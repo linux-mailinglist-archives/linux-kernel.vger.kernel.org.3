@@ -2,128 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275235AE250
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F965AE257
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiIFIUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
+        id S239120AbiIFIWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238950AbiIFIUf (ORCPT
+        with ESMTP id S232740AbiIFIWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:20:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F345C949
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 01:20:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F41EB8164A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67EF6C43470
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662452430;
-        bh=ZbibMUNAjjoNAAvz1ql7CXchqgAEAiETKd4gTDwr06c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OiBttTdW0feoadUUVSeiY5YxgLI/IG9xVMRfe9L5VClNiIfpRYyEChQTzNLjvw6u5
-         r+HOcj9DkQKkY816b7iApBE9j/4t+K98zV1JUnxrwJ4Tg1cvl4qfHJ4f+XfHXvF1yF
-         i2JEyxniYVFUG5ZXMV/B5XEozrAjIuzu6lRL6kFfQMyujo6fqofRhDYoIQWgrbUtlZ
-         6AwByAUS+AEShSrHmeXWCCoVk8ZgCcpvX860dwJq/fjz3s8LZ3bvs9TLHydkvNIOT0
-         cRHMk/WNxPqlh5Wi60Ry8HN8QdfNZI7EGrgODibw2/mAIwTbBqgqdDev/6gEp1AmHp
-         QyVbSowLp0vjg==
-Received: by mail-ua1-f46.google.com with SMTP id z26so387637uaq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 01:20:30 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1vwAknmZD91P9koMr7+t2aPJ5yTYb18yINFNZhN9RST/8sRhRi
-        /tRn9r/RuoN2CoqJ1RSP1Z2R/M6QBe87BMSirmA=
-X-Google-Smtp-Source: AA6agR7UVZ0Tj0zsxXqzRKUKDPugPMJ4MIAV237ApqkIFDn2SD4HuTsX5zoXyqCjRLDWNMpSokz/nMB5lSirOHJ+XeA=
-X-Received: by 2002:ab0:2ea9:0:b0:395:b672:508 with SMTP id
- y9-20020ab02ea9000000b00395b6720508mr3564505uay.63.1662452429281; Tue, 06 Sep
- 2022 01:20:29 -0700 (PDT)
+        Tue, 6 Sep 2022 04:22:30 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80088.outbound.protection.outlook.com [40.107.8.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C23272FFF;
+        Tue,  6 Sep 2022 01:22:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lR9gln8cb8//TaAtUdhfr/I7TYSMKIIQJ2+Pw79CGXXIpHIoBnjVlCEmxghnknH3RwzefqYsEIO9GzOBictgQuHzXOHJurR28WS0HKTypjkww4HHE64Vp2gn1/Z+X6t+X25Wu4K3QGOm87DsU9AV1FX2ixjtvxSnrzLrwXR46vlzjuIoupYnY+aADW+BwyfCAm7rvJND6SdUDki9XUWt/ruQhr+v8ZOleH/gP6TMTQdflUjuTXoTHu5nXrG+h6B+nTLzy5bdV8ZqFkAGTvnG9T6EMLBPq7kYK2bWlVkE0rJpQTnNpjtW2+T3srLnlrw9QK9KENfFFIkuOIN+2Aldbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z1M4x/gfQtitekY+Iv5AO4y7UdrrC+qbvH9GZv1rNp0=;
+ b=FiFbxmRjs/TSlG7/e94AQXjGvqodRHZbUIuV5zjGeYeni4cvNh2aDFy6xxcvAMsGlWBxWERUpCojGWw9fe9ExPTr8VKRhp6RTK7OSv1vMHLm9r5Wx26Tmz1bKNkhpX+IP7mHfOv+zFc8XsFYSdk+vWdj3AJSieebx4CCLzEZ48EydAeCWMWOzzsaTfwuWj66P5oWBBqntAF+TINTAmN7QKgX7cvM5cGYAV+skUryLgTna6DD6bwy7KEdS+SJ7x0Xo39wP4rgjbRQC64mBUTvamHOO1kSLSTklUl/IOx5L+rK3nXwowiKSVLsvYbrVgkJpBbkqEcEXy2G9tsb59WE4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=stud.acs.upb.ro; dmarc=pass action=none
+ header.from=stud.acs.upb.ro; dkim=pass header.d=stud.acs.upb.ro; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=stud.acs.upb.ro;
+Received: from VI1PR0102MB3166.eurprd01.prod.exchangelabs.com
+ (2603:10a6:803:e::11) by DU0PR01MB8877.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:350::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Tue, 6 Sep
+ 2022 08:22:25 +0000
+Received: from VI1PR0102MB3166.eurprd01.prod.exchangelabs.com
+ ([fe80::792e:fa13:2b7e:599]) by
+ VI1PR0102MB3166.eurprd01.prod.exchangelabs.com ([fe80::792e:fa13:2b7e:599%7])
+ with mapi id 15.20.5588.012; Tue, 6 Sep 2022 08:22:25 +0000
+From:   andrei.tachici@stud.acs.upb.ro
+To:     linux-kernel@vger.kernel.org
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        vegard.nossum@oracle.com, joel@jms.id.au, l.stelmach@samsung.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org
+Subject: [net-next v7 0/3] net: ethernet: adi: Add ADIN1110 support
+Date:   Tue,  6 Sep 2022 11:22:00 +0300
+Message-Id: <20220906082203.19572-1-andrei.tachici@stud.acs.upb.ro>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: VI1PR08CA0231.eurprd08.prod.outlook.com
+ (2603:10a6:802:15::40) To VI1PR0102MB3166.eurprd01.prod.exchangelabs.com
+ (2603:10a6:803:e::11)
 MIME-Version: 1.0
-References: <20220830104806.128365-1-xry111@xry111.site> <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
- <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name> <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
- <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
- <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn> <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
- <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
- <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
- <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
- <ae2652c5e140d407d523d7f35bee672cebe1b7a2.camel@xry111.site>
- <CAAhV-H56TQeU54JjvNQg2qZ6L1aSbzbaM2a=VQr9ZcAn4uthyg@mail.gmail.com>
- <8d0f96e2977c5c78f17bb410087f2aad986ef5a4.camel@xry111.site>
- <CAAhV-H7LjkY+XAzGs2K3544+CGOztCd4V8BuSjMJwZCgfBLDow@mail.gmail.com> <CAMj1kXE6YHCVj9DDbxLEZnS-ceZT__xe1XAcUcpXcd6eYb=UEw@mail.gmail.com>
-In-Reply-To: <CAMj1kXE6YHCVj9DDbxLEZnS-ceZT__xe1XAcUcpXcd6eYb=UEw@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 6 Sep 2022 16:20:18 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5NT-bq2jb3Kh-5wyCwVeG6t6pkLkPSRRC5XKrC33j1Nw@mail.gmail.com>
-Message-ID: <CAAhV-H5NT-bq2jb3Kh-5wyCwVeG6t6pkLkPSRRC5XKrC33j1Nw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation types
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f2639b3f-ad04-41a0-f044-08da8fe0ed83
+X-MS-TrafficTypeDiagnostic: DU0PR01MB8877:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RcMsaw87MLa5H/NCluJkAv9OsLbKUg+OR1MxO6t+pAb61ZNnBKGJF/H4CUfkdi7wxB2AEnAjNcAoSC9/9Y6VThkx35ZteOi0LqUf30ZOtsX02+hOpCv8DZy0Udz3W4j2GeTtsFySn1drm0ntb4V3f7fwJZkA0O8cCLW0nX5h37ddMxS9E4lF+4E71QYFeJzt6bqGQ4eVIlvKuj363cys2DYavPOFr+T+K5BDoxdSEupC3DyzYHRHUBzq6szue9HHXH9yOgCUanAT42vpprqw2FR99ADIv0htj8wbS4BldaMzVNm7dHtT60OFdhIViAPWhs/DaaTnQ+sSsfkziD7foutslLxMafgc9VMRAgkzByWpqzHAhvz3F02ym1pGo8KBJon1AEUS28yeyYMvvB61tbC0jBVM/ddbXqXLRNDastN+VOF5B9guwvh1cPshC6Iax/vU824SCJ8FLYq/X86m2xO5eM++/dtd6HrZ7Q9/uqKYrWo/nW7HQAbWhSKvMD10cOOe2dCpHRz75GFEMI1utQX/f+rS9B0iQ8YGOS0xzQw5BcBm3xynvW5aaU7KOeciVzIDae+laJm7I8ubJcDVkjIzcKFJGW3FHj6X3D5KgRFtVvPBixuAfEWiw1ZtDxU+8DMvoYP36K4+LoiX5PM65xHUEdNEJ8LyeolT1cUx/2cFlwBZdOeoMt1dpHy9E0YxSS/DD67My+5ZxCdJc8R4/6c50Yn3TpBLEQ6FNmXDRa0wDTovhLgj1wiEGxpaCnaK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0102MB3166.eurprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(39860400002)(346002)(366004)(376002)(396003)(5660300002)(2906002)(66476007)(8676002)(4326008)(8936002)(66946007)(66556008)(316002)(6916009)(786003)(478600001)(7416002)(6486002)(1076003)(9686003)(6512007)(41320700001)(6506007)(26005)(52116002)(2616005)(83380400001)(186003)(6666004)(41300700001)(86362001)(38100700002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IbDgYpPiuZzb0hYiQVKGvv5qWErd7NghL72Yrw0F41UOGgqYCoUkXfJtxaFD?=
+ =?us-ascii?Q?8o5aoH/coSyK4rP5NeL0QGWUfR3AIo1PmF0jYK4RhlEGXYg5HOKW+dI/nVPC?=
+ =?us-ascii?Q?kOOh5RJDvo/QlXgHsaZbnF4cerkmeu0/56OS4gxKL8Ff7JSi0cDWz4jrVOiI?=
+ =?us-ascii?Q?Z/UJJvXfaH4UhJ3vk5RbiMT4iGEa7D9ac4ec2ez7gmBz5h98UNATvO34ZRbA?=
+ =?us-ascii?Q?RABw8E8ekpspE1Z4nXcPaS66fRPTRPNcUbABkyGyF5FtE/0ztDeriAmTxIbc?=
+ =?us-ascii?Q?QM3Ij+VtssCbrJnZqhQg2gh3TKCfUKH9odzHrytcc3GASdwoZBOf+Q+uO61d?=
+ =?us-ascii?Q?PUtTwl1a2UyHzdG/VZtTjAWPShEc77uQj+YY0kz0UrJutl5OMf4KV6L90GFi?=
+ =?us-ascii?Q?eceS2/AOK4aHEUBRrfP6tPy6BL0E1dVS+CLTZLeS14gvKb11Llz13dkaGuFx?=
+ =?us-ascii?Q?VCQrVqJ/CLSqSbAaXdul4803p+jfdVMSCpkx8GF2eQFf9A7abeMQCycAiQCL?=
+ =?us-ascii?Q?DJenaLBZi7bRwIBCf7TbWbdWYdTNO23qmAN20BVjI/t+4u6gTVayC/4Wswzd?=
+ =?us-ascii?Q?SJKzQqjJXtYd3zw5OiEo3ltqqKD8Kfzhni30mFb018eB30h49Udc/MuyHIYw?=
+ =?us-ascii?Q?h6PyLv/m1EakqCOdI/KhUpWLsdNfotk55mm5Q4lBNg5jpzDGWK7sHkbGq8lv?=
+ =?us-ascii?Q?CH0ufoEqd7qzH1Up0GxLTbyLRQpke2NTt593HcjOqDYcQQzwQYrw89BW1Gbz?=
+ =?us-ascii?Q?ti6nPfVjyL26wfIbWyYtTRCPbyAj48T5iE6yuCPXogxRbw6SJKGAaSpkz1E5?=
+ =?us-ascii?Q?0fTvjFvlRluXHHTY4ll+Rj3KoRAnan4F5XRPNyRa136WLRjwogs6kE+IJ4IP?=
+ =?us-ascii?Q?IpMEvsMCIIpnDqOhjqje2V9jypuZ3lWDUcozh3tSBi543WoivmHww6kuOqBj?=
+ =?us-ascii?Q?dDtR7RpG3qR0XEEMCrdNt9IBot9GihUXz/nuxBL3kgbVFZR2/TLIQK+Y+9+U?=
+ =?us-ascii?Q?PnwbtH88Wb4R1RrWz31PK0Wy28RFPDYEltw2fAgIckMe6fPBMJenEaTnmuKL?=
+ =?us-ascii?Q?if8r50TGe4Pf3YxzA5FaAPYC7jiZst+03Lh9+MAP/VwId2V3HaGwQq5FkFTW?=
+ =?us-ascii?Q?LDhU4MEWjtnaTcKx7wrPEcsAzsPpcGy0O4oSwkrh0VcTDqiGS5KEkHEnglQM?=
+ =?us-ascii?Q?+I1zhwve5YZcej/MDrQPTsN+HA06u+ZtfeebRpKIECd+giZw6hCq/iynvk3H?=
+ =?us-ascii?Q?QE5N7/2URejiy50wq2S4jQDE8MPjNNoorwjDR4kA573laFDOhBKHbgRI44tj?=
+ =?us-ascii?Q?b45az7UB3+gMjxnSLcLRpGQgyiubBzfXI08ihFDEiVGWPPdj/dg62UCoOH6c?=
+ =?us-ascii?Q?uVDyRXCw9C9rQMD/21why1l0i/u5ukLAqyZw4A9T9WFShWpEvxniyP2Q4Vb2?=
+ =?us-ascii?Q?lMf7fp6EqGOqB4aOeKs2q8X4QAIBSudneP5WDeZZHEQa2T4BxyxEivRn3Vue?=
+ =?us-ascii?Q?P/FpyA+n8ro+hUoixr4uouvWsf238iyj9SzbmsV6go3OdH9+g897+vVjpnEo?=
+ =?us-ascii?Q?d0FccQOshmXMR/5dA68zyaHRIjJ4TTplznmFcAu4U3MwwiP37DBOmMVGH7th?=
+ =?us-ascii?Q?j+kp35QEtpCwk1IVyWzings=3D?=
+X-OriginatorOrg: stud.acs.upb.ro
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2639b3f-ad04-41a0-f044-08da8fe0ed83
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0102MB3166.eurprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 08:22:25.0701
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 2d8cc8ba-8dda-4334-9e5c-fac2092e9bac
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iNnk2WgZ2WpBNax//VePj6MNlv2NZFIU8o5IHvq9aM/mYu45gX6f06pc4fVr1dvGMy1QSUP0e82Av5dMeb5Qe+jhBXXbf5KM2HHD3C2MayM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR01MB8877
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 3:18 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Tue, 6 Sept 2022 at 06:43, Huacai Chen <chenhuacai@kernel.org> wrote:
-> >
-> > Hi, Ruoyao,
-> >
-> > On Tue, Sep 6, 2022 at 12:27 PM Xi Ruoyao <xry111@xry111.site> wrote:
-> > >
-> > > On Tue, 2022-09-06 at 09:52 +0800, Huacai Chen wrote:
-> > > > >   cflags-$(CONFIG_LOONGARCH)     := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> > > > > -                                  -fpic
-> > > > > +                                  -fpie
-> > > > >
-> > > > >   cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
-> > > > >
-> > > > > (Some explanation: -fpic does not only mean "generate position-
-> > > > > independent code", but "generate position-independent code *suitable for
-> > > > > use in a shared library*".  On LoongArch -mdirect-extern-access cannot
-> > > > > work for a shared library so the "-fpic -mdirect-extern-access"
-> > > > > combination is rejected deliberately.)
-> > > > >
-> > > > > Not sure how to submit these changes properly...  Do you prefer me to
-> > > > > send V8 of this series or a single patch on top of your tree on GitHub?
-> > >
-> > > > Don't need V8, I will squash it into the previous patch myself. But
-> > > > can we keep efistub as is?
-> > >
-> > > No, we can't allow -mdirect-extern-access -fpic on LoongArch because
-> > > without copy relocation such a combination just does not make sense (i.
-> > > e. we cannot find a sensible way to handle such a combination in GCC).
-> > > So such a combination will cause GCC refuse to run.
-> > >
-> > > Note that -fpic/-fPIC is "position-independent code *suitable for
-> > > use in a shared library*", while -fpie/-fPIE is more like just
-> > > "position-independent code".  The names of those options are confusing.
-> > > (When -fpic was invented first time, people mostly believed "PIC had
-> > > been only for shared libraries", so it's named -fpic instead of -shlib
-> > > or something.)  IMO in the EFI stub for other ports, -fpie should be
-> > > used instead of -fpic as well because the EFI stub is not similar to a
-> > > shared library in any means.
-> > You are right, but I guess that Ard doesn't want to squash the efistub
-> > change into the LoongArch efistub support patch. :)
-> >
->
-> I don't mind changing the stable tag at this point - I don't have
-> anything queued up on top of it at the moment.
->
-> But I don't see the actual patch: please send me the delta patch that
-> you want to apply, and I will update it. Then, you can rebase your
-> v6.1 tree on top of it.
-OK, Ruoyao, please send a patch to change the efistub cflags. Thank you.
+From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-Huacai
+The ADIN1110 is a low power single port 10BASE-T1L MAC-PHY
+designed for industrial Ethernet applications. It integrates
+an Ethernet PHY core with a MAC and all the associated analog
+circuitry, input and output clock buffering.
+
+ADIN1110 MAC-PHY encapsulates the ADIN1100 PHY. The PHY registers
+can be accessed through the MDIO MAC registers.
+We are registering an MDIO bus with custom read/write in order
+to let the PHY to be discovered by the PAL. This will let
+the ADIN1100 Linux driver to probe and take control of
+the PHY.
+
+The ADIN2111 is a low power, low complexity, two-Ethernet ports
+switch with integrated 10BASE-T1L PHYs and one serial peripheral
+interface (SPI) port.
+
+The device is designed for industrial Ethernet applications using
+low power constrained nodes and is compliant with the IEEE 802.3cg-2019
+Ethernet standard for long reach 10 Mbps single pair Ethernet (SPE).
+The switch supports various routing configurations between
+the two Ethernet ports and the SPI host port providing a flexible
+solution for line, daisy-chain, or ring network topologies.
+
+The ADIN2111 supports cable reach of up to 1700 meters with ultra
+low power consumption of 77 mW. The two PHY cores support the
+1.0 V p-p operating mode and the 2.4 V p-p operating mode defined
+in the IEEE 802.3cg standard.
+
+The device integrates the switch, two Ethernet physical layer (PHY)
+cores with a media access control (MAC) interface and all the
+associated analog circuitry, and input and output clock buffering.
+
+The device also includes internal buffer queues, the SPI and
+subsystem registers, as well as the control logic to manage the reset
+and clock control and hardware pin configuration.
+
+Access to the PHYs is exposed via an internal MDIO bus. Writes/reads
+can be performed by reading/writing to the ADIN2111 MDIO registers
+via SPI.
+
+On probe, for each port, a struct net_device is allocated and
+registered. When both ports are added to the same bridge, the driver
+will enable offloading of frame forwarding at the hardware level.
+
+Driver offers STP support. Normal operation on forwarding state.
+Allows only frames with the 802.1d DA to be passed to the host
+when in any of the other states.
+
+When both ports of ADIN2111 belong to the same SW bridge a maximum
+of 12 FDB entries will offloaded by the hardware and are marked as such.
+
+Alexandru Tachici (3):
+  net: phy: adin1100: add PHY IDs of adin1110/adin2111
+  net: ethernet: adi: Add ADIN1110 support
+  dt-bindings: net: adin1110: Add docs
+
+Changelog V6 -> V7:
+	- fixed undeclared var. err. (deleted it during ./checkpatch fixes)
+
+Changelog V5 -> V6:
+	- removed VEPA/VEB settings support.
+	- added support for FDB add/del. 12 hardware entries are available
+	- ethernet frames with an unknown dest MAC address will just be forwarded to the host, not
+	sent back on the other port. SW bridge will decide what to do instead.
+	- HW forwarding takes places only for broadcast/multicast/FDB matches
+	- in adin1110_ndo_set_mac_address(): use eth_prepare_mac_addr_change()
+	- in adin1110_start_xmit(): removed locking
+	- in adin1110_tx_work(): rate limit errors
+	- in adin1110_net_stop(): disable RX RDY IRQs for the given port
+	- in adin1110_port_bridge_join(): on bridge join forward to host based on the bridge's address
+	- in adin1110_netdev_ops: replaced .ndo_do_ioctl with .ndo_eth_ioctl
+
+ .../devicetree/bindings/net/adi,adin1110.yaml |   77 +
+ drivers/net/ethernet/Kconfig                  |    1 +
+ drivers/net/ethernet/Makefile                 |    1 +
+ drivers/net/ethernet/adi/Kconfig              |   28 +
+ drivers/net/ethernet/adi/Makefile             |    6 +
+ drivers/net/ethernet/adi/adin1110.c           | 1627 +++++++++++++++++
+ drivers/net/phy/adin1100.c                    |    7 +-
+ 7 files changed, 1746 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/net/adi,adin1110.yaml
+ create mode 100644 drivers/net/ethernet/adi/Kconfig
+ create mode 100644 drivers/net/ethernet/adi/Makefile
+ create mode 100644 drivers/net/ethernet/adi/adin1110.c
+
+-- 
+2.25.1
+

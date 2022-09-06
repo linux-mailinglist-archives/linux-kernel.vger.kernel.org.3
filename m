@@ -2,180 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4BC5AF677
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC565AF679
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiIFVAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S229741AbiIFVAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiIFVAQ (ORCPT
+        with ESMTP id S229472AbiIFVAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:00:16 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2EDA344D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:00:14 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t5so16748903edc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 14:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=jotNFZZpx7q+Hddf2s2cEezz+cM8xu236TrRMUfn/lo=;
-        b=E1thR/XoXOaJz29LuoXaL2MBxixwTlI88dRgIbu0hFZjVdGcGOkAVvQWfCXnh+jG3X
-         nt76pa8Fkui4H2sYo2Ta1ee/FESoT7G/B+L0HGcwlBIGm47T4ZeIP9JncdZQCki+FHYR
-         Q9PeR2+rUeCNmWXkvnf4ICXOIfUhlDc0rYnQlLp8PtI3f7zkyVRmBkn+eynlAylN5zk8
-         Wfihyb/ri81bYPkOffY5O2gS7CNSgdiZhgy4AK+Gf1yyc1LBG9/t5FBPvVMKvqWwr1DM
-         bB/TC6wXmp5jia7jdh0K5JpWBy4BteKG9H3G7M3P2JmAzhYvXupmly/8KMuVFGiRSd7C
-         9sZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=jotNFZZpx7q+Hddf2s2cEezz+cM8xu236TrRMUfn/lo=;
-        b=OnJ5D4UktxZvmEEXoWhEqtO54yES9d20EhyXAOAkQNABdY5ASECeXSsGWqGIS/QFXJ
-         z8iUm7+vM//q2QCAVeEEdl8a5tqKVOngUabsNToEHDjDzO+Df/UlTn+KXOcMX49bRXoN
-         OpJ2qq9VuSwo1rdZoAPKYsq0fn9ss7C4/+9+mwpEJE/tcgpFUe1Kly/KXuq4vJv/zhXS
-         ZAVwJ9kG484SUIrxPB/wAu4uBD+JVXVzrKf3+JAyQGMPUBwG1vbF3XukLHUM86Deqq2j
-         DUZdv4cZz5/tfMlpsmCzkjtUsDlk4cXge2jdL6ClG4nK2CAGQahRZxPC9dMiIgA5NhLW
-         vSZg==
-X-Gm-Message-State: ACgBeo1ag0e14owtGWaa6i4rTeKoeR1yvCf1NPfKjnQ0rEKCqsUIKxy7
-        OJCdpi5oSozICDlfZjspALgM3Sh8Syttd+FU6M2E+g==
-X-Google-Smtp-Source: AA6agR4QXokKI4S7GBxBJzWo+uW5DE0GDwh3Weqo4J3fenJg3A+nQwByYRe+jQLT9dyryE9LxXFguqVzoKYkNCv/j0Y=
-X-Received: by 2002:a05:6402:27cd:b0:44e:c4aa:5ff with SMTP id
- c13-20020a05640227cd00b0044ec4aa05ffmr396335ede.193.1662498012786; Tue, 06
- Sep 2022 14:00:12 -0700 (PDT)
+        Tue, 6 Sep 2022 17:00:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F854A801
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VfkRYEMWj3FD8tJg6/WhebmsvjXoNQjBzn0bpZ2iFog=; b=FXBP2PcZI1p1iGJHVq+rmXJUFc
+        hNewwmCKp0B8i+343tpoaqxtI6fszAT5bPagQgkp9nKY1u+n4cewpMO9nVjl7fH9m+RI+JgBV7rUs
+        FxKTvczPiWvV6fTDfLjIqwk3wHJx6ZjVpIKBXGgvQdkqpy/89H7IWkUn9NZYrWUwHVGyKHRnLSD5b
+        WvylxT4BYnnGIzSXW6VO7tOW6nPe3yNrXV9AtYapKXmR0O5rPLj5XgPGze+c0Wk8nZIjygTLD0gUy
+        HXuXEF2rU6OF3D+qunS7GYG7saqc21+Ky1XkdtljtuDRsGB0GBPbFWbj3WD2/prcnhnMz4p/zDl0B
+        9tUJOq2Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVfgU-00AlK0-Ry; Tue, 06 Sep 2022 21:00:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DDDB7300244;
+        Tue,  6 Sep 2022 23:00:36 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CC1CA2B977EDE; Tue,  6 Sep 2022 23:00:36 +0200 (CEST)
+Date:   Tue, 6 Sep 2022 23:00:36 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] x86/cpu: Avoid writing MSR_IA32_TSX_CTRL when writing it
+ is not supported
+Message-ID: <Yxe09Bk7tNwa6OsO@hirez.programming.kicks-ass.net>
+References: <20220906201743.436091-1-hdegoede@redhat.com>
+ <YxexAl+i+6MGjf7K@hirez.programming.kicks-ass.net>
+ <6ff23930-325b-4207-12fc-4d8fd5bea1ff@redhat.com>
 MIME-Version: 1.0
-References: <20220906132816.936069583@linuxfoundation.org>
-In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 7 Sep 2022 02:30:01 +0530
-Message-ID: <CA+G9fYsxAwv438Mmes4ZsotM+Sg4Su_F6jfKAkKrxj5BoU=CkA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/80] 5.10.142-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ff23930-325b-4207-12fc-4d8fd5bea1ff@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sept 2022 at 19:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.142 release.
-> There are 80 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.142-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Sep 06, 2022 at 10:56:47PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 9/6/22 22:43, Peter Zijlstra wrote:
+> > On Tue, Sep 06, 2022 at 10:17:43PM +0200, Hans de Goede wrote:
+> >> On an Intel Atom N2600 (and presumable other Cedar Trail models)
+> >> MSR_IA32_TSX_CTRL can be read, causing saved_msr.valid to be set for it
+> >> by msr_build_context().
+> >>
+> >> This causes restore_processor_state() to try and restore it, but writing
+> >> this MSR is not allowed on the Intel Atom N2600 leading to:
+> > 
+> > FWIW, virt tends to do this same thing a lot. They'll allow reading
+> > random MSRs and only fail on write.
+> 
+> Right. So I guess I should send a v2 with an updated commit
+> message mentioning this ?
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Nah, just saying this is a somewhat common pattern with MSRs.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.142-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: c5039c99f55583831340c6e37ef2284c6e0f2f80
-* git describe: v5.10.138-208-gc5039c99f555
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.138-208-gc5039c99f555
-
-## No test Regressions (compared to v5.10.138-127-gc59495de01ed)
-
-## No metric Regressions (compared to v5.10.138-127-gc59495de01ed)
-
-## No test Fixes (compared to v5.10.138-127-gc59495de01ed)
-
-## No metric Fixes (compared to v5.10.138-127-gc59495de01ed)
-
-## Test result summary
-total: 82101, pass: 73607, fail: 517, skip: 7728, xfail: 249
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 333 total, 333 passed, 0 failed
-* arm64: 65 total, 63 passed, 2 failed
-* i386: 55 total, 53 passed, 2 failed
-* mips: 56 total, 56 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 55 passed, 5 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 24 total, 24 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 56 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+The best ones are the one where writing the value read is invalid :/ or
+those who also silently eat a 0 write just for giggles. Luckily that
+doesn't happen often.

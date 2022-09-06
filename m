@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354D75AEB45
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3C35AED22
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240400AbiIFN46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S241886AbiIFOWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240017AbiIFNyV (ORCPT
+        with ESMTP id S242048AbiIFOT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:54:21 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579B07DF4A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:41:19 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id x14so2071264lfu.10
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=4eoG5o1/o/cDQc5d6B6txMUL3euvxIxbYDIIkvInIAw=;
-        b=A4wn9lx1lcwABPoTpUyayJvgxPQW3tUkhVk7viKkKXWpSxo7kIwl8oA4Low7EUD/9u
-         jLe8WUOHFCLpT1u02mXJg58OysAPz1o0Np7SR0dlo2tld6pbUNaa5h+m5U8AXNoOnT5N
-         mhVbY06QYAsImVSe5vIVHPyKrK7QGafEy2tC/Rn/ixxP4H1MlTGVVxGlknJq+PtWr+YJ
-         3/aebt9ofW1cNuXolIuABXfloqlTZ54rJgo2o5RlRRDOxLXcWHuOIeQYpxmBD3qgnZMW
-         lACN18SnL9WiVqjh1wbG4KXW+6wJroJqhcqG3Jvvt9kKTS9V4Q3YNWCMKsyI5steTU0u
-         y2EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4eoG5o1/o/cDQc5d6B6txMUL3euvxIxbYDIIkvInIAw=;
-        b=XsMK9cEagmY+VykLBuFa86Zkm3scf4hXEKJ7vRDbYRP1pC2lHGx0XVjiFln3gAhmFR
-         f0xZtSxjJKBsOWO5Yq76j6aG7KdYAnHUrUkbmhTbNapgA9hqSzMAIbNb/91sqjxj9gS4
-         BkLncdXDm98DRAhGopM7D24dYYHs3gDy6r+4QiHysDIiAcKEh+fKtwtd5/4OnCp2gs8w
-         i0kcbNHoviSWi6qdbgQm1QzKLoiJ2+H++c/g5jawpmpdwSKC55qPZVJ99nU1EOj8bSA0
-         mr0HQrzdTeBQ8/5NRKTyHbnzZ2uCDIFpM57xS0fnHgUEw4ywTeRpFoYZKiiKr+yh3Mah
-         SREQ==
-X-Gm-Message-State: ACgBeo1akQZTMlb7QDu8Jsw6UTypkbCxqTgdqQ0PGxb8+a7+vQRXmg45
-        4qs22h49KsjAJRXpSbNe4AoPLnQFh6dX7+dAFTJtug==
-X-Google-Smtp-Source: AA6agR5cPceOY8Mq5DyzvRQx6Zv3mWnQuLj7fVw9q5rqfekrEOtEUDBMOBHyxcmAzTvN5FuW74eb/4k8Cvclpno9OX4=
-X-Received: by 2002:a05:6512:110f:b0:494:a534:981d with SMTP id
- l15-20020a056512110f00b00494a534981dmr7612905lfg.376.1662471670498; Tue, 06
- Sep 2022 06:41:10 -0700 (PDT)
+        Tue, 6 Sep 2022 10:19:26 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A006243E49
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=v3ozdKl00Zk3pGYhPltXKnY62thad7R3U2qnCg2ZWmA=; b=TejASX/tUfb05N0Rr03cDfUJ4z
+        c86onR0QHJHnqqOSViQP28CVl6Vw8eKFGdmSoybLPFtoagFjXer4+jRDQNVL6J5ioZmA7Ip/F7Xoa
+        5cYLC+4wcSBeZGwdlBM2f9yvgsJiaMCH1qppoCCxklP/40vjmwLNxmgrvMbgsxxK28yuPfeVARAAr
+        pNiNAAQokoAu6QoqI0J7i7dRSJ5oFrOF0GB7+xJRK0x9zr2XOLIwV19zEwF4vI8TR/WY1CTk0/8U6
+        DZ+O6ZBxkID6uZ2kD6jB8lhM9NjiuII827ydnCZwmaCmBJUCvpuzxsv2PqgwqU6fItVWn6P0JvQ1a
+        hCjXF2Fw==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1oVYdW-008sZV-CB; Tue, 06 Sep 2022 16:29:06 +0300
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/8] Support for NVDEC on Tegra234
+Date:   Tue,  6 Sep 2022 16:28:15 +0300
+Message-Id: <20220906132823.2390953-1-cyndis@kapsi.fi>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-References: <0000000000004387dc05e5888ae5@google.com> <CA+fCnZc9u+QrF-JCQSA+uCM9-egh_=9x4hPdJng6T_uh6XWMZQ@mail.gmail.com>
- <YxdJ684ypgAy8k98@arm.com>
-In-Reply-To: <YxdJ684ypgAy8k98@arm.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 6 Sep 2022 15:40:59 +0200
-Message-ID: <CACT4Y+YOnTpWT5NCNhsPY=kV=2gFfQkY=7xGdU_1k7AdGhQneg@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: invalid-access Read in copy_page
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        tongtiangen@huawei.com,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        syzbot <syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Peter Collingbourne <pcc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sept 2022 at 15:24, Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> Hi Andrey,
->
-> On Mon, Sep 05, 2022 at 11:39:24PM +0200, Andrey Konovalov wrote:
-> > Syzbot reported an issue with MTE tagging of user pages, see the report below.
-> >
-> > Possibly, it's related to your "mm: kasan: Skip unpoisoning of user
-> > pages" series. However, I'm not sure what the issue is.
-> [...]
-> > On Sat, Aug 6, 2022 at 3:31 AM syzbot
-> > <syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com> wrote:
-> > > BUG: KASAN: invalid-access in copy_page+0x10/0xd0 arch/arm64/lib/copy_page.S:26
-> > > Read at addr f5ff000017f2e000 by task syz-executor.1/2218
-> > > Pointer tag: [f5], memory tag: [f2]
-> [...]
-> > > The buggy address belongs to the physical page:
-> > > page:000000003e6672be refcount:3 mapcount:2 mapping:0000000000000000 index:0xffffffffe pfn:0x57f2e
-> > > memcg:fbff00001ded8000
-> > > anon flags: 0x1ffc2800208001c(uptodate|dirty|lru|swapbacked|arch_2|node=0|zone=0|lastcpupid=0x7ff|kasantag=0xa)
->
-> It looks like a copy-on-write where the source page is tagged
-> (PG_mte_tagged set) but page_kasan_tag() != 0xff (kasantag == 0xa). The
-> page is also swap-backed. Our current assumption is that
-> page_kasan_tag_reset() should be called on page allocation and we should
-> never end up with a user page without the kasan tag reset.
->
-> I was hoping we can catch such condition with the diff below but it
-> never triggered for me even when swapping tagged pages in and out:
->
-> -------------8<-------------------------------------------
-> diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
-> index b2b730233274..241c616e3685 100644
-> --- a/arch/arm64/kernel/mte.c
-> +++ b/arch/arm64/kernel/mte.c
-> @@ -62,6 +62,9 @@ void mte_sync_tags(pte_t old_pte, pte_t pte)
->         if (!check_swap && !pte_is_tagged)
->                 return;
->
-> +       /* Pages mapped in user space should have had the kasan tag reset */
-> +       WARN_ON_ONCE(page_kasan_tag(page) != 0xff);
-> +
->         /* if PG_mte_tagged is set, tags have already been initialised */
->         for (i = 0; i < nr_pages; i++, page++) {
->                 if (!test_and_set_bit(PG_mte_tagged, &page->flags))
-> ------------------------8<-------------------------------
->
-> Does it take long to reproduce this kasan warning? If not, it may be
-> worth adding the above hunk, hopefully we can identify where that page
-> is coming from before it ends up in copy_page().
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
-syzbot finds several such cases every day (200 crashes for the past 35 days):
-https://syzkaller.appspot.com/bug?extid=c2c79c6d6eddc5262b77
-So once it reaches the tested tree, we should have an answer within a day.
+Hi all,
+
+this series adds support for the HW video decoder, NVDEC,
+on Tegra234 (Orin). The main change is a switch from Falcon
+to RISC-V for the internal microcontroller, which brings along
+a change in how the engine is booted. Otherwise it is backwards
+compatible with earlier versions.
+
+In previous iterations, firmware was simply loaded from disk and
+written into engine internal memory. Now, the engine has a
+bootrom that loads the firmware from a carveout where it has been
+loaded by the system bootloader; however, we still need to tell it
+where that carveout is loaded and some offsets into it. For that,
+the first patch adds a new memory controller API to query the
+carveout address. The offsets are read from device tree -- the
+expectation is that at flashing time (when the firmware is also
+flashed), the flasher also delivers a device tree overlay with
+values corresponding to the flashed firmware.
+
+The currently available Linux for Tegra release doesn't yet
+include this device tree overlay flashing, and the firmware version
+it contains is incompatible with this series. The plan is to fix
+that for the next Linux for Tegra release, but if necessary, we
+can postpone merging of this series to once those changes are
+available.
+
+Thanks!
+Mikko
+
+Mikko Perttunen (8):
+  memory: tegra: Add API for retrieving carveout bounds
+  dt-bindings: Add headers for NVDEC on Tegra234
+  dt-bindings: Add bindings for Tegra234 NVDEC
+  arm64: tegra: Add NVDEC on Tegra234
+  gpu: host1x: Add stream ID register data for NVDEC on Tegra234
+  drm/tegra: nvdec: Support multiple clocks
+  drm/tegra: Add code for booting RISC-V based engines
+  drm/tegra: Add Tegra234 support to NVDEC driver
+
+ .../gpu/host1x/nvidia,tegra210-nvdec.yaml     | 118 ++++++++++--
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  27 +++
+ drivers/gpu/drm/tegra/Makefile                |   3 +-
+ drivers/gpu/drm/tegra/drm.c                   |   1 +
+ drivers/gpu/drm/tegra/nvdec.c                 | 171 +++++++++++++++---
+ drivers/gpu/drm/tegra/riscv.c                 | 106 +++++++++++
+ drivers/gpu/drm/tegra/riscv.h                 |  30 +++
+ drivers/gpu/host1x/dev.c                      |  12 ++
+ drivers/memory/tegra/mc.c                     |  23 +++
+ drivers/memory/tegra/tegra234.c               |   5 +
+ include/dt-bindings/clock/tegra234-clock.h    |   4 +
+ include/dt-bindings/memory/tegra234-mc.h      |   3 +
+ .../dt-bindings/power/tegra234-powergate.h    |   1 +
+ include/dt-bindings/reset/tegra234-reset.h    |   1 +
+ include/soc/tegra/mc.h                        |  11 ++
+ 15 files changed, 470 insertions(+), 46 deletions(-)
+ create mode 100644 drivers/gpu/drm/tegra/riscv.c
+ create mode 100644 drivers/gpu/drm/tegra/riscv.h
+
+-- 
+2.37.0
+

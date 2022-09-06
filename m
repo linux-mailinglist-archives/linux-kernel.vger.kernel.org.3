@@ -2,178 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AC15AF296
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4D45AF29F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239548AbiIFRaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S239308AbiIFRaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbiIFR3r (ORCPT
+        with ESMTP id S238803AbiIFR3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:29:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345D681B20
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662484958; x=1694020958;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9N1rFSvtcLUcC7hpfWbXiZaUavz2e3CGIlFU0+3sm5g=;
-  b=KESH8VAaePT2+TV5Jy2BKvI1ROXqdThegCBpMVqL31OMXdvRb91YNc/q
-   GCY3if8caRuITM87ugYygEqbZQaQ5IxjnNlUN/2ddyvMncv4YaXrI8kF0
-   kDsQ6XqCMV0QF0FmaQQXXYaEB7FKoeDoYrQtb50JbOytzZaSSNxmYFgLG
-   USDsT4iEA0MFZ0qLuVPkWAvaoQUkrH8PteHw6KX6Vp635ifXEgiGt1W4t
-   228dTfl9zHE9BpnaeeD7DJb6+KQoLNw0N3R4aYVLVVgTQu44f08oV7rnW
-   wSgCPQkUvD0CBthqqXYXMFTBrp1GaC1TiI+PWEeFXmFIA8CYnTF9xC1fz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297440005"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="297440005"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 10:22:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="682477502"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Sep 2022 10:22:35 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVcHT-0005OL-0k;
-        Tue, 06 Sep 2022 17:22:35 +0000
-Date:   Wed, 7 Sep 2022 01:22:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sean Paul <seanpaul@chromium.org>,
-        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
-        "Kristian H. Kristensen" <hoegsberg@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 1155/6555]
- drivers/gpu/drm/drm_atomic_uapi.c:466: Error: unrecognized opcode `csrs
- sstatus,a3'
-Message-ID: <202209070101.FLJZtH6Z-lkp@intel.com>
+        Tue, 6 Sep 2022 13:29:52 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2052.outbound.protection.outlook.com [40.107.101.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0980EDF1E;
+        Tue,  6 Sep 2022 10:23:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nadMS6gw3igJJZp5S3ZJnaRsksCJvHSPKtdYj3MDbcqEqIMrq4kkX3wkYqX1YaNKFo/yAI0zBQjjw277X4eEQaFfIdEu3hkLCncCOyR2ALHUsfsCpWAXABTIh+PQDXrq5LKwv4pNvsBNQhW9rIpuyq/4JfhjocreA9U/X9i2zCGzdO68n9F56H5N0J8vVMJ2Vx/8ZfV+z0o9jkzMIXitolZIGB1QKrIJz/ILh6K5mGZyl5vXPCkaiDRaNa6zqCAsQP3W5H/ANS9fBBRt5C0npWPDTwDSEIt5eC3RbQvP8wijaljvmqz8i1VuEsJJbuYWA0gho7k9EGAmpFVp7z4/rA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NoRb27zS57HbG4mIszcdWHkwnQQiS1N8Nfr2qj8xm4E=;
+ b=DdBqIDJ9Pv/mBSM7qfNt6bkDeN82S9adB3yWLZnrVyK45pls9nwer+i97T8YEn18LSqHnts7CT2rBO+jBLOQogZrjJ50d6u8Kn83158fyTr5cE4O1alS0f4sgmjo33QGy+Q5Ly8GFxMi8pLCFJReujbj7ARNNAsO+vW/Wa6PS8ISTySyEU8Mscl96BjADDjtAr4ev6p3MyMOF7a252lPzb9ah8A4eRH3lEat/1ZlTeST6MpDqte7f6dON44m6u1E9aI77ct1cb9v9XMepDLfk9Fdl5+8AeV1oxg4vivRqn26HQeeZynkTfXj8IIRuyErlGqJN+d5GWx5w27w9T1hFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NoRb27zS57HbG4mIszcdWHkwnQQiS1N8Nfr2qj8xm4E=;
+ b=CmNihAt5NRx5PXmGQDMYDbPlOLL5tZFQASGYWGOLwlSJxxmTg2IB/c/wrtxBA8Dh7VDXnzkolLnB30k8YNDi9m/8huPQOZ2LIyS8bH1J2WCQsWehgmH/VuaX0Gw2WUDMmVIuMcPh1KuDwAbGMA9ilWgFrthut1mkbFKvc/MUXaQ=
+Received: from DM6PR12MB3082.namprd12.prod.outlook.com (2603:10b6:5:11b::12)
+ by IA1PR12MB6330.namprd12.prod.outlook.com (2603:10b6:208:3e4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Tue, 6 Sep
+ 2022 17:23:39 +0000
+Received: from DM6PR12MB3082.namprd12.prod.outlook.com
+ ([fe80::4c82:abe6:13a6:ac74]) by DM6PR12MB3082.namprd12.prod.outlook.com
+ ([fe80::4c82:abe6:13a6:ac74%3]) with mapi id 15.20.5588.014; Tue, 6 Sep 2022
+ 17:23:39 +0000
+From:   "Gupta, Nipun" <Nipun.Gupta@amd.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [RFC PATCH v3 6/7] vfio/cdx: add support for CDX bus
+Thread-Topic: [RFC PATCH v3 6/7] vfio/cdx: add support for CDX bus
+Thread-Index: AQHYwfd+6WpLgEu670uI7mK3gsgeSq3SpgMAgAAAlaA=
+Date:   Tue, 6 Sep 2022 17:23:39 +0000
+Message-ID: <DM6PR12MB3082B5227E5A81B35536AE0CE87E9@DM6PR12MB3082.namprd12.prod.outlook.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-7-nipun.gupta@amd.com> <YxeBYiBXMLvIIRAX@nvidia.com>
+In-Reply-To: <YxeBYiBXMLvIIRAX@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-09-06T17:23:36Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=9e0afe19-99d4-4341-b888-e7700f3212d8;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 37c94338-8fe1-4805-15b8-08da902c8a11
+x-ms-traffictypediagnostic: IA1PR12MB6330:EE_
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jUPiSh6opgXeoMTLEoeJMbbiQD7SGdwxQTqqrJFZPhkTcuegdQsf3v4QNFqcUH0mWThlESeuFhDRzg9T5hxJ+VmyqU+4WM3/DkVU+qdkLQTvUeBJ0d6bMVnoofleOmUc1UggX0TFUAW1qJOY9uo8pV//GBOlVE6mloBDOA48Jc71pw0+Yu/emWmEl56GNbqr3qvTu4RBUNP9bj6gjFgnuZJjMRjzh5K/yqu8fPVYH52J2/c0JkPOrEDFg2yX4RbJeqrRE2B9Y4+PRZOarBeK90t1YC/N4A0qmXGSQpm4FmuV4GjlewzEsY856/77kYNm+hLthBpimiiKmVmB0V12uj0OFz581N2bR2xmd4X9bt7u7IKo4krs6GKhVy8oOKQ/eSs9PDGhqqUhHI4co14uEZ/h+Kdmr951ISl/a+FNOLDOf5bnany3cKfAbHzrtm6UZ6xxUPYH1j/68Pip9oyNX5Uf0ja3sViZJTlQxC+DDXwH3J7W/fM/N/TTxmkkDqQ0pY/ZPCrkPPYIdlLj/JXYgq+p3qAoNQbgVwa6H5RKDGsLZplnKzU1cC0lkYCyCYQvT8rI6xrVwZBJGQiTw4Cfefx9wA8kbN05jguQpWjkMHh0nSsgZ+QDWNwlEsXE852OII+jqUANOFGhS2qwldd6ANPiWmza4s4YV/f2VhnQtaVlGSzOc/wIPVa0MGfqcnBpO6adONtH+SlViFyqo+OelyEtcBIrgi8xWIpgPvVVj0fQjdlV2p3XW2y4G87xydCdL3TCuWJLEQ1dBdJ61T8b1g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3082.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(39860400002)(136003)(396003)(54906003)(6916009)(186003)(38070700005)(55016003)(83380400001)(71200400001)(316002)(8936002)(26005)(122000001)(2906002)(41300700001)(52536014)(9686003)(4326008)(8676002)(53546011)(55236004)(5660300002)(6506007)(7696005)(33656002)(38100700002)(478600001)(76116006)(66946007)(66446008)(64756008)(86362001)(66476007)(7416002)(66556008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1I4sL48YgDOXi8HC57dICMCwYYh1OEnZFfrNLW/JGmBzHoVlLFZDq/IVgqWn?=
+ =?us-ascii?Q?Kn73ly5SArxRUz2SWeyQ1ROwEyptbDTBuHI8tOmq2k7cDuS3sO4EA5ROc9L+?=
+ =?us-ascii?Q?eODKSYbsw5Qmvc+UiwO/MT/96gAlHaCpuAjqy+e3ietVSsSy6mVxqmd8hqnr?=
+ =?us-ascii?Q?npbps78N5TLevbBFXuahGeKYO4zClKG2n1bE10X7E0nU8CbZEFJo663gHTDg?=
+ =?us-ascii?Q?CVZBourVLrnXh6rOYj7sR53jr27r9Bhri5SFG6FSgjIXEtOjeRdyPInrPAeY?=
+ =?us-ascii?Q?rIJi8zMtVaoB1QB586rxrEUhZmV5nBgu9Ubf+JfUvqp4AMTtA7nBtsTOBb60?=
+ =?us-ascii?Q?QgwnbCHnS3vad25XIe6/V0q6NxifJqcge9nI0R7KMU1tIVKCqANXxQInLwKq?=
+ =?us-ascii?Q?XR+qd1np4TECmTaFN8+vBhpi9Svh4Jp5eWvG29dhF39oVerkjQDMQkYrPyBu?=
+ =?us-ascii?Q?Fvf4Vy31S6zLdKzoWx8h6nf5hmtoj4VPmb6tuBXBCu1loj5qqNQc9MZKVMxx?=
+ =?us-ascii?Q?9R6ukUMTCThXDhSQc8AM3tHGS5UhOjKs8NVLYAF+yePyDdWjPlda5/pRRp5S?=
+ =?us-ascii?Q?B+qW298orBgn0/1JzTHJs4vHNPEo8j1fNqcEJo0lpjxS8LZnSM3pMfOuIOP+?=
+ =?us-ascii?Q?B+FtyAJkFfbvnO9ZfaZdK0xUv28jfBUoVdLE1uLQZ2zfDpxOKsnAWeumF4qa?=
+ =?us-ascii?Q?K2fqzli/VdeIRs7+uUEMkwtgwDHo/A1zVCPV82W78x6aYXv34p+iF23OFrFD?=
+ =?us-ascii?Q?IDxocq8A0lnUXB8wq5dYsOu4ovvhQZkEUVOJ6lX9BuBGnG7KWt4HD1SndT89?=
+ =?us-ascii?Q?2A73mmhtWPeb6xSRBnYhr6GAcygbwjISwDlI7seLWPWapFfhqDCMhSFAYZZE?=
+ =?us-ascii?Q?zdahrhFWzwvaa3MzoqDJCr3X+LVaT63Yt6FcFqgdCmBJeIHHMqV6Sn76gf6U?=
+ =?us-ascii?Q?mlOJdlRKZOoxs7JizgCjyVOuDhJ4B/F/nx8O+DtlxXtPpoOD74Qr5EedwiyW?=
+ =?us-ascii?Q?7KvCfGJTO/Lf+384rePrHyqk/oYUa8septWOgyuQdO5JlMYSqDTUseVG0hbQ?=
+ =?us-ascii?Q?dsAigvP6dkYu31lYZc80y+47DahcxL9nVFEv8afRbNPhbXDTnGhQvGZgPR0x?=
+ =?us-ascii?Q?qK3lj4KeGFXO+jxcFkrKWRN7A3QjPudrywqNaGkqNK7czpDwHaPIrZmu87Re?=
+ =?us-ascii?Q?hrk/708jzT4bQAMI0TrxwuTgHyQuuiW9NAhOp4eAWxia6oJ1SP39ARL7HZPJ?=
+ =?us-ascii?Q?seBhwPYPq85CKdUTGWdz3GFF3A2lBI37yTWEoDN5U1gqX/bbe4AkcJjHY28K?=
+ =?us-ascii?Q?EJsuzhMbTM6TyJJ5vPQ0u7AcrVH8DDTZNT7hKH3T2CO0/vgt/kUpJKcUkOtA?=
+ =?us-ascii?Q?ROKvMpysAfHSn0qvMboET9YeuN/LBHCXXPMg7tIJ1RnCQXlj4tpUE6QNkYAt?=
+ =?us-ascii?Q?Qr40lniIqCN5+biQPO8AW0vSPNzZ8X0m6FR+NwfnGVI00j5XopFelxBBgdTU?=
+ =?us-ascii?Q?TgV+1NG7hLUj8Ak7isKqmwK0Ff5ihrCqdO4xQnWC7vdRQxUqocuD45iLQo1V?=
+ =?us-ascii?Q?+8rotFvPFC8avCeTn/U=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3082.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37c94338-8fe1-4805-15b8-08da902c8a11
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2022 17:23:39.5370
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FuFRX16iOMcmHYjuimnmSN8nvjxvfqjyYrAOa1Oysig+7bm8ObOXt+zM6vTe8jxC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6330
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: dfdec43d0411076dc70591a0496a0824a8620695 [1155/6555] UPSTREAM: drm: extract drm_atomic_uapi.c
-config: riscv-buildonly-randconfig-r003-20220906 (https://download.01.org/0day-ci/archive/20220907/202209070101.FLJZtH6Z-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/dfdec43d0411076dc70591a0496a0824a8620695
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout dfdec43d0411076dc70591a0496a0824a8620695
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash M=drivers/gpu/drm
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/gpu/drm/drm_atomic_uapi.c: In function 'complete_signaling':
-   drivers/gpu/drm/drm_atomic_uapi.c:1193:26: warning: variable 'crtc' set but not used [-Wunused-but-set-variable]
-    1193 |         struct drm_crtc *crtc;
-         |                          ^~~~
-   drivers/gpu/drm/drm_atomic_uapi.c: Assembler messages:
-   drivers/gpu/drm/drm_atomic_uapi.c:1052: Error: unrecognized opcode `csrs sstatus,a4'
-   drivers/gpu/drm/drm_atomic_uapi.c:1052: Error: unrecognized opcode `csrc sstatus,a4'
-   drivers/gpu/drm/drm_atomic_uapi.c:1230: Error: unrecognized opcode `csrs sstatus,s7'
-   drivers/gpu/drm/drm_atomic_uapi.c:1230: Error: unrecognized opcode `csrc sstatus,s7'
->> drivers/gpu/drm/drm_atomic_uapi.c:466: Error: unrecognized opcode `csrs sstatus,a3'
->> drivers/gpu/drm/drm_atomic_uapi.c:466: Error: unrecognized opcode `csrc sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:366: Error: unrecognized opcode `csrs sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:366: Error: unrecognized opcode `csrc sstatus,a3'
->> drivers/gpu/drm/drm_atomic_uapi.c:1297: Error: unrecognized opcode `csrs sstatus,s1'
->> drivers/gpu/drm/drm_atomic_uapi.c:1297: Error: unrecognized opcode `csrc sstatus,s1'
-   drivers/gpu/drm/drm_atomic_uapi.c:1314: Error: unrecognized opcode `csrs sstatus,s1'
-   drivers/gpu/drm/drm_atomic_uapi.c:1314: Error: unrecognized opcode `csrc sstatus,s1'
-   drivers/gpu/drm/drm_atomic_uapi.c:1327: Error: unrecognized opcode `csrs sstatus,s5'
-   drivers/gpu/drm/drm_atomic_uapi.c:1327: Error: unrecognized opcode `csrc sstatus,s5'
+[AMD Official Use Only - General]
 
 
-vim +466 drivers/gpu/drm/drm_atomic_uapi.c
 
-   418	
-   419	static int drm_atomic_crtc_set_property(struct drm_crtc *crtc,
-   420			struct drm_crtc_state *state, struct drm_property *property,
-   421			uint64_t val)
-   422	{
-   423		struct drm_device *dev = crtc->dev;
-   424		struct drm_mode_config *config = &dev->mode_config;
-   425		bool replaced = false;
-   426		int ret;
-   427	
-   428		if (property == config->prop_active)
-   429			state->active = val;
-   430		else if (property == config->prop_mode_id) {
-   431			struct drm_property_blob *mode =
-   432				drm_property_lookup_blob(dev, val);
-   433			ret = drm_atomic_set_mode_prop_for_crtc(state, mode);
-   434			drm_property_blob_put(mode);
-   435			return ret;
-   436		} else if (property == config->degamma_lut_property) {
-   437			ret = drm_atomic_replace_property_blob_from_id(dev,
-   438						&state->degamma_lut,
-   439						val,
-   440						-1, sizeof(struct drm_color_lut),
-   441						&replaced);
-   442			state->color_mgmt_changed |= replaced;
-   443			return ret;
-   444		} else if (property == config->ctm_property) {
-   445			ret = drm_atomic_replace_property_blob_from_id(dev,
-   446						&state->ctm,
-   447						val,
-   448						sizeof(struct drm_color_ctm), -1,
-   449						&replaced);
-   450			state->color_mgmt_changed |= replaced;
-   451			return ret;
-   452		} else if (property == config->gamma_lut_property) {
-   453			ret = drm_atomic_replace_property_blob_from_id(dev,
-   454						&state->gamma_lut,
-   455						val,
-   456						-1, sizeof(struct drm_color_lut),
-   457						&replaced);
-   458			state->color_mgmt_changed |= replaced;
-   459			return ret;
-   460		} else if (property == config->prop_out_fence_ptr) {
-   461			s32 __user *fence_ptr = u64_to_user_ptr(val);
-   462	
-   463			if (!fence_ptr)
-   464				return 0;
-   465	
- > 466			if (put_user(-1, fence_ptr))
-   467				return -EFAULT;
-   468	
-   469			set_out_fence_for_crtc(state->state, crtc, fence_ptr);
-   470		} else if (crtc->funcs->atomic_set_property) {
-   471			return crtc->funcs->atomic_set_property(crtc, state, property, val);
-   472		} else {
-   473			DRM_DEBUG_ATOMIC("[CRTC:%d:%s] unknown property [PROP:%d:%s]]\n",
-   474					 crtc->base.id, crtc->name,
-   475					 property->base.id, property->name);
-   476			return -EINVAL;
-   477		}
-   478	
-   479		return 0;
-   480	}
-   481	
+> -----Original Message-----
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Tuesday, September 6, 2022 10:51 PM
+> To: Gupta, Nipun <Nipun.Gupta@amd.com>
+> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> gregkh@linuxfoundation.org; rafael@kernel.org; eric.auger@redhat.com;
+> alex.williamson@redhat.com; cohuck@redhat.com; Gupta, Puneet (DCG-ENG)
+> <puneet.gupta@amd.com>; song.bao.hua@hisilicon.com;
+> mchehab+huawei@kernel.org; maz@kernel.org; f.fainelli@gmail.com;
+> jeffrey.l.hugo@gmail.com; saravanak@google.com; Michael.Srba@seznam.cz;
+> mani@kernel.org; yishaih@nvidia.com; robin.murphy@arm.com;
+> will@kernel.org; joro@8bytes.org; masahiroy@kernel.org;
+> ndesaulniers@google.com; linux-arm-kernel@lists.infradead.org; linux-
+> kbuild@vger.kernel.org; linux-kernel@vger.kernel.org;
+> devicetree@vger.kernel.org; kvm@vger.kernel.org; okaya@kernel.org; Anand,
+> Harpreet <harpreet.anand@amd.com>; Agarwal, Nikhil
+> <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
+> Radovanovic, Aleksandar <aleksandar.radovanovic@amd.com>; git (AMD-Xilinx=
+)
+> <git@amd.com>
+> Subject: Re: [RFC PATCH v3 6/7] vfio/cdx: add support for CDX bus
+>=20
+> [CAUTION: External Email]
+>=20
+> On Tue, Sep 06, 2022 at 07:18:00PM +0530, Nipun Gupta wrote:
+> > vfio-cdx driver enables IOCTLs for user space to query
+> > MMIO regions for CDX devices and mmap them. This change
+> > also adds support for reset of CDX devices.
+> >
+> > This change adds the VFIO CDX driver and enables the following
+> > ioctls for CDX devices:
+> >  - VFIO_DEVICE_GET_INFO:
+> >  - VFIO_DEVICE_GET_REGION_INFO
+> >  - VFIO_DEVICE_RESET
+>=20
+> For non-RFC posting please post VFIO separately after getting the base
+> bus merged.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Agree, with non-RFC changes we will get bus merged first and then
+have the vfio patches as a separate set.
+
+Thanks,
+Nipun
+
+>=20
+> I think you will need to get some work done to consolidate some of
+> this duplicated code that was cut & pasted here..
+>=20
+> Jason

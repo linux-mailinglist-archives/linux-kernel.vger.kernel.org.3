@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833945ADDCA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 05:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3421E5ADDC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 05:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiIFDJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 23:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S230446AbiIFDHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 23:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbiIFDI2 (ORCPT
+        with ESMTP id S232190AbiIFDGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 23:08:28 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 640E86BD7A;
-        Mon,  5 Sep 2022 20:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=vxCdw
-        dBUw0DmipbTRNuKoL+VAC0UhCU9NiaMGV8I31E=; b=oXtHX0zWDwfXki/V896PH
-        6Grkm1aa5H869JuF7IkqlokdyZkj/vUa9vTeADV17tN8Gx97x3+/5Adjv49KFp9+
-        vnv4ka2kvgS9/ramsqr6yZcbfQNZGHhwYBv+jF27/Ie6bdrc8kiz42uIr/BsYjwK
-        pPRcA0NLghS34pUGIIb30I=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp3 (Coremail) with SMTP id G9xpCgCHe19buRZjGCkKbQ--.40649S2;
-        Tue, 06 Sep 2022 11:07:09 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     gotom@debian.or.jp, yokota@netlab.is.tsukuba.ac.jp,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] scsi: nsp32: fix spelling typo in comment
-Date:   Tue,  6 Sep 2022 11:06:42 +0800
-Message-Id: <20220906030642.854911-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 5 Sep 2022 23:06:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC28E58DEE;
+        Mon,  5 Sep 2022 20:06:52 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MM9Dl4CyKzkWsy;
+        Tue,  6 Sep 2022 11:03:03 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 6 Sep 2022 11:06:49 +0800
+Subject: Re: [PATCH v16 04/12] bpf: Export bpf_dynptr_get_size()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
+        <dhowells@redhat.com>, <jarkko@kernel.org>, <rostedt@goodmis.org>,
+        <mingo@redhat.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
+        <serge@hallyn.com>, <shuah@kernel.org>
+CC:     <bpf@vger.kernel.org>, <keyrings@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <deso@posteo.net>, <memxor@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+ <20220905143318.1592015-5-roberto.sassu@huaweicloud.com>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <0be03b75-8666-f18b-bd4f-f6677c448287@huawei.com>
+Date:   Tue, 6 Sep 2022 11:06:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgCHe19buRZjGCkKbQ--.40649S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Gw1kGrWfKrg_yoWfXFbEgF
-        Z3Z39rWry8CF4S9rnYyrZYvFWYvFWjgrs7uwn0grs3u3y7Xrs8ZFW8AF4xC347Jr40qFn8
-        Jw1q9rnYkr1DJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbiSdJUUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbivh10+1Zcem4jDwAAse
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220905143318.1592015-5-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+Hi,
 
-Fix spelling typo in comment.
+On 9/5/2022 10:33 PM, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Export bpf_dynptr_get_size(), so that kernel code dealing with eBPF dynamic
+> pointers can obtain the real size of data carried by this data structure.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
+> Acked-by: KP Singh <kpsingh@kernel.org>
+> ---
+>  include/linux/bpf.h  | 1 +
+>  kernel/bpf/helpers.c | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+SNIP
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index fc08035f14ed..824864ac82d1 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1408,7 +1408,7 @@ static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_typ
+>  	ptr->size |= type << DYNPTR_TYPE_SHIFT;
+>  }
+>  
+> -static u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
+> +u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
+>  {
+>  	return ptr->size & DYNPTR_SIZE_MASK;
+>  }
+qp-trie also need it. But considering bpf_dynptr_get_size() is just one line,
+Would moving it and the related definitions into bpf.h be a better choice ?
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/scsi/nsp32.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/nsp32.h b/drivers/scsi/nsp32.h
-index 924889f8bd37..47993d123a6f 100644
---- a/drivers/scsi/nsp32.h
-+++ b/drivers/scsi/nsp32.h
-@@ -520,7 +520,7 @@ typedef struct _nsp32_sync_table {
- #define SDTR_TARGET	  BIT(1)    /* sending SDTR from target           */
- #define SDTR_DONE	  BIT(2)    /* exchanging SDTR has been processed */
- 
--/* syncronous period value for nsp32_target.config_max */
-+/* synchronous period value for nsp32_target.config_max */
- #define FAST5M			0x32
- #define FAST10M			0x19
- #define ULTRA20M		0x0c
--- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
 

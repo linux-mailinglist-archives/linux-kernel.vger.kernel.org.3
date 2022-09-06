@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9809C5AE704
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32075AE70B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbiIFL4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S233899AbiIFL7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiIFL4c (ORCPT
+        with ESMTP id S232773AbiIFL7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:56:32 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9CB6F260;
-        Tue,  6 Sep 2022 04:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=db2zFCi0TeQzDV6buhxTlSnCtcmC9EJ7noOsn8H2ACY=; b=Pzalvoe77Xa573KE1sFZdEuKcW
-        cYoiLm9pv0/XqCBC/fXytMwSwpy7NXE9BvmPZngQpgcc8ghxw255u+3CNV/oKey4ooOYx9f/RcrXM
-        myEdLioa3ZOfkE3voCytFRnVGUQLszycTluZY99FwSYoT+44TwTMURxHFo9Hmtz7PvCM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oVXB1-00FkGI-Vf; Tue, 06 Sep 2022 13:55:35 +0200
-Date:   Tue, 6 Sep 2022 13:55:35 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tao Ren <rentao.bupt@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heyi Guo <guoheyi@linux.alibaba.com>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Liang He <windhl@126.com>, Hao Chen <chenhao288@hisilicon.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH net-next 2/2] ARM: dts: aspeed: elbert: Enable mac3
- controller
-Message-ID: <Yxc1N1auY5jk3yJI@lunn.ch>
-References: <20220905235634.20957-1-rentao.bupt@gmail.com>
- <20220905235634.20957-3-rentao.bupt@gmail.com>
- <YxaS2mS5vwW4HuqL@lunn.ch>
- <YxalTToannPyLQpI@taoren-fedora-PC23YAB4>
+        Tue, 6 Sep 2022 07:59:38 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392A013D32
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:59:33 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MMP6x3T8nz6897Z;
+        Tue,  6 Sep 2022 19:58:49 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Sep 2022 13:59:31 +0200
+Received: from [10.126.175.248] (10.126.175.248) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Sep 2022 12:59:31 +0100
+Message-ID: <1fd99fb4-bec1-9695-89f3-499477c88bb7@huawei.com>
+Date:   Tue, 6 Sep 2022 12:59:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxalTToannPyLQpI@taoren-fedora-PC23YAB4>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/3] iova: Some misc changes
+To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
+        <will@kernel.org>
+CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+References: <1660730984-30333-1-git-send-email-john.garry@huawei.com>
+ <11d9f054-fe7b-7646-a8f4-7d45a22e2a96@huawei.com>
+ <e8b232be-dfe9-0a67-c464-83fe5109070e@huawei.com>
+ <318d9157-6f2b-4ae5-70fc-a54d5919496e@arm.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <318d9157-6f2b-4ae5-70fc-a54d5919496e@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.175.248]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,63 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 06:41:33PM -0700, Tao Ren wrote:
-> Hi Andrew,
+On 05/09/2022 16:51, Robin Murphy wrote:
+>>
+>> Any thoughts on this? Since I got no review of patch #3 I assume that 
+>> it is not keenly welcome either.
 > 
-> On Tue, Sep 06, 2022 at 02:22:50AM +0200, Andrew Lunn wrote:
-> > On Mon, Sep 05, 2022 at 04:56:34PM -0700, rentao.bupt@gmail.com wrote:
-> > > From: Tao Ren <rentao.bupt@gmail.com>
-> > > 
-> > > Enable mac3 controller in Elbert dts: Elbert MAC3 is connected to the
-> > > onboard switch directly (fixed link).
-> > 
-> > What is the switch? Could you also add a DT node for it?
-> > 
-> > > 
-> > > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-> > > ---
-> > >  arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > > 
-> > > diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
-> > > index 27b43fe099f1..52cb617783ac 100644
-> > > --- a/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
-> > > +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
-> > > @@ -183,3 +183,14 @@ imux31: i2c@7 {
-> > >  &i2c11 {
-> > >  	status = "okay";
-> > >  };
-> > > +
-> > > +&mac3 {
-> > > +	status = "okay";
-> > > +	phy-mode = "rgmii";
-> > 
-> > 'rgmii' is suspicious, though not necessarily wrong. This value is
-> > normally passed to the PHY, so the PHY inserts the RGMII delay. You
-> > however don't have a PHY. So i assume the switch is inserting the
-> > delay? Again, being able to see the DT properties for the switch would
-> > be useful.
-> > 
-> >    Andrew
+> Yeah, I applied patch #3 to have a look at the result, but couldn't 
+> really convince myself either way - there are certainly a few functions 
+> in weirdly incongruous places at the moment, but afterwards we end up 
+> with certain other things in rather contrived order for the sake of 
+> avoiding declarations, so overall it just didn't feel objectively better 
+> to me. Plus the fact that rewriting nearly 2/3 of the file stands to 
+> make backporting tweaks or fixes unnecessarily painful is hard to 
+> overlook. 
+
+Yeah, that was my main concern. But if it is going to be done, then now 
+is as good a time as ever...
+
+> Hence I guess I'm leaning towards "worth trying to see how it 
+> looked, but let's not".
 > 
-> Thank you for the quick review!
-> 
-> The BMC mac3 is connected to BCM53134P's IMP_RGMII port, and there is no
-> PHY between BMC MAC and BCM53134P. BCM53134P loads configurations from
-> its EEPROM when the chip is powered.
 
-So i assume you have the switch RGMII port doing the delays. That is
-fine.
+ok, fine. But I do still feel that iova.c does need tidying to some 
+extent along these lines.
 
-> Could you please point me an example showing how to describe the switch in
-> dts? Anyhow I will need to improve the patch description and comments in
-> v2.
+> As for the stubs, it seems that they're currently unused due to linkage 
+> issues with IOMMU_IOVA=m - if we want better compile-test coverage, I 
+> wonder if we couldn't replace the IS_ENABLED() with IS_REACHABLE() and 
+> restore some of the previously-conditional selects?
 
-It looks like drivers/net/dsa/b53 does not support this particular
-switch. You could consider extending the driver. See
+Sorry, but I am not familiar - what were some examples of 
+previously-conditional selects?
 
-Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
-
-for documentation of the binding.
-
-    Andrew
+Thanks,
+John

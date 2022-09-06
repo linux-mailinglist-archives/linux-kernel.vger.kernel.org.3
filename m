@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89BC5ADD1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987375ADD1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiIFBzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 21:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        id S232568AbiIFB4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 21:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiIFBzp (ORCPT
+        with ESMTP id S229735AbiIFB4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 21:55:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA962B610;
-        Mon,  5 Sep 2022 18:55:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC60B61157;
-        Tue,  6 Sep 2022 01:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E01C43470;
-        Tue,  6 Sep 2022 01:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662429343;
-        bh=pfS9CNoNEvfoyh2//nxqJD7uVg2c1QLB5aCtER50Z68=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=loW/9YLv0rlmMEisudZVQNOFn1n6b22KNurVwZJY2+3OBiucKcZmNwklJUdkYGpQ6
-         WJdaxBb2Z+A2Zh0WRY5pZA57oUPw5K81bx1BQ8tKj00cHB94sa4qe5msnzBY1LtVkT
-         S51UUNMUOw0qDOdJ37JDmiNhsuxw+sY+Id2r1uFqfi028kLd31FORnYLfUL90x+KN5
-         KbJWTwNsBBHF21RQ3qWP8kheVIfcbrOsFRhVKhsVVWoqvi8BbnZbVzK/EPoaCENT/B
-         9q/LLsRJK3ZxBN7glmWf9O7WKIbsRQdLvP+2SSZBBxSMzfGN2l/Ad0X+uGkdQhhkbS
-         P9DYMVM3K1cZA==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1272fc7f51aso11690236fac.12;
-        Mon, 05 Sep 2022 18:55:43 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0MuBU+jmoncMVKgSnlJHrfJYEaZCxfzVupwrLrExJqaSjvFXk4
-        sLiGXT+Xf36DgkuXjlD7vo7uqMPRe0yVkilde1g=
-X-Google-Smtp-Source: AA6agR7+5Qkc1US3xZc6AzhwYNjNc26fVd4ocphyutdMyyGHQ7xzYM2uClin5e5pQtitt6PZnV/fiLM2jxFlHInyKGc=
-X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
- v18-20020a056870709200b0011eff3ad984mr10071831oae.19.1662429342398; Mon, 05
- Sep 2022 18:55:42 -0700 (PDT)
+        Mon, 5 Sep 2022 21:56:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABB729CA3;
+        Mon,  5 Sep 2022 18:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=CXem7Coa8rRQeskwG7G6nsmprv5fGWmxmm18847sqCA=; b=UuYpAIyS6pZIsEIgEKueahMcwz
+        MMyRuf5lkVJe8gIDPhuwBcgSknv1nqJWHA/F+wy3jf4U8SGFH8l5PjW7EfFWEm9Ag0Joql8OVIRPu
+        PI+KHx2OpcbkGTmrtsRT0nObFIOEoEmGitrh6eJChWMLLMsgTxCTvlzO8Dkd8TClKbia2ZsCiizoF
+        3VFJHo1+lr74X5pDYn3vgvG4iWs6r9jbAv8LGGM9qNxrhSfr2D1PJ9z2pGqaw51ehgLyiQJMScflN
+        0n0aISMhkgpRt15GZQUsKgJYive95BdGfkH3fBrdbzCZOhPUpiO91CuMN4RRnW2fEh0WFfHLTAstt
+        3nZRfWdQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVNp6-001VtU-Iu; Tue, 06 Sep 2022 01:56:20 +0000
+Message-ID: <1636a540-2115-0cdc-aeb3-236fabd78ccb@infradead.org>
+Date:   Mon, 5 Sep 2022 18:56:19 -0700
 MIME-Version: 1.0
-References: <20220904072637.8619-1-guoren@kernel.org> <YxX3CZQEe86u052D@xhacker>
-In-Reply-To: <YxX3CZQEe86u052D@xhacker>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 6 Sep 2022 09:55:30 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTYgKPMTUaHZn1n7qPmW3cPkxmx5xPurdGSg1h4tMqNqQ@mail.gmail.com>
-Message-ID: <CAJF2gTTYgKPMTUaHZn1n7qPmW3cPkxmx5xPurdGSg1h4tMqNqQ@mail.gmail.com>
-Subject: Re: [PATCH V2 0/6] riscv: Add GENERIC_ENTRY, IRQ_STACKS support
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] fs/nfs/pnfs_nfs.c: fix spelling typo and syntax error in
+ comment
+To:     Jiangshan Yi <13667453960@163.com>,
+        trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+References: <20220906015027.3963386-1-13667453960@163.com>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220906015027.3963386-1-13667453960@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,78 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 9:27 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> On Sun, Sep 04, 2022 at 03:26:31AM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > The patches convert riscv to use the generic entry infrastructure from
-> > kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
->
-> Amazing! You read my mind. I planed to do similar series this week, as
-I'm happy you liked it.
+Hi,
 
-> can be seen, I didn't RESEND the riscv irqstack patch, I planed to add
-> irqstack after generic entry. Thanks for this series.
->
-> Will read and test your patches soon. A minor comments below.
-Thx, any tests and reviews are helpful.
+On 9/5/22 18:50, Jiangshan Yi wrote:
+> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+> 
+> Fix spelling typo and syntax error in comment.
+> 
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> ---
+>  fs/nfs/pnfs_nfs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/nfs/pnfs_nfs.c b/fs/nfs/pnfs_nfs.c
+> index 657c242a18ff..45a5a66a2e3e 100644
+> --- a/fs/nfs/pnfs_nfs.c
+> +++ b/fs/nfs/pnfs_nfs.c
+> @@ -374,12 +374,12 @@ pnfs_bucket_search_commit_reqs(struct pnfs_commit_bucket *buckets,
+>  	return NULL;
+>  }
+>  
+> -/* pnfs_generic_search_commit_reqs - Search lists in @cinfo for the head reqest
+> +/* pnfs_generic_search_commit_reqs - Search lists in @cinfo for the head request
+>   *				   for @page
+>   * @cinfo - commit info for current inode
+>   * @page - page to search for matching head request
+>   *
 
->
-> > prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
-> > feature for the IRQ_STACKS config. You can try it directly with [1].
-> >
-> > [1] https://github.com/guoren83/linux/tree/generic_entry_v2
-> >
-> > Changes in V2:
-> >  - Fixup compile error by include "riscv: ptrace: Remove duplicate
-> >    operation"
-> >    https://lore.kernel.org/linux-riscv/20220903162328.1952477-2-guoren@kernel.org/T/#u
-> >  - Fixup compile warning
-> >    Reported-by: kernel test robot <lkp@intel.com>
-> >  - Add test repo link in cover letter
-> >
-> > Guo Ren (6):
-> >   riscv: ptrace: Remove duplicate operation
-> >   riscv: convert to generic entry
-> >   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-> >   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
-> >   riscv: elf_kexec: Fixup compile warning
-> >   riscv: compat_syscall_table: Fixup compile warning
->
-> It's better to move these two patches ahead of patch2.
-Okay.
+Since you are changing the Returns line anyway, please use the documented
+kernel-doc syntax for it:
 
->
-> >
-> >  arch/riscv/Kconfig                    |  10 +
-> >  arch/riscv/include/asm/csr.h          |   1 -
-> >  arch/riscv/include/asm/entry-common.h |   8 +
-> >  arch/riscv/include/asm/irq.h          |   3 +
-> >  arch/riscv/include/asm/ptrace.h       |  10 +-
-> >  arch/riscv/include/asm/stacktrace.h   |   5 +
-> >  arch/riscv/include/asm/syscall.h      |   6 +
-> >  arch/riscv/include/asm/thread_info.h  |  15 +-
-> >  arch/riscv/include/asm/vmap_stack.h   |  28 +++
-> >  arch/riscv/kernel/Makefile            |   1 +
-> >  arch/riscv/kernel/elf_kexec.c         |   4 +
-> >  arch/riscv/kernel/entry.S             | 255 +++++---------------------
-> >  arch/riscv/kernel/irq.c               |  75 ++++++++
-> >  arch/riscv/kernel/ptrace.c            |  41 -----
-> >  arch/riscv/kernel/signal.c            |  21 +--
-> >  arch/riscv/kernel/sys_riscv.c         |  26 +++
-> >  arch/riscv/kernel/traps.c             |  11 ++
-> >  arch/riscv/mm/fault.c                 |  12 +-
-> >  18 files changed, 250 insertions(+), 282 deletions(-)
-> >  create mode 100644 arch/riscv/include/asm/entry-common.h
-> >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
-> >
-> > --
-> > 2.36.1
-> >
+> - * Returns a the head request if one is found, otherwise returns NULL.
+> + * Returns the head request if one is found, otherwise returns NULL.
 
+ * Return: the head request if one is found, otherwise %NULL.
 
+>   */
+>  struct nfs_page *
+>  pnfs_generic_search_commit_reqs(struct nfs_commit_info *cinfo, struct page *page)
 
+Thanks.
 -- 
-Best Regards
- Guo Ren
+~Randy

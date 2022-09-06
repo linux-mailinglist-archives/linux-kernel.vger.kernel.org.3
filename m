@@ -2,173 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77E05AF3E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C10D5AF3E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiIFSpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 14:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S229674AbiIFSpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 14:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiIFSpq (ORCPT
+        with ESMTP id S229459AbiIFSpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:45:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D018F76478;
-        Tue,  6 Sep 2022 11:45:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3AE6615BB;
-        Tue,  6 Sep 2022 18:45:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E0DC433D6;
-        Tue,  6 Sep 2022 18:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662489943;
-        bh=5srtKgHlDqAawI0Yhw64Ha/8ev79Mn9jpJ+ljzWsc00=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=akv1mp2SKOXl6Fno8v3teqLcwKi8mSOxr9Xg06S1zU9K9MiK7O4inh1rSo8bqGC0h
-         XOn6xDQ4+8FYz/cqPxrP86enSQXcVhICaAORgai0Pb0a1lJqOZt0PDFa2eYCq7fz2U
-         E82wPu1uy+jTOsU0cRui+pzkUVpR6d9pnjSRF1MDSOtrixnExUEzyYLgm9ZE3hr1hy
-         M1uHT3AOgTuiWhqcb998vG37Oniw5oTUA06Q1nFuT5lIvWjRiBwljhvdTuApSecjwx
-         4d1ADdgGSjv7Fv8+tRvyB496HmRl6hrut8mqi32rrb5Paj14Ob6NQa5qvHWt3T0ITd
-         oJ90bzugrM9Jw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 187FA5C0A40; Tue,  6 Sep 2022 11:45:09 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 11:45:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Pingfan Liu <kernelfans@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Price <steven.price@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, boqun.feng@gmail.com
-Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
-Message-ID: <20220906184509.GF4315@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220822021520.6996-1-kernelfans@gmail.com>
- <20220822021520.6996-7-kernelfans@gmail.com>
- <20220822024528.GC6159@paulmck-ThinkPad-P17-Gen-1>
- <YwQygLBtzqwxuMIJ@piliu.users.ipa.redhat.com>
- <20220823030125.GJ6159@paulmck-ThinkPad-P17-Gen-1>
- <CAFgQCTup0uTqnKi79Tu+5Q0POYVdcE4UkGes8KfHXBd6VR552A@mail.gmail.com>
- <20220824162050.GA6159@paulmck-ThinkPad-P17-Gen-1>
- <20220831161522.GA2582451@paulmck-ThinkPad-P17-Gen-1>
- <CAFgQCTuNw3sdO=X1KNHkTZW8YvK8xo4bmTxyN_uJ9=kkWOW=zw@mail.gmail.com>
+        Tue, 6 Sep 2022 14:45:41 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDC872873;
+        Tue,  6 Sep 2022 11:45:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id l14so1840520eja.7;
+        Tue, 06 Sep 2022 11:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=HXIZTxgstp/ZG/oRasmhftNTYtNhQYTVNhwATRK01KA=;
+        b=hso5o++/iG3WRGqeXqsqlTQG4ASV62xJHp+fXx6Mo5Dj1U7EnT5tcbEfg9QrccgK/R
+         tnQv5lph3g5cU66MBB5hqlTwvZMB2d6SR9PZhlHnJuaCVyHDbfh+kPRp1piNBszvmaH+
+         iodyQdSbiPG6Yh2sL/zLpLHSrCoKfahUPUddoiAFnt2Wx5Eg27ht6xTB1sM8zgTv2Ns4
+         vmxmJAMVSkB/Xv788V6U5A4Q0mJhGVb6z09wE126tOirCZGg0U+LCSiMaM5rcTkGh0KM
+         JLCss/3rpU5dxEq5E1FltyKECYuiiVuFr2smlNleBgB0soZUBy/qKRfbrmN2dXoDaWHE
+         kwRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=HXIZTxgstp/ZG/oRasmhftNTYtNhQYTVNhwATRK01KA=;
+        b=rf28j5elNEJUPYnvqg6HiiUbC2ThlwHRORJ57TJoE1IAyy8eBZWK6Fzuh5OijS9dIT
+         PO3XcFQT4IPujM6GdWLbRWYMWCAlbbONq1aaRn1RljSunZVS80AeV1g0yu8L0memVEPs
+         R7AfqNdWgzDw4uNbcSWe0wdPKAr0NeopM1HtFjm39WA620rXJOHFh/P0+og/DqK41Qgq
+         r3P9DPBjaEDZ9hw+xQI4IiNqwKzEpj6pu67hG9Y/q5x1GvMSuVoSo6dmVs/q1SHMRGXG
+         /5YwKz6eJbvn7d0gVaVsvE9R+7ndMo10IGIENKjK0AmNowSc1Y9oJaZKW5nLsjyx16ZS
+         vsFQ==
+X-Gm-Message-State: ACgBeo08XGmeOj2gO45/O+aaoktbrUhhiNt5Voizw70uc92rLehW/WHl
+        htov2qFhPoj9i6JGN1T8e1KzY0ieGmfUAA+/rWc=
+X-Google-Smtp-Source: AA6agR4F+9Ti9v8fFFnmPvQrhjZYULAf1awN9JWkYZiJxqfPg4ByBnj54CpE5wTOzCEUch0G8xs2kRSTxhaKwuoYWS4=
+X-Received: by 2002:a17:906:58d1:b0:76d:af13:5ae3 with SMTP id
+ e17-20020a17090658d100b0076daf135ae3mr6734331ejs.708.1662489938725; Tue, 06
+ Sep 2022 11:45:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFgQCTuNw3sdO=X1KNHkTZW8YvK8xo4bmTxyN_uJ9=kkWOW=zw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+ <20220905143318.1592015-7-roberto.sassu@huaweicloud.com> <CAP01T74HKXuf9Aig4v3zsL1rwQAGRpUtTiaN2djWsMiJmaqF_A@mail.gmail.com>
+ <663480e6bdfd9809c9e367bfc8df95d7a1323723.camel@huaweicloud.com>
+In-Reply-To: <663480e6bdfd9809c9e367bfc8df95d7a1323723.camel@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 6 Sep 2022 11:45:27 -0700
+Message-ID: <CAADnVQLT9nSEqprcX_hmTeAYGVA9cWupVEfvhnyPuzWwrGKHcQ@mail.gmail.com>
+Subject: Re: [PATCH v16 06/12] bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        keyrings@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 11:53:52AM +0800, Pingfan Liu wrote:
-> On Thu, Sep 1, 2022 at 12:15 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Tue, Sep 6, 2022 at 1:01 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> > > +struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
+> > > +{
+> > > +       key_ref_t key_ref;
+> > > +       struct bpf_key *bkey;
+> > > +
+> > > +       if (flags & ~KEY_LOOKUP_ALL)
+> > > +               return NULL;
+> > > +
+> > > +       /*
+> > > +        * Permission check is deferred until the key is used, as
+> > > the
+> > > +        * intent of the caller is unknown here.
+> > > +        */
+> > > +       key_ref = lookup_user_key(serial, flags,
+> > > KEY_DEFER_PERM_CHECK);
+> > > +       if (IS_ERR(key_ref))
+> > > +               return NULL;
+> > > +
+> > > +       bkey = kmalloc(sizeof(*bkey), GFP_ATOMIC);
 > >
-> > On Wed, Aug 24, 2022 at 09:20:50AM -0700, Paul E. McKenney wrote:
-> > > On Wed, Aug 24, 2022 at 09:53:11PM +0800, Pingfan Liu wrote:
-> > > > On Tue, Aug 23, 2022 at 11:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > On Tue, Aug 23, 2022 at 09:50:56AM +0800, Pingfan Liu wrote:
-> > > > > > On Sun, Aug 21, 2022 at 07:45:28PM -0700, Paul E. McKenney wrote:
-> > > > > > > On Mon, Aug 22, 2022 at 10:15:16AM +0800, Pingfan Liu wrote:
-> > > > > > > > In order to support parallel, rcu_state.n_online_cpus should be
-> > > > > > > > atomic_dec()
-> > > > > > > >
-> > > > > > > > Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> > > > > > >
-> > > > > > > I have to ask...  What testing have you subjected this patch to?
-> > > > > > >
-> > > > > >
-> > > > > > This patch subjects to [1]. The series aims to enable kexec-reboot in
-> > > > > > parallel on all cpu. As a result, the involved RCU part is expected to
-> > > > > > support parallel.
-> > > > >
-> > > > > I understand (and even sympathize with) the expectation.  But results
-> > > > > sometimes diverge from expectations.  There have been implicit assumptions
-> > > > > in RCU about only one CPU going offline at a time, and I am not sure
-> > > > > that all of them have been addressed.  Concurrent CPU onlining has
-> > > > > been looked at recently here:
-> > > > >
-> > > > > https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
-> > > > >
-> > > > > You did us atomic_dec() to make rcu_state.n_online_cpus decrementing be
-> > > > > atomic, which is good.  Did you look through the rest of RCU's CPU-offline
-> > > > > code paths and related code paths?
-> > > >
-> > > > I went through those codes at a shallow level, especially at each
-> > > > cpuhp_step hook in the RCU system.
-> > >
-> > > And that is fine, at least as a first step.
-> > >
-> > > > But as you pointed out, there are implicit assumptions about only one
-> > > > CPU going offline at a time, I will chew the google doc which you
-> > > > share.  Then I can come to a final result.
-> > >
-> > > Boqun Feng, Neeraj Upadhyay, Uladzislau Rezki, and I took a quick look,
-> > > and rcu_boost_kthread_setaffinity() seems to need some help.  As it
-> > > stands, it appears that concurrent invocations of this function from the
-> > > CPU-offline path will cause all but the last outgoing CPU's bit to be
-> > > (incorrectly) set in the cpumask_var_t passed to set_cpus_allowed_ptr().
-> > >
-> > > This should not be difficult to fix, for example, by maintaining a
-> > > separate per-leaf-rcu_node-structure bitmask of the concurrently outgoing
-> > > CPUs for that rcu_node structure.  (Similar in structure to the
-> > > ->qsmask field.)
-> > >
-> 
-> Sorry to reply late, since I am interrupted by some other things.
-> I have took a different way and posted a series ([PATCH 1/3] rcu:
-> remove redundant cpu affinity setting during teardown) for that on
-> https://lore.kernel.org/rcu/20220905033852.18988-1-kernelfans@gmail.com/T/#t
+> > Since this function (due to lookup_user_key) is sleepable, do we
+> > really need GFP_ATOMIC here?
+>
+> Daniel suggested it for bpf_lookup_system_key(), so that the kfunc does
+> not have to be sleepable.
 
-And I took patch #3, thank you!
+Hold on. It has to be sleepable. Just take a look
+at what lookup_user_key is doing inside.
 
-#1 allows the kthread to run on the outgoing CPU, which is to be
-avoided, and #2 depends on #1.
-
-> Besides, for the integration of the concurrency cpu hot-removing into
-> the rcu torture test, I begin to do it.
-
-Very good!  I am looking forward to seeing what you come up with.
-
-> > > There are probably more where that one came from.  ;-)
-> >
-> > And here is one more from this week's session.
-> 
-> Thanks for the update.
-> 
-> > The calls to tick_dep_set() and tick_dep_clear() use atomic operations,
-> > but they operate on a global variable.  This means that the first call
-> > to rcutree_offline_cpu() would enable the tick and the first call to
-> > rcutree_dead_cpu() would disable the tick.  This might be OK, but it
-> > is at the very least bad practice.  There needs to be a counter
-> > mediating these calls.
-> 
-> I will see what I can do here.
-> 
-> > For more detail, please see the Google document:
-> >
-> > https://docs.google.com/document/d/1jymsaCPQ1PUDcfjIKm0UIbVdrJAaGX-6cXrmcfm0PRU/edit?usp=sharing
-> >
-> 
-> Have read it and hope that both online and offline concurrency can
-> come to true in near future.
-
-Indeed, I suspect that a lot of people would like to see faster kexec!
-
-							Thanx, Paul
+> For symmetry, I did the same to
+> bpf_lookup_user_key(). Will switch back to GFP_KERNEL.
+>
+> Thanks
+>
+> Roberto
+>

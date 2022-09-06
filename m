@@ -2,154 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7086F5AF5C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDCC5AF5CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiIFUXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S229876AbiIFUY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiIFUWv (ORCPT
+        with ESMTP id S229468AbiIFUYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:22:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8978A1FD
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:22:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662495755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6rfQm3A/tm7Sj95hHoCuXpvQKcgb4WAgDh0q01aC4qg=;
-        b=U1rT34XtVUrh0NF8Jjv898YADzbCIC+Hb08Uh1C+CvdQsRecl1AkBLR91CdJjMGrX4LC4+
-        pL4bpYs2gA8IyKA/5RXAku+sSkbZEj6JvOw1+cEcRS/uLYBgnYyjJERma5aQW/q0v++5od
-        pG2Qb9h7No06oBULPM55mB50NjPoTvc=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-172-hDz4yw1dPimUvrIP4nodVg-1; Tue, 06 Sep 2022 16:22:34 -0400
-X-MC-Unique: hDz4yw1dPimUvrIP4nodVg-1
-Received: by mail-qv1-f69.google.com with SMTP id li18-20020a0562145e1200b004a7963a772cso4181231qvb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:22:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=6rfQm3A/tm7Sj95hHoCuXpvQKcgb4WAgDh0q01aC4qg=;
-        b=DjA1w7uDo5t3oTSmYcWnRsDYO3kYWMpvMc1dC9GE1k2vGDml4ifSl9NtJtuwjelAfi
-         udWlK/avBwXQ+5D2/Awx57mh9VB7IofhYOqJVlylEI0UKDBT9WElF63MVryW4b26+cCx
-         GKzbkQ05YdziVjv1VK9reKzrAj2EhpP+LQtXWyDc1Je6tOwvFcpGL0WQQhfzkOjXnPWN
-         +0kvf/4rdM8+y32wqUHrUvHZ3MzKUGQrGl1Di03j/6zcfumf2qdqqEfIZvZlEw7xf7xf
-         rf3b9/wEWwgtf6s9KGb5lsAruaOseQsRgqEwrXb8VBe5ScOeFSR7w+RG4Wx1KepFkxpx
-         qMIQ==
-X-Gm-Message-State: ACgBeo2xP8AquARLsjjxfpmdXW3GounDXp/O032uu4EAxkjE857v+U3y
-        COhlfnpQPvRfjlkBN9EgEVTqmMvd0I5PWbkreKP6vBKWKDn1V79ENFqnrqqvzhS3WymB7bu8l7n
-        CM/iXIypagowq4ywMsDkNNXiq
-X-Received: by 2002:ad4:5ccc:0:b0:49a:87e:b21c with SMTP id iu12-20020ad45ccc000000b0049a087eb21cmr58585qvb.28.1662495753498;
-        Tue, 06 Sep 2022 13:22:33 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7HlEu+ZPwHInX004FIRhAcDe0jim1kS8RlEBcZxWCkXVNVfHqCq7f5i8MgInHqpj8yvoLXLQ==
-X-Received: by 2002:ad4:5ccc:0:b0:49a:87e:b21c with SMTP id iu12-20020ad45ccc000000b0049a087eb21cmr58555qvb.28.1662495753193;
-        Tue, 06 Sep 2022 13:22:33 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id u14-20020a05622a14ce00b00341a807ed21sm2137489qtx.72.2022.09.06.13.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 13:22:32 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 16:22:30 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michel Lespinasse <michel@lespinasse.org>,
-        Jerome Glisse <jglisse@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Laurent Dufour <laurent.dufour@fr.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
-        Hugh Dickins <hughd@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Minchan Kim <minchan@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH RESEND 19/28] mm: disallow do_swap_page to handle
- page faults under VMA lock
-Message-ID: <YxesBqZ+L+oeQv5e@xz-m1.local>
-References: <20220901173516.702122-1-surenb@google.com>
- <20220901173516.702122-20-surenb@google.com>
- <YxeiB2la/9fZEzLO@xz-m1.local>
- <CAJuCfpHkjHAAmKAJH=cxhFmwMawUDQJccwKa8k=xXNZZ1knT7g@mail.gmail.com>
+        Tue, 6 Sep 2022 16:24:55 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9FA3C8E0;
+        Tue,  6 Sep 2022 13:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662495894; x=1694031894;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t+qIvJWu1umzxU89Y8+usFUVVPU+q4y0SQBnYE3zFEo=;
+  b=N/pjZSy2yS0wGAbmnUejHfeSupmz55g+OgOM0zGCVYHv4XFTTsAFuzCl
+   cYwMWV5xF7sXpY9gxK6dtA+impgNFqTbSTxcfdlva660mM3qJ1APzKkqX
+   iMVeM3O0NT1TJmW8Ml8E4SzabsX5c1A+LNwOcRVoCDKcTPx8BjGUUpxLd
+   aFWKid514rWPt8lgk0dRe7jAXJwTz2FXBfvHGOVHQAD5Ad2xTsqIqS3Vf
+   r35z1C8Z8xS21V16+Q58svZjLtFhuDPcvt6z9qYBqdjcUKY2/T4QOZCpE
+   0WTMBCa5acSpB8MLSuJmHB3C9vadd7JnJ1Mol4JNQBqkcMVSPRs57JvyI
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="358413767"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="358413767"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:24:53 -0700
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="756503229"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:24:49 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVf7l-009MXY-2c;
+        Tue, 06 Sep 2022 23:24:45 +0300
+Date:   Tue, 6 Sep 2022 23:24:45 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 5/5] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+Message-ID: <YxesjfoBagiC3gGE@smile.fi.intel.com>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+ <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJuCfpHkjHAAmKAJH=cxhFmwMawUDQJccwKa8k=xXNZZ1knT7g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 01:08:10PM -0700, Suren Baghdasaryan wrote:
-> On Tue, Sep 6, 2022 at 12:39 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Thu, Sep 01, 2022 at 10:35:07AM -0700, Suren Baghdasaryan wrote:
-> > > Due to the possibility of do_swap_page dropping mmap_lock, abort fault
-> > > handling under VMA lock and retry holding mmap_lock. This can be handled
-> > > more gracefully in the future.
-> > >
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > ---
-> > >  mm/memory.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/mm/memory.c b/mm/memory.c
-> > > index 9ac9944e8c62..29d2f49f922a 100644
-> > > --- a/mm/memory.c
-> > > +++ b/mm/memory.c
-> > > @@ -3738,6 +3738,11 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> > >       vm_fault_t ret = 0;
-> > >       void *shadow = NULL;
-> > >
-> > > +     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> > > +             ret = VM_FAULT_RETRY;
-> > > +             goto out;
-> > > +     }
-> > > +
-> >
-> > May want to fail early similarly for handle_userfault() too for similar
-> > reason.  Thanks,
+On Tue, Sep 06, 2022 at 12:04:26PM -0700, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> I wasn't aware of a similar issue there. Will have a closer look. Thanks!
+> Add a Device Feature List (DFL) bus driver for the Altera
+> 16550 implementation of UART.
 
-Sure.
+...
 
-Just in case this would be anything helpful - handle_userfault() will both
-assert at the entry (mmap_assert_locked) and will in most cases release
-read lock along the way when waiting for page fault resolutions.
+> +#include <linux/dfl.h>
 
-And userfaultfd should work on anonymous memory for either missing mode or
-write protect mode.
+> +#include <linux/version.h>
 
-Thanks,
+Hmm... Do we need this?
+
+> +#include <linux/serial.h>
+> +#include <linux/serial_8250.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/io-64-nonatomic-lo-hi.h>
+
+Can this block be sorted alphabetically?
+
+...
+
+> +int feature_uart_walk(struct dfl_uart *dfluart, resource_size_t max)
+> +{
+> +	void __iomem *param_base;
+> +	int off;
+> +	u64 v;
+> +
+> +	v = readq(dfluart->csr_base + DFHv1_CSR_ADDR);
+> +	dfluart->csr_addr = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
+> +
+> +	v = readq(dfluart->csr_base + DFHv1_CSR_SIZE_GRP);
+> +	dfluart->csr_size = FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v);
+> +
+> +	if (dfluart->csr_addr == 0 || dfluart->csr_size == 0) {
+> +		dev_err(dfluart->dev, "FIXME bad dfh address and size\n");
+
+DFH ?
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
+> +		dev_err(dfluart->dev, "missing required parameters\n");
+
+Not sure I understood what parameters are here. FPGA VHDL? Configuration? RTL?
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	param_base = dfluart->csr_base + DFHv1_PARAM_HDR;
+> +
+> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_CLK_FRQ);
+> +	if (off < 0) {
+> +		dev_err(dfluart->dev, "missing CLK_FRQ param\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	dfluart->uart_clk = readq(param_base + off + DFHv1_PARAM_DATA);
+
+> +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
+
+Isn't this available via normal interfaces to user?
+
+> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_FIFO_LEN);
+> +	if (off < 0) {
+> +		dev_err(dfluart->dev, "missing FIFO_LEN param\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	dfluart->fifo_len = readq(param_base + off + DFHv1_PARAM_DATA);
+> +	dev_dbg(dfluart->dev, "UART_FIFO_ID fifo_len %llu\n", dfluart->fifo_len);
+> +
+> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
+> +	if (off < 0) {
+> +		dev_err(dfluart->dev, "missing REG_LAYOUT param\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	v = readq(param_base + off + DFHv1_PARAM_DATA);
+> +	dfluart->fifo_size = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
+> +	dfluart->reg_shift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
+> +	dev_dbg(dfluart->dev, "UART_LAYOUT_ID width %d shift %d\n",
+> +		dfluart->fifo_size, dfluart->reg_shift);
+> +
+> +	return 0;
+> +}
+> +
+> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
+> +{
+> +	struct device *dev = &dfl_dev->dev;
+> +	struct uart_8250_port uart;
+> +	struct dfl_uart *dfluart;
+> +	int ret;
+> +
+> +	memset(&uart, 0, sizeof(uart));
+> +
+> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
+> +	if (!dfluart)
+> +		return -ENOMEM;
+> +
+> +	dfluart->csr_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
+> +	if (IS_ERR(dfluart->csr_base)) {
+
+> +		dev_err(dev, "failed to get mem resource!\n");
+
+The above call have a few different messages depending on error code.
+No need to repeat this.
+
+> +		return PTR_ERR(dfluart->csr_base);
+> +	}
+> +
+> +	dfluart->dev = dev;
+> +
+> +	ret = feature_uart_walk(dfluart, resource_size(&dfl_dev->mmio_res));
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to uart feature walk %d\n", ret);
+
+> +		return -EINVAL;
+
+Why shadowing error code?
+What about
+
+	return dev_err_probe(dev, ret, ...);
+?
+
+> +	}
+> +
+> +	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
+> +
+> +	if (dfl_dev->num_irqs == 1)
+> +		uart.port.irq = dfl_dev->irqs[0];
+> +
+> +	switch (dfluart->fifo_len) {
+> +	case 32:
+> +		uart.port.type = PORT_ALTR_16550_F32;
+> +		break;
+> +
+> +	case 64:
+> +		uart.port.type = PORT_ALTR_16550_F64;
+> +		break;
+> +
+> +	case 128:
+> +		uart.port.type = PORT_ALTR_16550_F128;
+> +		break;
+> +
+> +	default:
+> +		dev_err(dev, "bad fifo_len %llu\n", dfluart->fifo_len);
+> +		return -EINVAL;
+> +	}
+> +
+> +	uart.port.iotype = UPIO_MEM32;
+> +	uart.port.membase = dfluart->csr_base + dfluart->csr_addr;
+> +	uart.port.mapsize = dfluart->csr_size;
+> +	uart.port.regshift = dfluart->reg_shift;
+> +	uart.port.uartclk = dfluart->uart_clk;
+> +
+> +	/* register the port */
+> +	ret = serial8250_register_8250_port(&uart);
+> +	if (ret < 0) {
+> +		dev_err(dev, "unable to register 8250 port %d.\n", ret);
+> +		return -EINVAL;
+> +	}
+> +	dev_info(dev, "serial8250_register_8250_port %d\n", ret);
+> +	dfluart->line = ret;
+> +	dev_set_drvdata(dev, dfluart);
+> +
+> +	return 0;
+> +}
+> +
+> +static void dfl_uart_remove(struct dfl_device *dfl_dev)
+> +{
+> +	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
+> +
+> +	if (dfluart->line > 0)
+> +		serial8250_unregister_port(dfluart->line);
+> +}
+
+...
+
+> +#define FME_FEATURE_ID_UART 0x24
+
+Purpose of this definition? For me with or without is still an ID.
+
+> +static const struct dfl_device_id dfl_uart_ids[] = {
+> +	{ FME_ID, FME_FEATURE_ID_UART },
+> +	{ }
+> +};
+
+...
+
+> +static struct dfl_driver dfl_uart_driver = {
+> +	.drv = {
+> +		.name = "dfl-uart",
+> +	},
+> +	.id_table = dfl_uart_ids,
+> +	.probe = dfl_uart_probe,
+> +	.remove = dfl_uart_remove,
+> +};
+
+> +
+
+No need to have this blank line.
+
+> +module_dfl_driver(dfl_uart_driver);
+
+...
+
+> +MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
+
+Move this closer to the definition. That's how other drivers do in the kernel.
+
+...
+
+> --- a/drivers/tty/serial/8250/Kconfig
+> +++ b/drivers/tty/serial/8250/Kconfig
+
+> --- a/drivers/tty/serial/8250/Makefile
+> +++ b/drivers/tty/serial/8250/Makefile
+
+I know that the records in those files are not sorted, but can you try hard
+to find the best place for them in those files from sorting point of view?
 
 -- 
-Peter Xu
+With Best Regards,
+Andy Shevchenko
+
 

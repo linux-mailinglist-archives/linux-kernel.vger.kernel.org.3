@@ -2,122 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307CE5AF773
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF705AF785
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiIFVyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        id S229870AbiIFV7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiIFVyq (ORCPT
+        with ESMTP id S229522AbiIFV7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:54:46 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFC02496A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:54:41 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z8so16958305edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 14:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=AOS1RPD3u8TwBcbN7lQkUbqEyQ5lUlBIgtzl/5BvCt8=;
-        b=ENgVronGcCwSedNCwVslHZ8WLV0fwSNVko2wg/BW5swdnQna7TzxSRjoo7j0ZLuA/K
-         nJvV/gEJUHakeQVDqgQM5QGftcslhxhx5LF8q0jc6kVMCBBjj1sFV4ATUgaePi9TImlB
-         jgMA+liOyGEuXf5EHPq+x7dKhULnvo9mGQwK8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=AOS1RPD3u8TwBcbN7lQkUbqEyQ5lUlBIgtzl/5BvCt8=;
-        b=Jh7ERpcxG1iUSDDiXP2kPdneTYCer2+dKZM4TZpzZ00XMd+di34I9XyBBEYDpGZ+5+
-         JEiQYTTjkAZPvdTLTLyaYvu0WzAnehje1FAcnPWUQGiMjmMVlXFyzN6Xl+IaCVHTuZu3
-         UNqx1lnMSFmiJspfMZ6xiRRQyYFANajo7lJFxgt5RHw3t85LV7LcHqWpSDC8Jd+jscx6
-         MOQkZ6zz5I2Y/9fCGxBBP+k22seW3pk37HQDKVo50RJeRVfmOb4+Iu7dgsJKvy4fVmfI
-         nih+MFr+rnYicIQZ2lqej5PwmN3mwRlWf1V/k90JC66UhbQDdNR1J+pIAMXv3G7GGMW3
-         lSJQ==
-X-Gm-Message-State: ACgBeo2vA9xtnIoTrs77V2XZX//cgHjDW2gF4EXmF/MzCHF2+GHtCTPt
-        82+lqulCObRN+vE0bLx4h3HQe7tWmUdB4Sx2
-X-Google-Smtp-Source: AA6agR7O8W/EpBzEkth6R0w7EQ2Vp1WISzb6mo514TUMWsEJtaF0nb337totrh7FXacTOnIUCSCPZg==
-X-Received: by 2002:a05:6402:b85:b0:44e:dad7:3e24 with SMTP id cf5-20020a0564020b8500b0044edad73e24mr570429edb.264.1662501280319;
-        Tue, 06 Sep 2022 14:54:40 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id r14-20020aa7c14e000000b0044e7adbe0c5sm5104986edp.87.2022.09.06.14.54.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 14:54:38 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id bp20so16945939wrb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 14:54:37 -0700 (PDT)
-X-Received: by 2002:a5d:4d0c:0:b0:228:cd9f:5a4c with SMTP id
- z12-20020a5d4d0c000000b00228cd9f5a4cmr278070wrt.138.1662501277455; Tue, 06
- Sep 2022 14:54:37 -0700 (PDT)
+        Tue, 6 Sep 2022 17:59:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B6393523;
+        Tue,  6 Sep 2022 14:59:04 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286LHrmk005609;
+        Tue, 6 Sep 2022 21:58:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=S0nSleMeoxkZR/mPLbGj26GS4xQuDMvTjjtjimwBpaI=;
+ b=rBv5EF1OFzq00Pg2IpYfFat7i6e9qQXelv0ht2QB5BLLHpJUdJ6eF9TbWAU+AdOqH8xY
+ z4rawByC2MK0XpqQerzpdFTvV7n14y6vll4De6kMEKYJaZa5SHtOemiCya7mzCBuLCHH
+ y1oVx4KpE3uj6sGT7JVLQm1ILVGL8zHRksaO0XlLTxBo4kCEjLv7m4vp4uMWhOs8n06x
+ BDHDShzrQ8nq9pc+aZvHiyR/K2oryFXXVskIy/sUQlE5f0cqnWHTVwqLCtPZUoq6zUxx
+ VEBCi7t+B55YNPiKipCXQqK+bHFSdDJtqy5+iYQQvZUBXm/O/4A7xkIuvtk3mCZSReOr VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jee0f8x3f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 21:58:59 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286LM3E4032644;
+        Tue, 6 Sep 2022 21:58:58 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jee0f8x2x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 21:58:58 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286LoHMj024617;
+        Tue, 6 Sep 2022 21:58:57 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma05wdc.us.ibm.com with ESMTP id 3jbxj9x2kf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 21:58:57 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286LwvfK2884190
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Sep 2022 21:58:57 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 056CDB2065;
+        Tue,  6 Sep 2022 21:58:57 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C92DB205F;
+        Tue,  6 Sep 2022 21:58:56 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.74.237])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Sep 2022 21:58:56 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     pavel@ucw.cz
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andy.shevchenko@gmail.com, joel@jms.id.au,
+        dan.carpenter@oracle.com, eajames@linux.ibm.com
+Subject: [PATCH v6 0/4] leds: pca955x: Add HW blink support
+Date:   Tue,  6 Sep 2022 16:58:51 -0500
+Message-Id: <20220906215855.1937331-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220906201959.69920-1-ahalaney@redhat.com>
-In-Reply-To: <20220906201959.69920-1-ahalaney@redhat.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 6 Sep 2022 14:54:25 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V1VS=JyG=B2bp6w5XutUxcpzi6Bo7PADJ1GyzQkhM=Ug@mail.gmail.com>
-Message-ID: <CAD=FV=V1VS=JyG=B2bp6w5XutUxcpzi6Bo7PADJ1GyzQkhM=Ug@mail.gmail.com>
-Subject: Re: [PATCH v2] regulator: dt-bindings: qcom,rpmh: Indicate
- regulator-allow-set-load dependencies
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Johan Hovold <johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4NZnexjLE-QY5-cKhACxv5BI5CZGZnGU
+X-Proofpoint-GUID: 2kMH-qvjtT52SUXdKpyG5Tb8ZuQtiIMK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=742 clxscore=1011
+ impostorscore=0 phishscore=0 mlxscore=0 spamscore=0 priorityscore=1501
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060100
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series adds support for blinking using the PCA955x chip, falling
+back to software blinking if another LED on the chip is already blinking
+at a different rate, or if the requested rate isn't representable with
+the PCA955x.
+Also included are some minor clean up and optimization changes that make
+the HW blinking a bit easier.
 
-On Tue, Sep 6, 2022 at 1:20 PM Andrew Halaney <ahalaney@redhat.com> wrote:
->
-> For RPMH regulators it doesn't make sense to indicate
-> regulator-allow-set-load without saying what modes you can switch to,
-> so be sure to indicate a dependency on regulator-allowed-modes.
->
-> With this in place devicetree validation can catch issues like this:
->
->     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
->             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->
-> Suggested-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
->
-> v1: https://lore.kernel.org/linux-arm-msm/20220902185148.635292-1-ahalaney@redhat.com/
-> Changes since v1:
->   - Dropped first two patches in the series as they were user error
->     (thanks Krzysztof for highlighting this!)
->   - No change in the remaining patch
->
-> Krzysztof also asked if this patch in particular should apply to other
-> regulators, which I think it should for those regulator's who implement
-> set_mode(). Unfortunately I don't know of a good way to get that
-> information in order to apply it at a broader scope for devicetree
-> regulator validation. At least with this in place RPMH users can get
-> better coverage... if someone has suggestions for how to broaden the
-> scope I'm all ears!
->
-> Thanks,
-> Andrew
->
->  .../devicetree/bindings/regulator/qcom,rpmh-regulator.yaml    | 4 ++++
->  1 file changed, 4 insertions(+)
+Changes since v5:
+ - Use auto-incrementing control register to read all the led selectors
+   at once during initialization
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Changes since v4:
+ - Set duty cycle to fifty percent for blinked LEDs in order to maintain
+   the specified blink rate.
+
+Changes since v3:
+ - Initialize return value in the blink function
+   Thanks Dan Carpenter and kernel test robot
+
+Changes since v2:
+ - Split the cleanup patch
+ - Prettier dev_err calls
+ - Include units for blink period and use defined unit translations
+   rather than just a number.
+ - Use positive conditionals.
+
+Changes since v1:
+ - Rework the blink function to fallback to software blinking if the
+   period is out of range of the chip's capabilities or if another LED
+   on the chip is already blinking at a different rate.
+ - Add the cleanup patch
+
+Eddie James (4):
+  leds: pca955x: Refactor with helper functions and renaming
+  leds: pca955x: Use pointers to driver data rather than I2C client
+  leds: pca955x: Optimize probe led selection
+  leds: pca955x: Add HW blink support
+
+ drivers/leds/leds-pca955x.c | 350 ++++++++++++++++++++++++------------
+ 1 file changed, 239 insertions(+), 111 deletions(-)
+
+-- 
+2.31.1
+

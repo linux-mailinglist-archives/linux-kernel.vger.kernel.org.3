@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6AA35AEA90
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52D75AEA49
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237773AbiIFNz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S234269AbiIFNla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239377AbiIFNxD (ORCPT
+        with ESMTP id S234091AbiIFNkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:53:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC227FF89;
-        Tue,  6 Sep 2022 06:40:37 -0700 (PDT)
+        Tue, 6 Sep 2022 09:40:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBF77DF6E;
+        Tue,  6 Sep 2022 06:37:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05C3661539;
-        Tue,  6 Sep 2022 13:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FECDC433D6;
-        Tue,  6 Sep 2022 13:40:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D3E961545;
+        Tue,  6 Sep 2022 13:35:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45E94C433C1;
+        Tue,  6 Sep 2022 13:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471622;
-        bh=kZZQgZNOWNb0uS5+JqWPB9O9PjOQu2pQWGFQnmKsyxU=;
+        s=korg; t=1662471335;
+        bh=PyZMdcACp8aTscjyxRfpRWX7/YNAAuHy+coEThDCwoM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VCzmgythir8O+/BwNdEk5WPdLzOEb7T+LKJgV+QmibNLjRjs14matOqz3TNtCAp4n
-         omTAqynTKbPa5+oOGJCx129OdGZfkhu4qrCVvRRe+fTOrbFhkXWrCamqTSYgj6XUJk
-         vZvkhyq4GqS2wkiF/HLUl1lnbLehNHjrOnR3nbDY=
+        b=07HjAYw80ureUN+dIRbYhVvO9wzmyBZ5xtSflug6JnSOrDL035nwZHKdI9U1tIBXF
+         DSkzuzeabhfk6V9rSmek3fmrL1jCn0zSBb3w9OLx/0j2VloEYzWMLoxU9KrtXRrNXG
+         mzE2FAf3J//iHieNjCQl2z7Ve1gSRC15kIfss2II=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Subject: [PATCH 5.15 089/107] driver core: Dont probe devices after bus_type.match() probe deferral
-Date:   Tue,  6 Sep 2022 15:31:10 +0200
-Message-Id: <20220906132825.586859822@linuxfoundation.org>
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        Anand Jain <anand.jain@oracle.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.10 74/80] btrfs: harden identification of a stale device
+Date:   Tue,  6 Sep 2022 15:31:11 +0200
+Message-Id: <20220906132820.223588978@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
+References: <20220906132816.936069583@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaac J. Manjarres <isaacmanjarres@google.com>
+From: Anand Jain <anand.jain@oracle.com>
 
-commit 25e9fbf0fd38868a429feabc38abebfc6dbf6542 upstream.
+commit 770c79fb65506fc7c16459855c3839429f46cb32 upstream.
 
-Both __device_attach_driver() and __driver_attach() check the return
-code of the bus_type.match() function to see if the device needs to be
-added to the deferred probe list. After adding the device to the list,
-the logic attempts to bind the device to the driver anyway, as if the
-device had matched with the driver, which is not correct.
+Identifying and removing the stale device from the fs_uuids list is done
+by btrfs_free_stale_devices().  btrfs_free_stale_devices() in turn
+depends on device_path_matched() to check if the device appears in more
+than one btrfs_device structure.
 
-If __device_attach_driver() detects that the device in question is not
-ready to match with a driver on the bus, then it doesn't make sense for
-the device to attempt to bind with the current driver or continue
-attempting to match with any of the other drivers on the bus. So, update
-the logic in __device_attach_driver() to reflect this.
+The matching of the device happens by its path, the device path. However,
+when device mapper is in use, the dm device paths are nothing but a link
+to the actual block device, which leads to the device_path_matched()
+failing to match.
 
-If __driver_attach() detects that a driver tried to match with a device
-that is not ready to match yet, then the driver should not attempt to bind
-with the device. However, the driver can still attempt to match and bind
-with other devices on the bus, as drivers can be bound to multiple
-devices. So, update the logic in __driver_attach() to reflect this.
+Fix this by matching the dev_t as provided by lookup_bdev() instead of
+plain string compare of the device paths.
 
-Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-Cc: stable@vger.kernel.org
-Cc: Saravana Kannan <saravanak@google.com>
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-Link: https://lore.kernel.org/r/20220817184026.3468620-1-isaacmanjarres@google.com
+Reported-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: Anand Jain <anand.jain@oracle.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/dd.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ fs/btrfs/volumes.c |   44 +++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 37 insertions(+), 7 deletions(-)
 
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -877,6 +877,11 @@ static int __device_attach_driver(struct
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		dev->can_match = true;
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Device can't match with a driver right now, so don't attempt
-+		 * to match or bind with other drivers on the bus.
-+		 */
-+		return ret;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
- 		return ret;
-@@ -1115,6 +1120,11 @@ static int __driver_attach(struct device
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		dev->can_match = true;
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Driver could not match with device, but may match with
-+		 * another device on the bus.
-+		 */
-+		return 0;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
- 		return ret;
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -540,15 +540,47 @@ error:
+ 	return ret;
+ }
+ 
+-static bool device_path_matched(const char *path, struct btrfs_device *device)
++/*
++ * Check if the device in the path matches the device in the given struct device.
++ *
++ * Returns:
++ *   true  If it is the same device.
++ *   false If it is not the same device or on error.
++ */
++static bool device_matched(const struct btrfs_device *device, const char *path)
+ {
+-	int found;
++	char *device_name;
++	struct block_device *bdev_old;
++	struct block_device *bdev_new;
++
++	/*
++	 * If we are looking for a device with the matching dev_t, then skip
++	 * device without a name (a missing device).
++	 */
++	if (!device->name)
++		return false;
++
++	device_name = kzalloc(BTRFS_PATH_NAME_MAX, GFP_KERNEL);
++	if (!device_name)
++		return false;
+ 
+ 	rcu_read_lock();
+-	found = strcmp(rcu_str_deref(device->name), path);
++	scnprintf(device_name, BTRFS_PATH_NAME_MAX, "%s", rcu_str_deref(device->name));
+ 	rcu_read_unlock();
+ 
+-	return found == 0;
++	bdev_old = lookup_bdev(device_name);
++	kfree(device_name);
++	if (IS_ERR(bdev_old))
++		return false;
++
++	bdev_new = lookup_bdev(path);
++	if (IS_ERR(bdev_new))
++		return false;
++
++	if (bdev_old == bdev_new)
++		return true;
++
++	return false;
+ }
+ 
+ /*
+@@ -581,9 +613,7 @@ static int btrfs_free_stale_devices(cons
+ 					 &fs_devices->devices, dev_list) {
+ 			if (skip_device && skip_device == device)
+ 				continue;
+-			if (path && !device->name)
+-				continue;
+-			if (path && !device_path_matched(path, device))
++			if (path && !device_matched(device, path))
+ 				continue;
+ 			if (fs_devices->opened) {
+ 				/* for an already deleted device return 0 */
 
 

@@ -2,259 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BE95AE130
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BCF5AE13F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238918AbiIFHgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S238952AbiIFHhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238921AbiIFHg2 (ORCPT
+        with ESMTP id S238921AbiIFHhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:36:28 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284937269C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:36:27 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id o10-20020a6b5a0a000000b0068aba769d73so6183924iob.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 00:36:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=E+eRpdq2zS/as9hnwe37rSof34gC+cknYbDBYa6XrPA=;
-        b=vqJurS4aotau13sdhGYi6UpzH/LKGjYr+SLUphRQsH75GXERcHy7myyj+PxCKxZAV2
-         UA462ibGYktB2C8TLuKmnmVYejYGCC5p7EodT7VZP+JYHn2dOfatOxkVbJmOa8QEARh1
-         Tf4y1pxOUPRKpH7aP/HA1/tHmof4jnofHmwGNuIrbOQ0XqSOBw4U7K22ZN94nyn8yJET
-         nRj0IJqXXSJBK/dBbUX/7sbKYiGlFb3kSbQOwsZ24uA2L81MIGu5gWR9eON3ImGauyNn
-         auAio803Xa/zdlngn/sXEIZlmZFRueaylHCPH6c9cyQxOy+qLuC4vd4ZWSPHFtd3N6UR
-         Ecrg==
-X-Gm-Message-State: ACgBeo3tDrK+YCty27PnT2PGusoNdKuK1IAxnyCPZe+Gs7+tUK1dDXUk
-        KhAJaQd5U0gdG/5fxA6SVpfC49OPt3axt/bPH8Z0TamUc7uc
-X-Google-Smtp-Source: AA6agR5FhrQy6NlBYGGtWOSxt8eV+c9MKylrHuNABr+HyQCPHddVLNSexaXji6XdkNhsnN2QT+Pq+Eq20l2gszPmzJqfxnbc+UE2
+        Tue, 6 Sep 2022 03:37:06 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F6A13DDE;
+        Tue,  6 Sep 2022 00:37:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NFXD7YtK4k9GSNTIrGtCt5dwLjfNfyTjMol15DxfpAOvxibHMnUx4Ll1OQ6kKAcVfYal7GKQAr1JSxwpRESlga+c5UHMnVd8i2JiKBJP57kU0ihVeSrMAp8GdrIFUxcWnpkZ3WXs0n7RUPpvVL3zx2gk3yjLGAPgTrLYBXeIkntDq2AUZLIvlRZLbRtGgZy72KprK02OZK4LPxbPkR18h0sv2e2HFiuDd8sFZeGIIe9t5oc2+uxBLNxsisqEP2UA15OrqTjhlE7Cx1pZMvSmgKkYKND9cDAGsKb6djS1rFaPs3kbc5tZkGOMGsA7S9MJ+PziSSgvN4H/jRNjSw+spA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2LEGvpK0ZL/eY/Q4OL7VLZrqeKVgWSCorY+0K5iaJ4Y=;
+ b=giTGmYak0QmFvVTmh21hZUKyyuEJH6UtZswimYVHOdW6DLqfatCiXFjBjl8ulQ0HbshLTjIV0eSGOTPTwjqBWvnt1iYMs5SrrWcPjPvkLIHKo3wjk8k8GDl6HHZrcZQpwA2bOVYEANrMIrpDpPu0/gpE9j7B8djO2NkyrOEuDwoUYCHttXcNDQUgdgy3w+7U64biyNBMoXJnYWX/spG/BoXzZnAgJaRXIXqc1p1mEoLd9Inx1KoXiK/exqsQ6G9T9xemU8dZtEk7K9ucppUK5tQQLeCuIVlh5Wf3CgaWH48HtQJk0leymUQT4QkiLUBekDWrPdygNWN/gcFdUa0y+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2LEGvpK0ZL/eY/Q4OL7VLZrqeKVgWSCorY+0K5iaJ4Y=;
+ b=Yie4tFZN24LzEd7JgMarDdaG8BNl4RUZqDPznKEZHVLoOB1DTRS/hhhxHDM5rLiivaKlPnBsTBT5+rCJHEUCFMrYEAC6evZluy6MSwDIOXS5qzw3WjNbyLAPzrjLkqJy3+Ddr3fUFycHweXXNylbA6ciO/Q1TnZXokAlMvbaR3NRP98VNbcEphqtrcKKKpigtcRjIybmZVZWQwM4THsxUAWm0r7Bb2YhcEFC17fQ29KwGQbuEyePNgmGvic5tWO0PWScilm5FV4V6iBmqHLrVctfBXlddsgkSrCFTGbEaP4tiLzeQvyc+/FYfuI8nQ21zWCq7i2FdmvjwftH/cZ4sg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
+ by BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Tue, 6 Sep
+ 2022 07:37:03 +0000
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb]) by DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb%3]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 07:37:03 +0000
+Message-ID: <ebdbc31d-68a3-e168-7344-6b1e3aa86e28@nvidia.com>
+Date:   Tue, 6 Sep 2022 00:37:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 0/7] convert most filesystems to pin_user_pages_fast()
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <YxbqUvDJ/rJsLMPZ@infradead.org>
+ <50d1d649-cb41-3031-c459-bbd38295c619@nvidia.com>
+ <Yxb1GKaiVkz7Bn2K@infradead.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Yxb1GKaiVkz7Bn2K@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0085.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::30) To DM6PR12MB4140.namprd12.prod.outlook.com
+ (2603:10b6:5:221::13)
 MIME-Version: 1.0
-X-Received: by 2002:a02:b182:0:b0:349:c915:33d4 with SMTP id
- t2-20020a02b182000000b00349c91533d4mr27182767jah.287.1662449786474; Tue, 06
- Sep 2022 00:36:26 -0700 (PDT)
-Date:   Tue, 06 Sep 2022 00:36:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fad77705e7fd40fb@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in task_work_run (2)
-From:   syzbot <syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, ebiederm@xmission.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e4cfde54-9b18-4fc6-3dbc-08da8fda97ac
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5995:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Kf1olUJDmsWeast3hnaIFbuiM9blQDSBdq2G09hfYr14MEyfef6cxBUj7A7FRVQdm3V3AR6XI2Qu/JUQQCgvFfrarUmD/2KNaX0QiYzVg6HNmAwJ8AK2/+HmcHUsoJxO7KdxXkj80UfdMsjexuc9lFDkKCX2yf9lKrcb2gPTKk8sH5KckkRYBxXClXw1fM31Eaz9PJS+KesmsT5virOkyB+kUofaRcRN7VZK6wsrSDUj6DN7DXN5MxhJSVRjWQnJSsTJu4aPGJoBxXNJe/rSA6YntHT4ppgwNcJlea3WdT4GdlRQxpw5ikP+XAeb7HKv2MOXxdweG2wmUaOMsq2HApfW6Ni4ivxEWLMLAv2Dsofzs7Jn6Fe7sPkiKg/4V9yrevjPSLU3ks8ne90cnjggvp8EkHKJhxr+PfmPXzKXOYfDEy8TX5wPQPVUbVAZPlRtk8t6Hx3te9YgecepeVtpWpQ6KLhixWrOoFlJg9ISDJUXTmcvpjPB1tIfK7KCsiqXw+QeKlZtWcys4ZOiAB0heGjRCU6qI4pF8SsB1LG3A2Jme+82e1e6M93EAs3JTaeTpB7PiZ7jjDbj/JNVDdlN+M0ciG4VqmfaKnzyVkVC08LFYnRoKC0s6fUhV0OTEeCTMQNNfw71A2XWzmgt611EJMOuyEwwyLOPnMEi0x+AG4bL85Gd3Xo2Yuy58u00OrOmQRFSr81JE6Aw1qzHKdhHcQPagEFJxIvKEIKtuO2Colx2ASVyo5l7WQv+EtwQL2SjM43e0vzo5irASD81zGiXfENz9nnhiqmB0KDMDAcXAuE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(136003)(366004)(39860400002)(396003)(31686004)(86362001)(66556008)(4326008)(8676002)(66476007)(66946007)(36756003)(38100700002)(31696002)(6486002)(26005)(53546011)(478600001)(6506007)(41300700001)(83380400001)(316002)(54906003)(6916009)(6512007)(2906002)(186003)(2616005)(5660300002)(8936002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0Z6TlVPVkdvYllJbVZGa0JKaHlBYitsZlVwclZEYm5NTmhZR0QxMEYrRm5W?=
+ =?utf-8?B?YkczVkVMSzlaV3BCVmdudFFCWVg5c3Byb0JnTzRkaFd3a041NWNPRG44Nm42?=
+ =?utf-8?B?RDE1Yzg0d2hDNWFKdjUwY1RwUDFQcHhzWmZNVjU0c1p1L0N2d1ZRdklncUZv?=
+ =?utf-8?B?NUVQUTlNa3NGRDBETWdsYlNpdkxPRUd3RDdmOGUzUE1zaE9YekpGS0E3RzVY?=
+ =?utf-8?B?TEg1aTVsa1NydmExZTd2NEp2b0lEa3NXVlR0RUx3Zk1CbG9FOUJuZE1XU0Vl?=
+ =?utf-8?B?TzRoR2x3U3FTVFlaR1dWeURZaG1iOXl0ZXJ1RFZyb2xWa0FIdWJQWXp2SzY2?=
+ =?utf-8?B?RENnWGlyNGpwd0ZzNFZiN3hJbE9pSjJ2TWlJUUJlb0QwblgwbFVLbnVGU0hM?=
+ =?utf-8?B?T0h4TmJONGs5S1hBQnlOQXRINERzRkZ5bUw5OTcvb0JQRDg5d2E2SHN0blhi?=
+ =?utf-8?B?WVlkWDh2YmZTZGQyNHY2S29ycFBWNVZNNEpBc3NuY3pvUGJxY3Rxekx5STFq?=
+ =?utf-8?B?RTczSGs4enNpc0l2bFk2UlJGUlRBdWZ0Z09uUFllTVA3NWZXSHR5MjA5Snlh?=
+ =?utf-8?B?ZzZkRWQ1QW1GWlVySmtkYTJMcHJmanVsN2NNUmR1bGRUT0IrdzdHN3AvUElu?=
+ =?utf-8?B?dXJzSVd2cTY1MUxRU2psVnBjZ0kveXdhSHJJZWlvdjEybnliQm1qc0NLTHNn?=
+ =?utf-8?B?YTYrcmJPcHZnek1vTXNad25NZWlyS0FmRjRxaG80aDVoOGt4R3h3UGZEck03?=
+ =?utf-8?B?d2psWUJPdU5ZelMxVnpzdlJjTW54ZTludmthaHZxRHhlZWQycHdSRlJobXJZ?=
+ =?utf-8?B?bUZOSHh2MUtaSzZPTXc3c3pjOUF5RkkzaHNDY1V1VWpWOCs4RTNvNkZVcWVp?=
+ =?utf-8?B?TkxmQ09DaVBGNkF5N1NadExOTnJJTkVEQ3NrNStsVGptVDk5Z3lqY1lGa2FJ?=
+ =?utf-8?B?WXgwYmRtQnBaRW5WY2J0SUxOUkRvSDZOWlYwQXV1bStxNkM4dXpnNWZqNWlh?=
+ =?utf-8?B?WStJVVFBMjRhZVFQM0tMRXIyWU1zVWpyTkJPY0lQc2JQSVJzS3NXRkZZRzJD?=
+ =?utf-8?B?UFZzNVRyLzRQQ3NvUzBlb2lteHVsNVNiRlYyanh0eVpUM210MHRyVlc4U1Fa?=
+ =?utf-8?B?UkxkWGNUUEhYeUtINHhRYVVGYjJQRnJtRFFYbWx1ZlZCS1BaazhDYjRlNW1v?=
+ =?utf-8?B?amF0ZHBySU1EMlFCc3lObFZHUCtKZWx2b3pzdUNMcHY2eGpqR0JIUjlWd2U3?=
+ =?utf-8?B?NGJIWmZwNmh0bU1tTG9aWXRwSE42YTdRWjBiZmQzMzFMR0cxM0FPdzRGNksw?=
+ =?utf-8?B?L2x3VVR1YkpZdXR2TXNyL1IzWS9XNGZJeStEdTBtSUN6RUh1UzJKd3NLbXJR?=
+ =?utf-8?B?TTExQkF0cjlVYjA4cWZIZFM1Y3BmSUNQWnJ2ZVl3aTh2WW1tczJUbzA2cnl5?=
+ =?utf-8?B?TStqTnNIUm5IUXFiMmMrbUdqVkVnaXdPcTZrMnFrcUplY0EycWdiaDZycm1J?=
+ =?utf-8?B?U0lYOGMzQXJKSXkya3h0RXlzN1B6K3MxTGxUYkVNcTNQRzByREZZam5TaHBp?=
+ =?utf-8?B?VHBHc3hvSzVjclAzdVgweW5DRDZhSHp4UE1HaDJkZ1Jtc2J0YXJHTldBUC9s?=
+ =?utf-8?B?WkRMSDVmWVdTSUVKUzZQaFRWazZMd05HZHhsMFpLeTFUVUFiM01GUGppeVN1?=
+ =?utf-8?B?aWdqUkhHaEswNUtVUzRmYzQwQ3BOS25UdThkdVdnY2dENUFBZHV6RElKRnFi?=
+ =?utf-8?B?MTRzemwrSEY3dlpVaGdXYzJ5MnhnTTFRdE1IbnkvR3kwSDl3SXNIMHFEWXNn?=
+ =?utf-8?B?U0x5bStodHJSVHF0dDV3QjBsVk4rc09FN3BQamdiQ1NpcTVTY0ZFMHB4cXo5?=
+ =?utf-8?B?dFdQWW1ncUREa0NlRVBqK29VUVNSRXdYYkoxeEcrUmFhbnorWmIyT0s1aHpR?=
+ =?utf-8?B?T3RrNGV5TEVaNytVRVZyaGZRdlI4bUxZRGFNaWdSbEVGWjFSUnNraFBIekg0?=
+ =?utf-8?B?Sy9jLzk2TlZlSG1LV2pvcmlQK0tGc0l1RnFENm1YamVvM1BQTzVwM1NHTmZD?=
+ =?utf-8?B?aG84Z3NKVjg0UmJNazFQaHExT2pPdXI1bzdiOVEyVjA3VFp5b00yWjZ5TmtG?=
+ =?utf-8?Q?Sh+uuVbSrIjZuCyYz3aqJNxKd?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4cfde54-9b18-4fc6-3dbc-08da8fda97ac
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 07:37:03.8199
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qi9QjPN6NZsEzMSsdY/k335XkAEXnmeJ02G7Cmr7fBq/GMWXHMOsh6zXsv93KtTOXp8KDxuC2yUirQjCzDFzYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5995
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 9/6/22 00:22, Christoph Hellwig wrote:
+> On Tue, Sep 06, 2022 at 12:10:54AM -0700, John Hubbard wrote:
+>> I would be delighted if that were somehow possible. Every time I think
+>> it's possible, it has fallen apart. The fact that bio_release_pages()
+>> will need to switch over from put_page() to unpin_user_page(), combined
+>> with the fact that there are a lot of callers that submit bios, has
+>> led me to the current approach.
+> 
+> We can (temporarily) pass the gup flag to bio_release_pages or even
+> better add a new bio_unpin_pages helper that undoes the pin side.
+> That is: don't try to reuse the old APIs, but ad new ones, just like
+> we do on the lower layers.
 
-syzbot found the following issue on:
+OK...so, to confirm: the idea is to convert these callsites (below) to
+call a new bio_unpin_pages() routine that does unpin_user_page().
 
-HEAD commit:    c5e4d5e99162 Merge tag 'fscache-fixes-20220831' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=142e0e1b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9c5c41fc03fda66f
-dashboard link: https://syzkaller.appspot.com/bug?extid=9228d6098455bb209ec8
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in task_work_run+0x126/0x1c0 kernel/task_work.c:176
-Read of size 8 at addr ffff88801d1fe500 by task syz-executor.2/18582
-
-CPU: 0 PID: 18582 Comm: syz-executor.2 Not tainted 6.0.0-rc3-syzkaller-00031-gc5e4d5e99162 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- print_address_description+0x65/0x4b0 mm/kasan/report.c:317
- print_report+0x108/0x220 mm/kasan/report.c:433
- kasan_report+0xfb/0x130 mm/kasan/report.c:495
- task_work_run+0x126/0x1c0 kernel/task_work.c:176
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x134/0x160 kernel/entry/common.c:169
- exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x2e/0x60 kernel/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f287f289279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f28804cd168 EFLAGS: 00000246 ORIG_RAX: 0000000000000119
-RAX: 0000000000000001 RBX: 00007f287f39bf80 RCX: 00007f287f289279
-RDX: 0000000000000001 RSI: 0000000020000000 RDI: 0000000000000003
-RBP: 00007f287f2e32e9 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000000006ff R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd34f4ba0f R14: 00007f28804cd300 R15: 0000000000022000
- </TASK>
-
-Allocated by task 18586:
- kasan_save_stack mm/kasan/common.c:38 [inline]
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- __kasan_slab_alloc+0xb2/0xe0 mm/kasan/common.c:470
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:727 [inline]
- slab_alloc_node mm/slub.c:3243 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
- kmem_cache_alloc+0x1a6/0x310 mm/slub.c:3268
- kmem_cache_zalloc include/linux/slab.h:723 [inline]
- __alloc_file+0x26/0x230 fs/file_table.c:138
- alloc_empty_file+0xa9/0x1b0 fs/file_table.c:187
- alloc_file+0x58/0x5e0 fs/file_table.c:229
- alloc_file_pseudo+0x260/0x300 fs/file_table.c:272
- dma_buf_getfile drivers/dma-buf/dma-buf.c:534 [inline]
- dma_buf_export+0x634/0x920 drivers/dma-buf/dma-buf.c:652
- drm_gem_dmabuf_export drivers/gpu/drm/drm_prime.c:253 [inline]
- drm_gem_prime_export+0x255/0x400 drivers/gpu/drm/drm_prime.c:895
- export_and_register_object drivers/gpu/drm/drm_prime.c:397 [inline]
- drm_gem_prime_handle_to_fd+0x3e6/0x530 drivers/gpu/drm/drm_prime.c:465
- drm_ioctl_kernel+0x33e/0x4f0 drivers/gpu/drm/drm_ioctl.c:782
- drm_ioctl+0x626/0xa10 drivers/gpu/drm/drm_ioctl.c:885
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 18595:
- kasan_save_stack mm/kasan/common.c:38 [inline]
- kasan_set_track+0x4c/0x70 mm/kasan/common.c:45
- kasan_set_free_info+0x1f/0x40 mm/kasan/generic.c:370
- ____kasan_slab_free+0xd8/0x120 mm/kasan/common.c:367
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1754 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1780
- slab_free mm/slub.c:3534 [inline]
- kmem_cache_free+0x95/0x1d0 mm/slub.c:3551
- rcu_do_batch kernel/rcu/tree.c:2245 [inline]
- rcu_core+0xa61/0x1710 kernel/rcu/tree.c:2505
- __do_softirq+0x382/0x793 kernel/softirq.c:571
-
-Last potentially related work creation:
- kasan_save_stack+0x3b/0x60 mm/kasan/common.c:38
- __kasan_record_aux_stack+0xaf/0xc0 mm/kasan/generic.c:348
- call_rcu+0x163/0x9c0 kernel/rcu/tree.c:2793
- task_work_run+0x146/0x1c0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x134/0x160 kernel/entry/common.c:169
- exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x2e/0x60 kernel/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Second to last potentially related work creation:
- kasan_save_stack+0x3b/0x60 mm/kasan/common.c:38
- __kasan_record_aux_stack+0xaf/0xc0 mm/kasan/generic.c:348
- task_work_add+0x2f/0x200 kernel/task_work.c:48
- fput+0xdc/0x1a0 fs/file_table.c:381
- dma_buf_poll_cb drivers/dma-buf/dma-buf.c:213 [inline]
- dma_buf_poll+0x53a/0x680 drivers/dma-buf/dma-buf.c:295
- vfs_poll include/linux/poll.h:88 [inline]
- ep_item_poll fs/eventpoll.c:853 [inline]
- ep_send_events fs/eventpoll.c:1692 [inline]
- ep_poll+0xb27/0x1e60 fs/eventpoll.c:1821
- do_epoll_wait+0x1a2/0x210 fs/eventpoll.c:2256
- do_epoll_pwait fs/eventpoll.c:2290 [inline]
- __do_sys_epoll_pwait fs/eventpoll.c:2303 [inline]
- __se_sys_epoll_pwait+0x28e/0x480 fs/eventpoll.c:2297
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88801d1fe500
- which belongs to the cache filp of size 456
-The buggy address is located 0 bytes inside of
- 456-byte region [ffff88801d1fe500, ffff88801d1fe6c8)
-
-The buggy address belongs to the physical page:
-page:ffffea0000747f80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1d1fe
-head:ffffea0000747f80 order:1 compound_mapcount:0 compound_pincount:0
-memcg:ffff888072449c01
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea00005ddf80 dead000000000002 ffff888140007a00
-raw: 0000000000000000 00000000000c000c 00000001ffffffff ffff888072449c01
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3111, tgid 3111 (v4l_id), ts 20130623440, free_ts 19733718234
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x72b/0x7a0 mm/page_alloc.c:4283
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5515
- alloc_slab_page+0x70/0xf0 mm/slub.c:1824
- allocate_slab+0x5e/0x520 mm/slub.c:1969
- new_slab mm/slub.c:2029 [inline]
- ___slab_alloc+0x42e/0xce0 mm/slub.c:3031
- __slab_alloc mm/slub.c:3118 [inline]
- slab_alloc_node mm/slub.c:3209 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
- kmem_cache_alloc+0x25d/0x310 mm/slub.c:3268
- kmem_cache_zalloc include/linux/slab.h:723 [inline]
- __alloc_file+0x26/0x230 fs/file_table.c:138
- alloc_empty_file+0xa9/0x1b0 fs/file_table.c:187
- path_openat+0xf1/0x2e00 fs/namei.c:3677
- do_filp_open+0x275/0x500 fs/namei.c:3718
- do_sys_openat2+0x13b/0x500 fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1338
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x7d/0x630 mm/page_alloc.c:3476
- qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x2f/0xe0 mm/kasan/common.c:447
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:727 [inline]
- slab_alloc_node mm/slub.c:3243 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
- kmem_cache_alloc+0x1a6/0x310 mm/slub.c:3268
- vm_area_alloc+0x20/0xe0 kernel/fork.c:459
- mmap_region+0xb4a/0x16f0 mm/mmap.c:1732
- do_mmap+0x7a7/0xdf0 mm/mmap.c:1540
- vm_mmap_pgoff+0x1e5/0x2f0 mm/util.c:552
- ksys_mmap_pgoff+0x48c/0x6d0 mm/mmap.c:1586
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff88801d1fe400: fb fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc
- ffff88801d1fe480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88801d1fe500: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff88801d1fe580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88801d1fe600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+$ git grep -nw bio_release_pages
+block/bio.c:1474:               bio_release_pages(bio, true);
+block/bio.c:1490:       bio_release_pages(bio, false);
+block/blk-map.c:308:    bio_release_pages(bio, false);
+block/blk-map.c:610:                    bio_release_pages(bio, bio_data_dir(bio) == READ);
+block/fops.c:99:        bio_release_pages(&bio, should_dirty);
+block/fops.c:165:               bio_release_pages(bio, false);
+block/fops.c:289:               bio_release_pages(bio, false);
+fs/direct-io.c:510:             bio_release_pages(bio, should_dirty);
+fs/iomap/direct-io.c:185:               bio_release_pages(bio, false);
+fs/zonefs/super.c:793:  bio_release_pages(bio, false);
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+And these can probably be done in groups, not as one big patch--your
+other email also asked to break them up into block, iomap, and legacy.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+That would be nice, I really hate the ugly dio_w*() wrappers, thanks
+for this help. :)
+
+thanks,
+
+-- 
+John Hubbard
+NVIDIA
+

@@ -2,109 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FCF5AE361
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0E15AE35F
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbiIFIqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
+        id S238999AbiIFIqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239506AbiIFIqT (ORCPT
+        with ESMTP id S239558AbiIFIqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:46:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93FA7A770
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 01:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662453743; x=1693989743;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8Y/bjET5zZ30la5m327NqJfIsBDroX957IXK6TjR0Kk=;
-  b=M91Vzvm865fGtZaP3ymDvEuVp2jKc74pXUqh81O0xAxd8qc71fixbcZD
-   dl9iggEfQAkUxwKMYYE5gIj4cf5lPzzKUqlCyuGQIKh/RMjxqDHL9fQdV
-   9lHBuWInTk51JgLHf5ybzaajz/svX6cF1byEOptaFsq14MdEXEMbnG5ty
-   /G3hpVuuAMmLLA5NFEOa/8+rolUOvF2mLavEz/Ls3O90efdxwg+R1BFMN
-   Rkj2RISt0M+0xk1e6r4RCCga0MAr10vpHtVyYFM0amNXIsF82ihcBxb9h
-   ithQfHHBa+A5/UA6iR6DWWuW1edv9v+yJKfTwxOmIHN/2iSba0NVfZlF6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="295274617"
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="295274617"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 01:42:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="644077988"
-Received: from jiebinsu-mobl.ccr.corp.intel.com (HELO [10.238.0.228]) ([10.238.0.228])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 01:41:57 -0700
-Message-ID: <4a6937b9-08b1-0f52-18db-13e17e344786@intel.com>
-Date:   Tue, 6 Sep 2022 16:41:55 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.1
-Subject: Re: [PATCH v2 1/2] percpu: Add percpu_counter_add_local
-Content-Language: en-US
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     akpm@linux-foundation.org, vasily.averin@linux.dev,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com,
-        ebiederm@xmission.com, legion@kernel.org, manfred@colorfullife.com,
-        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, tim.c.chen@intel.com,
-        feng.tang@intel.com, ying.huang@intel.com, tianyou.li@intel.com,
-        wangyang.guo@intel.com, jiebin.sun@intel.com
-References: <20220902152243.479592-1-jiebin.sun@intel.com>
- <20220905193516.846647-1-jiebin.sun@intel.com>
- <20220905193516.846647-3-jiebin.sun@intel.com>
- <20220905193159.eeu2xmqj6743kzxv@google.com>
-From:   "Sun, Jiebin" <jiebin.sun@intel.com>
-In-Reply-To: <20220905193159.eeu2xmqj6743kzxv@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 04:46:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEAF7CB74;
+        Tue,  6 Sep 2022 01:42:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7997C3377F;
+        Tue,  6 Sep 2022 08:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662453741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UFnaoWY/FeJrb/002mSVGgCF091vYON2BHbp4BeHfSo=;
+        b=n+2zFwCGuYqPO3nwxKhs0Uxq8JVOJiEMMDIZktmylzHQzHbngX4Jheti1gwlmaVoc6pxhB
+        HMEOByhuCPpK4Qpb6eREfjXI+HrnSOonuQ1FDiahKz70n53S+FdxS3Czlhv6Opv/5NeeXy
+        dyAcvLn+zZdxv2zOyNepe0YCKcV36GA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662453741;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UFnaoWY/FeJrb/002mSVGgCF091vYON2BHbp4BeHfSo=;
+        b=uKyuzu5SHZKTFLPvFFBngekvxCkGJ/1By41CUtVxOAFQ/bqtypInUNigiA0dtDzNYYDWpF
+        qv8gtgYJzrLlZAAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C4C313A19;
+        Tue,  6 Sep 2022 08:42:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8c2YFe0HF2O8VgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 06 Sep 2022 08:42:21 +0000
+Date:   Tue, 06 Sep 2022 10:42:20 +0200
+Message-ID: <87tu5khp1v.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        linux-sound@vger.kernel.org
+Subject: Re: [BUG] commit a8d302a0b77057568350fe0123e639d02dba0745 cause IO_PAGE_FAULT and a lot of errors
+In-Reply-To: <CABXGCsNBzjRB4G-fRbnOOPcmsX4EcibCMtE5UTs0iiq7T_Nedg@mail.gmail.com>
+References: <CABXGCsO+kB2t5QyHY-rUe76npr1m0-5JOtt8g8SiHUo34ur7Ww@mail.gmail.com>
+        <87ilm3vbzq.wl-tiwai@suse.de>
+        <875yi3froa.wl-tiwai@suse.de>
+        <CABXGCsMQ5H23np6fMN=58CZ6cBiHFF4WGdKdbtYLFyAAeAu5rQ@mail.gmail.com>
+        <874jxml7a4.wl-tiwai@suse.de>
+        <87o7vuj8ao.wl-tiwai@suse.de>
+        <CABXGCsNBzjRB4G-fRbnOOPcmsX4EcibCMtE5UTs0iiq7T_Nedg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 06 Sep 2022 10:13:48 +0200,
+Mikhail Gavrilov wrote:
+> 
+> On Mon, Sep 5, 2022 at 5:49 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > Even a simpler one below with a proper changelog.
+> >
+> 
+> Thanks!
+> I checked both the latest patches. Both solved the IO_PAGE_FAULT issue
+> and didn't cause any side effects.
+> Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
 
-On 9/6/2022 3:31 AM, Shakeel Butt wrote:
-> On Tue, Sep 06, 2022 at 03:35:16AM +0800, Jiebin Sun wrote:
->> Add percpu_counter_add_local for only updating local counter
->> without aggregating to global counter.
-> Please add why do we need this. Who should use this and who shouldn't.
+Thanks, I'm going to submit and merge this for the next PR.
 
-Thanks. I have added the code comment and change log in patch v3 and 
-provided
 
-the info who should use it and who shouldn't.
-
->
->> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
-> [...]
->
->> diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
->> index ed610b75dc32..d33cb750962a 100644
->> --- a/lib/percpu_counter.c
->> +++ b/lib/percpu_counter.c
->> @@ -72,6 +72,12 @@ void percpu_counter_set(struct percpu_counter *fbc, s64 amount)
->>   }
->>   EXPORT_SYMBOL(percpu_counter_set);
->>
-> Add a doc comment here on why someone want to use this?
->
->> +void percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
->> +{
->> +	this_cpu_add(*fbc->counters, amount);
->> +}
->> +EXPORT_SYMBOL(percpu_counter_add_local);
->> +
->>   /*
->>    * This function is both preempt and irq safe. The former is due to explicit
->>    * preemption disable. The latter is guaranteed by the fact that the slow path
->> -- 
->> 2.31.1
->>
+Takashi

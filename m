@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809195AEF7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DA85AEFAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238125AbiIFPzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S238654AbiIFP4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiIFPyd (ORCPT
+        with ESMTP id S233915AbiIFPzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:54:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C23E8B98E;
-        Tue,  6 Sep 2022 08:12:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Sep 2022 11:55:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EEA8D3F4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662477199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rSMhvfIyusO2m5Ftz3A0TdMajIqOhGV3ENODeHiCzw4=;
+        b=NG0XGk9ddSrgC16P7/K5eZ77vkHv8/8mWMidgFkk21liVbgtt5exFbnLsquI6Ed57sfd8s
+        wehB09AKgaFt1AGAIBqRL5G8MJBiPmkNl9w6FSdHBh5ExzKwWT1ntPE9DsyhdHGBEqx6wi
+        Wckry0cb99G7X8VF4e0osbj0kbAxwEQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-58-BrTXZ5JsO-uTWW_xymhi_w-1; Tue, 06 Sep 2022 11:13:13 -0400
+X-MC-Unique: BrTXZ5JsO-uTWW_xymhi_w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6FB8B81919;
-        Tue,  6 Sep 2022 15:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1405CC433C1;
-        Tue,  6 Sep 2022 15:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662477155;
-        bh=bD0yKhphSmBVVLUyMPYKB5NUPKImxamaOv37wNGzfVM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R/X1/ApvsqezV4eN1BIndC2/MAwkQm3YupuJBYQmD8izTSnTp/lrI35aWbBr4zeVc
-         RrxtZze9J3pTr5iwZMJWvEqU/rnzOxj7jVk2RnBIEPpBmvqamYQx7zcu17ut67cWKi
-         dRkfKWk30sRB8xj2AMRr3lzlVMbw9RHW09kJ9OnBYyEv7uLfy5xocv6HsKALoGXySt
-         ejOOkisZ96Ucfu1HHjJyLbB2sFPZm+NZfhiDksAp2OHDMd0cdYkr/6ne1hIpcUHcF0
-         Oge3E055C3Eev1I0kGxKPo51kJb7A/FLEOfwa+U13HiT1y0+KWMg6nK0jsTahy6JDx
-         rK3LGPYULPHmw==
-Date:   Tue, 6 Sep 2022 16:12:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, jirislaby@kernel.org, admin@hifiphile.com,
-        kavyasree.kotagiri@microchip.com, tudor.ambarus@microchip.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 01/13] spi: dt-bindings: atmel,at91rm9200-spi: Add DMA
- related properties
-Message-ID: <YxdjW2HXcneKvP3c@sirena.org.uk>
-References: <20220906135511.144725-1-sergiu.moga@microchip.com>
- <20220906135511.144725-2-sergiu.moga@microchip.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34AF42999B20;
+        Tue,  6 Sep 2022 15:13:13 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.192.236])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E2DBD40D296C;
+        Tue,  6 Sep 2022 15:13:10 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v11 0/7] bpf-core changes for preparation of
+Date:   Tue,  6 Sep 2022 17:12:56 +0200
+Message-Id: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RiykofuyQSrEwF40"
-Content-Disposition: inline
-In-Reply-To: <20220906135511.144725-2-sergiu.moga@microchip.com>
-X-Cookie: divorce, n:
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +65,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---RiykofuyQSrEwF40
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+well, given that the HID changes haven't moved a lot in the past
+revisions and that I am cc-ing a bunch of people, I have dropped them
+while we focus on the last 2 requirements in bpf-core changes.
 
-On Tue, Sep 06, 2022 at 04:55:00PM +0300, Sergiu Moga wrote:
-> The DT nodes of the SPI IP's may contain DMA related properties so
-> make sure that the binding is able to properly validate those as
-> well by making it aware of these optional properties.
+I'll submit a HID targeted series when we get these in tree, which
+would make things a lore more independent.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+For reference, the whole reasons for these 2 main changes are at
+https://lore.kernel.org/bpf/20220902132938.2409206-1-benjamin.tissoires@redhat.com/
 
-though it looks like perhaps this could just go separately?
+Compared to v10 (in addition of dropping the HID changes), I have
+changed the selftests so we can test both light skeletons and libbbpf
+calls.
 
---RiykofuyQSrEwF40
-Content-Type: application/pgp-signature; name="signature.asc"
+Cheers,
+Benjamin
 
------BEGIN PGP SIGNATURE-----
+Benjamin Tissoires (7):
+  selftests/bpf: regroup and declare similar kfuncs selftests in an
+    array
+  bpf: split btf_check_subprog_arg_match in two
+  bpf/verifier: allow all functions to read user provided context
+  selftests/bpf: add test for accessing ctx from syscall program type
+  bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
+  bpf/verifier: allow kfunc to return an allocated mem
+  selftests/bpf: Add tests for kfunc returning a memory pointer
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMXY1oACgkQJNaLcl1U
-h9CFSwf/f2WJjlGGmV0h/sjORBcMhneYZgMVZLsU1og4qFz2YDAOtYmPZnu9DQ+0
-Kra8RSJuu24fqcKgfjibNu9WMF9rhWVJCCW4Y0loHGBWWUf5ZFOXTLB0zor5WZjg
-nUodeAOO6krDC1SL5lmly3FP9DCEuYQoJ2PxH3Rh/3Vrvb0PWNbdGV6gJ8+KitmB
-eFlcVGlxggLpFxM7AZrpTY7cNt8XBmP3jQfo76+14nGSX5UsRIvvBt3To3ml3yyd
-wHF17Rb401msATbqq2sIy0GtR2ouz4KB42jNKYz7IF45cu8V053xJNwFY4P/5Epj
-XqqBL2HP7BaE5e8g7rqEqHrVv+jdXQ==
-=GClE
------END PGP SIGNATURE-----
+ include/linux/bpf.h                           |  11 +-
+ include/linux/bpf_verifier.h                  |   2 +
+ include/linux/btf.h                           |  10 +
+ kernel/bpf/btf.c                              | 149 ++++++++++--
+ kernel/bpf/verifier.c                         |  66 +++--
+ net/bpf/test_run.c                            |  37 +++
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ .../selftests/bpf/prog_tests/kfunc_call.c     | 227 ++++++++++++++++--
+ .../selftests/bpf/progs/kfunc_call_fail.c     | 160 ++++++++++++
+ .../selftests/bpf/progs/kfunc_call_test.c     |  71 ++++++
+ 10 files changed, 678 insertions(+), 60 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
 
---RiykofuyQSrEwF40--
+-- 
+2.36.1
+

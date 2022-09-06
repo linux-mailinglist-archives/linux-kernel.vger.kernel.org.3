@@ -2,136 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D54C5AE71E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AD55AE723
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbiIFMCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S234404AbiIFMCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234345AbiIFMCI (ORCPT
+        with ESMTP id S232906AbiIFMCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:02:08 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F827820C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:02:05 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id k10so2404785lfm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 05:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=aKRAxWiZNMhBTOwXeTZTH7tvy0Fc65bHyDaPpF0DRvo=;
-        b=NBfBfzaN0Z5N0WTEF8szrODng5xZ0noHaBAuSvVFSLzDhMhGGtN4NyXvxj3IoJxhPd
-         RNU8Oi6r4bSC2mpGUoB0Oak+BVc8HkxqK5oRiIwC7ueu0DRI41czHh4Q2EzEl3vGVkBC
-         qYiuWOnlDsaVvsMjP6uP+zuoAEYiIS03CeCv5pvXvNZIjhB/qf8A/z3mJTgHwm8nxljj
-         Gl5KgqlQRXUxr24dnNVQ2Mq4wO6NTMKvnhliJ8fzwIeaHc1CZP8tVTBTssJVLOV6xao3
-         oa5EZMoX7moIUQhkRQ3E4AeHbkIlCDB3XCwNpyrg/vnX1a9/S8MLg5fLP31SNhNrEs2+
-         MZMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=aKRAxWiZNMhBTOwXeTZTH7tvy0Fc65bHyDaPpF0DRvo=;
-        b=Vg4X/SOvTWNF3pFnp8Key0Iu8qrUpFZywwie0tGc7pAx18CoewS204koYFLzwdXK/Z
-         X7plRDmtzGzcO2Gox4wtvtyV8466i208RYS5W/gZL/dNDUIjv8JnlqaHM5S37CpBVokc
-         CR5esVf7gVCGejUYCdnCg6C1pfJEwAQOa4Wf5YUdW0ufMTXxwqTboRvfAUtGVAK8tR1D
-         5FcxHIR9eLG/whBJHM7x7CpZndHYH9H2OYBUt8cwXJubkBUo4CoVVl1isLjbiqZimoEA
-         s+eKR9pVyJp93m314W86MWzaLT1zzVhmPCfoNwSYWLWupf2ksNlTn5J/shwfJsg9gvYh
-         Ojtg==
-X-Gm-Message-State: ACgBeo0Up2Ook9HYJgeahiUfaLmqById8TMiFQkcZyvEoE2t/MhZ1c9T
-        JfpfTwvQBiZa5FdLywxapDkQ4yJ8qen5HDubSns=
-X-Google-Smtp-Source: AA6agR6VevdQAEMr+DlhREt3U2n5yyQ4W7Z02h6dvNWuxd59Rdr76rVKAPivd1qkpJ8rnREjOKO8cr7j06hnE8DRPYY=
-X-Received: by 2002:ac2:4e66:0:b0:48c:e34c:69b4 with SMTP id
- y6-20020ac24e66000000b0048ce34c69b4mr17232022lfs.85.1662465723387; Tue, 06
- Sep 2022 05:02:03 -0700 (PDT)
+        Tue, 6 Sep 2022 08:02:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E60785A2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662465742; x=1694001742;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B+zp+waDKjmV3+F5STc49zhhhMwE8xa40R3YdBcNWRk=;
+  b=Qro1wpNWT1J2yRdP7FjHa+3tHiRZ1SQwPyfwEG2A+3fEWXvjZRW49yH9
+   mo0NfO6FgPIveHG6dC9H3OaPgGgth+yfZK+PIv6W4xj1mXaAl+exWyNuf
+   huRBpFucWrpOM8IuIouCbaXfEWQ5TDRu7ub3qVo23/j6WYjZa8dbzLPr0
+   w2iT7ThuZbiuRPqb8BbXJM8ML7ydPwweY9xRRSe+rFD85ozT9piqXk4IU
+   nihSmIC3S4ir3Jeld5k0AzU3djLOiEEoqWWTf3BLfII3nm09WWhXwbDhN
+   oMFznwyFnQKKoyae1nGQ3OpbMUZRc4WP22Mx8+YU3QPunXHjolv29NNQU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="382868807"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="382868807"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:02:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="591239910"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2022 05:02:20 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVXHY-000551-0b;
+        Tue, 06 Sep 2022 12:02:20 +0000
+Date:   Tue, 6 Sep 2022 20:02:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: sound/soc/codecs/wm8731-i2c.c:65:1: error: type defaults to 'int' in
+ declaration of 'module_i2c_driver'
+Message-ID: <202209061939.wShjoFWE-lkp@intel.com>
 MIME-Version: 1.0
-Sender: donnalouise11954@gmail.com
-Received: by 2002:a9a:5c47:0:b0:211:6caf:f9ac with HTTP; Tue, 6 Sep 2022
- 05:01:59 -0700 (PDT)
-From:   "Ms. Aisha Al-Gaddafi" <mrsaishagaddafii46@gmail.com>
-Date:   Tue, 6 Sep 2022 12:01:59 +0000
-X-Google-Sender-Auth: wDFfIw0pGbi78U_zQGPxRXwHszQ
-Message-ID: <CADncvCumEw=zp=TUmpccFJ=sfUgCb_5ZLtZkDOmnnt8=BRcjyA@mail.gmail.com>
-Subject: I really need your urgent Respond now Please;;
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_99,BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
-        MILLION_USD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:135 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [donnalouise11954[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [donnalouise11954[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  0.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Morning To You My Beloved Friend,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
+commit: 9dc15f81baf273b5aaaa3302ee8faacd78f361fd ASoC: wm8731: Factor out the I2C and SPI bus code into separate modules
+date:   5 months ago
+config: mips-randconfig-s033-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061939.wShjoFWE-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9dc15f81baf273b5aaaa3302ee8faacd78f361fd
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9dc15f81baf273b5aaaa3302ee8faacd78f361fd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash sound/soc/codecs/
 
-How are you together with your lovely family?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-With due respect to your person and much sincerity of purpose I wish
-to write to you today for our mutual benefit in this investment
-transaction,
+All error/warnings (new ones prefixed by >>):
 
+>> sound/soc/codecs/wm8731-i2c.c:65:1: warning: data definition has no type or storage class
+      65 | module_i2c_driver(wm8731_i2c_driver);
+         | ^~~~~~~~~~~~~~~~~
+>> sound/soc/codecs/wm8731-i2c.c:65:1: error: type defaults to 'int' in declaration of 'module_i2c_driver' [-Werror=implicit-int]
+>> sound/soc/codecs/wm8731-i2c.c:65:1: warning: parameter names (without types) in function declaration
+   sound/soc/codecs/wm8731-i2c.c:56:26: warning: 'wm8731_i2c_driver' defined but not used [-Wunused-variable]
+      56 | static struct i2c_driver wm8731_i2c_driver = {
+         |                          ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-I'm Mss Aisha Gaddafi presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
-single Mother and a widow with three Children, I am the only
-biological Daughter of the late Libyan President (Late Colonel
-Muammar Gaddafi) I have an investment funds worth Twenty Seven
-Million Five Hundred Thousand United State Dollars ($27.500.000.00 )
-and i need an investment Manager/Partner and because of my Asylum
-Status I will authorize you the ownership of the investment funds,
-However I am interested in you for investment project assistance in
-your country in any business that will give us a good profit or in
-your company,may be from there, we can build a business relationship in the
-nearest future.
-
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds,
-
-Your urgent reply will be appreciated if only you are interested in
-this investment project,
-
-Sorry if you received this letter in your spam, is due to our recent
-connection/network error here in the country.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_SOC_WM8731_I2C
+   Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && I2C [=n]
+   Selected by [m]:
+   - SND_SOC_DB1200 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_SOC_AU1XPSC [=m]
 
 
-Best Regards,
-Mss Aisha Gaddafi.
+vim +65 sound/soc/codecs/wm8731-i2c.c
+
+    64	
+  > 65	module_i2c_driver(wm8731_i2c_driver);
+    66	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

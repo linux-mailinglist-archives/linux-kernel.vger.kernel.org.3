@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3525AEDF3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF36C5AEDE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241970AbiIFOeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S242124AbiIFOfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242145AbiIFOdf (ORCPT
+        with ESMTP id S242438AbiIFOd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:33:35 -0400
+        Tue, 6 Sep 2022 10:33:57 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD3E98A41;
-        Tue,  6 Sep 2022 06:58:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC2997D7B;
+        Tue,  6 Sep 2022 06:59:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662472736; x=1694008736;
+  t=1662472747; x=1694008747;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rxAl4C/+GYl9FO0p6O+KZF0I5ZhxVC6ijXZxrd6Fv+Y=;
-  b=o+7xicXdzFEcS32OeQr4f8AQxm2pgROJj0kZUBcwZ6GmqZJNc8xEYsNR
-   J+/QcbAL3Ca76LyCyZ871EbGKg5eo59mXWpdYepkjjdEzmu2+smY8J36g
-   ZGVD6DciP25grXEgi3ShktH1WBP/PuZT3wzuCZfkCnVnDCV617DCE8Ijw
-   kU2Uvya1LABYvztvDPZEBrywhZl0r4tXZQ4B3zktGwlIgVgwYg7XJA1Jf
-   qg0vZ7CxykWPrOIPiqQarQimFRncz5NvR+ADRIVsjGUP73RMuxDIyPBBS
-   47JuhIxXmdr08wg0nbblosinfbuDJNfGETHHvmO3ag8LfW98YCLMzuQGj
-   w==;
+  bh=1ukzoA6GXOrZn1fR+vQ1H2MVExXptIL532zW/9q++y4=;
+  b=0mtTwKfYoI0niDcWBzCban44d+3dp4+ABDOeYmcFnWD90DOPYP4WR/TW
+   fK6UPWo4uE0YO1ZVcSwbLwXeoI/2x+4wOiTR7/b9AtGMleHESufOwUxzS
+   xU47A28RgSJqYbfhrhwTobQZ+OVcCmT9Z2eIq8dJuqbiEQkL8HHIZ/+ky
+   aVGYWWLgi8+9GcCaEW+u/tE6vWYzuydyhhCWWdrLNDhayQRwPS/d/PD+E
+   /eZ2VzegnX/dPR/Zp2g/9xf6aUBar5LJDE5+dgRIr7tmi4fh6+CYRa/23
+   5K1kYhndVYDAUs0vEReClq1P5WsdGkgf5OHtV7F/CxJ4ELnI8Uoa2Nkzq
+   A==;
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="189613846"
+   d="scan'208";a="189613857"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:56:52 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:56:55 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 6 Sep 2022 06:56:49 -0700
+ 15.1.2507.12; Tue, 6 Sep 2022 06:56:54 -0700
 Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:56:44 -0700
+ 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:56:49 -0700
 From:   Sergiu Moga <sergiu.moga@microchip.com>
 To:     <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
@@ -53,9 +53,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 03/13] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI child node ref binding
-Date:   Tue, 6 Sep 2022 16:55:02 +0300
-Message-ID: <20220906135511.144725-4-sergiu.moga@microchip.com>
+Subject: [PATCH v2 04/13] ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
+Date:   Tue, 6 Sep 2022 16:55:03 +0300
+Message-ID: <20220906135511.144725-5-sergiu.moga@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906135511.144725-1-sergiu.moga@microchip.com>
 References: <20220906135511.144725-1-sergiu.moga@microchip.com>
@@ -72,38 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Another functionality of FLEXCOM is that of SPI. In order for
-the proper validation of the SPI children nodes through the binding
-to occur, the proper binding for SPI must be referenced.
+Maintain consistency among the compatibles of the serial nodes of
+sam9x60ek and highlight the incremental characteristic of its serial
+IP's by making sure that all serial nodes contain both the sam9x60
+and sam9260 usart/dbgu compatibles.
 
 Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
 ---
 
 
+
 v1 -> v2:
-- use full schema paths
+- Nothing, this patch was not here before
 
 
- .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml       | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-index 568da7cb630c..0db0f2728b65 100644
---- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-+++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-@@ -78,10 +78,9 @@ patternProperties:
-       of USART bindings.
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 81c38e101f58..49827e63508d 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -264,7 +264,7 @@ &flx5 {
+ 	status = "okay";
  
-   "^spi@[0-9a-f]+$":
--    type: object
-+    $ref: /schemas/spi/atmel,at91rm9200-spi.yaml
-     description:
--      Child node describing SPI. See ../spi/spi_atmel.txt for details
--      of SPI bindings.
-+      Child node describing SPI.
- 
-   "^i2c@[0-9a-f]+$":
-     $ref: ../i2c/atmel,at91sam-i2c.yaml
+ 	uart1: serial@200 {
+-		compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
++		compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+ 		reg = <0x200 0x200>;
+ 		interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
+ 		dmas = <&dma0
 -- 
 2.25.1
 

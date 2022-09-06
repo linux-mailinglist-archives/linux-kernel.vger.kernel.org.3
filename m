@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A0A5AE2D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14975AE2B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239324AbiIFIf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S233058AbiIFIeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239048AbiIFIe7 (ORCPT
+        with ESMTP id S234243AbiIFIeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:34:59 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6123D51438;
-        Tue,  6 Sep 2022 01:34:57 -0700 (PDT)
+        Tue, 6 Sep 2022 04:34:21 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA117AB5;
+        Tue,  6 Sep 2022 01:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662453297; x=1693989297;
+  t=1662453261; x=1693989261;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=08sYMwrtQYKROSQcOPqY388/Q3O4R9NE1kR8HL/zR+o=;
-  b=r7A/aYHlWzzKCucsJ/XPAeGRYwo4WfIbA9mXCtF1m0/bMfpen0gNAGVR
-   ExGY933CbXgWB+jSFlalqkHPHDMIXkqVWXnBvXyKqIME/IbRW9feMfgtG
-   Ek/1pbktX1kpAseqvYKFRSIrVqeIWobd5ANOu1oKzlggRSJG/Zv/M2jMr
-   k=;
+  bh=x+33rYav/AsPibYhxCbc0w3qFQuDbRm8ElL2qDQwvlI=;
+  b=JRjx7eVhyM3vV7KjqGXDq/cPmPcHQm6H/gnnZPdYcwyl/Gk2fkVmGzs1
+   +dpCnfBWh/WQbebn6/k3kc79daJaeZoX9qrU+F+IS+uFwEGHy+HKe2Go2
+   oulUkTzsSUzezJnWyhsZAXYdYwMoNuL/ve5owUzK9jKLqmYOC5nFuea0o
+   U=;
 X-IronPort-AV: E=Sophos;i="5.93,293,1654560000"; 
-   d="scan'208";a="256505599"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:41 +0000
+   d="scan'208";a="223661265"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 08:34:03 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com (Postfix) with ESMTPS id EFA291A005E;
-        Tue,  6 Sep 2022 08:34:38 +0000 (UTC)
-Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 6 Sep 2022 08:34:00 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 6 Sep 2022 08:34:00 +0000
+        by email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com (Postfix) with ESMTPS id 304F3C022E;
+        Tue,  6 Sep 2022 08:33:58 +0000 (UTC)
+Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 6 Sep 2022 08:33:58 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Tue, 6 Sep 2022 08:33:58 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:34:00 +0000
+ (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 6 Sep 2022 08:33:58 +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id D3EA94D7A; Tue,  6 Sep 2022 08:33:57 +0000 (UTC)
+        id C74184D70; Tue,  6 Sep 2022 08:33:57 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -51,17 +51,17 @@ To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
         <andriy.shevchenko@intel.com>
-Subject: [PATCH v4 15/21] hwmon: (mr75203) add VM pre-scaler x2 support
-Date:   Tue, 6 Sep 2022 08:33:50 +0000
-Message-ID: <20220906083356.21067-16-farbere@amazon.com>
+Subject: [PATCH v4 16/21] hwmon: (mr75203) modify the temperature equation according to series 5 datasheet
+Date:   Tue, 6 Sep 2022 08:33:51 +0000
+Message-ID: <20220906083356.21067-17-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220906083356.21067-1-farbere@amazon.com>
 References: <20220906083356.21067-1-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,144 +70,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for mr76006 pre-scaler which provides divide-by-2 scaling
-of the input voltage, so that it can be  presented to the VM for
-measurement within its range (the VM input range is limited from -0.1V
-to 1V).
+Modify the equation and coefficients used to convert the digital output
+to temperature according to series 5 of the Moortec Embedded Temperature
+Sensor (METS) datasheet:
+T = G + H * (n / cal5 - 0.5) + J * F
 
-The driver reads from the device-tree all the channels that use the
-mr76006 pre-scaler and multiplies the voltage result by a factor of 2,
-to represent to the user with the actual voltage input source.
+Where:
+*) G = 60, H = 200, cal5 = 4094, J = -0.1.
+*) F = frequency clock in MHz.
+*) n is the digital output.
 
-Channels that are not in the device-tree are multiplied by a factor
-of 1.
+In code, the G, H and J coefficients are multiplied by a factor of 1000
+to get the temperature in milli-Celsius.
+Final result is clamped in case it exceeds min/max thresholds.
+
+Change is done since it is unclear where the current equation and
+coefficients came from.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
 V4 -> V3:
-- Replace of_property_count_u8_elems() with device_property_count_u8().
-- Remove unnecessary blank line.
-- Remove code that validated the YAML.
+- Change 'not clear' to 'unclear' in commit message.
+- Add _mC prefix to temperature mix/max defines.
+- Add SERIES5 to coefficient defines.
 
 V3 -> V2:
-- Modify code according to new property format.
+- Protect from overflow.
+- Add temperature clamping.
+- Add better documentation.
 
- drivers/hwmon/mr75203.c | 55 +++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 53 insertions(+), 2 deletions(-)
+ drivers/hwmon/mr75203.c | 33 +++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 5aa694fd9118..66f151082c11 100644
+index 66f151082c11..f98fb0f3d2fd 100644
 --- a/drivers/hwmon/mr75203.c
 +++ b/drivers/hwmon/mr75203.c
-@@ -17,6 +17,7 @@
- #include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-+#include <linux/slab.h>
+@@ -102,13 +102,19 @@
  
- /* PVT Common register */
- #define PVT_IP_CONFIG	0x04
-@@ -108,17 +109,24 @@
+ #define PVT_POLL_DELAY_US	20
+ #define PVT_POLL_TIMEOUT_US	20000
+-#define PVT_H_CONST		100000
+-#define PVT_CAL5_CONST		2047
+-#define PVT_G_CONST		40000
+ #define PVT_CONV_BITS		10
  #define PVT_N_CONST		90
  #define PVT_R_CONST		245805
  
-+#define PRE_SCALER_X1	1
-+#define PRE_SCALER_X2	2
++#define PVT_TEMP_MIN_mC		-40000
++#define PVT_TEMP_MAX_mC		125000
 +
- /**
-  * struct voltage_device - VM single input parameters.
-  * @vm_map: Map channel number to VM index.
-  * @ch_map: Map channel number to channel index.
-+ * @pre_scaler: Pre scaler value (1 or 2) used to normalize the voltage output
-+ *              result.
-  *
-  * The structure provides mapping between channel-number (0..N-1) to VM-index
-  * (0..num_vm-1) and channel-index (0..ch_num-1) where N = num_vm * ch_num.
-+ * It also provides normalization factor for the VM equation.
-  */
- struct voltage_device {
- 	u32 vm_map;
- 	u32 ch_map;
-+	u32 pre_scaler;
- };
++/* Temperature coefficients for series 5 */
++#define PVT_SERIES5_H_CONST	200000
++#define PVT_SERIES5_G_CONST	60000
++#define PVT_SERIES5_J_CONST	-100
++#define PVT_SERIES5_CAL5_CONST	4094
++
+ #define PRE_SCALER_X1	1
+ #define PRE_SCALER_X2	2
  
- /**
-@@ -207,8 +215,8 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
- {
- 	struct pvt_device *pvt = dev_get_drvdata(dev);
- 	struct regmap *v_map = pvt->v_map;
-+	u32 n, stat, pre_scaler;
- 	u8 vm_idx, ch_idx;
--	u32 n, stat;
- 	int ret;
- 
- 	if (channel >= pvt->vm_channels.total)
-@@ -232,7 +240,9 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
- 
- 		n &= SAMPLE_DATA_MSK;
- 		/* Convert the N bitstream count into voltage */
--		*val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS);
-+		pre_scaler = pvt->vd[channel].pre_scaler;
-+		*val = pre_scaler * (PVT_N_CONST * (long)n - PVT_R_CONST) /
-+			(1 << PVT_CONV_BITS);
- 
- 		return 0;
- 	default:
-@@ -594,6 +604,43 @@ static int pvt_get_active_channel(struct device *dev, struct pvt_device *pvt,
+@@ -174,13 +180,26 @@ static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
  	return 0;
  }
  
-+static int pvt_get_pre_scaler(struct device *dev, struct pvt_device *pvt)
++static long pvt_calc_temp(struct pvt_device *pvt, u32 nbs)
 +{
-+	u8 *pre_scaler_ch_list;
-+	int i, ret, num_ch;
-+	u32 channel;
++	/*
++	 * Convert the register value to degrees centigrade temperature:
++	 * T = G + H * (n / cal5 - 0.5) + J * F
++	 */
++	s64 tmp = PVT_SERIES5_G_CONST +
++		PVT_SERIES5_H_CONST * (s64)nbs / PVT_SERIES5_CAL5_CONST -
++		PVT_SERIES5_H_CONST / 2 +
++		PVT_SERIES5_J_CONST * (s64)pvt->ip_freq / HZ_PER_MHZ;
 +
-+	/* Set default pre-scaler value to be 1. */
-+	for (i = 0; i < pvt->vm_channels.total; i++)
-+		pvt->vd[i].pre_scaler = PRE_SCALER_X1;
-+
-+	/* Get number of channels configured in "moortec,vm-pre-scaler-x2". */
-+	num_ch = device_property_count_u8(dev, "moortec,vm-pre-scaler-x2");
-+	if (num_ch <= 0)
-+		return 0;
-+
-+	pre_scaler_ch_list = kcalloc(num_ch, sizeof(*pre_scaler_ch_list),
-+				     GFP_KERNEL);
-+	if (!pre_scaler_ch_list)
-+		return -ENOMEM;
-+
-+	/* Get list of all channels that have pre-scaler of 2. */
-+	ret = device_property_read_u8_array(dev, "moortec,vm-pre-scaler-x2",
-+					    pre_scaler_ch_list, num_ch);
-+	if (ret)
-+		goto out;
-+
-+	for (i = 0; i < num_ch; i++) {
-+		channel = pre_scaler_ch_list[i];
-+		pvt->vd[channel].pre_scaler = PRE_SCALER_X2;
-+	}
-+
-+out:
-+	kfree(pre_scaler_ch_list);
-+
-+	return ret;
++	return clamp_val(tmp, PVT_TEMP_MIN_mC, PVT_TEMP_MAX_mC);
 +}
 +
- static int mr75203_probe(struct platform_device *pdev)
+ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
  {
- 	u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
-@@ -709,6 +756,10 @@ static int mr75203_probe(struct platform_device *pdev)
- 		if (ret)
- 			return ret;
+ 	struct pvt_device *pvt = dev_get_drvdata(dev);
+ 	struct regmap *t_map = pvt->t_map;
+ 	u32 stat, nbs;
+ 	int ret;
+-	u64 tmp;
  
-+		ret = pvt_get_pre_scaler(dev, pvt);
-+		if (ret)
-+			return ret;
-+
- 		in_config = devm_kcalloc(dev, pvt->vm_channels.total + 1,
- 					 sizeof(*in_config), GFP_KERNEL);
- 		if (!in_config)
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+@@ -201,9 +220,7 @@ static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+ 		 * Convert the register value to
+ 		 * degrees centigrade temperature
+ 		 */
+-		tmp = nbs * PVT_H_CONST;
+-		do_div(tmp, PVT_CAL5_CONST);
+-		*val = tmp - PVT_G_CONST - pvt->ip_freq;
++		*val = pvt_calc_temp(pvt, nbs);
+ 
+ 		return 0;
+ 	default:
+@@ -327,7 +344,7 @@ static int pvt_init(struct pvt_device *pvt)
+ 		    (key >> 1) << CLK_SYNTH_HI_SFT |
+ 		    (key >> 1) << CLK_SYNTH_HOLD_SFT | CLK_SYNTH_EN;
+ 
+-	pvt->ip_freq = sys_freq * 100 / (key + 2);
++	pvt->ip_freq = clk_get_rate(pvt->clk) / (key + 2);
+ 
+ 	if (t_num) {
+ 		ret = regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
 -- 
 2.37.1
 

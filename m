@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E328E5AE0B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EB65AE0B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238752AbiIFHOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S238797AbiIFHPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbiIFHOD (ORCPT
+        with ESMTP id S238669AbiIFHPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:14:03 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DF25EDD9;
-        Tue,  6 Sep 2022 00:14:02 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 45FC2424EB;
-        Tue,  6 Sep 2022 07:13:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1662448440; bh=0nUWl89mjqQ5K31+h2G4hNBO/2+SnGSjnZ+TdSHB9e8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ZoXYswq0HIX0U7DUE3HhgoIat+FrZQJmJZN5Qkuv9B9QlHGflmeOrVJVtI2rh/Pug
-         eB/LcOM6VlZeg89arq1wH9Jb3/7G7D3g7lPaM83BhcnSCeZKVrUHQkK0O2mWWi2NE4
-         O6hwwHI4IkN3qlS9piY5O+JryIer8/GnZSzsFQdJxeC2zUZP3Mnvlks6wwTjkT40in
-         bFABA/rPAF8Vmhuj2Q/jTtKvAlfcgzmEfbybd86A0bnAzt0r5qFiwRTOfoXwW43fPq
-         hZKq6nU2NRsLcGChvypsO0P6PEkbaijBAbzVSf+3qs1SgLdgkLDb6SM7HhhpmbARiB
-         9V7gRx8x5B+hA==
-Message-ID: <bbae73e7-9c9b-d86d-c34d-018cb9ef4540@marcan.st>
-Date:   Tue, 6 Sep 2022 16:13:56 +0900
+        Tue, 6 Sep 2022 03:15:11 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE40B2C123;
+        Tue,  6 Sep 2022 00:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=V3OOn
+        rE1L2kDomzeAbLVraRMWLD+oxq9SYhKU9hqaZY=; b=DOlvmcoqJ2C9qd+UObzaJ
+        5AL48kqPx0UinO0rJSdVWQrxauaGB2cek3RVLceKzVwG5HsRJ1bnD6Blf3M4YMlq
+        ZnTzrpJJBbZ9aeP92v4pAOieey6W7UA6AW/680j/R8NgKv9pL5ulLvLgRITIo0z4
+        U84Ncd4gUltlam0GPtUB9c=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp3 (Coremail) with SMTP id G9xpCgCnUYtq8xZjhUBHbQ--.42433S2;
+        Tue, 06 Sep 2022 15:14:53 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] kvm_host.h: fix spelling typo in comment
+Date:   Tue,  6 Sep 2022 15:14:22 +0800
+Message-Id: <20220906071422.56715-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] PCI: apple: do not leak reset GPIO on unbind/unload/error
-Content-Language: es-ES
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <YxatO5OaI2RpxQ2M@google.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <YxatO5OaI2RpxQ2M@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgCnUYtq8xZjhUBHbQ--.42433S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Jw4rXF1DJrb_yoWftrbEv3
+        Z7G3ykWrWfJr4S93W8ta4SqF1rKw4rCFyIgr95Wr47J3yqyws8Gw4kJF12ga4UGr4vkF93
+        Zan5WrZ3Ar1DXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU15C7UUUUUU==
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/xtbBthV0+11uQXYk9QAAs5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 11.15, Dmitry Torokhov wrote:
-> The driver allocates reset GPIO in apple_pcie_setup_port() but neither
-> releases the resource, nor uses devm API to have it released
-> automatically.
-> 
-> Let's fix this by switching to devm API. While at it let's use generic
-> devm_fwnode_gpiod_get() instead of OF-specific gpiod_get_from_of_node()
-> - this will allow us top stop exporting the latter down the road.
-> 
-> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
-> 
-> This patch has been pulled out of the series
-> https://lore.kernel.org/all/20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com/
-> with updated justification (leak fix vs pure API deprecation).
-> 
->  drivers/pci/controller/pcie-apple.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
-> index a2c3c207a04b..66f37e403a09 100644
-> --- a/drivers/pci/controller/pcie-apple.c
-> +++ b/drivers/pci/controller/pcie-apple.c
-> @@ -516,8 +516,8 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
->  	u32 stat, idx;
->  	int ret, i;
->  
-> -	reset = gpiod_get_from_of_node(np, "reset-gpios", 0,
-> -				       GPIOD_OUT_LOW, "PERST#");
-> +	reset = devm_fwnode_gpiod_get(pcie->dev, of_fwnode_handle(np), "reset",
-> +				      GPIOD_OUT_LOW, "PERST#");
->  	if (IS_ERR(reset))
->  		return PTR_ERR(reset);
->  
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Reviewed-by: Hector Martin <marcan@marcan.st>
+Fix spelling typo in comment.
 
-I actually caught this one a while back, just didn't get around to
-submitting it yet since it's part of my WIP PCIe power management branch
-(that I'm getting back to next week or so!) :)
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ include/linux/kvm_host.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://github.com/AsahiLinux/linux/commit/04f5628fc73ea0369f66c83ba473cb6f8187d2b3
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index f4519d3689e1..261152086dac 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -2184,7 +2184,7 @@ bool kvm_arch_irqfd_route_changed(struct kvm_kernel_irq_routing_entry *,
+ #endif /* CONFIG_HAVE_KVM_IRQ_BYPASS */
+ 
+ #ifdef CONFIG_HAVE_KVM_INVALID_WAKEUPS
+-/* If we wakeup during the poll time, was it a sucessful poll? */
++/* If we wakeup during the poll time, was it a successful poll? */
+ static inline bool vcpu_valid_wakeup(struct kvm_vcpu *vcpu)
+ {
+ 	return vcpu->valid_wakeup;
+-- 
+2.25.1
 
-- Hector
+
+No virus found
+		Checked by Hillstone Network AntiVirus
+

@@ -2,121 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBA95AF62C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F99D5AF62F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiIFUfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        id S230285AbiIFUhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiIFUfw (ORCPT
+        with ESMTP id S229829AbiIFUhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:35:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D312AE2E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662496550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eU/eDjhAzgwzMMuQpXibeKa7iqOSkUHAWQabX4HukB8=;
-        b=OuVdD9PNjmH1e6C6t8Iv/Nl8FssBX1kYzJWINTOSu/PpkfNrFJgkcACW527EAlOA3bsDfA
-        a4xrrZKD739Jc2+VKj6srT77hPAAisIAJstH6kzCDFqh0OGvHKdstjjliji/Mt+/wIgZUh
-        gZlg3wM18RpUSej3+uZ1k0zvBYZPIMI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-176-1nAapWJuOniE5PPpaNWAog-1; Tue, 06 Sep 2022 16:35:44 -0400
-X-MC-Unique: 1nAapWJuOniE5PPpaNWAog-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 663EC101A56C;
-        Tue,  6 Sep 2022 20:35:44 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E39862166B26;
-        Tue,  6 Sep 2022 20:35:43 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        feng xiangjun <fengxj325@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH v2] drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
-Date:   Tue,  6 Sep 2022 16:35:42 -0400
-Message-Id: <20220906203542.1796629-1-pauld@redhat.com>
+        Tue, 6 Sep 2022 16:37:06 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B993285AA4;
+        Tue,  6 Sep 2022 13:37:05 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id b9so9121785qka.2;
+        Tue, 06 Sep 2022 13:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=DZ0dxIN9tQK5jdKb/Xo71csBd9+xaWx/Qph+h8QMcik=;
+        b=bJkWA3f3zbGryciCNoKYUZlQ8sPDE+uuaOiPCWFKDnPVPKv0wE7qYv5u+fHKMffuZJ
+         VFdcDtR2OzCOOfHo0KXJgnO0tdOtWCWbzMD1ElXi2F9YaOdDwPggx+dQL0k8BRLGIjOZ
+         vOli4dJgZdMHMWwwbMXWkGtAm/5LhFPJ2fZXkjLn2dJ+C28NmnNMGMfWNG0g8/yW/KHk
+         muDpL8HhnNz3ndKUfiEstOy49yG8uhY9raY4CjLf2YIQEOJy6UR0kiWPjGc8RKzzfhBP
+         LVU8BzBddM9aE+hr2f58b/n5MH0OXT0yEdYbVDQ2cR0bsdII352N110l2obNfhvELGBj
+         YBKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=DZ0dxIN9tQK5jdKb/Xo71csBd9+xaWx/Qph+h8QMcik=;
+        b=qWYTorenEWGpdzFXiILBsZkKTIaV+MyG7tZQ25EZLprUpvQ5SI49X8utHFeAm29oyP
+         mtTKGlJy7ZLzrxczdDuumMBKxzh1/aaDTW6plN37vapJJI5PPxGfU7Vq1V25AhhQ36EV
+         EAdysjWcBclHnqn919+3oe5CBlwArpwq6FAs4FiS4SHzPgVhHxt2AJ9SF375pzxbkGSb
+         atNLN/ce8MyQbAnX9ucnI8Qg9/K3VklOYGSPxJfhQ84zq8cUdVknfZlE6KSbF+vB5+sg
+         fOu8Uer50dds0DoKEapiNixYqNiuzltOjUMd2Zj0IJ2ryug14vMxhoYHDZpVACSQdQnn
+         6hhg==
+X-Gm-Message-State: ACgBeo3aUKtRK/J4lgDxoBdKUOTSZ9HPLl3IAWoFPOJvOaNckO5D/Xux
+        g9O1UtG5RdFT5hMYNQut+RlBoAhBbtv+ILh2PKs=
+X-Google-Smtp-Source: AA6agR63gznhVonHJLFX9gUvtxHuMgp+NLO9da5Bjo90Te+ONTh0M1bKQ3ojMMU78IKD8Q9xatAvVSxsdXt8TMuc2AY=
+X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
+ v17-20020ae9e311000000b006bae711fb27mr384530qkf.320.1662496624827; Tue, 06
+ Sep 2022 13:37:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220906200535.1919398-1-eajames@linux.ibm.com> <20220906200535.1919398-3-eajames@linux.ibm.com>
+In-Reply-To: <20220906200535.1919398-3-eajames@linux.ibm.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 6 Sep 2022 23:36:28 +0300
+Message-ID: <CAHp75VcLiCRy_m35Sd4AGpOKQ+5WTXMzHZA7hcwDR-t1v46t2Q@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] iio: pressure: dps310: Reset chip after timeout
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
-This leads to very large file sizes:
+On Tue, Sep 6, 2022 at 11:05 PM Eddie James <eajames@linux.ibm.com> wrote:
+>
+> The DPS310 chip has been observed to get "stuck" such that pressure
+> and temperature measurements are never indicated as "ready" in the
+> MEAS_CFG register. The only solution is to reset the device and try
+> again. In order to avoid continual failures, use a boolean flag to
+> only try the reset after timeout once if errors persist.
 
-topology$ ls -l
-total 0
--r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
--r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
--r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
--r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
--r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
--r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
--r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
--r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
--r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
--r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
--r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
--r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
--r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
+If the previous patch is a dependency to this one, you need to use its
+Subject in a Cc: stable@ tag as it's pointed out in the documentation.
+Otherwise, Fixes go first in the series.
 
-Adjust the inequality to catch the case when NR_CPUS is configured
-to a small value.
+...
 
-Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
-Reported-by: feng xiangjun <fengxj325@gmail.com>
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: stable@vger.kernel.org
-Cc: feng xiangjun <fengxj325@gmail.com>
----
+> +static int dps310_reset_reinit(struct dps310_data *data)
+> +{
+> +       int rc;
+> +
+> +       rc = dps310_reset_wait(data);
+> +       if (rc)
+> +               return rc;
 
-v2: Remove the +/-1 completely from the test since it will produce the
-same results, and remove some extra parentheses.
+> +       rc = dps310_startup(data);
+> +       if (rc)
+> +               return rc;
+> +
+> +       return 0;
 
- include/linux/cpumask.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Can be simply return _startup(...);
 
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index bd047864c7ac..e8ad12b5b9d2 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -1127,9 +1127,10 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-  * cover a worst-case of every other cpu being on one of two nodes for a
-  * very large NR_CPUS.
-  *
-- *  Use PAGE_SIZE as a minimum for smaller configurations.
-+ *  Use PAGE_SIZE as a minimum for smaller configurations while avoiding
-+ *  unsigned comparison to -1.
-  */
--#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
-+#define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
- 					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
- #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
- 
--- 
-2.31.1
+> +}
 
+...
+
+Can it be a helper here?
+
+int dps310_get_ready_status(data, ready_bit, timeout)
+{
+  sleep = ...
+  int ready;
+
+ return regmap_read_poll_timeout(...);
+
+}
+
+> +static int dps310_ready(struct dps310_data *data, int ready_bit, int timeout)
+> +{
+> +       int rc;
+> +       int ready;
+> +       int sleep = DPS310_POLL_SLEEP_US(timeout);
+
+> +       rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready, ready & ready_bit,
+> +                                     sleep, timeout);
+
+rc = dps310_get_ready_status(...);
+
+> +       if (rc) {
+> +               if (rc == -ETIMEDOUT && !data->timeout_recovery_failed) {
+> +                       int rc2;
+> +
+> +                       /* Reset and reinitialize the chip. */
+> +                       rc2 = dps310_reset_reinit(data);
+> +                       if (rc2) {
+> +                               data->timeout_recovery_failed = true;
+> +                       } else {
+
+> +                               /* Try again to get sensor ready status. */
+> +                               rc2 = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
+> +                                                              ready, ready & ready_bit, sleep,
+> +                                                              timeout);
+
+rc2 = dps310_get_ready_status(...);
+
+> +                               if (rc2)
+> +                                       data->timeout_recovery_failed = true;
+> +                               else
+> +                                       return 0;
+> +                       }
+> +               }
+> +
+> +               return rc;
+> +       }
+> +
+> +       data->timeout_recovery_failed = false;
+> +       return 0;
+> +}
+
+--
+With Best Regards,
+Andy Shevchenko

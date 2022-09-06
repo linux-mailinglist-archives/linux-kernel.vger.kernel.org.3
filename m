@@ -2,109 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109105AF64F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75FE5AF651
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbiIFUrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S231278AbiIFUrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiIFUrO (ORCPT
+        with ESMTP id S229693AbiIFUrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:47:14 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECAD915C0;
-        Tue,  6 Sep 2022 13:47:13 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 130so13038738ybz.9;
-        Tue, 06 Sep 2022 13:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+WURMAVRZWoeEl3WfS2Wri6rYAcNRWeV/u+drCF3J74=;
-        b=Ety/usxvSDrpSlVHwhRJBA2Gy9vFEi2BJhkDv8zvEipJZz4J8fsc0PEt5E3GeUGjCs
-         rY/tNzWizv4kDArNaeIcPdoCaFqQyk1+FbzP2ZfKdqach02cd/MwU+7NbuO7ncv3tPRw
-         C+D28ruAzEfInAgr/0j2mVlP14uRWbtY+uXLRPRERQaqMOv6V8T6Mr6bQjOijtDk9hCQ
-         M8wgWl06tFlkpZJkAAqd+9yiyX0keQgduCvkLcob2Ssmir3Wb1BXhEQgkIxu8l+thW1p
-         eAKLlzzw2k3QxgV+k2zsx5QxysjSLUNtI7fL47Gg4vkvaGOs0vuXx1HQ32m7gotFejiI
-         eu/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+WURMAVRZWoeEl3WfS2Wri6rYAcNRWeV/u+drCF3J74=;
-        b=wCNSsujl3fyDWhSKRiAVMkwffYkvpTjNJJUx47tI/Tif8AAPG0y9N8ICKkW1BPkRU2
-         5R4V0bTLzn9ygt7nzCJxfnBnEtvoxRYsPMcwITdackApfzvdyhmxplYxuGyXLZBGX8W8
-         1KrnmrXgfaJ9y99OtcPmVm7q4+1+gOg+kqtAywSu50SPB6yP2wjYc+6vI/mN/YoVmeyw
-         Q859jmNCDTfn+F3SPTSVljXChv1i8x5CEQtbTdynledYiBG3SjkqwYBbViUUfcpMPw70
-         VKFZW43yYuiJfCZoQ3J2LlEnVRk2yNLWPgP5hgD7A7/diG/cxDafaH4MvPNJcdi+m+sj
-         mrSA==
-X-Gm-Message-State: ACgBeo0p40fshInUueUZbJgWXeKprfjGE1Y/cuu/7HaRhL/pbLgdNT9Z
-        nHY0/qXa7/zz7VTLkBrnHGYMxLAjZmkXpZqCPtod99bAZOo=
-X-Google-Smtp-Source: AA6agR57DkuDbCN2s20x5pRyTYxxXbXqSv1N4hr3gpM4FZXXY/u6mn1anMqn/b6jPFE17eUhBWPbCZgjfxyJMI8F8Kw=
-X-Received: by 2002:a25:dbcb:0:b0:6a8:e19f:9938 with SMTP id
- g194-20020a25dbcb000000b006a8e19f9938mr430485ybf.158.1662497233152; Tue, 06
- Sep 2022 13:47:13 -0700 (PDT)
+        Tue, 6 Sep 2022 16:47:47 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C06E92F5A;
+        Tue,  6 Sep 2022 13:47:46 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286JuuvQ017372;
+        Tue, 6 Sep 2022 20:47:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OLZbukH3qSiuuXcos743VoQvDRex9q2vckW6C/pLSOY=;
+ b=ZWC+kzw+xbqg64duub2hR38fDp3R3pQhrnMSXyxdhcRQTGd+fUUd00dASl9FyG8yN0aT
+ IF4b/Q3l7ccOCIV677EMbQlKikqZ3NkeP/YU2xrBf4N+lgk1UpdUvL+80Rl+LNi2bT/L
+ 14d0+CHeO5f5hvkWKi40/BPI6tLX56jEUu7EEmyNJifpBKjT8oKdSGeSnP5GWkspdh4X
+ WxzFPqyie3GKvJ8Rqj837KvFtXNsj+MIl2eylv+JaAAxlaEpPden3KpaS/hezv6mN15D
+ aBzfFGIa6lbnaaNy/RPCyVS0g3AKTnEPEgutq7kO1Bz9bGBo+NmUA/8uR6czS/jJcn+/ mA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jecthhbm4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 20:47:42 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286KaUXL018260;
+        Tue, 6 Sep 2022 20:47:41 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03dal.us.ibm.com with ESMTP id 3jbxja37kt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 20:47:41 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286Klfj68061674
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Sep 2022 20:47:41 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11A3AAC05B;
+        Tue,  6 Sep 2022 20:47:41 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1225AC059;
+        Tue,  6 Sep 2022 20:47:40 +0000 (GMT)
+Received: from [9.160.74.237] (unknown [9.160.74.237])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Sep 2022 20:47:40 +0000 (GMT)
+Message-ID: <f0f3a8c5-113c-7070-4613-150cc0cd20a6@linux.ibm.com>
+Date:   Tue, 6 Sep 2022 15:47:40 -0500
 MIME-Version: 1.0
-References: <20220906132821.713989422@linuxfoundation.org>
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Tue, 6 Sep 2022 21:46:37 +0100
-Message-ID: <CADVatmMTbnOm1bHWdbxVZ26QfbjyhhB+_ZRBMM53GicJczE5=Q@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/107] 5.15.66-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] leds: Ensure hardware blinking turns off when requested
+Content-Language: en-US
+To:     pavel@ucw.cz
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220520171134.31415-1-eajames@linux.ibm.com>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <20220520171134.31415-1-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9soKK_2NuCqcwXO7oO9e-cu66r1Wvgd0
+X-Proofpoint-GUID: 9soKK_2NuCqcwXO7oO9e-cu66r1Wvgd0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=770
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060095
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Any update on this?
 
-On Tue, Sep 6, 2022 at 2:37 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+Thanks,
+
+Eddie
+
+
+On 5/20/22 12:11, Eddie James wrote:
+> If an LED is blinking through the hardware and the trigger is deactivated,
+> the driver will set the brightness to 0 to disable blinking. However, if
+> the LED driver doesn't support non-blocking operations, the request for
+> setting brightness to 0 will get queued. Then if a user requests a new
+> non-zero brightness before the request for 0 brightness is executed, the
+> LED blinking will not get disabled since the brightness will simply be
+> updated.
+> Fix this by flushing the workqueue before updating the requested
+> brightness.
 >
-> This is the start of the stable review cycle for the 5.15.66 release.
-> There are 107 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> Fixes: 4d71a4a12b13 ("leds: Add support for setting brightness in a synchronous way")
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>   drivers/leds/led-class.c | 2 ++
+>   1 file changed, 2 insertions(+)
 >
-> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
-> Anything received after that time might be too late.
-
-My test pipelines are still running, but x86_64 allmodconfig failed
-with gcc-12 with the error:
-
-drivers/net/wwan/iosm/iosm_ipc_protocol_ops.c: In function
-'ipc_protocol_dl_td_process':
-drivers/net/wwan/iosm/iosm_ipc_protocol_ops.c:406:13: error: the
-comparison will always evaluate as 'true' for the address of 'cb' will
-never be NULL [-Werror=address]
-  406 |         if (!IPC_CB(skb)) {
-      |             ^
-In file included from drivers/net/wwan/iosm/iosm_ipc_imem.h:9,
-                 from drivers/net/wwan/iosm/iosm_ipc_protocol.h:9,
-                 from drivers/net/wwan/iosm/iosm_ipc_protocol_ops.c:6:
-./include/linux/skbuff.h:794:33: note: 'cb' declared here
-  794 |         char                    cb[48] __aligned(8);
-
-It will need dbbc7d04c549 ("net: wwan: iosm: remove pointless null check").
-
-
--- 
-Regards
-Sudip
+> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+> index 6a8ea94834fa..861a1cb5df5b 100644
+> --- a/drivers/leds/led-class.c
+> +++ b/drivers/leds/led-class.c
+> @@ -55,6 +55,8 @@ static ssize_t brightness_store(struct device *dev,
+>   
+>   	if (state == LED_OFF)
+>   		led_trigger_remove(led_cdev);
+> +	/* flush out any request to disable blinking */
+> +	flush_work(&led_cdev->set_brightness_work);
+>   	led_set_brightness(led_cdev, state);
+>   	flush_work(&led_cdev->set_brightness_work);
+>   

@@ -2,115 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324765AF1EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438E65AF257
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbiIFRHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S231809AbiIFRYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiIFRGr (ORCPT
+        with ESMTP id S236800AbiIFRX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:06:47 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2E36398;
-        Tue,  6 Sep 2022 09:54:02 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id c24so11140990pgg.11;
-        Tue, 06 Sep 2022 09:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=zQI+DdLFCUikiV3t8V8tFwBfwRVF+ZZxI2qA2tELRBo=;
-        b=eGQRctC9tfBhIZgDcOX7N5Qu5AXcjH955F6q8rujOsAHkxvCmrsrOue7d3Kh/PjRoo
-         fICVhL3TN6qp6HiRPs0WiwU8ibFFaKNuQX/qq+9XBjQODg8Apda7ytY4UH7iprmlfCCI
-         8fXnjwfghk92pZ4o/lZQW8sVapH+NdoLhMyAkhhd5nPI+vbIpq5FKi7RYIW5nxImmHSn
-         ad8wmJAPfLmsJJFlfilbXLYUJqdnORtv9tZw4UjrM0IE+QbUWbvOvwgXYcll0PL9OonI
-         8aYph2R0nAPla00jxGLwGIkRRCkZroB49/sO6/0asFPSWdH2v+57JtTMuAs+1pJdmTvF
-         myJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=zQI+DdLFCUikiV3t8V8tFwBfwRVF+ZZxI2qA2tELRBo=;
-        b=Zeg71Fy5L1FGaN0A5CH3QoCW4rSa/ShxZbE8efPdoW+z+cguYVJbOcoiu++6G3icJR
-         tE6KBD34mhIfkf2SM7/iYnN9bWWrANmhZ2INVGmNmWt4a177qnS1g4AuV/MkoBQwuyXy
-         Xdjphmg+6FalCY2wOsT7qUdHnYf0CWZlGa6Xd5r1gbFxufrV9IRAhO6JHINYmjwlpUI4
-         N5GvWFkYZkktaeHIcNrQiOq+tE/YvJNY7z1uXY+/SZ5EDqdZtBQJNGkQYyrUuuLh6ojU
-         LB0yRE1W08Z9eTzsTRaZyQGKxdm7C7NsujPvuhUOvC8ycvYS/O2g2CHNY47ajVLSyvWk
-         9OxQ==
-X-Gm-Message-State: ACgBeo0JgK8aO2NdW4u8u8TnR2FukmdylLqnOXaeRkoV+2USFk1/fNIw
-        MNyOyuDF5l9BFsdYwZ7WKDE=
-X-Google-Smtp-Source: AA6agR40KVFSonXPgm7B1M39fQ5MInhXgP1GfPy9N18rTZ8vE5vC3bNIPirphDfpRKdk2qanPExaCg==
-X-Received: by 2002:a65:5b0d:0:b0:434:a7d2:9771 with SMTP id y13-20020a655b0d000000b00434a7d29771mr3705934pgq.356.1662483241177;
-        Tue, 06 Sep 2022 09:54:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d16-20020a170902ced000b001753654d9c5sm10274183plg.95.2022.09.06.09.54.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:54:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Sep 2022 09:53:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hhhawa@amazon.com, jonnyc@amazon.com, andriy.shevchenko@intel.com
-Subject: Re: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix
- "intel,vm-map" property to be optional
-Message-ID: <20220906165359.GA817639@roeck-us.net>
-References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-3-farbere@amazon.com>
+        Tue, 6 Sep 2022 13:23:28 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3BE87695
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:12:55 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 8C4C56C2016;
+        Tue,  6 Sep 2022 17:12:53 +0000 (UTC)
+Received: from pdx1-sub0-mail-a202.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 1ED716C2134;
+        Tue,  6 Sep 2022 17:12:53 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662484373; a=rsa-sha256;
+        cv=none;
+        b=ZGkN1AkwtdY9QbLFTg0nFhCDJ2s6NnaAkGXpR13+blBlsrQODuy4fOiujyJBCZU1uAgeF3
+        gnvz+GrjtteY93XZuNVTvOV7BMqjXpoZMLMd2rmveC2oNVPrELzDBxPqcEmpRNFHsqqBly
+        ZETNFsJlJnWlxFQ/O3Jps8rvp0cD/GM/5nAQcV/sUiYxWHp3h3j1h5iz+akd5J67egBKfB
+        Qwi9DL99POrVPiRgSIqzcyHXVSmQNoTvoD9cEkGSphHj3dwHslBmrCPDI67iWg12QSq8L4
+        xUZzpCBsjhPg7aJHd3GQA/9GBFOiTlA3+mbgBVJAMi9mBw2rxCxMBvdCf032wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1662484373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=162NvlXlce/ajvDF/pu6rU6DTQ7WpeDjyxmRGs3LqRk=;
+        b=8yN3MWY1CSAeXtaNQhbaYFs5n+ppORCxPS0+cskPKxyeR+fzKZN/S7TMIUp3ns6ie85o11
+        eHRjrPAwW55HQKr1LUhK9sZmTUaLnS1btJjjRycAsQ+a+BDmSNqNGSyYkLGPF4xCC/EXLj
+        P89vdmO1/O/Ylz1HdQQcB+qm8gKA99F4CN3LzeuTVGK3hP1BYYVPeC2v0YEKaemEDByc8b
+        9ATN6GdgO1WtpH7FTUINv7K//AIDVXz8Gx/4gwdJWUcUDvEeycIKTG+uEtGv2QaK0YQW8U
+        I0gOsSGXpsA0qmAFtFv2FPaJkWVIk6uaA4jgonPTtqVaL3LTiyikROG0f46org==
+ARC-Authentication-Results: i=1;
+        rspamd-686945db84-4528g;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Versed-Wipe: 18e02d57674e1123_1662484373415_3098781220
+X-MC-Loop-Signature: 1662484373415:3983678406
+X-MC-Ingress-Time: 1662484373415
+Received: from pdx1-sub0-mail-a202.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.121.210.155 (trex/6.7.1);
+        Tue, 06 Sep 2022 17:12:53 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a202.dreamhost.com (Postfix) with ESMTPSA id 4MMX5J1CJHzB1;
+        Tue,  6 Sep 2022 10:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1662484372;
+        bh=162NvlXlce/ajvDF/pu6rU6DTQ7WpeDjyxmRGs3LqRk=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=IrebXoKY/oVFhttnmdep9cJW9mMhnDfzXfI+OISy+M36yJ2H1ARUyUmIbJmIhrUkg
+         Poesta5TlL57oTTTuK0RKZCPH9MC17p034QqTaTYUTCSW4GjX6tLozhU43UqhlmHl5
+         LorJjmU6XfW/OSW5SEbthDUzpYo8kpFPPrRujYffwJuZNUY9vuZp4QN0LxXcGiDcE9
+         bBLLOEniIERLK/CFat5VNxImUYmQxt+6O7anPLk7qkwhYPn0OlyCGH/ZP8hkbjItqy
+         BUQCveK6y/dDVdYtOekMGGKc+sC1b3DC6SCJXAKUtpk8HOL6HI6NCl/9B5oXSACWUk
+         aFbsFQzZeoEsw==
+Date:   Tue, 6 Sep 2022 09:54:00 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v13 54/70] mm/madvise: use vma_find() instead of vma
+ linked list
+Message-ID: <20220906165400.rfdivae7hlqdcatl@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-55-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-3-farbere@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220822150128.1562046-55-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:33:37AM +0000, Eliav Farber wrote:
-> Change "intel,vm-map" property to be optional instead of required.
-> 
-> The driver implementation indicates it is not mandatory to have
-> "intel,vm-map" in the device tree:
->  - probe doesn't fail in case it is absent.
->  - explicit comment in code - "Incase intel,vm-map property is not
->    defined, we assume incremental channel numbers".
-> 
-> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
-> V3 -> V2:
-> - Change this patch to be first in the series.
-> - Add explanation why "intel,vm-map" is not required.
-> 
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-I don't see how this change warrants dropping Rob's Acked-by tag.
-Am I missing something ?
+>From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+>
+>madvise_walk_vmas() no longer uses linked list.
+>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Guenter
-
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index b79f069a04c2..8ea97e774364 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -48,7 +48,6 @@ required:
->    - compatible
->    - reg
->    - reg-names
-> -  - intel,vm-map
->    - clocks
->    - resets
->    - "#thermal-sensor-cells"
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

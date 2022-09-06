@@ -2,106 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F44A5AE07D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4495AE080
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238763AbiIFHDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S238782AbiIFHDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238752AbiIFHDO (ORCPT
+        with ESMTP id S238790AbiIFHD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:03:14 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901566F557
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:03:11 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bt10so15989059lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 00:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Vh5dKJp8XgybaVsAxsDRTMhVft4uU9zUN/Q42DYvyOQ=;
-        b=K0mgYUOSou8QTlHcWhgwVshbgWLtJ1Eab3Sx8oxOBkZ35lLxyfk1myRr+wT9OIrm1f
-         SvN4RyuEgytQQ0ubS/YvvQIU1TqX6GeWdCuiwYLZ4LanwnEOqBaL77rIgB27zfnCRjDQ
-         8SA8G3pploFaxzyEC+vZEb02+7lIrGH6Cpx6Wt2kdNtIxceT4pFXZ6pwL1MBYFVOCxeY
-         9VpZqwwbyDjHLawD5I74XsZSkBrtABF5/TdSBkiYhpl3Bo8ER7bi6kZt7tiURx3NQR9a
-         +hfPVuGG9n25leSTr+lhBXP7Q20h/5chBiiuXWsIoyZr3YKP4nL60Zc/nczXceCMgAh5
-         xjcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Vh5dKJp8XgybaVsAxsDRTMhVft4uU9zUN/Q42DYvyOQ=;
-        b=WNA83ATuPtINlDZsAV5p9QmRJ/v5Ihdk6bYJ5tPTm4/m1Voq1qPas+jSBI5DfkSMBI
-         P7fHgIyU/VrPWjEOt1eFM66Nax9F3l0b98gVVZZBS/T7agRPs6vOC35ypJXb37OZx/RA
-         YxgD0VPusQ/g4jxyQ6ezvAcPGVQywjeRp/K3MIq9uYq97gh71kxOQZbMA2Tx5lh3jqCT
-         qbmGwO6ufoc0SOb4cYh4ykoUpyfsk48o3QV8UCHWcUJTcm6dwCtaBwjY2paDC9151L0M
-         YsoE7fcsV99lGGCoENWKtGDinXNsh3wIDvKTHja6yFZnZ/zbx1tdtqlhoXgnqBh4voRD
-         IzIg==
-X-Gm-Message-State: ACgBeo2RqwFnThRTMnccnSe5Q2AQIwpK3Rsc19UoIcCoEVQbGQt7BtdF
-        9ESgUPMhGMkU4hhTS7fH6cT9PA==
-X-Google-Smtp-Source: AA6agR7mE1s888VxyPAUOKHJ7M6JWPPOgX1u4M252CbSe02wYFJxALmb9mClXYAbaayos/k2RVPNPQ==
-X-Received: by 2002:ac2:4e15:0:b0:48b:7a5f:923c with SMTP id e21-20020ac24e15000000b0048b7a5f923cmr18784649lfr.134.1662447789099;
-        Tue, 06 Sep 2022 00:03:09 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v7-20020a2ea447000000b002648152512asm1716340ljn.90.2022.09.06.00.03.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 00:03:08 -0700 (PDT)
-Message-ID: <93600263-0211-9286-9043-fae5b017d15b@linaro.org>
-Date:   Tue, 6 Sep 2022 09:03:02 +0200
+        Tue, 6 Sep 2022 03:03:27 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAB273325;
+        Tue,  6 Sep 2022 00:03:18 -0700 (PDT)
+X-UUID: 1263fc9d66de48c38f8c502496438d86-20220906
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=4X0g6zh3LL2gC/S+uOCH4TXJCztnz+tFKJu4PBhlAjQ=;
+        b=i4J8NQoV1WB49QjRCx8FfFEa6QF4vm9gjnHUaQeaRgMSU7DHQqGXloht43hQ0Nu6t04YF9E65YvMsw48tLUI+xhLFgU8BHAtw01v7UcYeDWL1HZTNhXrvAg5fA/cByg+J7wCuQzqs9NxIm+5gsWLmp5OFTXV+tv0ha14QxMtGMQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:0974d8d2-8969-4f1d-8165-edaa246053bb,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Releas
+        e_Ham,ACTION:release,TS:-20
+X-CID-META: VersionHash:84eae18,CLOUDID:7da0d4d0-20bd-4e5e-ace8-00692b7ab380,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:1,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1263fc9d66de48c38f8c502496438d86-20220906
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <yee.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1404548576; Tue, 06 Sep 2022 15:03:12 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 6 Sep 2022 15:03:11 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 6 Sep 2022 15:03:11 +0800
+From:   <yee.lee@mediatek.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <patrick.wang.shcn@gmail.com>, Yee Lee <yee.lee@mediatek.com>,
+        <stable@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 5.15.y] Revert "mm: kmemleak: take a full lowmem check in kmemleak_*_phys()"
+Date:   Tue, 6 Sep 2022 15:03:06 +0800
+Message-ID: <20220906070309.18809-1-yee.lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings
- for J7200
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     robh+dt@kernel.org, lee.jones@linaro.org, kishon@ti.com,
-        vkoul@kernel.org, dan.carpenter@oracle.com,
-        grygorii.strashko@ti.com, rogerq@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220901085506.138633-1-s-vadapalli@ti.com>
- <20220901085506.138633-2-s-vadapalli@ti.com>
- <4b681c03-7f5a-0234-2276-316e0bad1de5@linaro.org>
- <44339382-c4e2-26db-de5d-263ae5a585b8@ti.com>
- <4e61b63b-74ac-1682-968f-17e5d8db7ce6@linaro.org>
- <dfa9e613-054e-cffc-747f-27842e825cc8@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dfa9e613-054e-cffc-747f-27842e825cc8@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 07:02, Siddharth Vadapalli wrote:
->>>
->>> Please let me know if the above description is fine.
->>
->> Hm, but that's a phy node, not address of register... Isn't this a phy
->> node representing the phy of the CPSW MAC ports?
-> 
-> Despite it being a phy node, the phy-gmii-sel driver actually uses this
-> node to obtain the address of the CTRLMMR_ENETx_CTRL registers which
-> correspond to the CPSW MAC configuration and are therefore unrelated to
-> the PHY. Please let me know if my suggested description would be fine.
+From: Yee Lee <yee.lee@mediatek.com>
 
-Either I miss some more pieces or this is wrong design. The phy node
-should not be used to pass some addresses somewhere. It is used to
-define a device which will be instantiated (as parent is simple-mfd). If
-you use it only to obtain some address, not to describe child device,
-then this is wrong property type.
+This reverts commit 23c2d497de21f25898fbea70aeb292ab8acc8c94.
 
-Best regards,
-Krzysztof
+Commit 23c2d497de21 ("mm: kmemleak: take a full lowmem check in
+kmemleak_*_phys()") brought false leak alarms on some archs like arm64
+that does not init pfn boundary in early booting. The final solution
+lands on linux-6.0: commit 0c24e061196c ("mm: kmemleak: add rbtree and
+store physical address for objects allocated with PA").
+
+Revert this commit before linux-6.0. The original issue of invalid PA
+can be mitigated by additional check in devicetree.
+
+The false alarm report is as following: Kmemleak output: (Qemu/arm64)
+unreferenced object 0xffff0000c0170a00 (size 128):
+  comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
+  hex dump (first 32 bytes):
+ 62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
+    [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
+    [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
+    [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
+    [<(____ptrval____)>] kobject_add+0x84/0x100
+    [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
+    [<(____ptrval____)>] of_core_init+0x68/0x104
+    [<(____ptrval____)>] driver_init+0x28/0x48
+    [<(____ptrval____)>] do_basic_setup+0x14/0x28
+    [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
+    [<(____ptrval____)>] kernel_init+0x20/0x1a0
+    [<(____ptrval____)>] ret_from_fork+0x10/0x20
+
+This pacth is also applicable to linux-5.17.y/linux-5.18.y/linux-5.19.y
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Yee Lee <yee.lee@mediatek.com>
+---
+ mm/kmemleak.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index 859303aae180..b78861b8e013 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -1125,7 +1125,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
+ void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
+ 			       gfp_t gfp)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_alloc(__va(phys), size, min_count, gfp);
+ }
+ EXPORT_SYMBOL(kmemleak_alloc_phys);
+@@ -1139,7 +1139,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
+  */
+ void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_free_part(__va(phys), size);
+ }
+ EXPORT_SYMBOL(kmemleak_free_part_phys);
+@@ -1151,7 +1151,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
+  */
+ void __ref kmemleak_not_leak_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_not_leak(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+@@ -1163,7 +1163,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+  */
+ void __ref kmemleak_ignore_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_ignore(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_ignore_phys);
+-- 
+2.18.0
+

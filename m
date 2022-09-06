@@ -2,161 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5005AF01F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA925AF021
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiIFQQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
+        id S238413AbiIFQRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235624AbiIFQQX (ORCPT
+        with ESMTP id S234984AbiIFQQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:16:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EDB488;
-        Tue,  6 Sep 2022 08:44:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A59B5B818C2;
-        Tue,  6 Sep 2022 15:44:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0043C433C1;
-        Tue,  6 Sep 2022 15:44:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662479069;
-        bh=qFOk6Wp6NGa1Ej+qcHbPtJExBc58ed/Pmqdo5YRCPig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eiXfYf3T/gGNUT6915A9D2Q7+AAUG7dPXv1inXwV2KRquc0Vpy4fQCmWfAWv6UIZy
-         ul38C7L5QFDgOxcWixx9aHE1JYPngBP/l4hUN0nYK5LFncG4J7ZntKF5Q4nMN0bfvR
-         4T7yMDDVsh3onuYzC7zOwFIO2zOXeCkWo6afLSpKltK625RM14d5F5UJREXOnMEo/S
-         6gn768eCIJpQYeZJwrnIeha0S7hBYdm+NA5O2cVozNlrW4ugs06hKXsXLyu6VFwu3p
-         b63o4MrKg0ZvzPEarvd5tTxFX1h/U36VOonPRQqiasczJtjjmLCqlt2XK4Dx5h90Aw
-         7zcaaSu+b5NiA==
-Date:   Tue, 6 Sep 2022 18:44:23 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     Marc Orr <marcorr@google.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>
-Subject: Re: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
- fault for user address
-Message-ID: <Yxdq1yQw9f54aw4+@kernel.org>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
- <YvKRjxgipxLSNCLe@zn.tnic>
- <YxcgAk7AHWZVnSCJ@kernel.org>
- <CAA03e5FgiLoixmqpKtfNOXM_0P5Y7LQzr3_oQe+2Z=GJ6kw32g@mail.gmail.com>
- <SN6PR12MB2767ABA4CEFE4591F87968AD8E7E9@SN6PR12MB2767.namprd12.prod.outlook.com>
+        Tue, 6 Sep 2022 12:16:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F319E3DBC0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:45:26 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286FcHE0023464;
+        Tue, 6 Sep 2022 15:44:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=4MkljBVDokyvV6hOWPaWLbtYatl+ONZEu/cDpFdhfog=;
+ b=Fm+iNgkU5d4uKCI7Y1xRCitnpbuo/A24XIoPyCtfFTdo9mA03DlEDw03VU0vzA4hFfAc
+ kQDEZphbp3WIsa/oiG9V2mArj+hG/lNOjmK0hdHk8I+0wR04Wzp4ep+J43OLvE+H1Yz1
+ 2MOw0MK65npWrjR5L90MbVti0PXZzRqxTTW5bT9hPk9HYuKHgypTy70KjirGFWWxGYiu
+ GsGpr89SmwoGpsvjMQ/lF/3Yw0lHZ6301qLgnVKnxUKdSBuw4XJ49AZACAY+QRe6SD7h
+ dR31b8ygFBKNNQ9b8QhGdaQigvB05g10ZTni8oZjhV8GRActoQ6uT6kxXJgnDqZG5Wy+ DQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je8su90qt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 15:44:57 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286FcLWh023984;
+        Tue, 6 Sep 2022 15:44:56 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je8su90nq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 15:44:56 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286FfwEK029294;
+        Tue, 6 Sep 2022 15:44:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3jbxj8tx7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 15:44:52 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286FiodI41025964
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Sep 2022 15:44:50 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A287A405B;
+        Tue,  6 Sep 2022 15:44:50 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 15515A4054;
+        Tue,  6 Sep 2022 15:44:49 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Sep 2022 15:44:49 +0000 (GMT)
+Message-ID: <70d59f18-472b-489c-ca4e-50e7d992b93e@linux.ibm.com>
+Date:   Tue, 6 Sep 2022 17:44:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR12MB2767ABA4CEFE4591F87968AD8E7E9@SN6PR12MB2767.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.0
+Subject: Re: [RFC PATCH RESEND 11/28] mm/mmap: mark VMAs as locked before
+ merging or splitting them
+Content-Language: fr
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, kernel-team@android.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220901173516.702122-1-surenb@google.com>
+ <20220901173516.702122-12-surenb@google.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <20220901173516.702122-12-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 825aBYYK_9T5U_u_iVzb9oKQMAjxZkqg
+X-Proofpoint-ORIG-GUID: BKjiziNjdxx17PCzm6Fd6iufU577aiSy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_07,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=729 clxscore=1015 mlxscore=0 adultscore=0 bulkscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060073
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 02:17:15PM +0000, Kalra, Ashish wrote:
-> [AMD Official Use Only - General]
+Le 01/09/2022 à 19:34, Suren Baghdasaryan a écrit :
+> Decisions about whether VMAs can be merged or split must be made while
+> VMAs are protected from the changes which can affect that decision.
+> For example, merge_vma uses vma->anon_vma in its decision whether the
+> VMA can be merged. Meanwhile, page fault handler changes vma->anon_vma
+> during COW operation.
+> Mark all VMAs which might be affected by a merge or split operation as
+> locked before making decision how such operations should be performed.
 > 
-> >> On Tue, Aug 09, 2022 at 06:55:43PM +0200, Borislav Petkov wrote:
-> >> > On Mon, Jun 20, 2022 at 11:03:43PM +0000, Ashish Kalra wrote:
-> >> > > +   pfn = pte_pfn(*pte);
-> >> > > +
-> >> > > +   /* If its large page then calculte the fault pfn */
-> >> > > +   if (level > PG_LEVEL_4K) {
-> >> > > +           unsigned long mask;
-> >> > > +
-> >> > > +           mask = pages_per_hpage(level) - pages_per_hpage(level - 1);
-> >> > > +           pfn |= (address >> PAGE_SHIFT) & mask;
-> >> >
-> >> > Oh boy, this is unnecessarily complicated. Isn't this
-> >> >
-> >> >       pfn |= pud_index(address);
-> >> >
-> >> > or
-> >> >       pfn |= pmd_index(address);
-> >>
-> >> I played with this a bit and ended up with
-> >>
-> >>         pfn = pte_pfn(*pte) | PFN_DOWN(address & page_level_mask(level 
-> >> - 1));
-> >>
-> >> Unless I got something terribly wrong, this should do the same (see 
-> >> the attached patch) as the existing calculations.
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  mm/mmap.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> >Actually, I don't think they're the same. I think Jarkko's version is correct. Specifically:
-> >- For level = PG_LEVEL_2M they're the same.
-> >- For level = PG_LEVEL_1G:
-> >The current code calculates a garbage mask:
-> >mask = pages_per_hpage(level) - pages_per_hpage(level - 1); translates to:
-> >>> hex(262144 - 512)
-> >'0x3fe00'
-> 
-> No actually this is not a garbage mask, as I explained in earlier responses we need to capture the address bits 
-> to get to the correct 4K index into the RMP table.
-> Therefore, for level = PG_LEVEL_1G:
-> mask = pages_per_hpage(level) - pages_per_hpage(level - 1) => 0x3fe00 (which is the correct mask).
-> 
-> >But I believe Jarkko's version calculates the correct mask (below), incorporating all 18 offset bits into the 1G page.
-> >>> hex(262144 -1)
-> >'0x3ffff'
-> 
-> We can get this simply by doing (page_per_hpage(level)-1), but as I mentioned above this is not what we need.
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index ed58cf0689b2..ade3909c89b4 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1147,10 +1147,17 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm,
+>  	if (vm_flags & VM_SPECIAL)
+>  		return NULL;
+>  
+> +	if (prev)
+> +		vma_mark_locked(prev);
+>  	next = vma_next(mm, prev);
+>  	area = next;
+> -	if (area && area->vm_end == end)		/* cases 6, 7, 8 */
+> +	if (area)
+> +		vma_mark_locked(area);
+> +	if (area && area->vm_end == end) {		/* cases 6, 7, 8 */
+>  		next = next->vm_next;
+> +		if (next)
+> +			vma_mark_locked(next);
+> +	}
+>  
+>  	/* verify some invariant that must be enforced by the caller */
+>  	VM_WARN_ON(prev && addr <= prev->vm_start);
+> @@ -2687,6 +2694,7 @@ int __split_vma(struct mm_struct *mm, struct vm_area_struct *vma,
+>  	struct vm_area_struct *new;
+>  	int err;
+>  
+> +	vma_mark_locked(vma);
+>  	if (vma->vm_ops && vma->vm_ops->may_split) {
+>  		err = vma->vm_ops->may_split(vma, addr);
+>  		if (err)
 
-I think you're correct, so I'll retry:
+That looks good to me, the new VMA allocated by vm_area_dup(vma) is
+inheriting the locked state from vma.
 
-(address / PAGE_SIZE) & (pages_per_hpage(level) - pages_per_hpage(level - 1)) =
-
-(address / PAGE_SIZE) & ((page_level_size(level) / PAGE_SIZE) - (page_level_size(level - 1) / PAGE_SIZE)) =
-
-[ factor out 1 / PAGE_SIZE ]
-
-(address & (page_level_size(level) - page_level_size(level - 1))) / PAGE_SIZE  =
-
-[ Substitute with PFN_DOWN() ] 
-
-PFN_DOWN(address & (page_level_size(level) - page_level_size(level - 1)))
-
-So you can just:
-
-pfn = pte_pfn(*pte) | PFN_DOWN(address & (page_level_size(level) - page_level_size(level - 1)));
-
-Which is IMHO way better still what it is now because no branching
-and no ad-hoc helpers (the current is essentially just page_level_size
-wrapper).
-
-BR, Jarkko
+Reviewed-by: Laurent Dufour <laurent.dufour@fr.ibm.com>

@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF48D5AF1A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2C15AF191
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiIFRB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S230165AbiIFRCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238543AbiIFRA0 (ORCPT
+        with ESMTP id S237674AbiIFRA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Sep 2022 13:00:26 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F472E6A8
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EE82B27D
         for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:47:53 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id ay12so7204077wmb.1
+Received: by mail-wr1-x430.google.com with SMTP id b5so16357691wrr.5
         for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=XsxTgl9OJhYT/B2dXFDz/rl/9WpF5J4y9HKMzylFxc4=;
-        b=PAWWdlymzjqyLPcoNRb1L6qlikcPu6u+TyZaT37Vl9cBK/SHvf1i2tmvu02d4qKZQ4
-         DtMJ+EFOnxwRZeDWVzhNaXVacviBa7Dh+aUJ/PHrpFTFhr09NU6gT7pMUVWYDv4QqiPO
-         V8SZe2MCkWIlf5UeVuB0MascbQvUmQUGNodMsWmHAa2da3tKiip/9bfm2w2jDOqRbia7
-         vlsv2dOEMlV5ZShLdnDGKAJ7YTaFUBEVuJ37ZHxf5/dI/CUSSNuIK+Bi7abOpR6dokYR
-         bqDazXzTJmx3z6oPNAPK/K/qDuEpXb3cSFbTglT7GYtHyrZxwehWrSw8QxpyDT871lvZ
-         mqMQ==
+        bh=zhkHfGU+506U13gs0KttMlfYYtmPZTAW+1/ApMCut14=;
+        b=Th8YiUXJY8DYoYMTJhR7p6ct3jT3QTtfDMxrkwLP8mHuq0wFkSJzpxAEDdL7/+Rckr
+         xbF1yZrk4nZD/Sy59+HkqI1nOavbwIyllvxPYclSUz3lV+PC7rmUoBciWw/7mBsjLc45
+         tv2AUdE+JPxVr8DzsLY+m/nLOYThFqeLQjs7FVy7UAtT1JgD7VJJ7qFosyAnsBSI0ku8
+         f8pKVc/KWQ2qg390fNi3MI9MJOjkf/2Tun+FAzLo0OD7hYLG5TLUUaSSt1AXgEq7EYbE
+         anieUPaJYTGO+QoxQRJ9Vgx6whb/DaWG2jVMS02iWhqyXrc0LrRaJx0iLZ1s9tOl/YBr
+         nvpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=XsxTgl9OJhYT/B2dXFDz/rl/9WpF5J4y9HKMzylFxc4=;
-        b=lMaWkmWneQzeLgMPMdTBYsMtJ2oVUGkgf7ViW5wp9f5zKyuFxRxX+KBLpOIwB5iyKk
-         yPhChZ/3Z6wGmjCfEqlvNxhzawNO7dkP5Q+/bETwifp+zvgyelEbC2aM+1jkcYeqtcN7
-         jJJPPFo77YE4oy58jeA4GNfyetYAR37Bg386tcWGI6YVTA6F8YCUmHqlpQCRtnxv0C/0
-         GYOPIvDC783tLW+61RwXPRueXFyEO93oYAXrs9U4oIw3DNAm5hHvInRlsyAVPfxexFvi
-         YsEcqyU0UPn1B/yUyXJDONHgnAo+zp+u+4+F3qxuioJd1A41OtCKtB2QtlHG96MXRtUw
-         fj/w==
-X-Gm-Message-State: ACgBeo2fT0d6RHSD8l+WfwHbGxfS/a5RQYA9OgJVUgyecHa9i55giDg5
-        Pqhnm3fC/EkwrwCai17tK57ZaMFVGZx0lg==
-X-Google-Smtp-Source: AA6agR7TTFk3YgOPlL+9C6TUwAfwOlLFM0YXFCK/P5v+ajG82oXuLeZAdoIc3R5bilRxv5ibXcqU+g==
-X-Received: by 2002:a05:600c:19d3:b0:3a8:46a0:149f with SMTP id u19-20020a05600c19d300b003a846a0149fmr14470152wmq.185.1662482871857;
-        Tue, 06 Sep 2022 09:47:51 -0700 (PDT)
+        bh=zhkHfGU+506U13gs0KttMlfYYtmPZTAW+1/ApMCut14=;
+        b=7MVTVNCRokSw8wkOc/xTAMGeRRh4pFGe9C5dSYP17dLNTtX+7nda0hFhhriymOYmDI
+         8HFynLqta4FfXLxGVDWz/vZjQ9L3/tJmYeeyWckS7wLbYebwt6YWVeRNh4GlprUOyEBE
+         DOOZGtszUqDDXivoR+2l6Eh2VXixPfINgNrq+sZmorQ7dq9FLLGUqR86iAWVIidx0wrg
+         z05fGJ3lgrRkaOrhkRxKhtaPjBNUTLHnO79CUPWVyyHu0/+LGDcQqQcWn5B+hhcgn0Fx
+         SSwOw33xpmQf5m8ogP/qi/i7lEjJBTdwCJQ04gc458T94KXWuq3al2xBj0FuSR+gdrUY
+         CCHg==
+X-Gm-Message-State: ACgBeo3HTp1NHM9ExUpgV9I0gD2Nu7FSRF2sZoCxktuA9MlCG0/qzNGA
+        qIfnVkF/Kk7I5UIdNocNTrX6iA==
+X-Google-Smtp-Source: AA6agR7wINrCePHeVs2TMkvqGiR/IRUfgMtH5I4tZVRbaGeKyMht9ahIL1Pvt2KiIEak8VBoyVlboQ==
+X-Received: by 2002:a5d:58cb:0:b0:228:dc7f:b9b3 with SMTP id o11-20020a5d58cb000000b00228dc7fb9b3mr1426297wrf.98.1662482873002;
+        Tue, 06 Sep 2022 09:47:53 -0700 (PDT)
 Received: from localhost.localdomain (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id e27-20020adf9bdb000000b0021f0ff1bc6csm7426600wrc.41.2022.09.06.09.47.50
+        by smtp.gmail.com with ESMTPSA id e27-20020adf9bdb000000b0021f0ff1bc6csm7426600wrc.41.2022.09.06.09.47.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:47:51 -0700 (PDT)
+        Tue, 06 Sep 2022 09:47:52 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT)
-Subject: [PATCH v3 11/30] thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
-Date:   Tue,  6 Sep 2022 18:47:01 +0200
-Message-Id: <20220906164720.330701-12-daniel.lezcano@linaro.org>
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/UNIPHIER
+        ARCHITECTURE)
+Subject: [PATCH v3 12/30] thermal/drivers/uniphier: Use generic thermal_zone_get_trip() function
+Date:   Tue,  6 Sep 2022 18:47:02 +0200
+Message-Id: <20220906164720.330701-13-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220906164720.330701-1-daniel.lezcano@linaro.org>
 References: <20220906164720.330701-1-daniel.lezcano@linaro.org>
@@ -67,7 +68,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,130 +76,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace a single call to thermal_zone_get_trip() to get a trip point
-instead of calling the different ops->get_trip*
+The thermal framework gives the possibility to register the trip
+points with the thermal zone. When that is done, no get_trip_* ops are
+needed and they can be removed.
+
+Convert ops content logic into generic trip points and register them with the
+thermal zone.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- drivers/thermal/tegra/soctherm.c        | 33 +++++++++++--------------
- drivers/thermal/tegra/tegra30-tsensor.c | 17 ++++++-------
- 2 files changed, 22 insertions(+), 28 deletions(-)
+ drivers/thermal/uniphier_thermal.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-index 1efe470f31e9..96b541458ccd 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -582,23 +582,23 @@ static int tsensor_group_thermtrip_get(struct tegra_soctherm *ts, int id)
- 	return temp;
- }
+diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
+index 4111d99ef50e..277ae300c5b1 100644
+--- a/drivers/thermal/uniphier_thermal.c
++++ b/drivers/thermal/uniphier_thermal.c
+@@ -248,8 +248,7 @@ static int uniphier_tm_probe(struct platform_device *pdev)
+ 	struct regmap *regmap;
+ 	struct device_node *parent;
+ 	struct uniphier_tm_dev *tdev;
+-	const struct thermal_trip *trips;
+-	int i, ret, irq, ntrips, crit_temp = INT_MAX;
++	int i, ret, irq, crit_temp = INT_MAX;
  
--static int tegra_thermctl_set_trip_temp(struct thermal_zone_device *tz, int trip, int temp)
-+static int tegra_thermctl_set_trip_temp(struct thermal_zone_device *tz, int trip_id, int temp)
- {
- 	struct tegra_thermctl_zone *zone = tz->devdata;
- 	struct tegra_soctherm *ts = zone->ts;
-+	struct thermal_trip trip;
- 	const struct tegra_tsensor_group *sg = zone->sg;
- 	struct device *dev = zone->dev;
--	enum thermal_trip_type type;
- 	int ret;
+ 	tdev = devm_kzalloc(dev, sizeof(*tdev), GFP_KERNEL);
+ 	if (!tdev)
+@@ -296,20 +295,18 @@ static int uniphier_tm_probe(struct platform_device *pdev)
+ 		return PTR_ERR(tdev->tz_dev);
+ 	}
  
- 	if (!tz)
- 		return -EINVAL;
- 
--	ret = tz->ops->get_trip_type(tz, trip, &type);
-+	ret = thermal_zone_get_trip(tz, trip_id, &trip);
- 	if (ret)
- 		return ret;
- 
--	if (type == THERMAL_TRIP_CRITICAL) {
-+	if (trip.type == THERMAL_TRIP_CRITICAL) {
- 		/*
- 		 * If thermtrips property is set in DT,
- 		 * doesn't need to program critical type trip to HW,
-@@ -609,7 +609,7 @@ static int tegra_thermctl_set_trip_temp(struct thermal_zone_device *tz, int trip
- 		else
- 			return 0;
- 
--	} else if (type == THERMAL_TRIP_HOT) {
-+	} else if (trip.type == THERMAL_TRIP_HOT) {
- 		int i;
- 
- 		for (i = 0; i < THROTTLE_SIZE; i++) {
-@@ -620,7 +620,7 @@ static int tegra_thermctl_set_trip_temp(struct thermal_zone_device *tz, int trip
- 				continue;
- 
- 			cdev = ts->throt_cfgs[i].cdev;
--			if (get_thermal_instance(tz, cdev, trip))
-+			if (get_thermal_instance(tz, cdev, trip_id))
- 				stc = find_throttle_cfg_by_name(ts, cdev->type);
- 			else
- 				continue;
-@@ -687,25 +687,20 @@ static const struct thermal_zone_device_ops tegra_of_thermal_ops = {
- 	.set_trips = tegra_thermctl_set_trips,
- };
- 
--static int get_hot_temp(struct thermal_zone_device *tz, int *trip, int *temp)
-+static int get_hot_temp(struct thermal_zone_device *tz, int *trip_id, int *temp)
- {
--	int ntrips, i, ret;
--	enum thermal_trip_type type;
-+	int i, ret;
-+	struct thermal_trip trip;
- 
--	ntrips = of_thermal_get_ntrips(tz);
--	if (ntrips <= 0)
--		return -EINVAL;
-+	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
- 
+-	/* get trip points */
+-	trips = of_thermal_get_trip_points(tdev->tz_dev);
+-	ntrips = of_thermal_get_ntrips(tdev->tz_dev);
+-	if (ntrips > ALERT_CH_NUM) {
+-		dev_err(dev, "thermal zone has too many trips\n");
+-		return -E2BIG;
+-	}
+-
+ 	/* set alert temperatures */
 -	for (i = 0; i < ntrips; i++) {
--		ret = tz->ops->get_trip_type(tz, i, &type);
-+		ret = thermal_zone_get_trip(tz, i, &trip);
- 		if (ret)
- 			return -EINVAL;
--		if (type == THERMAL_TRIP_HOT) {
--			ret = tz->ops->get_trip_temp(tz, i, temp);
--			if (!ret)
--				*trip = i;
- 
--			return ret;
-+		if (trip.type == THERMAL_TRIP_HOT) {
-+			*trip_id = i;
-+			return 0;	
- 		}
- 	}
- 
-diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
-index c34501287e96..cbaad2245f1d 100644
---- a/drivers/thermal/tegra/tegra30-tsensor.c
-+++ b/drivers/thermal/tegra/tegra30-tsensor.c
-@@ -316,18 +316,17 @@ static void tegra_tsensor_get_hw_channel_trips(struct thermal_zone_device *tzd,
- 	*hot_trip  = 85000;
- 	*crit_trip = 90000;
- 
--	for (i = 0; i < tzd->num_trips; i++) {
--		enum thermal_trip_type type;
--		int trip_temp;
-+	for (i = 0; i < thermal_zone_get_num_trips(tzd); i++) {
- 
--		tzd->ops->get_trip_temp(tzd, i, &trip_temp);
--		tzd->ops->get_trip_type(tzd, i, &type);
+-		if (trips[i].type == THERMAL_TRIP_CRITICAL &&
+-		    trips[i].temperature < crit_temp)
+-			crit_temp = trips[i].temperature;
+-		uniphier_tm_set_alert(tdev, i, trips[i].temperature);
++	for (i = 0; i < thermal_zone_get_num_trips(tdev->tz_dev); i++) {
 +		struct thermal_trip trip;
- 
--		if (type == THERMAL_TRIP_HOT)
--			*hot_trip = trip_temp;
-+		thermal_zone_get_trip(tzd, i, &trip);
-+		
-+		if (trip.type == THERMAL_TRIP_HOT)
-+			*hot_trip = trip.temperature;
- 
--		if (type == THERMAL_TRIP_CRITICAL)
--			*crit_trip = trip_temp;
-+		if (trip.type == THERMAL_TRIP_CRITICAL)
-+			*crit_trip = trip.temperature;
++
++		ret = thermal_zone_get_trip(tdev->tz_dev, i, &trip);
++		if (ret)
++			return ret;
++
++		if (trip.type == THERMAL_TRIP_CRITICAL &&
++		    trip.temperature < crit_temp)
++			crit_temp = trip.temperature;
++		uniphier_tm_set_alert(tdev, i, trip.temperature);
+ 		tdev->alert_en[i] = true;
  	}
- 
- 	/* clamp hardware trips to the calibration limits */
+ 	if (crit_temp > CRITICAL_TEMP_LIMIT) {
 -- 
 2.34.1
 

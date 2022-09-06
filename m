@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7289A5AEDA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13B05AEDD0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbiIFOlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S242166AbiIFOlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242387AbiIFOjQ (ORCPT
+        with ESMTP id S242412AbiIFOjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:39:16 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16B19AFA2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:01:15 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id p18-20020a170902e75200b00176c0e055c9so2287637plf.17
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 07:01:15 -0700 (PDT)
+        Tue, 6 Sep 2022 10:39:20 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C109BB4B;
+        Tue,  6 Sep 2022 07:01:28 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso7527014wmb.0;
+        Tue, 06 Sep 2022 07:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=+Q6B/cTB5oT3fqaZDpIDHs2zE/85n+XEC/rzCUUmUUs=;
-        b=fk3U/t/BSZPHw9Bf1Iqbtg/jRCq0HsROm/s9tfLAq/MH4ARIlquxqeYveq/8Imsj0C
-         s7a9BkcLOkuascsOwBzQ2uL6ZJJ+or3McsNseAy6TDk5QhFiZtD8jrnZfUdhYArRglIt
-         84Qy7/TpEcWoKipEsAeKVyTr+smrSgDovkV2e1mZc5IoCnsEbMwqIKRAUOjDRmCU/JxP
-         IMfDX8IAgctbiS6sDOpD2GtS/EytuF6VbHaruYPZT/uUX8sKXgbpFGAG3Rtc+S/2nVsE
-         YFPunQ+R61mHewEU6HMHYDzOaqHKIWLkn//+UDhsYk6JA7u9Ax/4PuJ4BTwKnzFhq6fE
-         kuUw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=pkMRy8XuGDtx9NMZA7uZCO5i/b7uDNNrxfsjCrj+Lc4=;
+        b=o4utixdJwalOBX1Q1sHVX2nwdDOJAJs9T+YbOtRt/UYSkeX5u+HMoGm1pJiYHACN31
+         tPj8fkgp7ANeqeE2sj3eT6XkJZtuuNV0koMxFM8zpW9qNBwRfoK8QN5hAzBXGskn6hoe
+         KEWGtDvunl3PCmUD8Diy3P+4Smc3U6xHZ/+xZZyaMLlTlUuny5GFIAMDSURhMJrub87d
+         BtsM6foajqPixys05COHdkj62R+NJG1UleOYFrNHcyakuGCLZDY2ccM5a+yo7lFbZ0WJ
+         a7fJ+elQA2Yf5Lpa9Z0JteOihcRg3zD/EWNHkM2L3pb2jhbLCbZXDaN8E2PCT3AqxOro
+         04Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=+Q6B/cTB5oT3fqaZDpIDHs2zE/85n+XEC/rzCUUmUUs=;
-        b=SFvw2uBZPAq4siq1REf0RcJ4mTz/s7yltKHq76RvAnIiW8GyGx1Oxu7Fr1595VbsTW
-         +2EszAUcX3rZY+XY8zIj/JAB1YF5ry0HIU51P0gFxwL8AR0Y8MrrgdHAf3b6SLzACQVH
-         pzGeIXvq/me6yIueIXkCIQPv+xKPqQMK7RGrRMzI/n/GH1jFU55dDQTFVz/OBa9AHswB
-         54xuH/ssjoMYddvz4kcaFISYHJ+z6QfOCY0Oh0Kdr6J6z5sJcqjckHez2lh/Y5dVgBYL
-         51b7POqDEv59SKrROdlDvRgPJUO/O1Q1gIOIuJzEsSAdcuIgeznDdMaw23cDZEN40k8m
-         TDUQ==
-X-Gm-Message-State: ACgBeo2AIP7f8vHw8clX1PJJJFMebrBMGs2xdDPSXK5pC3RNehF+ih/4
-        QV39QvnnPTH94yKYBJUj4q8RpXeki/KJOA==
-X-Google-Smtp-Source: AA6agR4MuU2P2JcPxrTr4nNG0hdwb++wxvhKgALyWAzsPADtaWvGC72IlSRZ3HervIO7xpA5+te9svzAmKEqKQ==
-X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:a05:6a00:10cf:b0:528:48c3:79e0 with SMTP
- id d15-20020a056a0010cf00b0052848c379e0mr54787114pfu.18.1662472803931; Tue,
- 06 Sep 2022 07:00:03 -0700 (PDT)
-Date:   Tue,  6 Sep 2022 13:59:47 +0000
-In-Reply-To: <20220906135948.3048225-1-cmllamas@google.com>
-Mime-Version: 1.0
-References: <20220906135948.3048225-1-cmllamas@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220906135948.3048225-4-cmllamas@google.com>
-Subject: [PATCH RESEND 3/3] binder: fix binder_alloc kernel-doc warnings
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Cc:     kernel-team@android.com, Todd Kjos <tkjos@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=pkMRy8XuGDtx9NMZA7uZCO5i/b7uDNNrxfsjCrj+Lc4=;
+        b=OchJ1IDDoSOLUNiFPWGbIqQfrhymPcgGYayp3aCUNw+oGrpTePIrxmU6HscZCClVCE
+         cq/jB24PjE0qwQeEFK66srU8BNP1TIld/Wr2C4E6rqY2PlTqOepASQJaaTKNY1LufpOd
+         8pUbzq3sRCUwKGCVnHQ6YY921amXzXwOuoW8FPs3gB4lFpUSkyK58y4ls6tD8eyr/m0y
+         pz/hgR5QK5Fg1eiLaYN9gvGqcEa64lAt6PllP7zNcC2kdUqTmhzWvHBhUMYaet7VwegY
+         TRXuAgtUViscSq9bJjrtPENbNgWI+OHNkB1h2XvHBXOtK/nWeNK8BK0Vtqz1FxuQ9/MO
+         isgw==
+X-Gm-Message-State: ACgBeo2M3KhkJGdAFikmQrknQ5rHWOI1DBAs9F69KigHu08lYUC+ffHT
+        oCAyJJLBvDlQ6xqLsUFQ/bI=
+X-Google-Smtp-Source: AA6agR6n8ts0/UWy/dounDKDCATDUCcX6IigUCNZspTdYgXsA+nwu6S5DsvfuJhzVBBuGPZzK4bqaQ==
+X-Received: by 2002:a05:600c:4f04:b0:3a5:f380:69dc with SMTP id l4-20020a05600c4f0400b003a5f38069dcmr14246016wmq.103.1662472812136;
+        Tue, 06 Sep 2022 07:00:12 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id e7-20020a05600c4e4700b003a60f0f34b7sm15189468wmq.40.2022.09.06.07.00.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 07:00:11 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] scsi: qla2xxx: Fix spelling mistake "definiton" -> "definition"
+Date:   Tue,  6 Sep 2022 15:00:10 +0100
+Message-Id: <20220906140010.194273-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the kernel-doc section of struct binder_alloc to fix the
-following warnings reported by ./scripts/kernel-doc:
+There is a spelling mistake in a MODULE_PARM_DESC description. Fix it.
 
-  warning: Function parameter or member 'mutex' not described in 'binder_alloc'
-  warning: Function parameter or member 'vma_addr' not described in 'binder_alloc'
-
-No functional changes in this patch.
-
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
-Acked-by: Todd Kjos <tkjos@google.com>
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/android/binder_alloc.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
-index ab3b027bcd29..0f811ac4bcff 100644
---- a/drivers/android/binder_alloc.h
-+++ b/drivers/android/binder_alloc.h
-@@ -74,10 +74,9 @@ struct binder_lru_page {
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 632f4d2956f4..2c85f3cce726 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -124,7 +124,7 @@ MODULE_PARM_DESC(ql2xextended_error_logging,
+ int ql2xextended_error_logging_ktrace = 1;
+ module_param(ql2xextended_error_logging_ktrace, int, S_IRUGO|S_IWUSR);
+ MODULE_PARM_DESC(ql2xextended_error_logging_ktrace,
+-		"Same BIT definiton as ql2xextended_error_logging, but used to control logging to kernel trace buffer (default=1).\n");
++		"Same BIT definition as ql2xextended_error_logging, but used to control logging to kernel trace buffer (default=1).\n");
  
- /**
-  * struct binder_alloc - per-binder proc state for binder allocator
-- * @vma:                vm_area_struct passed to mmap_handler
-+ * @mutex:              protects binder_alloc fields
-+ * @vma_addr:           vm_area_struct->vm_start passed to mmap_handler
-  *                      (invariant after mmap)
-- * @tsk:                tid for task that called init for this proc
-- *                      (invariant after init)
-  * @mm:                 copy of task->mm (invariant after open)
-  * @buffer:             base of per-proc address space mapped via mmap
-  * @buffers:            list of all buffers for this proc
+ int ql2xshiftctondsd = 6;
+ module_param(ql2xshiftctondsd, int, S_IRUGO);
 -- 
-2.37.2.789.g6183377224-goog
+2.37.1
 

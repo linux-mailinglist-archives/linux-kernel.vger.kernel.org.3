@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7064E5AEE27
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3C35AEDA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240784AbiIFOxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
+        id S234762AbiIFOrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238686AbiIFOwc (ORCPT
+        with ESMTP id S231342AbiIFOqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:52:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1E411822;
-        Tue,  6 Sep 2022 07:09:20 -0700 (PDT)
+        Tue, 6 Sep 2022 10:46:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DDD98A51;
+        Tue,  6 Sep 2022 07:05:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662473361; x=1694009361;
+  t=1662473126; x=1694009126;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dtDdScaB2Cqk9xup07KTtoOWp5VAV/gnXhULPXe5f+M=;
-  b=ro4LImfpw4Mb+xGndUTlrKYDK92oC8dk3uZ0TFML/vQGUH2nMwNVyqbp
-   UVwVIsrIhWye4FAGXxAYzRqITW1qU/3jHKmCG5GIYKebsQiZhPL66eoxF
-   3ADI6bK2nP1nIo59Hw/+5Et7j9rGMTJwOV2l9p7YxH2S7J+4lFn9e+jFC
-   PNkImLdl4rdZPkNNlH/i1eUrBRHQZiBYvA96HFcvk70Z7oF9UIebF/b8m
-   tM7OQXaPpG3HFWDnv1IlLvlv1YPF0/kfAcSYhwTjYcLHU+Ey34FhzIm4w
-   G5lbj4fmc7cHxgF1WMiEfF7H9L5oKOnghswWYu5eqFUiXixjneREHoh2H
+  bh=sPvmXHZOZTxiNsV8wQo2cqTLQ91qkb2yzTXY3QfEQ3U=;
+  b=ljYQYc+SvScQBoglQ4NCQuG93fnqmL48wjxSOWHlyPfKS7AqkIcurUCh
+   rndVYmIgq0XaOr+zZBRb/nkXlxvmUEnZFHhFC0hNkjFfOe4AwvwEs0De1
+   8HcmqYjkbx5+rSLf95WC7hWwsug8Xjlim4IbRn/1q/qfsWkQPhRpd0drP
+   r265D/Y1cewcqSpSadrUbPe5DGANh7wCgCGcPN4ozA2fZXs4IqvkcNW8n
+   6xumx27Pg//QXzW8zJNWKB9D/LHTXXRQCWy9OL3Uapr9ffXS4do2UFxpb
+   +uzYFL4U5fcHUZalFHk8BQAu7qTGlIHKnTyBSXLWXIaZIDpn2Hpaqn0dS
    w==;
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="112380495"
+   d="scan'208";a="179223615"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:57:10 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:57:12 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 6 Sep 2022 06:57:05 -0700
+ 15.1.2507.12; Tue, 6 Sep 2022 06:57:10 -0700
 Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:57:00 -0700
+ 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:57:05 -0700
 From:   Sergiu Moga <sergiu.moga@microchip.com>
 To:     <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
@@ -53,9 +53,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add SAM9260 compatibles to SAM9x60
-Date:   Tue, 6 Sep 2022 16:55:05 +0300
-Message-ID: <20220906135511.144725-7-sergiu.moga@microchip.com>
+Subject: [PATCH v2 07/13] dt-bindings: mfd: atmel,sama5d2-flexcom: Add USART child node ref binding
+Date:   Tue, 6 Sep 2022 16:55:06 +0300
+Message-ID: <20220906135511.144725-8-sergiu.moga@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906135511.144725-1-sergiu.moga@microchip.com>
 References: <20220906135511.144725-1-sergiu.moga@microchip.com>
@@ -72,34 +72,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the AT91SAM9260 serial compatibles to the list of SAM9X60 compatibles
-in order to highlight the incremental characteristics of the SAM9X60
-serial IP.
+FLEXCOM, among other functionalities, has the ability to offer the USART
+serial communication protocol. To have the FLEXCOM binding properly
+validate its USART children nodes, we must reference the correct binding.
+To differentiate between the SPI of FLEXCOM and the SPI of USART in SPI
+mode, use the clock-names property, since the latter's respective
+property is supposed to contain the "usart" string.
 
 Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
 ---
 
 
 v1 -> v2:
-- Nothing, this patch was not here before
+- Nothing
 
 
- Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-index b25535b7a4d2..4d80006963c7 100644
---- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-+++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-@@ -26,6 +26,8 @@ properties:
-       - items:
-           - const: microchip,sam9x60-dbgu
-           - const: microchip,sam9x60-usart
-+          - const: atmel,at91sam9260-dbgu
-+          - const: atmel,at91sam9260-usart
+ .../bindings/mfd/atmel,sama5d2-flexcom.yaml      | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+index 0db0f2728b65..b5fb509f07ec 100644
+--- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
++++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+@@ -72,13 +72,21 @@ properties:
  
-   reg:
-     maxItems: 1
+ patternProperties:
+   "^serial@[0-9a-f]+$":
+-    type: object
++    $ref: /schemas/serial/atmel,at91-usart.yaml
+     description:
+-      Child node describing USART. See atmel-usart.txt for details
+-      of USART bindings.
++      Child node describing USART.
+ 
+   "^spi@[0-9a-f]+$":
+-    $ref: /schemas/spi/atmel,at91rm9200-spi.yaml
++    allOf:
++      - if:
++          properties:
++            clock-names:
++              contains:
++                const: usart
++        then:
++          $ref: /schemas/serial/atmel,at91-usart.yaml
++        else:
++          $ref: /schemas/spi/atmel,at91rm9200-spi.yaml
+     description:
+       Child node describing SPI.
+ 
 -- 
 2.25.1
 

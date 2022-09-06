@@ -2,122 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC65C5AEB91
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAED5AED1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241768AbiIFOQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S241087AbiIFOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241321AbiIFOMY (ORCPT
+        with ESMTP id S241448AbiIFOQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:12:24 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20629.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9076574CDC
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:47:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c0jFjG1NZrnQqpWN50TYPZcXXw3nmg7kq2n4a2H7ACITUtcLJEebUyU+10ZCN7ccp6TeROwWPWUiKY8CIRjNI/H0+xM3Dq64zQLpQEQ2fl5G/UdEcASCOvAlp0tPSH2JNmlfK4qnKeabFFX0kzoqspoUgrag+tOK/rz1WJl0sIWjhUIvNt9lwOiF2+tj1MQx79Pu7+jZjFQ5Irt6nobMe47NMsrLS0bEyQ8HR9gJh1Ezk/UKZ2bFUGDyzrATOpKo39LSGX+TEmhOBStqL1jSIe6LzNUYTvyukl3DVJIJLYCIlgkGOF3TqQu34SkIXPIm/ow8v1ii6KgACfmjfcz1Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oVFOeuISb2CQY5iB3SrM+8Dmpa0eXVBFwLNF4T7ts+s=;
- b=JGwV4BNPcZEIByA33SUSWP8gStRC9a3qubE6vYIh8ERlqWCVdnOB3aHhrWHvgHgnF+k0k+HMFgf6SygVBo7w76fASXt3FUXDcrgVmqxqWrOUuMSHifCK5k3Nsrws/KZzcpDQDRS/0DZcWlUX4ZK1fDIzw1OnjKGHkJCyYwPQUvVgc9bKXbjS3EGLgtnlcEAUlZx+UQZOuH/Wx03D3R6jE7gcsg+eohhsOaVPeSwkekEZYqdzkKMCIP/hVG8Sg37RV01NM43tr5fQBGIVHRO2Fo6529PLcn7KqugAgSIjI8tdvFVq1rJld94mWMqaUBvKZ4H+2HqyfsZe1KzkfZjCJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oVFOeuISb2CQY5iB3SrM+8Dmpa0eXVBFwLNF4T7ts+s=;
- b=0tW/w+ZWxWQ+E0p8rqP4qH18aX+I1t0vn/+PQutiVzvZfdCEZBym4cz8AEAhJNG47MnMVSq8I1Rekg9hQ4khn8v9gxHNPdMEsj0V8k8/w8hKiJXQO/ClyK28nn3+cc5eokFEE7ZOcandasN12NovcLOTh1DT8Iaf6LD0WhKaAH4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by CY5PR12MB6226.namprd12.prod.outlook.com (2603:10b6:930:22::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Tue, 6 Sep
- 2022 13:46:12 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::406d:afb5:d2d7:8115]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::406d:afb5:d2d7:8115%6]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
- 13:46:12 +0000
-Message-ID: <18083c05-7636-2155-610b-2d1347f8585f@amd.com>
-Date:   Tue, 6 Sep 2022 09:46:10 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_amdkfd_gpuvm.c
-Content-Language: en-US
-To:     Jingyu Wang <jingyuwang_vip@163.com>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220905083825.23429-1-jingyuwang_vip@163.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20220905083825.23429-1-jingyuwang_vip@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT2PR01CA0007.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:38::12) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Tue, 6 Sep 2022 10:16:13 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B43AB62
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:49:21 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286Dbk75024128;
+        Tue, 6 Sep 2022 13:47:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+LONfiP1FwuoZ7sqp1pViTF6ooPK4HKK4YlqTWf6pqg=;
+ b=sNOqYYDADMI3R5nSXwQGUJtWPPP6SQoyLYvFB1XRzpnlY2WMioY05Nif/WaLXJPxTPrQ
+ TPabg+kBf6HFmKgvMcv9MidZLyV4GXolWLXkxp1xy0mcqg5uxXr9ZH5YYlxD47XQ4RhW
+ Dtfa16C/oR6idlnN0NgS4GHJjnSZgoWwNdKRI3ovpvUGFUj0EtbxInfFEECFgQ3TkHLU
+ q2fkMtj0oSlO2y1aZ6eLVmLB+fPWzJxUs6W6P/HVrvuI3RFuGH75ePNMZQKBNalWrpgV
+ zxp6DThGJ12S3QN+/s3hiYDyKaIH7h17GojUZ8S3cx3xZFzdBd/tN6vODXrdfkJqW4df qg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je78j8esy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 13:47:04 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286DcGaO025665;
+        Tue, 6 Sep 2022 13:47:03 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3je78j8eqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 13:47:03 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286DaQIi009009;
+        Tue, 6 Sep 2022 13:47:00 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jbxj8uukd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 13:47:00 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286Dkv4734996560
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Sep 2022 13:46:57 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CDA01A405C;
+        Tue,  6 Sep 2022 13:46:57 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9AE7A4054;
+        Tue,  6 Sep 2022 13:46:56 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Sep 2022 13:46:56 +0000 (GMT)
+Message-ID: <c84136d3-703a-0e57-20ce-59f6b5823999@linux.ibm.com>
+Date:   Tue, 6 Sep 2022 15:46:56 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee4e760e-af8b-49a2-e6ad-08da900e2937
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6226:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HtdxUu3YFPkz5bnVvsFI5CqvQXsfs8+MTOOASW3nYnuOY+qS3Xab7OfWH5IzIVcAqKZ60iccxrPp47ykPU+6006MN8I0nCXkOCko4uZrD9IDtVrnUMh9kv12AV+NBrwCsU2chavrDxI3ktpd6Jq3xIq1cZa4zxDy73x5/X9QNtoFQb5HHkPiKYzD0hRQhPM1GVhVdTDHFglmmM510MVWfCJ+AwLgMlWJuNf/WynVK59AdhMIM3N2oQfOBbUGVGTVYqvx1y838z8gxtQNWJYflt3uu60nOiIRZZFgUFVERZpK3XTv5oJG0SuseuaiEO5F5oOUtncJFlDVRv9xzVJXvmghjYpCgeUHp0AwAeLfgpB7yltceRs2zKRMlly7ShbeM1lZqj6fbkOBUZXu1MciqsY73LQmlDME43OF6ggKg80NDD9SFqcK3ZdYwrQKd9pXLEChZvwCGAs8jrM69e1ix8sQC7YwhwhsPKm6dCofiRWQHaM9JQryn7bbRug7Eeibro3ouUyWAgRARPCnkK/PY6qvqqmfBdpvm/Gn7vcDNFFr5X2usKLHaWZ6ee2kDYU+Hkg5CtcaFSXpVzO5npBS7L1L+xYyWXAryT/WlPenpifGY0T0F0s9YCfltfBpjdIqqyKbIi08EOYxCu4uoeXsv4TdsBCyOvfwfShAqa/4BkIDmqdmrwnXswGwB8blefpCGh02E9PQ6QoOixZ4PDJnrnxT8zjAUd550udyBDl+GDytW38ZoOI8l1VUlDckh8fK6x4vT2wp5iCAXf+qz2hObYq3rneUuRUc6hTiYkrmAWY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(478600001)(6506007)(8936002)(6512007)(26005)(86362001)(31696002)(41300700001)(6486002)(38100700002)(186003)(2616005)(4326008)(2906002)(31686004)(8676002)(83380400001)(36756003)(316002)(66476007)(66556008)(66946007)(5660300002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TjYvaWRYbEFSQWFTTlJFeFJGOUdzMmtwRkF0YmU3U3BPY1czdlpER016UUtk?=
- =?utf-8?B?WnpEWkxRcGRKL3NCTWN4aXREeXI3VkdYREpaLzlZZmczRHQ3YjFOQlRkdkJQ?=
- =?utf-8?B?UXJTN2ZaUWFPUm1qSHp2dzBJQ0JrY1hkbVpEbzBTbDRaQ2lCMWc0RElOUWYz?=
- =?utf-8?B?SFlDdGEyaFUrM1ZUYjZ4YW5oelhhVTJMR3c1dGdIU0xnRzRNcTBFZDZZdVB6?=
- =?utf-8?B?OFJaVHBmb3RIUno2ZFhMK1RFU0p2SXpzaGZJRmNOVnRPVitZd2pEOWFhUWpm?=
- =?utf-8?B?elREWktxSE55L0VQL2dPK081TVJRTk4xNlcwbVRPRDNMckV5bHJUWEtDMVJ5?=
- =?utf-8?B?U3MrQkgzUUk5NDNDaDgzZ3RnR1JWWktCTGV4YUQ3ZUVkYi9nQkJQQTBqU09s?=
- =?utf-8?B?WU5YaGRsWWpuYmxiNDE1dUZMaXdTRmVkZXRUaUxCQnNCcmxRLzkwYlhjaEVV?=
- =?utf-8?B?d1dvR01PakEyNjBrdFdGT1JNQ1NBa0o3cGx6NXRpWTFubWtFUEIxRG9McHVj?=
- =?utf-8?B?czQvUCtuaTF0b1B5YUIzYmsxT2hFMWRhcWxxUHFWbWZUcmVhWkJoS2hCdVQ5?=
- =?utf-8?B?N0NWV1RVRGhnS2UyNDNqTGZYVlJvRHhOZm1Nb2prV0JXREFQdlU5ajBWS1NF?=
- =?utf-8?B?ME5yN2ZXTFZaRnFhZktqcVp0VEw1eUVEOTBZYjhVYXhlMTRWcHlHWDlJNjlE?=
- =?utf-8?B?WlR2RW42K2pIbzNvb3RnS0kzSzRVSW56NmdpQldwaWZGRHFjQ0d5L1RJczZY?=
- =?utf-8?B?VGNwUGNlSVZIY0lPMGRFVkZPTnRYWFJDbDNXcUNrS3B2QkhMaUJPRnFTazc1?=
- =?utf-8?B?OC80M01uSDlubTVwajdkM1ZlUi9WcHQ4bFZpWGhtRWhMYklYQU80ckNhNXdT?=
- =?utf-8?B?SzcyOUFkMXI4S3g3VUtrUG45OVpVRE11dnVBVW4wZlY5K3VyY2t4QTByT0ZP?=
- =?utf-8?B?VUVRZ29GSzFROVRSNUZNamlOUStSd0p5OWxiUXk2WVpWUG9zeGVQU29qeEJ1?=
- =?utf-8?B?YzBRbURpUytRNWlCNEZZMGlrZTZTV0JyZlFDTm8xUDRwSTVtb3ptYmY4b0pY?=
- =?utf-8?B?OGNTak1PSEUySDVqOU5qTURrSndxNjAwZ0wwL29IZVR0MG5Kdzd0VzBwbURn?=
- =?utf-8?B?bVBYdDgxS1dlT2F1N3Jtbm9rdXBQSTZOSjRrT1hLNy9EQ2FOWWJBdm9DcVdu?=
- =?utf-8?B?bTJ5dUpTdmJMeCtkVW1oRVRLREJ2RE82UFBUeFhYQnR5Y1UyM3BMUVljTzIr?=
- =?utf-8?B?K2lXS2QyY3dmL1JXWTVIc2g5SU5FWXVnKzdpeCtVNGtlc1BJMVhmV3RtZkNN?=
- =?utf-8?B?bnVnS0N6d3ZpT05pRFpVTTZIVE5IMlJZOUx0QUQ0QjhlOWVkS0NiZC80Tjhh?=
- =?utf-8?B?MFVyM0JVaXIzbnB1ckF0WDM0SHNRNUR5NlRpNEw4cU5LQ1hRdFp2b3NETXFr?=
- =?utf-8?B?cVRIOGZvVE9iSWlydzR5Y1RvNFBHMnFJWkErZVhQbTJHQllBakgxQUk5SzV1?=
- =?utf-8?B?R2xwK21Bd2ZrS3ZjTkxSZzF0WDVJck9aVUowaE0rd000b2QvR2taN2ZGNVQz?=
- =?utf-8?B?eFhmSU1WQ29xczZCODRCaFREcVJmV25KbHlMTDJGMElKOEk3SlBGekQ3bThU?=
- =?utf-8?B?akJ1WVkxcHdwenNnM2szMTVxQktGcDZiVFZad3k3ZmhBQ2EwWm5XRVNIOVgy?=
- =?utf-8?B?YzhqeGhEQm5tYS9kSE41T2ZYWlZhT01jR0VsZWNIZWZlZHUreVk2UjNhRmwz?=
- =?utf-8?B?UGZjNzl2ODVWV0E0VEwwRWRPeG5mOHlyL0g5eXZaSkppcU1TN2lnSzR6L2o1?=
- =?utf-8?B?a1JpanRGQllFRGRYaUlnTEJIOHVGcExTdGQxcHlhd0dOSXNFMWlGOWx0eXdN?=
- =?utf-8?B?dk9XMVFEUnFGelJ4OUNoNXVBa1BCSzltZThCbXFuNGFKK0RPdlRWNlFqd05a?=
- =?utf-8?B?aXg5RFVYWkFRSUhCUVV2UytXdjBiVnFXMHdvV3BFRFBEN3R2MkpaMnhYMXF5?=
- =?utf-8?B?L0I0YkNNZGppSXpTSUpsUGpPK0FteDViWkdRemUzTDNLMWFJN3pCQitIZHFk?=
- =?utf-8?B?ZUtyYXVHMWFsc0s1TWdKWW5aS1VVR3hDMFhQRlhxMXhzdk9WODNRUjQwU1Fs?=
- =?utf-8?Q?VHl+HD76eGcKRWeS0S5UrxCKL?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee4e760e-af8b-49a2-e6ad-08da900e2937
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 13:46:12.3848
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FFwyCn+82YE+P/EKE0HtCA06B1feyWb4LqI+w4OpX8nCrJmULIuFiGooWpGGTW6QoPEtTSj0A8P63Zh5J9fzIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6226
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.0
+Subject: Re: [RFC PATCH RESEND 05/28] mm: add per-VMA lock and helper
+ functions to control it
+Content-Language: fr
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, laurent.dufour@fr.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        rientjes@google.com, axelrasmussen@google.com, joelaf@google.com,
+        minchan@google.com, kernel-team@android.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220901173516.702122-1-surenb@google.com>
+ <20220901173516.702122-6-surenb@google.com>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <20220901173516.702122-6-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UrSfiMSxrDaJu89C83q1fw95SxfJl1td
+X-Proofpoint-ORIG-GUID: 41BMFJp_5MK8rlp_otVy0PPuDlQMVUZL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_07,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=704 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1011 spamscore=0 adultscore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060065
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -126,50 +106,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le 01/09/2022 à 19:34, Suren Baghdasaryan a écrit :
+> Introduce a per-VMA rw_semaphore to be used during page fault handling
+> instead of mmap_lock. Because there are cases when multiple VMAs need
+> to be exclusively locked during VMA tree modifications, instead of the
+> usual lock/unlock patter we mark a VMA as locked by taking per-VMA lock
+> exclusively and setting vma->lock_seq to the current mm->lock_seq. When
+> mmap_write_lock holder is done with all modifications and drops mmap_lock,
+> it will increment mm->lock_seq, effectively unlocking all VMAs marked as
+> locked.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Despite a minor comment below,
 
-Am 2022-09-05 um 04:38 schrieb Jingyu Wang:
-> Fix everything checkpatch.pl complained about in amdgpu_amdkfd_gpuvm.c
->
-> Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+Reviewed-by: Laurent Dufour <laurent.dufour@fr.ibm.com>
+
 > ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> index cbd593f7d553..eff596c60c89 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-> @@ -1,3 +1,4 @@
-> +// SPDX-License-Identifier: MIT
-
-I'm not sure if this is correct. We've used "GPL-2.0 OR MIT" in KFD. In 
-amdgpu there is currently a mix of licenses. Alex, do you want to make a 
-call on a consistent one to use in amdgpu?
-
-Other than that, this patch is
-
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-
-
->   /*
->    * Copyright 2014-2018 Advanced Micro Devices, Inc.
->    *
-> @@ -1612,6 +1613,7 @@ size_t amdgpu_amdkfd_get_available_memory(struct amdgpu_device *adev)
->   	uint64_t reserved_for_pt =
->   		ESTIMATE_PT_SIZE(amdgpu_amdkfd_total_mem_size);
->   	size_t available;
+>  include/linux/mm.h        | 78 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/mm_types.h  |  7 ++++
+>  include/linux/mmap_lock.h | 13 +++++++
+>  kernel/fork.c             |  4 ++
+>  mm/init-mm.c              |  3 ++
+>  5 files changed, 105 insertions(+)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 7d322a979455..476bf936c5f0 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -611,6 +611,83 @@ struct vm_operations_struct {
+>  					  unsigned long addr);
+>  };
+>  
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +static inline void vma_init_lock(struct vm_area_struct *vma)
+> +{
+> +	init_rwsem(&vma->lock);
+> +	vma->vm_lock_seq = -1;
+> +}
 > +
->   	spin_lock(&kfd_mem_limit.mem_limit_lock);
->   	available = adev->gmc.real_vram_size
->   		- adev->kfd.vram_used_aligned
-> @@ -2216,7 +2218,7 @@ int amdgpu_amdkfd_gpuvm_get_vm_fault_info(struct amdgpu_device *adev,
->   {
->   	if (atomic_read(&adev->gmc.vm_fault_info_updated) == 1) {
->   		*mem = *adev->gmc.vm_fault_info;
-> -		mb();
-> +		mb(); /* make sure read happened */
->   		atomic_set(&adev->gmc.vm_fault_info_updated, 0);
->   	}
->   	return 0;
->
-> base-commit: e47eb90a0a9ae20b82635b9b99a8d0979b757ad8
+> +static inline void vma_mark_locked(struct vm_area_struct *vma)
+> +{
+> +	int mm_lock_seq;
+> +
+> +	mmap_assert_write_locked(vma->vm_mm);
+> +
+> +	/*
+> +	 * current task is holding mmap_write_lock, both vma->vm_lock_seq and
+> +	 * mm->mm_lock_seq can't be concurrently modified.
+> +	 */
+> +	mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
+> +	if (vma->vm_lock_seq == mm_lock_seq)
+> +		return;
+> +
+> +	down_write(&vma->lock);
+> +	vma->vm_lock_seq = mm_lock_seq;
+> +	up_write(&vma->lock);
+> +}
+> +
+> +static inline bool vma_read_trylock(struct vm_area_struct *vma)
+> +{
+> +	if (unlikely(down_read_trylock(&vma->lock) == 0))
+> +		return false;
+> +
+> +	/*
+> +	 * Overflow might produce false locked result but it's not critical.
+
+It might be good to precise here that in the case of false locked, the
+caller is assumed to fallback read locking the mm entirely before doing its
+change relative to that VMA.
+
+> +	 * False unlocked result is critical but is impossible because we
+> +	 * modify and check vma->vm_lock_seq under vma->lock protection and
+> +	 * mm->mm_lock_seq modification invalidates all existing locks.
+> +	 */
+> +	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq)) {
+> +		up_read(&vma->lock);
+> +		return false;
+> +	}
+> +	return true;
+> +}
+> +
+> +static inline void vma_read_unlock(struct vm_area_struct *vma)
+> +{
+> +	up_read(&vma->lock);
+> +}
+> +
+> +static inline void vma_assert_locked(struct vm_area_struct *vma)
+> +{
+> +	lockdep_assert_held(&vma->lock);
+> +	VM_BUG_ON_VMA(!rwsem_is_locked(&vma->lock), vma);
+> +}
+> +
+> +static inline void vma_assert_write_locked(struct vm_area_struct *vma, int pos)
+> +{
+> +	mmap_assert_write_locked(vma->vm_mm);
+> +	/*
+> +	 * current task is holding mmap_write_lock, both vma->vm_lock_seq and
+> +	 * mm->mm_lock_seq can't be concurrently modified.
+> +	 */
+> +	VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
+> +}
+> +
+> +#else /* CONFIG_PER_VMA_LOCK */
+> +
+> +static inline void vma_init_lock(struct vm_area_struct *vma) {}
+> +static inline void vma_mark_locked(struct vm_area_struct *vma) {}
+> +static inline bool vma_read_trylock(struct vm_area_struct *vma)
+> +		{ return false; }
+> +static inline void vma_read_unlock(struct vm_area_struct *vma) {}
+> +static inline void vma_assert_locked(struct vm_area_struct *vma) {}
+> +static inline void vma_assert_write_locked(struct vm_area_struct *vma, int pos) {}
+> +
+> +#endif /* CONFIG_PER_VMA_LOCK */
+> +
+>  static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
+>  {
+>  	static const struct vm_operations_struct dummy_vm_ops = {};
+> @@ -619,6 +696,7 @@ static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
+>  	vma->vm_mm = mm;
+>  	vma->vm_ops = &dummy_vm_ops;
+>  	INIT_LIST_HEAD(&vma->anon_vma_chain);
+> +	vma_init_lock(vma);
+>  }
+>  
+>  static inline void vma_set_anonymous(struct vm_area_struct *vma)
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index bed25ef7c994..6a03f59c1e78 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -486,6 +486,10 @@ struct vm_area_struct {
+>  	struct mempolicy *vm_policy;	/* NUMA policy for the VMA */
+>  #endif
+>  	struct vm_userfaultfd_ctx vm_userfaultfd_ctx;
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +	struct rw_semaphore lock;
+> +	int vm_lock_seq;
+> +#endif
+>  } __randomize_layout;
+>  
+>  struct kioctx_table;
+> @@ -567,6 +571,9 @@ struct mm_struct {
+>  					  * init_mm.mmlist, and are protected
+>  					  * by mmlist_lock
+>  					  */
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +		int mm_lock_seq;
+> +#endif
+>  
+>  
+>  		unsigned long hiwater_rss; /* High-watermark of RSS usage */
+> diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
+> index e49ba91bb1f0..a391ae226564 100644
+> --- a/include/linux/mmap_lock.h
+> +++ b/include/linux/mmap_lock.h
+> @@ -72,6 +72,17 @@ static inline void mmap_assert_write_locked(struct mm_struct *mm)
+>  	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
+>  }
+>  
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +static inline void vma_mark_unlocked_all(struct mm_struct *mm)
+> +{
+> +	mmap_assert_write_locked(mm);
+> +	/* No races during update due to exclusive mmap_lock being held */
+> +	WRITE_ONCE(mm->mm_lock_seq, mm->mm_lock_seq + 1);
+> +}
+> +#else
+> +static inline void vma_mark_unlocked_all(struct mm_struct *mm) {}
+> +#endif
+> +
+>  static inline void mmap_init_lock(struct mm_struct *mm)
+>  {
+>  	init_rwsem(&mm->mmap_lock);
+> @@ -114,12 +125,14 @@ static inline bool mmap_write_trylock(struct mm_struct *mm)
+>  static inline void mmap_write_unlock(struct mm_struct *mm)
+>  {
+>  	__mmap_lock_trace_released(mm, true);
+> +	vma_mark_unlocked_all(mm);
+>  	up_write(&mm->mmap_lock);
+>  }
+>  
+>  static inline void mmap_write_downgrade(struct mm_struct *mm)
+>  {
+>  	__mmap_lock_trace_acquire_returned(mm, false, true);
+> +	vma_mark_unlocked_all(mm);
+>  	downgrade_write(&mm->mmap_lock);
+>  }
+>  
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 614872438393..bfab31ecd11e 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -475,6 +475,7 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
+>  		 */
+>  		*new = data_race(*orig);
+>  		INIT_LIST_HEAD(&new->anon_vma_chain);
+> +		vma_init_lock(new);
+>  		new->vm_next = new->vm_prev = NULL;
+>  		dup_anon_vma_name(orig, new);
+>  	}
+> @@ -1130,6 +1131,9 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+>  	seqcount_init(&mm->write_protect_seq);
+>  	mmap_init_lock(mm);
+>  	INIT_LIST_HEAD(&mm->mmlist);
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +	WRITE_ONCE(mm->mm_lock_seq, 0);
+> +#endif
+>  	mm_pgtables_bytes_init(mm);
+>  	mm->map_count = 0;
+>  	mm->locked_vm = 0;
+> diff --git a/mm/init-mm.c b/mm/init-mm.c
+> index fbe7844d0912..8399f90d631c 100644
+> --- a/mm/init-mm.c
+> +++ b/mm/init-mm.c
+> @@ -37,6 +37,9 @@ struct mm_struct init_mm = {
+>  	.page_table_lock =  __SPIN_LOCK_UNLOCKED(init_mm.page_table_lock),
+>  	.arg_lock	=  __SPIN_LOCK_UNLOCKED(init_mm.arg_lock),
+>  	.mmlist		= LIST_HEAD_INIT(init_mm.mmlist),
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +	.mm_lock_seq	= 0,
+> +#endif
+>  	.user_ns	= &init_user_ns,
+>  	.cpu_bitmap	= CPU_BITS_NONE,
+>  #ifdef CONFIG_IOMMU_SVA
+

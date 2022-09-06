@@ -2,132 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490A85AF820
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911575AF822
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiIFWwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 18:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S230037AbiIFWy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 18:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiIFWwR (ORCPT
+        with ESMTP id S229580AbiIFWyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 18:52:17 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F1385FB7;
-        Tue,  6 Sep 2022 15:52:16 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id v2-20020a056830090200b006397457afecso9045411ott.13;
-        Tue, 06 Sep 2022 15:52:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=m9lRH378v02nM3+uAQbjodYmGXDtyYl3efgPvWYoaJw=;
-        b=14imkXoi7XDyFpktufeVwBmKfFrNjUutP8v1ss7qquaM7rHvlz0XztYtbXd2ECj5Ui
-         pAT1teSMzauLCb/cZ9RUKULDT/Q9MNCFHX6/V9nkk5qQiruf9m7xAN2gjBLo5v3oL3A5
-         hKoaNOp3cpmLL54eVAwUKuD09JCwHlJPbuWXabjOmdSLbEuKlrrxeIsvRGOqcPRGZ0rL
-         ub+fERHLwP/wbaj370qqv4WNZSLUuqmqw+LSfEQpeXlepwZHumWATuhmrvDitn7qrU/M
-         0I8usP3CirfVML0iG+2mCEr4a23Mf88ZAIYIvLnfzJJDg7YrAkedynb9FlZHjCDrP0q5
-         9ETg==
-X-Gm-Message-State: ACgBeo2mJqIg3J+QfyCVJM/suR0jeURGPuyoC7FCsPwtK7hPu27eTFOY
-        Qw0AVhUQwgZlOd/C5ErbRStfo9tP8ou7zA6pRaE=
-X-Google-Smtp-Source: AA6agR7oKSSizgcg1FnRj1qVpnPwVmnQkqBreO7IGDIbBbkLWNlhj4aN8o7718CX5YjQm6uzJAVGEj8ataDGJSbnyiE=
-X-Received: by 2002:a9d:6a59:0:b0:638:92fd:d5b4 with SMTP id
- h25-20020a9d6a59000000b0063892fdd5b4mr311940otn.247.1662504735143; Tue, 06
- Sep 2022 15:52:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220903000210.1112014-1-namhyung@kernel.org> <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com>
- <YxdA1CVzy9hzE3i1@kernel.org> <CAM9d7ci2ZujdY75DUtZA+f=fru7yh8VJrj8-r2RgZetu57u61A@mail.gmail.com>
- <CANpmjNMHX2S-29Tyw+zKyaWT7saAiEegxbJapQFs7duJTTncdw@mail.gmail.com> <F172EC4B-1CFC-46A5-9DC3-146EDF8F5BDF@gmail.com>
-In-Reply-To: <F172EC4B-1CFC-46A5-9DC3-146EDF8F5BDF@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 6 Sep 2022 15:52:04 -0700
-Message-ID: <CAM9d7chkXTtuzc+5eHq7vvTcw05RS6MqYK-WTVrfZxPaC_ppjQ@mail.gmail.com>
-Subject: Re: [PATCH] perf test: Skip sigtrap test on old kernels
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Marco Elver <elver@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 6 Sep 2022 18:54:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F1921806
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 15:54:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C67615A5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:54:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2918C433C1;
+        Tue,  6 Sep 2022 22:54:49 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1oVhTd-00C9uT-0b;
+        Tue, 06 Sep 2022 18:55:29 -0400
+Message-ID: <20220906225313.361552496@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 06 Sep 2022 18:53:13 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [PATCH v2 0/4] tracing: Have filters and histograms use a call table instead of pointers
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 1:56 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
->
->
-> On September 6, 2022 5:50:05 PM GMT-03:00, Marco Elver <elver@google.com> wrote:
-> >On Tue, 6 Sept 2022 at 20:31, Namhyung Kim <namhyung@kernel.org> wrote:
-> >>
-> >> On Tue, Sep 6, 2022 at 5:45 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >> >
-> >> > Em Sat, Sep 03, 2022 at 08:52:01AM +0200, Marco Elver escreveu:
-> >> > > On Sat, 3 Sept 2022 at 02:02, Namhyung Kim <namhyung@kernel.org> wrote:
-> >> > > >
-> >> > > > If it runs on an old kernel, perf_event_open would fail because of the
-> >> > > > new fields sigtrap and sig_data.  Just skip the test if it failed.
-> >> > > >
-> >> > > > Cc: Marco Elver <elver@google.com>
-> >> > > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> >> > > > ---
-> >> > > >  tools/perf/tests/sigtrap.c | 1 +
-> >> > > >  1 file changed, 1 insertion(+)
-> >> > > >
-> >> > > > diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
-> >> > > > index e32ece90e164..7057566e6ae4 100644
-> >> > > > --- a/tools/perf/tests/sigtrap.c
-> >> > > > +++ b/tools/perf/tests/sigtrap.c
-> >> > > > @@ -140,6 +140,7 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
-> >> > > >         fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
-> >> > > >         if (fd < 0) {
-> >> > > >                 pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
-> >> > > > +               ret = TEST_SKIP;
-> >> > >
-> >> > > Wouldn't we be interested if perf_event_open() fails because it could
-> >> > > actually be a bug? By skipping we'll be more likely to miss the fact
-> >> > > there's a real problem.
-> >> > >
-> >> > > That's my naive thinking at least - what do other perf tests usually
-> >> > > do in this case?
-> >> >
-> >> > Yeah, I was going to try and check if this is the only way that, with
-> >> > the given arguments, perf_event_open would fail, but its better to at
-> >> > least check errno against -EINVAL or something?
-> >>
-> >> EINVAL would be too generic and the kernel returns it in many places.
-> >> I really wish we could have a better error reporting mechanism.
-> >>
-> >> Maybe we could retry perf_event_open with sigtrap and sig_data cleared.
-> >> If it succeeded, then we can skip the test.  If it still failed, then report
-> >> the error.  But it still couldn't find a bug in the sigtrap code.
-> >> What do you think?
-> >
-> >Yes, that's what I meant, that it could point out an issue with
-> >sigtrap perf_event_open().
-> >
-> >If there's no clear way to determine if it's just not supported or a
-> >bug, it'd be better to leave it as-is.
->
-> perf could go fancy and try to add a probe using a source file+line where older kernels would fail 8-)
->
-> Anyway, perf already does all sorts of kernel capability checks, perhaps this is one of can for sure detect it's something available :-/
->
-> One new way could be to look at BTF?
+While looking at the histogram and filter code, I realized that it's filled
+with function pointers. With retpolines causing a big slowdown, I thought
+that was problematic. Thus, I decided to see what would happen if I changed
+the function pointers into enums, and instead called a single function
+that did a switch on those enums and called the necessary functions
+directly. The results were pretty clear.
 
-Yeah, we could check BTF if it had the attr.sigtrap field and skip if not.
-Let me see how I can do that. :)
+The first patch was to update the trace event benchmark event to include
+a integer value "delta" of the delta that it took to complete
+(it currently only shows the delta as part of a string). By doing
+so, I could benchmark the histogram and filter logic with it.
 
-Thanks,
-Namhyung
+Before this series, the histogram with a single filter (to ignore the
+first event, which has a delta of zero), had:
+
+# event histogram
+#
+# trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
+#
+
+{ delta:        129 } hitcount:       2213
+{ delta:        130 } hitcount:     285965
+{ delta:        131 } hitcount:    1146545
+{ delta:        132 } hitcount:    5185432
+{ delta:        133 } hitcount:   19896215
+{ delta:        134 } hitcount:   53118616
+{ delta:        135 } hitcount:   83816709
+{ delta:        136 } hitcount:   68329562
+{ delta:        137 } hitcount:   41859349
+{ delta:        138 } hitcount:   46257797
+{ delta:        139 } hitcount:   54400831
+{ delta:        140 } hitcount:   72875007
+{ delta:        141 } hitcount:   76193272
+{ delta:        142 } hitcount:   49504263
+{ delta:        143 } hitcount:   38821072
+{ delta:        144 } hitcount:   47702679
+{ delta:        145 } hitcount:   41357297
+{ delta:        146 } hitcount:   22058238
+{ delta:        147 } hitcount:    9720002
+{ delta:        148 } hitcount:    3193542
+{ delta:        149 } hitcount:     927030
+{ delta:        150 } hitcount:     850772
+{ delta:        151 } hitcount:    1477380
+{ delta:        152 } hitcount:    2687977
+{ delta:        153 } hitcount:    2865985
+{ delta:        154 } hitcount:    1977492
+{ delta:        155 } hitcount:    2475607
+{ delta:        156 } hitcount:    3403612
+{ delta:        157 } hitcount:    2264011
+{ delta:        158 } hitcount:    1096214
+{ delta:        159 } hitcount:     504653
+{ delta:        160 } hitcount:     218869
+{ delta:        161 } hitcount:     103246
+[..]
+
+Where the bulk was around 142ns, and the fastest time was 129ns.
+
+After this series:
+
+# event histogram
+#
+# trigger info: hist:keys=delta:vals=hitcount:sort=delta:size=2048 if delta > 0 [active]
+#
+
+{ delta:        103 } hitcount:         60
+{ delta:        104 } hitcount:      16966
+{ delta:        105 } hitcount:     396625
+{ delta:        106 } hitcount:    3223400
+{ delta:        107 } hitcount:   12053754
+{ delta:        108 } hitcount:   20241711
+{ delta:        109 } hitcount:   14850200
+{ delta:        110 } hitcount:    4946599
+{ delta:        111 } hitcount:    3479315
+{ delta:        112 } hitcount:   18698299
+{ delta:        113 } hitcount:   62388733
+{ delta:        114 } hitcount:   95803834
+{ delta:        115 } hitcount:   58278130
+{ delta:        116 } hitcount:   15364800
+{ delta:        117 } hitcount:    5586866
+{ delta:        118 } hitcount:    2346880
+{ delta:        119 } hitcount:    1131091
+{ delta:        120 } hitcount:     620896
+{ delta:        121 } hitcount:     236652
+{ delta:        122 } hitcount:     105957
+{ delta:        123 } hitcount:     119107
+{ delta:        124 } hitcount:      54494
+{ delta:        125 } hitcount:      63856
+{ delta:        126 } hitcount:      64454
+{ delta:        127 } hitcount:      34818
+{ delta:        128 } hitcount:      41446
+{ delta:        129 } hitcount:      51242
+{ delta:        130 } hitcount:      28361
+{ delta:        131 } hitcount:      23926
+{ delta:        132 } hitcount:      22253
+{ delta:        133 } hitcount:      16994
+{ delta:        134 } hitcount:      14970
+{ delta:        135 } hitcount:      13464
+{ delta:        136 } hitcount:      11452
+{ delta:        137 } hitcount:      12212
+{ delta:        138 } hitcount:      12280
+{ delta:        139 } hitcount:       9127
+{ delta:        140 } hitcount:       9553
+
+Where the bulk was around 114ns and the fast time was 103ns.
+
+That's almost a 20% speedup!!!
+
+Changes since v1: https://lore.kernel.org/all/20220823214606.344269352@goodmis.org/
+
+ - Fixed combining constants (Masami Hiramatsu)
+
+Steven Rostedt (Google) (4):
+      tracing: Add numeric delta time to the trace event benchmark
+      tracing/hist: Call hist functions directly via a switch statement
+      tracing: Move struct filter_pred into trace_events_filter.c
+      tracing/filter: Call filter predicate functions directly via a switch statement
+
+----
+ kernel/trace/trace.h               |  13 --
+ kernel/trace/trace_benchmark.c     |   2 +-
+ kernel/trace/trace_benchmark.h     |   8 +-
+ kernel/trace/trace_events_filter.c | 239 ++++++++++++++++++++++++-----------
+ kernel/trace/trace_events_hist.c   | 246 +++++++++++++++++++++++++------------
+ 5 files changed, 343 insertions(+), 165 deletions(-)

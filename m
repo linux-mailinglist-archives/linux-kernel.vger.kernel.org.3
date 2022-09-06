@@ -2,177 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C245ADC3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 02:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBD15ADC43
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 02:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiIFAP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 20:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S232111AbiIFAS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 20:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiIFAPz (ORCPT
+        with ESMTP id S229481AbiIFAS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 20:15:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC814F682;
-        Mon,  5 Sep 2022 17:15:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM5Wp3dbjz4x1d;
-        Tue,  6 Sep 2022 10:15:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662423351;
-        bh=uvwhs5LkYByPAUSDc55RSvlMkaNGa3ewrceu/px4Iy0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Dx78H16jr755pXikoUsnpAT7NYJ9z8xJ89U7u3hQuWsTsvToTagkppp5aCEEO4ryN
-         XKTX4ADoRYH2pm5zt7gKG6Qjj4I2AKIWUr1LcTvyZYO+YNrq1S3s253BA2Dt5flQ0q
-         atnJ8CkyNrhMHLKNRJh3RnpsJ+AW+0UP31WUNA7BjhnHj9pRz0HQWwrXfVYh3vjXij
-         VurE4Ytz7ctdQhyAcLjF9lqyK75Bv5iKj3yWEmFehMvqsg1XuhdJUznqW595XmhDM2
-         kEcXQtE4YSBbA5dpMJ+rzO076nfNMKUqB39H4v51Ryvmbu2dCfjqXsIz6QYGzrU1HA
-         r9zB2dxYT0b3w==
-Date:   Tue, 6 Sep 2022 10:15:49 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the btrfs tree with the btrfs-fixes
- tree
-Message-ID: <20220906101549.1cfee0d4@canb.auug.org.au>
-In-Reply-To: <20220906095055.498d90ea@canb.auug.org.au>
-References: <20220906095055.498d90ea@canb.auug.org.au>
+        Mon, 5 Sep 2022 20:18:57 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E439B564ED
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 17:18:55 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o15-20020a17090a3d4f00b002004ed4d77eso4311690pjf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 17:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=QfYqb6Pfw/hN4JPJ05FBEV50HBSGkGyPNi9iiQG7nRw=;
+        b=ld4zch2mgovaLAdB8N98ih+6dYvI8qBpwLRLtjNUDXeImKkqFWB254xBhy80F0U90A
+         J+yZQRYLuP0Jo0Mk4yML1TKUKTk4jEDPAOUEP0c5+yqaqhTQ7+gOhuufyatvIfqzg0BU
+         d51A5BQHmMl/s8AQIKgv1IR+4ol+H/BXs6JEZtb4Swr9u9DXePXU/BvNKH7l3CIBjpu3
+         /8dasrmmcoD2uYWsFEenjdP0uA9ZA4SxjaxZhym5FeSGQJkADFqbpqEmWC82AjcP9iKc
+         1NfcpSGj9hkQFNFfw2zrIOCfADCzsT/D3pikpqUQo60TyPiILNt9xpxLMpKu3gGjb8Lt
+         Rc5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=QfYqb6Pfw/hN4JPJ05FBEV50HBSGkGyPNi9iiQG7nRw=;
+        b=Hwmhq98R5Fo27tFj8oPeS2zX+3OnJvR6RA9s47M0TGFlOU6QM9EwhSQ5ZyPOuocdps
+         8KA48r+06ODbiLYF0E+aSBRPAMcRYFUf30g58DnKLqMRbMfr+pUTOWe7MYTzaqBPxS4R
+         sJR1EXPwacmug3qwJCLP6NzHNZKnHj8D9jDXTcn3W+/A6+6mPAXXM/s9ifUzg6Cser/t
+         hCTPbMbaEiobEJxQk8y4PMY0tl1rUiSH44ZGq9Ol1r94YQxTdBh26tOp4UWOrKOb6Afo
+         4j21EyNjYOkGI3Y520Uc0/2shzXAY4VuSlrvrLhF/Ym1Uz5z9Pj0KLMBQzaIGb/qZrYH
+         gJtQ==
+X-Gm-Message-State: ACgBeo1dv38jdzblC2wrf4WdpM0p5CvVWZBiwRU5Nj898jGg7nmMsVuw
+        WNAqUAk/ipFEcMuibs1WzNNg8eWMOzSi1Q==
+X-Google-Smtp-Source: AA6agR6jxIENBgUBR97NH/krn8jJvwlo5786QKZ2UpSO6xuS9EB3TrYsrTPQOCKgXQVdaJ7TxrILOA==
+X-Received: by 2002:a17:90a:7e87:b0:1fe:4d96:f6f6 with SMTP id j7-20020a17090a7e8700b001fe4d96f6f6mr21348991pjl.142.1662423535323;
+        Mon, 05 Sep 2022 17:18:55 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5-20020a170902c24500b0016dc78d0153sm219209plg.296.2022.09.05.17.18.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 17:18:54 -0700 (PDT)
+Message-ID: <55a2d67f-9a12-9fe6-d73b-8c3f5eb36f31@kernel.dk>
+Date:   Mon, 5 Sep 2022 18:18:53 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CRYrN=XD6G0mVc67TMvLduU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: New topic branch for block + gup work?
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <86266dcc-d475-7cd4-77dc-a8ba6f11620b@nvidia.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <86266dcc-d475-7cd4-77dc-a8ba6f11620b@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/CRYrN=XD6G0mVc67TMvLduU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 9/5/22 5:16 PM, John Hubbard wrote:
+> Hi Jens,
+> 
+> After you suggested a topic branch [1] as a way to address the recent
+> bio_map_user_iov() conflict in linux-next, I've reviewed a few more
+> patchsets in mm, and am now starting to suspect that a topic branch
+> would be ideal here.
+> 
+> Logan's "Userspace P2PDMA with O_DIRECT NVMe devices" series [2], my
+> "convert most filesystems to pin_user_pages_fast()" series [3], and the
+> block layer change from [1], all conflict in iov_iter*, and in
+> bio_map_user_iov().
+> 
+> Less of an issue but still worth considering, Dan's "Fix the DAX-gup
+> mistake" series [4] conflicts in gup.c, too.
+> 
+> Maybe:
+> 
+>     gup_bio
+> 
+> , or something like that, as a topic branch?
+> 
+> Everyone: thoughts, preferences here?
 
-Hi all,
+My suggestion would be to branch from for-6.1/block, then we can
+apply the gup patches on top of that. I'd probably just call it
+for-6.1/block-gup.
 
-On Tue, 6 Sep 2022 09:50:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the btrfs tree got a conflict in:
->=20
->   fs/btrfs/zoned.c
->=20
-> between commit:
->=20
->   6ca64ac27631 ("btrfs: zoned: fix mounting with conventional zones")
->=20
-> from the btrfs-fixes tree and commit:
->=20
->   e5182af66852 ("btrfs: convert block group bit field to use bit helpers")
->=20
-> from the btrfs tree.
->=20
-> I fixed it up (the former removed some of the code modified by the latter)
-> and can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+-- 
+Jens Axboe
 
-Actually the fix up is below ...
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/btrfs/zoned.c
-index 62e7007a7e46,dc96b3331bfb..000000000000
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
-@@@ -1426,17 -1402,32 +1426,16 @@@ int btrfs_load_block_group_zone_info(st
-  		cache->seq_zone =3D true;
- =20
-  	if (num_conventional > 0) {
- -		/*
- -		 * Avoid calling calculate_alloc_pointer() for new BG. It
- -		 * is no use for new BG. It must be always 0.
- -		 *
- -		 * Also, we have a lock chain of extent buffer lock ->
- -		 * chunk mutex.  For new BG, this function is called from
- -		 * btrfs_make_block_group() which is already taking the
- -		 * chunk mutex. Thus, we cannot call
- -		 * calculate_alloc_pointer() which takes extent buffer
- -		 * locks to avoid deadlock.
- -		 */
- -
-  		/* Zone capacity is always zone size in emulation */
-  		cache->zone_capacity =3D cache->length;
- -		if (new) {
- -			cache->alloc_offset =3D 0;
- -			goto out;
- -		}
- -		ret =3D calculate_alloc_pointer(cache, &last_alloc);
- -		if (ret || map->num_stripes =3D=3D num_conventional) {
- -			if (!ret)
- -				cache->alloc_offset =3D last_alloc;
- -			else
- -				btrfs_err(fs_info,
- +		ret =3D calculate_alloc_pointer(cache, &last_alloc, new);
- +		if (ret) {
- +			btrfs_err(fs_info,
-  			"zoned: failed to determine allocation offset of bg %llu",
- -					  cache->start);
- +				  cache->start);
- +			goto out;
- +		} else if (map->num_stripes =3D=3D num_conventional) {
- +			cache->alloc_offset =3D last_alloc;
-- 			cache->zone_is_active =3D 1;
-  			goto out;
-  		}
-  	}
-@@@ -1528,16 -1529,10 +1530,16 @@@ out
-  		ret =3D -EIO;
-  	}
- =20
- -	if (!ret)
- +	if (!ret) {
-  		cache->meta_write_pointer =3D cache->alloc_offset + cache->start;
-- 		if (cache->zone_is_active) {
- -
- -	if (ret) {
-++		if (test_bit(BLOCK_GROUP_FLAG_ZONE_IS_ACTIVE, &cache->runtime_flags)) {
- +			btrfs_get_block_group(cache);
- +			spin_lock(&fs_info->zone_active_bgs_lock);
- +			list_add_tail(&cache->active_bg_list,
- +				      &fs_info->zone_active_bgs);
- +			spin_unlock(&fs_info->zone_active_bgs_lock);
- +		}
- +	} else {
-  		kfree(cache->physical_map);
-  		cache->physical_map =3D NULL;
-  	}
-
---Sig_/CRYrN=XD6G0mVc67TMvLduU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWkTUACgkQAVBC80lX
-0GwKJQf+J23/uLehFPTk9OuQsSTePNsu8Tx3aLRPPrcVf+EVGLYbxmC5bTUC4dOW
-6LRrqpZ5iuh9upgW55kPZ0ymcox2taTxk23AthOQgg72v4vS1tHDsM9uMb0ZrvSD
-1cIlu4PDPhcl1u1qdzCy/k4udyytm362WabYtwR9kPjO4MRkgb2+aMPSgZtrPTfL
-p1rJWc178KjZWCFsKMjCGJR2Ol5xKf1wdulnQnaTR1UqAMoGyvyQuA8MbRhgoS95
-9AVBvCrck1vi4O93Dx2Eklu9MG8ArqCOQ6BXDFSf9JflJAH0HkhBFqQYcTVUu9+r
-AE6/BQqbZZWS89pIO8cHUoGVP4OdBA==
-=wIuH
------END PGP SIGNATURE-----
-
---Sig_/CRYrN=XD6G0mVc67TMvLduU--

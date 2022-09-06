@@ -2,231 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CCC5AE8D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003135AE8A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240215AbiIFMxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S240043AbiIFMpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240300AbiIFMwW (ORCPT
+        with ESMTP id S240045AbiIFMpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:52:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505176D54F;
-        Tue,  6 Sep 2022 05:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662468722; x=1694004722;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aRiuPJQGa4VDcCcM3wNAUjeRGrqhY6hXMwDxZaU2ESQ=;
-  b=HjOeHt/PFOVcCivaIkCHHgeU/pEYL8lfDcR+TP5/X9ei2peBKDAzKo+n
-   KNZvsxE361N206ZVytKNzbzl6Sj0VlPZmGnIRfAozGlEVNBBb1l/aOeY6
-   FVTbCDMKzM8LWMcHrpCqLn8cn6metZAXtoQVNYQqLseChBjcuWd6lcv/B
-   oNdsAQBBqv2Zwi6lUbN7GGFI8BMtorInjw8JHRQKU4avocifZl8JgaZoA
-   8TsMcFDK+6R+2Qk7T92DXu0MLyGlnJfxDwpuCFWzts4adEe28uP2jfYfo
-   G7hysVBXqt8hmNDDUTRgYNMchICF/UT1Roa/zIFLTGOWsLEa7b4PIH4jq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297895491"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="297895491"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:52:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="591253093"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2022 05:51:56 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH v13 13/13] iommu: Rename iommu-sva-lib.{c,h}
-Date:   Tue,  6 Sep 2022 20:44:58 +0800
-Message-Id: <20220906124458.46461-14-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220906124458.46461-1-baolu.lu@linux.intel.com>
-References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
+        Tue, 6 Sep 2022 08:45:12 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48C53CBE9;
+        Tue,  6 Sep 2022 05:45:10 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id v5so11175433plo.9;
+        Tue, 06 Sep 2022 05:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=4JGTiDJcgL+m7f4YRbRBhULIgiYlDFX66WuxAILPmWA=;
+        b=iZUwtOJfsM1j7MbG17D7Q1RqfQ+KHHvhEAQUl8beLSej/Bi5zelwoEVkEstB2FqLeA
+         z5BZHnGgRwuacozG2yTzl8QzMRXPTxT/Oelu6YuBwqV7zeZqdhnwCHzMR4JJiRi4kFtr
+         SDD0uF/8aHL7ZuaLZiK3cvTm4oWcrqSc17gJ66QPPBpqRXlcRonid267w+lGFHWaKlff
+         F02Fgh32dLBPti56AIwzkHX+M/q+1Y7RVIXy1od9r1Cx0XbsOaWsT23+peEuC55cDbRE
+         xAbrAQvPdl1CJrBJZr+SP4y7Etbd5exQsx76n1wuMRzEczbGiW2MJHDNW9+XoBEIGgM5
+         E2tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4JGTiDJcgL+m7f4YRbRBhULIgiYlDFX66WuxAILPmWA=;
+        b=BH/2MymNL9nQxhS0w97cXqYiaB098ACXNPypsuvIpR/QmvrSQF68j2/wIcv7PfNHNF
+         VD6vPRmembzkc/Db3u3iVPs52u/wrhLBZpHIVAwW+mjNhseKIYkVsyTDVRDQEkUtP4rA
+         f+s62dH1lPe9AG/117osh0PCMLckAXmr2y5F6XYa9Nuok0MRRoMw3LzJ9uZngMhPDf0J
+         UaIItpLKT1TkwdcUzVBgcAfCV3XALanQLzbzV20G/fvr5Ap1Ex9qioFbZbthth6BnXqE
+         w9Aa6tp5iVW8pLmqxHuAKTvybfiHhWBYn6JYoGMI88kS+PGme6zqwUAjUL2gUHyGrv+e
+         f7iw==
+X-Gm-Message-State: ACgBeo3dsNa07a51WX6fdRqzjUidmsEETDVDFyb9UvEcd87PlRZkdA+6
+        KYFWEgzAfy8/sCWXevWJln4=
+X-Google-Smtp-Source: AA6agR7QWNN7ufkMzjQ0FKa7hiypjlddIZiVpkhWwscOPcohK6+0wDv+vt35ku/dzbN+LaXVKySyPA==
+X-Received: by 2002:a17:902:76c6:b0:175:395c:b650 with SMTP id j6-20020a17090276c600b00175395cb650mr33705142plt.98.1662468310345;
+        Tue, 06 Sep 2022 05:45:10 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b00172c7a2c662sm9676801ple.48.2022.09.06.05.45.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 05:45:09 -0700 (PDT)
+Message-ID: <c9b3d50e-ec3d-3fa3-2706-5672100ffe09@gmail.com>
+Date:   Tue, 6 Sep 2022 20:45:00 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH 3/4] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220905123946.95223-1-likexu@tencent.com>
+ <20220905123946.95223-4-likexu@tencent.com>
+ <CALMp9eSBK3xVKoqrk4j2yNqk+Jh0z-Nk-rwCTaTE0Dca5DQoPA@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <CALMp9eSBK3xVKoqrk4j2yNqk+Jh0z-Nk-rwCTaTE0Dca5DQoPA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename iommu-sva-lib.c[h] to iommu-sva.c[h] as it contains all code
-for SVA implementation in iommu core.
+On 6/9/2022 2:00 am, Jim Mattson wrote:
+> On Mon, Sep 5, 2022 at 5:44 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>>
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> If AMD Performance Monitoring Version 2 (PerfMonV2) is detected
+>> by the guest, it can use a new scheme to manage the Core PMCs using
+>> the new global control and status registers.
+>>
+>> In addition to benefiting from the PerfMonV2 functionality in the same
+>> way as the host (higher precision), the guest also can reduce the number
+>> of vm-exits by lowering the total number of MSRs accesses.
+>>
+>> In terms of implementation details, amd_is_valid_msr() is resurrected
+>> since three newly added MSRs could not be mapped to one vPMC.
+>> The possibility of emulating PerfMonV2 on the mainframe has also
+>> been eliminated for reasons of precision.
+>>
+>> Co-developed-by: Sandipan Das <sandipan.das@amd.com>
+>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+>>   arch/x86/kvm/pmu.c     |  6 +++++
+>>   arch/x86/kvm/svm/pmu.c | 50 +++++++++++++++++++++++++++++++++---------
+>>   arch/x86/kvm/x86.c     | 11 ++++++++++
+>>   3 files changed, 57 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+>> index 7002e1b74108..56b4f898a246 100644
+>> --- a/arch/x86/kvm/pmu.c
+>> +++ b/arch/x86/kvm/pmu.c
+>> @@ -455,12 +455,15 @@ int kvm_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>
+>>          switch (msr) {
+>>          case MSR_CORE_PERF_GLOBAL_STATUS:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS:
+>>                  msr_info->data = pmu->global_status;
+>>                  return 0;
+>>          case MSR_CORE_PERF_GLOBAL_CTRL:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_CTL:
+>>                  msr_info->data = pmu->global_ctrl;
+>>                  return 0;
+>>          case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR:
+>>                  msr_info->data = 0;
+>>                  return 0;
+>>          default:
+>> @@ -479,12 +482,14 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>
+>>          switch (msr) {
+>>          case MSR_CORE_PERF_GLOBAL_STATUS:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS:
+>>                  if (msr_info->host_initiated) {
+>>                          pmu->global_status = data;
+>>                          return 0;
+>>                  }
+>>                  break; /* RO MSR */
+>>          case MSR_CORE_PERF_GLOBAL_CTRL:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_CTL:
+>>                  if (pmu->global_ctrl == data)
+>>                          return 0;
+>>                  if (kvm_valid_perf_global_ctrl(pmu, data)) {
+>> @@ -495,6 +500,7 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>                  }
+>>                  break;
+>>          case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR:
+>>                  if (!(data & pmu->global_ovf_ctrl_mask)) {
+>>                          if (!msr_info->host_initiated)
+>>                                  pmu->global_status &= ~data;
+>> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+>> index 3a20972e9f1a..4c7d408e3caa 100644
+>> --- a/arch/x86/kvm/svm/pmu.c
+>> +++ b/arch/x86/kvm/svm/pmu.c
+>> @@ -92,12 +92,6 @@ static struct kvm_pmc *amd_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+>>          return amd_pmc_idx_to_pmc(vcpu_to_pmu(vcpu), idx & ~(3u << 30));
+>>   }
+>>
+>> -static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+>> -{
+>> -       /* All MSRs refer to exactly one PMC, so msr_idx_to_pmc is enough.  */
+>> -       return false;
+>> -}
+>> -
+>>   static struct kvm_pmc *amd_msr_idx_to_pmc(struct kvm_vcpu *vcpu, u32 msr)
+>>   {
+>>          struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>> @@ -109,6 +103,29 @@ static struct kvm_pmc *amd_msr_idx_to_pmc(struct kvm_vcpu *vcpu, u32 msr)
+>>          return pmc;
+>>   }
+>>
+>> +static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+>> +{
+>> +       struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>> +
+>> +       switch (msr) {
+>> +       case MSR_K7_EVNTSEL0 ... MSR_K7_PERFCTR3:
+>> +               return pmu->version > 0;
+>> +       case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
+>> +               return guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE);
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_CTL:
+>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR:
+>> +               return pmu->version > 1;
+>> +       default:
+>> +               if (msr > MSR_F15H_PERF_CTR5 &&
+>> +                   msr < MSR_F15H_PERF_CTL0 + 2 * KVM_AMD_PMC_MAX_GENERIC)
+>> +                       return pmu->version > 1;
+> 
+> Should this be bounded by guest CPUID.80000022H:EBX[NumCorePmc]
+> (unless host-initiated)?
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-Tested-by: Tony Zhu <tony.zhu@intel.com>
----
- drivers/iommu/{iommu-sva-lib.h => iommu-sva.h}  | 6 +++---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c     | 2 +-
- drivers/iommu/intel/iommu.c                     | 2 +-
- drivers/iommu/intel/svm.c                       | 2 +-
- drivers/iommu/io-pgfault.c                      | 2 +-
- drivers/iommu/{iommu-sva-lib.c => iommu-sva.c}  | 2 +-
- drivers/iommu/iommu.c                           | 2 +-
- drivers/iommu/Makefile                          | 2 +-
- 9 files changed, 11 insertions(+), 11 deletions(-)
- rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (95%)
- rename drivers/iommu/{iommu-sva-lib.c => iommu-sva.c} (99%)
+Indeed, how about:
 
-diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva.h
-similarity index 95%
-rename from drivers/iommu/iommu-sva-lib.h
-rename to drivers/iommu/iommu-sva.h
-index 1b3ace4b5863..7215a761b962 100644
---- a/drivers/iommu/iommu-sva-lib.h
-+++ b/drivers/iommu/iommu-sva.h
-@@ -2,8 +2,8 @@
- /*
-  * SVA library for IOMMU drivers
-  */
--#ifndef _IOMMU_SVA_LIB_H
--#define _IOMMU_SVA_LIB_H
-+#ifndef _IOMMU_SVA_H
-+#define _IOMMU_SVA_H
- 
- #include <linux/ioasid.h>
- #include <linux/mm_types.h>
-@@ -72,4 +72,4 @@ iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
- 	return IOMMU_PAGE_RESP_INVALID;
- }
- #endif /* CONFIG_IOMMU_SVA */
--#endif /* _IOMMU_SVA_LIB_H */
-+#endif /* _IOMMU_SVA_H */
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index 640587f2321d..1710e7a5e13f 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -10,7 +10,7 @@
- #include <linux/slab.h>
- 
- #include "arm-smmu-v3.h"
--#include "../../iommu-sva-lib.h"
-+#include "../../iommu-sva.h"
- #include "../../io-pgtable-arm.h"
- 
- struct arm_smmu_mmu_notifier {
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index cb50f3d80405..8f907213414f 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -31,7 +31,7 @@
- #include <linux/amba/bus.h>
- 
- #include "arm-smmu-v3.h"
--#include "../../iommu-sva-lib.h"
-+#include "../../iommu-sva.h"
- 
- static bool disable_bypass = true;
- module_param(disable_bypass, bool, 0444);
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 1fa2aa598a4d..8d6aa57e1fbb 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -27,7 +27,7 @@
- 
- #include "iommu.h"
- #include "../irq_remapping.h"
--#include "../iommu-sva-lib.h"
-+#include "../iommu-sva.h"
- #include "pasid.h"
- #include "cap_audit.h"
- 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 83bfc9cd84dd..b391e46e537e 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -24,7 +24,7 @@
- #include "iommu.h"
- #include "pasid.h"
- #include "perf.h"
--#include "../iommu-sva-lib.h"
-+#include "../iommu-sva.h"
- #include "trace.h"
- 
- static irqreturn_t prq_event_thread(int irq, void *d);
-diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
-index d046d89cec55..e5b8b9110c13 100644
---- a/drivers/iommu/io-pgfault.c
-+++ b/drivers/iommu/io-pgfault.c
-@@ -11,7 +11,7 @@
- #include <linux/slab.h>
- #include <linux/workqueue.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- /**
-  * struct iopf_queue - IO Page Fault queue
-diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva.c
-similarity index 99%
-rename from drivers/iommu/iommu-sva-lib.c
-rename to drivers/iommu/iommu-sva.c
-index 520ec0b4ed85..54b4a66583d4 100644
---- a/drivers/iommu/iommu-sva-lib.c
-+++ b/drivers/iommu/iommu-sva.c
-@@ -6,7 +6,7 @@
- #include <linux/sched/mm.h>
- #include <linux/iommu.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- static DEFINE_MUTEX(iommu_sva_lock);
- static DECLARE_IOASID_SET(iommu_sva_pasid);
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index cbfde12dfae0..bf3861645048 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -29,7 +29,7 @@
- #include <trace/events/iommu.h>
- #include <linux/sched/mm.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- static struct kset *iommu_group_kset;
- static DEFINE_IDA(iommu_group_ida);
-diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
-index 44475a9b3eea..c1763476162b 100644
---- a/drivers/iommu/Makefile
-+++ b/drivers/iommu/Makefile
-@@ -27,6 +27,6 @@ obj-$(CONFIG_FSL_PAMU) += fsl_pamu.o fsl_pamu_domain.o
- obj-$(CONFIG_S390_IOMMU) += s390-iommu.o
- obj-$(CONFIG_HYPERV_IOMMU) += hyperv-iommu.o
- obj-$(CONFIG_VIRTIO_IOMMU) += virtio-iommu.o
--obj-$(CONFIG_IOMMU_SVA) += iommu-sva-lib.o io-pgfault.o
-+obj-$(CONFIG_IOMMU_SVA) += iommu-sva.o io-pgfault.o
- obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
- obj-$(CONFIG_APPLE_DART) += apple-dart.o
--- 
-2.25.1
+	default:
+		if (msr > MSR_F15H_PERF_CTR5 &&
+		    msr < MSR_F15H_PERF_CTL0 + 2 * pmu->nr_arch_gp_counters)
+			return pmu->version > 1;
+
+and for host-initiated:
+
+#define MSR_F15H_PERF_MSR_MAX  \
+	(MSR_F15H_PERF_CTR0 + 2 * (KVM_AMD_PMC_MAX_GENERIC - 1))
+
+kvm_{set|get}_msr_common()
+        case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_MSR_MAX:
+                 if (kvm_pmu_is_valid_msr(vcpu, msr))
+                         return kvm_pmu_set_msr(vcpu, msr_info);
+?
+
+> 
+>> +               break;
+>> +       }
+>> +
+>> +       return amd_msr_idx_to_pmc(vcpu, msr);
+>> +}
+>> +
+>>   static int amd_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>   {
+>>          struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>> @@ -162,20 +179,31 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>   static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+>>   {
+>>          struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>> +       struct kvm_cpuid_entry2 *entry;
+>> +       union cpuid_0x80000022_ebx ebx;
+>>
+>> -       if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
+>> +       pmu->version = 1;
+>> +       entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
+>> +       if (kvm_pmu_cap.version > 1 && entry && (entry->eax & BIT(0))) {
+>> +               pmu->version = 2;
+>> +               ebx.full = entry->ebx;
+>> +               pmu->nr_arch_gp_counters = min3((unsigned int)ebx.split.num_core_pmc,
+>> +                                               (unsigned int)kvm_pmu_cap.num_counters_gp,
+>> +                                               (unsigned int)KVM_AMD_PMC_MAX_GENERIC);
+>> +               pmu->global_ctrl_mask = ~((1ull << pmu->nr_arch_gp_counters) - 1);
+>> +               pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask;
+>> +       } else if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
+>>                  pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS_CORE;
+> 
+> The logic above doesn't seem quite right, since guest_cpuid_has(vcpu,
+> X86_FEATURE_PERFCTR_CORE) promises 6 PMCs, regardless of what
+> CPUID.80000022 says.
+
+I would have expected the appearance of CPUID.80000022 to override PERFCTR_CORE,
+now I don't think it's a good idea as you do, so how about:
+
+amd_pmu_refresh():
+	
+	bool perfctr_core = guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE);
+
+	pmu->version = 1;
+	if (kvm_pmu_cap.version > 1)
+		entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
+
+	if (!perfctr_core)
+		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
+	if (entry && (entry->eax & BIT(0))) {
+		pmu->version = 2;
+		ebx.full = entry->ebx;
+		pmu->nr_arch_gp_counters = min3((unsigned int)ebx.split.num_core_pmc,
+						(unsigned int)kvm_pmu_cap.num_counters_gp,
+						(unsigned int)KVM_AMD_PMC_MAX_GENERIC);
+	}
+	/* PERFCTR_CORE promises 6 PMCs, regardless of CPUID.80000022 */
+	if (perfctr_core) {
+		pmu->nr_arch_gp_counters = max(pmu->nr_arch_gp_counters,
+					       AMD64_NUM_COUNTERS_CORE);
+	}
+
+	if (pmu->version > 1) {
+		pmu->global_ctrl_mask = ~((1ull << pmu->nr_arch_gp_counters) - 1);
+		pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask;
+	}
+
+?
+
 

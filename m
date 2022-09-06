@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8665AEB2C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C693E5AEA05
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239368AbiIFNzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S232295AbiIFNlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239082AbiIFNwp (ORCPT
+        with ESMTP id S233717AbiIFNkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:52:45 -0400
+        Tue, 6 Sep 2022 09:40:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CCE1838B;
-        Tue,  6 Sep 2022 06:40:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046897D1F8;
+        Tue,  6 Sep 2022 06:37:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D15261545;
-        Tue,  6 Sep 2022 13:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E648C433D6;
-        Tue,  6 Sep 2022 13:40:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA97B61512;
+        Tue,  6 Sep 2022 13:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0110AC433D7;
+        Tue,  6 Sep 2022 13:35:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471619;
-        bh=g4OSy4eiWzd4GXoIulDPPUyvFbwo6gtuf8PChh14Lrc=;
+        s=korg; t=1662471332;
+        bh=m98F5jESOXA9JdUJZQ2Lpwin7wHAIedi2OSmc3PJYls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jFxTJI2y9yQ2E9dVg7pUU2ETlBi6l91sSH2E7MZJTw/2lyDKJiHOCM5Aoo8rL14BZ
-         sMB7JuO9deIp+Wz/x8NF5uzghrsk+my5F8hvV+qSWQmiJW0Ipk1uI+fdBP2yX6iUxK
-         bjTy5JyOIub4dv/YvFCqT0Ri59NLJKv4CmU6vY2s=
+        b=uL3pWTsDOcoOnEgyXe+K9k/6PynqPhnEa/WsoI2Y6Hts2hep81qoO5k7QFQNkB2mW
+         QSzel58c2GBkFr8+nHiBYgh/WckfKj34alRSCsrxxPEOEeZbc0f8gzTyDKy8xP/DMu
+         mNTGEnUxUmCHlWfWE00hP7cJJDgzp136AmS0pUZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH 5.15 088/107] usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
-Date:   Tue,  6 Sep 2022 15:31:09 +0200
-Message-Id: <20220906132825.537477342@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Diego Santa Cruz <Diego.SantaCruz@spinetix.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [PATCH 5.10 73/80] drm/i915/glk: ECS Liva Q2 needs GLK HDMI port timing quirk
+Date:   Tue,  6 Sep 2022 15:31:10 +0200
+Message-Id: <20220906132820.183793648@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
+References: <20220906132816.936069583@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
+From: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
 
-commit 9d4dc16ec71bd6368548e9743223e449b4377fc7 upstream.
+commit 919bef7a106ade2bda73681bbc2f3678198f44fc upstream.
 
-During cdrom emulation, the response to read_toc command must contain
-the cdrom address as the number of sectors (2048 byte sized blocks)
-represented either as an absolute value (when MSF bit is '0') or in
-terms of PMin/PSec/PFrame (when MSF bit is set to '1'). Incase of
-cdrom, the fsg_lun_open call sets the sector size to 2048 bytes.
+The quirk added in upstream commit 90c3e2198777 ("drm/i915/glk: Add
+Quirk for GLK NUC HDMI port issues.") is also required on the ECS Liva
+Q2.
 
-When MAC OS sends a read_toc request with MSF set to '1', the
-store_cdrom_address assumes that the address being provided is the
-LUN size represented in 512 byte sized blocks instead of 2048. It
-tries to modify the address further to convert it to 2048 byte sized
-blocks and store it in MSF format. This results in data transfer
-failures as the cdrom address being provided in the read_toc response
-is incorrect.
+Note: Would be nicer to figure out the extra delay required for the
+retimer without quirks, however don't know how to check for that.
 
-Fixes: 3f565a363cee ("usb: gadget: storage: adapt logic block size to bound block devices")
 Cc: stable@vger.kernel.org
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Link: https://lore.kernel.org/r/1661570110-19127-1-git-send-email-quic_kriskura@quicinc.com
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/1326
+Signed-off-by: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220616124137.3184371-1-jani.nikula@intel.com
+(cherry picked from commit 08e9505fa8f9aa00072a47b6f234d89b6b27a89c)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/function/storage_common.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/display/intel_quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/usb/gadget/function/storage_common.c
-+++ b/drivers/usb/gadget/function/storage_common.c
-@@ -294,8 +294,10 @@ EXPORT_SYMBOL_GPL(fsg_lun_fsync_sub);
- void store_cdrom_address(u8 *dest, int msf, u32 addr)
- {
- 	if (msf) {
--		/* Convert to Minutes-Seconds-Frames */
--		addr >>= 2;		/* Convert to 2048-byte frames */
-+		/*
-+		 * Convert to Minutes-Seconds-Frames.
-+		 * Sector size is already set to 2048 bytes.
-+		 */
- 		addr += 2*75;		/* Lead-in occupies 2 seconds */
- 		dest[3] = addr % 75;	/* Frames */
- 		addr /= 75;
+--- a/drivers/gpu/drm/i915/display/intel_quirks.c
++++ b/drivers/gpu/drm/i915/display/intel_quirks.c
+@@ -156,6 +156,9 @@ static struct intel_quirk intel_quirks[]
+ 	/* ASRock ITX*/
+ 	{ 0x3185, 0x1849, 0x2212, quirk_increase_ddi_disabled_time },
+ 	{ 0x3184, 0x1849, 0x2212, quirk_increase_ddi_disabled_time },
++	/* ECS Liva Q2 */
++	{ 0x3185, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
++	{ 0x3184, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
+ };
+ 
+ void intel_init_quirks(struct drm_i915_private *i915)
 
 

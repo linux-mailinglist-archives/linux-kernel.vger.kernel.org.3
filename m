@@ -2,99 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3295AE804
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572F55AE80A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240199AbiIFMZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S240163AbiIFM0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239790AbiIFMYy (ORCPT
+        with ESMTP id S239784AbiIFM0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:24:54 -0400
+        Tue, 6 Sep 2022 08:26:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6E27F0A5;
-        Tue,  6 Sep 2022 05:21:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDB47FE62;
+        Tue,  6 Sep 2022 05:22:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F201B818B3;
-        Tue,  6 Sep 2022 12:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12500C43140;
-        Tue,  6 Sep 2022 12:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662466890;
-        bh=UazPhnVpTJHRjiUmKc2QQMoFoLORH7z85kfQ7iHso9w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FhZR3ffNhItupbQPCx9kPqPygsVPhMlg2qGnK/tDU/WUo+1TMyTbeGOO4cQBHTuGo
-         KiKZM8IU1Zf5p4HflNlMteVCXYVJSzx4NxYioQDW7EG8MfBpEQmiUo5so1JMqV91e4
-         5n7gZhO+xXUo3JSvcDXOxCsOggghEpPdSUfMq057HKIF2MzPlqF+TPFI4UHyGfPFA+
-         tpL8EFCzeIPZ4AZUFBXpP2ChS30jST3iRqTYK9NopBJwpDaWq0PJDYFpJpMTaQbDsW
-         Xz11wIETYbgnL5YRClTQiz/tEu+5Ie10prnp6gGhPR9FmAA22YVsJ//pMq7RYHvQM9
-         UNNcXMycafeEQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oVXaA-00089W-Cq; Tue, 06 Sep 2022 14:21:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        Jonathan Woithe <jwoithe@just42.net>
-Subject: [PATCH stable-5.15 2/2] USB: serial: ch341: fix disabled rx timer on older devices
-Date:   Tue,  6 Sep 2022 14:21:27 +0200
-Message-Id: <20220906122127.31321-3-johan@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220906122127.31321-1-johan@kernel.org>
-References: <20220906122127.31321-1-johan@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20B30B818B0;
+        Tue,  6 Sep 2022 12:21:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7D9C4347C;
+        Tue,  6 Sep 2022 12:21:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BmUAtERM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1662466909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=87p6evS16rOwfc+reZpx2sDISz3k1kYdRZgIQ45xujk=;
+        b=BmUAtERMAG4pDGmc2MVJ+DDFkzxv39wTbd+wJehM8wt6pNwTSw7frPubYqm0o9GM0COy0H
+        aAcWJ0sRLrh0tPi0e1hjH7SujW96aIXOr2hXXEl1JCVipnTL0Uvrn4bcS7+QMIYjW+j0o8
+        7a4Ojo/M8AOIa36WtKW7ZXoDQwHaHbQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f6fdb045 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 6 Sep 2022 12:21:49 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id e126so9722820ybh.1;
+        Tue, 06 Sep 2022 05:21:48 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1FyhV/DO5q9xIHlhWP27jxWn32jJo59E4KDu//5e6y14htCYFq
+        yPxo6GCrbm4PxysnRB7zmUFtJRGKfoF3nWYBsmg=
+X-Google-Smtp-Source: AA6agR6DlHZ2DQP25Da/H2mYl2dvW4b6xOX/+PgxLgff1j6vFIRgOZ8E7MS0iPzUnrZlFlm8vyq612vY+96rTE56Qsw=
+X-Received: by 2002:a25:3211:0:b0:6a9:19b2:43ab with SMTP id
+ y17-20020a253211000000b006a919b243abmr7116752yby.24.1662466907857; Tue, 06
+ Sep 2022 05:21:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAHmME9ozPTL7tpj-QoFK3Dfyq58VAJgmM6MjUBW4VVM_TXo3VA@mail.gmail.com>
+ <20220906104147.287726-1-Jason@zx2c4.com>
+In-Reply-To: <20220906104147.287726-1-Jason@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 6 Sep 2022 14:21:36 +0200
+X-Gmail-Original-Message-ID: <CAHmME9qM+wygTbRoSQ3EiobjDqD=2RMXOYjM48Adfa2DgHb5XQ@mail.gmail.com>
+Message-ID: <CAHmME9qM+wygTbRoSQ3EiobjDqD=2RMXOYjM48Adfa2DgHb5XQ@mail.gmail.com>
+Subject: Re: [PATCH v2] efi: x86: Wipe setup_data on pure EFI boot
+To:     X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Borislav Petkov <bp@suse.de>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 41ca302a697b64a3dab4676e01d0d11bb184737d upstream.
+Hi Boris and other x86ers,
 
-At least one older CH341 appears to have the RX timer enable bit
-inverted so that setting it disables the RX timer and prevents the FIFO
-from emptying until it is full.
+On Tue, Sep 6, 2022 at 12:41 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> When booting the x86 kernel via EFI using the LoadImage/StartImage boot
+> services [as opposed to the deprecated EFI handover protocol], the setup
 
-Only set the RX timer enable bit for devices with version newer than
-0x27 (even though this probably affects all pre-0x30 devices).
+Just FYI, while this is an EFI change for Ard, it also bumps the x86
+boot protocol version, so it needs your ack or input on the matter.
 
-Reported-by: Jonathan Woithe <jwoithe@just42.net>
-Tested-by: Jonathan Woithe <jwoithe@just42.net>
-Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
-Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
-Cc: stable@vger.kernel.org      # 4.10
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/ch341.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index b787533aec64..752daa952abd 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -259,8 +259,12 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
- 	/*
- 	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
- 	 * has been received unless bit 7 is set.
-+	 *
-+	 * At least one device with version 0x27 appears to have this bit
-+	 * inverted.
- 	 */
--	val |= BIT(7);
-+	if (priv->version > 0x27)
-+		val |= BIT(7);
- 
- 	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
- 			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
--- 
-2.35.1
-
+Jason

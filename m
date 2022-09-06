@@ -2,86 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739865ADD5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC19C5ADD63
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiIFCc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S232942AbiIFCdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIFCcZ (ORCPT
+        with ESMTP id S229546AbiIFCdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:32:25 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA35326D7;
-        Mon,  5 Sep 2022 19:32:24 -0700 (PDT)
-X-UUID: 8e35192a87a243c2a988e77da9329084-20220906
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lLZfor8VBXyAk27TpjkWmLUUJBncHtHiCzkOPODLj50=;
-        b=kzfporl388g0UA+79REkS7ycBXjJtxz71afRFgOx4spUcNqlqyv7c6QxyA4TK+1gIZSnnOL1j/wHQa9xxvpTUKHcpsHyUVQYVcyG3ySayozyJGysXkcOCIK8PN2IVJQvbxvFW3J3bLYl6Rk/vNguEwzLsyOnL9kEW+MQ5l41uiE=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:0b54bcab-c882-4380-93c5-0f0add6bada9,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Releas
-        e_Ham,ACTION:release,TS:49
-X-CID-INFO: VERSION:1.1.10,REQID:0b54bcab-c882-4380-93c5-0f0add6bada9,OB:0,LOB
-        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:54,FILE:0,BULK:0,RULE:Release_
-        HamU,ACTION:release,TS:49
-X-CID-META: VersionHash:84eae18,CLOUDID:ede04921-1c20-48a5-82a0-25f9c331906d,C
-        OID:71996c057d7b,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: 8e35192a87a243c2a988e77da9329084-20220906
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <nathan.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1451122071; Tue, 06 Sep 2022 10:32:18 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 6 Sep 2022 10:32:17 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 6 Sep 2022 10:32:16 +0800
-Message-ID: <e1b486ec70f7e58c8f204bb9b7377716c8acfcdd.camel@mediatek.com>
-Subject: Re: [PATCH v1 1/4] dt-bindings: mediatek: modify VDOSYS0 device
- tree Documentations for MT8188
-From:   Nathan Lu <nathan.lu@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Rex-BC Chen" <rex-bc.chen@mediatek.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Moudy Ho <moudy.ho@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <wsd_upstream@mediatek.com>,
-        <lancelot.wu@mediatek.com>
-Date:   Tue, 6 Sep 2022 10:32:16 +0800
-In-Reply-To: <05f99396-f6e9-a315-7264-c659e3ec507c@linaro.org>
-References: <20220822033213.15769-1-nathan.lu@mediatek.com>
-         <20220822033213.15769-2-nathan.lu@mediatek.com>
-         <05f99396-f6e9-a315-7264-c659e3ec507c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 5 Sep 2022 22:33:02 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5368C255B9;
+        Mon,  5 Sep 2022 19:33:01 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id e7so5339005ilc.5;
+        Mon, 05 Sep 2022 19:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4qDNF8dPhMwbDSHgKTnXc7ZrRTg2DhtHWLkSBAhsVwg=;
+        b=Vua1s6fm20ZKL/f8WgybLoA/y7enupNXOWshqQCGGsvq+XBEusMdJNVTI+cqVMT96N
+         CsE0++wzyFpJNReS81/SPKo66yJxQJyoGN6NBLClMnVTBo4uaz1nVZ1kML/h+8TJy7pA
+         3Me0UvTqeaSVZP/f9ggOwAbseA1dGGiT1Hhi2+adXCkHPy2g8N/YGDeaJENR8tzCM/rV
+         1zm1znSgFI9RcOZIm4LZrk13BPO4fbynuFgNmePzSyLBaZvNYgus1M07sge5BzHW/XLJ
+         P2Vwgun8ufixAdU7ip1g2bYKGLutSzwohuvcrZYghumJaHCCUggGGdVw+1LsCEs5Atxy
+         xo8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4qDNF8dPhMwbDSHgKTnXc7ZrRTg2DhtHWLkSBAhsVwg=;
+        b=io9ZDYKWMaPjblEsOnNEx3pI2tRF/HFMRF1Gn3zdf8sQX+l+8cBPSChk8xjYcVOgJr
+         S/o5UjVdDLcI8GdBwwDHoG91Xv435D7yagBy+uX4v/lDmv9Zwg9JQ/AzqwY/0XsGYTFo
+         30qWoj+kJjgc5u6XoXPeakA0FxVS2sl2M8FuJCQ0q8enFmEYq5E8vUYiwS/GeW2yfhA8
+         yHGkA9Wdz+ci/DmN7wZYTko5YFvmBnWnccxrVv9RbPhnE5soHl4gQWP3zjAYvOODKzqx
+         QWaft4Hr6wI2irTcaVCTCHVMdQnaTDggsqyJDW1lajs5Jf4Idh6AeUTlk0+WmP/aUytM
+         ql9Q==
+X-Gm-Message-State: ACgBeo0ukoqlwJE7dwi5Z2wWi+uk5TCPClzypXEQ5FviUN6gxlXnecnu
+        L8FfNE9ZDndgSAjns5bhs49X3XJhwP5sVdahwOI=
+X-Google-Smtp-Source: AA6agR4Q3qEu6Nh67A8tibtWLaSlV3Vzqb58cgujGaSTS4Q1s1VFdS2cnLx4oTRqXRLsbiwhZZPjv6yTUAaYJbFxBr0=
+X-Received: by 2002:a05:6e02:190a:b0:2ee:9e75:ae4b with SMTP id
+ w10-20020a056e02190a00b002ee9e75ae4bmr9141148ilu.219.1662431580497; Mon, 05
+ Sep 2022 19:33:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com> <20220905143318.1592015-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220905143318.1592015-3-roberto.sassu@huaweicloud.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Tue, 6 Sep 2022 04:32:24 +0200
+Message-ID: <CAP01T75KbEOuzcyiTqzDMa7tqtSzY5c0r2jMPJXgniWndEKRpg@mail.gmail.com>
+Subject: Re: [PATCH v16 02/12] bpf: Move dynptr type check to is_dynptr_type_expected()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,42 +75,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Move dynptr type check to is_dynptr_type_expected() from
+> is_dynptr_reg_valid_init(), so that callers can better determine the cause
+> of a negative result (dynamic pointer not valid/initialized, dynamic
+> pointer of the wrong type). It will be useful for example for BTF, to
+> restrict which dynamic pointer types can be passed to kfuncs, as initially
+> only the local type will be supported.
+>
+> Also, splitting makes the code more readable, since checking the dynamic
+> pointer type is not necessarily related to validity and initialization.
+>
+> Split the validity/initialization and dynamic pointer type check also in
+> the verifier, and adjust the expected error message in the test (a test for
+> an unexpected dynptr type passed to a helper cannot be added due to missing
+> suitable helpers, but this case has been tested manually).
+>
+> Cc: Joanne Koong <joannelkoong@gmail.com>
+> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
 
-Thanks for your review, and appreciate for all comments and sugestions.
-I misunderstanding enum and const usage.
-I'll add another item for mt8188 at next version.
+I'm not sure the split is _really_ needed, but I don't feel strongly
+about it and defer to Joanne and others.
+Otherwise,
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-On Tue, 2022-08-23 at 15:51 +0300, Krzysztof Kozlowski wrote:
-> On 22/08/2022 06:32, nathan.lu wrote:
-> > From: Nathan Lu <nathan.lu@mediatek.com>
-> > 
-> > modify VDOSYS0 device tree Documentations for MT8188.
-> 
-> (...)
-> 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > index 0882ae86e6c4..d0e6c0dd4dfb 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.
-> > yaml
-> > @@ -30,6 +30,8 @@ properties:
-> >        - items:
-> >            - const: mediatek,mt8183-disp-rdma
-> >        - items:
-> > +          - enum:
-> > +              - mediatek,mt8188-disp-rdma
-> >            - const: mediatek,mt8195-disp-rdma
-> 
-> Why do you change existing bindings?
-> 
-> Best regards,
-> Krzysztof
-
+>  kernel/bpf/verifier.c                         | 35 ++++++++++++++-----
+>  .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +-
+>  2 files changed, 28 insertions(+), 9 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 068b20ed34d2..10b3c0a81d09 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_
+>         return true;
+>  }
+>
+> -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+> -                                    enum bpf_arg_type arg_type)
+> +static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> +                                    struct bpf_reg_state *reg)
+>  {
+>         struct bpf_func_state *state = func(env, reg);
+>         int spi = get_spi(reg->off);
+> @@ -796,11 +796,24 @@ static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_re
+>                         return false;
+>         }
+>
+> +       return true;
+> +}
+> +
+> +static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
+> +                                   struct bpf_reg_state *reg,
+> +                                   enum bpf_arg_type arg_type)
+> +{
+> +       struct bpf_func_state *state = func(env, reg);
+> +       enum bpf_dynptr_type dynptr_type;
+> +       int spi = get_spi(reg->off);
+> +
+>         /* ARG_PTR_TO_DYNPTR takes any type of dynptr */
+>         if (arg_type == ARG_PTR_TO_DYNPTR)
+>                 return true;
+>
+> -       return state->stack[spi].spilled_ptr.dynptr.type == arg_to_dynptr_type(arg_type);
+> +       dynptr_type = arg_to_dynptr_type(arg_type);
+> +
+> +       return state->stack[spi].spilled_ptr.dynptr.type == dynptr_type;
+>  }
+>
+>  /* The reg state of a pointer or a bounded scalar was saved when
+> @@ -6050,21 +6063,27 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+>                         }
+>
+>                         meta->uninit_dynptr_regno = regno;
+> -               } else if (!is_dynptr_reg_valid_init(env, reg, arg_type)) {
+> +               } else if (!is_dynptr_reg_valid_init(env, reg)) {
+> +                       verbose(env,
+> +                               "Expected an initialized dynptr as arg #%d\n",
+> +                               arg + 1);
+> +                       return -EINVAL;
+> +               } else if (!is_dynptr_type_expected(env, reg, arg_type)) {
+>                         const char *err_extra = "";
+>
+>                         switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
+>                         case DYNPTR_TYPE_LOCAL:
+> -                               err_extra = "local ";
+> +                               err_extra = "local";
+>                                 break;
+>                         case DYNPTR_TYPE_RINGBUF:
+> -                               err_extra = "ringbuf ";
+> +                               err_extra = "ringbuf";
+>                                 break;
+>                         default:
+> +                               err_extra = "<unknown>";
+>                                 break;
+>                         }
+> -
+> -                       verbose(env, "Expected an initialized %sdynptr as arg #%d\n",
+> +                       verbose(env,
+> +                               "Expected a dynptr of type %s as arg #%d\n",
+>                                 err_extra, arg + 1);
+>                         return -EINVAL;
+>                 }
+> diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> index bcf80b9f7c27..8fc4e6c02bfd 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> @@ -30,7 +30,7 @@ static struct {
+>         {"invalid_helper2", "Expected an initialized dynptr as arg #3"},
+>         {"invalid_write1", "Expected an initialized dynptr as arg #1"},
+>         {"invalid_write2", "Expected an initialized dynptr as arg #3"},
+> -       {"invalid_write3", "Expected an initialized ringbuf dynptr as arg #1"},
+> +       {"invalid_write3", "Expected an initialized dynptr as arg #1"},
+>         {"invalid_write4", "arg 1 is an unacquired reference"},
+>         {"invalid_read1", "invalid read from stack"},
+>         {"invalid_read2", "cannot pass in dynptr at an offset"},
+> --
+> 2.25.1
+>

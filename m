@@ -2,151 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA165AE82C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028435AE833
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240184AbiIFMbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S234197AbiIFMcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239968AbiIFMaz (ORCPT
+        with ESMTP id S240224AbiIFMbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:30:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E144E275C2;
-        Tue,  6 Sep 2022 05:27:46 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="296579839"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="296579839"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:27:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="565074197"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:27:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1oVXfv-00975d-2X;
-        Tue, 06 Sep 2022 15:27:31 +0300
-Date:   Tue, 6 Sep 2022 15:27:31 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 04/11] usb: phy: tegra: switch to using
- devm_gpiod_get()
-Message-ID: <Yxc8s8IfzElm/mjS@smile.fi.intel.com>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-4-b29adfb27a6c@gmail.com>
- <CAHp75VdMr7wru-2hD1HH3OS5JTNdzt6VRqB6OFoCp2JkiuiTjw@mail.gmail.com>
- <YxZQj8bwJCx5rqDv@google.com>
- <CAHp75VdHJS4YgrTK15OuY5sxodxKObUtzturL+YPXFQ3_wpxig@mail.gmail.com>
- <YxZTS3Nl1YaMGoBC@google.com>
- <CAHp75VeNajcf-Y6xvDDVwZijg6U53ggg1HQox1AZ74=wRut+1Q@mail.gmail.com>
- <4a0d089d-6ac6-b92e-6ac7-3d3de0144b4b@roeck-us.net>
+        Tue, 6 Sep 2022 08:31:31 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD27AF2E;
+        Tue,  6 Sep 2022 05:29:41 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MMPh837Wmz9v7Nk;
+        Tue,  6 Sep 2022 20:24:08 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwA3ZV8KPRdjOwYoAA--.51363S2;
+        Tue, 06 Sep 2022 13:29:12 +0100 (CET)
+Message-ID: <455d80a39b2bf87c58dae9b6035f8cabb4455639.camel@huaweicloud.com>
+Subject: Re: [PATCH v17 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     kpsingh@kernel.org
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
+        haoluo@google.com, jmorris@namei.org, john.fastabend@gmail.com,
+        jolsa@kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
+        memxor@gmail.com, mingo@redhat.com, mykolal@fb.com,
+        paul@paul-moore.com, roberto.sassu@huawei.com, rostedt@goodmis.org,
+        sdf@google.com, serge@hallyn.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com, Jarkko Sakkinen <jarkko@kernel.org>
+Date:   Tue, 06 Sep 2022 14:28:55 +0200
+In-Reply-To: <Yxc8fwOgZ+UY0jiX@kernel.org>
+References: <YxcyeZBHGPNQB+qJ@kernel.org>
+         <20220906121506.165001-1-roberto.sassu@huaweicloud.com>
+         <Yxc8fwOgZ+UY0jiX@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a0d089d-6ac6-b92e-6ac7-3d3de0144b4b@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwA3ZV8KPRdjOwYoAA--.51363S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1ftr15Xw4UZF1fZFyfXrb_yoW8tFy8pF
+        WDG3W8KryUtry2gw1DJwsFyw1Sk3y3Kr17WrnrKwn8Zana9r97tr1xtF13ur1FyrWUuw12
+        qr4293WDur4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAHBF1jj36rwAABsk
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 03:07:48PM -0700, Guenter Roeck wrote:
-> On 9/5/22 12:55, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 10:51 PM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> > > On Mon, Sep 05, 2022 at 10:41:40PM +0300, Andy Shevchenko wrote:
-> > > > On Mon, Sep 5, 2022 at 10:40 PM Dmitry Torokhov
-> > > > <dmitry.torokhov@gmail.com> wrote:
-> > > > > On Mon, Sep 05, 2022 at 01:59:44PM +0300, Andy Shevchenko wrote:
-> > > > > > On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-> > > > > > <dmitry.torokhov@gmail.com> wrote:
-
-...
-
-> > > > > > > +               gpiod = devm_gpiod_get(&pdev->dev, "nvidia,phy-reset",
-> > > > > > > +                                      GPIOD_OUT_HIGH);
-> > > > > > >                  err = PTR_ERR_OR_ZERO(gpiod);
-> > > > > > 
-> > > > > > What does _OR_ZERO mean now?
-> > > > > 
-> > > > > This converts a pointer to an error code if a pointer represents
-> > > > > ERR_PTR() encoded error, or 0 to indicate success.
-> > > > 
-> > > > Yes, I know that. My point is, how is it useful now (or even before)?
-> > > > I mean that devm_gpio_get() never returns NULL, right?
-> > > 
-> > > What does returning NULL have to do with anything.
+On Tue, 2022-09-06 at 15:26 +0300, Jarkko Sakkinen wrote:
+> On Tue, Sep 06, 2022 at 02:15:06PM +0200, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
 > > 
-> > It has to do with a dead code. If defm_gpiod_get() does not return
-> > NULL, then why do we even bother to check?
-> 
-> PTR_ERR_OR_ZERO() converts into an error code (if the pointer is an
-> ERR_PTR) or 0 if it is a real pointer. Its purpose is not to convert
-> NULL into 0, its purpose is to convert a pointer either into an error
-> code or 0. That is what is done here, and it is done all over the place
-> in the kernel. I don't see your problem with it. Care to explain ?
-> 
-> > > It converts a pointer
-> > > to a "classic" return code, with negative errors and 0 on success.
-> > > 
-> > > It allows to not use multiple IS_ERR/PTR_ERR in the code (I'd need 1
-> > > IS_ERR and 2 PTR_ERR, one in dev_err() and another to return).
+> > In preparation for the patch that introduces the
+> > bpf_lookup_user_key() eBPF
+> > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> > able to
+> > validate the kfunc parameters. Add them to enum key_lookup_flag, so
+> > that
+> > all the current ones and the ones defined in the future are
+> > automatically
+> > exported through BTF and available to eBPF programs.
 > > 
-> > I don't see how this is relevant.
+> > Also, add KEY_LOOKUP_ALL to the enum, with the logical OR of
+> > currently
+> > defined flags as value, to facilitate checking whether a variable
+> > contains
+> > only those flags.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/key.h      | 6 ++++++
+> >  security/keys/internal.h | 2 --
+> >  2 files changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/linux/key.h b/include/linux/key.h
+> > index 7febc4881363..d27477faf00d 100644
+> > --- a/include/linux/key.h
+> > +++ b/include/linux/key.h
+> > @@ -88,6 +88,12 @@ enum key_need_perm {
+> >  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
+> > deferred */
+> >  };
+> >  
+> > +enum key_lookup_flag {
+> > +	KEY_LOOKUP_CREATE = 0x01,
+> > +	KEY_LOOKUP_PARTIAL = 0x02,
+> > +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL),
+> > +};
+> > +
+> >  struct seq_file;
+> >  struct user_struct;
+> >  struct signal_struct;
+> > diff --git a/security/keys/internal.h b/security/keys/internal.h
+> > index 9b9cf3b6fcbb..3c1e7122076b 100644
+> > --- a/security/keys/internal.h
+> > +++ b/security/keys/internal.h
+> > @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct
+> > key_type *type,
+> >  
+> >  extern bool lookup_user_key_possessed(const struct key *key,
+> >  				      const struct key_match_data
+> > *match_data);
+> > -#define KEY_LOOKUP_CREATE	0x01
+> > -#define KEY_LOOKUP_PARTIAL	0x02
+> >  
+> >  extern long join_session_keyring(const char *name);
+> >  extern void key_change_session_keyring(struct callback_head
+> > *twork);
+> > -- 
+> > 2.25.1
+> > 
 > 
-> You lost me. Really, please explain your problem with PTR_ERR_OR_ZERO().
+> Thanks,
+> 
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I don't know what I was thinking about... You, guys, are right, sorry for
-my noise.
+Thanks Jarkko.
 
--- 
-With Best Regards,
-Andy Shevchenko
+KP, ok also for you?
 
+Thanks
+
+Roberto
 

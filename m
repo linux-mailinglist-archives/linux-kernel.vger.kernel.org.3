@@ -2,101 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501BB5AE0D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A44A5AE0DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238891AbiIFHUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S232416AbiIFHU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238835AbiIFHUN (ORCPT
+        with ESMTP id S238598AbiIFHUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:20:13 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA63F1F604
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:20:10 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id q15so10472680pfn.11
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 00:20:10 -0700 (PDT)
+        Tue, 6 Sep 2022 03:20:51 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2E74F1B4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:20:49 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id q21so1786882lfo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 00:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=wUM9TG8n899TMK7xfOD3wSfej2b1DDNKD7A4zDy+X0w=;
-        b=lJqMcav9akWTUkl7ucSdLf6fhDnUC5ApxPb2WzWhdE8mOEemfi5xDHa4gBZefQKSu2
-         KutoepYo9e2ptjcPA9KPT11yWmCDSBUA6UIglTEopbsAtY9JzceZKdFd/NvUx3/o1qle
-         EEzhCbi7PsNvp7Pjoq1ZPPi5EuB8FaU6yd2xd9k8Jhtka3VY2JMNDdFTxM0ZG6fBwN5Q
-         Cvxc6MNnAILosSK/YBdgrCQVN2qRd2xpZoqVDwQQZ2/ICx/XL0Dt7JlhnTqP+syy2qkx
-         4v0rzu13gsx1mOkaCtJNKUKb1dbg8Z4ZlBn+6H+AjZMyerrZXRgT+gDfnGHUj3jaDcGr
-         g6fA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=5SiZzQ3jsxp5inXo69JQyki2t9Pq/3JOTXDE+sx+9Mo=;
+        b=sPzvD7Hy6bAykcdTBo8dqmF2y4Dzh6E4HA5SmL+5yiUvW3yQzSnd/yPYaJPgMXLGpA
+         xQUw1HkSdbqLkoYlUQtEo3pEFFCP539FpvxP6NOVVS2E+o3W4p2ZQes/x4p8iXs6cM+h
+         CDUYJ0a1XXkNV0YMko/CYuB2sB5nL9bIABKfqvxM3MILYsPdTs0uLmULyFHeB1BKrc83
+         OtMaSfzLFiXJ0SsWRs54CtcUfe8d0URDskOVBIKxvIRvl9zN2rSmaSLiOirmCEWs5y4N
+         5tl++9bJf5M7xQ0/nvE2veVNUfUvNH3IS6e5FBW44EGo2gK/bzoBL6K37A2UyKL0L3uQ
+         cMTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=wUM9TG8n899TMK7xfOD3wSfej2b1DDNKD7A4zDy+X0w=;
-        b=au9xH7Kx4ztP+3PrC9B6kX42i3uTpe1T9C5phKAc8sfpq5Bu6dZugbUkOF87nGhUHs
-         u92ceNouG/OcUD5hXVYvkc9ZlwjOTDJZDehXq2Bv8V7bU5UXxx3hggn85zYTyQVLgrlJ
-         xx3yGwFxjzQzQSoMxMhL9mlSum79sC3jqUEppp37e4AaBj5pkEYrFcwDrNDjnhWDj3Ff
-         eAAmg0tuj6tsZdej6fjuG7/URYknTFh+E4RxO3GpjnWkT8MSGsZr3l+Nq9d9ciMaiNn2
-         1VocewdzdAX0dGAkGobOgiw1mVyCmXeTTcIDC6z8gMblGHqzmDKOv45NZMXn6EzPp+G3
-         IBtA==
-X-Gm-Message-State: ACgBeo0ggloxLP3w54dHit0BwlpMm9WrDDLI3iAUbOLI/Jq5pksvS9C1
-        R9HcuM2ykp3k/QUwK4XFXyg=
-X-Google-Smtp-Source: AA6agR6rEeZiwwk75IIxtYGnPtBHMCn+4GvuoL7LTtv0PcnQlgqMGE+lBtFD1xCNUcEvDQOVQe3yWw==
-X-Received: by 2002:a05:6a00:114f:b0:528:2c7a:634c with SMTP id b15-20020a056a00114f00b005282c7a634cmr53373587pfm.41.1662448810030;
-        Tue, 06 Sep 2022 00:20:10 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f28-20020a63511c000000b00422c003cf78sm1121918pgb.82.2022.09.06.00.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 00:20:09 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     fbarrat@linux.ibm.com
-Cc:     ajd@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] ocxl: Remove the unneeded result variable
-Date:   Tue,  6 Sep 2022 07:20:06 +0000
-Message-Id: <20220906072006.337099-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5SiZzQ3jsxp5inXo69JQyki2t9Pq/3JOTXDE+sx+9Mo=;
+        b=HiWzMCdz+6HvVEgXzZnVlaGugtsE1NVC5NKOuUEIVdZdGOQ5VMedIHcdgT2N7+LFOR
+         GQOmyKLfIFYVWMIDh89tXlY7+gazEDwFuYas1j6WuMhbM7JlptvApbAGAOWOSdO4hd9P
+         o1hPM3wIWO0F7urhFZ9D5O/wGDAtC7yHH9In9u0QuCJaCsdBpiptSevQhbo3BClmtpEi
+         UVL40+v0BAjtj/yY8/Zki7Q8+euojqvQ93kHVic8/P44HT/Mm0ZZVm06y33ZjWsuVrVL
+         K0byaOqjwILPcS+yppcgkkuJmgxJpeBu7usw88qWFn2QL2NS/KIfwWkOp7AMInzQW70k
+         0CxA==
+X-Gm-Message-State: ACgBeo1HuJKAZY9haLwVLzp2R23yV6dKLRwh3U6MuQhsyC8jYp4YtcCp
+        BmySMReUXJpZnrO80+nPbTpDbw==
+X-Google-Smtp-Source: AA6agR6ii0gwUVUWsZmlqNu0o8/iYY3SOGZORmJ8unVFiOExBClnZ/qQSXqCJsY4kKGElWZLfuTPDw==
+X-Received: by 2002:a05:6512:ba2:b0:494:6d93:e9ee with SMTP id b34-20020a0565120ba200b004946d93e9eemr12674578lfv.378.1662448848104;
+        Tue, 06 Sep 2022 00:20:48 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d14-20020a196b0e000000b0048d1101d0d6sm1550002lfa.121.2022.09.06.00.20.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 00:20:47 -0700 (PDT)
+Message-ID: <5b0317d9-16d8-bf86-3f5a-602489c9831c@linaro.org>
+Date:   Tue, 6 Sep 2022 09:20:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFC PATCH v2 1/6] Documentation: DT: Add entry for CDX
+ controller
+Content-Language: en-US
+To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Cc:     "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20220817150542.483291-1-nipun.gupta@amd.com>
+ <20220817150542.483291-2-nipun.gupta@amd.com>
+ <93f080cd-e586-112f-bac8-fa2a7f69efb3@linaro.org>
+ <DM6PR12MB308211F26296F3B816F3F005E87F9@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <8712e2ff-80e1-02e9-974a-c9ffcf83ffab@linaro.org>
+ <DM6PR12MB3082867B1BDCBBC9C25F560EE87E9@DM6PR12MB3082.namprd12.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DM6PR12MB3082867B1BDCBBC9C25F560EE87E9@DM6PR12MB3082.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 06/09/2022 09:03, Gupta, Nipun wrote:
+>> On 05/09/2022 16:05, Gupta, Nipun wrote:
+>>>>> +
+>>>>> +    cdxbus: cdxbus@@4000000 {
+>>>>
+>>>> Node names should be generic, so "cdx"
+>>>
+>>> Would be using bus: cdxbus@4000000.
+>>> Kindly correct me if this does not seem to be correct.
+>>
+>> I don't understand it. I asked to change cdxbus to cdx, but you said you
+>> will be using "bus" and "cdxbus"? So what exactly are you going to use?
+>> And how does it match generic node name recommendation?
+> 
+> I was also confused with the name suggestion as in one of the mail you
+> sent out later, you mentioned:
+> " Eh, too fast typing, obviously the other part of the name... node names
+> should be generic, so just "bus"."
+> 
+> That is why needed to confirm. To me now "cdx: cdx@4000000" makes sense.
+> Hope this seems correct?
 
-Return the value opal_npu_spa_clear_cache() directly instead of storing
-it in another redundant variable.
+If cdx is a name of some standard bus or interface (just like i2c, pci,
+can), then feel free to use "cdx". If on the other hand it is just name
+of your devices (specific to Xilinx), then more appropriate feels "bus",
+because cdx would be specific. Anyway one of these two.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- arch/powerpc/platforms/powernv/ocxl.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/arch/powerpc/platforms/powernv/ocxl.c b/arch/powerpc/platforms/powernv/ocxl.c
-index 27c936075031..629067781cec 100644
---- a/arch/powerpc/platforms/powernv/ocxl.c
-+++ b/arch/powerpc/platforms/powernv/ocxl.c
-@@ -478,10 +478,8 @@ EXPORT_SYMBOL_GPL(pnv_ocxl_spa_release);
- int pnv_ocxl_spa_remove_pe_from_cache(void *platform_data, int pe_handle)
- {
- 	struct spa_data *data = (struct spa_data *) platform_data;
--	int rc;
- 
--	rc = opal_npu_spa_clear_cache(data->phb_opal_id, data->bdfn, pe_handle);
--	return rc;
-+	return opal_npu_spa_clear_cache(data->phb_opal_id, data->bdfn, pe_handle);
- }
- EXPORT_SYMBOL_GPL(pnv_ocxl_spa_remove_pe_from_cache);
- 
--- 
-2.25.1
+Best regards,
+Krzysztof

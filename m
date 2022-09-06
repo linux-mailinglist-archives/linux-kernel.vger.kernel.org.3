@@ -2,118 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061775AF4B0
+	by mail.lfdr.de (Postfix) with ESMTP id 4F13C5AF4B1
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiIFTqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 15:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
+        id S229656AbiIFTrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 15:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiIFTq1 (ORCPT
+        with ESMTP id S229611AbiIFTrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 15:46:27 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D1179A72
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:46:26 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id io18so3617885plb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:46:26 -0700 (PDT)
+        Tue, 6 Sep 2022 15:47:00 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B4286716
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:46:52 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id b5so17016140wrr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=IBPdQANHf97tWgxor5PJdhaZzkDG3IihFINjxVsoED0=;
-        b=tLjM42w0h79oeklJLb6AxmbcJsxdaIdxPqO8qOG7XxoD7I85xW2QcdBt7Lxb0lDdnd
-         9a/DSLKMRsB0+/Gd1u0nvnI/4i79IFtQDsX3uBISupvrvBBVmw0LfkXv7ezkBzGHQ9jw
-         hHTPnqnfx8FAmeNJ7IQuOsCOiQKP1pczrX4HE3JbXpryGkncjDWde3KOG1Z2OpSY++B/
-         fJrycDcdz7R68wWzCM13qah3X/Pv9LBfeXeO1Aff1pO2VqwTW8cHY11+3PuSGn/hc99V
-         OuWD5c6lOhMfaz81qoO07RT/npj5jE52BzsLt6DHxlJqoHl5/s2lhdJiVxdBXyyfkPOA
-         au3w==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=bqv4iAd1mha/jCj0gsDylHCagZEixO6XwXeJh7bhmjc=;
+        b=NOyba92itqhhR/PpT3mpwNTiRuKPnJapzGo69+6nqHs39ugWnmJIcQdoc8PxAppiEe
+         Nhqo0BS1I2PQjWxAv660Zg3oA2AeRIsQXadSeWz8/QN+hKxVKwerxPyju8jl7Tf1WzGl
+         cAlMn1PiLddYyVHh0KGDxNdvkyeMTC7j4JKXE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=IBPdQANHf97tWgxor5PJdhaZzkDG3IihFINjxVsoED0=;
-        b=DkjqQZGOSmYypwAqdFscKJ74+pXa3014EkeLAxQ28o/GOgYrfq6L3dZcc+KpEUey3S
-         X56wtI+bMd4KwA18KRW012iOQY/HGcXPHLqRWj+F+U+O/eqPGhxpWza2zt1qXw7Dc3W9
-         qZmlcaCm6IwDdaAk5yNOXzGPMoYbBrzpQokLLdjfOTxMQbrlfwroGT26mtaNP8XwAHa5
-         sK1L1r7SuVOKwpezUBXuWYb3ncVvbaqksqUW+FUhTFC/FOJgB/dIYcJmtrLTaZ8RG5gL
-         IZ57pwrrtN3+gQN3b2fKgrsabQxduLN7m0Z7VgxOZPI54kdPWMqHTv5mLv9NZ+MKWWMV
-         4TPg==
-X-Gm-Message-State: ACgBeo0SIdaTQ1QMvf3+qS9IkkqinN/xJUFj6kAurLjySloOic2iw7uu
-        sMTJh9B5vYHcT+pWQFI5rfs57Q==
-X-Google-Smtp-Source: AA6agR5YVyvasPcVBbYqwjNdZ26vZr0t8z4gFVtE75jAQi4oOwLt88qoGwedD23/sop/xKnwVeYZJg==
-X-Received: by 2002:a17:903:230d:b0:176:d7ab:cd1b with SMTP id d13-20020a170903230d00b00176d7abcd1bmr221477plh.172.1662493586079;
-        Tue, 06 Sep 2022 12:46:26 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id l11-20020a17090aec0b00b00200b12f2bf3sm424007pjy.51.2022.09.06.12.46.24
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=bqv4iAd1mha/jCj0gsDylHCagZEixO6XwXeJh7bhmjc=;
+        b=MC5rB2CbDJKklPSWWg/4QN43hNj4CyRtXn3hfElFo9OX+YsmouBMwbAgpSeaJ0Grqk
+         IH7b9gjZZKyk3YZIx8y5j4bvA1REw6OXDBhOdF71OZw0Ua8bhMqYoHaqUsreHKWwyX0a
+         EhjME8poE0zY6Q28ViL7SR1Q4AjTva/WyHM8hYzfAy7CkI20h40DmziXwG37E9BS/VI6
+         cJOhL9dBPw6znmHyBT4LXanOY9xl6IrAMncsTlTzomY+OiuSR2Y5L142wkTzPUqre5hB
+         smGETxTTglZo/fay+JXs+fqQRjbhxyiOpT8H+QOR3Xn72hOnDXzmogHrB8e+gto+tsd9
+         fVFQ==
+X-Gm-Message-State: ACgBeo30fJ1kg8oY5P0tPHhiPUzU+SY7DkIrWMEb0RUdpmNoY7Wbqinm
+        Q8koINRjZNQhNvtLeGXEPwqKVg==
+X-Google-Smtp-Source: AA6agR6T7vwwOwFPSx9Y+6VkmPyGEeXPD3TVawQvk4BRuNrP/PJ8qNADqn/aJdfgkNiIYFdT3OynxQ==
+X-Received: by 2002:a5d:5a06:0:b0:226:d25e:b4ee with SMTP id bq6-20020a5d5a06000000b00226d25eb4eemr47055wrb.280.1662493610556;
+        Tue, 06 Sep 2022 12:46:50 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id z15-20020a5d654f000000b002211fc70174sm16324064wrv.99.2022.09.06.12.46.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 12:46:24 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 13:46:22 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: report firmware name on load failures
-Message-ID: <20220906194622.GB64477@p14s>
-References: <20220831161736.749932-1-krzysztof.kozlowski@linaro.org>
+        Tue, 06 Sep 2022 12:46:50 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 21:46:48 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [Linaro-mm-sig] [PATCH v2 1/3] dma-buf: Add ioctl to query mmap
+ info
+Message-ID: <YxejqOuHTjoO/iXg@phenom.ffwll.local>
+Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220801170459.1593706-1-robdclark@gmail.com>
+ <20220801170459.1593706-2-robdclark@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831161736.749932-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220801170459.1593706-2-robdclark@gmail.com>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 07:17:36PM +0300, Krzysztof Kozlowski wrote:
-> remoteproc error messages like:
->   remoteproc remoteproc0: request_firmware failed: -2
->   remoteproc remoteproc1: request_firmware failed: -2
-> are difficult to debug as one actually have no clue which device
-> reported it and which firmware is missing.  Be verbose and print the
-> name of the failed firmware.
+On Mon, Aug 01, 2022 at 10:04:55AM -0700, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> This is a fairly narrowly focused interface, providing a way for a VMM
+> in userspace to tell the guest kernel what pgprot settings to use when
+> mapping a buffer to guest userspace.
+> 
+> For buffers that get mapped into guest userspace, virglrenderer returns
+> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
+> pages into the guest VM, it needs to report to drm/virtio in the guest
+> the cache settings to use for guest userspace.  In particular, on some
+> architectures, creating aliased mappings with different cache attributes
+> is frowned upon, so it is important that the guest mappings have the
+> same cache attributes as any potential host mappings.
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 > ---
->  drivers/remoteproc/remoteproc_core.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> v2. fix compiler warning
+
+I think I bikeshedded this on irc already, here for the record too.
+
+- this wont work for buffers which do change the mapping when they move
+  (ttm can do that). And cros does make noises about discrete gpus I've
+  heard, this matters even for you :-)
+- I'm pretty sure this will put is even more onto the nasty people list
+  that dma-api folks maintain, especially with passing this all to
+  userspace
+- follow_pte() can figure this out internally in the kernel and kvm is
+  already using this, and I think doing this all internally with mmu
+  notifier and what not to make sure it all stays in sync is the right
+  approach. So your kvm/whatever combo should be able to figure out wth
+  it's supposed to be doing.
+
+I think if you make this a virtio special case like we've done with the
+magic uuid stuff, then that would make sense. Making it a full dma-buf
+interface doesn't imo.
+
+Cheers, Daniel
+
 > 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index e5279ed9a8d7..71cd7ed7a970 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -1923,7 +1923,8 @@ int rproc_trigger_recovery(struct rproc *rproc)
->  	/* load firmware */
->  	ret = request_firmware(&firmware_p, rproc->firmware, dev);
->  	if (ret < 0) {
-> -		dev_err(dev, "request_firmware failed: %d\n", ret);
-> +		dev_err(dev, "request_firmware %s failed: %d\n",
-> +			rproc->firmware, ret);
->  		goto unlock_mutex;
+>  drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
+>  include/linux/dma-buf.h      |  7 +++++++
+>  include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
+>  3 files changed, 61 insertions(+)
+> 
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 32f55640890c..87c52f080274 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+>  	return 0;
+>  }
+>  
+> +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
+> +{
+> +	struct dma_buf_info arg;
+> +
+> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+> +		return -EFAULT;
+> +
+> +	switch (arg.param) {
+> +	case DMA_BUF_INFO_VM_PROT:
+> +		if (!dmabuf->ops->mmap_info)
+> +			return -ENOSYS;
+> +		arg.value = dmabuf->ops->mmap_info(dmabuf);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (copy_to_user(uarg, &arg, sizeof(arg)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+>  static long dma_buf_ioctl(struct file *file,
+>  			  unsigned int cmd, unsigned long arg)
+>  {
+> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
+>  	case DMA_BUF_SET_NAME_B:
+>  		return dma_buf_set_name(dmabuf, (const char __user *)arg);
+>  
+> +	case DMA_BUF_IOCTL_INFO:
+> +		return dma_buf_info(dmabuf, (void __user *)arg);
+> +
+>  	default:
+>  		return -ENOTTY;
 >  	}
+> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> index 71731796c8c3..6f4de64a5937 100644
+> --- a/include/linux/dma-buf.h
+> +++ b/include/linux/dma-buf.h
+> @@ -283,6 +283,13 @@ struct dma_buf_ops {
+>  	 */
+>  	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
 >  
-> @@ -2023,7 +2024,8 @@ int rproc_boot(struct rproc *rproc)
->  		/* load firmware */
->  		ret = request_firmware(&firmware_p, rproc->firmware, dev);
->  		if (ret < 0) {
-> -			dev_err(dev, "request_firmware failed: %d\n", ret);
-> +			dev_err(dev, "request_firmware %s failed: %d\n",
-> +				rproc->firmware, ret);
-
-That information is already available in sysfs but if you are really keen on it
-please do the same for rproc_trigger_auto_boot().
-
-Thanks,
-Mathieu
-
->  			goto downref_rproc;
->  		}
+> +	/**
+> +	 * @mmap_info:
+> +	 *
+> +	 * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
+> +	 */
+> +	int (*mmap_info)(struct dma_buf *);
+> +
+>  	int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+>  	void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+>  };
+> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+> index b1523cb8ab30..a41adac0f46a 100644
+> --- a/include/uapi/linux/dma-buf.h
+> +++ b/include/uapi/linux/dma-buf.h
+> @@ -85,6 +85,32 @@ struct dma_buf_sync {
 >  
+>  #define DMA_BUF_NAME_LEN	32
+>  
+> +
+> +/**
+> + * struct dma_buf_info - Query info about the buffer.
+> + */
+> +struct dma_buf_info {
+> +
+> +#define DMA_BUF_INFO_VM_PROT      1
+> +#  define DMA_BUF_VM_PROT_WC      0
+> +#  define DMA_BUF_VM_PROT_CACHED  1
+> +
+> +	/**
+> +	 * @param: Which param to query
+> +	 *
+> +	 * DMA_BUF_INFO_BM_PROT:
+> +	 *     Query the access permissions of userspace mmap's of this buffer.
+> +	 *     Returns one of DMA_BUF_VM_PROT_x
+> +	 */
+> +	__u32 param;
+> +	__u32 pad;
+> +
+> +	/**
+> +	 * @value: Return value of the query.
+> +	 */
+> +	__u64 value;
+> +};
+> +
+>  #define DMA_BUF_BASE		'b'
+>  #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+>  
+> @@ -95,4 +121,6 @@ struct dma_buf_sync {
+>  #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
+>  #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
+>  
+> +#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
+> +
+>  #endif
 > -- 
-> 2.34.1
+> 2.36.1
 > 
+> _______________________________________________
+> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
+> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

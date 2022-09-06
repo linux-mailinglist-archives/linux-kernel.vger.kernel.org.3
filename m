@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D23F5AE389
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAD35AE38B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238907AbiIFIyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
+        id S238988AbiIFIzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239112AbiIFIyS (ORCPT
+        with ESMTP id S232511AbiIFIzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:54:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6A7100D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 01:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=alfmK5CsaXmtxluoaD5vHSL8C4bCLVhMZTnT0qzCitE=; b=GFNqqzp/JqDIfkpgVxvgO5h9NL
-        p24UMQD5gU5Fa8F6x1XPzIHZfIlbnp/y1rJN6iwsW0eOPZO3sTVtWqb0hg8BvndzzhYHe6eUAQdX1
-        DdK5o2oySF420nErUYhIrbInReLCuyd95XCxnwwbVEYe7laojSqYcIWvUkR2v+WZhGcmYJqpjuEGA
-        zhGDez3iO75FUFDmL/F19NyOXjx2tKOqa2OIGC1y2Xf33tApdId7bJd+F4kdBhriLW3jngVPHETuQ
-        Pe7ieKHcXwgpy67/Nyj5UG3jZ74baHkgEiCcni0KsAUr2iE5eiqjFcff0gsMbcjYPbyaQWkdSsT8L
-        9j3XkRlQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVULF-00AFHm-04; Tue, 06 Sep 2022 08:53:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5B3FC300244;
-        Tue,  6 Sep 2022 10:53:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B06B02012A05B; Tue,  6 Sep 2022 10:53:53 +0200 (CEST)
-Date:   Tue, 6 Sep 2022 10:53:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>
-Subject: Re: [PATCH v2 1/5] smp: don't declare nr_cpu_ids if NR_CPUS == 1
-Message-ID: <YxcKoaVGD+sTBjjG@hirez.programming.kicks-ass.net>
-References: <20220905230820.3295223-1-yury.norov@gmail.com>
- <20220905230820.3295223-2-yury.norov@gmail.com>
+        Tue, 6 Sep 2022 04:55:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB96119288;
+        Tue,  6 Sep 2022 01:55:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52B8E61350;
+        Tue,  6 Sep 2022 08:55:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728B5C433D6;
+        Tue,  6 Sep 2022 08:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662454515;
+        bh=A8VKRtYKUm9wCQHpRouUBvdnM8FexdjJBSs3MkiJec0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JcReit0zD6HMNAAudT8BsvNj5dLWEg+F9ELdMbYV8+ZvzNoGWyUBt2Kl5DBs0ScUt
+         HvEVJ0PbOz4tQeszOR8rIrZTGXx7gtRARIB5HIsMQBZUhb3VEetwbskgz6OUlhTawv
+         HjbCrm/3B2u/Ipi/bKUvIsWeQZPjFfWXim362y96yLir6nWGCbnugK8URcjcVT8KsN
+         5rIDdaDl7czGsGLcznKSwBKhIxM4ILt0nhBOitG0vRlpf8xoC93SFNY2t12tPkgaA3
+         HDeTUZ9D7QzAxjflfmX9Ly8+eWN/GkhBl360v+9+Kxr/NH9vX4nPpzJgGgr5ZPmU5l
+         HsqN9sqKgrrow==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 445B55C0834; Tue,  6 Sep 2022 01:55:12 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 01:55:12 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        urezki@gmail.com, neeraj.iitr10@gmail.com, rostedt@goodmis.org,
+        vineeth@bitbyteword.org, boqun.feng@gmail.com
+Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
+ implementation
+Message-ID: <20220906085512.GI4315@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-7-joel@joelfernandes.org>
+ <20220902152132.GA115525@lothringen>
+ <67122ae3-d69e-438c-18fc-a8de6e40201e@joelfernandes.org>
+ <20220905125949.GA173859@lothringen>
+ <d82fec15-af9a-6ff6-69dd-a315cdca9892@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220905230820.3295223-2-yury.norov@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <d82fec15-af9a-6ff6-69dd-a315cdca9892@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 04:08:16PM -0700, Yury Norov wrote:
-> SMP and NR_CPUS are independent options, hence nr_cpu_ids may be
-> declared even if NR_CPUS == 1, which is useless.
+On Mon, Sep 05, 2022 at 04:32:26PM -0400, Joel Fernandes wrote:
+> 
+> 
+> On 9/5/2022 8:59 AM, Frederic Weisbecker wrote:
+> > I'd rather see an updated patch (not the whole patchset but just this one) rather
+> > than deltas, just to make sure I'm not missing something in the whole picture.
+> > 
+> > Thanks.
+> 
+> There is also the previous patch which needs a fix up you suggested.
+> 
+> I will reply to individual patches with in-line patch (for you), as well as
+> refreshing whole series since it might be easier for Paul to apply them together.
 
-I'm thikning you're fixing the wrong problem here. Also who the heck
-cares about SMP=y NR_CPUS=1 anyway?
+To say nothing of the greater probability that the result will match
+your intent.  ;-)
 
-Why do we need extra source complexity for this?
+							Thanx, Paul

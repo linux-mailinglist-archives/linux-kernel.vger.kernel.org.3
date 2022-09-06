@@ -2,189 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AFC5AF33B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6088B5AF33D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiIFSCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 14:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
+        id S229559AbiIFSEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 14:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIFSCf (ORCPT
+        with ESMTP id S229511AbiIFSEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:02:35 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052EFB02A3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 11:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662487349; x=1694023349;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=daJKG6yz8Q8565HhHa0TNvI8O+X6Tw5lDfPbestEp8k=;
-  b=bvV00zWxrxtKxqZkQI6V5gz1QD5TlK7xc5M18IBaLvrmyLM5QZEkyXQI
-   6rA0WS4G+mGCHtytH20cw/Z356xQOGjR3Gju034eaSBnpw5KOpPNwQWa3
-   Xvny3KDYAT2NTdFIF3Q2e3YoKAKSprLbeQ+tBEJ4Y9XmK371jNUXicvPw
-   uk6FXwOAZA1jMRI7ZM0zbODu2LoznSGaSPs4c0zvVgG1MI5eSwNAf6G3g
-   9/twLQocVJnsq29OUwMO8cT7VBIU/lWOOJAfbUmk2u/d+bG7Bug3nTfW0
-   HSXa9RWUtT0C2svj0gQV3Yp0hUtg+3y/gpe/P69L704s6Z/w9aE0VUpxs
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="179390088"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 11:02:27 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 6 Sep 2022 11:02:27 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 6 Sep 2022 11:02:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oYuETGIeNE8FUWUIxliyFLKSiJBmSUmPWdFl+o4y9uXRytaWbEdsFYYo87V4QkS5BZSsCb7N/CueVaWOZtdRQPL1Pv2ScJReUQoyX/lUw2Ae6e2PewvrrFluq+6BIlmAxPpfh+MswImbfAL5u/Er/RBsGRWHo3dEUD/nO0fjMmVvN9gHU/7jBChYe25ksTIJsyifqx9fLHAxPuAwjRuuO5jNA5kMeMzXQPw2NBMt10Lh9hPSEOjDBBDIEC/EzuiMpgNSYo5lEnYQB2hqGPY+3kXSixY3iONdYrOOTafrt7q3M0zgcT2VQIBB4YBErTh3SWs/eY6EUu0ROFVzdFGi/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fg6oFhYCkG1/N3yCHT4tPcJATMif2KgjF4XuHnWHrgM=;
- b=PzesozR5a1YZQsiS2My3ySyssssjOBzdArCnGRUIDSR70b66KkU1qTc3WLCMSHNpxPsieaRQrRRwHWsmfyxAWrViei+vDcAekAB+I0O7RYbU2qFBXOpLD72OOjdl8bLw4lCDykiQOLoBUtcexRCjH/ldC/DhIaJ4neEx5bmjLCuv0GgNFuKF0Dz99gyMp1uLtjQsIXQD2YDYKgJMl11mfWkmXEalf40wDanXKdYIb2JmtHyjdQzrzHNvax/WE90PxB63PI/x6+YVaT1xeoyBobhvlLtmzILUNd5mXfD0DkccA2HAxtcvdP67TzqtYPS0fW+FqSnO9J9KTH9gYo4mWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Tue, 6 Sep 2022 14:04:40 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DAE13E14
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 11:04:38 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id gh9so3192235ejc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 11:04:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fg6oFhYCkG1/N3yCHT4tPcJATMif2KgjF4XuHnWHrgM=;
- b=H2TA65jZO3PVLx3vrDs7iI4sU936ODsxiu8hFTSbaZ6JrFr5rHR/QqfuhPSz/tFFsH4Rh8Yi6p+zDbiDdZ34umaetkQ0twMnsoLjNd1hQGsXt2OU0Qdv1t4ZmLcIqnFVfx3Bc6zcNV7Ur7zRD0pBvBDvs5q64w0ZGdmLL+yzJqA=
-Received: from BN8PR11MB3668.namprd11.prod.outlook.com (2603:10b6:408:81::24)
- by CH2PR11MB4389.namprd11.prod.outlook.com (2603:10b6:610:3f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Tue, 6 Sep
- 2022 18:02:22 +0000
-Received: from BN8PR11MB3668.namprd11.prod.outlook.com
- ([fe80::3198:2077:56c7:1780]) by BN8PR11MB3668.namprd11.prod.outlook.com
- ([fe80::3198:2077:56c7:1780%4]) with mapi id 15.20.5588.014; Tue, 6 Sep 2022
- 18:02:22 +0000
-From:   <Kumaravel.Thiagarajan@microchip.com>
-To:     <lkp@intel.com>
-CC:     <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>
-Subject: RE: [char-misc:char-misc-next 21/24]
- drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:135:34: sparse: sparse:
- symbol 'pci1xxxx_gpio_auxiliary_id_table' was not declared. Should it be
- static?
-Thread-Topic: [char-misc:char-misc-next 21/24]
- drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:135:34: sparse: sparse:
- symbol 'pci1xxxx_gpio_auxiliary_id_table' was not declared. Should it be
- static?
-Thread-Index: AQHYwPINBFGtBPTAu0ifzHiXlRk4Fa3Sr8ZA
-Date:   Tue, 6 Sep 2022 18:02:22 +0000
-Message-ID: <BN8PR11MB3668B1EAD67AFB7CB5CCB6C2E97E9@BN8PR11MB3668.namprd11.prod.outlook.com>
-References: <202209051441.knwv3o1D-lkp@intel.com>
-In-Reply-To: <202209051441.knwv3o1D-lkp@intel.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: be7b50a0-ae7f-47df-d2f6-08da9031f295
-x-ms-traffictypediagnostic: CH2PR11MB4389:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: quGO0tos9NHEBQjYh5W9E9X05P1QSlurqPOLcGqUpz9rx+SBWWyXg9EAAzsJ4a5TvP0cnakHoTA5aUdqJ3TA7eVpTKjqvs4s3EXW878tnMjWUCIGJeDexmTq05SQsc8Ub+AMQKcBweKjrp3X6oWlol+nVacU4EjtwrOcjl4MgsIk2rgwvf6wi6dUTyM3tkbZuqtuI1HtstcUvCAawYzcbMaviFDnyCPwQHhHZLyGebzNxRb1JU4UwRWwvbHZnBmF9zakveoGxDU4Yx9pGIcgRDqH1NBzrgFU5tv/gGcNw7XgP0/k5cM7pUwjUh8NglH17bUnwTDd7yFvZzkMW7yNMu5fs2Kdy2VqlcI7TK1F78RLsfeuaXTKfxfUCCc0FZGdaG8P93p/M2aLVNK6ksWvTXhpv46/Ey26IvlyfZrK16h3cP2gFJkjI23nFKaX0HDCEXxU5P9vFldKBiyY1Io5o2KBSUDpeI8sbQmvTImt7zPm1LI0kewvf8757pq3JzTllDUHElkUvJ3u3Vg2HmthpXUMzZBGW0YpaiTDsPqYiJ1bQdOHGt5zJHK1cVpv+XWfwp0gW2/WtQhSGPsrGCb0nLamJEpThQBuB5FrYCA40//9MsXE4ymI91PtNJeNIZ8nOibeMGYK6SgTR+q8PCNvlq9fLsNcOi9e3FOKFkqv4AJlidjmiAlj22i4SuymcuZ8y9xQOAo1xIpWXTtVNe3oeaoKRrGx3PsK8gdyUsvJNWFI5bj+tVGnM59DsHiMd95aQ4s4aRGJJt9GjmTHI+6WhchzrfV5NhCt2q1EikDqolWEwCl9K4ZqNV5hCOnkgTmExYCXWDlB+uZXUjJFjJqUpkBydY8VKslMCR0AgUClQiI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR11MB3668.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(136003)(39860400002)(396003)(366004)(8676002)(122000001)(76116006)(64756008)(66446008)(4326008)(66476007)(66556008)(66946007)(38100700002)(71200400001)(41300700001)(186003)(966005)(53546011)(6506007)(478600001)(7696005)(26005)(9686003)(54906003)(83380400001)(316002)(6916009)(2906002)(86362001)(5660300002)(33656002)(52536014)(8936002)(55016003)(38070700005)(473944003)(414714003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?abxW0KW3TmeVykTdjLwXvb3+y4f/jEJD7LM21wMy2OEKZQBHtM1VO3CJubqk?=
- =?us-ascii?Q?5bvB3i/YY2j9QZKpPYXjfvZV6I9uwygWH00sj+7r//DR2/ZU5H2vRbDsIocu?=
- =?us-ascii?Q?kHXHCmKl/zxlVdVN8S465/SlX2nIMuhXPyUZA8+Be6XEYzvpMuBk0ozyGEX/?=
- =?us-ascii?Q?X7QBOahbW9kFGaGidydCLf19YaMdN3KrsrrOa2mTgsIncb9N7ILLADagW5H5?=
- =?us-ascii?Q?0oDJMXsObRV4GQb5sdLuBg7YPAqa8eOsFj9F+1ZjFXAsaP+aqdB1kOx1q5XB?=
- =?us-ascii?Q?OX7ssBehnTMBGWjs4SUf2Fsa8hQZUfYT1adjptpflVZvsq4+Pcx34wgKCaC4?=
- =?us-ascii?Q?bcf9EfYQ6OeEctmqohFHDS1oHQ3YQNoOWOEm+ZlHvIMp2OBucQviyyaIO0AL?=
- =?us-ascii?Q?LjGrt8jTDhGGZQNYqTRKtVj+X/OzKBOK8Phb7a86GTV+RD1YpaictqLLtf0N?=
- =?us-ascii?Q?Ztx7Wkdn/1sA85SVVohtd13+HAXP/5CKWYr9LRJ+ZA8pFYp7lyeVXsF1Vrlj?=
- =?us-ascii?Q?zTpHIckZBRgFM72Sr7qBGsOQ+wSmXo8SUbdFyJh5lwJdXXuv++9So9QDpK5i?=
- =?us-ascii?Q?YYAnMC+fWFHn4syrM0ALzWlVp4uIKDqpG6q3FwYhnTaa2vVtaI5f/q/iTmD9?=
- =?us-ascii?Q?l4b7L1IYEXDJ7scsS+nOu4UhZBTfTprIoAV4F8ZCgRY/4GtNaGsGdnvQ+Ez/?=
- =?us-ascii?Q?Y/bQEuVt14lJIV8+kHrrvZ8nWSLPEoJElEMNKkDEhwcboxphyv2CmNKsVNX8?=
- =?us-ascii?Q?vMjg8hjd2JvB83YBH1F4zKsyOJ4XDGbaXnKLClHb40hyfPIARIsk5uABmJjz?=
- =?us-ascii?Q?LBZH96URSsCs0taQFeKrrWa+VTFhS+xZRlJKpRM3xCbHxStaNbLovTcfjpOn?=
- =?us-ascii?Q?ApzMni9k60NQmd1/XdJDiZ1GRiaKmprMg0AhzUhMbh7OMbTRQuYArfar56yp?=
- =?us-ascii?Q?1lcxOw3gKZWonaQVXZABldKdblvT+NMLPPRG+z1gR0cU+3IInspClZj+dvgq?=
- =?us-ascii?Q?ufcTP1Z/r84i4XE01h3an2s5OYpHFMqhKEP1EoCIf4nxqAxo8G9xvyYpBxW9?=
- =?us-ascii?Q?TAo1S3MJY2G+7m0SDO/ovd3mj3uwPdwHNOMakaDMUQ0UEuNIV5tK/3nuJec+?=
- =?us-ascii?Q?9cWzUpb3vCNPzfwrfZLYPk92FOevxpBQrFd48wtUWOyyBBr0czb1r2i2SeBh?=
- =?us-ascii?Q?ZghyVy0VA8mDnLhYhHTdWqtIuyosS8Xc5OQUv/CVteBHZxOtTgEpiX8ZhSgP?=
- =?us-ascii?Q?qWg3iWRLBjT3CiONHof0baelmII5gxNdr/FGtyKVMN47Sv0Xlhjm43koQ2Kr?=
- =?us-ascii?Q?/p8x2e1z/M6UNuAru0WMpsypZCJ2erWtrkpuN/PjtzsE563lkoD0qacg7OXM?=
- =?us-ascii?Q?t9h58lB5w5NDME0vn+PcWfWptugdgYQ+fd8lmufVOjHTq1T02eMYaHK0ROvB?=
- =?us-ascii?Q?RLCPTxeOawcAsz4DJ7+iK1Q+CwtM0grPqNr4pQdefl4hn/nkHaZhkXNMyfug?=
- =?us-ascii?Q?GE0BFO7lDpNN0xM3arjT4YszMC8yT83nvg0ymTrFTHiKQ3W11EUmCf3KyV85?=
- =?us-ascii?Q?8zt6d0lBp8lvNIf297iHYxbUX3U14etDY2BEufoho82Uy72Yvpq9ucS+vTJg?=
- =?us-ascii?Q?jjhmSdx+U2gx462Pt9fIPq8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Ow/wLd30qnpVXkYHu9y10pAdjF3WB8VsFrXpWU88Txg=;
+        b=28aoz7P7Ti8HMbmay9OAw9t6XaM0aGpiu1qjbU04Xqk2kmJdB4n9pNYyu0BPHUUARY
+         ZkbOuz7tkerHLa8mU/2DfbvUnLjzVt0QzW2FvP5WkryNWCzQLwkUD0VUDRMIUv3Jnc8/
+         HK4nSUiWPhF10YEtpPnvdueoz28qFOugksikcsiT0kFlnCBU1MLUYwYxM+pm7AgDWF3i
+         NcwfutTvXQfxGw1kqCfn5zZxJbot2DWR80QA+Kp76BU6Y2dn9cy6uRzViwHr4s5Y6Jj2
+         tBmutwyjtSbapmcxuaPfdkN2NNyoYWCuYFD4oemB0Wf2udzDwE5lfca2uUFxgfhRyFzm
+         gUBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ow/wLd30qnpVXkYHu9y10pAdjF3WB8VsFrXpWU88Txg=;
+        b=JRwln+QLrv5H6bLlcKQvp2DK6ECVw5fXPkB7SNVsBPF61qEywL4OmpgGZ+T/3gbnJP
+         Je4kfJ3YbPpce3Xbfo94RSWYO/M/CMbxMMznz1M0WHt15LbUK2OngsqaxaF+tq22kJyW
+         rPQV60P04NMii5suwCVE1/H2CLYpSifHwJ4tTO8c3F8Tqo8wJTi5ni2cevFD76inCAHK
+         bkUxdpnIegPgzxmPTLrsBySYG6N9JuxevImhrESLRJQuY6SoNs+5cLZ2PxlxcMF3WRBp
+         NNgYOAMZq7WRejMcQLYjgznX/W6JZzJSaqmvexIXNi2USFAa7kdx/LuAghS++IU6FzjT
+         jlYg==
+X-Gm-Message-State: ACgBeo1Up/5WDg24B+smehJY0rVixBtiapf1GxabLnletrm5oJ72PzGW
+        Dy5kQQQlhr3iuTFDdDMGDlSlHg==
+X-Google-Smtp-Source: AA6agR6lafvIMENxBfPkng6SP6E+fxgPIE0i4Xce9xglTCv8jjI/RR4iSZAXuzihbSYkU0fRkNQ0Hg==
+X-Received: by 2002:a17:907:7ea8:b0:731:4fa1:d034 with SMTP id qb40-20020a1709077ea800b007314fa1d034mr40894770ejc.758.1662487477080;
+        Tue, 06 Sep 2022 11:04:37 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id t6-20020a170906948600b00731745a7e62sm7007845ejx.28.2022.09.06.11.04.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 11:04:35 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     kernel test robot <oliver.sang@intel.com>, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH net 1/2] mptcp: fix fwd memory accounting on coalesce
+Date:   Tue,  6 Sep 2022 20:04:01 +0200
+Message-Id: <20220906180404.1255873-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR11MB3668.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be7b50a0-ae7f-47df-d2f6-08da9031f295
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2022 18:02:22.3580
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WMrU4uckglv4N9lSvZZNqvFBIdzts6YWcxaWaKJyiOr5TkryG9HU7tn9Tf5mnxnvjDEzSUJEz0GEMgNSaUMg3WI4mEXw5/rjtoPXqvs8PTv7oqHRnBx1gbEWioVgSK3l
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4389
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5665; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=t8cmDnU3uUS9PdW1N2RcyIJOSiEW+cMzPyWsGrCTiQQ=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjF4uEGvXD6136jzJ9RSpbwD8Xf7mZeTRCTlvAoKQd
+ KrYW74mJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCYxeLhAAKCRD2t4JPQmmgc5GsD/
+ 42uTEzezIR1isCLJfxvuKH+edEeHDc9WVDBxEr5SDyxKjNZVBgmWShPjaOFV+HodpN9REuezgZwD0R
+ A37hGko4Y6ERWeXVuzglXERHMVz2ImDvXEHQrlJUpQc4ilv8miqLDA4Po5C3T+2y6SMtRMvzuE5g/b
+ 8YeGKfPWWnaI/1gjXjIyKenkVBgGxuqs138qDExX5N8hGCjUAyNdNCpFX7QjvgWb7luKbsRKhD59H5
+ tO6kfywJ2bim9uN2pyBMZM0sWjHHYNp3tkPAWPNpo+8MJcCW822DH4MYutUA9kKA3i6q5zoQj95IrC
+ wzh43vOcIu1yncmBN3ckaRRWqoCygKnYQjDsxE9hkXXVcdoTcdxOFQ602YOifciIFuhlwA/AWTwLwR
+ 4XRLLaO8On3Zw+A7LWWhK2DtsUglp5/htgHnEAvpw2SeQJCGBt+PmIDkonTYJVuxX0sN69gOsZG7nL
+ MHNCISs+EzMl/bFSU8ppq5Ml3+JRvjXkDPdxHKTGcJjQR6+e5J3vlGzZ0+Lp0RRax/OC9i72D+gwg4
+ KvZhr5TqxOFq4i01t2W8iZ4sDqnlx7jfYFsPq0DaZhpRpOteQun1pOTzw00sXqE89NpuzS84WBQukK
+ v9CWFpvH2ZQTmGAbaRbKunMVmKFAGXYbzEXXs6I8JxZLSpumiHZVlUSTnyZA==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: kernel test robot <lkp@intel.com>
-> Sent: Monday, September 5, 2022 12:07 PM
-> To: Kumaravel Thiagarajan - I21417 <Kumaravel.Thiagarajan@microchip.com>
-> Cc: kbuild-all@lists.01.org; linux-kernel@vger.kernel.org; Greg Kroah-
-> Hartman <gregkh@linuxfoundation.org>
-> Subject: [char-misc:char-misc-next 21/24]
-> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:135:34: sparse: sparse:
-> symbol 'pci1xxxx_gpio_auxiliary_id_table' was not declared. Should it be
-> static?
->=20
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.=
-git
-> char-misc-next
-> head:   50e177c5bfd9abc3828cb57e14e6169170f6764a
-> commit: 7d3e4d807df2a216b9aa2944372f2b3f6ef3f205 [21/24] misc:
-> microchip: pci1xxxx: load gpio driver for the gpio controller auxiliary d=
-evice
-> enumerated by the auxiliary bus driver.
-> config: i386-randconfig-s033-20220905
-> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-.
-.
-.
->=20
-> sparse warnings: (new ones prefixed by >>)
-> >> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:135:34: sparse:
-> sparse: symbol 'pci1xxxx_gpio_auxiliary_id_table' was not declared. Shoul=
-d it
-> be static?
-Greg, do I need to submit another patch to resolve this warning on char-mis=
-c-next?
-I did not combine this with the last patch thinking that the last patch wou=
-ld
-be merged with the commit that introduced the errors and not queued.
+From: Paolo Abeni <pabeni@redhat.com>
 
-Thank You.
+The intel bot reported a memory accounting related splat:
 
-Regards,
-Kumaravel
+[  240.473094] ------------[ cut here ]------------
+[  240.478507] page_counter underflow: -4294828518 nr_pages=4294967290
+[  240.485500] WARNING: CPU: 2 PID: 14986 at mm/page_counter.c:56 page_counter_cancel+0x96/0xc0
+[  240.570849] CPU: 2 PID: 14986 Comm: mptcp_connect Tainted: G S                5.19.0-rc4-00739-gd24141fe7b48 #1
+[  240.581637] Hardware name: HP HP Z240 SFF Workstation/802E, BIOS N51 Ver. 01.63 10/05/2017
+[  240.590600] RIP: 0010:page_counter_cancel+0x96/0xc0
+[  240.596179] Code: 00 00 00 45 31 c0 48 89 ef 5d 4c 89 c6 41 5c e9 40 fd ff ff 4c 89 e2 48 c7 c7 20 73 39 84 c6 05 d5 b1 52 04 01 e8 e7 95 f3
+01 <0f> 0b eb a9 48 89 ef e8 1e 25 fc ff eb c3 66 66 2e 0f 1f 84 00 00
+[  240.615639] RSP: 0018:ffffc9000496f7c8 EFLAGS: 00010082
+[  240.621569] RAX: 0000000000000000 RBX: ffff88819c9c0120 RCX: 0000000000000000
+[  240.629404] RDX: 0000000000000027 RSI: 0000000000000004 RDI: fffff5200092deeb
+[  240.637239] RBP: ffff88819c9c0120 R08: 0000000000000001 R09: ffff888366527a2b
+[  240.645069] R10: ffffed106cca4f45 R11: 0000000000000001 R12: 00000000fffffffa
+[  240.652903] R13: ffff888366536118 R14: 00000000fffffffa R15: ffff88819c9c0000
+[  240.660738] FS:  00007f3786e72540(0000) GS:ffff888366500000(0000) knlGS:0000000000000000
+[  240.669529] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  240.675974] CR2: 00007f966b346000 CR3: 0000000168cea002 CR4: 00000000003706e0
+[  240.683807] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  240.691641] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  240.699468] Call Trace:
+[  240.702613]  <TASK>
+[  240.705413]  page_counter_uncharge+0x29/0x80
+[  240.710389]  drain_stock+0xd0/0x180
+[  240.714585]  refill_stock+0x278/0x580
+[  240.718951]  __sk_mem_reduce_allocated+0x222/0x5c0
+[  240.729248]  __mptcp_update_rmem+0x235/0x2c0
+[  240.734228]  __mptcp_move_skbs+0x194/0x6c0
+[  240.749764]  mptcp_recvmsg+0xdfa/0x1340
+[  240.763153]  inet_recvmsg+0x37f/0x500
+[  240.782109]  sock_read_iter+0x24a/0x380
+[  240.805353]  new_sync_read+0x420/0x540
+[  240.838552]  vfs_read+0x37f/0x4c0
+[  240.842582]  ksys_read+0x170/0x200
+[  240.864039]  do_syscall_64+0x5c/0x80
+[  240.872770]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[  240.878526] RIP: 0033:0x7f3786d9ae8e
+[  240.882805] Code: c0 e9 b6 fe ff ff 50 48 8d 3d 6e 18 0a 00 e8 89 e8 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+[  240.902259] RSP: 002b:00007fff7be81e08 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[  240.910533] RAX: ffffffffffffffda RBX: 0000000000002000 RCX: 00007f3786d9ae8e
+[  240.918368] RDX: 0000000000002000 RSI: 00007fff7be87ec0 RDI: 0000000000000005
+[  240.926206] RBP: 0000000000000005 R08: 00007f3786e6a230 R09: 00007f3786e6a240
+[  240.934046] R10: fffffffffffff288 R11: 0000000000000246 R12: 0000000000002000
+[  240.941884] R13: 00007fff7be87ec0 R14: 00007fff7be87ec0 R15: 0000000000002000
+[  240.949741]  </TASK>
+[  240.952632] irq event stamp: 27367
+[  240.956735] hardirqs last  enabled at (27366): [<ffffffff81ba50ea>] mem_cgroup_uncharge_skmem+0x6a/0x80
+[  240.966848] hardirqs last disabled at (27367): [<ffffffff81b8fd42>] refill_stock+0x282/0x580
+[  240.976017] softirqs last  enabled at (27360): [<ffffffff83a4d8ef>] mptcp_recvmsg+0xaf/0x1340
+[  240.985273] softirqs last disabled at (27364): [<ffffffff83a4d30c>] __mptcp_move_skbs+0x18c/0x6c0
+[  240.994872] ---[ end trace 0000000000000000 ]---
+
+After commit d24141fe7b48 ("mptcp: drop SK_RECLAIM_* macros"),
+if rmem_fwd_alloc become negative, mptcp_rmem_uncharge() can
+try to reclaim a negative amount of pages, since the expression:
+
+	reclaimable >= PAGE_SIZE
+
+will evaluate to true for any negative value of the int
+'reclaimable': 'PAGE_SIZE' is an unsigned long and
+the negative integer will be promoted to a (very large)
+unsigned long value.
+
+Still after the mentioned commit, kfree_skb_partial()
+in mptcp_try_coalesce() will reclaim most of just released fwd
+memory, so that following charging of the skb delta size will
+lead to negative fwd memory values.
+
+At that point a racing recvmsg() can trigger the splat.
+
+Address the issue switching the order of the memory accounting
+operations. The fwd memory can still transiently reach negative
+values, but that will happen in an atomic scope and no code
+path could touch/use such value.
+
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Fixes: d24141fe7b48 ("mptcp: drop SK_RECLAIM_* macros")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+ net/mptcp/protocol.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index d398f3810662..969b33a9dd64 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -150,9 +150,15 @@ static bool mptcp_try_coalesce(struct sock *sk, struct sk_buff *to,
+ 		 MPTCP_SKB_CB(from)->map_seq, MPTCP_SKB_CB(to)->map_seq,
+ 		 to->len, MPTCP_SKB_CB(from)->end_seq);
+ 	MPTCP_SKB_CB(to)->end_seq = MPTCP_SKB_CB(from)->end_seq;
+-	kfree_skb_partial(from, fragstolen);
++
++	/* note the fwd memory can reach a negative value after accounting
++	 * for the delta, but the later skb free will restore a non
++	 * negative one
++	 */
+ 	atomic_add(delta, &sk->sk_rmem_alloc);
+ 	mptcp_rmem_charge(sk, delta);
++	kfree_skb_partial(from, fragstolen);
++
+ 	return true;
+ }
+ 
+-- 
+2.37.2
+

@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2315AE3D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131CD5AE3D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239321AbiIFJGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S239393AbiIFJHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239032AbiIFJGd (ORCPT
+        with ESMTP id S239032AbiIFJHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:06:33 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEEA48E9E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:06:31 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id cu2so21786997ejb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 02:06:31 -0700 (PDT)
+        Tue, 6 Sep 2022 05:07:17 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3629C4C63E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:07:10 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id b5so14421288wrr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 02:07:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=melexis.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ApCvKf3zMouc6AAO9enLRrRsW9rTa7FiMgUGsRYHip4=;
-        b=pH3gGvUSPyHd/d/Bql7KLmqhrh4iGF4F0ZteFlG9Qx0TPal5X1Ct5YguvHhzg5js36
-         OPO3vp6e3WvRZGr4FyETuGq5QeeHcy0LifNziAr5baIVX5yXqNOciz+Ik6rYDSh0/1+8
-         xrOs0bUTtPcNZvuPgNPKUsC06tJ2EZh2evbQqadq/7Nja0m+++GwVtC/KAyxUWDP8IBO
-         mGlDnQuH7O8OLrDmvLz0zeq/dF4YV1bMTQsZlxuCTPmFc910XpY4XM8thMZj/LZ7AWTD
-         iBEGX5oWNNNn94FelgcThCmuMm1zseXLuBFLaYUt9gyz3S1qTciSFo2K9z7Av0hh0oZG
-         QMOA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=mPKulpM1VmePhCn9NGeORJeSVx0ds/dPcNDxI2woRLQ=;
+        b=OnHReX1D+oWmtqnZ/eFIfyCAVGEYKicV1nUmVMnE1mq0ZW5TQo+VrwL3LMDXAnzThh
+         PgsTdHm9zm/bb7llMOIcm0mtien4mSyFLB5tYIzK6YkwWNWKz7yEGvSfRHugyPOMfBXV
+         Rwt8GR7JXHfGD3sqSn1ZU/Jn8vmyWiZEuJdxBodcD2mq1gkeGnw3bq7R90r7KJvGbj08
+         G2frli139Xk75iDvNHb6a6pm+sC6JCwwFXCyWKaVwkIgtHVobIBV3C/z6b2TQNWvyEtm
+         8KxxsliBUqVXyyuGmSxUjgtz7uKO2Uhgy3fQKEvUPxq8Gi00lSsB9rwqR4TvDGO3caCt
+         8/IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ApCvKf3zMouc6AAO9enLRrRsW9rTa7FiMgUGsRYHip4=;
-        b=144X0Dbx1ro9hEjwD9xG20NjkzVkYCftzveu/VadMNb477oQxc2telHK19ZkOEpdGa
-         rizlX6sbOj4nI4Acdt5mniedcNgZkG1ZIkvcl0Zj96LBEs6efCPH90OwX9pE+tMrFcLH
-         xgeCDSRKcWgriScwaE1S2rRqkfwP++uscGn0ASTB0XnaYxNu+9H5Hs9HuchHrR5UXio1
-         8GY+OZRM0cZ2pdeakXuokAs88LCUW698Uf9/vyFyWEv2p9GE2H1wNBu7SW+Cq/E06zzs
-         P9BouVwEa5MAoE2ny6SFdqtXgVZK91Ln0DylU39YPDmVUkD6TYvt8x3pac6+w686pCzn
-         Uy4g==
-X-Gm-Message-State: ACgBeo1m+bpqi3Y0xTVgVC5lXNcNjRNqCw0gM7mmGfZY7wteaQRW5eX4
-        PhKvX6+2PZiX6v9AOJcsitPeuQ==
-X-Google-Smtp-Source: AA6agR60PpdOWUyNCjNiQPV55QXCUUhxETXPhy01tqt05CYPoTEYlW5+PtKr0uvRF4Xx0YsCZ7CjIA==
-X-Received: by 2002:a17:907:3e0a:b0:741:4b9b:8d08 with SMTP id hp10-20020a1709073e0a00b007414b9b8d08mr32286606ejc.113.1662455190085;
-        Tue, 06 Sep 2022 02:06:30 -0700 (PDT)
-Received: from cmo-ThinkPad-T495.telenet.be ([194.150.35.21])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906200a00b0073dc4385d3bsm6338600ejo.105.2022.09.06.02.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 02:06:29 -0700 (PDT)
-From:   cmo@melexis.com
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Crt Mori <cmo@melexis.com>
-Subject: [PATCH v3 0/3] iio: temperature: mlx90632: Add powermanagement
-Date:   Tue,  6 Sep 2022 11:06:18 +0200
-Message-Id: <cover.1662454215.git.cmo@melexis.com>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=mPKulpM1VmePhCn9NGeORJeSVx0ds/dPcNDxI2woRLQ=;
+        b=cnzggNne3zaNsP45fk65dNj9xGF41PeUr+haIA3BejUj6dVVk7zrSsh/A1G4yoC+gE
+         kbYrooS9yN6RcDpKdLUiizxatCxnpDlXKsCbBZvkjFAWaj8rNLq/zXzgqmcdTM0FxDWV
+         13wtdGkxNRPcuZ/azljY0hG3sT0T+zxod7T8qpWc0wAE8GuboyNgcKnUc+UOnkAkt0MS
+         QUKLRyHRorHjCd+MKKFMuwiYngOVw3tsyhgNezhpdteeWvzaXKOUm5gP0ZDiIYdqR0FZ
+         EM0jzJ0XsVSTEQfLf1fAVinaZ0twzY33EAm6F29vgGbqx+ZVjl8IPzJHUs9c3WUUaN17
+         o2WA==
+X-Gm-Message-State: ACgBeo2VsI+CKRBFs/cTKSmmn8lKZADtHMTECz46wPVsj+UwJbAbimYs
+        i0z8fzmx+DktvjaxYFZmUJA1AA==
+X-Google-Smtp-Source: AA6agR5YFhKwTFveLQ1zRnD0V87OI95Pez8WScCVXHUXaL7rQSxXDThAljQ2vlZ/LsGOpe9j9yPxfA==
+X-Received: by 2002:a05:6000:1f83:b0:228:6278:796b with SMTP id bw3-20020a0560001f8300b002286278796bmr7167060wrb.520.1662455228586;
+        Tue, 06 Sep 2022 02:07:08 -0700 (PDT)
+Received: from [10.1.3.188] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id k27-20020a05600c1c9b00b003a845fa1edfsm33016456wms.3.2022.09.06.02.07.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 02:07:08 -0700 (PDT)
+Message-ID: <b0d45e18-c92d-d187-2eac-851d975fbb7e@baylibre.com>
+Date:   Tue, 6 Sep 2022 11:07:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 1/1] pinctrl: meson: Switch to use fwnode instead of
+ of_node
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220905180034.73132-1-andriy.shevchenko@linux.intel.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220905180034.73132-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Crt Mori <cmo@melexis.com>
+On 05/09/2022 20:00, Andy Shevchenko wrote:
+> GPIO library now accepts fwnode as a firmware node, so
+> switch the driver to use it.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/pinctrl/meson/pinctrl-meson.c | 7 +++----
+>   drivers/pinctrl/meson/pinctrl-meson.h | 4 +++-
+>   2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
+> index cc2cd73ff8f9..530f3f934e19 100644
+> --- a/drivers/pinctrl/meson/pinctrl-meson.c
+> +++ b/drivers/pinctrl/meson/pinctrl-meson.c
+> @@ -608,6 +608,7 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
+>   
+>   	pc->chip.label = pc->data->name;
+>   	pc->chip.parent = pc->dev;
+> +	pc->chip.fwnode = pc->fwnode;
+>   	pc->chip.request = gpiochip_generic_request;
+>   	pc->chip.free = gpiochip_generic_free;
+>   	pc->chip.set_config = gpiochip_generic_config;
+> @@ -619,8 +620,6 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
+>   	pc->chip.base = -1;
+>   	pc->chip.ngpio = pc->data->num_pins;
+>   	pc->chip.can_sleep = false;
+> -	pc->chip.of_node = pc->of_node;
+> -	pc->chip.of_gpio_n_cells = 2;
+>   
+>   	ret = gpiochip_add_data(&pc->chip, pc);
+>   	if (ret) {
+> @@ -678,8 +677,8 @@ static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc)
+>   		return -EINVAL;
+>   	}
+>   
+> -	gpio_np = to_of_node(gpiochip_node_get_first(pc->dev));
+> -	pc->of_node = gpio_np;
+> +	pc->fwnode = gpiochip_node_get_first(pc->dev);
+> +	gpio_np = to_of_node(pc->fwnode);
+>   
+>   	pc->reg_mux = meson_map_resource(pc, gpio_np, "mux");
+>   	if (IS_ERR_OR_NULL(pc->reg_mux)) {
+> diff --git a/drivers/pinctrl/meson/pinctrl-meson.h b/drivers/pinctrl/meson/pinctrl-meson.h
+> index b197827027bd..34fc4e8612e4 100644
+> --- a/drivers/pinctrl/meson/pinctrl-meson.h
+> +++ b/drivers/pinctrl/meson/pinctrl-meson.h
+> @@ -12,6 +12,8 @@
+>   #include <linux/types.h>
+>   #include <linux/module.h>
+>   
+> +struct fwnode_handle;
+> +
+>   struct meson_pinctrl;
+>   
+>   /**
+> @@ -131,7 +133,7 @@ struct meson_pinctrl {
+>   	struct regmap *reg_gpio;
+>   	struct regmap *reg_ds;
+>   	struct gpio_chip chip;
+> -	struct device_node *of_node;
+> +	struct fwnode_handle *fwnode;
+>   };
+>   
+>   #define FUNCTION(fn)							\
 
-As discussed previously on the group under the
-"Controlling device power management from terminal" thread the mlx90632
-sensor provides measurement capabilities under sleep_step mode. This
-series runtime suspends the unused chip to sleep step mode to save power
-but in case of continuous sequential reading it switches to continuous
-mode for faster readouts. This value is hardcoded to
-MLX90632_MEAS_MAX_TIME (with some buffer) and not user configurable.
-
-The sensor runtime suspension is set to MLX90632_SLEEP_DELAY_MS which is
-hardcoded to 3 times as much as MEAS_MAX_TIME.
-
-Changes in v3 (per review comments from Jonathan Cameron):
-
- - Change the "available" attribute presentation to more recent way
-   suggested
- - Replace devm_pm_runtime_enable with enable and devm_add_action_or_reset
- - When suspending device also put it to lower power mode in case there is
-   dummy regulator
- - Use more switch cases instead of if/else
-
-Changes in v2:
-
- - apply review comments from Andy Shevchenko
-
-Crt Mori (3):
-  iio: temperature: mlx90632 Add runtime powermanagement modes
-  iio: temperature: mlx90632 Read sampling frequency
-  iio: temperature: mlx90632 Change return value of sensor measurement
-    channel
-
- drivers/iio/temperature/mlx90632.c | 400 +++++++++++++++++++++++++----
- 1 file changed, 354 insertions(+), 46 deletions(-)
-
--- 
-2.34.1
-
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

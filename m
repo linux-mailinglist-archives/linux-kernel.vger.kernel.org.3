@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8595AE7FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED265AE802
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239934AbiIFMWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
+        id S239869AbiIFMZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240090AbiIFMWG (ORCPT
+        with ESMTP id S232012AbiIFMX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:22:06 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E8F78BE3;
-        Tue,  6 Sep 2022 05:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=hqCjtiyrJ6rGXCi+KJhh0cIm4lWy2egYvSinPQdu6Hc=; b=XJhOYk74ELHK8gVTOYvVFYDo3a
-        a3RtNJTEJ8NKggTy06vcQ5vcCOqty6LYVSj3isgmjNkgJ8N1jbDgH/UoyB8MWeHKrLgGtnqSipV+B
-        VSsGD+vfQ780NkNP9OsG4Ih4DlnZRKkoygupkCjAr/VQwN9wU+Oz7Llk9W5VoMptJEPQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oVXXP-00FkPq-Nc; Tue, 06 Sep 2022 14:18:43 +0200
-Date:   Tue, 6 Sep 2022 14:18:43 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Olliver Schinagl <oliver@schinagl.nl>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH] linkstate: Add macros for link state up/down
-Message-ID: <Yxc6o+6u2zlPxU3a@lunn.ch>
-References: <20220906083754.2183092-1-oliver@schinagl.nl>
+        Tue, 6 Sep 2022 08:23:27 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2BC819C18
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ABlJF
+        eYOIQ1yMO4RgFSt8TOjiYFH1v4bYER/CMetTR8=; b=Lu6vgE9UhNP6WbYwomcKj
+        K18e/JS0PdkV1sXt5seLfKV7ChMGqeig1pMxxOSPr6+3LeessyB9HibdL9s0mVkB
+        ajf6Ax8BMAxz8EaKj79cBqOrXkpimagkeQglsNF0ApHsEjhGn0r1BZU9D4XGLLfO
+        Q6SPsegjECfKTkx7wyflOQ=
+Received: from whoami-VirtualBox.. (unknown [223.72.91.155])
+        by smtp13 (Coremail) with SMTP id EcCowABn1lLLOhdjrfx8aQ--.20577S2;
+        Tue, 06 Sep 2022 20:19:24 +0800 (CST)
+From:   Jinyu Tang <tjytimi@163.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, conor.dooley@microchip.com,
+        anup@brainfault.org, alexandre.ghiti@canonical.com,
+        guoren@kernel.org, akpm@linux-foundation.org, heiko@sntech.de,
+        tongtiangen@huawei.com, sunnanyong@huawei.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        falcon@tinylab.org, tjytimi@163.com
+Subject: [PATCH v1] riscv : support update_mmu_tlb() for riscv
+Date:   Tue,  6 Sep 2022 20:19:21 +0800
+Message-Id: <20220906121921.8355-1-tjytimi@163.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906083754.2183092-1-oliver@schinagl.nl>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowABn1lLLOhdjrfx8aQ--.20577S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7JF45JFW8XFyftFyfXrWrXwb_yoWfGrc_W3
+        WxCw4vgryvqF4xua1DXF1fWr45K34rAF1DXrs2qa13tF98JanrJ3ykta15Jr4UuanIvF4I
+        kr95GryFgFy2kjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sREuWlUUUUUU==
+X-Originating-IP: [223.72.91.155]
+X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbiTgx0eFUDRgjDigAAsf
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 10:37:54AM +0200, Olliver Schinagl wrote:
-> The phylink_link_state.state property can be up or down, via 1 and 0.
-> 
-> The other link state's (speed, duplex) are defined in ethtool.h so lets
-> add defines for the link-state there as well so we can use macro's to
-> define our up/down states.
+Add macro definition to support updata_mmu_tlb() for riscv,
+this function is from commit:7df676974359 ("mm/memory.c:Update 
+local TLB if PTE entry exists").
 
-Hi Olliver
+Signed-off-by: Jinyu Tang <tjytimi@163.com>
+---
+ arch/riscv/include/asm/pgtable.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-The change itself is fine, but we don't add to the API without
-users. Please make use of these two new values somewhere, to show they
-are really useful.
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 7ec936910a96..84a791d54f95 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -418,6 +418,9 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+ 	local_flush_tlb_page(address);
+ }
+ 
++#define	__HAVE_ARCH_UPDATE_MMU_TLB
++#define update_mmu_tlb	update_mmu_cache
++
+ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+ 		unsigned long address, pmd_t *pmdp)
+ {
+-- 
+2.30.2
 
-    Andrew

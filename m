@@ -2,269 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A437F5AE6BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563AB5AE6C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiIFLiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
+        id S232133AbiIFLk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiIFLis (ORCPT
+        with ESMTP id S230111AbiIFLk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:38:48 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1402D76477;
-        Tue,  6 Sep 2022 04:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662464327; x=1694000327;
-  h=message-id:date:mime-version:subject:from:to:references:
-   in-reply-to:content-transfer-encoding;
-  bh=VEJTkGxx44JImk6B2IUdv9204swC+QuEhIl64y3Z40U=;
-  b=QW4szLyIGO6f17I+w7BhxyLNxumUIze+BAxJMRJKL7TJe1Ezc434Dgic
-   2pJvvg2vlPFag16OEumqfxpjiju/SWvvzCvzJA53hGIXf9HIwqqDZyIoE
-   smcQlYp6BCT/tNqo4sTVQ5GOT8SBOcXAXYLxjk7GRU1lZog0FN/g8JVEx
-   Y/flP2rfGy84wqPvfGOqINpYqzFrV8VgIACMDfG3eFyC9m9FOodOkovHJ
-   nQtYy69SDDupgltT21INCHFHnVI0cIfcKtcrcHhDq5xUGwPMR3VpljiPq
-   RflUzjsxL0j4eRta2QYS56LyIbfxo6qSGP/YqZh6+ys8c/7hh4KlDehbw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="295304850"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="295304850"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:38:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="644137416"
-Received: from holmesda-mobl.ger.corp.intel.com (HELO [10.213.204.21]) ([10.213.204.21])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:38:43 -0700
-Message-ID: <af01406e-2a09-c2ff-ff29-8a8c2a869d79@linux.intel.com>
-Date:   Tue, 6 Sep 2022 12:38:41 +0100
+        Tue, 6 Sep 2022 07:40:56 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D1E32EFA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:40:55 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id v4so10358771pgi.10
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 04:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date;
+        bh=zLIlU5WRN/qpc/luGxAkx8MLhJShGTdf13t85Wt12A0=;
+        b=efebxuxDyVJ+HBbIqVJTWYN02z371rCOW39ThMtiUrXxkRMJo5y/R4IW1BYsezfxSS
+         dbLo3aDSWkZ3buIgH+W3V5FWYp2pLQrP84A9O/3bqK0cBaJgprHqFt4M9rSCiuYnc8y3
+         HV4TEsnNjdQfhpOS5WDRHL8LjiNUJ+fb35F1iaP7DKi0iFru3xhCW1MrbGap/jeziMOC
+         Q27Zn4X0fkLEZZcDsKhGzrPqWiGm83H1t04PrrvGeXZi+sHtRhUPR/RCFyCav6oPRloM
+         +NWdQcmIzaUzI+ZuE7qcgXc6Pb6rS5Q8luniNlANvY84IC0P3XQjO7WTnqLBUdyUtIlJ
+         VUMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=zLIlU5WRN/qpc/luGxAkx8MLhJShGTdf13t85Wt12A0=;
+        b=eNrsWQHz47mjqgqPrHpuTUVc5l2jtNCmA6/yWQhpUxUfMak8+W0LKlUczk4s1KB6Fy
+         Faq+Wt/nCKYQKMfak12J3qpff8+qE+Be9RhD0wZNq84S4Yv+Yx62DHQFj1N7ipNXJZTm
+         KXGrqZfiD7PYVYOhL2OA7HCmm1zKUetN6vdMlREXfpthiwTUQLOtL+OR2w5OEx9Fpqoy
+         R+UhiodlVwSyIMZ66kbMGTPXY/QJ5pX3CFnJpJdZ7GGxqq0GnlvCuWU162ozCU/RGn3P
+         JSbpypYH9lZhiOEyyqUkXYWVeAsLBt2Vok7+CuzwVzANU64kpEHJ+KjkvyGuJLkI4vj5
+         g5Ew==
+X-Gm-Message-State: ACgBeo1h5p9oPoXkikAydEeP0QGRmGzOtlO9udo5Xl79twVDIgUQRY8K
+        Xq2KzmujRDxsxmo0i8TeUK0=
+X-Google-Smtp-Source: AA6agR7+UBOMZ/AkV+sOu5uGrhLmnFa2ga5eqFjqkr6N/KL6vXSIVV7mrEpM7cGsezMaGjvvdFNcCQ==
+X-Received: by 2002:a63:1624:0:b0:430:c45:eb7d with SMTP id w36-20020a631624000000b004300c45eb7dmr27857067pgl.42.1662464454999;
+        Tue, 06 Sep 2022 04:40:54 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 6-20020a620606000000b0053e3a6f7da4sm1197954pfg.12.2022.09.06.04.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 04:40:53 -0700 (PDT)
+Message-ID: <631731c5.620a0220.8387b.1974@mx.google.com>
+X-Google-Original-Message-ID: <20220906114051.GA337755@cgel.zte@gmail.com>
+Date:   Tue, 6 Sep 2022 11:40:51 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     akpm@linux-foundation.org, tj@kernel.org, axboe@kernel.dk,
+        vdavydov.dev@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, cgel <cgel@zte.com.cn>
+Subject: Re: [RFC PATCH 1/2] psi: introduce memory.pressure.stat
+References: <20220801004205.1593100-1-ran.xiaokai@zte.com.cn>
+ <Yup+W/EFzkfSqRnW@cmpxchg.org>
+ <20220817025945.GA84631@cgel.zte@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 4/4] dma-buf: Check status of enable-signaling bit on
- debug
-Content-Language: en-US
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220905163502.4032-1-Arvind.Yadav@amd.com>
- <20220905163502.4032-5-Arvind.Yadav@amd.com>
- <f2e1367f-b056-b2af-365c-8ae4ef03f008@amd.com>
- <ec41b299-4280-d8e4-7ab0-23b5ea6ad401@linux.intel.com>
- <de799b93-1b55-c420-61d9-ad8fa926c7d2@amd.com>
- <691e636f-07d6-f4d3-6d83-29a3834ac1a2@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <691e636f-07d6-f4d3-6d83-29a3834ac1a2@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817025945.GA84631@cgel.zte@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 17, 2022 at 02:59:48AM +0000, CGEL wrote:
+> On Wed, Aug 03, 2022 at 09:55:39AM -0400, Johannes Weiner wrote:
+> > On Mon, Aug 01, 2022 at 12:42:04AM +0000, cgel.zte@gmail.com wrote:
+> > 
+> > This doubles the psi cache footprint on every context switch, wakeup,
+> > sleep, etc. in the scheduler. You're also adding more branches to
+> > those same paths. It'll measurably affect everybody who is using psi.
+> > 
+> > Yet, in the years of using psi in production myself, I've never felt
+> > the need for what this patch provides. There are event counters for
+> > everything that contributes to pressure, and it's never been hard to
+> > rootcause spikes. There are also things like bpftrace that let you
+> > identify who is stalling for how long in order to do one-off tuning
+> > and systems introspection.
+> > 
+> We think this patch is not for rootcause spikes, it's for automatic optimize
+> memory besides oomd, especially for sysctl adjustment. For example if we see
+> much pressure of direct reclaim the automatic optimize program might turn up
+> watermark_scale_factor.
+> The base idea is that this patch gives user a brief UI to know what kind of
+> memory pressure the system is suffering, and to optimize the system in a fine
+> grain. It could provide data for user to adjust watermark_boost_factor,
+> extfrag_threshold, compaction_proactiveness,transparent_hugepage/defrag,
+> swappiness, vfs_cache_pressure, madvise(), which may not easy for to do
+> before.
+> 
+> It's not easy for automatic optimize program to use tools likes bpftrace or
+> ftrace to do this.
+> 
+> While we may use CONFIG_PSI_XX or bootparam to turn on/off this patch to avoid
+> additional footprint for user who not need this.
 
-On 06/09/2022 12:21, Tvrtko Ursulin wrote:
-> 
-> On 06/09/2022 11:43, Christian König wrote:
->> Am 06.09.22 um 12:20 schrieb Tvrtko Ursulin:
->>>
->>> On 06/09/2022 09:39, Christian König wrote:
->>>> Am 05.09.22 um 18:35 schrieb Arvind Yadav:
->>>>> The core DMA-buf framework needs to enable signaling
->>>>> before the fence is signaled. The core DMA-buf framework
->>>>> can forget to enable signaling before the fence is signaled.
->>>>
->>>> This sentence is a bit confusing. I'm not a native speaker of 
->>>> English either, but I suggest something like:
->>>>
->>>> "Fence signaling must be enable to make sure that the 
->>>> dma_fence_is_signaled() function ever returns true."
->>>>
->>>>> To avoid this scenario on the debug kernel, check the
->>>>> DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT status bit before checking
->>>>> the signaling bit status to confirm that enable_signaling
->>>>> is enabled.
->>>>
->>>> This describes the implementation, but we should rather describe the 
->>>> background of the change. The implementation should be obvious. 
->>>> Something like this maybe:
->>>>
->>>> "
->>>> Since drivers and implementations sometimes mess this up enforce 
->>>> correct behavior when DEBUG_WW_MUTEX_SLOWPATH is used during debugging.
->>>>
->>>> This should make any implementations bugs resulting in not signaled 
->>>> fences much more obvious.
->>>> "
->>>
->>> I think I follow the idea but am not sure coupling (well "coupling".. 
->>> not really, but cross-contaminating in a way) dma-fence.c with a 
->>> foreign and effectively unrelated concept of a ww mutex is the best way.
->>>
->>> Instead, how about a dma-buf specific debug kconfig option?
->>
->> Yeah, I was thinking about that as well.
-> 
-> Cool, lets see about the specifics below and then decide.
-> 
->> The slowpath config option was just at hand because when you want to 
->> test the slowpath you want to test this here as well.
->>
->>>
->>> Condition would then be, according to my understanding of the rules 
->>> and expectations, along the lines of:
->>>
->>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>> index 775cdc0b4f24..147a9df2c9d0 100644
->>> --- a/include/linux/dma-fence.h
->>> +++ b/include/linux/dma-fence.h
->>> @@ -428,6 +428,17 @@ dma_fence_is_signaled_locked(struct dma_fence 
->>> *fence)
->>>  static inline bool
->>>  dma_fence_is_signaled(struct dma_fence *fence)
->>>  {
->>> +#ifdef CONFIG_DEBUG_DMAFENCE
->>> +       /*
->>> +        * Implementations not providing the enable_signaling 
->>> callback are
->>> +        * required to always have signaling enabled or fences are not
->>> +        * guaranteed to ever signal.
->>> +        */
->>
->> Well that comment is a bit misleading. The intention of the extra 
->> check is to find bugs in the frontend and not the backend.
-> 
-> By backend you mean drivers/dma-buf/dma-fence.c and by front end driver 
-> specific implementations? Or simply users for dma-fence?
-> 
-> Could be that I got confused.. I was reading these two:
-> 
-> 
->       * This callback is optional. If this callback is not present, then 
-> the
->       * driver must always have signaling enabled.
->       */
->      bool (*enable_signaling)(struct dma_fence *fence);
-> 
-> And dma_fence_is_signaled:
-> 
->   * Returns true if the fence was already signaled, false if not. Since 
-> this
->   * function doesn't enable signaling, it is not guaranteed to ever return
->   * true if dma_fence_add_callback(), dma_fence_wait() or
->   * dma_fence_enable_sw_signaling() haven't been called before.
-> 
-> Right, I think I did get confused, apologies. What I was thinking was 
-> probably two separate conditions:
-> 
->   static inline bool
->   dma_fence_is_signaled(struct dma_fence *fence)
->   {
-> +#ifdef CONFIG_DEBUG_DMAFENCE
-> +       if (WARN_ON_ONCE(!fence->ops->enable_signaling &&
-> +                        !test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, 
-> &fence->flags)))
-> +               return false;
-> +
-> +       if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
-> +               return false;
-> +#endif
-> +
-
-Or simpler OFC:
-
-	if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags)) {
-		WARN_ON_ONCE(!fence->ops->enable_signaling);
-		return false;
-	}
-
-You could also run this core change past i915 CI to see if it catches anything. Just send to our trybot and see what happens? With the debug option enabled of course. Hope it won't be painful.
-
-Regards,
-
-Tvrtko
-
->          if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->                  return true;
-> 
-> Not sure "is signaled" is the best place for the first one or that it 
-> should definitely be added.
-> 
-> Regards,
-> 
-> Tvrtko
-> 
->> In other words somewhere in the drm_syncobj code we have a 
->> dma_fence_is_signaled() call without matching 
->> dma_fence_enable_sw_signaling().
->>
->> Regards,
->> Christian.
->>
->>> + if (!fence->ops->enable_signaling &&
->>> +           !test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->>> +               return false;
->>> +#endif
->>> +
->>>         if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>>                 return true;
->>>
->>> Thoughts?
->>>
->>> Regards,
->>>
->>> Tvrtko
->>>
->>>>
->>>>>
->>>>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->>>>
->>>> With the improved commit message this patch is Reviewed-by: 
->>>> Christian König <christian.koenig@amd.com>
->>>>
->>>> Regards,
->>>> Christian.
->>>>
->>>>> ---
->>>>>
->>>>> Changes in v1 :
->>>>> 1- Addressing Christian's comment to replace
->>>>> CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS.
->>>>> 2- As per Christian's comment moving this patch at last so
->>>>> The version of this patch is also changed and previously
->>>>> it was [PATCH 1/4]
->>>>>
->>>>>
->>>>> ---
->>>>>   include/linux/dma-fence.h | 5 +++++
->>>>>   1 file changed, 5 insertions(+)
->>>>>
->>>>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>>>> index 775cdc0b4f24..ba1ddc14c5d4 100644
->>>>> --- a/include/linux/dma-fence.h
->>>>> +++ b/include/linux/dma-fence.h
->>>>> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence 
->>>>> *fence)
->>>>>   static inline bool
->>>>>   dma_fence_is_signaled(struct dma_fence *fence)
->>>>>   {
->>>>> +#ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH
->>>>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->>>>> +        return false;
->>>>> +#endif
->>>>> +
->>>>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>>>>           return true;
->>>>
->>
+Hi
+   Do you think this is praciseable?

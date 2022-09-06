@@ -2,168 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437265AEBA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDD65AECF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241358AbiIFOEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
+        id S240776AbiIFN6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240950AbiIFOBd (ORCPT
+        with ESMTP id S240421AbiIFNyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:01:33 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8D01057F;
-        Tue,  6 Sep 2022 06:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1662471339; bh=CGyEzQ7Ohr5A/cWCuHJ4L2zyjQiyb+aYxH/EYO9OTGU=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=PvaKeuuyqsDS6jTFvvDc+oQyBZ900VRvVuiY9zEzWgmQT2bghS1tGDnZtAfNrqt7m
-         4RmcEsomUuSZM/1n/E7qULITo1PFJMgVP95voEjg4QO00/noepJqEaKyKXghW8eI2O
-         K2NtwwAVGZ8J/TnTs+7PaCHZGbTUqfeR2mGac+CI=
-Date:   Tue, 6 Sep 2022 15:35:39 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: add BT/wifi nodes to Pinephone Pro
-Message-ID: <20220906133539.6ghjlzbs2ozgsa7v@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20220906124713.1683587-1-tom@tom-fitzhenry.me.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220906124713.1683587-1-tom@tom-fitzhenry.me.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 09:54:44 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59A980F53;
+        Tue,  6 Sep 2022 06:41:33 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-127a0d798bdso7735548fac.4;
+        Tue, 06 Sep 2022 06:41:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=U7KMCwyPUAeyOkS8LvXUFPy4Xy4KgDM/4fM2ZNJCPo4=;
+        b=bfki+yWcXz98D9qBYIwI1d8sJlDKhefVdfDQcuXhOwEYm0xuBoxYoVIp1S1kuCEn//
+         5V5bGvQ82RMexka8VMwwF3hObbdwU3Dps5FNyZWQJ8oP+OPdlTibi8jfBm8PXYfeGc6Q
+         +E64dHA62bADt4sZ7nxdlxYmt1kxckDrIsZQi8nZE8gkm0lTTmXGcqL5RHjCKVYcy7bm
+         tuiiwNHKNJPgJzBfHFnZkIPZZi/VyxBddp9CIoBbsLqcbvvXzoZupy0WS2vPW9SZxWxO
+         UrEQ7bxlYEVDA2TUKr+3ixqBq9PabTqfHpRE56v0jYBoL22ta1V3JKxopXNqGsxeaxQU
+         trrg==
+X-Gm-Message-State: ACgBeo16+Ep15vr9UPjCELRdAgoNVQk57oDEcmCrbGb9u5I9m3lsHel8
+        uWLtW7GUmhXFsz+eDVhdHw==
+X-Google-Smtp-Source: AA6agR4VFYt4Q6uqaviz/cWYZjZnXg/9Uo8qUBasuYk+y+0PkxJ2esvoAyfunvvkKBZRtHtdKfWDnQ==
+X-Received: by 2002:a05:6870:831d:b0:10d:a96f:8bc with SMTP id p29-20020a056870831d00b0010da96f08bcmr11029950oae.143.1662471647776;
+        Tue, 06 Sep 2022 06:40:47 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y2-20020a056808060200b003450abf4404sm5315654oih.21.2022.09.06.06.40.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 06:40:47 -0700 (PDT)
+Received: (nullmailer pid 360956 invoked by uid 1000);
+        Tue, 06 Sep 2022 13:40:45 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Martyn Welch <martyn.welch@collabora.co.uk>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20220906082820.4030401-2-martyn.welch@collabora.co.uk>
+References: <20220906082820.4030401-1-martyn.welch@collabora.co.uk> <20220906082820.4030401-2-martyn.welch@collabora.co.uk>
+Subject: Re: [PATCH v2 2/5] dt-bindings: gpio: pca95xx: add entry for pcal6534 and PI4IOE5V6534Q
+Date:   Tue, 06 Sep 2022 08:40:45 -0500
+Message-Id: <1662471645.313702.360955.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tom,
-
-On Tue, Sep 06, 2022 at 10:47:13PM +1000, Tom Fitzhenry wrote:
-> Pinephone Pro includes a AzureWave AW-CM256SM wifi (sdio0) and
-> bt (uart0) combo module, which is based on Cypress
-> CYP43455 (BCM43455).
+On Tue, 06 Sep 2022 09:28:16 +0100, Martyn Welch wrote:
+> From: Martyn Welch <martyn.welch@collabora.com>
 > 
-> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+> The NXP PCAL6534 is a 34-bit I2C I/O expander similar to the PCAL6524. The
+> Diodes PI4IOE5V6534Q is a functionally identical chip provided by Diodes
+> Inc.
+> 
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
 > ---
->  .../dts/rockchip/rk3399-pinephone-pro.dts     | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> index 2e058c3150256..096238126e4c1 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> @@ -43,6 +43,20 @@ key-power {
->  		};
->  	};
->  
-> +	/* Power sequence for SDIO WiFi module */
-> +	sdio_pwrseq: sdio-pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +		clocks = <&rk818 1>;
-> +		clock-names = "ext_clock";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wifi_enable_h_pin>;
-> +		post-power-on-delay-ms = <100>;
-> +		power-off-delay-us = <500000>;
+> Changes in v2:
+>  - Enumerate pi4ioe5v6534q as requiring pcal6534 fallback
+> 
+>  .../bindings/gpio/gpio-pca95xx.yaml           | 98 ++++++++++---------
+>  1 file changed, 52 insertions(+), 46 deletions(-)
+> 
 
-Do we really need such long delays? Almost no boards in rockchip/ use such
-delays at all, and if they do they don't usually use power off delay.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +		/* WL_REG_ON on module */
-> +		reset-gpios = <&gpio0 RK_PB2 GPIO_ACTIVE_LOW>;
-> +	};
-> +
->  	vcc_sys: vcc-sys-regulator {
->  		compatible = "regulator-fixed";
->  		regulator-name = "vcc_sys";
-> @@ -360,11 +374,31 @@ vsel2_pin: vsel2-pin {
->  		};
->  	};
->  
-> +	sdio-pwrseq {
-> +		wifi_enable_h_pin: wifi-enable-h-pin {
-> +			rockchip,pins = <0 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +	};
-> +
->  	sound {
->  		vcc1v8_codec_en: vcc1v8-codec-en {
->  			rockchip,pins = <3 RK_PA4 RK_FUNC_GPIO &pcfg_pull_down>;
->  		};
->  	};
-> +
-> +	wireless-bluetooth {
-> +		bt_wake_pin: bt-wake-pin {
-> +			rockchip,pins = <2 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +
-> +		bt_host_wake_pin: bt-host-wake-pin {
-> +			rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +
-> +		bt_reset_pin: bt-reset-pin {
-> +			rockchip,pins = <0 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
-> +		};
-> +	};
->  };
->  
->  &sdmmc {
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml:20:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml:23:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml:24:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
 
-see below
+dtschema/dtc warnings/errors:
 
-> @@ -380,6 +414,20 @@ &sdmmc {
->  	status = "okay";
->  };
->  
-> +&sdio0 {
+doc reference errors (make refcheckdocs):
 
-sd'i'o0 comes before 'm' in the alphabet.
+See https://patchwork.ozlabs.org/patch/
 
-> +	bus-width = <4>;
-> +	cap-sd-highspeed;
-> +	cap-sdio-irq;
-> +	disable-wp;
-> +	keep-power-in-suspend;
-> +	mmc-pwrseq = <&sdio_pwrseq>;
-> +	non-removable;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&sdio0_bus4 &sdio0_cmd &sdio0_clk>;
-> +	sd-uhs-sdr104;
-> +	status = "okay";
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-It might also be good to add the wifi node, and hookup the interrupt line and
-pinctrls, so that WoW works, while you're at it.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-See eg. https://elixir.bootlin.com/linux/v5.19.7/source/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4b-plus.dts#L30
+pip3 install dtschema --upgrade
 
-Looks like WIFI_HOST_WAKE_L is hooked to GPIO4_D0/PCIE_CLKREQnB_u according
-to the schematic. Let's hope GPIO4_D will consider 1.8V as high, because SoC
-GPIO4_D is in 3.0V domain and VDDIO of wifi chip is 1.8V.
+Please check and re-submit.
 
-Other than that,
-
-Reviewed-by: Ondřej Jirman <megi@xff.cz>
-
-Thank you and kind regards,
-	o.

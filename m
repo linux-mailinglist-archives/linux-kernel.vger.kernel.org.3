@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DAE5AF272
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203585AF27A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbiIFR2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S233954AbiIFR2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238408AbiIFR14 (ORCPT
+        with ESMTP id S234629AbiIFR2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:27:56 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D791EE2A;
-        Tue,  6 Sep 2022 10:19:23 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id q15so12023000pfn.11;
-        Tue, 06 Sep 2022 10:19:23 -0700 (PDT)
+        Tue, 6 Sep 2022 13:28:03 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6F31F2D2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:19:47 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id q81so9460957iod.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:19:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=DLlnc6RmTg0BKq5WkTFW6Fs5pUb+s+A4h9B4fzKjhrI=;
-        b=csTIT6mI2KzzjqaY8cqY1Odnetkmo9YoZgm1ta/V1CfQXFGHrNl5ID11UWr9EwdqWT
-         ybdIbatthK94dyrnSRNDRzDCley5Yk5BpAeFv0jlVOckHWFPIroZTDp8BT8QYEWrvkct
-         BA4eS1H6rJQxAfoCXt7ExiwOLg+VBwXu131zL1best+97Y5E8nYjpo+rR0a96WS+Wzv7
-         MjQLtS57kFrjmK6AclQeajykuyehhqAxxl6b2xCpvmumWgksYXgKSp//v3sHRcowshtU
-         cRIDx7lZIZpbAiQjffFScK2mWcqYWBLsFSVHgLV9dxsr6wqBZCCZBcPK/KMRw6ofIq1L
-         5hEw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=gzyOHmyEwcUpmMysME9KHn4+PV23NPixwgHPKgsB/oY=;
+        b=MvxONyw1ebqpEt5Lt7LRNWus5vuNJaskfmaB4vSkZDiH39G6HCVF5FWsakBlve0GG+
+         7pGoFFqC4A4NT2wFdXyPIcDcsj3y1iyE+fpsytjN6fJRq01mA5uWPTUXqZTGvIvAW4NH
+         Z/rKAoL9pd+0LfqZdeBKfJpzkODdCCBphFy2x7bX98L6cT/iJ+GchW8Qwke2cGOe0Q2p
+         jfJEnZcrTIUTUPFZ/2xFcunIxnsmJyGIbHRhoBLDPU7Gu2oaohJaxV7fB8PtWoSGgtEI
+         rR42PeGW+4pSqnNLxCPaz8Aybcqcb1D45SPHT1evh49FVAkNziqESlFQ3Gcu3QcYE7js
+         PHSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=DLlnc6RmTg0BKq5WkTFW6Fs5pUb+s+A4h9B4fzKjhrI=;
-        b=K+qVBmSeBKdclKp7xCaE7r7J8Qa1BCNLmu2b3VS+lAZoC+83N475YPiL5YrJBqvcSk
-         9jMP5cbXgf8FGHKrhNMJO/uZzagJRDxI9/M+z6VHlxZD+VcS10rQwFIgoPz4N9EJ2ukZ
-         drR8PyYZqmZMNaSbtpLZizK9YhIUAoXzU87FELe2aQpQ1jU5VJ5ak5MXIcXjaqf580y0
-         eRL37oses8f9Ysoi3mXpgs+6surs4RVc8wi5CpRJg1Z7+kIh/HHgwlMfleVxW4nV/0jj
-         k0Lt2ItpbkqrltDplh+6ZHbT3WK7alxgho65/5XEOAK/MsrhM6Aj/Wjt765XJ317y25B
-         u6mg==
-X-Gm-Message-State: ACgBeo2zk29F/NlPSrUXp10P/HMzR6CJqKGlhyMijsL1z9tPWAcknDkW
-        EfJoJsQLLuB76/WhHkH7VpsCJsha8h8=
-X-Google-Smtp-Source: AA6agR6DUk0XnuOm5ZGEH42iJ8VfksclmIYyolcIWWwZnbBPExrojB63b3kDCN+23GnniT1+npooqA==
-X-Received: by 2002:aa7:8b52:0:b0:537:c6c7:3ef4 with SMTP id i18-20020aa78b52000000b00537c6c73ef4mr54402894pfd.48.1662484763130;
-        Tue, 06 Sep 2022 10:19:23 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id v28-20020aa799dc000000b0053651308a1csm10539462pfi.195.2022.09.06.10.19.22
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=gzyOHmyEwcUpmMysME9KHn4+PV23NPixwgHPKgsB/oY=;
+        b=zx7z7nzYROw/hR4zCQLworEcYhp5BqJga52OjLuxa5XLcXtHyTzrcWTWzu95lirQ+t
+         XlVzWkXLnZlK2kPiqsfjS6BGTVlNgUnqpm/2ji07ESTrhRWSd6Qd57dNMOXEJIpq7c+k
+         cmS2/C6kO9B/gZCDEtnzBCRew7h04xMOa0j0TfZjk3QZ0Qkn3fGJkUbtwGblrbQHGE8Y
+         SHVlR5COywYDI7T7MT1uvRrDSS2i+8NPD0EuRFkLDfv2jDmXAZlk/VxLOKv3yw9s2WsA
+         Gtt8PmA4K+aZHRTbfcRnHKSS4BsN+SjFPrhj9aGTp4AxB6EqgKlz1op5RiQksxRc0lVv
+         pV8g==
+X-Gm-Message-State: ACgBeo2nF/neQ/FzY0C9ZxWEx6O43hIHvb84Z9SpL3ZjAGMSYHBKw1i5
+        4yzeBvPS0OjQ25rTSIhe6K9wkw==
+X-Google-Smtp-Source: AA6agR7Fs99/hGR+0innvdYwh8CnCaj0R559sZtpqkxnyZvq/AZfFVe2BhuEvJFHkgFMCm8iM4CTiQ==
+X-Received: by 2002:a6b:7d05:0:b0:68b:7243:63ff with SMTP id c5-20020a6b7d05000000b0068b724363ffmr19789524ioq.191.1662484785991;
+        Tue, 06 Sep 2022 10:19:45 -0700 (PDT)
+Received: from presto.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056e020c2a00b002eb3f5fc4easm5292204ilg.27.2022.09.06.10.19.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 10:19:22 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 6 Sep 2022 07:19:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Phishing Risk] [External] Re: [PATCH] cgroup/cpuset: Add a new
- isolated mems.policy type.
-Message-ID: <YxeBGeOaQxvlPLzo@slm.duckdns.org>
-References: <20220902063303.1057-1-hezhongkun.hzk@bytedance.com>
- <YxT/liaotbiOod51@slm.duckdns.org>
- <c05bdeac-b354-0ac7-3233-27f8e5cbb38a@bytedance.com>
+        Tue, 06 Sep 2022 10:19:45 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/6] net: ipa: don't use lists for transaction state
+Date:   Tue,  6 Sep 2022 12:19:37 -0500
+Message-Id: <20220906171942.957704-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c05bdeac-b354-0ac7-3233-27f8e5cbb38a@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This is the last series of patches to convert the IPA code so
+integer IDs are used rather than lists to track the state of
+transactions.
 
-On Mon, Sep 05, 2022 at 06:30:38PM +0800, Zhongkun He wrote:
-> We usually use numactl to set the memory policy, but it cannot be changed
-> dynamically. In addition, the mempolicy of cpuset can provide a more
-> convenient interface for management and control panel.
+A first series of patches added ID fields to track the state of
+transactions:
+  https://lore.kernel.org/netdev/20220831224017.377745-1-elder@linaro.org
+The second series started transitioning code to use these IDs rather
+than lists to manage state:
+  https://lore.kernel.org/netdev/20220902210218.745873-1-elder@linaro.org
 
-But you can write a better tool easily in userspace to do whatever you wanna
-do, right? If you're worried about racing against forks, you can freeze the
-cgroup, iterate all pids applying whatever new policy and then unfreeze. We
-can probably improve the freezer interface so that multiple users don't
-conflict with each other but that shouldn't be too difficult to do and is
-gonna be useful generically.
+This final series finishes the transition, to always use IDs instead
+of the lists to manage transaction state.  As a result, the list
+fields, links, and a spinlock to protect updates are no longer
+needed, so they are removed.  This permits a few other improvements
+to be implemented.
 
-I don't see much point in adding something which can be almost trivially
-implemented in userspace as a built-in kernel feature.
+					-Alex
 
-> Sorry,I don't quite understand the meaning of "don't enforce anything
-> resource related". Does it mean mempolicy, such as "prefer:2" must specify
-> node? Or "cpuset.mems.policy" need to specify a default value?
-> (cpuset.mems.policy does not require a default value.)
+Alex Elder (5):
+  net: ipa: always use transaction IDs instead of lists
+  net: ipa: kill the allocated transaction list
+  net: ipa: kill all other transaction lists
+  net: ipa: update channel in gsi_channel_trans_complete()
+  net: ipa: don't have gsi_channel_update() return a value
 
-In that there's no real resource being distributed hierarchically like cpu
-cycles or memory capacities. All it's doing is changing attributes for a
-group of processes, which can be done from userspace all the same.
-
-Thanks.
+ drivers/net/ipa/gsi.c         |  11 +--
+ drivers/net/ipa/gsi.h         |   7 --
+ drivers/net/ipa/gsi_private.h |  22 ++----
+ drivers/net/ipa/gsi_trans.c   | 136 ++++++----------------------------
+ drivers/net/ipa/gsi_trans.h   |   3 -
+ 5 files changed, 35 insertions(+), 144 deletions(-)
 
 -- 
-tejun
+2.34.1
+

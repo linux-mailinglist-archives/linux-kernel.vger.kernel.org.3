@@ -2,45 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9075AEF76
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809195AEF7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238379AbiIFPyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S238125AbiIFPzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233915AbiIFPyL (ORCPT
+        with ESMTP id S234387AbiIFPyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:54:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7C92DA9A;
-        Tue,  6 Sep 2022 08:11:39 -0700 (PDT)
+        Tue, 6 Sep 2022 11:54:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C23E8B98E;
+        Tue,  6 Sep 2022 08:12:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79285B8191A;
-        Tue,  6 Sep 2022 15:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 443B5C433D7;
-        Tue,  6 Sep 2022 15:11:36 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 11:12:14 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jianlin Lv <iecedge@gmail.com>
-Cc:     corbet@lwn.net, mingo@redhat.com, jianlv@ebay.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH v2] tracing/kprobes: Add method to display private
- kprobes in tracefs
-Message-ID: <20220906111214.0dd113cd@gandalf.local.home>
-In-Reply-To: <20220725062334.1778-1-iecedge@gmail.com>
-References: <20220725062334.1778-1-iecedge@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6FB8B81919;
+        Tue,  6 Sep 2022 15:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1405CC433C1;
+        Tue,  6 Sep 2022 15:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662477155;
+        bh=bD0yKhphSmBVVLUyMPYKB5NUPKImxamaOv37wNGzfVM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R/X1/ApvsqezV4eN1BIndC2/MAwkQm3YupuJBYQmD8izTSnTp/lrI35aWbBr4zeVc
+         RrxtZze9J3pTr5iwZMJWvEqU/rnzOxj7jVk2RnBIEPpBmvqamYQx7zcu17ut67cWKi
+         dRkfKWk30sRB8xj2AMRr3lzlVMbw9RHW09kJ9OnBYyEv7uLfy5xocv6HsKALoGXySt
+         ejOOkisZ96Ucfu1HHjJyLbB2sFPZm+NZfhiDksAp2OHDMd0cdYkr/6ne1hIpcUHcF0
+         Oge3E055C3Eev1I0kGxKPo51kJb7A/FLEOfwa+U13HiT1y0+KWMg6nK0jsTahy6JDx
+         rK3LGPYULPHmw==
+Date:   Tue, 6 Sep 2022 16:12:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+Cc:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, jirislaby@kernel.org, admin@hifiphile.com,
+        kavyasree.kotagiri@microchip.com, tudor.ambarus@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 01/13] spi: dt-bindings: atmel,at91rm9200-spi: Add DMA
+ related properties
+Message-ID: <YxdjW2HXcneKvP3c@sirena.org.uk>
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-2-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RiykofuyQSrEwF40"
+Content-Disposition: inline
+In-Reply-To: <20220906135511.144725-2-sergiu.moga@microchip.com>
+X-Cookie: divorce, n:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,211 +67,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-[ Adding Masami and Tom ]
+--RiykofuyQSrEwF40
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 25 Jul 2022 06:23:34 +0000
-Jianlin Lv <iecedge@gmail.com> wrote:
+On Tue, Sep 06, 2022 at 04:55:00PM +0300, Sergiu Moga wrote:
+> The DT nodes of the SPI IP's may contain DMA related properties so
+> make sure that the binding is able to properly validate those as
+> well by making it aware of these optional properties.
 
-> The private kprobes are not added to the global list dyn_event_list,
-> so there is a missing interface to show probe hit and probe miss.
-> This patch adds a profiling interface to check the number of hits or
-> misses for private kprobes.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Masami, what do you think of this patch?
+though it looks like perhaps this could just go separately?
 
--- Steve
+--RiykofuyQSrEwF40
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Signed-off-by: Jianlin Lv <iecedge@gmail.com>
-> ---
-> v2: update commit message
-> ---
->  Documentation/trace/kprobetrace.rst |  6 +++-
->  kernel/trace/trace_dynevent.c       | 20 +++++++++++
->  kernel/trace/trace_dynevent.h       | 37 ++++++++++++++++++++
->  kernel/trace/trace_kprobe.c         | 54 +++++++++++++++++++++++++++++
->  4 files changed, 116 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-> index b175d88f31eb..8815d64dd8a6 100644
-> --- a/Documentation/trace/kprobetrace.rst
-> +++ b/Documentation/trace/kprobetrace.rst
-> @@ -146,7 +146,11 @@ trigger:
->  Event Profiling
->  ---------------
->  You can check the total number of probe hits and probe miss-hits via
-> -/sys/kernel/debug/tracing/kprobe_profile.
-> +/sys/kernel/debug/tracing/kprobe_profile or
-> +/sys/kernel/debug/tracing/kprobe_local_profile.
-> +All kprobe events created by kprobe_events will be added to the global
-> +list, you can get their profiling via kprobe_profile; kprobe_local_profile
-> +shows profiling for private kprobe events created by perf_kprobe pmu.
->  The first column is event name, the second is the number of probe hits,
->  the third is the number of probe miss-hits.
->  
-> diff --git a/kernel/trace/trace_dynevent.c b/kernel/trace/trace_dynevent.c
-> index 076b447a1b88..70ec99cd9c53 100644
-> --- a/kernel/trace/trace_dynevent.c
-> +++ b/kernel/trace/trace_dynevent.c
-> @@ -181,6 +181,26 @@ static const struct seq_operations dyn_event_seq_op = {
->  	.show	= dyn_event_seq_show
->  };
->  
-> +#ifdef CONFIG_KPROBE_EVENTS
-> +LIST_HEAD(local_event_list);
-> +
-> +void *local_event_seq_start(struct seq_file *m, loff_t *pos)
-> +{
-> +	mutex_lock(&event_mutex);
-> +	return seq_list_start(&local_event_list, *pos);
-> +}
-> +
-> +void *local_event_seq_next(struct seq_file *m, void *v, loff_t *pos)
-> +{
-> +	return seq_list_next(v, &local_event_list, pos);
-> +}
-> +
-> +void local_event_seq_stop(struct seq_file *m, void *v)
-> +{
-> +	mutex_unlock(&event_mutex);
-> +}
-> +#endif /* CONFIG_KPROBE_EVENTS */
-> +
->  /*
->   * dyn_events_release_all - Release all specific events
->   * @type:	the dyn_event_operations * which filters releasing events
-> diff --git a/kernel/trace/trace_dynevent.h b/kernel/trace/trace_dynevent.h
-> index 936477a111d3..e30193470295 100644
-> --- a/kernel/trace/trace_dynevent.h
-> +++ b/kernel/trace/trace_dynevent.h
-> @@ -101,6 +101,43 @@ void dyn_event_seq_stop(struct seq_file *m, void *v);
->  int dyn_events_release_all(struct dyn_event_operations *type);
->  int dyn_event_release(const char *raw_command, struct dyn_event_operations *type);
->  
-> +#ifdef CONFIG_KPROBE_EVENTS
-> +extern struct list_head local_event_list;
-> +
-> +static inline
-> +int local_event_init(struct dyn_event *ev, struct dyn_event_operations *ops)
-> +{
-> +	if (!ev || !ops)
-> +		return -EINVAL;
-> +
-> +	INIT_LIST_HEAD(&ev->list);
-> +	ev->ops = ops;
-> +	return 0;
-> +}
-> +
-> +static inline int local_event_add(struct dyn_event *ev)
-> +{
-> +	lockdep_assert_held(&event_mutex);
-> +
-> +	if (!ev || !ev->ops)
-> +		return -EINVAL;
-> +
-> +	list_add_tail(&ev->list, &local_event_list);
-> +	return 0;
-> +}
-> +
-> +static inline void local_event_remove(struct dyn_event *ev)
-> +{
-> +	lockdep_assert_held(&event_mutex);
-> +	list_del_init(&ev->list);
-> +}
-> +
-> +void *local_event_seq_start(struct seq_file *m, loff_t *pos);
-> +void *local_event_seq_next(struct seq_file *m, void *v, loff_t *pos);
-> +void local_event_seq_stop(struct seq_file *m, void *v);
-> +
-> +#endif /* CONFIG_KPROBE_EVENTS */
-> +
->  /*
->   * for_each_dyn_event	-	iterate over the dyn_event list
->   * @pos:	the struct dyn_event * to use as a loop cursor
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index a245ea673715..76f500b17b46 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1213,6 +1213,52 @@ static const struct file_operations kprobe_profile_ops = {
->  	.release        = seq_release,
->  };
->  
-> +#ifdef CONFIG_KPROBE_EVENTS
-> +/* kprobe Local profile  */
-> +static int local_probes_profile_seq_show(struct seq_file *m, void *v)
-> +{
-> +	struct dyn_event *ev = v;
-> +	struct trace_kprobe *tk;
-> +
-> +	if (!is_trace_kprobe(ev))
-> +		return 0;
-> +
-> +	tk = to_trace_kprobe(ev);
-> +	seq_printf(m, "  %-44s %15lu %15lu\n",
-> +		trace_probe_name(&tk->tp),
-> +		trace_kprobe_nhit(tk),
-> +		tk->rp.kp.nmissed);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct seq_operations local_profile_seq_op = {
-> +	.start  = local_event_seq_start,
-> +	.next   = local_event_seq_next,
-> +	.stop   = local_event_seq_stop,
-> +	.show   = local_probes_profile_seq_show
-> +};
-> +
-> +static int local_profile_open(struct inode *inode, struct file *file)
-> +{
-> +	int ret;
-> +
-> +	ret = security_locked_down(LOCKDOWN_TRACEFS);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return seq_open(file, &local_profile_seq_op);
-> +}
-> +
-> +static const struct file_operations kprobe_local_profile_ops = {
-> +	.owner          = THIS_MODULE,
-> +	.open           = local_profile_open,
-> +	.read           = seq_read,
-> +	.llseek         = seq_lseek,
-> +	.release        = seq_release,
-> +};
-> +#endif /* CONFIG_KPROBE_EVENTS */
-> +
->  /* Kprobe specific fetch functions */
->  
->  /* Return the length of string -- including null terminal byte */
-> @@ -1830,6 +1876,7 @@ create_local_trace_kprobe(char *func, void *addr, unsigned long offs,
->  	if (ret < 0)
->  		goto error;
->  
-> +	local_event_add(&tk->devent);
->  	return trace_probe_event_call(&tk->tp);
->  error:
->  	free_trace_kprobe(tk);
-> @@ -1849,6 +1896,7 @@ void destroy_local_trace_kprobe(struct trace_event_call *event_call)
->  		return;
->  	}
->  
-> +	local_event_remove(&tk->devent);
->  	__unregister_trace_kprobe(tk);
->  
->  	free_trace_kprobe(tk);
-> @@ -1929,6 +1977,12 @@ static __init int init_kprobe_trace(void)
->  	trace_create_file("kprobe_profile", TRACE_MODE_READ,
->  			  NULL, NULL, &kprobe_profile_ops);
->  
-> +#ifdef CONFIG_KPROBE_EVENTS
-> +	/* kprobe Local profile */
-> +	tracefs_create_file("kprobe_local_profile", TRACE_MODE_READ,
-> +			  NULL, NULL, &kprobe_local_profile_ops);
-> +#endif /* CONFIG_KPROBE_EVENTS */
-> +
->  	setup_boot_kprobe_events();
->  
->  	return 0;
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMXY1oACgkQJNaLcl1U
+h9CFSwf/f2WJjlGGmV0h/sjORBcMhneYZgMVZLsU1og4qFz2YDAOtYmPZnu9DQ+0
+Kra8RSJuu24fqcKgfjibNu9WMF9rhWVJCCW4Y0loHGBWWUf5ZFOXTLB0zor5WZjg
+nUodeAOO6krDC1SL5lmly3FP9DCEuYQoJ2PxH3Rh/3Vrvb0PWNbdGV6gJ8+KitmB
+eFlcVGlxggLpFxM7AZrpTY7cNt8XBmP3jQfo76+14nGSX5UsRIvvBt3To3ml3yyd
+wHF17Rb401msATbqq2sIy0GtR2ouz4KB42jNKYz7IF45cu8V053xJNwFY4P/5Epj
+XqqBL2HP7BaE5e8g7rqEqHrVv+jdXQ==
+=GClE
+-----END PGP SIGNATURE-----
+
+--RiykofuyQSrEwF40--

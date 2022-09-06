@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB095ADD00
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA0C5ADD09
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiIFBls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 21:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
+        id S231994AbiIFBoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 21:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiIFBlp (ORCPT
+        with ESMTP id S231154AbiIFBoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 21:41:45 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA1F65544;
-        Mon,  5 Sep 2022 18:41:44 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x1so5508111plv.5;
-        Mon, 05 Sep 2022 18:41:44 -0700 (PDT)
+        Mon, 5 Sep 2022 21:44:14 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9B76B16D;
+        Mon,  5 Sep 2022 18:44:13 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id q81so7846696iod.9;
+        Mon, 05 Sep 2022 18:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=wR4LPrjfekVqjvMATBzjqFfhUkvNlLUUdzUvMBxpESs=;
-        b=fAn8Ca6BxfW8B6GwWQ+j/b2XZntmmRVgtRSpX6VUO92+DWvaZokWOokIDmpsUClAJd
-         QKe8lYnSXvInKYIIgHyCLWyePb1+LeYdB04PGDobVVbhPtszGc7TssZgqqbwD46G5tOj
-         iEDf9CWSO8WINiKJLraioNeM/tSh2oG5SDtqc9sBbD+ZpQD3zqBd2MGsomNU+3Eiq36q
-         ignrLr71jr29mS75UAat2TLZVc29hJPp1Bl8rbbXCPTEKzmHrQ7E1nCH3CJZ9XzUUa3f
-         vhOBzDg1ifmg7s7yXmSN3hahrP6nywPDxHy2wvpit2f+QmKPJAluwZBk1UXRWhmV8I6c
-         Nu7w==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=e08D4SbYcUhaLYKlJn1NPNEeQS9ZOdXgn69FJxpJUWU=;
+        b=aSf23VvqYq9Z9jdxRlZRJnEDJ7mvD/LHSdN8oA/u47qteegSQ8x0ao1esHDGm4oa2C
+         k+Dvbmdxt4429HmYjGNYHNbMjVa5CqcDHeMYlS5YiX4Y/RNeIfYnazKP7CCcKpzO6m1B
+         bq/tkOXVBPUmE4dMXlE6r/L96eop3rSNYx0TCPDvJeibI3ol0i+lyQCTxv64UVhq7hJk
+         cHVHMwzGYpwtoJtc9vGXnxL8zK0m48T+eDHXBYjmkP5/eB818ZK5eOT+7ovgZS9mNSHN
+         yekuhVwAYg598tep+YJ++aQU/Dlbrd18IzF5iXb9sWesBBQxxTlJ/AjtM9cE1sTgxTyw
+         d7zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wR4LPrjfekVqjvMATBzjqFfhUkvNlLUUdzUvMBxpESs=;
-        b=QsCwFv8Z2MfnKf4vMLVa6b1idOCGJrcn5pmAXN6D3qQBVilubn7QZznvRFt6vXSS4U
-         yxekuAtf/hVyvisXHpuc0h2ZZaQi1vchhToqMSabBFjJv1gttvytjG+lYdgNCMQsr00S
-         eTV3fMB+ha1NDwj/59H9reRWR2+dvK6qQODY2AL6jnHFwgk1qYXUuwMBffT2OA4GDIJ4
-         5CvizAsRFCWHcz8DnBW0MYk9OpuKvXEYjMB5tdq45MIChpQMy9qXe7aRs9qiWRMiZQ8v
-         fx0qSDc155DhbLSrd1FKviBD0piPjuiCe9QQHCmDW3XwG3edLyfUQxnuXEKMwWwCkf7f
-         zLpA==
-X-Gm-Message-State: ACgBeo2W8iYX9ZI2yWwbgV7kcs2XDdClvKatkJcKSZFwicUDkVoIwIN+
-        PazUyjswLty6PxbpOJ9H9Cs=
-X-Google-Smtp-Source: AA6agR5TgrDoVvwWAx1/PpDci1lw+560LvwFEWeXckFE2dCbAKtDFoQDxiEJOJP0QONGukRxKjeH5Q==
-X-Received: by 2002:a17:90a:5aa2:b0:200:30aa:c773 with SMTP id n31-20020a17090a5aa200b0020030aac773mr12700964pji.182.1662428503955;
-        Mon, 05 Sep 2022 18:41:43 -0700 (PDT)
-Received: from taoren-fedora-PC23YAB4 ([76.132.249.1])
-        by smtp.gmail.com with ESMTPSA id cp15-20020a170902e78f00b00176ae5c0f38sm2935022plb.178.2022.09.05.18.41.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 18:41:43 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 18:41:33 -0700
-From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heyi Guo <guoheyi@linux.alibaba.com>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Liang He <windhl@126.com>, Hao Chen <chenhao288@hisilicon.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] ARM: dts: aspeed: elbert: Enable mac3
- controller
-Message-ID: <YxalTToannPyLQpI@taoren-fedora-PC23YAB4>
-References: <20220905235634.20957-1-rentao.bupt@gmail.com>
- <20220905235634.20957-3-rentao.bupt@gmail.com>
- <YxaS2mS5vwW4HuqL@lunn.ch>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=e08D4SbYcUhaLYKlJn1NPNEeQS9ZOdXgn69FJxpJUWU=;
+        b=XoPJF87Su9j79iTIL/PJ73mSYmXzb9ePaB9ZT6FBnEhuMuIfFVq9DVSuXUsUJfZSB0
+         sVerqnMfYm6A5RwLqBhMcWPsp2az24z/dnEk2vo0r6IPRLgEpQ6p2px2o9Yohe/bcbQB
+         YUNwXb+nap3MTE4yQHAfvNcwGY2C47BxNwL9x+Gi/GYGYZVKHkQcuUz7QzKrsb9aysJ5
+         HevJ7FsNiPwqV+rEZUGuP5Iyqvo3OiLQvTGoixyZv4KZxfHQxp/Wc9Sx8HIGau9LNZj6
+         bmYBOtTPlSvia0OOrBe4WyklLOydRYka38BjMOwerN4JQneqCHJy+ctiyMLMei+GbCgI
+         CHvA==
+X-Gm-Message-State: ACgBeo1bbbdpjbShfgMBa5jCw14PTRIcoVYDXCHy2Zs8pC2QEBI9je1u
+        ZQw9wVrngZCWeeilSpv6g0n4LoMaiktMZ4MeMr4=
+X-Google-Smtp-Source: AA6agR7xh1vB2jFhH2LWVWFGJ55z+0Yj4EDaWMZotdc41OWc9x+Bg1vM4mSD3IyJX4nRCXIrG/8QekXPK7zob+GxIfI=
+X-Received: by 2002:a05:6602:1482:b0:688:d06b:223e with SMTP id
+ a2-20020a056602148200b00688d06b223emr23881601iow.3.1662428653335; Mon, 05 Sep
+ 2022 18:44:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxaS2mS5vwW4HuqL@lunn.ch>
+References: <20220905083125.29426-1-zong.li@sifive.com> <20220905083125.29426-3-zong.li@sifive.com>
+ <2a22c6ac-dc0e-7066-8f5f-04c428c77ee2@microchip.com>
+In-Reply-To: <2a22c6ac-dc0e-7066-8f5f-04c428c77ee2@microchip.com>
+From:   Zong Li <zongbox@gmail.com>
+Date:   Tue, 6 Sep 2022 09:44:01 +0800
+Message-ID: <CA+ZOyah199Vsa9haepO=uizymy947aLv3tMoO=5ye=FHqhkYCA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] soc: sifive: ccache: Rename SiFive L2 cache to
+ Composable cache.
+To:     Conor.Dooley@microchip.com
+Cc:     zong.li@sifive.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        greentime.hu@sifive.com, ben.dooks@sifive.com, bp@alien8.de,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -86,55 +74,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
-
-On Tue, Sep 06, 2022 at 02:22:50AM +0200, Andrew Lunn wrote:
-> On Mon, Sep 05, 2022 at 04:56:34PM -0700, rentao.bupt@gmail.com wrote:
-> > From: Tao Ren <rentao.bupt@gmail.com>
-> > 
-> > Enable mac3 controller in Elbert dts: Elbert MAC3 is connected to the
-> > onboard switch directly (fixed link).
-> 
-> What is the switch? Could you also add a DT node for it?
-> 
-> > 
-> > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+<Conor.Dooley@microchip.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=886=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A82:48=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Noticed a another thing, sorry..
+>
+> On 05/09/2022 09:31, Zong Li wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
+the content is safe
+> >
+> > From: Greentime Hu <greentime.hu@sifive.com>
+> >
+> > Since composable cache may be L3 cache if pL2 cache exists, we should u=
+se
+> > its original name composable cache to prevent confusion.
+> >
+> > Apart from renaming, we also add the compatible "sifive,ccache0" into I=
+D
+> > table.
+> >
+> > Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> > Signed-off-by: Zong Li <zong.li@sifive.com>
 > > ---
-> >  arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
-> > index 27b43fe099f1..52cb617783ac 100644
-> > --- a/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
-> > +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
-> > @@ -183,3 +183,14 @@ imux31: i2c@7 {
-> >  &i2c11 {
-> >  	status = "okay";
-> >  };
-> > +
-> > +&mac3 {
-> > +	status = "okay";
-> > +	phy-mode = "rgmii";
-> 
-> 'rgmii' is suspicious, though not necessarily wrong. This value is
-> normally passed to the PHY, so the PHY inserts the RGMII delay. You
-> however don't have a PHY. So i assume the switch is inserting the
-> delay? Again, being able to see the DT properties for the switch would
-> be useful.
-> 
->    Andrew
+> >  drivers/soc/sifive/Kconfig                    |   6 +-
+> >  drivers/soc/sifive/Makefile                   |   2 +-
+> >  .../{sifive_l2_cache.c =3D> sifive_ccache.c}    | 163 +++++++++-------=
+--
+> >  .../{sifive_l2_cache.h =3D> sifive_ccache.h}    |  16 +-
+> >  4 files changed, 94 insertions(+), 93 deletions(-)
+> >  rename drivers/soc/sifive/{sifive_l2_cache.c =3D> sifive_ccache.c} (35=
+%)
+> >  rename include/soc/sifive/{sifive_l2_cache.h =3D> sifive_ccache.h} (12=
+%)
+> >
+>
+> > -static ssize_t l2_write(struct file *file, const char __user *data,
+> > +static ssize_t ccache_write(struct file *file, const char __user *data=
+,
+> >                         size_t count, loff_t *ppos)
+>
+> You need to fix the alignment here as per checkpatch:
+> CHECK: Alignment should match open parenthesis
+> #112: FILE: drivers/soc/sifive/sifive_ccache.c:53:
+> +static ssize_t ccache_write(struct file *file, const char __user *data,
+> +                       size_t count, loff_t *ppos)
+>
 
-Thank you for the quick review!
+I'm not sure why I don't see that by checkpatch, but it looks that it
+is actually misalignment there, I would re-check all indents in
+source. Thanks.
 
-The BMC mac3 is connected to BCM53134P's IMP_RGMII port, and there is no
-PHY between BMC MAC and BCM53134P. BCM53134P loads configurations from
-its EEPROM when the chip is powered.
-
-Could you please point me an example showing how to describe the switch in
-dts? Anyhow I will need to improve the patch description and comments in
-v2.
-
-
-Thanks,
-
-- Tao
+> >  {
+> >         unsigned int val;
+> > @@ -57,75 +57,76 @@ static ssize_t l2_write(struct file *file, const ch=
+ar __user *data,
+> >         if (kstrtouint_from_user(data, count, 0, &val))
+> >                 return -EINVAL;
+> >         if ((val < 0xFF) || (val >=3D 0x10000 && val < 0x100FF))
+> > -               writel(val, l2_base + SIFIVE_L2_ECCINJECTERR);
+> > +               writel(val, ccache_base + SIFIVE_CCACHE_ECCINJECTERR);
+> >         else
+> >                 return -EINVAL;
+> >         return count;
+> >  }
+> >

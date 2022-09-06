@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949F25AF3DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD965AF3DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIFSox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 14:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S229643AbiIFSpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 14:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIFSou (ORCPT
+        with ESMTP id S229560AbiIFSpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:44:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015101D0D4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 11:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662489888; x=1694025888;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y/lcPs3orVnls9Hb6iT8Kn+P8uLpV38epnOs8myLRow=;
-  b=Nbtz/Qp9OIfkyxnyHsy6Q3yg+kaXWLeXbW6Kgo3fvrD36lNiUTdTG6oY
-   gHsNm9BStHi3gYdjsdvr6SzMc2qngVRNHo9NsvG+jbyORmQ9XT5FLboTV
-   S11P/2K1gJvMHk0vFS3rxopmBO4/1uecspNme4lK51i3Xviw4h2CtK8pU
-   LGQDqAU/gsEn5aNNpyalfdRN2/zCc89+jyIc7lSLIeI6MwGvPZyz06IFQ
-   ExzNZxwuQJNX9KL4fwlDZWQowPsoZDg63E9Fzlgnt2bBxnxyW1NUhUJOb
-   kHgfpSK7eLf9EOVQD2vhoQ0yl8IxvKO4uJkL7h+y3dP+PTHmyfSvjXW6p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297990554"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="297990554"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 11:44:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="739998118"
-Received: from schen9-mobl.amr.corp.intel.com ([10.252.133.221])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 11:44:47 -0700
-Message-ID: <048517e7f95aa8460cd47a169f3dfbd8e9b70d5c.camel@linux.intel.com>
-Subject: Re: [PATCH] ipc/msg.c: mitigate the lock contention with percpu
- counter
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Shakeel Butt <shakeelb@google.com>,
-        Jiebin Sun <jiebin.sun@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, vasily.averin@linux.dev,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Manfred Spraul <manfred@colorfullife.com>,
-        alexander.mikhalitsyn@virtuozzo.com, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Huang Ying <ying.huang@intel.com>, tianyou.li@intel.com,
-        wangyang.guo@intel.com
-Date:   Tue, 06 Sep 2022 11:44:46 -0700
-In-Reply-To: <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
-References: <20220902152243.479592-1-jiebin.sun@intel.com>
-         <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Tue, 6 Sep 2022 14:45:06 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013534620F;
+        Tue,  6 Sep 2022 11:45:04 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id h22so8766370qtu.2;
+        Tue, 06 Sep 2022 11:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=lpN2OCAZ8P4GFwjnfuKVcmszQEHpOwxxMRO45UtvrGY=;
+        b=p5GGMRndemtcx9BxNJi7oBUnDhbVmt++iYIriym+u1XAhJZTTAMO8FCoN432Mr/m45
+         Giy4urae0S67qmg4Be85NWnzoqO7FXjlDebVEL0MtYenfODMcZVDGJrD+zIS6APdGe/x
+         uu8qPt/Xuj2ISDp38BZwCwnJNFryXyrG7Ii1N9D7qLYOUwnKDaTG/3k2/whSY7rqn/Eh
+         wues3KPYt8S/cUnLIO3c9xXhaAfb44682861sbkMDlGw4pLt6BL8jlTQJxCH2gOGtihL
+         Pqmja2bd3KlowkiZt3bBIARHhCKiPOOYHWxIc/y7yf8hr5P9SbDKYF8evN1/XJHqFr9c
+         mxwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=lpN2OCAZ8P4GFwjnfuKVcmszQEHpOwxxMRO45UtvrGY=;
+        b=siwL72RqvlvPz58HKTb8phh1lePo+7E9rvdvynHHfDnGcvjOje7ph5o4NvPcQRNmp5
+         cIU5A1RNPJD/KWhsrWy4EyM7a6QehDUiUn2cfuoOcX4iFuk9UXSuHC5g01E8Pf0j+cz8
+         Nf9gboUzCxwlE0Shc4eyxvRp2ukfzsC+4zNRDnOzavkb7b+JCITHrm604LxcbjJMSv6v
+         OVwBDoHYQaiucSNe2w0aCCOe/1FEelLmZs+3KEQFlc6s4HVEEc0Pa1rsqcvjH0ENobM7
+         vTF1pd2iw7yQPb4FQDyzjDPMgIKFCPUCgZlwik0Enl5xDhcGLhzJBkX1wVpc/30zqVJf
+         HPWA==
+X-Gm-Message-State: ACgBeo2RZ3LlYNPafZvfWgdFDD7L40QdreSmcnX4FwGj1Orrvz3w+SzA
+        H2OG7clYZp4yxQgZjTGoEWI=
+X-Google-Smtp-Source: AA6agR5tCVW5OlNS3CjJeLYdWJ/cKlTRm7EolBuTcihlXVx/pWAwBKhpABTG2vTCnOjPBo+wTTgMxQ==
+X-Received: by 2002:a05:622a:259b:b0:343:4c3b:caa7 with SMTP id cj27-20020a05622a259b00b003434c3bcaa7mr45971563qtb.148.1662489903032;
+        Tue, 06 Sep 2022 11:45:03 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id cd9-20020a05622a418900b00342fdc4004fsm10389436qtb.52.2022.09.06.11.45.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 11:45:02 -0700 (PDT)
+Message-ID: <291d739c-752f-ead3-1974-a136b986afb7@gmail.com>
+Date:   Tue, 6 Sep 2022 11:45:00 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 5.15 101/107] kbuild: Unify options for BTF generation for
+ vmlinux and modules
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+References: <20220906132821.713989422@linuxfoundation.org>
+ <20220906132826.130642856@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220906132826.130642856@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-09-02 at 09:27 -0700, Shakeel Butt wrote:
-> On Fri, Sep 2, 2022 at 12:04 AM Jiebin Sun <jiebin.sun@intel.com> wrote:
-> > The msg_bytes and msg_hdrs atomic counters are frequently
-> > updated when IPC msg queue is in heavy use, causing heavy
-> > cache bounce and overhead. Change them to percpu_counters
-> > greatly improve the performance. Since there is one unique
-> > ipc namespace, additional memory cost is minimal. Reading
-> > of the count done in msgctl call, which is infrequent. So
-> > the need to sum up the counts in each CPU is infrequent.
-> > 
-> > Apply the patch and test the pts/stress-ng-1.4.0
-> > -- system v message passing (160 threads).
-> > 
-> > Score gain: 3.38x
-> > 
-> > CPU: ICX 8380 x 2 sockets
-> > Core number: 40 x 2 physical cores
-> > Benchmark: pts/stress-ng-1.4.0
-> > -- system v message passing (160 threads)
-> > 
-> > Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
-> [...]
-> > +void percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
-> > +{
-> > +       this_cpu_add(*fbc->counters, amount);
-> > +}
-> > +EXPORT_SYMBOL(percpu_counter_add_local);
+
+
+On 9/6/2022 6:31 AM, Greg Kroah-Hartman wrote:
+> From: Jiri Olsa <jolsa@redhat.com>
 > 
-> Why not percpu_counter_add()? This may drift the fbc->count more than
-> batch*nr_cpus. I am assuming that is not the issue for you as you
-> always do an expensive sum in the slow path. As Andrew asked, this
-> should be a separate patch.
+> commit e27f05147bff21408c1b8410ad8e90cd286e7952 upstream.
+> 
+> Using new PAHOLE_FLAGS variable to pass extra arguments to
+> pahole for both vmlinux and modules BTF data generation.
+> 
+> Adding new scripts/pahole-flags.sh script that detect and
+> prints pahole options.
+> 
+> [ fixed issues found by kernel test robot ]
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Link: https://lore.kernel.org/bpf/20211029125729.70002-1-jolsa@kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>   Makefile                  |    3 +++
+>   scripts/Makefile.modfinal |    2 +-
+>   scripts/link-vmlinux.sh   |   11 +----------
+>   scripts/pahole-flags.sh   |   20 ++++++++++++++++++++
+>   4 files changed, 25 insertions(+), 11 deletions(-)
+>   create mode 100755 scripts/pahole-flags.sh
 
-In the IPC case, the read is always done with the accurate read using
-percpu_counter_sum() gathering all the counts and
-never with percpu_counter_read() that only read global count.
-So Jiebin was not worry about accuracy.
+My linux-stable-rc/linux-5.15.y checkout shows that 
+scripts/pahole-flags.sh does not have an executable permission and 
+commit 128e3cc0beffc92154d9af6bd8c107f46e830000 ("kbuild: Unify options 
+for BTF generation for vmlinux and modules") does have:
 
-However, the counter is s64 and the local per cpu counter is S32.
-So the counter size has shrunk if we only keep the count in local per
-cpu counter, which can overflow a lot sooner and is not okay.
+diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+new file mode 100644
+index 000000000000..e6093adf4c06
 
-Jiebin, can you try to use percpu_counter_add_batch, but using a large
-batch size.  That should achieve what you want without needing
-to create a percpu_counter_add_local() function, and also the overflow
-problem.
-
-Tim
-
-
+whereas your email does have the proper 100755 permission set on the 
+file, any idea what happened here?
+-- 
+Florian

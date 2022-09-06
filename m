@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E6B5AE811
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ECA5AE818
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239923AbiIFM1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        id S233488AbiIFM31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239813AbiIFM1Q (ORCPT
+        with ESMTP id S240221AbiIFM2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:27:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCEA7FFAA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:23:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4A2E41F9EC;
-        Tue,  6 Sep 2022 12:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662466953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w88jYG1SC1kfMGHujv3S+yCLAncS2pWi2X4JA71CFvA=;
-        b=s/v3dkLmpeqdj8gQ1oinBEv5gZjP5azJBEJvEJZFqeERhSdP4JmFPOchIaW17o5YUx8y4y
-        BzO2Gi79ulwqQPJL3/alXByvVffAAGGQke6AWq3kVWFyv1rN2k0dJjgdk7V6e/FxlahL9b
-        Jf/SPP6gV53eQTxDxr+LWoJkYuIylRk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662466953;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w88jYG1SC1kfMGHujv3S+yCLAncS2pWi2X4JA71CFvA=;
-        b=LP4P4l4OMcApUJu9CsT6veq/r7BaW10KA+gXi3FDWGpCOCyTY2xc46TOZVLCAJEPRlZtg8
-        Il2GzM5ks7URVXBg==
-Received: from suse.de (mgorman.tcp.ovpn2.nue.suse.de [10.163.32.246])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 74B0C2C141;
-        Tue,  6 Sep 2022 12:22:30 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 13:22:26 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     mawupeng <mawupeng1@huawei.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, ying.huang@intel.com,
-        hannes@cmpxchg.org, corbet@lwn.net, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        songmuchun@bytedance.com, mike.kravetz@oracle.com,
-        osalvador@suse.de, surenb@google.com, rppt@kernel.org,
-        charante@codeaurora.org, jsavitz@redhat.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH -next v3 1/2] mm: Cap zone movable's min wmark to small
- value
-Message-ID: <20220906122226.ro7coxxiatvctyth@suse.de>
-References: <20220905032858.1462927-1-mawupeng1@huawei.com>
- <20220905032858.1462927-2-mawupeng1@huawei.com>
- <20220905092619.2533krnnx632hswc@suse.de>
- <c69a00c8-99d5-7a55-0861-1559764bd26c@huawei.com>
+        Tue, 6 Sep 2022 08:28:38 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485E924951;
+        Tue,  6 Sep 2022 05:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662467104; x=1694003104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VLnflIlhNOSKlv+K+sGMeC6Yi4HRSkPtWSqjX4XDHWo=;
+  b=U9N+FlkdS0sYsBDdatUc3mzlVKsE6YvuLzFvuz94vnUau0EGpqfl813Y
+   UBYWIblQvchfLB0b8JYx2LEqMITfM3qdXCfrSBaGv7ImPOphFXEEsuS8Z
+   TuXDbIYa5hrrjmtnKjR+0AIsowMyrIpVNz/UMzbraunUi6jk9dC0ZP0L9
+   9Qzq3aMrQ7QpW6ijGSd1xeLdE7ltHrAmjA+1tIByZ05odJBRKypVCn6G0
+   oPo2FoaWsoc79QDncKXpe0uXUFOs51YnWJU22GYfXxsgvrH0s9T0+0sUN
+   WQmGQRgSVKJpoipIXTX5gZBKSHDnR8I1hhUhDFRv3YAmHmVSn1s30Uy27
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="279592183"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="279592183"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:25:03 -0700
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="565073686"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:25:01 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oVXdS-00970o-2G;
+        Tue, 06 Sep 2022 15:24:58 +0300
+Date:   Tue, 6 Sep 2022 15:24:58 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Martyn Welch <martyn.welch@collabora.co.uk>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] gpio: pca953x: Add support for PCAL6534
+Message-ID: <Yxc8GgUnHOuMIn4p@smile.fi.intel.com>
+References: <20220906082820.4030401-1-martyn.welch@collabora.co.uk>
+ <20220906082820.4030401-5-martyn.welch@collabora.co.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c69a00c8-99d5-7a55-0861-1559764bd26c@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220906082820.4030401-5-martyn.welch@collabora.co.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,100 +67,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 06:12:23PM +0800, mawupeng wrote:
-> > I think there is a misunderstanding why the higher zones have a watermark
-> > and why it might be large.
-> > 
-> > It's not about a __GFP_HIGH or PF_MEMALLOC allocations because it's known
-> > that few of those allocations may be movable. It's because high memory
-> > allocations indirectly pin pages in lower zones. User-mapped memory allocated
-> > from ZONE_MOVABLE still needs page table pages allocated from a lower zone
-> > so there is a ratio between the size of ZONE_MOVABLE and lower zones
-> > that limits the total amount of memory that can be allocated. Similarly,
-> > file backed pages that may be allocated from ZONE_MOVABLE still requires
-> > pages from lower memory for the inode and other associated kernel
-> > objects that are allocated from lower zones.
-> > 
-> > The intent behind the higher zones having a large min watermark is so
-> > that kswapd reclaims pages from there first to *potentially* release
-> > pages from lower memory. By capping pages_min for zone_movable, there is
-> > the potential for lower memory pressure to be higher and to reach a point
-> > where a ZONE_MOVABLE page cannot be allocated simply because there isn't
-> > enough low memory available. Once the lower zones are all unreclaimable
-> > (e.g. page table pages or the movable pages are not been reclaimed to free
-> > the associated kernel structures), the system goes OOM.
+On Tue, Sep 06, 2022 at 09:28:19AM +0100, Martyn Welch wrote:
+> From: Martyn Welch <martyn.welch@collabora.com>
 > 
-> This i do agree with you, lower zone is actually "more important" than the
-> higher one.
-> 
+> Add support for the NXP PCAL6534. This device is broadly a 34-bit version
+> of the PCAL6524. However, whilst the registers are broadly what you'd
+> expect for a 34-bit version of the PCAL6524, the spacing of the registers
+> has been compacted. This has the unfortunate effect of breaking the bit
+> shift based mechanism that is employed to work out register locations used
+> by the other chips supported by this driver. To accommodate ths, callback
+> functions have been added to allow alterate implementations of
+> pca953x_recalc_addr() and pca953x_check_register() for the PCAL6534.
 
-Very often yes.
 
-> But higher min watermark for zone movable will not work since no memory
-> allocation can use this reserve memory below min. Memory allocation
-> with specify watermark modifier(__GFP_ATOMIC ,__GFP_HIGH ...) can use this
-> in slowpath, however the standard movable memory allocation
-> (gfp flag: GFP_HIGHUSER_MOVABLE) does not contain this.
-> 
+This looks much cleaner!
 
-Then a more appropriate solution may be to alter how the gap between min
-and low is calculated. That gap determines when kswapd is active but
-allocations are still allowed.
+...
 
-> Second, lowmem_reserve_ratio is used to "reserve" memory for lower zone.
-> And the second patch introduce per zone watermark_scale_factor to boost
-> normal/movable zone's watermark which can trigger early kswapd for zone
-> movable.
-> 
+> @@ -107,6 +109,7 @@ static const struct i2c_device_id pca953x_id[] = {
+>  	{ "tca9539", 16 | PCA953X_TYPE | PCA_INT, },
+>  	{ "tca9554", 8  | PCA953X_TYPE | PCA_INT, },
+>  	{ "xra1202", 8  | PCA953X_TYPE },
+> +
+>  	{ }
 
-The problem with the tunable is that this patch introduces a potentially
-seriously problem that must then be corrected by a system administrator and
-it'll be non-obvious what the root of the problem is or the solution. For
-some users, they will only be able to determine is that OOM triggers
-when there is plenty of free memory or kswapd is consuming a lot more
-CPU than expected. They will not necessarily be able to determine that
-watermark_scale_factor is the solution.
+Missed Diodes?
 
-> > 
-> > It's possible that there are safe adjustments that could be made that
-> > would detect when there is no choice except to reclaim zone reclaimable
-> > but it would be tricky and it's not this patch. This patch changelog states
-> > 
-> > 	However zone movable will get its min share in
-> > 	__setup_per_zone_wmarks() which does not make any sense.
-> > 
-> > It makes sense, higher zones allocations indirectly pin pages in lower
-> > zones and there is a bias in reclaim to free the higher zone pages first
-> > on the *possibility* that lower zone pages get indirectly released later.
-> > 
-> 
-> In our Test vm with 16G of mirrored memory(normal zone) and 256 of normal
-> momory(Movable zone), the min share for normal zone is too few since the
-> size of min watermark is calc by zone dma/normal while this will be shared
-> by zones(include zone movable) based on managed pages.
-> 
-> Node 0, zone      DMA
->         min      39
->         low      743
->         high     1447
-> Node 0, zone   Normal
->         min      180
->         low      3372
->         high     6564
-> Node 1, zone  Movable
->         min      3728
->         low      69788
->         high     135848
+>  };
+>  MODULE_DEVICE_TABLE(i2c, pca953x_id);
 
-The gap between min and low is massive so either adjust how that gap is
-calculated or to avoid side-effects for other users, consider special
-casing the gap for ZONE_MOVABLE with a comment explaining why it is
-treated differently. To mitigate the risk further, it could be further
-special cased to only apply when there is a massive ratio between
-ALL_ZONES_EXCEPT_MOVABLE:ZONE_MOVABLE. Document in the changelog the
-potential downside of more lowmem potentially getting pinned by MOVABLE
-allocations leading to excessive kswapd activity or premature OOM.
+...
+
+> +	u8 (*recalc_addr)(struct pca953x_chip *chip, int reg , int off);
+> +	bool (*check_reg)(struct pca953x_chip *chip, unsigned int reg,
+> +		          u32 checkbank);
+
+I would think of splitting this change. Like in a separate patch you simply
+create this interface and only add what you need in the next one.
+
+...
+
+> +static bool pcal6534_check_register(struct pca953x_chip *chip, unsigned int reg,
+> +				    u32 checkbank)
+> +{
+> +	int bank;
+> +	int offset;
+> +
+> +	if (reg > 0x2f) {
+
+I guess code read and generation wise the
+
+	if (reg >= 0x30) {
+
+is slightly better.
+
+> +		/*
+> +		 * Reserved block between 14h and 2Fh does not align on
+> +		 * expected bank boundaries like other devices.
+> +		 */
+> +		int temp = reg - 0x30;
+> +
+> +		bank = temp / NBANK(chip);
+> +		offset = temp - (bank * NBANK(chip));
+
+Parentheses are not needed fur multiplication, but if you insist...
+
+> +		bank += 8;
+
+> +	} else if (reg > 0x53) {
+
+In the similar way...
+
+> +		/* Handle lack of reserved registers after output port
+> +		 * configuration register to form a bank.
+> +		 */
+
+Comment style
+
+/*
+ * Handle...
+ */
+
+> +		int temp = reg - 0x54;
+> +
+> +		bank = temp / NBANK(chip);
+> +		offset = temp - (bank * NBANK(chip));
+> +		bank += 16;
+> +	} else {
+> +		bank = reg / NBANK(chip);
+> +		offset = reg - (bank * NBANK(chip));
+> +	}
+> +
+> +	/* Register is not in the matching bank. */
+> +	if (!(BIT(bank) & checkbank))
+> +		return false;
+> +
+> +	/* Register is not within allowed range of bank. */
+> +	if (offset >= NBANK(chip))
+> +		return false;
+> +
+> +	return true;
+> +}
+
+...
+
+> -	u8 regaddr = pinctrl | addr | (off / BANK_SZ);
+>  
+> -	return regaddr;
+> +	return pinctrl | addr | (off / BANK_SZ);
+
+Stray change, or anything I have missed?
+
+...
+
+> +/* The PCAL6534 and compatible chips have altered bank alignment that doesn't
+> + * fit within the bit shifting scheme used for other devices.
+> + */
+
+Comment style.
+
+...
+
+> @@ -1240,6 +1335,7 @@ static const struct of_device_id pca953x_dt_ids[] = {
+>  
+>  	{ .compatible = "nxp,pcal6416", .data = OF_953X(16, PCA_LATCH_INT), },
+>  	{ .compatible = "nxp,pcal6524", .data = OF_953X(24, PCA_LATCH_INT), },
+> +	{ .compatible = "nxp,pcal6534", .data = OF_653X(34, PCA_LATCH_INT), },
+>  	{ .compatible = "nxp,pcal9535", .data = OF_953X(16, PCA_LATCH_INT), },
+>  	{ .compatible = "nxp,pcal9554b", .data = OF_953X( 8, PCA_LATCH_INT), },
+>  	{ .compatible = "nxp,pcal9555a", .data = OF_953X(16, PCA_LATCH_INT), },
+
+Do you decide to drop Diodes compatible from the code?
 
 -- 
-Mel Gorman
-SUSE Labs
+With Best Regards,
+Andy Shevchenko
+
+

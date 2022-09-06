@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975ED5AF21D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB835AF2EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237361AbiIFROf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S231272AbiIFRlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239734AbiIFRNo (ORCPT
+        with ESMTP id S230175AbiIFRlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:13:44 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B5F8FD5A;
-        Tue,  6 Sep 2022 10:03:16 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so8471126oth.8;
-        Tue, 06 Sep 2022 10:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=XjI3JQEiXwzsRWt/M8irfOaiWmTHLb3z63j8Zzx/as0=;
-        b=SMRLrhO64BMjAoRWo5yIUqIHCvBvyhZfPGyHTSyX2FAnm4yuQfP5mK4qpUNGuEMzjv
-         szkieXnp4bIxa8CgyTBgMSfXYrbJBVzpr4+NSK2mn+aMMJar5a2niuCiKpMqk7v5laoX
-         SiKQe+F61EnSs8OhNVgDaBYK4iLZN6RT5s2wFXBZglZD8eJWIeOYcCkbkZrD0Ni8yeWQ
-         Rv0woTE6mWOc7S1fnnuQXIdrXpQdoNUs0mn9IUMbpHr4DCDz1tVLFissbc0A/uzx7rwl
-         O+4nK9LwzWBYjgoXcft8zONGLPllEwhwbyt3/etuEHVv4xbstI6126MjMEUU4CZZKO/U
-         s+XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=XjI3JQEiXwzsRWt/M8irfOaiWmTHLb3z63j8Zzx/as0=;
-        b=KxQ+SCJmW2pXb/c8VuXXheJ+kSQtxcumyuaxK6truriSSCSVEpB2LS3UzkBouZmY6H
-         /4UjgPiUuQ5VrneU9DfzPUzzXz2rdNe71GOCwUEcLinLvwTdOKxHtdswGLoIaFnH15R1
-         e8z7kIiRURFWBjE9CauwP+oifhXx3/r0YpeF53vC8rRkKzGcXIYTqjSr9WNCmMp+WUNC
-         4jK4XDQhOW8KWWETuY8uvZzsxtSoGWIQSH6mbKkWx2m5p3OuvvrwpRXS0si1SDEqEIGr
-         WqUhPHa90SWx5LiMsr42wSUqK3c3CgiFt4cb9Bse0QnUpvnDF9v6UBsa7ShGIyc/o8hY
-         Tl6Q==
-X-Gm-Message-State: ACgBeo2GD5m1qM/ddSdTjki/k1n31Knf81by060tRmaYZd6dt213TEZO
-        brz+CaPtvF9sURdH5P0uNn9A00QwlPw=
-X-Google-Smtp-Source: AA6agR4jL192rwove6vYYrGTACHllK/hCOUHL6kR1Quiw3oBNFFDCg2SvxQi1G3M1tmvgCIugxf6Mw==
-X-Received: by 2002:a05:6830:6308:b0:639:3942:7bad with SMTP id cg8-20020a056830630800b0063939427badmr22018527otb.221.1662483761455;
-        Tue, 06 Sep 2022 10:02:41 -0700 (PDT)
-Received: from grumpy-vm.hsd1.tx.comcast.net ([2601:2c3:480:7390::465])
-        by smtp.gmail.com with ESMTPSA id j95-20020a9d17e8000000b00638dd127f54sm6049634otj.1.2022.09.06.10.02.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 10:02:40 -0700 (PDT)
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
-To:     hdegoede@redhat.com, balalic.enver@gmail.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     markgross@kernel.org
-Subject: [PATCH v1 1/1] hp-wmi: Setting thermal profile fails with 0x06
-Date:   Tue,  6 Sep 2022 12:02:39 -0500
-Message-Id: <20220906170239.30384-1-jorge.lopez2@hp.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 6 Sep 2022 13:41:37 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47D6260E;
+        Tue,  6 Sep 2022 10:41:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MMWmS6PPPz9xFgS;
+        Wed,  7 Sep 2022 00:58:16 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwA34JNSfRdjftYoAA--.8234S2;
+        Tue, 06 Sep 2022 18:03:26 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jakub@cloudflare.com
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, houtao1@huawei.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/7] bpf: Add fd modes check for map iter and extend libbpf
+Date:   Tue,  6 Sep 2022 19:02:54 +0200
+Message-Id: <20220906170301.256206-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwA34JNSfRdjftYoAA--.8234S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw4kWryxAr1fAw4rWr4kZwb_yoW8uw4Dpr
+        Z3Gryakr1FvFWI9F9rGrsIyryfJa4xW3y5G3Z7Jr15Zry5XF4DArW8GF43Gry3u3s3W3Z3
+        Zr4Ykr9xGw17uFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUsfMaUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KtRwABsa
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Error 0x06 (invalid command parameter) is reported by hp-wmi module
-when reading the current thermal profile and then proceed to set it
-back. The failing condition occurs in Linux NixOS after user
-configures the thermal profile to ‘quiet mode’ in Windows.  Quiet Fan
-Mode is supported in Windows but was not supported in hp-wmi module.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-This fix adds support for PLATFORM_PROFILE_QUIET in hp-wmi module for
-HP notebooks other than HP Omen series.  Quiet thermal profile is not
-supported in HP Omen series notebooks.
+Add a missing fd modes check in map iterators, potentially causing
+unauthorized map writes by eBPF programs attached to the iterator. Use this
+patch set as an opportunity to start a discussion with the cgroup
+developers about whether a security check is missing or not for their
+iterator.
 
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+Also, extend libbpf with the _opts variant of bpf_*_get_fd_by_id(). Only
+bpf_map_get_fd_by_id_opts() is really useful in this patch set, to ensure
+that the creation of a map iterator fails with a read-only fd.
 
----
-Based on the latest platform-drivers-x86.git/for-next
----
- drivers/platform/x86/hp-wmi.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Add all variants in this patch set for symmetry with
+bpf_map_get_fd_by_id_opts(), and because all the variants share the same
+opts structure. Also, add all the variants here, to shrink the patch set
+fixing map permissions requested by bpftool, so that the remaining patches
+are only about the latter.
 
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index bc7020e9df9e..f5c13df35af0 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -177,7 +177,8 @@ enum hp_thermal_profile_omen_v1 {
- enum hp_thermal_profile {
- 	HP_THERMAL_PROFILE_PERFORMANCE	= 0x00,
- 	HP_THERMAL_PROFILE_DEFAULT		= 0x01,
--	HP_THERMAL_PROFILE_COOL			= 0x02
-+	HP_THERMAL_PROFILE_COOL			= 0x02,
-+	HP_THERMAL_PROFILE_QUIET		= 0x03,
- };
- 
- #define IS_HWBLOCKED(x) ((x & HPWMI_POWER_FW_OR_HW) != HPWMI_POWER_FW_OR_HW)
-@@ -1194,6 +1195,9 @@ static int hp_wmi_platform_profile_get(struct platform_profile_handler *pprof,
- 	case HP_THERMAL_PROFILE_COOL:
- 		*profile =  PLATFORM_PROFILE_COOL;
- 		break;
-+	case HP_THERMAL_PROFILE_QUIET:
-+		*profile = PLATFORM_PROFILE_QUIET;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1216,6 +1220,10 @@ static int hp_wmi_platform_profile_set(struct platform_profile_handler *pprof,
- 	case PLATFORM_PROFILE_COOL:
- 		tp =  HP_THERMAL_PROFILE_COOL;
- 		break;
-+	case PLATFORM_PROFILE_QUIET:
-+		tp = HP_THERMAL_PROFILE_QUIET;
-+		break;
-+
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -1266,6 +1274,7 @@ static int thermal_profile_setup(void)
- 	}
- 
- 	set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
-+	set_bit(PLATFORM_PROFILE_QUIET, platform_profile_handler.choices);
- 	set_bit(PLATFORM_PROFILE_BALANCED, platform_profile_handler.choices);
- 	set_bit(PLATFORM_PROFILE_PERFORMANCE, platform_profile_handler.choices);
- 
+Finally, extend the bpf_iter test with the read-only fd check, and test
+each _opts variant of bpf_*_get_fd_by_id().
+
+Roberto Sassu (7):
+  bpf: Add missing fd modes check for map iterators
+  libbpf: Define bpf_get_fd_opts and introduce
+    bpf_map_get_fd_by_id_opts()
+  libbpf: Introduce bpf_prog_get_fd_by_id_opts()
+  libbpf: Introduce bpf_btf_get_fd_by_id_opts()
+  libbpf: Introduce bpf_link_get_fd_by_id_opts()
+  selftests/bpf: Ensure fd modes are checked for map iters and destroy
+    links
+  selftests/bpf: Add tests for _opts variants of libbpf
+
+ include/linux/bpf.h                           |   2 +-
+ kernel/bpf/inode.c                            |   2 +-
+ kernel/bpf/map_iter.c                         |   3 +-
+ kernel/bpf/syscall.c                          |   8 +-
+ net/core/bpf_sk_storage.c                     |   3 +-
+ net/core/sock_map.c                           |   3 +-
+ tools/lib/bpf/bpf.c                           |  47 +++++-
+ tools/lib/bpf/bpf.h                           |  16 ++
+ tools/lib/bpf/libbpf.map                      |  10 +-
+ tools/lib/bpf/libbpf_version.h                |   2 +-
+ .../selftests/bpf/prog_tests/bpf_iter.c       |  34 +++-
+ .../bpf/prog_tests/libbpf_get_fd_opts.c       | 145 ++++++++++++++++++
+ .../bpf/progs/test_libbpf_get_fd_opts.c       |  49 ++++++
+ 13 files changed, 309 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
+
 -- 
-2.34.1
+2.25.1
 

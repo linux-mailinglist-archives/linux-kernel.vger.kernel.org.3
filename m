@@ -2,148 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131CD5AE3D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5508C5AE3E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239393AbiIFJHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        id S239032AbiIFJJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239032AbiIFJHR (ORCPT
+        with ESMTP id S233436AbiIFJJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:07:17 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3629C4C63E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:07:10 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id b5so14421288wrr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 02:07:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=mPKulpM1VmePhCn9NGeORJeSVx0ds/dPcNDxI2woRLQ=;
-        b=OnHReX1D+oWmtqnZ/eFIfyCAVGEYKicV1nUmVMnE1mq0ZW5TQo+VrwL3LMDXAnzThh
-         PgsTdHm9zm/bb7llMOIcm0mtien4mSyFLB5tYIzK6YkwWNWKz7yEGvSfRHugyPOMfBXV
-         Rwt8GR7JXHfGD3sqSn1ZU/Jn8vmyWiZEuJdxBodcD2mq1gkeGnw3bq7R90r7KJvGbj08
-         G2frli139Xk75iDvNHb6a6pm+sC6JCwwFXCyWKaVwkIgtHVobIBV3C/z6b2TQNWvyEtm
-         8KxxsliBUqVXyyuGmSxUjgtz7uKO2Uhgy3fQKEvUPxq8Gi00lSsB9rwqR4TvDGO3caCt
-         8/IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=mPKulpM1VmePhCn9NGeORJeSVx0ds/dPcNDxI2woRLQ=;
-        b=cnzggNne3zaNsP45fk65dNj9xGF41PeUr+haIA3BejUj6dVVk7zrSsh/A1G4yoC+gE
-         kbYrooS9yN6RcDpKdLUiizxatCxnpDlXKsCbBZvkjFAWaj8rNLq/zXzgqmcdTM0FxDWV
-         13wtdGkxNRPcuZ/azljY0hG3sT0T+zxod7T8qpWc0wAE8GuboyNgcKnUc+UOnkAkt0MS
-         QUKLRyHRorHjCd+MKKFMuwiYngOVw3tsyhgNezhpdteeWvzaXKOUm5gP0ZDiIYdqR0FZ
-         EM0jzJ0XsVSTEQfLf1fAVinaZ0twzY33EAm6F29vgGbqx+ZVjl8IPzJHUs9c3WUUaN17
-         o2WA==
-X-Gm-Message-State: ACgBeo2VsI+CKRBFs/cTKSmmn8lKZADtHMTECz46wPVsj+UwJbAbimYs
-        i0z8fzmx+DktvjaxYFZmUJA1AA==
-X-Google-Smtp-Source: AA6agR5YFhKwTFveLQ1zRnD0V87OI95Pez8WScCVXHUXaL7rQSxXDThAljQ2vlZ/LsGOpe9j9yPxfA==
-X-Received: by 2002:a05:6000:1f83:b0:228:6278:796b with SMTP id bw3-20020a0560001f8300b002286278796bmr7167060wrb.520.1662455228586;
-        Tue, 06 Sep 2022 02:07:08 -0700 (PDT)
-Received: from [10.1.3.188] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id k27-20020a05600c1c9b00b003a845fa1edfsm33016456wms.3.2022.09.06.02.07.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 02:07:08 -0700 (PDT)
-Message-ID: <b0d45e18-c92d-d187-2eac-851d975fbb7e@baylibre.com>
-Date:   Tue, 6 Sep 2022 11:07:07 +0200
+        Tue, 6 Sep 2022 05:09:22 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5654B4A5;
+        Tue,  6 Sep 2022 02:09:20 -0700 (PDT)
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 28698i61023724;
+        Tue, 6 Sep 2022 18:08:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28698i61023724
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662455324;
+        bh=R3PMwyCU9XVA+BiXnB3Ur5skrUwcficqvUv17oBbyNs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Yh0bG6cvaD4rETTtxz0JcrijEDFRXHTiBbdFdB5DxeVeQ6437m2l8P2aM80V8Fhjt
+         8XaLJeJX2FIOsZv+AZJoGS0iOlqNq9RvwD5A9Mh87qGoY85d0Q5b1ewOsFcCVvMK+1
+         74VXfwJmGORuUFktIqabbDCwjTgd0nNfe9vq+r5CjV8fpGtrHWOZzg+kQUT8OXl13o
+         iqSN7KpGxwHq25ozD8cCPSItm1womvMbQLV7Uzqzf6i2R8JCTT1u101YOFdXkcJ6Rz
+         X1+R1NsbFNmzhUEh2OygiGYsQLI3apkHawGL7t1UVLTAikCFnkrzfqqaFAnLTZBpiR
+         fAMqZn6GGgqPQ==
+X-Nifty-SrcIP: [209.85.160.47]
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1272fc7f51aso13315576fac.12;
+        Tue, 06 Sep 2022 02:08:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3dR4QXIChk/dt5Q+rFv4u+0rRo7PvjfF4XlYFD6duGdufWrNbv
+        Ze8XIZXFXWJA/HXGNJOKkuQlLOzU9wHwLJSLrJc=
+X-Google-Smtp-Source: AA6agR6OY4q6aKw+dcVMf+1HMS5Bz6jBUkf9aUWQi5PyQb2qypkWmtdG6+Qas8shnXJL81hfLNtBQMLJ68tsKioph7s=
+X-Received: by 2002:a05:6808:90a:b0:34b:826c:6116 with SMTP id
+ w10-20020a056808090a00b0034b826c6116mr4009247oih.194.1662455323387; Tue, 06
+ Sep 2022 02:08:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/1] pinctrl: meson: Switch to use fwnode instead of
- of_node
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220905180034.73132-1-andriy.shevchenko@linux.intel.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220905180034.73132-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906061313.1445810-1-masahiroy@kernel.org>
+ <20220906061313.1445810-9-masahiroy@kernel.org> <f76020e2-e8bd-4f75-a697-3d6ec6665969@www.fastmail.com>
+In-Reply-To: <f76020e2-e8bd-4f75-a697-3d6ec6665969@www.fastmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 6 Sep 2022 18:08:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASmaQYfQSSbu=1P9GtcRr6gFGEpPdUgaV0bOf3FdoLnhg@mail.gmail.com>
+Message-ID: <CAK7LNASmaQYfQSSbu=1P9GtcRr6gFGEpPdUgaV0bOf3FdoLnhg@mail.gmail.com>
+Subject: Re: [PATCH v2 8/8] kbuild: remove head-y syntax
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/09/2022 20:00, Andy Shevchenko wrote:
-> GPIO library now accepts fwnode as a firmware node, so
-> switch the driver to use it.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/pinctrl/meson/pinctrl-meson.c | 7 +++----
->   drivers/pinctrl/meson/pinctrl-meson.h | 4 +++-
->   2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
-> index cc2cd73ff8f9..530f3f934e19 100644
-> --- a/drivers/pinctrl/meson/pinctrl-meson.c
-> +++ b/drivers/pinctrl/meson/pinctrl-meson.c
-> @@ -608,6 +608,7 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
->   
->   	pc->chip.label = pc->data->name;
->   	pc->chip.parent = pc->dev;
-> +	pc->chip.fwnode = pc->fwnode;
->   	pc->chip.request = gpiochip_generic_request;
->   	pc->chip.free = gpiochip_generic_free;
->   	pc->chip.set_config = gpiochip_generic_config;
-> @@ -619,8 +620,6 @@ static int meson_gpiolib_register(struct meson_pinctrl *pc)
->   	pc->chip.base = -1;
->   	pc->chip.ngpio = pc->data->num_pins;
->   	pc->chip.can_sleep = false;
-> -	pc->chip.of_node = pc->of_node;
-> -	pc->chip.of_gpio_n_cells = 2;
->   
->   	ret = gpiochip_add_data(&pc->chip, pc);
->   	if (ret) {
-> @@ -678,8 +677,8 @@ static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc)
->   		return -EINVAL;
->   	}
->   
-> -	gpio_np = to_of_node(gpiochip_node_get_first(pc->dev));
-> -	pc->of_node = gpio_np;
-> +	pc->fwnode = gpiochip_node_get_first(pc->dev);
-> +	gpio_np = to_of_node(pc->fwnode);
->   
->   	pc->reg_mux = meson_map_resource(pc, gpio_np, "mux");
->   	if (IS_ERR_OR_NULL(pc->reg_mux)) {
-> diff --git a/drivers/pinctrl/meson/pinctrl-meson.h b/drivers/pinctrl/meson/pinctrl-meson.h
-> index b197827027bd..34fc4e8612e4 100644
-> --- a/drivers/pinctrl/meson/pinctrl-meson.h
-> +++ b/drivers/pinctrl/meson/pinctrl-meson.h
-> @@ -12,6 +12,8 @@
->   #include <linux/types.h>
->   #include <linux/module.h>
->   
-> +struct fwnode_handle;
-> +
->   struct meson_pinctrl;
->   
->   /**
-> @@ -131,7 +133,7 @@ struct meson_pinctrl {
->   	struct regmap *reg_gpio;
->   	struct regmap *reg_ds;
->   	struct gpio_chip chip;
-> -	struct device_node *of_node;
-> +	struct fwnode_handle *fwnode;
->   };
->   
->   #define FUNCTION(fn)							\
+On Tue, Sep 6, 2022 at 5:00 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Sep 6, 2022, at 8:13 AM, Masahiro Yamada wrote:
+> > Kbuild puts the objects listed in head-y at the head of vmlinux.
+> > Conventionally, we do this for head*.S, which contains the kernel entry
+> > point.
+> >
+> > A counter approach is to control the section order by the linker script.
+> > Actually, the code marked as __HEAD goes into the ".head.text" section,
+> > which is placed before the normal ".text" section.
+> >
+> > I do not know if both of them are needed. From the build system
+> > perspective, head-y is not mandatory. If you can achieve the proper code
+> > placement by the linker script only, it would be cleaner.
+> >
+> > I collected the current head-y objects into head-object-list.txt. It is
+> > a whitelist. My hope is it will be reduced in the long run.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+>
+> The scripts/head-object-list.txt approach feels a little awkward,
+> so overall I'm not convinced that this is an improvement as long
+> as there is no final decision for what should be done instead.
+>
+> If the .head.text section approach works, maybe convert at
+> a minimum the x86 and arm64 architectures to provide an example
+> of what it should look like in the end, otherwise I doubt that
+> any architecture maintainers are going to work on removing their
+> architectures from the head-object-list.txt file.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+
+
+I wish I had done this before fa96b57c149061f71a70bd6582d995f6424fbbf4.
+Maybe I would have been able to avoid loongarch adding a head-y.
+
+When people port a new arch, they mimic other arch implementations,
+and apparently they assume having head-y is mandatory, and the right
+thing to do.
+
+So, we need something to make arch maintainers realize
+"when you add a new head-y entry, very likely you are doing wrong".
+
+So, collecting the current ones into a whitelist can prevent the list
+from growing at least, even if nobody strives to reduce it.
+
+
+I did a similar approach for
+
+  scripts/headers_install.sh
+  usr/include/Makefile
+
+It was successful because we did not get a new breakage.
+
+
+
+
+Do you have a better idea to avoid bad code slipping in?
+
+
+
+
+See the next arch port.
+
+
+If somebody upsteams arch/kvx/, they will be very likely to add
+arch/kvx/kernel/head.o to head-y.
+
+They are already doing it.
+https://github.com/kalray/linux_coolidge/blob/coolidge/arch/kvx/Makefile
+
+
+
+
+People never re-think "why do we need head-y in the first place?"
+
+
+
+
+
+
+
+>
+> > +arch/alpha/kernel/head.o
+> > +arch/arc/kernel/head.o
+> > +arch/arm/kernel/head-nommu.o
+> > +arch/arm/kernel/head.o
+> > +arch/arm64/kernel/head.o
+> > +arch/csky/kernel/head.o
+> > +arch/hexagon/kernel/head.o
+> > +arch/ia64/kernel/head.o
+> > +arch/loongarch/kernel/head.o
+> > +arch/m68k/68000/head.o
+> > +arch/m68k/coldfire/head.o
+> > +arch/m68k/kernel/head.o
+> > +arch/m68k/kernel/sun3-head.o
+> > +arch/microblaze/kernel/head.o
+> > +arch/mips/kernel/head.o
+> > +arch/nios2/kernel/head.o
+> > +arch/openrisc/kernel/head.o
+> > +arch/parisc/kernel/head.o
+> > +arch/powerpc/kernel/head_40x.o
+> > +arch/powerpc/kernel/head_44x.o
+> > +arch/powerpc/kernel/head_64.o
+> > +arch/powerpc/kernel/head_8xx.o
+> > +arch/powerpc/kernel/head_book3s_32.o
+> > +arch/powerpc/kernel/head_fsl_booke.o
+> > +arch/powerpc/kernel/entry_64.o
+> > +arch/powerpc/kernel/fpu.o
+> > +arch/powerpc/kernel/vector.o
+> > +arch/powerpc/kernel/prom_init.o
+> > +arch/riscv/kernel/head.o
+> > +arch/s390/kernel/head64.o
+> > +arch/sh/kernel/head_32.o
+> > +arch/sparc/kernel/head_32.o
+> > +arch/sparc/kernel/head_64.o
+> > +arch/x86/kernel/head_32.o
+> > +arch/x86/kernel/head_64.o
+> > +arch/x86/kernel/head32.o
+> > +arch/x86/kernel/head64.o
+> > +arch/x86/kernel/ebda.o
+> > +arch/x86/kernel/platform-quirks.o
+> > +arch/xtensa/kernel/head.o
+>
+> Seeing that almost all of these have the same naming
+> convention, another alternative would be to have a
+> special case exclusively for arch/*/kernel/head.S and
+> make that either an assembly file that includes all
+> the other files from your current list, or use
+> an intermediate object to link head-*.o into head.o
+> before putting that first.
+>
+>      Arnd
+
+
+I prefer a simple list of objects, so that people
+can work on it one by one.
+
+
+
+As Ard pointed out, we can remove
+arch/arm64/kernel/head.o
+but it requires deep arch-specific knowledge.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

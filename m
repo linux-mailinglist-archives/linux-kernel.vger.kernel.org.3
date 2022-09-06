@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD315AF40F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E725AF417
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiIFTCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 15:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S229699AbiIFTEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 15:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiIFTCP (ORCPT
+        with ESMTP id S229596AbiIFTET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 15:02:15 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DC78C023
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:01:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l14so1929586eja.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:01:59 -0700 (PDT)
+        Tue, 6 Sep 2022 15:04:19 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0358C466
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:04:18 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id v5so12195352plo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=5UOqHpIX2ymZ1ZWJZa2X5c7mteo5YGPo854Fo8SNFiE=;
-        b=bnMoFeDBq3MNXMP5q8vz3iI7cDhJd8DvFw1NXGJVRd0j2wOgWRMKqmIIcrfNUa3/Xt
-         OE9zto1rYttYNTOumDc76M70yOMgsh2s1nI8/sHouf8j6JN722csoBNbskq4wtI2hTGs
-         c/5507OkL1vJ4e/iwuVZYgjElI9ctwJUIWZidS2v4VV+FATnQLoq4n+wvhC5rFQ70W6C
-         xILFA7Lkrm7uZfVp57xslMO0Cy6NlqHIJd9YaYAc+T8Zk/bZ8QQsMGyO2h1HLFrI+y6N
-         vrd4Tn8HdLPlpJ/dQ0bUU3xi+Kk9SIPhxjjPS76USNLEcB9lUMdfYLC+Vo80y66CWQn5
-         WrIw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=u5M6QxdAPtDOUZYM968YPfYQgKBWh+diykgOvWRU0/o=;
+        b=d+qIdUiwBS4vrHLafCK0ZewwWsNsAresJB4Ha48hicYnkPEiiLzJJ9HIYP5gpQp9Q6
+         MLY24WiB+HBZQDlXE+zB3hVXOuJsZup37ch73XmdcCyJEaqM6DmnXc7twtV1wW4aJiwZ
+         yYPBJ9HdxQ6Kh4A5xJuZHjD7u0cBwmHsZUr/o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=5UOqHpIX2ymZ1ZWJZa2X5c7mteo5YGPo854Fo8SNFiE=;
-        b=JvMe+kOipZPxw55WHGkj9HbKRRe78ZYhuyAyAXg43vEurzStPE1pnqyyilPD0QsBRb
-         ouoQP0Ll1BjIh4E0POzaVejGzJ06UP7EyU8iecIzBMTpkJ6dKQmls+Adwp+UoxDZCdXq
-         KGrwML3p97E3OBWEvBRVRma2IfCTHnNMez35ww0W4bJfkiD7ByiYvRxZiGqRoJy24kDz
-         LMTxP1ajE9cI17CWCGrcgzZkuq//a7khtmERk6Prus91ZllLWXDiYPrQDAYNHUX2tGHh
-         p3KM9gLHQ6YaycZ21QIllSV3qKcusIJO09VcTTJfEx39TPplfWThJLZrcYXOBMJXhe64
-         bi8g==
-X-Gm-Message-State: ACgBeo2oJsDXSK3xTlgSRnX47UsGNfU8IwYWFMRwxKHcRJSiqRTFt2c/
-        vLygdNm6aLSDf8Hlbn5gmxcG820wtU9f30GFqrT60LHFbpyvPQ==
-X-Google-Smtp-Source: AA6agR7u35Lld13jLy2nQPiqq7La303UBzoD4Rak4akBONfsuxGYkk5CIsqhZtdlzkdsaQ/uz52xQE5OMAy14Ab3qf4=
-X-Received: by 2002:a17:906:9bd9:b0:73d:da74:120c with SMTP id
- de25-20020a1709069bd900b0073dda74120cmr37466877ejc.412.1662490917935; Tue, 06
- Sep 2022 12:01:57 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=u5M6QxdAPtDOUZYM968YPfYQgKBWh+diykgOvWRU0/o=;
+        b=HmI/xNGw1l/J/OQ3v0LAegaHFyPqb/+Jp2rTz3MZ0xvhaj4C68XWogz+0BPSHT/DHI
+         aQvJq3GhkHJzXNZ4Oyjfr9N7hUlNo/PkO8oZ3JvPAwP1vRaDRTY9SOwYtFhrilOndeYq
+         EnsT5xE8j9hAmCcVh6gHaXQlINrAMgFyzpxgdclFv2yRiZFXdd3oKa1OHaAEvZX6d9dl
+         OFzu+O+fLFOGs8s32CvO2cLcWR1NzV64VMI9vOBKIBB6ubt/s2zrno2VUACsEgHPWicy
+         OM9ysVNlSuyuefWyGYF+tIlsQ/Zx/lLia++I8s9/74rocR+l8BWqRa8SB9QqTgVLbUtZ
+         7GLg==
+X-Gm-Message-State: ACgBeo3/k6y7ozASmuYdRHrwpd8InVqMmm/nDCb1gpMaEDeh9NmgEK8l
+        K2X4Kbs3SBI0ou6V3IvEM71kzw==
+X-Google-Smtp-Source: AA6agR7U2bm4Qk9QDupReQP6foEFsmxKNcPMJZV3bm3IXBlg6jD5XNYwq9ld8GkXR0taSv15gfL9/A==
+X-Received: by 2002:a17:902:be01:b0:176:8bc3:b379 with SMTP id r1-20020a170902be0100b001768bc3b379mr51706pls.109.1662491057388;
+        Tue, 06 Sep 2022 12:04:17 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:acea:5f9a:4de:10c7])
+        by smtp.gmail.com with UTF8SMTPSA id q13-20020a170902dacd00b001743be790b4sm10337536plx.215.2022.09.06.12.04.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 12:04:16 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 12:04:14 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7180: Configure USB as wakeup
+ source
+Message-ID: <YxeZrvKvRB/ct3Ss@google.com>
+References: <20220901102946.v2.1.I347ea409ee3134bd32a29e33fecd1a6ef32085a0@changeid>
+ <CAD=FV=WBzVTaz1dtMswNMWhBzBBUQZTxqXff_DgiuP6WJgG8Qg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220906132829.417117002@linuxfoundation.org>
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 7 Sep 2022 00:31:46 +0530
-Message-ID: <CA+G9fYt3bRF1oz0UARVxWYR9B7qY2uh62jQ_d5JUt4BfPH6YUQ@mail.gmail.com>
-Subject: Re: [PATCH 5.19 000/155] 5.19.8-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=WBzVTaz1dtMswNMWhBzBBUQZTxqXff_DgiuP6WJgG8Qg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,111 +77,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sept 2022 at 19:13, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.19.8 release.
-> There are 155 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.19.8-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Doug,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On Tue, Sep 06, 2022 at 11:33:56AM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Sep 1, 2022 at 10:29 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > The dwc3 USB controller of the sc7180 supports USB remote
+> > wakeup, configure it as a wakeup source.
+> >
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
+> >
+> > Changes in v2:
+> > - use qcom/arm64-for-6.1 as base, v1 was unintendedly based on a
+> >   downstream branch that was used for testing
+> >
+> >  arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > index e8debb0da411..af5bab27eaf3 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > @@ -2782,6 +2782,8 @@ usb_1: usb@a6f8800 {
+> >                                         <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3 0>;
+> >                         interconnect-names = "usb-ddr", "apps-usb";
+> >
+> > +                       wakeup-source;
+> > +
+> 
+> The patch documenting this property has landed in commit 416b61893860
+> ("dt-bindings: usb: qcom,dwc3: add wakeup-source property"). I guess
+> the only question is whether this should be in the general sc7180
+> device tree file or just for trogdor.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I had a similar comment on the patch for sc7280 [1], there the rationale
+for putting the property into the .dtsi of the SoC was that the wakeup
+capability is provided by the SoC.
 
-## Build
-* kernel: 5.19.8-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.19.y
-* git commit: c0790038d4859e77589313023c61b0d7104e2d14
-* git describe: v5.19.4-390-gc0790038d485
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19=
-.4-390-gc0790038d485
+For sc8280xp.dtsi the property is also in the .dtsi of the SoC:
 
-## No test Regressions (compared to v5.19.4-234-gdd6b2254d7a7)
+https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/tree/arch/arm64/boot/dts/qcom/sc8280xp.dtsi?h=arm64-for-6.1#n1315
 
-## No metric Regressions (compared to v5.19.4-234-gdd6b2254d7a7)
+> Any chance it could cause problems for devices that aren't designed like
+> trogdor?
 
-## No test Fixes (compared to v5.19.4-234-gdd6b2254d7a7)
+Probably not in a functional sense, however power consumption during system
+suspend is slightly higher (2-3 mW) when USB wakeup is enabled. Boards can
+disable wakeup by deleting the property in their .dtsi file, though it
+is not necessarily evident that this is an option to reduce power
+consumption.
 
-## No metric Fixes (compared to v5.19.4-234-gdd6b2254d7a7)
-
-## Test result summary
-total: 103723, pass: 93459, fail: 693, skip: 9312, xfail: 259
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 333 total, 333 passed, 0 failed
-* arm64: 65 total, 63 passed, 2 failed
-* i386: 55 total, 53 passed, 2 failed
-* mips: 56 total, 56 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 69 total, 63 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 56 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1649321104-31322-7-git-send-email-quic_c_sanm@quicinc.com/

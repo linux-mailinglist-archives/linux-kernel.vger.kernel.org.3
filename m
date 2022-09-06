@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4CE5AE426
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BF45AE432
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239094AbiIFJ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
+        id S239099AbiIFJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbiIFJ1p (ORCPT
+        with ESMTP id S239710AbiIFJ2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:27:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552FEB7E7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:27:44 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1A36D6601F39;
-        Tue,  6 Sep 2022 10:27:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662456463;
-        bh=q/pjRlc+P1EXAov84vHYYZkyXsNxDJtdjpHTIHnbw+w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X7j7JJNoV/4qGA8hHzxbjp29Roe1pEwLywRePOz7quQpuSF3ELkhNFcFELz4usSLR
-         ma9qGN9glh2aoynYH44mhPSEr5MX4SB38P5Dzu2KhkvV3PP1Sled5nHEjvl3+4dkAN
-         S9d7FBvig4OAydOT3pxG5AipzTqt471gt8hspnXlkaKtFjh3mjSZIpKfU8/Q1XMiLJ
-         BNs79djZuVQXHT1FJUSqlU6zKaC9YGJqfwc3pQzc68D7EMRIpjOsLPm+zp3vXLg2LE
-         ZublxmPgPhgumD9twr6pXezF0Albz7sAyU/WPAmyuNYyuck3VVOfxwZ7L/O3c5gJ52
-         SU+2RwqRrJA7w==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        matthias.bgg@gmail.com, wenst@chromium.org,
-        pierre-louis.bossart@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, trevor.wu@mediatek.com, tzungbi@google.com,
-        angelogioacchino.delregno@collabora.com, yc.hung@mediatek.com,
-        Allen-KH.Cheng@mediatek.com, geert@linux-m68k.org,
-        chunxu.li@mediatek.com, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, kernel@collabora.com
-Subject: [PATCH 5/5] ASoC: SOF: mediatek: mt8195: Add devicetree support to select topologies
-Date:   Tue,  6 Sep 2022 11:27:27 +0200
-Message-Id: <20220906092727.37324-6-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220906092727.37324-1-angelogioacchino.delregno@collabora.com>
-References: <20220906092727.37324-1-angelogioacchino.delregno@collabora.com>
+        Tue, 6 Sep 2022 05:28:44 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114B56F263
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662456517; x=1693992517;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QqmXy2GZLHSohVU0zyxyHogpet/ueg+VsoCb0iGCfBE=;
+  b=LYZqZGnlmUns3OTpnk34/sPBcxVfdHwDIX+2DUFgGejYvurKWhPvNVU8
+   kd/BxGbte5NnlzmyQa3HdsoVqM8F0LZFdbIa7Ae5jojC0CcazdWtwC/HN
+   EvNCIr13d+aSUFdgZkC6WMtPevsdw0gDYmcWqjiohDEFw+m52+j/gb314
+   Lc2Eo9i4j/uEyJPEqWww4hgJWw47i0bcPzQNE5Qy2ik5yx1o8bPYljAWy
+   WDUDHQhNaMg7OfjvLuQ+0djb5XiNLZXCoFLh3kqxwagx3jjG8YXv7I0i/
+   lNhFAu6JOEFQHDYhsllDJa1X8ghBsmpBPotctTMzru3FZ/ZsNQKTe50Da
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="358264015"
+X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
+   d="scan'208";a="358264015"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 02:28:36 -0700
+X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
+   d="scan'208";a="644091572"
+Received: from zhaohaif-mobl1.ccr.corp.intel.com (HELO [10.254.214.249]) ([10.254.214.249])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 02:28:32 -0700
+Message-ID: <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
+Date:   Tue, 6 Sep 2022 17:28:29 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/2] iova: Remove some magazine pointer NULL checks
+To:     John Garry <john.garry@huawei.com>, robin.murphy@arm.com,
+        joro@8bytes.org, will@kernel.org
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1662369083-238529-1-git-send-email-john.garry@huawei.com>
+ <1662369083-238529-2-git-send-email-john.garry@huawei.com>
+From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
+In-Reply-To: <1662369083-238529-2-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support devicetree by adding a snd_soc_of_mach array, specifying SOF
-topologies for a generic MT8195 machine and for Google Tomato
-Chromebooks.
+John,
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- sound/soc/sof/mediatek/mt8195/mt8195.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+在 2022/9/5 17:11, John Garry 写道:
+> Since commit 32e92d9f6f87 ("iommu/iova: Separate out rcache init") it
+> has not been possible to have NULL CPU rcache "loaded" or "prev" magazine
+> pointers. As such, the checks in iova_magazine_full(),
+> iova_magazine_empty(), and iova_magazine_free_pfns() may be dropped.
+>
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>   drivers/iommu/iova.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index 47d1983dfa2a..580fdf669922 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -661,9 +661,6 @@ iova_magazine_free_pfns(struct iova_magazine *mag, struct iova_domain *iovad)
+>   	unsigned long flags;
+>   	int i;
+>   
+> -	if (!mag)
+> -		return;
+> -
 
-diff --git a/sound/soc/sof/mediatek/mt8195/mt8195.c b/sound/soc/sof/mediatek/mt8195/mt8195.c
-index c1590e78edd4..8e359c296308 100644
---- a/sound/soc/sof/mediatek/mt8195/mt8195.c
-+++ b/sound/soc/sof/mediatek/mt8195/mt8195.c
-@@ -615,7 +615,20 @@ static struct snd_sof_dsp_ops sof_mt8195_ops = {
- 			SNDRV_PCM_INFO_NO_PERIOD_WAKEUP,
- };
- 
-+static struct snd_sof_of_mach sof_mt8195_machs[] = {
-+	{
-+		.compatible = "google,tomato",
-+		.sof_tplg_filename = "sof-mt8195-mt6359-rt1019-rt5682-dts.tplg"
-+	}, {
-+		.compatible = "mediatek,mt8195",
-+		.sof_tplg_filename = "sof-mt8195.tplg"
-+	}, {
-+		/* sentinel */
-+	}
-+};
-+
- static const struct sof_dev_desc sof_of_mt8195_desc = {
-+	.of_machines = sof_mt8195_machs,
- 	.ipc_supported_mask	= BIT(SOF_IPC),
- 	.ipc_default		= SOF_IPC,
- 	.default_fw_path = {
+iommu_probe_device
+   ops->probe_finalize(dev);
+     intel_iommu_probe_finalize
+        iommu_setup_dma_ops
+          iommu_dma_init_domain(domain, dma_base, dma_limit, dev)
+            iova_domain_init_rcaches
+              {
+              ...
+              cpu_rcache->loaded = iova_magazine_alloc(GFP_KERNEL);
+              cpu_rcache->prev = iova_magazine_alloc(GFP_KERNEL);
+   	     if (!cpu_rcache->loaded || !cpu_rcache->prev) {
+			    ret = -ENOMEM;
+   		            goto out_err;
+
+Do you mean iova_magazine_alloc() is impossible to fail ?
+
+Thanks,
+
+Ethan
+
+>   	spin_lock_irqsave(&iovad->iova_rbtree_lock, flags);
+>   
+>   	for (i = 0 ; i < mag->size; ++i) {
+> @@ -683,12 +680,12 @@ iova_magazine_free_pfns(struct iova_magazine *mag, struct iova_domain *iovad)
+>   
+>   static bool iova_magazine_full(struct iova_magazine *mag)
+>   {
+> -	return (mag && mag->size == IOVA_MAG_SIZE);
+> +	return mag->size == IOVA_MAG_SIZE;
+>   }
+>   
+>   static bool iova_magazine_empty(struct iova_magazine *mag)
+>   {
+> -	return (!mag || mag->size == 0);
+> +	return mag->size == 0;
+>   }
+>   
+>   static unsigned long iova_magazine_pop(struct iova_magazine *mag,
+
 -- 
-2.37.2
+"firm, enduring, strong, and long-lived"
 

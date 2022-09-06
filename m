@@ -2,103 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85375AF63C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2CB5AF63E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiIFUiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S231165AbiIFUju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiIFUiu (ORCPT
+        with ESMTP id S230474AbiIFUjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:38:50 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D4C89914;
-        Tue,  6 Sep 2022 13:38:50 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id w28so8995585qtc.7;
-        Tue, 06 Sep 2022 13:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=h237n7/UKMUwrtK2SdW8VgK2awMEb5gtKYbegstNBYY=;
-        b=C9Ss8byNwMFLSuiFD4ppV8owA9/4wkUTBP/U9WKwcHSUI4M6aleZ6JI47wDpnkXwvP
-         sZOiL5B8tm854nQMBnoWx0QFNoZAC40OYRWf3oCu0hnqVdbYj86/gybzpnL3oBIPPAZh
-         B53R+G9LFexSWJa8KlhN098kxoLc/uAlOUrSWZ8IgB4ORIpBlIj3V7ZDsxkySiy77FAo
-         jF809Cgn/tHn57YHP3b+oVVszQzoN3sVs4fU6e/0EylbBuZTDwcFJsF0CpFHEx6YUo5m
-         DCDD2ERnMUeNyjy99d2P8UijGtKO5WqpGOcppPHDPOBaSMIdO1jnJGIW2VRCtez5JZ5f
-         764w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=h237n7/UKMUwrtK2SdW8VgK2awMEb5gtKYbegstNBYY=;
-        b=QUrElzvllE6YXinZqG0/iSpsWNGNti57P4Z2IySnBU4mAdRBIr5d6yKRNwdonoriV2
-         67V+9Q+ds4cMI5HTF2+iUvrAF69eOrD6LbRFoG0v/Ek602tL2m5rTbJ7rOpaJtvAQHI7
-         dXY8SQ0iaPM5txMiLiwqD2A9RA7LoNthl1evT7EdXMOLj+cYuPnSVqtbK5N9Lo8XuTVL
-         kihcHK3qRQ/+r3sviF7dWOV/HfWtm5QOSn3gcohJbDqcokL1GAUMeidBiKbjKQU0ntfx
-         g1aKvsCV+tnmj55KvCq/0hvLgw2ao20CgPmn4H2u0S917egA5gw2iboBN5EeI6uEEc9V
-         Pd+g==
-X-Gm-Message-State: ACgBeo2jEm0MxYJqFMjmlhBu9mByaYI5AKkNsMyn9uRnXAvIVFz+NiBO
-        VbrORzvGx99JX2S9GWXi0W4=
-X-Google-Smtp-Source: AA6agR7jUYM/thCW3aozvylNyqUlO54iIfwG+TJITPxh00AjybJsEh/bVfCV5cWcRER/xBmwVBiXKw==
-X-Received: by 2002:ac8:5907:0:b0:344:e61b:8c0e with SMTP id 7-20020ac85907000000b00344e61b8c0emr335730qty.349.1662496729120;
-        Tue, 06 Sep 2022 13:38:49 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id 137-20020a37078f000000b006be68f9bdddsm11617656qkh.133.2022.09.06.13.38.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 13:38:46 -0700 (PDT)
-Message-ID: <a475ec3e-a1ce-c81c-5d80-8254e9b62068@gmail.com>
-Date:   Tue, 6 Sep 2022 13:38:42 -0700
+        Tue, 6 Sep 2022 16:39:47 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8493A186DF
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662496786; x=1694032786;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rExLlN3V5QG+V48IGEwb2e3lGFTG2oeVWSO5sqImoY4=;
+  b=VOOtgMmb7FVBPj4VRiQikpDOlXO6gtqiFLpvxCMCRig3O4ShH6rQ6hyR
+   pQ0fICwYH4DfWSYJk5ss/Wdbjc8Kqag+aIoOrKSW0IZYf8jn8T7Sptp+M
+   bMXrKjT05KhjFu65szpJ0/3JUg6PQn7nRnGkozmDJk4cM9FfhEma9m/7m
+   SahngyXus0Sht+a5nlWxMIdLUaYl0cRRPVh+xoSVRtb3cXzWp+V6LszC1
+   buGC3mtCDK33aJPvvIaFlfY8Q2tEgvsZy9hFuA6GbBqkfSbCnCpaTZpWc
+   ketYGm5IZKx8PLwdssxNbTJ8JK8rNwZWDZ+3/Ph5C3EknCz2ctHJRwZcB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297485246"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="297485246"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:39:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="591412602"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2022 13:39:44 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVfMF-0005b3-2z;
+        Tue, 06 Sep 2022 20:39:43 +0000
+Date:   Wed, 7 Sep 2022 04:38:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/reset/reset-ti-sci.c:229: undefined reference to
+ `devm_ti_sci_get_handle'
+Message-ID: <202209070451.QaOZq6Qu-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v3 05/11] leds: bcm6358: Get rid of custom
- led_init_default_state_get()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gene Chen <gene_chen@richtek.com>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Lee Jones <lee@kernel.org>
-References: <20220906135004.14885-1-andriy.shevchenko@linux.intel.com>
- <20220906135004.14885-6-andriy.shevchenko@linux.intel.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220906135004.14885-6-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Philipp,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
+commit: a6af504184c981efd253f986e6fc54db57b1d39f reset: ti-sci: Allow building under COMPILE_TEST
+date:   5 months ago
+config: arm-randconfig-c042-20220906 (https://download.01.org/0day-ci/archive/20220907/202209070451.QaOZq6Qu-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a6af504184c981efd253f986e6fc54db57b1d39f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a6af504184c981efd253f986e6fc54db57b1d39f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arm-linux-gnueabi-ld: drivers/reset/reset-ti-sci.o: in function `ti_sci_reset_probe':
+>> drivers/reset/reset-ti-sci.c:229: undefined reference to `devm_ti_sci_get_handle'
+   pahole: .tmp_vmlinux.btf: No such file or directory
+   .btf.vmlinux.bin.o: file not recognized: file format not recognized
 
 
-On 9/6/2022 6:49 AM, Andy Shevchenko wrote:
-> LED core provides a helper to parse default state from firmware node.
-> Use it instead of custom implementation.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+vim +229 drivers/reset/reset-ti-sci.c
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+28df169b9afa12 Andrew F. Davis 2017-05-24  217  
+28df169b9afa12 Andrew F. Davis 2017-05-24  218  static int ti_sci_reset_probe(struct platform_device *pdev)
+28df169b9afa12 Andrew F. Davis 2017-05-24  219  {
+28df169b9afa12 Andrew F. Davis 2017-05-24  220  	struct ti_sci_reset_data *data;
+28df169b9afa12 Andrew F. Davis 2017-05-24  221  
+28df169b9afa12 Andrew F. Davis 2017-05-24  222  	if (!pdev->dev.of_node)
+28df169b9afa12 Andrew F. Davis 2017-05-24  223  		return -ENODEV;
+28df169b9afa12 Andrew F. Davis 2017-05-24  224  
+28df169b9afa12 Andrew F. Davis 2017-05-24  225  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+28df169b9afa12 Andrew F. Davis 2017-05-24  226  	if (!data)
+28df169b9afa12 Andrew F. Davis 2017-05-24  227  		return -ENOMEM;
+28df169b9afa12 Andrew F. Davis 2017-05-24  228  
+28df169b9afa12 Andrew F. Davis 2017-05-24 @229  	data->sci = devm_ti_sci_get_handle(&pdev->dev);
+28df169b9afa12 Andrew F. Davis 2017-05-24  230  	if (IS_ERR(data->sci))
+28df169b9afa12 Andrew F. Davis 2017-05-24  231  		return PTR_ERR(data->sci);
+28df169b9afa12 Andrew F. Davis 2017-05-24  232  
+28df169b9afa12 Andrew F. Davis 2017-05-24  233  	data->rcdev.ops = &ti_sci_reset_ops;
+28df169b9afa12 Andrew F. Davis 2017-05-24  234  	data->rcdev.owner = THIS_MODULE;
+28df169b9afa12 Andrew F. Davis 2017-05-24  235  	data->rcdev.of_node = pdev->dev.of_node;
+28df169b9afa12 Andrew F. Davis 2017-05-24  236  	data->rcdev.of_reset_n_cells = 2;
+28df169b9afa12 Andrew F. Davis 2017-05-24  237  	data->rcdev.of_xlate = ti_sci_reset_of_xlate;
+28df169b9afa12 Andrew F. Davis 2017-05-24  238  	data->dev = &pdev->dev;
+28df169b9afa12 Andrew F. Davis 2017-05-24  239  	idr_init(&data->idr);
+28df169b9afa12 Andrew F. Davis 2017-05-24  240  
+28df169b9afa12 Andrew F. Davis 2017-05-24  241  	platform_set_drvdata(pdev, data);
+28df169b9afa12 Andrew F. Davis 2017-05-24  242  
+28df169b9afa12 Andrew F. Davis 2017-05-24  243  	return reset_controller_register(&data->rcdev);
+28df169b9afa12 Andrew F. Davis 2017-05-24  244  }
+28df169b9afa12 Andrew F. Davis 2017-05-24  245  
+
+:::::: The code at line 229 was first introduced by commit
+:::::: 28df169b9afa121153ef2a3ef4ceae72512cde6d reset: Add the TI SCI reset driver
+
+:::::: TO: Andrew F. Davis <afd@ti.com>
+:::::: CC: Philipp Zabel <p.zabel@pengutronix.de>
+
 -- 
-Florian
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,107 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6475AF0ED
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAED5AF0EF
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiIFQo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S237273AbiIFQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiIFQn4 (ORCPT
+        with ESMTP id S239228AbiIFQoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:43:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8FBE0D4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:23:45 -0700 (PDT)
+        Tue, 6 Sep 2022 12:44:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E421106;
+        Tue,  6 Sep 2022 09:24:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A85A614AA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 16:23:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04CEC433D6;
-        Tue,  6 Sep 2022 16:23:42 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 17:23:39 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        tongtiangen@huawei.com,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        syzbot <syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [syzbot] KASAN: invalid-access Read in copy_page
-Message-ID: <Yxd0C7ndn+iPAGcj@arm.com>
-References: <0000000000004387dc05e5888ae5@google.com>
- <CA+fCnZc9u+QrF-JCQSA+uCM9-egh_=9x4hPdJng6T_uh6XWMZQ@mail.gmail.com>
- <YxdJ684ypgAy8k98@arm.com>
- <CACT4Y+YOnTpWT5NCNhsPY=kV=2gFfQkY=7xGdU_1k7AdGhQneg@mail.gmail.com>
- <YxdZXvsWr37RrFRk@arm.com>
- <CA+fCnZf-GOZpnBRLkRPrL7FUwYrAb-bu=PV0zMfbKOuNYrZ00A@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A25E2B818D4;
+        Tue,  6 Sep 2022 16:24:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D5CC433C1;
+        Tue,  6 Sep 2022 16:24:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662481463;
+        bh=I9HEnsbD64k69AXnJTEmM71NuSK/jsrCbllGo7OZAcE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oGNhKoZ23xmRmuMfF5By9jdWcF+k0B2GSVOYstp81XQgpGtsjDdL+emiHg7zYoqMj
+         IflTD2XbgUMEVE/Eq55++YXOFYXbNtIs8Gmh4D6kxh0WCjoFV2wYWFFrXiAIP0sotW
+         sVPNy5kCa//2GRAZX2RitE35UUcpj++7o4GjeAnIO5cfR6zH3DGGR6970lnX1UCQ7G
+         lzKflOjgv6TtMc7FcduohNII9+XludVGhDPdV8Q4YxDYfRfUE0PCsybDCpBZjUn0dx
+         +ZQxwz7p95fO4m4IyNAHH1pMMwsmcNjx3DNhIWXEM4EfoVws9j9iTM1KyjDy5d4N/t
+         udVbnIp9osezw==
+From:   SeongJae Park <sj@kernel.org>
+To:     stable@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, xen-devel@lists.xenproject.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>,
+        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>
+Subject: [PATCH for-stable-5.10.y] xen-blkfront: Cache feature_persistent value before advertisement
+Date:   Tue,  6 Sep 2022 16:24:14 +0000
+Message-Id: <20220906162414.105452-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+fCnZf-GOZpnBRLkRPrL7FUwYrAb-bu=PV0zMfbKOuNYrZ00A@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 04:39:57PM +0200, Andrey Konovalov wrote:
-> On Tue, Sep 6, 2022 at 4:29 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > > Does it take long to reproduce this kasan warning?
-> > >
-> > > syzbot finds several such cases every day (200 crashes for the past 35 days):
-> > > https://syzkaller.appspot.com/bug?extid=c2c79c6d6eddc5262b77
-> > > So once it reaches the tested tree, we should have an answer within a day.
-> 
-> To be specific, this syzkaller instance fuzzes the mainline, so the
-> patch with the WARN_ON needs to end up there.
-> 
-> If this is unacceptable, perhaps, we could switch the MTE syzkaller
-> instance to the arm64 testing tree.
+commit fe8f65b018effbf473f53af3538d0c1878b8b329 upstream.
 
-It needs some more digging first. My first guess was that a PROT_MTE
-page was mapped into the user address space and the task repainted it
-but I don't think that's the case.
+Xen blkfront advertises its support of the persistent grants feature
+when it first setting up and when resuming in 'talk_to_blkback()'.
+Then, blkback reads the advertised value when it connects with blkfront
+and decides if it will use the persistent grants feature or not, and
+advertises its decision to blkfront.  Blkfront reads the blkback's
+decision and it also makes the decision for the use of the feature.
 
-> > That's good to know. BTW, does syzkaller write tags in mmap'ed pages or
-> > only issues random syscalls?
-> 
-> syzkaller doesn't write tags. Or, at least, shouldn't. Theoretically
-> it could come up with same way to generate instructions that write
-> tags, but this is unlikely.
+Commit 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter
+when connect"), however, made the blkfront's read of the parameter for
+disabling the advertisement, namely 'feature_persistent', to be done
+when it negotiate, not when advertise.  Therefore blkfront advertises
+without reading the parameter.  As the field for caching the parameter
+value is zero-initialized, it always advertises as the feature is
+disabled, so that the persistent grants feature becomes always disabled.
 
-Yeah. And colouring an entire page with the same tag is even less
-likely.
+This commit fixes the issue by making the blkfront does parmeter caching
+just before the advertisement.
 
-> > I'm trying to figure out whether tag 0xf2
-> > was written by the kernel without updating the corresponding
-> > page_kasan_tag() or it was syzkaller recolouring the page.
-> 
-> Just in case, I want to point out that the kasantag == 0xa from the
-> page flags matches the pointer tag 0xf5 in the report. The tag value
-> is stored bitwise-inverted in the page flags. Not that this matters in
-> this case though.
+Fixes: 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter when connect")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Signed-off-by: SeongJae Park <sj@kernel.org>
+Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Link: https://lore.kernel.org/r/20220831165824.94815-4-sj@kernel.org
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
 
-Yes, I'm aware of this. So copy_page() tries to read from
-page_address(src) with kasantag == 0xa (real tag 0xf5) while the
-in-memory tag is 0xf2. Since the user didn't repaint the page, I'm
-trying to figure out what set the tags to 0xf2 while leaving the
-page_kasan_tag() to 0xf5. Some of the page_kasan_tag_reset() calls in
-the past could have hidden a different issue.
+This patch is a manual backport of the upstream commit on the 5.10.y
+kernel.  Please note that this patch can be applied on the latest 5.10.y
+only after the preceding patch[1] is applied.
 
-Since I can't find the kernel boot log for these runs, is there any kind
-of swap enabled? I'm trying to narrow down where the problem may be.
+[1] https://lore.kernel.org/stable/20220906132819.016040100@linuxfoundation.org/
 
+ drivers/block/xen-blkfront.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+index 9d5460f6e0ff..6f33d62331b1 100644
+--- a/drivers/block/xen-blkfront.c
++++ b/drivers/block/xen-blkfront.c
+@@ -1852,6 +1852,12 @@ static void free_info(struct blkfront_info *info)
+ 	kfree(info);
+ }
+ 
++/* Enable the persistent grants feature. */
++static bool feature_persistent = true;
++module_param(feature_persistent, bool, 0644);
++MODULE_PARM_DESC(feature_persistent,
++		"Enables the persistent grants feature");
++
+ /* Common code used when first setting up, and when resuming. */
+ static int talk_to_blkback(struct xenbus_device *dev,
+ 			   struct blkfront_info *info)
+@@ -1943,6 +1949,7 @@ static int talk_to_blkback(struct xenbus_device *dev,
+ 		message = "writing protocol";
+ 		goto abort_transaction;
+ 	}
++	info->feature_persistent_parm = feature_persistent;
+ 	err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
+ 			info->feature_persistent_parm);
+ 	if (err)
+@@ -2019,12 +2026,6 @@ static int negotiate_mq(struct blkfront_info *info)
+ 	return 0;
+ }
+ 
+-/* Enable the persistent grants feature. */
+-static bool feature_persistent = true;
+-module_param(feature_persistent, bool, 0644);
+-MODULE_PARM_DESC(feature_persistent,
+-		"Enables the persistent grants feature");
+-
+ /**
+  * Entry point to this code when a new device is created.  Allocate the basic
+  * structures and the ring buffer for communication with the backend, and
+@@ -2394,7 +2395,6 @@ static void blkfront_gather_backend_features(struct blkfront_info *info)
+ 	if (xenbus_read_unsigned(info->xbdev->otherend, "feature-discard", 0))
+ 		blkfront_setup_discard(info);
+ 
+-	info->feature_persistent_parm = feature_persistent;
+ 	if (info->feature_persistent_parm)
+ 		info->feature_persistent =
+ 			!!xenbus_read_unsigned(info->xbdev->otherend,
 -- 
-Catalin
+2.25.1
+

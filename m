@@ -2,148 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3B75AE936
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B445AE93A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240333AbiIFNPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S239655AbiIFNQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiIFNPj (ORCPT
+        with ESMTP id S234277AbiIFNQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:15:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3314D4FE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662470136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1uJsWhraelKXluHwB7FaDWCgu+gdxCn6dypgVW00Tgc=;
-        b=bF5LJJux6pkMsVLSu9nhNW/lSLbx6PqMRuDcPP3rp8MRQW/eKT3RDtWAFO01gOjiCg6JXj
-        oLPEru7ZKFnDfsjCb5p44b9xAesyfcdDuZzSICNlpQ6pnaow+hY64dirPC/NqER2MtKev3
-        w2409D0WQFhyeucvX/8O9KlOHxtKe+0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-329-ZJ6f2qvFNdyHQEaDEwgJug-1; Tue, 06 Sep 2022 09:15:35 -0400
-X-MC-Unique: ZJ6f2qvFNdyHQEaDEwgJug-1
-Received: by mail-wm1-f72.google.com with SMTP id v21-20020a05600c215500b003a83c910d83so2093556wml.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:15:34 -0700 (PDT)
+        Tue, 6 Sep 2022 09:16:48 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EDE6C106;
+        Tue,  6 Sep 2022 06:16:44 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id a22so7916336qtw.10;
+        Tue, 06 Sep 2022 06:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=NoCbebGaOWxkwqZQWcLHo7uI1OK/Nn+DHDHQ7NFsadc=;
+        b=jYp77ldm+4lVSZXDHm2hhZj1UVisPG2zTYgIgaIfWxFZW1nIM2l0UC6+Fo6MXviZdR
+         Y9P0mg7I4yTrG7pd2splD69vkgwTcj6+0AYqNUUT68bC7+5rRpGCey2s5NFCvXlOK62t
+         iTRAsGQWpPEzUOHESPOo5lskqEbuUwGR5eb5/cP+J0R92gipJoOm2/PyaRD0Bm27Ni4F
+         EGlHiSRK6HWmpzXVT+QKGrkD4W+zzUf0zRFPAcdx4hR9rvPbeXFNoYOwT0b9yyp51jh7
+         u7pRu9aTfjT4Ohqs0XnmK1h4Pk1//urX5l7pdZedkcrA/HkLE/notVUO7QOwm1Nf9zVv
+         YS1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=1uJsWhraelKXluHwB7FaDWCgu+gdxCn6dypgVW00Tgc=;
-        b=0Fy2Qwi/HXpYZtHy48dHpUEW2HalY+ekEJvjgqOMiBThH4skCL3iuX1E/xM34GR0hz
-         S8wU1AQ1LCL3eKJryN5hlYQHYgsZfYsblZxE+i9wn7zDnBHzqckzboQW+Lry0Oohb1Ir
-         iBIfan756xkG6mnOtn0kaTd2jo2VKWhrYeFErWge5wtOKjxBFwIWHlx8zQj270vrbzyA
-         1JW7tFhcBotgpB+GyIQ08prIFivx7VxIorvmVv/4r3/vqf780j0C+rR0ZKMRTGtB2ZXn
-         p4t4WmH2BSLh7snnw7E4R0Z9O14B3iAN8zPf0ADNgGRN1d8RtjzFNvxz7ubGM7p46a2v
-         mCjQ==
-X-Gm-Message-State: ACgBeo2gXwMBYmIUsphZPtdw7XIveHzERb9dxCxoec0cTT4zW8foW0u1
-        we5jyYhB0lWJYu4KdlX7uS6cu0FxIS/AF0h0CqRL6wwcbLA5ti/VMaf3xEY+/0X9MJGYmNc7xgB
-        x3CijvEaMkewmWAUFTua03U3T
-X-Received: by 2002:a5d:59a4:0:b0:228:5f74:796 with SMTP id p4-20020a5d59a4000000b002285f740796mr9196592wrr.655.1662470133839;
-        Tue, 06 Sep 2022 06:15:33 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5P3NAwv8A+ZEKH3JYcwHQ89wUpJPH3H2eNehgZC3vx/2n+iYwWJrNvkLHshgWwyn7m7zUFWA==
-X-Received: by 2002:a5d:59a4:0:b0:228:5f74:796 with SMTP id p4-20020a5d59a4000000b002285f740796mr9196562wrr.655.1662470133442;
-        Tue, 06 Sep 2022 06:15:33 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-72.dyn.eolo.it. [146.241.112.72])
-        by smtp.gmail.com with ESMTPSA id q1-20020a05600c2e4100b003a2cf1ba9e2sm13653800wmf.6.2022.09.06.06.15.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 06:15:32 -0700 (PDT)
-Message-ID: <8b2589bd6303133fd27cab1af27b096a5f848074.camel@redhat.com>
-Subject: Re: [PATCH net-next 2/5] net: hns3: support ndo_select_queue()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Guangbin Huang <huangguangbin2@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     edumazet@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
-        lanhao@huawei.com
-Date:   Tue, 06 Sep 2022 15:15:31 +0200
-In-Reply-To: <20220905081539.62131-3-huangguangbin2@huawei.com>
-References: <20220905081539.62131-1-huangguangbin2@huawei.com>
-         <20220905081539.62131-3-huangguangbin2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=NoCbebGaOWxkwqZQWcLHo7uI1OK/Nn+DHDHQ7NFsadc=;
+        b=gCR3hDxWgZ1IwIp7nJPaVImDEx8YaJDu5q1P+B8ODoCu0kSlUNFO8HbBSyYEgppDdh
+         sWezRoYQmhaBDDOJbcP+bP49OIKN8qE8Fp3bM96IfhDQGMKDhahFMrhz+3Pv8iyv6iO4
+         q5YnMeaJ5A2uU2gr85YeLqvHCuLxSAGpgPSW7VzA3pM/FMrwDzOD0i31QvHBPZhISRBT
+         1eKg13SFlu1unpQthH+XwqK6nyRqhSXjYRO7Qxkj6vUUx1Sgqw/4qUpEdkrXeeQn18Aa
+         t8KEwlfUPMhAV/MQAnynfXc7F4du93p2g/6yg/NXnagab+0HVFZWg8GRWa37ZDubMBne
+         9/yQ==
+X-Gm-Message-State: ACgBeo1F+V1lOow1ErY3Yux4/ThrIG8BoD4M5O5PDb34fuTsCbqkWwV/
+        hLZHv7mQucjGytrfvr/PjnVPrA5hZq6MsdkVskE=
+X-Google-Smtp-Source: AA6agR6i7B+oUyRuVMipuDEgzBmFB2WR/0ilFHjBm/eE8ykTIP5wbce/mr2hbsEUK+C6GBDvn2dvfWF75D5NHNiyxcg=
+X-Received: by 2002:a05:622a:40a:b0:343:77ba:727f with SMTP id
+ n10-20020a05622a040a00b0034377ba727fmr44328260qtx.481.1662470203427; Tue, 06
+ Sep 2022 06:16:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1662454215.git.cmo@melexis.com> <32c4b72624e4a3480b202f24f506ca91029e47f7.1662454215.git.cmo@melexis.com>
+ <CAHp75VezNufWGW6sC+ALmX9H4yavWRCmpHuv9ZVoRycQxZ-uQg@mail.gmail.com>
+ <CAKv63utD2NzbUYR2=rrmZtkdtwOzoQBW7dZ5yzNa-r8uKmqXaw@mail.gmail.com>
+ <CAHp75Vc1a1bguLxX7Laewa9f2k9c38KeOD1zsikmC+3=21MnyQ@mail.gmail.com> <CAKv63utCSXVgOP4JkEBQSzDWF_s443a-ZbCd8V4tP9=z461McA@mail.gmail.com>
+In-Reply-To: <CAKv63utCSXVgOP4JkEBQSzDWF_s443a-ZbCd8V4tP9=z461McA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 6 Sep 2022 16:16:07 +0300
+Message-ID: <CAHp75VcAhDPLyS=f07qVyiUY_Bh-ZrovWcajn2UkugQt=OCNNQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] iio: temperature: mlx90632 Add runtime
+ powermanagement modes
+To:     Crt Mori <cmo@melexis.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-09-05 at 16:15 +0800, Guangbin Huang wrote:
-> To support tx packets to select queue according to its dscp field after
-> setting dscp and tc map relationship, this patch implements
-> ndo_select_queue() to set skb->priority according to the user's setting
-> dscp and priority map relationship.
-> 
-> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
-> ---
->  .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> index 481a300819ad..82f83e3f8162 100644
-> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> @@ -2963,6 +2963,51 @@ static int hns3_nic_set_vf_mac(struct net_device *netdev, int vf_id, u8 *mac)
->  	return h->ae_algo->ops->set_vf_mac(h, vf_id, mac);
->  }
->  
-> +#define HNS3_INVALID_DSCP		0xff
-> +#define HNS3_DSCP_SHIFT			2
-> +
-> +static u8 hns3_get_skb_dscp(struct sk_buff *skb)
-> +{
-> +	__be16 protocol = skb->protocol;
-> +	u8 dscp = HNS3_INVALID_DSCP;
-> +
-> +	if (protocol == htons(ETH_P_8021Q))
-> +		protocol = vlan_get_protocol(skb);
-> +
-> +	if (protocol == htons(ETH_P_IP))
-> +		dscp = ipv4_get_dsfield(ip_hdr(skb)) >> HNS3_DSCP_SHIFT;
-> +	else if (protocol == htons(ETH_P_IPV6))
-> +		dscp = ipv6_get_dsfield(ipv6_hdr(skb)) >> HNS3_DSCP_SHIFT;
-> +
-> +	return dscp;
-> +}
-> +
-> +static u16 hns3_nic_select_queue(struct net_device *netdev,
-> +				 struct sk_buff *skb,
-> +				 struct net_device *sb_dev)
-> +{
-> +	struct hnae3_handle *h = hns3_get_handle(netdev);
-> +	u8 dscp, priority;
-> +	int ret;
-> +
-> +	if (h->kinfo.tc_map_mode != HNAE3_TC_MAP_MODE_DSCP ||
-> +	    !h->ae_algo->ops->get_dscp_prio)
-> +		goto out;
-> +
-> +	dscp = hns3_get_skb_dscp(skb);
-> +	if (unlikely(dscp == HNS3_INVALID_DSCP))
-> +		goto out;
-> +
-> +	ret = h->ae_algo->ops->get_dscp_prio(h, dscp, NULL, &priority);
+On Tue, Sep 6, 2022 at 4:04 PM Crt Mori <cmo@melexis.com> wrote:
+> On Tue, 6 Sept 2022 at 14:37, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > On Tue, Sep 6, 2022 at 1:52 PM Crt Mori <cmo@melexis.com> wrote:
+> > > On Tue, 6 Sept 2022 at 12:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > >
+> > > > Very good and documented code, thanks!
+> > > > I believe you better to use DEFINE_.*_PM_OPS instead of legacy ones
+> > > > (due to pm_ptr() usage).
+> > > > Otherwise, with some nitpicks that wouldn't prevent a green light,
+> > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > >
+> > > I checked DEFINE_.*_PM_OPS usage around drivers and you either have
+> > > SIMPLE (where you define suspend/resume) or you have RUNTIME (for
+> > > runtime suspend/resume), but never are those two together. So I am a
+> > > bit puzzled how to get this working.
+> >
+> > The one which suits here is called _DEFINE_DEV_PM_OPS(). But it's
+> > basically the same what you put here with the possible unused case.
+> >
+> I thought underscore prefixed macros are the ones not to be used
+> directly by drivers. I also found no occurrence in current drivers, so
+> it was not something that was done so far?
 
-This introduces an additional, unneeded indirect call in the fast path,
-you could consider replacing the above with a direct call to
-hclge_get_dscp_prio() - again taking care of the CONFIG_HNS3_DCB
-dependency.
+Looks like... Okay, then let's leave it to the maintainer to decide.
 
-Cheers,
-
-Paolo
-
+-- 
+With Best Regards,
+Andy Shevchenko

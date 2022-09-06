@@ -2,116 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714835ADD93
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8675ADDA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237896AbiIFCwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S238036AbiIFC6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiIFCwW (ORCPT
+        with ESMTP id S232918AbiIFC6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:52:22 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E358C65552
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 19:52:21 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o2-20020a17090a9f8200b0020025a22208so6346023pjp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 19:52:21 -0700 (PDT)
+        Mon, 5 Sep 2022 22:58:19 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126786BD52;
+        Mon,  5 Sep 2022 19:58:18 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id a9so5370588ilh.1;
+        Mon, 05 Sep 2022 19:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=xbLAZ8EomOdTf/PJLZrmWD8AyHmyj6muZVNU6dvfnNM=;
-        b=dGCbKL+fZJValWDbQnzUFtwrGNDTzB5t3YFfSujn7JYPt03eRYHZHVun8Z5rdT4lc4
-         oreblwss8NLvxHPjIW2ndNfWkOI7XDUAIwS4+m6j3jOIQxZTZZZhn1pGDlkv03bSVqpS
-         EacE2SgvLKy8qnbAKcSfbo1FCOPQDlQu9jZJoGrfqnJseIqaVHJBmiGRHg412IyIP+8w
-         iVDNXHy8Ilr5IhOypx5MGx8xOEAf9tlVHoCpcnQ4J9pXDm2L6sBqjadbsQGxj/H9gIGR
-         N1gToIYlM2ZqPIYEO3RXRTj+LLoP3vX4TMkFZFUtNrGTupyS1PyKUcegAAkfzTQjQA3q
-         Y4XA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4x4iyOx/qVbQuH7nJfiJGEP2eqYxJVCITtuz3ZahOGo=;
+        b=lQ/KQWX997iGCOqIJTfok8gUQHJNcxoGhPRj2dUh5ihpUuZ4UQaxlnEKw2FddVkFDM
+         L/IdKuvxznuxkvNM1jdTwn1NGEG3HSGQXp0ur414xM/qpO/TNHEAamsezhcZPl3ZFu9W
+         Y0Ar8NzKm7Ub+w9ynjfMckiwuGQIncPaQDwOwOWzcU/g8aruy+7Em8nP2bPT1i0jcVUW
+         ktRvXeBUVlAhLVAYIDFgDF12JcMELmYLPzRk39iSSVl5L4JKUqg88iHTQRNjoyb+Ynil
+         nOFjorQUHCnIeXaQ9HaGqDf3P/6U7O/WQ8jhwcsN1Txla+vQB4e83KNW/kGudRAvpmWr
+         uPnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=xbLAZ8EomOdTf/PJLZrmWD8AyHmyj6muZVNU6dvfnNM=;
-        b=B1IISGxZKdHfqO8dqIv+8MXLmH4UQvWtjQzLAdr+sKK6fFjP+VxNwypVrSHBSxTC1Y
-         /VGHeJS4uku4UOzc27h/NlSfhVwejJktKSlfxjfE8hUeh8ZTA5iZFMvERAilOh2Ul8ag
-         tT2zfAvuykHRcENEzFJjP0EXG37o1vjbpSQb5eHjqRy41CS9AumyNke3fR+eQ96T3dlG
-         J2JKkx83+XumWo7Zby79PYWMefMiZaL6kiAyxFFCxchSsRvhxj7a4ErNsGbwH8u+z/30
-         24m4YKcQHQ1UmGOsZPw1mIC5HBLq2ayqvRb355hb31U1bTbDMDy3ZxfFElAV/Jm9IOGg
-         4Ojg==
-X-Gm-Message-State: ACgBeo2hpuKvDbqPppNfoohx0kFATCJ5SVgvlUshAKtMpNYhgdTfRC7X
-        u+ra0/7/PL3cEG8WVOTk3x9HBZaiEqSfuINJ
-X-Google-Smtp-Source: AA6agR7cR+7qIJU07dBJP76b6LZTWTWrXy+v3LP+x2Q6MRZTN3lE7bDdfjqKgPKoo2gkzF1fyWuZlA==
-X-Received: by 2002:a17:902:c209:b0:175:1a78:a170 with SMTP id 9-20020a170902c20900b001751a78a170mr34675882pll.45.1662432741435;
-        Mon, 05 Sep 2022 19:52:21 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-83.three.co.id. [180.214.233.83])
-        by smtp.gmail.com with ESMTPSA id d22-20020aa797b6000000b0053dfef91b0bsm285903pfq.205.2022.09.05.19.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 19:52:21 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id A0230103BA4; Tue,  6 Sep 2022 09:52:15 +0700 (WIB)
-Date:   Tue, 6 Sep 2022 09:52:15 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Charles Mirabile <cmirabil@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Serge Schneider <serge@raspberrypi.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Nicolas Saenz Julienne <nicolassaenzj@gmail.com>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, rh-kdlp@googlegroups.com,
-        Joel Savitz <jsavitz@redhat.com>
-Subject: Re: [PATCH 5/5] DO NOT MERGE: full sensehat device tree overlay for
- raspberry pi 4
-Message-ID: <Yxa135HNrFztZe3F@debian.me>
-References: <20220823174158.45579-1-cmirabil@redhat.com>
- <20220823174158.45579-6-cmirabil@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4x4iyOx/qVbQuH7nJfiJGEP2eqYxJVCITtuz3ZahOGo=;
+        b=dU7cr3i1gemKFcOMq1VWIrpBUC9SWOyjdUyDPfq97zMC2TnYyZbHwrpR1qQ65lfuZL
+         7eu6ETawISVHfLC0bpCUMaJ6KUuE49PTknHbQGqKPthlEAZAk1ioR6zRLOTG8oCa8jny
+         0FEE2x923FWucWGB+wjYTyrn1oCB4vvZhvc7a+38wATby+KjZm14B+IamXeOyjFRgLEo
+         tH7WLv+vkSuBW17jfxAVW0UP1qyrgfzK5MlnXBFK3YASZSUzyhyk3Zr8Gbti31beGS6r
+         qhTV+KNuxw+VGd3H3MtWKJyooh/lkoG1MtXNfJwwSF7QzjsUE6FMP2B8zwe06iZxQieQ
+         dXsg==
+X-Gm-Message-State: ACgBeo36MQp8+H1HzkWapimiA6m1Ge1Nb2nSaNDeFB3i+nnTwvrgXp5r
+        Zm42Wkw9jIxCczI1IrTgLSHpvAbYiT+A1QxWk+I=
+X-Google-Smtp-Source: AA6agR5aMg+qaWsjwd2wu0dFhLTJgtP4otraU5rsKzrQ2LNbsJlrEgmoSx8wVUBnNjXWp/gSOBSBa4LXzC+D9wlAwik=
+X-Received: by 2002:a05:6e02:1d0b:b0:2eb:73fc:2235 with SMTP id
+ i11-20020a056e021d0b00b002eb73fc2235mr15057542ila.164.1662433097391; Mon, 05
+ Sep 2022 19:58:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JL88ZHhn8zfeK6Xv"
-Content-Disposition: inline
-In-Reply-To: <20220823174158.45579-6-cmirabil@redhat.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com> <20220905143318.1592015-8-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220905143318.1592015-8-roberto.sassu@huaweicloud.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Tue, 6 Sep 2022 04:57:41 +0200
+Message-ID: <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
+Subject: Re: [PATCH v16 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        joannelkoong@gmail.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 5 Sept 2022 at 16:35, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
+> the ability to check the validity of a signature against supplied data, by
+> using user-provided or system-provided keys as trust anchor.
+>
+> The new kfunc makes it possible to enforce mandatory policies, as eBPF
+> programs might be allowed to make security decisions only based on data
+> sources the system administrator approves.
+>
+> The caller should provide the data to be verified and the signature as eBPF
+> dynamic pointers (to minimize the number of parameters) and a bpf_key
+> structure containing a reference to the keyring with keys trusted for
+> signature verification, obtained from bpf_lookup_user_key() or
+> bpf_lookup_system_key().
+>
+> For bpf_key structures obtained from the former lookup function,
+> bpf_verify_pkcs7_signature() completes the permission check deferred by
+> that function by calling key_validate(). key_task_permission() is already
+> called by the PKCS#7 code.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Acked-by: KP Singh <kpsingh@kernel.org>
+> ---
+>  kernel/trace/bpf_trace.c | 45 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 7a7023704ac2..8e2c026b0a58 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1294,12 +1294,57 @@ void bpf_key_put(struct bpf_key *bkey)
+>         kfree(bkey);
+>  }
+>
+> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> +/**
+> + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
+> + * @data_ptr: data to verify
+> + * @sig_ptr: signature of the data
+> + * @trusted_keyring: keyring with keys trusted for signature verification
+> + *
+> + * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
+> + * with keys in a keyring referenced by *trusted_keyring*.
+> + *
+> + * Return: 0 on success, a negative value on error.
+> + */
+> +int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+> +                              struct bpf_dynptr_kern *sig_ptr,
+> +                              struct bpf_key *trusted_keyring)
+> +{
+> +       int ret;
+> +
+> +       if (trusted_keyring->has_ref) {
+> +               /*
+> +                * Do the permission check deferred in bpf_lookup_user_key().
+> +                * See bpf_lookup_user_key() for more details.
+> +                *
+> +                * A call to key_task_permission() here would be redundant, as
+> +                * it is already done by keyring_search() called by
+> +                * find_asymmetric_key().
+> +                */
+> +               ret = key_validate(trusted_keyring->key);
+> +               if (ret < 0)
+> +                       return ret;
+> +       }
+> +
+> +       return verify_pkcs7_signature(data_ptr->data,
+> +                                     bpf_dynptr_get_size(data_ptr),
+> +                                     sig_ptr->data,
+> +                                     bpf_dynptr_get_size(sig_ptr),
 
---JL88ZHhn8zfeK6Xv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+MIssing check for data_ptr->data == NULL before making this call? Same
+for sig_ptr.
 
-On Tue, Aug 23, 2022 at 01:41:58PM -0400, Charles Mirabile wrote:
-> This patch shold not be merged - dtbs files are not stored in the
-> kernel tree. We just provide this file so the code can be tested.
->=20
-
-Hmm, if this is DO NOT MERGE patch due to build artifacts (in this case
-dtbs), then how testing of this driver can be done with just DT source
-(like other drivers)? Does providing custom overlay needed for testing
-it?
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---JL88ZHhn8zfeK6Xv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxa13wAKCRD2uYlJVVFO
-o5gNAPwMHaUxhbii/cyRnfLMdSGhlm35fNu4mvbZ6jD5HFVuSAD6Aku/MDnJPVmV
-4ut3dE+fghstxX8j8p0tN4TlCPULRAk=
-=HlGA
------END PGP SIGNATURE-----
-
---JL88ZHhn8zfeK6Xv--
+> +                                     trusted_keyring->key,
+> +                                     VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+> +                                     NULL);
+> +}
+> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
+> +
+>  __diag_pop();
+>
+>  BTF_SET8_START(key_sig_kfunc_set)
+>  BTF_ID_FLAGS(func, bpf_lookup_user_key, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
+>  BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
+> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> +BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
+> +#endif
+>  BTF_SET8_END(key_sig_kfunc_set)
+>
+>  static const struct btf_kfunc_id_set bpf_key_sig_kfunc_set = {
+> --
+> 2.25.1
+>

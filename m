@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AD55AE723
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9FF5AE728
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234404AbiIFMCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S237308AbiIFMDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiIFMCX (ORCPT
+        with ESMTP id S234504AbiIFMDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:02:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E60785A2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:02:22 -0700 (PDT)
+        Tue, 6 Sep 2022 08:03:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0ADA78231;
+        Tue,  6 Sep 2022 05:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662465742; x=1694001742;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B+zp+waDKjmV3+F5STc49zhhhMwE8xa40R3YdBcNWRk=;
-  b=Qro1wpNWT1J2yRdP7FjHa+3tHiRZ1SQwPyfwEG2A+3fEWXvjZRW49yH9
-   mo0NfO6FgPIveHG6dC9H3OaPgGgth+yfZK+PIv6W4xj1mXaAl+exWyNuf
-   huRBpFucWrpOM8IuIouCbaXfEWQ5TDRu7ub3qVo23/j6WYjZa8dbzLPr0
-   w2iT7ThuZbiuRPqb8BbXJM8ML7ydPwweY9xRRSe+rFD85ozT9piqXk4IU
-   nihSmIC3S4ir3Jeld5k0AzU3djLOiEEoqWWTf3BLfII3nm09WWhXwbDhN
-   oMFznwyFnQKKoyae1nGQ3OpbMUZRc4WP22Mx8+YU3QPunXHjolv29NNQU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="382868807"
+  t=1662465823; x=1694001823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4+M54oJEAmpUgzwqHAgtKWrqpFIukcuuWaBTNO+cn0c=;
+  b=KbCteuXW16N9QSI15kJ6T9BieiuPN8zltuqJSlMGSZ0etEBb2ocDCtbO
+   OgwwQ6GxaTL2qxNaGByoqTIGaMO67arw6c/l8xkfsA2jlTiRhmQQGr0nr
+   qzSww8GDPkfisqMqgeh2rfzqYCz6SwLZ6QOY5r2h+0sL6AVSbsSPPprVL
+   FRuQR18uwl7XuFp8B2Z2apOBwevHAvyFJ21kkNlzFSogZZlpTbkwAVZYq
+   fjZXcrzVHKelImoXV/6gauzvhyb4wV567fMa1YTGiz8NdHVNssT5E9DwV
+   IrCOREe5L0UAIdGgQoC0tKQdL0/wPjY0b+LZhLB2Onj4Q6ALG9oNnRgzx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="297887264"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="382868807"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:02:22 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="297887264"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:03:43 -0700
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="591239910"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2022 05:02:20 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVXHY-000551-0b;
-        Tue, 06 Sep 2022 12:02:20 +0000
-Date:   Tue, 6 Sep 2022 20:02:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: sound/soc/codecs/wm8731-i2c.c:65:1: error: type defaults to 'int' in
- declaration of 'module_i2c_driver'
-Message-ID: <202209061939.wShjoFWE-lkp@intel.com>
+   d="scan'208";a="614072065"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:03:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oVXIn-0096P7-15;
+        Tue, 06 Sep 2022 15:03:37 +0300
+Date:   Tue, 6 Sep 2022 15:03:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com
+Subject: Re: [PATCH v4 05/21] hwmon: (mr75203) fix voltage equation for
+ negative source input
+Message-ID: <Yxc3GeFc5gDKrYyP@smile.fi.intel.com>
+References: <20220906083356.21067-1-farbere@amazon.com>
+ <20220906083356.21067-6-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220906083356.21067-6-farbere@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,53 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   53e99dcff61e1523ec1c3628b2d564ba15d32eb7
-commit: 9dc15f81baf273b5aaaa3302ee8faacd78f361fd ASoC: wm8731: Factor out the I2C and SPI bus code into separate modules
-date:   5 months ago
-config: mips-randconfig-s033-20220906 (https://download.01.org/0day-ci/archive/20220906/202209061939.wShjoFWE-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9dc15f81baf273b5aaaa3302ee8faacd78f361fd
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9dc15f81baf273b5aaaa3302ee8faacd78f361fd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash sound/soc/codecs/
+On Tue, Sep 06, 2022 at 08:33:40AM +0000, Eliav Farber wrote:
+> According to Moortec Embedded Voltage Monitor (MEVM) series 3 data
+> sheet, the minimum input signal is -100mv and maximum input signal
+> is +1000mv.
+> 
+> The equation used to convert the digital word to voltage uses mixed
+> types (*val signed and n unsigned), and on 64 bit machines also has
+> different size, since sizeof(u32) = 4 and sizeof(long) = 8.
+> 
+> So when measuring a negative input, n will be small enough, such that
+> PVT_N_CONST * n < PVT_R_CONST, and the result of
+> (PVT_N_CONST * n - PVT_R_CONST) will overflow to a very big positive
+> 32 bit number. Then when storing the result in *val it will be the same
+> value just in 64 bit (instead of it representing a negative number which
+> will what happen when sizeof(long) = 4).
+> 
+> When -1023 <= (PVT_N_CONST * n - PVT_R_CONST) <= -1
+> dividing the number by 1024 should result of in 0, but because ">> 10"
+> is used it results in -1 (0xf...fffff).
+> 
+> This change fixes the sign problem and supports negative values by
+> casting n to long and replacing the shift right with div operation.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This is really downside of C...
 
-All error/warnings (new ones prefixed by >>):
+...
 
->> sound/soc/codecs/wm8731-i2c.c:65:1: warning: data definition has no type or storage class
-      65 | module_i2c_driver(wm8731_i2c_driver);
-         | ^~~~~~~~~~~~~~~~~
->> sound/soc/codecs/wm8731-i2c.c:65:1: error: type defaults to 'int' in declaration of 'module_i2c_driver' [-Werror=implicit-int]
->> sound/soc/codecs/wm8731-i2c.c:65:1: warning: parameter names (without types) in function declaration
-   sound/soc/codecs/wm8731-i2c.c:56:26: warning: 'wm8731_i2c_driver' defined but not used [-Wunused-variable]
-      56 | static struct i2c_driver wm8731_i2c_driver = {
-         |                          ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+> -		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
+> +		*val = (PVT_N_CONST * (long)n - PVT_R_CONST) / (1 << PVT_CONV_BITS);
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_SOC_WM8731_I2C
-   Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && I2C [=n]
-   Selected by [m]:
-   - SND_SOC_DB1200 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_SOC_AU1XPSC [=m]
+Wondering if we can use BIT(PVT_CONV_BITS) for two (quite unlikely to happen,
+I hope) purposes:
 
+1) Somebody copies such code where PVT_CONV_BITS analogue can be 31,
+   which is according to C standard is UB (undefined behaviour).
 
-vim +65 sound/soc/codecs/wm8731-i2c.c
-
-    64	
-  > 65	module_i2c_driver(wm8731_i2c_driver);
-    66	
+2) It makes shorter the line and also drops the pattern where some
+   dumb robot may propose a patch to basically revert the division
+   change.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Andy Shevchenko
+
+

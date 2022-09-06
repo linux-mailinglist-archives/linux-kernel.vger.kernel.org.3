@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCFF5ADED6
+	by mail.lfdr.de (Postfix) with ESMTP id 507785ADED4
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 07:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiIFFR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 01:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S232571AbiIFFTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 01:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbiIFFRw (ORCPT
+        with ESMTP id S232514AbiIFFTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 01:17:52 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3386BCD7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 22:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1662441468;
-        bh=NsoOFwFx0AaCpoovCG8Ki6hZzXU3jxwvWcd2PK9PRqU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=hp7IQRiDpU6Bbdl1RyNiTcuOZCsE3I/D4feOVWr+fTnOOcwVUaG6ugNw9L0PSYpDA
-         xGCIEEBIMc4/efYr4wG+whO2rrSX3FZEAaDSuXJV1gfoTjjQyFdhm4UgnA4y99Tx0y
-         1PViNCnZGTL9hCxrmuonolCKIVEM67AbU4Cetfbo=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 1889965C56;
-        Tue,  6 Sep 2022 01:17:46 -0400 (EDT)
-Message-ID: <a218373f773ef193903daa528291ec8bb384ddd2.camel@xry111.site>
-Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Tue, 06 Sep 2022 13:17:45 +0800
-In-Reply-To: <29cd929b-185b-1c4b-f200-08f2a724b59d@loongson.cn>
-References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
-         <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
-         <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
-         <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
-         <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
-         <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
-         <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
-         <0b2d115c42ff6cb9b8c65d852ec2f0746ca6e8d9.camel@xry111.site>
-         <d852f590-95b4-3fd1-924a-68c0a6bb1b1b@loongson.cn>
-         <29cd929b-185b-1c4b-f200-08f2a724b59d@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.45.3 
+        Tue, 6 Sep 2022 01:19:12 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7636BCD7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 22:19:11 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id b17so5486274ilh.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 22:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ely/aEFxFzOsBw72pTQ4C/orrI0uHapotCxDtVzcVYQ=;
+        b=jTLIue7tHKiJEkIXE4UvdD0oiM5JDsR6TuVAzKn9K426IYhT2US3RYz/q78X3ZWD6c
+         sAhbuxwdk9LtcvA6YbW7AXb+ovyOI68IvMeN5JEeACghUSA+NVCNiHOmQwZsazSFfgGM
+         Q0IBWq4vNb7kU3n+Ovg2Oe0zLk54+WFQenC2ZV539EAqJOeDvkp1OkUUm2bRcYL3dHrZ
+         jj8zRznnkmaPSvd1/Q//+Smnbl6/cJt0xQsAZ1iwZgZxklQLVEmy8aV6tagiaQShm0R2
+         j6wcsFrzK2bm69SBEi5tH2EiZ3vm9MPLIKjLpwB3c/4Tafwc3x7R4pVkBLPMiC81hb4m
+         R0Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ely/aEFxFzOsBw72pTQ4C/orrI0uHapotCxDtVzcVYQ=;
+        b=Q4z5t1txNA+MrdIV390I2Ogxjx+NHceDQgrspaVtv549DSR7pm+jfBAknS91m2KWGT
+         cLnLPsa4UPwFEksxe39n8AVBNGTHXTGgiyI8vqlzK9Ep2n1wRkdcDQ53pJd9D6upzba1
+         Rr8KXYbm/NHFnrVv5uBxJaRDS/speH+mzEmddDhrvptUwGNMYLwAj3a7hlVtlkhsn4X3
+         Vr8TmQQaUhv3BHPfnVqw2WsulIO5FTcM+vaQxcbgPHWjWQDMMmI5wt4K//lbdSj2gXnR
+         1KmXTRUCi9x2HtTmw8c/in+el9LIsBaHIjIhb+ylRpZ+hwm/SGUK7N+qhmBqQ3U5o4Bg
+         38zw==
+X-Gm-Message-State: ACgBeo2e21pbbOWE58MGJ0aC+KWO9DXmg8B15mzugmiylorkk+CLq5XY
+        iRcyHzqdSBlKjySDe0MeLcYZ6WcOnhfGLwkIoso=
+X-Google-Smtp-Source: AA6agR5rwgsCL4VMr/DQKH9Y82uS44Oz0RSu8ipUCP41EntnG4CbXRh6pftkDnSorGe7i+G64IFBFZbpeWy6KlRZCzg=
+X-Received: by 2002:a05:6e02:1ca9:b0:2e5:fa2a:6345 with SMTP id
+ x9-20020a056e021ca900b002e5fa2a6345mr26370929ill.5.1662441550668; Mon, 05 Sep
+ 2022 22:19:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220826023504.6183-1-steve.lee.analog@gmail.com>
+ <Yw+OCnOgYUOWdIEx@sirena.org.uk> <CA+Fz0PZStYOZhNpRQCCVKxaDmPPq_PwvWrxfWbq=sBNKrZzzNg@mail.gmail.com>
+ <YxCPYbPsEyZmuHOI@sirena.org.uk>
+In-Reply-To: <YxCPYbPsEyZmuHOI@sirena.org.uk>
+From:   Lee Steve <steve.lee.analog@gmail.com>
+Date:   Tue, 6 Sep 2022 14:17:53 +0900
+Message-ID: <CA+Fz0PZv-sxLiXFgFQ4STN+ghg0-eQqW-jXh8X1hzD0ykTn8tQ@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: max98390: Remove unnecessary amp on/off conrtol
+To:     Mark Brown <broonie@kernel.org>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        krzk@kernel.org, ryans.lee@analog.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-06 at 10:16 +0800, Youling Tang wrote:
+On Thu, Sep 1, 2022 at 7:54 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Thu, Sep 01, 2022 at 02:57:19PM +0900, Lee Steve wrote:
+> > On Thu, Sep 1, 2022 at 1:36 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> > > I can't see anything which ensures that this is the case?  Should there
+> > > be a check which returns an error if the output is not enabled, or
+> > > should the function check the current state and preserve it at the end?
+> > > I can see that this would fix problems with it being disabled when
+> > > callibrating.
+>
+> >  As your comment, this can fix amp being disabled when calibrating.
+> > And this also fix the case that music play right after calibration.
+> > Actually, calibration process should start mute playback before
+> > trigger this function.
+> > AMP disable/enable control in calibration function can break sync with
+> > userspace enable/disable control.
+>
+> Right, so that sounds like there should be something which checks the
+> current state and doesn't start callibration unless the device is in a
+> sensible state.
 
-> Switch to relative exception tables:
->=20
-> https://github.com/tangyouling/linux/commit/6525b8da
-> https://github.com/tangyouling/linux/commit/b6ac0827
->=20
-> Will switch to the relative exception tables after applying the above
-> two patches. So there is no need to relocate the exception table
-> (remove relocate_exception_table).
->=20
-> Now we can remove the relocation of la.abs , got and ex_table, but
-> still need to relocate LARCH_64. Is there anything else that needs to
-> be modified to eliminate this relocation?
-
-You may see the RISC-V patch as a reference:
-
-https://lore.kernel.org/all/20211009171259.2515351-2-alexandre.ghiti@canoni=
-cal.com/
-
-Basically, make the linker to generate R_*_RELATIVE instead of R_*_64
-for pointers.  And, perform R_*_RELATIVE relocation loading the kernel.
-
-Something problematic IMO: RISC-V uses "-shared" to trick the linker to
-generate R_*_RELATIVE but I consider it ugly (if the kernel is a shared
-library, my grandma will be a wagon!)  I prefer "-pie -static", but our
-Glibc does not have static-pie support for now.  It won't really affect
-the kernel (we are -nostdlib), but we cannot learn how to handle
-R_*_RELATIVE in static pie from Glibc then.
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+ I will send v2 patch adding check before start calibration.
+Thanks.

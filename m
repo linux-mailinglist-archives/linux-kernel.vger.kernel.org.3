@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C90B5AF303
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181BF5AF301
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiIFRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S229553AbiIFRqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIFRqz (ORCPT
+        with ESMTP id S229437AbiIFRqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:46:55 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C506E2DC;
-        Tue,  6 Sep 2022 10:46:47 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id n11-20020a4aa7cb000000b0044b3583d373so2054317oom.2;
-        Tue, 06 Sep 2022 10:46:47 -0700 (PDT)
+        Tue, 6 Sep 2022 13:46:51 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D176EF1C;
+        Tue,  6 Sep 2022 10:46:45 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-11ee4649dfcso30087966fac.1;
+        Tue, 06 Sep 2022 10:46:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=uiew6NbFXf44Z/IbImQfdvjEizUYy8izei1Fpy5Vg/0=;
-        b=f/12ZMIwCsEBCbNRwz1Fakq+guxaXrntYNpzGu3FRDTBoIyqGbwNC7+FYBfmwnZgB+
-         20vpS7Fis2pV5N6kfbliarW/fZTDyUPgagRIAUZW1HbTVyS/k78kmfwlvxNXYG9h0Y0d
-         gwEqNEMTJdmS2QWmlP8StQHS99yJuXC7oc6J3MlJkIuVWH6wwFtYqA+laCt74Xi37LqS
-         MJsgVz/vKbb/Ys6Pzbije0CjIUaMlFuJelehYivGUI1ML7p+MeHdvmvcowF7toyeXKxS
-         qw9oPd2pWx0kdKvYjOuAsvJd2a+OABFvp4j6P9IBvFK+HpZfG1GWXX8cg6t1s0hDprXh
-         kurg==
-X-Gm-Message-State: ACgBeo33n0oODw677HDSyTzyeVaXJcXZguGpYWeGt1vBKeNVG9Y6NpeQ
-        xiA9rYj5pXgqc4PZokR0mg==
-X-Google-Smtp-Source: AA6agR5bj+5NJ3XNxjU5HfDtqr6HRIQ7mmileSv2rYw50aB+2a5kFqg1A4SznszpVYY8bgrNu8YWNw==
-X-Received: by 2002:a4a:e1ad:0:b0:448:b28c:5fe3 with SMTP id 13-20020a4ae1ad000000b00448b28c5fe3mr18839646ooy.21.1662486405944;
-        Tue, 06 Sep 2022 10:46:45 -0700 (PDT)
+        bh=HzG5COCo19lT3oBLgm1nvDwcIQQgyJlzuG7SNbHTaDU=;
+        b=EfqvCJv4EJGQHW2EngMd2R2Spen4DloQpQ/TVy3FXX+OcC4HEH/9A0TD01GIZVq9iE
+         FdA9FrMSRcdFJkTgMVTXbJLQheTBNdNTq0l5pPKyk/J06QcUHHBDrLLZoIsuScKx/KLZ
+         5qelH67uJdEjIBWm5Rtwgbw3SHA/SrIFf8x+Mo0AxcGLVcgsT0oytuOSRKMZcf4hZsKn
+         Rx9umggsKQyxNSBYLQUz2aqh7Osp+fNHzzpiuM931VIC9cs0P/+KTZjg9Cx4Ux773RSW
+         DP+4eBBmvl62FZ7B519rTgm1kTpNjrNLEcBlp0FAC9n7xXJ4ufFZLIK1xjOP/WQjj2gT
+         13XQ==
+X-Gm-Message-State: ACgBeo1GnHzqDaHPUzUiyIFH5P66Mg0/fyanwbiVfW50mBSncs2DznOy
+        4WJnM9KH+lZeG/hnCcLhx+oMuoLYWw==
+X-Google-Smtp-Source: AA6agR6RDLZuCPdeXtZwiyPUodQixHiTacheiSfTh+HaN2WJ01ett6hG3ahw/odd+L270KgcOrJkyA==
+X-Received: by 2002:a05:6870:430b:b0:101:3d98:ba41 with SMTP id w11-20020a056870430b00b001013d98ba41mr12501688oah.46.1662486404036;
+        Tue, 06 Sep 2022 10:46:44 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p4-20020a0568301d4400b006339b36127dsm6158688oth.3.2022.09.06.10.46.44
+        by smtp.gmail.com with ESMTPSA id 22-20020aca0916000000b00344adbc3492sm5583872oij.24.2022.09.06.10.46.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 10:46:45 -0700 (PDT)
-Received: (nullmailer pid 780026 invoked by uid 1000);
+        Tue, 06 Sep 2022 10:46:43 -0700 (PDT)
+Received: (nullmailer pid 780017 invoked by uid 1000);
         Tue, 06 Sep 2022 17:46:42 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Nipun Gupta <nipun.gupta@amd.com>
-Cc:     gregkh@linuxfoundation.org, eric.auger@redhat.com,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        jeffrey.l.hugo@gmail.com, maz@kernel.org, puneet.gupta@amd.com,
-        Michael.Srba@seznam.cz, cohuck@redhat.com, will@kernel.org,
-        masahiroy@kernel.org, mchehab+huawei@kernel.org, joro@8bytes.org,
-        okaya@kernel.org, alex.williamson@redhat.com,
-        song.bao.hua@hisilicon.com, jgg@nvidia.com, mani@kernel.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rafael@kernel.org, f.fainelli@gmail.com, jgg@ziepe.ca,
-        kvm@vger.kernel.org, nikhil.agarwal@amd.com,
-        harpreet.anand@amd.com, yishaih@nvidia.com,
-        linux-arm-kernel@lists.infradead.org, git@amd.com,
-        saravanak@google.com, aleksandar.radovanovic@amd.com,
-        michal.simek@amd.com, ndesaulniers@google.com
-In-Reply-To: <20220906134801.4079497-2-nipun.gupta@amd.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com> <20220906134801.4079497-1-nipun.gupta@amd.com> <20220906134801.4079497-2-nipun.gupta@amd.com>
-Subject: Re: [RFC PATCH v3 1/7] dt-bindings: bus: add CDX bus device tree bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andy Gross <agross@kernel.org>, alsa-devel@alsa-project.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+In-Reply-To: <20220906121655.303693-10-krzysztof.kozlowski@linaro.org>
+References: <20220906121655.303693-1-krzysztof.kozlowski@linaro.org> <20220906121655.303693-10-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 09/12] dt-bindings: soc: qcom: apr: correct service children
 Date:   Tue, 06 Sep 2022 12:46:42 -0500
-Message-Id: <1662486402.681939.780022.nullmailer@robh.at.kernel.org>
+Message-Id: <1662486402.667876.780014.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -72,19 +66,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 19:17:55 +0530, Nipun Gupta wrote:
-> This patch adds a devicetree binding documentation for CDX
-> bus.
+On Tue, 06 Sep 2022 14:16:52 +0200, Krzysztof Kozlowski wrote:
+> The APR bindings were not describing properly children nodes for DAIs.
+> None of the DTSes use unit addresses for the children, so correct the
+> nodes and reference their schema: clock-controller, dais and routing.
 > 
-> CDX bus controller dynamically detects CDX bus and the
-> devices on these bus using CDX firmware.
-> 
-> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../devicetree/bindings/bus/xlnx,cdx.yaml     | 75 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++
->  2 files changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+>  .../bindings/soc/qcom/qcom,apr.yaml           | 38 +++++++++++++------
+>  .../sound/qcom,q6dsp-lpass-clocks.yaml        | 16 ++------
+>  .../sound/qcom,q6dsp-lpass-ports.yaml         | 16 ++------
+>  3 files changed, 35 insertions(+), 35 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -93,31 +85,8 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/bus/xlnx,cdx.example.dts:18.23-21.11: Warning (unit_address_vs_reg): /example-0/smmu@ec000000: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/bus/xlnx,cdx.example.dts:23.22-30.11: Warning (unit_address_vs_reg): /example-0/gic@e2000000: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/bus/xlnx,cdx.example.dts:26.35-29.15: Warning (unit_address_vs_reg): /example-0/gic@e2000000/gic-its@e2040000: node has a unit name, but no reg or ranges property
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: smmu@ec000000: $nodename:0: 'smmu@ec000000' does not match '^iommu@[0-9a-f]*'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: smmu@ec000000: 'reg' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: $nodename:0: 'gic@e2000000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: '#interrupt-cells' is a dependency of 'interrupt-controller'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: 'reg' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: gic-its@e2040000: False schema does not allow {'compatible': ['arm,gic-v3-its'], 'msi-controller': True, 'phandle': [[1]]}
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: gic-its@e2040000: '#msi-cells' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: gic-its@e2040000: 'reg' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: 'oneOf' conditional failed, one must be fixed:
-	'interrupts' is a required property
-	'interrupts-extended' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: cdx@4000000: reg: [[0, 67108864], [0, 4096]] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,q6apm-dai.example.dtb: gpr: service@1: '#address-cells', '#size-cells', 'apm-dai@1' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
 
 doc reference errors (make refcheckdocs):
 

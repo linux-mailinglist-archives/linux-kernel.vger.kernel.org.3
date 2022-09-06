@@ -2,99 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7CB5AE7A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460005AE7DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbiIFMRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S233656AbiIFMUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239841AbiIFMRN (ORCPT
+        with ESMTP id S240200AbiIFMTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:17:13 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CB17C1E7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:15:12 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id b26so12020874ljk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 05:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=6UHmjFqZqnkfqTkZXpVtIF2gB+ePd2RxW9GhLYwJ20M=;
-        b=C22raz0IOJkbOdosFAVzFv4qOMwXY/MebmIjmU9VnZLg1c3DRqJPzf2ftKSu3iKlVq
-         /81y2AJJUxserzvRP3HY68hRFQw2nZZ5+MPZ3+HIpuXxh7AqVxtXv243JAyVIZg35HJK
-         1S/Q3h1zZAOMtPaq7I1awkBzGimPcl/u5sufjGO3gFVbSCchGOeC5Mt38JBUnYH15h4s
-         Evc3l2TPSdZrVCsbKQKoKPj9BJsGGBEz09PpJullsopORdEAB/0v2T+yWe0/MT0X1a11
-         sVpQ8z6DhX+RPbba+3n4ZD6pQqd/NnLeM+uUBrt6cuqMhJArEa78UrehaszjV3g+EoyK
-         qtNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=6UHmjFqZqnkfqTkZXpVtIF2gB+ePd2RxW9GhLYwJ20M=;
-        b=Iuf2SxYTwlG/A1aiaWejr6gXFZWkEfqyghTx0HoAbuc4ymglrZ0P+CH1pUzxO/Z3Do
-         4Ocl6A9OYnMecJF5EbWqHDYqSKVpNnAQeIld2Lm8k1hoGTK3uZNRyrp1lPUJZtaEO4u5
-         me9u2AjiI/WRFuTvYj9lgt3sFRfuA0roRu2gduYDugHqUcwkamzMQm3FqOpBDL8YDvbS
-         t3BUFYZmZkEl7/TnTBz0MfCNYyhhagC8hFew3EYBZDaJFDmx6rXOvv3/hNhJiE+OyT8p
-         iUSS3AlfIzQdarzekMeHkCKNRaQwrN3I2a+iKhkdM1memBfHA9Jc7qAO024NzqXAHIDH
-         pZ+Q==
-X-Gm-Message-State: ACgBeo0+lF2DGXSKYZq0zG8Lvxlv9ObHIUAYczrZoVC6PvKKrHunyZx0
-        M7hVF5ehtO5hDzSqy7S3EsO/1Q==
-X-Google-Smtp-Source: AA6agR73Uyz5drAuwDGsn4Pe1UQqm8/rEf1fJfgYCEv9dAukBNbatU8NvbsMMrl+ei2+SY/udulANA==
-X-Received: by 2002:a2e:92ce:0:b0:261:e39e:2c1d with SMTP id k14-20020a2e92ce000000b00261e39e2c1dmr15563243ljh.273.1662466440501;
-        Tue, 06 Sep 2022 05:14:00 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m5-20020a056512114500b00494a0993698sm1708125lfg.11.2022.09.06.05.13.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 05:14:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: remoteproc: qcom,adsp: enforce smd-edge schema
-Date:   Tue,  6 Sep 2022 14:13:58 +0200
-Message-Id: <20220906121358.302894-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 6 Sep 2022 08:19:16 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F227CA80;
+        Tue,  6 Sep 2022 05:16:57 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MMPNV6Zymz9v7Z8;
+        Tue,  6 Sep 2022 20:10:34 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDn3pLcORdjV_onAA--.39374S2;
+        Tue, 06 Sep 2022 13:15:39 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     jarkko@kernel.org
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
+        haoluo@google.com, jmorris@namei.org, john.fastabend@gmail.com,
+        jolsa@kernel.org, keyrings@vger.kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
+        memxor@gmail.com, mingo@redhat.com, mykolal@fb.com,
+        paul@paul-moore.com, roberto.sassu@huawei.com,
+        roberto.sassu@huaweicloud.com, rostedt@goodmis.org, sdf@google.com,
+        serge@hallyn.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
+Subject: [PATCH v17 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h and define KEY_LOOKUP_ALL
+Date:   Tue,  6 Sep 2022 14:15:06 +0200
+Message-Id: <20220906121506.165001-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YxcyeZBHGPNQB+qJ@kernel.org>
+References: <YxcyeZBHGPNQB+qJ@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwDn3pLcORdjV_onAA--.39374S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW3JFW3Xr43Gr17tFy5urg_yoW8CF15pF
+        WDC3W8Kry8Cry2gwn5GwsFy3WSk39xGr17XF9IgwnYya1Sg3y8trn7GF47CF1YyrWUuw12
+        qrW29a1Uur1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUojjgUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAHBF1jj36rkwAAs2
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The smd-edge child node references respective schema which allows
-additional properties, so the ADSP needs to further restrict them.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
+kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
+validate the kfunc parameters. Add them to enum key_lookup_flag, so that
+all the current ones and the ones defined in the future are automatically
+exported through BTF and available to eBPF programs.
+
+Also, add KEY_LOOKUP_ALL to the enum, with the logical OR of currently
+defined flags as value, to facilitate checking whether a variable contains
+only those flags.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/key.h      | 6 ++++++
+ security/keys/internal.h | 2 --
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index 3072af5f9d79..db9e0f0c2bea 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -152,6 +152,7 @@ properties:
-     description:
-       Qualcomm Shared Memory subnode which represents communication edge,
-       channels and devices related to the ADSP.
-+    unevaluatedProperties: false
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 7febc4881363..d27477faf00d 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -88,6 +88,12 @@ enum key_need_perm {
+ 	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+ };
  
-   glink-edge:
-     $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
++enum key_lookup_flag {
++	KEY_LOOKUP_CREATE = 0x01,
++	KEY_LOOKUP_PARTIAL = 0x02,
++	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL),
++};
++
+ struct seq_file;
+ struct user_struct;
+ struct signal_struct;
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 9b9cf3b6fcbb..3c1e7122076b 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
+ 
+ extern bool lookup_user_key_possessed(const struct key *key,
+ 				      const struct key_match_data *match_data);
+-#define KEY_LOOKUP_CREATE	0x01
+-#define KEY_LOOKUP_PARTIAL	0x02
+ 
+ extern long join_session_keyring(const char *name);
+ extern void key_change_session_keyring(struct callback_head *twork);
 -- 
-2.34.1
+2.25.1
 

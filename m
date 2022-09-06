@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B8A5AEBD7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1675AEBED
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240854AbiIFOA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S240495AbiIFOAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240537AbiIFN5G (ORCPT
+        with ESMTP id S239014AbiIFN4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:57:06 -0400
+        Tue, 6 Sep 2022 09:56:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D888982D0D;
-        Tue,  6 Sep 2022 06:42:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA12D81B2D;
+        Tue,  6 Sep 2022 06:42:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A3036154A;
-        Tue,  6 Sep 2022 13:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856C6C433C1;
-        Tue,  6 Sep 2022 13:41:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6803C614C9;
+        Tue,  6 Sep 2022 13:41:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A48CC433D7;
+        Tue,  6 Sep 2022 13:41:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471682;
-        bh=/ku4iYcPiRQHqcXSV5f7lpnrnG969nJ6mcZXqPje1cM=;
+        s=korg; t=1662471685;
+        bh=Xt26qhiog42++afoF8PkB8vPyUpXbYVlMImYk5r6XAw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iwp9lkDaLkpZFXTYwoxJGyZCCzAB0csPmNBMjyIagP3abjOhfeCjENn90npKgYCDP
-         8+Zyq0Yetv0iX5Ayk6yjjE0QzNHKtKBOBviCiZzvsHbnkPlKuVNDtU/pelOZAlLOeP
-         lhICht8vIMxsJX2xoBIiL33twbPU9jM9ESuHmxTQ=
+        b=FM0xUfKVMRpWzH327GizLUYjiKv8wgCke5uBZCE1vu+KsMJsBW/VDVJ1cvZWnxmMh
+         zhAxQhQyU4/mXqWYkqT5AIS4uwT7cfyiEgyGycX0WfBrEpO8s/V6Hl6gaXkR0pWalx
+         FYbBlVT6kbjzDikPPUlitNRUmBxu9/egy+7u2G8Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Mazin Al Haddad <mazinalhaddad05@gmail.com>,
-        syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 100/107] tty: n_gsm: add sanity check for gsm->receive in gsm_receive_buf()
-Date:   Tue,  6 Sep 2022 15:31:21 +0200
-Message-Id: <20220906132826.080174666@linuxfoundation.org>
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH 5.15 101/107] kbuild: Unify options for BTF generation for vmlinux and modules
+Date:   Tue,  6 Sep 2022 15:31:22 +0200
+Message-Id: <20220906132826.130642856@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -55,55 +54,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mazin Al Haddad <mazinalhaddad05@gmail.com>
+From: Jiri Olsa <jolsa@redhat.com>
 
-commit f16c6d2e58a4c2b972efcf9eb12390ee0ba3befb upstream.
+commit e27f05147bff21408c1b8410ad8e90cd286e7952 upstream.
 
-A null pointer dereference can happen when attempting to access the
-"gsm->receive()" function in gsmld_receive_buf(). Currently, the code
-assumes that gsm->recieve is only called after MUX activation.
-Since the gsmld_receive_buf() function can be accessed without the need to
-initialize the MUX, the gsm->receive() function will not be set and a
-NULL pointer dereference will occur.
+Using new PAHOLE_FLAGS variable to pass extra arguments to
+pahole for both vmlinux and modules BTF data generation.
 
-Fix this by avoiding the call to "gsm->receive()" in case the function is
-not initialized by adding a sanity check.
+Adding new scripts/pahole-flags.sh script that detect and
+prints pahole options.
 
-Call Trace:
- <TASK>
- gsmld_receive_buf+0x1c2/0x2f0 drivers/tty/n_gsm.c:2861
- tiocsti drivers/tty/tty_io.c:2293 [inline]
- tty_ioctl+0xa75/0x15d0 drivers/tty/tty_io.c:2692
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[ fixed issues found by kernel test robot ]
 
-Link: https://syzkaller.appspot.com/bug?id=bdf035c61447f8c6e0e6920315d577cb5cc35ac5
-Fixes: 01aecd917114 ("tty: n_gsm: fix tty registration before control channel open")
-Cc: stable <stable@kernel.org>
-Reported-and-tested-by: syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com
-Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
-Link: https://lore.kernel.org/r/20220814015211.84180-1-mazinalhaddad05@gmail.com
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20211029125729.70002-1-jolsa@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/n_gsm.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Makefile                  |    3 +++
+ scripts/Makefile.modfinal |    2 +-
+ scripts/link-vmlinux.sh   |   11 +----------
+ scripts/pahole-flags.sh   |   20 ++++++++++++++++++++
+ 4 files changed, 25 insertions(+), 11 deletions(-)
+ create mode 100755 scripts/pahole-flags.sh
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2753,7 +2753,8 @@ static void gsmld_receive_buf(struct tty
- 			flags = *fp++;
- 		switch (flags) {
- 		case TTY_NORMAL:
--			gsm->receive(gsm, *cp);
-+			if (gsm->receive)
-+				gsm->receive(gsm, *cp);
- 			break;
- 		case TTY_OVERRUN:
- 		case TTY_BREAK:
+--- a/Makefile
++++ b/Makefile
+@@ -480,6 +480,8 @@ LZ4		= lz4c
+ XZ		= xz
+ ZSTD		= zstd
+ 
++PAHOLE_FLAGS	= $(shell PAHOLE=$(PAHOLE) $(srctree)/scripts/pahole-flags.sh)
++
+ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
+ 		  -Wbitwise -Wno-return-void -Wno-unknown-attribute $(CF)
+ NOSTDINC_FLAGS :=
+@@ -534,6 +536,7 @@ export KBUILD_CFLAGS CFLAGS_KERNEL CFLAG
+ export KBUILD_AFLAGS AFLAGS_KERNEL AFLAGS_MODULE
+ export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_LDFLAGS_MODULE
+ export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
++export PAHOLE_FLAGS
+ 
+ # Files to ignore in find ... statements
+ 
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -40,7 +40,7 @@ quiet_cmd_ld_ko_o = LD [M]  $@
+ quiet_cmd_btf_ko = BTF [M] $@
+       cmd_btf_ko = 							\
+ 	if [ -f vmlinux ]; then						\
+-		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J --btf_base vmlinux $@; \
++		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+ 	else								\
+ 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+ 	fi;
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -211,7 +211,6 @@ vmlinux_link()
+ gen_btf()
+ {
+ 	local pahole_ver
+-	local extra_paholeopt=
+ 
+ 	if ! [ -x "$(command -v ${PAHOLE})" ]; then
+ 		echo >&2 "BTF: ${1}: pahole (${PAHOLE}) is not available"
+@@ -226,16 +225,8 @@ gen_btf()
+ 
+ 	vmlinux_link ${1}
+ 
+-	if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
+-		# pahole 1.18 through 1.21 can't handle zero-sized per-CPU vars
+-		extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_vars"
+-	fi
+-	if [ "${pahole_ver}" -ge "121" ]; then
+-		extra_paholeopt="${extra_paholeopt} --btf_gen_floats"
+-	fi
+-
+ 	info "BTF" ${2}
+-	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${extra_paholeopt} ${1}
++	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+ 
+ 	# Create ${2} which contains just .BTF section but no symbols. Add
+ 	# SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
+--- /dev/null
++++ b/scripts/pahole-flags.sh
+@@ -0,0 +1,20 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++extra_paholeopt=
++
++if ! [ -x "$(command -v ${PAHOLE})" ]; then
++	exit 0
++fi
++
++pahole_ver=$(${PAHOLE} --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/')
++
++if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
++	# pahole 1.18 through 1.21 can't handle zero-sized per-CPU vars
++	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_vars"
++fi
++if [ "${pahole_ver}" -ge "121" ]; then
++	extra_paholeopt="${extra_paholeopt} --btf_gen_floats"
++fi
++
++echo ${extra_paholeopt}
 
 

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DF35AEB1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8C95AEA55
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233049AbiIFNrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S233188AbiIFNn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239887AbiIFNoS (ORCPT
+        with ESMTP id S234173AbiIFNlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:44:18 -0400
+        Tue, 6 Sep 2022 09:41:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67697F108;
-        Tue,  6 Sep 2022 06:38:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6C265B6;
+        Tue,  6 Sep 2022 06:37:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E1B961512;
-        Tue,  6 Sep 2022 13:37:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3109C433D6;
-        Tue,  6 Sep 2022 13:37:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92EB161522;
+        Tue,  6 Sep 2022 13:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FCEEC433C1;
+        Tue,  6 Sep 2022 13:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471436;
-        bh=3n/B6nVK2oW6DBTebohZRaYRa191+ouET0qMeKiCUS4=;
+        s=korg; t=1662471439;
+        bh=F0eM71e91+JZcsQVtYIET15R7F56/3gtOSliUrL1LwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LerNP32I2zVT3/kXZdWdDVXrBw9g5QD/E0LfMWX4FDe757BIHM64MlGriWy5w2lrY
-         w4IIyfpxEXdscsaWioH/enjMqIWsX2JHrfJ2PvwC7K7Ya5tfPdj6orgxR3EloXtlr2
-         R2dhYmIoT4w6DxSyBf9Tl0s4IOC1ZfWgfza0mxV8=
+        b=Zu2n8syaN3hyzhbASZhBWmFS6EupNRLydhAUqISBmxGQQP5djCY/XxzZIHGQIsxKA
+         aGPSoP9ZVOZiRlHtbz5oIIIYwzSC13VL0EgRUIc6F4iJsPBYz4/9qxEE+kbRFfY+BE
+         T7RC+QEXT+EAKpXvzPpcjQ+lXN3N6qRC3sXiTXuE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+e696806ef96cdd2d87cd@syzkaller.appspotmail.com,
-        Tom Herbert <tom@herbertland.com>,
-        Cong Wang <cong.wang@bytedance.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
         Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+9fc084a4348493ef65d2@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 025/107] kcm: fix strp_init() order and cleanup
-Date:   Tue,  6 Sep 2022 15:30:06 +0200
-Message-Id: <20220906132822.845761712@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>, zdi-disclosures@trendmicro.com
+Subject: [PATCH 5.15 026/107] sch_cake: Return __NET_XMIT_STOLEN when consuming enqueued skb
+Date:   Tue,  6 Sep 2022 15:30:07 +0200
+Message-Id: <20220906132822.891871800@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -59,72 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
+From: Toke Høiland-Jørgensen <toke@toke.dk>
 
-[ Upstream commit 8fc29ff3910f3af08a7c40a75d436b5720efe2bf ]
+[ Upstream commit 90fabae8a2c225c4e4936723c38857887edde5cc ]
 
-strp_init() is called just a few lines above this csk->sk_user_data
-check, it also initializes strp->work etc., therefore, it is
-unnecessary to call strp_done() to cancel the freshly initialized
-work.
+When the GSO splitting feature of sch_cake is enabled, GSO superpackets
+will be broken up and the resulting segments enqueued in place of the
+original skb. In this case, CAKE calls consume_skb() on the original skb,
+but still returns NET_XMIT_SUCCESS. This can confuse parent qdiscs into
+assuming the original skb still exists, when it really has been freed. Fix
+this by adding the __NET_XMIT_STOLEN flag to the return value in this case.
 
-And if sk_user_data is already used by KCM, psock->strp should not be
-touched, particularly strp->work state, so we need to move strp_init()
-after the csk->sk_user_data check.
-
-This also makes a lockdep warning reported by syzbot go away.
-
-Reported-and-tested-by: syzbot+9fc084a4348493ef65d2@syzkaller.appspotmail.com
-Reported-by: syzbot+e696806ef96cdd2d87cd@syzkaller.appspotmail.com
-Fixes: e5571240236c ("kcm: Check if sk_user_data already set in kcm_attach")
-Fixes: dff8baa26117 ("kcm: Call strp_stop before strp_done in kcm_attach")
-Cc: Tom Herbert <tom@herbertland.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-Link: https://lore.kernel.org/r/20220827181314.193710-1-xiyou.wangcong@gmail.com
+Fixes: 0c850344d388 ("sch_cake: Conditionally split GSO segments")
+Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-18231
+Link: https://lore.kernel.org/r/20220831092103.442868-1-toke@toke.dk
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/kcm/kcmsock.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ net/sched/sch_cake.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index 11a715d76a4f1..f780fbe82e7dc 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -1411,12 +1411,6 @@ static int kcm_attach(struct socket *sock, struct socket *csock,
- 	psock->sk = csk;
- 	psock->bpf_prog = prog;
- 
--	err = strp_init(&psock->strp, csk, &cb);
--	if (err) {
--		kmem_cache_free(kcm_psockp, psock);
--		goto out;
--	}
--
- 	write_lock_bh(&csk->sk_callback_lock);
- 
- 	/* Check if sk_user_data is already by KCM or someone else.
-@@ -1424,13 +1418,18 @@ static int kcm_attach(struct socket *sock, struct socket *csock,
- 	 */
- 	if (csk->sk_user_data) {
- 		write_unlock_bh(&csk->sk_callback_lock);
--		strp_stop(&psock->strp);
--		strp_done(&psock->strp);
- 		kmem_cache_free(kcm_psockp, psock);
- 		err = -EALREADY;
- 		goto out;
+diff --git a/net/sched/sch_cake.c b/net/sched/sch_cake.c
+index 857aaebd49f43..6944c669731c4 100644
+--- a/net/sched/sch_cake.c
++++ b/net/sched/sch_cake.c
+@@ -1713,6 +1713,7 @@ static s32 cake_enqueue(struct sk_buff *skb, struct Qdisc *sch,
  	}
+ 	idx--;
+ 	flow = &b->flows[idx];
++	ret = NET_XMIT_SUCCESS;
  
-+	err = strp_init(&psock->strp, csk, &cb);
-+	if (err) {
-+		write_unlock_bh(&csk->sk_callback_lock);
-+		kmem_cache_free(kcm_psockp, psock);
-+		goto out;
-+	}
-+
- 	psock->save_data_ready = csk->sk_data_ready;
- 	psock->save_write_space = csk->sk_write_space;
- 	psock->save_state_change = csk->sk_state_change;
+ 	/* ensure shaper state isn't stale */
+ 	if (!b->tin_backlog) {
+@@ -1771,6 +1772,7 @@ static s32 cake_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 
+ 		qdisc_tree_reduce_backlog(sch, 1-numsegs, len-slen);
+ 		consume_skb(skb);
++		ret |= __NET_XMIT_STOLEN;
+ 	} else {
+ 		/* not splitting */
+ 		cobalt_set_enqueue_time(skb, now);
+@@ -1904,7 +1906,7 @@ static s32 cake_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 		}
+ 		b->drop_overlimit += dropped;
+ 	}
+-	return NET_XMIT_SUCCESS;
++	return ret;
+ }
+ 
+ static struct sk_buff *cake_dequeue_one(struct Qdisc *sch)
 -- 
 2.35.1
 

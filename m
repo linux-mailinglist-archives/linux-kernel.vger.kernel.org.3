@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760DD5AE0CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594785AE0CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238292AbiIFHRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S238879AbiIFHSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238836AbiIFHRm (ORCPT
+        with ESMTP id S238882AbiIFHSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:17:42 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BBE73935;
-        Tue,  6 Sep 2022 00:17:41 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 6 Sep 2022 03:18:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F1774359
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:18:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 8794E21BD;
-        Tue,  6 Sep 2022 09:17:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1662448659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qxi49WzANBodoTQOX0E/K8f/DX4qR1X+vWMmaXpTEi0=;
-        b=meVG/NVLfkJRQq1uQnr1QrnzD86804WP6rLDZ4fMa74eMzJRJ06DuH2PpAeYygx6Q0yVmI
-        CKxYu2kWDrIH7e5gBxduRNf0iG3RAQ/QV8226tNmvaCHkSj9YzB4ZCRlLWBfZfKjlQTR+F
-        /hEGP/tq0pYx88MrddxkP9B1G6W82MBFEuSFNxflm2i4E0qRiG6PAmm6ZAx3vPM82q3LFN
-        MZ0rHiuraa/yULLl/UrQtGZvoVj1DSpb+2BGFwu3Ftmu823xOZu51ZKHMNUGXbSlbOORKW
-        6fXPcV+4bmlYLw/pf4d+0295AYasFcyNwKeymFV1krtZDiB2m74YBPiDpCgLKg==
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61B13612DD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:18:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD18DC433B5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:18:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662448721;
+        bh=wOasH0d9vVnsQ6vVQd+RRAYmkKfASMZfn5I/64WuHBk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=E4+RHbLsSEhU9eHu6jt9ZcHz9QjmVwSYc6PVN8GL3d4qvw6K/LkGVzwzrpfSxNNLL
+         hjKgNiKW0HkCPk9Y1fvwpuh7EyHPzyJ5EVNxcD5YleIm1i+UgkY26G05p5RAywdIQY
+         2pmi6PPvDpxUFWvXR6vJjcVEfcTDrjzp5LBYZ1u6ucAig+lsyw0u/FoBxyoOSDw29C
+         tDAjJZGYehcpRB9untrnvLxIyiIv+zQFxRA/1qbpZRRSR2rcW1uXkRtK7FavdEi80/
+         72bCmVK1Hi79xknulp+be9KduiajX/xbxxRqzpWL33GQmSc8w1qJcMfbCk4V88S56l
+         FG4qN0gxK0POA==
+Received: by mail-lj1-f170.google.com with SMTP id bn9so11295665ljb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 00:18:41 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2+etNGcyxVS8vfbWv+sSABt8DjeSALcD7oPY+6HsxhN9dfxe0i
+        VqkHGrsyNQrSfnMbeh8Hv2RewP2btxViJ8VQ85w=
+X-Google-Smtp-Source: AA6agR4Ww//E4nt0F61XUM0Cdm+4eMF6tutfuNx2D0Z3J/JOZ4ZSlSGerGa5kH2jQ1GS5+6ZESm28fB/WRt/9gs5Osg=
+X-Received: by 2002:a2e:9115:0:b0:26a:c086:5138 with SMTP id
+ m21-20020a2e9115000000b0026ac0865138mr25505ljg.189.1662448719736; Tue, 06 Sep
+ 2022 00:18:39 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 06 Sep 2022 09:17:39 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net 1/3] net: dsa: felix: tc-taprio intervals smaller
- than MTU should send at least one packet
-In-Reply-To: <20220906001134.ikooyzebb4pmgzib@skbuf>
-References: <20220905170125.1269498-1-vladimir.oltean@nxp.com>
- <20220905170125.1269498-2-vladimir.oltean@nxp.com>
- <d50be0e224c70453e1a4a7d690cfdf1b@walle.cc>
- <20220906001134.ikooyzebb4pmgzib@skbuf>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0c7c5fecc853ce161236f66c517b7474@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220830104806.128365-1-xry111@xry111.site> <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+ <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name> <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
+ <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
+ <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn> <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+ <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
+ <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
+ <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+ <ae2652c5e140d407d523d7f35bee672cebe1b7a2.camel@xry111.site>
+ <CAAhV-H56TQeU54JjvNQg2qZ6L1aSbzbaM2a=VQr9ZcAn4uthyg@mail.gmail.com>
+ <8d0f96e2977c5c78f17bb410087f2aad986ef5a4.camel@xry111.site> <CAAhV-H7LjkY+XAzGs2K3544+CGOztCd4V8BuSjMJwZCgfBLDow@mail.gmail.com>
+In-Reply-To: <CAAhV-H7LjkY+XAzGs2K3544+CGOztCd4V8BuSjMJwZCgfBLDow@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 6 Sep 2022 09:18:28 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE6YHCVj9DDbxLEZnS-ceZT__xe1XAcUcpXcd6eYb=UEw@mail.gmail.com>
+Message-ID: <CAMj1kXE6YHCVj9DDbxLEZnS-ceZT__xe1XAcUcpXcd6eYb=UEw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation types
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-09-06 02:11, schrieb Vladimir Oltean:
-> On Tue, Sep 06, 2022 at 12:53:20AM +0200, Michael Walle wrote:
->> I haven't looked at the overall code, but the solution described
->> above sounds good.
->> 
->> FWIW, I don't think such a schedule, where exactly one frame
->> can be sent, is very likely in the wild though. Imagine a piece
->> of software is generating one frame per cycle. It might happen
->> that during one (hardware) cycle there is no frame ready (because
->> it is software and it jitters), but then in the next cycle, there
->> are now two frames ready. In that case you'll always lag one frame
->> behind and you'll never recover from it.
->> 
->> Either I'd make sure I can send at two frames in one cycle, or
->> my software would only send a frame every other cycle.
-> 
-> A 10 us interval is a 10 us interval, it shouldn't matter if you slice
-> it up as one 1250B frame, or two 500B frames, or four 200B frames, etc.
-> Except with the Microchip hardware implementation, it does. In v1, we
-> were slicing the 10 us interval in half for useful traffic and half for
-> the guard band. So we could fit more small packets in 5 us. In v2, at
-> your proposal, we are slicing it in 33 ns for the useful traffic, and
-> 10 us - 33 ns for the guard band. This indeed allows for a single
-> packet, be it big or small. It's how the hardware works; without any
-> other input data point, a slicing point needs to be put somewhere.
-> Somehow it's just as arbitrary in v2 as where it was in v1, just
-> optimized for a different metric which you're now saying is less 
-> practical.
+On Tue, 6 Sept 2022 at 06:43, Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> Hi, Ruoyao,
+>
+> On Tue, Sep 6, 2022 at 12:27 PM Xi Ruoyao <xry111@xry111.site> wrote:
+> >
+> > On Tue, 2022-09-06 at 09:52 +0800, Huacai Chen wrote:
+> > > >   cflags-$(CONFIG_LOONGARCH)     := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> > > > -                                  -fpic
+> > > > +                                  -fpie
+> > > >
+> > > >   cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+> > > >
+> > > > (Some explanation: -fpic does not only mean "generate position-
+> > > > independent code", but "generate position-independent code *suitable for
+> > > > use in a shared library*".  On LoongArch -mdirect-extern-access cannot
+> > > > work for a shared library so the "-fpic -mdirect-extern-access"
+> > > > combination is rejected deliberately.)
+> > > >
+> > > > Not sure how to submit these changes properly...  Do you prefer me to
+> > > > send V8 of this series or a single patch on top of your tree on GitHub?
+> >
+> > > Don't need V8, I will squash it into the previous patch myself. But
+> > > can we keep efistub as is?
+> >
+> > No, we can't allow -mdirect-extern-access -fpic on LoongArch because
+> > without copy relocation such a combination just does not make sense (i.
+> > e. we cannot find a sensible way to handle such a combination in GCC).
+> > So such a combination will cause GCC refuse to run.
+> >
+> > Note that -fpic/-fPIC is "position-independent code *suitable for
+> > use in a shared library*", while -fpie/-fPIE is more like just
+> > "position-independent code".  The names of those options are confusing.
+> > (When -fpic was invented first time, people mostly believed "PIC had
+> > been only for shared libraries", so it's named -fpic instead of -shlib
+> > or something.)  IMO in the EFI stub for other ports, -fpie should be
+> > used instead of -fpic as well because the EFI stub is not similar to a
+> > shared library in any means.
+> You are right, but I guess that Ard doesn't want to squash the efistub
+> change into the LoongArch efistub support patch. :)
+>
 
-I actually checked the code before writing and saw that one could
-change the guard band by setting the MTU of the interface. I though,
-"ah ok, then there is no issue". After sleeping, I noticed that you'd
-restrict the size of all the frames on the interface. Doh ;)
+I don't mind changing the stable tag at this point - I don't have
+anything queued up on top of it at the moment.
 
--michael
-
-> By the way, I was a fool in last year's discussion on guard bands for
-> saying that there isn't any way for the user to control per-tc MTU.
-> IEEE 802.1Qbv, later standardized as IEEE 802.1Q clause 8.6.8.4
-> Enhancements for scheduled traffic, does contain a queueMaxSDUTable
-> structure with queueMaxSDU elements. I guess I have no choice except to
-> add this to the tc-taprio UAPI in a net-next patch, because as I've
-> explained above, even though I've solved the port hanging issue, this
-> hardware needs more fine tuning to obtain a differentiation between 
-> many
-> small packets vs few large packets per interval.
-
+But I don't see the actual patch: please send me the delta patch that
+you want to apply, and I will update it. Then, you can rebase your
+v6.1 tree on top of it.

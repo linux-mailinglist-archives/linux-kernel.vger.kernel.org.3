@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A9A5AEAA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8905AEAE2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238755AbiIFNvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S232966AbiIFNuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239176AbiIFNtH (ORCPT
+        with ESMTP id S238431AbiIFNrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:49:07 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273321DA60;
-        Tue,  6 Sep 2022 06:39:35 -0700 (PDT)
+        Tue, 6 Sep 2022 09:47:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ADD7393D;
+        Tue,  6 Sep 2022 06:39:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CFC68CE177D;
-        Tue,  6 Sep 2022 13:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F190C433D6;
-        Tue,  6 Sep 2022 13:38:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20FD061539;
+        Tue,  6 Sep 2022 13:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B1DC433C1;
+        Tue,  6 Sep 2022 13:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471494;
-        bh=bOjPBm5qX5SICRTBurdgip+E5ccxw+hbLLzg/aua814=;
+        s=korg; t=1662471500;
+        bh=O5R17pgkOIgcx4ARTJWVhg4HpP51vCwCpBj+tlMVaZ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U1gQ1j1++CJGLV59fg489cgx2w6VXMH9F/0cE9aCuofeXEGequxqrFYZE0kslauRE
-         C4m+TSLxhc6LLCLeISWHQqIATz70IaYTGPvK96T+Vifc3HS6S8SsRmQdssjpVbAOOB
-         6tmqd1UBFUlUfz3F6QH4pndBe+u27glQ5/BP+UK4=
+        b=yLPTkzf5mZbi6TkUu5aRRnsLAXU+NJGGrAyC7aimRyI80hvTR668XCzPBRSyc+y9X
+         APWUhfvct51EV5BxsQKeM0GCaWGK/q6/jjyj0TbjQD7F4sJ/2TJNpY3EcMlquQ4Gzu
+         nCQGzbaXUULWaErB4vCfB4Gl9WWV6X8c7phvspj0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>, stable <stable@kernel.org>
-Subject: [PATCH 5.15 046/107] binder: fix UAF of ref->proc caused by race condition
-Date:   Tue,  6 Sep 2022 15:30:27 +0200
-Message-Id: <20220906132823.783217015@linuxfoundation.org>
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com,
+        syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com,
+        Todd Kjos <tkjos@google.com>,
+        Carlos Llamas <cmllamas@google.com>
+Subject: [PATCH 5.15 047/107] binder: fix alloc->vma_vm_mm null-ptr dereference
+Date:   Tue,  6 Sep 2022 15:30:28 +0200
+Message-Id: <20220906132823.823260775@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -57,73 +60,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Carlos Llamas <cmllamas@google.com>
 
-commit a0e44c64b6061dda7e00b7c458e4523e2331b739 upstream.
+commit 1da52815d5f1b654c89044db0cdc6adce43da1f1 upstream.
 
-A transaction of type BINDER_TYPE_WEAK_HANDLE can fail to increment the
-reference for a node. In this case, the target proc normally releases
-the failed reference upon close as expected. However, if the target is
-dying in parallel the call will race with binder_deferred_release(), so
-the target could have released all of its references by now leaving the
-cleanup of the new failed reference unhandled.
+Syzbot reported a couple issues introduced by commit 44e602b4e52f
+("binder_alloc: add missing mmap_lock calls when using the VMA"), in
+which we attempt to acquire the mmap_lock when alloc->vma_vm_mm has not
+been initialized yet.
 
-The transaction then ends and the target proc gets released making the
-ref->proc now a dangling pointer. Later on, ref->node is closed and we
-attempt to take spin_lock(&ref->proc->inner_lock), which leads to the
-use-after-free bug reported below. Let's fix this by cleaning up the
-failed reference on the spot instead of relying on the target to do so.
+This can happen if a binder_proc receives a transaction without having
+previously called mmap() to setup the binder_proc->alloc space in [1].
+Also, a similar issue occurs via binder_alloc_print_pages() when we try
+to dump the debugfs binder stats file in [2].
 
+Sample of syzbot's crash report:
   ==================================================================
-  BUG: KASAN: use-after-free in _raw_spin_lock+0xa8/0x150
-  Write of size 4 at addr ffff5ca207094238 by task kworker/1:0/590
+  KASAN: null-ptr-deref in range [0x0000000000000128-0x000000000000012f]
+  CPU: 0 PID: 3755 Comm: syz-executor229 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+  syz-executor229[3755] cmdline: ./syz-executor2294415195
+  Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+  RIP: 0010:__lock_acquire+0xd83/0x56d0 kernel/locking/lockdep.c:4923
+  [...]
+  Call Trace:
+   <TASK>
+   lock_acquire kernel/locking/lockdep.c:5666 [inline]
+   lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+   down_read+0x98/0x450 kernel/locking/rwsem.c:1499
+   mmap_read_lock include/linux/mmap_lock.h:117 [inline]
+   binder_alloc_new_buf_locked drivers/android/binder_alloc.c:405 [inline]
+   binder_alloc_new_buf+0xa5/0x19e0 drivers/android/binder_alloc.c:593
+   binder_transaction+0x242e/0x9a80 drivers/android/binder.c:3199
+   binder_thread_write+0x664/0x3220 drivers/android/binder.c:3986
+   binder_ioctl_write_read drivers/android/binder.c:5036 [inline]
+   binder_ioctl+0x3470/0x6d00 drivers/android/binder.c:5323
+   vfs_ioctl fs/ioctl.c:51 [inline]
+   __do_sys_ioctl fs/ioctl.c:870 [inline]
+   __se_sys_ioctl fs/ioctl.c:856 [inline]
+   __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+   [...]
+  ==================================================================
 
-  CPU: 1 PID: 590 Comm: kworker/1:0 Not tainted 5.19.0-rc8 #10
-  Hardware name: linux,dummy-virt (DT)
-  Workqueue: events binder_deferred_func
-  Call trace:
-   dump_backtrace.part.0+0x1d0/0x1e0
-   show_stack+0x18/0x70
-   dump_stack_lvl+0x68/0x84
-   print_report+0x2e4/0x61c
-   kasan_report+0xa4/0x110
-   kasan_check_range+0xfc/0x1a4
-   __kasan_check_write+0x3c/0x50
-   _raw_spin_lock+0xa8/0x150
-   binder_deferred_func+0x5e0/0x9b0
-   process_one_work+0x38c/0x5f0
-   worker_thread+0x9c/0x694
-   kthread+0x188/0x190
-   ret_from_fork+0x10/0x20
+Fix these issues by setting up alloc->vma_vm_mm pointer during open()
+and caching directly from current->mm. This guarantees we have a valid
+reference to take the mmap_lock during scenarios described above.
 
-Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+[1] https://syzkaller.appspot.com/bug?extid=f7dc54e5be28950ac459
+[2] https://syzkaller.appspot.com/bug?extid=a75ebe0452711c9e56d9
+
+Fixes: 44e602b4e52f ("binder_alloc: add missing mmap_lock calls when using the VMA")
+Cc: <stable@vger.kernel.org> # v5.15+
+Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
+Reported-by: syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com
+Reported-by: syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Acked-by: Todd Kjos <tkjos@google.com>
 Signed-off-by: Carlos Llamas <cmllamas@google.com>
-Cc: stable <stable@kernel.org> # 4.14+
-Link: https://lore.kernel.org/r/20220801182511.3371447-1-cmllamas@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220829201254.1814484-2-cmllamas@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/android/binder.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/android/binder_alloc.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -1358,6 +1358,18 @@ static int binder_inc_ref_for_node(struc
- 	}
- 	ret = binder_inc_ref_olocked(ref, strong, target_list);
- 	*rdata = ref->data;
-+	if (ret && ref == new_ref) {
-+		/*
-+		 * Cleanup the failed reference here as the target
-+		 * could now be dead and have already released its
-+		 * references by now. Calling on the new reference
-+		 * with strong=0 and a tmp_refs will not decrement
-+		 * the node. The new_ref gets kfree'd below.
-+		 */
-+		binder_cleanup_ref_olocked(new_ref);
-+		ref = NULL;
-+	}
-+
- 	binder_proc_unlock(proc);
- 	if (new_ref && ref != new_ref)
- 		/*
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -322,7 +322,6 @@ static inline void binder_alloc_set_vma(
+ 	 */
+ 	if (vma) {
+ 		vm_start = vma->vm_start;
+-		alloc->vma_vm_mm = vma->vm_mm;
+ 		mmap_assert_write_locked(alloc->vma_vm_mm);
+ 	} else {
+ 		mmap_assert_locked(alloc->vma_vm_mm);
+@@ -795,7 +794,6 @@ int binder_alloc_mmap_handler(struct bin
+ 	binder_insert_free_buffer(alloc, buffer);
+ 	alloc->free_async_space = alloc->buffer_size / 2;
+ 	binder_alloc_set_vma(alloc, vma);
+-	mmgrab(alloc->vma_vm_mm);
+ 
+ 	return 0;
+ 
+@@ -1095,6 +1093,8 @@ static struct shrinker binder_shrinker =
+ void binder_alloc_init(struct binder_alloc *alloc)
+ {
+ 	alloc->pid = current->group_leader->pid;
++	alloc->vma_vm_mm = current->mm;
++	mmgrab(alloc->vma_vm_mm);
+ 	mutex_init(&alloc->mutex);
+ 	INIT_LIST_HEAD(&alloc->buffers);
+ }
 
 

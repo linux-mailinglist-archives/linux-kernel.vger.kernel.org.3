@@ -2,155 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6615AE4AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4574E5AE4A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239602AbiIFJtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S233619AbiIFJqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239286AbiIFJsf (ORCPT
+        with ESMTP id S233147AbiIFJqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:48:35 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2059.outbound.protection.outlook.com [40.107.104.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF8A77578;
-        Tue,  6 Sep 2022 02:48:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QCdDvR8eor0EImvEEh+j7XuilDkipBiqHuQUZ+KTENDeiW0eW+G31AANGfHrqp1PvZ9A8h5nmQMc3DPc7LfmgiPqma8ilPPfiiP+F7jzqZibgqQffZfdAsVUkJ5TRceuSfA8rvfUrL8B9elMOZbNaI9FvdJUBZKanNQWKGipMqc2S2iYhhBXp6AX0DnhKYEy4vky/tVnTtAMue+rb94SANuTERQ4+fw1NrDUtdjN3o9ISrtJ1sVVA5I3gACNwNXUBdjflh7zQUmgvql99WPh092ui0Zs6PEFOCwoirppQ4Kqs+qnyrBSIZgv2XnMnR9qiDHzPfkjmFzF+vNzLPiIIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r0FmPn9bKy+WC5vi1B5s348FJ6sWh/6fPot6HI30w/c=;
- b=RFwF5NqkoBlcgKKzwDjGWNtoYV/YMVVMV5htUwBAy4yHBwqc7f5CKRpFmshjC+gLYRskHsKuJTbBbeek9ZGP/Nj2sym3I8TLzmlzJaq548kvslmKEG9ie8Fwfd0sZeUx1iG+mq2Cf/bU/hpiifJcl9pBlmszRYNfu4HhXd9EV5fxWwkr40Moj3FC459sB2Nzqe3wi2CnBcP/OOcE7oYswd0S/UX60U02Sx9WVaeW05MSFM5/5tFF7GjuRQZUBMaf98+NDFMeyNea4VGTkRjqBEdpxTVpV8LHCOCz6dGhq3DCqZ31x+cz/tCTFHpzaDZiTsrVr1pYrA6MKy/GHrP/Hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r0FmPn9bKy+WC5vi1B5s348FJ6sWh/6fPot6HI30w/c=;
- b=LtHEbcSYx1k0VnFfK6FqB+JmGem568wNUEbF0sWF31HH+/zmesVC+EQ3OUF2EO/B/VPGuJGW3weHhy/4PICZ3qc02ucCBFb6XRdx6RtqFAahhf7BV5xRSF+cOT8s3E7M58LjGbW5ay6/pGRSrcRHGPjOvGeK6oKPxewhG52dF8E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB5925.eurprd04.prod.outlook.com (2603:10a6:20b:ab::19)
- by PR3PR04MB7305.eurprd04.prod.outlook.com (2603:10a6:102:83::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Tue, 6 Sep
- 2022 09:48:32 +0000
-Received: from AM6PR04MB5925.eurprd04.prod.outlook.com
- ([fe80::704a:fa82:a28e:d198]) by AM6PR04MB5925.eurprd04.prod.outlook.com
- ([fe80::704a:fa82:a28e:d198%6]) with mapi id 15.20.5588.017; Tue, 6 Sep 2022
- 09:48:32 +0000
-From:   Joy Zou <joy.zou@nxp.com>
-To:     vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
-Cc:     shengjiu.wang@nxp.com, martink@posteo.de, dev@lynxeye.de,
-        alexander.stein@ew.tq-group.com, peng.fan@nxp.com, david@ixit.cz,
-        aford173@gmail.com, hongxing.zhu@nxp.com, linux-imx@nxp.com,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 4/4] arm64: dts: imx8mq: update sdma node name format
-Date:   Tue,  6 Sep 2022 17:42:56 +0800
-Message-Id: <20220906094256.3787384-5-joy.zou@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220906094256.3787384-1-joy.zou@nxp.com>
-References: <20220906094256.3787384-1-joy.zou@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR03CA0128.apcprd03.prod.outlook.com
- (2603:1096:4:91::32) To AM6PR04MB5925.eurprd04.prod.outlook.com
- (2603:10a6:20b:ab::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 25fc980b-07c1-44c4-665d-08da8fecf593
-X-MS-TrafficTypeDiagnostic: PR3PR04MB7305:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /I/L2Bz+Sume6KRFMJhW6xdzgqvompCgjdESf9/kacrmxIoWOoMwOzKgCm4do0ChYzEbUAtR3KTDr5pFVABldsFGvzaOql1hIdRW7NS6cq4gLeyv8PvHdNgTSAPbMVSuvePQkR1JwhLWkyHbP764bQ+bErydAfl9OCvWczeKoSy4J5ureVgxyAdNa8oNdKQXLvIadH0ZyDI8AO1tNRSucqTNcCLCdYmTrVIfXl9ftx7iDSHD6SlHAsbEfU1CaAjqtkEc/EAS12SczApdbWBQD80SnBwMIq6wmHAcmg/thV0qiesv9QtCeAn89lN9PzOgg1w9VHFwsVhQ7xvYYtxBeLsAv5ld59aMnGwoOEIZ2CrrVMm00sTPCbhOzhk7RUzu5kMo/FeXMlCg4RGwKePrD1mHLI6Gu8fo2UcixGhw6aEEilf6yeUeQIbKTP7S9nPaaoOtQ2bFGQ1636azIi8kUWQbvkviAl/W5sKtw7DTyX4JVne6sDOEg9qJcqgLoT24Wv4vYtutWys/IPnQkSQe+SlA6s2efR3y5Y/BQESYxbjduK0mDHWfQARdOD1MifHAyspxCf4I7fnSP7PpEhxcfo/DbCHSS8B4WAmBa0fVg2J0GCfewnHDYhFJ96MTH9UeHW4EThe54tedWPTFj0sAQTQb1/7tL5Q5tCVLFwEwrWQXNphOfJgWYedYKB0SxFztcSTSWXVoxoeOVsUZrLfV8cdE3Y9rkajWydk5uyum7cL3lyFn80/4lCACs9f55wyZF1wtohUKAG+/6NBrqXJw2KlCo3cfcbm7yxdJNirUjzo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5925.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(376002)(136003)(346002)(396003)(7416002)(8936002)(5660300002)(44832011)(15650500001)(2906002)(83380400001)(38350700002)(66476007)(36756003)(8676002)(38100700002)(66946007)(4326008)(66556008)(316002)(6666004)(86362001)(2616005)(6506007)(26005)(1076003)(186003)(41300700001)(6486002)(52116002)(478600001)(6512007)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BNmrjsCiZBxTYu45O0Q4pA2MAxSv56ZwyeoVUQVQS3xZKn0D4rwZp9P5EzRj?=
- =?us-ascii?Q?hp0FpjgLDreVbXS7bIe7VvWq14BtviKRa12I6bDa9uhUq99P6MnQSFWd3Rs6?=
- =?us-ascii?Q?o1H74H2cD9zF501uQl1T3DHKQoBdCvUuk3k/q1ks17I0N6b3tKqxJrz836y6?=
- =?us-ascii?Q?lpPEjcZKFdURjELTJdnZDEXnA/Ro0+NVP9do03QSAUjP2mgwTY2VCE8rhUei?=
- =?us-ascii?Q?NKNIJj7F2mZlnnU4EWCyjyUVJNuVEzM3i1emNXJv/xdjRSo3tdZS6Jh/zfNg?=
- =?us-ascii?Q?lcnnimhV/lvcKZQU5z9qruxNk1RuaPlBPL/VhAQWYYolTeUgktEFSxA41dsG?=
- =?us-ascii?Q?hsdnEMaxV45hEHir8qhSfhAf8tCA8UbqvOQF50mm0iFn6Hf+Lwe4Dx0RWMEb?=
- =?us-ascii?Q?b/yJ2heUWO5DRVgsxRBUuL0XA+hH7DKv5C9zt+N6mRgl5siBB/lKNUQs9vGG?=
- =?us-ascii?Q?UYiqcBmw7J2Z0VXs/eioVl953yvezf1NVlSgPjR/s4WIpMa4HyifqXFnxIMH?=
- =?us-ascii?Q?KMAiPmcDPAIszggWGwpZX4AfilmxTORkbsh5zNkMrhV3Cn7mtCHQX0q6DkxW?=
- =?us-ascii?Q?VE51aBH+CnsnfR5Ba9pPR5GmfUSSXvij1DIG/FsabK8lhlVovapkVeNt2/4J?=
- =?us-ascii?Q?krRAnyVLqZPotmsc1g1XLlYdTtSno09zCRFYZPd2a1Bn9KQtuvWAaSTNvUMD?=
- =?us-ascii?Q?RgQjKNj1d4h7aPtmIACV7wCR0zwNkzkilp5tSSYy1uZN0Mtdt20eKtXPnABl?=
- =?us-ascii?Q?+/AMygnZvfPH4er7jimh0A6DWiRogtcbty4zC0UKoO8JM8TkoaG9m+wjJtYx?=
- =?us-ascii?Q?xHJ05ZrBOKND7KRQ0A0QG2TXq9ltRRNt3vcYAQL1EB/CTyi9PphNWHtGffAx?=
- =?us-ascii?Q?P7dbkY0+gKUzHhVmzzjzRhB3jEmWW2dveeWuSHXjeEgsQpTI/w0g7cxN31Dd?=
- =?us-ascii?Q?VZLS9gzuo4wN2hWvQPL6nugObt8Ly+WthMhLCDmpmyN7zHuFy9V4xcueLiTr?=
- =?us-ascii?Q?yeKnC1c5z002lCjoB8VQZAxFu2eqLXKzZFHkeEetsBaij3xMzQxX3KUyahM6?=
- =?us-ascii?Q?hdjEYmdeQ31mFeD+mHFsGTENHjwunkSqq77xXCUukPxzBbn3/JFisyasjqX7?=
- =?us-ascii?Q?hGD45Qk9ocd9QbdYBzgyOXKiVXOF9Tv3OdSgqd6veETZlIAOBNX2N6A7Q080?=
- =?us-ascii?Q?YkOYuCEk9EnQRlvMWUaNvHbuQhpmAROdytgVSKiEndG2ZKzl48UPdiqsMHxT?=
- =?us-ascii?Q?u5uUnjxs21ZRDxf0mWhjlsWfegl5A2q1wE5twDJ5+yHOQEPkw5e9bTlA3MIb?=
- =?us-ascii?Q?u1avX4Xdl1XnwyjyrmzYpAZWA6QDqsDWEj35Cn8dQy4AogwKw/Nr+zjqN6P9?=
- =?us-ascii?Q?7hWwncejYyDyKHCPAUz54jCLtYj5bXPNK16otT0eUGee5eIfJ0zljE6OJeqE?=
- =?us-ascii?Q?T3e+3m6Xx87xvKUTZY50EWMy6cmsAYjalsUck2tckNu/6aFvLxRAXqaPa1Yj?=
- =?us-ascii?Q?QkRrwU4hu16a5GVolQHtRYq+O4546uvbDoN4/BkBfkhIcIPhAs/OT2hQUNPd?=
- =?us-ascii?Q?Fppsf/0ACsV332BvFYYzzvOrBh1oele4EXcx2umn?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25fc980b-07c1-44c4-665d-08da8fecf593
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5925.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 09:48:32.6946
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LFWyilPi9CJfdMZASUmh2zT5Okl+281GQdFzH8tjWAFzRO/Ouogq2iB839hK5vAk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7305
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        Tue, 6 Sep 2022 05:46:02 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9446F760E1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 02:45:59 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id gb36so21846883ejc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 02:45:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
+        bh=VtLdd7vkvDTE4ZQfVBsC4VxzNjo0K0INFc86CHoi1Co=;
+        b=mDh9NxcPOaUlXnZU9kI6p49EzyANeI/LZ/y/fSYtsOIvabWsGS3h3W73ZJoc6x9ssj
+         wF/MwocRBvfg9Ld/ylStXfB9bX2roLVCzU/XGTDAEVE95ZqQj82bKJlynZe4a0OGqfkn
+         jzneNXhMPz2+h7fS7RP9+OLMaMh2doQOn26aAbPbVdRTrgf/R3lAPetQeRY74o+BwzCA
+         cNvWkYPTZ5tZf0mRBkX7vcX4BrLDvOfFZpmMNC8pH6tulrg+3KlJbnmcHc3UBPSHdqR9
+         W2+hq9eEmZ0faXJCBHCuVfjXjhr9vDGLGA0l8tdMdqINkIX7CG6ayVTUCxxOtIYscUIW
+         8SXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=VtLdd7vkvDTE4ZQfVBsC4VxzNjo0K0INFc86CHoi1Co=;
+        b=Qus3pgXTRR3e4B5gVQpmZ8blZgoC4hgCtWT2r7v47ZbzrpJ3cEdXW87SEyn/CaDRTd
+         OzLhEPW3Z5jr9OnkDkNTuWZznaoAw45EDdGWpYAZgkuibvD4oi3tbkmDvjA5s8qBC5P9
+         rICjlFCh+T5LaNE/tsnlBvDzW9KCku2AB8JgyaLM9ZbyopyfqFf7Lq+AObLBVb4EfBH0
+         QyK77pgYBVe3y0HYJWHEPhz7rei5xPxI6pBtyp3kTYU/gbMt+dFzUHX9AQQWWae2zoSO
+         c5OAWwqt7b+Ut4FoV/QAGox/dpaaa/0xAqnHzDh8jqaVynfaVVYYHm8P3J1FkvRzA54H
+         Tbug==
+X-Gm-Message-State: ACgBeo010u+fexa1BXWRjImtPOD9ab4w4RE6EUeTsQQdj9C9TbawTpvQ
+        emIGhggIdW6u2FI8cdaxARWEwg==
+X-Google-Smtp-Source: AA6agR6kYrPMIegCZ/MD9J95k2Z6B0Ycf9T8Cat6OfFamb+zoIbBd/kPLFPHo3yGBug8Z1F/Da++sA==
+X-Received: by 2002:a17:906:9c82:b0:6e1:1d6c:914c with SMTP id fj2-20020a1709069c8200b006e11d6c914cmr1145411ejc.769.1662457557672;
+        Tue, 06 Sep 2022 02:45:57 -0700 (PDT)
+Received: from [192.168.0.13] ([83.216.184.132])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906300a00b00738795e7d9bsm6273344ejz.2.2022.09.06.02.45.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Sep 2022 02:45:56 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: stalling IO regression since linux 5.12, through 5.18
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <297cbb87-87aa-2e1d-1fc3-8e96c241f28f@huaweicloud.com>
+Date:   Tue, 6 Sep 2022 11:45:54 +0200
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        Chris Murphy <lists@colorremedies.com>,
+        Jan Kara <jack@suse.cz>, Nikolay Borisov <nborisov@suse.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <69523E26-6A87-4C8A-A5CD-D37A28018109@linaro.org>
+References: <Yv0KmT8UYos2/4SX@T590>
+ <35f0d608-7448-4276-8922-19a23d8f9049@www.fastmail.com>
+ <Yv2P0zyoVvz35w/m@T590>
+ <568465de-5c3b-4d94-a74b-5b83ce2f942f@www.fastmail.com>
+ <Yv2w+Tuhw1RAoXI5@T590>
+ <9f2f608a-cd5f-4736-9e6d-07ccc2eca12c@www.fastmail.com>
+ <a817431f-276f-4aab-9ff8-c3e397494339@www.fastmail.com>
+ <5426d0f9-6539-477d-8feb-2b49136b960f@www.fastmail.com>
+ <Yv3NIQlDL0T3lstU@T590>
+ <0f731b0a-fbd5-4e7b-a3df-0ed63360c1e0@www.fastmail.com>
+ <YwCGlyDMhWubqKoL@T590>
+ <297cbb87-87aa-2e1d-1fc3-8e96c241f28f@huaweicloud.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Node names should be generic, so change the sdma node name format 'sdma'
-into 'dma-controller'.
 
-Signed-off-by: Joy Zou <joy.zou@nxp.com>
----
-Changes in v5:
-modify the commit message.
----
- arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index e9f0cdd10ab6..19eaa523564d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -534,7 +534,7 @@ wdog3: watchdog@302a0000 {
- 				status = "disabled";
- 			};
- 
--			sdma2: sdma@302c0000 {
-+			sdma2: dma-controller@302c0000 {
- 				compatible = "fsl,imx8mq-sdma","fsl,imx7d-sdma";
- 				reg = <0x302c0000 0x10000>;
- 				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-@@ -1302,7 +1302,7 @@ qspi0: spi@30bb0000 {
- 				status = "disabled";
- 			};
- 
--			sdma1: sdma@30bd0000 {
-+			sdma1: dma-controller@30bd0000 {
- 				compatible = "fsl,imx8mq-sdma","fsl,imx7d-sdma";
- 				reg = <0x30bd0000 0x10000>;
- 				interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.37.1
+> Il giorno 1 set 2022, alle ore 09:02, Yu Kuai =
+<yukuai1@huaweicloud.com> ha scritto:
+>=20
+> Hi, Chris
+>=20
+> =E5=9C=A8 2022/08/20 15:00, Ming Lei =E5=86=99=E9=81=93:
+>> On Fri, Aug 19, 2022 at 03:20:25PM -0400, Chris Murphy wrote:
+>>>=20
+>>>=20
+>>> On Thu, Aug 18, 2022, at 1:24 AM, Ming Lei wrote:
+>>>> On Thu, Aug 18, 2022 at 12:27:04AM -0400, Chris Murphy wrote:
+>>>>>=20
+>>>>>=20
+>>>>> On Thu, Aug 18, 2022, at 12:18 AM, Chris Murphy wrote:
+>>>>>> On Thu, Aug 18, 2022, at 12:12 AM, Chris Murphy wrote:
+>>>>>>> On Wed, Aug 17, 2022, at 11:41 PM, Ming Lei wrote:
+>>>>>>>=20
+>>>>>>>> OK, can you post the blk-mq debugfs log after you trigger it on =
+v5.17?
+>>>>>=20
+>>>>> Same boot, 3rd log. But the load is above 300 so I kinda need to =
+sysrq+b soon.
+>>>>>=20
+>>>>> =
+https://drive.google.com/file/d/1375H558kqPTdng439rvG6LuXXWPXLToo/view?usp=
+=3Dsharing
+>>>>>=20
+>>>>=20
+>>>> Also please test the following one too:
+>>>>=20
+>>>>=20
+>>>> diff --git a/block/blk-mq.c b/block/blk-mq.c
+>>>> index 5ee62b95f3e5..d01c64be08e2 100644
+>>>> --- a/block/blk-mq.c
+>>>> +++ b/block/blk-mq.c
+>>>> @@ -1991,7 +1991,8 @@ bool blk_mq_dispatch_rq_list(struct =
+blk_mq_hw_ctx
+>>>> *hctx, struct list_head *list,
+>>>>  		if (!needs_restart ||
+>>>>  		    (no_tag && =
+list_empty_careful(&hctx->dispatch_wait.entry)))
+>>>>  			blk_mq_run_hw_queue(hctx, true);
+>>>> -		else if (needs_restart && needs_resource)
+>>>> +		else if (needs_restart && (needs_resource ||
+>>>> +					=
+blk_mq_is_shared_tags(hctx->flags)))
+>>>>  			blk_mq_delay_run_hw_queue(hctx, =
+BLK_MQ_RESOURCE_DELAY);
+>>>>=20
+>>>>  		blk_mq_update_dispatch_busy(hctx, true);
+>>>>=20
+>>>=20
+>>>=20
+>>> With just this patch on top of 5.17.0, it still hangs. I've captured =
+block debugfs log:
+>>> =
+https://drive.google.com/file/d/1ic4YHxoL9RrCdy_5FNdGfh_q_J3d_Ft0/view?usp=
+=3Dsharing
+>> The log is similar with before, and the only difference is RESTART =
+not
+>> set.
+>> Also follows another patch merged to v5.18 and it fixes io stall too, =
+feel free to test it:
+>> 8f5fea65b06d blk-mq: avoid extending delays of active hctx from =
+blk_mq_delay_run_hw_queues
+>=20
+> Have you tried this patch?
+>=20
+> We meet a similar problem in our test, and I'm pretty sure about the
+> situation at the scene,
+>=20
+> Our test environment=EF=BC=9Anvme with bfq ioscheduler,
+>=20
+> How io is stalled:
+>=20
+> 1. hctx1 dispatch rq from bfq in service queue, bfqq becomes empty,
+> dispatch somehow fails and rq is inserted to hctx1->dispatch, new run
+> work is queued.
+>=20
+> 2. other hctx tries to dispatch rq, however, in service bfqq is
+> empty, bfq_dispatch_request return NULL, thus
+> blk_mq_delay_run_hw_queues is called.
+>=20
+> 3. for the problem described in above patch=EF=BC=8Crun work from =
+"hctx1"
+> can be stalled.
+>=20
+> Above patch should fix this io stall, however, it seems to me bfq do
+> have some problems that in service bfqq doesn't expire under following
+> situation:
+>=20
+> 1. dispatched rqs don't complete
+> 2. no new rq is issued to bfq
+>=20
+
+There may be one more important problem: is bfq_finish_requeue_request
+eventually invoked for the failed rq?  If it is not, then a memory
+leak follows, because recounting gets unavoidably unbalanced.
+
+In contrast, if bfq_finish_requeue_request is correctly invoked, then
+no stall should occur.
+
+Thanks,
+Paolo
+
+> Thanks,
+> Kuai
+>> Thanks,
+>> Ming
+>> .
 

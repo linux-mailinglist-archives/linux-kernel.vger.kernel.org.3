@@ -2,75 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E685AF01A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5005AF01F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238329AbiIFQQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S231878AbiIFQQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237420AbiIFQQG (ORCPT
+        with ESMTP id S235624AbiIFQQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:16:06 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1C92BF4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:43:23 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id 65so1528203pfx.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 08:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date;
-        bh=+D1zF2DCKf5WB+zgoPewh33B5r7wz0pan/6d9WW6hok=;
-        b=pH9RKm/TPf2/OyVkyrRBJ6qM45HScECPbEnaj8lYNtL3zKeqCZDloJ5emwPC+JiaRl
-         UI7ErAQFZmUNbD++WTaqyPy/GGKriOIy4FVaNu8D8sMHQRpBUTRY7NAIR/qxC6q0kIZ8
-         1rYx+w9U1P7UXxqK+0A/7IsiNFrpSy4ng/NNADgbuxEFwIjWgWxvjm+Gezun9n2Ocjxg
-         Wg4w2XHUfCO0Drt1RB3xikc+Y5InJ88Id86syf4dFILg73GIOKD2T3nO28TksLGtEZuu
-         8YEnDjPQSBmnhikDsQNsf7FrQD5JlSQIGCJFdKsXAAH2YyM11fdoMoaoNNJeT6Vt0aXO
-         RSHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=+D1zF2DCKf5WB+zgoPewh33B5r7wz0pan/6d9WW6hok=;
-        b=vgdl738Zc7iQsKT4JWYkM1ltK9LgcPaJq/p6/WNeT5bNb1yp40jm2LdYKK3vqvv8z5
-         6XoJIXDoixtR8DCem5b8DZnV9X6+IP2LaVR/uyw6gDZ6AkbML4p6GRuTnt9fBK9IcMUB
-         cc/tbP+faBIYJuS9/KX7CVOyGyhgvr6ku1pBXwYNvSMZ7zfvQFcIciYOKZeA3CcQEW3k
-         8jFZo6cpTkJrgwX1M5pl84TY6vW0WMBi+OgCgFgXduBeZ6O3t51DlWlK3y3vU9OUe6oF
-         V9kWfb64X4O9NKM0I/dePlqwn2t8ih+QdWq7+oy8ZpuPJUgvshTTC6JbSQLd5CtumAog
-         Pgmg==
-X-Gm-Message-State: ACgBeo2vSBMVZp58sf3V2Shnk2GnS0Gy2XlUaO5THUUP3+aP/URPbsBc
-        GLPjhPCCbX34MFZm8zs4IUT8Dbm8IeLhcqiEGRQ=
-X-Google-Smtp-Source: AA6agR4jckI8m9urihs3H+eFjrNNGcOZGbauqbVP/aG2BFr68lkayOXI2HujjcX+HwK6xouWiLH2Zo5STQnKe09WCNU=
-X-Received: by 2002:a65:6951:0:b0:42b:b13:b253 with SMTP id
- w17-20020a656951000000b0042b0b13b253mr48015492pgq.555.1662479002771; Tue, 06
- Sep 2022 08:43:22 -0700 (PDT)
+        Tue, 6 Sep 2022 12:16:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EDB488;
+        Tue,  6 Sep 2022 08:44:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A59B5B818C2;
+        Tue,  6 Sep 2022 15:44:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0043C433C1;
+        Tue,  6 Sep 2022 15:44:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662479069;
+        bh=qFOk6Wp6NGa1Ej+qcHbPtJExBc58ed/Pmqdo5YRCPig=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eiXfYf3T/gGNUT6915A9D2Q7+AAUG7dPXv1inXwV2KRquc0Vpy4fQCmWfAWv6UIZy
+         ul38C7L5QFDgOxcWixx9aHE1JYPngBP/l4hUN0nYK5LFncG4J7ZntKF5Q4nMN0bfvR
+         4T7yMDDVsh3onuYzC7zOwFIO2zOXeCkWo6afLSpKltK625RM14d5F5UJREXOnMEo/S
+         6gn768eCIJpQYeZJwrnIeha0S7hBYdm+NA5O2cVozNlrW4ugs06hKXsXLyu6VFwu3p
+         b63o4MrKg0ZvzPEarvd5tTxFX1h/U36VOonPRQqiasczJtjjmLCqlt2XK4Dx5h90Aw
+         7zcaaSu+b5NiA==
+Date:   Tue, 6 Sep 2022 18:44:23 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     Marc Orr <marcorr@google.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>
+Subject: Re: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
+ fault for user address
+Message-ID: <Yxdq1yQw9f54aw4+@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+ <YvKRjxgipxLSNCLe@zn.tnic>
+ <YxcgAk7AHWZVnSCJ@kernel.org>
+ <CAA03e5FgiLoixmqpKtfNOXM_0P5Y7LQzr3_oQe+2Z=GJ6kw32g@mail.gmail.com>
+ <SN6PR12MB2767ABA4CEFE4591F87968AD8E7E9@SN6PR12MB2767.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Reply-To: edmondpamela60@gmail.com
-Sender: donatus.brown656@gmail.com
-Received: by 2002:a05:7022:525:b0:43:c66b:3f78 with HTTP; Tue, 6 Sep 2022
- 08:43:22 -0700 (PDT)
-From:   Pamela Edmond <edmondpamela60@gmail.com>
-Date:   Tue, 6 Sep 2022 15:43:22 +0000
-X-Google-Sender-Auth: JtYP_7YYSQJ3O5rMDoX2VUbVZj0
-Message-ID: <CAGyz52Si7ySG0K6P5x7qm88+R4ckx6RustDLR1zGSH7L4gbeSg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SN6PR12MB2767ABA4CEFE4591F87968AD8E7E9@SN6PR12MB2767.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good afternoon!
+On Tue, Sep 06, 2022 at 02:17:15PM +0000, Kalra, Ashish wrote:
+> [AMD Official Use Only - General]
+> 
+> >> On Tue, Aug 09, 2022 at 06:55:43PM +0200, Borislav Petkov wrote:
+> >> > On Mon, Jun 20, 2022 at 11:03:43PM +0000, Ashish Kalra wrote:
+> >> > > +   pfn = pte_pfn(*pte);
+> >> > > +
+> >> > > +   /* If its large page then calculte the fault pfn */
+> >> > > +   if (level > PG_LEVEL_4K) {
+> >> > > +           unsigned long mask;
+> >> > > +
+> >> > > +           mask = pages_per_hpage(level) - pages_per_hpage(level - 1);
+> >> > > +           pfn |= (address >> PAGE_SHIFT) & mask;
+> >> >
+> >> > Oh boy, this is unnecessarily complicated. Isn't this
+> >> >
+> >> >       pfn |= pud_index(address);
+> >> >
+> >> > or
+> >> >       pfn |= pmd_index(address);
+> >>
+> >> I played with this a bit and ended up with
+> >>
+> >>         pfn = pte_pfn(*pte) | PFN_DOWN(address & page_level_mask(level 
+> >> - 1));
+> >>
+> >> Unless I got something terribly wrong, this should do the same (see 
+> >> the attached patch) as the existing calculations.
+> 
+> >Actually, I don't think they're the same. I think Jarkko's version is correct. Specifically:
+> >- For level = PG_LEVEL_2M they're the same.
+> >- For level = PG_LEVEL_1G:
+> >The current code calculates a garbage mask:
+> >mask = pages_per_hpage(level) - pages_per_hpage(level - 1); translates to:
+> >>> hex(262144 - 512)
+> >'0x3fe00'
+> 
+> No actually this is not a garbage mask, as I explained in earlier responses we need to capture the address bits 
+> to get to the correct 4K index into the RMP table.
+> Therefore, for level = PG_LEVEL_1G:
+> mask = pages_per_hpage(level) - pages_per_hpage(level - 1) => 0x3fe00 (which is the correct mask).
+> 
+> >But I believe Jarkko's version calculates the correct mask (below), incorporating all 18 offset bits into the 1G page.
+> >>> hex(262144 -1)
+> >'0x3ffff'
+> 
+> We can get this simply by doing (page_per_hpage(level)-1), but as I mentioned above this is not what we need.
 
-Recently I have forwarded you a necessary documentation.
+I think you're correct, so I'll retry:
 
-Have you already seen it?
+(address / PAGE_SIZE) & (pages_per_hpage(level) - pages_per_hpage(level - 1)) =
+
+(address / PAGE_SIZE) & ((page_level_size(level) / PAGE_SIZE) - (page_level_size(level - 1) / PAGE_SIZE)) =
+
+[ factor out 1 / PAGE_SIZE ]
+
+(address & (page_level_size(level) - page_level_size(level - 1))) / PAGE_SIZE  =
+
+[ Substitute with PFN_DOWN() ] 
+
+PFN_DOWN(address & (page_level_size(level) - page_level_size(level - 1)))
+
+So you can just:
+
+pfn = pte_pfn(*pte) | PFN_DOWN(address & (page_level_size(level) - page_level_size(level - 1)));
+
+Which is IMHO way better still what it is now because no branching
+and no ad-hoc helpers (the current is essentially just page_level_size
+wrapper).
+
+BR, Jarkko

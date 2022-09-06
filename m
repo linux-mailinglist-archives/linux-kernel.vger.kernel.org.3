@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FE95AE9B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C255AEA07
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbiIFNdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S232812AbiIFNl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240469AbiIFNch (ORCPT
+        with ESMTP id S231154AbiIFNkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:32:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE2675FCE;
-        Tue,  6 Sep 2022 06:32:31 -0700 (PDT)
+        Tue, 6 Sep 2022 09:40:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F057DF63;
+        Tue,  6 Sep 2022 06:37:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3530461546;
-        Tue,  6 Sep 2022 13:32:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427EFC433C1;
-        Tue,  6 Sep 2022 13:32:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 441BCB818C2;
+        Tue,  6 Sep 2022 13:36:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896BDC433D6;
+        Tue,  6 Sep 2022 13:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471149;
-        bh=owkutCVtF3WgN0PkOOap7smURXQ96hR7pkmpNAVs74c=;
+        s=korg; t=1662471414;
+        bh=NWUzBANqXW9GVAHrKIuVNQwpQgRn9It+MIN89V6w+x8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mRAnPj66ggkHv1VYuccWeSdsy2tVjl7mI80EJsupACt4r4jnw5EBXtNZ8w6ZPbPHo
-         ipWqsctOgUu7xsjkg8156gGhGg8dq3uXUeHVhenTbIaJAQjqYYhVd5crs4NiCD51sT
-         q3lwMTqVZYgYw+gK66B939AOezVrmCh0nyKu8EdI=
+        b=jf9xSod86gXyJHw3k0jXrAURz8Rpt3mVKVmUHDwG4BteaQMtAsnyj+bQVR//3uoJc
+         nlqWzISZ55J5zNAXyklF1va3iPJ1T/V32lOTpoAZJfVO5fzoXUY0WQUpgUpoVnwXCp
+         H45y4u/fzF5fIxS0VW3/fCFnzBkvgVUEylXSyMe4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Aaron Conole <aconole@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 02/80] drm/msm/dp: delete DP_RECOVERED_CLOCK_OUT_EN to fix tps4
-Date:   Tue,  6 Sep 2022 15:29:59 +0200
-Message-Id: <20220906132817.040032328@linuxfoundation.org>
+Subject: [PATCH 5.15 019/107] openvswitch: fix memory leak at failed datapath creation
+Date:   Tue,  6 Sep 2022 15:30:00 +0200
+Message-Id: <20220906132822.567603670@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
-References: <20220906132816.936069583@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+References: <20220906132821.713989422@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>
 
-[ Upstream commit 032d57960176ac01cc5adff5bcc5eb51317f8781 ]
+[ Upstream commit a87406f4adee9c53b311d8a1ba2849c69e29a6d0 ]
 
-Data Symbols scrambled is required for tps4 at link training 2.
-Therefore SCRAMBLING_DISABLE bit should not be set for tps4 to
-work.
+ovs_dp_cmd_new()->ovs_dp_change()->ovs_dp_set_upcall_portids()
+allocates array via kmalloc.
+If for some reason new_vport() fails during ovs_dp_cmd_new()
+dp->upcall_portids must be freed.
+Add missing kfree.
 
-RECOVERED_CLOCK_OUT_EN is for enable simple EYE test for jitter
-measurement with minimal equipment for embedded applications purpose
-and is not required to be set during normal operation. Current
-implementation always have RECOVERED_CLOCK_OUT_EN bit set which
-cause SCRAMBLING_DISABLE bit wrongly set at tps4 which prevent
-tps4 from working.
+Kmemleak example:
+unreferenced object 0xffff88800c382500 (size 64):
+  comm "dump_state", pid 323, jiffies 4294955418 (age 104.347s)
+  hex dump (first 32 bytes):
+    5e c2 79 e4 1f 7a 38 c7 09 21 38 0c 80 88 ff ff  ^.y..z8..!8.....
+    03 00 00 00 0a 00 00 00 14 00 00 00 28 00 00 00  ............(...
+  backtrace:
+    [<0000000071bebc9f>] ovs_dp_set_upcall_portids+0x38/0xa0
+    [<000000000187d8bd>] ovs_dp_change+0x63/0xe0
+    [<000000002397e446>] ovs_dp_cmd_new+0x1f0/0x380
+    [<00000000aa06f36e>] genl_family_rcv_msg_doit+0xea/0x150
+    [<000000008f583bc4>] genl_rcv_msg+0xdc/0x1e0
+    [<00000000fa10e377>] netlink_rcv_skb+0x50/0x100
+    [<000000004959cece>] genl_rcv+0x24/0x40
+    [<000000004699ac7f>] netlink_unicast+0x23e/0x360
+    [<00000000c153573e>] netlink_sendmsg+0x24e/0x4b0
+    [<000000006f4aa380>] sock_sendmsg+0x62/0x70
+    [<00000000d0068654>] ____sys_sendmsg+0x230/0x270
+    [<0000000012dacf7d>] ___sys_sendmsg+0x88/0xd0
+    [<0000000011776020>] __sys_sendmsg+0x59/0xa0
+    [<000000002e8f2dc1>] do_syscall_64+0x3b/0x90
+    [<000000003243e7cb>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-This patch delete setting RECOVERED_CLOCK_OUT_EN to fix
-SCRAMBLING_DISABLE be wrongly set at tps4.
-
-Changes in v2:
--- fix Fixes tag
-
-Changes in v3:
--- revise commit text
-
-Changes in v4:
--- fix commit text newline
-
-Changes in v5:
--- fix commit text line over 75 chars
-
-Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/497194/
-Link: https://lore.kernel.org/r/1660258670-4200-1-git-send-email-quic_khsieh@quicinc.com
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Fixes: b83d23a2a38b ("openvswitch: Introduce per-cpu upcall dispatch")
+Acked-by: Aaron Conole <aconole@redhat.com>
+Signed-off-by: Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>
+Link: https://lore.kernel.org/r/20220825020326.664073-1-andrey.zhadchenko@virtuozzo.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/openvswitch/datapath.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index b9ca844ce2ad0..9fac55c24214a 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1205,7 +1205,7 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
- 	if (ret)
- 		return ret;
+diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+index 67ad08320886b..5e2c83cb7b129 100644
+--- a/net/openvswitch/datapath.c
++++ b/net/openvswitch/datapath.c
+@@ -1801,7 +1801,7 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 				ovs_dp_reset_user_features(skb, info);
+ 		}
  
--	dp_ctrl_train_pattern_set(ctrl, pattern | DP_RECOVERED_CLOCK_OUT_EN);
-+	dp_ctrl_train_pattern_set(ctrl, pattern);
+-		goto err_unlock_and_destroy_meters;
++		goto err_destroy_portids;
+ 	}
  
- 	for (tries = 0; tries <= maximum_retries; tries++) {
- 		drm_dp_link_train_channel_eq_delay(ctrl->panel->dpcd);
+ 	err = ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
+@@ -1816,6 +1816,8 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	ovs_notify(&dp_datapath_genl_family, reply, info);
+ 	return 0;
+ 
++err_destroy_portids:
++	kfree(rcu_dereference_raw(dp->upcall_portids));
+ err_unlock_and_destroy_meters:
+ 	ovs_unlock();
+ 	ovs_meters_exit(dp);
 -- 
 2.35.1
 

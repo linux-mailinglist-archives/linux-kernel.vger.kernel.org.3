@@ -2,236 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BABC5AE1B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DBE5AE1BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbiIFH7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S233902AbiIFH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233110AbiIFH7A (ORCPT
+        with ESMTP id S233120AbiIFH7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:59:00 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80FA7171C;
-        Tue,  6 Sep 2022 00:58:58 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fy31so21312539ejc.6;
-        Tue, 06 Sep 2022 00:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=G5xMT6aDNv4kW7DoRuL08vNOs1PAIlSGM76dCe+/XnA=;
-        b=IqR3y18Cx1qIwYw4UCiCTVh/G1F5irxJGmeXs1tScFvtbsL6xEpJxG2G/X6Gl4lhIj
-         +2KrmUt+oRnZv2in1enq/dW/oGz8TuVY6qP7kLHjRjLDgIUAJy0ndbbIiaJi6ZNadtxI
-         y5EvFZkZuwL0e0v6pQC5u87gcLh52hNoFtGTG4s+x9NTpfmdykE+j8OluBNOTg5w6EEb
-         CAj9vrObxn37Woc0hrBx34RCimwLSIK7kEqX+b1ptJmgvYmBXXMYLYD3rfzCmNogiGEn
-         rbepDzapjt3YfkGRcTXwVovnVtdeUw/Avi2dszJ13t45IfJeQ+Am19GtI6oJjAoPrywZ
-         o8dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=G5xMT6aDNv4kW7DoRuL08vNOs1PAIlSGM76dCe+/XnA=;
-        b=wBlqIJb8sTI0FtfooGsBYWJ4GouVIqzzpLI5z6+0IkkBNhTbX+v3FrtJZPiUiqTrdy
-         PJCMVGDrzFtRei2bTiZei+gmtnzOoexqvL7RzEqqZalND0Pc0+pyfTR6X6ezlysbReFk
-         +cbJlX1/kifM4ELZ4IX11yfrVnIDu+VRUuYP7JYx506L/iduxbCoAjsvwYqYJPYTKbXa
-         59df0HW+jnUizayl7Y6xdACrLTG6ey9+o+PcTqPYaz+/bLK3v0Xb5MsBDJX/b3hJy26H
-         eDckBVWb0TUCJHY+mubGePFo9LFpna+O2YQrP9+xvuOG6ngKnB/N3tGfu5fgTRVV3NpZ
-         YeBw==
-X-Gm-Message-State: ACgBeo0UFUMpqVuesM6K7KO3adYracuJYmLmtec5lvEpBaL9v6D1QDK+
-        iPKbM0fc++CczWXo+6D27qquXTVlGDBDiYbN8MM=
-X-Google-Smtp-Source: AA6agR5YnY0EzdQxo8Pq6IyzStk5Of82NqC2kb+QzscEVqwyjmybojqR67VAd+bpi6dSl5otBltC+plapAULeuYVO+o=
-X-Received: by 2002:a17:907:7dac:b0:739:8df9:3c16 with SMTP id
- oz44-20020a1709077dac00b007398df93c16mr37890355ejc.9.1662451137307; Tue, 06
- Sep 2022 00:58:57 -0700 (PDT)
+        Tue, 6 Sep 2022 03:59:13 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on20625.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e83::625])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086B271704;
+        Tue,  6 Sep 2022 00:59:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XaLmTY2o6ftnbJ/27vPewOhblwlOVwJOX1P0gzpp0IOPYfiZCZ4fLAhmKtYQb2vHP1HANaqgkjPGvZSCMEYJiTJEvGlfVdJqKBuGva3zlAPJlaMIkJ0WlvI2w1/mVP7WHdzTz696aWqcTkudqq0kNjzJIxjft9JnDrwN3zg7/iuAfGjq+VO9BNAv1AFydqESyfUhZpVgHt1Tu0+KX9QmYAWma0SF1/5TgTZfj9sGDR3jZGeQkJxhE7wajDYFVGrGbIGPNbZEDj1n+AF0D3v0w+rsy+ZW+7amPbaLI71gnXG0MFU8vhV5ColymkMImVMTE0jqdb76/ar7UpAA+FSJHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wNvOLQzdymwbkQafamtSqqFEIWTZYQwKnN+RaXcYcJI=;
+ b=nHFmRGzcv5emiG2YvFAhU6+1mjke7lGDW9VLvoofbi+1n5xYujxqsxv0Niyd6nf1oz5O+yXtYDc2+30HYCQ8YXEaPRSWECX3bAwDIL8X+VVuoL46qFqnSbwzDLRNydrao80yqwDzBka9xlJ4RrYUej7NzLizUprOV6JXVTLssOWhIxGUOtbgvAPnZS9mfzcFubHHIV8nsBqvoqm2hpg5jq+XQGRFBHWttwRcnwJMwQa+ooyusivCJLW4FMU7NfEJvNOUC609O4X8M4X/1BCfh2iEfm6BfeeO6l/mFr+lFnawvHnKmcDWentKB6CxliP9APnaCAF49oWDJXAACKuO7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wNvOLQzdymwbkQafamtSqqFEIWTZYQwKnN+RaXcYcJI=;
+ b=K4PKvLVJ2VrF65GFHZvFHk5Rxg94xZ8tjBqQvI/G6YZlp80D40h0tBLtLrQbHoEEM9SsevIzSRB2Ttmz8umeGdxIILL0qdtxNOYJ4MLUWqwdo5OPDBDWTbploFcZhYupsPW6Ezv6XsKTzUG3yZVyqeGchDM0hGGkohe5OirFjWwXoLCl0t369eQH7lzQdl26LE9GvKP1WeR5h2Di+7REStm3Hwm6odd7YZJKrZ7LNwuMWvy1ZW4FrJ91O/PhcZzLriTAUMwnamP3oJT7v9FMlVRHMIQiN6GcbdFlaswC6nU4pczuisb+ZL8tH2p+ie+DzWmKw67s3tAHWU78WclzCg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com (2603:10b6:5:221::13)
+ by SJ0PR12MB5609.namprd12.prod.outlook.com (2603:10b6:a03:42c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Tue, 6 Sep
+ 2022 07:59:09 +0000
+Received: from DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb]) by DM6PR12MB4140.namprd12.prod.outlook.com
+ ([fe80::e0c5:bb15:a743:7ddb%3]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 07:59:09 +0000
+Message-ID: <d1535f25-b252-ee38-8eb8-94af9367d5f1@nvidia.com>
+Date:   Tue, 6 Sep 2022 00:58:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <20220831041843.973026-5-jhubbard@nvidia.com>
+ <YxbtF1O8+kXhTNaj@infradead.org>
+ <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+ <Yxb7YQWgjHkZet4u@infradead.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <Yxb7YQWgjHkZet4u@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR20CA0007.namprd20.prod.outlook.com
+ (2603:10b6:a03:1f4::20) To DM6PR12MB4140.namprd12.prod.outlook.com
+ (2603:10b6:5:221::13)
 MIME-Version: 1.0
-References: <20220905171601.79284-1-peron.clem@gmail.com> <20220905171601.79284-5-peron.clem@gmail.com>
- <OS0PR01MB5922142861E78A1DD81AD1C9867F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAJiuCceGZJr24hVjpP0ptOkG8bMFKr=QLj0LcyDX4fUy7Rr2xA@mail.gmail.com> <OS0PR01MB5922EE3F6CDD827919A7763E867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922EE3F6CDD827919A7763E867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Tue, 6 Sep 2022 09:58:45 +0200
-Message-ID: <CAJiuCcd7upgT6vQWHos-X1-89+Z-5xxDe2SMCdC2=_LgZaVMiw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the recommended
- one to configure and enable regulator
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 854f191e-6af1-4505-9918-08da8fddad86
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5609:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W7Pqvo2CuFIX9TiyH/FdgxlrodWFD6UDMeedtFgFLpJ3Q6lcDB7odHxJzuLTsWZJPLT4EmKxl0C1NCRGLnIEv91KVnd9EWYA0PDWt7b+5lakx9o7llPvh6ClcGUeUUMc+E5J4oT74/LQ92nsLOglGRnPoY0jKl1j1MmVeM00fL+CLauDapaUwOx9rS56mjgoQKJs7/Y4upicS5w3q9XoTLf9hHMix9fhw3EZEzz2B0mLjkjGqaegsskLVRRwIiBSbtYqpCwj+by+aHf3fmGt9Ro/XJGas7z8VYtfjsO185ALtltz36NzoFfagN1m1K9rmPcKjE1BpU8W1DJHDHDCyt6iDtcjS9VjCNoZrIwSwNur4jJ/+R9GKGPPuFfPwRWT4Qopk81OcvmM/1Y82yPy93Kkg1ulPk9+Hfdl6Wy+LB6EcVbMplNBAqcAsdFXDrb543rEV1lqfcCpevC+ZxP8LyBFIjbMHgh/5pyC3+3VowTnLrW7/JzTKQ8NXOInZ1bFV6Q9yPWnRpbiccusbNlmhKfbheThAYXp708cAVYg3SKsjHPH/NKNgKipIdJqN/o7AbEw49ou1XicWmHaCBJoQmsml1axC2wKIPjkhGFaDs/kZohAjlO0XAL5W+zRdFsKlvphC9tovW/aLeJrSz6xVQuSXO5yuvCZCihBTHVlBln7cuFNZHnTec4F7ofd9DwRUmDWEI5iOe5niYYXxnDqGTX6NmUEg1fz86BoLeUxbx5xX7Rwje0gTZ0277xAuk/dVhJPPYLCTeBNDIaos6uHWv+Ry3UE7ORz+Xu6YcSOtp4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4140.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(7416002)(8936002)(4326008)(8676002)(5660300002)(66556008)(66946007)(6486002)(6506007)(26005)(6512007)(38100700002)(478600001)(6666004)(66476007)(41300700001)(316002)(186003)(6916009)(2616005)(53546011)(54906003)(83380400001)(31686004)(86362001)(31696002)(2906002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXFCM1FZSnpYWUNkbk5ybi82ZTlRUkNBOFBqeHY4VWZpcEpXVGNrVEFlaDFZ?=
+ =?utf-8?B?R1pISzBqM3hRdEZFWU9uclpZNCtCYWVkZzQzY0RRRzc2bmJhWGVRdkFZVjVN?=
+ =?utf-8?B?UmpCZmNtT3NEN2R0bTRtbUtUSmUxU0RMa0xFcFY5bFRaTVhvczFtL0JjeWxN?=
+ =?utf-8?B?VWk2QTQ4Mi8vNkl1azRRekVicjVsUysxMTB5aVFtRXlLL084bUQyZ0dvVzA2?=
+ =?utf-8?B?MlBTT0NreU8zOWZJS21DeGhnY2QwZjYveW1XalMvenludmsxTG1aODRyTFJq?=
+ =?utf-8?B?a2liMG9vSzlnVUNob3J1c1prK0FZaWh2aXhyOVh2NFpDYUdUajlvaW1NSm11?=
+ =?utf-8?B?VmtpUkt3NExKblovOVFVU09XTmdRRHdKNVJvQ2h5TSswc3ZDMGhsOEFSLzMw?=
+ =?utf-8?B?cE1hSUNWRXRtd0VvSzZwU3NlVVVpTUYyVjU0WGtORnVZVERxTkZ6dXMrLzJa?=
+ =?utf-8?B?dDl3d283bUtUazVsM1NYTG9GdnNXbHdUaER5U3A0S29TOFg5Nm82enkyZGha?=
+ =?utf-8?B?SkFPZXVnSTZ2SVhNdEROVXBIK2czQjg3UnJCb2hXYWRRTXljSjhlKytEKzFV?=
+ =?utf-8?B?c2pGVkhpL0VycHRtRFcwWE4vM1dTcDlEbkpRSStlTGNjeHBFdlBqeUNQUmNH?=
+ =?utf-8?B?dXo1ckkvV3RxVlV0TDBQVzMyNFFIazJpTmZ4alNmMk5zNmxFQ0FFOW1mVGpN?=
+ =?utf-8?B?UjZQRzhmMHQ3UnU1Uldka044NEpBWlFNYWIzT2phQy8yeHNreGYvcjZ2eWVX?=
+ =?utf-8?B?UVpucG1WeWU1a09OeGNsbFQ2QnAwdXZId1o3V3pVa000STkrZGtkV3JvYVZR?=
+ =?utf-8?B?RFYveWY0K0pqNVVGZzdtUzVtL1ZwNWxaWTBvVWtSMzVOb0NlQzRoRzFvVXFp?=
+ =?utf-8?B?ZjBmVXhTTWJ2YUNGNnRQMWE0NHZvUXJmNnZRb2w4cGdPK3VOa0JieWxGQmNC?=
+ =?utf-8?B?QVJzaDFGNkFreWdRdTQrZTE4Y0dRdXpPdEpzdDJTNnBDaytGejZ4bk5CWFBO?=
+ =?utf-8?B?dmhIaFRpaG5DU2dPZUFwYVoveWJOOTRwd0RMZGRQVlRKRk5Zdk5ZeHpVU1Bv?=
+ =?utf-8?B?c3NWOXJhb0tERkpUV1BwSXZ3YkM1bkV2Y0ZEZUliMkE3NlEzMWY0OEE3TnQ4?=
+ =?utf-8?B?UUhPMVdHWnZvWUdjNHlwK01WRFhFWjlqVFhVbUNyR2hVeUVOQkczS0VVdUdq?=
+ =?utf-8?B?ZnhOQ2tGQnJqa2NORThCdElUT2NzNSt4NlptWWE4Um1ZSzA5cldRZlFMVW9I?=
+ =?utf-8?B?TXpuK29GbklTVWYzTmV3NXovTUl2Q0dkMjE4dXJkVU9XbHNkWTFjSjZmK0xC?=
+ =?utf-8?B?dXR4bzF1a3Y3NnBtbUlUb0pVRFZlOUJMc01vbnBVV0VVMTBSaVJVbHo1K2dq?=
+ =?utf-8?B?cXZINHJFcGtjY3lLUE1vaG9WUldkOVFiQzJWOU0yYUJGc3hqTlNWc2lsYmFK?=
+ =?utf-8?B?eXd3dkNRdlJwc2M3QXRaQ3ZJaGR1NlJGN1BMM29CWHA3RzRWM0N4U2dQcHVo?=
+ =?utf-8?B?SloxTTFmYmtFa2ZrZVM1WHljaFV5d2NKZm1VTTB4MWxHWGlXc095YStzZVl0?=
+ =?utf-8?B?ancrV0x6a1kzOU05Qkd1M21tSjZOMXBxK0h1NTJtN094SmxKWG5KcjRaREph?=
+ =?utf-8?B?SmJkLzJmYlNYQktMRXc2WXlFZUY0bW9COEg4MFltdkZrVG5GN2ZaZmVmRlcr?=
+ =?utf-8?B?a01vS21jelk3dXZYa09TSnB0aFg5bjJHTDZpZmhzc3l6UG05aEYxd0J6bkw4?=
+ =?utf-8?B?cVdndzZOeEF6ekx1YzduTW93Vm1JbDlnbldyaG10RG1OUmx5UVRwS21od1Yw?=
+ =?utf-8?B?R3Y1aGFSbTNQLzZaN25laDYzZ2FXNkpyeU5HZHhCdStGTE8yaVp5TWNuME9N?=
+ =?utf-8?B?WEZBMCtOZ0VIL2lsazlqc2s0WUduVDdBbml3MEJJSTErRm4yTWg2VkdNalVI?=
+ =?utf-8?B?MmllYUkwZUdsN2FhbHlNU2U0TDlQZjhaaG01aEZYTUxUc3BOUGtPSnZYV0xE?=
+ =?utf-8?B?RHFNeVA5RXVPdVpoWDArNVVhY2JzZzRCSGQ0SExITXREdEI2MUlNTEpaaGhK?=
+ =?utf-8?B?VE8yMFRhZC92bFJweFUwSDlQOVJkYTgrVURveEVINTFLUFpXY1MwUjNqdmhv?=
+ =?utf-8?Q?LkvOAWaVg/d6BhQJAuKv1k1BJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 854f191e-6af1-4505-9918-08da8fddad86
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4140.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 07:59:09.0201
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2T6Isx3z1j2v+FzSuBMhCL66JGYL55tiirQ7tm1RRQLq8fPEKt8e5FroKRm9UMmEwJPkZRuM7NA2j+efPviR9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5609
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+On 9/6/22 00:48, Christoph Hellwig wrote:
+> On Tue, Sep 06, 2022 at 12:44:28AM -0700, John Hubbard wrote:
+>> OK, that part is clear.
+>>
+>>>  - for the pin case don't use the existing bvec helper at all, but
+>>>    copy the logic for the block layer for not pinning.
+>>
+>> I'm almost, but not quite sure I get the idea above. Overall, what
+>> happens to bvec pages? Leave the get_page() pin in place for FOLL_GET
+>> (or USE_FOLL_GET), I suppose, but do...what, for FOLL_PIN callers?
+> 
+> Do not change anyhing for FOLL_GET callers, as they are on the way out
+> anyway.
+> 
 
-On Tue, 6 Sept 2022 at 08:42, Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
-> Hi Clement,
->
-> >
-> > Hi,
-> >
-> > On Mon, 5 Sept 2022 at 20:17, Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > >
-> > > Hi,
-> > >
-> > > Thanks for the patch.
-> > >
-> > > > Subject: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the
-> > > > recommended one to configure and enable regulator
-> > > >
-> > > > devm_pm_opp_set_regulators() doesn't enable regulator, which make
-> > > > regulator framework switching it off during regulator_late_cleanup(=
-).
-> > >
-> > > In that case, why not regulator_get()for Dynamic regulator(non fixed
-> > > regulator)??
-> >
-> > Sorry I don't understand, what do you mean?
->
-> Normally we need to turn on regulator and clock only when needed.
-> I am not sure with your new code, will make it always on and
-> drains the power unnecessarily and does it set lower opp or higher
-> opp at the start??
+OK, got it.
 
-The code doesn't make it always on, it makes it how it should be at
-the recommended OPP which is the "start point".
+> For FOLL_PIN callers, never pin bvec and kvec pages:  For file systems
+> not acquiring a reference is obviously safe, and the other callers will
+> need an audit, but I can't think of why it woul  ever be unsafe.
 
-If the recommended OPP says to switch off the regulator then it will.
+In order to do that, one would need to be confident that such bvec and kvec
+pages do not get passed down to bio_release_pages() (or the new
+bio_unpin_pages()). Also, I'm missing a key point, because today bvec pages get
+a get_page() reference from __iov_iter_get_pages_alloc(). If I just skip
+that, then the get/put calls are unbalanced...
 
->
-> Compared to the fixed regulator, you have voltage regulator to
-> control that is the difference between my environment and
-> Your environment.
->
-> I am not sure any other SoC is using voltage regulator??
-> If yes, thenthere should be some bug or some difference in HW
-> which is giving different behaviour??
->
-> If you are the first one using voltage regulator with mali gpu,
-> Then Your implementation may be correct, as you have proper
-> HW to check.
-
-The issue is that my regulator is not marked as "always-on", if no OPP
-is called before regulator_late_cleanup() then nobody sets the
-regulator_enable() and the regulator is switched off, which makes my
-board hang.
-
-Like Viresh recommends I will send an update with more details in the
-commit log.
-
-Regards,
-Clement
+I can just hear Al Viro repeating his points about splice() and vmsplice(),
+heh. :)
 
 
->
-> >
-> > >
-> > > >
-> > > > Call dev_pm_opp_set_opp() with the recommend OPP in
-> > > > panfrost_devfreq_init() to enable the regulator and avoid any switc=
-h
-> > > > off by regulator_late_cleanup().
-> > > >
-> > > > Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
-> > > > ---
-> > > >  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 8 ++++++++
-> > > >  1 file changed, 8 insertions(+)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > index 5110cd9b2425..67b242407156 100644
-> > > > --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> > > > @@ -131,6 +131,14 @@ int panfrost_devfreq_init(struct
-> > > > panfrost_device
-> > > > *pfdev)
-> > > >               return PTR_ERR(opp);
-> > > >
-> > > >       panfrost_devfreq_profile.initial_freq =3D cur_freq;
-> > > > +
-> > > > +     /* Setup and enable regulator */
-> > > > +     ret =3D dev_pm_opp_set_opp(dev, opp);
-> > > > +     if (ret) {
-> > > > +             DRM_DEV_ERROR(dev, "Couldn't set recommended OPP\n");
-> > > > +             return ret;
-> > > > +     }
-> > >
-> > >
-> > > FYI,
-> > > On RZ/G2L mali gpu, we have fixed regulator and I was able to do GPU
-> > > OPP transition without any issues previously.
-> >
-> > rzg2l-smarc-som.dtsi uses regulator reg_1p1v; which is marked as
-> > regulator-always-on; that's why
-> > regulator_late_cleanup() doesn't switch it off.
->
-> Yes that is correct. It is fixed regulator and always on.
-> We control only frequency.
->
-> Cheers,
-> Biju
->
-> >
-> > >
-> > > root@smarc-rzg2l:~# cat /sys/class/devfreq/11840000.gpu/trans_stat
-> > >      From  :   To
-> > >            :  50000000  62500000 100000000 125000000 200000000
-> > 250000000 400000000 500000000   time(ms)
-> > > *  50000000:         0         0         0         0         0
-> > 0         0         1       144
-> > >    62500000:         0         0         0         0         0
-> > 0         0         0         0
-> > >   100000000:         0         0         0         0         0
-> > 0         0         9       524
-> > >   125000000:         0         0         9         0         0
-> > 0         0         3      2544
-> > >   200000000:         0         0         0        11         0
-> > 0         0        46      3304
-> > >   250000000:         1         0         0         0        33
-> > 0         0         0      7496
-> > >   400000000:         0         0         0         0        16
-> > 19         0         0      2024
-> > >   500000000:         1         0         0         1         8
-> > 15        35         0      4032
-> > > Total transition : 208
-> > >
-> > > Cheers,
-> > > Biju
-> > >
+thanks,
+
+-- 
+John Hubbard
+NVIDIA
+

@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2950C5AF38D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8EA5AF38E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiIFS0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 14:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
+        id S229588AbiIFS0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 14:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIFS0S (ORCPT
+        with ESMTP id S229557AbiIFS0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:26:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25AE09AF8D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 11:26:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 080E41042;
-        Tue,  6 Sep 2022 11:26:23 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 130353F534;
-        Tue,  6 Sep 2022 11:26:14 -0700 (PDT)
-Message-ID: <ad67a859-dc57-e30f-e422-3f9a0cb5239b@arm.com>
-Date:   Tue, 6 Sep 2022 19:25:51 +0100
+        Tue, 6 Sep 2022 14:26:48 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA8C9AFA6
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 11:26:46 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id c11so12500717wrp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 11:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ebadhH2uYVNTslR5/261s7BWUnmUPBodlcqT9q7w6G8=;
+        b=ouyb1NFaaJmVw2D5Z+apTQaYtMy1L9tXjdOm3G0+A3X0y9XF6Z2VYp0OClNSy/O94L
+         7IRwykt0SxBx75g95cJWUNNmeHJlMF035UGAe5U/g+d8a1STdXUQRn6Y1309cjoF7CmB
+         Bn+kuxDGBiQugwLb/Yw0VorkrExVBjLj7RfoC/VAgKWM612LHzDJjgPGRLsN4Qei/mMf
+         IFTe7Nn2l5z6lmFV9/aw/s5NDLyuZrQQKSExgxSvzd+xo61HyYiZ1yIFbiEFcVHFDzMc
+         kOv0yt4TgkKIRU/Ant9uTbP+yISj7eLuT28aMqYI86W136Quj3Vg+S7cNIMxcGYb/qih
+         zk5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ebadhH2uYVNTslR5/261s7BWUnmUPBodlcqT9q7w6G8=;
+        b=L5V8OAJ2DQqTgbFwygh9dDmUs6C89Fmp2ftgAx6VYsV5qajDeAxM9kvJn617MsJCra
+         FySKcRImZ6oXZ7i7vhPy8nRwNrd3laXfrIzZbfUoGZTkhF7PXPxhd+3cqcK2nWTltsSy
+         iwC7bAkwGWDo8a1/1P42N2YY97/JEsn4VKSfHv5RiLRbd9uO23KpZq3qI9Od3Jbq0jTl
+         w8QbV4OnSAk4SQFVlfgvvLzof92ZZeZFPPnYsReNUzY8dgj4C39jQtSp4l1dDrroUZ2i
+         LwilxWWaUVcnBY8hRxRYEgbyBst0ubr3mSFPIm969vCDnuU1ooL95UTBvfOQ1uIb3aBv
+         VViA==
+X-Gm-Message-State: ACgBeo3dnMU/M9Kw1TYStfT+nFtyGmbcz8HV8Bm3JXJyAavXjPLPrOOA
+        NVQfvLIoR3Qk8M5nNg3B2PaIh3A0tClG5WrIsjxU0g==
+X-Google-Smtp-Source: AA6agR7pNNwn4fhSG+iMJ8bz1+4iqG4YUPuYPcghISM7jq8faXl211XoIDxETeH03HrnYY+egECXTP5/t97C+IGFLik=
+X-Received: by 2002:a05:6000:813:b0:226:da5a:84a9 with SMTP id
+ bt19-20020a056000081300b00226da5a84a9mr24413460wrb.309.1662488804474; Tue, 06
+ Sep 2022 11:26:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 1/2] iova: Remove some magazine pointer NULL checks
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>,
-        Ethan Zhao <haifeng.zhao@linux.intel.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com
-References: <1662369083-238529-1-git-send-email-john.garry@huawei.com>
- <1662369083-238529-2-git-send-email-john.garry@huawei.com>
- <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
- <3fa23318-6fa7-eba0-30b8-1fb71e6c327e@huawei.com>
- <555fa5aa-a575-d783-dc97-79f63dcf2f57@arm.com>
- <cc950d77-2a97-ac75-4a1d-19aaf864a3be@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <cc950d77-2a97-ac75-4a1d-19aaf864a3be@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220905003732.752-1-mailhol.vincent@wanadoo.fr>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 6 Sep 2022 11:26:31 -0700
+Message-ID: <CAKwvOdnr_F9-voPj4cp2HG8=U32a8Hp1aLpynSQiKOrwe4txpQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,77 +80,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-06 18:36, John Garry wrote:
->>>>
->>>> iommu_probe_device
->>>>    ops->probe_finalize(dev);
->>>>      intel_iommu_probe_finalize
->>>>         iommu_setup_dma_ops
->>>>           iommu_dma_init_domain(domain, dma_base, dma_limit, dev)
->>>>             iova_domain_init_rcaches
->>>>               {
->>>>               ...
->>>>               cpu_rcache->loaded = iova_magazine_alloc(GFP_KERNEL);
->>>>               cpu_rcache->prev = iova_magazine_alloc(GFP_KERNEL);
->>>>             if (!cpu_rcache->loaded || !cpu_rcache->prev) {
->>>>                  ret = -ENOMEM;
->>>>                        goto out_err;
->>>>
->>>> Do you mean iova_magazine_alloc() is impossible to fail ?
->>>
->>> No, iova_magazine_alloc() may fail and return NULL. But if it does 
->>> then we set iovad rcache pointer = NULL in the error path and don't 
->>> use the rcache.
->>>
->>> However we have a !iovad->rcache check on the "fast" alloc but not 
->>> "insert". I need to check why that is again.
->>
->> Right, if you find a good reason to respin the patch then perhaps also 
->> tweaking the commit message to clarify that it's impossible to have a 
->> NULL rcache *at any point where those checks are made* might avoid all 
->> possible doubt, however I'd hope that it's clear enough that the 
->> transient case while iova_domain_init_rcaches() is in the process of 
->> failing really doesn't need consideration in its own right.
-> 
-> Yeah, I would think so. But I still don't mind tweaking it to be extra 
-> clear.
-> 
->>
->> I guess the check in iova_rcache_get() was maybe with the intent of 
->> allowing alloc_iova_fast() to seamlessly fall back to standard 
->> allocation, so an API user can treat iova_domain_init_rcaches() 
->> failure as non-fatal?
-> 
-> The 2x users treat iova_domain_init_rcaches() as fatal:
-> - dma-iommu falls back to platform ops in iommu_setup_dma_ops()
-> 
-> Caveat: on the chance that the IOVA domain init fails due to the rcache 
-> init failing, then, if there were another device in the group which 
-> probes later, its probe would be ok as the start_pfn is set. Not Good.
+On Sun, Sep 4, 2022 at 5:38 PM Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+>
+> The compilers provide some builtin expression equivalent to the ffs(),
+> __ffs() and ffz() functions of the kernel. The kernel uses optimized
+> assembly which produces better code than the builtin
+> functions. However, such assembly code can not be folded when used
+> with constant expressions.
 
-Yeah, there's a lot not to like about iommu_dma_init_domain() - I've 
-been banking on it all getting cleaned up when I get to refactoring that 
-area of probing (remember the issue you reported years ago with PCI 
-groups being built in the wrong order? All related...), but in fact 
-since the cookie management got pulled into core code, we can probably 
-tie the IOVA domain setup to that right now without much other 
-involvement. That could be a cheap win, so I'll give it a go soon.
+Another tact which may help additional sources other than just the
+Linux kernel; it seems that compilers should be able to fold this.
 
-> - vdpa just fails to create the domain in vduse_domain_create()
-> 
->> That makes a fair amount of sense, but does mean that we're missing 
->> the equivalent in iova_rcache_insert() for it to actually work. Or we 
->> just remove it and tighten up the documentation to say that's not valid 
-> 
-> I'd be more inclined to remove it. I would rather remove fathpath checks 
-> as much as possible and have robust error handling in the domain init.
-> 
-> Afterall I do have the "remove check" craze going.
+Vincent, if you're interested in making such an optimization in LLVM,
+we'd welcome the contribution, and I'd be happy to show you where to
+make such changes within LLVM; please let me know off thread.
 
-Sure, like I say I'm happy to be consistent either way. If I do end up 
-reinstating such a check I think I'd prefer to have it explicit in 
-{alloc,free}_iova_fast() anyway, rather than buried in internal 
-implementation details.
+If not, at the least, we should file feature requests in both:
+* https://github.com/llvm/llvm-project/issues
+* https://gcc.gnu.org/bugzilla/
 
-Cheers,
-Robin.
+>
+> This series relies on __builtin_constant_p to select the optimal solution:
+>
+>   * use kernel assembly for non constant expressions
+>
+>   * use compiler's __builtin function for constant expressions.
+>
+>
+> ** Statistics **
+>
+> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+> of __ffs() and ffz() calls (details of the calculation in each patch).
+>
+>
+> ** Changelog **
+>
+> v6 -> v7:
+>
+>   * (no changes on code, only commit tag was modified)
+>
+>   * Add Reviewed-by: Yury Norov <yury.norov@gmail.com> in both patches
+>
+>
+> v5 -> v6:
+>   * Rename variable___ffs() into variable__ffs() (two underscores
+>     instead of three)
+>
+>
+> v4 -> v5:
+>
+>   * (no changes on code, only commit comment was modified)
+>
+>   * Rewrite the commit log:
+>     - Use two spaces instead of `| ' to indent code snippets.
+>     - Do not use `we'.
+>     - Do not use `this patch' in the commit description. Instead,
+>       use imperative tone.
+>   Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
+>
+>
+> v3 -> v4:
+>
+>   * (no changes on code, only commit comment was modified)
+>
+>   * Remove note and link to Nick's message in patch 1/2, c.f.:
+>   Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+>     patch 2/2.
+>
+>
+> v2 -> v3:
+>
+>   * Redacted out the instructions after ret and before next function
+>     in the assembly output.
+>
+>   * Added a note and a link to Nick's message on the constant
+>     propagation missed-optimization in clang:
+>     Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+>
+>   * Fix copy/paste typo in statistics of patch 1/2. Number of
+>     occurences before patches are 1081 and not 3607 (percentage
+>     reduction of 26.7% remains correct)
+>
+>   * Rename the functions as follow:
+>     - __varible_ffs() -> variable___ffs()
+>     - __variable_ffz() -> variable_ffz()
+>
+>   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+>     patch 1/2.
+>
+>
+> Vincent Mailhol (2):
+>   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+>     expressions
+>   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+>     expressions
+>
+>  arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+>  1 file changed, 38 insertions(+), 26 deletions(-)
+>
+> --
+> 2.35.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

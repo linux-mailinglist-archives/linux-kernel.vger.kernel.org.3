@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E9C5AEB33
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735985AEB09
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239205AbiIFNxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
+        id S238597AbiIFNsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239930AbiIFNuE (ORCPT
+        with ESMTP id S233664AbiIFNoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:50:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FCE7D1E3;
-        Tue,  6 Sep 2022 06:40:08 -0700 (PDT)
+        Tue, 6 Sep 2022 09:44:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D992418B3D;
+        Tue,  6 Sep 2022 06:38:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C040EB818DC;
-        Tue,  6 Sep 2022 13:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C446C433C1;
-        Tue,  6 Sep 2022 13:39:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 931FD6154E;
+        Tue,  6 Sep 2022 13:36:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB0BC433D6;
+        Tue,  6 Sep 2022 13:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471578;
-        bh=4i5sYG49tf9dNz8KHpFIUCVSBk6MKdxITrMG9BQRhAw=;
+        s=korg; t=1662471373;
+        bh=A2SlET5mA2JB6GyGY8Cy5ilZkG92iGR0V0gDf6pDXZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ylcLrrw7sxYgP98OAmT8ACg2Z1QpDUOqe7hgNKFv+Wyd0eCJtGicj844iG2rOD94g
-         yHBvm5nJjrb0AXx4Dbt2UjLqr9uOxC32lT8tCPObTRUqcBHOX2DdYC1BF8LnN4+ian
-         21aA+4MGyd6CyWNaD74KMlpuU3sOG8JFQkaBFmCw=
+        b=hrg4Z8C1kAUcRu502swNfJyDhiJfWBpGH/p3YntnQrygEJanfR4uZpuFM4rKPQmwx
+         9DrKfqTfiIiWI6qEVvheU7f1mno0boIRdAr38e/KJ7NaGlVeb7TGXuVzPlUH3ie4iT
+         SQSeCheAdUzVCKnNzG6pHFv9D7iMib3/geVvU0l4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Ranquet <granquet@baylibre.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: [PATCH 5.15 075/107] usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles
-Date:   Tue,  6 Sep 2022 15:30:56 +0200
-Message-Id: <20220906132824.980232602@linuxfoundation.org>
+        stable@vger.kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH 5.10 60/80] s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages
+Date:   Tue,  6 Sep 2022 15:30:57 +0200
+Message-Id: <20220906132819.563491929@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
+References: <20220906132816.936069583@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Sun <pablo.sun@mediatek.com>
+From: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 
-commit c1e5c2f0cb8a22ec2e14af92afc7006491bebabb upstream.
+commit 7c8d42fdf1a84b1a0dd60d6528309c8ec127e87c upstream.
 
-Fix incorrect pin assignment values when connecting to a monitor with
-Type-C receptacle instead of a plug.
+The alignment check in prepare_hugepage_range() is wrong for 2 GB
+hugepages, it only checks for 1 MB hugepage alignment.
 
-According to specification, an UFP_D receptacle's pin assignment
-should came from the UFP_D pin assignments field (bit 23:16), while
-an UFP_D plug's assignments are described in the DFP_D pin assignments
-(bit 15:8) during Mode Discovery.
+This can result in kernel crash in __unmap_hugepage_range() at the
+BUG_ON(start & ~huge_page_mask(h)) alignment check, for mappings
+created with MAP_FIXED at unaligned address.
 
-For example the LG 27 UL850-W is a monitor with Type-C receptacle.
-The monitor responds to MODE DISCOVERY command with following
-DisplayPort Capability flag:
+Fix this by correctly handling multiple hugepage sizes, similar to the
+generic version of prepare_hugepage_range().
 
-        dp->alt->vdo=0x140045
-
-The existing logic only take cares of UPF_D plug case,
-and would take the bit 15:8 for this 0x140045 case.
-
-This results in an non-existing pin assignment 0x0 in
-dp_altmode_configure.
-
-To fix this problem a new set of macros are introduced
-to take plug/receptacle differences into consideration.
-
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-Cc: stable@vger.kernel.org
-Co-developed-by: Pablo Sun <pablo.sun@mediatek.com>
-Co-developed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: Guillaume Ranquet <granquet@baylibre.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Link: https://lore.kernel.org/r/20220804034803.19486-1-macpaul.lin@mediatek.com
+Fixes: d08de8e2d867 ("s390/mm: add support for 2GB hugepages")
+Cc: <stable@vger.kernel.org> # 4.8+
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/typec/altmodes/displayport.c |    4 ++--
- include/linux/usb/typec_dp.h             |    5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ arch/s390/include/asm/hugetlb.h |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -88,8 +88,8 @@ static int dp_altmode_configure(struct d
- 	case DP_STATUS_CON_UFP_D:
- 	case DP_STATUS_CON_BOTH: /* NOTE: First acting as DP source */
- 		conf |= DP_CONF_UFP_U_AS_UFP_D;
--		pin_assign = DP_CAP_DFP_D_PIN_ASSIGN(dp->alt->vdo) &
--			     DP_CAP_UFP_D_PIN_ASSIGN(dp->port->vdo);
-+		pin_assign = DP_CAP_PIN_ASSIGN_UFP_D(dp->alt->vdo) &
-+				 DP_CAP_PIN_ASSIGN_DFP_D(dp->port->vdo);
- 		break;
- 	default:
- 		break;
---- a/include/linux/usb/typec_dp.h
-+++ b/include/linux/usb/typec_dp.h
-@@ -73,6 +73,11 @@ enum {
- #define DP_CAP_USB			BIT(7)
- #define DP_CAP_DFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(15, 8)) >> 8)
- #define DP_CAP_UFP_D_PIN_ASSIGN(_cap_)	(((_cap_) & GENMASK(23, 16)) >> 16)
-+/* Get pin assignment taking plug & receptacle into consideration */
-+#define DP_CAP_PIN_ASSIGN_UFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-+			DP_CAP_UFP_D_PIN_ASSIGN(_cap_) : DP_CAP_DFP_D_PIN_ASSIGN(_cap_))
-+#define DP_CAP_PIN_ASSIGN_DFP_D(_cap_) ((_cap_ & DP_CAP_RECEPTACLE) ? \
-+			DP_CAP_DFP_D_PIN_ASSIGN(_cap_) : DP_CAP_UFP_D_PIN_ASSIGN(_cap_))
- 
- /* DisplayPort Status Update VDO bits */
- #define DP_STATUS_CONNECTION(_status_)	((_status_) & 3)
+--- a/arch/s390/include/asm/hugetlb.h
++++ b/arch/s390/include/asm/hugetlb.h
+@@ -28,9 +28,11 @@ pte_t huge_ptep_get_and_clear(struct mm_
+ static inline int prepare_hugepage_range(struct file *file,
+ 			unsigned long addr, unsigned long len)
+ {
+-	if (len & ~HPAGE_MASK)
++	struct hstate *h = hstate_file(file);
++
++	if (len & ~huge_page_mask(h))
+ 		return -EINVAL;
+-	if (addr & ~HPAGE_MASK)
++	if (addr & ~huge_page_mask(h))
+ 		return -EINVAL;
+ 	return 0;
+ }
 
 

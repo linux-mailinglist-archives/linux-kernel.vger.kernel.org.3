@@ -2,91 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8D45ADD87
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D769A5ADD89
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237542AbiIFCqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S237720AbiIFCqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbiIFCqC (ORCPT
+        with ESMTP id S232432AbiIFCqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:46:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E21402D4;
-        Mon,  5 Sep 2022 19:45:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53B1EB815CB;
-        Tue,  6 Sep 2022 02:45:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38D1C433C1;
-        Tue,  6 Sep 2022 02:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662432356;
-        bh=ghi35xw2bM6XkWJz3ZynG6KjYwLr/s0j/PUC4aSPkuk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u0AldxqpC/s55xjzxvow+esfaO81KuYY/Pe/L2weWaNUAw60JFMc3Mm4lN089wi2q
-         GjUvnnrjep+H2LR45evWWPOHTQKYljaJeXO0cK5XYGyEdI1QBk3C0j285hgCevlZsw
-         5xHAyGem+wH5XVprGgxNF5zj48OsLf9jkgrKXwn0W4PUZdR9hoI69QtPwiS96oZY2x
-         K53eMd3sVAdxCfLDumAj3xBk96FLNHlejrs8TOCQ6mMKtKMyy4of2IykxZzlr0/n6x
-         wcmXyhoAeEyy8U5vhKjGGweU9sxccbuWk9R9doyWEbSQtIuL6XoKNQd+mOfFptNZco
-         DRBAvz4xHlvWw==
-Date:   Mon, 5 Sep 2022 21:45:52 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v12 2/3] phy: qcom-snps: Add support for overriding phy
- tuning parameters
-Message-ID: <20220906024552.lob5k4q3iyagyo5e@baldur>
-References: <1662201048-26049-1-git-send-email-quic_kriskura@quicinc.com>
- <1662201048-26049-3-git-send-email-quic_kriskura@quicinc.com>
+        Mon, 5 Sep 2022 22:46:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F8F6B8FC;
+        Mon,  5 Sep 2022 19:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662432410; x=1693968410;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7CdB3wigi7YuQKBSfYSGgarsGabHYEr32jS565LL5kQ=;
+  b=S+iTqacc3EVQ8FDTfqpqOxbkxWfDiYtpBMcNNfW9xYfo1dg2OyUZrFHv
+   zRBQ7NJTSnDMgG5m/2QZcquvAkJlq98++L++PG3RzJvYQjNFRqjFm+dEF
+   EYJE+2SGyKtMG3pTWRSPPfcpWf6Jh7HYOP3ISoA/6gYPwTND6PlcS0t0z
+   s799C0xrTmgOu0NtmLRvAHfdr62jNz3zwPLeGrgo7Arytz9hQN1BNCRau
+   qZZ/S6JXjiFXfi3tzasfHOfv6j7KnwSBE7LErDRFu2USCEDWyJGMXgX5P
+   jx6X5WoWukTCEiyIeEWLh2a4iId/trdH/vqky0kJHhIJeBCf2oaIon8YA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="279501511"
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="279501511"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 19:46:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,292,1654585200"; 
+   d="scan'208";a="675487606"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Sep 2022 19:46:44 -0700
+Date:   Tue, 6 Sep 2022 10:46:43 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
+        Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v3 10/22] KVM: Drop kvm_count_lock and instead protect
+ kvm_usage_count with kvm_lock
+Message-ID: <20220906024643.ti66dw2y6m6jgch2@yy-desk-7060>
+References: <cover.1662084396.git.isaku.yamahata@intel.com>
+ <20212af31729ba27e29c3856b78975c199b5365c.1662084396.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1662201048-26049-3-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20212af31729ba27e29c3856b78975c199b5365c.1662084396.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 04:00:47PM +0530, Krishna Kurapati wrote:
-[..]
-> +static void qcom_snps_hsphy_read_override_param_seq(struct device *dev)
-> +{
-> +	struct device_node *node = dev->of_node;
-> +	s32 val;
-> +	int ret, i;
-> +	struct qcom_snps_hsphy *hsphy;
-> +	const struct override_param_map *cfg = of_device_get_match_data(dev);
+On Thu, Sep 01, 2022 at 07:17:45PM -0700, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> Because kvm_count_lock unnecessarily complicates the KVM locking convention
+> Drop kvm_count_lock and instead protect kvm_usage_count with kvm_lock for
+> simplicity.
+>
+> Opportunistically add some comments on locking.
+>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  Documentation/virt/kvm/locking.rst | 14 +++++-------
+>  virt/kvm/kvm_main.c                | 34 ++++++++++++++++++++----------
+>  2 files changed, 28 insertions(+), 20 deletions(-)
+>
+> diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
+> index 845a561629f1..8957e32aa724 100644
+> --- a/Documentation/virt/kvm/locking.rst
+> +++ b/Documentation/virt/kvm/locking.rst
+> @@ -216,15 +216,11 @@ time it will be set using the Dirty tracking mechanism described above.
+>  :Type:		mutex
+>  :Arch:		any
+>  :Protects:	- vm_list
+> -
+> -``kvm_count_lock``
+> -^^^^^^^^^^^^^^^^^^
+> -
+> -:Type:		raw_spinlock_t
+> -:Arch:		any
+> -:Protects:	- hardware virtualization enable/disable
+> -:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
+> -		migration.
+> +                - kvm_usage_count
+> +                - hardware virtualization enable/disable
+> +:Comment:	Use cpus_read_lock() for hardware virtualization enable/disable
+> +                because hardware enabling/disabling must be atomic /wrt
+> +                migration.  The lock order is cpus lock => kvm_lock.
+>
+>  ``kvm->mn_invalidate_lock``
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index fc55447c4dba..082d5dbc8d7f 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -100,7 +100,6 @@ EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
+>   */
+>
+>  DEFINE_MUTEX(kvm_lock);
+> -static DEFINE_RAW_SPINLOCK(kvm_count_lock);
+>  LIST_HEAD(vm_list);
+>
+>  static cpumask_var_t cpus_hardware_enabled;
+> @@ -4996,6 +4995,8 @@ static void hardware_enable_nolock(void *caller_name)
+>  	int cpu = raw_smp_processor_id();
+>  	int r;
+>
+> +	WARN_ON_ONCE(preemptible());
 
-Given that you don't have any .data specified for the other compatibles
-(which is fine), cfg would be NULL here and below loop would attempt to
-access NULL[0].prop_name and crash.
+This looks incorrect, it may triggers everytime when online CPU.
+Because patch 7 moved CPUHP_AP_KVM_STARTING *AFTER*
+CPUHP_AP_ONLINE_IDLE as CPUHP_AP_KVM_ONLINE, then cpuhp_thread_fun()
+runs the new CPUHP_AP_KVM_ONLINE in *non-atomic* context:
 
-Please add a check for !cfg and just return here.
+cpuhp_thread_fun(unsigned int cpu) {
+...
+	if (cpuhp_is_atomic_state(state)) {
+		local_irq_disable();
+		st->result = cpuhp_invoke_callback(cpu, state, bringup, st->node, &st->last);
+		local_irq_enable();
 
-With that I think the series looks good.
+		WARN_ON_ONCE(st->result);
+	} else {
+		st->result = cpuhp_invoke_callback(cpu, state, bringup, st->node, &st->last);
+	}
+...
+}
 
-Regards,
-Bjorn
+static bool cpuhp_is_atomic_state(enum cpuhp_state state)
+{
+	return CPUHP_AP_IDLE_DEAD <= state && state < CPUHP_AP_ONLINE;
+}
+
+The hardware_enable_nolock() now is called in 2 cases:
+1. in atomic context by on_each_cpu().
+2. From non-atomic context by CPU hotplug thread.
+
+so how about "WARN_ONCE(preemptible() && cpu_active(cpu))" ?
+
+> +
+>  	if (cpumask_test_cpu(cpu, cpus_hardware_enabled))
+>  		return;
+>
+> @@ -5019,7 +5020,7 @@ static int kvm_online_cpu(unsigned int cpu)
+>  	if (ret)
+>  		return ret;
+>
+> -	raw_spin_lock(&kvm_count_lock);
+> +	mutex_lock(&kvm_lock);
+>  	/*
+>  	 * Abort the CPU online process if hardware virtualization cannot
+>  	 * be enabled. Otherwise running VMs would encounter unrecoverable
+> @@ -5034,7 +5035,7 @@ static int kvm_online_cpu(unsigned int cpu)
+>  			ret = -EIO;
+>  		}
+>  	}
+> -	raw_spin_unlock(&kvm_count_lock);
+> +	mutex_unlock(&kvm_lock);
+>  	return ret;
+>  }
+>
+> @@ -5042,6 +5043,8 @@ static void hardware_disable_nolock(void *junk)
+>  {
+>  	int cpu = raw_smp_processor_id();
+>
+> +	WARN_ON_ONCE(preemptible());
+
+Ditto.
+
+> +
+>  	if (!cpumask_test_cpu(cpu, cpus_hardware_enabled))
+>  		return;
+>  	cpumask_clear_cpu(cpu, cpus_hardware_enabled);
+> @@ -5050,10 +5053,10 @@ static void hardware_disable_nolock(void *junk)
+>
+>  static int kvm_offline_cpu(unsigned int cpu)
+>  {
+> -	raw_spin_lock(&kvm_count_lock);
+> +	mutex_lock(&kvm_lock);
+>  	if (kvm_usage_count)
+>  		hardware_disable_nolock(NULL);
+> -	raw_spin_unlock(&kvm_count_lock);
+> +	mutex_unlock(&kvm_lock);
+>  	return 0;
+>  }
+>
+> @@ -5068,9 +5071,11 @@ static void hardware_disable_all_nolock(void)
+>
+>  static void hardware_disable_all(void)
+>  {
+> -	raw_spin_lock(&kvm_count_lock);
+> +	cpus_read_lock();
+> +	mutex_lock(&kvm_lock);
+>  	hardware_disable_all_nolock();
+> -	raw_spin_unlock(&kvm_count_lock);
+> +	mutex_unlock(&kvm_lock);
+> +	cpus_read_unlock();
+>  }
+>
+>  static int hardware_enable_all(void)
+> @@ -5088,7 +5093,7 @@ static int hardware_enable_all(void)
+>  	 * Disable CPU hotplug to prevent this case from happening.
+>  	 */
+>  	cpus_read_lock();
+> -	raw_spin_lock(&kvm_count_lock);
+> +	mutex_lock(&kvm_lock);
+>
+>  	kvm_usage_count++;
+>  	if (kvm_usage_count == 1) {
+> @@ -5101,7 +5106,7 @@ static int hardware_enable_all(void)
+>  		}
+>  	}
+>
+> -	raw_spin_unlock(&kvm_count_lock);
+> +	mutex_unlock(&kvm_lock);
+>  	cpus_read_unlock();
+>
+>  	return r;
+> @@ -5708,8 +5713,15 @@ static void kvm_init_debug(void)
+>
+>  static int kvm_suspend(void)
+>  {
+> -	if (kvm_usage_count)
+> +	/*
+> +	 * The caller ensures that CPU hotlug is disabled by
+> +	 * cpu_hotplug_disable() and other CPUs are offlined.  No need for
+> +	 * locking.
+> +	 */
+> +	if (kvm_usage_count) {
+> +		lockdep_assert_not_held(&kvm_lock);
+>  		hardware_disable_nolock(NULL);
+> +	}
+>  	return 0;
+>  }
+>
+> @@ -5723,7 +5735,7 @@ static void kvm_resume(void)
+>  		return; /* FIXME: disable KVM */
+>
+>  	if (kvm_usage_count) {
+> -		lockdep_assert_not_held(&kvm_count_lock);
+> +		lockdep_assert_not_held(&kvm_lock);
+>  		hardware_enable_nolock((void *)__func__);
+>  	}
+>  }
+> --
+> 2.25.1
+>

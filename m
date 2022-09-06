@@ -2,163 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406F15AF0AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318455AF0BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238543AbiIFQiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S233051AbiIFQiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238511AbiIFQht (ORCPT
+        with ESMTP id S234913AbiIFQhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:37:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDE11EC5F;
-        Tue,  6 Sep 2022 09:14:41 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286CWWUb026293;
-        Tue, 6 Sep 2022 16:14:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=h5BgBKL+F8wAqWSvAJ0pDMx/YCeZeVPg3n3Av6WFlcs=;
- b=eUp0Rr4sZXWW6JYC7UA8x+MfLtNMmJkOoU6N83vDH8rU7PCuA/71S2zpInvVlDDOKagB
- KakyrFxCSaBuph6TZfZW5j0/abmUP/L1ld4hSSe+07kpnjQcb0L5JcrczLz1MmYPFC7m
- fg83nDu0H2luP4lz7WOA/X2nscsBY9O1FyMDTEfROx/KG6W1RFu85A+0F34KRTtoC2Jc
- UpaLDcIJJEN2YJqvg1aFjvjMbbDzJsn5rx/c0tzGiRyszQ/6HXS0Imesns9UuJw4Cwqa
- lRnkVUuAASRgEcXlJxVfF7oZBoYz0/zayD0wFkKe54bC6l7e5IDH8fSPkWlu0KIPw8A2 lg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jdusrjr36-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 16:14:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 286GERi1002600
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Sep 2022 16:14:27 GMT
-Received: from [10.216.11.219] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 6 Sep 2022
- 09:14:21 -0700
-Message-ID: <e61dc3f2-7c56-2474-fdaf-f0ad0337d67a@quicinc.com>
-Date:   Tue, 6 Sep 2022 21:44:17 +0530
+        Tue, 6 Sep 2022 12:37:42 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E151DFBE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:14:29 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so5175122pjh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=7CXDoix81nCcuywXft6Y3RRt0+1RNNcCmY7zulk0U7c=;
+        b=OFjpfysVV1/z6c6F7Tl1V0DukI72KYzDhLdtoOZgHLzGCHihgIKAFQlVhWam6SBvJu
+         P4gYQceuv8uTFhEriQ7a805oEkTCwl0CPwvPS4JQwwLLJlpkE/PhT3bGFarXT71ZV/zC
+         /L8MQaIBhK/L/Po1d7BYMfDSuuRR6Z0DhvvBCC7yYh0gFL0q/I/ftbzNgIeFeZlzx+8p
+         NmFZ+3aoiy/3LAUn12pFdTBuXQeiLIugcKhnbIBCsvAekEexbA37sYwcgyOTd5kJHssD
+         zpYogs2kEJ7sq2XIPm4cDWVV5N5waUI10efONdoWWFJehxlK8XTO2y7LZlTji0FpOh7c
+         6yVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=7CXDoix81nCcuywXft6Y3RRt0+1RNNcCmY7zulk0U7c=;
+        b=RDRuzZwJl2uHLO6olGNLH5moFI3lSq4dYlticFCu2KXLc7pCZRfd1CstOy2ueVArks
+         UxgQU0WLKf3Fa4JPANQ5sgLszHCQF8oZUe3Rf3bGnMfmJhmY8AriVYicNbkoEOhWd86V
+         4UoN3PMtUD/LmgKEcKFUHDC1hOiGrVytmNgTI5kY8kcAK+iM0tYhRin/nVtt7nJpfHfx
+         bk+atiUcATStQy2E9d4ZjBhiI6s2NOxO/RrbOgym2nCnaBytIFxKNHv7hUayuEJiq9BR
+         BeP1c5UZvPbcnDqgerGlwLzWf19VsJcKFGb31VI4g6b1OSCGzFHkwIa+/7+MiAzMTIfv
+         Nhkg==
+X-Gm-Message-State: ACgBeo2kK4YtIHeTS7e+GZE8nBT1K2249yuElWOwmpguY8naAdn2B7xx
+        FMKAzkeb+y1jSTsozK6rVvcGbw==
+X-Google-Smtp-Source: AA6agR5flBH1H6qZt6yqi1YACzYjOurpqqJC2Z48B/RK4btE8X1zqj9xN+EaD6QhovkgkPr16hq/9g==
+X-Received: by 2002:a17:90b:1e0c:b0:1f5:4e52:4866 with SMTP id pg12-20020a17090b1e0c00b001f54e524866mr26225036pjb.230.1662480868029;
+        Tue, 06 Sep 2022 09:14:28 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id bi10-20020a170902bf0a00b00174e5fe9ce1sm1858226plb.159.2022.09.06.09.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 09:14:27 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 16:14:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Liam Ni <zhiguangni01@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
+        pbonzini@redhat.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com
+Subject: Re: [PATCH] KVM: Reduce the execution of one instruction
+Message-ID: <Yxdx36BHlClCq52J@google.com>
+References: <20220906153357.1362555-1-zhiguangni01@zhaoxin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v12 0/3] Add QCOM SNPS PHY overriding params support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-References: <1662480729-10187-1-git-send-email-quic_kriskura@quicinc.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <1662480729-10187-1-git-send-email-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: y9mUZDpt0vE_JVAKigAvO8uCIXkGj54w
-X-Proofpoint-ORIG-GUID: y9mUZDpt0vE_JVAKigAvO8uCIXkGj54w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
- priorityscore=1501 mlxlogscore=769 malwarescore=0 suspectscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209060076
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906153357.1362555-1-zhiguangni01@zhaoxin.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+"KVM: x86:" for the shortlog.
 
+On Tue, Sep 06, 2022, Liam Ni wrote:
+> From: Liam Ni <zhiguangni01@gmail.com>
+> 
+> If the condition is met,
 
-On 9/6/2022 9:42 PM, Krishna Kurapati wrote:
-> Added support for overriding tuning parameters in QCOM SNPS PHY
-> from device tree. This parameter tuning is required to tune the
-> hs signal on dp/dm lines for electrical compliance to be successful.
-> 
-> Changes in v12:
-> Fixed nitpicks in driver code.
-> 
-> Changes in v11:
-> Made changes to logs added in phy driver.
-> Fixed nitpicks in code.
-> 
-> Changes in v10:
-> Fixed patch headers.
-> 
-> changes in v9:
-> Fixed nitpick in driver code.
-> 
-> changes in v8:
-> Fixed nitpick in driver code.
-> 
-> changes in v7:
-> Fixed nitpick in driver code and dtsi file.
-> 
-> changes in v6:
-> Fixed errors in dt-bindings.
-> Fixed nitpick in driver code.
-> 
-> changes in v5:
-> Fixed nitpicks in code.
-> Added minimum and maximum for each parameter added in dt-bindings.
-> Added proper suffixes to each parameter as per dtschema.
-> 
-> changes in v4:
-> Fixed nitpicks in code.
-> Initial compliance test results showed overshoot in the middle of eye
-> diagram. The current dt values were put in place to correct it and fix
-> overshoot issue.
-> 
-> changes in v3:
-> Added support for phy tuning parameters to be represented in bps and
-> corresponding register values to be written are obtained by traversing
-> through data map declared in the driver.
-> 
-> changes in v2:
-> Reading the individual fields in each overriding register from
-> device tree.
-> 
-> Krishna Kurapati (2):
->    phy: qcom-snps: Add support for overriding phy tuning parameters
->    arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
-> 
-> Sandeep Maheswaram (1):
->    dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params
->      bindings
-> 
->   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       |  88 +++++++
->   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   6 +
->   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c      | 252 ++++++++++++++++++++-
->   3 files changed, 344 insertions(+), 2 deletions(-)
-> 
-Hi All,
+Please describe this specific code change, "If the condition is met" is extremely
+generic and doesn't help the reader understand what change is being made.
 
-  Please ignore this series. Re-sent v12 instead of v13.
-Sorry for the inconvenience.
+> reduce the execution of one instruction.
 
-Regards,
-Krishna,
+This is highly speculative, e.g. clang will generate identical output since it's
+trivial for the compiler to observe that ctxt->modrm_reg doesn't need to be read.
+
+And similar to the above "If the condition is met", the shortlog is too generic
+even if it were 100% accurate.
+
+I do think this change is a net positive, but it's beneficial only in making the
+code easier to read.  Shaving a single cheap instruction in a relatively slow path
+isn't sufficient justification even if the compiler isn't clever enough to optimize
+away the load in the first place.
+
+E.g. something like:
+
+  KVM: x86: Clean up ModR/M "reg" initialization in reg op decoding
+
+  Refactor decode_register_operand() to get the ModR/M register if and
+  only if the instruction uses a ModR/M encoding to make it more obvious
+  how the register operand is retrieved.
+
+> Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
+> ---
+>  arch/x86/kvm/emulate.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index f8382abe22ff..ebb95f3f9862 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -1139,10 +1139,12 @@ static int em_fnstsw(struct x86_emulate_ctxt *ctxt)
+>  static void decode_register_operand(struct x86_emulate_ctxt *ctxt,
+>  				    struct operand *op)
+>  {
+> -	unsigned reg = ctxt->modrm_reg;
+> +	unsigned int reg;
+>  
+>  	if (!(ctxt->d & ModRM))
+>  		reg = (ctxt->b & 7) | ((ctxt->rex_prefix & 1) << 3);
+> +	else
+> +		reg = ctxt->modrm_reg;
+
+I'd prefer to write this as:
+
+	unsigned int reg;
+
+	if (ctxt->d & ModRM)
+		reg = ctxt->modrm_reg;
+	else
+		reg = (ctxt->b & 7) | ((ctxt->rex_prefix & 1) << 3);
+
+so that "is ModRM" check is immediately followed by "get ModRM".
+
+>  
+>  	if (ctxt->d & Sse) {
+>  		op->type = OP_XMM;
+> -- 
+> 2.25.1
+
+> 

@@ -2,152 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313D75AF5AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128625AF5B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiIFUTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S230332AbiIFUUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiIFUSr (ORCPT
+        with ESMTP id S231243AbiIFUTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:18:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2F4B7EC2;
-        Tue,  6 Sep 2022 13:16:07 -0700 (PDT)
+        Tue, 6 Sep 2022 16:19:34 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DBB2A417
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:17:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662495368; x=1694031368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rTEJdLWeNY+AFkZlSJeReaA9D1yKDOK0j+qthok/Uk4=;
-  b=PrSq6mkskcGdBrOhilswqesftWhqxqJjSCY7EnXWQTtCHPtoQX7nZhm2
-   nPDXm+0HObNadQ4C40ZPzcdagGKt5Vkpoejt4648iyt+XC7XnX+p8HG0Q
-   yhxyEsUv/DblPeXrfjTcPRh2kvhee92IE43Jp0DM22Mh4Yz/4NJGsZoXQ
-   9TxHFeUy87p0yduUyWtj84w5zMuHhb/QYOsppXqTzjIlaf7PJ8Kgwe8mc
-   N3K0/8Uyjt8TrkRreu3w776siMnxkXjN5OBN10TwNXM4jccksILRBQBmZ
-   15lNF8B0kEUbfPHg/TPpJsuvcAvLB027SuQAoavpu4Ev4hckg3Iqf1P8E
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="298009994"
+  t=1662495430; x=1694031430;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=t3tRAGMT9XkcPnOx0NHixcOfXhtq+FPnW0bmN3b3jlg=;
+  b=eHY/BkF11xYGhD1bwEak2ozU4SGMrfV+M0xcXQ7HlRpMQ6Spp3DtYquB
+   gDBvfITbvz20lOJhyYhD5lCTPISlKIMZF5at6e1adFm3nS5YJWnhGxDYN
+   5M8ZU0GmrVYzowkSLQt8f7cNWQB+4Uvbq8vLK/sAdLm5uX12dAjZsltaE
+   FIqBK/O0Cp/8+3CNROv9zdcygRtU/rz6klVagHZNEhNlQ5eiwuBwtL44g
+   Q6VBipl7rILGb2UL18HKpf2ojVY2iRO275SxboIGN/VZCnl44d25HLJkN
+   Wtu9sQW7Erb8qFoufmFGU+BjDIMKag9V53WVObo2DQNblSDofZ1K7/hHO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="358411689"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="298009994"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:15:18 -0700
+   d="scan'208";a="358411689"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:17:04 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="756500327"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:15:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oVeyU-009MNA-0C;
-        Tue, 06 Sep 2022 23:15:10 +0300
-Date:   Tue, 6 Sep 2022 23:15:09 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX interrupts
-Message-ID: <YxeqTdny7Nu7LzZo@smile.fi.intel.com>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-5-matthew.gerlach@linux.intel.com>
+   d="scan'208";a="789801764"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 06 Sep 2022 13:17:03 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Sep 2022 13:17:03 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Sep 2022 13:17:02 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 6 Sep 2022 13:17:02 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 6 Sep 2022 13:17:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B96lc7Kjuq4SGapfyxAtZMomaZNDbOJbbrT3KC5MWMH/lfxbnaKcQylGHM/F31CyXhWGw5QeXCXQGaldEJBNEOEfyAKeaMgPm80O9reVJ/UTO+NkxRsKb3ugSClzqo4JVBQXaFI0GFOiz8qT0BYSLVFQSFr2S0UWqjkZhrKYPrb5MtyU52Xrf9UqDgT0FvQKW9MWF5WXG9CJsHVxufwEsfbvqTonYAfBP9U7FagUix3XL48Y2wnmkgTtf+eqqXLmwhJQ98UWlOZRmoaaGAKCTzeLSszgk525ZZCBfqrca2chzsPEuIl5RPDReUNPbXZDV5+FuG6uQ378f4Qg4Xc3EA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2A9AXpXnBhks8FcmX8onD+Qe1k9pkbV2ikpg/TFyqiU=;
+ b=SxRmzESSteqacVubgQ6tYNZfyNoUKx/PQwr3PZf9/KCYHKlX1gbeocB9o5H/0TxRb4n82MjN4pLSgXxwvjGxlf47xmvTb0DoZsHgy6BweuSxipI0TUDS9Xn1ACbyHgAThiKM9pA0jnceXbcBN+iaG7uykHcjhDIj7Rd/1EAOGWpJAdZCOWZDPdOR/Q/Ci0iNy0TL7QAEYS1UjrBglzcuOL+aj5DhpohJp7iRg4awSeze6bM6pD+OtLH8j360/VoXolpaaGTCW19HAmwZQG6Li8MsXTqHJVWNNX4sbdlVzApKMy5VV2oCWddhO8k6FcL+JCc1ZyQg1wpFckTDpjI8UQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
+ CH0PR11MB5396.namprd11.prod.outlook.com (2603:10b6:610:bb::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.12; Tue, 6 Sep 2022 20:17:00 +0000
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::b04c:807c:4ea0:c62e]) by DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::b04c:807c:4ea0:c62e%9]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 20:16:59 +0000
+From:   =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+To:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <intel-gfx@lists.freedesktop.org>
+CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Simon Ser <contact@emersion.fr>,
+        Matthew Wilcox <willy@infradead.org>,
+        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+Subject: [PATCH v4 0/3] drm: Use full allocated minor range for DRM
+Date:   Tue, 6 Sep 2022 22:16:26 +0200
+Message-ID: <20220906201629.419160-1-michal.winiarski@intel.com>
+X-Mailer: git-send-email 2.37.1
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM6PR04CA0020.eurprd04.prod.outlook.com
+ (2603:10a6:20b:92::33) To DM4PR11MB5373.namprd11.prod.outlook.com
+ (2603:10b6:5:394::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906190426.3139760-5-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6f85773b-14f2-447e-a501-08da9044c088
+X-MS-TrafficTypeDiagnostic: CH0PR11MB5396:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LQMOOvDf8aS+1ARCha/XdaoWBmVx8w9dtS4db0jt0WV/E3YG7tg9XjMsbglqFuzIyGbSOjN+c/rb6Y/+6RSRdjqxqQnAd97gKcQ/+HhQ8LHD78GlpBLfdj9GBy4C3MJzXAgzKGvEPOdmiIeG7EKzoCg5U/cte03p1m0O9b8bcIGiD+d0YV8dU12Y/rAX8FnAkGUGp49so3bD1twOlI1zjidK/+5Fx/sDZj9FBh7xQMvEQzo69pa9sbcgcoWYpLffGkywf41Aj47ycEq3c60FPg5QJhipzwU+LHKsRKySC/hp0p2OC381Or0+543Uxfgn/n5PP9+m3Yo4gwLW2tebO+khfKe6KJTxroTyMFRRhHCzdhMDlhmuHKARB2bfF9G9USCYLIz2PT/JktVqbDzTyAup4u5Sah4qegzuJAX6yufXObd3MbbdEaFKJ/pmNzhbWEmLmeI/E9VKaTdbAM+w/Cjnljvd3ktK80Tzs1ZSUCKOQjB38RagJARROoJ9bCoyVQnC1BwLqBaM2CmlYdJ/QZLUbPlW9B+4YTzFSAA2TpLY1x0D0ZYkulYi1hqp5KPirWmdaprrSK2NEkcIoghV1/D3gJO2hCHAon49LFCti+I1SVrOp+nVlIEKp8naaCBWZd4hio3j+YIyqSL/reCZSjCS0MFb4PNfQ+pxlePZ+DtSdO2SYj+o/rI9/gLjXa3rG/eHIZpVnJUsDkBUqXld/w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(346002)(136003)(39860400002)(366004)(4744005)(316002)(54906003)(86362001)(82960400001)(36756003)(2906002)(38100700002)(5660300002)(8936002)(7416002)(66946007)(4326008)(66476007)(83380400001)(8676002)(6512007)(6486002)(2616005)(6666004)(186003)(1076003)(6506007)(478600001)(66556008)(41300700001)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WW1VS0grcFd4VEJWcVBWZERxUEhQMG8zejZuMUpLWmFvdzJHaGduWVNXUjQz?=
+ =?utf-8?B?OFEveUhMc243VUFjcXZZSzN5eEFOYjFOcWNnbDBERjZId2lkYjBuVm9uZGlv?=
+ =?utf-8?B?c3pOUTFmaXJjdXhibllJQzhrZ2RCSmhqVFZkd1R5RzdCcDJBR0V3SU1YU2VR?=
+ =?utf-8?B?empJWFdZaEk4UUVmOFRJWHkyVmlxUFprc1dUUit0amJMblZ1M2lQMXJ6VXM0?=
+ =?utf-8?B?VTcwQUtUaDBLK1FGZmRSZms5aFlsYVh0Yk1Rd0FBZXQzNktrTlVwNGZDTWQv?=
+ =?utf-8?B?NWY5ZzI4WDRxUWxKdlorQnRFNEFDd3AxQkxCTFIxSW00WTBjWUdZMUFORmVR?=
+ =?utf-8?B?OEZScVdDRmpOeUhLdTFIOUNSR3NwOTlkR0t0SC9ML1NsdlNCTUJpOXRGSU9I?=
+ =?utf-8?B?bUs0SjNjTEM2ZWNnbUdNNTkzeHp2Y0xxSS81cmtwNEFPbUI4cGxaS3J5VnZ5?=
+ =?utf-8?B?dVVkbllyTHd2UG1xZUl4RkdOVEF1OUVUbVozY3NXQU5MQmtodzFQd1Z0K2tx?=
+ =?utf-8?B?NTNDcytIaEJDdHBQU0dRc2J2bWIyY09iOWM1WHd4YUpEMitKOVFPeUN1QnJB?=
+ =?utf-8?B?RGpVUGwwNmxFNHo2M3lUSFNPSUlVNTVDcStwcnF5OVZvWHBQcDFOcGI0L0dY?=
+ =?utf-8?B?UGl5RU5JNVFtd2creWNHSWN3b0dieTNPbzU1SjlKR2NQdFc2bnpHQVNqck1Y?=
+ =?utf-8?B?TUExNk96cGdKR3N0VXdRVTJEeGIzVHdtV1RkUTV3TjljTnZ0Z291cGFZOWlo?=
+ =?utf-8?B?YTVYTlhrT0NnY2pCTkkrTWtlVU1jS2tQalZEQzlhUDJhN3ZoOVR0WE1vOVVu?=
+ =?utf-8?B?cVFSZldMbzhmQ3dOYVNlbUI4Q1pOM3haanZVZ1cvdDJuQVlXQXBlWG9PbWRi?=
+ =?utf-8?B?Ni9vRlBGVWFpL0Z3cHFRM1lURkNjUVdNZVJpYmtVb1Q1UnZnQkhFYm9yR1Ns?=
+ =?utf-8?B?dG5INDhLZzZUdW5IT0NBUzQ2UmVzeWI5NVBjNFBqbjRGT2xibVdDMHJTcEJr?=
+ =?utf-8?B?bFBOSDNYM1RNRTIwUW90Zi90STFIck90Nld2cFpDMXpxN2Y1NWN2SlhGcDN4?=
+ =?utf-8?B?cU8ydTZjWlh2TUtnMjF6dkp3Yy9kZ1Y2TUUrTXl3TG9ab0xKeVRZdlQvbG9s?=
+ =?utf-8?B?NmhpRmhMQ2dZS2Y4ZVRUNUg4MExEWGlIVTBTWURqR2NPQktVSzVPMmxDaGhF?=
+ =?utf-8?B?aEhhR0NWdHpGNER0OHRmRmVLdGUrWEU0OGdZZkhCK3owVlNJQ2c4QXVMYW1U?=
+ =?utf-8?B?MXR6L3RQNnVvR1B3cXJ3NG5SL01CRVVSSllzZzdSdlVwWEd0MWNFaWxsOXVw?=
+ =?utf-8?B?aFZrSllQZTBNbnd3Mk1FaVBxTGllRS90M3lacE1PZ2s0OTVwY1d5bGJoRStL?=
+ =?utf-8?B?QjZEa1JnQnE2U1NQR0Q3YWVrWERtVTVaekxKbnkvQnNtTFBnRHpLVU9henBY?=
+ =?utf-8?B?dDZ4R1NEZHZVYVFxNy9XZUdyRmVyNy9EOU10c0VFNi9rdno3aWdCSmpnN0gv?=
+ =?utf-8?B?QTE0R2JEZnBSUzNwbXlaR2lPWFFFS1VvVU1OU2JtYmdYYk1xd00zQXNWaThq?=
+ =?utf-8?B?WjBudnhyNVNRRGxJTGlaMy9vR1lvckJZNFhGMzJHQzIxYkxCNys0OGFNRzM5?=
+ =?utf-8?B?aHlQN3dxQkpCSkVtREpwR1gwMEYxTnRKbXlwanVzZXBORDY3bExMTlk4SDNx?=
+ =?utf-8?B?NE9tRDhpWjdBWGRnakk3eGIwell6Mi9DcWRWTWY1aU1qamlhQjhZKzBKQU5C?=
+ =?utf-8?B?dkM4ZTRYTlZhL3E4azZaSFNNMG40TG5CdWhwOXd4UTF2c3hWVnNEaXdqRmhF?=
+ =?utf-8?B?cWMwWENsb3c1NE0xL0FOVTJGNkN1VjRFOGM0eXZBY29vVXZYMVFSb1ZucWlt?=
+ =?utf-8?B?Vm5LTzF3Nng0MjNGbmxXS1lCZEJvWWYvSTh3eTBvSGw1bmJFTURaTzJ0a2dT?=
+ =?utf-8?B?RDVCUkdWRGJjc3VXZXdxUkU0YjNhM0MzalZpTnhKU2lUeHo4MDRYRnJLakpB?=
+ =?utf-8?B?V1lEYk14ZS8zYTJ4NjZxSm1QL3RuaU1talpTY1J2YXN2STBRTHh4TVQrNWRz?=
+ =?utf-8?B?T2dES1phQTd4SWhmYlhYTXhmV3VGNTUwMDFPSTdvOTJHL0d5YTBTVEc3OTNH?=
+ =?utf-8?B?Y01mZEVpOVZUeU13Qkt2TGpMZWhWQzNxeVRzcHptZTZFaFRha1hOczE4dXVu?=
+ =?utf-8?B?QlE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f85773b-14f2-447e-a501-08da9044c088
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 20:16:59.0265
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WsyMNSyloT+vKmQKlPbt5WuYt67LdILKwCIpzeNPHafXNFA9BaVMLyv0uBDTBXA2NHsfuTG/I71jFoh8ABdKdDwmAvQQZ0VOL5kBA0eOe34=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5396
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:04:25PM -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Define and use a DFHv1 parameter to add generic support for MSIX
-> interrupts for DFL devices.
+64 DRM device nodes is not enough for everyone.
+Upgrade it to ~512K (which definitely is more than enough).
 
-...
+To allow testing userspace support for >64 devices, add additional DRM
+modparam (skip_legacy_minors) which causes DRM to skip allocating minors
+in 0-192 range.
+Additionally - convert minors to use XArray instead of IDR to simplify the
+locking.
 
-> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
-> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
-> +		v = readq(base);
-> +		v = FIELD_GET(DFH_VERSION, v);
-> +
-> +		if (v == 1) {
-> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
+v1 -> v2:
+Don't touch DRM_MINOR_CONTROL and its range (Simon Ser)
 
-I am already lost what v keeps...
+v2 -> v3:
+Don't use legacy scheme for >=192 minor range (Dave Airlie)
+Add modparam for testing (Dave Airlie)
+Add lockdep annotation for IDR (Daniel Vetter)
 
-Perhaps
+v3 -> v4:
+Convert from IDR to XArray (Matthew Wilcox)
 
-		v = readq(base);
-		switch (FIELD_GET(DFH_VERSION, v)) {
-		case 1:
-			...
-			break;
-		}
+Michał Winiarski (3):
+  drm: Use XArray instead of IDR for minors
+  drm: Expand max DRM device number to full MINORBITS
+  drm: Introduce skip_legacy_minors modparam
 
-> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
-
-				void __iomem *v1hdr = base + DFHv1_PARAM_HDR;
-
-> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
-> +						     DFHv1_PARAM_ID_MSIX);
-
-				off = dfl_find_param(v1hdr, ofst, DFHv1_PARAM_ID_MSIX);
-
-> +				if (off >= 0) {
-> +					ibase = readl(base + DFHv1_PARAM_HDR +
-> +						      off + DFHv1_PARAM_MSIX_STARTV);
-> +					inr = readl(base + DFHv1_PARAM_HDR +
-> +						    off + DFHv1_PARAM_MSIX_NUMV);
-
-					ibase = readl(v1hdr + off + DFHv1_PARAM_MSIX_STARTV);
-					inr = readl(v1hdr + off + DFHv1_PARAM_MSIX_NUMV);
-
-> +					dev_dbg(binfo->dev, "%s start %d num %d fid 0x%x\n",
-> +						__func__, ibase, inr, fid);
-
-No __func__ for dev_dbg(). Dynamic debug has this feature at runtime!
-
-> +				}
-> +			}
-> +		}
-> +	}
-
-...
-
-> +/*
-
-If it's a kernel doc, make it to be parsable as a such.
-
-> + * dfl_find_param() - find the offset of the given parameter
-> + * @base: base pointer to start of dfl parameters in DFH
-> + * @max: maximum offset to search
-> + * @param: id of dfl parameter
-> + *
-> + * Return: positive offset on success, negative error code otherwise.
-> + */
-> +int dfl_find_param(void __iomem *base, resource_size_t max, int param);
-
-+ blank line.
-
->  #endif /* __LINUX_DFL_H */
+ drivers/gpu/drm/drm_drv.c | 66 +++++++++++++++++++--------------------
+ 1 file changed, 33 insertions(+), 33 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.3
 

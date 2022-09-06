@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9E45AE79A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7CB5AE7A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239809AbiIFMPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S233244AbiIFMRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239642AbiIFMNE (ORCPT
+        with ESMTP id S239841AbiIFMRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:13:04 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E8F79A75;
-        Tue,  6 Sep 2022 05:12:01 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MMPL16BdCzmVFm;
-        Tue,  6 Sep 2022 20:08:25 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 6 Sep
- 2022 20:11:58 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <martin.lau@linux.dev>
-CC:     <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <ast@kernel.org>, <andrii@kernel.org>, <song@kernel.org>,
-        <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 22/22] net: sched: act_vlan: get rid of tcf_vlan_walker and tcf_vlan_search
-Date:   Tue, 6 Sep 2022 20:13:46 +0800
-Message-ID: <20220906121346.71578-23-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220906121346.71578-1-shaozhengchao@huawei.com>
-References: <20220906121346.71578-1-shaozhengchao@huawei.com>
+        Tue, 6 Sep 2022 08:17:13 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CB17C1E7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:15:12 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id b26so12020874ljk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 05:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=6UHmjFqZqnkfqTkZXpVtIF2gB+ePd2RxW9GhLYwJ20M=;
+        b=C22raz0IOJkbOdosFAVzFv4qOMwXY/MebmIjmU9VnZLg1c3DRqJPzf2ftKSu3iKlVq
+         /81y2AJJUxserzvRP3HY68hRFQw2nZZ5+MPZ3+HIpuXxh7AqVxtXv243JAyVIZg35HJK
+         1S/Q3h1zZAOMtPaq7I1awkBzGimPcl/u5sufjGO3gFVbSCchGOeC5Mt38JBUnYH15h4s
+         Evc3l2TPSdZrVCsbKQKoKPj9BJsGGBEz09PpJullsopORdEAB/0v2T+yWe0/MT0X1a11
+         sVpQ8z6DhX+RPbba+3n4ZD6pQqd/NnLeM+uUBrt6cuqMhJArEa78UrehaszjV3g+EoyK
+         qtNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=6UHmjFqZqnkfqTkZXpVtIF2gB+ePd2RxW9GhLYwJ20M=;
+        b=Iuf2SxYTwlG/A1aiaWejr6gXFZWkEfqyghTx0HoAbuc4ymglrZ0P+CH1pUzxO/Z3Do
+         4Ocl6A9OYnMecJF5EbWqHDYqSKVpNnAQeIld2Lm8k1hoGTK3uZNRyrp1lPUJZtaEO4u5
+         me9u2AjiI/WRFuTvYj9lgt3sFRfuA0roRu2gduYDugHqUcwkamzMQm3FqOpBDL8YDvbS
+         t3BUFYZmZkEl7/TnTBz0MfCNYyhhagC8hFew3EYBZDaJFDmx6rXOvv3/hNhJiE+OyT8p
+         iUSS3AlfIzQdarzekMeHkCKNRaQwrN3I2a+iKhkdM1memBfHA9Jc7qAO024NzqXAHIDH
+         pZ+Q==
+X-Gm-Message-State: ACgBeo0+lF2DGXSKYZq0zG8Lvxlv9ObHIUAYczrZoVC6PvKKrHunyZx0
+        M7hVF5ehtO5hDzSqy7S3EsO/1Q==
+X-Google-Smtp-Source: AA6agR73Uyz5drAuwDGsn4Pe1UQqm8/rEf1fJfgYCEv9dAukBNbatU8NvbsMMrl+ei2+SY/udulANA==
+X-Received: by 2002:a2e:92ce:0:b0:261:e39e:2c1d with SMTP id k14-20020a2e92ce000000b00261e39e2c1dmr15563243ljh.273.1662466440501;
+        Tue, 06 Sep 2022 05:14:00 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056512114500b00494a0993698sm1708125lfg.11.2022.09.06.05.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 05:14:00 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: remoteproc: qcom,adsp: enforce smd-edge schema
+Date:   Tue,  6 Sep 2022 14:13:58 +0200
+Message-Id: <20220906121358.302894-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,60 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tcf_vlan_walker() and tcf_vlan_search() do the same thing as generic
-walk/search function, so remove them.
+The smd-edge child node references respective schema which allows
+additional properties, so the ADSP needs to further restrict them.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- net/sched/act_vlan.c | 19 -------------------
- 1 file changed, 19 deletions(-)
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/sched/act_vlan.c b/net/sched/act_vlan.c
-index a1a0c2c6a5cc..7b24e898a3e6 100644
---- a/net/sched/act_vlan.c
-+++ b/net/sched/act_vlan.c
-@@ -332,16 +332,6 @@ static int tcf_vlan_dump(struct sk_buff *skb, struct tc_action *a,
- 	return -1;
- }
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index 3072af5f9d79..db9e0f0c2bea 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -152,6 +152,7 @@ properties:
+     description:
+       Qualcomm Shared Memory subnode which represents communication edge,
+       channels and devices related to the ADSP.
++    unevaluatedProperties: false
  
--static int tcf_vlan_walker(struct net *net, struct sk_buff *skb,
--			   struct netlink_callback *cb, int type,
--			   const struct tc_action_ops *ops,
--			   struct netlink_ext_ack *extack)
--{
--	struct tc_action_net *tn = net_generic(net, act_vlan_ops.net_id);
--
--	return tcf_generic_walker(tn, skb, cb, type, ops, extack);
--}
--
- static void tcf_vlan_stats_update(struct tc_action *a, u64 bytes, u64 packets,
- 				  u64 drops, u64 lastuse, bool hw)
- {
-@@ -352,13 +342,6 @@ static void tcf_vlan_stats_update(struct tc_action *a, u64 bytes, u64 packets,
- 	tm->lastuse = max_t(u64, tm->lastuse, lastuse);
- }
- 
--static int tcf_vlan_search(struct net *net, struct tc_action **a, u32 index)
--{
--	struct tc_action_net *tn = net_generic(net, act_vlan_ops.net_id);
--
--	return tcf_idr_search(tn, a, index);
--}
--
- static size_t tcf_vlan_get_fill_size(const struct tc_action *act)
- {
- 	return nla_total_size(sizeof(struct tc_vlan))
-@@ -437,10 +420,8 @@ static struct tc_action_ops act_vlan_ops = {
- 	.dump		=	tcf_vlan_dump,
- 	.init		=	tcf_vlan_init,
- 	.cleanup	=	tcf_vlan_cleanup,
--	.walk		=	tcf_vlan_walker,
- 	.stats_update	=	tcf_vlan_stats_update,
- 	.get_fill_size	=	tcf_vlan_get_fill_size,
--	.lookup		=	tcf_vlan_search,
- 	.offload_act_setup =	tcf_vlan_offload_act_setup,
- 	.size		=	sizeof(struct tcf_vlan),
- };
+   glink-edge:
+     $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
 -- 
-2.17.1
+2.34.1
 

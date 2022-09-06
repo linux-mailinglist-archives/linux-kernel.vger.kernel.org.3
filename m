@@ -2,119 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B8D5AF670
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73925AF66B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiIFU5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S231433AbiIFU5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiIFU5U (ORCPT
+        with ESMTP id S230369AbiIFU4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:57:20 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A81FA00D2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:56:56 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id az27so17249573wrb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:56:56 -0700 (PDT)
+        Tue, 6 Sep 2022 16:56:48 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD8399247;
+        Tue,  6 Sep 2022 13:56:45 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-127dca21a7dso3942602fac.12;
+        Tue, 06 Sep 2022 13:56:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=yMM2FY3IJOc8ZIC+YBU+PmCr88InYvCeIt5RFR0M8Pk=;
-        b=X+Trjh9rPGbs7UPhbuvHibypqjrCN55jfWvRbMk2FxxXv9XSvr/JCZRxehh4P2rxRd
-         enCv/OBAErOTA7xi9ki3iIRmvPIOI8cz0o5C5rq1Z2JsqZD7UNTWLFmoFXoVr1GXKI+J
-         AbnYCgmGnf7kyzoqWsUUclps9Y1474jh7R99y/LoGyAwkE2EJbdxwNAEk+y87+GkrTIF
-         ihIua75zQcntpzpVXAXrObMGh9GMCdWd3PqKSCRBnvoexrt6knZbXMQpd4aJm4UoGg4E
-         kIgGf9+y9hPYHOp83DsKRyoiDVxLtdckdjjt+4TqvyiE1Bq+/x4QL4GnrD41xJZjoV2S
-         ZgLw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date;
+        bh=JLKbHHTVrfhdQxKJcLepz8hjtNrJiGDZhh85/uIQM0Q=;
+        b=I7Jn10IrZ3Kl5W47zzd+T28Pm+YKxVY0TzhwWFXt8BajHUReYryLrAEr1mjjxEDy7w
+         DTpei9wXbmLYYkesYjGslbe/+5znIlaGIALl9Q5OM6GCofsJJBcF8JTJR54agGL4k01k
+         JTZqxX0YBTYyMvSj+svEkErrrprgkhBQE/7zB/a4N0YI84sNwAkYUUYKRocqN+FYawns
+         /Xh9TsoVx5fE8OlGuSD/I1dD6ba7B2WVPem5bsbdhQ+hjmfjEZ5qgnDL5ApzHwpyNEW+
+         TwzwZpo2g6m8CxPIzEmkqEq6oJNaPz3W9PouzLVl4pfULNqTjBdy2RaNhSinU5qYmRyR
+         LcYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=yMM2FY3IJOc8ZIC+YBU+PmCr88InYvCeIt5RFR0M8Pk=;
-        b=xfr5PLIb6llSMC/9Qp/7+HdqHRgEvmCmbEVCl1Q2RoEpLus7g1UPrqoa9AQTk3S+79
-         oQ9OWhepKe58yA/xHvpO8XiUN4N7v5wLP1QLlsKRVpq5KRcyQGGvpRYN+iAJhdQlS9bV
-         5IYXB0hqWCRsGIK/XjkzIPWK2OC+lauVAB3lCy+G+wL67bpFFJiy5FaOeKMoEh/MBjMt
-         gkKbn9DusIDKTxNPViaiq2g3bt5ExmCwOQQmPfRjulbwhivdzG2PNka6YFWu8xqtd4Yf
-         BT/pAchAA1edBGtNXbF4DsNdLpOqB0bQsiqNR9jWiN/VpKwA+suOgw7qV7//Ym/EtKuW
-         qGpw==
-X-Gm-Message-State: ACgBeo1gpdhrmginhsfGq2zd4rZUOI1QZz02+aOZOYme4iP7PC3V7xQL
-        9+ZXhG/ch1TMgfxRTBr2U5DR/A==
-X-Google-Smtp-Source: AA6agR6i36nnqPOqjfG5LL42pPJrr20SYSi1MC6hX0LjqRAWLHRtnZIDE+SUfSn3GO/M8GzyX12qSg==
-X-Received: by 2002:a5d:4534:0:b0:228:a411:1145 with SMTP id j20-20020a5d4534000000b00228a4111145mr165002wra.222.1662497815748;
-        Tue, 06 Sep 2022 13:56:55 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n24-20020a1c7218000000b003a317ee3036sm15735887wmc.2.2022.09.06.13.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 13:56:52 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Thomas Haller <thaller@redhat.com>, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 5/5] mptcp: account memory allocation in mptcp_nl_cmd_add_addr() to user
-Date:   Tue,  6 Sep 2022 22:55:43 +0200
-Message-Id: <20220906205545.1623193-6-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220906205545.1623193-1-matthieu.baerts@tessares.net>
-References: <20220906205545.1623193-1-matthieu.baerts@tessares.net>
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=JLKbHHTVrfhdQxKJcLepz8hjtNrJiGDZhh85/uIQM0Q=;
+        b=HbsBKy/J1cEzPlRfOUbelba4tb9+QkaaeUP0c6fx3QIQASqOMfTlILEf5W2LQtGb9h
+         i5eoDu/9vACNVQS9n6uXvklGVxZdpdRxwWvfejk8p1eyfklrBaVugwYmCfW28vg232iW
+         VHlamVytqvBA6veaB+Eaevr64MpLEPYId1nudVA8IIY0IPNJKe9VnybFIORUy959TV06
+         rgTjVAykeyOdKpbuIAxjJbf/l5WMYHp6z+afR5bWBbO+N6GC5faoskAfxxBhXhvEbuVf
+         kKyzRjJKcaXAeHQK7jP2ARwVF3I/986/JiplRUx7WyAOI+zXRbRAQ5iEA5g1YLOmr3yj
+         R8IA==
+X-Gm-Message-State: ACgBeo0G0EV7k/qDi4crwePA5A1UZjo0PAWKb/DmqpfprIijxLQqp4FO
+        CaM8hklOLFQbhIlYb8TeOwailUEGJ/g=
+X-Google-Smtp-Source: AA6agR5UJZ5K0bvXhuNUQdD3brO0ZbixHxxcymP6/oBLCK1I7qbhwn9+76sWUFaCU3Y/6DN0zWDmbw==
+X-Received: by 2002:a05:6870:59d:b0:f3:627:e2b0 with SMTP id m29-20020a056870059d00b000f30627e2b0mr79456oap.47.1662497804367;
+        Tue, 06 Sep 2022 13:56:44 -0700 (PDT)
+Received: from [127.0.0.1] ([187.19.239.21])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056870e24800b0011e4c574dfcsm7606906oac.40.2022.09.06.13.56.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 13:56:43 -0700 (PDT)
+Date:   Tue, 06 Sep 2022 17:56:37 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Marco Elver <elver@google.com>, Namhyung Kim <namhyung@kernel.org>
+CC:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Subject: Re: [PATCH] perf test: Skip sigtrap test on old kernels
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CANpmjNMHX2S-29Tyw+zKyaWT7saAiEegxbJapQFs7duJTTncdw@mail.gmail.com>
+References: <20220903000210.1112014-1-namhyung@kernel.org> <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com> <YxdA1CVzy9hzE3i1@kernel.org> <CAM9d7ci2ZujdY75DUtZA+f=fru7yh8VJrj8-r2RgZetu57u61A@mail.gmail.com> <CANpmjNMHX2S-29Tyw+zKyaWT7saAiEegxbJapQFs7duJTTncdw@mail.gmail.com>
+Message-ID: <F172EC4B-1CFC-46A5-9DC3-146EDF8F5BDF@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=865; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=hqQtNGfqEcSdigDLJiA3QmJUymEPTwMdYwGqPXFlNhA=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjF7O5vhEtOWQ/pfczdwco8rjLVXWSgmW0J1lYVXuy
- Z/n7UFCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCYxezuQAKCRD2t4JPQmmgcyagEA
- COkVtEkFDeK16sX1ShQiSuLqXI8eeLGbzuEd6GSJ2TQS2vOlYP9aw6gYwraBV+mCCzQx6TicRsWC6p
- bMjqzjwROu98J7e4ZG0/eWDeqTUVPE8FG2kNbMhOPIopWDr0mRG4kUP5ixQuDixOXSLXY9/0wVcAcQ
- Y6VJlG6f0dxRSitFjOCUN57qxiA4qC/o/y1D0JN7LDBIAbEty4Q0FKMzux+9kSI2bdF4O2LjCYt/XE
- oClVp6vFG5VdbSFZVrDamFsRdXOS66w8VYYchqogE6MRzEYUvAAy1gBA5dHJWaZKXq4aHtXY6dbZJ8
- eY32rg159zmUy3dPquMmnMRJckEXBpABx4QYeqEcj80b2Ihvq15nxxS8C+lyZ3AJI/O8ielu8wmR45
- X0kq/DXWmwPH8fq7TGVKvJVSh2LGHRxqWskmSOGsraHhR2CE5Sf/BKBTF0cfDIYgsB1waN2fw4aaDG
- Ue2Ea/UDJ3N2LoLG7jQ2dw44+vHuJGaW9RGtxVmjE09ECrF+3Wzq/0BoCx/YxDNw/n42/E6G2FrBtQ
- NtsRmjkKjir8JSZNnqiJ6VgX+X/P2QWhtMDkUcog49bmeexNm0kUXFqn/8L55EucUvgQXzNPCYIjIZ
- fuG5TolplUBupmQg6iH5BuSPRn+LnBOwvdcJIXbQqKDJp2uMw7Z2NtzTLG9A==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Haller <thaller@redhat.com>
 
-Now that non-root users can configure MPTCP endpoints, account
-the memory allocation to the user.
 
-Signed-off-by: Thomas Haller <thaller@redhat.com>
-Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- net/mptcp/pm_netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On September 6, 2022 5:50:05 PM GMT-03:00, Marco Elver <elver@google=2Ecom=
+> wrote:
+>On Tue, 6 Sept 2022 at 20:31, Namhyung Kim <namhyung@kernel=2Eorg> wrote:
+>>
+>> On Tue, Sep 6, 2022 at 5:45 AM Arnaldo Carvalho de Melo <acme@kernel=2E=
+org> wrote:
+>> >
+>> > Em Sat, Sep 03, 2022 at 08:52:01AM +0200, Marco Elver escreveu:
+>> > > On Sat, 3 Sept 2022 at 02:02, Namhyung Kim <namhyung@kernel=2Eorg> =
+wrote:
+>> > > >
+>> > > > If it runs on an old kernel, perf_event_open would fail because o=
+f the
+>> > > > new fields sigtrap and sig_data=2E  Just skip the test if it fail=
+ed=2E
+>> > > >
+>> > > > Cc: Marco Elver <elver@google=2Ecom>
+>> > > > Signed-off-by: Namhyung Kim <namhyung@kernel=2Eorg>
+>> > > > ---
+>> > > >  tools/perf/tests/sigtrap=2Ec | 1 +
+>> > > >  1 file changed, 1 insertion(+)
+>> > > >
+>> > > > diff --git a/tools/perf/tests/sigtrap=2Ec b/tools/perf/tests/sigt=
+rap=2Ec
+>> > > > index e32ece90e164=2E=2E7057566e6ae4 100644
+>> > > > --- a/tools/perf/tests/sigtrap=2Ec
+>> > > > +++ b/tools/perf/tests/sigtrap=2Ec
+>> > > > @@ -140,6 +140,7 @@ static int test__sigtrap(struct test_suite *t=
+est __maybe_unused, int subtest __m
+>> > > >         fd =3D sys_perf_event_open(&attr, 0, -1, -1, perf_event_o=
+pen_cloexec_flag());
+>> > > >         if (fd < 0) {
+>> > > >                 pr_debug("FAILED sys_perf_event_open(): %s\n", st=
+r_error_r(errno, sbuf, sizeof(sbuf)));
+>> > > > +               ret =3D TEST_SKIP;
+>> > >
+>> > > Wouldn't we be interested if perf_event_open() fails because it cou=
+ld
+>> > > actually be a bug? By skipping we'll be more likely to miss the fac=
+t
+>> > > there's a real problem=2E
+>> > >
+>> > > That's my naive thinking at least - what do other perf tests usuall=
+y
+>> > > do in this case?
+>> >
+>> > Yeah, I was going to try and check if this is the only way that, with
+>> > the given arguments, perf_event_open would fail, but its better to at
+>> > least check errno against -EINVAL or something?
+>>
+>> EINVAL would be too generic and the kernel returns it in many places=2E
+>> I really wish we could have a better error reporting mechanism=2E
+>>
+>> Maybe we could retry perf_event_open with sigtrap and sig_data cleared=
+=2E
+>> If it succeeded, then we can skip the test=2E  If it still failed, then=
+ report
+>> the error=2E  But it still couldn't find a bug in the sigtrap code=2E
+>> What do you think?
+>
+>Yes, that's what I meant, that it could point out an issue with
+>sigtrap perf_event_open()=2E
+>
+>If there's no clear way to determine if it's just not supported or a
+>bug, it'd be better to leave it as-is=2E
 
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index afc98adf2746..9813ed0fde9b 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -1327,7 +1327,7 @@ static int mptcp_nl_cmd_add_addr(struct sk_buff *skb, struct genl_info *info)
- 		return -EINVAL;
- 	}
- 
--	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+	entry = kmalloc(sizeof(*entry), GFP_KERNEL_ACCOUNT);
- 	if (!entry) {
- 		GENL_SET_ERR_MSG(info, "can't allocate addr");
- 		return -ENOMEM;
--- 
-2.37.2
+perf could go fancy and try to add a probe using a source file+line where =
+older kernels would fail 8-)
 
+Anyway, perf already does all sorts of kernel capability checks, perhaps t=
+his is one of can for sure detect it's something available :-/
+
+One new way could be to look at BTF?
+
+>
+>Some other options:
+>
+>1=2E Provide a way to disable certain tests, if it's known they will
+>fail for otherwise benign reasons i=2Ee=2E no support=2E
+>
+>2=2E Provide a command line option to skip instead of fail tests where
+>perf_event_open() returns some particular errnos=2E The default will be
+>fail, but you can then choose to trust that failure of
+>perf_event_open() means no support, and pass the option=2E

@@ -2,74 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCF05AEFE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5F55AEFEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbiIFQHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S238783AbiIFQHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbiIFQGC (ORCPT
+        with ESMTP id S232848AbiIFQHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:06:02 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EB1627DC7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=uKNIl0VCi9tiAEi3aw
-        ARGiYJ39SyrDAmIGjdTHmuGxc=; b=ZVaIRjKuI5vaP4nlk36nuS+cRUUYvyDdil
-        4GnxM/D5z7Iz2rqNv6KTqwPC4FB/0ODkcwM0SvXyRdfzTiQ0vwYP1ZPSqodsyfWc
-        5EyIaWODNVAbCL/8HRVPrcr1cz991mdFsmz4qHJnbi9RJhe9ByKiZjpEr8Uc2NXi
-        cuHSdFUeo=
-Received: from localhost.localdomain (unknown [153.37.203.188])
-        by smtp3 (Coremail) with SMTP id G9xpCgBnjaHlZhdj1ECrbQ--.24181S4;
-        Tue, 06 Sep 2022 23:28:57 +0800 (CST)
-From:   lizhe <sensor1010@163.com>
-To:     peterz@infradead.org, tglx@linutronix.de, hdegoede@redhat.com,
-        tony.luck@intel.com
-Cc:     linux-kernel@vger.kernel.org, lizhe <sensor1010@163.com>
-Subject: [PATCH v1] kernel/stop_matche.c : remove redundant global variable initialization
-Date:   Tue,  6 Sep 2022 08:27:32 -0700
-Message-Id: <20220906152732.5179-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: G9xpCgBnjaHlZhdj1ECrbQ--.24181S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKrWUGF1fGr47tF47JFW7twb_yoWxuFg_uF
-        10qw18Wr1Y9rW0gw12qw4rXFyDKw4Fva1IkrWxKFWUAa1kG3Z8Cw1qgr9IqF4fWrnIvF98
-        AwnI9Fn8tw1UGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtqXHJUUUUU==
-X-Originating-IP: [153.37.203.188]
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBdBp0q1gi3zK2-gAAsu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 12:07:23 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBED98D3C;
+        Tue,  6 Sep 2022 08:30:38 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso7684352wmq.1;
+        Tue, 06 Sep 2022 08:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=NW5MbJ9oB/CKkA2uVQGgD3qEK3k/FiXePuny+oDqcy4=;
+        b=od9qULTexRVgJTef8J4V+LaNVdUZgsqXUCA7ADevHkDIFUNi/UoNZnBNjyp6BsZb9R
+         JDNEe2dNcV72YeBEEi3YHSs0ygvkEdhlqHMyiJxfyZbQtRLVBgknwl6VDbyTBJMewa1q
+         YpuCtQpKPI79clSoysJJPrF1aC/rofgxM4AVo/DsHoSGIAAX+zjFGSKam+atpJdSQFOT
+         hSA7vu6IUhhql/4Mdvn6n6r3IPvcVZ9RsLkgnGhPcxj3q4n19uY22IhwesEmqSeTu8wB
+         a0c9VyEDre/6DXydgGrvQ21J9nzcSUAXF1tzkv1pkXEAhM40XPnLRbuhdsUwUzzEqpLc
+         bWMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=NW5MbJ9oB/CKkA2uVQGgD3qEK3k/FiXePuny+oDqcy4=;
+        b=eJeJq4YoQFMssa6vD4BWXt2L9qSXWsP8qWRQAeKlE2+55qbUOvQWt0GRYWqSTQpsTz
+         oCrTrkoM8CVhudDsYQw4H7oqz+Z8XpfaAAa4R27X7i0mmLhWdnhooli/o6STBFS3qOlG
+         vm/fbonbLs3NGrocBYvy6/1Bqw2mkQVkao0CCbrAqbspWWwEDL4vi7Zvwn55nfD5O3eS
+         grJr1ISwViBQVStWaULOImBOzrDFL3eoBjDul3O5lu56+ZrEYPPODCO4wFZiXfRE4R4+
+         vdyTjck/vaqbaaVZWrmITkWQDYxze6+dZ/rHCpPN38YunQ97pEd6YiKm/nhL0yQ0inNb
+         oUew==
+X-Gm-Message-State: ACgBeo0K904iyj9uEtuhcbLmW2Wv/Nt2xiEgfm9CJ/JSsCM4FO48tdwP
+        RULvdVQD6o8JU+ZsB/R0ilU=
+X-Google-Smtp-Source: AA6agR7Xp8vqGGwqNGcb09DGgwhi3xKkb+Aoi7Ihjymn/0Fa1D/5dd1OIycy1XIwV/wusOVvCHIBtw==
+X-Received: by 2002:a05:600c:4a09:b0:3a6:9a22:3979 with SMTP id c9-20020a05600c4a0900b003a69a223979mr14303510wmp.57.1662478236817;
+        Tue, 06 Sep 2022 08:30:36 -0700 (PDT)
+Received: from Clement-Blade14.outsight.local (lputeaux-656-1-11-33.w82-127.abo.wanadoo.fr. [82.127.142.33])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003a6125562e1sm14922731wmg.46.2022.09.06.08.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 08:30:35 -0700 (PDT)
+From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Subject: [PATCH v4 0/5] Allwinner H6 GPU devfreq
+Date:   Tue,  6 Sep 2022 17:30:29 +0200
+Message-Id: <20220906153034.153321-1-peron.clem@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	the global variable stop_machine_initialized has a default
-	value of false, no need to initialize it fo false
+Hi,
 
-Signed-off-by: lizhe <sensor1010@163.com>
----
- kernel/stop_machine.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is a refresh of previous patches sent to enable GPU Devfreq on H6
+Beelink GS1 but that wasn't stable at that time[0].
 
-diff --git a/kernel/stop_machine.c b/kernel/stop_machine.c
-index cedb17ba158a..d1ea5233a45e 100644
---- a/kernel/stop_machine.c
-+++ b/kernel/stop_machine.c
-@@ -47,7 +47,7 @@ struct cpu_stopper {
- };
- 
- static DEFINE_PER_CPU(struct cpu_stopper, cpu_stopper);
--static bool stop_machine_initialized = false;
-+static bool stop_machine_initialized;
- 
- void print_stop_info(const char *log_lvl, struct task_struct *task)
- {
+With the recent fix on GPU PLL from Roman Stratiienko I have retested
+and everything seems stable and works as expected[1].
+
+Regards,
+Clement
+
+0: https://lore.kernel.org/lkml/CAJiuCce58Gaxf_Qg2cnMwvOgUqYU__eKb3MDX1Fe_+47htg2bA@mail.gmail.com/
+1: https://lore.kernel.org/linux-arm-kernel/2562485.k3LOHGUjKi@kista/T/
+
+Changes since v3:
+ - Try to be more explicit for panfrost OPP patch
+ - Fix typo
+
+Changes since v2:
+ - Fixes device-tree warnings
+ - Add panfrost fix to enable regulator
+ - Remove always-on regulator from device-tree
+ - Update cooling map from vendor kernel
+
+
+Clément Péron (5):
+  arm64: defconfig: Enable devfreq cooling device
+  arm64: dts: allwinner: h6: Add cooling map for GPU
+  arm64: dts: allwinner: h6: Add GPU OPP table
+  drm/panfrost: devfreq: set opp to the recommended one to configure
+    regulator
+  arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
+
+ .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  1 +
+ .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 87 +++++++++++++++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 51 ++++++++++-
+ arch/arm64/configs/defconfig                  |  1 +
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c   | 11 +++
+ 5 files changed, 149 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+
 -- 
-2.17.1
+2.34.1
 

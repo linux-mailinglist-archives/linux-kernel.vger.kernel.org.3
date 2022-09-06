@@ -2,171 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0FA5AF52C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97055AF536
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiIFT7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 15:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S231144AbiIFUBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiIFT6f (ORCPT
+        with ESMTP id S230517AbiIFUB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 15:58:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B298343
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:55:02 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id nc14so25653560ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:55:02 -0700 (PDT)
+        Tue, 6 Sep 2022 16:01:27 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FB11658D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:57:19 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b16so16591684edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1VmPA5Yq8eTH/6a8GLeRpEEPUlpUiovS+eHf396Ag4g=;
-        b=fAEZWrlW3WNegmJlRFl5z4yJJNGBDMHOlL8r6C0EeIaNM/067+srYLvfeOAtwtihYf
-         3UxoQg6Lw4seebei0SaHQnYlb947cZAXMTcplsL63gt0t2KsN7OGNCmh6HXh0xHMAOwS
-         vLEB4QJhnmMdFnAJfVxE/h0yXpyjffrmM+LGKA+vhIm7kwA0GHIA7GdMIOBVFH9wzkUq
-         j+SXUxSv9QsiOuy5eRxsFuJEuxsVJkjQq9AQPlqYxUhEpfLWD29XFbFQSot7nyySSg0Z
-         slO2S8jGDSFLx7yGuwV6ZaLoihH3bq4KGOaglNRJLR8/GnJdZMmum0vTmDHwSqVjwlA8
-         HAuQ==
+        bh=o3FJxGbvo/djmf1/vSZvVYYgwgJJ+geM2X/sdQK6HR0=;
+        b=AvqcZcCnPk5VAPbLzem17L6T87zN2kazPPScK9Y9l1+t8COyNRphx0SVnhuE3Lz0pA
+         vnV2hNbLPc0OAMgbZQXglLnhmiDxG+gjKcEcEZmnME3Cuub10N0L07UIvsZrToRrTqVt
+         4EptUWVyAWuDEKXYZnFZ/ypnjqPuZ9WRJIvh42R8jC+pXis03VCH0xFPP5sz8jpvxgXd
+         nAeMaiwqB2aZHBR85LIrsuH60VPqX5z3FS8uCdVWBGXrvn6CFpUUB3+ruOyellRD4Lvo
+         w5qlFJMLPkAujnmi4/GLTmgc+1JJLn+hwwNSNuhh3+RXn4RQIVshe0qdj1kqGbooZvAX
+         BqGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=1VmPA5Yq8eTH/6a8GLeRpEEPUlpUiovS+eHf396Ag4g=;
-        b=5O2LSlh1IYEm+nXd+ZVK++hJW/gIetd7QktDXVLNy7UyqzziMae0hDBCJAzlDYgFw8
-         UTO69DguASAwXQP9TpL7SWzZjsC53KQAryNXJEY4T7EuYw1eEylrH5ofUnN9P6vugftd
-         wW5x1BFcbIJpdCScscEB+MojftCDB3kO1BO2tcKuKvFbMz2+33GavIXqk4jXHJ/MRLRm
-         0tS5PGnAZpG399jBoM3/Gm80tS//4Gq35/lLOzbhUIjl/NGr8vU65YqS/L2bHx/l2Vi6
-         wZbRAYsP9h4gfwmJkRf0D8r2wxoyvABY9Kfi3NAAbXTPcObyniHJLqpm/twoTXsXOjo/
-         SRCA==
-X-Gm-Message-State: ACgBeo20PVemaMK/DwR+R6aRKPscHToRXxOWWfOqRoA4VnI+TPY03J1X
-        HAvxhe0rKgabiAlgl/G9orY=
-X-Google-Smtp-Source: AA6agR6l9+2gcUu/mhmRnnWa80cHCNMhpaeUYeFi2zZRQMHUqum76qUrEMPtgl3MaTjDFRyJM6+y3Q==
-X-Received: by 2002:a17:907:97c1:b0:741:a098:1703 with SMTP id js1-20020a17090797c100b00741a0981703mr74480ejc.216.1662493946813;
-        Tue, 06 Sep 2022 12:52:26 -0700 (PDT)
+        bh=o3FJxGbvo/djmf1/vSZvVYYgwgJJ+geM2X/sdQK6HR0=;
+        b=m0f0Nb42Uo74dWV1C+3ICHydaKBLZ6HEd3Ufch/I7lAw0FLjWxNCo86SqECptcyJCc
+         9x/RP3q3P0ZVuJyrefYDem+h542ITn+I1EcbBAtl5kOUgOOa/C8kSAiV7ui8fNiLnwJK
+         yB9yz3ea2QtjWHUIlRpfUp68rieiIxtHLMeOW1XvLuzUOOwAoOtYWXKRN2rBNKqHs0UD
+         4DWr6BWtsbag3LhtQzOL00okOaqSgSFV9o27lmfyEa1CzuaZMSrKFHtijvf/ajKgcJrp
+         W24fDVmpyf47oKonQFNAS01TIsqA7osBmK7XR7A9Um3qi4xPekK61UT28KZVk2JXqDWz
+         8njA==
+X-Gm-Message-State: ACgBeo1bKccu8+K19cNupkc9rcTpdJLOcAmB9gnT6PKvaWlv4flwH4p4
+        eLC8k3quO62b0hQ0ALlDv84=
+X-Google-Smtp-Source: AA6agR5hdGoggyr7fRQYHp8N7yV1d5NR3lZZ6rZ6eA78jVDZ/BEMIc5kqWx5sFYkBgBmhAhjqOW0YA==
+X-Received: by 2002:a05:6402:2b88:b0:43a:6c58:6c64 with SMTP id fj8-20020a0564022b8800b0043a6c586c64mr204259edb.348.1662494057026;
+        Tue, 06 Sep 2022 12:54:17 -0700 (PDT)
 Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
-        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b0073dd99a0febsm7115788ejg.188.2022.09.06.12.52.25
+        by smtp.gmail.com with ESMTPSA id i10-20020a170906264a00b0073cf8e0355fsm6941414ejc.208.2022.09.06.12.54.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 12:52:25 -0700 (PDT)
+        Tue, 06 Sep 2022 12:54:16 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        qianfanguijin@163.com
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Evgeny Boger <boger@wirenboard.com>,
-        qianfan Zhao <qianfanguijin@163.com>
-Subject: Re: [PATCH 1/2] drivers: net: mdio-sun4i: Speedup mdio read and write
-Date:   Tue, 06 Sep 2022 21:52:24 +0200
-Message-ID: <4737709.GXAFRqVoOG@kista>
-In-Reply-To: <20220906075616.21347-1-qianfanguijin@163.com>
-References: <20220906075616.21347-1-qianfanguijin@163.com>
+To:     maxime@cerno.tech, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        wens@csie.org, samuel@sholland.org,
+        Victor Hassan <victor@allwinnertech.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [RESEND] clocksource: sun4i: add definition of clear interrupt
+Date:   Tue, 06 Sep 2022 21:54:15 +0200
+Message-ID: <2113704.irdbgypaU6@kista>
+In-Reply-To: <20220906052056.43404-1-victor@allwinnertech.com>
+References: <20220906052056.43404-1-victor@allwinnertech.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 06. september 2022 ob 09:56:15 CEST je qianfanguijin@163.com 
-napisal(a):
-> From: qianfan Zhao <qianfanguijin@163.com>
+Dne torek, 06. september 2022 ob 07:20:56 CEST je Victor Hassan napisal(a):
+> To prevent misunderstanding, use TIMER_IRQ_CLEAR instead of TIMER_IRQ_EN
+> in function sun4i_timer_clear_interrupt.
 > 
-> msleep(1) on my board takes about 30ms, and it is too long to accept.
-> Use read_poll_timeout to speedup.
-> 
-> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
-> ---
->  drivers/net/mdio/mdio-sun4i.c | 29 ++++++++++++-----------------
->  1 file changed, 12 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/net/mdio/mdio-sun4i.c b/drivers/net/mdio/mdio-sun4i.c
-> index f798de3276dc..168e2a375535 100644
-> --- a/drivers/net/mdio/mdio-sun4i.c
-> +++ b/drivers/net/mdio/mdio-sun4i.c
-> @@ -26,8 +26,6 @@
->  #define EMAC_MAC_MIND_REG	(0x10)
->  #define EMAC_MAC_SSRR_REG	(0x14)
-> 
-> -#define MDIO_TIMEOUT		(msecs_to_jiffies(100))
-> -
->  struct sun4i_mdio_data {
->  	void __iomem		*membase;
->  	struct regulator	*regulator;
-> @@ -36,8 +34,7 @@ struct sun4i_mdio_data {
->  static int sun4i_mdio_read(struct mii_bus *bus, int mii_id, int regnum)
->  {
->  	struct sun4i_mdio_data *data = bus->priv;
-> -	unsigned long timeout_jiffies;
-> -	int value;
-> +	int ret, tmp, value;
-> 
->  	/* issue the phy address and reg */
->  	writel((mii_id << 8) | regnum, data->membase + EMAC_MAC_MADR_REG);
-> @@ -45,12 +42,11 @@ static int sun4i_mdio_read(struct mii_bus *bus, int
-> mii_id, int regnum) writel(0x1, data->membase + EMAC_MAC_MCMD_REG);
-> 
->  	/* Wait read complete */
-> -	timeout_jiffies = jiffies + MDIO_TIMEOUT;
-> -	while (readl(data->membase + EMAC_MAC_MIND_REG) & 0x1) {
-> -		if (time_is_before_jiffies(timeout_jiffies))
-> -			return -ETIMEDOUT;
-> -		msleep(1);
-> -	}
-> +	ret = read_poll_timeout(readl, tmp, (tmp & 1) == 0,
-> +				20, 10000, false,
-> +				data->membase + 
-EMAC_MAC_MIND_REG);
+> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
 
-You should use readl_poll_timeout() instead, as instructed by documentation. 
-Additionally, are you sure about both delay parameters? They are both much 
-smaller than in original code.
-
-Same comments apply to patch 2.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
 Jernej
 
-> +	if (ret < 0)
-> +		return ret;
+> ---
+>  drivers/clocksource/timer-sun4i.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
->  	/* push down the phy io line */
->  	writel(0x0, data->membase + EMAC_MAC_MCMD_REG);
-> @@ -64,7 +60,7 @@ static int sun4i_mdio_write(struct mii_bus *bus, int
-> mii_id, int regnum, u16 value)
+> diff --git a/drivers/clocksource/timer-sun4i.c
+> b/drivers/clocksource/timer-sun4i.c index 94dc6e42e983..e5a70aa1deb4 100644
+> --- a/drivers/clocksource/timer-sun4i.c
+> +++ b/drivers/clocksource/timer-sun4i.c
+> @@ -26,6 +26,7 @@
+>  #define TIMER_IRQ_EN_REG	0x00
+>  #define TIMER_IRQ_EN(val)		BIT(val)
+>  #define TIMER_IRQ_ST_REG	0x04
+> +#define TIMER_IRQ_CLEAR(val)		BIT(val)
+>  #define TIMER_CTL_REG(val)	(0x10 * val + 0x10)
+>  #define TIMER_CTL_ENABLE		BIT(0)
+>  #define TIMER_CTL_RELOAD		BIT(1)
+> @@ -123,7 +124,7 @@ static int sun4i_clkevt_next_event(unsigned long evt,
+> 
+>  static void sun4i_timer_clear_interrupt(void __iomem *base)
 >  {
->  	struct sun4i_mdio_data *data = bus->priv;
-> -	unsigned long timeout_jiffies;
-> +	int ret, tmp;
+> -	writel(TIMER_IRQ_EN(0), base + TIMER_IRQ_ST_REG);
+> +	writel(TIMER_IRQ_CLEAR(0), base + TIMER_IRQ_ST_REG);
+>  }
 > 
->  	/* issue the phy address and reg */
->  	writel((mii_id << 8) | regnum, data->membase + EMAC_MAC_MADR_REG);
-> @@ -72,12 +68,11 @@ static int sun4i_mdio_write(struct mii_bus *bus, int
-> mii_id, int regnum, writel(0x1, data->membase + EMAC_MAC_MCMD_REG);
-> 
->  	/* Wait read complete */
-> -	timeout_jiffies = jiffies + MDIO_TIMEOUT;
-> -	while (readl(data->membase + EMAC_MAC_MIND_REG) & 0x1) {
-> -		if (time_is_before_jiffies(timeout_jiffies))
-> -			return -ETIMEDOUT;
-> -		msleep(1);
-> -	}
-> +	ret = read_poll_timeout(readl, tmp, (tmp & 1) == 0,
-> +				20, 10000, false,
-> +				data->membase + 
-EMAC_MAC_MIND_REG);
-> +	if (ret < 0)
-> +		return ret;
-> 
->  	/* push down the phy io line */
->  	writel(0x0, data->membase + EMAC_MAC_MCMD_REG);
+>  static irqreturn_t sun4i_timer_interrupt(int irq, void *dev_id)
 > --
-> 2.25.1
+> 2.29.0
 
 

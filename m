@@ -2,173 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28085AF117
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FA45AF11D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiIFQun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S238210AbiIFQvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234413AbiIFQuW (ORCPT
+        with ESMTP id S230178AbiIFQvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:50:22 -0400
+        Tue, 6 Sep 2022 12:51:20 -0400
 Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CBE81B2D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:36:15 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b5so16311645wrr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:36:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F0265C9
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:37:57 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id bz13so12901572wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=u9aosksAPdNjDd0bmpKVWgEojLBbOI+Pi5HIfNyLBhA=;
-        b=viV8ASe7i5je49B5m4Tc6eMD+h4fSi5v86IpkPQdT8vTn20Ob+X0CLIzxUxQRPbD0m
-         znLDsEJmhmjPHYJuFrOlsvSBPhi9dX7dYWU2bfVvFkdlF63b/bYiP9aswCtWqTiyV2+I
-         ghEt9I2FaI0YWWyi98dTvJ7iH5J31HH+sJn1Xl0A4GU1hHR7dPhClC0rbayb7j75aoEZ
-         FTliPeRmqWowBGmc4o8F37OI2aXh5EQUkVpmWlVL9Gs7dvsPgsbm95GvFM6w4aENIJkR
-         0B5+Yi5eqnBVKvSd63yQCaZx1dVLIkV2vaZ0eGqALNT7v41HgzW/LHyzjRoPmxEF+fyC
-         73Pw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=WRgBEaIROkHsbqiLlLVtVzNIxvB4btETvriIqS02JBs=;
+        b=c/WmjlCUYq1ys/R+jL2BkRWKajrLG75nP/QpHOGP/F4RUOE9Wro0OHtQGszgM9qRxe
+         z7XZNr8bx59b/9CA4wyaEyOR2YINjDjJxNcB65KBmMKvBqXCPXTW2L9cx6bciaZuCJri
+         7ZYUGedlXxcUD+9LCca5qPIwJS8eUr2Quor7dnjqsHIhngJkjIO9teu9XnGxAFjMNjbK
+         /ZMzcEeE5ugVdU+JjJ28ESULuPjj22Xzb7YrNyZ9y9In2MQ8VXyv2RYAqZfIGCyu506W
+         xz+B9vLCZP2DbatepAHSUKYw2j5Quxt4TcQP8xGb1BK6rwX7U1b6N+r2qMEnMQ9Ugjj3
+         xfhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=u9aosksAPdNjDd0bmpKVWgEojLBbOI+Pi5HIfNyLBhA=;
-        b=GzolEdOUEvEjg8/UWVoD7PH3DCZnZVMtXpOKJzOSfqjcw/ZhSdutp/wBkX58M5ICWj
-         KyYrMT/FYC+Do6G/7B6ebUrrz/fwxz8n5ky1WX99O7r4H/a2gkyNkGu9A4mF62jBVGeo
-         6757q5LuterWDjWy2OoWCXwqDQpt2VG6itMN791sH24WsQIz7vCgq4KbHYHdgZA1PaYT
-         ARPc1GPyd9J/iIsHIm510G3LNQo1F83IZTy5r5IpjkN413SUni8ZfbM6kpgLImnrIXlZ
-         +T3lL77G/9trdtn3gRSwqpnLz+wPwWhTVHl7rME9bt79896rXXPiuo1itSzg8df74Ajt
-         Ivew==
-X-Gm-Message-State: ACgBeo0KzcnRbbkIBA+chVJFqua2AgqJVYzBdyRBKBwfJsAS9PUEM/kp
-        414dzxMWGNTzMPJWrKiDA86rTw==
-X-Google-Smtp-Source: AA6agR6rVNZtgyKoGht+YirSloUtiazD6tjUr777qQIeSXmbawEaMBEBIGDh8y7fMY4VMzSQgyschQ==
-X-Received: by 2002:a05:6000:184d:b0:220:8235:132 with SMTP id c13-20020a056000184d00b0022082350132mr28396554wri.178.1662482174493;
-        Tue, 06 Sep 2022 09:36:14 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id q10-20020adff78a000000b0021e6277bc50sm16009172wrp.36.2022.09.06.09.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 09:36:13 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 17:36:09 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 09/13] iommu/sva: Refactoring
- iommu_sva_bind/unbind_device()
-Message-ID: <Yxd2+d/VOjdOgrR2@myrica>
-References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
- <20220906124458.46461-10-baolu.lu@linux.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=WRgBEaIROkHsbqiLlLVtVzNIxvB4btETvriIqS02JBs=;
+        b=ViSaIMi7kA3CM6KnAB1xecnJ0+JxHR0PPpLyIdRKKFfat6bVNaVL11pl4FW4zcG3Bu
+         1saw5Y+kVLc0C824aFoj2SNJBCDMRq7XBe8vXdJwqVJr6l0WIFCoiByABKCqUBB8yJNI
+         2tiBWBOP+CZmS0gGRN0sLA2PFFVllwIwynqIbPfxqpVbhqHZ3biQOus/OBHt16ajFXJ9
+         fNu+XsZvfdibySOFolbgzNWcejvM0ZD5fMVpijsM9lgyiEArKR/crnP7VcFmUNgYMOkS
+         Ng4oAlJvlrpMF4d+9V+VPyl7OiaiELr1t10cKc867rJ/oO24e72JPMgZkpKOH8T7yHy8
+         +rYw==
+X-Gm-Message-State: ACgBeo3NC67e6hen9PP2eofl8PokdfIUxhEdRZ62CYFMORAHxQx3y3YY
+        gv8kDY7vfA/p/l8XETOHQX1KBbVSs+zGE9pwDYpjuA==
+X-Google-Smtp-Source: AA6agR67CPRfwhYa2E4op20iW4ujRDkrian2fe9S1zq0GPYV1G/fFR7+F7OSOdLlRVeqDFPy8n8ljAbn8oGE6inT9C8=
+X-Received: by 2002:a05:6000:10cf:b0:228:df93:a9b1 with SMTP id
+ b15-20020a05600010cf00b00228df93a9b1mr18470wrx.4.1662482275344; Tue, 06 Sep
+ 2022 09:37:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906124458.46461-10-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220902204351.2521805-1-keescook@chromium.org>
+In-Reply-To: <20220902204351.2521805-1-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 6 Sep 2022 09:37:44 -0700
+Message-ID: <CAKwvOdmMhTdkpA5pOrkDkyRB6O6Y8mw_s2JbqvBS3r12BCMQyg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Fix FORTIFY=y UBSAN_LOCAL_BOUNDS=y
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        David Gow <davidgow@google.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Eric Biggers <ebiggers@google.com>,
+        Hannes Reinecke <hare@suse.de>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:44:54PM +0800, Lu Baolu wrote:
-> +/**
-> + * iommu_sva_bind_device() - Bind a process address space to a device
-> + * @dev: the device
-> + * @mm: the mm to bind, caller must hold a reference to mm_users
-> + *
-> + * Create a bond between device and address space, allowing the device to access
-> + * the mm using the returned PASID. If a bond already exists between @device and
-> + * @mm, it is returned and an additional reference is taken. Caller must call
-> + * iommu_sva_unbind_device() to release each reference.
-
-This isn't true anymore. How about storing handle in the domain?
-
-(Maybe also drop my Reviewed-by tags since this has changed significantly,
-I tend to ignore patches that have them)
+On Fri, Sep 2, 2022 at 1:43 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we
+> observe a runtime panic while running Android's Compatibility Test
+> Suite's (CTS) android.hardware.input.cts.tests. This is stemming from a
+> strlen() call in hidinput_allocate().
+>
+> __builtin_object_size(str, 0 or 1) has interesting behavior for C
+> strings when str is runtime dependent, and all possible values are known
+> at compile time; it evaluates to the maximum of those sizes. This causes
+> UBSAN_LOCAL_BOUNDS to insert faults for the smaller values, which we
+> trip at runtime.
+>
+> Patch 1 is the actual fix, using a 0-index __builtin_constant_p() check
+> to short-circuit the runtime check.
+> Patch 2 is a KUnit test to validate this behavior going forward.
+> Patch 3 is is a cosmetic cleanup to use SIZE_MAX instead of (size_t)-1
 
 Thanks,
-Jean
+Testing out patch 1/3 against Android's CTS:
+https://android-review.googlesource.com/c/kernel/common/+/2206839,
+will give formal signoffs/review after a completed test run.
 
-> + *
-> + * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
-> + * initialize the required SVA features.
-> + *
-> + * On error, returns an ERR_PTR value.
-> + */
-> +struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
-> +{
-> +	struct iommu_domain *domain;
-> +	struct iommu_sva *handle;
-> +	ioasid_t max_pasids;
-> +	int ret;
-> +
-> +	max_pasids = dev->iommu->max_pasids;
-> +	if (!max_pasids)
-> +		return ERR_PTR(-EOPNOTSUPP);
-> +
-> +	/* Allocate mm->pasid if necessary. */
-> +	ret = iommu_sva_alloc_pasid(mm, 1, max_pasids - 1);
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +
-> +	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
-> +	if (!handle)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	mutex_lock(&iommu_sva_lock);
-> +	/* Search for an existing domain. */
-> +	domain = iommu_get_domain_for_dev_pasid(dev, mm->pasid,
-> +						IOMMU_DOMAIN_SVA);
-> +	if (IS_ERR(domain)) {
-> +		ret = PTR_ERR(domain);
-> +		goto out_unlock;
-> +	}
-> +
-> +	if (domain) {
-> +		domain->users++;
-> +		goto out;
-> +	}
-> +
-> +	/* Allocate a new domain and set it on device pasid. */
-> +	domain = iommu_sva_domain_alloc(dev, mm);
-> +	if (!domain) {
-> +		ret = -ENOMEM;
-> +		goto out_unlock;
-> +	}
-> +
-> +	ret = iommu_attach_device_pasid(domain, dev, mm->pasid);
-> +	if (ret)
-> +		goto out_free_domain;
-> +	domain->users = 1;
-> +out:
-> +	mutex_unlock(&iommu_sva_lock);
-> +	handle->dev = dev;
-> +	handle->domain = domain;
-> +
-> +	return handle;
-> +
-> +out_free_domain:
-> +	iommu_domain_free(domain);
-> +out_unlock:
-> +	mutex_unlock(&iommu_sva_lock);
-> +	kfree(handle);
-> +
-> +	return ERR_PTR(ret);
-> +}
-> +EXPORT_SYMBOL_GPL(iommu_sva_bind_device);
+>
+> -Kees
+>
+> v2:
+>  - different solution
+>  - add KUnit test
+>  - expand scope of cosmetic cleanup
+> v1: https://lore.kernel.org/lkml/20220830205309.312864-1-ndesaulniers@google.com
+>
+> Kees Cook (3):
+>   fortify: Fix __compiletime_strlen() under UBSAN_BOUNDS_LOCAL
+>   fortify: Add KUnit test for FORTIFY_SOURCE internals
+>   fortify: Use SIZE_MAX instead of (size_t)-1
+>
+>  MAINTAINERS                    |  1 +
+>  include/linux/fortify-string.h | 29 ++++++-------
+>  lib/Kconfig.debug              |  9 ++++
+>  lib/Makefile                   |  1 +
+>  lib/fortify_kunit.c            | 77 ++++++++++++++++++++++++++++++++++
+>  5 files changed, 103 insertions(+), 14 deletions(-)
+>  create mode 100644 lib/fortify_kunit.c
+>
+> --
+> 2.34.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

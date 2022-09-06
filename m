@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31FC5AEDBC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66165AEDE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238338AbiIFOjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        id S242183AbiIFOjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242215AbiIFOir (ORCPT
+        with ESMTP id S242301AbiIFOjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:38:47 -0400
+        Tue, 6 Sep 2022 10:39:03 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1F49A964;
-        Tue,  6 Sep 2022 07:00:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C64A9A95D;
+        Tue,  6 Sep 2022 07:01:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662472857; x=1694008857;
+  t=1662472866; x=1694008866;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pk0hBeRzv9yrSvjx77z7pR8KMLbpypDtOQMtHWLcCCU=;
-  b=OWPO9sIzkxP4jocz/tYqCEZPLZBqAyq6myzvB1OVIVjJN+6TmZhgdVBH
-   uCGp7bXKA4cMtUf1S3g6cthOgsgMnpjpEqNV+xqVVCva96n3Hk6JROMxv
-   UOleduYl7jCJ7jYwGEH7s3HgFoSef66iEN3cHXJrekfkbDoZ0b1mT4Xfh
-   ylfBkPI8pAYIeWkXLrpYkvJUjpWM8LIPmVLSlm4RoWvB4nWp6YPKUNmOj
-   KOWvK7xVqrs6MSGKfMyw57daMPKUT3CTuZG5bW+6dcnX8TaGIOIGTvcPl
-   neJdUZz7k9+inxZjsLicfSRfCuh3zv2HyFKGOv4NEKx4InCS5DmRT6poh
+  bh=0iBvNvc6oWFi2GwjYfyBen8v+JZc1cmnAG1OVejo090=;
+  b=K3i+MMVc8YRojr/yv9RWxH/1vtnnZx7zQxf5eq6GC13ho3RGPDK3iokr
+   wIZ9FbzfNwR3XKZMvAuXPZRuH2L1Ymcw6ygxiKARUU3uusDbFwWZ7qAgf
+   MNMf7mgtURagmb/WEyMZzic0fH5/nGBAUR3cGCW9+u9fpg/VukNePGcXb
+   wf2VPHeC9eXsJ6p/OKF4O15JTIgJYarpQ7YUn7JjnnFAgxgJVj6fuqKYZ
+   jS7wA3aDZgWbzvybzTZD7gvay8zZz5FjOuDfD/5hghmesrV/wrEREzRAu
+   CuDZ2YrBhYnnKx0h7naGbgSiNQ3Hv9X0sWhUrVVIh7dgQgHH43Ua21735
    w==;
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="175830165"
+   d="scan'208";a="175830176"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:57:31 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 06:57:33 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 6 Sep 2022 06:57:26 -0700
+ 15.1.2507.12; Tue, 6 Sep 2022 06:57:31 -0700
 Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:57:21 -0700
+ 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 06:57:26 -0700
 From:   Sergiu Moga <sergiu.moga@microchip.com>
 To:     <lee@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
@@ -53,9 +53,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 10/13] tty: serial: atmel: Only divide Clock Divisor if the IP is USART
-Date:   Tue, 6 Sep 2022 16:55:09 +0300
-Message-ID: <20220906135511.144725-11-sergiu.moga@microchip.com>
+Subject: [PATCH v2 11/13] clk: at91: sama5d2: Add Generic Clocks for UART/USART
+Date:   Tue, 6 Sep 2022 16:55:10 +0300
+Message-ID: <20220906135511.144725-12-sergiu.moga@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906135511.144725-1-sergiu.moga@microchip.com>
 References: <20220906135511.144725-1-sergiu.moga@microchip.com>
@@ -72,82 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure that the driver only divides the clock divisor if the
-IP handled at that point is USART, since UART IP's do not support
-implicit peripheral clock division. Instead, in the case of UART,
-go with the highest possible clock divisor.
+Add the generic clocks for UART/USART in the sama5d2 driver to allow them
+to be registered in the Common Clock Framework.
 
 Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
 
 
+
 v1 -> v2:
-- Nothing, this patch was not here before and is mainly meant as both cleanup
-and as a way to introduce a new field into struct atmel_uart_port that will be
-used by the last patch to diferentiate between USART and UART regarding the
-location of the Baudrate Clock Source bitmask.
+- Added R-b tag
 
 
 
 
- drivers/tty/serial/atmel_serial.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/clk/at91/sama5d2.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 7450d3853031..6aa01ca5489c 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -150,6 +150,7 @@ struct atmel_uart_port {
- 	u32			rts_low;
- 	bool			ms_irq_enabled;
- 	u32			rtor;	/* address of receiver timeout register if it exists */
-+	bool			is_usart;
- 	bool			has_frac_baudrate;
- 	bool			has_hw_timer;
- 	struct timer_list	uart_timer;
-@@ -1825,6 +1826,7 @@ static void atmel_get_ip_name(struct uart_port *port)
- 	 */
- 	atmel_port->has_frac_baudrate = false;
- 	atmel_port->has_hw_timer = false;
-+	atmel_port->is_usart = false;
- 
- 	if (name == new_uart) {
- 		dev_dbg(port->dev, "Uart with hw timer");
-@@ -1834,6 +1836,7 @@ static void atmel_get_ip_name(struct uart_port *port)
- 		dev_dbg(port->dev, "Usart\n");
- 		atmel_port->has_frac_baudrate = true;
- 		atmel_port->has_hw_timer = true;
-+		atmel_port->is_usart = true;
- 		atmel_port->rtor = ATMEL_US_RTOR;
- 		version = atmel_uart_readl(port, ATMEL_US_VERSION);
- 		switch (version) {
-@@ -1863,6 +1866,7 @@ static void atmel_get_ip_name(struct uart_port *port)
- 			dev_dbg(port->dev, "This version is usart\n");
- 			atmel_port->has_frac_baudrate = true;
- 			atmel_port->has_hw_timer = true;
-+			atmel_port->is_usart = true;
- 			atmel_port->rtor = ATMEL_US_RTOR;
- 			break;
- 		case 0x203:
-@@ -2282,10 +2286,17 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 		cd = uart_get_divisor(port, baud);
- 	}
- 
--	if (cd > 65535) {	/* BRGR is 16-bit, so switch to slower clock */
-+	/*
-+	 * BRGR is 16-bit, so switch to slower clock.
-+	 * Otherwise, keep the highest possible value for the clock divisor.
-+	 */
-+	if (atmel_port->is_usart && cd > 65535) {
- 		cd /= 8;
- 		mode |= ATMEL_US_USCLKS_MCK_DIV8;
-+	} else {
-+		cd &= 65535;
- 	}
-+
- 	quot = cd | fp << ATMEL_US_FP_OFFSET;
- 
- 	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
+diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
+index cfd0f5e23b99..84156dc52bff 100644
+--- a/drivers/clk/at91/sama5d2.c
++++ b/drivers/clk/at91/sama5d2.c
+@@ -120,6 +120,16 @@ static const struct {
+ 	struct clk_range r;
+ 	int chg_pid;
+ } sama5d2_gck[] = {
++	{ .n = "flx0_gclk",   .id = 19, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "flx1_gclk",   .id = 20, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "flx2_gclk",   .id = 21, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "flx3_gclk",   .id = 22, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "flx4_gclk",   .id = 23, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "uart0_gclk",  .id = 24, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "uart1_gclk",  .id = 25, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "uart2_gclk",  .id = 26, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "uart3_gclk",  .id = 27, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
++	{ .n = "uart4_gclk",  .id = 28, .chg_pid = INT_MIN, .r = { .min = 0, .max = 27666666 }, },
+ 	{ .n = "sdmmc0_gclk", .id = 31, .chg_pid = INT_MIN, },
+ 	{ .n = "sdmmc1_gclk", .id = 32, .chg_pid = INT_MIN, },
+ 	{ .n = "tcb0_gclk",   .id = 35, .chg_pid = INT_MIN, .r = { .min = 0, .max = 83000000 }, },
 -- 
 2.25.1
 

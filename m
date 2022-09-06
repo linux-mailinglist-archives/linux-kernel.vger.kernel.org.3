@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36A05AF0AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E865AF09D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbiIFQhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S233656AbiIFQhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233349AbiIFQgp (ORCPT
+        with ESMTP id S238870AbiIFQgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:36:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019C11C38
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662480777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kg2ZD8/t1Jr30+S6ZmV5Vng3X+mccbhRQidJGUyOJ8o=;
-        b=Hdx2jw3IDZlrCLAi90onICEn5UaRBMqVRZJzny7HB2pFOFn6WF38JxMq5cL7qF3ntLY+AH
-        0Chj4OdzwUj9kPiqaa2oiuhA+Noj6Wbv73sL/O/6ob24LMJsq7hvGSTdnWog0X69XmLRBF
-        BEsVFCTgRjNyiBXYgtk8YiFOIs7jLJg=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-649-uWV8hYxHMdW7KfVR_b0Kkg-1; Tue, 06 Sep 2022 12:12:56 -0400
-X-MC-Unique: uWV8hYxHMdW7KfVR_b0Kkg-1
-Received: by mail-pg1-f197.google.com with SMTP id 135-20020a63018d000000b00430673f7922so5957410pgb.6
+        Tue, 6 Sep 2022 12:36:43 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315F512D11
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:12:55 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id z23so12879578ljk.1
         for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/Nx3mH5ct9QYpoBU00B/ScU7zjA9VoC62pYJpkPSb+0=;
+        b=C8cZQFXaa61yU4SrHQ+z2RUREsINQPfpjDxOHnk9rDEOvRE3ock2QmxnK8YSiG4XuP
+         WNXQuL7nBdyL9sxZS7FPupijVONMx0NGze/N5GrovdbyBAJHPiFipLDSN9w3N6Y3nwOc
+         FRp/kBBArbTAJ8Rqn+kzx/1qWM6GZDj3Yz10PFXfMV/B2045cCqeOxu04on9ZcM6y5l8
+         mfy6wqW65WQZC7t2vKoiCqt8ym4b/CgyCvQGcdRVWWevj1eSWdKT9me/9OjA/LtHlZPX
+         GOM1TRi1AqIVurh+LkerPnooW2qA9NpriY/2CossgrhArmaXCMUih8WDEHAiOo+UNqez
+         ZXtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kg2ZD8/t1Jr30+S6ZmV5Vng3X+mccbhRQidJGUyOJ8o=;
-        b=weANGgn1mCylAIYOH2Dsps+vxpWBgtCGgmxe/ivvrGpwBCkOST6GkZ2pBmdWeUEZ7C
-         b8D4jo8F5jaYYf1mOX27bUkMyKXXIiaWRS7P0tBHy8lJ3+EMCqwHg9kzcfTQ/OsMhLcL
-         psVagyNPUIwCQnPeVEKIA0RwJkRx7oPpvNUfevKYXgU4V8OemgkWlPGqw3VQAqOUYFnV
-         mY1P298NIeWyOkAWiGI9fYVSMD0zsVaHvlHw6f7rZnDNpOFKzZSuSKJvW6CDMFE9tfjN
-         RdvJytXW07Jvarnhj4tm8NgNXzq+VOJ1PiCEAci9zR/rTvBdpwgqnKofo2QHcLu//KCv
-         Cr5w==
-X-Gm-Message-State: ACgBeo3aNv8OEfSfhah4VuHatg8LoBSv16ozxSsDv459Gft8zkl4YtS0
-        QXlReoDD6WgvmhLDYou4tq2MDYGeqgPkip62gtZ/MXnvJ9Gp1nKr4c6AEE2t5b9noxjRnwz8koZ
-        SS0yjN9CXc31m1jrs+zGDpTZXh7XAFnRM4pI16Flz
-X-Received: by 2002:a17:90a:4485:b0:1fa:cc1f:a7a with SMTP id t5-20020a17090a448500b001facc1f0a7amr25979378pjg.45.1662480774581;
-        Tue, 06 Sep 2022 09:12:54 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR62clyvFNxfvYwrm+zhQNaRY46JYdBxaA8PGMyTRlTBTbWPbc89Y4U7LekV45n04MZzTad6xPl3cyc04nZan6E=
-X-Received: by 2002:a17:90a:4485:b0:1fa:cc1f:a7a with SMTP id
- t5-20020a17090a448500b001facc1f0a7amr25979368pjg.45.1662480774362; Tue, 06
- Sep 2022 09:12:54 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/Nx3mH5ct9QYpoBU00B/ScU7zjA9VoC62pYJpkPSb+0=;
+        b=5AVOpCXQNVx2rLCvHmFnYFHJklRINMHq18eOkUAHbjkp4r9g5c+zmTZj5LTrGLAueH
+         nvgAd+JLf+lczsD/ajIMfN4h8A/k9wtmmhi2wPDP6TrLOhl7d4E/x2SUFDUIyzfbem5Y
+         8h+2yAznHe30gfeYYGWRs8MWG44/lAFup/ygsNa0GMr81h8bdC0MvPjr90FmVPmvqbC+
+         VoCdv5yxbkGOCxYhSi7xljvPOE5UFEuylrsRMTsxv6ZC4l0etj1UUFW91byX1Hflwc9w
+         VIHAOgmGsiCxFZGRXaUT0f3SKxP4AtIWOF56+NSSenBzHBdh0j0wvmxP5i1ytmia2+x3
+         C/OQ==
+X-Gm-Message-State: ACgBeo3OjJePX8AuhczCmhYP3E+THI2s2fTR0j/MzokMRJxneJe2T+/6
+        AxZ2eyNwaH8zQP40tB9IFwZHzQ==
+X-Google-Smtp-Source: AA6agR4EaFe2XbhpwW6/C+wSaaX2AYP7xlORVBSPVXTkkJdhAk0LJl4qlI6kcu6z2cuYCEJOuzzoCQ==
+X-Received: by 2002:a2e:83c9:0:b0:24d:a95d:7b7a with SMTP id s9-20020a2e83c9000000b0024da95d7b7amr16140667ljh.254.1662480773537;
+        Tue, 06 Sep 2022 09:12:53 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id e1-20020a196901000000b004947555dbc2sm1819378lfc.100.2022.09.06.09.12.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 09:12:53 -0700 (PDT)
+Message-ID: <67657fa4-4b15-da4c-db3a-907b2a5b6d92@linaro.org>
+Date:   Tue, 6 Sep 2022 18:12:51 +0200
 MIME-Version: 1.0
-References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
- <20220902132938.2409206-2-benjamin.tissoires@redhat.com> <CAP01T75KTjawtsvQmhZhj0=tEJVwc7UewRqdT1ui+uKONg07Zw@mail.gmail.com>
- <CAP01T74zEuSfTYhkKieU1B5YwzdXhKWxPX55AabV84j-=virwA@mail.gmail.com> <CAO-hwJLBtjfU7NWVTRK8HKmATuSb3ZSY__+OOMZhqY85DeQbWQ@mail.gmail.com>
-In-Reply-To: <CAO-hwJLBtjfU7NWVTRK8HKmATuSb3ZSY__+OOMZhqY85DeQbWQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 6 Sep 2022 18:12:43 +0200
-Message-ID: <CAO-hwJ+K0EmS-j+2uuj-13aDf2+X8ZVU4ue4MNg55p9nJhLAKw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v10 01/23] selftests/bpf: regroup and declare
- similar kfuncs selftests in an array
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v11] dt-bindings: misc: fastrpc convert bindings to yaml
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, David Heidelberg <david@ixit.cz>
+References: <20220906150102.3399115-1-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220906150102.3399115-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,97 +83,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 3:50 PM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Tue, Sep 6, 2022 at 5:27 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> >
-> > On Tue, 6 Sept 2022 at 05:25, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > >
-> > > On Fri, 2 Sept 2022 at 15:29, Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > > > Similar to tools/testing/selftests/bpf/prog_tests/dynptr.c:
-> > > > we declare an array of tests that we run one by one in a for loop.
-> > > >
-> > > > Followup patches will add more similar-ish tests, so avoid a lot of copy
-> > > > paste by grouping the declaration in an array.
-> > > >
-> > > > To be able to call bpf_object__find_program_by_name(), we need to use
-> > > > plain libbpf calls, and not light skeletons. So also change the Makefile
-> > > > to not generate light skeletons.
-> > > >
-> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > >
-> > > > ---
-> > >
-> > > I see your point, but this is also a test so that we keep verifying
-> > > kfunc call in light skeleton.
-> > > Code for relocating both is different in libbpf (we generate BPF ASM
-> > > for light skeleton so it is done inside a loader BPF program instead
-> > > of userspace).
-> >
-> > Err, hit send too early.
-> > We can probably use a macro to hide how program is called, then do
-> > X(prog1)
-> > X(prog2)
-> > in a series, won't look too bad and avoids duplication at the same time.
-> >
-> > > You might then be able to make it work for both light and normal skeleton.
-> > >
-> > WDYT?
-> >
->
-> On this patch alone, I concede the benefit is minimum. But if you look
-> at 6/23, I must confess I definitely prefer having just an array of
-> tests at the beginning instead of crippling the tests functions with
-> calls or macros.
->
-> The actual reason for me to ditch light skeletons was because I was
-> using bpf_object__find_program_by_name().
->
-> But I can work around that by relying on the offsetof() macro, and
-> make the whole thing working for *both* light skeleton and libbpf:
-> +struct kfunc_test_params {
-> +       const char *prog_name;
-> +       unsigned long int lskel_prog_desc_offset;
-> +       int retval;
-> +};
+On 06/09/2022 17:01, Abel Vesa wrote:
+> Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
+> dt-entries correctly and any future additions can go into yaml format.
+> 
+
+Thank you for your patch. There is something to discuss/improve.
+
 > +
-> +#define TC_TEST(name,__retval) \
-> +       { \
-> +         .prog_name = #name, \
-> +         .lskel_prog_desc_offset = offsetof(struct
-> kfunc_call_test_lskel, progs.name), \
-> +         .retval = __retval, \
-> +       }
+> +patternProperties:
+> +  "(compute-)?cb@[0-9]*$":
+> +    type: object
 > +
-> +static struct kfunc_test_params kfunc_tests[] = {
-> +       TC_TEST(kfunc_call_test1, 12),
-> +       TC_TEST(kfunc_call_test2, 3),
-> +       TC_TEST(kfunc_call_test_ref_btf_id, 0),
-> +};
+> +    description: >
+> +      Each subnode of the Fastrpc represents compute context banks available on the dsp.
 > +
-> +static void verify_success(struct kfunc_test_params *param)
->  {
-> [...]
-> +       struct bpf_prog_desc *lskel_prog = (struct bpf_prog_desc
-> *)((char *)lskel + param->lskel_prog_desc_offset);
->
-> However, for failing tests, I can not really rely on light skeletons
-> because we can not dynamically set the autoload property.
-> So either I split every failed test in its own file, or I only test
-> the ones that are supposed to load, which don't add a lot IMO.
->
-> I'll repost the bpf-core changes only so you can have a better idea of
-> what I am saying.
->
+> +    properties:
+> +      compatible:
+> +        const: qcom,fastrpc-compute-cb
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +      qcom,nsession:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        default: 1
+> +        description: >
+> +          A value indicating how many sessions can share this context bank.
+> +
+> +    required:
+> +      - compatible
+> +      - reg
 
-FWIW, I have now sent them at [0] and dropped all of the people not in
-get_maintainers.pl.
+I think this was pointed previously by Rob in v4 - you need here
+additionalProperties: false (on that level of indentation).
 
-Cheers,
-Benjamin
+> +
+> +required:
+> +  - compatible
+> +  - label
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
 
-[0] https://lore.kernel.org/all/20220906151303.2780789-1-benjamin.tissoires@redhat.com/T/#u
 
+Best regards,
+Krzysztof

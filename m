@@ -2,134 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F005AEFC8
+	by mail.lfdr.de (Postfix) with ESMTP id 37A215AEFC6
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbiIFQAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S238451AbiIFQAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233660AbiIFQAR (ORCPT
+        with ESMTP id S236513AbiIFQAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:00:17 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E723AB00
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:19:55 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q3so11635217pjg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 08:19:55 -0700 (PDT)
+        Tue, 6 Sep 2022 12:00:09 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632C83F3D;
+        Tue,  6 Sep 2022 08:19:11 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fg1so1952572ejc.2;
+        Tue, 06 Sep 2022 08:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1NDwLaBCs5nhmRz61i3eAQ3IF542diGapeEzK/fCX5o=;
-        b=Zo5lCexyWBldwLJNn337E+X4XjLh3CKtHzTEdaQ/ECk+dhSOKS4DnmcGXPxy+tuk+U
-         DUV5mZGpHmWJrRWFmITH9tJPsFe1PisCnZYzDJPqP0axutpJSiQFSLw/4EbTQLO1dE1Y
-         ZfGil5qcOfMj5r12bh+MaLOVAENX22LwVqJbfiy8lNzM7eK8mU+c+KLNV/DP0QAXsk0V
-         5eobciFlxZL6g0+VRCohy0KR6AZLqVuB0KtCkAnw2bo6svNgZuDD4BlwJC3aCzLdc5id
-         Tr8R3j3r6k3AcZ/1Ex0sSQ94QMEp9vGtRd4+ITU5wwMa0YVVivbd1CotjXtDyWyLYiAo
-         +ejw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Ma2iDt0aE81Ahc9ZUJZycp2jvO5tJvy1n9qVt6gCQwI=;
+        b=mZ+FcifZ+4aqabfna498JJgJVm7ZJdYQe8WPPtTpmukN0ltsFgbqVaNbL1sFWPnx0F
+         +kFG3VCNFENVAovNsysmwpOZ9RuJ0ufsyH/pTm2Y0z5gRcOpO/R+heCj40VC0B/407ah
+         gIy12X9ei8z3+szxvE4NyRdxrjANyShKAEl2/x/Zm5O/QSiE8OYXer9bdBZdxhHaAE7q
+         f4tiV5HYLbiMy7AqJzsjwqwX5vSbICO2tfPlRmT+E50cm2MApRR8eNqmx5TuhyMcbdUY
+         7WrJdlicqbcwsKebKLfXD1Wod6uRLkMhZP+32t59uXM5n6TIYOGjSb2jPimnfwACXEvM
+         IUDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1NDwLaBCs5nhmRz61i3eAQ3IF542diGapeEzK/fCX5o=;
-        b=0u26rSejzI7Ol27iPnDZoUc9bWqPDIVNikUT8hahox9FGOn2tad3SpCdrI65G07JDD
-         tFJhFJ41iJXrRvJEEHcba/34TCL5QDmKnRkLIDPaBG4gf6PccvoPXY1XwhauqCU0fDXT
-         U1t4fuoOQ0i8V1DYn21bRF6eviLQHS+9t6qzGv5vEo5K5NxEUrjxpLCPKhJ5rvN4jGNL
-         Q6NVBEjihFLYgLijjYnU+QF31eAxYLx03wTd6nW9+v5P/R6VGxsX8vCO2AhOLZWPB0gT
-         kokys0z7hcLIseEvoaf7FfS0DAJ0e7D39eeQQGAzNZJMgjdxwD0BXfq6nMrSeS7WErwF
-         29rA==
-X-Gm-Message-State: ACgBeo3YGY3My9aNkV25BSeOfgKa+E/mIKsF+WEEMVNz724HRZkHJC/l
-        PwjKwNziE29GCisDFuEpOQ==
-X-Google-Smtp-Source: AA6agR4qbrSGPS0PcXmVtpUkCSbvfk3XXjbUCMdjYOZ7LU95Dyl0T9eBAaOS1Yx1ItBiTzOFcFhj8A==
-X-Received: by 2002:a17:90b:1d0a:b0:1ff:35a3:c594 with SMTP id on10-20020a17090b1d0a00b001ff35a3c594mr24869790pjb.14.1662477595386;
-        Tue, 06 Sep 2022 08:19:55 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id x4-20020a170902a38400b0016dc26c7d30sm1095554pla.164.2022.09.06.08.19.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Sep 2022 08:19:54 -0700 (PDT)
-From:   xiakaixu1987@gmail.com
-X-Google-Original-From: kaixuxia@tencent.com
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
-Subject: [PATCH] mm/damon/core: iterate the regions list from current point in damon_set_regions()
-Date:   Tue,  6 Sep 2022 23:18:47 +0800
-Message-Id: <1662477527-13003-1-git-send-email-kaixuxia@tencent.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ma2iDt0aE81Ahc9ZUJZycp2jvO5tJvy1n9qVt6gCQwI=;
+        b=QH4OiwHDUmSV5zbjGts8jFsfEsjPJy8my6Y58o3F0l05IgPR3o9NrNwBtGFY6aQ48W
+         IXTH+NPQ/Mo0c9mymKo0BcfB20okmT3c0ZQTj52Eu8TTxs5exf0dj/8wLdvnKSzxXtEj
+         bZzUz/WD6ZS0eLKIJrN9OKxENRQy/zGiSU8HTikjywdchJ0U+rCnHmizDuSJFKiIPYtn
+         D3vr/2aGJ26S4ruj0ZemXKpjiP/d6x5mSZ5TCcO1DEDhUOpEzmZ+UrveL3hpJCxDod5d
+         2x4lZb91CQo5hwNI00Va9x1VCf2E6LFgFTmKWjzp/4quKqhoXbhR3Rvki0aoC7Wq0qW0
+         gEPg==
+X-Gm-Message-State: ACgBeo1CXck8HreLTMMATX3x1WXuulmWxjPTlvGkevh5pTOuuyAocotS
+        NqYOQj3Q0qDah5YLcctkhX9NAbDI0br2mVOBf7A=
+X-Google-Smtp-Source: AA6agR5G9HfMrf0VgwjZaDpL+Bw3LD81rl/8ufqZpYLsPbGzQjkQjICo51PcirHskBDNf2s6ND3MqbShzMKHHJ8IDw0=
+X-Received: by 2002:a17:907:2ce7:b0:741:6e62:4558 with SMTP id
+ hz7-20020a1709072ce700b007416e624558mr31784827ejc.273.1662477550254; Tue, 06
+ Sep 2022 08:19:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220829151536.8578-1-jandryuk@gmail.com> <20220902165921.GA354189@bhelgaas>
+In-Reply-To: <20220902165921.GA354189@bhelgaas>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Tue, 6 Sep 2022 11:18:58 -0400
+Message-ID: <CAKf6xpt9DDjQoMsu9e09Gq_Bb_VFe2gzU9faARTsfS6c45E0bg@mail.gmail.com>
+Subject: Re: [PATCH] xen-pcifront: Handle missed Connected state
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        linux-pci@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kaixu Xia <kaixuxia@tencent.com>
+On Fri, Sep 2, 2022 at 12:59 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> The conventional style for subject (from "git log --oneline") is:
+>
+>   xen/pcifront: Handle ...
+>
+> On Mon, Aug 29, 2022 at 11:15:36AM -0400, Jason Andryuk wrote:
+> > An HVM guest with linux stubdom and 2 PCI devices failed to start as
+>
+> "stubdom" might be handy shorthand in the Xen world, but I think
+> it would be nice to consistently spell out "stubdomain" since you use
+> both forms randomly in this commit log and newbies like me have to
+> wonder whether they're the same or different.
+>
+> > libxl timed out waiting for the PCI devices to be added.  It happens
+> > intermittently but with some regularity.  libxl wrote the two xenstore
+> > entries for the devices, but then timed out waiting for backend state 4
+> > (Connected) - the state stayed at 7 (Reconfiguring).  (PCI passthrough
+> > to an HVM with stubdomain is PV passthrough to the stubdomain and then
+> > HVM passthrough with the QEMU inside the stubdomain.)
+> >
+> > The stubdom kernel never printed "pcifront pci-0: Installing PCI
+> > frontend", so it seems to have missed state 4 which would have
+> > called pcifront_try_connect -> pcifront_connect_and_init_dma
+>
+> Add "()" after function names for clarity.
+>
+> > Have pcifront_detach_devices special-case state Initialised and call
+> > pcifront_connect_and_init_dma.  Don't use pcifront_try_connect because
+> > that sets the xenbus state which may throw off the backend.  After
+> > connecting, skip the remainder of detach_devices since none have been
+> > initialized yet.  When the backend switches to Reconfigured,
+> > pcifront_attach_devices will pick them up again.
 
-We iterate the whole regions list every time to get the first/last regions
-intersecting with the specific range in damon_set_regions(), in order to
-add new region or resize existing regions to fit in the specific range.
-Actually, it is unnecessary to iterate the new added regions and the
-front regions that have been checked. Just iterate the regions list from
-the current point using list_for_each_entry_from() every time to improve
-performance.
-The kunit tests passed:
- [PASSED] damon_test_apply_three_regions1
- [PASSED] damon_test_apply_three_regions2
- [PASSED] damon_test_apply_three_regions3
- [PASSED] damon_test_apply_three_regions4
+Thanks for taking a look, Bjorn.  That all sounds good.  I'll wait a
+little longer to see if there is any more feedback before sending a
+v2.
 
-Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
----
- include/linux/damon.h | 8 ++++++++
- mm/damon/core.c       | 3 ++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index 7b1f4a488230..d54acec048d6 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -463,9 +463,17 @@ static inline struct damon_region *damon_last_region(struct damon_target *t)
- 	return list_last_entry(&t->regions_list, struct damon_region, list);
- }
- 
-+static inline struct damon_region *damon_first_region(struct damon_target *t)
-+{
-+	return list_first_entry(&t->regions_list, struct damon_region, list);
-+}
-+
- #define damon_for_each_region(r, t) \
- 	list_for_each_entry(r, &t->regions_list, list)
- 
-+#define damon_for_each_region_from(r, t) \
-+	list_for_each_entry_from(r, &t->regions_list, list)
-+
- #define damon_for_each_region_safe(r, next, t) \
- 	list_for_each_entry_safe(r, next, &t->regions_list, list)
- 
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 7d25dc582fe3..702e1b7e975b 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -195,6 +195,7 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
- 			damon_destroy_region(r, t);
- 	}
- 
-+	r = damon_first_region(t);
- 	/* Add new regions or resize existing regions to fit in the ranges */
- 	for (i = 0; i < nr_ranges; i++) {
- 		struct damon_region *first = NULL, *last, *newr;
-@@ -202,7 +203,7 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
- 
- 		range = &ranges[i];
- 		/* Get the first/last regions intersecting with the range */
--		damon_for_each_region(r, t) {
-+		damon_for_each_region_from(r, t) {
- 			if (damon_intersect(r, range)) {
- 				if (!first)
- 					first = r;
--- 
-2.27.0
-
+Regards,
+Jason

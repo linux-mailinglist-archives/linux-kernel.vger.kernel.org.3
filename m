@@ -2,87 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893DB5AF768
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD845AF57D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiIFVx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        id S230209AbiIFUJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIFVxz (ORCPT
+        with ESMTP id S230192AbiIFUJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:53:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC2C985B9;
-        Tue,  6 Sep 2022 14:53:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMfKS3l9sz4xGG;
-        Wed,  7 Sep 2022 07:53:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662501228;
-        bh=P1UZW97JpfiJjJNwh5Z/whP3vo9XvHY8OmNfyz0LgNs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Oz25eLLPtUcfrKiZPZ4zDIBgAHP8fAJHdSZVrCKyTnUrvyK+EV6fVQWxZ2wIdnqlV
-         wLcvrP+FdLpupJ/5Z9Tdu2g1TLu77tJ1cgSXgc/snpD+QyvUN/zYyB+0KVbm4X/r3r
-         sFck5g8IXzn/GHCiyVMkas3Nkyv/maGs70m3UNiX58+MqCeoDb4xvNenqaV3z6ZHTf
-         2JT1shxbPyZsCX3Dfjnbr+F/XIAC6p3U2PMOLhZl2XedyKfu89ZDRWw19yhLoZ98YF
-         KvlZicyDOcpkmsKcqu0VKSg5smlfIJjTu8BxyB/yGxtsXEkai1vmtR6qZ6bfNg7a3V
-         1E1k69kmh4/2w==
-Date:   Wed, 7 Sep 2022 03:31:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
+        Tue, 6 Sep 2022 16:09:10 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C24658E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:04:28 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so8093088wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=nLFlBHZY1lvIxs+wDFQOuCeDs8kLFFZtfH1W2GDdEPo=;
+        b=UqsTLgVjQLipDQfZb/x0qe5JDHCOxqku0e19QU0dYlou2/J8OVBZJeRDxNXiMt97Fh
+         3E5z3Ckh+fTAiNAZ88UqDkC8Rxqq2be8e1Xcs8X8S+5QiUwgVbbGmxhGgJ8jaABZOpvw
+         +SV8IhftYfLCmHJyD8EeqxTHO2IpFsS+Y4e0s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=nLFlBHZY1lvIxs+wDFQOuCeDs8kLFFZtfH1W2GDdEPo=;
+        b=W2mlYGTbtBmTh1J3CEpKjJ3oNPvKrhxQvPu1t18n4fwSbnkjAezUeN5kwejAtQaf+y
+         MBW/a+UwQIVl+eVoC99EseCZXx36ikfuxEBZ1cFTQTcTRaQRQjgqEODSBVSJEOtWnqT+
+         pY7JVffjVky5D1V9MS+pYxYaWoUqcO5tSY2f8YcxugyzBBUOezZ/x0ouBbJa05zst2pL
+         +/bdAlx7L/ORs/qaY4QBSkf/hGYcOb37Y+HRdFPj7VVSDfxumdShArC358xIU9YZGgxE
+         AHILVvMJ38tHbiRUTKN4jCvGFD7orv/jgcIu8AjAkMXWgXKnFOJi4ENcma7F2LuW3/jp
+         LKCQ==
+X-Gm-Message-State: ACgBeo2t5CGR3IrSbgI6p4MlMjsvQ9hUN8jfqgB6GCAoPFUJwfrWvuD5
+        HwaWe9TtWWCJNYVjXhrMn0bwnnlJ6+Gafw==
+X-Google-Smtp-Source: AA6agR4Ex0Q2u9orVMhIMp0RV1p91dVmN3st8TBkHWlsBcXFUjkX8mk1vLkzR/Iodys0dLHtL7HtSw==
+X-Received: by 2002:a05:600c:1c95:b0:3a5:c28a:df3e with SMTP id k21-20020a05600c1c9500b003a5c28adf3emr54685wms.40.1662494084388;
+        Tue, 06 Sep 2022 12:54:44 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id n22-20020a05600c465600b003a839b9ba0asm20868743wmo.40.2022.09.06.12.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 12:54:43 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 21:54:41 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrey Strachuk <strochuk@ispras.ru>,
+        ldv-project@linuxtesting.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>, Helge Deller <deller@gmx.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the arm64 tree
-Message-ID: <20220907033142.1fe410e2@canb.auug.org.au>
+        Maxime Ripard <mripard@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [ldv-project] [PATCH v2] drm/fb-helper: add virtual screen size
+ check to drm_fb_helper_check_var()
+Message-ID: <YxelgRXMMxbJmlAH@phenom.ffwll.local>
+Mail-Followup-To: Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrey Strachuk <strochuk@ispras.ru>, ldv-project@linuxtesting.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>, Helge Deller <deller@gmx.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+References: <20220811144850.215377-1-strochuk@ispras.ru>
+ <CAMuHMdXSnHJpy=27pkAfQC0v+tkpx7Q4Ze1=nvTmy+aMBeVPFg@mail.gmail.com>
+ <da72ac1b-57ef-18c5-98c7-f6f1a4c11b8d@ispras.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6l6AviH5J5QVXm+_yHv5Bmg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da72ac1b-57ef-18c5-98c7-f6f1a4c11b8d@ispras.ru>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/6l6AviH5J5QVXm+_yHv5Bmg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Aug 11, 2022 at 11:59:00PM +0300, Alexey Khoroshilov wrote:
+> For v2 I would suggest to update description to something like this:
+> 
+> Make sure that virtual screen size is not less than physical screen one.
+> 
+> and comment to:
+>     /* make sure that virtual resolution >= physical resolution */
 
-Hi all,
+Did this land somewhere? If not please resend with r-b tags and
+everything.
 
-Commit
+Thanks, Daniel
 
-  000aef672bf2 ("kselftest/arm64: Install signal handlers before output in =
-FP stress tests")
+> 
+> --
+> Alexey
+> 
+> 
+> On 11.08.2022 17:54, Geert Uytterhoeven wrote:
+> > Hi Andrey,
+> > 
+> > On Thu, Aug 11, 2022 at 4:49 PM Andrey Strachuk <strochuk@ispras.ru> wrote:
+> >> Add virtual screen size check to drm_fb_helper_check_var() in
+> >> order to validate userspace input.
+> >>
+> >> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
+> >>
+> >> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
+> > 
+> > Thanks for the update!
+> > 
+> >> Fixes: 785b93ef8c30 ("drm/kms: move driver specific fb common code to helper functions (v2)")
+> > 
+> > I'd drop the Fixes tag completely, as the bug was present in the
+> > intel and radeon drivers before. But probably it doesn't matter, as no one
+> > is gonna backport this to v2.6.31 and earlier ;-)
+> > 
+> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > 
+> > Gr{oetje,eeting}s,
+> > 
+> >                         Geert
+> > 
+> > --
+> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> > 
+> > In personal conversations with technical people, I call myself a hacker. But
+> > when I'm talking to journalists I just say "programmer" or something like that.
+> >                                 -- Linus Torvalds
+> > 
+> > _______________________________________________
+> > ldv-project mailing list
+> > ldv-project@linuxtesting.org
+> > http://linuxtesting.org/cgi-bin/mailman/listinfo/ldv-project
+> > 
+> 
 
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6l6AviH5J5QVXm+_yHv5Bmg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMXg/8ACgkQAVBC80lX
-0GwjQAf/dappteMw8xgyyIJ265ILHV+qYAdKHBX2FgdfRSxfrC4TH3bFEvl1Y3Q5
-Vayh/D6oCvGGQIzh/BoG1FV83ajYuVAq6aVOgsXdfdu0c6eY4qNit4PX6jhtNAKi
-Jgs5JmBL5Ao+/RpwcNip57798466ekorXRU7f5vOiSDaav+XNbSZEhaaITWrpRsF
-s3ruxO6fCoGxoKccDGL5OCOArsHmM/t+jWL6MLVUEM+iWZuZBilNsjNHqOGpifkQ
-yRP8t5l+wOpIQoZsO/QKVYtVAZGE4IwGYTMgt/vnHGaquccqnK6ApLi7RqHX/BUL
-Xl4Sjklm0u5mc/MyljZBm85sFyNfeA==
-=6GX7
------END PGP SIGNATURE-----
-
---Sig_/6l6AviH5J5QVXm+_yHv5Bmg--
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

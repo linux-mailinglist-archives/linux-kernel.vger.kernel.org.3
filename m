@@ -2,205 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ECA5AE818
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1305AE81C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiIFM31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S239750AbiIFM3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240221AbiIFM2i (ORCPT
+        with ESMTP id S240251AbiIFM2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:28:38 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485E924951;
-        Tue,  6 Sep 2022 05:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662467104; x=1694003104;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VLnflIlhNOSKlv+K+sGMeC6Yi4HRSkPtWSqjX4XDHWo=;
-  b=U9N+FlkdS0sYsBDdatUc3mzlVKsE6YvuLzFvuz94vnUau0EGpqfl813Y
-   UBYWIblQvchfLB0b8JYx2LEqMITfM3qdXCfrSBaGv7ImPOphFXEEsuS8Z
-   TuXDbIYa5hrrjmtnKjR+0AIsowMyrIpVNz/UMzbraunUi6jk9dC0ZP0L9
-   9Qzq3aMrQ7QpW6ijGSd1xeLdE7ltHrAmjA+1tIByZ05odJBRKypVCn6G0
-   oPo2FoaWsoc79QDncKXpe0uXUFOs51YnWJU22GYfXxsgvrH0s9T0+0sUN
-   WQmGQRgSVKJpoipIXTX5gZBKSHDnR8I1hhUhDFRv3YAmHmVSn1s30Uy27
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="279592183"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="279592183"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:25:03 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="565073686"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:25:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oVXdS-00970o-2G;
-        Tue, 06 Sep 2022 15:24:58 +0300
-Date:   Tue, 6 Sep 2022 15:24:58 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Martyn Welch <martyn.welch@collabora.co.uk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] gpio: pca953x: Add support for PCAL6534
-Message-ID: <Yxc8GgUnHOuMIn4p@smile.fi.intel.com>
-References: <20220906082820.4030401-1-martyn.welch@collabora.co.uk>
- <20220906082820.4030401-5-martyn.welch@collabora.co.uk>
+        Tue, 6 Sep 2022 08:28:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C608C77;
+        Tue,  6 Sep 2022 05:25:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98F2261518;
+        Tue,  6 Sep 2022 12:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F237FC433D7;
+        Tue,  6 Sep 2022 12:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662467121;
+        bh=FVIz9jOcYZovbef6R7ziRzkYDGIwM247D7ae6/vYWLg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UVDCbT9WfXM6YFeFbxLTt7scCB/B1HbIkRDQXNdpzQas3y5MwiK5OJhKn1HhqVRij
+         e7ZS/k+VZxYZl9Qb639i94Q1drkjC+E+0ozdRZRmBGBQKDrSi0dwZTTyEkUo0lUmtC
+         6wby4TpKl2dXSZAB2negF5YuN4pP3bXSu8XneZME3a2Ge5gPDn4SV/nxmdBJ43tpMJ
+         1yZB5CZinBgh2yVvcjcRwqxt27FUbm3oStpXkOanMYbtK6sLu00ZsPJQDO5z+lw/gn
+         7pSFabp4FtcjwMyLmw5ekHEQmlaF77/ODt3YcqtULiUBcDKOUv9G3hcqbNOWKgwzTq
+         jVsd0NfK96Ggw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oVXdt-0008BH-3O; Tue, 06 Sep 2022 14:25:25 +0200
+Date:   Tue, 6 Sep 2022 14:25:25 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH stable-5.15 1/3] usb: dwc3: fix PHY disable sequence
+Message-ID: <Yxc8NclTP8hwmQG9@hovoldconsulting.com>
+References: <20220906120702.19219-1-johan@kernel.org>
+ <20220906120702.19219-2-johan@kernel.org>
+ <Yxc6GMzOrz1k1c2D@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906082820.4030401-5-martyn.welch@collabora.co.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yxc6GMzOrz1k1c2D@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 09:28:19AM +0100, Martyn Welch wrote:
-> From: Martyn Welch <martyn.welch@collabora.com>
+On Tue, Sep 06, 2022 at 02:16:24PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Sep 06, 2022 at 02:07:00PM +0200, Johan Hovold wrote:
+> > From: Johan Hovold <johan+linaro@kernel.org>
+> > 
+> > commit d2ac7bef95c9ead307801ccb6cb6dfbeb14247bf upstream.
+> > 
+> > Generic PHYs must be powered-off before they can be tore down.
+> > 
+> > Similarly, suspending legacy PHYs after having powered them off makes no
+> > sense.
+> > 
+> > Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
+> > dwc3_probe() error-path sequences that got this wrong.
+> > 
+> > Note that this makes dwc3_core_exit() match the dwc3_core_init() error
+> > path with respect to powering off the PHYs.
+> > 
+> > Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
+> > Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
+> > Cc: stable@vger.kernel.org      # 4.8
+> > Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > Link: https://lore.kernel.org/r/20220804151001.23612-2-johan+linaro@kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > [ johan: adjust context to 5.15 ]
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >  drivers/usb/dwc3/core.c | 19 ++++++++++---------
+> >  1 file changed, 10 insertions(+), 9 deletions(-)
 > 
-> Add support for the NXP PCAL6534. This device is broadly a 34-bit version
-> of the PCAL6524. However, whilst the registers are broadly what you'd
-> expect for a 34-bit version of the PCAL6524, the spacing of the registers
-> has been compacted. This has the unfortunate effect of breaking the bit
-> shift based mechanism that is employed to work out register locations used
-> by the other chips supported by this driver. To accommodate ths, callback
-> functions have been added to allow alterate implementations of
-> pca953x_recalc_addr() and pca953x_check_register() for the PCAL6534.
+> This one did not apply to 4.9.y, 4.14.y, or 4.19.y :(
 
+Perhaps someone who cares about these old trees can do the backports.
+Should be as trivial. Can't be the patch submitters responsibility to
+maintain 8 stable trees.
 
-This looks much cleaner!
-
-...
-
-> @@ -107,6 +109,7 @@ static const struct i2c_device_id pca953x_id[] = {
->  	{ "tca9539", 16 | PCA953X_TYPE | PCA_INT, },
->  	{ "tca9554", 8  | PCA953X_TYPE | PCA_INT, },
->  	{ "xra1202", 8  | PCA953X_TYPE },
-> +
->  	{ }
-
-Missed Diodes?
-
->  };
->  MODULE_DEVICE_TABLE(i2c, pca953x_id);
-
-...
-
-> +	u8 (*recalc_addr)(struct pca953x_chip *chip, int reg , int off);
-> +	bool (*check_reg)(struct pca953x_chip *chip, unsigned int reg,
-> +		          u32 checkbank);
-
-I would think of splitting this change. Like in a separate patch you simply
-create this interface and only add what you need in the next one.
-
-...
-
-> +static bool pcal6534_check_register(struct pca953x_chip *chip, unsigned int reg,
-> +				    u32 checkbank)
-> +{
-> +	int bank;
-> +	int offset;
-> +
-> +	if (reg > 0x2f) {
-
-I guess code read and generation wise the
-
-	if (reg >= 0x30) {
-
-is slightly better.
-
-> +		/*
-> +		 * Reserved block between 14h and 2Fh does not align on
-> +		 * expected bank boundaries like other devices.
-> +		 */
-> +		int temp = reg - 0x30;
-> +
-> +		bank = temp / NBANK(chip);
-> +		offset = temp - (bank * NBANK(chip));
-
-Parentheses are not needed fur multiplication, but if you insist...
-
-> +		bank += 8;
-
-> +	} else if (reg > 0x53) {
-
-In the similar way...
-
-> +		/* Handle lack of reserved registers after output port
-> +		 * configuration register to form a bank.
-> +		 */
-
-Comment style
-
-/*
- * Handle...
- */
-
-> +		int temp = reg - 0x54;
-> +
-> +		bank = temp / NBANK(chip);
-> +		offset = temp - (bank * NBANK(chip));
-> +		bank += 16;
-> +	} else {
-> +		bank = reg / NBANK(chip);
-> +		offset = reg - (bank * NBANK(chip));
-> +	}
-> +
-> +	/* Register is not in the matching bank. */
-> +	if (!(BIT(bank) & checkbank))
-> +		return false;
-> +
-> +	/* Register is not within allowed range of bank. */
-> +	if (offset >= NBANK(chip))
-> +		return false;
-> +
-> +	return true;
-> +}
-
-...
-
-> -	u8 regaddr = pinctrl | addr | (off / BANK_SZ);
->  
-> -	return regaddr;
-> +	return pinctrl | addr | (off / BANK_SZ);
-
-Stray change, or anything I have missed?
-
-...
-
-> +/* The PCAL6534 and compatible chips have altered bank alignment that doesn't
-> + * fit within the bit shifting scheme used for other devices.
-> + */
-
-Comment style.
-
-...
-
-> @@ -1240,6 +1335,7 @@ static const struct of_device_id pca953x_dt_ids[] = {
->  
->  	{ .compatible = "nxp,pcal6416", .data = OF_953X(16, PCA_LATCH_INT), },
->  	{ .compatible = "nxp,pcal6524", .data = OF_953X(24, PCA_LATCH_INT), },
-> +	{ .compatible = "nxp,pcal6534", .data = OF_653X(34, PCA_LATCH_INT), },
->  	{ .compatible = "nxp,pcal9535", .data = OF_953X(16, PCA_LATCH_INT), },
->  	{ .compatible = "nxp,pcal9554b", .data = OF_953X( 8, PCA_LATCH_INT), },
->  	{ .compatible = "nxp,pcal9555a", .data = OF_953X(16, PCA_LATCH_INT), },
-
-Do you decide to drop Diodes compatible from the code?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Johan

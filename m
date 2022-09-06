@@ -2,169 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292D05ADF5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E415ADF5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238275AbiIFGEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
+        id S238270AbiIFGGJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Sep 2022 02:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238142AbiIFGEc (ORCPT
+        with ESMTP id S238241AbiIFGGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:04:32 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913241152;
-        Mon,  5 Sep 2022 23:04:28 -0700 (PDT)
-Subject: Re: [PATCH 1/2] md/raid5: Remove unnecessary bio_put() in
- raid5_read_one_chunk()
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662444266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n1Hx9zKkSqShfHLYD/BCxj56hkaYTpL8T/E2x/FgJgY=;
-        b=F8Fltwi/pjMJWAG4PZnfTeKNO3hT23D87QK5FxBPhyUpLHCcgmS1H4L9n1IxfP7BAn0BTU
-        MzO+HHZisbNkKgsVfniuvyC3HIGgI0SrCu7YQFejxkgegbkcAp72qN/BeG9MdoHV5KJvTu
-        vAgqrHtwhOlTV0B+XfEzSisV4C2E7N0=
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-References: <20220902171609.23376-1-logang@deltatee.com>
- <20220902171609.23376-2-logang@deltatee.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-Message-ID: <f244023c-a794-fe24-bf98-b1149ee7846d@linux.dev>
-Date:   Tue, 6 Sep 2022 14:04:11 +0800
+        Tue, 6 Sep 2022 02:06:06 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7106165272
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:06:02 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28624FXR016898
+        for <linux-kernel@vger.kernel.org>; Mon, 5 Sep 2022 23:06:01 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jc4eymcyf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 23:06:01 -0700
+Received: from twshared30313.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 5 Sep 2022 23:06:00 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id 12669C895177; Mon,  5 Sep 2022 23:05:56 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+CC:     <songliubraving@fb.com>, Song Liu <song@kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Baoquan He <bhe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2] mm/vmalloc: Extend find_vmap_lowest_match_check with extra arguments
+Date:   Mon, 5 Sep 2022 23:05:48 -0700
+Message-ID: <20220906060548.1127396-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220902171609.23376-2-logang@deltatee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: Ftb4v6E6OjFW4OaTXIb672dtaEyZjsy3
+X-Proofpoint-ORIG-GUID: Ftb4v6E6OjFW4OaTXIb672dtaEyZjsy3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_03,2022-09-05_03,2022-06-22_01
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+find_vmap_lowest_match() is now able to handle different roots. With
+DEBUG_AUGMENT_LOWEST_MATCH_CHECK enabled as:
 
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index e68c0081e861..7552f1f8350e 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -713,7 +713,7 @@ EXPORT_SYMBOL(vmalloc_to_pfn);
+/*** Global kva allocator ***/
 
-On 9/3/22 1:16 AM, Logan Gunthorpe wrote:
-> From: David Sloan <david.sloan@eideticom.com>
->
-> When running chunk-sized reads on disks with badblocks duplicate bio
-> free/puts are observed:
->
->     =============================================================================
->     BUG bio-200 (Not tainted): Object already free
->     -----------------------------------------------------------------------------
->     Allocated in mempool_alloc_slab+0x17/0x20 age=3 cpu=2 pid=7504
->      __slab_alloc.constprop.0+0x5a/0xb0
->      kmem_cache_alloc+0x31e/0x330
->      mempool_alloc_slab+0x17/0x20
->      mempool_alloc+0x100/0x2b0
->      bio_alloc_bioset+0x181/0x460
->      do_mpage_readpage+0x776/0xd00
->      mpage_readahead+0x166/0x320
->      blkdev_readahead+0x15/0x20
->      read_pages+0x13f/0x5f0
->      page_cache_ra_unbounded+0x18d/0x220
->      force_page_cache_ra+0x181/0x1c0
->      page_cache_sync_ra+0x65/0xb0
->      filemap_get_pages+0x1df/0xaf0
->      filemap_read+0x1e1/0x700
->      blkdev_read_iter+0x1e5/0x330
->      vfs_read+0x42a/0x570
->     Freed in mempool_free_slab+0x17/0x20 age=3 cpu=2 pid=7504
->      kmem_cache_free+0x46d/0x490
->      mempool_free_slab+0x17/0x20
->      mempool_free+0x66/0x190
->      bio_free+0x78/0x90
->      bio_put+0x100/0x1a0
->      raid5_make_request+0x2259/0x2450
->      md_handle_request+0x402/0x600
->      md_submit_bio+0xd9/0x120
->      __submit_bio+0x11f/0x1b0
->      submit_bio_noacct_nocheck+0x204/0x480
->      submit_bio_noacct+0x32e/0xc70
->      submit_bio+0x98/0x1a0
->      mpage_readahead+0x250/0x320
->      blkdev_readahead+0x15/0x20
->      read_pages+0x13f/0x5f0
->      page_cache_ra_unbounded+0x18d/0x220
->     Slab 0xffffea000481b600 objects=21 used=0 fp=0xffff8881206d8940 flags=0x17ffffc0010201(locked|slab|head|node=0|zone=2|lastcpupid=0x1fffff)
->     CPU: 0 PID: 34525 Comm: kworker/u24:2 Not tainted 6.0.0-rc2-localyes-265166-gf11c5343fa3f #143
->     Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
->     Workqueue: raid5wq raid5_do_work
->     Call Trace:
->      <TASK>
->      dump_stack_lvl+0x5a/0x78
->      dump_stack+0x10/0x16
->      print_trailer+0x158/0x165
->      object_err+0x35/0x50
->      free_debug_processing.cold+0xb7/0xbe
->      __slab_free+0x1ae/0x330
->      kmem_cache_free+0x46d/0x490
->      mempool_free_slab+0x17/0x20
->      mempool_free+0x66/0x190
->      bio_free+0x78/0x90
->      bio_put+0x100/0x1a0
->      mpage_end_io+0x36/0x150
->      bio_endio+0x2fd/0x360
->      md_end_io_acct+0x7e/0x90
->      bio_endio+0x2fd/0x360
->      handle_failed_stripe+0x960/0xb80
->      handle_stripe+0x1348/0x3760
->      handle_active_stripes.constprop.0+0x72a/0xaf0
->      raid5_do_work+0x177/0x330
->      process_one_work+0x616/0xb20
->      worker_thread+0x2bd/0x6f0
->      kthread+0x179/0x1b0
->      ret_from_fork+0x22/0x30
->      </TASK>
->
-> The double free is caused by an unnecessary bio_put() in the
-> if(is_badblock(...)) error path in raid5_read_one_chunk().
->
-> The error path was moved ahead of bio_alloc_clone() in c82aa1b76787c
-> ("md/raid5: move checking badblock before clone bio in
-> raid5_read_one_chunk"). The previous code checked and freed align_bio
-> which required a bio_put. After he move that is no longer needed as
-> raid_bio is returned to the control of the common io path which
-> performs its own endio resulting in a double free on bad device blocks.
->
-> Fixes: c82aa1b76787c ("md/raid5: move checking badblock before clone bio in raid5_read_one_chunk")
-> Signed-off-by: David Sloan <david.sloan@eideticom.com>
-> [logang@deltatee.com: minor rewording of commit message]
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-> ---
->   drivers/md/raid5.c | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index 4e6d865a6456..734f92e75f85 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -5538,7 +5538,6 @@ static int raid5_read_one_chunk(struct mddev *mddev, struct bio *raid_bio)
->   
->   	if (is_badblock(rdev, sector, bio_sectors(raid_bio), &first_bad,
->   			&bad_sectors)) {
-> -		bio_put(raid_bio);
->   		rdev_dec_pending(rdev, mddev);
->   		return 0;
->   	}
+-#define DEBUG_AUGMENT_LOWEST_MATCH_CHECK 0
++#define DEBUG_AUGMENT_LOWEST_MATCH_CHECK 1
 
-Acked-by: Guoqing Jiang <Guoqing.jiang@linux.dev>
+compilation failed as:
 
-Thanks,
-Guoqing
+mm/vmalloc.c: In function 'find_vmap_lowest_match_check':
+mm/vmalloc.c:1328:32: warning: passing argument 1 of 'find_vmap_lowest_match' makes pointer from integer without a cast [-Wint-conversion]
+1328 |  va_1 = find_vmap_lowest_match(size, align, vstart, false);
+     |                                ^~~~
+     |                                |
+     |                                long unsigned int
+mm/vmalloc.c:1236:40: note: expected 'struct rb_root *' but argument is of type 'long unsigned int'
+1236 | find_vmap_lowest_match(struct rb_root *root, unsigned long size,
+     |                        ~~~~~~~~~~~~~~~~^~~~
+mm/vmalloc.c:1328:9: error: too few arguments to function 'find_vmap_lowest_match'
+1328 |  va_1 = find_vmap_lowest_match(size, align, vstart, false);
+     |         ^~~~~~~~~~~~~~~~~~~~~~
+mm/vmalloc.c:1236:1: note: declared here
+1236 | find_vmap_lowest_match(struct rb_root *root, unsigned long size,
+     | ^~~~~~~~~~~~~~~~~~~~~~
+
+Extend find_vmap_lowest_match_check() and find_vmap_lowest_linear_match()
+with extra arguments to fix this.
+
+Fixes: f9863be49312 ("mm/vmalloc: extend __alloc_vmap_area() with extra arguments")
+Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Cc: Baoquan He <bhe@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Song Liu <song@kernel.org>
+
+---
+Changes v1 => v2:
+1. Update commit log to show the error with
+   DEBUG_AUGMENT_LOWEST_MATCH_CHECK. (Uladzislau Rezki, Baoquan He)
+---
+ mm/vmalloc.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index dd6cdb201195..088b421601c4 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1300,12 +1300,12 @@ find_vmap_lowest_match(struct rb_root *root, unsigned long size,
+ #include <linux/random.h>
+ 
+ static struct vmap_area *
+-find_vmap_lowest_linear_match(unsigned long size,
++find_vmap_lowest_linear_match(struct list_head *head, unsigned long size,
+ 	unsigned long align, unsigned long vstart)
+ {
+ 	struct vmap_area *va;
+ 
+-	list_for_each_entry(va, &free_vmap_area_list, list) {
++	list_for_each_entry(va, head, list) {
+ 		if (!is_within_this_va(va, size, align, vstart))
+ 			continue;
+ 
+@@ -1316,7 +1316,8 @@ find_vmap_lowest_linear_match(unsigned long size,
+ }
+ 
+ static void
+-find_vmap_lowest_match_check(unsigned long size, unsigned long align)
++find_vmap_lowest_match_check(struct rb_root *root, struct list_head *head,
++			     unsigned long size, unsigned long align)
+ {
+ 	struct vmap_area *va_1, *va_2;
+ 	unsigned long vstart;
+@@ -1325,8 +1326,8 @@ find_vmap_lowest_match_check(unsigned long size, unsigned long align)
+ 	get_random_bytes(&rnd, sizeof(rnd));
+ 	vstart = VMALLOC_START + rnd;
+ 
+-	va_1 = find_vmap_lowest_match(size, align, vstart, false);
+-	va_2 = find_vmap_lowest_linear_match(size, align, vstart);
++	va_1 = find_vmap_lowest_match(root, size, align, vstart, false);
++	va_2 = find_vmap_lowest_linear_match(head, size, align, vstart);
+ 
+ 	if (va_1 != va_2)
+ 		pr_emerg("not lowest: t: 0x%p, l: 0x%p, v: 0x%lx\n",
+@@ -1513,7 +1514,7 @@ __alloc_vmap_area(struct rb_root *root, struct list_head *head,
+ 		return vend;
+ 
+ #if DEBUG_AUGMENT_LOWEST_MATCH_CHECK
+-	find_vmap_lowest_match_check(size, align);
++	find_vmap_lowest_match_check(root, head, size, align);
+ #endif
+ 
+ 	return nva_start_addr;
+-- 
+2.30.2
+

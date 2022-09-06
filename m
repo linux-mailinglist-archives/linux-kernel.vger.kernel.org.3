@@ -2,235 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2385AF57F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519725AF577
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiIFULq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S231295AbiIFULW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiIFULN (ORCPT
+        with ESMTP id S230206AbiIFULA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:11:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B89ABD296;
-        Tue,  6 Sep 2022 13:05:55 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286JuuPC017359;
-        Tue, 6 Sep 2022 20:05:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=VVBWBjxd8R8chMmF9p2W/z0k6Cry+a7sL/3ImeWyCP0=;
- b=GolfMr5ApuMFHGJdcopL35jmobM1YXEoJNJAxAu7Zo0INsF6N1ucj73Uso/lJloCLwBQ
- omdXCPeIGzQsoPCecAQMD8iNa2dBR5rg6VFVz0dt5kJTHz5bDBRnHxfmfq8oTNcaoTli
- Qgr5NOXNWCIahz/LcEAgG0tIwpoxK+E2WteZRXrpLda/WvUMTxcnvyvdUEw7R6IXOyOI
- TT+GMWdyJkLzajvXpZN8/hoXzmpaNXr6Fu4+vtj1sRS/lR4PEA0bj9AIfVBLGWrZgu29
- VdZOjaAopsBu/TcQpbKq9rwQtN7x5JYno+GcVAvddl+Ml52SbnlZw8p3hgjNL6XHFCkK Qg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jecthg8jq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 20:05:40 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 286Jvg3o019245;
-        Tue, 6 Sep 2022 20:05:40 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jecthg8jg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 20:05:40 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 286JoHlS000994;
-        Tue, 6 Sep 2022 20:05:39 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma05wdc.us.ibm.com with ESMTP id 3jbxj9wm2b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Sep 2022 20:05:39 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 286K5dhQ27525542
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Sep 2022 20:05:39 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CFA76E054;
-        Tue,  6 Sep 2022 20:05:38 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C79886E04E;
-        Tue,  6 Sep 2022 20:05:37 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.74.237])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  6 Sep 2022 20:05:37 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     jic23@kernel.org
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au,
-        andy.shevchenko@gmail.com, eajames@linux.ibm.com
-Subject: [PATCH v6 2/2] iio: pressure: dps310: Reset chip after timeout
-Date:   Tue,  6 Sep 2022 15:05:35 -0500
-Message-Id: <20220906200535.1919398-3-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220906200535.1919398-1-eajames@linux.ibm.com>
-References: <20220906200535.1919398-1-eajames@linux.ibm.com>
+        Tue, 6 Sep 2022 16:11:00 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E548C0BC4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:05:43 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id i188-20020a1c3bc5000000b003a7b6ae4eb2so10289458wma.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:to:from
+         :date:from:to:cc:subject:date;
+        bh=c/UsxweYx46AtL1DrAVsnOTkZkntK4Jt2WwuEBuVBzE=;
+        b=BIZ0Q/ukdR5e8iBKd7CK7xTCph8PA4xDeCDAuT0ilInjv6/CXXpk2vswtwj06vQTut
+         jSztYj68KfnrEQ1l+jMYYFIp1TaZ9AHjui7bxO2qIXvmXnfIT6zdQzp36XPDWemNsC1E
+         yz6w1C0iA2azNn9h4SAmSijOrJiZ0W178kjP8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=c/UsxweYx46AtL1DrAVsnOTkZkntK4Jt2WwuEBuVBzE=;
+        b=j8WEBIPFA09GkwP7LnB61su/S9i1UlZKh+xaj9M3JGRdlB+BQEASppdzVBtI8s9nqA
+         wlRsbDiZ1aaZEYgOpggkMSoYvYxF4A4vCxfwUP3bnGClbl8+n+r+PH6O7bn13lAWKSRA
+         mADwYIwKcJ2H6TW7RxiCxIcCtvo0D7kvtERpp/rj5aHHubw26MJofINYgJ5yVoZAgT1k
+         ynKZlo7OXiy4Z2GlUI5XnE2rhqrGbDvN72aNnWb2cA3CrvrN8pVELjR0tTvOLoagwV/S
+         ss3sXefBU6vVeCHzmeuflxd6iqkyYLUHxCxdgjy1K4C9JWkfTBmQrFGyP3/AftE4g5lc
+         b/FA==
+X-Gm-Message-State: ACgBeo19FTO7HzLiXMxeVmR6sENnW8q2KTZcMqlFcRSVTyPBGTHq1/1k
+        0FE2ApNlyS5Ri1vdeqvTnRPGhA==
+X-Google-Smtp-Source: AA6agR52xlQCRWj/b3iUB8MkVLnvM+veWz5+Ya5VF/kMkQLeItZ5yTKo+e9fQ+u56AttgY9ZLonVMQ==
+X-Received: by 2002:a05:600c:19cb:b0:3a8:4622:ad3d with SMTP id u11-20020a05600c19cb00b003a84622ad3dmr14508871wmq.37.1662494740716;
+        Tue, 06 Sep 2022 13:05:40 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05600c378c00b003a5f4fccd4asm21521437wmr.35.2022.09.06.13.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 13:05:40 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 22:05:38 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Trigger Huang <Trigger.Huang@gmail.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Antonio Caggiano <antonio.caggiano@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
+Message-ID: <YxeoEr6xAtlZ+IrU@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Trigger Huang <Trigger.Huang@gmail.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Antonio Caggiano <antonio.caggiano@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
+ <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
+ <YxenK8xZHC6Q4Eu4@phenom.ffwll.local>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LUyv-CQ9LiDaGPI9iCeX-MIb_rT8s-oa
-X-Proofpoint-GUID: VNtokSlpoOk_40kCEeVHUWLbza-Mkmfw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209060093
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YxenK8xZHC6Q4Eu4@phenom.ffwll.local>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DPS310 chip has been observed to get "stuck" such that pressure
-and temperature measurements are never indicated as "ready" in the
-MEAS_CFG register. The only solution is to reset the device and try
-again. In order to avoid continual failures, use a boolean flag to
-only try the reset after timeout once if errors persist.
+On Tue, Sep 06, 2022 at 10:01:47PM +0200, Daniel Vetter wrote:
+> On Mon, Aug 15, 2022 at 12:05:19PM +0200, Christian König wrote:
+> > Am 15.08.22 um 11:54 schrieb Dmitry Osipenko:
+> > > Higher order pages allocated using alloc_pages() aren't refcounted and they
+> > > need to be refcounted, otherwise it's impossible to map them by KVM. This
+> > > patch sets the refcount of the tail pages and fixes the KVM memory mapping
+> > > faults.
+> > > 
+> > > Without this change guest virgl driver can't map host buffers into guest
+> > > and can't provide OpenGL 4.5 profile support to the guest. The host
+> > > mappings are also needed for enabling the Venus driver using host GPU
+> > > drivers that are utilizing TTM.
+> > > 
+> > > Based on a patch proposed by Trigger Huang.
+> > 
+> > Well I can't count how often I have repeated this: This is an absolutely
+> > clear NAK!
+> > 
+> > TTM pages are not reference counted in the first place and because of this
+> > giving them to virgl is illegal.
+> > 
+> > Please immediately stop this completely broken approach. We have discussed
+> > this multiple times now.
+> 
+> Yeah we need to get this stuff closed for real by tagging them all with
+> VM_IO or VM_PFNMAP asap.
 
-Fixes: ba6ec48e76bc ("iio: Add driver for Infineon DPS310")
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/iio/pressure/dps310.c | 78 ++++++++++++++++++++++++++++++-----
- 1 file changed, 68 insertions(+), 10 deletions(-)
+For a bit more context: Anything mapping a bo should be VM_SPECIAL. And I
+think we should add the checks to the gem and dma-buf mmap functions to
+validate for that, and fix all the fallout.
 
-diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
-index c706a8b423b5..58571007a24f 100644
---- a/drivers/iio/pressure/dps310.c
-+++ b/drivers/iio/pressure/dps310.c
-@@ -89,6 +89,7 @@ struct dps310_data {
- 	s32 c00, c10, c20, c30, c01, c11, c21;
- 	s32 pressure_raw;
- 	s32 temp_raw;
-+	bool timeout_recovery_failed;
- };
- 
- static const struct iio_chan_spec dps310_channels[] = {
-@@ -393,11 +394,73 @@ static int dps310_get_temp_k(struct dps310_data *data)
- 	return scale_factors[ilog2(rc)];
- }
- 
-+static int dps310_reset_wait(struct dps310_data *data)
-+{
-+	int rc;
-+
-+	rc = regmap_write(data->regmap, DPS310_RESET, DPS310_RESET_MAGIC);
-+	if (rc)
-+		return rc;
-+
-+	/* Wait for device chip access: 2.5ms in specification */
-+	usleep_range(2500, 12000);
-+	return 0;
-+}
-+
-+static int dps310_reset_reinit(struct dps310_data *data)
-+{
-+	int rc;
-+
-+	rc = dps310_reset_wait(data);
-+	if (rc)
-+		return rc;
-+
-+	rc = dps310_startup(data);
-+	if (rc)
-+		return rc;
-+
-+	return 0;
-+}
-+
-+static int dps310_ready(struct dps310_data *data, int ready_bit, int timeout)
-+{
-+	int rc;
-+	int ready;
-+	int sleep = DPS310_POLL_SLEEP_US(timeout);
-+
-+	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready, ready & ready_bit,
-+				      sleep, timeout);
-+	if (rc) {
-+		if (rc == -ETIMEDOUT && !data->timeout_recovery_failed) {
-+			int rc2;
-+
-+			/* Reset and reinitialize the chip. */
-+			rc2 = dps310_reset_reinit(data);
-+			if (rc2) {
-+				data->timeout_recovery_failed = true;
-+			} else {
-+				/* Try again to get sensor ready status. */
-+				rc2 = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
-+							       ready, ready & ready_bit, sleep,
-+							       timeout);
-+				if (rc2)
-+					data->timeout_recovery_failed = true;
-+				else
-+					return 0;
-+			}
-+		}
-+
-+		return rc;
-+	}
-+
-+	data->timeout_recovery_failed = false;
-+	return 0;
-+}
-+
- static int dps310_read_pres_raw(struct dps310_data *data)
- {
- 	int rc;
- 	int rate;
--	int ready;
- 	int timeout;
- 	s32 raw;
- 	u8 val[3];
-@@ -409,9 +472,7 @@ static int dps310_read_pres_raw(struct dps310_data *data)
- 	timeout = DPS310_POLL_TIMEOUT_US(rate);
- 
- 	/* Poll for sensor readiness; base the timeout upon the sample rate. */
--	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
--				      ready & DPS310_PRS_RDY,
--				      DPS310_POLL_SLEEP_US(timeout), timeout);
-+	rc = dps310_ready(data, DPS310_PRS_RDY, timeout);
- 	if (rc)
- 		goto done;
- 
-@@ -448,7 +509,6 @@ static int dps310_read_temp_raw(struct dps310_data *data)
- {
- 	int rc;
- 	int rate;
--	int ready;
- 	int timeout;
- 
- 	if (mutex_lock_interruptible(&data->lock))
-@@ -458,10 +518,8 @@ static int dps310_read_temp_raw(struct dps310_data *data)
- 	timeout = DPS310_POLL_TIMEOUT_US(rate);
- 
- 	/* Poll for sensor readiness; base the timeout upon the sample rate. */
--	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
--				      ready & DPS310_TMP_RDY,
--				      DPS310_POLL_SLEEP_US(timeout), timeout);
--	if (rc < 0)
-+	rc = dps310_ready(data, DPS310_TMP_RDY, timeout);
-+	if (rc)
- 		goto done;
- 
- 	rc = dps310_read_temp_ready(data);
-@@ -756,7 +814,7 @@ static void dps310_reset(void *action_data)
- {
- 	struct dps310_data *data = action_data;
- 
--	regmap_write(data->regmap, DPS310_RESET, DPS310_RESET_MAGIC);
-+	dps310_reset_wait(data);
- }
- 
- static const struct regmap_config dps310_regmap_config = {
+Otherwise this dragon keeps resurrecting ...
+
+VM_SPECIAL _will_ block get_user_pages, which will block everyone from
+even trying to refcount this stuff.
+
+Minimally we need to fix this for all ttm drivers, and it sounds like
+that's still not yet the case :-( Iirc last time around some funky amdkfd
+userspace was the hold-up because regressions?
+-Daniel
+
+> 
+> It seems ot be a recurring amount of fun that people try to mmap dma-buf
+> and then call get_user_pages on them.
+> 
+> Which just doesn't work. I guess this is also why Rob Clark send out that
+> dma-buf patch to expos mapping information (i.e. wc vs wb vs uncached).
+> 
+> There seems to be some serious bonghits going on :-/
+> -Daniel
+> 
+> > 
+> > Regards,
+> > Christian.
+> > 
+> > > 
+> > > Cc: stable@vger.kernel.org
+> > > Cc: Trigger Huang <Trigger.Huang@gmail.com>
+> > > Link: https://www.collabora.com/news-and-blog/blog/2021/11/26/venus-on-qemu-enabling-new-virtual-vulkan-driver/#qcom1343
+> > > Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # AMDGPU (Qemu and crosvm)
+> > > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> > > ---
+> > >   drivers/gpu/drm/ttm/ttm_pool.c | 25 ++++++++++++++++++++++++-
+> > >   1 file changed, 24 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/ttm/ttm_pool.c b/drivers/gpu/drm/ttm/ttm_pool.c
+> > > index 21b61631f73a..11e92bb149c9 100644
+> > > --- a/drivers/gpu/drm/ttm/ttm_pool.c
+> > > +++ b/drivers/gpu/drm/ttm/ttm_pool.c
+> > > @@ -81,6 +81,7 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+> > >   	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
+> > >   	struct ttm_pool_dma *dma;
+> > >   	struct page *p;
+> > > +	unsigned int i;
+> > >   	void *vaddr;
+> > >   	/* Don't set the __GFP_COMP flag for higher order allocations.
+> > > @@ -93,8 +94,10 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+> > >   	if (!pool->use_dma_alloc) {
+> > >   		p = alloc_pages(gfp_flags, order);
+> > > -		if (p)
+> > > +		if (p) {
+> > >   			p->private = order;
+> > > +			goto ref_tail_pages;
+> > > +		}
+> > >   		return p;
+> > >   	}
+> > > @@ -120,6 +123,23 @@ static struct page *ttm_pool_alloc_page(struct ttm_pool *pool, gfp_t gfp_flags,
+> > >   	dma->vaddr = (unsigned long)vaddr | order;
+> > >   	p->private = (unsigned long)dma;
+> > > +
+> > > +ref_tail_pages:
+> > > +	/*
+> > > +	 * KVM requires mapped tail pages to be refcounted because put_page()
+> > > +	 * is invoked on them in the end of the page fault handling, and thus,
+> > > +	 * tail pages need to be protected from the premature releasing.
+> > > +	 * In fact, KVM page fault handler refuses to map tail pages to guest
+> > > +	 * if they aren't refcounted because hva_to_pfn_remapped() checks the
+> > > +	 * refcount specifically for this case.
+> > > +	 *
+> > > +	 * In particular, unreferenced tail pages result in a KVM "Bad address"
+> > > +	 * failure for VMMs that use VirtIO-GPU when guest's Mesa VirGL driver
+> > > +	 * accesses mapped host TTM buffer that contains tail pages.
+> > > +	 */
+> > > +	for (i = 1; i < 1 << order; i++)
+> > > +		page_ref_inc(p + i);
+> > > +
+> > >   	return p;
+> > >   error_free:
+> > > @@ -133,6 +153,7 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
+> > >   {
+> > >   	unsigned long attr = DMA_ATTR_FORCE_CONTIGUOUS;
+> > >   	struct ttm_pool_dma *dma;
+> > > +	unsigned int i;
+> > >   	void *vaddr;
+> > >   #ifdef CONFIG_X86
+> > > @@ -142,6 +163,8 @@ static void ttm_pool_free_page(struct ttm_pool *pool, enum ttm_caching caching,
+> > >   	if (caching != ttm_cached && !PageHighMem(p))
+> > >   		set_pages_wb(p, 1 << order);
+> > >   #endif
+> > > +	for (i = 1; i < 1 << order; i++)
+> > > +		page_ref_dec(p + i);
+> > >   	if (!pool || !pool->use_dma_alloc) {
+> > >   		__free_pages(p, order);
+> > 
+> 
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
+
 -- 
-2.31.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

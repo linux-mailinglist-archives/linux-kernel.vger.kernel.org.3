@@ -2,80 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E865AF09D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406F15AF0AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbiIFQhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S238543AbiIFQiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238870AbiIFQgn (ORCPT
+        with ESMTP id S238511AbiIFQht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:36:43 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315F512D11
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:12:55 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id z23so12879578ljk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/Nx3mH5ct9QYpoBU00B/ScU7zjA9VoC62pYJpkPSb+0=;
-        b=C8cZQFXaa61yU4SrHQ+z2RUREsINQPfpjDxOHnk9rDEOvRE3ock2QmxnK8YSiG4XuP
-         WNXQuL7nBdyL9sxZS7FPupijVONMx0NGze/N5GrovdbyBAJHPiFipLDSN9w3N6Y3nwOc
-         FRp/kBBArbTAJ8Rqn+kzx/1qWM6GZDj3Yz10PFXfMV/B2045cCqeOxu04on9ZcM6y5l8
-         mfy6wqW65WQZC7t2vKoiCqt8ym4b/CgyCvQGcdRVWWevj1eSWdKT9me/9OjA/LtHlZPX
-         GOM1TRi1AqIVurh+LkerPnooW2qA9NpriY/2CossgrhArmaXCMUih8WDEHAiOo+UNqez
-         ZXtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/Nx3mH5ct9QYpoBU00B/ScU7zjA9VoC62pYJpkPSb+0=;
-        b=5AVOpCXQNVx2rLCvHmFnYFHJklRINMHq18eOkUAHbjkp4r9g5c+zmTZj5LTrGLAueH
-         nvgAd+JLf+lczsD/ajIMfN4h8A/k9wtmmhi2wPDP6TrLOhl7d4E/x2SUFDUIyzfbem5Y
-         8h+2yAznHe30gfeYYGWRs8MWG44/lAFup/ygsNa0GMr81h8bdC0MvPjr90FmVPmvqbC+
-         VoCdv5yxbkGOCxYhSi7xljvPOE5UFEuylrsRMTsxv6ZC4l0etj1UUFW91byX1Hflwc9w
-         VIHAOgmGsiCxFZGRXaUT0f3SKxP4AtIWOF56+NSSenBzHBdh0j0wvmxP5i1ytmia2+x3
-         C/OQ==
-X-Gm-Message-State: ACgBeo3OjJePX8AuhczCmhYP3E+THI2s2fTR0j/MzokMRJxneJe2T+/6
-        AxZ2eyNwaH8zQP40tB9IFwZHzQ==
-X-Google-Smtp-Source: AA6agR4EaFe2XbhpwW6/C+wSaaX2AYP7xlORVBSPVXTkkJdhAk0LJl4qlI6kcu6z2cuYCEJOuzzoCQ==
-X-Received: by 2002:a2e:83c9:0:b0:24d:a95d:7b7a with SMTP id s9-20020a2e83c9000000b0024da95d7b7amr16140667ljh.254.1662480773537;
-        Tue, 06 Sep 2022 09:12:53 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id e1-20020a196901000000b004947555dbc2sm1819378lfc.100.2022.09.06.09.12.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 09:12:53 -0700 (PDT)
-Message-ID: <67657fa4-4b15-da4c-db3a-907b2a5b6d92@linaro.org>
-Date:   Tue, 6 Sep 2022 18:12:51 +0200
+        Tue, 6 Sep 2022 12:37:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDE11EC5F;
+        Tue,  6 Sep 2022 09:14:41 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286CWWUb026293;
+        Tue, 6 Sep 2022 16:14:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=h5BgBKL+F8wAqWSvAJ0pDMx/YCeZeVPg3n3Av6WFlcs=;
+ b=eUp0Rr4sZXWW6JYC7UA8x+MfLtNMmJkOoU6N83vDH8rU7PCuA/71S2zpInvVlDDOKagB
+ KakyrFxCSaBuph6TZfZW5j0/abmUP/L1ld4hSSe+07kpnjQcb0L5JcrczLz1MmYPFC7m
+ fg83nDu0H2luP4lz7WOA/X2nscsBY9O1FyMDTEfROx/KG6W1RFu85A+0F34KRTtoC2Jc
+ UpaLDcIJJEN2YJqvg1aFjvjMbbDzJsn5rx/c0tzGiRyszQ/6HXS0Imesns9UuJw4Cwqa
+ lRnkVUuAASRgEcXlJxVfF7oZBoYz0/zayD0wFkKe54bC6l7e5IDH8fSPkWlu0KIPw8A2 lg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jdusrjr36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 16:14:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 286GERi1002600
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Sep 2022 16:14:27 GMT
+Received: from [10.216.11.219] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 6 Sep 2022
+ 09:14:21 -0700
+Message-ID: <e61dc3f2-7c56-2474-fdaf-f0ad0337d67a@quicinc.com>
+Date:   Tue, 6 Sep 2022 21:44:17 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v11] dt-bindings: misc: fastrpc convert bindings to yaml
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v12 0/3] Add QCOM SNPS PHY overriding params support
 Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, David Heidelberg <david@ixit.cz>
-References: <20220906150102.3399115-1-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220906150102.3399115-1-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
+References: <1662480729-10187-1-git-send-email-quic_kriskura@quicinc.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <1662480729-10187-1-git-send-email-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: y9mUZDpt0vE_JVAKigAvO8uCIXkGj54w
+X-Proofpoint-ORIG-GUID: y9mUZDpt0vE_JVAKigAvO8uCIXkGj54w
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=769 malwarescore=0 suspectscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060076
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,49 +92,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 17:01, Abel Vesa wrote:
-> Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
-> dt-entries correctly and any future additions can go into yaml format.
+
+
+On 9/6/2022 9:42 PM, Krishna Kurapati wrote:
+> Added support for overriding tuning parameters in QCOM SNPS PHY
+> from device tree. This parameter tuning is required to tune the
+> hs signal on dp/dm lines for electrical compliance to be successful.
 > 
+> Changes in v12:
+> Fixed nitpicks in driver code.
+> 
+> Changes in v11:
+> Made changes to logs added in phy driver.
+> Fixed nitpicks in code.
+> 
+> Changes in v10:
+> Fixed patch headers.
+> 
+> changes in v9:
+> Fixed nitpick in driver code.
+> 
+> changes in v8:
+> Fixed nitpick in driver code.
+> 
+> changes in v7:
+> Fixed nitpick in driver code and dtsi file.
+> 
+> changes in v6:
+> Fixed errors in dt-bindings.
+> Fixed nitpick in driver code.
+> 
+> changes in v5:
+> Fixed nitpicks in code.
+> Added minimum and maximum for each parameter added in dt-bindings.
+> Added proper suffixes to each parameter as per dtschema.
+> 
+> changes in v4:
+> Fixed nitpicks in code.
+> Initial compliance test results showed overshoot in the middle of eye
+> diagram. The current dt values were put in place to correct it and fix
+> overshoot issue.
+> 
+> changes in v3:
+> Added support for phy tuning parameters to be represented in bps and
+> corresponding register values to be written are obtained by traversing
+> through data map declared in the driver.
+> 
+> changes in v2:
+> Reading the individual fields in each overriding register from
+> device tree.
+> 
+> Krishna Kurapati (2):
+>    phy: qcom-snps: Add support for overriding phy tuning parameters
+>    arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
+> 
+> Sandeep Maheswaram (1):
+>    dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params
+>      bindings
+> 
+>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml       |  88 +++++++
+>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   6 +
+>   drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c      | 252 ++++++++++++++++++++-
+>   3 files changed, 344 insertions(+), 2 deletions(-)
+> 
+Hi All,
 
-Thank you for your patch. There is something to discuss/improve.
+  Please ignore this series. Re-sent v12 instead of v13.
+Sorry for the inconvenience.
 
-> +
-> +patternProperties:
-> +  "(compute-)?cb@[0-9]*$":
-> +    type: object
-> +
-> +    description: >
-> +      Each subnode of the Fastrpc represents compute context banks available on the dsp.
-> +
-> +    properties:
-> +      compatible:
-> +        const: qcom,fastrpc-compute-cb
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      qcom,nsession:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        default: 1
-> +        description: >
-> +          A value indicating how many sessions can share this context bank.
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-
-I think this was pointed previously by Rob in v4 - you need here
-additionalProperties: false (on that level of indentation).
-
-> +
-> +required:
-> +  - compatible
-> +  - label
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-
-
-Best regards,
-Krzysztof
+Regards,
+Krishna,

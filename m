@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1575AEAE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75895AE9ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238815AbiIFNut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
+        id S240467AbiIFNfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233845AbiIFNs1 (ORCPT
+        with ESMTP id S240617AbiIFNeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:48:27 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8FA7F27D;
-        Tue,  6 Sep 2022 06:39:17 -0700 (PDT)
+        Tue, 6 Sep 2022 09:34:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD2D79A50;
+        Tue,  6 Sep 2022 06:33:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 98E11CE1780;
-        Tue,  6 Sep 2022 13:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA4EC433D7;
-        Tue,  6 Sep 2022 13:38:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBC16B816A0;
+        Tue,  6 Sep 2022 13:33:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E406C433D6;
+        Tue,  6 Sep 2022 13:33:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471503;
-        bh=Zk48IUKtQINSipB806vFhlCrnAEYhLzY44m4JbLhUNs=;
+        s=korg; t=1662471203;
+        bh=KInf7nXmZCQz9nRyt3phsKM3hc7mqdIKeVR71CKLHwg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QK0thbc/mNB79dn6HfQ2YoRxFUNQbf+eLye4USFCoA2panTlA9V8sFxS7EUJ/bip9
-         39Hms+r0YWhtIQ3vpN32BugWQmtR/AsMne4eQdgKEheURD9DefeUnZ+HGDll5wje55
-         orLgzsfNu1o1AGTXl5ywkKcx2L5241PAjIeV3xMM=
+        b=qVrfV0Jb2VgJKc+t7juSfvDAniJcgdOW+2Wzi9yeL5UC5IQCBgAodBAI7GaxclFmc
+         NoHN0j7LigxOjCO1i0vCTdWKzCWd8a9sDX6D/Uoan5Pt6nf/HBn1rgE1RO1pk5EOMG
+         tE7XM/RBJYaaap48z9nKdHkaFweRIHqeZeHwvjhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Enzo Matsumiya <ematsumiya@suse.de>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 048/107] cifs: fix small mempool leak in SMB2_negotiate()
-Date:   Tue,  6 Sep 2022 15:30:29 +0200
-Message-Id: <20220906132823.873166010@linuxfoundation.org>
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 33/80] drm/i915/reg: Fix spelling mistake "Unsupport" -> "Unsupported"
+Date:   Tue,  6 Sep 2022 15:30:30 +0200
+Message-Id: <20220906132818.357402519@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
+References: <20220906132816.936069583@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enzo Matsumiya <ematsumiya@suse.de>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-commit 27893dfc1285f80f80f46b3b8c95f5d15d2e66d0 upstream.
+[ Upstream commit 233f56745be446b289edac2ba8184c09365c005e ]
 
-In some cases of failure (dialect mismatches) in SMB2_negotiate(), after
-the request is sent, the checks would return -EIO when they should be
-rather setting rc = -EIO and jumping to neg_exit to free the response
-buffer from mempool.
+There is a spelling mistake in a gvt_vgpu_err error message. Fix it.
 
-Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
-Cc: stable@vger.kernel.org
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 695fbc08d80f ("drm/i915/gvt: replace the gvt_err with gvt_vgpu_err")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
+Link: http://patchwork.freedesktop.org/patch/msgid/20220315202449.2952845-1-colin.i.king@gmail.com
+Reviewed-by: Zhi Wang <zhi.a.wang@intel.com>
+Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/i915/gvt/handlers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -933,16 +933,17 @@ SMB2_negotiate(const unsigned int xid, s
- 	} else if (rc != 0)
- 		goto neg_exit;
- 
-+	rc = -EIO;
- 	if (strcmp(server->vals->version_string,
- 		   SMB3ANY_VERSION_STRING) == 0) {
- 		if (rsp->DialectRevision == cpu_to_le16(SMB20_PROT_ID)) {
- 			cifs_server_dbg(VFS,
- 				"SMB2 dialect returned but not requested\n");
--			return -EIO;
-+			goto neg_exit;
- 		} else if (rsp->DialectRevision == cpu_to_le16(SMB21_PROT_ID)) {
- 			cifs_server_dbg(VFS,
- 				"SMB2.1 dialect returned but not requested\n");
--			return -EIO;
-+			goto neg_exit;
- 		} else if (rsp->DialectRevision == cpu_to_le16(SMB311_PROT_ID)) {
- 			/* ops set to 3.0 by default for default so update */
- 			server->ops = &smb311_operations;
-@@ -953,7 +954,7 @@ SMB2_negotiate(const unsigned int xid, s
- 		if (rsp->DialectRevision == cpu_to_le16(SMB20_PROT_ID)) {
- 			cifs_server_dbg(VFS,
- 				"SMB2 dialect returned but not requested\n");
--			return -EIO;
-+			goto neg_exit;
- 		} else if (rsp->DialectRevision == cpu_to_le16(SMB21_PROT_ID)) {
- 			/* ops set to 3.0 by default for default so update */
- 			server->ops = &smb21_operations;
-@@ -967,7 +968,7 @@ SMB2_negotiate(const unsigned int xid, s
- 		/* if requested single dialect ensure returned dialect matched */
- 		cifs_server_dbg(VFS, "Invalid 0x%x dialect returned: not requested\n",
- 				le16_to_cpu(rsp->DialectRevision));
--		return -EIO;
-+		goto neg_exit;
- 	}
- 
- 	cifs_dbg(FYI, "mode 0x%x\n", rsp->SecurityMode);
-@@ -985,9 +986,10 @@ SMB2_negotiate(const unsigned int xid, s
+diff --git a/drivers/gpu/drm/i915/gvt/handlers.c b/drivers/gpu/drm/i915/gvt/handlers.c
+index 0b1ea29dcffac..606e6c315fe24 100644
+--- a/drivers/gpu/drm/i915/gvt/handlers.c
++++ b/drivers/gpu/drm/i915/gvt/handlers.c
+@@ -660,7 +660,7 @@ static int update_fdi_rx_iir_status(struct intel_vgpu *vgpu,
+ 	else if (FDI_RX_IMR_TO_PIPE(offset) != INVALID_INDEX)
+ 		index = FDI_RX_IMR_TO_PIPE(offset);
  	else {
- 		cifs_server_dbg(VFS, "Invalid dialect returned by server 0x%x\n",
- 				le16_to_cpu(rsp->DialectRevision));
--		rc = -EIO;
- 		goto neg_exit;
+-		gvt_vgpu_err("Unsupport registers %x\n", offset);
++		gvt_vgpu_err("Unsupported registers %x\n", offset);
+ 		return -EINVAL;
  	}
-+
-+	rc = 0;
- 	server->dialect = le16_to_cpu(rsp->DialectRevision);
  
- 	/*
+-- 
+2.35.1
+
 
 

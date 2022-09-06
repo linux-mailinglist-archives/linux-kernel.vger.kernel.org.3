@@ -2,121 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3215AE476
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E595AE486
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbiIFJku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S239405AbiIFJlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239445AbiIFJkk (ORCPT
+        with ESMTP id S233630AbiIFJle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:40:40 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E846715C;
-        Tue,  6 Sep 2022 02:40:37 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id bn9so11635537ljb.6;
-        Tue, 06 Sep 2022 02:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=0+DYhezzLoWJqNIc57WnwGVIa9MiDZ24BuWYzD1fu+E=;
-        b=QfhVfLE7cbyCLEVbhkK2byK+qK6mOOuYXbIjS4LmizJCcEOX7fqAR2ogsRIGL4C9Nv
-         o3mDYc04W7CshfYS9DFquBLGiOA2RTwXckd5CbDmOqRWoRs9SJcvqHmr3zj22Blermkr
-         6viFYSYUaZr8sey5m+vPz4QiFoZbddss0ecdvyrnggDuZi6l2QUQ0tIaTGriGRIlWQfL
-         wFNErzbCFDFn34fQTHHAjvREuryKHoopG3gH8H0v3OB12Yetzmrq1LRCZRoO79H6V2CE
-         hUFk9S5pbZX7ku+XGhSAXuc1b4Zg4f7LEc0Y52mcDFgoMVBhOACez1yLlFfyyaVp9sT9
-         nVYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0+DYhezzLoWJqNIc57WnwGVIa9MiDZ24BuWYzD1fu+E=;
-        b=Fwbur+mvJZFBPe5UVWy4DTGuVucIhQLobobEaTDRNZO8McRIdr8gQg41870U9L4D2S
-         WMZr5HHPgUWHYB8T1RrX5qccfYdiyAzinrf6XYIgqm08sg0jtx9oJHp80JAYQoK3u/x2
-         V6BsQ+KXQX1AdHQPwCsKmlcjdP3gRppNAph6LnDu4VaCWqH2qBGXccjbg6N72ibQP7Y0
-         i1w25CNyWoSvhZElHkCQuo9IZxNrE6hoG0j4LBkpDybu+rRp7vmw3Kyw/XF5xY9a+jVp
-         /UNv7mMFwElcyak8E/AyqAEmBelNglTS1Whoen8CoXatiwdBQDOPoqb/rol682i9C9LA
-         D9ZA==
-X-Gm-Message-State: ACgBeo3ElMXRNUM7NwCyGnKl52d7Stk1pHTP02m7F100L0M1gFiM6xyP
-        X6COK9lfJOVosrV/Okr8RppEGW+oQoZNtNqpUFU=
-X-Google-Smtp-Source: AA6agR5YuY4SFg1XgmCZPq4Aud7zXbg+NlWVbVfhM+/2UuQ+H7lRm8h/SYVKor0DYHsA7gDwIc3iFXSEq5/j7dw6ifY=
-X-Received: by 2002:a2e:9d94:0:b0:263:c964:4970 with SMTP id
- c20-20020a2e9d94000000b00263c9644970mr12003839ljj.345.1662457235608; Tue, 06
- Sep 2022 02:40:35 -0700 (PDT)
+        Tue, 6 Sep 2022 05:41:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F427538A;
+        Tue,  6 Sep 2022 02:41:32 -0700 (PDT)
+Date:   Tue, 06 Sep 2022 09:41:29 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1662457290;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=74OyvidmN9+oi6pdkOajSJGHunp0IvnXC2FF+xQ1V8I=;
+        b=devkIU7P+LJEyMAXIb2M/BNCvPF4o1MSQHpfTk+o/q8F0enK7NQKjtoK7AWZMtUHQyicwe
+        rMFRnh417jAB/B+VDwjH89s31jfVn5VVrF/FiCvrfWQWxhapzN6bOYnI8X6DI29R1NJ3Ki
+        5kEHour8rhtPxULkw/fL/Y02jq1MoJPE0c2Z4i5qsvYGr3yGO4Uyni/VmdhqbH3jK54tA9
+        ob8psWooFUcELvlcNgWJkS7RyDUPJn3pKoD3BtwKhmMaN4iuqWJAa508wjvnte64y7PPao
+        A6hf8H9BDOF4UHoaOQyMDLfodAndoRP32RHf+u+HnpDRAdFtVW91WkNPF0rwXA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1662457290;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=74OyvidmN9+oi6pdkOajSJGHunp0IvnXC2FF+xQ1V8I=;
+        b=asrjzbLAlFwakZ2vYnY+GFzUdXc8v9A+IDE5vsHFw+E+FMmql4KBB2d2VZxVyK9D6Kokhn
+        wri1A1mI8UEF5WCw==
+From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf: Use sample_flags for txn
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220901130959.1285717-7-kan.liang@linux.intel.com>
+References: <20220901130959.1285717-7-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-References: <CABwm_eTnARC1GwMD-JF176k8WXU1Z0+H190mvXn61yr369qt6g@mail.gmail.com>
- <YwfYyLE3ajSFVHGQ@kernel.org> <CABwm_eSvcnygceTU0sNXLkBFaNfEfrThFVmwH=TS4hN=HVGrGg@mail.gmail.com>
- <CAM9d7cjsbhHnaAiHSBb6qAfH0bNgdKrBHdg16esRCt+4DPmvtQ@mail.gmail.com>
-In-Reply-To: <CAM9d7cjsbhHnaAiHSBb6qAfH0bNgdKrBHdg16esRCt+4DPmvtQ@mail.gmail.com>
-From:   Zixuan Tan <tanzixuan.me@gmail.com>
-Date:   Tue, 6 Sep 2022 17:40:24 +0800
-Message-ID: <CABwm_eT=BHQB=ELEWTZtXG61WyYVqQfp+gy85aD3xMRycKtLwA@mail.gmail.com>
-Subject: Re: [PATCH] perf/genelf: Switch deprecated openssl MD5_* functions to
- new EVP API
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166245728904.401.8050095818158375126.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo, are there any updates?
+The following commit has been merged into the perf/core branch of tip:
 
-Thanks,
-- Zixuan
+Commit-ID:     ee9db0e14b0575aa827579dc2471a29ec5fc6877
+Gitweb:        https://git.kernel.org/tip/ee9db0e14b0575aa827579dc2471a29ec5fc6877
+Author:        Kan Liang <kan.liang@linux.intel.com>
+AuthorDate:    Thu, 01 Sep 2022 06:09:59 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 06 Sep 2022 11:33:03 +02:00
 
-On Sat, Aug 27, 2022 at 2:32 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hello,
->
-> On Fri, Aug 26, 2022 at 10:22 AM Zixuan Tan <tanzixuan.me@gmail.com> wrote:
-> >
-> > On Fri, Aug 26, 2022 at 4:17 AM Arnaldo Carvalho de Melo
-> > <arnaldo.melo@gmail.com> wrote:
-> > >
-> > > Em Fri, Aug 26, 2022 at 01:00:58AM +0800, Zixuan Tan escreveu:
-> > > > Switch to the flavored EVP API like in test-libcrypto.c, and remove the
-> > > > bad gcc #pragma.
-> > > >
-> > > > Inspired-By: 5b245985a6de ("tools build: Switch to new openssl API for
-> > > > test-libcrypto")
-> > >
-> > > How did you test the end result? Can you please describe step by step?
-> > >
-> > > Also please consider adding a 'perf test' entry to make sure this
-> > > doesn't regress.
-> >
-> > Sorry but I don't get what you mean, what results do I need to test?
-> >
-> > These EVP_* APIs are just replacements for the deprecated MD5_* APIs in
-> > openssl v3 [1][2]. With the same input, they produce the same MD5 digest.
-> >
-> > And this patch just does the migration work for the upgrade and does not
-> > change the logic of the code. so...what should I test?
->
-> Yeah, I understand that this merely changes the MD5 APIs.
-> While it's good to have a test case for the genelf code, I don't think
-> it belongs to this patch.  So,
->
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
->
->
-> >
-> > Links:
-> > [1] https://www.openssl.org/docs/man3.0/man3/MD5.html
-> > [2] https://stackoverflow.com/questions/69806220/advice-needed-for-migration-of-low-level-openssl-api-to-high-level-openssl-apis
+perf: Use sample_flags for txn
+
+Use the new sample_flags to indicate whether the txn field is filled by
+the PMU driver.
+
+Remove the txn field from the perf_sample_data_init() to minimize the
+number of cache lines touched.
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220901130959.1285717-7-kan.liang@linux.intel.com
+---
+ arch/x86/events/intel/ds.c | 8 ++++++--
+ include/linux/perf_event.h | 3 +--
+ kernel/events/core.c       | 3 +++
+ 3 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index bde73d4..a5275c2 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1628,9 +1628,11 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
+ 			data->weight.full = intel_get_tsx_weight(pebs->tsx_tuning);
+ 			data->sample_flags |= PERF_SAMPLE_WEIGHT_TYPE;
+ 		}
+-		if (sample_type & PERF_SAMPLE_TRANSACTION)
++		if (sample_type & PERF_SAMPLE_TRANSACTION) {
+ 			data->txn = intel_get_tsx_transaction(pebs->tsx_tuning,
+ 							      pebs->ax);
++			data->sample_flags |= PERF_SAMPLE_TRANSACTION;
++		}
+ 	}
+ 
+ 	/*
+@@ -1780,9 +1782,11 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
+ 		if (sample_type & PERF_SAMPLE_ADDR_TYPE)
+ 			data->addr = meminfo->address;
+ 
+-		if (sample_type & PERF_SAMPLE_TRANSACTION)
++		if (sample_type & PERF_SAMPLE_TRANSACTION) {
+ 			data->txn = intel_get_tsx_transaction(meminfo->tsx_tuning,
+ 							  gprs ? gprs->ax : 0);
++			data->sample_flags |= PERF_SAMPLE_TRANSACTION;
++		}
+ 	}
+ 
+ 	if (format_size & PEBS_DATACFG_XMMS) {
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 6849f10..581880d 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1012,7 +1012,6 @@ struct perf_sample_data {
+ 	u64				addr;
+ 	struct perf_raw_record		*raw;
+ 	u64				period;
+-	u64				txn;
+ 
+ 	/*
+ 	 * The other fields, optionally {set,used} by
+@@ -1021,6 +1020,7 @@ struct perf_sample_data {
+ 	struct perf_branch_stack	*br_stack;
+ 	union perf_sample_weight	weight;
+ 	union  perf_mem_data_src	data_src;
++	u64				txn;
+ 
+ 	u64				type;
+ 	u64				ip;
+@@ -1063,7 +1063,6 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
+ 	data->addr = addr;
+ 	data->raw  = NULL;
+ 	data->period = period;
+-	data->txn = 0;
+ }
+ 
+ /*
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 163e2f4..15d27b1 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7414,6 +7414,9 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 	if (filtered_sample_type & PERF_SAMPLE_DATA_SRC)
+ 		data->data_src.val = PERF_MEM_NA;
+ 
++	if (filtered_sample_type & PERF_SAMPLE_TRANSACTION)
++		data->txn = 0;
++
+ 	if (sample_type & PERF_SAMPLE_REGS_INTR) {
+ 		/* regs dump ABI info */
+ 		int size = sizeof(u64);

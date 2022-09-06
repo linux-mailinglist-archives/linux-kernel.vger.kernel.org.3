@@ -2,263 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468B75AE5B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93185AE5D2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbiIFKpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S239863AbiIFKrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239616AbiIFKpL (ORCPT
+        with ESMTP id S239827AbiIFKqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:45:11 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::61f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DC077EAE;
-        Tue,  6 Sep 2022 03:44:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q3e2eE3+/4voLVQLcLn4EqenBlUemW5iiuCsWHKqVhvXk6Mb4165paJF2uPDbX7b0teNj3Tc+USdOTYW7M8TG/Pt6bk/azh8K+k7M9CAuIO6n6GcY7V6Us617yo9U8ig+9XdHhlGZuMa6fWG8GTTbv2A//yUkV7B7WE2YAMo9A2TL3bMUCLdQuPM1FxB/SkqE2lbyfExEvm38WK8uDnBv3HIgu7DJkre4tEOOnpdBjIjE4/iGrIASvTjDm9PskFNOzxYTunoMb8CjTB1eBFIYHDXke4oQtWh2nccAhJl7L3pQcZ0/v0XlPLfvy88rjTGAr2NNHB49KK7XCpxe/oKiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OOTc2P3N3Pe8q2hLkBPf4R8v07rUra1C+ryagE8qmX0=;
- b=DaVWVhzcNsL8azscS6m1aW3/JYD4wHnFYOewRYSgvXBdhIUrriirKyVRZgYfQEM5F6gI0ztXUZeSH/Jh9cWXeQ0AgAexW7yUsrPZ35+uvEqkun/1Qgu1mwXBDR5IxUC6g9wVwku552Sqsgo8qjk0YXI/Nm0yP26bU++eE3oudZ+4iunx8Qfztm89MMnOadkxtztx4jcnq9u5TNNIZWJ9XpBzX45zqqlGb/M6/Kf0CpLUrJGTq1Wo7Voi3uKd6CDBsLrMg+d9LlRJBr9770leSoGO9Y4pEVZGl/RVvbN3ziue8lJOghylyNnV+OxWgWj50COb+P2V+wJWFmY6EWr4uw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OOTc2P3N3Pe8q2hLkBPf4R8v07rUra1C+ryagE8qmX0=;
- b=mMQ790rUoRUt0j4msDzy2vKA4HXZTMXCSOZhx3UaIWlyAYWeGFyOdsZRxmUbKNifEgiewgdh+J8UYKIx3JBOhRG1lxwNxNWI0ISps7p6tEf3qyLK4760wi5QuT2rBu3A6U8aoCVFvjtDLzuVbFZdxCeaFylMghe8y+Hdlt9oM4w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
- by SA0PR12MB4541.namprd12.prod.outlook.com (2603:10b6:806:9e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
- 2022 10:43:47 +0000
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::a997:c7f:aea0:764a]) by BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::a997:c7f:aea0:764a%4]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
- 10:43:47 +0000
-Message-ID: <de799b93-1b55-c420-61d9-ad8fa926c7d2@amd.com>
-Date:   Tue, 6 Sep 2022 12:43:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 4/4] dma-buf: Check status of enable-signaling bit on
- debug
-Content-Language: en-US
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220905163502.4032-1-Arvind.Yadav@amd.com>
- <20220905163502.4032-5-Arvind.Yadav@amd.com>
- <f2e1367f-b056-b2af-365c-8ae4ef03f008@amd.com>
- <ec41b299-4280-d8e4-7ab0-23b5ea6ad401@linux.intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <ec41b299-4280-d8e4-7ab0-23b5ea6ad401@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM5PR0301CA0032.eurprd03.prod.outlook.com
- (2603:10a6:206:14::45) To BYAPR12MB3589.namprd12.prod.outlook.com
- (2603:10b6:a03:df::29)
+        Tue, 6 Sep 2022 06:46:32 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E8B7B7A7;
+        Tue,  6 Sep 2022 03:45:23 -0700 (PDT)
+Received: from pyrite.rasen.tech (h175-177-042-159.catv02.itscom.jp [175.177.42.159])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1839425B;
+        Tue,  6 Sep 2022 12:44:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662461102;
+        bh=BsC/oYZMlsU0AfsdsrR9QSz2oK4VIzDllo5FeG24Gr4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YSpBUFbsYKtRJgJCOHldFTmoGOA3QaSUl28vxA1uT3F7eTXuuVoBYAh/jWVuImJux
+         F5Ko9VPNesLXMs7UAowUvglpjWyJZ/Z7a4OOMsxd7Oxp5zU0Fu7c9FYiN8IEVgmGFG
+         m5rvbmP69kqcwAuCOZmQt0XaIz18IwVmqR22swsk=
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-media@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: imx7-media-csi: Add support for fast-tracking queued buffers
+Date:   Tue,  6 Sep 2022 19:44:37 +0900
+Message-Id: <20220906104437.4095745-1-paul.elder@ideasonboard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1419fc62-b0df-4785-6677-08da8ff4ad6d
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4541:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a1xx2BKvWSTY3tsl9kcvDeL9BWsBIMjl/6PZkqqI1MOy8NQuHsPSA4GMVzmKQJTzdsNiJ5X+pvAk7p6UdkMoicqwds2pMzrBiaap+qbl0121ft7TZFSg02RPKjRZv6pxDXGte8QYnT+XwTH5L3ibfXHmP5V92nhRZCGiKVxDEslN9cLxGL7CyboXzeBA+ljAw0OTPAvmI07DYReMnvKIz31xCXX4XN0gpXPD4v4sfWZmMB7IJAU3AYZUULEm6F9rO/ha0r7fvntsV5wyPjWaOGDwHUNmN4405AFE7CkHEd740SSBbAvMezMyPqpRG1XNF1jCtGlGSizqIojuJlCu14oxbjL+iYfAGafSWHfD77F11TF3EsEtomWdUbTaI/9Y9NfOr4rS1OBtakXfsWdVCCB38QHvpy1l0xW6s0R7TnuakpADm1dVJm81CQLFPKAh5P96Xd2gAUdcHw0p2deInL5QdIdBRIEUHCN2TercNtKxqH8ycNeGA1crzgp6Dccpd8Bj3n3Muk+iETjm6kmSuIbTM9D2PS03t3O49eHbPx5J3yDlL2bQqqkLBXRg4QXCjn1NPk4XjFDRF18P/R8XVIzgHuEE7wwXlgnjtVg63dlN0s3z7JiQ33cEnSoDitMjsGo+nvRn2WTjoBb0JbzmpWUVdZJRUvFZYEx8DoCenpwQ/2LxW7Rzu/tU2PJyW5YsCVzMxHoPIka0AutAufBQLZ+2/YokmYiLI1W+JN6tdT6RocLy9HFufNCe9rrGJBToG7v9ItGhMjBHNtSe1jLUjEEDpKoFEpFCd2O3V9aHv2syxe5SAaeig/oKXtaF++fM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(31686004)(186003)(66574015)(110136005)(921005)(83380400001)(316002)(2616005)(2906002)(6486002)(5660300002)(36756003)(6512007)(41300700001)(8936002)(8676002)(53546011)(31696002)(6506007)(38100700002)(66946007)(478600001)(66556008)(86362001)(6666004)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGs4TjJ1Q2VhNSsxQkpDSXJaUllyYmU4M0o4MDNNOWt4LzVpSHcyMUNOVTg3?=
- =?utf-8?B?QmZrOHp4Z1BVaUMzVkpRdkg0WkhDT29CLzdhOStVOG14cERycWlTbjEvcHFR?=
- =?utf-8?B?OVpFOERNSjl5UENWamlnMDZpL0NKV3cvdjgrR1RjWitkcktjbk9kenU4TnZQ?=
- =?utf-8?B?UjRyNWtXS3JVRFhiMzlrMWsvdTZGM09lN1lrSzJZeE5yZ3ZpeWF3UnRrUlJH?=
- =?utf-8?B?My9jOTlvelIyUDJ4R0RsR0RzZjNJS0YyclFIQnp4YXRjckpxSXpNMVkzbVNu?=
- =?utf-8?B?dHEzN3c5YW9VOUllSER6VHJ5Nk9QNC9yeC9MQzhPR3UvNzhEbS9HYnFkNE5X?=
- =?utf-8?B?RTFwZDZRYXZvanF3WkQ3ZE9wTW1iem1jQUg3dkhXaFE4K2ZzbTFHZFJsUTZJ?=
- =?utf-8?B?QTJncmZNSXNsUmZvbTNEazE2Z1ZHSU1haUhLWDg3RklUOWhQQ1ZoUUJVWnFl?=
- =?utf-8?B?VW5qSFJ0WDV6T2JMbUNDYzFUOVJUOUN0UWhMTmIySlJ3RzFBa0J6THoxTHo3?=
- =?utf-8?B?dU1wMmx4SU5yKzZLazNmTW1pU2xjMG1IRXFxcEFxR2V2dm5Sam1yc1U0REEy?=
- =?utf-8?B?MjcycUsvekxEdmhvWndHUmx5OUlpd3hXV3V0ZjNrSG5QVm0zNi9WZTdPNkQw?=
- =?utf-8?B?aC8vUFpVaFRzamZmYVpnOTBVdkwxRTNJaXpVNXNjOFZHaXE2dnRkSEVpcVND?=
- =?utf-8?B?MEQ2azAySzIyQnRGd1VxWFJoeGhVSHR4TkhBSXZ3L2RieGJSemR0UGxwSWlU?=
- =?utf-8?B?N2NXRnFBbG92SmpNdmhZOHk3dmRQTnJ4MzZNZ21uOVY3M2kzNmFFdEJNZlBK?=
- =?utf-8?B?c1BZVU9VOVVHQWlJbHpmV2U4QVNQOUZOcFlUcENJdzZGMzAxcytGRW9yd25P?=
- =?utf-8?B?clBnSnF2V2pxNzdvblc2cWlnUGI4dklacjVDVmdlaGdkaXorU0pJbkpWTTA4?=
- =?utf-8?B?TlZGSk9ZYUl2M0JJcnhIMHhyYUtoaTQvK2FaRHMrZ0c3aDhHcGhMMG90T21h?=
- =?utf-8?B?WUViNlNSTWJsalhORnZDWFRhLzNuUDBFZnMvRjJFeUZGS1l1bEprNEVQWlpX?=
- =?utf-8?B?ZHo0T1ZhaGEydU9OQmh4amFxbGVDakJvNVlYSEZpMGYraXYvREdIbTBTRTBx?=
- =?utf-8?B?RUFYQnpway9ycUVUTUszVjhGRyt4THFQM3hWcW9jRkxRSjdDbFhQMmE0K1RY?=
- =?utf-8?B?eXRFdzV2RnBoNEJHbGpuTVJ6emUvbFNqbjVuWk02aVZrRStqV0FaNFFIeWM3?=
- =?utf-8?B?NDBNV2NwdEFNNkZiNDFid0Riem53TEM1WXFPbW4vOTUzTU9SdWlFSzJhTWFC?=
- =?utf-8?B?ZFh6TGdCOXVEbnpjSWxIR1FCaUQ4VjZJSmxORnVkSDI2L2lUR0w2TlB2WGJm?=
- =?utf-8?B?RjhqZmZ2ZEZBVWJqYk9KaDRTdi80azFscFFCTXdYRHdRR0xYWVB4ZGQ1VkxF?=
- =?utf-8?B?WHB3VEV3bVIwNEd6bjE5ejhzd1VLN09QZERucmpnUVY0U09pQjJYYkZ5N0NG?=
- =?utf-8?B?YStPVTF5T0c2TFZrajBNVHgxRzBiSyt3aEhsYmE5QU9Yd1BDRU1QMkVBYTJ3?=
- =?utf-8?B?cEZqeXJ1WFA4blVqaytKWFpNN2hyRHZ6THNvcGlSWnlYV0xpMDBpelBzM0d1?=
- =?utf-8?B?RnJSK21xMmozOFhlTmcxK0tpVkxNaHQ0Nm5lUERueU10UzJpS1lHdFJBVTJR?=
- =?utf-8?B?SGo0SVlPVlZwR0t1b1FrYjcraHUrRUtWV0xwa01TYVVobjJVY3dRbE1Ya2g0?=
- =?utf-8?B?TE5TNnQvUi9xQlRrdHNLc0J1cUdZQWo5RGJCTng1bGhRT0cwVVphSnJPQkF0?=
- =?utf-8?B?UmRHNk9uRVMyN0FFT3lvWjdtNzZRcmJHYmk2WWV4STV5VXdDS1NwZ1VSbDh5?=
- =?utf-8?B?ZGpITFJYNXhsbVJBUi9jTVNJYlJDZzYwY2dqS2c0RXlRRGN3Y0V5SlpOOXFj?=
- =?utf-8?B?T2c4ZUJPeXhmSjhDbWpGMTl6VENrK3Q0VC9JRklLYmYzQzUyTVNiNy9CeTRU?=
- =?utf-8?B?bHVaSUV0MmozM2JjbUJXZmZLdlN5VnNkOEFWTVAzdWNVczdmdzNNWGxmZ0FR?=
- =?utf-8?B?bU5tWmN0akRWSXFHOEFMK0JoUm1DQ1MyNzgwRk8yK0pwMXkrU0ZWL0RPVHgv?=
- =?utf-8?B?QXNvL2dQTUNDY0hMcEZpcUlPNUJBbDR2dDVNRHQ5UWUxWWlnQmF0NHc4N25V?=
- =?utf-8?Q?DvtuS2bEAYddgOPwSxJUDoQOd4CQhFyK4IqLScvQBOwx?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1419fc62-b0df-4785-6677-08da8ff4ad6d
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 10:43:47.3110
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NW+PcKaEEfxipMF5tDOAHEav1XCUvEqfO60W6YWsUiVUXgQUE+tJhdvZGYLrPse1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4541
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 06.09.22 um 12:20 schrieb Tvrtko Ursulin:
->
-> On 06/09/2022 09:39, Christian König wrote:
->> Am 05.09.22 um 18:35 schrieb Arvind Yadav:
->>> The core DMA-buf framework needs to enable signaling
->>> before the fence is signaled. The core DMA-buf framework
->>> can forget to enable signaling before the fence is signaled.
->>
->> This sentence is a bit confusing. I'm not a native speaker of English 
->> either, but I suggest something like:
->>
->> "Fence signaling must be enable to make sure that the 
->> dma_fence_is_signaled() function ever returns true."
->>
->>> To avoid this scenario on the debug kernel, check the
->>> DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT status bit before checking
->>> the signaling bit status to confirm that enable_signaling
->>> is enabled.
->>
->> This describes the implementation, but we should rather describe the 
->> background of the change. The implementation should be obvious. 
->> Something like this maybe:
->>
->> "
->> Since drivers and implementations sometimes mess this up enforce 
->> correct behavior when DEBUG_WW_MUTEX_SLOWPATH is used during debugging.
->>
->> This should make any implementations bugs resulting in not signaled 
->> fences much more obvious.
->> "
->
-> I think I follow the idea but am not sure coupling (well "coupling".. 
-> not really, but cross-contaminating in a way) dma-fence.c with a 
-> foreign and effectively unrelated concept of a ww mutex is the best way.
->
-> Instead, how about a dma-buf specific debug kconfig option?
+The CSI hardware compatible with this driver handles buffers using a
+ping-pong mechanism with two sets of destination addresses. Normally,
+when an interrupt comes in to signal the completion of one buffer, say
+FB0, it assigns the next buffer in the queue to the next FB0, and the
+hardware starts to capture into FB1 in the meantime.
 
-Yeah, I was thinking about that as well.
+In a buffer underrun situation, in the above example without loss of
+generality, if a new buffer is queued before the interrupt for FB0 comes
+in, we can program the buffer into FB1 (which is programmed with a dummy
+buffer, as there is a buffer underrun).
 
-The slowpath config option was just at hand because when you want to 
-test the slowpath you want to test this here as well.
+This of course races with the interrupt that signals FB0 completion, as
+once that interrupt comes in, we are no longer guaranteed that the
+programming of FB1 was in time and must assume it was too late. This
+race is resolved by locking the programming of FB1. If it came after the
+interrupt for FB0, then the variable that is used to determine which FB
+to program would have been swapped by the interrupt handler, thus
+resolving the race.
 
->
-> Condition would then be, according to my understanding of the rules 
-> and expectations, along the lines of:
->
-> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-> index 775cdc0b4f24..147a9df2c9d0 100644
-> --- a/include/linux/dma-fence.h
-> +++ b/include/linux/dma-fence.h
-> @@ -428,6 +428,17 @@ dma_fence_is_signaled_locked(struct dma_fence 
-> *fence)
->  static inline bool
->  dma_fence_is_signaled(struct dma_fence *fence)
->  {
-> +#ifdef CONFIG_DEBUG_DMAFENCE
-> +       /*
-> +        * Implementations not providing the enable_signaling callback 
-> are
-> +        * required to always have signaling enabled or fences are not
-> +        * guaranteed to ever signal.
-> +        */
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+---
+ drivers/staging/media/imx/imx7-media-csi.c | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-Well that comment is a bit misleading. The intention of the extra check 
-is to find bugs in the frontend and not the backend.
-
-In other words somewhere in the drm_syncobj code we have a 
-dma_fence_is_signaled() call without matching 
-dma_fence_enable_sw_signaling().
-
-Regards,
-Christian.
-
-> + if (!fence->ops->enable_signaling &&
-> +           !test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
-> +               return false;
-> +#endif
-> +
->         if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->                 return true;
->
-> Thoughts?
->
-> Regards,
->
-> Tvrtko
->
->>
->>>
->>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->>
->> With the improved commit message this patch is Reviewed-by: Christian 
->> König <christian.koenig@amd.com>
->>
->> Regards,
->> Christian.
->>
->>> ---
->>>
->>> Changes in v1 :
->>> 1- Addressing Christian's comment to replace
->>> CONFIG_DEBUG_WW_MUTEX_SLOWPATH instead of CONFIG_DEBUG_FS.
->>> 2- As per Christian's comment moving this patch at last so
->>> The version of this patch is also changed and previously
->>> it was [PATCH 1/4]
->>>
->>>
->>> ---
->>>   include/linux/dma-fence.h | 5 +++++
->>>   1 file changed, 5 insertions(+)
->>>
->>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->>> index 775cdc0b4f24..ba1ddc14c5d4 100644
->>> --- a/include/linux/dma-fence.h
->>> +++ b/include/linux/dma-fence.h
->>> @@ -428,6 +428,11 @@ dma_fence_is_signaled_locked(struct dma_fence 
->>> *fence)
->>>   static inline bool
->>>   dma_fence_is_signaled(struct dma_fence *fence)
->>>   {
->>> +#ifdef CONFIG_DEBUG_WW_MUTEX_SLOWPATH
->>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->>> +        return false;
->>> +#endif
->>> +
->>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>>           return true;
->>
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index a0553c24cce4..06e50080ed31 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -1296,11 +1296,60 @@ static int imx7_csi_video_buf_prepare(struct vb2_buffer *vb)
+ 	return 0;
+ }
+ 
++static int imx7_csi_fast_track_buffer(struct imx7_csi *csi,
++				      struct imx7_csi_vb2_buffer *buf)
++{
++	unsigned long flags;
++	dma_addr_t phys;
++	int buf_num;
++	int ret = -EBUSY;
++
++	if (!csi->is_streaming)
++		return ret;
++
++	phys = vb2_dma_contig_plane_dma_addr(&buf->vbuf.vb2_buf, 0);
++
++	/*
++	 * buf_num holds the fb id of the most recently (*not* the next
++	 * anticipated) triggered interrupt. Without loss of generality, if
++	 * buf_num is 0 and we get to this section before the irq for fb1, the
++	 * buffer that we are fast-tracking into fb0 should be programmed in
++	 * time to be captured into. If the irq for fb1 already happened, then
++	 * buf_num would be 1, and we would fast-track the buffer into fb1
++	 * instead. This guarantees that we won't try to fast-track into fb0
++	 * and race against the start-of-capture into fb0.
++	 *
++	 * We only fast-track the buffer if the currently programmed buffer is
++	 * a dummy buffer. We can check the active_vb2_buf instead as it is
++	 * always modified along with programming the fb[0,1] registers via the
++	 * lock (besides setup and cleanup). If it is not a dummy buffer then
++	 * we queue it normally, as fast-tracking is not an option.
++	 */
++
++	spin_lock_irqsave(&csi->irqlock, flags);
++
++	buf_num = csi->buf_num;
++	if (csi->active_vb2_buf[buf_num] == NULL) {
++		csi->active_vb2_buf[buf_num] = buf;
++		imx7_csi_update_buf(csi, phys, buf_num);
++		ret = 0;
++	}
++
++	spin_unlock_irqrestore(&csi->irqlock, flags);
++
++	return ret;
++}
++
+ static void imx7_csi_video_buf_queue(struct vb2_buffer *vb)
+ {
+ 	struct imx7_csi *csi = vb2_get_drv_priv(vb->vb2_queue);
+ 	struct imx7_csi_vb2_buffer *buf = to_imx7_csi_vb2_buffer(vb);
+ 	unsigned long flags;
++	int ret;
++
++	ret = imx7_csi_fast_track_buffer(csi, buf);
++	if (!ret)
++		return;
+ 
+ 	spin_lock_irqsave(&csi->q_lock, flags);
+ 
+-- 
+2.30.2
 

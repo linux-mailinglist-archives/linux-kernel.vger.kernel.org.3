@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325035AE63E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B1A5AE647
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiIFLMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S239368AbiIFLMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234074AbiIFLL4 (ORCPT
+        with ESMTP id S239095AbiIFLMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:11:56 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F0F7859A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:11:55 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id h1so6673858wmd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 04:11:55 -0700 (PDT)
+        Tue, 6 Sep 2022 07:12:33 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D8F79628;
+        Tue,  6 Sep 2022 04:12:30 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id f124so2044755pgc.0;
+        Tue, 06 Sep 2022 04:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=G22FTacdNp/5st4PWx8yeyzweiOddCK7/04ygNQp0N0=;
-        b=vB3qVosKKn+313MmCONMnAnc+rOAx2mVl9gmu4Oev03Ob1lqLo+2VpKJjBTJUO6fZ4
-         Kcck2Q3R+4TbCXGFM5Ad15yivpBTdhLcQkPB9hdhwROVzKTN+SbSgruhvov375WAyD3h
-         bxC+CFprcOXuvc4LKI32y6IDsXKD3G2levQoFfTpkO/WDMVDPBVQi6X3RR8iBtOU4Rdw
-         Y4oVCIXDodJnJmIQ2SBcRU8XgSXu6Zo+6voGbr0TNhN8hJ8Egg5sgmxYvTBe5/ipjtbW
-         /9i8APrHIJDqAzArmH/cp6NG6Jz/Ey+Xw7wQgseNG4yRjNsdZt/1U9bh1Ehm9FISqw0i
-         carg==
+        d=gmail.com; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc:subject:date;
+        bh=SaAS/zEVeX9aW0q1fpyxO05gvDdBuKUtUdG6Vtt1kqY=;
+        b=EbT8jl7kMqIb2ZrGnLPw+3qlMxE6yCNckMaWo1NvNsMrIQl1Pu8yXfIBVZRddVf5vy
+         Sg0DMR9Qh/jfTKXGkx0IHViHX4qTk4eJg13Y5QgpiOyMpkeYiMoIN9XSP7X8NJZ8vD67
+         MePeCLdqhJw7h8Zk3HDp8+/o401RMd9cyHwyjp6VHtIoKwb8mcKiN1LJaINiqPBiQ1QY
+         VZfWh5TYG84VdHYHdnYa/u7fJ6afRlRwMukoPcSUxFadKOWF7Cce6mqp5E5lDXgNrgen
+         CVIGIzbB4697b7eXhMVdswffK9jNDRVBN2Ut5xoo+N73uZiN+ndmu7rhKAgEG3P5uaJL
+         Uiqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=G22FTacdNp/5st4PWx8yeyzweiOddCK7/04ygNQp0N0=;
-        b=siTlUZO1KLZoT/mlbXaK1bbmaTAf9cReXlin/6mZdQRd+plAP7g84G4IpW/z7R2XCd
-         ipIIKcepEd9zIbaPxox6wv5xewLgWSbv5Ha0QJcP+vFEwUuMZ2lJrXHyfDzeZNqk5yaf
-         gI/z8/NkSsGr2W0dsmxhs2DcIZSbMVoNrB2dYMNxTTIPHTqEB8owC1jkjVNTd9HaSr1W
-         nhCBNtf/nb88KHjuPZ6RxedPhm0oYU11Yzhkz9FPosa8eLCIZZq0ePAE5tdWGMP92HzW
-         KoQrK+vppJjZkxYKsvKjVj03h5iLWu18EyOLnrzyuEWSL2osNbal8sjCy51PEfVfqqhe
-         ghCw==
-X-Gm-Message-State: ACgBeo0y7FsuisCYJ8N9e1w+ji5oL6IRwadz73AeOUkWa5+SEG4uval/
-        dCNyMCK2ivu1P4gBXEESRYQLxQ==
-X-Google-Smtp-Source: AA6agR7voJKZZcbQSCcq+9ZNRdGFJfjhieUYCaSI0ZPybs7lhYpqyA6Yk8tXADCmfxRYQ68zSyk14A==
-X-Received: by 2002:a05:600c:4caa:b0:3a5:4a14:854a with SMTP id g42-20020a05600c4caa00b003a54a14854amr13635552wmp.107.1662462713945;
-        Tue, 06 Sep 2022 04:11:53 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id b14-20020a056000054e00b002252ec781f7sm12154902wrf.8.2022.09.06.04.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 04:11:53 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 14:11:51 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v9 2/2] MAINTAINERS: Update fastrpc documentation file
- from txt to yaml
-Message-ID: <Yxcq9xQFmpsTlqC4@linaro.org>
-References: <20220906103055.2089519-1-abel.vesa@linaro.org>
- <20220906103055.2089519-2-abel.vesa@linaro.org>
- <872bffe6-416e-0d15-5994-0cf80c2063b4@linaro.org>
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=SaAS/zEVeX9aW0q1fpyxO05gvDdBuKUtUdG6Vtt1kqY=;
+        b=4zuCLmFUODa5Xm0Y89U14Kf2jhZeVXq+sJNA5EVedIxqJdcFXwTWMBhKUTQ23/wqJ0
+         cnyAQ+JBjS7l8L/ig74AUqLtzvi0o5YPCQV4bokszwwjEQ6bUZGSV3JdK0YgvYCVatih
+         i3rpbGLWEglvHIjDIOsccDVzkaeKG3GBg2sQdLrykaozXUN2dvRGJR7Y7p+wrD4FNDCt
+         TJc0OK1mX61Yh+YcsBTDx80lIYIGgDflPlCFQmIV6zyFBnc35QW/ToKCd8VLTuYOwoik
+         SA8tOZkGJJsTPS5RHhUdycB6wtotlCqb1YX520yA7cW6Kv0RSmi2lU2fPXi1NbrYUynp
+         Ie+g==
+X-Gm-Message-State: ACgBeo3/0dbuPm1rPIUN6opyhgcMasU71WvcJJV2MToh763c6wUaCNXb
+        2I9ruHYQUkAwT2S3DgA3jT0=
+X-Google-Smtp-Source: AA6agR4UlyMIdI6ISnbB4ysRbFQPseOYt+uq+FzYFyjbH0klhw1Ba+7fS0f2daADAZ3eNvNX7JHnwQ==
+X-Received: by 2002:a62:4c2:0:b0:52e:bd4d:50e1 with SMTP id 185-20020a6204c2000000b0052ebd4d50e1mr55860465pfe.8.1662462750183;
+        Tue, 06 Sep 2022 04:12:30 -0700 (PDT)
+Received: from hcl-ThinkPad-T495 ([2401:4900:1ce1:13f0:48c4:2ac5:ccad:657d])
+        by smtp.gmail.com with ESMTPSA id t12-20020a170902e84c00b001753eb66692sm9548734plg.250.2022.09.06.04.12.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 06 Sep 2022 04:12:29 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 16:42:23 +0530
+From:   Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH v1] Update for Facebook yosemite V2 BMC.
+Message-ID: <20220906111223.GA1779@hcl-ThinkPad-T495>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <872bffe6-416e-0d15-5994-0cf80c2063b4@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-09-06 12:57:58, Krzysztof Kozlowski wrote:
-> On 06/09/2022 12:30, Abel Vesa wrote:
-> > The documentation for fastrpc bingings is now YAML. So update the
-> > MAINTAINERS file.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> 
-> Abel, I sent you two messages about this patch that it is not
-> bisectable. You did not respond to them, regarding maintainers entry, so
-> I don't know what to think.
+Removed NIC EEPROM driver IPMB-12 channel and keeping it as
+"status ok".
 
-Hmm, for some reason I thought the MAINTAINERS file update needs to go through a
-different tree.
+Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Sorry for the missunderstanding.
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+index 8864e9c312a8..2293f10e94d6 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+@@ -207,12 +207,6 @@
+ 
+ &i2c12 {
+ 	status = "okay";
+-	//MEZZ_FRU
+-	eeprom@51 {
+-		compatible = "atmel,24c64";
+-		reg = <0x51>;
+-		pagesize = <32>;
+-	};
+ };
+ 
+ &pwm_tacho {
+-- 
+2.17.1
 
-Will squash it then.
-
-> 
-> This must be squashed.
-> 
-> Best regards,
-> Krzysztof

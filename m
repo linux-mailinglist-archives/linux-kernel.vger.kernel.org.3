@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73925AF66B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F865AF66D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiIFU5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S230128AbiIFU5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiIFU4s (ORCPT
+        with ESMTP id S229842AbiIFU5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:56:48 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD8399247;
-        Tue,  6 Sep 2022 13:56:45 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-127dca21a7dso3942602fac.12;
-        Tue, 06 Sep 2022 13:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date;
-        bh=JLKbHHTVrfhdQxKJcLepz8hjtNrJiGDZhh85/uIQM0Q=;
-        b=I7Jn10IrZ3Kl5W47zzd+T28Pm+YKxVY0TzhwWFXt8BajHUReYryLrAEr1mjjxEDy7w
-         DTpei9wXbmLYYkesYjGslbe/+5znIlaGIALl9Q5OM6GCofsJJBcF8JTJR54agGL4k01k
-         JTZqxX0YBTYyMvSj+svEkErrrprgkhBQE/7zB/a4N0YI84sNwAkYUUYKRocqN+FYawns
-         /Xh9TsoVx5fE8OlGuSD/I1dD6ba7B2WVPem5bsbdhQ+hjmfjEZ5qgnDL5ApzHwpyNEW+
-         TwzwZpo2g6m8CxPIzEmkqEq6oJNaPz3W9PouzLVl4pfULNqTjBdy2RaNhSinU5qYmRyR
-         LcYA==
+        Tue, 6 Sep 2022 16:57:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1CA9E2FD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662497811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LPRivCeSjBulelI1+kw/PdRERXMqiUKrh1hGXvPKua8=;
+        b=FZb2urG9JKgh4QumL+yOI5Uls3DG30x9kgTDm5k1dD4oarmZCTKtLzwcU90gM/on5wVOWF
+        DAt6/272FclKdUpD50hfm00YmqY+cf6UpS3BXEgpY0N1ZFiHdCQLrKKtfMUu8Wyn9UIEsE
+        DpqPEe70RwIAyuPaygdfqBqUoHw8cnM=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-663-cj98G2QpOcm7JWnKY42eng-1; Tue, 06 Sep 2022 16:56:50 -0400
+X-MC-Unique: cj98G2QpOcm7JWnKY42eng-1
+Received: by mail-ed1-f69.google.com with SMTP id q18-20020a056402519200b0043dd2ff50feso8211546edd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:56:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=JLKbHHTVrfhdQxKJcLepz8hjtNrJiGDZhh85/uIQM0Q=;
-        b=HbsBKy/J1cEzPlRfOUbelba4tb9+QkaaeUP0c6fx3QIQASqOMfTlILEf5W2LQtGb9h
-         i5eoDu/9vACNVQS9n6uXvklGVxZdpdRxwWvfejk8p1eyfklrBaVugwYmCfW28vg232iW
-         VHlamVytqvBA6veaB+Eaevr64MpLEPYId1nudVA8IIY0IPNJKe9VnybFIORUy959TV06
-         rgTjVAykeyOdKpbuIAxjJbf/l5WMYHp6z+afR5bWBbO+N6GC5faoskAfxxBhXhvEbuVf
-         kKyzRjJKcaXAeHQK7jP2ARwVF3I/986/JiplRUx7WyAOI+zXRbRAQ5iEA5g1YLOmr3yj
-         R8IA==
-X-Gm-Message-State: ACgBeo0G0EV7k/qDi4crwePA5A1UZjo0PAWKb/DmqpfprIijxLQqp4FO
-        CaM8hklOLFQbhIlYb8TeOwailUEGJ/g=
-X-Google-Smtp-Source: AA6agR5UJZ5K0bvXhuNUQdD3brO0ZbixHxxcymP6/oBLCK1I7qbhwn9+76sWUFaCU3Y/6DN0zWDmbw==
-X-Received: by 2002:a05:6870:59d:b0:f3:627:e2b0 with SMTP id m29-20020a056870059d00b000f30627e2b0mr79456oap.47.1662497804367;
-        Tue, 06 Sep 2022 13:56:44 -0700 (PDT)
-Received: from [127.0.0.1] ([187.19.239.21])
-        by smtp.gmail.com with ESMTPSA id d8-20020a056870e24800b0011e4c574dfcsm7606906oac.40.2022.09.06.13.56.42
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=LPRivCeSjBulelI1+kw/PdRERXMqiUKrh1hGXvPKua8=;
+        b=BwxVxhFN5SqAgHE2TKwtzxdIwDzOyj6dTIl6V6Ip1lgodN3NQuWTkfTJoWfk3ETKZU
+         NFR/asGE3ZpSqte0M8okmwuZU23bmKQ/4lwbiOBpUNEduJU9vQWNHlw4f17e/VbIRuiw
+         bpvrwbZSQKBmXII0I8PYq75Z3Ckowrpe1Gs045JggZ1G3PvWEESiXFP4o2lqCY8zEzbA
+         XVpBGLOw/5drRnA/wXhWYoFBQBAWfP+ZCjNZzAZjJGe/c92v1vet0LI6auLW9f16/mXQ
+         /AKF5GIRTZ821S5GDez5t2EU9IowBrCsmXJIvDTBnQfwYSXIE4ST3RHH6IfToNqu1+8v
+         8QYQ==
+X-Gm-Message-State: ACgBeo2fwQIWVNMPZBTUi4WJotXe/JkXlB+kSyaFtyKXfVxI4c/ci1Bs
+        wzlqw8No8G8p3YaN0rmeHclWAHPFlDTC73axwf9XB8KZ/LKbm44CxKuWRNkzEPLy8hWN1rh5fp3
+        2/6/hsJPmlErPeUO1qBo9ObTe
+X-Received: by 2002:a17:907:7b93:b0:770:1d4f:4de9 with SMTP id ne19-20020a1709077b9300b007701d4f4de9mr218709ejc.201.1662497809302;
+        Tue, 06 Sep 2022 13:56:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5+FpCsJzk4NbZ93QZn7KJ5CfN6FaCiztEXmhUnS5W0y0TA2BvpLNKWLw815Om1soqjBIGb+g==
+X-Received: by 2002:a17:907:7b93:b0:770:1d4f:4de9 with SMTP id ne19-20020a1709077b9300b007701d4f4de9mr218699ejc.201.1662497809123;
+        Tue, 06 Sep 2022 13:56:49 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id b13-20020a17090630cd00b007308812ce89sm7070197ejb.168.2022.09.06.13.56.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 13:56:43 -0700 (PDT)
-Date:   Tue, 06 Sep 2022 17:56:37 -0300
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-To:     Marco Elver <elver@google.com>, Namhyung Kim <namhyung@kernel.org>
-CC:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Subject: Re: [PATCH] perf test: Skip sigtrap test on old kernels
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CANpmjNMHX2S-29Tyw+zKyaWT7saAiEegxbJapQFs7duJTTncdw@mail.gmail.com>
-References: <20220903000210.1112014-1-namhyung@kernel.org> <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com> <YxdA1CVzy9hzE3i1@kernel.org> <CAM9d7ci2ZujdY75DUtZA+f=fru7yh8VJrj8-r2RgZetu57u61A@mail.gmail.com> <CANpmjNMHX2S-29Tyw+zKyaWT7saAiEegxbJapQFs7duJTTncdw@mail.gmail.com>
-Message-ID: <F172EC4B-1CFC-46A5-9DC3-146EDF8F5BDF@gmail.com>
+        Tue, 06 Sep 2022 13:56:48 -0700 (PDT)
+Message-ID: <6ff23930-325b-4207-12fc-4d8fd5bea1ff@redhat.com>
+Date:   Tue, 6 Sep 2022 22:56:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] x86/cpu: Avoid writing MSR_IA32_TSX_CTRL when writing it
+ is not supported
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>
+References: <20220906201743.436091-1-hdegoede@redhat.com>
+ <YxexAl+i+6MGjf7K@hirez.programming.kicks-ass.net>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YxexAl+i+6MGjf7K@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,89 +88,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On September 6, 2022 5:50:05 PM GMT-03:00, Marco Elver <elver@google=2Ecom=
-> wrote:
->On Tue, 6 Sept 2022 at 20:31, Namhyung Kim <namhyung@kernel=2Eorg> wrote:
+On 9/6/22 22:43, Peter Zijlstra wrote:
+> On Tue, Sep 06, 2022 at 10:17:43PM +0200, Hans de Goede wrote:
+>> On an Intel Atom N2600 (and presumable other Cedar Trail models)
+>> MSR_IA32_TSX_CTRL can be read, causing saved_msr.valid to be set for it
+>> by msr_build_context().
 >>
->> On Tue, Sep 6, 2022 at 5:45 AM Arnaldo Carvalho de Melo <acme@kernel=2E=
-org> wrote:
->> >
->> > Em Sat, Sep 03, 2022 at 08:52:01AM +0200, Marco Elver escreveu:
->> > > On Sat, 3 Sept 2022 at 02:02, Namhyung Kim <namhyung@kernel=2Eorg> =
-wrote:
->> > > >
->> > > > If it runs on an old kernel, perf_event_open would fail because o=
-f the
->> > > > new fields sigtrap and sig_data=2E  Just skip the test if it fail=
-ed=2E
->> > > >
->> > > > Cc: Marco Elver <elver@google=2Ecom>
->> > > > Signed-off-by: Namhyung Kim <namhyung@kernel=2Eorg>
->> > > > ---
->> > > >  tools/perf/tests/sigtrap=2Ec | 1 +
->> > > >  1 file changed, 1 insertion(+)
->> > > >
->> > > > diff --git a/tools/perf/tests/sigtrap=2Ec b/tools/perf/tests/sigt=
-rap=2Ec
->> > > > index e32ece90e164=2E=2E7057566e6ae4 100644
->> > > > --- a/tools/perf/tests/sigtrap=2Ec
->> > > > +++ b/tools/perf/tests/sigtrap=2Ec
->> > > > @@ -140,6 +140,7 @@ static int test__sigtrap(struct test_suite *t=
-est __maybe_unused, int subtest __m
->> > > >         fd =3D sys_perf_event_open(&attr, 0, -1, -1, perf_event_o=
-pen_cloexec_flag());
->> > > >         if (fd < 0) {
->> > > >                 pr_debug("FAILED sys_perf_event_open(): %s\n", st=
-r_error_r(errno, sbuf, sizeof(sbuf)));
->> > > > +               ret =3D TEST_SKIP;
->> > >
->> > > Wouldn't we be interested if perf_event_open() fails because it cou=
-ld
->> > > actually be a bug? By skipping we'll be more likely to miss the fac=
-t
->> > > there's a real problem=2E
->> > >
->> > > That's my naive thinking at least - what do other perf tests usuall=
-y
->> > > do in this case?
->> >
->> > Yeah, I was going to try and check if this is the only way that, with
->> > the given arguments, perf_event_open would fail, but its better to at
->> > least check errno against -EINVAL or something?
->>
->> EINVAL would be too generic and the kernel returns it in many places=2E
->> I really wish we could have a better error reporting mechanism=2E
->>
->> Maybe we could retry perf_event_open with sigtrap and sig_data cleared=
-=2E
->> If it succeeded, then we can skip the test=2E  If it still failed, then=
- report
->> the error=2E  But it still couldn't find a bug in the sigtrap code=2E
->> What do you think?
->
->Yes, that's what I meant, that it could point out an issue with
->sigtrap perf_event_open()=2E
->
->If there's no clear way to determine if it's just not supported or a
->bug, it'd be better to leave it as-is=2E
+>> This causes restore_processor_state() to try and restore it, but writing
+>> this MSR is not allowed on the Intel Atom N2600 leading to:
+> 
+> FWIW, virt tends to do this same thing a lot. They'll allow reading
+> random MSRs and only fail on write.
 
-perf could go fancy and try to add a probe using a source file+line where =
-older kernels would fail 8-)
+Right. So I guess I should send a v2 with an updated commit
+message mentioning this ?
 
-Anyway, perf already does all sorts of kernel capability checks, perhaps t=
-his is one of can for sure detect it's something available :-/
+Regards,
 
-One new way could be to look at BTF?
+Hans
 
->
->Some other options:
->
->1=2E Provide a way to disable certain tests, if it's known they will
->fail for otherwise benign reasons i=2Ee=2E no support=2E
->
->2=2E Provide a command line option to skip instead of fail tests where
->perf_event_open() returns some particular errnos=2E The default will be
->fail, but you can then choose to trust that failure of
->perf_event_open() means no support, and pass the option=2E

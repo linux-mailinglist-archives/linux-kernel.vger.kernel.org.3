@@ -2,172 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613E25AE1E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE2B5AE1F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 10:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbiIFII2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 04:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S233612AbiIFIJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 04:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238465AbiIFII0 (ORCPT
+        with ESMTP id S238774AbiIFIIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:08:26 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC02652E7E;
-        Tue,  6 Sep 2022 01:08:24 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MMHwJ5hqLz9xqvl;
-        Tue,  6 Sep 2022 16:04:16 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnYl3P_xZj3EYnAA--.22559S2;
-        Tue, 06 Sep 2022 09:07:55 +0100 (CET)
-Message-ID: <3d32decb1fda80e261d9ed08decfdca45614c4af.camel@huaweicloud.com>
-Subject: Re: [PATCH v16 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, joannelkoong@gmail.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 06 Sep 2022 10:07:41 +0200
-In-Reply-To: <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
-         <20220905143318.1592015-8-roberto.sassu@huaweicloud.com>
-         <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 6 Sep 2022 04:08:32 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5BB6D555;
+        Tue,  6 Sep 2022 01:08:31 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gb36so21329023ejc.10;
+        Tue, 06 Sep 2022 01:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=ixcTJEmX6ojSJFpffdmxDEeT09//71awlYUYMTCkQ2k=;
+        b=ZEw2t8eu/IGDJPWWS2O9AIx5J+sVDehAoSc0jwGGUi62VfOxEv0EBn/OlitZ+YCeRf
+         PR7LKeKeVrdvAjyp8thX5wqf3UHxdpDl/5T0XW+lG1qku5rK3Hmmkzjsm47nUXSsg7+J
+         8Q8z8iDRqSYxh3qlGRknUNhrP+SLOPhXZYUqTDAd5ceCxMn3My+V9VqLUS81gaE+cIXs
+         9GfSR3XtxUG6oomZZeXFRlN68cuesq9Zl6Ovhe3SK7WEcHMxmTFlxs4Xjq5ADtAWyUOX
+         oVY5p05K7+V5XUbz+R/MJUb0BWZLhdSpttHWjB9fbbrIPyoqqov5dyuatCRJqfNPHBKQ
+         mU6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ixcTJEmX6ojSJFpffdmxDEeT09//71awlYUYMTCkQ2k=;
+        b=q1Oc9B2rNSeUbfBTuh7vdkbKep0iTlYrepaAyezIjs4vdgfUdfaGvkSvheVeDUqi5X
+         nwmsPaAQqFi1J/PLPERVCnNBPUeJ6j8njYXT0OQ3NMzLugCRSqXFRB+VjU9xFy7NAPWN
+         xd6rYioE+HBGu7sE+2Kre+XXWTlTGyjdDSSm+fItLt616VUjhSFwJ2YxNPuEUmorVrfn
+         vE1PA89x4qoXeIQ/eXEcOt7PJV8qtID3sXtUFomulnrnj2Y6mXxLtcINz68NTQJoHpK4
+         Vfr88WXA5PUbSt5GA1MC8SASBNGsxN8Da7qk03gJsAc1cNzuCGHwoO/VYJxZoaOOZw7b
+         LwSg==
+X-Gm-Message-State: ACgBeo2yIU+pMEox/bVAowz1l+nZuJJIPfxvSaOnXDm3xfChmX1bb5PS
+        mjuLHqTI8+Oz/eGadwfx0iob1FpHTLQQv2WUCCYrrDBsSAs=
+X-Google-Smtp-Source: AA6agR7l2FBAWvpWs6dGX+cL9sjarYnZLQUBlXz3+1QQvQp7fIsevP7hAeerxFCrUwKA5g5IT5oDby9FydR2xo3Y+I4=
+X-Received: by 2002:a17:906:8450:b0:741:5b1b:5c7f with SMTP id
+ e16-20020a170906845000b007415b1b5c7fmr30767205ejy.766.1662451709902; Tue, 06
+ Sep 2022 01:08:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDnYl3P_xZj3EYnAA--.22559S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw1rWF4fWw17ZrWftry7Jrb_yoW5ZF1DpF
-        W8KF4Y9ry8JF12yF13Za1fua4Sk3yvqw17W3sxt3s3ZrnY9r1xuF18tF45W3sYkry8try2
-        vFyIqrya9wn8Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KmiQAAse
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220905171601.79284-1-peron.clem@gmail.com> <20220905171601.79284-5-peron.clem@gmail.com>
+ <OS0PR01MB5922142861E78A1DD81AD1C9867F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAJiuCceGZJr24hVjpP0ptOkG8bMFKr=QLj0LcyDX4fUy7Rr2xA@mail.gmail.com>
+ <OS0PR01MB5922EE3F6CDD827919A7763E867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAJiuCcd7upgT6vQWHos-X1-89+Z-5xxDe2SMCdC2=_LgZaVMiw@mail.gmail.com> <OS0PR01MB5922240073630A409D67ED03867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB5922240073630A409D67ED03867E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date:   Tue, 6 Sep 2022 10:08:18 +0200
+Message-ID: <CAJiuCcddO9m3L2--rycO9TVtoELy24OMb9NRdpin2mbokm=Hog@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the recommended
+ one to configure and enable regulator
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-sunxi@lists.linux.dev" <linux-sunxi@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-06 at 04:57 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Mon, 5 Sept 2022 at 16:35, Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security
-> > modules
-> > the ability to check the validity of a signature against supplied
-> > data, by
-> > using user-provided or system-provided keys as trust anchor.
-> > 
-> > The new kfunc makes it possible to enforce mandatory policies, as
-> > eBPF
-> > programs might be allowed to make security decisions only based on
-> > data
-> > sources the system administrator approves.
-> > 
-> > The caller should provide the data to be verified and the signature
-> > as eBPF
-> > dynamic pointers (to minimize the number of parameters) and a
-> > bpf_key
-> > structure containing a reference to the keyring with keys trusted
-> > for
-> > signature verification, obtained from bpf_lookup_user_key() or
-> > bpf_lookup_system_key().
-> > 
-> > For bpf_key structures obtained from the former lookup function,
-> > bpf_verify_pkcs7_signature() completes the permission check
-> > deferred by
-> > that function by calling key_validate(). key_task_permission() is
-> > already
-> > called by the PKCS#7 code.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Acked-by: KP Singh <kpsingh@kernel.org>
-> > ---
-> >  kernel/trace/bpf_trace.c | 45
-> > ++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 45 insertions(+)
-> > 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 7a7023704ac2..8e2c026b0a58 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -1294,12 +1294,57 @@ void bpf_key_put(struct bpf_key *bkey)
-> >         kfree(bkey);
-> >  }
-> > 
-> > +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> > +/**
-> > + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-> > + * @data_ptr: data to verify
-> > + * @sig_ptr: signature of the data
-> > + * @trusted_keyring: keyring with keys trusted for signature
-> > verification
-> > + *
-> > + * Verify the PKCS#7 signature *sig_ptr* against the supplied
-> > *data_ptr*
-> > + * with keys in a keyring referenced by *trusted_keyring*.
-> > + *
-> > + * Return: 0 on success, a negative value on error.
-> > + */
-> > +int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-> > +                              struct bpf_dynptr_kern *sig_ptr,
-> > +                              struct bpf_key *trusted_keyring)
-> > +{
-> > +       int ret;
-> > +
-> > +       if (trusted_keyring->has_ref) {
-> > +               /*
-> > +                * Do the permission check deferred in
-> > bpf_lookup_user_key().
-> > +                * See bpf_lookup_user_key() for more details.
-> > +                *
-> > +                * A call to key_task_permission() here would be
-> > redundant, as
-> > +                * it is already done by keyring_search() called by
-> > +                * find_asymmetric_key().
-> > +                */
-> > +               ret = key_validate(trusted_keyring->key);
-> > +               if (ret < 0)
-> > +                       return ret;
-> > +       }
-> > +
-> > +       return verify_pkcs7_signature(data_ptr->data,
-> > +                                     bpf_dynptr_get_size(data_ptr)
-> > ,
-> > +                                     sig_ptr->data,
-> > +                                     bpf_dynptr_get_size(sig_ptr),
-> 
-> MIssing check for data_ptr->data == NULL before making this call?
-> Same
-> for sig_ptr.
+Hi,
 
-Patch 3 requires the dynptrs to be initialized. Isn't enough?
+On Tue, 6 Sept 2022 at 10:06, Biju Das <biju.das.jz@bp.renesas.com> wrote:
+>
+> Hi Clement,
+>
+> > Subject: Re: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the
+> > recommended one to configure and enable regulator
+> >
+> > Hi Biju,
+> >
+> > On Tue, 6 Sept 2022 at 08:42, Biju Das <biju.das.jz@bp.renesas.com>
+> > wrote:
+> > >
+> > > Hi Clement,
+> > >
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Mon, 5 Sept 2022 at 20:17, Biju Das <biju.das.jz@bp.renesas.com>
+> > > > wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > Thanks for the patch.
+> > > > >
+> > > > > > Subject: [PATCH v3 4/5] drm/panfrost: devfreq: set opp to the
+> > > > > > recommended one to configure and enable regulator
+> > > > > >
+> > > > > > devm_pm_opp_set_regulators() doesn't enable regulator, which
+> > > > > > make regulator framework switching it off during
+> > regulator_late_cleanup().
+> > > > >
+> > > > > In that case, why not regulator_get()for Dynamic regulator(non
+> > > > > fixed regulator)??
+> > > >
+> > > > Sorry I don't understand, what do you mean?
+> > >
+> > > Normally we need to turn on regulator and clock only when needed.
+> > > I am not sure with your new code, will make it always on and drains
+> > > the power unnecessarily and does it set lower opp or higher opp at th=
+e
+> > > start??
+> >
+> > The code doesn't make it always on, it makes it how it should be at the
+> > recommended OPP which is the "start point".
+> >
+> > If the recommended OPP says to switch off the regulator then it will.
+> >
+> > >
+> > > Compared to the fixed regulator, you have voltage regulator to contro=
+l
+> > > that is the difference between my environment and Your environment.
+> > >
+> > > I am not sure any other SoC is using voltage regulator??
+> > > If yes, thenthere should be some bug or some difference in HW which i=
+s
+> > > giving different behaviour??
+> > >
+> > > If you are the first one using voltage regulator with mali gpu, Then
+> > > Your implementation may be correct, as you have proper HW to check.
+> >
+> > The issue is that my regulator is not marked as "always-on", if no OPP =
+is
+> > called before regulator_late_cleanup() then nobody sets the
+> > regulator_enable() and the regulator is switched off, which makes my
+> > board hang.
+>
+> Cool, From your testing looks like no one tested this feature with
+> mali GPU on mainline??
 
-Thanks
+Or no one without always-on.
 
-Roberto
+Clement
 
+>
+> Cheers,
+> Biju
+>
+>
+> >
+> > Like Viresh recommends I will send an update with more details in the
+> > commit log.
+> >
+> > Regards,
+> > Clement
+> >
+> >
+> > >
+> > > >
+> > > > >
+> > > > > >
+> > > > > > Call dev_pm_opp_set_opp() with the recommend OPP in
+> > > > > > panfrost_devfreq_init() to enable the regulator and avoid any
+> > > > > > switch off by regulator_late_cleanup().
+> > > > > >
+> > > > > > Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > > > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
+> > > > > > ---
+> > > > > >  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 8 ++++++++
+> > > > > >  1 file changed, 8 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> > > > > > b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> > > > > > index 5110cd9b2425..67b242407156 100644
+> > > > > > --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> > > > > > +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> > > > > > @@ -131,6 +131,14 @@ int panfrost_devfreq_init(struct
+> > > > > > panfrost_device
+> > > > > > *pfdev)
+> > > > > >               return PTR_ERR(opp);
+> > > > > >
+> > > > > >       panfrost_devfreq_profile.initial_freq =3D cur_freq;
+> > > > > > +
+> > > > > > +     /* Setup and enable regulator */
+> > > > > > +     ret =3D dev_pm_opp_set_opp(dev, opp);
+> > > > > > +     if (ret) {
+> > > > > > +             DRM_DEV_ERROR(dev, "Couldn't set recommended
+> > OPP\n");
+> > > > > > +             return ret;
+> > > > > > +     }
+> > > > >
+> > > > >
+> > > > > FYI,
+> > > > > On RZ/G2L mali gpu, we have fixed regulator and I was able to do
+> > > > > GPU OPP transition without any issues previously.
+> > > >
+> > > > rzg2l-smarc-som.dtsi uses regulator reg_1p1v; which is marked as
+> > > > regulator-always-on; that's why
+> > > > regulator_late_cleanup() doesn't switch it off.
+> > >
+> > > Yes that is correct. It is fixed regulator and always on.
+> > > We control only frequency.
+> > >
+> > > Cheers,
+> > > Biju
+> > >
+> > > >
+> > > > >
+> > > > > root@smarc-rzg2l:~# cat /sys/class/devfreq/11840000.gpu/trans_sta=
+t
+> > > > >      From  :   To
+> > > > >            :  50000000  62500000 100000000 125000000 200000000
+> > > > 250000000 400000000 500000000   time(ms)
+> > > > > *  50000000:         0         0         0         0         0
+> > > > 0         0         1       144
+> > > > >    62500000:         0         0         0         0         0
+> > > > 0         0         0         0
+> > > > >   100000000:         0         0         0         0         0
+> > > > 0         0         9       524
+> > > > >   125000000:         0         0         9         0         0
+> > > > 0         0         3      2544
+> > > > >   200000000:         0         0         0        11         0
+> > > > 0         0        46      3304
+> > > > >   250000000:         1         0         0         0        33
+> > > > 0         0         0      7496
+> > > > >   400000000:         0         0         0         0        16
+> > > > 19         0         0      2024
+> > > > >   500000000:         1         0         0         1         8
+> > > > 15        35         0      4032
+> > > > > Total transition : 208
+> > > > >
+> > > > > Cheers,
+> > > > > Biju
+> > > > >

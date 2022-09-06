@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056075AE8DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EB55AE8DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiIFMyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S240357AbiIFMzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240211AbiIFMyA (ORCPT
+        with ESMTP id S240347AbiIFMy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:54:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD07D74E26;
-        Tue,  6 Sep 2022 05:53:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E6B661500;
-        Tue,  6 Sep 2022 12:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C12C3C433C1;
-        Tue,  6 Sep 2022 12:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662468809;
-        bh=fldsy+P2Q7PF4mFLFUGFtLZ/KojrACP13eE47+4QOLs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ucylPzXrD7R0fNl3OILAPn6lz+kQHL5B9dok/3TaEJwy3KnlDGitr9hTyiSekDiQh
-         5VuZvSYD6NEPcREhkN07Xkfvw0HQbuaPgKeDhKCHwiQjh8UuoDiSnESGR2yAe1FJVS
-         o4oFsHDScad7GIEe0i0F57qOvna5Np7Yvr+4xSyVQYQJ5boQQ4bmqHWeRdkC8OCVu0
-         JooftswuuOGi01wdQBIrLio2pKEOvLixctayUf8XiiJ6sggHG8NICrHgPnPU7kSNNb
-         K+9EKGKsWrcJ0KIDTw4F2umkPmJJQBjRygFfWt0yOIAdsMqw1OUG616hGKMu++Bu6m
-         /OuUEKVFxY6sA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8253D404A1; Tue,  6 Sep 2022 09:53:27 -0300 (-03)
-Date:   Tue, 6 Sep 2022 09:53:27 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V2] libperf evlist: Fix per-thread mmaps for
- multi-threaded targets
-Message-ID: <YxdCx6UPU6wI95kc@kernel.org>
-References: <20220905114209.8389-1-adrian.hunter@intel.com>
+        Tue, 6 Sep 2022 08:54:29 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293C56E8A6;
+        Tue,  6 Sep 2022 05:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662468852; x=1694004852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AuhIIJScC02nXHqA0igWrc36n6s/zz9Obhn0kpayqwI=;
+  b=GGww8Cn7kVSFV/AzDA+inK0dJsuxvIzXg/i47K+BHSjFVkU9YSojUEZA
+   smKuKcWLLgaBhe4PDYG8/w6L55XJumniADATd2Ra2CfRV0X7c7zjVlTcD
+   VkkiQed3p/598jsk0x9NnFN9mc7ZL8jKSxVD/v1+grh6FEvikO66MJ4EU
+   dKMz+M+WXZNNktZQEDAC3L8j5KJpNrsmh7KaNhq4PMCTwKNIDkMzKPrqa
+   Fm9rdGAPiv1CmLhYJWpGMGDJipoOk3KUUjy7WBSxKjJrp7+e/RO6GF3yV
+   PpgnjoCXbas7KezbcOYUXvvTsIfbCZBEF+Gwufi2cpomcBcDnpBiHlvnG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="360532020"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="360532020"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:54:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="675677408"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:54:09 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVY5e-0097jn-2u;
+        Tue, 06 Sep 2022 15:54:06 +0300
+Date:   Tue, 6 Sep 2022 15:54:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v1 1/1] Input: icn8505 - Utilize acpi_get_subsystem_id()
+Message-ID: <YxdC7i9F1ayR5icS@smile.fi.intel.com>
+References: <20220905172001.69244-1-andriy.shevchenko@linux.intel.com>
+ <YxZPjsRJXJijZ/K3@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905114209.8389-1-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YxZPjsRJXJijZ/K3@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Sep 05, 2022 at 02:42:09PM +0300, Adrian Hunter escreveu:
-> The offending commit removed mmap_per_thread(), which did not consider
-> the different set-output rules for per-thread mmaps i.e. in the per-thread
-> case set-output is used for file descriptors of the same thread not the
-> same cpu.
+On Mon, Sep 05, 2022 at 12:35:42PM -0700, Dmitry Torokhov wrote:
+> On Mon, Sep 05, 2022 at 08:20:01PM +0300, Andy Shevchenko wrote:
+
+...
+
+> > +	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
+> > +	if (IS_ERR(subsys) && PTR_ERR(subsys) != -ENODATA)
+> > +		return PTR_ERR(subsys);
+> > +
+> > +	if (IS_ERR(subsys) && PTR_ERR(subsys) == -ENODATA)
+> > +		subsys = kstrdup_const("unknown", GFP_KERNEL);
 > 
-> Fixes: ae4f8ae16a07 ("libperf evlist: Allow mixing per-thread and per-cpu mmaps")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> Do we really need kstrdup_const() here? This makes me wonder if we need
+> to also have error handling here, and if we going to tip some automated
+> tools by not having it. Why can't we simply assign the constant here
+> (and continue using kfree_const() below)?
 
-I added these:
+Which makes code inconsistent. But okay, no big deal.
 
-Reported-by: Tomáš Trnka <trnka@scm.com>
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216441
+> I think this is the case where PTR_ERR_OR_ZERO() might help avoid
+> multiple IS_ERR/PTR_ERR:
+> 
+> 	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
+> 	error = PTR_ERR_OR_ZERO(subsys);
+> 	if (error == -ENODATA)
+> 		subsys = "unknown";
+> 	else if (error)
+> 		return error;
 
-Jiri made a comment, can you please reply?
+Would it matter? The generated code will be the same in both cases, no?
 
-Applied locally for further tests,
+> >  	snprintf(icn8505->firmware_name, sizeof(icn8505->firmware_name),
+> >  		 "chipone/icn8505-%s.fw", subsys);
+> >  
+> > -	kfree(buffer.pointer);
+> > +	kfree_const(subsys);
+> >  	return 0;
 
-Thanks,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-- Arnaldo
+

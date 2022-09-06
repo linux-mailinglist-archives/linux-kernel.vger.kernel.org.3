@@ -2,48 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8815ADCE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1215ADCE6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 03:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbiIFBaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 21:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S232478AbiIFBaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 21:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiIFBaS (ORCPT
+        with ESMTP id S229619AbiIFBa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 21:30:18 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B8D4C601;
-        Mon,  5 Sep 2022 18:30:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 5 Sep 2022 21:30:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FF8647C6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 18:30:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM79f11SGz4xG6;
-        Tue,  6 Sep 2022 11:30:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662427814;
-        bh=OGm8FbMx/rVmQR6RSZSoIPcAE0Xg1UA0h2SDNoahiOI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RL5qxQa11wjwhrCNFJUGlJKE2c7bWLSD8VViQ+HhKled+DafuXXAD3RczEwb1YAsT
-         Vq31JJ4N12n2ab6sAT4gtMANrUV4Vg6B0Q5Fa5skocGOasujghD5zYEa0KJl7bp43c
-         Eb4TmGjdM0wVyK01kbmpAykjLmSCFM1zYm8pA4s5jmw5D2h5GInHncxfU5G+DjjcEM
-         2dZ7BkJBdvTrhEYFR1dJzzflWexGAkiTD/krLOWF1nwUpP2M+TBDYfWvv56vgxBNh4
-         jQurUG91nQbWbzsK2Z+m2hVEzmFaqyiw2Wa5ukPPfhC85ugdYXWLXjuKMkurv5E8p5
-         tbAifAppBcHsg==
-Date:   Tue, 6 Sep 2022 11:30:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the crypto tree
-Message-ID: <20220906113012.447fc7f4@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BLImpwYhLV.gavsNcajwkZg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4FBAB815AE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 01:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775E5C433C1;
+        Tue,  6 Sep 2022 01:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662427823;
+        bh=2k5Cf0hW3tgV+89sebcqyCh1W3nfzEd+bh/IzTIAxbw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kzihkAXHcCDK0QFtMnv3oRGa65bDVQGbIW11SiWsBVaHQtcZQb5xQZZ4yN9LOnf6f
+         fY2shsKIB9m+RZokDSLSbddDf+2uc4ygODww5Pcqx/2GWcpw6e440vNNWlVlmFCzW/
+         CLBlXjgjdEP0nlU4aWrOoqxVvRMPyLB+Bc0IXMtCrnwxXNyhUssakBjjlQDkCRpxWX
+         hIl7QvnrAzln+7094yOG0IsMnkkOFqw1TLE4jS0zp4UNBKZDepimuICbXiS97WbHH+
+         i8b+wyZP7nB0b2oraymdKBJsVb9TXWRQh7XcSQczS37JFBs3fW1GG7dkxUNEzENAI4
+         ZzGXWiWQ+tQPA==
+Date:   Tue, 6 Sep 2022 10:30:18 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>
+Subject: Re: CONFIG_RETHUNK int3 filling prevents kprobes in function body
+Message-Id: <20220906103018.50f46e8c21c4a40b2d635c75@kernel.org>
+In-Reply-To: <YxYTvgTqRP0GMAjO@hirez.programming.kicks-ass.net>
+References: <20220904230713.a461f8fe85329663226c755f@kernel.org>
+        <20220905105758.176734eb@gandalf.local.home>
+        <YxYRYwZ/zYO+u1ij@hirez.programming.kicks-ass.net>
+        <YxYTvgTqRP0GMAjO@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,48 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BLImpwYhLV.gavsNcajwkZg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 5 Sep 2022 17:20:30 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Hi all,
+> On Mon, Sep 05, 2022 at 05:10:27PM +0200, Peter Zijlstra wrote:
+> > On Mon, Sep 05, 2022 at 10:57:58AM -0400, Steven Rostedt wrote:
+> > > On Sun, 4 Sep 2022 23:07:13 +0900
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> > > 
+> > > > Can we use another instruction for padding instead of INT3? (e.g. NOP or UD2)
+> > > > 
+> > > > Or, can I expect the instruction length in __return_sites[] are always 5?
+> > > > If so, I can just skip 5 bytes if the address is in __return_sites[].
+> > > 
+> > > Perhaps another option is to have a table of where the padding is placed
+> > > (tagged), and that kprobes could check to see if the int3 is due to this
+> > > padding or not?
+> > 
+> > I don't see need for that. If you want to be strict you can simply
+> > follow the branches found earlier, if you want to be lazy, you can
+> > decode until you run out of the symbol size.
+> 
+> Another lazy option is to teach the thing that 'ret' is followed by 0,1
+> or 4 'int3' instructions depending on CONFIG_SLS, CONFIG_RETHUNK, but
+> that'll get you into trouble with future SLS compiler options, like the
+> aforementioned JMP-SLS option.
 
-After merging the crypto tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Yes, I agree... OK, let me try to decode branches to find the
+nearest earlier target instruction.
 
-ERROR: modpost: "aspeed_register_hace_hash_algs" [drivers/crypto/aspeed/asp=
-eed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_unregister_hace_crypto_algs" [drivers/crypto/aspeed=
-/aspeed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_register_hace_crypto_algs" [drivers/crypto/aspeed/a=
-speed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_unregister_hace_hash_algs" [drivers/crypto/aspeed/a=
-speed_crypto.ko] undefined!
+Thank you!
 
-Exposed by commit
-
-  31b39755e325 ("crypto: aspeed - Enable compile testing")
-
-I have used the crypto tree from next-20220901 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BLImpwYhLV.gavsNcajwkZg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWoqQACgkQAVBC80lX
-0GwLVwf8CZG3HaGdmOv9YClgzsgMYuu2mOR8dPePl/zLiGl2AKs5KMmvniLhqe9g
-CEmXzl2LuyuqUwoFGZTsIFd927f/iAP0m7ff25Zm1YeBkpO0gGiofeu4fDo2ayo5
-cilKi3FO49r8abZjC9NAVFLQ6vBqblAY9R4kP36R2MFNPUON08FReKvR+Eh2Z6NK
-BTdStOFIwP/gDtxM7eTll7lJccdOeqMaAmOHYW4oTkX4WuCM82tv/JShZMDIEjIo
-ec46MVsEVPxbHneTfkba2GRIA3gLBHQXMLQwHgpHuqGmqzgvgXbp/9SciKrtgFD+
-DDlUnFGzicDazOYXyYrTNpD5jaKR6Q==
-=JXHU
------END PGP SIGNATURE-----
-
---Sig_/BLImpwYhLV.gavsNcajwkZg--
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

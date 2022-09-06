@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEDB5ADFCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3308A5ADFCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 08:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbiIFGbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 02:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
+        id S238368AbiIFGc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 02:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238076AbiIFGbn (ORCPT
+        with ESMTP id S231569AbiIFGc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 02:31:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80CD6B16B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 23:31:40 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oVS7M-0006t6-OD; Tue, 06 Sep 2022 08:31:28 +0200
-Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:a3ba:d49d:1749:550])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A6CA1DB575;
-        Tue,  6 Sep 2022 06:31:27 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 08:31:25 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: net: can: nxp,sja1000: drop ref from
- reg-io-width
-Message-ID: <20220906063125.pgv3j3i4ugkxlubq@pengutronix.de>
-References: <20220823101011.386970-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lsl5szbglsrv6lm6"
-Content-Disposition: inline
-In-Reply-To: <20220823101011.386970-1-krzysztof.kozlowski@linaro.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 6 Sep 2022 02:32:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684DF6B16B;
+        Mon,  5 Sep 2022 23:32:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA45F6131C;
+        Tue,  6 Sep 2022 06:32:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37967C433C1;
+        Tue,  6 Sep 2022 06:32:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662445945;
+        bh=8LMCsYlvl0CUwYsQ2G7wmr8HmSnIgXOgFBXtW7glAw0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r8JMlanDPN5JhKFA/O5mbNlEqqfeumtL6rk3hWkNYXtbSzkZu3hYbaFVDU7q/EK1L
+         abt8/KMjuQWTpEajHFPIJl96puonsddBsiL1LASz6I0C6s8mWIFCLFJJP2Lk5TkaA/
+         6a9bmoQKC0yFGl0in68Egcx8yfQE4e1ObLTa8MCB/TdtkPUARAlb7yZYngZWCHAUn4
+         9bzkkxOvWz1v1rlIZhdD8Q1RU5UGd5y5tIsGDqGG7Ke4GhePC03/t9mwoXvHeU9+Vg
+         nTO4ZHUNTMoC2hucxl0iRhNUj7fCBOSKhCe2QslnkDGCE/VEIYft4gVTzYF2AjjZxR
+         wcQuGmN/9VBIg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oVS8F-008EWN-13;
+        Tue, 06 Sep 2022 07:32:23 +0100
+Date:   Tue, 06 Sep 2022 07:32:22 +0100
+Message-ID: <87pmg9ui6h.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, isaku.yamahata@gmail.com,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v3 10/22] KVM: Drop kvm_count_lock and instead protect kvm_usage_count with kvm_lock
+In-Reply-To: <20220906024643.ti66dw2y6m6jgch2@yy-desk-7060>
+References: <cover.1662084396.git.isaku.yamahata@intel.com>
+        <20212af31729ba27e29c3856b78975c199b5365c.1662084396.git.isaku.yamahata@intel.com>
+        <20220906024643.ti66dw2y6m6jgch2@yy-desk-7060>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: yuan.yao@linux.intel.com, isaku.yamahata@intel.com, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de, will@kernel.org, isaku.yamahata@gmail.com, kai.huang@intel.com, chao.gao@intel.com, atishp@atishpatra.org, zhangshaokun@hisilicon.com, liuqi115@huawei.com, john.garry@huawei.com, daniel.lezcano@linaro.org, ying.huang@intel.com, chenhuacai@kernel.org, dave.hansen@linux.intel.com, bp@alien8.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,41 +81,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 06 Sep 2022 03:46:43 +0100,
+Yuan Yao <yuan.yao@linux.intel.com> wrote:
+> 
+> On Thu, Sep 01, 2022 at 07:17:45PM -0700, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >
+> > Because kvm_count_lock unnecessarily complicates the KVM locking convention
+> > Drop kvm_count_lock and instead protect kvm_usage_count with kvm_lock for
+> > simplicity.
+> >
+> > Opportunistically add some comments on locking.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  Documentation/virt/kvm/locking.rst | 14 +++++-------
+> >  virt/kvm/kvm_main.c                | 34 ++++++++++++++++++++----------
+> >  2 files changed, 28 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
+> > index 845a561629f1..8957e32aa724 100644
+> > --- a/Documentation/virt/kvm/locking.rst
+> > +++ b/Documentation/virt/kvm/locking.rst
+> > @@ -216,15 +216,11 @@ time it will be set using the Dirty tracking mechanism described above.
+> >  :Type:		mutex
+> >  :Arch:		any
+> >  :Protects:	- vm_list
+> > -
+> > -``kvm_count_lock``
+> > -^^^^^^^^^^^^^^^^^^
+> > -
+> > -:Type:		raw_spinlock_t
+> > -:Arch:		any
+> > -:Protects:	- hardware virtualization enable/disable
+> > -:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
+> > -		migration.
+> > +                - kvm_usage_count
+> > +                - hardware virtualization enable/disable
+> > +:Comment:	Use cpus_read_lock() for hardware virtualization enable/disable
+> > +                because hardware enabling/disabling must be atomic /wrt
+> > +                migration.  The lock order is cpus lock => kvm_lock.
+> >
+> >  ``kvm->mn_invalidate_lock``
+> >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index fc55447c4dba..082d5dbc8d7f 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -100,7 +100,6 @@ EXPORT_SYMBOL_GPL(halt_poll_ns_shrink);
+> >   */
+> >
+> >  DEFINE_MUTEX(kvm_lock);
+> > -static DEFINE_RAW_SPINLOCK(kvm_count_lock);
+> >  LIST_HEAD(vm_list);
+> >
+> >  static cpumask_var_t cpus_hardware_enabled;
+> > @@ -4996,6 +4995,8 @@ static void hardware_enable_nolock(void *caller_name)
+> >  	int cpu = raw_smp_processor_id();
+> >  	int r;
+> >
+> > +	WARN_ON_ONCE(preemptible());
+> 
+> This looks incorrect, it may triggers everytime when online CPU.
+> Because patch 7 moved CPUHP_AP_KVM_STARTING *AFTER*
+> CPUHP_AP_ONLINE_IDLE as CPUHP_AP_KVM_ONLINE, then cpuhp_thread_fun()
+> runs the new CPUHP_AP_KVM_ONLINE in *non-atomic* context:
+> 
+> cpuhp_thread_fun(unsigned int cpu) {
+> ...
+> 	if (cpuhp_is_atomic_state(state)) {
+> 		local_irq_disable();
+> 		st->result = cpuhp_invoke_callback(cpu, state, bringup, st->node, &st->last);
+> 		local_irq_enable();
+> 
+> 		WARN_ON_ONCE(st->result);
+> 	} else {
+> 		st->result = cpuhp_invoke_callback(cpu, state, bringup, st->node, &st->last);
+> 	}
+> ...
+> }
+> 
+> static bool cpuhp_is_atomic_state(enum cpuhp_state state)
+> {
+> 	return CPUHP_AP_IDLE_DEAD <= state && state < CPUHP_AP_ONLINE;
+> }
+> 
+> The hardware_enable_nolock() now is called in 2 cases:
+> 1. in atomic context by on_each_cpu().
+> 2. From non-atomic context by CPU hotplug thread.
+> 
+> so how about "WARN_ONCE(preemptible() && cpu_active(cpu))" ?
 
---lsl5szbglsrv6lm6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I suspect similar changes must be applied to the arm64 side (though
+I'm still looking for a good definition of cpu_active()).
 
-On 23.08.2022 13:10:11, Krzysztof Kozlowski wrote:
-> reg-io-width is a standard property, so no need for defining its type
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	M.
 
-Applied to linux-can-next.
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---lsl5szbglsrv6lm6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMW6TsACgkQrX5LkNig
-013fawf/c4s2V6wfXL6c4iE/QdZf/iopJwlkYqM7pckagIuvQSOS+kP09wxmZNE5
-IekY6tNx4kDVC7ZohH89YnCGs5eiVv6iprt7mS4FZDa9HKiFw/338U6Y294HvANm
-MONUHbOJ255OHFLGKwGRYCaLOAAGMZeCJGkOsLf5uStH3q+/6pR7bNoSXSeM4n2G
-HVz1mvY5wNSEwjQzv5/BiHp8qJnqqLdStNdWo3jC+tFVZodriCb3wYDRU0hwRJKr
-nh8RVCWKfEjANY7ilGpH/QugdJV0wP3mlawiKgHazLJIQxUPBe9J/+ajfQinhXY5
-umdlkFB3p7I3TA6bBN3P7EwX6sWNiA==
-=0by4
------END PGP SIGNATURE-----
-
---lsl5szbglsrv6lm6--
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,83 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A11D5AE7F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8595AE7FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240007AbiIFMWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
+        id S239934AbiIFMWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239962AbiIFMVa (ORCPT
+        with ESMTP id S240090AbiIFMWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:21:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769747C524;
-        Tue,  6 Sep 2022 05:18:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FF1F614F0;
-        Tue,  6 Sep 2022 12:18:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D80BC433C1;
-        Tue,  6 Sep 2022 12:18:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662466690;
-        bh=1gMZkYY0yDzHXlPGzNHurF/vidUlbmKz4+0OJev6OOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CSggKgk1lcxhSWGD2WRJrmHwlZ4kyuhdYX6Fe1itri3TPI7D037aKm48NfnUi50SF
-         oVjZdeMMH4MSUHy1RRTZnPggpm4AN/75JAFBbdD0N8c6lWz0CP26zTUEHKDKfwsmQg
-         nBL2SkFxIp4ipUTlBi7/sccBYU8zYY7FUmct7vRo=
-Date:   Tue, 6 Sep 2022 14:18:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        stable <stable@kernel.org>
-Subject: Re: usb: dwc3: disable USB core PHY management
-Message-ID: <Yxc6gCoDZ3w8MHOy@kroah.com>
-References: <20220906120702.19219-4-johan@kernel.org>
+        Tue, 6 Sep 2022 08:22:06 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E8F78BE3;
+        Tue,  6 Sep 2022 05:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=hqCjtiyrJ6rGXCi+KJhh0cIm4lWy2egYvSinPQdu6Hc=; b=XJhOYk74ELHK8gVTOYvVFYDo3a
+        a3RtNJTEJ8NKggTy06vcQ5vcCOqty6LYVSj3isgmjNkgJ8N1jbDgH/UoyB8MWeHKrLgGtnqSipV+B
+        VSsGD+vfQ780NkNP9OsG4Ih4DlnZRKkoygupkCjAr/VQwN9wU+Oz7Llk9W5VoMptJEPQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oVXXP-00FkPq-Nc; Tue, 06 Sep 2022 14:18:43 +0200
+Date:   Tue, 6 Sep 2022 14:18:43 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Olliver Schinagl <oliver@schinagl.nl>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Olliver Schinagl <oliver+list@schinagl.nl>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH] linkstate: Add macros for link state up/down
+Message-ID: <Yxc6o+6u2zlPxU3a@lunn.ch>
+References: <20220906083754.2183092-1-oliver@schinagl.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906120702.19219-4-johan@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220906083754.2183092-1-oliver@schinagl.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 02:07:02PM +0200, Johan Hovold wrote:
-> From: Johan Hovold <johan+linaro@kernel.org>
+On Tue, Sep 06, 2022 at 10:37:54AM +0200, Olliver Schinagl wrote:
+> The phylink_link_state.state property can be up or down, via 1 and 0.
 > 
-> commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
-> 
-> The dwc3 driver manages its PHYs itself so the USB core PHY management
-> needs to be disabled.
-> 
-> Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
-> host: xhci-plat: add platform data support") and f768e718911e ("usb:
-> host: xhci-plat: add priv quirk for skip PHY initialization") to
-> propagate the setting for now.
-> 
-> Fixes: 4e88d4c08301 ("usb: add a flag to skip PHY initialization to struct usb_hcd")
-> Fixes: 178a0bce05cb ("usb: core: hcd: integrate the PHY wrapper into the HCD core")
-> Tested-by: Matthias Kaehlcke <mka@chromium.org>
-> Cc: stable <stable@kernel.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> Link: https://lore.kernel.org/r/20220825131836.19769-1-johan+linaro@kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> [ johan: adjust context to 5.15 ]
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/usb/dwc3/host.c |   10 ++++++++++
->  1 file changed, 10 insertions(+)
+> The other link state's (speed, duplex) are defined in ethtool.h so lets
+> add defines for the link-state there as well so we can use macro's to
+> define our up/down states.
 
-Breaks the build on 4.19.y :(
+Hi Olliver
+
+The change itself is fine, but we don't add to the API without
+users. Please make use of these two new values somewhere, to show they
+are really useful.
+
+    Andrew

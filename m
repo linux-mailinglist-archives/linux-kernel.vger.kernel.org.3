@@ -2,62 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450105AF590
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90E65AF58E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiIFUNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S230041AbiIFUN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiIFUNH (ORCPT
+        with ESMTP id S230513AbiIFUNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:13:07 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0563BB01B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:08:37 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1278a61bd57so12407058fac.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:08:37 -0700 (PDT)
+        Tue, 6 Sep 2022 16:13:08 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F91BD4FD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:08:39 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id a9so6556130ilh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=a06d3C+ifwK9soSHXJQPu7Jd/b8VO4PZ2kvK/hGJ0IQ=;
-        b=TKsQyhcxKyQPJTesrEP8UNmxw1k0uPiJhBCydCzktlHoa1amSnHerKcx0AbxM2gafF
-         FDs+aJvfDKuefYz8/DMSICxkQ7tdgRg0wy6Qp0/TJAHqqoJ1ZO/bJ3rxDgnmo5uiGA3V
-         Nu8Xlhn/wTJgAmaEwDcRKYzUwFNY5aIubELXKVPbqr0rfcCuO4vPK4OBvtAT4AomXsbZ
-         9KVH2XNRRZZK5Ju2hGfN9cCiN9cZpYs9lFxrai1/0yjMzRqzz0MkAD7B8/uMmvsO57/7
-         IfdjSIM1bW8NePpOWqTYxaZ6lEutlQMnAZuCQgd/gVFOl+1lIBPuZAgPVRi3H7JmmPRP
-         kvlg==
+        bh=xXYqmgNj8Tmj+x9M5f+04P5dGXCMQoJ15NQDTyzFADc=;
+        b=m8rk4SWGAohfkoYbpdwdbzCtTDUzSXWWGs5XiL42MbO9eUE0KkcAYJtigCpi9ZiVNM
+         XRpBlpbqZwXmwRi9Nu33ABMaIniF1jEHqbW4ibZa4VuMko12DcRlsp/s+LV6WxLiKUuc
+         DlfoAjSQiq7WPBBE1H0eJXzkvrbAVqNEfHSySVRwxI4xwPffNFz/azZDxOMKUNiN3Ouc
+         7vutba0HCoTD9TjCbtMYQAiBlFuUgL4kHcRgMCO70oFgb/HnnUnaLa2Z+vFBz7EwfT/e
+         UjoQCVppiPyeulYLjD59K/Xfz+Ua8hohlBdVSzf0piAJ4TW92nmjmGtCKP2RKU2CH0AC
+         U7Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=a06d3C+ifwK9soSHXJQPu7Jd/b8VO4PZ2kvK/hGJ0IQ=;
-        b=1Lcj3b4IQtjQodmKfAUXwobjBumsdcRnxZlqCHtXwzXXy/lAesLxNzsZjgka2rsNS0
-         qvVXWn9miAOukmQoIYe4Ey8mnfYmhgxa+YiPjQ3pjTzlT70YpJ8tzrJdKfYNT+dbJbdl
-         tj1OEI1ZAHIsPWFVxw7ikIDIMjmSyCLBQ4I0uR+/uk0Yo7cCyL/ip3m52F10If75gQ0m
-         Wk+II7WFJuc8JUj7bfovyJzC4iMGQaqVaziVZsCiH5ZOwKELVseeUWQzyAllDKT4lwHF
-         2BJyEF29P9Mgta++n9WMQ9cUolYi6eKx7a5Lyeo4XAzCevsYOKb4LyZ2HKH2lzbklrZZ
-         1jZQ==
-X-Gm-Message-State: ACgBeo19OTlURY0x25IiEB3Mi5/k2Ys41AjtNM1DIiyT4VD5+PCfQ0jE
-        66E4BGuslfvb/WZUDaxjpJwRML8RgmD21wPyEW7vkA==
-X-Google-Smtp-Source: AA6agR4PSXlVXVaCDz1ZY1BJE4ibDUJmuCAOAZrxzdTiId9I76g2kXWIP9Yj0TcraP0M3nu/zSFhhGpVtgr88IIQa+s=
-X-Received: by 2002:a05:6870:41d0:b0:126:5d06:28a5 with SMTP id
- z16-20020a05687041d000b001265d0628a5mr23038oac.181.1662494900513; Tue, 06 Sep
- 2022 13:08:20 -0700 (PDT)
+        bh=xXYqmgNj8Tmj+x9M5f+04P5dGXCMQoJ15NQDTyzFADc=;
+        b=bwszPmk1hDpezJmPh6u4egz82Req0vPYwJ99eR7P4qIWJazXWktue9dnOXI4F04yn0
+         h0YXY9OcWUZHxsnwMqGO3I0gphSm+gcpCZ7/9ACKZKPzmUz8JKMkorwoezf3xEbdPcNw
+         V/cyZkc/rglMp10i/+dhPfAGpkHpzi/dCIWrT9Kg3bANNYnm3qHKuapYEgPKQ+qu19aO
+         IDDSSSzm21tExjui1Q9+V5OGYtr0YHQpK1jwHRWm9d16R13yxi4sZ4Tx9k+nDgiWC5wz
+         yrMtUsTrukixSllxGJ38G+7av1Krd6NZB4KrGUUBDtZbMV8SZ10XobRJMM06vujfjdig
+         ZmuQ==
+X-Gm-Message-State: ACgBeo1hTEDEg3rlxNYbkej/NVSJy1TT0+d5CWJSUhYwb2FOSwZvbtPl
+        tRHTTF5Ku81Wk/10ygYh1eqcBba+QEZTS61Tpb+J/g==
+X-Google-Smtp-Source: AA6agR4kK/DxJZ/QWl7YVW2Lx89QOwSRT/InEkv6rZ+riJpikx1NlRv2IBjPMwhu7ALyb9V69oOBORt1uVJaIEcSenM=
+X-Received: by 2002:a92:ca0f:0:b0:2ee:5577:e447 with SMTP id
+ j15-20020a92ca0f000000b002ee5577e447mr103285ils.215.1662494902370; Tue, 06
+ Sep 2022 13:08:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220905123946.95223-1-likexu@tencent.com> <20220905123946.95223-5-likexu@tencent.com>
- <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com> <0e0f773b-0dde-2282-c2d0-fad2311f59a7@gmail.com>
-In-Reply-To: <0e0f773b-0dde-2282-c2d0-fad2311f59a7@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 6 Sep 2022 13:08:09 -0700
-Message-ID: <CALMp9eQQe-XDUZmNtg5Z+Vv8hMu_R_fuTv2+-ZfuRwzNUmW0fA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf 0x80000022
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-20-surenb@google.com>
+ <YxeiB2la/9fZEzLO@xz-m1.local>
+In-Reply-To: <YxeiB2la/9fZEzLO@xz-m1.local>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 6 Sep 2022 13:08:10 -0700
+Message-ID: <CAJuCfpHkjHAAmKAJH=cxhFmwMawUDQJccwKa8k=xXNZZ1knT7g@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 19/28] mm: disallow do_swap_page to handle page
+ faults under VMA lock
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michel Lespinasse <michel@lespinasse.org>,
+        Jerome Glisse <jglisse@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Laurent Dufour <laurent.dufour@fr.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
+        Hugh Dickins <hughd@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Minchan Kim <minchan@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -70,146 +96,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 5:53 AM Like Xu <like.xu.linux@gmail.com> wrote:
+On Tue, Sep 6, 2022 at 12:39 PM Peter Xu <peterx@redhat.com> wrote:
 >
-> On 6/9/2022 1:36 am, Jim Mattson wrote:
-> > On Mon, Sep 5, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
-> >>
-> >> From: Sandipan Das <sandipan.das@amd.com>
-> >>
-> >> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some
-> >> new performance monitoring features for AMD processors.
-> >>
-> >> Bit 0 of EAX indicates support for Performance Monitoring
-> >> Version 2 (PerfMonV2) features. If found to be set during
-> >> PMU initialization, the EBX bits of the same CPUID function
-> >> can be used to determine the number of available PMCs for
-> >> different PMU types.
-> >>
-> >> Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so
-> >> that guests can make use of the PerfMonV2 features.
-> >>
-> >> Co-developed-by: Like Xu <likexu@tencent.com>
-> >> Signed-off-by: Like Xu <likexu@tencent.com>
-> >> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> >> ---
-> >>   arch/x86/include/asm/perf_event.h |  8 ++++++++
-> >>   arch/x86/kvm/cpuid.c              | 21 ++++++++++++++++++++-
-> >>   2 files changed, 28 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-> >> index f6fc8dd51ef4..c848f504e467 100644
-> >> --- a/arch/x86/include/asm/perf_event.h
-> >> +++ b/arch/x86/include/asm/perf_event.h
-> >> @@ -214,6 +214,14 @@ union cpuid_0x80000022_ebx {
-> >>          unsigned int            full;
-> >>   };
-> >>
-> >> +union cpuid_0x80000022_eax {
-> >> +       struct {
-> >> +               /* Performance Monitoring Version 2 Supported */
-> >> +               unsigned int    perfmon_v2:1;
-> >> +       } split;
-> >> +       unsigned int            full;
-> >> +};
-> >> +
-> >>   struct x86_pmu_capability {
-> >>          int             version;
-> >>          int             num_counters_gp;
-> >> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> >> index 75dcf7a72605..08a29ab096d2 100644
-> >> --- a/arch/x86/kvm/cpuid.c
-> >> +++ b/arch/x86/kvm/cpuid.c
-> >> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
-> >>                  entry->edx = 0;
-> >>                  break;
-> >>          case 0x80000000:
-> >> -               entry->eax = min(entry->eax, 0x80000021);
-> >> +               entry->eax = min(entry->eax, 0x80000022);
-> >>                  /*
-> >>                   * Serializing LFENCE is reported in a multitude of ways, and
-> >>                   * NullSegClearsBase is not reported in CPUID on Zen2; help
-> >> @@ -1203,6 +1203,25 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
-> >>                  if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
-> >>                          entry->eax |= BIT(6);
-> >>                  break;
-> >> +       /* AMD Extended Performance Monitoring and Debug */
-> >> +       case 0x80000022: {
-> >> +               union cpuid_0x80000022_eax eax;
-> >> +               union cpuid_0x80000022_ebx ebx;
-> >> +
-> >> +               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-> >> +               if (!enable_pmu)
-> >> +                       break;
-> >> +
-> >> +               if (kvm_pmu_cap.version > 1) {
-> >> +                       /* AMD PerfMon is only supported up to V2 in the KVM. */
-> >> +                       eax.split.perfmon_v2 = 1;
-> >> +                       ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
-> >> +                                                    KVM_AMD_PMC_MAX_GENERIC);
+> On Thu, Sep 01, 2022 at 10:35:07AM -0700, Suren Baghdasaryan wrote:
+> > Due to the possibility of do_swap_page dropping mmap_lock, abort fault
+> > handling under VMA lock and retry holding mmap_lock. This can be handled
+> > more gracefully in the future.
 > >
-> > Note that the number of core PMCs has to be at least 6 if
-> > guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE). I suppose this leaf
-> > could claim fewer, but the first 6 PMCs must work, per the v1 PMU
-> > spec. That is, software that knows about PERFCTR_CORE, but not about
-> > PMU v2, can rightfully expect 6 PMCs.
->
-> I thought the NumCorePmc number would only make sense if
-> CPUID.80000022.eax.perfmon_v2
-> bit was present, but considering that the user space is perfectly fine with just
-> configuring the
-> NumCorePmc number without setting perfmon_v2 bit at all, so how about:
-
-CPUID.80000022H might only make sense if X86_FEATURE_PERFCTR_CORE is
-present. It's hard to know in the absence of documentation.
-
->         /* AMD Extended Performance Monitoring and Debug */
->         case 0x80000022: {
->                 union cpuid_0x80000022_eax eax;
->                 union cpuid_0x80000022_ebx ebx;
->                 bool perfctr_core;
->
->                 entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->                 if (!enable_pmu)
->                         break;
->
->                 perfctr_core = kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE);
->                 if (!perfctr_core)
->                         ebx.split.num_core_pmc = AMD64_NUM_COUNTERS;
->                 if (kvm_pmu_cap.version > 1) {
->                         /* AMD PerfMon is only supported up to V2 in the KVM. */
->                         eax.split.perfmon_v2 = 1;
->                         ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
->                                                      KVM_AMD_PMC_MAX_GENERIC);
->                 }
->                 if (perfctr_core) {
->                         ebx.split.num_core_pmc = max(ebx.split.num_core_pmc,
->                                                      AMD64_NUM_COUNTERS_CORE);
->                 }
-
-This still isn't quite right. All AMD CPUs must support a minimum of 4 PMCs.
-
->
->                 entry->eax = eax.full;
->                 entry->ebx = ebx.full;
->                 break;
->         }
->
-> ?
->
-> Once 0x80000022 appears, ebx.split.num_core_pmc will report only
-> the real "Number of Core Performance Counters" regardless of perfmon_v2.
->
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  mm/memory.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
 > >
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 9ac9944e8c62..29d2f49f922a 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -3738,6 +3738,11 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >       vm_fault_t ret = 0;
+> >       void *shadow = NULL;
 > >
-> >> +               }
-> >> +               entry->eax = eax.full;
-> >> +               entry->ebx = ebx.full;
-> >> +               break;
-> >> +       }
-> >>          /*Add support for Centaur's CPUID instruction*/
-> >>          case 0xC0000000:
-> >>                  /*Just support up to 0xC0000004 now*/
-> >> --
-> >> 2.37.3
-> >>
+> > +     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> > +             ret = VM_FAULT_RETRY;
+> > +             goto out;
+> > +     }
+> > +
+>
+> May want to fail early similarly for handle_userfault() too for similar
+> reason.  Thanks,
+
+I wasn't aware of a similar issue there. Will have a closer look. Thanks!
+
+>
+> --
+> Peter Xu
+>

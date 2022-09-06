@@ -2,83 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67A45ADC7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 02:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BD25ADC9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 02:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbiIFAgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 20:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S229817AbiIFAiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 20:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232486AbiIFAf4 (ORCPT
+        with ESMTP id S229619AbiIFAiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 20:35:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E40567C97;
-        Mon,  5 Sep 2022 17:35:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93B0EB8159F;
-        Tue,  6 Sep 2022 00:35:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F28EC43145;
-        Tue,  6 Sep 2022 00:35:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662424551;
-        bh=AFVELCe6kckm5eVg8tSkLGzu73jpu1k+AHFc6+CYBcw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nI77n7PyLi5FxsG5xVGzM7IPkRddyT0b0CMVM4SXMhWb+vUNwAV0WGNt4PA9n8CqS
-         zxVkXOyN5M/JlTZh6GqixESF8eOED5NoosbhPX2Hsbo0g74HUvcD5IqIAIzpnj5CaD
-         d4ygcuWBgqOpLZM9kiHSPuHX97fV/gU10RfgBZV6i4M0nptUl44AJG2NDDPrJ3KyGn
-         1mg1nut4G2j0qOt/ZUizGE05HWc7HSg5muHqEVTDVysQf1oTx2lYiY2aW+xCf1axIQ
-         MnFiCmpbeoQzdH1L8YqUu19CRdilnf4OtxFGR0RF0l82/TvXGOFtk+ukltv8mWvtx4
-         CmdEvf4qo/wqw==
-Received: by mail-ot1-f49.google.com with SMTP id m21-20020a9d6ad5000000b00638df677850so7112274otq.5;
-        Mon, 05 Sep 2022 17:35:51 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1irLWI9k40WIIAZUzn+PUxbCUun/ta0nMlF7gXXQveqVBkCJz6
-        /gv/1dF3FWqxO41xCbpdUKyXzy9lVYDMFwar1g==
-X-Google-Smtp-Source: AA6agR7JB46gDLcqHlczb2XMcJBrFON4MTYWbTLa6xhusijh7jtXlCYbGmC4KWVKQpa3XwKRkOEL4frns62DfuOfGIw=
-X-Received: by 2002:a05:6830:6999:b0:61d:26f8:94c1 with SMTP id
- cy25-20020a056830699900b0061d26f894c1mr20597426otb.278.1662424550394; Mon, 05
- Sep 2022 17:35:50 -0700 (PDT)
+        Mon, 5 Sep 2022 20:38:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3517D696D5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 17:38:06 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bj12so19804516ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 17:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7un4HX2JCwCz50GAyQxv3uo3L7dunvyCkFMMoxC/GmE=;
+        b=aP6iMqzgytKnLYUKeWOGgeQf7XrWU3yeeBV15MvVRL/qVSmBdE7EDnSFKZuJ0PPcQg
+         VviWREQGiQx9scuQUS31+9p12E5NBCKfgBsBPn4vUyvDBf7cWiVyxVIu5JC9lnpnHmAb
+         jX0Tke+GE0beO8MaJFc9omSrI33+5ZfAy9qF1L6g5BpsXWfO1wvNHdx24MdzpI8ZV9EC
+         RTlTk+2AoUelBrKMKjAOOLKzUE0MLgkZc+XKmw43y/A6QpY7bdElZFMQ9hQ1Zxq260lh
+         ptMNs5uA6SIKuB/PAdISDefPLlf/nfIOnmwR8S3iKzU1Ixtk8d8JvgJFJEei8ouGwPhu
+         Qr0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7un4HX2JCwCz50GAyQxv3uo3L7dunvyCkFMMoxC/GmE=;
+        b=SmTnjy3yRMEFxUhoKYjTV0yyKhilEgR9fXit6z7FdaQQfBJ3hKeUCMukZPRM1Qeue/
+         1SAa9FJZpO87/7Ol0XX62zudh1nX/Qn15PuGYZfz/Jnjn46C1+7OLklVZvvY/c4xdjgw
+         07RTUJBWL2dl3r9D9lk4p0SVEhSi9IHPXqEcD7//gGlGMRNf0Xzgil6N6HphbuUZm4A0
+         /+E7qCM/nvkPwMX66a52XLHTVN0cthNZLdQ0HKwA7gQUSmCi6Xt5sVNIRyNwAZE/FJ1C
+         fQjFfTsUXhTNeCn6ZRJVKfwpRiH0hQNc+J6s9dtSgxcaWf3d4AWhMkgXyru/JJu3ocIU
+         zPZg==
+X-Gm-Message-State: ACgBeo3GEv/fZumjFSpz3Q2WvqfOgjHwoF6ydCXmGTtnS0PBQR2OIvd7
+        pn9EeW6tKkg0RcztgAAbCmiOWRp8PN5GfcJqElvVfA==
+X-Google-Smtp-Source: AA6agR5fOzdQufQ44wqDDK7YEEkgYae38ASeKpZbXXmTrNA6WkhrnwsIV1o34p4PJIU8pn/xD3voz0mXgvBqb/dQReE=
+X-Received: by 2002:a17:907:7252:b0:73f:c3e9:4197 with SMTP id
+ ds18-20020a170907725200b0073fc3e94197mr34115682ejc.173.1662424684715; Mon, 05
+ Sep 2022 17:38:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901044149.16782-1-rex-bc.chen@mediatek.com>
- <af23462c-2d3b-470a-7fd6-2bf09a3174cb@gmail.com> <80985882-c46f-cfb1-b077-a92866536678@collabora.com>
-In-Reply-To: <80985882-c46f-cfb1-b077-a92866536678@collabora.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Tue, 6 Sep 2022 08:35:31 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-C8fmabcTrytpHowbHe8Y+tTmv=5SV+oKPjUNRLTaU9w@mail.gmail.com>
-Message-ID: <CAAOTY_-C8fmabcTrytpHowbHe8Y+tTmv=5SV+oKPjUNRLTaU9w@mail.gmail.com>
-Subject: Re: [PATCH v17 00/10] Add MT8195 DisplayPort driver
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        DTML <devicetree@vger.kernel.org>, linux-fbdev@vger.kernel.org,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Jitao Shi <jitao.shi@mediatek.com>, liangxu.xu@mediatek.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>, deller@gmx.de,
-        David Airlie <airlied@linux.ie>
+References: <20220902232732.12358-1-rick.p.edgecombe@intel.com> <3d82deb6-357d-0b54-ffd1-dce157674aad@intel.com>
+In-Reply-To: <3d82deb6-357d-0b54-ffd1-dce157674aad@intel.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Mon, 5 Sep 2022 20:37:27 -0400
+Message-ID: <CA+CK2bCAC4uQr_nrJM=mbP8DSpR7Vz=OGF9q7wufU_i4Wk3GBw@mail.gmail.com>
+Subject: Re: [PATCH] mm: Check writable zero page in page table check
+To:     "Huang, Shaoqin" <shaoqin.huang@intel.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,46 +68,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Dmitry:
+Hi Shaoqin,
 
-Dmitry Osipenko <dmitry.osipenko@collabora.com> =E6=96=BC 2022=E5=B9=B49=E6=
-=9C=885=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:53=E5=AF=AB=E9=81=
-=93=EF=BC=9A
+The idea behind page table check is to prevent some types of memory
+corruptions: i.e. prevent false page sharing, and memory leaking
+between address spaces. This is an optional security feature for
+setups where it is more dangerous to leak data than to crash the
+machine. Therefore, when page table check detects illegal page sharing
+it immediately crashes the kernel. I think we can have a
+page_table_check option that would change BUG_ON to WARN_ON() (or to
+WARN_ON_ONCE(), since once corruption is detected I believe it might
+show up many times again)
+
+Pasha
+
+On Fri, Sep 2, 2022 at 10:13 PM Huang, Shaoqin <shaoqin.huang@intel.com> wrote:
 >
-> On 9/4/22 15:59, Dmitry Osipenko wrote:
-> > 01.09.2022 07:41, Bo-Chen Chen =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> This patch is separated from v10 which is including dp driver, phy dri=
-ver
-> >> and dpintf driver. This series is only contained the DisplayPort drive=
-r.
-> >>
-> >> This series can be tested using 5.19-rc2 kernel and I test it in MT819=
-5
-> >> Tomato Chromebook. Modetest these modes:
+>
+>
+> On 9/3/2022 7:27 AM, Rick Edgecombe wrote:
+> > The zero page should remain all zero, so that it can be mapped as
+> > read-only for read faults of memory that should be zeroed. If it is ever
+> > mapped writable to userspace, it could become non-zero and so other apps
+> > would unexpectedly get non-zero data. So the zero page should never be
+> > mapped writable to userspace. Check for this condition in
+> > page_table_check_set().
 > >
-> > Applied to drm-misc-next, thanks!
+> > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> >
+> > ---
+> >
+> > Hi,
+> >
+> > CONFIG_PAGE_TABLE_CHECK is pretty explicit about what it checks (and
+> > doesn't mention the zero page), but this condition seems to fit with the
+> > general category of "pages mapped wrongly to userspace". I added it
+> > locally to help me debug something. Maybe it's more widely useful.
+> >
+> >   mm/page_table_check.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> > index e2062748791a..665ece0d55d4 100644
+> > --- a/mm/page_table_check.c
+> > +++ b/mm/page_table_check.c
+> > @@ -102,6 +102,8 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
+> >       if (!pfn_valid(pfn))
+> >               return;
+> >
+> > +     BUG_ON(is_zero_pfn(pfn) && rw);
+> > +
 >
-> Hello Chun-Kuang Hu,
+> Why we need use BUG_ON() here? Based on [1], we should avoid to use the
+> BUG_ON() due to it will panic the machine.
 >
-> Angelo told me today that you wanted to pick up the MTK driver patches
-> and I applied them all to the drm-misc instead just of the "video/hdmi"
-> patch. The series was fully reviewed and tested, so I had no doubts when
-> applied all the patches.
+> [1]: https://lore.kernel.org/lkml/20220824163100.224449-1-david@redhat.com/
 >
-> The applied patches can't be reverted, so if you have more changes
-> prepared for the MTK driver, then please rebase them on top of the
-> latest drm-misc-next.
->
-> Apologizes for this confusion. Please let us know if we can help you.
-
-OK, if this cannot be reverted, I could only accept this. Normally,
-drm/mediatek patches would go though medaitek-drm-* branch. To prevent
-any confusion, it's better to discuss before pick up.
-
-Regards,
-Chun-Kuang.
-
->
-> --
-> Best regards,
-> Dmitry
+> >       page = pfn_to_page(pfn);
+> >       page_ext = lookup_page_ext(page);
+> >       anon = PageAnon(page);
+> >
+> > base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5

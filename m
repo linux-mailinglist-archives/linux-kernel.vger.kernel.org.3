@@ -2,136 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCE45AF06C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFB45AF06D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbiIFQcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S232608AbiIFQcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234022AbiIFQbh (ORCPT
+        with ESMTP id S232035AbiIFQbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:31:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AC418C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:04:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 6 Sep 2022 12:31:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B311403D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662480278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8aqTDgZ9S3xUVtZZj9N8B3wCOKXsynU6SIs7zbX6wbU=;
+        b=AlTFqiYCJ/H47MAxVA2HbgQEbBT0FHvs32GSoMWDgfjV8itKklm6CWWL6YUQLOBgLr1wXd
+        B+AqbnXzDqyrN97n5Kly7e7Cwy+nMqevXpYtGkMRErJWhXEyFL5uFMLvZbPpEOrYSZYrcc
+        pU71DsmUH/2sDsCd7VdxKEF58xeJOgs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-526-n_kaTBntPiiocCur2-YYRw-1; Tue, 06 Sep 2022 12:04:32 -0400
+X-MC-Unique: n_kaTBntPiiocCur2-YYRw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 84522336D0;
-        Tue,  6 Sep 2022 16:04:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662480268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjzLZ3rHiihQrfLWNjF73yb4DNX3TJs0K7iqQQYIzQo=;
-        b=qYKnMbTM2t9wVFrOaIDTF/7pRF1f/JPbZAAVu8dONP4NXKb54xTxNNQ0fk7NeISe5+Da4O
-        ItVoOUJgur+9LHy9chr3m3zjPTmh6gPqLws/dZT4MAbFCXSuAXX5+Iz1FWkuV9+8a/N7W8
-        y4Ypb91KWk5RhdFz2AgDdCmRXailzqM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662480268;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjzLZ3rHiihQrfLWNjF73yb4DNX3TJs0K7iqQQYIzQo=;
-        b=/rXtOPbKB0N9AvfH9HkXXKgjzQsE+kCoPHdCkMRCJlmjsNbF1OEU7+U3pDk2Zx7KvhneRb
-        rMCQxvMrSgRyU/CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57DFD13A19;
-        Tue,  6 Sep 2022 16:04:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hOKcFIxvF2OKLQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 06 Sep 2022 16:04:28 +0000
-Date:   Tue, 06 Sep 2022 18:04:27 +0200
-Message-ID: <877d2gfq0k.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION 5.19.x] AMD HD-audio devices missing on 5.19
-In-Reply-To: <YxdtCMbrDQCc5N42@nvidia.com>
-References: <874jy4cqok.wl-tiwai@suse.de>
-        <20220823010021.GA5967@nvidia.com>
-        <87h723sdde.wl-tiwai@suse.de>
-        <87ilmjqj1f.wl-tiwai@suse.de>
-        <20220823202824.GA4516@nvidia.com>
-        <YxdqP9i0bEwUg4VJ@nvidia.com>
-        <87edwofqkd.wl-tiwai@suse.de>
-        <YxdtCMbrDQCc5N42@nvidia.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EEC1E1C14B73;
+        Tue,  6 Sep 2022 16:04:31 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 35576409B3E6;
+        Tue,  6 Sep 2022 16:04:31 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        feng xiangjun <fengxj325@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
+Date:   Tue,  6 Sep 2022 12:04:30 -0400
+Message-Id: <20220906160430.1169837-1-pauld@redhat.com>
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 17:53:44 +0200,
-Jason Gunthorpe wrote:
-> 
-> On Tue, Sep 06, 2022 at 05:52:34PM +0200, Takashi Iwai wrote:
-> > On Tue, 06 Sep 2022 17:41:51 +0200,
-> > Jason Gunthorpe wrote:
-> > > 
-> > > On Tue, Aug 23, 2022 at 05:28:24PM -0300, Jason Gunthorpe wrote:
-> > > > On Tue, Aug 23, 2022 at 01:46:36PM +0200, Takashi Iwai wrote:
-> > > > > It was tested now and confirmed that the call path is via AMDGPU, as
-> > > > > expected:
-> > > > >   amdgpu_pci_probe ->
-> > > > >   amdgpu_driver_load_kms ->
-> > > > >   amdgpu_device_init ->
-> > > > >   amdgpu_amdkfd_device_init ->
-> > > > >   kgd2kfd_device_init ->
-> > > > >   kgd2kfd_resume_iommu ->
-> > > > >   kfd_iommu_resume ->
-> > > > >   amd_iommu_init_device ->
-> > > > >   iommu_attach_group ->
-> > > > >   __iommu_attach_group
-> > > > 
-> > > > Oh, when you said sound intel I thought this was an Intel CPU..
-> > > > 
-> > > > Yes, there is this hacky private path from the amdgpu to
-> > > > the amd iommu driver that makes a mess of it here. We discussed it in
-> > > > this thread:
-> > > > 
-> > > > https://lore.kernel.org/linux-iommu/YgtuJQhY8SNlv9%2F6@8bytes.org/
-> > > > 
-> > > > But nobody put it together that it would be a problem with this.
-> > > > 
-> > > > Something like this, perhaps, but I didn't check if overriding the
-> > > > type would cause other problems.
-> > > 
-> > > Takashi, do we want to do this patch?
-> > 
-> > I really have no much preference regarding the fix for this
-> > regression from my side.  If you can work on it, it'd be greatly
-> > appreciated.
-> 
-> If you say this patch works I will formally propose it, but I have no
-> ability to test on this special AMD HW.
+As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
+This leads to very large file sizes:
 
-Erm, it's not clear which patch you're referring to.  The mentioned
-URL points to a patch series.
+topology$ ls -l
+total 0
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
+-r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
+-r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
+-r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
 
-If you can send (or point) a patch for test, I can set up a test
-kernel and ask reporters for testing it.
+Adjust the inequality to catch the case when NR_CPUS is configured
+to a small value.
 
+Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
+Reported-by: feng xiangjun <fengxj325@gmail.com>
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: stable@vger.kernel.org
+Cc: feng xiangjun <fengxj325@gmail.com>
+---
+ include/linux/cpumask.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index bd047864c7ac..7b1349612d6d 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -1127,9 +1127,10 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+  * cover a worst-case of every other cpu being on one of two nodes for a
+  * very large NR_CPUS.
+  *
+- *  Use PAGE_SIZE as a minimum for smaller configurations.
++ *  Use PAGE_SIZE as a minimum for smaller configurations while avoiding
++ *  unsigned comparison to -1.
+  */
+-#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
++#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32) > PAGE_SIZE + 1) \
+ 					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
+ #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
+ 
+-- 
+2.31.1
 
-Takashi

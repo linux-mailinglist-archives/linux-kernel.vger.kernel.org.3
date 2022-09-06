@@ -2,80 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECECE5AEFB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995135AEF86
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiIFP4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S233233AbiIFPzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiIFPz3 (ORCPT
+        with ESMTP id S238275AbiIFPzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:55:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77E78E457;
-        Tue,  6 Sep 2022 08:13:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AACF6B81915;
-        Tue,  6 Sep 2022 15:13:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F006DC43470;
-        Tue,  6 Sep 2022 15:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662477213;
-        bh=6ixbFK5dgdMaMZNuwVyiFXnCv9UWW2o+MX03FBO4Qsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GJtuD/4inzykbohpjLekuGttk04rVbGcZHY3Tyw6Y16SsUF3FSPVjS/Q8FcKoBIHC
-         ZXlYUwiemE5wPjpAXY0/5yEw8FWoRtu6S3VJ1oC8of2BO/QXkQejU58ArloQjPUCQs
-         ggGPcakrSem1zh0n7fODo2aieFhCo+agA3mwWkDz6yABqbuL0xzZwSn79F5U8cGtdl
-         gTdz0OH563dgBeClebTp0g6aVYImdSo0mNYl+buuVLOwFtbH5bhJhjczJlhK/jLDy+
-         p4uR2wHuUXF40+naQ68NTLLcZTvVd3d6LoCYiXLyKtrZ5AUTncilm0hYWMGYoKoS6m
-         JSwgV1lQjEf3g==
-Date:   Tue, 6 Sep 2022 16:13:07 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Mithil Bavishi <bavishimithil@gmail.com>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
-        tony@atomide.com, linux@armlinux.org.uk, contact@paulk.fr
-Subject: Re: [PATCH 01/10] power: reset: Move TWL4030 power driver from mfd
-Message-ID: <Yxdjg/MKlc5Tc/3Z@google.com>
-References: <20220820071659.1215-1-bavishimithil@gmail.com>
- <20220820071659.1215-2-bavishimithil@gmail.com>
+        Tue, 6 Sep 2022 11:55:13 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1187D8D3DB
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:13:17 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id fs14so6819493pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 08:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=4qWRg0pj2vBJoOh7qGaSZ5h4bkObiV59g0dITseF1n0=;
+        b=KH7IZDJD7Y8b3uEKowAoMS8Pgvs4QXX0NKTxI9TaaUhs7uVP5Bj5TamunKFEA0TQ4O
+         5mPwZMYKSdGrKlbbUz70Uk3uZpfTZXnpEnNSlQQgnLHw4gT08k8BSzbIkTUzpMQQRqUx
+         RB3/4s1o4qCU5xSRHgxYCc6BVLwv6ImjNlMYrq8szmymAduxvRh8dQzEpmd91TKEfhQ2
+         G3ynoaj1HRj7InuUUrWBwvxp1fOMxB83X2B2cLjEX0V0YqO+yms9w/E+HN/cniSQQ+4O
+         hSXwFMGurgNR8aDcQeoUFFFTojFcRHLuQ4QEDQvkYx/UBetpqDbACf1iTwKB6iOFWbfV
+         YdGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=4qWRg0pj2vBJoOh7qGaSZ5h4bkObiV59g0dITseF1n0=;
+        b=jMOYyM/teo4jwdYGPXqpAqhPViVxlWhX4o/gzkpxvYtwe75xBOmjPD6a2ChRtopB5L
+         67pm1OArd+r2S0xbdn4/F9B52vBkOSdXDyrPexrdEGL3E+rAfNMwJ6N5DvZCxQd2LRef
+         qNs/zkx1lV3wRUsoMQi3dqLzcdoMIci3f9qrXCJkF82mb6A83cS+5WkB6+tQ7sws3mRe
+         TFCosvGCR5H1ZLNWVRjBapmDjzFUARyDzcMxcNlGQPSHPQT1VS5fQlqxHFXhqrEQZiW+
+         uOVQED5P2wCbkSlSnYggQBPejdcAHfv5q3uuwdgGl1LDxujwXlZ5frh6GghfoJlqGqJC
+         ugqg==
+X-Gm-Message-State: ACgBeo1sC8h78EOuWMOeyGIrSDf6K37VGn+CrnvaTU8VwTqOysGRfkbX
+        wNG4OVIzhLU5BbjvYjAAfpD4/A==
+X-Google-Smtp-Source: AA6agR6olQ2PMxoDYdSDVBVtrzpxzp/U6DDWqd82S3Z03OAgq6QfbVrOAcQZG7VjcS4//eIPfGIAjg==
+X-Received: by 2002:a17:902:b194:b0:176:d229:83bd with SMTP id s20-20020a170902b19400b00176d22983bdmr3241229plr.174.1662477196446;
+        Tue, 06 Sep 2022 08:13:16 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e7-20020a17090ab38700b001f1acb6c3ebsm8847767pjr.34.2022.09.06.08.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 08:13:15 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 15:13:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, suravee.suthikulpanit@amd.com,
+        mlevitsk@redhat.com, joao.m.martins@oracle.com
+Subject: Re: [PATCH 1/1] KVM: x86: Allow emulation of EOI writes with AVIC
+ enabled
+Message-ID: <YxdjiNsWBPOoX2w1@google.com>
+References: <20220903200557.1719-1-alejandro.j.jimenez@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220820071659.1215-2-bavishimithil@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220903200557.1719-1-alejandro.j.jimenez@oracle.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022, Mithil Bavishi wrote:
-
-> The power/reset folder seems like a more appropriate place for
-> twl4030-power.c
+On Sat, Sep 03, 2022, Alejandro Jimenez wrote:
+> According to section 15.29.9.2 - AVIC Access to un-accelerated vAPIC register
+> of the AMD APM [1]:
 > 
-> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
+> "A guest access to an APIC register that is not accelerated by AVIC results in
+> a #VMEXIT with the exit code of AVIC_NOACCEL. This fault is also generated if
+> an EOI is attempted when the highest priority in-service interrupt is set for
+> level-triggered mode."
+> 
+> This is also stated in Table 15-22 - Guest vAPIC Register Access Behavior,
+> confirming that AVIC hardware traps on EOI writes for level triggered
+> interrupts, and leading to the following call stack:
+> 
+> avic_unaccelerated_access_interception()
+> -> avic_unaccel_trap_write()
+>   -> kvm_apic_write_nodecode()
+>     -> kvm_lapic_msr_read()
+>       -> kvm_lapic_reg_read()
+> 
+> In kvm_lapic_reg_read(), the APIC_EOI offset (0xb0) is not allowed as valid, so
+> the error returned triggers the assertion introduced by 'commit 70c8327c11c6
+> ("KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on a "bad" reg")'
+> and kills the VM.
+> 
+> Add APIC_EOI offset to the valid mask in kvm_lapic_reg_read() to allow the
+> emulation of EOI behavior for level triggered interrupts.
+> 
+> [1] https://www.amd.com/system/files/TechDocs/24593.pdf
+> 
+> Fixes: 0105d1a52640 ("KVM: x2apic interface to lapic")
+> Signed-off-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> Cc: stable@vger.kernel.org
 > ---
->  drivers/mfd/Kconfig                          | 13 -------------
->  drivers/mfd/Makefile                         |  1 -
->  drivers/power/reset/Kconfig                  | 12 ++++++++++++
->  drivers/power/reset/Makefile                 |  1 +
->  drivers/{mfd => power/reset}/twl4030-power.c |  0
->  5 files changed, 13 insertions(+), 14 deletions(-)
->  rename drivers/{mfd => power/reset}/twl4030-power.c (100%)
+> 
+> I am unsure as to the proper commit to use for the Fixes: tag. Technically the
+> issue was introduced by the initial SVM AVIC commits in 2016, since they failed
+> to add the EOI offset to the valid mask.
+> 
+> To be safe, I used the commit that introduces the valid mask, but that is
+> somewhat misleading since at the time AVIC was not available, and I believe that
+> Intel posted interrupts implementation does not require access to EOI offset in
+> this code.
+> 
+> Please correct Fixes: tag if necessary.
+> ---
+>  arch/x86/kvm/lapic.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9dda989a1cf0..61041fecfa89 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1452,6 +1452,7 @@ static int kvm_lapic_reg_read(struct kvm_lapic *apic, u32 offset, int len,
+>  		APIC_REG_MASK(APIC_LVR) |
+>  		APIC_REG_MASK(APIC_TASKPRI) |
+>  		APIC_REG_MASK(APIC_PROCPRI) |
+> +		APIC_REG_MASK(APIC_EOI) |
 
-Acked-by: Lee Jones <lee@kernel.org>
+EOI is write-only for x2APIC, reads are supposed to #GP.  So unfortunately, simply
+adding it to the set of allowed registers won't work.
 
+EOI is also write-only for xAPIC on Intel, but apparently AMD allows reads.
+
+I'm leaning towards this as a fix.  The only reason KVM uses kvm_lapic_msr_read()
+is to play nice with the 64-bit ICR in x2APIC.  I don't love that the x2APIC details
+bleed further into kvm_apic_write_nodecode(), but odds are good that if there's ever
+another 64-bit register, it'll need to be special cased here anyways, same as ICR. 
+
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 6 Sep 2022 07:52:41 -0700
+Subject: [PATCH] KVM: x86: Blindly get current x2APIC reg value on "nodecode
+ write" traps
+
+When emulating a x2APIC write in response to an APICv/AVIC trap, get the
+the written value from the vAPIC page without checking that reads are
+allowed for the target register.  AVIC can generate trap-like VM-Exits on
+writes to EOI, and so KVM needs to get the written value from the backing
+page without running afoul of EOI's write-only behavior.
+
+Alternatively, EOI could be special cased to always write '0', e.g. so
+that the sanity check could be preserved, but x2APIC on AMD is actually
+supposed to disallow non-zero writes (not emulated by KVM), and the
+sanity check was a byproduct of how the KVM code was written, i.e. wasn't
+added to guard against anything in particular.
+
+Fixes: 70c8327c11c6 ("KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on a "bad" reg")
+Fixes: 1bd9dfec9fd4 ("KVM: x86: Do not block APIC write for non ICR registers")
+Reported-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/lapic.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 4cebbdd3431b..76a19bf1eb55 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2349,23 +2349,18 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+ 	struct kvm_lapic *apic = vcpu->arch.apic;
+ 	u64 val;
+ 
+-	if (apic_x2apic_mode(apic)) {
+-		if (KVM_BUG_ON(kvm_lapic_msr_read(apic, offset, &val), vcpu->kvm))
+-			return;
+-	} else {
+-		val = kvm_lapic_get_reg(apic, offset);
+-	}
+-
+ 	/*
+ 	 * ICR is a single 64-bit register when x2APIC is enabled.  For legacy
+ 	 * xAPIC, ICR writes need to go down the common (slightly slower) path
+ 	 * to get the upper half from ICR2.
+ 	 */
+ 	if (apic_x2apic_mode(apic) && offset == APIC_ICR) {
++		val = kvm_lapic_get_reg64(apic, APIC_ICR);
+ 		kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
+ 		trace_kvm_apic_write(APIC_ICR, val);
+ 	} else {
+ 		/* TODO: optimize to just emulate side effect w/o one more write */
++		val = kvm_lapic_get_reg(apic, offset);
+ 		kvm_lapic_reg_write(apic, offset, (u32)val);
+ 	}
+ }
+
+base-commit: 476d5fb78ea6438941559af4814a2795849cb8f0
 -- 
-Lee Jones [李琼斯]
+

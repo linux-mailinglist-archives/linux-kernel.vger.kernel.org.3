@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146375AE9D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C865AEACC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240588AbiIFNfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S234374AbiIFNvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240668AbiIFNfC (ORCPT
+        with ESMTP id S239140AbiIFNtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:35:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9322576472;
-        Tue,  6 Sep 2022 06:33:36 -0700 (PDT)
+        Tue, 6 Sep 2022 09:49:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9604C10FD7;
+        Tue,  6 Sep 2022 06:39:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEDB9B81632;
-        Tue,  6 Sep 2022 13:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CECC433C1;
-        Tue,  6 Sep 2022 13:33:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66D2361545;
+        Tue,  6 Sep 2022 13:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69538C433C1;
+        Tue,  6 Sep 2022 13:38:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471212;
-        bh=MtB4kKNXg3dgWQL89KhUjvedI2cYF2X+0wTaXWCOJbQ=;
+        s=korg; t=1662471517;
+        bh=gWFC3UEwVWJYUsSVYb540iYzjm8Ght+yh+I86oya6EI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yHkux88ZinCfFpxe40U/p1UkkSrWDo5MjETXG2i4fAolYBI9SFveqLgMbHz7w8YEl
-         BCt8JjcL24HVkpqrmLUEu8Be8adzFTEC4gHNU/IGQCntTEaqWyk+/SCmRCdFOmcw1o
-         REpTQkufbV+FlUdW6kGzQEbROJddCxlH79UHo1zE=
+        b=vsr5a0YeFEyznxjeU70mHXcYk11mGKs8aQIBGLJhtO0eHkyKIlcZSRjPieiJntmlP
+         7jDyPIBsWSZZnYmv6UTe2f8RGYpIh85koA6MwAP/jEz5pedgmOcfSMpx2HocHazB7c
+         8s4vHGI0DdybHFmqeOhZz4/dsZK2jYvylXqf7iPs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
         <nfraprado@collabora.com>, Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 36/80] clk: core: Fix runtime PM sequence in clk_core_unprepare()
-Date:   Tue,  6 Sep 2022 15:30:33 +0200
-Message-Id: <20220906132818.490989701@linuxfoundation.org>
+Subject: [PATCH 5.15 053/107] clk: core: Fix runtime PM sequence in clk_core_unprepare()
+Date:   Tue,  6 Sep 2022 15:30:34 +0200
+Message-Id: <20220906132824.083353942@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
-References: <20220906132816.936069583@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+References: <20220906132821.713989422@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -80,7 +80,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 2e56cc0a3bce6..b355d3d40f63a 100644
+index d6dc58bd07b33..0674dbc62eb55 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
 @@ -846,10 +846,9 @@ static void clk_core_unprepare(struct clk_core *core)

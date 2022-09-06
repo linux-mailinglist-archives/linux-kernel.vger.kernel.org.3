@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8798B5AE189
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C7D5AE192
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238974AbiIFHrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S233696AbiIFHtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239021AbiIFHqw (ORCPT
+        with ESMTP id S233978AbiIFHs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:46:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5384E74CE0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:46:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAC6361155
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BFACC433C1;
-        Tue,  6 Sep 2022 07:46:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662450395;
-        bh=L1N7WtoHUPgAdoMCUsE4RYeHoy6kXFKLrw1Sb9QARtQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FbmWYdNHmnme3dfvJ/DeZaDIs1xu3SBifDzSwwbz6IF8phNHOQdJG5zR4LAKXWoQn
-         QaqoDVyAPmEX5LGLDOoq+CZFmi3PZYPVsNXBJ37uuHm3oCLhzqlN8/EKl0vS0TKJwt
-         4Mzq0F2JL50fKWabJwPCa5EkGL8lEHE9zN4t7Jz9/BUssgmuaTWGYwmgX8xF4iCZVU
-         zlWhAicyCM/kCAFYKmVFrEzXwK4cXH4nSEt78xjxqsZWlzNQvRnMN+m8aZqeIlY43j
-         BBaN6NwzcFTg+U088wfS0NMc2JkFg4gN5ZsExTAcV8/WgQ59Hf3G+PafI7MLWRfO8V
-         +LTEhbknRxEtw==
-Date:   Tue, 6 Sep 2022 09:46:31 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Oleksandr Tymoshenko <ovt@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] seccomp: fix refcounter leak if fork/clone is terminated
-Message-ID: <20220906074631.52jgqa7qz3sjmdie@wittgenstein>
-References: <20220902034135.2853973-1-ovt@google.com>
- <20220905083914.msdgd575tblq4syj@wittgenstein>
- <CACGj0CgTVVAhBrL7DsP_fL7R9EhZUwu+MkQ1_GpPEtHQW4ojOQ@mail.gmail.com>
+        Tue, 6 Sep 2022 03:48:57 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222AB5F98C;
+        Tue,  6 Sep 2022 00:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=//VHbIAzK137JUV3wdYi+bkIg+RFNtTNOapoAnB6JWQ=; b=ClmaQqYV3Rr7HMvl1VZYIfZnCR
+        jRe7hf3xcMU++YZlWuqWFGV7yOxXgIpw5cfVwrcGrONCrbaLvQbyG3imcg0L5ArK9A2drD7kyElWW
+        nXQKaVxFJrG3tR0Z4U4Px3R7OpWn36TNcpqBIShyq99RxBc7AjqZgGjYsk8t2hNNt06e5WjA8H/ty
+        RyHuTiOQV01VXnapEk24jH+CnWL3HTVChFhLI0VOiL1YDAush7xV3xHWLUNZICcRFCQ+31s25Ab2f
+        NJZGx1AeyvkBlwLScjl7adl9Vy5CQ+Nyntlh4EwdZzr43wsKaXw1wEaH0wDR88TobrWWo+qXS2DCW
+        PiCuP0Rg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVTKD-00Avjf-6M; Tue, 06 Sep 2022 07:48:49 +0000
+Date:   Tue, 6 Sep 2022 00:48:49 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <Yxb7YQWgjHkZet4u@infradead.org>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <20220831041843.973026-5-jhubbard@nvidia.com>
+ <YxbtF1O8+kXhTNaj@infradead.org>
+ <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACGj0CgTVVAhBrL7DsP_fL7R9EhZUwu+MkQ1_GpPEtHQW4ojOQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 03:53:54PM -0700, Oleksandr Tymoshenko wrote:
-> Hi Christian,
+On Tue, Sep 06, 2022 at 12:44:28AM -0700, John Hubbard wrote:
+> OK, that part is clear.
 > 
-> The patch in the seccomp tree, adapted to 5.10 branch, fixed the
-> memory leak in my reproducer.
-> Thanks for working on this, I should have checked the seccomp tree first :)
-> Please disregard the patch in my submission.
+> >  - for the pin case don't use the existing bvec helper at all, but
+> >    copy the logic for the block layer for not pinning.
+> 
+> I'm almost, but not quite sure I get the idea above. Overall, what
+> happens to bvec pages? Leave the get_page() pin in place for FOLL_GET
+> (or USE_FOLL_GET), I suppose, but do...what, for FOLL_PIN callers?
 
-Oh, it wasn't my patch it was someone else's. :) I just acked it! Thanks
-for working on this we need things like these spotted and fixed!
+Do not change anyhing for FOLL_GET callers, as they are on the way out
+anyway.
+
+For FOLL_PIN callers, never pin bvec and kvec pages:  For file systems
+not acquiring a reference is obviously safe, and the other callers will
+need an audit, but I can't think of why it woul  ever be unsafe.

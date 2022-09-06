@@ -2,107 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A2B5AF2FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C90B5AF303
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiIFRph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S229647AbiIFRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIFRpd (ORCPT
+        with ESMTP id S229437AbiIFRqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:45:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871F94D4D2;
-        Tue,  6 Sep 2022 10:45:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92FFDB819D2;
-        Tue,  6 Sep 2022 17:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 489F8C433C1;
-        Tue,  6 Sep 2022 17:45:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662486327;
-        bh=9JOGS+DmMCZRcR+ue1CWAsQbzUKVC+BdBUjpVyMqD1E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cVagUGZ5rXx2aXKE0qH2oo2yEuZx+EjlKrBLx0BoQZ0GMmFtU/6bJFoBoocueQXxj
-         lnk4scbOL/b/lmlNZW0X4kKlQWrOwaV6UcIfbAvIYmy4h57CSKOSjTsttV7neyIVsf
-         T01B0T/rWr08KrUixfYnLcivKPya5o4ZGEkwAL7rid/39LBl9OXltN5b58a/2Ma4pf
-         t0PRSV4oDyMJPCmBGnt9OVMwygY87Sczc8PTKoaGe7ycl4VrgPyPq3opFznwlozCYa
-         +/zxXRN+j3pJXHSb5q/7uqlx7mVFeJP8wQAXMrBw4qbPBgUmD/5rxXj7eSAFrTGMSf
-         Oiv+BjVzsGwIQ==
-Received: by mail-vk1-f179.google.com with SMTP id i67so5887270vkb.2;
-        Tue, 06 Sep 2022 10:45:27 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2ol0tGXTOGQuG4mbKtM+H+F8arc0Yr3gWCbxpWWFYHly5jszXy
-        twa95PpDgYZ9OS9KSSQvHVU0Abz9ciJmuFFHuw==
-X-Google-Smtp-Source: AA6agR4QgQXp/ntiocLHUxEHId1vX4FahEcMw4sf8AAlkUaloq3asnMm2cm0LQtbOZ7hWcgiplL7EnK9jP3qXbBmaK4=
-X-Received: by 2002:a1f:23c6:0:b0:38c:88f3:f55c with SMTP id
- j189-20020a1f23c6000000b0038c88f3f55cmr15615940vkj.19.1662486326264; Tue, 06
- Sep 2022 10:45:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220906095943.60296-1-alexander.sverdlin@nokia.com>
-In-Reply-To: <20220906095943.60296-1-alexander.sverdlin@nokia.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 6 Sep 2022 12:45:15 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLhXE9E5UkGy+=t5Eas1KfTxmjm=mQcVVQ0MdAs7eYAtw@mail.gmail.com>
-Message-ID: <CAL_JsqLhXE9E5UkGy+=t5Eas1KfTxmjm=mQcVVQ0MdAs7eYAtw@mail.gmail.com>
-Subject: Re: [PATCH] of: irq: Report individual failures in of_irq_init()
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 13:46:55 -0400
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C506E2DC;
+        Tue,  6 Sep 2022 10:46:47 -0700 (PDT)
+Received: by mail-oo1-f43.google.com with SMTP id n11-20020a4aa7cb000000b0044b3583d373so2054317oom.2;
+        Tue, 06 Sep 2022 10:46:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=uiew6NbFXf44Z/IbImQfdvjEizUYy8izei1Fpy5Vg/0=;
+        b=f/12ZMIwCsEBCbNRwz1Fakq+guxaXrntYNpzGu3FRDTBoIyqGbwNC7+FYBfmwnZgB+
+         20vpS7Fis2pV5N6kfbliarW/fZTDyUPgagRIAUZW1HbTVyS/k78kmfwlvxNXYG9h0Y0d
+         gwEqNEMTJdmS2QWmlP8StQHS99yJuXC7oc6J3MlJkIuVWH6wwFtYqA+laCt74Xi37LqS
+         MJsgVz/vKbb/Ys6Pzbije0CjIUaMlFuJelehYivGUI1ML7p+MeHdvmvcowF7toyeXKxS
+         qw9oPd2pWx0kdKvYjOuAsvJd2a+OABFvp4j6P9IBvFK+HpZfG1GWXX8cg6t1s0hDprXh
+         kurg==
+X-Gm-Message-State: ACgBeo33n0oODw677HDSyTzyeVaXJcXZguGpYWeGt1vBKeNVG9Y6NpeQ
+        xiA9rYj5pXgqc4PZokR0mg==
+X-Google-Smtp-Source: AA6agR5bj+5NJ3XNxjU5HfDtqr6HRIQ7mmileSv2rYw50aB+2a5kFqg1A4SznszpVYY8bgrNu8YWNw==
+X-Received: by 2002:a4a:e1ad:0:b0:448:b28c:5fe3 with SMTP id 13-20020a4ae1ad000000b00448b28c5fe3mr18839646ooy.21.1662486405944;
+        Tue, 06 Sep 2022 10:46:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p4-20020a0568301d4400b006339b36127dsm6158688oth.3.2022.09.06.10.46.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 10:46:45 -0700 (PDT)
+Received: (nullmailer pid 780026 invoked by uid 1000);
+        Tue, 06 Sep 2022 17:46:42 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     gregkh@linuxfoundation.org, eric.auger@redhat.com,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        jeffrey.l.hugo@gmail.com, maz@kernel.org, puneet.gupta@amd.com,
+        Michael.Srba@seznam.cz, cohuck@redhat.com, will@kernel.org,
+        masahiroy@kernel.org, mchehab+huawei@kernel.org, joro@8bytes.org,
+        okaya@kernel.org, alex.williamson@redhat.com,
+        song.bao.hua@hisilicon.com, jgg@nvidia.com, mani@kernel.org,
+        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, f.fainelli@gmail.com, jgg@ziepe.ca,
+        kvm@vger.kernel.org, nikhil.agarwal@amd.com,
+        harpreet.anand@amd.com, yishaih@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, git@amd.com,
+        saravanak@google.com, aleksandar.radovanovic@amd.com,
+        michal.simek@amd.com, ndesaulniers@google.com
+In-Reply-To: <20220906134801.4079497-2-nipun.gupta@amd.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com> <20220906134801.4079497-1-nipun.gupta@amd.com> <20220906134801.4079497-2-nipun.gupta@amd.com>
+Subject: Re: [RFC PATCH v3 1/7] dt-bindings: bus: add CDX bus device tree bindings
+Date:   Tue, 06 Sep 2022 12:46:42 -0500
+Message-Id: <1662486402.681939.780022.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 4:59 AM Alexander A Sverdlin
-<alexander.sverdlin@nokia.com> wrote:
->
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
->
-> Rewrite pr_debug() as pr_err() to faciliate debugging.
->
-> This change was inspired by a long lasting debugging of the
-> octeon_irq_init_ciu() which fails completely silently and leaves the
-> interrupt controller half-way configured which in turn had very non-obvious
-> effects.
-
-With this, if a node skipped completely won't be obvious. Please keep
-the debug line and just add the error print.
-
->
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+On Tue, 06 Sep 2022 19:17:55 +0530, Nipun Gupta wrote:
+> This patch adds a devicetree binding documentation for CDX
+> bus.
+> 
+> CDX bus controller dynamically detects CDX bus and the
+> devices on these bus using CDX firmware.
+> 
+> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
 > ---
->  drivers/of/irq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-> index d22f605..45e4392 100644
-> --- a/drivers/of/irq.c
-> +++ b/drivers/of/irq.c
-> @@ -586,12 +586,12 @@ void __init of_irq_init(const struct of_device_id *matches)
->
->                         of_node_set_flag(desc->dev, OF_POPULATED);
->
-> -                       pr_debug("of_irq_init: init %pOF (%p), parent %p\n",
-> -                                desc->dev,
-> -                                desc->dev, desc->interrupt_parent);
->                         ret = desc->irq_init_cb(desc->dev,
->                                                 desc->interrupt_parent);
->                         if (ret) {
-> +                               pr_err("%s: Failed to init %pOF (%p), parent %p\n",
-> +                                      __func__, desc->dev, desc->dev,
-> +                                      desc->interrupt_parent);
->                                 of_node_clear_flag(desc->dev, OF_POPULATED);
->                                 kfree(desc);
->                                 continue;
-> --
-> 2.10.2
->
+>  .../devicetree/bindings/bus/xlnx,cdx.yaml     | 75 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/bus/xlnx,cdx.example.dts:18.23-21.11: Warning (unit_address_vs_reg): /example-0/smmu@ec000000: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/bus/xlnx,cdx.example.dts:23.22-30.11: Warning (unit_address_vs_reg): /example-0/gic@e2000000: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/bus/xlnx,cdx.example.dts:26.35-29.15: Warning (unit_address_vs_reg): /example-0/gic@e2000000/gic-its@e2040000: node has a unit name, but no reg or ranges property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: smmu@ec000000: $nodename:0: 'smmu@ec000000' does not match '^iommu@[0-9a-f]*'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: smmu@ec000000: 'reg' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: $nodename:0: 'gic@e2000000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: '#interrupt-cells' is a dependency of 'interrupt-controller'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: 'reg' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: gic-its@e2040000: False schema does not allow {'compatible': ['arm,gic-v3-its'], 'msi-controller': True, 'phandle': [[1]]}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: gic-its@e2040000: '#msi-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: gic-its@e2040000: 'reg' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: gic@e2000000: 'oneOf' conditional failed, one must be fixed:
+	'interrupts' is a required property
+	'interrupts-extended' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.example.dtb: cdx@4000000: reg: [[0, 67108864], [0, 4096]] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

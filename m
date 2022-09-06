@@ -2,126 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58A45AE184
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C16D5AE185
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238958AbiIFHqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S238989AbiIFHqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238450AbiIFHqT (ORCPT
+        with ESMTP id S238970AbiIFHqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:46:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8FC13E07;
-        Tue,  6 Sep 2022 00:46:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E15DAB8163A;
-        Tue,  6 Sep 2022 07:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F56C43143;
-        Tue,  6 Sep 2022 07:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662450375;
-        bh=stv2KodLgeKaNZa5CAyIDorCb1OmM6jfahmuccdBINU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sS4scs//uRVMm3xxTvr2jEEcMp0+xBk3LJctdshNhtNddZNa1lH5ZeJFXNQqU6GdC
-         V/Xdg/MEEoDJQ4FyISI2bpVppaL+vbQlsSEs2DCBazdva9EDQDTYQYXnEzCBvenW71
-         hLbE8D+rnETGTZU8YNGokSvSIHKEc0gPfj3Lk77R55XrpMfpGyyjQxg3nnqP6JIrYO
-         I7NDVdyE6hVpKzM3d+TSCKEI7zUjQQy009Eq0reHXnE0X8DmDWhoxKTtJFsdZgGWKX
-         9uEC2KW94LN/ypzt/bfgXCZD32JbuAAYaWUClmvqP5Mg9l6I+fcWzkAwPvINli0PWi
-         zRwOymG7BBR/A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oVTHm-00019K-OA; Tue, 06 Sep 2022 09:46:18 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 3/3] phy: qcom-qmp: drop dual-lane comments
-Date:   Tue,  6 Sep 2022 09:45:50 +0200
-Message-Id: <20220906074550.4383-4-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220906074550.4383-1-johan+linaro@kernel.org>
-References: <20220906074550.4383-1-johan+linaro@kernel.org>
+        Tue, 6 Sep 2022 03:46:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289FF6FA37;
+        Tue,  6 Sep 2022 00:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=h9eaPItotJ7UIpRDKaJ9/my+8DVdUgH18U/XWRw9gVo=; b=SCvMLvtlCWYzBebXM8+WkKDrjo
+        ymTnnTY52kxYFnUiA7OTVNS90YUq+kTYFgbjNWAuKGJ1QUdWwKQmu/AQlrqji5v3r433FIog5S7GM
+        CTNKqeQaustPu5E1Z2coPLUA1ovGNEALpYvfdIhaKAa1u246QTcS96pf5SR6Mk6ERVk/i1F46Ux48
+        8yglEbpXh4+GYqEWV2oxHIdfsk3Q0SNZYqjPSe2QnhIY6zTUsDocMzZ7nDFkFnmsuv7dnfrLvHZNv
+        FDWqRXMlHaQmtBt30Vz0Z8RXXV3zY8Y0c7UBJiD110xs5iCZHGkAQijzg3Gn4QCza4UVETpoPvC8m
+        /y4OZTWw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVTHj-00AuQK-AA; Tue, 06 Sep 2022 07:46:15 +0000
+Date:   Tue, 6 Sep 2022 00:46:15 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/7] convert most filesystems to pin_user_pages_fast()
+Message-ID: <Yxb6x50XqTfxrqB1@infradead.org>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <YxbqUvDJ/rJsLMPZ@infradead.org>
+ <50d1d649-cb41-3031-c459-bbd38295c619@nvidia.com>
+ <Yxb1GKaiVkz7Bn2K@infradead.org>
+ <ebdbc31d-68a3-e168-7344-6b1e3aa86e28@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebdbc31d-68a3-e168-7344-6b1e3aa86e28@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the obsolete and misleading dual-lane comments which gave the
-impression that only combo PHYs have a second lane.
+On Tue, Sep 06, 2022 at 12:37:00AM -0700, John Hubbard wrote:
+> On 9/6/22 00:22, Christoph Hellwig wrote:
+> > On Tue, Sep 06, 2022 at 12:10:54AM -0700, John Hubbard wrote:
+> >> I would be delighted if that were somehow possible. Every time I think
+> >> it's possible, it has fallen apart. The fact that bio_release_pages()
+> >> will need to switch over from put_page() to unpin_user_page(), combined
+> >> with the fact that there are a lot of callers that submit bios, has
+> >> led me to the current approach.
+> > 
+> > We can (temporarily) pass the gup flag to bio_release_pages or even
+> > better add a new bio_unpin_pages helper that undoes the pin side.
+> > That is: don't try to reuse the old APIs, but ad new ones, just like
+> > we do on the lower layers.
+> 
+> OK...so, to confirm: the idea is to convert these callsites (below) to
+> call a new bio_unpin_pages() routine that does unpin_user_page().
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 1 -
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c  | 1 -
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c   | 1 -
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c   | 1 -
- 4 files changed, 4 deletions(-)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index d200cd5ca4fa..af608c4dc869 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -2139,7 +2139,6 @@ static int qcom_qmp_phy_combo_power_on(struct phy *phy)
- 	qcom_qmp_phy_combo_configure_lane(tx, cfg->regs,
- 				    cfg->tx_tbl, cfg->tx_tbl_num, 1);
- 
--	/* Configuration for other LANE for USB-DP combo PHY */
- 	if (cfg->is_dual_lane_phy) {
- 		qcom_qmp_phy_combo_configure_lane(qphy->tx2, cfg->regs,
- 					    cfg->tx_tbl, cfg->tx_tbl_num, 2);
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index 3766a6d44e87..2923977b205a 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -2036,7 +2036,6 @@ static int qmp_pcie_power_on(struct phy *phy)
- 	qmp_pcie_configure_lane(tx, cfg->regs, cfg->tx_tbl, cfg->tx_tbl_num, 1);
- 	qmp_pcie_configure_lane(tx, cfg->regs, cfg->tx_tbl_sec, cfg->tx_tbl_num_sec, 1);
- 
--	/* Configuration for other LANE for USB-DP combo PHY */
- 	if (cfg->is_dual_lane_phy) {
- 		qmp_pcie_configure_lane(qphy->tx2, cfg->regs, cfg->tx_tbl,
- 					cfg->tx_tbl_num, 2);
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index c8583f5a54bd..01a99a06fd4f 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -1020,7 +1020,6 @@ static int qcom_qmp_phy_ufs_power_on(struct phy *phy)
- 	qcom_qmp_phy_ufs_configure_lane(tx, cfg->regs,
- 				    cfg->tx_tbl, cfg->tx_tbl_num, 1);
- 
--	/* Configuration for other LANE for USB-DP combo PHY */
- 	if (cfg->is_dual_lane_phy) {
- 		qcom_qmp_phy_ufs_configure_lane(qphy->tx2, cfg->regs,
- 					    cfg->tx_tbl, cfg->tx_tbl_num, 2);
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 59ed6c89979d..fba8e40441cb 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2283,7 +2283,6 @@ static int qcom_qmp_phy_usb_power_on(struct phy *phy)
- 	qcom_qmp_phy_usb_configure_lane(tx, cfg->regs,
- 				    cfg->tx_tbl, cfg->tx_tbl_num, 1);
- 
--	/* Configuration for other LANE for USB-DP combo PHY */
- 	if (cfg->is_dual_lane_phy) {
- 		qcom_qmp_phy_usb_configure_lane(qphy->tx2, cfg->regs,
- 					    cfg->tx_tbl, cfg->tx_tbl_num, 2);
--- 
-2.35.1
-
+Yeah.  And to stay symmetric also a new bio_iov_iter_pin_pages for
+the pin side.

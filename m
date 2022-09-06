@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563AB5AE6C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8105AE6C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiIFLk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S232502AbiIFLmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiIFLk4 (ORCPT
+        with ESMTP id S231688AbiIFLmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:40:56 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D1E32EFA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:40:55 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id v4so10358771pgi.10
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 04:40:55 -0700 (PDT)
+        Tue, 6 Sep 2022 07:42:13 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2E733401
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:42:12 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so7260802wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 04:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date;
-        bh=zLIlU5WRN/qpc/luGxAkx8MLhJShGTdf13t85Wt12A0=;
-        b=efebxuxDyVJ+HBbIqVJTWYN02z371rCOW39ThMtiUrXxkRMJo5y/R4IW1BYsezfxSS
-         dbLo3aDSWkZ3buIgH+W3V5FWYp2pLQrP84A9O/3bqK0cBaJgprHqFt4M9rSCiuYnc8y3
-         HV4TEsnNjdQfhpOS5WDRHL8LjiNUJ+fb35F1iaP7DKi0iFru3xhCW1MrbGap/jeziMOC
-         Q27Zn4X0fkLEZZcDsKhGzrPqWiGm83H1t04PrrvGeXZi+sHtRhUPR/RCFyCav6oPRloM
-         +NWdQcmIzaUzI+ZuE7qcgXc6Pb6rS5Q8luniNlANvY84IC0P3XQjO7WTnqLBUdyUtIlJ
-         VUMw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=yfwusrA/vHTen2gLyGVSqF1Zuxr8iDP38xL+HIoCxPI=;
+        b=QkM9zo9PN2dWAiC8J4q0THRsOuX24X/0IhqXiSTaZbCTClt+1QWxnekXzhtV7mEEFC
+         J9ChK+JMTerYRrKuh8XoBouBuTylZMvgrtfQtzBcGjITn4BG6SvU3D15LBV3Db2pZ8g5
+         JdCmBntAE0+4+tMGV7VIz1kJ8B5+kc9UW0b/xdDxGItoeLNpy8iu8WOejf7WtyNVa4Oa
+         go4po6ri4qntg4X1g6oAueCnUd/Oa5vJWJrE9mOklo1xmxDP/yrU2/ZoXNbLvpRgtlrA
+         lMVf2o3F9m7pu55tTpjtoZkC1pVTLp1sER3G0gkFajOCnEuwpSYzl0n/Mo9bxCaGEGEs
+         l67g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=zLIlU5WRN/qpc/luGxAkx8MLhJShGTdf13t85Wt12A0=;
-        b=eNrsWQHz47mjqgqPrHpuTUVc5l2jtNCmA6/yWQhpUxUfMak8+W0LKlUczk4s1KB6Fy
-         Faq+Wt/nCKYQKMfak12J3qpff8+qE+Be9RhD0wZNq84S4Yv+Yx62DHQFj1N7ipNXJZTm
-         KXGrqZfiD7PYVYOhL2OA7HCmm1zKUetN6vdMlREXfpthiwTUQLOtL+OR2w5OEx9Fpqoy
-         R+UhiodlVwSyIMZ66kbMGTPXY/QJ5pX3CFnJpJdZ7GGxqq0GnlvCuWU162ozCU/RGn3P
-         JSbpypYH9lZhiOEyyqUkXYWVeAsLBt2Vok7+CuzwVzANU64kpEHJ+KjkvyGuJLkI4vj5
-         g5Ew==
-X-Gm-Message-State: ACgBeo1h5p9oPoXkikAydEeP0QGRmGzOtlO9udo5Xl79twVDIgUQRY8K
-        Xq2KzmujRDxsxmo0i8TeUK0=
-X-Google-Smtp-Source: AA6agR7+UBOMZ/AkV+sOu5uGrhLmnFa2ga5eqFjqkr6N/KL6vXSIVV7mrEpM7cGsezMaGjvvdFNcCQ==
-X-Received: by 2002:a63:1624:0:b0:430:c45:eb7d with SMTP id w36-20020a631624000000b004300c45eb7dmr27857067pgl.42.1662464454999;
-        Tue, 06 Sep 2022 04:40:54 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 6-20020a620606000000b0053e3a6f7da4sm1197954pfg.12.2022.09.06.04.40.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 04:40:53 -0700 (PDT)
-Message-ID: <631731c5.620a0220.8387b.1974@mx.google.com>
-X-Google-Original-Message-ID: <20220906114051.GA337755@cgel.zte@gmail.com>
-Date:   Tue, 6 Sep 2022 11:40:51 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     akpm@linux-foundation.org, tj@kernel.org, axboe@kernel.dk,
-        vdavydov.dev@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, cgel <cgel@zte.com.cn>
-Subject: Re: [RFC PATCH 1/2] psi: introduce memory.pressure.stat
-References: <20220801004205.1593100-1-ran.xiaokai@zte.com.cn>
- <Yup+W/EFzkfSqRnW@cmpxchg.org>
- <20220817025945.GA84631@cgel.zte@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=yfwusrA/vHTen2gLyGVSqF1Zuxr8iDP38xL+HIoCxPI=;
+        b=k+IZYlcvOcuQrQwExxADm3HvIunDsHZCMcwVQLz/st925+4wMbs+mnQMN4lcFsQQll
+         sJAKWLskStzfqbCuf5EWLYiWcE4UmytTdYvOHfpRHXugreO+BZl46LD3GAg9dBYA+Y4/
+         nFVDQJ2oqsT2ry5G89HjDthliohf4DAZy+skXtuL/BhQEa3QPEtL5WxoLMTLYnLLhhBI
+         XAOvpCqEZ7Box7YUGEJk7V7TRZ1iou2VlsjAGuCVhOW6weqi5t3pJEDozsJ5b5mmoARj
+         NS7M7ONWCrGBbnX/+IvD6H8avTvwYEWCkMpYXDYn71xWgPw1AYCVq0cwMCDYmyTpHmCx
+         Qjcw==
+X-Gm-Message-State: ACgBeo2RMplwjtWmZY0zF17DSJkeK9fa6qBeAXSppqTTXPT7pe+sBQmg
+        GJk7mgcljCMVCx+QldhaUMjm2Ha6qgkV2TZRPwdwCwMPZXg=
+X-Google-Smtp-Source: AA6agR6sJco1NZSWZTgvBaNZK+j/cMNesorrtn3LYX7TH6GbgoGfKURFhUi+BOvyvq/CTWtp6gM6quAwEjcBA4oKJrA=
+X-Received: by 2002:a7b:c34b:0:b0:3a6:8516:a729 with SMTP id
+ l11-20020a7bc34b000000b003a68516a729mr13865234wmj.83.1662464531080; Tue, 06
+ Sep 2022 04:42:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817025945.GA84631@cgel.zte@gmail.com>
+References: <1662373788-19561-1-git-send-email-shengjiu.wang@nxp.com>
+ <CAGoOwPQomcnO5dhkT9DBynwJo8LfVvuuwj5AYNpv0KhAGSWLEw@mail.gmail.com>
+ <CAA+D8APOL1Qx0fAhyajXXzh0_tqEmDJoDBh3Xgo6uYNhV0usBw@mail.gmail.com>
+ <CAGoOwPQfkT2ptdt6mBTAgPfN0NOoR4KfdLE9B2AoL+Qn6bWdFw@mail.gmail.com> <CAA+D8AMYrQsu-nM_WdrBtB4iPU2UYNDhPW-zdY_Z+-9L03gu1Q@mail.gmail.com>
+In-Reply-To: <CAA+D8AMYrQsu-nM_WdrBtB4iPU2UYNDhPW-zdY_Z+-9L03gu1Q@mail.gmail.com>
+From:   Nicolin Chen <nicoleotsuka@gmail.com>
+Date:   Tue, 6 Sep 2022 04:41:59 -0700
+Message-ID: <CAGoOwPSOEmLN+0esj2QfoadN7JZ=TJeZymxcp3MPqP4oLok70w@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: fsl_asrc: Add initialization finishing check in
+ runtime resume
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>
+Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,37 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:59:48AM +0000, CGEL wrote:
-> On Wed, Aug 03, 2022 at 09:55:39AM -0400, Johannes Weiner wrote:
-> > On Mon, Aug 01, 2022 at 12:42:04AM +0000, cgel.zte@gmail.com wrote:
-> > 
-> > This doubles the psi cache footprint on every context switch, wakeup,
-> > sleep, etc. in the scheduler. You're also adding more branches to
-> > those same paths. It'll measurably affect everybody who is using psi.
-> > 
-> > Yet, in the years of using psi in production myself, I've never felt
-> > the need for what this patch provides. There are event counters for
-> > everything that contributes to pressure, and it's never been hard to
-> > rootcause spikes. There are also things like bpftrace that let you
-> > identify who is stalling for how long in order to do one-off tuning
-> > and systems introspection.
-> > 
-> We think this patch is not for rootcause spikes, it's for automatic optimize
-> memory besides oomd, especially for sysctl adjustment. For example if we see
-> much pressure of direct reclaim the automatic optimize program might turn up
-> watermark_scale_factor.
-> The base idea is that this patch gives user a brief UI to know what kind of
-> memory pressure the system is suffering, and to optimize the system in a fine
-> grain. It could provide data for user to adjust watermark_boost_factor,
-> extfrag_threshold, compaction_proactiveness,transparent_hugepage/defrag,
-> swappiness, vfs_cache_pressure, madvise(), which may not easy for to do
-> before.
-> 
-> It's not easy for automatic optimize program to use tools likes bpftrace or
-> ftrace to do this.
-> 
-> While we may use CONFIG_PSI_XX or bootparam to turn on/off this patch to avoid
-> additional footprint for user who not need this.
+On Tue, Sep 6, 2022 at 3:50 AM Shengjiu Wang <shengjiu.wang@gmail.com> wrote:
+>> >> > +       /* Wait for status of initialization for every enabled pairs */
+>> >> > +       do {
+>> >> > +               udelay(5);
+>> >> > +               regmap_read(asrc->regmap, REG_ASRCFG, &reg);
+>> >> > +               reg = (reg >> ASRCFG_INIRQi_SHIFT(0)) & 0x7;
+>> >> > +       } while ((reg != ((asrctr >> ASRCTR_ASRCEi_SHIFT(0)) & 0x7)) && --retry);
+>> >> > +
+>> >> > +       /* FIXME: Doesn't treat initialization timeout as error */
+>> >> > +       if (!retry)
+>> >> > +               dev_warn(dev, "initialization isn't finished\n");
+>> >>
+>> >> Any reason why not just dev_err?
+>> >
+>> > Just hesitate to use dev_err. if use dev_err, then should return an error.
+>> > May one of the pairs is finished, it still can continue.
+>>
+>> Makes sense. In that case, why "FIXME" :)
 
-Hi
-   Do you think this is praciseable?
+> Just want to have a record/note here, need to care about this warning.
+
+"FIXME" feels like something is wrong and literally means that it is
+waiting for a fix/solution. In your case, it's not waiting for a fix
+at all, but just an annotation? So, shouldn't it be just "Note:"?

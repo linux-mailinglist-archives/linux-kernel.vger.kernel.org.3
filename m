@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA18D5AEB40
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B635AEA59
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240134AbiIFN4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S238777AbiIFNnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239892AbiIFNyQ (ORCPT
+        with ESMTP id S234120AbiIFNlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:54:16 -0400
+        Tue, 6 Sep 2022 09:41:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF2980526;
-        Tue,  6 Sep 2022 06:41:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D266E7DF75;
+        Tue,  6 Sep 2022 06:37:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95E5F61551;
-        Tue,  6 Sep 2022 13:35:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 934E3C433D6;
-        Tue,  6 Sep 2022 13:35:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B428F6154B;
+        Tue,  6 Sep 2022 13:35:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B530BC433C1;
+        Tue,  6 Sep 2022 13:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471342;
-        bh=4wMBIiOVRFEUQgZUCLPvtOAlNnzfJHtYdPAydFACWFM=;
+        s=korg; t=1662471345;
+        bh=o31RZ0FSPNoaHT8CN+G8PmbffRQDGmpmv7Z42yZluC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B7k7JYn5caGkg9xDIgW7rUhxiRNf5mjnYC4NvXcbEaKzsLMveUdSeR757OYyt+lY6
-         TGy6jYBW5+j4p2wp9/EZr5gCc7uDDDLJQ2Y3wNUJeBOo6sS8/a3zSMvNJM5bmXNnnn
-         g9Q0a4IKx7yRh3V8U4RPaSjG9a1++JF59E+G7Bl0=
+        b=1LgkqYSAiIY4FRhNp2nQytsMrGFZl59FAK3IsRwzDn5y9/Rx/ihnTx2GfbnFJPPeS
+         jeIP6sfeLLiJKbW94ROlrimaJBIe9L2W9A4g3IPw2mICjJxx1Kme4C80viIxg/XwG9
+         x2bnzC7jtztvQ5GRmXa9gRHjXUOMWMstyVVcELjw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 5.10 76/80] usb: dwc3: fix PHY disable sequence
-Date:   Tue,  6 Sep 2022 15:31:13 +0200
-Message-Id: <20220906132820.303080833@linuxfoundation.org>
+Subject: [PATCH 5.10 77/80] usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
+Date:   Tue,  6 Sep 2022 15:31:14 +0200
+Message-Id: <20220906132820.336028002@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
 References: <20220906132816.936069583@linuxfoundation.org>
@@ -58,79 +57,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Johan Hovold <johan+linaro@kernel.org>
 
-commit d2ac7bef95c9ead307801ccb6cb6dfbeb14247bf upstream.
+commit  a872ab303d5ddd4c965f9cd868677781a33ce35a upstream.
 
-Generic PHYs must be powered-off before they can be tore down.
+The Qualcomm dwc3 runtime-PM implementation checks the xhci
+platform-device pointer in the wakeup-interrupt handler to determine
+whether the controller is in host mode and if so triggers a resume.
 
-Similarly, suspending legacy PHYs after having powered them off makes no
-sense.
+After a role switch in OTG mode the xhci platform-device would have been
+freed and the next wakeup from runtime suspend would access the freed
+memory.
 
-Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
-dwc3_probe() error-path sequences that got this wrong.
+Note that role switching is executed from a freezable workqueue, which
+guarantees that the pointer is stable during suspend.
 
-Note that this makes dwc3_core_exit() match the dwc3_core_init() error
-path with respect to powering off the PHYs.
+Also note that runtime PM has been broken since commit 2664deb09306
+("usb: dwc3: qcom: Honor wakeup enabled/disabled state"), which
+incidentally also prevents this issue from being triggered.
 
-Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
-Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
-Cc: stable@vger.kernel.org      # 4.8
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
+Cc: stable@vger.kernel.org      # 4.18
 Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220804151001.23612-2-johan+linaro@kernel.org
+Link: https://lore.kernel.org/r/20220804151001.23612-5-johan+linaro@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[ johan: adjust context to 5.15 ]
+[ johan: adjust context for 5.15 ]
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/core.c |   19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/usb/dwc3/dwc3-qcom.c |   14 +++++++++++++-
+ drivers/usb/dwc3/host.c      |    1 +
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -728,15 +728,16 @@ static void dwc3_core_exit(struct dwc3 *
- {
- 	dwc3_event_buffers_cleanup(dwc);
- 
-+	usb_phy_set_suspend(dwc->usb2_phy, 1);
-+	usb_phy_set_suspend(dwc->usb3_phy, 1);
-+	phy_power_off(dwc->usb2_generic_phy);
-+	phy_power_off(dwc->usb3_generic_phy);
-+
- 	usb_phy_shutdown(dwc->usb2_phy);
- 	usb_phy_shutdown(dwc->usb3_phy);
- 	phy_exit(dwc->usb2_generic_phy);
- 	phy_exit(dwc->usb3_generic_phy);
- 
--	usb_phy_set_suspend(dwc->usb2_phy, 1);
--	usb_phy_set_suspend(dwc->usb3_phy, 1);
--	phy_power_off(dwc->usb2_generic_phy);
--	phy_power_off(dwc->usb3_generic_phy);
- 	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
- 	reset_control_assert(dwc->reset);
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -296,6 +296,14 @@ static void dwc3_qcom_interconnect_exit(
+ 	icc_put(qcom->icc_path_apps);
  }
-@@ -1606,16 +1607,16 @@ err5:
- 	dwc3_debugfs_exit(dwc);
- 	dwc3_event_buffers_cleanup(dwc);
  
--	usb_phy_shutdown(dwc->usb2_phy);
--	usb_phy_shutdown(dwc->usb3_phy);
--	phy_exit(dwc->usb2_generic_phy);
--	phy_exit(dwc->usb3_generic_phy);
--
- 	usb_phy_set_suspend(dwc->usb2_phy, 1);
- 	usb_phy_set_suspend(dwc->usb3_phy, 1);
- 	phy_power_off(dwc->usb2_generic_phy);
- 	phy_power_off(dwc->usb3_generic_phy);
- 
-+	usb_phy_shutdown(dwc->usb2_phy);
-+	usb_phy_shutdown(dwc->usb3_phy);
-+	phy_exit(dwc->usb2_generic_phy);
-+	phy_exit(dwc->usb3_generic_phy);
++/* Only usable in contexts where the role can not change. */
++static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
++{
++	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
 +
- 	dwc3_ulpi_exit(dwc);
++	return dwc->xhci;
++}
++
+ static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+ {
+ 	if (qcom->hs_phy_irq) {
+@@ -411,7 +419,11 @@ static irqreturn_t qcom_dwc3_resume_irq(
+ 	if (qcom->pm_suspended)
+ 		return IRQ_HANDLED;
  
- err4:
+-	if (dwc->xhci)
++	/*
++	 * This is safe as role switching is done from a freezable workqueue
++	 * and the wakeup interrupts are disabled as part of resume.
++	 */
++	if (dwc3_qcom_is_host(qcom))
+ 		pm_runtime_resume(&dwc->xhci->dev);
+ 
+ 	return IRQ_HANDLED;
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -130,4 +130,5 @@ err:
+ void dwc3_host_exit(struct dwc3 *dwc)
+ {
+ 	platform_device_unregister(dwc->xhci);
++	dwc->xhci = NULL;
+ }
 
 

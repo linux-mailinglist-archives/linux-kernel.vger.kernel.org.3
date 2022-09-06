@@ -2,81 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFF35AE610
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EACC5AE611
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbiIFK6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
+        id S239498AbiIFK6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiIFK6D (ORCPT
+        with ESMTP id S233220AbiIFK6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:58:03 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F813CBC1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:58:02 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id w19so11837717ljj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 03:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ORguQGJ+jcnqw8eowE0KKiCcX55E0FSXFsOOApHEpOM=;
-        b=U68Zh9mQBLzfJSdNR58ymOgPj/T4+G/zPlnyNdI/nsm3+1yMhbcmP9xrqAP3k3Xc+t
-         4IV9tCu2U9nBjgB0WNJbhmSuUd2omplTLqSUH+FG7OUD2mcrt03QINczFmQvuSHdFgn5
-         ngnf1ke/CQYXyBPlN7VCr5YWXXiUFXAtjaLXGB5D5uawKSwDNnZeOXAAC+ET+t9dzKYU
-         Pgz5Raxph4iLk2qqrfXPPMEkCK1ZLTI1H5R4NjODKXkWuyKDhkZHQnGvuJjvlRtFFc7b
-         cPOi4rwoqmiTZRtTk20f/ryqQomOAMIv++52KXlKxVk5VZdWI2Uy1b9lBTIxXAQyvClU
-         7w9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ORguQGJ+jcnqw8eowE0KKiCcX55E0FSXFsOOApHEpOM=;
-        b=V46/h8QnxWKyuM89E3whM3LdxaBsUs/FuYVc1gLU3BTMK7JlGRtEQPTpikHqxlHjOR
-         bknMQXbWMo7AXCoBbTzJutwXHOs+vXmxMdz/ExoORV9KGvbLW2LyyG3waqpqbdIt6/xx
-         4chQIefihBTZQE8vV2gkxY8V93nlWpDdbn0v2YMTwi1SyQNiCZeFQeOvNhThkOJmTpsv
-         sGMWQQLSs5Yon9vG7DeECMd+s+VJ3XPqgZsvNK7zmXjDyhtPaarTk6Hvy1XSx9lfaf9d
-         EsO9zsp6G/agwELFWBmAH/vaw7lnn1AyXx/rqwnq0TnlWaTALUMyPpIovby5viH3eaPU
-         G7qA==
-X-Gm-Message-State: ACgBeo3WGyWR2buhoEFQd9Jd0Lg2eJSfJ4Gx+N1YveITVOQfqJ7+M+0o
-        JMEJ7Kdv8KiygplLWVluLlYdTw==
-X-Google-Smtp-Source: AA6agR7syjIYMu2DxjRvWa53god5653pNfvbu/mnSo4Wf8ca0qOupBU8ACKnZieein6B5857rZXlbA==
-X-Received: by 2002:a2e:bc10:0:b0:267:b34a:52e6 with SMTP id b16-20020a2ebc10000000b00267b34a52e6mr10145748ljf.292.1662461880397;
-        Tue, 06 Sep 2022 03:58:00 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a4-20020a056512200400b0048b193041easm1658504lfb.209.2022.09.06.03.57.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 03:57:59 -0700 (PDT)
-Message-ID: <872bffe6-416e-0d15-5994-0cf80c2063b4@linaro.org>
-Date:   Tue, 6 Sep 2022 12:57:58 +0200
+        Tue, 6 Sep 2022 06:58:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C773C8F4;
+        Tue,  6 Sep 2022 03:58:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D13A4614AE;
+        Tue,  6 Sep 2022 10:58:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA5CC433C1;
+        Tue,  6 Sep 2022 10:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662461896;
+        bh=VVMTL6otukiB8F/2HYcarj4/PNAYKkz7PWViuFBZE2Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jmoJFCGjWbVxgleC4Xfd/Bb0hhJD72fEnDihbI8c+8o/djhzy5UWD4HWUTQ8bEGU1
+         igDNr/B6Y1ZyI9G07g/peHuZ3GF9vk9OuNckUhvIapVKI1QU54II3YpXi1Aa/qWi4z
+         LV/lS1uI9RIRQ8WNI47rTYyhE4ETAFFjHrHN27bA=
+Date:   Tue, 6 Sep 2022 12:58:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/2] misc: pci_endpoint_test: Aggregate params
+ checking for xfer
+Message-ID: <YxcnxSPEVeCcMHmZ@kroah.com>
+References: <20220906101555.106033-1-mie@igel.co.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v9 2/2] MAINTAINERS: Update fastrpc documentation file
- from txt to yaml
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org
-References: <20220906103055.2089519-1-abel.vesa@linaro.org>
- <20220906103055.2089519-2-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220906103055.2089519-2-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906101555.106033-1-mie@igel.co.jp>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,17 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 12:30, Abel Vesa wrote:
-> The documentation for fastrpc bingings is now YAML. So update the
-> MAINTAINERS file.
+On Tue, Sep 06, 2022 at 07:15:54PM +0900, Shunsuke Mie wrote:
+> Each transfer test functions have same parameter checking code. This patch
+> unites those to an introduced function.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+> ---
+> Changes in v2:
+> * New patch
+> ---
+> ---
+>  drivers/misc/pci_endpoint_test.c | 35 ++++++++++++++++++++++++++------
+>  1 file changed, 29 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+> index 8f786a225dcf..3bd9f135cdac 100644
+> --- a/drivers/misc/pci_endpoint_test.c
+> +++ b/drivers/misc/pci_endpoint_test.c
+> @@ -332,6 +332,17 @@ static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+>  	return false;
+>  }
+>  
+> +static int pci_endpoint_test_validate_xfer_params(struct device *dev,
+> +		struct pci_endpoint_test_xfer_param *param, size_t alignment)
+> +{
+> +	if (param->size > SIZE_MAX - alignment) {
+> +		dev_err(dev, "Maximum transfer data size exceeded\n");
 
-Abel, I sent you two messages about this patch that it is not
-bisectable. You did not respond to them, regarding maintainers entry, so
-I don't know what to think.
+Do not allow userspace to spam the kernel log.
 
-This must be squashed.
+This should be dev_dbg() at most.
 
-Best regards,
-Krzysztof
+thanks,
+
+greg k-h

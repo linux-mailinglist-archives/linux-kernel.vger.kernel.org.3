@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BC75AEED3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B805AEED6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239740AbiIFP3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S232937AbiIFPbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239829AbiIFP3Y (ORCPT
+        with ESMTP id S233466AbiIFPag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:29:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DB76F266;
-        Tue,  6 Sep 2022 07:40:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E46756153A;
-        Tue,  6 Sep 2022 14:39:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577F6C433D6;
-        Tue,  6 Sep 2022 14:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662475183;
-        bh=UOsnnpLppYPpbsDkpHaDmc77HuAeAd3zvlBZGZ0INGU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P/n+Y8l+zc0C3UizitRrMLWs5qO23ptIUSUhV80HBrxAXj2g4QD6GiZmxOjCMvRpU
-         bSLm4F+zDJtr5FgUuRKyGqwME6vBTe2sAZvo6A9jirw1bFIy3HCyUMcnrQIrbAjAdP
-         QgZTftu2XalW60j4QlWFPq16UG1Oy3K8J1u7x/a12a044H8ftwoE2qYXCIkLyXSjOy
-         yX2TtsA/icfJJJHRvnrPR0PsM2RG+4Tul+Iv/uS3Z41R/VHcYsOfU2rTJ9oDTR9X7t
-         r1/lVmM8GXDu0xqy5nbSPJedHdL0Z1Pg5Il1KEhTA66++ImC519xFxyoh5whOR3oHx
-         N3YkwJaZCS6Vg==
-Received: by mail-vk1-f182.google.com with SMTP id 134so5604857vkz.11;
-        Tue, 06 Sep 2022 07:39:43 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0kB83la8UPdudfQi5DMr4VBz586m7Y4T7Pbcm2vODocd/L5t4y
-        Nl7zg5C7hXX0kkbOjOnWeAhgJMvTZIcTZz2ifw==
-X-Google-Smtp-Source: AA6agR6b8hZYwJBLm7SLsCAO/aDS4ocsOKNPA6oXV5y0JmR0eVsUiPdTEKIihaSDtWt0cXx/BWWu6dkQqN3LRIxu+kc=
-X-Received: by 2002:ac5:cd54:0:b0:39e:937c:333d with SMTP id
- n20-20020ac5cd54000000b0039e937c333dmr1077487vkm.15.1662475182280; Tue, 06
- Sep 2022 07:39:42 -0700 (PDT)
+        Tue, 6 Sep 2022 11:30:36 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703B89C205
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 07:41:41 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j6so8262873qkl.10
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 07:41:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=UJM5srF8hEIXQkbrFMWMpqfmvKyMTxPhXcroonaQ7aQ=;
+        b=epwK90jy61HZNipHj8B/Tf8YmC7Qsc3IQVW+IlHHrLXfo8k5D7ZxivfiRbzUQLHUUd
+         wLtaPMkqKiEE/Dbedbqv8XPxEnrBV/w/G5Xd1/wVjJba6ZfKbKacxZe1uFkYLfZHY8gc
+         5Cg1Oyp96V5d94RRdwEqDgBG5iiWJH2JpMVSo6r0F39OFCHdfBzUI7clZPLo7QFHFbPU
+         PSTQiTW4VEfeLMb2IknBj9pjs9T6/edDMMoMjMfxxQ8x0merJzV9oqMLzj7gpki1hd2O
+         kurkxImGxOykfUkGrFXkFkwxqp+OiDexOmKn/p58f9mZmq0T/e+8+5j4bqEUp0dRA4R9
+         JoXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=UJM5srF8hEIXQkbrFMWMpqfmvKyMTxPhXcroonaQ7aQ=;
+        b=Ggr5aDU3OiBHt93dB50smqIN3gdSMMP3XdIVfZMR7zlnivjb4zkMlT84DnFqWulyiC
+         mvwhA4hH6NU6L75ddTSNraA//pHoyLnzPGCv8quzSPDVhrPLki93VQPAdRAkilrx/Mds
+         aa97ihDxno5DLmeBhsTIMU3D1Kg01esXgmy3WclMh3j3w0ewhMOtDLupQjoI3NiyvEPe
+         ZKWnMU3YpJGOFYqnctejT5rlhEk4oO4/2GL4o/GbghuLlannHLnOokEXHLwGFwlOyHW0
+         VUZfqnrUU4mIUyH2PvqdBgWZEZ14lktHT9q3NJKkJiTtsgJqvEEvZd16SdlQQfOs/xx6
+         KvIQ==
+X-Gm-Message-State: ACgBeo0W/dscdWvunLv5pK1NhCCUNHlWwAI7+hzjklcRlHbxAfAIhqwH
+        Zv6AOuWH1oghDULUsvnFwZMfxeGdawuAu2FQIwM=
+X-Google-Smtp-Source: AA6agR4MBUJtnIa50hiAS7G9JA5E6Aq1xbxIHPwY3sOf3SUdmPfliYyjNzIfBE9ijKwOdRqDo+ZSK6IXoihAPG5g2ck=
+X-Received: by 2002:a05:620a:254f:b0:6bc:5763:de4b with SMTP id
+ s15-20020a05620a254f00b006bc5763de4bmr34905718qko.207.1662475208646; Tue, 06
+ Sep 2022 07:40:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220826220017.188066-1-marek.bykowski@gmail.com>
- <CAL_JsqKGgZOSdWQ2ithipvrRAYwt-vOL1z9-RM++-_h6pA=C_Q@mail.gmail.com> <20220830153500.49206b5a@ubuntu.armcompdev.pub.tds.tieto.com>
-In-Reply-To: <20220830153500.49206b5a@ubuntu.armcompdev.pub.tds.tieto.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 6 Sep 2022 09:39:31 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLbpbWavxs6ifO_RRSMreOjj1ToSSDS11P2wuVDeBj_7A@mail.gmail.com>
-Message-ID: <CAL_JsqLbpbWavxs6ifO_RRSMreOjj1ToSSDS11P2wuVDeBj_7A@mail.gmail.com>
-Subject: Re: [PATCH] of/fdt: Don't calculate initrd_start from the DT if
- 'linux,initrd-end' is 0
-To:     Marek Bykowski <marek.bykowski@gmail.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <0000000000004387dc05e5888ae5@google.com> <CA+fCnZc9u+QrF-JCQSA+uCM9-egh_=9x4hPdJng6T_uh6XWMZQ@mail.gmail.com>
+ <YxdJ684ypgAy8k98@arm.com> <CACT4Y+YOnTpWT5NCNhsPY=kV=2gFfQkY=7xGdU_1k7AdGhQneg@mail.gmail.com>
+ <YxdZXvsWr37RrFRk@arm.com>
+In-Reply-To: <YxdZXvsWr37RrFRk@arm.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 6 Sep 2022 16:39:57 +0200
+Message-ID: <CA+fCnZf-GOZpnBRLkRPrL7FUwYrAb-bu=PV0zMfbKOuNYrZ00A@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: invalid-access Read in copy_page
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        tongtiangen@huawei.com,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        syzbot <syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Peter Collingbourne <pcc@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 10:35 AM Marek Bykowski
-<marek.bykowski@gmail.com> wrote:
+On Tue, Sep 6, 2022 at 4:29 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> On Sun, 28 Aug 2022 20:12:41 -0500
-> Rob Herring <robh+dt@kernel.org> wrote:
->
+> > > Does it take long to reproduce this kasan warning?
 > >
-> > Shouldn't we just check that start < end?
-> >
-> > Can we check this somewhere not DT specific (and also not arch
-> > specific)? Then we don't have to worry if any other method of setting
-> > initrd could have the same error.
->
-> Yes, we can switch from checking on the end being 0 to that proposed:
-> - if (!end)
-> -     return;
-> + if (start >= end)
-> +     return;
->
-> Then the check would even go further as would also catch cases where
-> end < start.
->
-> My taking is early_init_dt_scan_chosen() that sets initrd size
-> incorrectly is DT specific but generic/arch agnostic. So that if
-> the error got introduced by a bootloader/U-Boot through the DT
-> chosen node, we should catch it in DT and react.
->
-> ARM64, for example, before going down for mapping for the incorrect
-> address (some extra large address resulting from the negative to
-> positive value conversion), has a check after DT parsing if
-> phys_initrd_size is other than 0 to proceed, and it is so that it
-> passes or in other words it doesn't catch the error.
+> > syzbot finds several such cases every day (200 crashes for the past 35 days):
+> > https://syzkaller.appspot.com/bug?extid=c2c79c6d6eddc5262b77
+> > So once it reaches the tested tree, we should have an answer within a day.
 
-Okay.
+To be specific, this syzkaller instance fuzzes the mainline, so the
+patch with the WARN_ON needs to end up there.
 
-Please send an updated patch.
+If this is unacceptable, perhaps, we could switch the MTE syzkaller
+instance to the arm64 testing tree.
 
-Rob
+> That's good to know. BTW, does syzkaller write tags in mmap'ed pages or
+> only issues random syscalls?
+
+syzkaller doesn't write tags. Or, at least, shouldn't. Theoretically
+it could come up with same way to generate instructions that write
+tags, but this is unlikely.
+
+> I'm trying to figure out whether tag 0xf2
+> was written by the kernel without updating the corresponding
+> page_kasan_tag() or it was syzkaller recolouring the page.
+
+Just in case, I want to point out that the kasantag == 0xa from the
+page flags matches the pointer tag 0xf5 in the report. The tag value
+is stored bitwise-inverted in the page flags. Not that this matters in
+this case though.

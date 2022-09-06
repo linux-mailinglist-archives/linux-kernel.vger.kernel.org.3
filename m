@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536BE5AED51
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A985AECB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242088AbiIFOaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S241470AbiIFONQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241905AbiIFO2V (ORCPT
+        with ESMTP id S241200AbiIFOMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:28:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A6B40BC9;
-        Tue,  6 Sep 2022 06:54:52 -0700 (PDT)
+        Tue, 6 Sep 2022 10:12:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39915876BD;
+        Tue,  6 Sep 2022 06:47:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7812ECE1770;
-        Tue,  6 Sep 2022 13:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4BDC433D6;
-        Tue,  6 Sep 2022 13:37:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 448B7B81633;
+        Tue,  6 Sep 2022 13:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65F6C433C1;
+        Tue,  6 Sep 2022 13:46:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471476;
-        bh=mobJGZFcfs84x6ygQFCoWpjPrj+Z9cYKBuqWlUjkdtg=;
+        s=korg; t=1662471977;
+        bh=LvdH7vVr1r23YEdZutNO3OHpW6XFVLpbsu0SIYi1q5Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nxgdSNHY46mk8Qmr7EBeVhdbS7TpTcPR4ycI2oIz5QjBrjny/WViwjxaJqAJdhLTR
-         r6Ol1rNpMZcqmMjYbrAkqGCqx/EBWp7VLUHzgVHJNIVaek0No/IXhGW+oWY0W6r2FJ
-         lbmuDKK1m1xwHKN7HPlR+w3gC6cnwYbHZuJ4sQys=
+        b=h/IB+K8m7S8hJtdvQVVd1JOpCrsyPhUDKthcIiwS3vBYa1usd/4lKMATxajxQE6Nu
+         Zjhs5qTViGXy4W0RIgVIJcF+vn70DwO5VpS1WUp/YkpwNLzBdSvaAYGioL9QnwB9vD
+         JdVeNGFXTFtNTIl+EhX/uy/BR1csooQawVKIwveQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 040/107] iio: adc: mcp3911: use correct formula for AD conversion
-Date:   Tue,  6 Sep 2022 15:30:21 +0200
-Message-Id: <20220906132823.508070326@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH 5.19 074/155] firmware_loader: Fix use-after-free during unregister
+Date:   Tue,  6 Sep 2022 15:30:22 +0200
+Message-Id: <20220906132832.553603595@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+References: <20220906132829.417117002@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
+From: Russ Weight <russell.h.weight@intel.com>
 
-commit 9e2238e3ae40d371a1130226e0e740aa1601efa6 upstream.
+commit 8b40c38e37492b5bdf8e95b46b5cca9517a9957a upstream.
 
-The ADC conversion is actually not rail-to-rail but with a factor 1.5.
-Make use of this factor when calculating actual voltage.
+In the following code within firmware_upload_unregister(), the call to
+device_unregister() could result in the dev_release function freeing the
+fw_upload_priv structure before it is dereferenced for the call to
+module_put(). This bug was found by the kernel test robot using
+CONFIG_KASAN while running the firmware selftests.
 
-Fixes: 3a89b289df5d ("iio: adc: add support for mcp3911")
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220722130726.7627-4-marcus.folkesson@gmail.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+  device_unregister(&fw_sysfs->dev);
+  module_put(fw_upload_priv->module);
+
+The problem is fixed by copying fw_upload_priv->module to a local variable
+for use when calling device_unregister().
+
+Fixes: 97730bbb242c ("firmware_loader: Add firmware-upload support")
+Cc: stable <stable@kernel.org>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Link: https://lore.kernel.org/r/20220829174557.437047-1-russell.h.weight@intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/mcp3911.c |   17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/base/firmware_loader/sysfs_upload.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/iio/adc/mcp3911.c
-+++ b/drivers/iio/adc/mcp3911.c
-@@ -38,8 +38,8 @@
- #define MCP3911_CHANNEL(x)		(MCP3911_REG_CHANNEL0 + x * 3)
- #define MCP3911_OFFCAL(x)		(MCP3911_REG_OFFCAL_CH0 + x * 6)
+--- a/drivers/base/firmware_loader/sysfs_upload.c
++++ b/drivers/base/firmware_loader/sysfs_upload.c
+@@ -377,6 +377,7 @@ void firmware_upload_unregister(struct f
+ {
+ 	struct fw_sysfs *fw_sysfs = fw_upload->priv;
+ 	struct fw_upload_priv *fw_upload_priv = fw_sysfs->fw_upload_priv;
++	struct module *module = fw_upload_priv->module;
  
--/* Internal voltage reference in uV */
--#define MCP3911_INT_VREF_UV		1200000
-+/* Internal voltage reference in mV */
-+#define MCP3911_INT_VREF_MV		1200
+ 	mutex_lock(&fw_upload_priv->lock);
+ 	if (fw_upload_priv->progress == FW_UPLOAD_PROG_IDLE) {
+@@ -392,6 +393,6 @@ void firmware_upload_unregister(struct f
  
- #define MCP3911_REG_READ(reg, id)	((((reg) << 1) | ((id) << 5) | (1 << 0)) & 0xff)
- #define MCP3911_REG_WRITE(reg, id)	((((reg) << 1) | ((id) << 5) | (0 << 0)) & 0xff)
-@@ -137,11 +137,18 @@ static int mcp3911_read_raw(struct iio_d
- 
- 			*val = ret / 1000;
- 		} else {
--			*val = MCP3911_INT_VREF_UV;
-+			*val = MCP3911_INT_VREF_MV;
- 		}
- 
--		*val2 = 24;
--		ret = IIO_VAL_FRACTIONAL_LOG2;
-+		/*
-+		 * For 24bit Conversion
-+		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
-+		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
-+		 */
-+
-+		/* val2 = (2^23 * 1.5) */
-+		*val2 = 12582912;
-+		ret = IIO_VAL_FRACTIONAL;
- 		break;
- 	}
- 
+ unregister:
+ 	device_unregister(&fw_sysfs->dev);
+-	module_put(fw_upload_priv->module);
++	module_put(module);
+ }
+ EXPORT_SYMBOL_GPL(firmware_upload_unregister);
 
 

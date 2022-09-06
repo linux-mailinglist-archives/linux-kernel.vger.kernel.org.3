@@ -2,86 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B772E5AF398
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB295AF399
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiIFSar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 14:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S229853AbiIFSbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 14:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiIFSao (ORCPT
+        with ESMTP id S229526AbiIFSbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:30:44 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AC317E3C;
-        Tue,  6 Sep 2022 11:30:43 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id u22so12084348plq.12;
-        Tue, 06 Sep 2022 11:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=XgR/VP7NAhWauMOsrwcgIw4hBbhzAc1gPVaPVW58FU4=;
-        b=S0fGy3Amy4jLKzuOHjKtRyPXTXPwsHuseA5jDpGwgXLMWKnDw9zRiwSKKo7O5Q/hOS
-         LouY1sFAeHQBoDjypEXbFeLyxrjIzIiq//XsVdH9HR8vYwJl9TsrdpKS3ETQdJR7SAcb
-         LDXBubAEA2lklGik3H1FSYpdt7J2XoaJlUr7sH3ht/xkgT2hAlWId1cjanJn4WNCSYkD
-         qwA+UwuSZoYf5J1TeqNALYVszB4PYXcjVbLXWs7E91eAKhvFPM2byJ8TUSIrdcFZOQ1R
-         xZIXH+U3kSC5zEdIPoL3lCrE1nPLx2y4A1djzpPAPsIwaqBXqYM9BuRC7NvWENr09cCq
-         bLhQ==
+        Tue, 6 Sep 2022 14:31:17 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBE232056;
+        Tue,  6 Sep 2022 11:31:16 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so8618724otd.12;
+        Tue, 06 Sep 2022 11:31:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=XgR/VP7NAhWauMOsrwcgIw4hBbhzAc1gPVaPVW58FU4=;
-        b=Qg37A/4vlOclBnY5e2UvksUqx/syAieGjsQ5LAw1Pb8io12JwaeCoh2GVCqHIhBWDL
-         hPtN2MkHdKfF2nwAgjEKhgFkc3yYRldp+RDJTIZ3TpyJ17xD8r/2j0HuEUiKC0ClMejT
-         zmmp8mt2s+tmJvNfELll/ScZO9zCJGvPwkFGbJ8ZJgatoBTavNECGoaJJ7LcOeGhQ98+
-         owMxA/LddOORInEtwOxSCtimpRRj3qYKPYOUw5lmybrjk6l0L+9VLEY64MgcyqetDNEX
-         sXAunKhd0YbKwSE/UkM4qmU5U2PIPiBBh7Iy0AUZRlu2r+JViNffBUNz4CDEhnufh6t1
-         2aag==
-X-Gm-Message-State: ACgBeo3nT9VcsQDzfBjajOyoVRMTEsHNDtnpS0ik5hrg2nhQPeGcZe6T
-        XaDDlc1TzrVcagsk3utbxDPwY5Zfy7c=
-X-Google-Smtp-Source: AA6agR7xwQzeEteyz/qsiN1TMQKL/kt8HG+oZBtL6gOlaPJR0iFY+K5yJ6jN1awDrocqkyJ2OZtU3g==
-X-Received: by 2002:a17:903:41c2:b0:174:6cec:8d0d with SMTP id u2-20020a17090341c200b001746cec8d0dmr28511777ple.123.1662489043141;
-        Tue, 06 Sep 2022 11:30:43 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id n7-20020a170902d2c700b001709e3c755fsm2588998plc.230.2022.09.06.11.30.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 11:30:42 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 6 Sep 2022 08:30:41 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jing-Ting Wu <jing-ting.wu@mediatek.com>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        wsd_upstream@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Jonathan.JMChen@mediatek.com,
-        "chris.redpath@arm.com" <chris.redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Donnefort <vdonnefort@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, lixiong.liu@mediatek.com,
-        wenju.xu@mediatek.com, Waiman Long <longman@redhat.com>
-Subject: Re: BUG: HANG_DETECT waiting for migration_cpu_stop() complete
-Message-ID: <YxeR0RoiTdm8sWCJ@slm.duckdns.org>
-References: <88b2910181bda955ac46011b695c53f7da39ac47.camel@mediatek.com>
- <b605c3ec-94ab-a55f-5825-9b370d77ecf3@quicinc.com>
- <203d4614c1b2a498a240ace287156e9f401d5395.camel@mediatek.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=KTMC4sgGs4iMTIRHGtHX14ygc35A9XeknD+0EJXhRfs=;
+        b=tuB3YEpGuU0bj3K2vM2zYY5zKFkkLbBkhtKfkzXAO8IgevDSoE5OF9CdNAB0Szt71A
+         Mv68yu3e/cBo2gkqWQiLg+M2ApFFRvKDjImDOh+zOwqyAvFyJmJ/aXWi5Vv89E/gsS6P
+         x/t08t1kOP26ooHXQfGrpY2U2F0yXz8Poyo36ySe1x0PTip9nHKasEmCwFQ8kgykc8Mr
+         dSaqlBOr42/cJW+xxlxoO2YLbhxf5L/4n4voJ0q0JOh6uubhWh7dU/dLdRYtX0jckHLA
+         wZqSNr20zPGN5X2Fkn+Mu+IiMke1UpWQUG3rFWGSm0ry/ppsbNRNHvGccnffJGPFi8B/
+         PGjQ==
+X-Gm-Message-State: ACgBeo12Qg6KBeIiXGSTskVNAkSjDyGOhYgrXM6p/D/fEijPXwy/kc/o
+        ng0kSFNOjux/y4Mxm+FiItuLp7l9DVHkyGbEYR4ZUdO2
+X-Google-Smtp-Source: AA6agR5wIKuqeybuaOjh8IZNxiROzu/OFeaNSVGnVmevPf9aFwUSW1gEMxZT2SMQ83z9S3QPMVk6pFV0NPNc9oeKCmw=
+X-Received: by 2002:a9d:6f18:0:b0:638:b4aa:a546 with SMTP id
+ n24-20020a9d6f18000000b00638b4aaa546mr21388276otq.124.1662489075965; Tue, 06
+ Sep 2022 11:31:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <203d4614c1b2a498a240ace287156e9f401d5395.camel@mediatek.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+References: <20220903000210.1112014-1-namhyung@kernel.org> <CANpmjNMPh5QjdxXtrCc5FApjgzV=81CNNiwbeg_rE3NxN_WCZw@mail.gmail.com>
+ <YxdA1CVzy9hzE3i1@kernel.org>
+In-Reply-To: <YxdA1CVzy9hzE3i1@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 6 Sep 2022 11:31:04 -0700
+Message-ID: <CAM9d7ci2ZujdY75DUtZA+f=fru7yh8VJrj8-r2RgZetu57u61A@mail.gmail.com>
+Subject: Re: [PATCH] perf test: Skip sigtrap test on old kernels
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Marco Elver <elver@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,20 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Sep 6, 2022 at 5:45 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> Em Sat, Sep 03, 2022 at 08:52:01AM +0200, Marco Elver escreveu:
+> > On Sat, 3 Sept 2022 at 02:02, Namhyung Kim <namhyung@kernel.org> wrote:
+> > >
+> > > If it runs on an old kernel, perf_event_open would fail because of the
+> > > new fields sigtrap and sig_data.  Just skip the test if it failed.
+> > >
+> > > Cc: Marco Elver <elver@google.com>
+> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > > ---
+> > >  tools/perf/tests/sigtrap.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> > > index e32ece90e164..7057566e6ae4 100644
+> > > --- a/tools/perf/tests/sigtrap.c
+> > > +++ b/tools/perf/tests/sigtrap.c
+> > > @@ -140,6 +140,7 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+> > >         fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+> > >         if (fd < 0) {
+> > >                 pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
+> > > +               ret = TEST_SKIP;
+> >
+> > Wouldn't we be interested if perf_event_open() fails because it could
+> > actually be a bug? By skipping we'll be more likely to miss the fact
+> > there's a real problem.
+> >
+> > That's my naive thinking at least - what do other perf tests usually
+> > do in this case?
+>
+> Yeah, I was going to try and check if this is the only way that, with
+> the given arguments, perf_event_open would fail, but its better to at
+> least check errno against -EINVAL or something?
 
-(cc'ing Waiman in case he has a better idea)
+EINVAL would be too generic and the kernel returns it in many places.
+I really wish we could have a better error reporting mechanism.
 
-On Mon, Sep 05, 2022 at 04:22:29PM +0800, Jing-Ting Wu wrote:
-> https://lore.kernel.org/lkml/YvrWaml3F+x9Dk+T@slm.duckdns.org/ is for
-> fix cgroup_threadgroup_rwsem <-> cpus_read_lock() deadlock.
-> But this issue is cgroup_threadgroup_rwsem <-> cpuset_rwsem deadlock.
+Maybe we could retry perf_event_open with sigtrap and sig_data cleared.
+If it succeeded, then we can skip the test.  If it still failed, then report
+the error.  But it still couldn't find a bug in the sigtrap code.
+What do you think?
 
-If I'm understanding what you're writing correctly, this isn't a deadlock.
-The cpuset_hotplug_workfn simply isn't being woken up while holding
-cpuset_rwsem and others are just waiting for that lock to be released.
-
-Thanks.
-
--- 
-tejun
+Thanks,
+Namhyung

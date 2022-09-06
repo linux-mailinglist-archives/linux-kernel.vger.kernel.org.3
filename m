@@ -2,90 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CE55AE882
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1955AE88B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239510AbiIFMhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S237156AbiIFMiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiIFMhM (ORCPT
+        with ESMTP id S239732AbiIFMh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:37:12 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560D82408D;
-        Tue,  6 Sep 2022 05:37:11 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id j1so8165776qvv.8;
-        Tue, 06 Sep 2022 05:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xpQtocT5Zisw3O9+aeFWboKbjJDP0EWoNrPcWVo7piw=;
-        b=YVI/aM+ELJNZDNwkFkIDb1ee3t0OHhCnXR19746BpxdKzbjfIyXfdR9WYP/xCTgvY6
-         +f+lwJ6Uvkuaqh7l28Cyeh0aYnAwg2KBoS4KQ72O4mNZtzp/OZKLOzHys1PbPobd4DdZ
-         +Sz81M+K/nAN93Ubh6+yydU/4pDEavsPoolCdSzOVWm4Dp53XOGbnAf9FSN1B8bbVhPO
-         KizOsX0A0CPXnbpzEGjNYuehR9KUg71pwlD5MzXTIu5PmmpKNr3MxY4FxJ3cgN+gmAL2
-         ksntbEcfFMe7kVAz+d45nYoHd5I73gSBLEn+eJcRQuQqxqpWSQLOpF85FeGZGkxfusW6
-         2/iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xpQtocT5Zisw3O9+aeFWboKbjJDP0EWoNrPcWVo7piw=;
-        b=olDI6QZ1xNpRHRZSEeBw4izPa6HhdrltSVY/LYeOqrcvoieKzOh6DgcCdt4mYNRaMh
-         RVX116Wm++zN0qi+UDUfq/2xFOiSHdITeRx11Hm5XwZS5+hQAyjb6lUsnow/nt//s/ZT
-         N4+joD/cXK5k6vtRQviLn6zbI0c8/nlxIKNk1xawq9uioRLLthFWA6mTbfbn3mQtw0ZD
-         ZIEO8MJGPhizX6xeGmWe7Xk+kL3fUxAWOCIKMzJacUb1ks4+r7l2HdWdSDMvPU7fbI2O
-         8NsrzDLih2y+2AfTLT8fgROZqmf9/U7WX9ve6TSjSamYTW67OqAFp5rcFYP4ZUr1n1qU
-         P9NQ==
-X-Gm-Message-State: ACgBeo0ih9keBaCuXC3wNuigoCd0dNc5Jb6ZgCHdT96Pe90iw62ECA9V
-        Y9D+M9AV3Hgw7LMwviOScCDSSDqLg65jiCnpKRZTlLyoC+OEOg==
-X-Google-Smtp-Source: AA6agR5xg7xsGW4UZ7tl+m6D3eixtJ14kZjmmZ8LYgKwueY9tqDc8gWdClFu2ozn1PkQGJx3BYbrRXBW8DnqZkE2q94=
-X-Received: by 2002:a05:6214:c8f:b0:499:21eb:ba3b with SMTP id
- r15-20020a0562140c8f00b0049921ebba3bmr25835843qvr.97.1662467830452; Tue, 06
- Sep 2022 05:37:10 -0700 (PDT)
+        Tue, 6 Sep 2022 08:37:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D502225E87
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662467877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NwavP4bpJ5RCOsyXBh4N8THSIxStyZegdjcyZhUquBU=;
+        b=HSM1vJnoyWpCDNHo/iU4kQKQEiG9QSQcN2fO5jQdiqn6guOgdMD07Z6Ap0FN5aOuuDKYSc
+        SIew0bhtxNFFvcTTvSPjmIoRE46ZweZlwC6gejhE+cCLdlhRSpngxpaaPCPEQjRWs9MiYv
+        zzG6H87glJMJ1QZhxGCwc9rEER+7pgI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-15-xyxTHjOaPfqDg-3_GN9Jlw-1; Tue, 06 Sep 2022 08:37:56 -0400
+X-MC-Unique: xyxTHjOaPfqDg-3_GN9Jlw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0EF72101A54E;
+        Tue,  6 Sep 2022 12:37:55 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.109])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 968181121314;
+        Tue,  6 Sep 2022 12:37:49 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, kuba@kernel.org,
+        miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+References: <20220816032846.2579217-1-imagedong@tencent.com>
+        <CAKwvOd=accNK7t_SOmybo3e4UcBKoZ6TBPjCHT3eSSpSUouzEA@mail.gmail.com>
+        <CADxym3Yxq0k_W43kVjrofjNoUUag3qwmpRGLLAQL1Emot3irPQ@mail.gmail.com>
+        <20220818165838.GM25951@gate.crashing.org>
+        <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com>
+        <20220819152157.GO25951@gate.crashing.org>
+        <CADxym3Y-=6pRP=CunxRomfwXf58k0LyLm510WGtzsBnzjqdD4g@mail.gmail.com>
+        <871qt86711.fsf@oldenburg.str.redhat.com>
+        <CADxym3Z7WpPbX7VSZqVd+nVnbaO6HvxV7ak58TXBCqBqodU+Jg@mail.gmail.com>
+Date:   Tue, 06 Sep 2022 14:37:47 +0200
+In-Reply-To: <CADxym3Z7WpPbX7VSZqVd+nVnbaO6HvxV7ak58TXBCqBqodU+Jg@mail.gmail.com>
+        (Menglong Dong's message of "Wed, 24 Aug 2022 00:23:02 +0800")
+Message-ID: <87edwo65lw.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-References: <cover.1662454215.git.cmo@melexis.com> <32c4b72624e4a3480b202f24f506ca91029e47f7.1662454215.git.cmo@melexis.com>
- <CAHp75VezNufWGW6sC+ALmX9H4yavWRCmpHuv9ZVoRycQxZ-uQg@mail.gmail.com> <CAKv63utD2NzbUYR2=rrmZtkdtwOzoQBW7dZ5yzNa-r8uKmqXaw@mail.gmail.com>
-In-Reply-To: <CAKv63utD2NzbUYR2=rrmZtkdtwOzoQBW7dZ5yzNa-r8uKmqXaw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 6 Sep 2022 15:36:34 +0300
-Message-ID: <CAHp75Vc1a1bguLxX7Laewa9f2k9c38KeOD1zsikmC+3=21MnyQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] iio: temperature: mlx90632 Add runtime
- powermanagement modes
-To:     Crt Mori <cmo@melexis.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 1:52 PM Crt Mori <cmo@melexis.com> wrote:
-> On Tue, 6 Sept 2022 at 12:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> >
-> > Very good and documented code, thanks!
-> > I believe you better to use DEFINE_.*_PM_OPS instead of legacy ones
-> > (due to pm_ptr() usage).
-> > Otherwise, with some nitpicks that wouldn't prevent a green light,
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> >
-> I checked DEFINE_.*_PM_OPS usage around drivers and you either have
-> SIMPLE (where you define suspend/resume) or you have RUNTIME (for
-> runtime suspend/resume), but never are those two together. So I am a
-> bit puzzled how to get this working.
+* Menglong Dong:
 
-The one which suits here is called _DEFINE_DEV_PM_OPS(). But it's
-basically the same what you put here with the possible unused case.
+> Hello,
+>
+> On Mon, Aug 22, 2022 at 4:01 PM Florian Weimer <fweimer@redhat.com> wrote:
+>>
+>> * Menglong Dong:
+>>
+>> > /*
+>> >  * Used by functions that use '__builtin_return_address'. These function
+>> >  * don't want to be splited or made inline, which can make
+>> >  * the '__builtin_return_address' got unexpected address.
+>> >  */
+>> > #define __fix_address noinline __noclone
+>>
+>> You need something on the function *declaration* as well, to inhibit
+>> sibcalls.
+>>
+>
+> I did some research on the 'sibcalls' you mentioned above. Feel like
+> It's a little similar to 'inline', and makes the callee use the same stack
+> frame with the caller, which obviously will influence the result of
+> '__builtin_return_address'.
+>
+> Hmm......but I'm not able to find any attribute to disable this optimization.
+> Do you have any ideas?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Unless something changed quite recently, GCC does not allow disabling
+the optimization with a simple attribute (which would have to apply to
+function pointers as well, not functions).  asm ("") barriers that move
+out a call out of the tail position are supposed to prevent the
+optimization.
+
+Thanks,
+Florian
+

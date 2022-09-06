@@ -2,87 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B34C5ADD4E
+	by mail.lfdr.de (Postfix) with ESMTP id 90B8C5ADD4F
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbiIFC2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S233139AbiIFC3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiIFC2v (ORCPT
+        with ESMTP id S230377AbiIFC25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:28:51 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8A066B17F;
-        Mon,  5 Sep 2022 19:28:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=RszKb
-        mJQMUpZ5unihsN11xSDWrvsPjIXsmsDeEprHb4=; b=ocbMGQOzxcWmji2Dpl9/M
-        57nPw9SZ/ibD7Hn5J7Q3eB8BYTPu18HTcn8kJSsxw6aG6ZH1XM7hFe4FYGfoWcIF
-        fLrMtltbTF/P+9keNgyeCq/Y1KtS4eSVoZjXhLDrJ9heKCMLBnKD8NgH+HgZvkrr
-        dIQqoQWiRZWk4IZF/vCc0U=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp5 (Coremail) with SMTP id HdxpCgB3fv44sBZj0qC7aA--.37989S2;
-        Tue, 06 Sep 2022 10:28:10 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] scsi: mpt3sas: mpt3sas_warpdrive: fix spelling typo in comment
-Date:   Tue,  6 Sep 2022 10:27:55 +0800
-Message-Id: <20220906022755.217835-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 5 Sep 2022 22:28:57 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5436A4B0;
+        Mon,  5 Sep 2022 19:28:56 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id d16so5337922ils.8;
+        Mon, 05 Sep 2022 19:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=EVFz7Snz7wNBPA0IRAcw8NAeZu8JeFGc8bhvLijNe68=;
+        b=Lmlb/JhMlBqxERnYMJ8xSM+tQfW/dY5Q27/zRIGeDuPRz4ABJisLKzdisqy5Jvs06X
+         WmFvYxnJn+ULydDg0lZty9ZEKN/kPkvzaS1IQ+EZuRhmpoHdBcJkLe6xcCQ0on4bAodO
+         Dl6Bf6onWU7tIlUud7ejRxIN4YOr01XWC16nfqjJfB9pQvRGC9GsxKBvofMT0kIS1JHi
+         owaeyTup6MfQkO0PrWHUrEH12xVEJggGL2l9+5AnyMFr3ywP/41dy4xpwWFUbu7AeZie
+         x6tpwH+XIJhnUv+LrNEGJjmJqvUDZvl0as1f/VLKBeLwBL95jeIWGB9AjCMUbpmj7+/o
+         84Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=EVFz7Snz7wNBPA0IRAcw8NAeZu8JeFGc8bhvLijNe68=;
+        b=erQ2gDepAgcu8bbSHhJqqSgLppZqGlI0uN5hzjLkm2hh7t3lCOczHf6kyQTQiYZFJt
+         x3i9eajoq+fJ4ctENp/lkIRUOI5yUr36P2gvOhS1mpFTWKSbL6TQFreMLetgmDueOVcm
+         DaM4/ah49qjjIB/AcxI3OUU7g4UdrblCQ7/5I7y7EQajkTW94gDqWaNaI49wUsBxffKE
+         kTsEXHu8ep1vMuse5o1nq55utf07oBHyerY7PlSXoXwaL8SANweRYa1I2hMxPsWvD3V6
+         kGEBrJz4jNTRO3dH/aXELZPAjcQSjOGVubEOYgNbKaWg9ephFjfdMZFKM6O7UHQltJzS
+         t4rg==
+X-Gm-Message-State: ACgBeo3vtV6Njiynl8cyrqwkuJ8Zk0sauqBia6w2yeCAfaAeypkPvruP
+        o7rXSLwceSmMgXXL/SSLEnz4XChm/rIrSKKeoE+ccXK4SJE=
+X-Google-Smtp-Source: AA6agR54DVLjK+sXLtyBp0zuCC8wQY+NbjiMCEnQx6tLIjpLuD4/sp+QIJcXwS68s1riFM3yhVq+Okziu7FVbH8weUo=
+X-Received: by 2002:a05:6e02:190a:b0:2ee:9e75:ae4b with SMTP id
+ w10-20020a056e02190a00b002ee9e75ae4bmr9134684ilu.219.1662431335360; Mon, 05
+ Sep 2022 19:28:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgB3fv44sBZj0qC7aA--.37989S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Gry8uw13twb_yoWDurgE93
-        42vrW7W348CFsayF1Fyr4xZrWjy3W8Xa4kCrs09wn8Aw47Zw4DXrZrZr17K34DJ3yUta43
-        WayDJ3yruw1UWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8ebytUUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbi8Bp0+1uoiEnxmwAAs9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com> <20220905143318.1592015-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220905143318.1592015-2-roberto.sassu@huaweicloud.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Tue, 6 Sep 2022 04:28:19 +0200
+Message-ID: <CAP01T76CNmuh6qzewzafoZrSX1WCs6YsCBiEDkSr-1Oi+th0aw@mail.gmail.com>
+Subject: Re: [PATCH v16 01/12] bpf: Allow kfuncs to be used in LSM programs
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: KP Singh <kpsingh@kernel.org>
+>
+> In preparation for the addition of new kfuncs, allow kfuncs defined in the
+> tracing subsystem to be used in LSM programs by mapping the LSM program
+> type to the TRACING hook.
+>
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
 
-Fix spelling typo in comment.
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/scsi/mpt3sas/mpt3sas_warpdrive.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_warpdrive.c b/drivers/scsi/mpt3sas/mpt3sas_warpdrive.c
-index cc07ba41f507..2d35a5948bf3 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_warpdrive.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_warpdrive.c
-@@ -250,7 +250,7 @@ mpt3sas_init_warpdrive_properties(struct MPT3SAS_ADAPTER *ioc,
-  * @ioc: per adapter object
-  * @scmd: pointer to scsi command object
-  * @raid_device: pointer to raid device data structure
-- * @mpi_request: pointer to the SCSI_IO reqest message frame
-+ * @mpi_request: pointer to the SCSI_IO request message frame
-  */
- void
- mpt3sas_setup_direct_io(struct MPT3SAS_ADAPTER *ioc, struct scsi_cmnd *scmd,
--- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
-
+>  kernel/bpf/btf.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 903719b89238..e49b3b6d48ad 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -7243,6 +7243,7 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+>         case BPF_PROG_TYPE_STRUCT_OPS:
+>                 return BTF_KFUNC_HOOK_STRUCT_OPS;
+>         case BPF_PROG_TYPE_TRACING:
+> +       case BPF_PROG_TYPE_LSM:
+>                 return BTF_KFUNC_HOOK_TRACING;
+>         case BPF_PROG_TYPE_SYSCALL:
+>                 return BTF_KFUNC_HOOK_SYSCALL;
+> --
+> 2.25.1
+>

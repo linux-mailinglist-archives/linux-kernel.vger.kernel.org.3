@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C805AF7FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713A15AF801
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 00:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiIFW3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 18:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S230085AbiIFWcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 18:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiIFW3U (ORCPT
+        with ESMTP id S229668AbiIFWcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 18:29:20 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A71F21E1C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 15:29:17 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m1so17035417edb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 15:29:17 -0700 (PDT)
+        Tue, 6 Sep 2022 18:32:04 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505988A7D7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 15:32:03 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id u5so5074958qvv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 15:32:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tzV5Zo1zPXPHYlUrwIwFAafpDKH7ddJHuMF7Y7rCweA=;
-        b=NrD1lKMkW/LP27c/myN1W9vtmnxl9C2r3nLQQCkEubatVJntTMQywq96/+Zrhp3iNX
-         V1pMZj8E2hhw9LETuAVP7nAnj1shZXe9cZ1jpIBnlBmss4fyyZvnatwjINmE/DJ6EVk/
-         J4zJGnHbdmQSTo/6vGt+tdufQ/kiMCxUcod1M=
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Mtcu5af70evTT3fbOV+V5zfVRDwyrQCko52sY5cVhcg=;
+        b=MUKUNeSzKJdsN3Qb5nS1G483fq8T2gOozXD2zdbdk3Bcl8juL7DedSlztqB/fS3WOr
+         PKGORSNOiC2CbmrQpSQj1L8+HWnEJUeRPV3zyPwlUmczmpnzRciLBJhs22DxJzIo51GY
+         aiy8qQEire1kRnPm1A3+Zknfdtv7QB/xD99tw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tzV5Zo1zPXPHYlUrwIwFAafpDKH7ddJHuMF7Y7rCweA=;
-        b=bh6b9FzVAUoeRC9bk1FquVQfIRKzK6X+MCGvcSeZAjTyTugSUJOL8pCleR4GW3DfyX
-         G8xAybYOneyIAU2svkhcI0cr5qqMBWZEo3y/fGDezyVPcqHjB00UPC8GFo1oSgK+TfCz
-         Injnsk6GD+Pg3RxyMN7QHCH2f1DwugsIZTUb8ASxoNz3UnXEMvpi3LAAtRO0A0N9SgUx
-         zJSr/EzPKeonDfH8iWn2y3qdchSb4vhu5oyCWZRJ3Iai2tucJYAgpvKq9Tj3zatpddOn
-         vlReeB5+ifX0WgI/8DKkjoAXcBDKhmtOTIDDr8CtFjuOZMleWtudZzmPrELNZbn4SzQO
-         WRmg==
-X-Gm-Message-State: ACgBeo1l2BO95vOhlqKguxKqPP/XwPXafUeVKVgPomgCXDsyi0I1qPyj
-        GRYmkQWz0UcsKbl6geNMwFVV3ZNmIo/imw9l
-X-Google-Smtp-Source: AA6agR6bsPJUIVSKA39dbUcypDLGiQbTt1qfSt5IAxg38DzqKOOY9IGn3so9wpgILqP+Da4RibzXgw==
-X-Received: by 2002:a05:6402:2712:b0:448:e383:1f37 with SMTP id y18-20020a056402271200b00448e3831f37mr600569edd.375.1662503355848;
-        Tue, 06 Sep 2022 15:29:15 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id n12-20020aa7c68c000000b0044e8d0682b2sm4535131edq.71.2022.09.06.15.29.15
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Mtcu5af70evTT3fbOV+V5zfVRDwyrQCko52sY5cVhcg=;
+        b=OWVSmrMrziGb/QeqAwPVxXIrNMlPHBdDlSjNm9tkeCj7/+5GEGUNJ/79NXNgGo92xs
+         b0jz/rROV7rNkrKtj7/jWM/rnsnYeqqmRwXxlQ7lkKB4bf0eV7f+a2kbi6tBzYXzYwcV
+         RQgbYtzaj9EjCxC6vF/6oPulmUCDA6iCGBUwgVX8XSQUdowo0Vg6WNzcAFPL9nmVXxY0
+         0ZxHGodCctNxv3yknnjLSlz9of4vAX7Sw3op5WFaRpIbQZKs784Vd09EOX+Ugpz8R9rj
+         IL2TROKbJmLjpBcR0EqQ7f0Pk8D6vBalMFguI2UDisl1I0DNZg0ZDJTJYnzveSa2FYcA
+         4zRw==
+X-Gm-Message-State: ACgBeo0NNwmLv+hg4EJB+fZOLzjsBKsvRsbfpa4AI/CvPH+BZn3nTLAe
+        v7Off2fHVVNL/VZ5MTWMCbSZ2A==
+X-Google-Smtp-Source: AA6agR6T0S3GHapOEkuvZVWSZvxnakTwXjtf6NmVBM9YBxg+CfGLtCYEnFsRahjA9ta7k6QRkN6GkQ==
+X-Received: by 2002:a05:6214:20cf:b0:476:c8d:6da6 with SMTP id 15-20020a05621420cf00b004760c8d6da6mr581223qve.98.1662503522308;
+        Tue, 06 Sep 2022 15:32:02 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id bi3-20020a05620a318300b006b61b2cb1d2sm11855463qkb.46.2022.09.06.15.32.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 15:29:15 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id i188-20020a1c3bc5000000b003a7b6ae4eb2so10515301wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 15:29:15 -0700 (PDT)
-X-Received: by 2002:a05:600c:5114:b0:3a6:1ab9:5b3d with SMTP id
- o20-20020a05600c511400b003a61ab95b3dmr271110wms.93.1662503354765; Tue, 06 Sep
- 2022 15:29:14 -0700 (PDT)
+        Tue, 06 Sep 2022 15:32:02 -0700 (PDT)
+Message-ID: <ecd0497e-5623-0bf9-0160-79dca921a0a7@joelfernandes.org>
+Date:   Tue, 6 Sep 2022 18:31:59 -0400
 MIME-Version: 1.0
-References: <20220902082843.1.I7da6ff6c8e8700624d61e51ff7d09e151bd83dcb@changeid>
-In-Reply-To: <20220902082843.1.I7da6ff6c8e8700624d61e51ff7d09e151bd83dcb@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 6 Sep 2022 15:29:03 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=URtPnUF=moq_+iua517RBPB4WF+56gE94GZ6fhM2XUow@mail.gmail.com>
-Message-ID: <CAD=FV=URtPnUF=moq_+iua517RBPB4WF+56gE94GZ6fhM2XUow@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: input: touchscreen: elants_i2c: Add
- eth3915n touchscreen chip
-To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Henry Sun <henrysun@google.com>,
-        David Heidelberg <david@ixit.cz>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v5 03/18] rcu/tree: Use READ_ONCE() for lockless read of
+ rnp->qsmask
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
+        rostedt@goodmis.org, vineeth@bitbyteword.org
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-4-joel@joelfernandes.org>
+ <YxfJGYP2l0xbxxdr@boqun-archlinux>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <YxfJGYP2l0xbxxdr@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,28 +77,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Fri, Sep 2, 2022 at 1:32 AM Yunlong Jia
-<yunlong.jia@ecs.corp-partner.google.com> wrote:
->
-> Add an elan touch screen chip eth3915n.
-> This chip requires more delay time than the eth3500.
->
-> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-> ---
->
->  .../devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml   | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml b/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
-> index a9b53c2e6f0ab..d28625372f5ac 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/elan,elants_i2c.yaml
-> @@ -17,6 +17,7 @@ properties:
->      enum:
->        - elan,ektf3624
->        - elan,ekth3500
-> +      - elan,ekth3915
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+On 9/6/2022 6:26 PM, Boqun Feng wrote:
+> On Thu, Sep 01, 2022 at 10:17:05PM +0000, Joel Fernandes (Google) wrote:
+>> The rnp->qsmask is locklessly accessed from rcutree_dying_cpu(). This
+>> may help avoid load/store tearing due to concurrent access, KCSAN
+> 
+> Nit: you can avoid only load tearing with READ_ONCE().
+> 
+
+I modified it as you suggested for the next revision, thanks.

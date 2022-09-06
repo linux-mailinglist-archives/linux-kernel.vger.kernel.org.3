@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87E45AE558
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7845AE55C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239438AbiIFK2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S233682AbiIFKaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbiIFK1Q (ORCPT
+        with ESMTP id S233089AbiIFKaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:27:16 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494CC5FD1;
-        Tue,  6 Sep 2022 03:26:47 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMM4j2VRCz4xGD;
-        Tue,  6 Sep 2022 20:26:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662460006;
-        bh=L2xKkds7fkPogfw87puWZAy1Lx+vC472R8pSsgR8InU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QGf2/rg+Rj6b1p1JcMgKYAmsXQ+8ymg7WWgwrYZpzH1qQRoXx/e0IW2cAaGuAaGe9
-         CGmKT8Hc24P1Sp6BXsCq0ZeSU8OlIQNWeuDIWKL8Tza7/2OIcbQ/RqXQQkgq+pIVxI
-         f0uI8Xvhn96En8q0QSTugwmQF8AZWsDsS8jwROLf3ETaoP7Dpp5mgIWyTlq4fM0F+6
-         /iNAHqEPYPwiOEOWmwzPhIfjzVGlmwkwCqK8CFpib2SBb9Zkp4a/5UCMQjAGX9vrQn
-         vJdZp2YI43mzfZZRF5IbTJebsomSYg4lGxLvfOIWC0h1l16+Y2PxFekGojzATPgV7k
-         vktk0D2zY3+TQ==
-Date:   Tue, 6 Sep 2022 20:26:44 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mm tree with the slab tree
-Message-ID: <20220906202644.6552d26c@canb.auug.org.au>
+        Tue, 6 Sep 2022 06:30:17 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9B428E30;
+        Tue,  6 Sep 2022 03:30:15 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 286AU28L084731;
+        Tue, 6 Sep 2022 05:30:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1662460202;
+        bh=NcoemCXH05TY9ODveI/RTyU7+TLIkOHYkpTRhi9iocQ=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=earOJCEJxSh7heXTUJ1w73TdC+nrjoFIkLqLle32pQAZlBqzgyX8o0AFKeIGjgce9
+         WRGwQ2ccQNkf0OnW4X8s/azozWBi3CzIRvECKslZzNis4x/6HOIpDyAg5QVHFmEkhI
+         Pkq2qcmRyvrE12I6f2oFcF7oKzQH48DHqPdrZxxM=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 286AU1YJ010551
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Sep 2022 05:30:02 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 6 Sep
+ 2022 05:30:00 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 6 Sep 2022 05:30:00 -0500
+Received: from [10.24.69.241] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 286ATuM5105135;
+        Tue, 6 Sep 2022 05:29:57 -0500
+Message-ID: <4c34dcba-0a30-164f-49bb-1cf22781a4b2@ti.com>
+Date:   Tue, 6 Sep 2022 15:59:55 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+_elwJPqf+hB9eyh+0sj/EJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <robh+dt@kernel.org>, <lee.jones@linaro.org>, <kishon@ti.com>,
+        <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
+        <grygorii.strashko@ti.com>, <rogerq@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings
+ for J7200
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+References: <20220901085506.138633-1-s-vadapalli@ti.com>
+ <20220901085506.138633-2-s-vadapalli@ti.com>
+ <4b681c03-7f5a-0234-2276-316e0bad1de5@linaro.org>
+ <44339382-c4e2-26db-de5d-263ae5a585b8@ti.com>
+ <4e61b63b-74ac-1682-968f-17e5d8db7ce6@linaro.org>
+ <dfa9e613-054e-cffc-747f-27842e825cc8@ti.com>
+ <93600263-0211-9286-9043-fae5b017d15b@linaro.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <93600263-0211-9286-9043-fae5b017d15b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,88 +78,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+_elwJPqf+hB9eyh+0sj/EJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello Krzysztof,
 
-Hi all,
+On 06/09/22 12:33, Krzysztof Kozlowski wrote:
+> On 06/09/2022 07:02, Siddharth Vadapalli wrote:
+>>>>
+>>>> Please let me know if the above description is fine.
+>>>
+>>> Hm, but that's a phy node, not address of register... Isn't this a phy
+>>> node representing the phy of the CPSW MAC ports?
+>>
+>> Despite it being a phy node, the phy-gmii-sel driver actually uses this
+>> node to obtain the address of the CTRLMMR_ENETx_CTRL registers which
+>> correspond to the CPSW MAC configuration and are therefore unrelated to
+>> the PHY. Please let me know if my suggested description would be fine.
+> 
+> Either I miss some more pieces or this is wrong design. The phy node
+> should not be used to pass some addresses somewhere. It is used to
+> define a device which will be instantiated (as parent is simple-mfd). If
+> you use it only to obtain some address, not to describe child device,
+> then this is wrong property type.
 
-Today's linux-next merge of the mm tree got a conflict in:
+Sorry for describing it incompletely, and at some places incorrectly.
+Yes, you were right when you initially mentioned that the phy node
+corresponds to the phy of the ethernet MAC ports. I had incorrectly
+understood the term "phy" there as the external Layer-1 ethernet phy.The
+phy node corresponds to the phy used by the ethernet MAC, based on the
+phy-mode configured. The am65-cpsw-nuss driver which is responsible for
+ethernet MAC, requires the ethernet MAC's phy to be configured by the
+phy-gmii-sel driver. Thus, the phy node corresponds to an actual phy
+(ethernet MAC's PHY).
 
-  mm/slub.c
+I plan on updating the description for the phy pattern property to the
+following:
+"The phy node corresponding to the ethernet MAC."
 
-between commits:
-
-  a0c3b940023e ("mm/slub: move kmalloc_large_node() to slab_common.c")
-  d6a71648dbc0 ("mm/slab: kmalloc: pass requests larger than order-1 page t=
-o page allocator")
-
-from the slab tree and commit:
-
-  47dd2b0d3e37 ("mm: kmsan: call KMSAN hooks from SLUB code")
-
-from the mm tree.
-
-I fixed it up (I used the former version of this file and applied the
-following patch) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 6 Sep 2022 19:42:49 +1000
-Subject: [PATCH] mm/slab: fix up for "mm: kmsan: call KMSAN hooks from SLUB=
- code"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/slab_common.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 6a76c496e7e0..2e28a551b8d3 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -901,6 +901,7 @@ void free_large_kmalloc(struct folio *folio, void *obje=
-ct)
-=20
- 	kmemleak_free(object);
- 	kasan_kfree_large(object);
-+	kmsan_kfree_large(object);
-=20
- 	mod_lruvec_page_state(folio_page(folio, 0), NR_SLAB_UNRECLAIMABLE_B,
- 			      -(PAGE_SIZE << order));
-@@ -1078,6 +1079,7 @@ static void *__kmalloc_large_node(size_t size, gfp_t =
-flags, int node)
- 	ptr =3D kasan_kmalloc_large(ptr, size, flags);
- 	/* As ptr might get tagged, call kmemleak hook after KASAN. */
- 	kmemleak_alloc(ptr, size, 1, flags);
-+	kmsan_kmalloc_large(ptr, size, flags);
-=20
- 	return ptr;
- }
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+_elwJPqf+hB9eyh+0sj/EJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMXIGQACgkQAVBC80lX
-0GyBOAf/Vg03dObWEj/3kfLPWjm9JLyg9tCaLGI1pARaJuSYutTjHT2JGe4QBnGl
-xKw6BgrV47fE61AxFGviYJHQUTaK86goB3X7dMNYZIeEkCBsG+XdLppI2aq5UbvA
-KndgNFRJFF8PJwGXUCinHCXBtL8DdW/7/AuihBzqE4+qvTFwCXTsQx7z/4oDWtlr
-vFs+7/Kcnp1nCuzz36EX8gYHotCvZhfUEUFklClNiE/5geln0ZNeI0BwmZFKdSzb
-O6dA9JIZ93mt7mQg4xOXQ0UWot1WstOS91MTHOR6lGEPuhZYlRuHQUf+3c7BZnTF
-lxSD9j5FTCuSit8FpER2M/D9AIuUcA==
-=UYZP
------END PGP SIGNATURE-----
-
---Sig_/+_elwJPqf+hB9eyh+0sj/EJ--
+Regards,
+Siddharth.

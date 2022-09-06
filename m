@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD925AF29D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825165AF281
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239343AbiIFR27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
+        id S239379AbiIFR3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbiIFR2G (ORCPT
+        with ESMTP id S234760AbiIFR2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Sep 2022 13:28:06 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569F828711
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05EB29839
         for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:19:51 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id n202so9462671iod.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:19:50 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id l6so6310850ilk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=vGV0LErzUVZ+oH6Ahl3yaA3wsEhujDLPCmZWellXY2E=;
-        b=fhyOsKBoGlfGVT9fE6T//G3it4Qv/vOjcLFmHO38ILsRfLiLXvp+ayam+rsB5VpbKt
-         ZptduDSgOvMw+UEBpcwMDtsCtDWKmWC4/MD6cvmdqkb3bTctUQhE3bgxudC/6/3ZROIu
-         5R02jOk0zW/rxhOx1lXDYdmB6FTOwuJtQ3n9a4M/fQw84OENtySHrft/h3xiiTdh+nB3
-         HKrnR3/1BKgXTstaqmMufCPCQpZQ73BKYwUzGWEvOia4zugtnGurXldHke/ZpoGvn5gB
-         WlR2UuYN2D/lpJgtJOCEX5p6uZEjtCcfF18nsnG4hNdyfOz4Iqw3i4yjBx1mf/ebXsN7
-         /Wrg==
+        bh=zZbEcuX0tdGW7P2MaUSSUsEhwbNAXlnJUrhgFzH+WmQ=;
+        b=I0njSX+tXOi0JgBd1TyTJqM9z+wnQ1XLkog8MwTlzh2ydkCBZMPz/yUwAhOX2G7qiw
+         bWh33JM8bI7MWixDFomd9+Py89DNjn9W/8GB39vf09N3gM/0fhG8TGiu9DCJoOKZdVun
+         kG0YZB6ONQoDZrzjGoIXIFhRaQh8cqaVfjNjD9e+7qyb89hs0LkSK8tysKGpo8zSTqb4
+         Tt1n/N3nW5aFaEIxf+0I43/PY61PcZE3kIuqK+bQhN8s48dTBcOhG5slGSKSaffeSZMo
+         TNbF53ZwrxaELtt/9SMWOsZfrlfGe4rTfkW0R2eqePgH/TmnmCr4zbQk29kfHw2H23Q3
+         3VGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=vGV0LErzUVZ+oH6Ahl3yaA3wsEhujDLPCmZWellXY2E=;
-        b=fiNF/JWJIhSfsdP6xjr0FGOse1R7Wuz49wNj/AHNGNg3eaB8RVWSw2inq/7U/YhhqH
-         AhWAhK+J8MN/SXUUde/QXsl9mks11zqiNk5XnF/WTWlmvsD43udnOHfK88MgNm4N9X9n
-         nHlPIEd/hs0dRNtcT8h/BTYZNaJoBlocbw2/H0Vyfh2yH3T5/Ak3Hwnvu+GYhL4Hg2cu
-         DpSdr/FzRlXIskmfaexxUoLfNSdezy/PNF/Qh0XkqXpmfMbdByHWcKoXbaqWTOOxoNWo
-         uOuvSh7SPp0sJbogWd2YHMSJxGPnsNaJHS+KfFNDEclYydBlkvEJJ5+fNTZWNWKbHaHY
-         TCog==
-X-Gm-Message-State: ACgBeo0djQezJkTzu1K5mNP5Rtdx+oPb2BXtPPxEERhmbw8ytR1JncJ9
-        eTVmvWOcWgd+15YjQdcDuC+Vww==
-X-Google-Smtp-Source: AA6agR4n1LTlHdCfl+Mih055iDKJd42eGpUqbhFXFSCI+CzoZ+ZKWIDBkHhj882oa/5RuGb1q1s2Iw==
-X-Received: by 2002:a05:6602:490:b0:678:d781:446d with SMTP id y16-20020a056602049000b00678d781446dmr26173445iov.115.1662484789865;
-        Tue, 06 Sep 2022 10:19:49 -0700 (PDT)
+        bh=zZbEcuX0tdGW7P2MaUSSUsEhwbNAXlnJUrhgFzH+WmQ=;
+        b=4a3WXXuoIHiTLhP45AFkTABfYAZ5WPcItuFZuZc79EHNHDBzoPLX5hYYotmpWTLbuY
+         r7e+yP9u0N5YkGccHqnWV4PzV4E6lIG+ovX4qINZxtTQgS53rYMAVQQFIqhKfY0jeh/u
+         uq95kHu1IimoV5+BLUtDeSPzOR3bf/QOe9wI5MH0XaRwfnytUlCFOd7uzI1vAi7ordm/
+         qjn30DTrC4OkqSrvrbvrgXEFqlB2L9awsDZBRxkNEZ6MATPQc+IIm3vDSl64PUSGJ5pk
+         UDzKP52ZriWoy3k4dhL0wYV2hu1QqMCKZeXBrVR28en98vARJ1QKJOv/6ATknCUej7gN
+         2Ofg==
+X-Gm-Message-State: ACgBeo2ZOZTIBUPTFI2cOK/scDJnHrQui7iPqjzAgCYRGFmNDzsOB8Lv
+        Lvmx0HVzY7bLX4Tg7hgIeznjxxpb1JCAxg==
+X-Google-Smtp-Source: AA6agR7XdHZspGzRaTMyCUViyeFlimDqc98GcZ+u5jnNk0/i4g7QUV6klrH8oqlC3vAYFZYZ4k5ZFA==
+X-Received: by 2002:a05:6e02:19cb:b0:2eb:3cd1:105e with SMTP id r11-20020a056e0219cb00b002eb3cd1105emr17590197ill.235.1662484791034;
+        Tue, 06 Sep 2022 10:19:51 -0700 (PDT)
 Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056e020c2a00b002eb3f5fc4easm5292204ilg.27.2022.09.06.10.19.48
+        by smtp.gmail.com with ESMTPSA id q10-20020a056e020c2a00b002eb3f5fc4easm5292204ilg.27.2022.09.06.10.19.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 10:19:49 -0700 (PDT)
+        Tue, 06 Sep 2022 10:19:50 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -57,9 +57,9 @@ Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
         quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
         elder@kernel.org, netdev@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 3/5] net: ipa: kill all other transaction lists
-Date:   Tue,  6 Sep 2022 12:19:40 -0500
-Message-Id: <20220906171942.957704-4-elder@linaro.org>
+Subject: [PATCH net-next 4/5] net: ipa: update channel in gsi_channel_trans_complete()
+Date:   Tue,  6 Sep 2022 12:19:41 -0500
+Message-Id: <20220906171942.957704-5-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220906171942.957704-1-elder@linaro.org>
 References: <20220906171942.957704-1-elder@linaro.org>
@@ -67,7 +67,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,221 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-None of the transaction lists are actually needed any more, because
-transaction IDs (which have been shown to be equivalent) are used
-instead.  So we can remove all of them, as well as the spinlock
-that protects updates to them.
-
-Not requiring a lock simplifies gsi_trans_free() as well; we only
-need to check the reference count once to decide whether we've hit
-the last reference.
-
-This makes the links field in the gsi_trans structure unused, so get
-rid of that as well.
+Have gsi_channel_trans_complete() update the known state from
+hardware rather than doing so in gsi_channel_poll_one().
 
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
- drivers/net/ipa/gsi.h       |  6 ----
- drivers/net/ipa/gsi_trans.c | 71 ++++---------------------------------
- drivers/net/ipa/gsi_trans.h |  3 --
- 3 files changed, 6 insertions(+), 74 deletions(-)
+ drivers/net/ipa/gsi.c         | 5 +----
+ drivers/net/ipa/gsi_private.h | 8 ++++++++
+ drivers/net/ipa/gsi_trans.c   | 2 +-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ipa/gsi.h b/drivers/net/ipa/gsi.h
-index a3f2d27a7e4b3..84d178a1a7d22 100644
---- a/drivers/net/ipa/gsi.h
-+++ b/drivers/net/ipa/gsi.h
-@@ -94,12 +94,6 @@ struct gsi_trans_info {
+diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
+index 16df699009a86..5471843b665fc 100644
+--- a/drivers/net/ipa/gsi.c
++++ b/drivers/net/ipa/gsi.c
+@@ -1475,7 +1475,7 @@ void gsi_channel_doorbell(struct gsi_channel *channel)
+ }
  
- 	struct gsi_trans_pool sg_pool;	/* scatterlist pool */
- 	struct gsi_trans_pool cmd_pool;	/* command payload DMA pool */
+ /* Consult hardware, move any newly completed transactions to completed list */
+-static struct gsi_trans *gsi_channel_update(struct gsi_channel *channel)
++struct gsi_trans *gsi_channel_update(struct gsi_channel *channel)
+ {
+ 	u32 evt_ring_id = channel->evt_ring_id;
+ 	struct gsi *gsi = channel->gsi;
+@@ -1529,9 +1529,6 @@ static struct gsi_trans *gsi_channel_poll_one(struct gsi_channel *channel)
+ 
+ 	/* Get the first transaction from the completed list */
+ 	trans = gsi_channel_trans_complete(channel);
+-	if (!trans)	/* List is empty; see if there's more to do */
+-		trans = gsi_channel_update(channel);
 -
--	spinlock_t spinlock;		/* protects updates to the lists */
--	struct list_head committed;	/* committed, awaiting doorbell */
--	struct list_head pending;	/* pending, awaiting completion */
--	struct list_head complete;	/* completed, awaiting poll */
--	struct list_head polled;	/* returned by gsi_channel_poll_one() */
- };
+ 	if (trans)
+ 		gsi_trans_move_polled(trans);
  
- /* Hardware values signifying the state of a channel */
+diff --git a/drivers/net/ipa/gsi_private.h b/drivers/net/ipa/gsi_private.h
+index 0b2516fa21b5d..a937811bb1bb7 100644
+--- a/drivers/net/ipa/gsi_private.h
++++ b/drivers/net/ipa/gsi_private.h
+@@ -94,6 +94,14 @@ void gsi_channel_trans_exit(struct gsi_channel *channel);
+  */
+ void gsi_channel_doorbell(struct gsi_channel *channel);
+ 
++/* gsi_channel_update() - Update knowledge of channel hardware state
++ * @channel:	Channel whose doorbell should be rung
++ *
++ * Consult hardware, move any newly completed transactions to a
++ * channel's completed list
++ */
++struct gsi_trans *gsi_channel_update(struct gsi_channel *channel);
++
+ /**
+  * gsi_ring_virt() - Return virtual address for a ring entry
+  * @ring:	Ring whose address is to be translated
 diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-index 254c09824004c..a3ae0ca4813c6 100644
+index a3ae0ca4813c6..0b78ae904bacf 100644
 --- a/drivers/net/ipa/gsi_trans.c
 +++ b/drivers/net/ipa/gsi_trans.c
-@@ -252,75 +252,43 @@ static void gsi_trans_move_committed(struct gsi_trans *trans)
- 	struct gsi_channel *channel = &trans->gsi->channel[trans->channel_id];
- 	struct gsi_trans_info *trans_info = &channel->trans_info;
+@@ -241,7 +241,7 @@ struct gsi_trans *gsi_channel_trans_complete(struct gsi_channel *channel)
+ 	u16 trans_id = trans_info->completed_id;
  
--	spin_lock_bh(&trans_info->spinlock);
--
--	list_add_tail(&trans->links, &trans_info->committed);
--
--	spin_unlock_bh(&trans_info->spinlock);
--
- 	/* This allocated transaction is now committed */
- 	trans_info->allocated_id++;
+ 	if (trans_id == trans_info->pending_id)
+-		return NULL;
++		return gsi_channel_update(channel);
+ 
+ 	return &trans_info->trans[trans_id %= channel->tre_count];
  }
- 
--/* Move transactions from the committed list to the pending list */
-+/* Move committed transactions to pending state */
- static void gsi_trans_move_pending(struct gsi_trans *trans)
- {
- 	struct gsi_channel *channel = &trans->gsi->channel[trans->channel_id];
- 	struct gsi_trans_info *trans_info = &channel->trans_info;
- 	u16 trans_index = trans - &trans_info->trans[0];
--	struct list_head list;
- 	u16 delta;
- 
--	spin_lock_bh(&trans_info->spinlock);
--
--	/* Move this transaction and all predecessors to the pending list */
--	list_cut_position(&list, &trans_info->committed, &trans->links);
--	list_splice_tail(&list, &trans_info->pending);
--
--	spin_unlock_bh(&trans_info->spinlock);
--
- 	/* These committed transactions are now pending */
- 	delta = trans_index - trans_info->committed_id + 1;
- 	trans_info->committed_id += delta % channel->tre_count;
- }
- 
--/* Move a transaction and all of its predecessors from the pending list
-- * to the completed list.
-- */
-+/* Move pending transactions to completed state */
- void gsi_trans_move_complete(struct gsi_trans *trans)
- {
- 	struct gsi_channel *channel = &trans->gsi->channel[trans->channel_id];
- 	struct gsi_trans_info *trans_info = &channel->trans_info;
- 	u16 trans_index = trans - trans_info->trans;
--	struct list_head list;
- 	u16 delta;
- 
--	spin_lock_bh(&trans_info->spinlock);
--
--	/* Move this transaction and all predecessors to completed list */
--	list_cut_position(&list, &trans_info->pending, &trans->links);
--	list_splice_tail(&list, &trans_info->complete);
--
--	spin_unlock_bh(&trans_info->spinlock);
--
- 	/* These pending transactions are now completed */
- 	delta = trans_index - trans_info->pending_id + 1;
- 	delta %= channel->tre_count;
- 	trans_info->pending_id += delta;
- }
- 
--/* Move a transaction from the completed list to the polled list */
-+/* Move a transaction from completed to polled state */
- void gsi_trans_move_polled(struct gsi_trans *trans)
- {
- 	struct gsi_channel *channel = &trans->gsi->channel[trans->channel_id];
- 	struct gsi_trans_info *trans_info = &channel->trans_info;
- 
--	spin_lock_bh(&trans_info->spinlock);
--
--	list_move_tail(&trans->links, &trans_info->polled);
--
--	spin_unlock_bh(&trans_info->spinlock);
--
- 	/* This completed transaction is now polled */
- 	trans_info->completed_id++;
- }
-@@ -383,7 +351,6 @@ struct gsi_trans *gsi_channel_trans_alloc(struct gsi *gsi, u32 channel_id,
- 	memset(trans, 0, sizeof(*trans));
- 
- 	/* Initialize non-zero fields in the transaction */
--	INIT_LIST_HEAD(&trans->links);
- 	trans->gsi = gsi;
- 	trans->channel_id = channel_id;
- 	trans->rsvd_count = tre_count;
-@@ -396,7 +363,7 @@ struct gsi_trans *gsi_channel_trans_alloc(struct gsi *gsi, u32 channel_id,
- 	trans->direction = direction;
- 	refcount_set(&trans->refcount, 1);
- 
--	/* This free transaction will now be allocated */
-+	/* This free transaction is now allocated */
- 	trans_info->free_id++;
- 
- 	return trans;
-@@ -405,31 +372,15 @@ struct gsi_trans *gsi_channel_trans_alloc(struct gsi *gsi, u32 channel_id,
- /* Free a previously-allocated transaction */
- void gsi_trans_free(struct gsi_trans *trans)
- {
--	refcount_t *refcount = &trans->refcount;
- 	struct gsi_trans_info *trans_info;
--	bool last;
- 
--	/* We must hold the lock to release the last reference */
--	if (refcount_dec_not_one(refcount))
--		return;
--
--	trans_info = &trans->gsi->channel[trans->channel_id].trans_info;
--
--	spin_lock_bh(&trans_info->spinlock);
--
--	/* Reference might have been added before we got the lock */
--	last = refcount_dec_and_test(refcount);
--	if (last)
--		list_del(&trans->links);
--
--	spin_unlock_bh(&trans_info->spinlock);
--
--	if (!last)
-+	if (!refcount_dec_and_test(&trans->refcount))
- 		return;
- 
- 	/* Unused transactions are allocated but never committed, pending,
- 	 * completed, or polled.
- 	 */
-+	trans_info = &trans->gsi->channel[trans->channel_id].trans_info;
- 	if (!trans->used_count) {
- 		trans_info->allocated_id++;
- 		trans_info->committed_id++;
-@@ -692,11 +643,6 @@ void gsi_channel_trans_cancel_pending(struct gsi_channel *channel)
- 	u16 trans_id = trans_info->pending_id;
- 
- 	/* channel->gsi->mutex is held by caller */
--	spin_lock_bh(&trans_info->spinlock);
--
--	list_splice_tail_init(&trans_info->pending, &trans_info->complete);
--
--	spin_unlock_bh(&trans_info->spinlock);
- 
- 	/* If there are no pending transactions, we're done */
- 	if (trans_id == trans_info->committed_id)
-@@ -815,11 +761,6 @@ int gsi_channel_trans_init(struct gsi *gsi, u32 channel_id)
- 	if (ret)
- 		goto err_map_free;
- 
--	spin_lock_init(&trans_info->spinlock);
--	INIT_LIST_HEAD(&trans_info->committed);
--	INIT_LIST_HEAD(&trans_info->pending);
--	INIT_LIST_HEAD(&trans_info->complete);
--	INIT_LIST_HEAD(&trans_info->polled);
- 
- 	return 0;
- 
-diff --git a/drivers/net/ipa/gsi_trans.h b/drivers/net/ipa/gsi_trans.h
-index 7084507830c21..af8c4c6719d11 100644
---- a/drivers/net/ipa/gsi_trans.h
-+++ b/drivers/net/ipa/gsi_trans.h
-@@ -29,7 +29,6 @@ struct gsi_trans_pool;
-  * struct gsi_trans - a GSI transaction
-  *
-  * Most fields in this structure for internal use by the transaction core code:
-- * @links:	Links for channel transaction lists by state
-  * @gsi:	GSI pointer
-  * @channel_id: Channel number transaction is associated with
-  * @cancelled:	If set by the core code, transaction was cancelled
-@@ -50,8 +49,6 @@ struct gsi_trans_pool;
-  * received.
-  */
- struct gsi_trans {
--	struct list_head links;		/* gsi_channel lists */
--
- 	struct gsi *gsi;
- 	u8 channel_id;
- 
 -- 
 2.34.1
 

@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DBF5ADEB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 06:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403F65ADEC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 07:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiIFE6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 00:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S232100AbiIFFBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 01:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiIFE6U (ORCPT
+        with ESMTP id S230377AbiIFFBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 00:58:20 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1138769F58
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 21:58:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R671e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VObAuyh_1662440294;
-Received: from 30.240.120.121(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VObAuyh_1662440294)
-          by smtp.aliyun-inc.com;
-          Tue, 06 Sep 2022 12:58:16 +0800
-Message-ID: <8b35da5c-3a1b-0edb-d35c-026081864092@linux.alibaba.com>
-Date:   Tue, 6 Sep 2022 12:58:08 +0800
+        Tue, 6 Sep 2022 01:01:34 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3875F122
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 22:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1662440491;
+        bh=1oNtxf1c5bbGEwVSqkKGWodjPqD73sS9Q23KWDUkQ6g=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=aX6nT/2JzHVMgDszWnrupgVW3cEl6rr1OHFw95xgVFGoIfsOSegPaE4yzhx5DK0Dd
+         folpTg84mXDIFjOPKbbx7TKGcYj4uBDfhJS5GDM7cFZpZbCd1sKLGix+GJQxKDM6JL
+         NDQYjTTvZo+xAf7IrRnSCKpkNRve+8QD07ZIXGz8=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 5BDB965C37;
+        Tue,  6 Sep 2022 01:01:29 -0400 (EDT)
+Message-ID: <6a3e185eaaac4a1397abe43026004548d47ee305.camel@xry111.site>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation
+ types
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
+Date:   Tue, 06 Sep 2022 13:01:27 +0800
+In-Reply-To: <CAAhV-H7LjkY+XAzGs2K3544+CGOztCd4V8BuSjMJwZCgfBLDow@mail.gmail.com>
+References: <20220830104806.128365-1-xry111@xry111.site>
+         <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+         <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name>
+         <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
+         <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
+         <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn>
+         <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+         <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
+         <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
+         <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+         <ae2652c5e140d407d523d7f35bee672cebe1b7a2.camel@xry111.site>
+         <CAAhV-H56TQeU54JjvNQg2qZ6L1aSbzbaM2a=VQr9ZcAn4uthyg@mail.gmail.com>
+         <8d0f96e2977c5c78f17bb410087f2aad986ef5a4.camel@xry111.site>
+         <CAAhV-H7LjkY+XAzGs2K3544+CGOztCd4V8BuSjMJwZCgfBLDow@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH v4 0/3] drivers/perf: add DDR Sub-System Driveway PMU
- driver for Yitian 710 SoC
-Content-Language: en-US
-To:     will@kernel.org, Jonathan.Cameron@Huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org, robin.murphy@arm.com, mark.rutland@arm.com,
-        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20220617111825.92911-1-xueshuai@linux.alibaba.com>
- <20220818031822.38415-1-xueshuai@linux.alibaba.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20220818031822.38415-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-09-06 at 12:43 +0800, Huacai Chen wrote:
+> > Note that -fpic/-fPIC is "position-independent code *suitable for
+> > use in a shared library*", while -fpie/-fPIE is more like just
+> > "position-independent code".=C2=A0 The names of those options are confu=
+sing.
+> > (When -fpic was invented first time, people mostly believed "PIC had
+> > been only for shared libraries", so it's named -fpic instead of -shlib
+> > or something.)=C2=A0 IMO in the EFI stub for other ports, -fpie should =
+be
+> > used instead of -fpic as well because the EFI stub is not similar to a
+> > shared library in any means.
 
-在 2022/8/18 AM11:18, Shuai Xue 写道:
-> Hi, Will,
-> 
-> I am wondering that do you have any comments to this patch set? If/when you're
-> happy with them, cloud you please queue them up?
-> 
-> Thank you :)
-> 
-> Cheers,
-> Shuai.
+> You are right, but I guess that Ard doesn't want to squash the efistub
+> change into the LoongArch efistub support patch. :)
 
-Gentle ping. Any comment or suggestion is appreciated.
+It only changes cflags-$(CONFIG_LOONGARCH), which is LoongArch specific.
+And arm64 is also using -fpie.
 
-Best Regards,
-Shuai
+Should I send the one-line EFI stub change to linux-efi first?
 
-> 
-> Changes since v3:
-> - add Reviewed-by of Baolin
-> - Rebase on Linux v6.0 rc1
-> 
-> Changes since v2:
-> - relaxe build constraints and add COMPILE_TEST
-> - explicitly include dependent headers
-> - add Reviewed-by, thanks Jonathan Cameron and Randy Dunlap for their
->   valuable review and comments
-> - Link: https://lore.kernel.org/linux-arm-kernel/20220715151310.90091-4-xueshuai@linux.alibaba.com/T/#m1116abc4b0bda1943ab436a45d95359f9bbe0858
-> 
-> Changes since v1:
-> - add high level workflow about DDRC so that user cloud better understand
->   the PMU hardware mechanism
-> - rewrite patch description and add interrupt sharing constraints
-> - delete event perf prefix
-> - add a condition to fix bug in ali_drw_pmu_isr
-> - perfer CPU in the same Node when migrating irq
-> - use FIELD_PREP and FIELD_GET to make code more readable
-> - add T-Head HID and leave ARMHD700 as CID for compatibility
-> - Link: https://lore.kernel.org/linux-arm-kernel/eb50310d-d4a0-c7ff-7f1c-b4ffd919b10c@linux.alibaba.com/T/
-> 
-> This patchset adds support for Yitian 710 DDR Sub-System Driveway PMU driver,
-> which custom-built by Alibaba Group's chip development business, T-Head.
-> 
-> Shuai Xue (3):
->   docs: perf: Add description for Alibaba's T-Head PMU driver
->   drivers/perf: add DDR Sub-System Driveway PMU driver for Yitian 710
->     SoC
->   MAINTAINERS: add maintainers for Alibaba' T-Head PMU driver
-> 
->  .../admin-guide/perf/alibaba_pmu.rst          | 100 +++
->  Documentation/admin-guide/perf/index.rst      |   1 +
->  MAINTAINERS                                   |   6 +
->  drivers/perf/Kconfig                          |   7 +
->  drivers/perf/Makefile                         |   1 +
->  drivers/perf/alibaba_uncore_drw_pmu.c         | 810 ++++++++++++++++++
->  6 files changed, 925 insertions(+)
->  create mode 100644 Documentation/admin-guide/perf/alibaba_pmu.rst
->  create mode 100644 drivers/perf/alibaba_uncore_drw_pmu.c
-> 
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

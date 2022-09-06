@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0413D5AF5C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F835AF5BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiIFUVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S231204AbiIFUVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiIFUVL (ORCPT
+        with ESMTP id S229790AbiIFUVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:21:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7339C22A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662495630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vINMxXDx/GP00laEzueh2Ucc5/ncSXAIQhbYOwhIwO0=;
-        b=KHjj9DNOCNrOCJ9TnXFZn2+umxsHHO4HA9zYW+2ZgtuPoMOIg7U6MyyudoOXNyZ0ABb5wU
-        x+JSnqO/RxYkENdrs+NE/eNtFb4EyBdwwkSDoF8GMEGA1YV6HN7YSQ4vYR3+NTpCK1Yzt7
-        U/t95leG8N5QXOaYRz4Za75+FBjZpnk=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-561-GvxdnE_XPryLuiSjWiftfQ-1; Tue, 06 Sep 2022 16:20:28 -0400
-X-MC-Unique: GvxdnE_XPryLuiSjWiftfQ-1
-Received: by mail-qk1-f200.google.com with SMTP id bs43-20020a05620a472b00b006bb56276c94so10252296qkb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:20:28 -0700 (PDT)
+        Tue, 6 Sep 2022 16:21:01 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC3C6EF04
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:20:17 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id r4so16642543edi.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=xgqtpFYeImQmfiByKGLHHb3o58b4i3/JLUBGIVs0rt8=;
+        b=M3cJI7if2XWRe7fxFqlgPPKLqtHhY1f1oE0QPdTzZmwBNdO1ZwRjYHplIKZ9ox4y+k
+         6Kv1RJo2ljbEUrBrpIhd6mlAZzoluH2SxBabc48qOp8uF6xz+2/OcNLN3cj7L3BKIKe1
+         E/Nwfmo2I4qACE6BCm75BykS5tccVMIEOCJCQ+jTonZ/m/Q75W+94s6Czh7rwvDWnkxt
+         BQ8U5ZqrIQCoZBK8lbAM4thKiVpZixD3YsI/HLeLPPrGKAZZ74vvjefdqFuBuziizdJ3
+         WqRsRV36sgzLkeFxZB5qy9i/5tHm3oFqGVfNVaPUZv+f6E/fmgtDcc9hPEEd17ivZIZK
+         treQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=vINMxXDx/GP00laEzueh2Ucc5/ncSXAIQhbYOwhIwO0=;
-        b=l6G0RuJwtoWhK3cbOjV0PA0AOd1q/Fy1ZWEz2Hbfjb4gTT/+iDaZ5umkhq7ltatR7a
-         NyKk5ACxrAAD/3W+xl8N8KuSf8y8tHApiVtxGkX8LZSMYu0tLtFF2VsHehYyXLlmOrHv
-         nG5d/LIgzrOw2YnsbxOZkLo2qd3w1PMYQHiVHiZ/Bcb0Z+Nwj+67o57IRBClvFl6OpFl
-         Qm1sJ0MByuepjsLYpEhnWpkdrYm/V0ail4jlp/DdLQTyYOclB2JfSyHybVRptDpPTUBx
-         HpMJlbviob6ljf+2nEkdUYNoJXnhZqUe9GZMsuV2QOkyrdN+5aHlK+jRjgJTpYdnazLj
-         b2Dw==
-X-Gm-Message-State: ACgBeo3C6A8Ke0mCYxw57NPG7ggEPIfwvtvh/3b4fhudt3pui7LMFgLE
-        8s5ATSvY7EipprjX6yNkX1jwbis61bZmH48C1+VE9XLIP8UBQ9ztL+msYRsrmLjc2ZzJbAsp4G+
-        4BsAQmpgJ9w/SOXuh7HCrPKLd
-X-Received: by 2002:a05:6214:1cc8:b0:46e:1920:70f8 with SMTP id g8-20020a0562141cc800b0046e192070f8mr313883qvd.6.1662495627966;
-        Tue, 06 Sep 2022 13:20:27 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7FvlA5FhvR3KvnIshbIQJl0zQIP1ibxwJlVoyeLJTiDcXTn96w5r5a1ESbR3w6uJUzZcMwNQ==
-X-Received: by 2002:a05:6214:1cc8:b0:46e:1920:70f8 with SMTP id g8-20020a0562141cc800b0046e192070f8mr313868qvd.6.1662495627698;
-        Tue, 06 Sep 2022 13:20:27 -0700 (PDT)
-Received: from halaneylaptop.redhat.com ([2600:1700:1ff0:d0e0::a])
-        by smtp.gmail.com with ESMTPSA id o13-20020a05620a2a0d00b006b5df4d2c81sm13049873qkp.94.2022.09.06.13.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 13:20:27 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dianders@chromium.org,
-        johan@kernel.org, Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH v2] regulator: dt-bindings: qcom,rpmh: Indicate regulator-allow-set-load dependencies
-Date:   Tue,  6 Sep 2022 15:19:59 -0500
-Message-Id: <20220906201959.69920-1-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=xgqtpFYeImQmfiByKGLHHb3o58b4i3/JLUBGIVs0rt8=;
+        b=u03CVO4/n8Yd5hVptOKbxJF580yQVlZJqVuI6Yuk74vIO4X8YkmIiKmlYxSr3impIH
+         XM6aqYhRaxuqNdOdx6m9Ag86VuhH42ztRTsWxnTShqnZVtDt6HOz/KG4AD3aM+Ry+M9E
+         ZrTOrcVyzspFIsezGwgt2Pzne5ZGXmJqVN5D35tJY3ruBE9mEZ8V+gEhU6P9elt7TnSJ
+         UC3Z/EYYP8pcDeO/gqM4f208fl7zRyU6HuAqUjJDGTxvHhK4I/xsyMeh3/XD1zO6aU1F
+         L8i24tb91bWXxtzNGxD5X/6TAinhHr4lowhf03ittSacmY8Yk1mvn5wYqPRLVvDrGt0N
+         HadQ==
+X-Gm-Message-State: ACgBeo1K8+V4vLLmpCN60pdasn9lrT027FW/mxaLyvbHe/VTLAoEgYGE
+        bq6MpM+otQi9EOQGPKOFbWuG1SzyYDvvQJWj80fl0Q==
+X-Google-Smtp-Source: AA6agR4SDhAUP65TRQjxYheaA176e85sRvVDxNM+sdq7QwudOZHUohQzZKoh4MA7eyv1GG+G2ekjy06D+KNQkqts2Dc=
+X-Received: by 2002:a05:6402:27cd:b0:44e:c4aa:5ff with SMTP id
+ c13-20020a05640227cd00b0044ec4aa05ffmr272878ede.193.1662495616035; Tue, 06
+ Sep 2022 13:20:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 7 Sep 2022 01:50:04 +0530
+Message-ID: <CA+G9fYv5twyvMr==HQ2tUs1D5thFS1Pr32ydeSsVptihq-FO_g@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/107] 5.15.66-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,60 +72,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For RPMH regulators it doesn't make sense to indicate
-regulator-allow-set-load without saying what modes you can switch to,
-so be sure to indicate a dependency on regulator-allowed-modes.
+On Tue, 6 Sept 2022 at 19:07, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.66 release.
+> There are 107 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.66-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-With this in place devicetree validation can catch issues like this:
 
-    /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
-            From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Suggested-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-v1: https://lore.kernel.org/linux-arm-msm/20220902185148.635292-1-ahalaney@redhat.com/
-Changes since v1:
-  - Dropped first two patches in the series as they were user error
-    (thanks Krzysztof for highlighting this!)
-  - No change in the remaining patch
+## Build
+* kernel: 5.15.66-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 78a6337a09dea696f5296f00bf8ae5e5283eef89
+* git describe: v5.15.63-319-g78a6337a09de
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.63-319-g78a6337a09de
 
-Krzysztof also asked if this patch in particular should apply to other
-regulators, which I think it should for those regulator's who implement
-set_mode(). Unfortunately I don't know of a good way to get that
-information in order to apply it at a broader scope for devicetree
-regulator validation. At least with this in place RPMH users can get
-better coverage... if someone has suggestions for how to broaden the
-scope I'm all ears!
+## No test Regressions (compared to v5.15.63-211-gad2e22e028e7)
 
-Thanks,
-Andrew
+## No metric Regressions (compared to v5.15.63-211-gad2e22e028e7)
 
- .../devicetree/bindings/regulator/qcom,rpmh-regulator.yaml    | 4 ++++
- 1 file changed, 4 insertions(+)
+## No test Fixes (compared to v5.15.63-211-gad2e22e028e7)
 
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-index 9a36bee750af..92ff4d59ba20 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-@@ -99,12 +99,16 @@ properties:
-     type: object
-     $ref: "regulator.yaml#"
-     description: BOB regulator node.
-+    dependencies:
-+      regulator-allow-set-load: ["regulator-allowed-modes"]
- 
- patternProperties:
-   "^(smps|ldo|lvs)[0-9]+$":
-     type: object
-     $ref: "regulator.yaml#"
-     description: smps/ldo regulator nodes(s).
-+    dependencies:
-+      regulator-allow-set-load: ["regulator-allowed-modes"]
- 
- required:
-   - compatible
--- 
-2.37.2
+## No metric Fixes (compared to v5.15.63-211-gad2e22e028e7)
 
+## Test result summary
+total: 74572, pass: 67375, fail: 420, skip: 6561, xfail: 216
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 333 total, 333 passed, 0 failed
+* arm64: 65 total, 63 passed, 2 failed
+* i386: 55 total, 53 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 63 passed, 0 failed
+* riscv: 22 total, 22 passed, 0 failed
+* s390: 24 total, 24 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 58 total, 56 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,153 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8DC5AF43D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149CB5AF439
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiIFTLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 15:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S229658AbiIFTKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 15:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiIFTLR (ORCPT
+        with ESMTP id S229459AbiIFTKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 15:11:17 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F54A4070;
-        Tue,  6 Sep 2022 12:11:16 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c2so12232995plo.3;
-        Tue, 06 Sep 2022 12:11:16 -0700 (PDT)
+        Tue, 6 Sep 2022 15:10:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766F0A285D;
+        Tue,  6 Sep 2022 12:10:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id kk26so25434090ejc.11;
+        Tue, 06 Sep 2022 12:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Uxyfydq6mAQset0rLjj0lZ4kT2T9DNQSTtQIf3P/WBc=;
-        b=oxJVDLjYXG19wqnH1nnFoB8v1YUHjmBDOpxhsRIcHu18Lp+SuatKIr8BBiqhtCS2zS
-         8FdV2LiA2sf+BltT5uHDrkQomWbRcswYAw9e4LKWCFH0WxWZYyFzBWPig2oThOXgwr06
-         EP9UxK+6dic8lRLj/pt7mK7VlghHDkYFfBb9q4W23L5T838up4tW8Y0yQ+S4+8FnXRUg
-         FWJVXIMLx0GCU31MZH/KI58HZA5v1ebcsU4XE4Yxh4Zo6Ep+dRO4FRufHZakBcO6SAjT
-         XJ7XshjTMqg+L/1nNyfRRifLY5Qq/Ll8Dbj8fAy1AVdV20YF/awcuCEL2zoLtw/KJyhB
-         OnJA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=w/ZOd8w9PpfH0PoP4VeEmJ6xZfMkRuDkUmQ7u7OOSbI=;
+        b=oYm3QwusiprapdZgx34JgD15YXVl+0e25+F+6mUrTli6IPDa+bMXDhGUoyw6Iwo/Kv
+         Vdlic0olw6Sky94t7Kx/GETDzah7M+tvgPlH6ZqJd1oL3TTOyNY/DXzfD5CErsy0tqLk
+         W592WP0k+fS6kPfYk3EoaE3EXMod5fA0VyJmmPvfcCr6OKTLYsPj7YmMfeuHxlNVYmo+
+         4Cy052KhsUtLHk3deXW+LKk2jyfERjdC4GUrNJXhu5jROJ1daMrdDubsIT2a8DGF6cFx
+         lPsftlm1GUt761wyza6CRZ2snjPgJvoRml2/X3HdQixGvWLqjK9HTRVzW6vDHoBD6H3E
+         i5/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Uxyfydq6mAQset0rLjj0lZ4kT2T9DNQSTtQIf3P/WBc=;
-        b=gGOlq6hvXL9j/Ht7qtnnA8DWqMh1dK1m6OFf4QrY4gT5O6moalThOrX/5nx73q+Huy
-         oPfnuR0GC/39f1ccW8vJIsOmb+qSPUH6NuFTVwSlElW1+1vrO2X9Vlhf2UjY4kTu/ctf
-         YLq31Al10u3MW5d5Gr8pwMUIwA7Wn5wAU8PS8XxvWD8VMSsXhqtPCff1HqfmvAsfXDVn
-         GaloM+SwAFcE4YamxgDZagdNLlt0mWxw8Cs7FRAa4hZiPYZOO65X2SQs3TxTSbcZn1w8
-         6ujJyI3EhhS30U3pf3bakW83N0sqQUecFKC+XMHI3YyVY2HUunv5O8vebfgE++SQebhO
-         rX7Q==
-X-Gm-Message-State: ACgBeo32g7hfp77MJlYqQZviNPkGhbwu9V1XMBbzyPRsheaXfcELgY1a
-        ZoH07XV/ptPmi8sOEfWE7C370/iSgjTRDg==
-X-Google-Smtp-Source: AA6agR6KeD/ronskaUphIe75PRVpn0Gz8ycVJHGWaWdgrnikNAJXC7eBzzsQfBetAAs0ds0Sb0bBtQ==
-X-Received: by 2002:a17:902:aa8c:b0:173:4137:55c4 with SMTP id d12-20020a170902aa8c00b00173413755c4mr56436346plr.108.1662491475771;
-        Tue, 06 Sep 2022 12:11:15 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1f28:3ecf:7535:6f32:453c:4179])
-        by smtp.googlemail.com with ESMTPSA id h10-20020a170902680a00b0016d4f05eb95sm10213461plk.272.2022.09.06.12.11.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Sep 2022 12:11:15 -0700 (PDT)
-From:   Vishal Badole <badolevishal1116@gmail.com>
-To:     sboyd@kernel.org
-Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mintupatel89@gmail.com,
-        chinmoyghosh2001@gmail.com, vimal.kumar32@gmail.com,
-        Vishal Badole <badolevishal1116@gmail.com>
-Subject: [PATCH v4] Common clock: To list active consumers of clocks
-Date:   Wed,  7 Sep 2022 00:39:51 +0530
-Message-Id: <1662491391-12111-1-git-send-email-badolevishal1116@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        bh=w/ZOd8w9PpfH0PoP4VeEmJ6xZfMkRuDkUmQ7u7OOSbI=;
+        b=kyYfb5dCqztSsc9SxItiRYetae5B9CVcu17e5Oy09mOd3Qqj+vekKzU+oBaXaGgsGE
+         pgUofn9r3dDLRCNiE71Kc6AuhWo3oMnKzpqR6s4RtK/egOzv9o3r0E9breaRyaytXKW8
+         wf9X2nKBzJKEOOTVIycdn5h6rLsFzqaLmdGJ18QAMvZJm0MGNVB1Hh+w9vSsc7R7jQeI
+         ETYYq4J19trbnMZi8BRjcn9ayrgujA4dchrar8em0Karh97+e9BLpGfAFA7vvbWVo0UB
+         UkY/YCa4OFYUUQKXYzeB9qN4krVLIi350kWSFxGedxSuLHZ/WaLTzPxS7bJuPJTs79QR
+         MHug==
+X-Gm-Message-State: ACgBeo1PlgsrWnXnidK4BHry5vc8f0Sdx3nWNaAQLMvnAxU9om7E0Ztz
+        VG6ZjJJu3k8tY6lb/Qt2QDY=
+X-Google-Smtp-Source: AA6agR5o/hB8ODtHH/gpw6zFvP+JmOgSI2ED73R2uoqAFYkPfIPG8L9e/o3qsvEJU6l4v+KqU6WtBg==
+X-Received: by 2002:a17:907:2c75:b0:741:5871:4318 with SMTP id ib21-20020a1709072c7500b0074158714318mr31694444ejc.532.1662491442690;
+        Tue, 06 Sep 2022 12:10:42 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id r16-20020a50c010000000b00447bd64d4f6sm9045994edb.73.2022.09.06.12.10.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 12:10:42 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?ISO-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        =?ISO-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Subject: Re: [PATCH v4 3/5] arm64: dts: allwinner: h6: Add GPU OPP table
+Date:   Tue, 06 Sep 2022 21:10:40 +0200
+Message-ID: <12048299.O9o76ZdvQC@kista>
+In-Reply-To: <20220906153034.153321-4-peron.clem@gmail.com>
+References: <20220906153034.153321-1-peron.clem@gmail.com> <20220906153034.153321-4-peron.clem@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This feature lists the clock consumer's name and respective connection
-id. Using this feature user can easily check that which user has
-acquired and enabled a particular clock.
+Dne torek, 06. september 2022 ob 17:30:32 CEST je Cl=E9ment P=E9ron napisal=
+(a):
+> Add an Operating Performance Points table for the GPU to
+> enable Dynamic Voltage & Frequency Scaling on the H6.
+>=20
+> The voltage range is set with minimal voltage set to the target
+> and the maximal voltage set to 1.2V. This allow DVFS framework to
+> work properly on board with fixed regulator.
+>=20
+> Signed-off-by: Cl=E9ment P=E9ron <peron.clem@gmail.com>
+> ---
+>  .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 87 +++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+>=20
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+> b/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi new file mode 1006=
+44
+> index 000000000000..b48049c4fc85
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+> @@ -0,0 +1,87 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +// Copyright (C) 2022 Cl=E9ment P=E9ron <peron.clem@gmail.com>
+> +
+> +/ {
+> +	gpu_opp_table: opp-table-gpu {
+> +		compatible =3D "operating-points-v2";
+> +
+> +		opp-216000000 {
+> +			opp-hz =3D /bits/ 64 <216000000>;
+> +			opp-microvolt =3D <810000 810000 1200000>;
+> +		};
+> +
+> +		opp-264000000 {
+> +			opp-hz =3D /bits/ 64 <264000000>;
+> +			opp-microvolt =3D <810000 810000 1200000>;
+> +		};
 
-Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-Co-developed-by: Vimal Kumar <vimal.kumar32@gmail.com>
-Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
-Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
----
- drivers/clk/clk.c | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+As mentioned in clock patch review, rates below 288 MHz are deemed unstable=
+ on=20
+GPU PLL by vendor GPU kernel driver. At least in the BSP version that I hav=
+e.=20
+Did you test these points? If not, better to drop them.
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index f00d4c1..db48f84 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -2953,28 +2953,41 @@ static void clk_summary_show_one(struct seq_file *s, struct clk_core *c,
- 				 int level)
- {
- 	int phase;
-+	struct clk *clk_user;
-+	int multi_node = 0;
- 
--	seq_printf(s, "%*s%-*s %7d %8d %8d %11lu %10lu ",
-+	seq_printf(s, "%*s%-*s %-7d %-8d %-8d %-11lu %-10lu ",
- 		   level * 3 + 1, "",
--		   30 - level * 3, c->name,
-+		   35 - level * 3, c->name,
- 		   c->enable_count, c->prepare_count, c->protect_count,
- 		   clk_core_get_rate_recalc(c),
- 		   clk_core_get_accuracy_recalc(c));
- 
- 	phase = clk_core_get_phase(c);
- 	if (phase >= 0)
--		seq_printf(s, "%5d", phase);
-+		seq_printf(s, "%-5d", phase);
- 	else
- 		seq_puts(s, "-----");
- 
--	seq_printf(s, " %6d", clk_core_get_scaled_duty_cycle(c, 100000));
-+	seq_printf(s, " %-6d", clk_core_get_scaled_duty_cycle(c, 100000));
- 
- 	if (c->ops->is_enabled)
--		seq_printf(s, " %9c\n", clk_core_is_enabled(c) ? 'Y' : 'N');
-+		seq_printf(s, " %5c ", clk_core_is_enabled(c) ? 'Y' : 'N');
- 	else if (!c->ops->enable)
--		seq_printf(s, " %9c\n", 'Y');
-+		seq_printf(s, " %5c ", 'Y');
- 	else
--		seq_printf(s, " %9c\n", '?');
-+		seq_printf(s, " %5c ", '?');
-+
-+	hlist_for_each_entry(clk_user, &c->clks, clks_node) {
-+		seq_printf(s, "%*s%-*s  %-25s\n",
-+			   level * 3 + 2 + 105 * multi_node, "",
-+			   30,
-+			   clk_user->dev_id ? clk_user->dev_id : "deviceless",
-+			   clk_user->con_id ? clk_user->con_id : "no_connection_id");
-+
-+		multi_node = 1;
-+	}
-+
- }
- 
- static void clk_summary_show_subtree(struct seq_file *s, struct clk_core *c,
-@@ -2995,9 +3008,10 @@ static int clk_summary_show(struct seq_file *s, void *data)
- 	struct clk_core *c;
- 	struct hlist_head **lists = (struct hlist_head **)s->private;
- 
--	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware\n");
--	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable\n");
--	seq_puts(s, "-------------------------------------------------------------------------------------------------------\n");
-+	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware                            connection\n");
-+	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable   consumer                         id\n");
-+	seq_puts(s, "---------------------------------------------------------------------------------------------------------------------------------------------\n");
-+
- 
- 	clk_prepare_lock();
- 
--- 
-2.7.4
+Best regards,
+Jernej
+
+> +
+> +		opp-312000000 {
+> +			opp-hz =3D /bits/ 64 <312000000>;
+> +			opp-microvolt =3D <810000 810000 1200000>;
+> +		};
+> +
+> +		opp-336000000 {
+> +			opp-hz =3D /bits/ 64 <336000000>;
+> +			opp-microvolt =3D <810000 810000 1200000>;
+> +		};
+> +
+> +		opp-360000000 {
+> +			opp-hz =3D /bits/ 64 <360000000>;
+> +			opp-microvolt =3D <820000 820000 1200000>;
+> +		};
+> +
+> +		opp-384000000 {
+> +			opp-hz =3D /bits/ 64 <384000000>;
+> +			opp-microvolt =3D <830000 830000 1200000>;
+> +		};
+> +
+> +		opp-408000000 {
+> +			opp-hz =3D /bits/ 64 <408000000>;
+> +			opp-microvolt =3D <840000 840000 1200000>;
+> +		};
+> +
+> +		opp-420000000 {
+> +			opp-hz =3D /bits/ 64 <420000000>;
+> +			opp-microvolt =3D <850000 850000 1200000>;
+> +		};
+> +
+> +		opp-432000000 {
+> +			opp-hz =3D /bits/ 64 <432000000>;
+> +			opp-microvolt =3D <860000 860000 1200000>;
+> +		};
+> +
+> +		opp-456000000 {
+> +			opp-hz =3D /bits/ 64 <456000000>;
+> +			opp-microvolt =3D <870000 870000 1200000>;
+> +		};
+> +
+> +		opp-504000000 {
+> +			opp-hz =3D /bits/ 64 <504000000>;
+> +			opp-microvolt =3D <890000 890000 1200000>;
+> +		};
+> +
+> +		opp-540000000 {
+> +			opp-hz =3D /bits/ 64 <540000000>;
+> +			opp-microvolt =3D <910000 910000 1200000>;
+> +		};
+> +
+> +		opp-576000000 {
+> +			opp-hz =3D /bits/ 64 <576000000>;
+> +			opp-microvolt =3D <930000 930000 1200000>;
+> +		};
+> +
+> +		opp-624000000 {
+> +			opp-hz =3D /bits/ 64 <624000000>;
+> +			opp-microvolt =3D <950000 950000 1200000>;
+> +		};
+> +
+> +		opp-756000000 {
+> +			opp-hz =3D /bits/ 64 <756000000>;
+> +			opp-microvolt =3D <1040000 1040000 1200000>;
+> +		};
+> +	};
+> +};
+> +
+> +&gpu {
+> +	operating-points-v2 =3D <&gpu_opp_table>;
+> +};
+> --
+> 2.34.1
+
 

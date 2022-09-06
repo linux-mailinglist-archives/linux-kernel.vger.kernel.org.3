@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00305AF54B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8267A5AF560
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiIFUEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
+        id S231253AbiIFUFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiIFUEC (ORCPT
+        with ESMTP id S229534AbiIFUF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:04:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2211409B;
-        Tue,  6 Sep 2022 12:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662494382; x=1694030382;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1GmuwRmBcP+qpqm868ZlLiTER6yT1AblOqnH4Dlpe/4=;
-  b=WUlupqneHjKsRzvVz5N7pYtc/7DBPiirwHapJDv4QeFXpVRxepSnlse3
-   aFFUPEpdIzMt+UiIVhEWDVfQZu0HZZ5CBdiGcW2/N5UAiupHxDpRjg2EX
-   EZZgA48SD+FpN2HUlA7eT4YyzOinivUqwNwrSiUX8D2zDSdhDJpPbtO4j
-   Hn2gt2n8WOTV9w5/AR8QG8NenET3Z/xzZAo5utD4uMn329mZ/0iQJuVYQ
-   ef4yJZQefP3YQJ/03Yz7aphJEBh+c/idTrJOQxExkTVIWjblteWJnioA3
-   obkP6IicAugRq2McUcevoIDKGcGrv1CkE1005rtaLuG+jLe1PlTsZkrYT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="358407370"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="358407370"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 12:57:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="647351096"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 06 Sep 2022 12:57:32 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4D24657F; Tue,  6 Sep 2022 22:57:46 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: [PATCH v1 9/9] pwm: lpss: Allow other drivers to enable PWM LPSS
-Date:   Tue,  6 Sep 2022 22:57:35 +0300
-Message-Id: <20220906195735.87361-9-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
-References: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
+        Tue, 6 Sep 2022 16:05:28 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F83FBD174
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:00:50 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id s23so7450819wmj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=VrcGAAHAFPBkHhppiEmlpx+VdwyrqvH6/RbOsQratUo=;
+        b=M5h3saQs6F1UBXdjXnvlynP0tALp22uVJtMAUE8iSwB+bkrHqEOrpeStA2fQe0HZLG
+         YdZDuD8LI9dc62w8cGcwf2yNtMGV2kRoFK6GdKfUXRceSGpRnCR0rRV3DTzNfjVFjuJU
+         dg17JdrVDQJfVv8mYhJu6NQhnD6rI1ItsBHd8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VrcGAAHAFPBkHhppiEmlpx+VdwyrqvH6/RbOsQratUo=;
+        b=hKwT8bJBOM8k5i2umbGTE54XejhIpnwaLqbpcXVREnL3prvPz09LIzFqb5kmuI7146
+         b4i/mHQGxW9KTWXNvPY7xFpWV9fZTVmmpa839V9n8jssF8QloPOlNAMW0iOm4CDBqk5+
+         tywFUL5UUpqZwohPiJ9SXlz109O+B2NU8hftTLLFxSKh4Wii6uQCVzc5m+TTEYYy5u/V
+         QYe16MiTAS01+Er3E9wkK4QsgXi7H3XdUM1BJJxmqxrN4dhumffOYgPXP4VuczJbxmfk
+         PYtujBNfblIcUCkzuW7R1oLa26CoRf3rH0yl3nJYrv7XUQkFkge5rrwnCpYBcTYGTqDe
+         Yg7w==
+X-Gm-Message-State: ACgBeo1znZj+JgyXZdKArWtQJTVUl0YTCibcOxVCl96VBHzH1DY+jkzx
+        yVfvXYU5Hhh3I9zf+f3gpQ/J5Q==
+X-Google-Smtp-Source: AA6agR70xNvhnTUF/14KkJLm8rVw//b90FT680b1H6RZc3w8FRaOhwakoWInvlm1LH/O+Z8Yz4H0qw==
+X-Received: by 2002:a05:600c:34c2:b0:3a5:d2f5:9d02 with SMTP id d2-20020a05600c34c200b003a5d2f59d02mr37123wmq.153.1662494364404;
+        Tue, 06 Sep 2022 12:59:24 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id l9-20020adfe9c9000000b00228d94931dcsm4199922wrn.116.2022.09.06.12.59.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 12:59:23 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 21:59:21 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Olivier Masse <olivier.masse@nxp.com>, clement.faure@nxp.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        jens.wiklander@linaro.org, linaro-mm-sig@lists.linaro.org,
+        op-tee@lists.trustedfirmware.org, etienne.carriere@linaro.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 0/1] tee: Add tee_shm_register_fd
+Message-ID: <YxemmVxh5F0fXEPJ@phenom.ffwll.local>
+Mail-Followup-To: Sumit Garg <sumit.garg@linaro.org>,
+        Olivier Masse <olivier.masse@nxp.com>, clement.faure@nxp.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        jens.wiklander@linaro.org, linaro-mm-sig@lists.linaro.org,
+        op-tee@lists.trustedfirmware.org, etienne.carriere@linaro.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+References: <20220812143055.12938-1-olivier.masse@nxp.com>
+ <CAFA6WYM89+SrW2Br-fnFke4djt4GgGHXn7JS3=rxvAa7dAAY7w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYM89+SrW2Br-fnFke4djt4GgGHXn7JS3=rxvAa7dAAY7w@mail.gmail.com>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,106 +82,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PWM LPSS device can be embedded in another device.
-In order to enable it, allow that drivers to probe
-a corresponding device.
+On Fri, Aug 19, 2022 at 01:54:31PM +0530, Sumit Garg wrote:
+> Hi Olivier,
+> 
+> On Fri, 12 Aug 2022 at 20:01, Olivier Masse <olivier.masse@nxp.com> wrote:
+> >
+> > Add a new ioctl called TEE_IOC_SHM_REGISTER_FD to register a
+> > shared memory from a dmabuf file descriptor.
+> > This new ioctl will allow the Linux Kernel to register a buffer
+> > to be used by the Secure Data Path OPTEE OS feature.
+> >
+> > Please find more information here:
+> > https://static.linaro.org/connect/san19/presentations/san19-107.pdf
+> >
+> > Patch tested on Hikey 6220.
+> >
+> 
+> AFAIU, for the OP-TEE SDP feature to work you need to have a DMA-BUF
+> heap driver for allocating secure buffers through exposed chardev:
+> "/dev/dma_heap/sdp". Have you tested it with some out-of-tree driver
+> as I can't find it upstream? Also, do you plan to push that upstream
+> as well?
+> 
+> BTW, please add a changelog while sending newer patch-set versions.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pwm/pwm-lpss.h                     | 26 ++---------------
- include/linux/platform_data/x86/pwm-lpss.h | 33 ++++++++++++++++++++++
- 2 files changed, 35 insertions(+), 24 deletions(-)
- create mode 100644 include/linux/platform_data/x86/pwm-lpss.h
+Also after the huge discussion last year dma-buf are agreed to be under
+the "you need an open source userspace for any new uapi using them" rule
+that all gpu drivers are under.
 
-diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
-index 35e570067fc6..41cb4b6246bb 100644
---- a/drivers/pwm/pwm-lpss.h
-+++ b/drivers/pwm/pwm-lpss.h
-@@ -13,11 +13,9 @@
- #include <linux/pwm.h>
- #include <linux/types.h>
- 
--#define MAX_PWMS			4
--
--struct device;
-+#include <linux/platform_data/x86/pwm-lpss.h>
- 
--struct pwm_lpss_boardinfo;
-+#define MAX_PWMS			4
- 
- struct pwm_lpss_chip {
- 	struct pwm_chip chip;
-@@ -25,23 +23,6 @@ struct pwm_lpss_chip {
- 	const struct pwm_lpss_boardinfo *info;
- };
- 
--struct pwm_lpss_boardinfo {
--	unsigned long clk_rate;
--	unsigned int npwm;
--	unsigned long base_unit_bits;
--	/*
--	 * Some versions of the IP may stuck in the state machine if enable
--	 * bit is not set, and hence update bit will show busy status till
--	 * the reset. For the rest it may be otherwise.
--	 */
--	bool bypass;
--	/*
--	 * On some devices the _PS0/_PS3 AML code of the GPU (GFX0) device
--	 * messes with the PWM0 controllers state,
--	 */
--	bool other_devices_aml_touches_pwm_regs;
--};
--
- /* BayTrail */
- static __maybe_unused const struct pwm_lpss_boardinfo pwm_lpss_byt_info = {
- 	.clk_rate = 25000000,
-@@ -72,7 +53,4 @@ static __maybe_unused const struct pwm_lpss_boardinfo pwm_lpss_tng_info = {
- 	.base_unit_bits = 22,
- };
- 
--struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *base,
--				     const struct pwm_lpss_boardinfo *info);
--
- #endif	/* __PWM_LPSS_H */
-diff --git a/include/linux/platform_data/x86/pwm-lpss.h b/include/linux/platform_data/x86/pwm-lpss.h
-new file mode 100644
-index 000000000000..296bd837ddbb
---- /dev/null
-+++ b/include/linux/platform_data/x86/pwm-lpss.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Intel Low Power Subsystem PWM controller driver */
-+
-+#ifndef __PLATFORM_DATA_X86_PWM_LPSS_H
-+#define __PLATFORM_DATA_X86_PWM_LPSS_H
-+
-+#include <linux/types.h>
-+
-+struct device;
-+
-+struct pwm_lpss_chip;
-+
-+struct pwm_lpss_boardinfo {
-+	unsigned long clk_rate;
-+	unsigned int npwm;
-+	unsigned long base_unit_bits;
-+	/*
-+	 * Some versions of the IP may stuck in the state machine if enable
-+	 * bit is not set, and hence update bit will show busy status till
-+	 * the reset. For the rest it may be otherwise.
-+	 */
-+	bool bypass;
-+	/*
-+	 * On some devices the _PS0/_PS3 AML code of the GPU (GFX0) device
-+	 * messes with the PWM0 controllers state,
-+	 */
-+	bool other_devices_aml_touches_pwm_regs;
-+};
-+
-+struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *base,
-+				     const struct pwm_lpss_boardinfo *info);
-+
-+#endif	/* __PLATFORM_DATA_X86_PWM_LPSS_H */
+Does this exist here?
+-Daniel
+
+> 
+> -Sumit
+> 
+> > Etienne Carriere (1):
+> >   tee: new ioctl to a register tee_shm from a dmabuf file descriptor
+> >
+> >  drivers/tee/tee_core.c   | 38 +++++++++++++++
+> >  drivers/tee/tee_shm.c    | 99 +++++++++++++++++++++++++++++++++++++++-
+> >  include/linux/tee_drv.h  | 11 +++++
+> >  include/uapi/linux/tee.h | 29 ++++++++++++
+> >  4 files changed, 175 insertions(+), 2 deletions(-)
+> >
+> > --
+> > 2.25.0
+> >
+
 -- 
-2.35.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

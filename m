@@ -2,305 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDCC5AF5CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B5A5AF5CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiIFUY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S229930AbiIFUZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiIFUYz (ORCPT
+        with ESMTP id S229923AbiIFUZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:24:55 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9FA3C8E0;
-        Tue,  6 Sep 2022 13:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662495894; x=1694031894;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t+qIvJWu1umzxU89Y8+usFUVVPU+q4y0SQBnYE3zFEo=;
-  b=N/pjZSy2yS0wGAbmnUejHfeSupmz55g+OgOM0zGCVYHv4XFTTsAFuzCl
-   cYwMWV5xF7sXpY9gxK6dtA+impgNFqTbSTxcfdlva660mM3qJ1APzKkqX
-   iMVeM3O0NT1TJmW8Ml8E4SzabsX5c1A+LNwOcRVoCDKcTPx8BjGUUpxLd
-   aFWKid514rWPt8lgk0dRe7jAXJwTz2FXBfvHGOVHQAD5Ad2xTsqIqS3Vf
-   r35z1C8Z8xS21V16+Q58svZjLtFhuDPcvt6z9qYBqdjcUKY2/T4QOZCpE
-   0WTMBCa5acSpB8MLSuJmHB3C9vadd7JnJ1Mol4JNQBqkcMVSPRs57JvyI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="358413767"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="358413767"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:24:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="756503229"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 13:24:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oVf7l-009MXY-2c;
-        Tue, 06 Sep 2022 23:24:45 +0300
-Date:   Tue, 6 Sep 2022 23:24:45 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 5/5] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <YxesjfoBagiC3gGE@smile.fi.intel.com>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
+        Tue, 6 Sep 2022 16:25:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8B681694
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662495930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uWq0DQ3f4X7MTaLrpOjEjqg4Wu5PCHE713Z5NmM6sFY=;
+        b=OYKml+JIs4IDO0rhtUG/QMWzDYMD9Clsp54GEg/zOhkkcWhL9jj0VU0OZA5/X75vhzFGbC
+        2uQ5bEhwtwY0nxMmLqhUyJN34bAK0QEIBGBoUO3RJuXEsEapUiUpPcDiB4BSM2QWt3dY3s
+        FZE/eDZ4x6j1FEs8xiFKxgLZFxTx0Is=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-612-IiF5Z_-RPqejEyJbIl9c7w-1; Tue, 06 Sep 2022 16:25:29 -0400
+X-MC-Unique: IiF5Z_-RPqejEyJbIl9c7w-1
+Received: by mail-qt1-f197.google.com with SMTP id ff27-20020a05622a4d9b00b0034306b77c08so9982184qtb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 13:25:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=uWq0DQ3f4X7MTaLrpOjEjqg4Wu5PCHE713Z5NmM6sFY=;
+        b=jw2Q+oltiylgVs7ntyPp2+x1by9/LjFZBzdNYc4ZDuvQU1oVEZ9iThjQ/N0R3bHqPl
+         qQukmd3wJqyoF7H8nPfslo54p1rO8F3UMH0PhbPI2cAib1k9cT5jpnfKUshn96dxTCuc
+         SJBknT9U8sCS5HJhwjSWqLKEnAzxcFuDwZ/37PsWedZeM3XUrBXkl2NYmXCoKH8s4OY6
+         qgbxzxqkuhkGinTKwzm9edAFiTSYEc2wJmlqyeRGLFILIo9rWqcX4TLP+uCb8q6SaOAz
+         KtoCpNMZE5uZUXn8O9W4nU9TtoMp0U2R+mH/Ie6Pql8JGApI4tu9lrjGiwQfh8u6rhwk
+         eJ9Q==
+X-Gm-Message-State: ACgBeo2uNJYTRmShXpZ+UXu82YRQFL6RNa0/K5iCNXTsmpDOuMBFUz+S
+        nTnSH+E4i8tR4pwxOQSEaw10TzFtQjAJOwqjTNEZB57cEtkPchWJdsTA9RK0f/zJfHtMdvXINej
+        3V7QN3UgZ+za6o3bHmteNEHWX
+X-Received: by 2002:ac8:5b03:0:b0:343:679b:64f2 with SMTP id m3-20020ac85b03000000b00343679b64f2mr357919qtw.260.1662495928601;
+        Tue, 06 Sep 2022 13:25:28 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4egzO6xt0SmhlP9DK65FMQdsts/oyfk4ZClfRpE6BDi9UEKa+ciSJbTyc7rql38ozwwMMnYQ==
+X-Received: by 2002:ac8:5b03:0:b0:343:679b:64f2 with SMTP id m3-20020ac85b03000000b00343679b64f2mr357901qtw.260.1662495928385;
+        Tue, 06 Sep 2022 13:25:28 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::a])
+        by smtp.gmail.com with ESMTPSA id x6-20020ac84a06000000b00342f8143599sm10471111qtq.13.2022.09.06.13.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 13:25:28 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 15:25:25 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dianders@chromium.org, johan@kernel.org
+Subject: Re: [PATCH 0/3] regulator: dt-bindings: qcom,rpmh: dt-binding fixups
+Message-ID: <20220906202525.s77kgjmptdm7cjtw@halaneylaptop>
+References: <20220902185148.635292-1-ahalaney@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906190426.3139760-6-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220902185148.635292-1-ahalaney@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:04:26PM -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Fri, Sep 02, 2022 at 01:51:45PM -0500, Andrew Halaney wrote:
+> Hi,
 > 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
+> This is my poor attempt at getting devicetree validation into a better
+> state for qcom,rpmh-regulator.yaml. This is a follow-up to Johan's
+> request for this over here:
+> 
+>     https://lore.kernel.org/linux-arm-msm/Yw8EE%2FESDUnIRf8P@hovoldconsulting.com/
+> 
+> In particular, I'm not certain patch 1 is the correct way to handle
+> things, and patch 2 makes validation too wide for the *-supply nodes.
+> 
+> I'd love any feedback here as I'm really not experienced in any of the
+> spaces (regulator, rpmh, or dt schema) so nit picking is welcomed.
 
-...
-
-> +#include <linux/dfl.h>
-
-> +#include <linux/version.h>
-
-Hmm... Do we need this?
-
-> +#include <linux/serial.h>
-> +#include <linux/serial_8250.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/io-64-nonatomic-lo-hi.h>
-
-Can this block be sorted alphabetically?
-
-...
-
-> +int feature_uart_walk(struct dfl_uart *dfluart, resource_size_t max)
-> +{
-> +	void __iomem *param_base;
-> +	int off;
-> +	u64 v;
-> +
-> +	v = readq(dfluart->csr_base + DFHv1_CSR_ADDR);
-> +	dfluart->csr_addr = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
-> +
-> +	v = readq(dfluart->csr_base + DFHv1_CSR_SIZE_GRP);
-> +	dfluart->csr_size = FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v);
-> +
-> +	if (dfluart->csr_addr == 0 || dfluart->csr_size == 0) {
-> +		dev_err(dfluart->dev, "FIXME bad dfh address and size\n");
-
-DFH ?
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
-> +		dev_err(dfluart->dev, "missing required parameters\n");
-
-Not sure I understood what parameters are here. FPGA VHDL? Configuration? RTL?
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	param_base = dfluart->csr_base + DFHv1_PARAM_HDR;
-> +
-> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_CLK_FRQ);
-> +	if (off < 0) {
-> +		dev_err(dfluart->dev, "missing CLK_FRQ param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	dfluart->uart_clk = readq(param_base + off + DFHv1_PARAM_DATA);
-
-> +	dev_dbg(dfluart->dev, "UART_CLK_ID %llu Hz\n", dfluart->uart_clk);
-
-Isn't this available via normal interfaces to user?
-
-> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_FIFO_LEN);
-> +	if (off < 0) {
-> +		dev_err(dfluart->dev, "missing FIFO_LEN param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	dfluart->fifo_len = readq(param_base + off + DFHv1_PARAM_DATA);
-> +	dev_dbg(dfluart->dev, "UART_FIFO_ID fifo_len %llu\n", dfluart->fifo_len);
-> +
-> +	off = dfl_find_param(param_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
-> +	if (off < 0) {
-> +		dev_err(dfluart->dev, "missing REG_LAYOUT param\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	v = readq(param_base + off + DFHv1_PARAM_DATA);
-> +	dfluart->fifo_size = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
-> +	dfluart->reg_shift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
-> +	dev_dbg(dfluart->dev, "UART_LAYOUT_ID width %d shift %d\n",
-> +		dfluart->fifo_size, dfluart->reg_shift);
-> +
-> +	return 0;
-> +}
-> +
-> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
-> +{
-> +	struct device *dev = &dfl_dev->dev;
-> +	struct uart_8250_port uart;
-> +	struct dfl_uart *dfluart;
-> +	int ret;
-> +
-> +	memset(&uart, 0, sizeof(uart));
-> +
-> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-> +	if (!dfluart)
-> +		return -ENOMEM;
-> +
-> +	dfluart->csr_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-> +	if (IS_ERR(dfluart->csr_base)) {
-
-> +		dev_err(dev, "failed to get mem resource!\n");
-
-The above call have a few different messages depending on error code.
-No need to repeat this.
-
-> +		return PTR_ERR(dfluart->csr_base);
-> +	}
-> +
-> +	dfluart->dev = dev;
-> +
-> +	ret = feature_uart_walk(dfluart, resource_size(&dfl_dev->mmio_res));
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to uart feature walk %d\n", ret);
-
-> +		return -EINVAL;
-
-Why shadowing error code?
-What about
-
-	return dev_err_probe(dev, ret, ...);
-?
-
-> +	}
-> +
-> +	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
-> +
-> +	if (dfl_dev->num_irqs == 1)
-> +		uart.port.irq = dfl_dev->irqs[0];
-> +
-> +	switch (dfluart->fifo_len) {
-> +	case 32:
-> +		uart.port.type = PORT_ALTR_16550_F32;
-> +		break;
-> +
-> +	case 64:
-> +		uart.port.type = PORT_ALTR_16550_F64;
-> +		break;
-> +
-> +	case 128:
-> +		uart.port.type = PORT_ALTR_16550_F128;
-> +		break;
-> +
-> +	default:
-> +		dev_err(dev, "bad fifo_len %llu\n", dfluart->fifo_len);
-> +		return -EINVAL;
-> +	}
-> +
-> +	uart.port.iotype = UPIO_MEM32;
-> +	uart.port.membase = dfluart->csr_base + dfluart->csr_addr;
-> +	uart.port.mapsize = dfluart->csr_size;
-> +	uart.port.regshift = dfluart->reg_shift;
-> +	uart.port.uartclk = dfluart->uart_clk;
-> +
-> +	/* register the port */
-> +	ret = serial8250_register_8250_port(&uart);
-> +	if (ret < 0) {
-> +		dev_err(dev, "unable to register 8250 port %d.\n", ret);
-> +		return -EINVAL;
-> +	}
-> +	dev_info(dev, "serial8250_register_8250_port %d\n", ret);
-> +	dfluart->line = ret;
-> +	dev_set_drvdata(dev, dfluart);
-> +
-> +	return 0;
-> +}
-> +
-> +static void dfl_uart_remove(struct dfl_device *dfl_dev)
-> +{
-> +	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-> +
-> +	if (dfluart->line > 0)
-> +		serial8250_unregister_port(dfluart->line);
-> +}
-
-...
-
-> +#define FME_FEATURE_ID_UART 0x24
-
-Purpose of this definition? For me with or without is still an ID.
-
-> +static const struct dfl_device_id dfl_uart_ids[] = {
-> +	{ FME_ID, FME_FEATURE_ID_UART },
-> +	{ }
-> +};
-
-...
-
-> +static struct dfl_driver dfl_uart_driver = {
-> +	.drv = {
-> +		.name = "dfl-uart",
-> +	},
-> +	.id_table = dfl_uart_ids,
-> +	.probe = dfl_uart_probe,
-> +	.remove = dfl_uart_remove,
-> +};
-
-> +
-
-No need to have this blank line.
-
-> +module_dfl_driver(dfl_uart_driver);
-
-...
-
-> +MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
-
-Move this closer to the definition. That's how other drivers do in the kernel.
-
-...
-
-> --- a/drivers/tty/serial/8250/Kconfig
-> +++ b/drivers/tty/serial/8250/Kconfig
-
-> --- a/drivers/tty/serial/8250/Makefile
-> +++ b/drivers/tty/serial/8250/Makefile
-
-I know that the records in those files are not sorted, but can you try hard
-to find the best place for them in those files from sorting point of view?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+v2 posted over here: https://lore.kernel.org/linux-arm-msm/20220906201959.69920-1-ahalaney@redhat.com/
 

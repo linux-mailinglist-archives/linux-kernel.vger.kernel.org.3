@@ -2,188 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CFE5AEFC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F005AEFC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiIFP7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S231846AbiIFQAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239107AbiIFP7F (ORCPT
+        with ESMTP id S233660AbiIFQAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:59:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33912B867;
-        Tue,  6 Sep 2022 08:18:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7C1361584;
-        Tue,  6 Sep 2022 15:18:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6394C433D6;
-        Tue,  6 Sep 2022 15:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662477481;
-        bh=6bXYrJvn3otuSLF3aA7hYluot/Fn9Xe12IYghkcz9pc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sUeBZKlIOyqiOkXEFtxsynBhXtE/f/0WKVZ/n+Hmvl2nSM5qc+x+gGnEBQd2yKjo6
-         6rcgtiUp5izbkqdEo15Eyl1uVBE3VKUDekkyOe0ztTRodGoa4PVwuCHffIwd5HtxyO
-         EGZL2fiXOrWURihOCV/xYy9L3nN0LiBYSnSqjgBV0DtGIOAQa04nHRzx0PNp26SLvs
-         ltoWH7/JpG2PMO1ogPZHihQHg6DDEfBDiq+nNRgvuEy8+VVYF6l+ZzkNIOC+1cbjsM
-         xFVzTsUGAZEQm1fEaoXkr1374V+fSEYeEWiXn4tZPciZObznIDf84HNkSAY1oYXBgh
-         DB6Sdq2bvCM/A==
-Date:   Tue, 6 Sep 2022 17:17:57 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org, boqun.feng@gmail.com
-Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
- implementation
-Message-ID: <20220906151757.GA183806@lothringen>
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-7-joel@joelfernandes.org>
- <20220902152132.GA115525@lothringen>
- <Yxa5Ch574cRZxRdo@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxa5Ch574cRZxRdo@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 12:00:17 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E723AB00
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 08:19:55 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id q3so11635217pjg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 08:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=1NDwLaBCs5nhmRz61i3eAQ3IF542diGapeEzK/fCX5o=;
+        b=Zo5lCexyWBldwLJNn337E+X4XjLh3CKtHzTEdaQ/ECk+dhSOKS4DnmcGXPxy+tuk+U
+         DUV5mZGpHmWJrRWFmITH9tJPsFe1PisCnZYzDJPqP0axutpJSiQFSLw/4EbTQLO1dE1Y
+         ZfGil5qcOfMj5r12bh+MaLOVAENX22LwVqJbfiy8lNzM7eK8mU+c+KLNV/DP0QAXsk0V
+         5eobciFlxZL6g0+VRCohy0KR6AZLqVuB0KtCkAnw2bo6svNgZuDD4BlwJC3aCzLdc5id
+         Tr8R3j3r6k3AcZ/1Ex0sSQ94QMEp9vGtRd4+ITU5wwMa0YVVivbd1CotjXtDyWyLYiAo
+         +ejw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=1NDwLaBCs5nhmRz61i3eAQ3IF542diGapeEzK/fCX5o=;
+        b=0u26rSejzI7Ol27iPnDZoUc9bWqPDIVNikUT8hahox9FGOn2tad3SpCdrI65G07JDD
+         tFJhFJ41iJXrRvJEEHcba/34TCL5QDmKnRkLIDPaBG4gf6PccvoPXY1XwhauqCU0fDXT
+         U1t4fuoOQ0i8V1DYn21bRF6eviLQHS+9t6qzGv5vEo5K5NxEUrjxpLCPKhJ5rvN4jGNL
+         Q6NVBEjihFLYgLijjYnU+QF31eAxYLx03wTd6nW9+v5P/R6VGxsX8vCO2AhOLZWPB0gT
+         kokys0z7hcLIseEvoaf7FfS0DAJ0e7D39eeQQGAzNZJMgjdxwD0BXfq6nMrSeS7WErwF
+         29rA==
+X-Gm-Message-State: ACgBeo3YGY3My9aNkV25BSeOfgKa+E/mIKsF+WEEMVNz724HRZkHJC/l
+        PwjKwNziE29GCisDFuEpOQ==
+X-Google-Smtp-Source: AA6agR4qbrSGPS0PcXmVtpUkCSbvfk3XXjbUCMdjYOZ7LU95Dyl0T9eBAaOS1Yx1ItBiTzOFcFhj8A==
+X-Received: by 2002:a17:90b:1d0a:b0:1ff:35a3:c594 with SMTP id on10-20020a17090b1d0a00b001ff35a3c594mr24869790pjb.14.1662477595386;
+        Tue, 06 Sep 2022 08:19:55 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id x4-20020a170902a38400b0016dc26c7d30sm1095554pla.164.2022.09.06.08.19.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Sep 2022 08:19:54 -0700 (PDT)
+From:   xiakaixu1987@gmail.com
+X-Google-Original-From: kaixuxia@tencent.com
+To:     sj@kernel.org, akpm@linux-foundation.org
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
+Subject: [PATCH] mm/damon/core: iterate the regions list from current point in damon_set_regions()
+Date:   Tue,  6 Sep 2022 23:18:47 +0800
+Message-Id: <1662477527-13003-1-git-send-email-kaixuxia@tencent.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:05:46AM +0000, Joel Fernandes wrote:
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 4dc86274b3e8..b201606f7c4f 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -256,6 +256,31 @@ static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
->  	return __wake_nocb_gp(rdp_gp, rdp, force, flags);
->  }
->  
-> +/*
-> + * LAZY_FLUSH_JIFFIES decides the maximum amount of time that
-> + * can elapse before lazy callbacks are flushed. Lazy callbacks
-> + * could be flushed much earlier for a number of other reasons
-> + * however, LAZY_FLUSH_JIFFIES will ensure no lazy callbacks are
-> + * left unsubmitted to RCU after those many jiffies.
-> + */
-> +#define LAZY_FLUSH_JIFFIES (10 * HZ)
-> +unsigned long jiffies_till_flush = LAZY_FLUSH_JIFFIES;
+From: Kaixu Xia <kaixuxia@tencent.com>
 
-Still not static.
+We iterate the whole regions list every time to get the first/last regions
+intersecting with the specific range in damon_set_regions(), in order to
+add new region or resize existing regions to fit in the specific range.
+Actually, it is unnecessary to iterate the new added regions and the
+front regions that have been checked. Just iterate the regions list from
+the current point using list_for_each_entry_from() every time to improve
+performance.
+The kunit tests passed:
+ [PASSED] damon_test_apply_three_regions1
+ [PASSED] damon_test_apply_three_regions2
+ [PASSED] damon_test_apply_three_regions3
+ [PASSED] damon_test_apply_three_regions4
 
-> @@ -293,12 +322,16 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
->   * proves to be initially empty, just return false because the no-CB GP
->   * kthread may need to be awakened in this case.
->   *
-> + * Return true if there was something to be flushed and it succeeded, otherwise
-> + * false.
-> + *
+Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+---
+ include/linux/damon.h | 8 ++++++++
+ mm/damon/core.c       | 3 ++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-This kind of contradict the comment that follows. Not sure you need to add
-that line because the existing comment seem to cover it.
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index 7b1f4a488230..d54acec048d6 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -463,9 +463,17 @@ static inline struct damon_region *damon_last_region(struct damon_target *t)
+ 	return list_last_entry(&t->regions_list, struct damon_region, list);
+ }
+ 
++static inline struct damon_region *damon_first_region(struct damon_target *t)
++{
++	return list_first_entry(&t->regions_list, struct damon_region, list);
++}
++
+ #define damon_for_each_region(r, t) \
+ 	list_for_each_entry(r, &t->regions_list, list)
+ 
++#define damon_for_each_region_from(r, t) \
++	list_for_each_entry_from(r, &t->regions_list, list)
++
+ #define damon_for_each_region_safe(r, next, t) \
+ 	list_for_each_entry_safe(r, next, &t->regions_list, list)
+ 
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 7d25dc582fe3..702e1b7e975b 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -195,6 +195,7 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 			damon_destroy_region(r, t);
+ 	}
+ 
++	r = damon_first_region(t);
+ 	/* Add new regions or resize existing regions to fit in the ranges */
+ 	for (i = 0; i < nr_ranges; i++) {
+ 		struct damon_region *first = NULL, *last, *newr;
+@@ -202,7 +203,7 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 
+ 		range = &ranges[i];
+ 		/* Get the first/last regions intersecting with the range */
+-		damon_for_each_region(r, t) {
++		damon_for_each_region_from(r, t) {
+ 			if (damon_intersect(r, range)) {
+ 				if (!first)
+ 					first = r;
+-- 
+2.27.0
 
->   * Note that this function always returns true if rhp is NULL.
-
->   */
->  static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> -				     unsigned long j)
-> +				     unsigned long j, unsigned long flush_flags)
->  {
->  	struct rcu_cblist rcl;
-> +	bool lazy = flush_flags & FLUSH_BP_LAZY;
->  
->  	WARN_ON_ONCE(!rcu_rdp_is_offloaded(rdp));
->  	rcu_lockdep_assert_cblist_protected(rdp);
-> @@ -326,13 +372,20 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->   * Note that this function always returns true if rhp is NULL.
->   */
->  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> -				  unsigned long j)
-> +				  unsigned long j, unsigned long flush_flags)
->  {
-> +	bool ret;
-> +
->  	if (!rcu_rdp_is_offloaded(rdp))
->  		return true;
->  	rcu_lockdep_assert_cblist_protected(rdp);
->  	rcu_nocb_bypass_lock(rdp);
-> -	return rcu_nocb_do_flush_bypass(rdp, rhp, j);
-> +	ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
-> +
-> +	if (flush_flags & FLUSH_BP_WAKE)
-> +		wake_nocb_gp(rdp, true);
-
-Why the true above?
-
-Also should we check if the wake up is really necessary (otherwise it means we
-force a wake up for all rdp's from rcu_barrier())?
-
-       was_alldone = rcu_segcblist_pend_cbs(&rdp->cblist);
-       ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
-       if (was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist))
-       	  wake_nocb_gp(rdp, false);
-
-
-> @@ -461,16 +521,29 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->  	// We need to use the bypass.
->  	rcu_nocb_wait_contended(rdp);
->  	rcu_nocb_bypass_lock(rdp);
-> +
->  	ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
->  	rcu_segcblist_inc_len(&rdp->cblist); /* Must precede enqueue. */
->  	rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
-> +
-> +	if (IS_ENABLED(CONFIG_RCU_LAZY) && lazy)
-> +		WRITE_ONCE(rdp->lazy_len, rdp->lazy_len + 1);
-> +
->  	if (!ncbs) {
->  		WRITE_ONCE(rdp->nocb_bypass_first, j);
->  		trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("FirstBQ"));
->  	}
-> +
->  	rcu_nocb_bypass_unlock(rdp);
->  	smp_mb(); /* Order enqueue before wake. */
-> -	if (ncbs) {
-> +
-> +	// We had CBs in the bypass list before. There is nothing else to do if:
-> +	// There were only non-lazy CBs before, in this case, the bypass timer
-
-Kind of misleading. I would replace "There were only non-lazy CBs before" with
-"There was at least one non-lazy CBs before".
-
-> +	// or GP-thread will handle the CBs including any new lazy ones.
-> +	// Or, the new CB is lazy and the old bypass-CBs were also lazy. In this
-> +	// case the old lazy timer would have been setup. When that expires,
-> +	// the new lazy one will be handled.
-> +	if (ncbs && (!bypass_is_lazy || lazy)) {
->  		local_irq_restore(flags);
->  	} else {
->  		// No-CBs GP kthread might be indefinitely asleep, if so, wake.
-> @@ -479,6 +552,10 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->  					    TPS("FirstBQwake"));
->  			__call_rcu_nocb_wake(rdp, true, flags);
-> +		} else if (bypass_is_lazy && !lazy) {
-> +			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
-> +					    TPS("FirstBQwakeLazy2Non"));
-> +			__call_rcu_nocb_wake(rdp, true, flags);
-
-Not sure we need this chunk. Since there are pending callbacks anyway,
-nocb_gp_wait() should be handling them and it will set the appropriate
-timer on the next loop.
-
-Thanks.
-
->  		} else {
->  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->  					    TPS("FirstBQnoWake"));

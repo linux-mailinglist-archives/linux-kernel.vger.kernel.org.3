@@ -2,82 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870F35AF069
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCE45AF06C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbiIFQbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
+        id S234197AbiIFQcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbiIFQbQ (ORCPT
+        with ESMTP id S234022AbiIFQbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:31:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E061AD83;
-        Tue,  6 Sep 2022 09:03:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Sep 2022 12:31:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AC418C
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:04:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 108E5B81604;
-        Tue,  6 Sep 2022 16:03:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7F5C433D6;
-        Tue,  6 Sep 2022 16:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662480178;
-        bh=FMYRZ0ogLlueEYXP4JG30FH8Q9HpHmij/Ejx+UQ4AXo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=T+EmDN+BtZcLf/du1cxdlgshB6cr0YWlKAyXAUEFy8L+zlIEQ6D+QrX3W3a688eGL
-         2sV8BNCO0pODeH4IaisrhIotHxY2Dcwt6CAbjXclw/AzIINPrp3trfNrKoIawHMYbh
-         oUEE195garRlFPZ6oMGgQT2IgtTRn3Z1BaIynTpM+dNZ/aXH9mrfAlJjygn/jHnke/
-         gWZtq95BCvzK4CjTnkjLOnG2c6qRD66WCyyAJUgXLeiA4iTijVLOZlUtTQ6X+wkPN5
-         lRshuExOWRzEKmk+vPmqMbsjhFNvJFyLfYnz/PQaFYFULAXPbCMupLdmn85Kq9MqSv
-         U82YgXH0FjC8A==
-Message-ID: <93ff2f6d8c49091c0aa8a008695da5150c096be3.camel@kernel.org>
-Subject: Re: [PATCH v5] vfs, security: Fix automount superblock LSM init
- problem, preventing NFS sb sharing
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-nfs@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, dwysocha@redhat.com,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 06 Sep 2022 12:02:55 -0400
-In-Reply-To: <3349244.1662480110@warthog.procyon.org.uk>
-References: <7a154687f8be9d7a2365ae4a93f2b7f734002904.camel@kernel.org>
-         <217595.1662033775@warthog.procyon.org.uk>
-         <3349244.1662480110@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 84522336D0;
+        Tue,  6 Sep 2022 16:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662480268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AjzLZ3rHiihQrfLWNjF73yb4DNX3TJs0K7iqQQYIzQo=;
+        b=qYKnMbTM2t9wVFrOaIDTF/7pRF1f/JPbZAAVu8dONP4NXKb54xTxNNQ0fk7NeISe5+Da4O
+        ItVoOUJgur+9LHy9chr3m3zjPTmh6gPqLws/dZT4MAbFCXSuAXX5+Iz1FWkuV9+8a/N7W8
+        y4Ypb91KWk5RhdFz2AgDdCmRXailzqM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662480268;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AjzLZ3rHiihQrfLWNjF73yb4DNX3TJs0K7iqQQYIzQo=;
+        b=/rXtOPbKB0N9AvfH9HkXXKgjzQsE+kCoPHdCkMRCJlmjsNbF1OEU7+U3pDk2Zx7KvhneRb
+        rMCQxvMrSgRyU/CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57DFD13A19;
+        Tue,  6 Sep 2022 16:04:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hOKcFIxvF2OKLQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 06 Sep 2022 16:04:28 +0000
+Date:   Tue, 06 Sep 2022 18:04:27 +0200
+Message-ID: <877d2gfq0k.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION 5.19.x] AMD HD-audio devices missing on 5.19
+In-Reply-To: <YxdtCMbrDQCc5N42@nvidia.com>
+References: <874jy4cqok.wl-tiwai@suse.de>
+        <20220823010021.GA5967@nvidia.com>
+        <87h723sdde.wl-tiwai@suse.de>
+        <87ilmjqj1f.wl-tiwai@suse.de>
+        <20220823202824.GA4516@nvidia.com>
+        <YxdqP9i0bEwUg4VJ@nvidia.com>
+        <87edwofqkd.wl-tiwai@suse.de>
+        <YxdtCMbrDQCc5N42@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-06 at 17:01 +0100, David Howells wrote:
-> Jeff Layton <jlayton@kernel.org> wrote:
->=20
-> > If this or the other allocations below fail, do you need to free the
-> > prior ones here? Or do they automagically get cleaned up somehow?
->=20
-> Once the fs_context is allocated, it will always get cleaned up with
-> put_fs_context(), which will dispose of the partially constructed
-> smack_mnt_opts struct.
->=20
+On Tue, 06 Sep 2022 17:53:44 +0200,
+Jason Gunthorpe wrote:
+> 
+> On Tue, Sep 06, 2022 at 05:52:34PM +0200, Takashi Iwai wrote:
+> > On Tue, 06 Sep 2022 17:41:51 +0200,
+> > Jason Gunthorpe wrote:
+> > > 
+> > > On Tue, Aug 23, 2022 at 05:28:24PM -0300, Jason Gunthorpe wrote:
+> > > > On Tue, Aug 23, 2022 at 01:46:36PM +0200, Takashi Iwai wrote:
+> > > > > It was tested now and confirmed that the call path is via AMDGPU, as
+> > > > > expected:
+> > > > >   amdgpu_pci_probe ->
+> > > > >   amdgpu_driver_load_kms ->
+> > > > >   amdgpu_device_init ->
+> > > > >   amdgpu_amdkfd_device_init ->
+> > > > >   kgd2kfd_device_init ->
+> > > > >   kgd2kfd_resume_iommu ->
+> > > > >   kfd_iommu_resume ->
+> > > > >   amd_iommu_init_device ->
+> > > > >   iommu_attach_group ->
+> > > > >   __iommu_attach_group
+> > > > 
+> > > > Oh, when you said sound intel I thought this was an Intel CPU..
+> > > > 
+> > > > Yes, there is this hacky private path from the amdgpu to
+> > > > the amd iommu driver that makes a mess of it here. We discussed it in
+> > > > this thread:
+> > > > 
+> > > > https://lore.kernel.org/linux-iommu/YgtuJQhY8SNlv9%2F6@8bytes.org/
+> > > > 
+> > > > But nobody put it together that it would be a problem with this.
+> > > > 
+> > > > Something like this, perhaps, but I didn't check if overriding the
+> > > > type would cause other problems.
+> > > 
+> > > Takashi, do we want to do this patch?
+> > 
+> > I really have no much preference regarding the fix for this
+> > regression from my side.  If you can work on it, it'd be greatly
+> > appreciated.
+> 
+> If you say this patch works I will formally propose it, but I have no
+> ability to test on this special AMD HW.
+
+Erm, it's not clear which patch you're referring to.  The mentioned
+URL points to a patch series.
+
+If you can send (or point) a patch for test, I can set up a test
+kernel and ask reporters for testing it.
 
 
-Ok! In that case, you can add:
+thanks,
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Takashi

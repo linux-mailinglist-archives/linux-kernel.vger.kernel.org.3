@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB81C5AE933
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3B75AE936
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240385AbiIFNOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S240333AbiIFNPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiIFNO3 (ORCPT
+        with ESMTP id S234277AbiIFNPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:14:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF286EF2F;
-        Tue,  6 Sep 2022 06:14:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3920E61525;
-        Tue,  6 Sep 2022 13:14:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20584C433C1;
-        Tue,  6 Sep 2022 13:14:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662470054;
-        bh=a9w/Vs65i9eFdgfD56qa1Y3jWZBcc3vZheq7lUkZQ9o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K9jdrn5HcSyF5r41NkgbHhArlyluLufhOGKdZceCxn3tF9wzAbg8cslLV6yZgK5VJ
-         s/GVbf2VDh43c9mPo9JicSnsCfxEkszYi6H48UlywUrkEC9nck85HHw6k03v3G8VbZ
-         R/6Q5XNKASAlihSOWOGYlrpTv80K78q4j5OM4cig=
-Date:   Tue, 6 Sep 2022 15:14:11 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH stable-5.15 1/3] usb: dwc3: fix PHY disable sequence
-Message-ID: <YxdHo2JPYhm5GgEr@kroah.com>
-References: <20220906120702.19219-1-johan@kernel.org>
- <20220906120702.19219-2-johan@kernel.org>
- <Yxc6GMzOrz1k1c2D@kroah.com>
- <Yxc8NclTP8hwmQG9@hovoldconsulting.com>
+        Tue, 6 Sep 2022 09:15:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3314D4FE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662470136;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1uJsWhraelKXluHwB7FaDWCgu+gdxCn6dypgVW00Tgc=;
+        b=bF5LJJux6pkMsVLSu9nhNW/lSLbx6PqMRuDcPP3rp8MRQW/eKT3RDtWAFO01gOjiCg6JXj
+        oLPEru7ZKFnDfsjCb5p44b9xAesyfcdDuZzSICNlpQ6pnaow+hY64dirPC/NqER2MtKev3
+        w2409D0WQFhyeucvX/8O9KlOHxtKe+0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-329-ZJ6f2qvFNdyHQEaDEwgJug-1; Tue, 06 Sep 2022 09:15:35 -0400
+X-MC-Unique: ZJ6f2qvFNdyHQEaDEwgJug-1
+Received: by mail-wm1-f72.google.com with SMTP id v21-20020a05600c215500b003a83c910d83so2093556wml.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:15:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=1uJsWhraelKXluHwB7FaDWCgu+gdxCn6dypgVW00Tgc=;
+        b=0Fy2Qwi/HXpYZtHy48dHpUEW2HalY+ekEJvjgqOMiBThH4skCL3iuX1E/xM34GR0hz
+         S8wU1AQ1LCL3eKJryN5hlYQHYgsZfYsblZxE+i9wn7zDnBHzqckzboQW+Lry0Oohb1Ir
+         iBIfan756xkG6mnOtn0kaTd2jo2VKWhrYeFErWge5wtOKjxBFwIWHlx8zQj270vrbzyA
+         1JW7tFhcBotgpB+GyIQ08prIFivx7VxIorvmVv/4r3/vqf780j0C+rR0ZKMRTGtB2ZXn
+         p4t4WmH2BSLh7snnw7E4R0Z9O14B3iAN8zPf0ADNgGRN1d8RtjzFNvxz7ubGM7p46a2v
+         mCjQ==
+X-Gm-Message-State: ACgBeo2gXwMBYmIUsphZPtdw7XIveHzERb9dxCxoec0cTT4zW8foW0u1
+        we5jyYhB0lWJYu4KdlX7uS6cu0FxIS/AF0h0CqRL6wwcbLA5ti/VMaf3xEY+/0X9MJGYmNc7xgB
+        x3CijvEaMkewmWAUFTua03U3T
+X-Received: by 2002:a5d:59a4:0:b0:228:5f74:796 with SMTP id p4-20020a5d59a4000000b002285f740796mr9196592wrr.655.1662470133839;
+        Tue, 06 Sep 2022 06:15:33 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5P3NAwv8A+ZEKH3JYcwHQ89wUpJPH3H2eNehgZC3vx/2n+iYwWJrNvkLHshgWwyn7m7zUFWA==
+X-Received: by 2002:a5d:59a4:0:b0:228:5f74:796 with SMTP id p4-20020a5d59a4000000b002285f740796mr9196562wrr.655.1662470133442;
+        Tue, 06 Sep 2022 06:15:33 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-112-72.dyn.eolo.it. [146.241.112.72])
+        by smtp.gmail.com with ESMTPSA id q1-20020a05600c2e4100b003a2cf1ba9e2sm13653800wmf.6.2022.09.06.06.15.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 06:15:32 -0700 (PDT)
+Message-ID: <8b2589bd6303133fd27cab1af27b096a5f848074.camel@redhat.com>
+Subject: Re: [PATCH net-next 2/5] net: hns3: support ndo_select_queue()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Guangbin Huang <huangguangbin2@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lipeng321@huawei.com,
+        lanhao@huawei.com
+Date:   Tue, 06 Sep 2022 15:15:31 +0200
+In-Reply-To: <20220905081539.62131-3-huangguangbin2@huawei.com>
+References: <20220905081539.62131-1-huangguangbin2@huawei.com>
+         <20220905081539.62131-3-huangguangbin2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxc8NclTP8hwmQG9@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,43 +82,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 02:25:25PM +0200, Johan Hovold wrote:
-> On Tue, Sep 06, 2022 at 02:16:24PM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Sep 06, 2022 at 02:07:00PM +0200, Johan Hovold wrote:
-> > > From: Johan Hovold <johan+linaro@kernel.org>
-> > > 
-> > > commit d2ac7bef95c9ead307801ccb6cb6dfbeb14247bf upstream.
-> > > 
-> > > Generic PHYs must be powered-off before they can be tore down.
-> > > 
-> > > Similarly, suspending legacy PHYs after having powered them off makes no
-> > > sense.
-> > > 
-> > > Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
-> > > dwc3_probe() error-path sequences that got this wrong.
-> > > 
-> > > Note that this makes dwc3_core_exit() match the dwc3_core_init() error
-> > > path with respect to powering off the PHYs.
-> > > 
-> > > Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
-> > > Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
-> > > Cc: stable@vger.kernel.org      # 4.8
-> > > Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-> > > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> > > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > Link: https://lore.kernel.org/r/20220804151001.23612-2-johan+linaro@kernel.org
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > [ johan: adjust context to 5.15 ]
-> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > ---
-> > >  drivers/usb/dwc3/core.c | 19 ++++++++++---------
-> > >  1 file changed, 10 insertions(+), 9 deletions(-)
-> > 
-> > This one did not apply to 4.9.y, 4.14.y, or 4.19.y :(
+On Mon, 2022-09-05 at 16:15 +0800, Guangbin Huang wrote:
+> To support tx packets to select queue according to its dscp field after
+> setting dscp and tc map relationship, this patch implements
+> ndo_select_queue() to set skb->priority according to the user's setting
+> dscp and priority map relationship.
 > 
-> Perhaps someone who cares about these old trees can do the backports.
-> Should be as trivial. Can't be the patch submitters responsibility to
-> maintain 8 stable trees.
+> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+> ---
+>  .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> index 481a300819ad..82f83e3f8162 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> @@ -2963,6 +2963,51 @@ static int hns3_nic_set_vf_mac(struct net_device *netdev, int vf_id, u8 *mac)
+>  	return h->ae_algo->ops->set_vf_mac(h, vf_id, mac);
+>  }
+>  
+> +#define HNS3_INVALID_DSCP		0xff
+> +#define HNS3_DSCP_SHIFT			2
+> +
+> +static u8 hns3_get_skb_dscp(struct sk_buff *skb)
+> +{
+> +	__be16 protocol = skb->protocol;
+> +	u8 dscp = HNS3_INVALID_DSCP;
+> +
+> +	if (protocol == htons(ETH_P_8021Q))
+> +		protocol = vlan_get_protocol(skb);
+> +
+> +	if (protocol == htons(ETH_P_IP))
+> +		dscp = ipv4_get_dsfield(ip_hdr(skb)) >> HNS3_DSCP_SHIFT;
+> +	else if (protocol == htons(ETH_P_IPV6))
+> +		dscp = ipv6_get_dsfield(ipv6_hdr(skb)) >> HNS3_DSCP_SHIFT;
+> +
+> +	return dscp;
+> +}
+> +
+> +static u16 hns3_nic_select_queue(struct net_device *netdev,
+> +				 struct sk_buff *skb,
+> +				 struct net_device *sb_dev)
+> +{
+> +	struct hnae3_handle *h = hns3_get_handle(netdev);
+> +	u8 dscp, priority;
+> +	int ret;
+> +
+> +	if (h->kinfo.tc_map_mode != HNAE3_TC_MAP_MODE_DSCP ||
+> +	    !h->ae_algo->ops->get_dscp_prio)
+> +		goto out;
+> +
+> +	dscp = hns3_get_skb_dscp(skb);
+> +	if (unlikely(dscp == HNS3_INVALID_DSCP))
+> +		goto out;
+> +
+> +	ret = h->ae_algo->ops->get_dscp_prio(h, dscp, NULL, &priority);
 
-I agree!  :)
+This introduces an additional, unneeded indirect call in the fast path,
+you could consider replacing the above with a direct call to
+hclge_get_dscp_prio() - again taking care of the CONFIG_HNS3_DCB
+dependency.
+
+Cheers,
+
+Paolo
+

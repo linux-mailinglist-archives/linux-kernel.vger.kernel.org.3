@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9245AEB76
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2508D5AEC35
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240709AbiIFNzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S238358AbiIFN6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239208AbiIFNwD (ORCPT
+        with ESMTP id S239219AbiIFNwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Sep 2022 09:52:03 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1DE80025;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD38D80020;
         Tue,  6 Sep 2022 06:40:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EB099CE1784;
-        Tue,  6 Sep 2022 13:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E80C433C1;
-        Tue,  6 Sep 2022 13:40:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54F246153B;
+        Tue,  6 Sep 2022 13:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA17C433D7;
+        Tue,  6 Sep 2022 13:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471613;
-        bh=3wsj5esTvo6viuU3KgaxbK82FTQMpAjVMt8kheUTXX8=;
+        s=korg; t=1662471616;
+        bh=ZRAoLUtu8uRv0tJrbLp+O+tHa9erJ7AsNm8KsKz0XDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BQtqwCX+BrygWuYiBBQn1//BasIMslpuc88jn8IMQ2gPO6AawxC9NpnZcLaIyLpGK
-         3gnP6DJIhdA+x74jNCDcaRUo7P7YYsHABC6h/hENRTyNzKEDsJ87lWJz4vRmtjqQHO
-         XnIKmWppMNrbOeRGsqz5TAi58OIHjgn8dWeb43K4=
+        b=ZNSPmlkgxZDawcvtPFzFxAddGgeVtXB90k/XYcSaTPH1P8hRIX2H0m6quJY4qPrO+
+         ygDgGxhPVjlTy3MSU8gLcj0RFRPYQSkGKXFG0sZIeYl0XJBOCFfRf7H1iU9yqF4vNN
+         hqB8rmArTnxZe3j7h/D2orUgSvrR1yCgCH2UtRtw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        stable <stable@kernel.org>
-Subject: [PATCH 5.15 086/107] usb: xhci-mtk: relax TT periodic bandwidth allocation
-Date:   Tue,  6 Sep 2022 15:31:07 +0200
-Message-Id: <20220906132825.451104476@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH 5.15 087/107] usb: xhci-mtk: fix bandwidth release issue
+Date:   Tue,  6 Sep 2022 15:31:08 +0200
+Message-Id: <20220906132825.490789159@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -56,56 +56,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-commit 8b13ea05117ffad4727b0971ed09122d5c91c4dc upstream.
+commit 6020f480004a80cdad4ae5ee180a231c4f65595b upstream.
 
-Currently uses the worst case byte budgets on FS/LS bus bandwidth,
-for example, for an isochronos IN endpoint with 192 bytes budget, it
-will consume the whole 5 uframes(188 * 5) while the actual FS bus
-budget should be just 192 bytes. It cause that many usb audio headsets
-with 3 interfaces (audio input, audio output, and HID) cannot be
-configured.
-To improve it, changes to use "approximate" best case budget for FS/LS
-bandwidth management. For the same endpoint from the above example,
-the approximate best case budget is now reduced to (188 * 2) bytes.
+This happens when @udev->reset_resume is set to true, when usb resume,
+the flow as below:
+  - hub_resume
+    - usb_disable_interface
+      - usb_disable_endpoint
+        - usb_hcd_disable_endpoint
+          - xhci_endpoint_disable  // it set @ep->hcpriv to NULL
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Then when reset usb device, it will drop allocated endpoints,
+the flow as below:
+  - usb_reset_and_verify_device
+    - usb_hcd_alloc_bandwidth
+      - xhci_mtk_drop_ep
+
+but @ep->hcpriv is already set to NULL, the bandwidth will be not
+released anymore.
+
+Due to the added endponts are stored in hash table, we can drop the check
+of @ep->hcpriv.
+
+Fixes: 4ce186665e7c ("usb: xhci-mtk: Do not use xhci's virt_dev in drop_endpoint")
 Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220819080556.32215-1-chunfeng.yun@mediatek.com
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/20220819080556.32215-2-chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci-mtk-sch.c |   11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/usb/host/xhci-mtk-sch.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 --- a/drivers/usb/host/xhci-mtk-sch.c
 +++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -476,7 +476,6 @@ static int check_fs_bus_bw(struct mu3h_s
+@@ -815,8 +815,8 @@ int xhci_mtk_drop_ep(struct usb_hcd *hcd
+ 	if (ret)
+ 		return ret;
  
- static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
- {
--	u32 extra_cs_count;
- 	u32 start_ss, last_ss;
- 	u32 start_cs, last_cs;
+-	if (ep->hcpriv)
+-		drop_ep_quirk(hcd, udev, ep);
++	/* needn't check @ep->hcpriv, xhci_endpoint_disable set it NULL */
++	drop_ep_quirk(hcd, udev, ep);
  
-@@ -512,18 +511,12 @@ static int check_sch_tt(struct mu3h_sch_
- 		if (last_cs > 7)
- 			return -ESCH_CS_OVERFLOW;
- 
--		if (sch_ep->ep_type == ISOC_IN_EP)
--			extra_cs_count = (last_cs == 7) ? 1 : 2;
--		else /*  ep_type : INTR IN / INTR OUT */
--			extra_cs_count = 1;
--
--		cs_count += extra_cs_count;
- 		if (cs_count > 7)
- 			cs_count = 7; /* HW limit */
- 
- 		sch_ep->cs_count = cs_count;
--		/* one for ss, the other for idle */
--		sch_ep->num_budget_microframes = cs_count + 2;
-+		/* ss, idle are ignored */
-+		sch_ep->num_budget_microframes = cs_count;
- 
- 		/*
- 		 * if interval=1, maxp >752, num_budge_micoframe is larger
+ 	return 0;
+ }
 
 

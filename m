@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E822C5AE0AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E328E5AE0B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 09:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238662AbiIFHMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 03:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        id S238752AbiIFHOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 03:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238843AbiIFHMh (ORCPT
+        with ESMTP id S233502AbiIFHOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 03:12:37 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037B717E1E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 00:12:35 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        Tue, 6 Sep 2022 03:14:03 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DF25EDD9;
+        Tue,  6 Sep 2022 00:14:02 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id EBDF820E7;
-        Tue,  6 Sep 2022 09:12:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1662448354;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=myPv8B55ZEW05OB+S9pWiPrxR+s0aF+7aFKm/XD78HY=;
-        b=h7cs+Br+GYOgEzdUyybaY6Litl/DVXOqlyaCC3x+VljpHK2U+n5HWxh9W+DjpzwfEyOQ1w
-        wK6epONrj1e71rI1GKxBbvpi1G0xKi0jaEJAw8nCLpTqgB5sGjYZJtLDA4H4K6XQrk7B62
-        M+o9vZ7xwYQ7tt9O8PScxqHiEIt71/mBRahS0uQ1dkzry5ykx6Dv38eo7kYoudflXbUr9p
-        GIUY/pW4HmfLdLrMwmEMaKSim1sZYuqwcR4l5Y26xgeOti7tDLbeLOyufl3nxVf4L95LbH
-        XGpQp0o9H9YALg+3bYjQSjKapyqC3nEpudOGQXC65xwynwAp8vU17wovHEzDkg==
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 45FC2424EB;
+        Tue,  6 Sep 2022 07:13:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1662448440; bh=0nUWl89mjqQ5K31+h2G4hNBO/2+SnGSjnZ+TdSHB9e8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ZoXYswq0HIX0U7DUE3HhgoIat+FrZQJmJZN5Qkuv9B9QlHGflmeOrVJVtI2rh/Pug
+         eB/LcOM6VlZeg89arq1wH9Jb3/7G7D3g7lPaM83BhcnSCeZKVrUHQkK0O2mWWi2NE4
+         O6hwwHI4IkN3qlS9piY5O+JryIer8/GnZSzsFQdJxeC2zUZP3Mnvlks6wwTjkT40in
+         bFABA/rPAF8Vmhuj2Q/jTtKvAlfcgzmEfbybd86A0bnAzt0r5qFiwRTOfoXwW43fPq
+         hZKq6nU2NRsLcGChvypsO0P6PEkbaijBAbzVSf+3qs1SgLdgkLDb6SM7HhhpmbARiB
+         9V7gRx8x5B+hA==
+Message-ID: <bbae73e7-9c9b-d86d-c34d-018cb9ef4540@marcan.st>
+Date:   Tue, 6 Sep 2022 16:13:56 +0900
 MIME-Version: 1.0
-Date:   Tue, 06 Sep 2022 09:12:33 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, Jason@zx2c4.com,
-        jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        sumit.garg@linaro.org, david@sigma-star.at, john.ernberg@actia.se,
-        jmorris@namei.org, serge@hallyn.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, j.luebbe@pengutronix.de, ebiggers@kernel.org,
-        richard@nod.at, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
-        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Subject: Re: [RFC PATCH HBK: 0/8] HW BOUND KEY as TRUSTED KEY
-In-Reply-To: <20220906065157.10662-1-pankaj.gupta@nxp.com>
-References: <20220906065157.10662-1-pankaj.gupta@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <047746e1134d5bdce699d8c021f849b6@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] PCI: apple: do not leak reset GPIO on unbind/unload/error
+Content-Language: es-ES
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <YxatO5OaI2RpxQ2M@google.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <YxatO5OaI2RpxQ2M@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 06/09/2022 11.15, Dmitry Torokhov wrote:
+> The driver allocates reset GPIO in apple_pcie_setup_port() but neither
+> releases the resource, nor uses devm API to have it released
+> automatically.
+> 
+> Let's fix this by switching to devm API. While at it let's use generic
+> devm_fwnode_gpiod_get() instead of OF-specific gpiod_get_from_of_node()
+> - this will allow us top stop exporting the latter down the road.
+> 
+> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> 
+> This patch has been pulled out of the series
+> https://lore.kernel.org/all/20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com/
+> with updated justification (leak fix vs pure API deprecation).
+> 
+>  drivers/pci/controller/pcie-apple.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> index a2c3c207a04b..66f37e403a09 100644
+> --- a/drivers/pci/controller/pcie-apple.c
+> +++ b/drivers/pci/controller/pcie-apple.c
+> @@ -516,8 +516,8 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  	u32 stat, idx;
+>  	int ret, i;
+>  
+> -	reset = gpiod_get_from_of_node(np, "reset-gpios", 0,
+> -				       GPIOD_OUT_LOW, "PERST#");
+> +	reset = devm_fwnode_gpiod_get(pcie->dev, of_fwnode_handle(np), "reset",
+> +				      GPIOD_OUT_LOW, "PERST#");
+>  	if (IS_ERR(reset))
+>  		return PTR_ERR(reset);
+>  
 
-Am 2022-09-06 08:51, schrieb Pankaj Gupta:
-> Hardware Bound key(HBK), is never acessible as plain key outside of the
-> hardware boundary. Thus, it is un-usable, even if somehow fetched
-> from kernel memory. It ensures run-time security.
-> 
-> This patchset adds generic support for classing the Hardware Bound Key,
-> based on:
-> 
-> - Newly added flag-'is_hbk', added to the tfm.
-> 
->   Consumer of the kernel crypto api, after allocating
->   the transformation, sets this flag based on the basis
->   of the type of key consumer has.
-> 
-> - This helps to influence the core processing logic
->   for the encapsulated algorithm.
-> 
-> - This flag is set by the consumer after allocating
->   the tfm and before calling the function crypto_xxx_setkey().
-> 
-> First implementation is based on CAAM.
-> 
-> NXP built CAAM IP is the Cryptographic Acceleration and Assurance 
-> Module.
-> This is contain by the i.MX and QorIQ SoCs by NXP.
-> 
-> CAAM is a suitable backend (source) for kernel trusted keys.
-> This backend source can be used for run-time security as well
-> by generating the hardware bound key.
-> 
-> Along with plain key, the CAAM generates black key. A black key is an
-> encrypted key, which can only be decrypted inside CAAM. Hence, CAAM's
-> black key can only be used by CAAM. Thus it is declared as a hardware 
-> bound key.
+Reviewed-by: Hector Martin <marcan@marcan.st>
 
-What is the difference to the current trusted keys with CAAM?
-When I tested the patch series back then, I wasn't able to import
-a sealed key on another board with the same SoC.
+I actually caught this one a while back, just didn't get around to
+submitting it yet since it's part of my WIP PCIe power management branch
+(that I'm getting back to next week or so!) :)
 
--michael
+https://github.com/AsahiLinux/linux/commit/04f5628fc73ea0369f66c83ba473cb6f8187d2b3
+
+- Hector

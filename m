@@ -2,47 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F49F5AE97B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE9C5AE978
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbiIFN0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
+        id S233304AbiIFN0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbiIFN0H (ORCPT
+        with ESMTP id S229679AbiIFN0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:26:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C4474344;
-        Tue,  6 Sep 2022 06:26:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Sep 2022 09:26:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A2F74344
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:26:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662470800;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cG+EMJYQC9dpJwtmnpabIGTtF9jjQR1GUpVCWiATrrQ=;
+        b=Md31JahcKMsadYLO0WJ5EFkFr/jJ/HDITKyBMED7RbQt43gMbQoM7DzCtjLtZl/tPWDZ8F
+        N0mSn09fEpiUdA75nblk6dpCCfHLwmznImEAWS+M47B7wcawZmQ+tTcGBAffH4QTn3upUT
+        IYKfneN6DigazVd9h9gfLSLvPW/lRTM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-kAuUCntzO02DdqDuwRNM8A-1; Tue, 06 Sep 2022 09:26:37 -0400
+X-MC-Unique: kAuUCntzO02DdqDuwRNM8A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0CDAB818B4;
-        Tue,  6 Sep 2022 13:26:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADB8C433D6;
-        Tue,  6 Sep 2022 13:26:00 +0000 (UTC)
-Message-ID: <082ba39a-aa00-ac49-ac2a-eceac0bca5ff@xs4all.nl>
-Date:   Tue, 6 Sep 2022 15:25:58 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 907501C006AA;
+        Tue,  6 Sep 2022 13:26:35 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0EAEC2026D4C;
+        Tue,  6 Sep 2022 13:26:34 +0000 (UTC)
+Date:   Tue, 6 Sep 2022 09:26:33 -0400
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@gmail.com>
+Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH 0/6] virtio/vsock: introduce dgrams, sk_buff, and qdisc
+Message-ID: <YxdKiUzlfpHs3h3q@fedora>
+References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFT PATCH] media: em28xx: Enable v4l2 file ops at the end of
- em28xx_v4l2_init()
-Content-Language: en-US
-To:     Soumya Negi <soumya.negi97@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220829132548.23520-1-soumya.negi97@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220829132548.23520-1-soumya.negi97@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ffA3zeJuYjNdcnmP"
+Content-Disposition: inline
+In-Reply-To: <cover.1660362668.git.bobby.eshleman@bytedance.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,152 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Soumya,
 
-On 29/08/2022 15:25, Soumya Negi wrote:
-> Fix syzbot bug KASAN: use-after-free Read in v4l2_fh_open
-> Syzbot link:
-> https://syzkaller.appspot.com/bug?id=0e3c97f1c4112e102c9988afd5eff079350eab7f
-> Repro: https://syzkaller.appspot.com/text?tag=ReproC&x=12663ebdd00000
-> 
-> The bug arises because the em28xx driver registers a v4l2 video
-> device(struct video_device) with the V4L2 interface in
-> em28xx_v4l2_init() but the v4l2 extension initialization eventually
-> fails and the video device is unregistered. v4l2_open() in the V4L2
-> interface views the device as registered and allows calls to
-> em28xx_v4l2_open(). Due to race between video_unregister_device() and
-> v4l2_open(), em28xx_v4l2_open() is accessing video device after it has
-> been freed(by the release callback) and is passing it on to
-> v4l2_fh_open().
-> 
-> In em28xx_v4l2_init(), temporarily disable v4l2 file operations on
-> struct video_device devices(video, vbi, radio) before registering them
-> and enable the file ops at the end when v4l2 extension initialization
-> succeeds.
+--ffA3zeJuYjNdcnmP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-That's not the right approach. The problem is the roll-your-own v4l2->ref
-refcount. Instead this should use the refcount that is built into struct
-v4l2_device.
+Hi Bobby,
+If you are attending Linux Foundation conferences in Dublin, Ireland
+next week (Linux Plumbers Conference, Open Source Summit Europe, KVM
+Forum, ContainerCon Europe, CloudOpen Europe, etc) then you could meet
+Stefano Garzarella and others to discuss this patch series.
 
-Specifically v4l2_dev->release should be set to the release function, and
-v4l2_device_put(&v4l2->v4l2_dev); should be called in remove() or in the
-error path of em28xx_v4l2_init().
+Using netdev and sk_buff is a big change to vsock. Discussing your
+requirements and the future direction of vsock in person could help.
 
-Using this the release callback of v4l2_device will be called when the last
-open file handle is closed, i.e. it keeps track of the open()s.
+If you won't be in Dublin, don't worry. You can schedule a video call if
+you feel it would be helpful to discuss these topics.
 
-The roll-your-own approach in the em28xx driver (written before this v4l2_device
-refcounting existed), is not taking that into account, so that causes these
-problems.
+Stefan
 
-What is also bad is that em28xx_vb2_setup() is called after the video devices
-are registered. That should happen before.
+--ffA3zeJuYjNdcnmP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Regards,
+-----BEGIN PGP SIGNATURE-----
 
-	Hans
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmMXSogACgkQnKSrs4Gr
+c8iC8wf/WGQyOwxcifRrsvIy43xkZiginzOzlIJEAkBPO1lbTUzCLMkjeiaOgOkO
+7VOexEKxi3S67NVq1vUyAzKPB6HFERheGtQOQtkhrmKDKfhVH14zU6t/bHSVeoAe
+UfM2UaaO4nF/XRVuO6g6sKsVAqVFWQxpdBjVrsg4B4v8k/1q7W/tiAy//WJHCZc9
+6dJCJ+qoPxICjfqc0bw56xbERbh0TG+xneBkGVjp7nLLq/NG/tV7LoIb7xs3EXxq
+wB/WYW+bZBtO378tl7SxMksYKv1DFPuYjU52vuUw2X0bz6jgoFn3/rB5ndoHg/o0
+D8YtdthVM/GJqXQtJAhIIqbPdUV7Dg==
+=DJmj
+-----END PGP SIGNATURE-----
 
-> 
-> Reported-by: syzbot+b2391895514ed9ef4a8e@syzkaller.appspotmail.com
-> Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
-> ---
->  drivers/media/usb/em28xx/em28xx-video.c | 45 +++++++++++++++++++++----
->  1 file changed, 39 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/media/usb/em28xx/em28xx-video.c b/drivers/media/usb/em28xx/em28xx-video.c
-> index 8181c0e6a25b..900a1eacb1c7 100644
-> --- a/drivers/media/usb/em28xx/em28xx-video.c
-> +++ b/drivers/media/usb/em28xx/em28xx-video.c
-> @@ -2320,6 +2320,19 @@ static int em28xx_v4l2_close(struct file *filp)
->  	return 0;
->  }
->  
-> +/* Used to temporarily disable file operations on video_device until successful
-> + * initialization in em28xx_v4l2_init().
-> + */
-> +static const struct v4l2_file_operations em28xx_v4l_fops_empty = {
-> +	.owner         = THIS_MODULE,
-> +	.open          = NULL,
-> +	.release       = NULL,
-> +	.read          = NULL,
-> +	.poll          = NULL,
-> +	.mmap          = NULL,
-> +	.unlocked_ioctl = NULL,
-> +};
-> +
->  static const struct v4l2_file_operations em28xx_v4l_fops = {
->  	.owner         = THIS_MODULE,
->  	.open          = em28xx_v4l2_open,
-> @@ -2375,12 +2388,22 @@ static const struct v4l2_ioctl_ops video_ioctl_ops = {
->  };
->  
->  static const struct video_device em28xx_video_template = {
-> -	.fops		= &em28xx_v4l_fops,
-> +	.fops		= &em28xx_v4l_fops_empty,
->  	.ioctl_ops	= &video_ioctl_ops,
->  	.release	= video_device_release_empty,
->  	.tvnorms	= V4L2_STD_ALL,
->  };
->  
-> +/* Used to temporarily disable file operations on video_device until successful
-> + * initialization in em28xx_v4l2_init().
-> + */
-> +static const struct v4l2_file_operations radio_fops_empty = {
-> +	.owner         = THIS_MODULE,
-> +	.open          = NULL,
-> +	.release       = NULL,
-> +	.unlocked_ioctl = NULL,
-> +};
-> +
->  static const struct v4l2_file_operations radio_fops = {
->  	.owner         = THIS_MODULE,
->  	.open          = em28xx_v4l2_open,
-> @@ -2404,7 +2427,7 @@ static const struct v4l2_ioctl_ops radio_ioctl_ops = {
->  };
->  
->  static struct video_device em28xx_radio_template = {
-> -	.fops		= &radio_fops,
-> +	.fops		= &radio_fops_empty,
->  	.ioctl_ops	= &radio_ioctl_ops,
->  	.release	= video_device_release_empty,
->  };
-> @@ -2833,9 +2856,6 @@ static int em28xx_v4l2_init(struct em28xx *dev)
->  				"can't register radio device\n");
->  			goto unregister_dev;
->  		}
-> -		dev_info(&dev->intf->dev,
-> -			 "Registered radio device as %s\n",
-> -			 video_device_node_name(&v4l2->radio_dev));
->  	}
->  
->  	/* Init entities at the Media Controller */
-> @@ -2851,14 +2871,27 @@ static int em28xx_v4l2_init(struct em28xx *dev)
->  	}
->  #endif
->  
-> +	/* Enable v4l2 file operations for v4l2 video video_device */
-> +	v4l2->vdev.fops = &em28xx_v4l_fops;
->  	dev_info(&dev->intf->dev,
->  		 "V4L2 video device registered as %s\n",
->  		 video_device_node_name(&v4l2->vdev));
->  
-> -	if (video_is_registered(&v4l2->vbi_dev))
-> +	if (video_is_registered(&v4l2->vbi_dev)) {
-> +		/* Enable v4l2 file operations for v4l2 vbi video_device */
-> +		v4l2->vbi_dev.fops = &em28xx_v4l_fops;
->  		dev_info(&dev->intf->dev,
->  			 "V4L2 VBI device registered as %s\n",
->  			 video_device_node_name(&v4l2->vbi_dev));
-> +	}
-> +
-> +	if (video_is_registered(&v4l2->radio_dev)) {
-> +		/* Enable v4l2 file operations for v4l2 radio video_device */
-> +		v4l2->radio_dev.fops = &radio_fops;
-> +		dev_info(&dev->intf->dev,
-> +			 "Registered radio device as %s\n",
-> +			 video_device_node_name(&v4l2->radio_dev));
-> +	}
->  
->  	/* Save some power by putting tuner to sleep */
->  	v4l2_device_call_all(&v4l2->v4l2_dev, 0, tuner, standby);
+--ffA3zeJuYjNdcnmP--
 

@@ -2,52 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F085AEB39
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D820D5AE999
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbiIFN4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S234206AbiIFNax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239731AbiIFNyH (ORCPT
+        with ESMTP id S233940AbiIFNav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:54:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C018F7D1D7;
-        Tue,  6 Sep 2022 06:41:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Sep 2022 09:30:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7771A2AE03
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662471049;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bCl6uulMyxrVlr2gxACbm/zfYRoeE0Wcxnn2cAdr1a0=;
+        b=Ff+mlRqIJk6gNMi9Hicw8WZODv4/hZFwb5CHa75DS6GMwPlRqErB8sECZYbIZ0y5+V5+Ne
+        GAdE/ee5nwZk+lKesZdyhcV1ZT4hv+5MpjoPyFrhjwvS7LJxIuo4pT80MFYeMWAv5O7Fie
+        vW4frXd4uvv6iIy7BZ5f5QvQMlfyGlI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-jATdod-ZPH2s4yFEqEid-Q-1; Tue, 06 Sep 2022 09:30:46 -0400
+X-MC-Unique: jATdod-ZPH2s4yFEqEid-Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63A36B818CA;
-        Tue,  6 Sep 2022 13:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A18C433D6;
-        Tue,  6 Sep 2022 13:40:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471660;
-        bh=AH3bor9FHUfTQvRdH/pgLK4+Owq/zkRLMns2Qt34c4c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=krvxMNxkBv5gpLRAX1I+0J3JpIp8UJ39nme6doKqUVnVgZWQmR5G/8qBWZckxJ4G9
-         D8pTsClUi90upi7u7MHll8GOfinlV87TaEdcTVyXayGfswcJJIZRcKco+BCL0XjlJy
-         Sn4HhrXyDN7qUdF8X0HbZtEeOm/rK1iYM89l5gJk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 062/107] xen/grants: prevent integer overflow in gnttab_dma_alloc_pages()
-Date:   Tue,  6 Sep 2022 15:30:43 +0200
-Message-Id: <20220906132824.452160974@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-References: <20220906132821.713989422@linuxfoundation.org>
-User-Agent: quilt/0.67
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C750F8039B2;
+        Tue,  6 Sep 2022 13:30:45 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 457AE40D296E;
+        Tue,  6 Sep 2022 13:30:45 +0000 (UTC)
+Date:   Tue, 6 Sep 2022 09:30:43 -0400
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     vgoyal@redhat.com, miklos@szeredi.hu,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtiofs: Drop unnecessary initialization in
+ send_forget_request and virtio_fs_get_tree
+Message-ID: <YxdLg8tI9OtVjbfe@fedora>
+References: <20220906053848.2503-1-wangdeming@inspur.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="S+kjWGQJm00xfWBG"
+Content-Disposition: inline
+In-Reply-To: <20220906053848.2503-1-wangdeming@inspur.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,40 +63,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit e9ea0b30ada008f4e65933f449db6894832cb242 ]
+--S+kjWGQJm00xfWBG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The change from kcalloc() to kvmalloc() means that arg->nr_pages
-might now be large enough that the "args->nr_pages << PAGE_SHIFT" can
-result in an integer overflow.
+On Tue, Sep 06, 2022 at 01:38:48AM -0400, Deming Wang wrote:
+> The variable is initialized but it is only used after its assignment.
+>=20
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>  fs/fuse/virtio_fs.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
+> index 4d8d4f16c..bffe74d44 100644
+> --- a/fs/fuse/virtio_fs.c
+> +++ b/fs/fuse/virtio_fs.c
+> @@ -414,7 +414,7 @@ static int send_forget_request(struct virtio_fs_vq *f=
+svq,
+>  {
+>  	struct scatterlist sg;
+>  	struct virtqueue *vq;
+> -	int ret =3D 0;
+> +	int ret;
+>  	bool notify;
+>  	struct virtio_fs_forget_req *req =3D &forget->req;
+> =20
 
-Fixes: b3f7931f5c61 ("xen/gntdev: switch from kcalloc() to kvcalloc()")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/YxDROJqu/RPvR0bi@kili
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/xen/grant-table.c | 3 +++
- 1 file changed, 3 insertions(+)
+That causes an uninitialized access in the source tree I'm looking at
+(c5e4d5e99162ba8025d58a3af7ad103f155d2df7):
 
-diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
-index 5c83d41766c85..0a2d24d6ac6f7 100644
---- a/drivers/xen/grant-table.c
-+++ b/drivers/xen/grant-table.c
-@@ -981,6 +981,9 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
- 	size_t size;
- 	int i, ret;
- 
-+	if (args->nr_pages < 0 || args->nr_pages > (INT_MAX >> PAGE_SHIFT))
-+		return -ENOMEM;
-+
- 	size = args->nr_pages << PAGE_SHIFT;
- 	if (args->coherent)
- 		args->vaddr = dma_alloc_coherent(args->dev, size,
--- 
-2.35.1
+  static int send_forget_request(struct virtio_fs_vq *fsvq,
+                     struct virtio_fs_forget *forget,
+                     bool in_flight)
+  {
+      struct scatterlist sg;
+      struct virtqueue *vq;
+      int ret =3D 0;
+      ^^^^^^^
+      bool notify;
+      struct virtio_fs_forget_req *req =3D &forget->req;
+ =20
+      spin_lock(&fsvq->lock);
+      if (!fsvq->connected) {
+          if (in_flight)
+              dec_in_flight_req(fsvq);
+          kfree(forget);
+          goto out;
+      ...
+      out:
+      spin_unlock(&fsvq->lock);
+      return ret;
+             ^^^
+  }
 
+What is the purpose of this patch? Is there a compiler warning (if so,
+which compiler and version)? Do you have a static analysis tool that
+reported this (if yes, then maybe it's broken)?
 
+Stefan
+
+--S+kjWGQJm00xfWBG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmMXS4MACgkQnKSrs4Gr
+c8hAnwgAr+QWzw860ulBE175xxGhGz+svhuLqPnyhkkQWyLQ+SsHglf6wgX8wyJo
+3GImaRGa4ntB59O6CORrt1m7YIFLeCAob1b4AooxalOuXeP3st5ryPhMO81RovYL
+L3hVXfFQQeDboa2r7KdH8EyT7sJSrzsOpLQpFfDXOrpDfQrdzZPwSRcU4DHr98QW
+0ErLih20bpg/tptA1VY8+qfrXJMUYfFZkfcFgWo6F8GLFJGieGKKxEbAzOczz9IS
+7mFLUtaRglCb9dDLItuOZwr40Uipgj1jqKx2JweQx2UYdt8hqZ6yRLbbOvxQH3R5
+i+axLSVNdiXXrXNKkTGNKETbFwpEfw==
+=3X2b
+-----END PGP SIGNATURE-----
+
+--S+kjWGQJm00xfWBG--
 

@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1465AE61D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFF35AE610
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239745AbiIFLAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S233534AbiIFK6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239828AbiIFLAT (ORCPT
+        with ESMTP id S233220AbiIFK6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:00:19 -0400
-Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48C6576752
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2O36e
-        ECB5BuZ0d6JGjlpKqyVLf4hom/1qxnJ/phFFe0=; b=ZB6xj1t0TxGh5nWoee937
-        +fav66yp0tyaoIrGTHB9CKScYrTssJdZDzLnApzGZcXQtwQ5y+mQ30l1CSckvV+E
-        X9QuGtvIy9Juw486axkOZqU+ZRIDR0lLvZMcxRTJdNputQxvgyqe+2YdBnqPMDZD
-        c2Ti2wRf07qvzTQPP0b3Y8=
-Received: from whoami-VirtualBox.. (unknown [223.72.91.155])
-        by smtp11 (Coremail) with SMTP id D8CowAAngYjFJxdjoZMDAQ--.5323S2;
-        Tue, 06 Sep 2022 18:58:13 +0800 (CST)
-From:   Jinyu Tang <tjytimi@163.com>
-To:     conor.dooley@microchip.com
-Cc:     akpm@linux-foundation.org, alexandre.ghiti@canonical.com,
-        anshuman.khandual@arm.com, anup@brainfault.org,
-        aou@eecs.berkeley.edu, atishp@rivosinc.com, falcon@tinylab.org,
-        guoren@kernel.org, heiko@sntech.de, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        panqinglin2020@iscas.ac.cn, paul.walmsley@sifive.com,
-        sunnanyong@huawei.com, tjytimi@163.com, tongtiangen@huawei.com
-Subject: Re:Re: [PATCH v2] riscv: make update_mmu_cache to support asid
-Date:   Tue,  6 Sep 2022 18:57:56 +0800
-Message-Id: <20220906105756.6082-1-tjytimi@163.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <7e17ceaf-6648-e099-d526-8b698eaa5a04@microchip.com>
-References: <7e17ceaf-6648-e099-d526-8b698eaa5a04@microchip.com>
+        Tue, 6 Sep 2022 06:58:03 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F813CBC1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:58:02 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id w19so11837717ljj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 03:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ORguQGJ+jcnqw8eowE0KKiCcX55E0FSXFsOOApHEpOM=;
+        b=U68Zh9mQBLzfJSdNR58ymOgPj/T4+G/zPlnyNdI/nsm3+1yMhbcmP9xrqAP3k3Xc+t
+         4IV9tCu2U9nBjgB0WNJbhmSuUd2omplTLqSUH+FG7OUD2mcrt03QINczFmQvuSHdFgn5
+         ngnf1ke/CQYXyBPlN7VCr5YWXXiUFXAtjaLXGB5D5uawKSwDNnZeOXAAC+ET+t9dzKYU
+         Pgz5Raxph4iLk2qqrfXPPMEkCK1ZLTI1H5R4NjODKXkWuyKDhkZHQnGvuJjvlRtFFc7b
+         cPOi4rwoqmiTZRtTk20f/ryqQomOAMIv++52KXlKxVk5VZdWI2Uy1b9lBTIxXAQyvClU
+         7w9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ORguQGJ+jcnqw8eowE0KKiCcX55E0FSXFsOOApHEpOM=;
+        b=V46/h8QnxWKyuM89E3whM3LdxaBsUs/FuYVc1gLU3BTMK7JlGRtEQPTpikHqxlHjOR
+         bknMQXbWMo7AXCoBbTzJutwXHOs+vXmxMdz/ExoORV9KGvbLW2LyyG3waqpqbdIt6/xx
+         4chQIefihBTZQE8vV2gkxY8V93nlWpDdbn0v2YMTwi1SyQNiCZeFQeOvNhThkOJmTpsv
+         sGMWQQLSs5Yon9vG7DeECMd+s+VJ3XPqgZsvNK7zmXjDyhtPaarTk6Hvy1XSx9lfaf9d
+         EsO9zsp6G/agwELFWBmAH/vaw7lnn1AyXx/rqwnq0TnlWaTALUMyPpIovby5viH3eaPU
+         G7qA==
+X-Gm-Message-State: ACgBeo3WGyWR2buhoEFQd9Jd0Lg2eJSfJ4Gx+N1YveITVOQfqJ7+M+0o
+        JMEJ7Kdv8KiygplLWVluLlYdTw==
+X-Google-Smtp-Source: AA6agR7syjIYMu2DxjRvWa53god5653pNfvbu/mnSo4Wf8ca0qOupBU8ACKnZieein6B5857rZXlbA==
+X-Received: by 2002:a2e:bc10:0:b0:267:b34a:52e6 with SMTP id b16-20020a2ebc10000000b00267b34a52e6mr10145748ljf.292.1662461880397;
+        Tue, 06 Sep 2022 03:58:00 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a4-20020a056512200400b0048b193041easm1658504lfb.209.2022.09.06.03.57.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 03:57:59 -0700 (PDT)
+Message-ID: <872bffe6-416e-0d15-5994-0cf80c2063b4@linaro.org>
+Date:   Tue, 6 Sep 2022 12:57:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: D8CowAAngYjFJxdjoZMDAQ--.5323S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZF48Gr4fXrWUKFyUXrWUArb_yoWrJrW7pF
-        srGan5KayfGr97Gry2qrnI9r17Xw4kK3WayrWSvrW5twsIgF1UKF9xKry09r1rJFy8WrWI
-        kayjyr13u3yYywUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRRwZrUUUUU=
-X-Originating-IP: [223.72.91.155]
-X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbiTgV0eFUDRgewlQAAs1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v9 2/2] MAINTAINERS: Update fastrpc documentation file
+ from txt to yaml
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org
+References: <20220906103055.2089519-1-abel.vesa@linaro.org>
+ <20220906103055.2089519-2-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220906103055.2089519-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your guidance.^ ^
+On 06/09/2022 12:30, Abel Vesa wrote:
+> The documentation for fastrpc bingings is now YAML. So update the
+> MAINTAINERS file.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 
-Sincerely yours,
-Jinyu
+Abel, I sent you two messages about this patch that it is not
+bisectable. You did not respond to them, regarding maintainers entry, so
+I don't know what to think.
 
-At 2022-09-04 21:49:31, Conor.Dooley@microchip.com wrote:
->On 04/09/2022 14:37, Jinyu Tang wrote:
->> The `update_mmu_cache` function in riscv flush tlb cache without asid
->
->FWIW, when referring to functions please put the () at the end.
->Makes the changelog more natural to read. You do not need to make
->a v3 for that though.
->
->Thanks,
->Conor.
->
->> information now, which will flush tlbs in other tasks' address space
->> even if processor supports asid. So add a new function
->> `flush_tlb_local_one_page` to flush local one page whether processor
->> supports asid or not,for cases that need to flush local one page like
->> function `update_mmu_cache`.
->> 
->> Signed-off-by: Jinyu Tang <tjytimi@163.com>
->> ---
->> RFC V1 -> V2 : 
->> 1.Rebased on PATCH9 of IPI imporvement series as Anup Patel
->> suggestion. 
->> 2.Make commit log more clear.
->> 
->>  arch/riscv/include/asm/pgtable.h  |  2 +-
->>  arch/riscv/include/asm/tlbflush.h |  2 ++
->>  arch/riscv/mm/tlbflush.c          | 11 +++++++++++
->>  3 files changed, 14 insertions(+), 1 deletion(-)
->> 
->> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
->> index 7ec936910a96..09ccefa6b6c7 100644
->> --- a/arch/riscv/include/asm/pgtable.h
->> +++ b/arch/riscv/include/asm/pgtable.h
->> @@ -415,7 +415,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->>  	 * Relying on flush_tlb_fix_spurious_fault would suffice, but
->>  	 * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
->>  	 */
->> -	local_flush_tlb_page(address);
->> +	flush_tlb_local_one_page(vma, address);
->>  }
->>  
->>  static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
->> diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
->> index 801019381dea..120aeb1c6ecf 100644
->> --- a/arch/riscv/include/asm/tlbflush.h
->> +++ b/arch/riscv/include/asm/tlbflush.h
->> @@ -30,6 +30,7 @@ static inline void local_flush_tlb_page(unsigned long addr)
->>  #if defined(CONFIG_SMP) && defined(CONFIG_MMU)
->>  void flush_tlb_all(void);
->>  void flush_tlb_mm(struct mm_struct *mm);
->> +void flush_tlb_local_one_page(struct vm_area_struct *vma, unsigned long addr);
->>  void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr);
->>  void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
->>  		     unsigned long end);
->> @@ -42,6 +43,7 @@ void flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
->>  
->>  #define flush_tlb_all() local_flush_tlb_all()
->>  #define flush_tlb_page(vma, addr) local_flush_tlb_page(addr)
->> +#define flush_tlb_local_one_page(vma, addr) local_flush_tlb_page(addr)
->>  
->>  static inline void flush_tlb_range(struct vm_area_struct *vma,
->>  		unsigned long start, unsigned long end)
->> diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
->> index 27a7db8eb2c4..0843e1baaf34 100644
->> --- a/arch/riscv/mm/tlbflush.c
->> +++ b/arch/riscv/mm/tlbflush.c
->> @@ -41,6 +41,17 @@ static inline void local_flush_tlb_range_asid(unsigned long start,
->>  		local_flush_tlb_all_asid(asid);
->>  }
->>  
->> +void flush_tlb_local_one_page(struct vm_area_struct *vma, unsigned long addr)
->> +{
->> +	if (static_branch_unlikely(&use_asid_allocator)) {
->> +		unsigned long asid = atomic_long_read(&vma->vm_mm->context.id);
->> +
->> +		local_flush_tlb_page_asid(addr, asid);
->> +	} else {
->> +		local_flush_tlb_page(addr);
->> +	}
->> +}
->> +
->>  static void __ipi_flush_tlb_all(void *info)
->>  {
->>  	local_flush_tlb_all();
+This must be squashed.
 
+Best regards,
+Krzysztof

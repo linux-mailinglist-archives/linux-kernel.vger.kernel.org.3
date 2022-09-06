@@ -2,193 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654B45ADDA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FF45ADDAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 05:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbiIFC6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
+        id S238054AbiIFDAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 23:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232850AbiIFC6L (ORCPT
+        with ESMTP id S232371AbiIFDAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:58:11 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2134.outbound.protection.outlook.com [40.107.101.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834266BD5B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 19:58:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WP1xtwEd1RXSToWNvrNhzZeNTdJhuQwHzly5rGKkqqJyCqP0TolJZvl51rGTjypQ/S/L6K+AarY7F6DAriemqvBRMFL1fmNMY7JeQKiPTtH9WdeYoN1Ldy5jftO5xlIIwJvQ8LtTswwqLuGlKhbGbPsexsyPeXvzyOTVPKmJzZIcPrdh9vlPThKYCvF6X8Bmiw6ZLW64WvdXfoNXBj/XtgWeR5HICoW1zzMeCJp9LyO9nVm1hUzsxYNdqQfgBoHkiIXkKtJeHiVeaMS+10FL12DuLESPS8MprmCvYqCY3De3EXVDqbEuHKi1TqIERG7hcs914CYfEI73utcfQ40mpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TSjVfscx5eAwvDv0ILiVYKmxqhjb1+FZ5X1sB2WTaDk=;
- b=Pd4kJQ0pN4QjLja0v2t4v1KKLB39D1FupItsSme3yJmU6yqGIdBpn5plJ3/mJar0Q8ITV7budDm0qzsvS0XZbHErpDVYWSHtESCzspp2ndbBRegTHbapIdunz3nq+rIhSWT2a7bha5PkWxJuABD4Wt1Nz3JA9yMeBS4Ev/7f9drpGvRWGC3/xoeyJAVstBTO1Babmwb02w3g1pN5C6BeobuLwWiTY+v4fSDaxH8pKrGXrTDuQaXOrNjNLtIuViqqevtkUT0tHSWI+NehpJjfjQFUnSClT3K7XcfYA8bXI/7gzFob35zJML6d7snBOGNMwmsdrCVoGp9sXGnDQCmz5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TSjVfscx5eAwvDv0ILiVYKmxqhjb1+FZ5X1sB2WTaDk=;
- b=CTS7l1dv9OdpKz/lTXr2dHAEM3/esN0cOLDGPD97fH9vld0dcnjz51FCRSO6D59TmMM/Up5D13b6n7MaoLulYVaQy0itql7FIqfNq22su1QepBq8FaAQMmwCeYoGethTpDc8md+QXKGOsnFu11gU0U58DibtUW3qoGPvER4s1OQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by CO2PR04MB2197.namprd04.prod.outlook.com (2603:10b6:102:c::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Tue, 6 Sep
- 2022 02:58:06 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::1ad:536d:f2aa:8d13]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::1ad:536d:f2aa:8d13%3]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
- 02:58:06 +0000
-Date:   Tue, 6 Sep 2022 10:57:53 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, bliang@analogixsemi.com,
-        qwen@analogixsemi.com, mliu@analogixsemi.com, hsinyi@chromium.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/bridge: anx7625: Set HPD irq detect window to 2ms
-Message-ID: <20220906025753.GA642918@anxtwsw-Precision-3640-Tower>
-References: <20220903130833.541463-1-xji@analogixsemi.com>
- <CAG3jFyum5M8iGdW++c7rayUn4ogJ6izWaX7VaqMfV7ShAe_kRQ@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG3jFyum5M8iGdW++c7rayUn4ogJ6izWaX7VaqMfV7ShAe_kRQ@mail.gmail.com>
-X-ClientProxiedBy: TYCP286CA0091.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b4::13) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        Mon, 5 Sep 2022 23:00:03 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D976583D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 20:00:01 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MM9722x9szrS60;
+        Tue,  6 Sep 2022 10:58:06 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 6 Sep 2022 10:59:59 +0800
+Subject: Re: [PATCH v2 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
+ memory section with hwpoisoned hugepage
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220905062137.1455537-1-naoya.horiguchi@linux.dev>
+ <20220905062137.1455537-2-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <3e302aa5-d63d-097e-2cb7-831b7c99e736@huawei.com>
+Date:   Tue, 6 Sep 2022 10:59:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d913f8ae-0360-4ce9-b9ca-08da8fb39f29
-X-MS-TrafficTypeDiagnostic: CO2PR04MB2197:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D0LsfaDA60wEbTCDTqwlrjd430Ncwbwi3VeYlTpd7VyKhIapurYCsYMXiY5/CiHqFiIngpn21BUxk5w8NViI0lLDvVNGbpa/87g870sp2T+QbnzaAF6tvMKTIkNHwV0TY4SrHjXowmluztRE/LJNX/TrZsm3CGmD3/CFySrt/tKGIy+xP8RquwKDbTS7n/a4gxjHhUmdULZWLAnh4u09BK+PhY+vL4to0fnTkaH14Qcxuu7eggx/zGQY3Kw9KyxXC4z4nqOETz+OCdysXdMoUAr0wAjkht5F59rEYWNaWvtdjf6B1GMlIs7q+zjCoN1M0oL88J1lkBjhHPqvuyYyogaPW17gUVoHKDvqBiwg6m7sViPy3aIChQcVTMv8t0RWUocZ1Dwi6ops9N6WOk6ohGU+rBJHuFD2tOKri1PBC+sMT7dm18EcYhnUgp3U7mysgib19BFOPrMW+UqfVrTmNTK3YViSsokCpx7KTv34kEYBOGU027nHJxzCHRT0XA2h3fg0i6Lqau2NEUVALyUwUeUSMQkXZyXrRV1CupH5hNFv+NG915ffG+0CmrH8WvDaiouuWBSB41l9IyOqbG8nWDEm6vdHVxUv+bjdm4rAbekl0iOPyWwBRr47cOZGv9SKVi14+5BV1vgrpWT4NusbSXYixh8WhFpMHI8ZOdv66q6xjR4UUxCM4CBTgTBzR3dHRkhc5spFsU2SuqScrMPMORlxAQgeFZRhM0UVYmr4G1xPE1sX7ouOg6tzvleBOYlShRBmVCzr6EyEY31CtgG27w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(376002)(346002)(136003)(39840400004)(396003)(83380400001)(186003)(1076003)(6486002)(316002)(6916009)(54906003)(66946007)(4326008)(66556008)(66476007)(8676002)(52116002)(6666004)(86362001)(26005)(6506007)(6512007)(2906002)(9686003)(5660300002)(33656002)(41300700001)(478600001)(33716001)(8936002)(7416002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6jqr6qqeilE/htiXUXBzL0q0vPWqApvVNKSfKAb27yB0khDYXI/GG9rkenM8?=
- =?us-ascii?Q?dddFMFBRhS0ER9EY5tuGvSxC3k80VjgmycDS4AtjkqvWEgU5dUwwagRnwFYM?=
- =?us-ascii?Q?OkqVBHTK7yGDNol6kx1bvgTjw6u+mFJvrmWUkbOKEkD3DdaHv9pXyZM4EhTr?=
- =?us-ascii?Q?4RZN0zUuSmBAtaIk6Qo54vuY+Mu9D2pqHFYUdnEyEIabSMtNHof9Sx9e0hzp?=
- =?us-ascii?Q?5a8VKdfFCxWs4baA1f3EYgqRCXLVU7/FfrZGz7W6LfOfmkzQv1a9Q4i0DBKA?=
- =?us-ascii?Q?I0vqdSbdLQEylvIiyQPhOXqttrk+Ky/krw4AW9wER6I5R3D76k99v2JogVmS?=
- =?us-ascii?Q?OIEt5y+uViI49xnrOm5EY4Zn5g9vujNbqlvlHGL1BgH/bnydVz16y4v5vFOx?=
- =?us-ascii?Q?ja8c0+9bIAx9v7ethGTR/4ZpkwJfugyhR7bJ+IiLtsUXYNMgy+Mfe5zZrlVJ?=
- =?us-ascii?Q?0U56UfJCD4I8vdJJD8lmGCsXOax71Yxvxat7ZnPihhmyYEmXe3Q3LP4MdzP0?=
- =?us-ascii?Q?ADe9igNlTvDjzF2Ldl1NB80NFARYBS6Fnnn06gF7Z0xsRoOVo4mj72/M++KH?=
- =?us-ascii?Q?E6VDeXWHoEOg2Du7Wku29nTuaexbGANvboZJkNR82+nEXv/JCwMCsw/vJ7IL?=
- =?us-ascii?Q?b+BDjY2ELSUUpnsHrdzdkwbzIm9PfwNkTFVkok2VRtiIDyQLevQrJPKWtker?=
- =?us-ascii?Q?L8+IlLfwbkbLGwgho08XZ5PTSELU/yBEnYuF6LiI7JTpFe+b81GOskMUgM6l?=
- =?us-ascii?Q?NV3JXvBeO6DaM7hdwUAMKbCVhygvdq84jeo4L6NvlzrAYEsHquU2Qk+NVkg6?=
- =?us-ascii?Q?M3XbT6dJFKxy2w52TOr1rBWK98ucYipZGWTeHJsEZZWSJGugZcfm5dW5Mr5c?=
- =?us-ascii?Q?vZ21Kk8EdP9t4sjMEfCwMvNxKsrD4dqOe9Q1+fsM850YQiAB5dril7p+9w4V?=
- =?us-ascii?Q?gWaHiTovg58St4JWqY/pbp3VnO4d231dWZ0f1aqr0/ob4NpmrdiZNdzcdsS+?=
- =?us-ascii?Q?MAyt3kKsvC/h+7zh7MteeP3JPKMVrmBaQ8h0+9MaIQKV1jWvgNb+422gx9kL?=
- =?us-ascii?Q?FHBkb+/1nezNNzeXI0g+LOZMQ/yXfGmvX/2X9/KGV8jtjW4DqLRh/bKnB/GJ?=
- =?us-ascii?Q?Iet8zu6ae17FPCl3R5ES5de0cV/ZwkpZ5elKhTR2DdPbFS11vYQMDmp73jCJ?=
- =?us-ascii?Q?9nNtUYeHueUb9xCBsYCIjR/FdJXAyUPLCh2wi5NFYGgPT36s8XfnpSZV+hq4?=
- =?us-ascii?Q?S2/h0XChpFZ0Nsua29pv8kt5x+AmCiCdpCyYF2DsapiL2Bt4vbMyaX59hw2I?=
- =?us-ascii?Q?Zu62clm58/N1bZL77s4y/D07o0Wa8CYh3EivDYO/Wmi6nypn1BpqUVI3iCtO?=
- =?us-ascii?Q?LOzeuuVGC2H08n9tp+Rf3J0OTgLZUynP04Xa+c+dzmUKPhqArfxpMyIV5k45?=
- =?us-ascii?Q?hR2Yx8VvAnYu/2ZXj/sID3acki31s7ntxv+2vZWTUXGHlYSg7cmyey9LFbVJ?=
- =?us-ascii?Q?u24Z2Jq9CIklCeXrKzEzrGmOyfJ/ZT/vc3isWi3G11+xAN2Z1Xw1xRBau0ax?=
- =?us-ascii?Q?9zohOyH/25wF11fgCV/gBRyb64u/Y3ezBCKg4ZSS?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d913f8ae-0360-4ce9-b9ca-08da8fb39f29
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 02:58:06.1388
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kVkbikW80LW4mu9+J/Nj4NXrFd7H3OmZz/PVWUSPzmYtcVM2qbErMxCcErroXjqq9KSEez7jElcNMfiA6t+blg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO2PR04MB2197
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220905062137.1455537-2-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 06:48:06PM +0200, Robert Foss wrote:
-> Hi Xin,
+On 2022/9/5 14:21, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 > 
-> On Sat, 3 Sept 2022 at 15:09, Xin Ji <xji@analogixsemi.com> wrote:
-> >
-> > Some panels trigger HPD irq due to noise, the HPD debounce
-> > may be 1.8ms, exceeding the default irq detect window, ~1.4ms.
-> > This patch set HPD irq detection window to 2ms to
-> > tolerate the HPD noise.
-> >
-> > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > ---
-> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 14 ++++++++++++++
-> >  drivers/gpu/drm/bridge/analogix/anx7625.h |  6 ++++++
-> >  2 files changed, 20 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > index c74b5df4cade..0c323b5a1c99 100644
-> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > @@ -1440,6 +1440,20 @@ static void anx7625_start_dp_work(struct anx7625_data *ctx)
-> >
-> >  static int anx7625_read_hpd_status_p0(struct anx7625_data *ctx)
-> >  {
-> > +       int ret;
-> > +
-> > +       /* Set irq detect window to 2ms */
-> > +       ret = anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-> > +                               HPD_DET_TIMER_BIT0_7, HPD_TIME & 0xFF);
-> > +       ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-> > +                                HPD_DET_TIMER_BIT8_15,
-> > +                                (HPD_TIME >> 8) & 0xFF);
-> > +       ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-> > +                                HPD_DET_TIMER_BIT16_23,
-> > +                                (HPD_TIME >> 16) & 0xFF);
+> HWPoisoned page is not supposed to be accessed once marked, but currently
+> such accesses can happen during memory hotremove because do_migrate_range()
+> can be called before dissolve_free_huge_pages() is called.
 > 
-> Does the HPD debounce timer register need to be written for every HPD
-> status read?
-Hi Robert Foss, yes, it is better to set it in every HPD status check, because the
-HPD may be affected by noise, once the chip detect HPD is low, the timer
-register will be automatically set to 1.4ms, so the driver better set it
-in each check loop.
+> Move dissolve_free_huge_pages() before scan_movable_pages(). Recently
+> delayed dissolve has been implemented, so the dissolving can turn
+> a hwpoisoned hugepage into 4kB hwpoison page, which memory hotplug can
+> handle safely.
+
+Yes, thanks for your work, Naoya. ;)
+
+> 
+> Reported-by: Miaohe Lin <linmiaohe@huawei.com>
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+>  mm/memory_hotplug.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index fad6d1f2262a..c24735d63b25 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1880,6 +1880,17 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  
+>  			cond_resched();
+>  
+> +			/*
+> +			 * Dissolve free hugepages in the memory block before doing
+> +			 * offlining actually in order to make hugetlbfs's object
+> +			 * counting consistent.
+> +			 */
+> +			ret = dissolve_free_huge_pages(start_pfn, end_pfn);
+> +			if (ret) {
+> +				reason = "failure to dissolve huge pages";
+> +				goto failed_removal_isolated;
+> +			}
+
+This change has a side-effect. If hugetlb pages are in-use, dissolve_free_huge_pages() will always return -EBUSY
+even if those pages can be migrated. So we fail to hotremove the memory even if they could be offlined.
+Or am I miss something?
 
 Thanks,
-Xin
+Miaohe Lin
+
+> +
+>  			ret = scan_movable_pages(pfn, end_pfn, &pfn);
+>  			if (!ret) {
+>  				/*
+> @@ -1895,17 +1906,6 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  			goto failed_removal_isolated;
+>  		}
+>  
+> -		/*
+> -		 * Dissolve free hugepages in the memory block before doing
+> -		 * offlining actually in order to make hugetlbfs's object
+> -		 * counting consistent.
+> -		 */
+> -		ret = dissolve_free_huge_pages(start_pfn, end_pfn);
+> -		if (ret) {
+> -			reason = "failure to dissolve huge pages";
+> -			goto failed_removal_isolated;
+> -		}
+> -
+>  		ret = test_pages_isolated(start_pfn, end_pfn, MEMORY_OFFLINE);
+>  
+>  	} while (ret);
 > 
-> > +       if (ret < 0)
-> > +               return ret;
-> > +
-> >         return anx7625_reg_read(ctx, ctx->i2c.rx_p0_client, SYSTEM_STSTUS);
-> >  }
-> >
-> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> > index e257a84db962..14f33d6be289 100644
-> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> > @@ -132,6 +132,12 @@
-> >  #define I2S_SLAVE_MODE 0x08
-> >  #define AUDIO_LAYOUT   0x01
-> >
-> > +#define HPD_DET_TIMER_BIT0_7   0xea
-> > +#define HPD_DET_TIMER_BIT8_15  0xeb
-> > +#define HPD_DET_TIMER_BIT16_23 0xec
-> > +/* HPD debounce time 2ms for 27M clock */
-> > +#define HPD_TIME               54000
-> > +
-> >  #define AUDIO_CONTROL_REGISTER 0xe6
-> >  #define TDM_TIMING_MODE 0x08
-> >
-> > --
-> > 2.25.1
-> >
+

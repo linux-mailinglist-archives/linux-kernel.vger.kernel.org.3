@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEAB5AE80E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E6B5AE811
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240132AbiIFM0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S239923AbiIFM1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240110AbiIFMZ2 (ORCPT
+        with ESMTP id S239813AbiIFM1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:25:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8C47D1D9;
-        Tue,  6 Sep 2022 05:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662466926; x=1694002926;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ac6/ZnvaxotntCoR53/68zz+h1Omy7csO+/TGUoEwRk=;
-  b=ILePcFT87MFjbQYIc4Fg+yotJFKziyUrAacYO0YwPD9TbpgXZEi6qetn
-   LL07rUgA7GnklYtBaKMWnxqTwS6qYObMukWvLAoZC40X5hn6ILHjWpRUN
-   NrLhYjwzj/R3z+UETYUi1AofOw30yZ+nx7Z9EELnvj6/y9qPocC0BAxLh
-   bKEOZhmFT/91CETFiGUK67V3Iut2gdgELMzeGy/l75ulO9q3p1L1gXgHb
-   NIUfUaDpvtiayhtpFDctcRdzsJzdaPnByTc7GSwLqN9SCtjiryB3astne
-   WXe0cE0H3xzgP/FsPJWhJeT43PBg5XS384X8/aOMBxcE/zJy6a9R5Hq50
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="360526721"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="360526721"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:21:43 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="675668300"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:21:42 -0700
-Message-ID: <030ca8bc8258a4edc1aef23b077f9b4463b24639.camel@linux.intel.com>
-Subject: Re: [PATCH linux-next] tools: power: x86: intel_pstate_tracer:
- intel_pstate_tracer: Replace the relative path of the called grep with an
- absolute path
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Doug Smythies <dsmythies@telus.net>, cgel.zte@gmail.com
-Cc:     linux-kernel@vger.kernel.org, xu.panda@zte.com.cn,
-        ray.huang@amd.com, rafael.j.wysocki@intel.com, Jinzhou.Su@amd.com,
-        Zeal Robot <zealci@zte.com.cn>,
-        zhanglin <zhang.lin16@zte.com.cn>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Tue, 06 Sep 2022 05:21:42 -0700
-In-Reply-To: <CAAYoRsUFF=ebThB3gKUw2G1G2HO_HmBXvd-+XiwYtiKpJ41zqw@mail.gmail.com>
-References: <20220829125447.268741-1-xu.panda@zte.com.cn>
-         <CAAYoRsUFF=ebThB3gKUw2G1G2HO_HmBXvd-+XiwYtiKpJ41zqw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Tue, 6 Sep 2022 08:27:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCEA7FFAA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:23:12 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4A2E41F9EC;
+        Tue,  6 Sep 2022 12:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662466953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w88jYG1SC1kfMGHujv3S+yCLAncS2pWi2X4JA71CFvA=;
+        b=s/v3dkLmpeqdj8gQ1oinBEv5gZjP5azJBEJvEJZFqeERhSdP4JmFPOchIaW17o5YUx8y4y
+        BzO2Gi79ulwqQPJL3/alXByvVffAAGGQke6AWq3kVWFyv1rN2k0dJjgdk7V6e/FxlahL9b
+        Jf/SPP6gV53eQTxDxr+LWoJkYuIylRk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662466953;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w88jYG1SC1kfMGHujv3S+yCLAncS2pWi2X4JA71CFvA=;
+        b=LP4P4l4OMcApUJu9CsT6veq/r7BaW10KA+gXi3FDWGpCOCyTY2xc46TOZVLCAJEPRlZtg8
+        Il2GzM5ks7URVXBg==
+Received: from suse.de (mgorman.tcp.ovpn2.nue.suse.de [10.163.32.246])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 74B0C2C141;
+        Tue,  6 Sep 2022 12:22:30 +0000 (UTC)
+Date:   Tue, 6 Sep 2022 13:22:26 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     mawupeng <mawupeng1@huawei.com>
+Cc:     akpm@linux-foundation.org, david@redhat.com, ying.huang@intel.com,
+        hannes@cmpxchg.org, corbet@lwn.net, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com,
+        songmuchun@bytedance.com, mike.kravetz@oracle.com,
+        osalvador@suse.de, surenb@google.com, rppt@kernel.org,
+        charante@codeaurora.org, jsavitz@redhat.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH -next v3 1/2] mm: Cap zone movable's min wmark to small
+ value
+Message-ID: <20220906122226.ro7coxxiatvctyth@suse.de>
+References: <20220905032858.1462927-1-mawupeng1@huawei.com>
+ <20220905032858.1462927-2-mawupeng1@huawei.com>
+ <20220905092619.2533krnnx632hswc@suse.de>
+ <c69a00c8-99d5-7a55-0861-1559764bd26c@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <c69a00c8-99d5-7a55-0861-1559764bd26c@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,67 +70,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-09-04 at 15:23 -0700, Doug Smythies wrote:
-> Note: Modifying the address list a little with this reply.
+On Tue, Sep 06, 2022 at 06:12:23PM +0800, mawupeng wrote:
+> > I think there is a misunderstanding why the higher zones have a watermark
+> > and why it might be large.
+> > 
+> > It's not about a __GFP_HIGH or PF_MEMALLOC allocations because it's known
+> > that few of those allocations may be movable. It's because high memory
+> > allocations indirectly pin pages in lower zones. User-mapped memory allocated
+> > from ZONE_MOVABLE still needs page table pages allocated from a lower zone
+> > so there is a ratio between the size of ZONE_MOVABLE and lower zones
+> > that limits the total amount of memory that can be allocated. Similarly,
+> > file backed pages that may be allocated from ZONE_MOVABLE still requires
+> > pages from lower memory for the inode and other associated kernel
+> > objects that are allocated from lower zones.
+> > 
+> > The intent behind the higher zones having a large min watermark is so
+> > that kswapd reclaims pages from there first to *potentially* release
+> > pages from lower memory. By capping pages_min for zone_movable, there is
+> > the potential for lower memory pressure to be higher and to reach a point
+> > where a ZONE_MOVABLE page cannot be allocated simply because there isn't
+> > enough low memory available. Once the lower zones are all unreclaimable
+> > (e.g. page table pages or the movable pages are not been reclaimed to free
+> > the associated kernel structures), the system goes OOM.
+> 
+> This i do agree with you, lower zone is actually "more important" than the
+> higher one.
 > 
 
-Subject can be "Use absolute path for grep"
+Very often yes.
 
-> On Mon, Aug 29, 2022 at 5:55 AM <cgel.zte@gmail.com> wrote:
-> > 
-> > From: xupanda <xu.panda@zte.com.cn>
-> > 
-> > Using absolute paths when invoking grep can lead to serious
-> > security
-> > issues. 
-I think you mean 
-"Not using absolute path when invoking grep can lead to serious
-security issues"
-
-Thanks,
-Srinivas
-
-> > A malicious operator may create a new file named grep in the
-> > PATH before the real grep file. When the program executes and calls
-> > grep, the fake grep file will be executed, so that the malicious
-> > operator can execute arbitrary code or even obtain root privileges.
-> > Using absolute paths when calling grep avoids this problem.
-> > 
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: xupanda <xu.panda@zte.com.cn>
-> > Reviewed-by: zhanglin <zhang.lin16@zte.com.cn>
+> But higher min watermark for zone movable will not work since no memory
+> allocation can use this reserve memory below min. Memory allocation
+> with specify watermark modifier(__GFP_ATOMIC ,__GFP_HIGH ...) can use this
+> in slowpath, however the standard movable memory allocation
+> (gfp flag: GFP_HIGHUSER_MOVABLE) does not contain this.
 > 
-> Acked-by: Doug Smythies <dsmythies@telus.net>
+
+Then a more appropriate solution may be to alter how the gap between min
+and low is calculated. That gap determines when kswapd is active but
+allocations are still allowed.
+
+> Second, lowmem_reserve_ratio is used to "reserve" memory for lower zone.
+> And the second patch introduce per zone watermark_scale_factor to boost
+> normal/movable zone's watermark which can trigger early kswapd for zone
+> movable.
 > 
-> > 
-> > ---
-> >  tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 4 ++-
-> > -
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git
-> > a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > index b46e9eb8f5aa..d6fae6e51d30 100755
-> > --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> > @@ -348,8 +348,8 @@ def split_csv(current_max_cpu, cpu_mask):
-> >      if os.path.exists('cpu.csv'):
-> >          for index in range(0, current_max_cpu + 1):
-> >              if cpu_mask[int(index)] != 0:
-> > -                os.system('grep -m 1 common_cpu cpu.csv >
-> > cpu{:0>3}.csv'.format(index))
-> > -                os.system('grep CPU_{:0>3} cpu.csv >>
-> > cpu{:0>3}.csv'.format(index, index))
-> > +                os.system('/usr/bin/grep -m 1 common_cpu cpu.csv >
-> > cpu{:0>3}.csv'.format(index))
-> > +                os.system('/usr/bin/grep CPU_{:0>3} cpu.csv >>
-> > cpu{:0>3}.csv'.format(index, index))
-> > 
-> >  def fix_ownership(path):
-> >      """Change the owner of the file to SUDO_UID, if required"""
-> > --
-> > 2.25.1
-> > 
 
+The problem with the tunable is that this patch introduces a potentially
+seriously problem that must then be corrected by a system administrator and
+it'll be non-obvious what the root of the problem is or the solution. For
+some users, they will only be able to determine is that OOM triggers
+when there is plenty of free memory or kswapd is consuming a lot more
+CPU than expected. They will not necessarily be able to determine that
+watermark_scale_factor is the solution.
 
+> > 
+> > It's possible that there are safe adjustments that could be made that
+> > would detect when there is no choice except to reclaim zone reclaimable
+> > but it would be tricky and it's not this patch. This patch changelog states
+> > 
+> > 	However zone movable will get its min share in
+> > 	__setup_per_zone_wmarks() which does not make any sense.
+> > 
+> > It makes sense, higher zones allocations indirectly pin pages in lower
+> > zones and there is a bias in reclaim to free the higher zone pages first
+> > on the *possibility* that lower zone pages get indirectly released later.
+> > 
+> 
+> In our Test vm with 16G of mirrored memory(normal zone) and 256 of normal
+> momory(Movable zone), the min share for normal zone is too few since the
+> size of min watermark is calc by zone dma/normal while this will be shared
+> by zones(include zone movable) based on managed pages.
+> 
+> Node 0, zone      DMA
+>         min      39
+>         low      743
+>         high     1447
+> Node 0, zone   Normal
+>         min      180
+>         low      3372
+>         high     6564
+> Node 1, zone  Movable
+>         min      3728
+>         low      69788
+>         high     135848
+
+The gap between min and low is massive so either adjust how that gap is
+calculated or to avoid side-effects for other users, consider special
+casing the gap for ZONE_MOVABLE with a comment explaining why it is
+treated differently. To mitigate the risk further, it could be further
+special cased to only apply when there is a massive ratio between
+ALL_ZONES_EXCEPT_MOVABLE:ZONE_MOVABLE. Document in the changelog the
+potential downside of more lowmem potentially getting pinned by MOVABLE
+allocations leading to excessive kswapd activity or premature OOM.
+
+-- 
+Mel Gorman
+SUSE Labs

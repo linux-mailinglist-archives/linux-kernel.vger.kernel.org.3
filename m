@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8165AEB46
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31635AEB3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240544AbiIFN5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S240075AbiIFN4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240214AbiIFNyg (ORCPT
+        with ESMTP id S239836AbiIFNyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:54:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7067C1A4;
-        Tue,  6 Sep 2022 06:41:25 -0700 (PDT)
+        Tue, 6 Sep 2022 09:54:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6ECD804A2;
+        Tue,  6 Sep 2022 06:41:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 820C0B818C2;
-        Tue,  6 Sep 2022 13:41:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3349C433C1;
-        Tue,  6 Sep 2022 13:41:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 786DE614C9;
+        Tue,  6 Sep 2022 13:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85019C433D6;
+        Tue,  6 Sep 2022 13:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471677;
-        bh=1StxdWEfLHHT7B0TPQARbP42UKuJAzjduxckLtCTBu4=;
+        s=korg; t=1662471665;
+        bh=hu6botTHiQm8Tl+D3CgsImgm+NidKmwEjsE9sSec0lo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RmVwb5TAyIYPtTzIIB7BNljlUTg4s6mJ+qmg12hhZF28zrhaQhHK7qMmdFR6UF32e
-         PWdcW8PIwWF5pFyoyynXuF6aoMclRAdyVwOL7v+sz36rM79/gFKsDez0cmSh2GAaTH
-         Zu3EHQBkCn9sEXEb6Im7ZzTVj/3MnD5UfNq1QgF4=
+        b=U3G9xZ63km0sebwUu5G+HNxBA0+uv/f5lZbXkC1t9ihWU5r1Asno/CThA1kyz+us+
+         uKYiU9YMP+WnC1mUQaUnB+3CYSpQfKwCy6XHGsQgzsOkbz6w52ClxXVI+V9OhBGWVe
+         hTPyCr/3HG5FN+huAmTIkptxXI5Mncj4hi9hO04M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Diego Santa Cruz <Diego.SantaCruz@spinetix.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [PATCH 5.15 098/107] drm/i915/glk: ECS Liva Q2 needs GLK HDMI port timing quirk
-Date:   Tue,  6 Sep 2022 15:31:19 +0200
-Message-Id: <20220906132825.990362449@linuxfoundation.org>
+        stable@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 5.15 105/107] usb: dwc3: disable USB core PHY management
+Date:   Tue,  6 Sep 2022 15:31:26 +0200
+Message-Id: <20220906132826.312588809@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
 References: <20220906132821.713989422@linuxfoundation.org>
@@ -58,41 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-commit 919bef7a106ade2bda73681bbc2f3678198f44fc upstream.
+commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
 
-The quirk added in upstream commit 90c3e2198777 ("drm/i915/glk: Add
-Quirk for GLK NUC HDMI port issues.") is also required on the ECS Liva
-Q2.
+The dwc3 driver manages its PHYs itself so the USB core PHY management
+needs to be disabled.
 
-Note: Would be nicer to figure out the extra delay required for the
-retimer without quirks, however don't know how to check for that.
+Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
+host: xhci-plat: add platform data support") and f768e718911e ("usb:
+host: xhci-plat: add priv quirk for skip PHY initialization") to
+propagate the setting for now.
 
-Cc: stable@vger.kernel.org
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/1326
-Signed-off-by: Diego Santa Cruz <Diego.SantaCruz@spinetix.com>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220616124137.3184371-1-jani.nikula@intel.com
-(cherry picked from commit 08e9505fa8f9aa00072a47b6f234d89b6b27a89c)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Fixes: 4e88d4c08301 ("usb: add a flag to skip PHY initialization to struct usb_hcd")
+Fixes: 178a0bce05cb ("usb: core: hcd: integrate the PHY wrapper into the HCD core")
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
+Cc: stable <stable@kernel.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220825131836.19769-1-johan+linaro@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[ johan: adjust context to 5.15 ]
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/display/intel_quirks.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/dwc3/host.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/drivers/gpu/drm/i915/display/intel_quirks.c
-+++ b/drivers/gpu/drm/i915/display/intel_quirks.c
-@@ -190,6 +190,9 @@ static struct intel_quirk intel_quirks[]
- 	/* ASRock ITX*/
- 	{ 0x3185, 0x1849, 0x2212, quirk_increase_ddi_disabled_time },
- 	{ 0x3184, 0x1849, 0x2212, quirk_increase_ddi_disabled_time },
-+	/* ECS Liva Q2 */
-+	{ 0x3185, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
-+	{ 0x3184, 0x1019, 0xa94d, quirk_increase_ddi_disabled_time },
- };
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -10,8 +10,13 @@
+ #include <linux/acpi.h>
+ #include <linux/platform_device.h>
  
- void intel_init_quirks(struct drm_i915_private *i915)
++#include "../host/xhci-plat.h"
+ #include "core.h"
+ 
++static const struct xhci_plat_priv dwc3_xhci_plat_priv = {
++	.quirks = XHCI_SKIP_PHY_INIT,
++};
++
+ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ {
+ 	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
+@@ -87,6 +92,11 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 		goto err;
+ 	}
+ 
++	ret = platform_device_add_data(xhci, &dwc3_xhci_plat_priv,
++					sizeof(dwc3_xhci_plat_priv));
++	if (ret)
++		goto err;
++
+ 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+ 
+ 	if (dwc->usb3_lpm_capable)
 
 

@@ -2,62 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8630D5AE402
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEA35AE43F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 11:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiIFJVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 05:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S239359AbiIFJ3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 05:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiIFJVF (ORCPT
+        with ESMTP id S239292AbiIFJ30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 05:21:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB965D0C2;
-        Tue,  6 Sep 2022 02:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vy6nhn+svKRWk4UHHjIpjrQPm3rnkDXTTEC9kQv7hsI=; b=m+cdFEpiagnAD0rrm6GsVDWg3B
-        2Rk21UjJ5I47wq+rl9+JefLh4rt5d2c1T78jtRBAsTx5gYUmfEZRipHr8uCSESCeyQClCka0t2xlZ
-        MLSQ9OwhvtSviIC5TGH3xqEkE9Wey1XadKVr7M2HPoSnX0v1pBdnnIErQmZNA5ocZY0A/kjqvWixG
-        pPjyC8sULaMaAERtQZK1Hdvdj3FwcA2qT5w4ZtnSSF2QGKuZnxsfigyGCrcBs94/42/TMXO3Xofj9
-        /p9I+ae4AHtYpM7Cn7zb+IDsUVlSYPqn1uJgUqD0vd3e8qvcosd+IE26idDdnYpEK7sZiYytz6NOy
-        /yamx01g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVUlA-00AGRW-KJ; Tue, 06 Sep 2022 09:20:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B0909300023;
-        Tue,  6 Sep 2022 11:20:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5EA1920239D76; Tue,  6 Sep 2022 11:20:40 +0200 (CEST)
-Date:   Tue, 6 Sep 2022 11:20:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, bigeasy@linutronix.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V3 4/7] riscv: convert to generic entry
-Message-ID: <YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net>
-References: <20220906035423.634617-1-guoren@kernel.org>
- <20220906035423.634617-5-guoren@kernel.org>
+        Tue, 6 Sep 2022 05:29:26 -0400
+X-Greylist: delayed 439 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Sep 2022 02:29:22 PDT
+Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CBD21E;
+        Tue,  6 Sep 2022 02:29:22 -0700 (PDT)
+Received: from mailer.emlix.com (unknown [81.20.119.6])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.emlix.com (Postfix) with ESMTPS id 1B01E5FB05;
+        Tue,  6 Sep 2022 11:22:02 +0200 (CEST)
+From:   Rolf Eike Beer <eb@emlix.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steven Price <steven.price@arm.com>
+Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
+Date:   Tue, 06 Sep 2022 11:21:56 +0200
+Message-ID: <1697463.OzeqPvCt3f@mobilepool36.emlix.com>
+In-Reply-To: <20220906190141.028ea19a@canb.auug.org.au>
+References: <20220906190141.028ea19a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906035423.634617-5-guoren@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: multipart/signed; boundary="nextPart17688512.O1j82dVNQg"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,88 +43,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 11:54:20PM -0400, guoren@kernel.org wrote:
+--nextPart17688512.O1j82dVNQg
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Rolf Eike Beer <eb@emlix.com>
+Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
+Date: Tue, 06 Sep 2022 11:21:56 +0200
+Message-ID: <1697463.OzeqPvCt3f@mobilepool36.emlix.com>
+In-Reply-To: <20220906190141.028ea19a@canb.auug.org.au>
+References: <20220906190141.028ea19a@canb.auug.org.au>
+MIME-Version: 1.0
 
-> +asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
-> +{
-> +	struct pt_regs *old_regs;
-> +	irqentry_state_t state = irqentry_enter(regs);
-> +
-> +	irq_enter_rcu();
-> +	old_regs = set_irq_regs(regs);
-> +	handle_arch_irq(regs);
-> +	set_irq_regs(old_regs);
-> +	irq_exit_rcu();
-> +
-> +	irqentry_exit(regs, state);
-> +}
+Am Dienstag, 6. September 2022, 11:01:41 CEST schrieb Stephen Rothwell:
+> Hi all,
+> 
+> Today's linux-next merge of the mm tree got a conflict in:
+> 
+>   mm/pagewalk.c
+> 
+> between commit:
+> 
+>   8782fb61cc84 ("mm: pagewalk: Fix race between unmap and page walker")
+> 
+> from Linus' tree and commits:
+> 
+>   fa02fb928200 ("mm: pagewalk: make error checks more obvious")
+>   66c217081bd0 ("mm: pagewalk: allow walk_page_range_novma() without mm")
+> 
+> from the mm tree.
+> 
+> I fixed it up (I think - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-The above is right in that everything that calls irqentry_enter() should
-be noinstr; however all the below instances get it wrong:
+Andrew,
 
->  #define DO_ERROR_INFO(name, signo, code, str)				\
->  asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
->  {									\
-> +	irqentry_state_t state = irqentry_enter(regs);			\
->  	do_trap_error(regs, signo, code, regs->epc, "Oops - " str);	\
-> +	irqentry_exit(regs, state);					\
->  }
->  
->  DO_ERROR_INFO(do_trap_unknown,
-> @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
->  
->  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
->  {
-> +	irqentry_state_t state = irqentry_enter(regs);
->  	if (!handle_misaligned_load(regs))
->  		return;
->  	do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
->  		      "Oops - load address misaligned");
-> +	irqentry_exit(regs, state);
->  }
->  
->  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
->  {
-> +	irqentry_state_t state = irqentry_enter(regs);
->  	if (!handle_misaligned_store(regs))
->  		return;
->  	do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
->  		      "Oops - store (or AMO) address misaligned");
-> +	irqentry_exit(regs, state);
->  }
->  #endif
->  DO_ERROR_INFO(do_trap_store_fault,
-> @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
->  
->  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
->  {
-> +	irqentry_state_t state = irqentry_enter(regs);
-> +
->  #ifdef CONFIG_KPROBES
->  	if (kprobe_single_step_handler(regs))
->  		return;
-> @@ -185,6 +194,8 @@ asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
->  		regs->epc += get_break_insn_length(regs->epc);
->  	else
->  		die(regs, "Kernel BUG");
-> +
-> +	irqentry_exit(regs, state);
->  }
->  NOKPROBE_SYMBOL(do_trap_break);
+please drop all my patches except the following 2 from your queue for now:
 
-> +asmlinkage void do_page_fault(struct pt_regs *regs)
-> +{
-> +	irqentry_state_t state = irqentry_enter(regs);
-> +
-> +	__do_page_fault(regs);
-> +
-> +	irqentry_exit(regs, state);
-> +}
->  NOKPROBE_SYMBOL(do_page_fault);
+-mm: pagewalk: fix documentation of PTE hole handling
+-mm: pagewalk: add api documentation for walk_page_range_novma()
 
-Without noinstr the compiler is free to insert instrumentation (think
-all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-yet ready to run this early in the entry path, for instance it could
-rely on RCU which isn't on yet, or expect lockdep state.
+Some of these patches are clearly outdated now with 
+8782fb61cc848364e1e1599d76d3c9dd58a1cc06 being included. I'll review them in 
+detail eventually and resubmit what is still relevant.
+
+Regards,
+
+Eike
+--nextPart17688512.O1j82dVNQg
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iLMEAAEIAB0WIQQ/Uctzh31xzAxFCLur5FH7Xu2t/AUCYxcRNAAKCRCr5FH7Xu2t
+/IRdA/wOKgkuuUhb8NObay0gGGsA6yE3ewYcmMO3g0KJ2GYonYuqtMvUQetW5KiK
+hxsfkPAn6MdEf2Bxo97798KH9xXi0hL16d04Sxbh2LQAERJvU96Lgnm/AD5X35QD
+ZtE4S6MlVXTTiaZqDRD7M8ABNmJvqf72js+G1f7UNy/bBH5V2w==
+=5lQP
+-----END PGP SIGNATURE-----
+
+--nextPart17688512.O1j82dVNQg--
+
 
 

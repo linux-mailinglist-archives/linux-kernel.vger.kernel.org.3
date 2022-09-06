@@ -2,265 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B41A5AE85A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A598F5AE87B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 14:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbiIFMeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 08:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S239780AbiIFMfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 08:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239482AbiIFMel (ORCPT
+        with ESMTP id S239732AbiIFMfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:34:41 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0ED5F60E0;
-        Tue,  6 Sep 2022 05:34:37 -0700 (PDT)
-Received: from [10.20.42.105] (unknown [10.20.42.105])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx5OFRPhdj8bsSAA--.11067S3;
-        Tue, 06 Sep 2022 20:34:25 +0800 (CST)
-Subject: Re: [PATCH V3 2/2] LoongArch: Remove ARCH_HAS_PHYS_TO_DMA
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     lpieralisi@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        loongarch@lists.linux.dev
-References: <20220830030139.29899-1-lvjianmin@loongson.cn>
- <20220830030139.29899-3-lvjianmin@loongson.cn>
- <CAAhV-H4P=MsH2B29U+x4TWJpN4s_2ZYLsX5_rfaapPxx9+UmPQ@mail.gmail.com>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <36d0a38f-86ce-9a7d-8b83-aa7342146ebb@loongson.cn>
-Date:   Tue, 6 Sep 2022 20:34:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 6 Sep 2022 08:35:17 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2854A19297
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 05:35:15 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id x5so7824567qtv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 05:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=FZksdU12pLfzW5mzHMGsEGTK3wlFdOKHCYK4iAsjsiI=;
+        b=lZa0cs4iGUNUwFXW7UI48KvoLL5Oa1UA5SyT1ntEro6NGKZyGY/8QFxniXnRptRjy8
+         vhWHeju2wgBEnjzIpdJxpC59cvyiqhPN4e1qyvW05L6fxwSPCge8o8zMOgpRoOiDIUgX
+         llf1tyt+1aLHRF4kMemLGVHdIrf/TgFwCwlemSx3zWDCabKHtpmkKmsZOf+/MPRs4ndd
+         o7KVqleidylkjaOP+pDWY8FUUyY8cc99ONrGjXOtp93iG/bGMAyfuAe8WerGpp/zXN6u
+         oDYdNx4P/WSObJ5W5Dbkb/rVeHeTZWRr8zyoKd8pgfKyE5gZewhuKp6CtucEfhh8D4j8
+         7Yhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=FZksdU12pLfzW5mzHMGsEGTK3wlFdOKHCYK4iAsjsiI=;
+        b=HLXT2ceLbCuWGF8P76grf0oYqdFVnbLH5e1ErXcetPLOGGBOLwvLcKp1huMJWgKVtp
+         PhkfBVxISJ0+5DkehZoczSSatZ8arqNWDyeTN+jIxT6zt3VQWal7IvtuqISEmNY+WF2L
+         8MQHf23E71hgk2WF4NOYHcyQqy1Xu+ZrNOJHs6qlhpeSNphKJw4aJ52dU7TXhoEeuuSG
+         pIuKhyynynO9Fp95xnLFdgIiIT3kt8WzIf+6VjJXYVgO4/I2K2uL1gvAMghVx+ReKUhR
+         3g92bUJhnC6z+YyOspXr5rvXjPoueNNULWtGLDQp/9gNwP9H3m+MQEMkLe3DBXqlvI6y
+         iUWw==
+X-Gm-Message-State: ACgBeo2gpQdYO3L8fQioSucGjneOWRnFBzb6tDkXy8t19sHx3rnDwZRr
+        jzSjBDfWZbsXgjwLFNo+P/1QXeaV65pSePBGnK4=
+X-Google-Smtp-Source: AA6agR4dko+tRdnO4TKFH72LosJ8iXjC4v0hVWtxl/3ACep2ViT8nWBRfvpUzBHN6ulm0i0spR7CR5QJCjW6sV0yKkk=
+X-Received: by 2002:a05:622a:1cc:b0:343:6f2c:eb1b with SMTP id
+ t12-20020a05622a01cc00b003436f2ceb1bmr44442429qtw.550.1662467713972; Tue, 06
+ Sep 2022 05:35:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4P=MsH2B29U+x4TWJpN4s_2ZYLsX5_rfaapPxx9+UmPQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx5OFRPhdj8bsSAA--.11067S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFW7Ww4xtFy7uF4ftr1DZFb_yoW7uw4xpF
-        9rCFs8Gr4xGrn7WrWvyw1rZFn8X34vka42qFWxK34kCrnF9r1DXr1kArykuFyYyFZrKF4I
-        vF95WFyavF4UC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
-        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4
-        x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI
-        1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r
-        yrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220904193020.65556-1-casionwoo@gmail.com> <696a1a53-87b5-7517-3c05-82217c8eb190@arm.com>
+In-Reply-To: <696a1a53-87b5-7517-3c05-82217c8eb190@arm.com>
+From:   Jeungwoo Yoo <casionwoo@gmail.com>
+Date:   Tue, 6 Sep 2022 14:35:02 +0200
+Message-ID: <CAMguKxboV7iVz6J77cZZcrKv-q6QprO1THE-gnXv-ourf1GKoA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: Remove d-cache clean operation at preserve_boot_args().
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Sangyun Kim <sangyun.kim@snu.ac.kr>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Huacai
+2022=EB=85=84 9=EC=9B=94 5=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 12:47, R=
+obin Murphy <robin.murphy@arm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On 2022-09-04 20:30, Jeungwoo Yoo wrote:
+> > Kernel expects only the clean operation as a booting requirement in
+> > arm64 architecture [1], therefore, the kernel has to invalidate any
+> > cache entries after accessing a memory in the booting time (before
+> > enabling D-cache and MMU) not to overwrite the memory with the stale
+> > cache entry.
+> >
+> > Same applied in preserve_boot_args(), kernel saves boot arguments into
+> > 'boot_args' and invalidates the corresponding cache entry. However,
+> > according to the 'dcache_inval_poc()' implementation, the cache entry
+> > will be not only invalidated but also cleaned. That means if there is a
+> > stale cache entry corresponding to the address of the 'boot_args', the
+> > saved boot arguments in 'boot_args' will be overwritten by the stale
+> > cache entry. Therefore, it uses 'dv ivac' instruction directly instead
+> > of calling 'dcache_inval_poc()'.
+>
+> You've already said in the first paragraph that we expect these
+> locations to be clean. Clean lines are not written back, so your
+> reasoning here is spurious. If boot_args has somehow become dirtied such
+> that the clean operation *would* write back to memory, that can only
+> mean one of two things: either the kernel image was not cleaned per the
+> boot protocol, in which case there's every chance that other things will
+> also go wrong elsewhere and there's not much we can do, or the prior
+> stores hit in the cache (either unexpectedly or because the MMU was left
+> on), in which case we almost certainly *would* want writeback here anyway=
+.
 
-Ok, thanks, I'll change title in V4. There is *not* size calculation in
-this patch, so the patch does not need resource_size() as in 
-acpi_dma_get_range().
+Yes, you are right. I misunderstood that the "clean operation" will
+propagate the content from the d-cache to the memory always.
+However, as the cache line is already cleaned by the bootloader and
+not modified in the d-cache, the "clean operation" in
+"dcache_inval_poc()" will be ignored.
+Thank you for your correction.
 
-On 2022/9/5 下午10:42, Huacai Chen wrote:
-> Hi, Jianmin,
-> 
-> The title can be "LoongArch: Use acpi_arch_dma_setup() and remove
-> ARCH_HAS_PHYS_TO_DMA", and please use resource_size() as arm64.
-> 
-> Acked-by: Huacai Chen <chenhuacai@loongson.cn>
-> 
-> 
-> Huacai
-> 
-> 
-> On Tue, Aug 30, 2022 at 11:01 AM Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->> Use _DMA defined in ACPI spec for translation between
->> DMA address and CPU address, and implement acpi_arch_dma_setup
->> for initializing dev->dma_range_map, where acpi_dma_get_range
->> is called for parsing _DMA.
->>
->> e.g.
->> If we have two dma ranges:
->> cpu address      dma address    size         offset
->> 0x200080000000   0x2080000000   0x400000000  0x1fe000000000
->> 0x400080000000   0x4080000000   0x400000000  0x3fc000000000
->>
->> _DMA for pci devices should be declared in host bridge as
->> flowing:
->>
->> Name (_DMA, ResourceTemplate() {
->>          QWordMemory (ResourceProducer,
->>              PosDecode,
->>              MinFixed,
->>              MaxFixed,
->>              NonCacheable,
->>              ReadWrite,
->>              0x0,
->>              0x4080000000,
->>              0x447fffffff,
->>              0x3fc000000000,
->>              0x400000000,
->>              ,
->>              ,
->>              )
->>
->>          QWordMemory (ResourceProducer,
->>              PosDecode,
->>              MinFixed,
->>              MaxFixed,
->>              NonCacheable,
->>              ReadWrite,
->>              0x0,
->>              0x2080000000,
->>              0x247fffffff,
->>              0x1fe000000000,
->>              0x400000000,
->>              ,
->>              ,
->>              )
->>      })
->>
->> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
->> ---
->>   arch/loongarch/Kconfig        |  1 -
->>   arch/loongarch/kernel/dma.c   | 52 +++++++++++++++++--------------------------
->>   arch/loongarch/kernel/setup.c |  2 +-
->>   include/linux/acpi.h          |  9 +++++---
->>   4 files changed, 28 insertions(+), 36 deletions(-)
->>
->> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->> index b57daee..9dedcf9 100644
->> --- a/arch/loongarch/Kconfig
->> +++ b/arch/loongarch/Kconfig
->> @@ -7,7 +7,6 @@ config LOONGARCH
->>          select ARCH_ENABLE_MEMORY_HOTPLUG
->>          select ARCH_ENABLE_MEMORY_HOTREMOVE
->>          select ARCH_HAS_ACPI_TABLE_UPGRADE      if ACPI
->> -       select ARCH_HAS_PHYS_TO_DMA
->>          select ARCH_HAS_PTE_SPECIAL
->>          select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->>          select ARCH_INLINE_READ_LOCK if !PREEMPTION
->> diff --git a/arch/loongarch/kernel/dma.c b/arch/loongarch/kernel/dma.c
->> index 8c9b531..7a9c6a9 100644
->> --- a/arch/loongarch/kernel/dma.c
->> +++ b/arch/loongarch/kernel/dma.c
->> @@ -2,39 +2,29 @@
->>   /*
->>    * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
->>    */
->> -#include <linux/init.h>
->> +#include <linux/acpi.h>
->>   #include <linux/dma-direct.h>
->> -#include <linux/dma-mapping.h>
->> -#include <linux/dma-map-ops.h>
->> -#include <linux/swiotlb.h>
->>
->> -#include <asm/bootinfo.h>
->> -#include <asm/dma.h>
->> -#include <asm/loongson.h>
->> -
->> -/*
->> - * We extract 4bit node id (bit 44~47) from Loongson-3's
->> - * 48bit physical address space and embed it into 40bit.
->> - */
->> -
->> -static int node_id_offset;
->> -
->> -dma_addr_t phys_to_dma(struct device *dev, phys_addr_t paddr)
->> -{
->> -       long nid = (paddr >> 44) & 0xf;
->> -
->> -       return ((nid << 44) ^ paddr) | (nid << node_id_offset);
->> -}
->> -
->> -phys_addr_t dma_to_phys(struct device *dev, dma_addr_t daddr)
->> +void acpi_arch_dma_setup(struct device *dev)
->>   {
->> -       long nid = (daddr >> node_id_offset) & 0xf;
->> +       int ret;
->> +       u64 mask, end = 0;
->> +       const struct bus_dma_region *map = NULL;
->> +
->> +       ret = acpi_dma_get_range(dev, &map);
->> +       if (!ret && map) {
->> +               const struct bus_dma_region *r = map;
->> +
->> +               for (end = 0; r->size; r++) {
->> +                       if (r->dma_start + r->size - 1 > end)
->> +                               end = r->dma_start + r->size - 1;
->> +               }
->> +
->> +               mask = DMA_BIT_MASK(ilog2(end) + 1);
->> +               dev->bus_dma_limit = end;
->> +               dev->dma_range_map = map;
->> +               dev->coherent_dma_mask = min(dev->coherent_dma_mask, mask);
->> +               *dev->dma_mask = min(*dev->dma_mask, mask);
->> +       }
->>
->> -       return ((nid << node_id_offset) ^ daddr) | (nid << 44);
->> -}
->> -
->> -void __init plat_swiotlb_setup(void)
->> -{
->> -       swiotlb_init(true, SWIOTLB_VERBOSE);
->> -       node_id_offset = ((readl(LS7A_DMA_CFG) & LS7A_DMA_NODE_MASK) >> LS7A_DMA_NODE_SHF) + 36;
->>   }
->> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
->> index c74860b..974f085 100644
->> --- a/arch/loongarch/kernel/setup.c
->> +++ b/arch/loongarch/kernel/setup.c
->> @@ -247,7 +247,7 @@ static void __init arch_mem_init(char **cmdline_p)
->>          sparse_init();
->>          memblock_set_bottom_up(true);
->>
->> -       plat_swiotlb_setup();
->> +       swiotlb_init(true, SWIOTLB_VERBOSE);
->>
->>          dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
->>
->> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
->> index 34e0545..33977b87 100644
->> --- a/include/linux/acpi.h
->> +++ b/include/linux/acpi.h
->> @@ -278,14 +278,17 @@ int acpi_table_parse_madt(enum acpi_madt_type id,
->>
->>   void acpi_numa_x2apic_affinity_init(struct acpi_srat_x2apic_cpu_affinity *pa);
->>
->> +#if defined(CONFIG_ARM64) || defined(CONFIG_LOONGARCH)
->> +void acpi_arch_dma_setup(struct device *dev);
->> +#else
->> +static inline void acpi_arch_dma_setup(struct device *dev) { }
->> +#endif
->> +
->>   #ifdef CONFIG_ARM64
->>   void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
->> -void acpi_arch_dma_setup(struct device *dev);
->>   #else
->>   static inline void
->>   acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
->> -static inline void
->> -acpi_arch_dma_setup(struct device *dev) { }
->>   #endif
->>
->>   int acpi_numa_memory_affinity_init (struct acpi_srat_mem_affinity *ma);
->> --
->> 1.8.3.1
->>
->>
+>
+> > The address of the 'boot_args' is aligned to the cache line size and th=
+e
+> > size of 'boot_args' is 32 byte (8 byte * 4), therefore, a single
+> > invalidate operation is enough to invalidate the cache line belonging t=
+o
+> > the 'boot_args'.
+>
+> The architecture allows the CWG to be as small as 2 words, so this is
+> clearly untrue.
+>
+> Thanks,
+> Robin.
+>
+> > Sometimes clean operation is required not to lose any contents in the
+> > cache entry but not the target of the invalidation. However, in this
+> > case, there is no valid cache entries at a very early booting stage and
+> > preserve_boot_args() is not called by any other (non-primary) CPUs.
+> > Therefore, this invalidation operation will not introduce any problems.
+> >
+> > [1] in Documentation/arm64/booting.rst:
+> > The address range corresponding to the loaded kernel image must be
+> > cleaned to the PoC.
+> >
+> > Co-developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> > Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> >
+> > Co-developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+> > Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+> >
+> > Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
+> > ---
+> >   arch/arm64/kernel/head.S | 4 +---
+> >   1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+> > index cefe6a73ee54..916227666b07 100644
+> > --- a/arch/arm64/kernel/head.S
+> > +++ b/arch/arm64/kernel/head.S
+> > @@ -121,9 +121,7 @@ SYM_CODE_START_LOCAL(preserve_boot_args)
+> >
+> >       dmb     sy                              // needed before dc ivac =
+with
+> >                                               // MMU off
+> > -
+> > -     add     x1, x0, #0x20                   // 4 x 8 bytes
+> > -     b       dcache_inval_poc                // tail call
+> > +     dc      ivac, x0                        // Invalidate potentially=
+ stale cache line
+> >   SYM_CODE_END(preserve_boot_args)
+> >
+> >   SYM_FUNC_START_LOCAL(clear_page_tables)
 
+
+
+--=20
+Best Regards,
+Jeungwoo Yoo

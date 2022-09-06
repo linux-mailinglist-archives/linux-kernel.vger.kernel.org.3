@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9BC5AE6E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEA65AE6F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbiIFLuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S233300AbiIFLyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiIFLuS (ORCPT
+        with ESMTP id S232951AbiIFLyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:50:18 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4CC248DD;
-        Tue,  6 Sep 2022 04:50:15 -0700 (PDT)
+        Tue, 6 Sep 2022 07:54:45 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2CF13CF9;
+        Tue,  6 Sep 2022 04:54:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662465016; x=1694001016;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kFyXJulK0j1hcoGy8usN4XdbvXPR01T+6NsIRoXpSkA=;
-  b=cwi65sTDpYvXHnrNHPhtztU5DhWjAOm31epP+EMDUea7x3NFHXehS20g
-   2HZWTnY4kEgeT2Dyd4VPoNvQquBE1ePeWXISeFuA4svGMYrPibDVayiQl
-   U7nX5+PXZLPbOm8N4phPgJy0Fu80UtsZimOqTjK/Jmu3ttkzzoKaZNSHL
-   PYBQMPOMqpb8pZJGKgKfjsSJR7mRkOvU4CNplsZS/hO+AJ+px96L0RvIo
-   9drJx6kGLFx7BYI+3Chdcnh8/vtj35iPADjk5OtUkk1wP0Klq1+vlYpcN
-   vng4oZ6/l3PUFjvHvsc0ecJBnx5z4BAG4v718aMr11iZDC16Art8aZl+T
+  t=1662465283; x=1694001283;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BglTHeEuNNVFp8jxILPr2zH0JGMkuFYyH3BFt9cHmlI=;
+  b=RoSdIW/1EHiXQHRVaZX7wffeiAzmqb147I06facMsyeeQ16fejCXdr4R
+   veIzdWcJ/GYzaUZN4NCPXcLT2aZXqaWqhyNNTQqriJi3ChWVPftILmVJS
+   Vq9q0pzlcniePqoyv2IIRKbLCuYk43LEHAmM0Z4jgyUM4SDedjISPvZE/
+   +c3sVZshgojmvaoKY76SVyyX8XYemixWcoJYw72XbEMwuRGi2JcXlApfR
+   IEEimj3RPAcxd9mDD5ezVa/ZT9PcGViUjbOayehZcSUNBEWfBdodan98b
+   I6KRQIy/WlDwNfeDYlN/uXHtkrYpXAEOpvOlWtGerWnInclqZkAJZxFXf
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="296573082"
+X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="295306819"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="296573082"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:50:15 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="295306819"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:54:41 -0700
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="756341259"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 04:50:10 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id BF303101; Tue,  6 Sep 2022 14:50:25 +0300 (EEST)
+   d="scan'208";a="565065780"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 04:54:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVX7x-0096Bf-0b;
+        Tue, 06 Sep 2022 14:52:25 +0300
+Date:   Tue, 6 Sep 2022 14:52:24 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] pinctrl: microchip-sgpio: Correct the fwnode_irq_get() return value check
-Date:   Tue,  6 Sep 2022 14:50:21 +0300
-Message-Id: <20220906115021.8661-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: meson: Switch to use fwnode instead of
+ of_node
+Message-ID: <Yxc0eAsFDA9AMHeI@smile.fi.intel.com>
+References: <20220905180034.73132-1-andriy.shevchenko@linux.intel.com>
+ <b0d45e18-c92d-d187-2eac-851d975fbb7e@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0d45e18-c92d-d187-2eac-851d975fbb7e@baylibre.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,34 +71,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fwnode_irq_get() may return all possible signed values, such as Linux
-error code. Fix the code to handle this properly.
+On Tue, Sep 06, 2022 at 11:07:07AM +0200, Neil Armstrong wrote:
+> On 05/09/2022 20:00, Andy Shevchenko wrote:
+> > GPIO library now accepts fwnode as a firmware node, so
+> > switch the driver to use it.
 
-Fixes: be2dc859abd4 ("pinctrl: pinctrl-microchip-sgpio: Add irq support (for sparx5)")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Michael Walle <michael@walle.cc>
----
-v2: added tag (Michael), fixed typo in the Subject
- drivers/pinctrl/pinctrl-microchip-sgpio.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-index 6f55bf7d5e05..0771b743a940 100644
---- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
-+++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-@@ -864,9 +864,10 @@ static int microchip_sgpio_register_bank(struct device *dev,
- 	gc->can_sleep		= !bank->is_input;
- 
- 	if (bank->is_input && priv->properties->flags & SGPIO_FLAGS_HAS_IRQ) {
--		int irq = fwnode_irq_get(fwnode, 0);
-+		int irq;
- 
--		if (irq) {
-+		irq = fwnode_irq_get(fwnode, 0);
-+		if (irq > 0) {
- 			struct gpio_irq_chip *girq = &gc->irq;
- 
- 			gpio_irq_chip_set_chip(girq, &microchip_sgpio_irqchip);
+> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+
+Thanks!
+
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 

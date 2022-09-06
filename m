@@ -2,114 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97055AF536
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893DB5AF768
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiIFUBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 16:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S229778AbiIFVx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiIFUB1 (ORCPT
+        with ESMTP id S229536AbiIFVxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:01:27 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FB11658D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:57:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b16so16591684edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=o3FJxGbvo/djmf1/vSZvVYYgwgJJ+geM2X/sdQK6HR0=;
-        b=AvqcZcCnPk5VAPbLzem17L6T87zN2kazPPScK9Y9l1+t8COyNRphx0SVnhuE3Lz0pA
-         vnV2hNbLPc0OAMgbZQXglLnhmiDxG+gjKcEcEZmnME3Cuub10N0L07UIvsZrToRrTqVt
-         4EptUWVyAWuDEKXYZnFZ/ypnjqPuZ9WRJIvh42R8jC+pXis03VCH0xFPP5sz8jpvxgXd
-         nAeMaiwqB2aZHBR85LIrsuH60VPqX5z3FS8uCdVWBGXrvn6CFpUUB3+ruOyellRD4Lvo
-         w5qlFJMLPkAujnmi4/GLTmgc+1JJLn+hwwNSNuhh3+RXn4RQIVshe0qdj1kqGbooZvAX
-         BqGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=o3FJxGbvo/djmf1/vSZvVYYgwgJJ+geM2X/sdQK6HR0=;
-        b=m0f0Nb42Uo74dWV1C+3ICHydaKBLZ6HEd3Ufch/I7lAw0FLjWxNCo86SqECptcyJCc
-         9x/RP3q3P0ZVuJyrefYDem+h542ITn+I1EcbBAtl5kOUgOOa/C8kSAiV7ui8fNiLnwJK
-         yB9yz3ea2QtjWHUIlRpfUp68rieiIxtHLMeOW1XvLuzUOOwAoOtYWXKRN2rBNKqHs0UD
-         4DWr6BWtsbag3LhtQzOL00okOaqSgSFV9o27lmfyEa1CzuaZMSrKFHtijvf/ajKgcJrp
-         W24fDVmpyf47oKonQFNAS01TIsqA7osBmK7XR7A9Um3qi4xPekK61UT28KZVk2JXqDWz
-         8njA==
-X-Gm-Message-State: ACgBeo1bKccu8+K19cNupkc9rcTpdJLOcAmB9gnT6PKvaWlv4flwH4p4
-        eLC8k3quO62b0hQ0ALlDv84=
-X-Google-Smtp-Source: AA6agR5hdGoggyr7fRQYHp8N7yV1d5NR3lZZ6rZ6eA78jVDZ/BEMIc5kqWx5sFYkBgBmhAhjqOW0YA==
-X-Received: by 2002:a05:6402:2b88:b0:43a:6c58:6c64 with SMTP id fj8-20020a0564022b8800b0043a6c586c64mr204259edb.348.1662494057026;
-        Tue, 06 Sep 2022 12:54:17 -0700 (PDT)
-Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170906264a00b0073cf8e0355fsm6941414ejc.208.2022.09.06.12.54.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 12:54:16 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     maxime@cerno.tech, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        wens@csie.org, samuel@sholland.org,
-        Victor Hassan <victor@allwinnertech.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [RESEND] clocksource: sun4i: add definition of clear interrupt
-Date:   Tue, 06 Sep 2022 21:54:15 +0200
-Message-ID: <2113704.irdbgypaU6@kista>
-In-Reply-To: <20220906052056.43404-1-victor@allwinnertech.com>
-References: <20220906052056.43404-1-victor@allwinnertech.com>
+        Tue, 6 Sep 2022 17:53:55 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC2C985B9;
+        Tue,  6 Sep 2022 14:53:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMfKS3l9sz4xGG;
+        Wed,  7 Sep 2022 07:53:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662501228;
+        bh=P1UZW97JpfiJjJNwh5Z/whP3vo9XvHY8OmNfyz0LgNs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Oz25eLLPtUcfrKiZPZ4zDIBgAHP8fAJHdSZVrCKyTnUrvyK+EV6fVQWxZ2wIdnqlV
+         wLcvrP+FdLpupJ/5Z9Tdu2g1TLu77tJ1cgSXgc/snpD+QyvUN/zYyB+0KVbm4X/r3r
+         sFck5g8IXzn/GHCiyVMkas3Nkyv/maGs70m3UNiX58+MqCeoDb4xvNenqaV3z6ZHTf
+         2JT1shxbPyZsCX3Dfjnbr+F/XIAC6p3U2PMOLhZl2XedyKfu89ZDRWw19yhLoZ98YF
+         KvlZicyDOcpkmsKcqu0VKSg5smlfIJjTu8BxyB/yGxtsXEkai1vmtR6qZ6bfNg7a3V
+         1E1k69kmh4/2w==
+Date:   Wed, 7 Sep 2022 03:31:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the arm64 tree
+Message-ID: <20220907033142.1fe410e2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/6l6AviH5J5QVXm+_yHv5Bmg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 06. september 2022 ob 07:20:56 CEST je Victor Hassan napisal(a):
-> To prevent misunderstanding, use TIMER_IRQ_CLEAR instead of TIMER_IRQ_EN
-> in function sun4i_timer_clear_interrupt.
-> 
-> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
+--Sig_/6l6AviH5J5QVXm+_yHv5Bmg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Hi all,
 
-Best regards,
-Jernej
+Commit
 
-> ---
->  drivers/clocksource/timer-sun4i.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clocksource/timer-sun4i.c
-> b/drivers/clocksource/timer-sun4i.c index 94dc6e42e983..e5a70aa1deb4 100644
-> --- a/drivers/clocksource/timer-sun4i.c
-> +++ b/drivers/clocksource/timer-sun4i.c
-> @@ -26,6 +26,7 @@
->  #define TIMER_IRQ_EN_REG	0x00
->  #define TIMER_IRQ_EN(val)		BIT(val)
->  #define TIMER_IRQ_ST_REG	0x04
-> +#define TIMER_IRQ_CLEAR(val)		BIT(val)
->  #define TIMER_CTL_REG(val)	(0x10 * val + 0x10)
->  #define TIMER_CTL_ENABLE		BIT(0)
->  #define TIMER_CTL_RELOAD		BIT(1)
-> @@ -123,7 +124,7 @@ static int sun4i_clkevt_next_event(unsigned long evt,
-> 
->  static void sun4i_timer_clear_interrupt(void __iomem *base)
->  {
-> -	writel(TIMER_IRQ_EN(0), base + TIMER_IRQ_ST_REG);
-> +	writel(TIMER_IRQ_CLEAR(0), base + TIMER_IRQ_ST_REG);
->  }
-> 
->  static irqreturn_t sun4i_timer_interrupt(int irq, void *dev_id)
-> --
-> 2.29.0
+  000aef672bf2 ("kselftest/arm64: Install signal handlers before output in =
+FP stress tests")
 
+is missing a Signed-off-by from its author.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6l6AviH5J5QVXm+_yHv5Bmg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMXg/8ACgkQAVBC80lX
+0GwjQAf/dappteMw8xgyyIJ265ILHV+qYAdKHBX2FgdfRSxfrC4TH3bFEvl1Y3Q5
+Vayh/D6oCvGGQIzh/BoG1FV83ajYuVAq6aVOgsXdfdu0c6eY4qNit4PX6jhtNAKi
+Jgs5JmBL5Ao+/RpwcNip57798466ekorXRU7f5vOiSDaav+XNbSZEhaaITWrpRsF
+s3ruxO6fCoGxoKccDGL5OCOArsHmM/t+jWL6MLVUEM+iWZuZBilNsjNHqOGpifkQ
+yRP8t5l+wOpIQoZsO/QKVYtVAZGE4IwGYTMgt/vnHGaquccqnK6ApLi7RqHX/BUL
+Xl4Sjklm0u5mc/MyljZBm85sFyNfeA==
+=6GX7
+-----END PGP SIGNATURE-----
+
+--Sig_/6l6AviH5J5QVXm+_yHv5Bmg--

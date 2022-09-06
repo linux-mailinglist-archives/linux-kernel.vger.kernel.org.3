@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A3F5AEA35
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0249A5AEAB3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240817AbiIFNh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S232725AbiIFNqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240668AbiIFNhE (ORCPT
+        with ESMTP id S238916AbiIFNnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:37:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423F5BC02;
-        Tue,  6 Sep 2022 06:34:30 -0700 (PDT)
+        Tue, 6 Sep 2022 09:43:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A59655E;
+        Tue,  6 Sep 2022 06:38:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF900B81636;
-        Tue,  6 Sep 2022 13:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2133AC433D6;
-        Tue,  6 Sep 2022 13:34:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F1D06155F;
+        Tue,  6 Sep 2022 13:36:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92836C433D6;
+        Tue,  6 Sep 2022 13:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662471267;
-        bh=qtB+aJVlpSYbn4x8TBMybS0G9wFa1htqzUS2oOQ3oZE=;
+        s=korg; t=1662471379;
+        bh=wvX/8tER1vYek1vzOBoKyRvWRfxfMD8tTbBrb7D4Zgg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bm0LVSJzJG/OCngkug112e0N7WwHgBscOR3Uj6d2UgxAx7oqujvATocH7GUvyHfUb
-         de2B5V+5I7qn4ll9Lwx8KIxRj80nVOQWSXUKxexlkLiL1xtLtITG8YKxFUEmuxR0L2
-         GtDtQjbpXOwzGdFmMjH/fc26jYa/dRMObjoqY2rY=
+        b=1lr57WwAqCYjPTk7yC8lgHIr99Q4+twN7S4Q8BDpNVg8N9W7kzeFtpE8y4pTLIRwf
+         GqiZp8rbytOza6Ss+zkWCyM5EYWzGN07h7ARxBsN6+XkAt8ck4BgR9s8PP5vmnRM5S
+         x21WzPzq9OfeRYmD+o8THd5PY7sSvy+RfV83wlvs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.10 51/80] xhci: Add grace period after xHC start to prevent premature runtime suspend.
-Date:   Tue,  6 Sep 2022 15:30:48 +0200
-Message-Id: <20220906132819.155465063@linuxfoundation.org>
+        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 52/80] USB: serial: cp210x: add Decagon UCA device id
+Date:   Tue,  6 Sep 2022 15:30:49 +0200
+Message-Id: <20220906132819.205512196@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220906132816.936069583@linuxfoundation.org>
 References: <20220906132816.936069583@linuxfoundation.org>
@@ -54,84 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 33e321586e37b642ad10594b9ef25a613555cd08 upstream.
+commit ceb4038472a4803e7046ed488b03d11551991514 upstream.
 
-After xHC controller is started, either in probe or resume, it can take
-a while before any of the connected usb devices are visible to the roothub
-due to link training.
+Add the device id for Decagon Devices USB Cable Adapter.
 
-It's possible xhci driver loads, sees no acivity and suspends the host
-before the USB device is visible.
-
-In one testcase with a hotplugged xHC controller the host finally detected
-the connected USB device and generated a wake 500ms after host initial
-start.
-
-If hosts didn't suspend the device duringe training it probablty wouldn't
-take up to 500ms to detect it, but looking at specs reveal USB3 link
-training has a couple long timeout values, such as 120ms
-RxDetectQuietTimeout, and 360ms PollingLFPSTimeout.
-
-So Add a 500ms grace period that keeps polling the roothub for 500ms after
-start, preventing runtime suspend until USB devices are detected.
-
+Link: https://lore.kernel.org/r/trinity-819f9db2-d3e1-40e9-a669-9c245817c046-1661523546680@msvc-mesg-web108
 Cc: stable@vger.kernel.org
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220825150840.132216-3-mathias.nyman@linux.intel.com
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci-hub.c |   11 +++++++++++
- drivers/usb/host/xhci.c     |    4 +++-
- drivers/usb/host/xhci.h     |    2 +-
- 3 files changed, 15 insertions(+), 2 deletions(-)
+ drivers/usb/serial/cp210x.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1561,6 +1561,17 @@ int xhci_hub_status_data(struct usb_hcd
- 
- 	status = bus_state->resuming_ports;
- 
-+	/*
-+	 * SS devices are only visible to roothub after link training completes.
-+	 * Keep polling roothubs for a grace period after xHC start
-+	 */
-+	if (xhci->run_graceperiod) {
-+		if (time_before(jiffies, xhci->run_graceperiod))
-+			status = 1;
-+		else
-+			xhci->run_graceperiod = 0;
-+	}
-+
- 	mask = PORT_CSC | PORT_PEC | PORT_OCC | PORT_PLC | PORT_WRC | PORT_CEC;
- 
- 	/* For each port, did anything change?  If so, set that bit in buf. */
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -149,9 +149,11 @@ int xhci_start(struct xhci_hcd *xhci)
- 		xhci_err(xhci, "Host took too long to start, "
- 				"waited %u microseconds.\n",
- 				XHCI_MAX_HALT_USEC);
--	if (!ret)
-+	if (!ret) {
- 		/* clear state flags. Including dying, halted or removing */
- 		xhci->xhc_state = 0;
-+		xhci->run_graceperiod = jiffies + msecs_to_jiffies(500);
-+	}
- 
- 	return ret;
- }
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1816,7 +1816,7 @@ struct xhci_hcd {
- 
- 	/* Host controller watchdog timer structures */
- 	unsigned int		xhc_state;
--
-+	unsigned long		run_graceperiod;
- 	u32			command;
- 	struct s3_save		s3;
- /* Host controller is dying - not responding to commands. "I'm not dead yet!"
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -134,6 +134,7 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(0x10C4, 0x83AA) }, /* Mark-10 Digital Force Gauge */
+ 	{ USB_DEVICE(0x10C4, 0x83D8) }, /* DekTec DTA Plus VHF/UHF Booster/Attenuator */
+ 	{ USB_DEVICE(0x10C4, 0x8411) }, /* Kyocera GPS Module */
++	{ USB_DEVICE(0x10C4, 0x8414) }, /* Decagon USB Cable Adapter */
+ 	{ USB_DEVICE(0x10C4, 0x8418) }, /* IRZ Automation Teleport SG-10 GSM/GPRS Modem */
+ 	{ USB_DEVICE(0x10C4, 0x846E) }, /* BEI USB Sensor Interface (VCP) */
+ 	{ USB_DEVICE(0x10C4, 0x8470) }, /* Juniper Networks BX Series System Console */
 
 

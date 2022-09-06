@@ -2,149 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208395AF3FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 20:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1E05AF52E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiIFS6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 14:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
+        id S230179AbiIFT7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 15:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiIFS5u (ORCPT
+        with ESMTP id S231264AbiIFT6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 14:57:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BD15D119
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 11:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662490667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xFe5nbfa4cPKFz06ph4fehEDhqSnRc9j+k9A8lBvtDk=;
-        b=Y1GmAe6i+OOB0gwNH5h9J4SFYPsNuR82xXYV1SDKkvVSlgWYGlexjn0dAdVpYNM6IWs3Np
-        Jtj1kzFEY36WTuVwrTNemMRkO+FZGTESjVHbuqiaG57+dznYjT2mKbdjxoipZzKmpjiAsm
-        vKsu66Fx4lo7Z1VTYgYsNckKk/VxE0o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-GCkmG9JUNOaNRv2HLWlwVw-1; Tue, 06 Sep 2022 14:57:43 -0400
-X-MC-Unique: GCkmG9JUNOaNRv2HLWlwVw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 6 Sep 2022 15:58:44 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A40F16
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662494114; x=1694030114;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dskIZY0NrVgrM+PxM/nvZ7gE20s9P1sqP9KsU9Rs7BQ=;
+  b=RDq6mE/MDaZZzC3Fwx0JcjDpXQG7lCXdHkvVnDLmsf3UoP8ZexjtZGxS
+   3Y1WA3ueGsxfMCKsAS2RAL3G/3wZxo5xG85T0TpO4UX1XAefW4qFymXpQ
+   TtQ3E/u5iiKPAO+TRCKvJPPEI4XQiUaO2WJqMeJHhMcgwCVA3QpV8f4nf
+   x08gokKIi7+74K/o7VaOTouk/FyMOBmP22az09A8v6DyA8kAO242uc+lR
+   2Xy9xG0SvLAB6BXTk+1mJ4myiJFl41yqVA0+0VdR4rLmu7szD4tv/VXx4
+   NJR6J3hDWslgnWiGlXgs8RvlvvmRdx0NVFZaq35WcCP2Ah4GgWAwFGVH1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="358406144"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="358406144"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 12:52:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="616820492"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Sep 2022 12:52:30 -0700
+Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.44.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 418B62A59541;
-        Tue,  6 Sep 2022 18:57:43 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.32.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3FCB2026D4C;
-        Tue,  6 Sep 2022 18:57:42 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 14:57:41 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        feng xiangjun <fengxj325@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] drivers/base: Fix unsigned comparison to -1 in
- CPUMAP_FILE_MAX_BYTES
-Message-ID: <YxeYJcFVEURPRQu/@lorien.usersys.redhat.com>
-References: <20220906160430.1169837-1-pauld@redhat.com>
- <YxeM8WKek/3gp8Fl@yury-laptop>
+        by linux.intel.com (Postfix) with ESMTPS id 74FEC580890;
+        Tue,  6 Sep 2022 12:52:28 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 20:58:27 +0200
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Juha-Pekka =?UTF-8?B?SGVpa2tpbMOk?= 
+        <juha-pekka.heikkila@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v2 16/39] drm/i915: intel_fb: fix a
+ kernel-doc issue with Sphinx
+Message-ID: <20220906205819.03709faa@maurocar-mobl2>
+In-Reply-To: <YtHeySNYE+B3XJ7w@intel.com>
+References: <cover.1657699522.git.mchehab@kernel.org>
+        <5647d7b6ffe47f53b90342e4ad881d4d4e6b005b.1657699522.git.mchehab@kernel.org>
+        <YtHeySNYE+B3XJ7w@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxeM8WKek/3gp8Fl@yury-laptop>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 11:09:53AM -0700 Yury Norov wrote:
-> On Tue, Sep 06, 2022 at 12:04:30PM -0400, Phil Auld wrote:
-> > As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
-> > This leads to very large file sizes:
+On Fri, 15 Jul 2022 17:40:25 -0400
+Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+
+> On Wed, Jul 13, 2022 at 09:12:04AM +0100, Mauro Carvalho Chehab wrote:
+> > We can't use %foo[<something>] as this produces a bad markup.
+> > Use instead, the emphasis markup directly.
 > > 
-> > topology$ ls -l
-> > total 0
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
-> > -r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
-> > -r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
-> > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
-> > -r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
+> > Fix this issue:
+> > 	Documentation/gpu/i915:136: ./drivers/gpu/drm/i915/display/intel_fb.c:280: WARNING: Inline strong start-string without end-string.
 > > 
-> > Adjust the inequality to catch the case when NR_CPUS is configured
-> > to a small value.
-> > 
-> > Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
-> > Reported-by: feng xiangjun <fengxj325@gmail.com>
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Yury Norov <yury.norov@gmail.com>
-> > Cc: stable@vger.kernel.org
-> > Cc: feng xiangjun <fengxj325@gmail.com>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>  
+> 
+> Just trying to understand as well on why in a few you had chosen ```foo```
+> and here **foo**. why?
+> 
+
+No particular reason. I'll use ``foo`` here too, keeping your reviewed-by.
+
+> anyway, not a blocker:
+> 
+> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+
+
+> 
+> 
+> 
 > > ---
-> >  include/linux/cpumask.h | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
 > > 
-> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > index bd047864c7ac..7b1349612d6d 100644
-> > --- a/include/linux/cpumask.h
-> > +++ b/include/linux/cpumask.h
-> > @@ -1127,9 +1127,10 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
-> >   * cover a worst-case of every other cpu being on one of two nodes for a
-> >   * very large NR_CPUS.
+> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> > See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
+> > 
+> >  drivers/gpu/drm/i915/display/intel_fb.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/display/intel_fb.c b/drivers/gpu/drm/i915/display/intel_fb.c
+> > index b191915ab351..fe72c75a9c79 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_fb.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_fb.c
+> > @@ -276,7 +276,7 @@ lookup_format_info(const struct drm_format_info formats[],
+> >   * @cmd: FB add command structure
 > >   *
-> > - *  Use PAGE_SIZE as a minimum for smaller configurations.
-> > + *  Use PAGE_SIZE as a minimum for smaller configurations while avoiding
-> > + *  unsigned comparison to -1.
+> >   * Returns:
+> > - * Returns the format information for @cmd->pixel_format specific to @cmd->modifier[0],
+> > + * Returns the format information for @cmd->pixel_format specific to **cmd->modifier[0]**,
+> >   * or %NULL if the modifier doesn't override the format.
 > >   */
-> > -#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
-> > +#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32) > PAGE_SIZE + 1) \
-> 
-> Maybe it would be easier to read with less braces and '>=' instead of '>'?
->   #define CPUMAP_FILE_MAX_BYTES \
->         (NR_CPUS * 9 / 32 >= PAGE_SIZE ? NR_CPUS * 9 / 32 - 1 : PAGE_SIZE)
-> 
-> Anyways, this is a good catch. If you think it doesn't worth an
-> update, I can take it in bitmap-for-next as-is.
->
-
-It would work as
-   #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
-   	   			     ? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-
-Since 4097 > PAGE_SIZE and then you'd get PAGE_SIZE anyway. That is we could just
-leave the 1 out of the inequality completely. 
-
-If I recall at least some of the parens are needed to make the compiler happy.
-
-I can resend with the above if you want.  
-
-Cheers,
-Phil
-
-> >  					? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
-> >  #define CPULIST_FILE_MAX_BYTES  (((NR_CPUS * 7)/2 > PAGE_SIZE) ? (NR_CPUS * 7)/2 : PAGE_SIZE)
-> >  
+> >  const struct drm_format_info *
 > > -- 
-> > 2.31.1
-> 
-
--- 
-
+> > 2.36.1
+> >   

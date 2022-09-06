@@ -2,116 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7845AE55C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32A85AE5BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiIFKaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S239689AbiIFKqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbiIFKaR (ORCPT
+        with ESMTP id S239772AbiIFKpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:30:17 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9B428E30;
-        Tue,  6 Sep 2022 03:30:15 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 286AU28L084731;
-        Tue, 6 Sep 2022 05:30:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1662460202;
-        bh=NcoemCXH05TY9ODveI/RTyU7+TLIkOHYkpTRhi9iocQ=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=earOJCEJxSh7heXTUJ1w73TdC+nrjoFIkLqLle32pQAZlBqzgyX8o0AFKeIGjgce9
-         WRGwQ2ccQNkf0OnW4X8s/azozWBi3CzIRvECKslZzNis4x/6HOIpDyAg5QVHFmEkhI
-         Pkq2qcmRyvrE12I6f2oFcF7oKzQH48DHqPdrZxxM=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 286AU1YJ010551
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 6 Sep 2022 05:30:02 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 6 Sep
- 2022 05:30:00 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 6 Sep 2022 05:30:00 -0500
-Received: from [10.24.69.241] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 286ATuM5105135;
-        Tue, 6 Sep 2022 05:29:57 -0500
-Message-ID: <4c34dcba-0a30-164f-49bb-1cf22781a4b2@ti.com>
-Date:   Tue, 6 Sep 2022 15:59:55 +0530
+        Tue, 6 Sep 2022 06:45:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88B8B12A98;
+        Tue,  6 Sep 2022 03:44:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A75BC139F;
+        Tue,  6 Sep 2022 03:43:55 -0700 (PDT)
+Received: from e126387.arm.com (unknown [10.57.15.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 32D983F534;
+        Tue,  6 Sep 2022 03:43:48 -0700 (PDT)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH v8 00/13] perf: test: Add trace data quality tests for CoreSight
+Date:   Tue,  6 Sep 2022 11:30:31 +0100
+Message-Id: <20220906103044.761250-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-CC:     <robh+dt@kernel.org>, <lee.jones@linaro.org>, <kishon@ti.com>,
-        <vkoul@kernel.org>, <dan.carpenter@oracle.com>,
-        <grygorii.strashko@ti.com>, <rogerq@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings
- for J7200
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-References: <20220901085506.138633-1-s-vadapalli@ti.com>
- <20220901085506.138633-2-s-vadapalli@ti.com>
- <4b681c03-7f5a-0234-2276-316e0bad1de5@linaro.org>
- <44339382-c4e2-26db-de5d-263ae5a585b8@ti.com>
- <4e61b63b-74ac-1682-968f-17e5d8db7ce6@linaro.org>
- <dfa9e613-054e-cffc-747f-27842e825cc8@ti.com>
- <93600263-0211-9286-9043-fae5b017d15b@linaro.org>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <93600263-0211-9286-9043-fae5b017d15b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-On 06/09/22 12:33, Krzysztof Kozlowski wrote:
-> On 06/09/2022 07:02, Siddharth Vadapalli wrote:
->>>>
->>>> Please let me know if the above description is fine.
->>>
->>> Hm, but that's a phy node, not address of register... Isn't this a phy
->>> node representing the phy of the CPSW MAC ports?
->>
->> Despite it being a phy node, the phy-gmii-sel driver actually uses this
->> node to obtain the address of the CTRLMMR_ENETx_CTRL registers which
->> correspond to the CPSW MAC configuration and are therefore unrelated to
->> the PHY. Please let me know if my suggested description would be fine.
-> 
-> Either I miss some more pieces or this is wrong design. The phy node
-> should not be used to pass some addresses somewhere. It is used to
-> define a device which will be instantiated (as parent is simple-mfd). If
-> you use it only to obtain some address, not to describe child device,
-> then this is wrong property type.
+This series adds more test cases to perf test as well as new
+infrastructure for testing coresight data quality to ensure the data
+coming out of the kernel via perf actually contains useful information.
 
-Sorry for describing it incompletely, and at some places incorrectly.
-Yes, you were right when you initially mentioned that the phy node
-corresponds to the phy of the ethernet MAC ports. I had incorrectly
-understood the term "phy" there as the external Layer-1 ethernet phy.The
-phy node corresponds to the phy used by the ethernet MAC, based on the
-phy-mode configured. The am65-cpsw-nuss driver which is responsible for
-ethernet MAC, requires the ethernet MAC's phy to be configured by the
-phy-gmii-sel driver. Thus, the phy node corresponds to an actual phy
-(ethernet MAC's PHY).
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 
-I plan on updating the description for the phy pattern property to the
-following:
-"The phy node corresponding to the ethernet MAC."
 
-Regards,
-Siddharth.
+Carsten Haitzler (13):
+  perf test: Add CoreSight shell lib shared code for future tests
+  perf test: Add build infra for perf test tools for CoreSight tests
+  perf test: Add asm pureloop test tool
+  perf test: Add asm pureloop test shell script
+  perf test: Add git ignore for perf data generated by the CoreSight
+    tests
+  perf test: Add memcpy thread test tool
+  perf test: Add memcpy thread test shell script
+  perf test: Add thread loop test tool
+  perf test: Add thread loop test shell scripts
+  perf test: Add unroll thread test tool
+  perf test: Add unroll thread test shell script
+  perf test: Add git ignore for tmp and output files of CoreSight tests
+  perf test: Add relevant documentation about CoreSight testing
+
+ .../trace/coresight/coresight-perf.rst        | 158 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ tools/perf/.gitignore                         |   6 +-
+ .../perf/Documentation/perf-arm-coresight.txt |   5 +
+ tools/perf/Makefile.config                    |   2 +
+ tools/perf/Makefile.perf                      |  15 +-
+ tools/perf/tests/shell/coresight/Makefile     |  30 ++++
+ .../tests/shell/coresight/Makefile.miniconfig |  14 ++
+ .../tests/shell/coresight/asm_pure_loop.sh    |  18 ++
+ .../shell/coresight/asm_pure_loop/.gitignore  |   1 +
+ .../shell/coresight/asm_pure_loop/Makefile    |  34 ++++
+ .../coresight/asm_pure_loop/asm_pure_loop.S   |  28 ++++
+ .../shell/coresight/memcpy_thread/.gitignore  |   1 +
+ .../shell/coresight/memcpy_thread/Makefile    |  33 ++++
+ .../coresight/memcpy_thread/memcpy_thread.c   |  79 +++++++++
+ .../shell/coresight/memcpy_thread_16k_10.sh   |  18 ++
+ .../shell/coresight/thread_loop/.gitignore    |   1 +
+ .../shell/coresight/thread_loop/Makefile      |  33 ++++
+ .../shell/coresight/thread_loop/thread_loop.c |  86 ++++++++++
+ .../coresight/thread_loop_check_tid_10.sh     |  19 +++
+ .../coresight/thread_loop_check_tid_2.sh      |  19 +++
+ .../coresight/unroll_loop_thread/.gitignore   |   1 +
+ .../coresight/unroll_loop_thread/Makefile     |  33 ++++
+ .../unroll_loop_thread/unroll_loop_thread.c   |  74 ++++++++
+ .../shell/coresight/unroll_loop_thread_10.sh  |  18 ++
+ tools/perf/tests/shell/lib/coresight.sh       | 132 +++++++++++++++
+ 26 files changed, 855 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/trace/coresight/coresight-perf.rst
+ create mode 100644 tools/perf/Documentation/perf-arm-coresight.txt
+ create mode 100644 tools/perf/tests/shell/coresight/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/Makefile.miniconfig
+ create mode 100755 tools/perf/tests/shell/coresight/asm_pure_loop.sh
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/asm_pure_loop.S
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+ create mode 100755 tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/thread_loop.c
+ create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+ create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c
+ create mode 100755 tools/perf/tests/shell/coresight/unroll_loop_thread_10.sh
+ create mode 100644 tools/perf/tests/shell/lib/coresight.sh
+
+-- 
+2.32.0
+

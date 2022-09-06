@@ -2,251 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F13C5AF4B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420145AF52F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 22:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiIFTrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 15:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        id S230250AbiIFUAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 16:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiIFTrA (ORCPT
+        with ESMTP id S231626AbiIFT7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 15:47:00 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B4286716
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:46:52 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id b5so17016140wrr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date;
-        bh=bqv4iAd1mha/jCj0gsDylHCagZEixO6XwXeJh7bhmjc=;
-        b=NOyba92itqhhR/PpT3mpwNTiRuKPnJapzGo69+6nqHs39ugWnmJIcQdoc8PxAppiEe
-         Nhqo0BS1I2PQjWxAv660Zg3oA2AeRIsQXadSeWz8/QN+hKxVKwerxPyju8jl7Tf1WzGl
-         cAlMn1PiLddYyVHh0KGDxNdvkyeMTC7j4JKXE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=bqv4iAd1mha/jCj0gsDylHCagZEixO6XwXeJh7bhmjc=;
-        b=MC5rB2CbDJKklPSWWg/4QN43hNj4CyRtXn3hfElFo9OX+YsmouBMwbAgpSeaJ0Grqk
-         IH7b9gjZZKyk3YZIx8y5j4bvA1REw6OXDBhOdF71OZw0Ua8bhMqYoHaqUsreHKWwyX0a
-         EhjME8poE0zY6Q28ViL7SR1Q4AjTva/WyHM8hYzfAy7CkI20h40DmziXwG37E9BS/VI6
-         cJOhL9dBPw6znmHyBT4LXanOY9xl6IrAMncsTlTzomY+OiuSR2Y5L142wkTzPUqre5hB
-         smGETxTTglZo/fay+JXs+fqQRjbhxyiOpT8H+QOR3Xn72hOnDXzmogHrB8e+gto+tsd9
-         fVFQ==
-X-Gm-Message-State: ACgBeo30fJ1kg8oY5P0tPHhiPUzU+SY7DkIrWMEb0RUdpmNoY7Wbqinm
-        Q8koINRjZNQhNvtLeGXEPwqKVg==
-X-Google-Smtp-Source: AA6agR6T7vwwOwFPSx9Y+6VkmPyGEeXPD3TVawQvk4BRuNrP/PJ8qNADqn/aJdfgkNiIYFdT3OynxQ==
-X-Received: by 2002:a5d:5a06:0:b0:226:d25e:b4ee with SMTP id bq6-20020a5d5a06000000b00226d25eb4eemr47055wrb.280.1662493610556;
-        Tue, 06 Sep 2022 12:46:50 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id z15-20020a5d654f000000b002211fc70174sm16324064wrv.99.2022.09.06.12.46.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 12:46:50 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 21:46:48 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [Linaro-mm-sig] [PATCH v2 1/3] dma-buf: Add ioctl to query mmap
- info
-Message-ID: <YxejqOuHTjoO/iXg@phenom.ffwll.local>
-Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220801170459.1593706-1-robdclark@gmail.com>
- <20220801170459.1593706-2-robdclark@gmail.com>
+        Tue, 6 Sep 2022 15:59:33 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5157BD141;
+        Tue,  6 Sep 2022 12:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662494169; x=1694030169;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vL/YDbBtpAt9jdjtaY4Sr1ZSqPRuhmV3B7r6AYlC4uw=;
+  b=UodM1Py0XsVbpV99MM71DHZ7wzDvHXLpLETsU8M6bbckNIivRGV/q7cq
+   9igSYmOXJ8fCWUTbvx6t6Zc7+9wP2W1P70uqes2T0JA2kZNNyTwvJ/i4H
+   u45G2pPjE1v6jqcGyhLl0UWOK7JsqQcBpr5Zb79Tl0/oeMvB+LCbZXtR8
+   r6x9Jwb4Zb6a7DzunUr6Otzq8GmtUapMffx9XkL5vfEyGaF0/Ld34xb3b
+   6t1ZzWE2RAKecpJGHDDjpx5yBATQeCINxpKSLaYzBO5sIgVIxFmu7w1dq
+   Y41u5+jd5wVuN36/F/biC0/ehn7uE7HeWn0AFj9E7E7nrfL8nOvZyi5pi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283687054"
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="283687054"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 12:52:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="859375126"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 06 Sep 2022 12:52:26 -0700
+Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.44.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 9517C580890;
+        Tue,  6 Sep 2022 12:52:23 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 21:47:43 +0200
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-doc@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        intel-gfx@lists.freedesktop.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [Intel-gfx] [PATCH v2 38/39] drm/i915: add descriptions for
+ some RPM macros at intel_gt_pm.h
+Message-ID: <20220906214735.20faebfb@maurocar-mobl2>
+In-Reply-To: <YvIy9o2dHkB1gAr6@intel.com>
+References: <cover.1657699522.git.mchehab@kernel.org>
+        <37e3b9aac85f1d08c0a53bae86680d504308bf67.1657699522.git.mchehab@kernel.org>
+        <YvIy9o2dHkB1gAr6@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801170459.1593706-2-robdclark@gmail.com>
-X-Operating-System: Linux phenom 5.18.0-4-amd64 
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 10:04:55AM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> This is a fairly narrowly focused interface, providing a way for a VMM
-> in userspace to tell the guest kernel what pgprot settings to use when
-> mapping a buffer to guest userspace.
-> 
-> For buffers that get mapped into guest userspace, virglrenderer returns
-> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
-> pages into the guest VM, it needs to report to drm/virtio in the guest
-> the cache settings to use for guest userspace.  In particular, on some
-> architectures, creating aliased mappings with different cache attributes
-> is frowned upon, so it is important that the guest mappings have the
-> same cache attributes as any potential host mappings.
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
-> v2. fix compiler warning
+On Tue, 9 Aug 2022 06:12:06 -0400
+Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
 
-I think I bikeshedded this on irc already, here for the record too.
+> On Wed, Jul 13, 2022 at 09:12:26AM +0100, Mauro Carvalho Chehab wrote:
+> > The intel_gt_pm.h file contains some convenient macros to be used
+> > in GT code in order to get/put runtime PM references and for
+> > checking them.
+> > 
+> > Add descriptions based on the ones at intel_wakeref.h and
+> > intel_runtime_pm.c.
+> > 
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > ---
+> > 
+> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> > See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
+> > 
+> >  Documentation/gpu/i915.rst            |  2 +
+> >  drivers/gpu/drm/i915/gt/intel_gt_pm.h | 62 +++++++++++++++++++++++++++
+> >  2 files changed, 64 insertions(+)
+> > 
+> > diff --git a/Documentation/gpu/i915.rst b/Documentation/gpu/i915.rst
+> > index 6bb50edc6d79..9862d504df4d 100644
+> > --- a/Documentation/gpu/i915.rst
+> > +++ b/Documentation/gpu/i915.rst
+> > @@ -709,6 +709,8 @@ Table Manager (TTM)
+> >  
+> >  .. kernel-doc:: drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+> >  
+> > +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gt_pm.h  
+> 
+> I don't believe this is the right placement for this.
 
-- this wont work for buffers which do change the mapping when they move
-  (ttm can do that). And cros does make noises about discrete gpus I've
-  heard, this matters even for you :-)
-- I'm pretty sure this will put is even more onto the nasty people list
-  that dma-api folks maintain, especially with passing this all to
-  userspace
-- follow_pte() can figure this out internally in the kernel and kvm is
-  already using this, and I think doing this all internally with mmu
-  notifier and what not to make sure it all stays in sync is the right
-  approach. So your kvm/whatever combo should be able to figure out wth
-  it's supposed to be doing.
+I'll add it then at:
 
-I think if you make this a virtio special case like we've done with the
-magic uuid stuff, then that would make sense. Making it a full dma-buf
-interface doesn't imo.
+	Other GT functionality
 
-Cheers, Daniel
+Section.
+
+Regards,
+Mauro
+
 
 > 
->  drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
->  include/linux/dma-buf.h      |  7 +++++++
->  include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
->  3 files changed, 61 insertions(+)
+> the rest lgtm
 > 
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 32f55640890c..87c52f080274 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
->  	return 0;
->  }
->  
-> +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
-> +{
-> +	struct dma_buf_info arg;
-> +
-> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	switch (arg.param) {
-> +	case DMA_BUF_INFO_VM_PROT:
-> +		if (!dmabuf->ops->mmap_info)
-> +			return -ENOSYS;
-> +		arg.value = dmabuf->ops->mmap_info(dmabuf);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (copy_to_user(uarg, &arg, sizeof(arg)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
->  static long dma_buf_ioctl(struct file *file,
->  			  unsigned int cmd, unsigned long arg)
->  {
-> @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
->  	case DMA_BUF_SET_NAME_B:
->  		return dma_buf_set_name(dmabuf, (const char __user *)arg);
->  
-> +	case DMA_BUF_IOCTL_INFO:
-> +		return dma_buf_info(dmabuf, (void __user *)arg);
-> +
->  	default:
->  		return -ENOTTY;
->  	}
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 71731796c8c3..6f4de64a5937 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -283,6 +283,13 @@ struct dma_buf_ops {
->  	 */
->  	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
->  
-> +	/**
-> +	 * @mmap_info:
-> +	 *
-> +	 * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
-> +	 */
-> +	int (*mmap_info)(struct dma_buf *);
-> +
->  	int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->  	void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
->  };
-> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
-> index b1523cb8ab30..a41adac0f46a 100644
-> --- a/include/uapi/linux/dma-buf.h
-> +++ b/include/uapi/linux/dma-buf.h
-> @@ -85,6 +85,32 @@ struct dma_buf_sync {
->  
->  #define DMA_BUF_NAME_LEN	32
->  
-> +
-> +/**
-> + * struct dma_buf_info - Query info about the buffer.
-> + */
-> +struct dma_buf_info {
-> +
-> +#define DMA_BUF_INFO_VM_PROT      1
-> +#  define DMA_BUF_VM_PROT_WC      0
-> +#  define DMA_BUF_VM_PROT_CACHED  1
-> +
-> +	/**
-> +	 * @param: Which param to query
-> +	 *
-> +	 * DMA_BUF_INFO_BM_PROT:
-> +	 *     Query the access permissions of userspace mmap's of this buffer.
-> +	 *     Returns one of DMA_BUF_VM_PROT_x
-> +	 */
-> +	__u32 param;
-> +	__u32 pad;
-> +
-> +	/**
-> +	 * @value: Return value of the query.
-> +	 */
-> +	__u64 value;
-> +};
-> +
->  #define DMA_BUF_BASE		'b'
->  #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
->  
-> @@ -95,4 +121,6 @@ struct dma_buf_sync {
->  #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
->  #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
->  
-> +#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
-> +
->  #endif
-> -- 
-> 2.36.1
-> 
-> _______________________________________________
-> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
-> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> > +
+> >  Graphics Execution Manager (GEM)
+> >  --------------------------------
+> >  
+> > diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.h b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
+> > index bc898df7a48c..a8ea6846980a 100644
+> > --- a/drivers/gpu/drm/i915/gt/intel_gt_pm.h
+> > +++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
+> > @@ -11,21 +11,57 @@
+> >  #include "intel_gt_types.h"
+> >  #include "intel_wakeref.h"
+> >  
+> > +/**
+> > + * intel_gt_pm_is_awake: Query whether the runtime PM is awake held
+> > + *
+> > + * @gt: pointer to the graphics engine
+> > + *
+> > + * Returns: true if a runtime pm reference is currently held and the GT is
+> > + * awake.
+> > + */
+> >  static inline bool intel_gt_pm_is_awake(const struct intel_gt *gt)
+> >  {
+> >  	return intel_wakeref_is_active(&gt->wakeref);
+> >  }
+> >  
+> > +/**
+> > + * intel_gt_pm_get: grab a runtime PM reference ensuring that GT is powered up
+> > + * @gt: pointer to the graphics engine
+> > + *
+> > + * Any runtime pm reference obtained by this function must have a symmetric
+> > + * call to intel_gt_pm_put() to release the reference again.
+> > + *
+> > + * Note that this is allowed to fail, in which case the runtime-pm wakeref
+> > + * will be released and the acquisition unwound.
+> > + */
+> >  static inline void intel_gt_pm_get(struct intel_gt *gt)
+> >  {
+> >  	intel_wakeref_get(&gt->wakeref);
+> >  }
+> >  
+> > +/**
+> > + * __intel_gt_pm_get: Acquire the runtime PM reference again
+> > + * @gt: pointer to the graphics engine which contains the wakeref
+> > + *
+> > + * Increment the PM reference counter, only valid if it is already held by
+> > + * the caller.
+> > + *
+> > + * See intel_gt_pm_get().
+> > + */
+> >  static inline void __intel_gt_pm_get(struct intel_gt *gt)
+> >  {
+> >  	__intel_wakeref_get(&gt->wakeref);
+> >  }
+> >  
+> > +/**
+> > + * intel_gt_pm_get_if_awake: Acquire the runtime PM reference if active
+> > + * @gt: pointer to the graphics engine which contains the PM reference
+> > + *
+> > + * Acquire a hold on the PM reference, but only if the GT is already
+> > + * active.
+> > + *
+> > + * Returns: true if the wakeref was acquired, false otherwise.
+> > + */
+> >  static inline bool intel_gt_pm_get_if_awake(struct intel_gt *gt)
+> >  {
+> >  	return intel_wakeref_get_if_active(&gt->wakeref);
+> > @@ -36,6 +72,14 @@ static inline void intel_gt_pm_might_get(struct intel_gt *gt)
+> >  	intel_wakeref_might_get(&gt->wakeref);
+> >  }
+> >  
+> > +/**
+> > + * intel_gt_pm_put: Release the runtime PM reference
+> > + * @gt: pointer to the graphics engine which contains the PM reference
+> > + *
+> > + * Release our hold on the runtime PM for GT.
+> > + *
+> > + * It might power down the GT right away if this is the last reference.
+> > + */
+> >  static inline void intel_gt_pm_put(struct intel_gt *gt)
+> >  {
+> >  	intel_wakeref_put(&gt->wakeref);
+> > @@ -51,10 +95,28 @@ static inline void intel_gt_pm_might_put(struct intel_gt *gt)
+> >  	intel_wakeref_might_put(&gt->wakeref);
+> >  }
+> >  
+> > +/**
+> > + * with_intel_gt_pm - get a GT reference ensuring that GT is powered up,
+> > + *	run some code and then put the reference away.
+> > + *
+> > + * @gt: pointer to the gt
+> > + * @tmp: pointer to a temporary wakeref.
+> > + */
+> >  #define with_intel_gt_pm(gt, tmp) \
+> >  	for (tmp = 1, intel_gt_pm_get(gt); tmp; \
+> >  	     intel_gt_pm_put(gt), tmp = 0)
+> >  
+> > +/**
+> > + * intel_gt_pm_wait_for_idle: Wait until the runtime PM reference is idle
+> > + * @gt: pointer to the graphics engine which contains the PM reference
+> > + *
+> > + * Wait for the earlier asynchronous release of the runtime PM reference. Note
+> > + * this will wait for any third party as well, so make sure you only wait
+> > + * when you have control over the GT runtime PM and trust no one else is
+> > + * acquiring it.
+> > + *
+> > + * Return: 0 on success, error code if killed.
+> > + */
+> >  static inline int intel_gt_pm_wait_for_idle(struct intel_gt *gt)
+> >  {
+> >  	return intel_wakeref_wait_for_idle(&gt->wakeref);
+> > -- 
+> > 2.36.1
+> >   

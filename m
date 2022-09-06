@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B8C5ADD4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF2F5ADD45
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 04:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbiIFC3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Sep 2022 22:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S232433AbiIFC2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Sep 2022 22:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiIFC25 (ORCPT
+        with ESMTP id S229499AbiIFC22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Sep 2022 22:28:57 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5436A4B0;
-        Mon,  5 Sep 2022 19:28:56 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id d16so5337922ils.8;
-        Mon, 05 Sep 2022 19:28:56 -0700 (PDT)
+        Mon, 5 Sep 2022 22:28:28 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F58642DD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Sep 2022 19:28:27 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 123so589469pfy.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Sep 2022 19:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=EVFz7Snz7wNBPA0IRAcw8NAeZu8JeFGc8bhvLijNe68=;
-        b=Lmlb/JhMlBqxERnYMJ8xSM+tQfW/dY5Q27/zRIGeDuPRz4ABJisLKzdisqy5Jvs06X
-         WmFvYxnJn+ULydDg0lZty9ZEKN/kPkvzaS1IQ+EZuRhmpoHdBcJkLe6xcCQ0on4bAodO
-         Dl6Bf6onWU7tIlUud7ejRxIN4YOr01XWC16nfqjJfB9pQvRGC9GsxKBvofMT0kIS1JHi
-         owaeyTup6MfQkO0PrWHUrEH12xVEJggGL2l9+5AnyMFr3ywP/41dy4xpwWFUbu7AeZie
-         x6tpwH+XIJhnUv+LrNEGJjmJqvUDZvl0as1f/VLKBeLwBL95jeIWGB9AjCMUbpmj7+/o
-         84Rg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Xy6WkgEFaeEodmkOTP/wZeGwCx12lREAvX9x2pDH+sc=;
+        b=SSVih/zlg15TJfUVj4Gque2nzl5RSohnXGjg1I9nNuXKCcL+UeqoJWXS67wwxjcCwR
+         zrydbRfCZaq+FmB7smkRm+3SA7VvXSU6Wux/TD8zwlme0S3bi9fATECl8QSPuEHk/Bzb
+         Dlw3ck36ZtgmOT3sFyT6Ou0+7axsF0dhj8g7psbnT0KFSmcu1lka/5xYQRxuutfBtaUM
+         caqvU+tQvkXl1NuFId5d6RkX25WOxSfXZdDtW7gjE5HUuGyBB6drc7ZsfIlu448E2mEK
+         RGd+aZgo/ICv2QXMO/rk9wOB4xKgvHvzFAjluTSsZELcVYweHCLU2aMDyNl8CNyaIidU
+         7nhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=EVFz7Snz7wNBPA0IRAcw8NAeZu8JeFGc8bhvLijNe68=;
-        b=erQ2gDepAgcu8bbSHhJqqSgLppZqGlI0uN5hzjLkm2hh7t3lCOczHf6kyQTQiYZFJt
-         x3i9eajoq+fJ4ctENp/lkIRUOI5yUr36P2gvOhS1mpFTWKSbL6TQFreMLetgmDueOVcm
-         DaM4/ah49qjjIB/AcxI3OUU7g4UdrblCQ7/5I7y7EQajkTW94gDqWaNaI49wUsBxffKE
-         kTsEXHu8ep1vMuse5o1nq55utf07oBHyerY7PlSXoXwaL8SANweRYa1I2hMxPsWvD3V6
-         kGEBrJz4jNTRO3dH/aXELZPAjcQSjOGVubEOYgNbKaWg9ephFjfdMZFKM6O7UHQltJzS
-         t4rg==
-X-Gm-Message-State: ACgBeo3vtV6Njiynl8cyrqwkuJ8Zk0sauqBia6w2yeCAfaAeypkPvruP
-        o7rXSLwceSmMgXXL/SSLEnz4XChm/rIrSKKeoE+ccXK4SJE=
-X-Google-Smtp-Source: AA6agR54DVLjK+sXLtyBp0zuCC8wQY+NbjiMCEnQx6tLIjpLuD4/sp+QIJcXwS68s1riFM3yhVq+Okziu7FVbH8weUo=
-X-Received: by 2002:a05:6e02:190a:b0:2ee:9e75:ae4b with SMTP id
- w10-20020a056e02190a00b002ee9e75ae4bmr9134684ilu.219.1662431335360; Mon, 05
- Sep 2022 19:28:55 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Xy6WkgEFaeEodmkOTP/wZeGwCx12lREAvX9x2pDH+sc=;
+        b=XsndxviU3EfYq84ybXfn0RrdTDzvV/caq7ZYVCVhQIv9jSFwKw02Y0a/j1KXtd+fq6
+         fo1zZOBTbe6i8wZRSuqz1zehEw4IRyEptqwiQQbBJmuqGWeTc3+E/GBYHYSWKRhq1AFZ
+         XMVzD3jcqjcUQYCLcAT0WvLUkBbMsRjIyJOzwhN0wGSxVNfUjKcDFmrDbOVIOLx54d39
+         rpywhA1U5Wt18qWNsW7gJl37IzqnP47yAXX2j9zsu7bocDkMXUcLK7oxty9IQ7HH1YUB
+         8LCjikM1/7HXH2H8/Fm0IUtAZ2bGjBGUAdUXMnsz4HnSqPCm6pajxjD6Xj1Q6w8r20G5
+         f49A==
+X-Gm-Message-State: ACgBeo3W+94L+ly0OiXajWnWSJrn3j9zAPemWtwVcCWVkoZOXqDUYsKR
+        HC8xumBq9e/dTM9D0np87IU=
+X-Google-Smtp-Source: AA6agR7NBDH34Q9KVqZt1AM6M2N7Z01aI0AHZqnC7gyZvkfrSOHG8/kQLPSArybpJ0qWTLmCN69w5Q==
+X-Received: by 2002:a05:6a00:88a:b0:53a:b7a0:ea3a with SMTP id q10-20020a056a00088a00b0053ab7a0ea3amr29919286pfj.21.1662431306994;
+        Mon, 05 Sep 2022 19:28:26 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-83.three.co.id. [180.214.233.83])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170902a38b00b00176677a893bsm4056487pla.82.2022.09.05.19.28.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 19:28:26 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id B7B5B103CFD; Tue,  6 Sep 2022 09:28:23 +0700 (WIB)
+Date:   Tue, 6 Sep 2022 09:28:23 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Charles Mirabile <cmirabil@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nicolassaenzj@gmail.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, rh-kdlp@googlegroups.com,
+        Lee Jones <lee.jones@linaro.org>,
+        Joel Savitz <jsavitz@redhat.com>
+Subject: Re: [PATCH 1/5] drivers/mfd: sensehat: Add Raspberry Pi Sense HAT to
+ simple_mfd_i2c
+Message-ID: <YxawR1ygLhZ49DsR@debian.me>
+References: <20220823174158.45579-1-cmirabil@redhat.com>
+ <20220823174158.45579-2-cmirabil@redhat.com>
 MIME-Version: 1.0
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com> <20220905143318.1592015-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220905143318.1592015-2-roberto.sassu@huaweicloud.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Tue, 6 Sep 2022 04:28:19 +0200
-Message-ID: <CAP01T76CNmuh6qzewzafoZrSX1WCs6YsCBiEDkSr-1Oi+th0aw@mail.gmail.com>
-Subject: Re: [PATCH v16 01/12] bpf: Allow kfuncs to be used in LSM programs
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ioEe3Tuii9pgRIJs"
+Content-Disposition: inline
+In-Reply-To: <20220823174158.45579-2-cmirabil@redhat.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: KP Singh <kpsingh@kernel.org>
->
-> In preparation for the addition of new kfuncs, allow kfuncs defined in the
-> tracing subsystem to be used in LSM programs by mapping the LSM program
-> type to the TRACING hook.
->
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+--ioEe3Tuii9pgRIJs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  kernel/bpf/btf.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 903719b89238..e49b3b6d48ad 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7243,6 +7243,7 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
->         case BPF_PROG_TYPE_STRUCT_OPS:
->                 return BTF_KFUNC_HOOK_STRUCT_OPS;
->         case BPF_PROG_TYPE_TRACING:
-> +       case BPF_PROG_TYPE_LSM:
->                 return BTF_KFUNC_HOOK_TRACING;
->         case BPF_PROG_TYPE_SYSCALL:
->                 return BTF_KFUNC_HOOK_SYSCALL;
-> --
-> 2.25.1
->
+On Tue, Aug 23, 2022 at 01:41:54PM -0400, Charles Mirabile wrote:
+> This patch adds the compatible string for the Sense HAT device to
+> the list of compatible strings in the simple_mfd_i2c driver so that
+> it can match against the device and load its children and their drivers
+>=20
+
+Better say "Add compatibe string for Sense HAT device. The device is
+compatible with silergy,sy7636a."
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--ioEe3Tuii9pgRIJs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxawRwAKCRD2uYlJVVFO
+o4/cAPsEB9c7qBIzYTXr/Nf+mkfNcSkaw7X8J1mNcWcNyaWPrQEA6ScGriT/KWyT
+1MY66xRF05EDj5DtuxeeGOs0oxc1CgY=
+=aNcd
+-----END PGP SIGNATURE-----
+
+--ioEe3Tuii9pgRIJs--

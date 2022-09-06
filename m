@@ -2,231 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001E05AF0DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0CC5AF0C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 18:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234438AbiIFQkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 12:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        id S232132AbiIFQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 12:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234251AbiIFQiW (ORCPT
+        with ESMTP id S233926AbiIFQnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:38:22 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6276555F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 09:15:22 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id w4so4638853qvp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 09:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=LOelBV/IXXPtmIJeYUARfOPCrWQ4CDmcKuWEe2JOG+Q=;
-        b=e+CL9Rwtoo2kdhze7KSvkUNH5pMPPU7/KnYPHvdr9P1queZSVHfyc/5hKEXOTC3PCF
-         q1ZWtaCbVCq/JQ5ZLyIAKlc3lNsZ8W2nAKqWVjS31JK39/8v816d5VoDeFfHJT1AEh8a
-         c2GLB/mnPFdQKeG+6WNDRna9qIrR8I4sdi3QE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=LOelBV/IXXPtmIJeYUARfOPCrWQ4CDmcKuWEe2JOG+Q=;
-        b=MPXs9zRR6nx4h2DjVMczpx74w5+6f9w/Wd2rrJ5LJgjO3QJ96NxoJu73GILKdimc+9
-         ls5RJ4fd0M0BuIt9oD89xzrxEsMSJKwNcUn503HFctlpICKJcjREpJyHDbI2TcdWFYQ9
-         tTpIA+O3R1D05PIQrjCz5WdAvncAJXIw6rBH8cU6H1ANNjoXmq0NUbKnAo5W1peDFjXV
-         FRUcIymXrmhP8zOnrcMb5ZO4lePQuvYcPfKjMChTW3ZcGFU8w8XTGj/wyOabf7DeauPi
-         wLmMgIfRIY//+t07zk6PJW9CjJCYMy/KshcqZe7OOHT4EQ2PR1gA47XgIV98WUqsYjZy
-         07FQ==
-X-Gm-Message-State: ACgBeo0UPjM8U5rrPPNoitaBDG9RWBO+S0S/ueK5wA3j8y4YBDU/a/CW
-        cQu8Vb1z+zwAYPwOBoRVDnF0DQ==
-X-Google-Smtp-Source: AA6agR5z0nIrV7ZT0sPMUkcKspYCEnTSkuvEPYVNrqP7AtL7Mn5I2us7n2V2g58P+PHFrpUn35WAsg==
-X-Received: by 2002:a0c:ec46:0:b0:4a7:509:386e with SMTP id n6-20020a0cec46000000b004a70509386emr8314823qvq.61.1662480921703;
-        Tue, 06 Sep 2022 09:15:21 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id j11-20020ac85c4b000000b0031ef67386a5sm10165581qtj.68.2022.09.06.09.15.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 09:15:21 -0700 (PDT)
-Message-ID: <cde6586e-ae61-5e85-3c9a-1ce7dd2464ed@joelfernandes.org>
-Date:   Tue, 6 Sep 2022 12:15:19 -0400
+        Tue, 6 Sep 2022 12:43:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEC190819;
+        Tue,  6 Sep 2022 09:21:06 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286AkdmJ025337;
+        Tue, 6 Sep 2022 16:20:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=kfJX+M3scL7IHo5EN9K4rObjASXUCJrfvhxRIb3Y6l4=;
+ b=dFkU0mF2LAKfMh738pWVZH8+GPSd2Zk7KAkv//Pd5JRDXxuQwerh2LUJ/O1Cp5blT73L
+ KfkAFU/ert42823Wu5l6PHqgp+1HoP9T8f1TZxiB5wAHnCIE7r/Rru9YuVeLW5vaXdxa
+ MfigANXlS84oDEnXGLokDiWipaXK3T4cUxOiXXmv8rxwBnnyn0aaMUlHrbsmbOCX7TAG
+ Wa++EUjCIIWqFM7797dnEdbpJb46ROlv4vA1JsbK8UCcxoeliAm2h5VCilUA4aj8uFoE
+ n/Orxb0uOPNyRLoywyRgD//Bwk5P+61qdMA5ME9IDhGFmgThHYIZxIeVDPv057nkZg7f QA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jdusrjrkd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 16:20:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 286GFikY006956
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Sep 2022 16:15:44 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 6 Sep 2022 09:15:37 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v13 0/3] Add QCOM SNPS PHY overriding params support
+Date:   Tue, 6 Sep 2022 21:45:30 +0530
+Message-ID: <1662480933-12326-1-git-send-email-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
- implementation
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org, boqun.feng@gmail.com
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-7-joel@joelfernandes.org>
- <20220902152132.GA115525@lothringen> <Yxa5Ch574cRZxRdo@google.com>
- <20220906151757.GA183806@lothringen>
-Content-Language: en-US
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220906151757.GA183806@lothringen>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: YQ_e0Sm582OGCU2jDQ99eP0L736jiznN
+X-Proofpoint-ORIG-GUID: YQ_e0Sm582OGCU2jDQ99eP0L736jiznN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=554 malwarescore=0 suspectscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209060076
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Added support for overriding tuning parameters in QCOM SNPS PHY
+from device tree. This parameter tuning is required to tune the
+hs signal on dp/dm lines for electrical compliance to be successful.
 
+Changes in v13:
+Fixed NULL pointer check in driver code.
 
-On 9/6/2022 11:17 AM, Frederic Weisbecker wrote:
-> On Tue, Sep 06, 2022 at 03:05:46AM +0000, Joel Fernandes wrote:
->> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
->> index 4dc86274b3e8..b201606f7c4f 100644
->> --- a/kernel/rcu/tree_nocb.h
->> +++ b/kernel/rcu/tree_nocb.h
->> @@ -256,6 +256,31 @@ static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
->>  	return __wake_nocb_gp(rdp_gp, rdp, force, flags);
->>  }
->>  
->> +/*
->> + * LAZY_FLUSH_JIFFIES decides the maximum amount of time that
->> + * can elapse before lazy callbacks are flushed. Lazy callbacks
->> + * could be flushed much earlier for a number of other reasons
->> + * however, LAZY_FLUSH_JIFFIES will ensure no lazy callbacks are
->> + * left unsubmitted to RCU after those many jiffies.
->> + */
->> +#define LAZY_FLUSH_JIFFIES (10 * HZ)
->> +unsigned long jiffies_till_flush = LAZY_FLUSH_JIFFIES;
-> 
-> Still not static.
+Changes in v12:
+Fixed nitpicks in driver code.
 
-Oops will fix.
+Changes in v11:
+Made changes to logs added in phy driver.
+Fixed nitpicks in code.
 
->> @@ -293,12 +322,16 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
->>   * proves to be initially empty, just return false because the no-CB GP
->>   * kthread may need to be awakened in this case.
->>   *
->> + * Return true if there was something to be flushed and it succeeded, otherwise
->> + * false.
->> + *
-> 
-> This kind of contradict the comment that follows. Not sure you need to add
-> that line because the existing comment seem to cover it.
-> 
->>   * Note that this function always returns true if rhp is NULL.
-> 
->>   */
->>  static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->> -				     unsigned long j)
->> +				     unsigned long j, unsigned long flush_flags)
->>  {
->>  	struct rcu_cblist rcl;
->> +	bool lazy = flush_flags & FLUSH_BP_LAZY;
->>  
->>  	WARN_ON_ONCE(!rcu_rdp_is_offloaded(rdp));
->>  	rcu_lockdep_assert_cblist_protected(rdp);
->> @@ -326,13 +372,20 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->>   * Note that this function always returns true if rhp is NULL.
->>   */
->>  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->> -				  unsigned long j)
->> +				  unsigned long j, unsigned long flush_flags)
->>  {
->> +	bool ret;
->> +
->>  	if (!rcu_rdp_is_offloaded(rdp))
->>  		return true;
->>  	rcu_lockdep_assert_cblist_protected(rdp);
->>  	rcu_nocb_bypass_lock(rdp);
->> -	return rcu_nocb_do_flush_bypass(rdp, rhp, j);
->> +	ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
->> +
->> +	if (flush_flags & FLUSH_BP_WAKE)
->> +		wake_nocb_gp(rdp, true);
-> 
-> Why the true above?
-> 
-> Also should we check if the wake up is really necessary (otherwise it means we
-> force a wake up for all rdp's from rcu_barrier())?
+Changes in v10:
+Fixed patch headers.
 
-Good point. I need to look into your suggested optimization here more, it is
-possible the wake up is not needed some of the times, but considering that
-rcu_barrier() is a slow path, I will probably aim for robustness here over
-mathematically correct code. And the cost of a missed wake up here can be
-serious as I saw by the RCU_SCALE test I added. Also the wake up pf the rcuog
-thread is square root of CPUs because of the rdp grouping right?
+changes in v9:
+Fixed nitpick in driver code.
 
-Still, it'd be good to not do something unnecessary, so your point is well
-taken. I'll spend some time on this and get back to you.
+changes in v8:
+Fixed nitpick in driver code.
 
->        was_alldone = rcu_segcblist_pend_cbs(&rdp->cblist);
->        ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
->        if (was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist))
->        	  wake_nocb_gp(rdp, false);
-> 
-> 
->> @@ -461,16 +521,29 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->>  	// We need to use the bypass.
->>  	rcu_nocb_wait_contended(rdp);
->>  	rcu_nocb_bypass_lock(rdp);
->> +
->>  	ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
->>  	rcu_segcblist_inc_len(&rdp->cblist); /* Must precede enqueue. */
->>  	rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
->> +
->> +	if (IS_ENABLED(CONFIG_RCU_LAZY) && lazy)
->> +		WRITE_ONCE(rdp->lazy_len, rdp->lazy_len + 1);
->> +
->>  	if (!ncbs) {
->>  		WRITE_ONCE(rdp->nocb_bypass_first, j);
->>  		trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("FirstBQ"));
->>  	}
->> +
->>  	rcu_nocb_bypass_unlock(rdp);
->>  	smp_mb(); /* Order enqueue before wake. */
->> -	if (ncbs) {
->> +
->> +	// We had CBs in the bypass list before. There is nothing else to do if:
->> +	// There were only non-lazy CBs before, in this case, the bypass timer
-> 
-> Kind of misleading. I would replace "There were only non-lazy CBs before" with
-> "There was at least one non-lazy CBs before".
+changes in v7:
+Fixed nitpick in driver code and dtsi file.
 
-I really mean "There were only non-lazy CBs ever queued in the bypass list
-before". That's the bypass_is_lazy variable. So I did not fully understand your
-suggested comment change.
+changes in v6:
+Fixed errors in dt-bindings.
+Fixed nitpick in driver code.
 
->> +	// or GP-thread will handle the CBs including any new lazy ones.
->> +	// Or, the new CB is lazy and the old bypass-CBs were also lazy. In this
->> +	// case the old lazy timer would have been setup. When that expires,
->> +	// the new lazy one will be handled.
->> +	if (ncbs && (!bypass_is_lazy || lazy)) {
->>  		local_irq_restore(flags);
->>  	} else {
->>  		// No-CBs GP kthread might be indefinitely asleep, if so, wake.
->> @@ -479,6 +552,10 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
->>  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->>  					    TPS("FirstBQwake"));
->>  			__call_rcu_nocb_wake(rdp, true, flags);
->> +		} else if (bypass_is_lazy && !lazy) {
->> +			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->> +					    TPS("FirstBQwakeLazy2Non"));
->> +			__call_rcu_nocb_wake(rdp, true, flags);
-> 
-> Not sure we need this chunk. Since there are pending callbacks anyway,
-> nocb_gp_wait() should be handling them and it will set the appropriate
-> timer on the next loop.
+changes in v5:
+Fixed nitpicks in code.
+Added minimum and maximum for each parameter added in dt-bindings.
+Added proper suffixes to each parameter as per dtschema.
 
-We do because those pending callbacks could be because of a bypass list flush
-and not because there were pending CBs before, right? I do recall missed wake
-ups of non-lazy CBs, and them having to wait for the full lazy timer duration
-and slowing down synchronize_rcu() which is on the ChromeOS boot critical path!
+changes in v4:
+Fixed nitpicks in code.
+Initial compliance test results showed overshoot in the middle of eye
+diagram. The current dt values were put in place to correct it and fix
+overshoot issue.
 
-Thanks,
+changes in v3:
+Added support for phy tuning parameters to be represented in bps and
+corresponding register values to be written are obtained by traversing
+through data map declared in the driver.
 
- - Joel
+changes in v2:
+Reading the individual fields in each overriding register from
+device tree.
 
+Krishna Kurapati (2):
+  phy: qcom-snps: Add support for overriding phy tuning parameters
+  arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280 IDP device
 
+Sandeep Maheswaram (1):
+  dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params
+    bindings
+
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml       |  88 +++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |   6 +
+ drivers/phy/qualcomm/phy-qcom-snps-femto-v2.c      | 255 ++++++++++++++++++++-
+ 3 files changed, 347 insertions(+), 2 deletions(-)
+
+-- 
+2.7.4
 

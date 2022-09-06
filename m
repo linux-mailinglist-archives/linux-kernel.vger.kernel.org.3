@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9E15AE564
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F06C5AE56E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239098AbiIFKbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S238274AbiIFKeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234061AbiIFKbJ (ORCPT
+        with ESMTP id S231569AbiIFKd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:31:09 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269CD3D5B4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:31:04 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bp20so14263106wrb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 03:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=0C8ZbZGRsC6WjnSw7WLm99RBXqDzMdZGyqdyLdbrKqA=;
-        b=pTovjWtRzdMpF92MW8b2c0eWxMHtxixVr0cmHy/pfwC6yTbJyjCmj+XX8x9A8Y2jDY
-         2v9p3NqG3lyns7zHwFLabqm7vZ7aoaDlWxWYnhaSD5KJ0utWYNzq0jvfUHpx+Ahh8Em3
-         KRtQd5iNP916z6IEJdhjUKBPZeaTXnmxpnFDqL9FQdBWIg1Mw8ksB8QAswmbGkQuDSjB
-         L6hhcpLUtb72zDbBDqw+1quUn4YB65hlAwN8jfCNx8R3T8M/ovMgUfViIDaxYLyVz+lV
-         LEIe2XaMpfTe84o0DEq0yNuEwEVKJY2rW9xG5OjnLhwsRhzRSmN43T7vI77T28/+WZMi
-         JHHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=0C8ZbZGRsC6WjnSw7WLm99RBXqDzMdZGyqdyLdbrKqA=;
-        b=kxfWAnd/qJv+dVDvXFvTvqFdTHGMt1ZlYthS2AooxDa2o5nqQm+sk5/P9xiQf7Wc6o
-         F3GyQQW4vy+u380LSghObfiFtdNSKB21G0+8+agkAG9I3ayFQ37EAo/Cki0bKcCjdfq2
-         wa+NkRS1493FzoFhx66pIjMGdfdaIinqtxWb4Mf0W415HWzTjjarBsivvzcxpFihShRH
-         FfsBOg64UoNhqIhLppcgnsgJm1ecf6UtIQhjYQsV6z5a1BS4n4C44HvlyClC9k+NPkGW
-         VdA4xQf5Ys8lrKN6qqiReXAW2C1kKVyO9/sO3dSOkeyYZ1GHyhJpdssxjV3Py2HJ+cdO
-         qiqQ==
-X-Gm-Message-State: ACgBeo2WsQZc8bKZ5km28L/MA+MWH8E/aqqz5U1VvUp+/MbYZH3ltmMv
-        UAEAad13/8UT6hMz1LCYd4ocqg==
-X-Google-Smtp-Source: AA6agR4Y8kHinJebL9VZAxfM33D0R3zE1NXbClajF1sigO+w/4Bc5A7bAMTHhVTUyqWogDNicEQ47A==
-X-Received: by 2002:a05:6000:1f83:b0:223:60ee:6c08 with SMTP id bw3-20020a0560001f8300b0022360ee6c08mr26000850wrb.682.1662460262623;
-        Tue, 06 Sep 2022 03:31:02 -0700 (PDT)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05600c4fd000b003a5c999cd1asm18121478wmq.14.2022.09.06.03.31.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 03:31:01 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org
-Subject: [PATCH v9 2/2] MAINTAINERS: Update fastrpc documentation file from txt to yaml
-Date:   Tue,  6 Sep 2022 13:30:55 +0300
-Message-Id: <20220906103055.2089519-2-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220906103055.2089519-1-abel.vesa@linaro.org>
-References: <20220906103055.2089519-1-abel.vesa@linaro.org>
+        Tue, 6 Sep 2022 06:33:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DBC491E5;
+        Tue,  6 Sep 2022 03:33:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F93BB81630;
+        Tue,  6 Sep 2022 10:33:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74FCCC433D6;
+        Tue,  6 Sep 2022 10:33:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662460433;
+        bh=BEJTgw4/cLVo9r6M19N464M5+kcpcrF4AMd4GiRbV/c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XPswdJgwvV05BMK6oF8t3uLF7VdIDhGrQrsKJJMjF64jMPPiij8laSTbRLgqIiIG0
+         8JwHxhZJKbLSseRW+gA8aBCZxVh5+OY4MlS8dBE8++1qDg2Wdd1C/Gba4p4d38KxTb
+         AzLYNqwIQNDXYIP+hD0CCHg5zEC9FHK+8mUws+r4hV4YT4aY4Yk9d4VnNY9l9AuVO7
+         AI0Ad+uVDitGcCAXjMU+FlC437rP+ds4rKBlXCVjnPP5uRKFxqJBixvnb9PCoOa+sW
+         FnVvegFB93d5PF6ldKrHYjfzccHyaL4fTmx8moc5rYWwXg3ugRNp0UYTYGX1p0pS8v
+         oaZXCrDylcdzQ==
+Date:   Tue, 6 Sep 2022 13:33:49 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Ashish Kalra <Ashish.Kalra@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com
+Subject: Re: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
+ fault for user address
+Message-ID: <YxciDTgONtzwiiYo@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+ <YvKRjxgipxLSNCLe@zn.tnic>
+ <YxcgAk7AHWZVnSCJ@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxcgAk7AHWZVnSCJ@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,31 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The documentation for fastrpc bingings is now YAML. So update the
-MAINTAINERS file.
+On Tue, Sep 06, 2022 at 01:25:10PM +0300, Jarkko Sakkinen wrote:
+> On Tue, Aug 09, 2022 at 06:55:43PM +0200, Borislav Petkov wrote:
+> > On Mon, Jun 20, 2022 at 11:03:43PM +0000, Ashish Kalra wrote:
+> > > +	pfn = pte_pfn(*pte);
+> > > +
+> > > +	/* If its large page then calculte the fault pfn */
+> > > +	if (level > PG_LEVEL_4K) {
+> > > +		unsigned long mask;
+> > > +
+> > > +		mask = pages_per_hpage(level) - pages_per_hpage(level - 1);
+> > > +		pfn |= (address >> PAGE_SHIFT) & mask;
+> > 
+> > Oh boy, this is unnecessarily complicated. Isn't this
+> > 
+> > 	pfn |= pud_index(address);
+> > 
+> > or
+> > 	pfn |= pmd_index(address);
+> 
+> I played with this a bit and ended up with
+> 
+>         pfn = pte_pfn(*pte) | PFN_DOWN(address & page_level_mask(level - 1));
+> 
+> Unless I got something terribly wrong, this should do the
+> same (see the attached patch) as the existing calculations.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
+IMHO a better name for this function would be do_user_rmp_addr_fault() as
+it is more consistent with the existing function names.
 
-Changes since v8:
- * no changes
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 96f47a7865d6..ad697195fc59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16863,7 +16863,7 @@ M:	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
- M:	Amol Maheshwari <amahesh@qti.qualcomm.com>
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-+F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
- F:	drivers/misc/fastrpc.c
- F:	include/uapi/misc/fastrpc.h
- 
--- 
-2.34.1
-
+BR, Jarkko

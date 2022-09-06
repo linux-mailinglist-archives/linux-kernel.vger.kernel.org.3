@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF16E5AE904
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E3D5AE906
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 15:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240180AbiIFND4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 09:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S240225AbiIFNE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 09:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbiIFNDx (ORCPT
+        with ESMTP id S240191AbiIFNEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 09:03:53 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EC8402F9;
-        Tue,  6 Sep 2022 06:03:53 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 66B4E5C015C;
-        Tue,  6 Sep 2022 09:03:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 06 Sep 2022 09:03:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1662469432; x=1662555832; bh=Lz
-        rKfTcjNa2gAYtG7mObzCcMkmt+e+ZeVr16IOXkI9Q=; b=FB8R49WvUzxUAY/QLO
-        0B9zWhxqPOcOOARwGkDoP+AV2rxDIvbksXX2HQ1MxlhDGOhAux7gNLeO3trSzct9
-        5eKepMsdR9areu1huPQnDzP+NlU3kSYTffVIjle2HNL7UFe3KGxtCwcwDGYWYpKu
-        UA7DHyfluQWS0ZWm7oyFKt3Em9cOegvepxi5D5Omw9qxMHKQPcGeRxe/Cs5KMnXp
-        xmA3xAz3SgmA9hlfxp5ALpUFmqkTYkyarKaJREMxAaJjEBvL1QSbRBdDVOguRwiI
-        FwF8Gu0uK5BfwHx0M+01quZZV2IHxNO/m3jh7BUqbounFvtRvlZNg/dqm4E0zRuW
-        alnQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662469432; x=1662555832; bh=LzrKfTcjNa2gAYtG7mObzCcMkmt+
-        e+ZeVr16IOXkI9Q=; b=DkC18CJJBQMHbol50NFvQme1LFVGP4hVY/zkbPRqkZBs
-        vDfLjOs/da6LoN/vFc0ZIxSjLidBprjIRhy9u//YxpAMAg2asob+CfpnPLeF+72f
-        5cRguktNnuRsDKqlBA8EL4UVofEboXA8Ekbnen02OEUsJI4r7mDgOXPaVpnk30lg
-        HyCxNJBxwTKmYvwjVHkHzJmhSinzLF+XJrDIaeuz4m3VIeYsZbUU/sI56ckoyNJZ
-        TsROQy5GU/41Jh4q8p4tOcI35jHWq12giheZa+V+zK85pxCEXDGTIhXNyv5TZsBL
-        TGqJelhOm9207irqMoyJxKrBJ5JRMCOvNS0mj95euQ==
-X-ME-Sender: <xms:NkUXYyAp1P7aigflXTgkJmCI6fhYOtu_uK8ueNr9a0GmtdLn1kLZjA>
-    <xme:NkUXY8hevg6TLba2niZSV4APsBU0KlcVK3lRsUh505kEjtiHE98kK4joVgmeJ3FOi
-    NKqOIMwKTN1cHuyyGI>
-X-ME-Received: <xmr:NkUXY1lj9heGLCHl3_QB1xuVBmqB2tEYLORXu-XJkzrv45_ebAotMoBAnt2etD8uRQdXCxBgAKfmJlwZwlZr4Oy2tET8l5GHMq5H>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelkedgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
-    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
-    htvghrnhepffelgeffveelkeffkeehiefgtdeluedvtdfghfdtvdefgfejheffudeuveek
-    vddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    gvsegsvghnsghovggtkhgvlhdrnhgvth
-X-ME-Proxy: <xmx:NkUXYwyvGZrad7T064RRoQ1OLHM5awoNeUvRS4HgNBUPN68MoT5RFQ>
-    <xmx:NkUXY3QUiLPv4Y0m-uWgx8S_KBnq6chwfoU_TmTU5NjEls7o6JXxyA>
-    <xmx:NkUXY7aJJ6e1n25wwg3yB9KwZKABSwsKKBcz63Pz-c9kK55rRKGzxw>
-    <xmx:OEUXY_qqGV1JoBS2ZntZv3x-SeYrR6BEioLbT5zviEaPBp9kjzWf1Q>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Sep 2022 09:03:50 -0400 (EDT)
-Date:   Tue, 6 Sep 2022 09:03:48 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, Jason@zx2c4.com,
-        jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        sumit.garg@linaro.org, david@sigma-star.at, michael@walle.cc,
-        john.ernberg@actia.se, jmorris@namei.org, serge@hallyn.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
-        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Subject: Re: [RFC PATCH HBK: 6/8] KEYS: trusted: caam based black key
-Message-ID: <YxdFNIYcD1QO7mtC@farprobe>
-References: <20220906065157.10662-1-pankaj.gupta@nxp.com>
- <20220906065157.10662-7-pankaj.gupta@nxp.com>
+        Tue, 6 Sep 2022 09:04:55 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7510E1E3C0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:04:53 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1274ec87ad5so13047750fac.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 06:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=melexis.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7Haewm4pcI6ughQ1h8d6eCH0y+Fa4YzQ3XWrFfPFHdM=;
+        b=gZ1NSeFPE+0lZGlav/wzFNn/dSqU/yNEuwpQNNs0Nt55bsLZoMeJWS1/CQjYcGUbFE
+         dzhWj5EOasmyF5MoUzSG632ZX9kIvuof3pTMMq4CLyF1LDCoXZBjA71zLJimTWpyuA6o
+         jSAp+m3l7226UqJgAF7kldOPfXx4JiMwHq2LDJTG2yyIWo5dcyE7mhodkTF9uPaFdFlv
+         hC7ZSYWwVVpoMhesTgy2Ta/E54WY8/BeewR+QOBuVx/WvmUZjzSY1Pcx54TyG84y8pm+
+         82fr1EpeW8VcejHmBrvL0EaXNX24lwevhxeVvUtRk5Cl2Y7C9WSOLgX+S41ZUYeuZ5dW
+         F72Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7Haewm4pcI6ughQ1h8d6eCH0y+Fa4YzQ3XWrFfPFHdM=;
+        b=n3a7uHx6xtfBxrRHwpDSMR6WA5z7k4xmnluwo+i0Hm0N6J1zW72fwzgb+KpDOpkJb4
+         mkzf4969/3HwSKIiMGINS9lgp3M7ugvBjFsaOQG6u1vrcNStRcmLStC5cq7+OvB3eYlk
+         Ydl0DsH9pNO1oZR/GgkiWFpOJPv/24VtkqLaOr55e88waNC9VlaNPdc4BBdzpKP7EGlA
+         Nh275YLgS9oaDFA5xtQmuXzOXR0vxp2nltTd2sVyooNCIXqcXazjGn6lNdbCS8HLmqV/
+         IB45CwBfBGZRHTrvBHwVOprGm4CYsfDEV9OfWmbQTIBkRPm8G3HEYMRTh/iNtmh8CTcn
+         ucsg==
+X-Gm-Message-State: ACgBeo2UR1p2pCFrxU1jVHfHOhkwTsptr66b0cQIeJDeor6NzDtq7qQ3
+        zkJw7+Z/rY27vJijmR1YHH5Q1RpCiUlq52iObGQyJw==
+X-Google-Smtp-Source: AA6agR6B6YeRaWAlddT2IpJ3b2YefZvlzZju/DNCIjrQ3U9qB9vM+iWjlJiKiS/BIaTrwzI8b92Tgus8vmDxx/umhEQ=
+X-Received: by 2002:a05:6808:e90:b0:345:49f2:a112 with SMTP id
+ k16-20020a0568080e9000b0034549f2a112mr10039724oil.7.1662469492642; Tue, 06
+ Sep 2022 06:04:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220906065157.10662-7-pankaj.gupta@nxp.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1662454215.git.cmo@melexis.com> <32c4b72624e4a3480b202f24f506ca91029e47f7.1662454215.git.cmo@melexis.com>
+ <CAHp75VezNufWGW6sC+ALmX9H4yavWRCmpHuv9ZVoRycQxZ-uQg@mail.gmail.com>
+ <CAKv63utD2NzbUYR2=rrmZtkdtwOzoQBW7dZ5yzNa-r8uKmqXaw@mail.gmail.com> <CAHp75Vc1a1bguLxX7Laewa9f2k9c38KeOD1zsikmC+3=21MnyQ@mail.gmail.com>
+In-Reply-To: <CAHp75Vc1a1bguLxX7Laewa9f2k9c38KeOD1zsikmC+3=21MnyQ@mail.gmail.com>
+From:   Crt Mori <cmo@melexis.com>
+Date:   Tue, 6 Sep 2022 15:04:16 +0200
+Message-ID: <CAKv63utCSXVgOP4JkEBQSzDWF_s443a-ZbCd8V4tP9=z461McA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] iio: temperature: mlx90632 Add runtime
+ powermanagement modes
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:21:55 +0530, Pankaj Gupta wrote:
-> - CAAM supports two types of black keys:
-
-What is a "black key"?
-
->   -- Plain key encrypted with ECB
->   -- Plain key encrypted with CCM
->   Note: Due to robustness, default encytption used for black key is CCM.
-                                     ^^^^^^^^^^
-
-"encryption"
-
-> - A black key blob is generated, and added to trusted key payload.
-
-Missing "the" before "trusted".
-
---Ben
+On Tue, 6 Sept 2022 at 14:37, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>
+> On Tue, Sep 6, 2022 at 1:52 PM Crt Mori <cmo@melexis.com> wrote:
+> > On Tue, 6 Sept 2022 at 12:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > >
+> > > Very good and documented code, thanks!
+> > > I believe you better to use DEFINE_.*_PM_OPS instead of legacy ones
+> > > (due to pm_ptr() usage).
+> > > Otherwise, with some nitpicks that wouldn't prevent a green light,
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > >
+> > I checked DEFINE_.*_PM_OPS usage around drivers and you either have
+> > SIMPLE (where you define suspend/resume) or you have RUNTIME (for
+> > runtime suspend/resume), but never are those two together. So I am a
+> > bit puzzled how to get this working.
+>
+> The one which suits here is called _DEFINE_DEV_PM_OPS(). But it's
+> basically the same what you put here with the possible unused case.
+>
+I thought underscore prefixed macros are the ones not to be used
+directly by drivers. I also found no occurrence in current drivers, so
+it was not something that was done so far?

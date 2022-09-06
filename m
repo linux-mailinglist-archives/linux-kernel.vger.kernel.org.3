@@ -2,70 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4974C5AE6C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2975AE6CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 13:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbiIFLmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 07:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S232170AbiIFLoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 07:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbiIFLmn (ORCPT
+        with ESMTP id S232233AbiIFLn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 07:42:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29B123A4B5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 04:42:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E59AE139F;
-        Tue,  6 Sep 2022 04:42:48 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACCB33F534;
-        Tue,  6 Sep 2022 04:42:37 -0700 (PDT)
-Message-ID: <5f4d77c3-ec58-659e-0b03-a799b3782a31@arm.com>
-Date:   Tue, 6 Sep 2022 12:42:32 +0100
+        Tue, 6 Sep 2022 07:43:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4FF32EFA;
+        Tue,  6 Sep 2022 04:43:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 862C8614D5;
+        Tue,  6 Sep 2022 11:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72430C433D6;
+        Tue,  6 Sep 2022 11:43:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662464637;
+        bh=AehOEKhpmpH1FHjym6CQIW6lvwPUnU6KzriMmKjXbRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qU/E7xRE1iuF0V2oUvMrbwhZikLmOmNx8whkru0Ru9GU3BXYPEWjCBWSVyYkfIdnC
+         OXqUP1bOMJjkIVNSIh4DJHEcyJgTxOJp7/gv3nbr2RjRw7PRDi0KBozXb+GDhHm8qT
+         0/k3TfwjyqTMe9VUl0fzx10JGM96c7jGp41yo6gQvVCf6sAM58dNACf0HeUmh37dBx
+         Sq5m4XzPPHF/h01OvKRM1LERn6EXvwsd5RXI54z1/81IgJQTbKLrCf+X6xtXHI3DMt
+         50L5EBM5xHbt9RCitv8RIToNDz6wul+op7d1kRfIIO0mEzUO7GxjB/oTxJqoJ3A89o
+         uLK4cAfjwZmzg==
+Date:   Tue, 6 Sep 2022 14:43:53 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v16 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+Message-ID: <YxcyeZBHGPNQB+qJ@kernel.org>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+ <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
+ <YxZsbLIAcR4/bScc@kernel.org>
+ <394ed3b5f96afd3cf39e99675be1a32c89c8080d.camel@huaweicloud.com>
+ <Yxci4yrV5OcMnTNi@kernel.org>
+ <bd7cb49606b6102c5263df94784c850c91434359.camel@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] drm/amdgpu: cleanup coding style in amdgpu_drv.c
-Content-Language: en-GB
-To:     Jingyu Wang <jingyuwang_vip@163.com>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, evan.quan@amd.com, mario.limonciello@amd.com,
-        Felix.Kuehling@amd.com, andrey.grodzovsky@amd.com,
-        olomon.chiu@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <4362da59f466d8c41c9a3ea91348266280b6a594>
- <20220904191513.15159-1-jingyuwang_vip@163.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220904191513.15159-1-jingyuwang_vip@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd7cb49606b6102c5263df94784c850c91434359.camel@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-04 20:15, Jingyu Wang wrote:
-[...]
-> @@ -565,8 +566,8 @@ module_param_named(timeout_period, amdgpu_watchdog_timer.period, uint, 0644);
->    */
->   #ifdef CONFIG_DRM_AMDGPU_SI
->   
-> -#if defined(CONFIG_DRM_RADEON) || defined(CONFIG_DRM_RADEON_MODULE)
-> -int amdgpu_si_support = 0;
-> +#if IS_ENABLED(CONFIG_DRM_RADEON) || defined(CONFIG_DRM_RADEON_MODULE)
+On Tue, Sep 06, 2022 at 01:04:35PM +0200, Roberto Sassu wrote:
+> On Tue, 2022-09-06 at 13:37 +0300, Jarkko Sakkinen wrote:
+> > On Tue, Sep 06, 2022 at 09:08:23AM +0200, Roberto Sassu wrote:
+> > > On Tue, 2022-09-06 at 00:38 +0300, Jarkko Sakkinen wrote:
+> > > > On Mon, Sep 05, 2022 at 04:33:11PM +0200, Roberto Sassu wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > 
+> > > > > In preparation for the patch that introduces the
+> > > > > bpf_lookup_user_key() eBPF
+> > > > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to
+> > > > > be
+> > > > > able to
+> > > > > validate the kfunc parameters. Add them to enum
+> > > > > key_lookup_flag, so
+> > > > > that
+> > > > > all the current ones and the ones defined in the future are
+> > > > > automatically
+> > > > > exported through BTF and available to eBPF programs.
+> > > > > 
+> > > > > Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking
+> > > > > whether a
+> > > > > variable contains only defined flags.
+> > > > > 
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > Reviewed-by: KP Singh <kpsingh@kernel.org>
+> > > > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > 
+> > > > You should remove ack if there is any substantial change.
+> > > 
+> > > Yes, sorry. I thought you were fine with the change due to:
+> > > 
+> > > https://lore.kernel.org/bpf/YxF4H9MTDj+PnJ+V@kernel.org/
+> > 
+> > It was the documentation part, not really the enum change.
+> > 
+> 
+> Ok, so if I remove the documentation I can keep your ack?
 
-Hint: read the checkpatch warning again more closely, and consider what 
-IS_ENABLED() does and therefore why this is still not quite right.
+Can you show the updated patch (e.g. via using attachment)?
 
-Robin.
-
-> +int amdgpu_si_support;
->   MODULE_PARM_DESC(si_support, "SI support (1 = enabled, 0 = disabled (default))");
->   #else
->   int amdgpu_si_support = 1;
+BR, Jarkko

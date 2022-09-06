@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB4C5AEF47
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2502E5AEF57
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 17:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbiIFPtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 11:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S233654AbiIFPtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 11:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiIFPsU (ORCPT
+        with ESMTP id S234418AbiIFPsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:48:20 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95117883C1;
-        Tue,  6 Sep 2022 07:58:26 -0700 (PDT)
+        Tue, 6 Sep 2022 11:48:42 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4431063D0;
+        Tue,  6 Sep 2022 07:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662476306; x=1694012306;
+  t=1662476376; x=1694012376;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+SNXQQW5PQbfXWhgvv3wu0uuNTP0Y8hkmSWJkIlRHaI=;
-  b=jTDLYfh1ID8rRSrwgBCcMar3sUIiuMVBceCJ69W+5EaSDy52yDUcYhi1
-   VhFG5xYuHKe+ZoMUm2NcHYfm+OmJFb1BGYwsCqJ2r9xsPI7/eMk16GO35
-   WLvZNpS80sJb2M93YQbGr/nPqNn5FwGMhyST+Hc4SaW6GmOQQAIese4o4
-   vXAYClGfywS/JvFyqZNoxurcw4ZjIS1rK2Wa4CjPfnIdPEWYfKr9dc7vW
-   rBGOHfNGX6PiBYLWSNdwnlBw1+BnrTtCOgPz/YMqrMH+bKOBwawjy2tPw
-   EDn+YW6jZXJ1V0MyWCbvVOY9cpXg1lXrZUdSCB3aKnQMSll3TwfaOE0ZK
+  bh=DNga4iNT+UIy0i9CErZMzAatkIfsNy/jUgqH3PWHYd8=;
+  b=UtjnCjE/DmBOacMBMgOWes9aeLG2p+u04U2CuyIuAHC8vvLgvBXXQq/R
+   x5e8Lo6Tm9QLWK2PZ7TDEu71XhGTmz17kTKI81ASdT+e43CcB5lY9dysS
+   kmznLekMluXa3FjZN+cpeniFn2XRleAG9l9+SU70gVI0GsAgwhkhclvQK
+   7hIlI1ZdbPaDFqg38UEqP8gtocIN5B6W/i0b90YygWenaooNczCgNCjbB
+   fkxuNfxxnDPCh0au6DkvDBPXPBfFhy6CarcXpz8ZMpAG3PU6Cxbgf472f
+   S+Ah/BFLriH2W94MyE18jGA/FATgeIj56DVho4+9ZZlRX1WNGSNFE8jxf
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="382909710"
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="296614838"
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="382909710"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:58:25 -0700
+   d="scan'208";a="296614838"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:59:35 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="647256044"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 07:58:22 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oVa1q-009AHd-2J;
-        Tue, 06 Sep 2022 17:58:18 +0300
-Date:   Tue, 6 Sep 2022 17:58:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa@kernel.org, krzk@kernel.org, jarkko.nikula@linux.intel.com,
-        robh@kernel.org, semen.protsenko@linaro.org, sven@svenpeter.dev,
-        jsd@semihalf.com, rafal@milecki.pl, olof@lixom.net, arnd@arndb.de,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v3 i2c-master] i2c: microchip: pci1xxxx: Add driver for
- I2C host controller in multifunction endpoint of pci1xxxx switch
-Message-ID: <YxdgCmj+Xr23V4v/@smile.fi.intel.com>
-References: <20220906102057.679839-1-tharunkumar.pasumarthi@microchip.com>
+   d="scan'208";a="644199099"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 06 Sep 2022 07:59:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 2C18F86; Tue,  6 Sep 2022 17:59:49 +0300 (EEST)
+Date:   Tue, 6 Sep 2022 17:59:49 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, sanju.mehta@amd.com,
+        mario.limonciello@amd.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Resume PCIe bridges after switch is found
+ on AMD USB4 controller
+Message-ID: <YxdgZavuLU78lqIL@black.fi.intel.com>
+References: <20220905065622.1573811-1-kai.heng.feng@canonical.com>
+ <YxWgGKIAvsxwSz85@black.fi.intel.com>
+ <CAAd53p4iV=ne5bDGZ6FxE9bBUVoFh=eXF9_oMPvPzjVj=UVoog@mail.gmail.com>
+ <YxWqSYDWe0NitSkL@black.fi.intel.com>
+ <CAAd53p6bSmTPavjA0v6tybc6=HrwiDn0JGzXwVOG_m5EVw1p1w@mail.gmail.com>
+ <YxYXH5dqKqPANeVX@black.fi.intel.com>
+ <CAAd53p5tYG=mAR-RSr1g_iznmmcCy1QpthG5vQzr99AP4QLJyg@mail.gmail.com>
+ <YxdNKx1OFKsgBUBu@black.fi.intel.com>
+ <CAAd53p6nNh1nUSfJgj5db+2B=eOCfiKta5aRiGsE4N0teL9cPQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906102057.679839-1-tharunkumar.pasumarthi@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <CAAd53p6nNh1nUSfJgj5db+2B=eOCfiKta5aRiGsE4N0teL9cPQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,338 +73,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:50:57PM +0530, Tharun Kumar P wrote:
-> Microchip pci1xxxx is an unmanaged PCIe3.1a Switch for Consumer,
-> Industrial and Automotive applications. This switch has multiple
-> downstream ports. In one of the Switch's Downstream port, there
-> is a multifunction endpoint for peripherals which includes an I2C
-> host controller. The I2C function in the endpoint operates at 100KHz,
-> 400KHz and 1 MHz and has buffer depth of 128 bytes.
-> This patch provides the I2C controller driver for the I2C function
-> of the switch.
-
-No serious problems found. I think next version would be good enough.
-
-...
-
-+ bits.h
-
-> +#include <linux/delay.h>
-> +#include <linux/i2c.h>
-> +#include <linux/i2c-smbus.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-
-+ types.h
-
-...
-
-> +static void pci1xxxx_i2c_buffer_write(struct pci1xxxx_i2c *i2c, u8 slaveaddr,
-> +				      u8 transferlen, unsigned char *buf)
-> +{
-> +	void __iomem *bp;
-> +
-> +	bp = i2c->i2c_base;
-> +	if (slaveaddr) {
-> +		writeb(slaveaddr, bp + SMBUS_MST_BUF);
-> +		if (buf)
-> +			memcpy_toio(bp + SMBUS_MST_BUF + 1, buf, transferlen);
-> +	} else {
-> +		if (buf)
-> +			memcpy_toio(bp + SMBUS_MST_BUF, buf, transferlen);
-> +	}
-
-So, basically it's like this:
-
-	void __iomem *bp = i2c->i2c_base + SMBUS_MST_BUF;
-
-	if (slaveaddr)
-		writeb(slaveaddr, bp++);
-
-	if (buf)
-		memcpy_toio(bp, buf, transferlen);
-
-> +}
-
-...
-
-> +static void pci1xxxx_i2c_reset_counters(struct pci1xxxx_i2c *i2c)
-> +{
-> +	void __iomem *bp;
-
-In all these helpers do like above:
-
-	void __iomem *bp = i2c->i2c_base + SMBUS_CONTROL_REG_OFF;
-
-It will unload code from duplicating noise.
-
-> +	u8 regval;
-> +
-> +	bp = i2c->i2c_base;
-> +	regval = readb(bp + SMBUS_CONTROL_REG_OFF);
-> +	regval |= CTL_RESET_COUNTERS;
-> +	writeb(regval, bp + SMBUS_CONTROL_REG_OFF);
-> +}
-
-...
-
-> +static irqreturn_t pci1xxxx_i2c_isr(int irq, void *dev)
-> +{
-> +	irqreturn_t intr_handled = IRQ_NONE;
-> +	struct pci1xxxx_i2c *i2c = dev;
-> +	void __iomem *bp;
-
-	void __iomem *bp = i2c->i2c_base + SMBUS_GEN_INT_STAT_REG_OFF;
-
-> +	u16 reg1;
-> +	u8 reg3;
-> +
-> +	bp = i2c->i2c_base;
-> +
-> +	/*
-> +	 *  Read the SMBus interrupt status register to see if the
-> +	 *  DMA_TERM interrupt has caused this callback.
-> +	 */
-> +	reg1 = readw(bp + SMBUS_GEN_INT_STAT_REG_OFF);
-> +
-> +	if (reg1 & I2C_BUF_MSTR_INTR_MASK) {
-> +		reg3 = readb(bp + SMBUS_INTR_STAT_REG_OFF);
-> +		if (reg3 & INTR_STAT_DMA_TERM) {
-> +			complete(&i2c->i2c_xfer_done);
-> +			intr_handled = IRQ_HANDLED;
-> +			writeb(INTR_STAT_DMA_TERM, bp + SMBUS_INTR_STAT_REG_OFF);
-> +		}
-> +		pci1xxxx_ack_high_level_intr(i2c, I2C_BUF_MSTR_INTR_MASK);
-> +	}
-> +
-> +	if (reg1 & SMBALERT_INTR_MASK) {
-> +		intr_handled = IRQ_HANDLED;
-> +		pci1xxxx_ack_high_level_intr(i2c, SMBALERT_INTR_MASK);
-> +	}
-> +
-> +	return intr_handled;
-> +}
-
-...
-
-> +	ret = set_sys_lock(i2c);
-> +	if (ret != -EPERM) {
-> +		regval = readl(bp + SMB_GPR_REG);
-> +		release_sys_lock(i2c);
-> +	} else {
-> +		/*
-> +		 * Configure I2C Fast Mode as default frequency if unable
-> +		 * to acquire sys lock.
-> +		 */
-> +		regval = 0;
-> +	}
-
-Why not positive conditional?
-
-	if (ret == -EPERM) {
-		...
-	} else {
-		...
-	}
-
-...
-
-> +	/*
-> +	 * Enable Pullup for the SMB alert pin which is just used for
-
-pull-up
-
-> +	 * wakeup right now.
-> +	 */
-
-...
-
-> +		transferlen = min_t(u16, remainingbytes, (u16)SMBUS_BUF_MAX_SIZE);
-
-min_t (note 't' part) does type casting for you, no need to repeat this.
-
-...
-
-> +		if ((count + transferlen >= total_len) &&
-> +				(i2c->flags & I2C_FLAGS_STOP)) {
-
-Broken indentation (align ( under ( in the second line)
-
-> +			pci1xxxx_i2c_set_clear_FW_ACK(i2c, false);
-> +			pci1xxxx_i2c_send_start_stop(i2c, 0);
-> +		} else {
-> +			pci1xxxx_i2c_set_clear_FW_ACK(i2c, true);
-> +		}
-
-...
-
-> +		time_left = wait_for_completion_timeout
-> +				(&i2c->i2c_xfer_done,
-
-Why this on a separate line? Join them together.
-
-> +				msecs_to_jiffies(PCI1XXXX_I2C_TIMEOUT_MS));
-> +		if (time_left == 0) {
-> +			/* Reset the I2C core to release the bus lock. */
-> +			pci1xxxx_i2c_init(i2c);
-> +			retval = -ETIMEDOUT;
-> +			goto cleanup;
-> +		}
-
-...
-
-> +		if (i2c->flags & I2C_FLAGS_SMB_BLK_READ) {
-> +			buf[0] = readb(bp + SMBUS_MST_BUF);
-> +			read_count = buf[0];
-> +			memcpy_fromio(&buf[1], bp + SMBUS_MST_BUF + 1, read_count);
-> +		} else {
-> +			memcpy_fromio(&buf[count], bp + SMBUS_MST_BUF, transferlen);
-> +		}
-
-Hmm... count in the second case because we may not write all in one transfer?
-
-...
-
-> +	for (count = 0; count < total_len; count += transferlen) {
-> +		/*
-> +		 * Before start of any transaction clear the existing
-> +		 * START/STOP conditions.
-> +		 */
-> +		writeb(0x00, bp + SMB_CORE_CMD_REG_OFF1);
-
-0x00 --> 0
-
-(below as well)
-
-> +		pci1xxxx_i2c_clear_flags(i2c);
-> +		remainingbytes = total_len - count;
-> +
-> +		/* If it is the starting of the transaction send START. */
-> +		if (count == 0) {
-> +			pci1xxxx_i2c_send_start_stop(i2c, 1);
-> +
-> +			/* -1 for the slave address. */
-> +			transferlen = min_t(u16, (u16)SMBUS_BUF_MAX_SIZE - 1,
-> +					  remainingbytes);
-
-No castings.
-
-> +			pci1xxxx_i2c_buffer_write(i2c, slaveaddr,
-> +						  transferlen, &buf[count]);
-> +			/*
-> +			 * The actual number of bytes written on the I2C bus
-> +			 * is including the slave address.
-> +			 */
-> +			actualwritelen = transferlen + 1;
-> +		} else {
-> +			transferlen = min_t(u16, (u16)SMBUS_BUF_MAX_SIZE,
-> +					  remainingbytes);
-
-Ditto.
-
-> +			pci1xxxx_i2c_buffer_write(i2c, 0x00, transferlen, &buf[count]);
-> +			actualwritelen = transferlen;
-> +		}
-> +
-> +		pci1xxxx_i2c_set_count(i2c, actualwritelen, actualwritelen, 0x00);
-> +
-> +		/*
-> +		 * Send STOP only when I2C_FLAGS_STOP bit is set in the flags and
-> +		 * only for the last transaction.
-> +		 */
-> +		if (remainingbytes <= transferlen &&
-> +				(i2c->flags & I2C_FLAGS_STOP))
-
-Indentation needs to be fixed.
-
-> +			pci1xxxx_i2c_send_start_stop(i2c, 0);
-> +
-> +		pci1xxxx_i2c_start_DMA(i2c);
-> +
-> +		/*
-> +		 * Wait for the DMA_TERM interrupt.
-> +		 */
-> +		time_left = wait_for_completion_timeout(&i2c->i2c_xfer_done,
-> +				msecs_to_jiffies(PCI1XXXX_I2C_TIMEOUT_MS));
-> +		if (time_left == 0) {
-> +			/* Reset the I2C core to release the bus lock. */
-> +			pci1xxxx_i2c_init(i2c);
-> +			retval = -ETIMEDOUT;
-> +			goto cleanup;
-> +		}
-> +
-> +		regval = readb(bp + SMB_CORE_COMPLETION_REG_OFF3);
-> +		if (regval & COMPLETION_MNAKX) {
-
-> +			writeb(COMPLETION_MNAKX, i2c->i2c_base +
-> +						SMB_CORE_COMPLETION_REG_OFF3);
-
-			writeb(COMPLETION_MNAKX,
-			       i2c->i2c_base + SMB_CORE_COMPLETION_REG_OFF3);
-
-looks better.
-
-> +			retval = -ETIMEDOUT;
-> +			goto cleanup;
-> +		}
-> +	}
-
-...
-
-> +static const struct i2c_adapter pci1xxxx_i2c_ops = {
-> +	.owner	= THIS_MODULE,
-> +	.name	= "Pci1xxxx I2C Adapter",
-
-Wouldn't PCI1xxxx look better?
-
-> +	.algo	= &pci1xxxx_i2c_algo,
-> +};
-
-...
-
-> +	device_set_wakeup_enable(dev, TRUE);
-> +	pci_wake_from_d3(pdev, TRUE);
-
-What's TRUE? Why true can't be used?
-
-...
-
-> +	struct pci1xxxx_i2c *i2c;
-> +	struct device *dev;
-> +	int ret;
-> +
-> +	dev = &pdev->dev;
-
-The idea is when we 100% know that the dereference is okay and can't fail, we
-move assignments like this to the definition block above, otherwise, when an
-additional check is needed, we keep the assignment closer to its first user
-(conditional).
-
-> +	i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
-> +	if (!i2c)
-> +		return -ENOMEM;
-
-...
-
-> +	/*
-> +	 * We are getting the base address of the SMB core. SMB core uses
-> +	 * BAR0 and size is 32K.
-> +	 */
-> +	ret = pcim_iomap_regions(pdev, BIT(0), pci_name(pdev));
-> +	if (ret < 0)
-
-> +		return -ENOMEM;
-
-What's wrong with
-
-		return ret;
-
-?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+On Tue, Sep 06, 2022 at 10:29:03PM +0800, Kai-Heng Feng wrote:
+> On Tue, Sep 6, 2022 at 9:37 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > On Tue, Sep 06, 2022 at 08:57:20PM +0800, Kai-Heng Feng wrote:
+> > > On Mon, Sep 5, 2022 at 11:34 PM Mika Westerberg
+> > > <mika.westerberg@linux.intel.com> wrote:
+> > > >
+> > > > On Mon, Sep 05, 2022 at 11:21:36PM +0800, Kai-Heng Feng wrote:
+> > > > > > Hmm, so you see the actual hotplug but the tunneled PCIe link may not be
+> > > > > > detected? Does the PCIe "Card Present" (or Data Link Layer Active)
+> > > > > > status change at all or is it always 0?
+> > > > >
+> > > > > It changes only after tb_switch_add() is called.
+> > > >
+> > > > I doubt tb_switch_add() does anything but instead it is the established
+> > > > PCIe tunnel that then shows up as it toggles the Card Present bit or so.
+> > > > But that should also trigger PME if the root port is in D3 so you should
+> > > > see this wake if everything works accordingly (unless I'm missing
+> > > > something).
+> > >
+> > > You are right. Sometimes it may still fail to detect hotplugged device
+> > > right after tb_switch_add().
+> > > At which point PCIe tunnels are established? Is it after tb_scan_port()?
+> >
+> > They are established when userspace writes "1" to ../authorized of the
+> > device (not automatically).
+> >
+> > On Ubuntu that's boltd that handles this so you may need to disable it
+> > before you do the experiment.
+> 
+> In the dmesg it was disabled and "authorized" was 0 originally.
+
+OK.
+
+> >
+> > > I found that it's cleaner to wakeup hotplug ports via iterating device
+> > > link consumers at the end of tb_scan_port().
+> > >
+> > > According to your commit b2be2b05cf3b1c7b499d3b05decdcc524879fea7
+> > > ("thunderbolt: Create device links from ACPI description"), it states
+> > > "The _DSD can be added to tunneled USB3 and PCIe ports, and is needed to
+> > > make sure the USB4 NHI is resumed before any of the tunneled ports so
+> > > the protocol tunnels get established properly before the actual port
+> > > itself is resumed. Othwerwise the USB/PCI core find the link may not be
+> > > established and starts tearing down the device stack."
+> > >
+> > > So isn't waking them up a logical thing to do here?
+> >
+> > No they should wake up themselves.
+> 
+> OK.
+> 
+> >
+> > > > So if you do this:
+> > > >
+> > > > 1. Boot the system up, nothing connected
+> > > > 2. Plug in the TBT/USB4 device but do not authorize the PCIe tunnel
+> > > > 3. Wait for the TBT/USB4 domain to enter sleep (runtime suspend)
+> > > > 4. Authorize the PCIe tunnel
+> > > >
+> > > >   # echo 1 > .../authorized
+> > > >
+> > > > The established PCIe tunnel should trigger PME and the root port then
+> > > > should be able to detect the PCIe link. Can you add full dmesg with
+> > > > "thunderbolt.dyndbg=+p" in the command line to the bug?
+> > >
+> > > dmesg attached. Unfortunately there's no PME.
+> >
+> > Hmm, attached to where? Forgot to attach? ;-)
+> 
+> Oops, it's attached to the Bugzilla now.
+
+Okay I see in the dmesg now that the root port enters D3hot:
+
+[   40.363249] pcieport 0000:00:04.1: saving config space at offset 0x34 (reading 0x50)
+[   40.363257] pcieport 0000:00:04.1: saving config space at offset 0x38 (reading 0x0)
+[   40.363265] pcieport 0000:00:04.1: saving config space at offset 0x3c (reading 0x200ff)
+[   40.365052] pcieport 0000:00:04.1: PME# enabled
+
+and then the PCIe tunnel is authorized:
+
+[   58.936258] thunderbolt 0000:64:00.6: 0:5 <-> 2:6 (PCI): activating
+[   58.936270] thunderbolt 0000:64:00.6: activating PCIe Down path from 0:5 to 2:6
+[   58.936434] thunderbolt 0000:64:00.6: 2:1: Writing hop 1
+[   58.936443] thunderbolt 0000:64:00.6: 2:1:  In HopID: 8 => Out port: 6 Out HopID: 8
+[   58.936449] thunderbolt 0000:64:00.6: 2:1:   Weight: 1 Priority: 3 Credits: 32 Drop: 0
+[   58.936453] thunderbolt 0000:64:00.6: 2:1:    Counter enabled: 0 Counter index: 2047
+[   58.936457] thunderbolt 0000:64:00.6: 2:1:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
+[   58.936460] thunderbolt 0000:64:00.6: 2:1:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
+[   58.936786] thunderbolt 0000:64:00.6: 0:5: Writing hop 0
+[   58.936795] thunderbolt 0000:64:00.6: 0:5:  In HopID: 8 => Out port: 2 Out HopID: 8
+[   58.936800] thunderbolt 0000:64:00.6: 0:5:   Weight: 1 Priority: 3 Credits: 7 Drop: 0
+[   58.936803] thunderbolt 0000:64:00.6: 0:5:    Counter enabled: 0 Counter index: 2047
+[   58.936807] thunderbolt 0000:64:00.6: 0:5:   Flow Control (In/Eg): 1/1 Shared Buffer (In/Eg): 0/0
+[   58.936810] thunderbolt 0000:64:00.6: 0:5:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
+[   58.936971] thunderbolt 0000:64:00.6: path activation complete
+[   58.936979] thunderbolt 0000:64:00.6: activating PCIe Up path from 2:6 to 0:5
+[   58.937129] thunderbolt 0000:64:00.6: 0:2: Writing hop 1
+[   58.937138] thunderbolt 0000:64:00.6: 0:2:  In HopID: 8 => Out port: 5 Out HopID: 8
+[   58.937143] thunderbolt 0000:64:00.6: 0:2:   Weight: 1 Priority: 3 Credits: 32 Drop: 0
+[   58.937147] thunderbolt 0000:64:00.6: 0:2:    Counter enabled: 0 Counter index: 2047
+[   58.937150] thunderbolt 0000:64:00.6: 0:2:   Flow Control (In/Eg): 1/0 Shared Buffer (In/Eg): 0/0
+[   58.937154] thunderbolt 0000:64:00.6: 0:2:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
+[   58.937453] thunderbolt 0000:64:00.6: 2:6: Writing hop 0
+[   58.937462] thunderbolt 0000:64:00.6: 2:6:  In HopID: 8 => Out port: 1 Out HopID: 8
+[   58.937467] thunderbolt 0000:64:00.6: 2:6:   Weight: 1 Priority: 3 Credits: 7 Drop: 0
+[   58.937471] thunderbolt 0000:64:00.6: 2:6:    Counter enabled: 0 Counter index: 2047
+[   58.937474] thunderbolt 0000:64:00.6: 2:6:   Flow Control (In/Eg): 1/1 Shared Buffer (In/Eg): 0/0
+[   58.937478] thunderbolt 0000:64:00.6: 2:6:   Unknown1: 0x0 Unknown2: 0x0 Unknown3: 0x0
+[   58.937633] thunderbolt 0000:64:00.6: path activation complete
+
+but this is not detected by the root port so after a while the domain is
+suspended as well:
+
+[   84.327759] thunderbolt 0000:64:00.6: 0: suspending switch
+
+What should happen right after the PCIe tunnel activation is that the root port
+should get PME / hotplug and it should then find the devices but this for some
+reason is not happening.
+
+This reminded me that in Intel hardware there is an ACPI power resource that is
+shared between related devices. IIRC there is _PR0() method under the root
+port, xHCI and the TBT NHI that returns the same power resource. Now, when the
+power resource is turned on for any of the devices the kernel wakes up the rest
+too to make sure they get properly re-initialized if they went into
+D0unitialized or something like that. The commit that added this is
+4533771c1e53 ("ACPI / PM: Introduce concept of a _PR0 dependent device").
+
+I'm not entirely sure if that applies here because none of the devices seem to
+enter D3cold, though. Is this working on Windows side and do you know if it
+goes into D3cold too?

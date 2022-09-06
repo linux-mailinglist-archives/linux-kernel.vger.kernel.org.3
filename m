@@ -2,92 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E713E5AF245
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D855AF246
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237807AbiIFRRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S239632AbiIFRRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237758AbiIFRRQ (ORCPT
+        with ESMTP id S237058AbiIFRRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:17:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A8895694;
-        Tue,  6 Sep 2022 10:06:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BAC7615C1;
-        Tue,  6 Sep 2022 17:05:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C096AC433D7;
-        Tue,  6 Sep 2022 17:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662483920;
-        bh=pkC2ANF3tna1pzIjDrSAqSZoO9hFwZIzhtSAi9gowNk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=PjAMYIYcPZWbcgvRkmd+ptsJC8tLyiy+WgXoZvqzf6QiX5NOl0P/E3uzQHDU1njIg
-         MCpsFLTdbWORt6N0JqSnVFSrH5YJ9UAPUYuD5y9U6tNQ4CT6fxSfL/WYNEcOzvCMZr
-         DCQ7CIQxD3HxjV/dQZPIbjvHq8jtZo94pxUrl3J2KFqi9zwK9KbuB3Vu9pSRM3DQZu
-         Lo9RIICjydeOl68HUSgSroRfAWBnvXEX9F956ffWJF7/RF6CYF6swGh2uGXeyaSP1n
-         wO0AMwFQ2Kj2AfTVtFYG+I59ov/6LOBFPiljXiBsJ/+monShyBpUurxEoCFnRKoDmW
-         f8z/sR8plnWcA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B99A85C0834; Tue,  6 Sep 2022 10:05:01 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 10:05:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        urezki@gmail.com, neeraj.iitr10@gmail.com, rostedt@goodmis.org,
-        vineeth@bitbyteword.org, boqun.feng@gmail.com
-Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
- implementation
-Message-ID: <20220906170501.GX4315@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-7-joel@joelfernandes.org>
- <20220902152132.GA115525@lothringen>
- <67122ae3-d69e-438c-18fc-a8de6e40201e@joelfernandes.org>
- <20220905125949.GA173859@lothringen>
- <d82fec15-af9a-6ff6-69dd-a315cdca9892@joelfernandes.org>
- <20220906085512.GI4315@paulmck-ThinkPad-P17-Gen-1>
- <11d8b17a-1a82-148d-6da9-5e624b8e5942@joelfernandes.org>
+        Tue, 6 Sep 2022 13:17:14 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D57795ADC;
+        Tue,  6 Sep 2022 10:06:12 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id f4so8643636qkl.7;
+        Tue, 06 Sep 2022 10:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=8sd1XUbOAaqPt2UCp3leBFo+ZTg1rtmlDOW2QOnPSY4=;
+        b=UpW2c3Q5SPY5cpVDcDaldZhV6TrTm9uikL8Sd8wiKKD4SaxIUKoPBHv2xlT/0T+O7L
+         wCu7F64Ybkzrdh56zxEGQXeG/IpapGwwmx77FSCnENV9Lu9pLSapSlNaENmkBhniPZKy
+         w6Xwd68F9ZzNULGVSCZJyeyNRsKXvudlclI4hJgOSnjlExEJTYgxpdIh3HftxjAmzRB8
+         W4L/L2C++Ddmcov4GGvSGX1RATzP2qgW6Bi7UoCtEDbqJh1KLK/z9sOQ8XiwbNcp7tfP
+         BP+CR9ko7ggnxxhmKNfrdlBr8CTO506lDq917+e8kVpuy/xtkM/vHIAloK4gcW+xfZ1a
+         O8Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=8sd1XUbOAaqPt2UCp3leBFo+ZTg1rtmlDOW2QOnPSY4=;
+        b=bDCLVGf4w3Un4RvtgTncmqc27k+NYjxmRkczagbANgAIsMHnkUG9S7wcZnC6ZXPxrc
+         2BgkyqqXctbJcpN4DXjE8+gqarhU/hZu2C1WwCcacW6MFrOwL8X2OVy4BZNyhiHJ49Rh
+         2CigNLj7Dn2krUeDloOTNdUfQJxLWT4GnCDPh7O/gqgkgulOIjVZjVmr2JcCYaTEBZ+1
+         c3Te9iJh6b44oJnf4JotJIa9BMvZDN7Ly+x2misMod/E2FZWDO2z5YV6lghwBhwYfQkG
+         nLucEHnAQ7OYy1EuPB0G1ShZieeR/ntDUAcu1t/Xp9/3PU8BeurGWAUB9qZFwgk4uYmZ
+         XSAA==
+X-Gm-Message-State: ACgBeo3S7oIy7vy3FQcS5kvym5ikFDGowLyveYiXrFoDCCSuWLnVhIe5
+        b8YAMkFuDS/eQEF38jHEvyA=
+X-Google-Smtp-Source: AA6agR5Fh76feQksNNuMqw8LuVW2nPF1DLvwm04cZ58xFgMHtAIHU/k+SKMVvtgd5SOemtCLL7r4Kg==
+X-Received: by 2002:a05:620a:4089:b0:6bb:97e6:d5b1 with SMTP id f9-20020a05620a408900b006bb97e6d5b1mr37512666qko.117.1662483948729;
+        Tue, 06 Sep 2022 10:05:48 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id fp5-20020a05622a508500b0031e9ab4e4cesm9876026qtb.26.2022.09.06.10.05.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 10:05:48 -0700 (PDT)
+Message-ID: <45cdae58-632a-7cbb-c9d5-74c126ba6a3e@gmail.com>
+Date:   Tue, 6 Sep 2022 10:05:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11d8b17a-1a82-148d-6da9-5e624b8e5942@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH net-next 2/2] ARM: dts: aspeed: elbert: Enable mac3
+ controller
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>, Tao Ren <rentao.bupt@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heyi Guo <guoheyi@linux.alibaba.com>,
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Liang He <windhl@126.com>, Hao Chen <chenhao288@hisilicon.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, Tao Ren <taoren@fb.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220905235634.20957-1-rentao.bupt@gmail.com>
+ <20220905235634.20957-3-rentao.bupt@gmail.com> <YxaS2mS5vwW4HuqL@lunn.ch>
+ <YxalTToannPyLQpI@taoren-fedora-PC23YAB4> <Yxc1N1auY5jk3yJI@lunn.ch>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <Yxc1N1auY5jk3yJI@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:16:19PM -0400, Joel Fernandes wrote:
-> On 9/6/2022 4:55 AM, Paul E. McKenney wrote:
-> > On Mon, Sep 05, 2022 at 04:32:26PM -0400, Joel Fernandes wrote:
-> >>
-> >>
-> >> On 9/5/2022 8:59 AM, Frederic Weisbecker wrote:
-> >>> I'd rather see an updated patch (not the whole patchset but just this one) rather
-> >>> than deltas, just to make sure I'm not missing something in the whole picture.
-> >>>
-> >>> Thanks.
-> >>
-> >> There is also the previous patch which needs a fix up you suggested.
-> >>
-> >> I will reply to individual patches with in-line patch (for you), as well as
-> >> refreshing whole series since it might be easier for Paul to apply them together.
-> > 
-> > To say nothing of the greater probability that the result will match
-> > your intent.  ;-)
+
+
+On 9/6/2022 4:55 AM, Andrew Lunn wrote:
+> On Mon, Sep 05, 2022 at 06:41:33PM -0700, Tao Ren wrote:
+>> Hi Andrew,
+>>
+>> On Tue, Sep 06, 2022 at 02:22:50AM +0200, Andrew Lunn wrote:
+>>> On Mon, Sep 05, 2022 at 04:56:34PM -0700, rentao.bupt@gmail.com wrote:
+>>>> From: Tao Ren <rentao.bupt@gmail.com>
+>>>>
+>>>> Enable mac3 controller in Elbert dts: Elbert MAC3 is connected to the
+>>>> onboard switch directly (fixed link).
+>>>
+>>> What is the switch? Could you also add a DT node for it?
+>>>
+>>>>
+>>>> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+>>>> ---
+>>>>   arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts | 11 +++++++++++
+>>>>   1 file changed, 11 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
+>>>> index 27b43fe099f1..52cb617783ac 100644
+>>>> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
+>>>> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts
+>>>> @@ -183,3 +183,14 @@ imux31: i2c@7 {
+>>>>   &i2c11 {
+>>>>   	status = "okay";
+>>>>   };
+>>>> +
+>>>> +&mac3 {
+>>>> +	status = "okay";
+>>>> +	phy-mode = "rgmii";
+>>>
+>>> 'rgmii' is suspicious, though not necessarily wrong. This value is
+>>> normally passed to the PHY, so the PHY inserts the RGMII delay. You
+>>> however don't have a PHY. So i assume the switch is inserting the
+>>> delay? Again, being able to see the DT properties for the switch would
+>>> be useful.
+>>>
+>>>     Andrew
+>>
+>> Thank you for the quick review!
+>>
+>> The BMC mac3 is connected to BCM53134P's IMP_RGMII port, and there is no
+>> PHY between BMC MAC and BCM53134P. BCM53134P loads configurations from
+>> its EEPROM when the chip is powered.
 > 
-> It is shaping up well ;-)
+> So i assume you have the switch RGMII port doing the delays. That is
+> fine.
+> 
+>> Could you please point me an example showing how to describe the switch in
+>> dts? Anyhow I will need to improve the patch description and comments in
+>> v2.
+> 
+> It looks like drivers/net/dsa/b53 does not support this particular
+> switch. You could consider extending the driver. See
+> 
+> Documentation/devicetree/bindings/net/dsa/brcm,b53.yaml
+> 
+> for documentation of the binding.
 
-Very good, looking forward to the next round!
-
-							Thanx, Paul
+Correct the 53134 is not supported at the moment by the b53 driver, 
+however it should not be too hard to support it, if you would be willing 
+to add it, I would be glad to review patches.
+-- 
+Florian

@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E177D5AEBEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABA05AED52
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239661AbiIFOFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S239732AbiIFOa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241351AbiIFOEH (ORCPT
+        with ESMTP id S242423AbiIFO3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:04:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8101415A31
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:44:45 -0700 (PDT)
+        Tue, 6 Sep 2022 10:29:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4803F8E4FD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 06:55:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 506BE60F89
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2D4C433C1;
-        Tue,  6 Sep 2022 13:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662471816;
-        bh=hPRXcLEFIHPYT059+yYJRm2n/GWwq1YoXtAIQHu0q6o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gFpTdM5DwlX7jrJMmI1KZTSuaJ4koybW44opy7BrM3HyWDlYsCkRIuuh13LrXDppp
-         yxFy+JSCFO92Eyia9RuGfGAumR7oeA28e9abnvgrCpQ1RErh0nUBaCBNC9ZRuUseOa
-         wbFHslwke1h27yQv4XPqIIH+muPLFxyGwhLStPQetGVK14z34jogB77gmyGTr06LII
-         DG0wgH5WqikRZDVm/IgcrhjJu5mTONpPwsXMOkixnL7JTwl/VyovkvX72ixvmr4Qcn
-         dX2RmVnyYm8YRdagUutg3fMmqTwUhCtQARD5+OAeta7RN43TVpD3IFwQJ9Webv+LXo
-         sTZbrFFXoMlFQ==
-Message-ID: <3f8c0e42-07dc-4349-5021-bcb75e640094@kernel.org>
-Date:   Tue, 6 Sep 2022 15:43:33 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACA85B818BF
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 13:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F4FFC433D6;
+        Tue,  6 Sep 2022 13:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662472449;
+        bh=du3sh9blzaxecIl+k6c24M5BhK015GBGQAWwh/6ZhRg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cSKtuXzeXAw4pwE+VQ7BmdLG16OKCcnlMrEHiU888tDe1uTLeWtgZwxPKreLgTjul
+         4u6Q75u2ssjMytQLESXv5zAc0zBHinP6hjiaRgJQ4tQ5Q66G5u2y5sNIKVrPUx+BhE
+         VulqqhYQZJGi3hxIj0HTyeLqotcMbvF4Ld9/xmFI=
+Date:   Tue, 6 Sep 2022 15:43:34 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org,
+        lkp@intel.com
+Subject: Re: [PATCH v3 char-misc-next] misc: microchip: pci1xxxx: fix
+ dependency issues in building the pci1xxxx's aux bus driver.
+Message-ID: <YxdOhoQd7ClSFd8r@kroah.com>
+References: <20220906124951.696776-1-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH -next] rv/reactor: add __init/__exit annotations to module
- init/exit funcs
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, rostedt@goodmis.org, mingo@redhat.com
-References: <20220906111846.58738-1-xiujianfeng@huawei.com>
-Content-Language: en-US
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220906111846.58738-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906124951.696776-1-kumaravel.thiagarajan@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 06, 2022 at 06:19:51PM +0530, Kumaravel Thiagarajan wrote:
+> build errors and warnings listed below and reported by kernel
+> test robot <lkp@intel.com> on the char-misc-next branch are
+> fixed in this add-on patch.
+> 
+> errors:
+> ERROR: modpost: "auxiliary_device_init" [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.ko] undefined!
+> ERROR: modpost: "__auxiliary_device_add" [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.ko] undefined!
+> ERROR: modpost: "auxiliary_driver_unregister" [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.ko] undefined!
+> ERROR: modpost: "__auxiliary_driver_register" [drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.ko] undefined!
+> ia64-linux-ld: drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.o: in function `gp_aux_bus_probe.part.0':
+> mchp_pci1xxxx_gp.c:(.text+0x342): undefined reference to `auxiliary_device_init'
+> ia64-linux-ld: mchp_pci1xxxx_gp.c:(.text+0x392): undefined reference to `__auxiliary_device_add'
+> ia64-linux-ld: mchp_pci1xxxx_gp.c:(.text+0x5c2): undefined reference to `auxiliary_device_init'
+> ia64-linux-ld: mchp_pci1xxxx_gp.c:(.text+0x612): undefined reference to `__auxiliary_device_add'
+> ia64-linux-ld: drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.o: in function `pci1xxxx_gpio_driver_init':
+> mchp_pci1xxxx_gpio.c:(.init.text+0x42): undefined reference to `__auxiliary_driver_register'
+> 
+> warnings:
+> unmet direct dependencies detected for GPIOLIB_IRQCHIP when selected by GP_PCI1XXXX
+> 
+> Fixes: 393fc2f5948f ("misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> ---
+> Changes in v3:
+>   - Unwrap the error messages & warnings to display in single line
 
-Hi Xiu
-On 9/6/22 13:18, Xiu Jianfeng wrote:
-> Add missing __init/__exit annotations to module init/exit funcs.
+Thanks for the quick fixes, now queued up!
 
-Regarding the Subject, this patch is not -next. I would suggest only using -next
-when you are fixing something in the linux-next (which is not the case here).
-
-You can also fix this for the printk reactor. Do you mind re-sending this patch
-with including the printk reactor?
-
-If you found it using an automatic tool, please add information to the patch.
-Also, try to figure out why it pointed to the panic reactor but did not point to
-printk.
-
-Add to v2:
-
-Fixes: 135b881ea885 ("rv/reactor: Add the printk reactor")
-Fixes: e88043c0ac16 ("rv/reactor: Add the panic reactor")
-
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-
-Thanks
--- Daniel
+greg k-h

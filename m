@@ -2,148 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87E35AE512
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54C55AE515
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238575AbiIFKMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S238819AbiIFKM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbiIFKM2 (ORCPT
+        with ESMTP id S234241AbiIFKMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:12:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18511E3EC
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:12:26 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMLgn34dCzkWy2;
-        Tue,  6 Sep 2022 18:08:37 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Sep 2022 18:12:24 +0800
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 6 Sep 2022 18:12:23 +0800
-Message-ID: <c69a00c8-99d5-7a55-0861-1559764bd26c@huawei.com>
-Date:   Tue, 6 Sep 2022 18:12:23 +0800
+        Tue, 6 Sep 2022 06:12:53 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2790C33359;
+        Tue,  6 Sep 2022 03:12:53 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id v4so10179758pgi.10;
+        Tue, 06 Sep 2022 03:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=IZ9wqMiAS8T5F34wY5ClrLEGhUO/wD1wIUmQ3qIVn+I=;
+        b=aLLkQR3n+oKSmaaMQrlcldkJKdJ/KPIH6hRMPXFeUFgn6DDr7ubuuwLotvHm8kNb8B
+         Ifv1VneVRWMsn9o5cvu1t5bTCNVXrEEhstMChsr0UTfXehVhUcc4ZE1eyR3I1oZANqdL
+         JOHMA7yrDeGApvWdyZ4Ju72jisf7NE/6qJmyUOn/aukOCKANAyJ+pIPov81XNa63d2Mi
+         SsasReJ9PdPp+tWo42SmrlH1NE61AxH53BUlQxJlGVTOpcpToJ9p8V4MLlCp0A60RhWr
+         6qMlRZf4kiaQQYV6Rqm3FB6XM9ieoVPabZQQ2tY+SKIvReW6/VODSu2LnHtF2OVkkdJk
+         FNPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=IZ9wqMiAS8T5F34wY5ClrLEGhUO/wD1wIUmQ3qIVn+I=;
+        b=qG3jvEZDdAkSSMTrRB9gxuuyxTR3aI0ypcqv3jQbbholSEoj81s3U+DX5WO9Cf/Zgt
+         C9uv57CdGAoMMPU33ve0G4SEbx94CgDD/O29bp+4fFJJyZHF9pif2/fgyINQWl77v7Rc
+         VQGGOFN8sRbkxM7qiiQRUWdpB1a6bMtFErFHdoKMAdBX+MhU7xsJazMf5qxcOCWLA6Zp
+         yKU6Fg39WHlti/zXBr7JT1uxanB7LsY9zq3Qopb2WcBirSJDyEXiBJM6zBH4cop2GP5C
+         pLcn1UN1wxLMYFsrY5FFlvR+GHi2X8z4f+A9d0kkvJkWVI5pRxFPsr6D1EQ82L2BPwrP
+         dc9A==
+X-Gm-Message-State: ACgBeo0gB1FNl1+cEqfKOZsygscFVknzEBKfg1C2/cSrRGWcJbc/J7fh
+        0ZY+W84fc5qJMBe+km1iyrhc0ilKu4On9g==
+X-Google-Smtp-Source: AA6agR7RsWMoIhEfMO/PpZo+/t7Fx6lBx03dsKZuqz+hW2WI2JYDyigNhWz05vKyWB/6Ri7IB7rO9w==
+X-Received: by 2002:a05:6a00:994:b0:537:d9e4:e939 with SMTP id u20-20020a056a00099400b00537d9e4e939mr52109988pfg.12.1662459172344;
+        Tue, 06 Sep 2022 03:12:52 -0700 (PDT)
+Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
+        by smtp.gmail.com with ESMTPSA id mn22-20020a17090b189600b001fd7cde9990sm12532385pjb.0.2022.09.06.03.12.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 03:12:52 -0700 (PDT)
+From:   Szuying Chen <chensiying21@gmail.com>
+To:     mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     gregkh@linuxfoundation.org, mario.limonciello@amd.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw
+Subject: RE: [PATCH v9 0/6] thunderbolt: Add support for ASMedia NVM firmware image format
+Date:   Tue,  6 Sep 2022 18:12:45 +0800
+Message-Id: <20220906101245.6559-1-chensiying21@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-CC:     <mawupeng1@huawei.com>, <akpm@linux-foundation.org>,
-        <david@redhat.com>, <ying.huang@intel.com>, <hannes@cmpxchg.org>,
-        <corbet@lwn.net>, <mcgrof@kernel.org>, <keescook@chromium.org>,
-        <yzaikin@google.com>, <songmuchun@bytedance.com>,
-        <mike.kravetz@oracle.com>, <osalvador@suse.de>,
-        <surenb@google.com>, <rppt@kernel.org>, <charante@codeaurora.org>,
-        <jsavitz@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>
-Subject: Re: [PATCH -next v3 1/2] mm: Cap zone movable's min wmark to small
- value
-Content-Language: en-US
-To:     <mgorman@suse.de>
-References: <20220905032858.1462927-1-mawupeng1@huawei.com>
- <20220905032858.1462927-2-mawupeng1@huawei.com>
- <20220905092619.2533krnnx632hswc@suse.de>
-From:   mawupeng <mawupeng1@huawei.com>
-In-Reply-To: <20220905092619.2533krnnx632hswc@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Szuying Chen <Chloe_Chen@asmedia.com.tw>
 
+Hi,
 
-On 2022/9/5 17:26, Mel Gorman wrote:
-> On Mon, Sep 05, 2022 at 11:28:57AM +0800, Wupeng Ma wrote:
->> From: Ma Wupeng <mawupeng1@huawei.com>
->>
->> Since min_free_kbytes is based on gfp_zone(GFP_USER) which does not include
->> zone movable. However zone movable will get its min share in
->> __setup_per_zone_wmarks() which does not make any sense.
->>
->> And like highmem pages, __GFP_HIGH and PF_MEMALLOC allocations usually
->> don't need movable pages, so there is no need to assign min pages for zone
->> movable.
->>
->> Let's cap pages_min for zone movable to a small value here just link
->> highmem pages.
->>
+> Hi all,
 > 
-> I think there is a misunderstanding why the higher zones have a watermark
-> and why it might be large.
+> This series adds support for ASMedia NVM images. It is based on the
+> work of Szuying Chen with a couple of changes from me. The first
+> patches move Intel specific NVM validation into nvm.c and >adds a
+> vendor table for both routers and retimers that can be extended to
+> support different >vendor NVM image formats. Once that is done the
+> ASMedia NVM image format support is added.
 > 
-> It's not about a __GFP_HIGH or PF_MEMALLOC allocations because it's known
-> that few of those allocations may be movable. It's because high memory
-> allocations indirectly pin pages in lower zones. User-mapped memory allocated
-> from ZONE_MOVABLE still needs page table pages allocated from a lower zone
-> so there is a ratio between the size of ZONE_MOVABLE and lower zones
-> that limits the total amount of memory that can be allocated. Similarly,
-> file backed pages that may be allocated from ZONE_MOVABLE still requires
-> pages from lower memory for the inode and other associated kernel
-> objects that are allocated from lower zones.
+> The previous version of the patch series can be found here:
 > 
-> The intent behind the higher zones having a large min watermark is so
-> that kswapd reclaims pages from there first to *potentially* release
-> pages from lower memory. By capping pages_min for zone_movable, there is
-> the potential for lower memory pressure to be higher and to reach a point
-> where a ZONE_MOVABLE page cannot be allocated simply because there isn't
-> enough low memory available. Once the lower zones are all unreclaimable
-> (e.g. page table pages or the movable pages are not been reclaimed to free
-> the associated kernel structures), the system goes OOM.
+>   https://lore.kernel.org/linux-usb/20220902094010.2170-1-chensiying21@gmail.com/
+> 
+> Changes from the previous version:
+> 
+>   * Shuffled the ordering of the patches a bit
+>   * Add tb_retimer_nvm_read() and tb_switch_nvm_read()
+>   * Add ->write_headers() callback that is used with Thunderbolt 2
+>     routers
+>   * Cover retimers too
+>   * Minor cleanups and tweaks
+> 
+> I have tested this on Intel Thunderbolt 3 and Thunderbolt 4 routers.
+> ASMedia folks, can you try this also on your side and let me know if it works or not?
 
-This i do agree with you, lower zone is actually "more important" than the
-higher one.
-
-But higher min watermark for zone movable will not work since no memory
-allocation can use this reserve memory below min. Memory allocation
-with specify watermark modifier(__GFP_ATOMIC ,__GFP_HIGH ...) can use this
-in slowpath, however the standard movable memory allocation
-(gfp flag: GFP_HIGHUSER_MOVABLE) does not contain this.
-
-Second, lowmem_reserve_ratio is used to "reserve" memory for lower zone.
-And the second patch introduce per zone watermark_scale_factor to boost
-normal/movable zone's watermark which can trigger early kswapd for zone
-movable.
+I send a comments in separate email please help to modify it.
+I have tested this on ASMedia USB4 router. It work well.
 
 > 
-> It's possible that there are safe adjustments that could be made that
-> would detect when there is no choice except to reclaim zone reclaimable
-> but it would be tricky and it's not this patch. This patch changelog states
+> Mika Westerberg (1):
+>   thunderbolt: Provide tb_retimer_nvm_read() analogous to tb_switch_nvm_read()
 > 
-> 	However zone movable will get its min share in
-> 	__setup_per_zone_wmarks() which does not make any sense.
+> Szuying Chen (5):
+>   thunderbolt: Allow NVM upgrade of USB4 host routers
+>   thunderbolt: Extend NVM version fields to 32-bits
+>   thunderbolt: Rename and make nvm_read() available for other files
+>   thunderbolt: Move vendor specific NVM handling into nvm.c
+>   thunderbolt: Add support for ASMedia NVM image format
 > 
-> It makes sense, higher zones allocations indirectly pin pages in lower
-> zones and there is a bias in reclaim to free the higher zone pages first
-> on the *possibility* that lower zone pages get indirectly released later.
-> 
+>  drivers/thunderbolt/nvm.c     | 385 +++++++++++++++++++++++++++++++++-
+>  drivers/thunderbolt/retimer.c | 105 ++++------  drivers/thunderbolt/switch.c  | 162 +++++---------
+>  drivers/thunderbolt/tb.c      |   5 +-
+>  drivers/thunderbolt/tb.h      |  30 ++-
+>  5 files changed, 498 insertions(+), 189 deletions(-)
 
-In our Test vm with 16G of mirrored memory(normal zone) and 256 of normal
-momory(Movable zone), the min share for normal zone is too few since the
-size of min watermark is calc by zone dma/normal while this will be shared
-by zones(include zone movable) based on managed pages.
+Thanks!
 
-Node 0, zone      DMA
-        min      39
-        low      743
-        high     1447
-Node 0, zone   Normal
-        min      180
-        low      3372
-        high     6564
-Node 1, zone  Movable
-        min      3728
-        low      69788
-        high     135848
+<p></p>

@@ -2,218 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A770C5AF26E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5775AF273
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 19:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237361AbiIFR2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 13:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S237664AbiIFR2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 13:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbiIFR1s (ORCPT
+        with ESMTP id S237135AbiIFR1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:27:48 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9C225C8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 10:19:05 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id y187so9531134iof.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:19:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=QfDvYdUdYp4IWhbJI3qOuZcjPKjhP7sYkjgPDUO+zHo=;
-        b=WILT073FsTIu6roPPSq54BECUHVQJG+F4mk0L2/x7YxNrmkK+A71YpbAlPcFHowp/C
-         76/s8aERPHUUhMle/CPWdkByS3hcrKfXf5kl+XetUWj6yefOIq3LFrM5Xw4rnTqtzXnt
-         D+XwhZ/9x+8z92Y2QxWWSxJ8dWF2QEbV7X134=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=QfDvYdUdYp4IWhbJI3qOuZcjPKjhP7sYkjgPDUO+zHo=;
-        b=yUFm5MnDCVO72tQGB1WDBcvjCStefZwGa6OH9Cere1sJnqIjjl7HZOOS48hW09J8pj
-         cjlzbpiiZPvX5H9rOMz5UoMgTFfsHlPyX89yMJnQUOsyxsAq8Z/n4kZeqXyeZSqgPYBr
-         GtjRKTuIik37GZSRBUefVZcnpEV1VxmAIflcEutauj/ESPbjitA8nlTpEfYVo2EbuvCT
-         7Fdh9RddzUbSc/cGoOvpGuscIniZ7clXa8lUfHxQ0+0ZK2EOtvocOqBUTv30Hl76BMAt
-         IsGXR3M2g3ksRfLwkfCN7ntnSWPDsCxzR0nT8xI212xVEZG/bdb4p4C2cIS29db89FvO
-         NFJg==
-X-Gm-Message-State: ACgBeo2Q42OVYBoHxxPgW6+NGYved0+yiEOOc+HYqNQ8yqcHOIGpOzii
-        oOF/QWMGTtrEPiGaHGNXCTHwaM5fDmWXKg==
-X-Google-Smtp-Source: AA6agR7nZ1JI5Fgq4h23dmY57D1Wfx0BuhdsRKEhSkhyyn3/x8iOJpLqmh6eR8ubtC3Nh7/GZ7b9pw==
-X-Received: by 2002:a6b:d214:0:b0:691:5e18:bad8 with SMTP id q20-20020a6bd214000000b006915e18bad8mr9747477iob.218.1662484744161;
-        Tue, 06 Sep 2022 10:19:04 -0700 (PDT)
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
-        by smtp.gmail.com with ESMTPSA id d188-20020a0262c5000000b00349be675e76sm5614305jac.131.2022.09.06.10.19.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 10:19:01 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id c4so9473195iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 10:19:01 -0700 (PDT)
-X-Received: by 2002:a05:6602:3cc:b0:678:eb57:5eb with SMTP id
- g12-20020a05660203cc00b00678eb5705ebmr24073719iov.125.1662484740728; Tue, 06
- Sep 2022 10:19:00 -0700 (PDT)
+        Tue, 6 Sep 2022 13:27:53 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2074.outbound.protection.outlook.com [40.107.92.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA0713E25;
+        Tue,  6 Sep 2022 10:19:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oEj1KnKmRuDG6gdpcv+hjoPF9y1UU9YhBxjpCFU3FdTM4eh5BUcyNptiPyFAcfQUNZpiHJG5TbYFMYlS6U/1AiVSKosYt+PS5Zdw8JYDSx8Agx5UYbtkb7tB9qqPS2nCOLed/3fwXXzAdb3it0TDEx2mIYDq7BYTjtCbEXA0CMj4vZO2MQ7Zl1B4LU7eBIEE74rvbRUiXXLycTtL3kiiVsKQVKFi82U7LienLHAwR2cPJWg2/NOECgdDkAqe20Kd3DqMI6teFW+sYtyrWUzUn+1WPXvHK3mP1uZvFFKc9nNsSkKbn5YGxoiFosBCPpLZGWUNOIESWgtxe7h7+lp47A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/sngGjkHHa1MqLFMLOhWEC3i4piJHq6eQEgygLz5SpY=;
+ b=I/xbtElb8QhczWHwSeuPZVw5LgSef3a74yG5tGzf+pfpRsjvAoFwN6iio5/vBNdq8GGm6m73aeAZORfrmvzhqIQPSSGrPo1Tq4iY4d1BfDfiHQGZAUuXVJ9iPcgax+6duYLiE4DLA8CPzZ2nigLx1iPDrx6RabyVc7W8EYmXNdJKsKTvsqd/PG70FgvWyyVyJsuFHMRjGJscg+QwiqdOJgqL4JGhBkXzVMxCF0ileDqGHX0v7Emo2SaS2Q1H9J2c959ISNkjPm6K3Pht4iGddccEcCAFClpc8rQrZgD+bOeCa1FBzbiUuTH8UxoZR6JLA/N3q/8/H9UfAyU4chShWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/sngGjkHHa1MqLFMLOhWEC3i4piJHq6eQEgygLz5SpY=;
+ b=h/cVgicDTP6Dtv3qXhW8ZlFLN3zGY6WXLTx8L3G8vK/1SNwzWS4XMCFDSZklAWfKkSXtUUM3HHFTVknBnGKoWbrAhTnLuB0iRqLw9dpVOzzVD10Yt/LpjEB9P6iUwQV0drmHnGk0TUwL2GUBcy+/5SHi5RGcppfRSDjM9aT39o/oWlwGZ+QCuGTCsUSfjYtZmm6LjSfqPZruLPVAK7O70KGBIs3etKu4yc8t1RD63sWGES8QLz9PXelzq1ykpbNYb+AOc66cEhkWCxKsYVo8+++Vf4BsdV2vtkyDubw9navLxwC1SjeETg0HmliNlURwsmcmMk3CrKJAOwWupnlNaA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CH2PR12MB4037.namprd12.prod.outlook.com (2603:10b6:610:7a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Tue, 6 Sep
+ 2022 17:19:08 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 17:19:08 +0000
+Date:   Tue, 6 Sep 2022 14:19:06 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        eric.auger@redhat.com, alex.williamson@redhat.com,
+        cohuck@redhat.com, puneet.gupta@amd.com,
+        song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org,
+        maz@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com,
+        saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org,
+        yishaih@nvidia.com, robin.murphy@arm.com, will@kernel.org,
+        joro@8bytes.org, masahiroy@kernel.org, ndesaulniers@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kvm@vger.kernel.org, okaya@kernel.org, harpreet.anand@amd.com,
+        nikhil.agarwal@amd.com, michal.simek@amd.com,
+        aleksandar.radovanovic@amd.com, git@amd.com
+Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
+ domain as parent
+Message-ID: <YxeBCsA32jnwMjSj@nvidia.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-5-nipun.gupta@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906134801.4079497-5-nipun.gupta@amd.com>
+X-ClientProxiedBy: MN2PR01CA0063.prod.exchangelabs.com (2603:10b6:208:23f::32)
+ To MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220830231541.1135813-1-rrangel@chromium.org>
- <20220830171332.1.Id022caf53d01112188308520915798f08a33cd3e@changeid>
- <CAJZ5v0h10wrurjYG50dA+pCfRtNDqN=c8odQ0p6HJRnOyJh7KA@mail.gmail.com>
- <Yw+yqbaTi04Ydgkq@google.com> <Yw+zo9eUQM+T1eYZ@google.com>
- <CAHQZ30C0Q39cSxTcfu3+6ZNj7iuRE6pJpc9aPdreFt4MNHqZRQ@mail.gmail.com> <YxLg7t2wyPajh/rY@google.com>
-In-Reply-To: <YxLg7t2wyPajh/rY@google.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Tue, 6 Sep 2022 11:18:49 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30BEksUMuwqkin8XtXxPpFR0havN-pqx6nSjzpA2wSdORw@mail.gmail.com>
-Message-ID: <CAHQZ30BEksUMuwqkin8XtXxPpFR0havN-pqx6nSjzpA2wSdORw@mail.gmail.com>
-Subject: Re: [PATCH 1/8] Input: elan_i2c - Use PM subsystem to manage wake irq
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e9a70c09-a316-461f-9a74-08da902be80d
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4037:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pUL0ngNZs3U6pYawxFHTqpb6t9csNyFQQtBVImxhWOtJeoM6ncNs0Z7156RUtJ75Aqf6OPnJ68P3jBRIzmxR30nL5/LioNi6dQeM8TE05xgzscLsnSRDTi+gCSApdRvzdYRqZYQPQ/WULij8Tkw4rGOqGE4fjCD9Urj/rH1dUbwtkn3xwaxGQzxNxvUFtC1+e654ewpiNkvhwdbTfB9F083FB5E9YoMtxRWhZs+w/BOT+MO2WZ6333OBVx2pVCf8Qjn6BpqiFI+CLN3uqCHhSKUWGWqJMa3GyJ7c5z1uBxADUIernVDqJoI0rQBRNF/kxlfFFkg8dPF1mFpA4frM8Z2ufzjuNn8HFYRkRgDpoiiU4+DQbJXVX6y3EOwAHlzflzIHzRHFolf5dgPyr3FY6MERW4vuWIr47+hfM9I4GA2PPzvF6X0cTKOeAyRvDuY3qN9hHHw60J7AnDLLOCR61Uy8A6fYR7ns+p2ITm4+JHojFxcpKJLqcILB0AQzGCKFR0LNXQYz17Ia5ZipAKaqCHo34dKKddC/mBjL3nMz4n4Tcc6FjI9hSPF2hK8JIIT+4sP/rqZmwpFxqhk7DPEapdbJEIVHXX5S5/GzRhGIP9O5EtGQ29p6YxGRMQDYx6fomAkC/pqJRbuPml1B72OXqaCgeEIPRRygEdTN01FlrKWm6Av9s9mSfCQCJ63MhnQNir8Yy3GXp+bXlAY0FfWJ2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(366004)(346002)(136003)(39860400002)(2616005)(7416002)(7406005)(26005)(2906002)(5660300002)(4744005)(8936002)(6506007)(6512007)(41300700001)(186003)(36756003)(86362001)(6486002)(478600001)(316002)(8676002)(66476007)(66556008)(66946007)(6916009)(38100700002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XwhUHLWLaub/SXHt0Oqzi7S82UD1Awx1BgOA+zoifLGaz1EYaDr/4CB/8QWY?=
+ =?us-ascii?Q?6tNQgE4qw/K7FOhKf1K5kUYewRPHwedgCQHDXgHUGTOhm2hH55060S8fiKoc?=
+ =?us-ascii?Q?UfS+p2HysPd2vPe8RNjo+Tj6qdJ5iYZ519GQ9jM/C7yawHIgJHTHrFSa5fK4?=
+ =?us-ascii?Q?MTojbByfwyaCp+vyK6bfgJjXpxZvh1NBXNbM//7oyGHnAofpDXZ3ZwizXAWa?=
+ =?us-ascii?Q?rN4WH0goAWgBZxw7TpX5psxBeWG8bYlwpEcibhebjvYRm/YxTQBJfwpGNkYV?=
+ =?us-ascii?Q?wxOMIOYDN/tEGSvIg6LVOo9RPY4qozOeh+kjgtmgWmWpt3HI1UU08bCogKPU?=
+ =?us-ascii?Q?5czPWqKxAdfR6h4MCS4AmR3cdfdevaamGACrdWQOx2h14qzdHCIIAhGJk2Qm?=
+ =?us-ascii?Q?En4RltBb1JEMsOR/QwzRMgbBSABKt6IhQhlLbAngKq7+laoc8RVyMGZWfu22?=
+ =?us-ascii?Q?yTtcqtyS5cvOsRg+K0uruc67AEI4lt1P0x8rxspcYAQI6IEv+crWOURyeAPd?=
+ =?us-ascii?Q?Iy8iHgd1/yIiC869B1svioG8QMxhQE4LXeEXFJmkonUh6/EMETFNP818JKfz?=
+ =?us-ascii?Q?pIjlPZQ6jantV82VHSdFsL9ijy1scBlvM35GCXjv/EOP/GwQGrf6oRqasl0z?=
+ =?us-ascii?Q?Sv3fUl8xOrgLgHL1lDgL7nVN9R0TYfSuzDy2t3efNpMI/dCQIla4gwfqM2hq?=
+ =?us-ascii?Q?RjvSAP+KKnROf/fke8zatMhtJqsixuOOqrsokvRO4ktY5jW5xZKGNlMs/fTk?=
+ =?us-ascii?Q?b4KM3PpuXIKpCWn2JCdWbdcqK7cAMCtyDlehajCUAQiZfsoBUwk4YxOHvrjv?=
+ =?us-ascii?Q?iGqplNkB3nbtGr6z3a7B/YBLVW0SPNd3zydhokM973S7C3+p5brNbZi459GJ?=
+ =?us-ascii?Q?5WPjEjpSbjPr+EirUDwnM/ydSAGacgx7EkgJQyw/qbZ3Pq9QE4HpqQ/rwGYd?=
+ =?us-ascii?Q?9S/zIEO4PLY5snussyQRzpYzm4W82B/nvuihAxK5RzD6+yxIgCduNiE6pD6Q?=
+ =?us-ascii?Q?DlEhux51tLc1JZIzmUAvlqX3+7+Q/7N05Mz1Nxiv/DR1xH5ydykNrNn/pcv5?=
+ =?us-ascii?Q?nQK5SaRc/Hg98ZyTey/voikJ20nJWYCaMp4rVUqLtqmlIQXCuKF7hTOt/zno?=
+ =?us-ascii?Q?MRh6e8KiGXrfPDDMSbsvx4ecQGkQTRauQO4vJyUv6tCKGCpVhdyhexeXWdBy?=
+ =?us-ascii?Q?huis2bgxY4a8Ik/FCeV/oxWHp0aQEvXrMfZQk81QaZVeTvrfXuajkbTADR5f?=
+ =?us-ascii?Q?kQ0RzUnvsODAsGUuk0l9bwMYio8DkJQpw1S68d1ZDjLegnlZCk4jms1rPP1t?=
+ =?us-ascii?Q?MS3vBiJhiSha2vVOMWdAW44SonILTe86aDY5QuuO1u4WZ2OAVqZMrngaiEKf?=
+ =?us-ascii?Q?IBVbnYjfBoPbkaF/UAk7KaUlqjcyHPH6fv18d3r+1DXpZq78g4mn3Pw05XXj?=
+ =?us-ascii?Q?lJwrq5ODDymbXgMAUXdBCFuv8DapcxWB/GC0IAm58W/Gj5PmSgQxoRk9wkE8?=
+ =?us-ascii?Q?m/KB2Ua56wnaucP3vxwzLlfV4E9SGZZqEUT6JknBqt9QIwvI3lHXTxGRy2yG?=
+ =?us-ascii?Q?cD5cfAHfGXtQ4WXOTCJcBwj25AuIl2EYEftD015L?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9a70c09-a316-461f-9a74-08da902be80d
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2022 17:19:07.9888
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J3QgLwFQaqZDzzpDtRClvgKRWQr5PbqhyQWHF3uK5Q6EmhhGLTzhcUxBPrPKHMev
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4037
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 11:07 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> On Wed, Aug 31, 2022 at 08:17:23PM -0600, Raul Rangel wrote:
-> > On Wed, Aug 31, 2022 at 1:16 PM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> > >
-> > > On Wed, Aug 31, 2022 at 12:12:41PM -0700, Dmitry Torokhov wrote:
-> > > > On Wed, Aug 31, 2022 at 08:01:12PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Wed, Aug 31, 2022 at 1:16 AM Raul E Rangel <rrangel@chromium.org> wrote:
-> > > > > >
-> > > > > > The Elan I2C touchpad driver is currently manually managing the wake
-> > > > > > IRQ. This change removes the explicit enable_irq_wake/disable_irq_wake
-> > > > > > and instead relies on the PM subsystem. This is done by calling
-> > > > > > dev_pm_set_wake_irq.
-> > > > > >
-> > > > > > i2c_device_probe already calls dev_pm_set_wake_irq when using device
-> > > > > > tree, so it's only required when using ACPI. The net result is that this
-> > > > > > change should be a no-op. i2c_device_remove also already calls
-> > > > > > dev_pm_clear_wake_irq, so we don't need to do that in this driver.
-> > > > > >
-> > > > > > I tested this on an ACPI system where the touchpad doesn't have _PRW
-> > > > > > defined. I verified I can still wake the system and that the wake source
-> > > > > > was the touchpad IRQ GPIO.
-> > > > > >
-> > > > > > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > > > >
-> > > > > I like this a lot [...]
-> > > >
-> >
-> > > > I also like this a lot, but this assumes that firmware has correct
-> > > > settings for the interrupt... Unfortunately it is not always the case
-> > > > and I see that at least Chrome OS devices, such as glados line (cave, chell, sentry,
-> > > > ect) do not mark interrupt as wakeup:
-> > > >
-> > > > src/mainboard/google/glados/variants/chell/overridetree.cb
-> > > >
-> > > >                         chip drivers/i2c/generic
-> > > >                                 register "hid" = ""ELAN0000""
-> > > >                                 register "desc" = ""ELAN Touchpad""
-> > > >                                 register "irq" = "ACPI_IRQ_LEVEL_LOW(GPP_B3_IRQ)"
-> > > >                                 register "wake" = "GPE0_DW0_05"
-> > > >                                 device i2c 15 on end
-> > > >
-> >
-> > So the above entry specifies the `wake` register. This generates an
-> > ACPI _PRW resource. The patch series will actually fix devices like
-> > this. Today without this patch series we get two wake events for a
-> > device. The ACPI wake GPE specified by the _PRW resource, and the
-> > erroneous GPIO wake event. But you bring up a good point.
->
+On Tue, Sep 06, 2022 at 07:17:58PM +0530, Nipun Gupta wrote:
 
+> +static void cdx_msi_write_msg(struct irq_data *irq_data,
+> +			      struct msi_msg *msg)
+> +{
+> +	/*
+> +	 * Do nothing as CDX devices have these pre-populated
+> +	 * in the hardware itself.
+> +	 */
+> +}
 
-> Does this mean that the example that we currently have in coreboot
-> documentation (Documentation/acpi/devicetree.md) is not correct:
->
-> device pci 15.0 on
->         chip drivers/i2c/generic
->                 register "hid" = ""ELAN0000""
->                 register "desc" = ""ELAN Touchpad""
->                 register "irq" = "ACPI_IRQ_WAKE_LEVEL_LOW(GPP_A21_IRQ)"
->                 register "wake" = "GPE0_DW0_21"
->                 device i2c 15 on end
->         end
-> end # I2C #0
->
-> Doesn't in say that we have both GpioIrq and GPE wakeup methods defined
-> for the same device?
+Huh?
 
-Hrmm, yeah that is wrong and will cause duplicate wake events for the
-device. I'll push a CL to clean up the documentation.
+There is no way it can be pre-populated, the addr/data pair,
+especially on ARM, is completely under SW control. There is some
+commonly used IOVA base in Linux for the ITS page, but no HW should
+hardwire that.
 
->
-> >
-> > I wrote a quick and dirty script (https://0paste.com/391849) to parse
-> > the coreboot device tree entries. Open source firmware is great isn't
-> > it? ;)
-> >
-> > $ find src/mainboard/google/ -iname '*.cb' | xargs awk -f touch.awk --
-> > src/mainboard/google/eve/devicetree.cb
->
-> ...
->
-> > src/mainboard/google/sarien/variants/sarien/devicetree.cb
-> > 1
-> > chip drivers/i2c/generic
-> > register "hid" = ""ELAN0000""
-> > register "desc" = ""ELAN Touchpad""
-> > register "irq" = "ACPI_IRQ_EDGE_LOW(GPP_B3_IRQ)"
-> > register "probed" = "1"
-> > device i2c 2c on end
-> > end
-> > Total Touchpad: 202
-> > Total Wake: 195
-> >
-> > Out of all the touchpads defined on ChromeOS it looks like only 4
-> > devices are missing a wake declaration. I omitted touchpanels because
-> > ChromeOS doesn't use those as a wake source. chromeos_laptop.c already
-> > defines some devices with i2c board_info and it sets the
-> > `I2C_CLIENT_WAKE` flag. I'm not sure if this is actually working as
-> > expected. `i2c_device_probe` requires a `wakeup` irq to be present in
-> > the device tree if the `I2C_CLIENT_WAKE` flag is set, but I'm assuming
->
-> No it does not. If there is no wakeup IRQ defined of_irq_get_byname()
-> will return an error and we'll take the "else if (client->irq > 0)"
-> branch and will set up client->irq as the wakeup irq.
->
-> > the device tree was missing wake attributes.
-
-Oh thanks for pointing that out. I might refactor patch #4 to just set
-the `I2C_CLIENT_WAKE` flag when `acpi_wake_capable` is true.
-
->
-> >
-> > Anyway, patches 6, and 7 are the ones that drop the legacy behavior. I
-> > can figure out how to add the above boards to chromeos_laptop.c and
-> > get the wake attribute plumbed, or I can add something directly to the
-> > elan_i2c_core, etc so others can add overrides for their boards there.
-> > I'll also send out CLs to fix the device tree configs (not that we
-> > would run a FW qual just for this change).
->
-> My preference is to limit board-specific hacks in drivers if we can, so
-> adding missing properties to chromeos_laptop.c would be my preference.
-
-How should we handle non chromeos boards?
-
->
-> Thanks.
->
-> --
-> Dmitry
-
-Thanks!
+Jason

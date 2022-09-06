@@ -2,135 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE1A5AF680
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466725AF68C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 23:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiIFVCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 17:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S230110AbiIFVCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 17:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiIFVC1 (ORCPT
+        with ESMTP id S229842AbiIFVC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 17:02:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57159E0FF
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662498145;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wOjFY7tNKFL7dFNVA6yx/TeGWvfp5wOKn+I8yQQqSS4=;
-        b=Ju1onuYKug+swmkdBSR2v9LEcsyecazwiRANYZ+KIu+KoHu6PWTbDpqtyuxhN05GZ9v+8L
-        13I/ulcBuKPc5Lk+yG/+l8MbFAbHj6oopJ3q/DZ4KhH3wjohejS6VB/V48CeyOpVsCLI9I
-        8gBMWMaF0AY/0KNEyOGFqYstH12kp1M=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-375-WupwlPYUPr2I2vTup4ohvA-1; Tue, 06 Sep 2022 17:02:22 -0400
-X-MC-Unique: WupwlPYUPr2I2vTup4ohvA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 792CC1C05EAC;
-        Tue,  6 Sep 2022 21:02:21 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C17CEC15BC3;
-        Tue,  6 Sep 2022 21:02:20 +0000 (UTC)
-Message-ID: <879886ba-7d77-11fc-5357-b21e141637ef@redhat.com>
-Date:   Tue, 6 Sep 2022 17:02:20 -0400
+        Tue, 6 Sep 2022 17:02:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAFAA74EB
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 14:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=ahAQHE+1iY9jvcUUdT9evfOPFE+6F0GSGPnh72g4V/Q=; b=VhDEBnkyj7coyyzA54oFVLlrMP
+        oKLICLLOw7M+tjyB9dG0vGsW0034q2Pmi1xrRWccCls5l7cy9oAxWKMGDERQgBGThrYF2cuo+VpLJ
+        TRyrVUviAoDvU/BQpFrZBe1ngt1gU1PWXtUztGA9r1cC2HluF8dcPflmnL17DFZhhOF+mVl0lH1RL
+        c0pKWr8M6h/FUf3ZuO1AIVuV4cFHJF6/qTEGN6ZilhSKDhzg/xDkxh8yHw+MBxoPn3Txt68KsOxUQ
+        twjkPEpTntJQM2R42/EagEWnOjDkT0bs0cNy2YRoEk21LfmbJxv4CkFlvVTpK+wVEqUrMvieZb9U3
+        xjfLAWVg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVfiC-00AlOm-Mi; Tue, 06 Sep 2022 21:02:24 +0000
+Date:   Tue, 6 Sep 2022 22:02:24 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH v4 1/3] drm: Use XArray instead of IDR for minors
+Message-ID: <Yxe1YDcVfqbjgT6a@casper.infradead.org>
+References: <20220906201629.419160-1-michal.winiarski@intel.com>
+ <20220906201629.419160-2-michal.winiarski@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: BUG: HANG_DETECT waiting for migration_cpu_stop() complete
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Jing-Ting Wu <jing-ting.wu@mediatek.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        wsd_upstream@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Jonathan.JMChen@mediatek.com,
-        "chris.redpath@arm.com" <chris.redpath@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Donnefort <vdonnefort@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Christian Brauner <brauner@kernel.org>,
-        cgroups@vger.kernel.org, lixiong.liu@mediatek.com,
-        wenju.xu@mediatek.com
-References: <88b2910181bda955ac46011b695c53f7da39ac47.camel@mediatek.com>
- <b605c3ec-94ab-a55f-5825-9b370d77ecf3@quicinc.com>
- <203d4614c1b2a498a240ace287156e9f401d5395.camel@mediatek.com>
- <YxeR0RoiTdm8sWCJ@slm.duckdns.org>
- <02b8e7b3-941d-8bb9-cd0e-992738893ba3@redhat.com>
- <36a73401-7011-834a-7949-c65a2f66246c@redhat.com>
- <YxeylMvgc/wKcJqk@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YxeylMvgc/wKcJqk@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220906201629.419160-2-michal.winiarski@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 06, 2022 at 10:16:27PM +0200, Michał Winiarski wrote:
+> IDR is deprecated, and since XArray manages its own state with internal
+> locking, it simplifies the locking on DRM side.
+> Additionally, don't use the IRQ-safe variant, since operating on drm
+> minor is not done in IRQ context.
+> 
+> Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
 
-On 9/6/22 16:50, Peter Zijlstra wrote:
-> On Tue, Sep 06, 2022 at 04:40:03PM -0400, Waiman Long wrote:
->
-> I've not followed the earlier stuff due to being unreadable; just
-> reacting to this..
->
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index 838623b68031..5d9ea1553ec0 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -2794,9 +2794,9 @@ static int __set_cpus_allowed_ptr_locked(struct
->> task_struct *p,
->>                  if (cpumask_equal(&p->cpus_mask, new_mask))
->>                          goto out;
->>
->> -               if (WARN_ON_ONCE(p == current &&
->> -                                is_migration_disabled(p) &&
->> -                                !cpumask_test_cpu(task_cpu(p), new_mask)))
->> {
->> +               if (is_migration_disabled(p) &&
->> +                   !cpumask_test_cpu(task_cpu(p), new_mask)) {
->> +                       WARN_ON_ONCE(p == current);
->>                          ret = -EBUSY;
->>                          goto out;
->>                  }
->> @@ -2818,7 +2818,11 @@ static int __set_cpus_allowed_ptr_locked(struct
->> task_struct *p,
->>          if (flags & SCA_USER)
->>                  user_mask = clear_user_cpus_ptr(p);
->>
->> -       ret = affine_move_task(rq, p, rf, dest_cpu, flags);
->> +       if (!is_migration_disabled(p) || (flags & SCA_MIGRATE_ENABLE)) {
->> +               ret = affine_move_task(rq, p, rf, dest_cpu, flags);
->> +       } else {
->> +               task_rq_unlock(rq, p, rf);
->> +       }
-> This cannot be right. There might be previous set_cpus_allowed_ptr()
-> callers that are blocked and waiting for the task to land on a valid
-> CPU.
+I have a few questions, but I like where you're going.
 
-You are probably right. I haven't fully understand all the migration 
-disable code yet. However, if migration is disabled, there are some 
-corner cases we need to handle properly.
+> @@ -98,21 +98,18 @@ static struct drm_minor **drm_minor_get_slot(struct drm_device *dev,
+>  static void drm_minor_alloc_release(struct drm_device *dev, void *data)
+>  {
+>  	struct drm_minor *minor = data;
+> -	unsigned long flags;
+>  
+>  	WARN_ON(dev != minor->dev);
+>  
+>  	put_device(minor->kdev);
+>  
+> -	spin_lock_irqsave(&drm_minor_lock, flags);
+> -	idr_remove(&drm_minors_idr, minor->index);
+> -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +	xa_release(&drm_minors_xa, minor->index);
 
-Cheers,
-Longman
+Has it definitely been unused at this point?  I would think that
+xa_erase() (an unconditional store) would be the correct function to
+call.
 
+> @@ -122,20 +119,12 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+>  	minor->type = type;
+>  	minor->dev = dev;
+>  
+> -	idr_preload(GFP_KERNEL);
+> -	spin_lock_irqsave(&drm_minor_lock, flags);
+> -	r = idr_alloc(&drm_minors_idr,
+> -		      NULL,
+> -		      64 * type,
+> -		      64 * (type + 1),
+> -		      GFP_NOWAIT);
+> -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> -	idr_preload_end();
+> -
+> +	r = xa_alloc(&drm_minors_xa, &id, NULL,
+> +		     XA_LIMIT(64 * type, 64 * (type + 1) - 1), GFP_KERNEL);
+>  	if (r < 0)
+>  		return r;
+>  
+> -	minor->index = r;
+> +	minor->index = id;
+
+Wouldn't it be better to call:
+
+	r = xa_alloc(&drm_minors_xa, &minor->index, NULL,
+			XA_LIMIT(64 * type, 64 * (type + 1) - 1), GFP_KERNEL);
+
+I might also prefer a little syntactic sugar like:
+
+#define DRM_MINOR_LIMIT(type)	XA_LIMIT(64 * (type), 64 * (type) + 63)
+
+but that's definitely a matter of taste.
+
+> @@ -172,9 +161,12 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
+>  		goto err_debugfs;
+>  
+>  	/* replace NULL with @minor so lookups will succeed from now on */
+> -	spin_lock_irqsave(&drm_minor_lock, flags);
+> -	idr_replace(&drm_minors_idr, minor, minor->index);
+> -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +	entry = xa_store(&drm_minors_xa, minor->index, &minor, GFP_KERNEL);
+> +	if (xa_is_err(entry)) {
+> +		ret = xa_err(entry);
+> +		goto err_debugfs;
+> +	}
+> +	WARN_ON(entry);
+
+Might be better as an xa_cmpxchg()?
+
+> @@ -187,16 +179,13 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
+>  static void drm_minor_unregister(struct drm_device *dev, unsigned int type)
+>  {
+>  	struct drm_minor *minor;
+> -	unsigned long flags;
+>  
+>  	minor = *drm_minor_get_slot(dev, type);
+>  	if (!minor || !device_is_registered(minor->kdev))
+>  		return;
+>  
+>  	/* replace @minor with NULL so lookups will fail from now on */
+> -	spin_lock_irqsave(&drm_minor_lock, flags);
+> -	idr_replace(&drm_minors_idr, NULL, minor->index);
+> -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +	xa_erase(&drm_minors_xa, minor->index);
+
+This isn't an exact replacement, but I'm not sure whether that makes a
+difference.  xa_erase() allows allocation of this ID again while
+idr_replace() means that lookups return NULL, but the ID remains in
+use.  The equivalent of idr_replace() is:
+	xa_store(&drm_minors_xa, minor->index, NULL, GFP_KERNEL);
+
+> @@ -215,13 +204,10 @@ static void drm_minor_unregister(struct drm_device *dev, unsigned int type)
+>  struct drm_minor *drm_minor_acquire(unsigned int minor_id)
+>  {
+>  	struct drm_minor *minor;
+> -	unsigned long flags;
+>  
+> -	spin_lock_irqsave(&drm_minor_lock, flags);
+> -	minor = idr_find(&drm_minors_idr, minor_id);
+> +	minor = xa_load(&drm_minors_xa, minor_id);
+>  	if (minor)
+>  		drm_dev_get(minor->dev);
+> -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+
+This is also not an exact equivalent as the dev_drm_get() is now outside
+the lock.  Does that matter in this case?  I don't know the code well
+enough to say.  If you want it to be equivalent, then:
+
+	xa_lock(&drm_minors_xa);
+	minor = xa_load(&drm_minors_xa, minor_id);
+	if (minor)
+		drm_dev_get(minor->dev);
+	xa_unlock(&drm_minors_xa);
+
+would be the code to use.
+
+> @@ -1037,7 +1023,7 @@ static void drm_core_exit(void)
+>  	unregister_chrdev(DRM_MAJOR, "drm");
+>  	debugfs_remove(drm_debugfs_root);
+>  	drm_sysfs_destroy();
+> -	idr_destroy(&drm_minors_idr);
+> +	xa_destroy(&drm_minors_xa);
+
+I don't know if this is the right call.  xa_destroy() is the exact
+replacement, but if the xarray should already be empty (and it should,
+right?) then asserting the xa_empty() is true may be the better call
+to make.
+
+
+Phew, that was a lot of comments/questions.  I hope that was useful!

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096B15AEC61
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470FA5AEBB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 16:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241656AbiIFOPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 10:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S239322AbiIFOAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 10:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241738AbiIFOOC (ORCPT
+        with ESMTP id S239848AbiIFN4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 10:14:02 -0400
+        Tue, 6 Sep 2022 09:56:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C91289921;
-        Tue,  6 Sep 2022 06:48:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B84816AB;
+        Tue,  6 Sep 2022 06:42:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93FF4B818E2;
-        Tue,  6 Sep 2022 13:47:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F021AC4314A;
-        Tue,  6 Sep 2022 13:47:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80374B818CB;
+        Tue,  6 Sep 2022 13:41:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB91DC43470;
+        Tue,  6 Sep 2022 13:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662472042;
-        bh=0IlhPDcg+N1l9IGYJ4pYlrDwi/O4Kivf2evnYygpIEQ=;
+        s=korg; t=1662471697;
+        bh=uXBXjQ+l91Ud9CKl/sEZLUYfcKqG17/+vuMcJgSkDUY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1CQR/aZPdZhPtsVJKyc03mKhIlFnMMJERVWefi1uDeSRXuNI6Ui+nf2oTAQcBD04F
-         aGWW304K4wtz49rzEbTXxi/kcbmFPfkirEhSPs0gEaBepInO/x7lA8uuXjx/JZJ9lV
-         f6kn2tIutVFWS/GmLKAWeWTG0jgELfZ4e8pS7b6s=
+        b=j7afwuKhQF4BH/zLNjmxZhLAGBxpOIoWCbwLaWHyreW+ryUUMzXfGEv8f2yU3jhTr
+         oGx8ek9je5slZMIUIjcMOdgXqOXe9ygs6vbnJbHRLM3wSfkLj2DfvV9FkNxVoD0and
+         mttWTtG88LkvVuacZw0jjERxsKjtfWtoYIidxObU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        stable <stable@kernel.org>,
-        Witold Lipieta <witold.lipieta@thaumatec.com>
-Subject: [PATCH 5.19 127/155] usb-storage: Add ignore-residue quirk for NXP PN7462AU
-Date:   Tue,  6 Sep 2022 15:31:15 +0200
-Message-Id: <20220906132834.815468731@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 095/107] ALSA: hda/realtek: Add speaker AMP init for Samsung laptops with ALC298
+Date:   Tue,  6 Sep 2022 15:31:16 +0200
+Message-Id: <20220906132825.865064876@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-References: <20220906132829.417117002@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+References: <20220906132821.713989422@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Witold Lipieta <witold.lipieta@thaumatec.com>
+From: Kacper Michajłow <kasper93@gmail.com>
 
-commit 2aa48857ad52236a9564c71183d6cc8893becd41 upstream.
+commit a2d57ebec1e15f0ac256eb8397e82b07adfaaacc upstream.
 
-This is USB mass storage primary boot loader for code download on
-NXP PN7462AU.
+Magic initialization sequence was extracted from Windows driver and
+cleaned up manually.
 
-Without the quirk it is impossible to write whole memory at once as
-device restarts during the write due to bogus residue values reported.
+Fixes internal speakers output.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
-Link: https://lore.kernel.org/r/20220809112911.462776-1-witold.lipieta@thaumatec.com
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=207423
+Link: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1851518
+Signed-off-by: Kacper Michajłow <kasper93@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220827203328.30363-1-kasper93@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/storage/unusual_devs.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ sound/pci/hda/patch_realtek.c |   63 +++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 56 insertions(+), 7 deletions(-)
 
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -2294,6 +2294,13 @@ UNUSUAL_DEV( 0x1e74, 0x4621, 0x0000, 0x0
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BULK_IGNORE_TAG | US_FL_MAX_SECTORS_64 ),
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -4684,6 +4684,48 @@ static void alc236_fixup_hp_mute_led_mic
+ 	alc236_fixup_hp_micmute_led_vref(codec, fix, action);
+ }
  
-+/* Reported by Witold Lipieta <witold.lipieta@thaumatec.com> */
-+UNUSUAL_DEV( 0x1fc9, 0x0117, 0x0100, 0x0100,
-+		"NXP Semiconductors",
-+		"PN7462AU",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_RESIDUE ),
++static inline void alc298_samsung_write_coef_pack(struct hda_codec *codec,
++						  const unsigned short coefs[2])
++{
++	alc_write_coef_idx(codec, 0x23, coefs[0]);
++	alc_write_coef_idx(codec, 0x25, coefs[1]);
++	alc_write_coef_idx(codec, 0x26, 0xb011);
++}
 +
- /* Supplied with some Castlewood ORB removable drives */
- UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
- 		"Double-H Technology",
++struct alc298_samsung_amp_desc {
++	unsigned char nid;
++	unsigned short init_seq[2][2];
++};
++
++static void alc298_fixup_samsung_amp(struct hda_codec *codec,
++				     const struct hda_fixup *fix, int action)
++{
++	int i, j;
++	static const unsigned short init_seq[][2] = {
++		{ 0x19, 0x00 }, { 0x20, 0xc0 }, { 0x22, 0x44 }, { 0x23, 0x08 },
++		{ 0x24, 0x85 }, { 0x25, 0x41 }, { 0x35, 0x40 }, { 0x36, 0x01 },
++		{ 0x38, 0x81 }, { 0x3a, 0x03 }, { 0x3b, 0x81 }, { 0x40, 0x3e },
++		{ 0x41, 0x07 }, { 0x400, 0x1 }
++	};
++	static const struct alc298_samsung_amp_desc amps[] = {
++		{ 0x3a, { { 0x18, 0x1 }, { 0x26, 0x0 } } },
++		{ 0x39, { { 0x18, 0x2 }, { 0x26, 0x1 } } }
++	};
++
++	if (action != HDA_FIXUP_ACT_INIT)
++		return;
++
++	for (i = 0; i < ARRAY_SIZE(amps); i++) {
++		alc_write_coef_idx(codec, 0x22, amps[i].nid);
++
++		for (j = 0; j < ARRAY_SIZE(amps[i].init_seq); j++)
++			alc298_samsung_write_coef_pack(codec, amps[i].init_seq[j]);
++
++		for (j = 0; j < ARRAY_SIZE(init_seq); j++)
++			alc298_samsung_write_coef_pack(codec, init_seq[j]);
++	}
++}
++
+ #if IS_REACHABLE(CONFIG_INPUT)
+ static void gpio2_mic_hotkey_event(struct hda_codec *codec,
+ 				   struct hda_jack_callback *event)
+@@ -6842,6 +6884,7 @@ enum {
+ 	ALC236_FIXUP_HP_GPIO_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF,
++	ALC298_FIXUP_SAMSUNG_AMP,
+ 	ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
+ 	ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
+ 	ALC295_FIXUP_ASUS_MIC_NO_PRESENCE,
+@@ -8196,6 +8239,12 @@ static const struct hda_fixup alc269_fix
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = alc236_fixup_hp_mute_led_micmute_vref,
+ 	},
++	[ALC298_FIXUP_SAMSUNG_AMP] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc298_fixup_samsung_amp,
++		.chained = true,
++		.chain_id = ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET
++	},
+ 	[ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET] = {
+ 		.type = HDA_FIXUP_VERBS,
+ 		.v.verbs = (const struct hda_verb[]) {
+@@ -8985,13 +9034,13 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x10ec, 0x1254, "Intel Reference board", ALC295_FIXUP_CHROME_BOOK),
+ 	SND_PCI_QUIRK(0x10f7, 0x8338, "Panasonic CF-SZ6", ALC269_FIXUP_HEADSET_MODE),
+ 	SND_PCI_QUIRK(0x144d, 0xc109, "Samsung Ativ book 9 (NP900X3G)", ALC269_FIXUP_INV_DMIC),
+-	SND_PCI_QUIRK(0x144d, 0xc169, "Samsung Notebook 9 Pen (NP930SBE-K01US)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc176, "Samsung Notebook 9 Pro (NP930MBE-K04US)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc189, "Samsung Galaxy Flex Book (NT950QCG-X716)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc18a, "Samsung Galaxy Book Ion (NP930XCJ-K01US)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
++	SND_PCI_QUIRK(0x144d, 0xc169, "Samsung Notebook 9 Pen (NP930SBE-K01US)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc176, "Samsung Notebook 9 Pro (NP930MBE-K04US)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc189, "Samsung Galaxy Flex Book (NT950QCG-X716)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc18a, "Samsung Galaxy Book Ion (NP930XCJ-K01US)", ALC298_FIXUP_SAMSUNG_AMP),
+ 	SND_PCI_QUIRK(0x144d, 0xc740, "Samsung Ativ book 8 (NP870Z5G)", ALC269_FIXUP_ATIV_BOOK_8),
+-	SND_PCI_QUIRK(0x144d, 0xc812, "Samsung Notebook Pen S (NT950SBE-X58)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+-	SND_PCI_QUIRK(0x144d, 0xc830, "Samsung Galaxy Book Ion (NT950XCJ-X716A)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
++	SND_PCI_QUIRK(0x144d, 0xc812, "Samsung Notebook Pen S (NT950SBE-X58)", ALC298_FIXUP_SAMSUNG_AMP),
++	SND_PCI_QUIRK(0x144d, 0xc830, "Samsung Galaxy Book Ion (NT950XCJ-X716A)", ALC298_FIXUP_SAMSUNG_AMP),
+ 	SND_PCI_QUIRK(0x144d, 0xc832, "Samsung Galaxy Book Flex Alpha (NP730QCJ)", ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+ 	SND_PCI_QUIRK(0x1458, 0xfa53, "Gigabyte BXBT-2807", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1462, 0xb120, "MSI Cubi MS-B120", ALC283_FIXUP_HEADSET_MIC),
+@@ -9351,7 +9400,7 @@ static const struct hda_model_fixup alc2
+ 	{.id = ALC299_FIXUP_PREDATOR_SPK, .name = "predator-spk"},
+ 	{.id = ALC298_FIXUP_HUAWEI_MBX_STEREO, .name = "huawei-mbx-stereo"},
+ 	{.id = ALC256_FIXUP_MEDION_HEADSET_NO_PRESENCE, .name = "alc256-medion-headset"},
+-	{.id = ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc298-samsung-headphone"},
++	{.id = ALC298_FIXUP_SAMSUNG_AMP, .name = "alc298-samsung-amp"},
+ 	{.id = ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc256-samsung-headphone"},
+ 	{.id = ALC255_FIXUP_XIAOMI_HEADSET_MIC, .name = "alc255-xiaomi-headset"},
+ 	{.id = ALC274_FIXUP_HP_MIC, .name = "alc274-hp-mic-detect"},
 
 

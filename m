@@ -2,148 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBEA5AF43F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C755AF444
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 21:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiIFTLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 15:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S229783AbiIFTOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 15:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiIFTLm (ORCPT
+        with ESMTP id S229614AbiIFTOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 15:11:42 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86BE72B60
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 12:11:41 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id b144so7548441pfb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 12:11:41 -0700 (PDT)
+        Tue, 6 Sep 2022 15:14:06 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8C3A894B;
+        Tue,  6 Sep 2022 12:14:03 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1278a61bd57so12058215fac.7;
+        Tue, 06 Sep 2022 12:14:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=w5HACyk7qZtfk4k6sLXm47Jz7SohkcpzYCPZm4Qovhw=;
-        b=diUvTLiw+h79hhqSYAnJNwSPRkd1iPWX5fdPVlO7qXvE+qUW5IlY4N+riprFgHXr6k
-         PdunL/+mWBLAV7lPq10sadvcrEh8ttEBQEoBE4IMpHCLvW+0wkoHbrZJYpBY2c1DDua1
-         hgXJxgzCWGdvghNgyyutLEQpTzP+RXjqv3cKk9dk4k0O4K5GjHXXr4ezFJcTAziXG0b6
-         +WqoqlBz7VXUWFPlByKTBIfNsWU91CO3LzTtufPsmKHryaRKFvnyJS7Wf/m0Sp+UcCc1
-         nu/FlDyM07OiWHysKErZlR4CRE19EhFNurevpzExh4vfi7iKocpCJRhFl2AqZBntKi5C
-         uwJA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=yyFnJEeFnbtMtSAcAH7sHUm0rKeS0DESBmJhkjy5TGc=;
+        b=DTV87E77lD4ICvOcwvSC/ZWTxGRiuucq83iEYksb2V4d4AfVKmIiVxyCQLVDzxtyXO
+         PKbU1x+BuCmWE/UefxGg0b8YtwK1QHQQD9tCoXUzFhRMnLFi+zpjIe047V84sH2zVsKe
+         FWx4FMjzjJXdkN0LHxq8IfHqM+gnv+4Y8TEwZkbBxinjcyzjNC520XlHn6TaZ4QGG7NS
+         mvV8IVpk/cvcQIJeOHmnq7Sc9nftFoXYfXtbfMj3HYLUK0a1X/7aHOqo5jincJg1zkZg
+         h6DQFasWZ1qftqBMnKcj6PfGsDrdA5O1Lv2AKHPR+68PES/mpTT4MiYaTQdiV/OH2Wi4
+         UekA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=w5HACyk7qZtfk4k6sLXm47Jz7SohkcpzYCPZm4Qovhw=;
-        b=j9VGgLffLspSA10eCDZ+uE1l54NVWVWzwLTcdpPtpJ1FKj7WaQ5HP9sdF2EROTbGe7
-         Tv6Ke3dIxex6ud3PjwHlLBVJxf7YMwujXR+jmLFFt+ycG+o0vu2/FQnbDil5aThNlHXo
-         ky9htLbpFZDDLGxP5i+NV5sA3cj7kCSTIIMCWoDx0Ok6Z6UY06zOF36sSJvG4YZSHTcK
-         KmUurO/fmO/Y4B2oXB/EBfjIjrFjIjxLDKPONQhWrtjnQOHsM7wec75UIijE3H60ghFS
-         mVNiQlspMs07w1IfxbwBkhjl/Iyyz59uTJYsxaGfSbKNJf/2paO05VcNrC5I6J6uvZ9V
-         T8Jg==
-X-Gm-Message-State: ACgBeo33L+h+ov9wAP7yUtmzHvsepdqhfY2SBvsHwNCd2kqgbbb0KjWi
-        0kgXgoPJxtejCnpO21xDkSuKT9e9CywfTj/5th0=
-X-Google-Smtp-Source: AA6agR5SVGBUB2XMa2QyGadf0meSM6bevz7OIIXSFjdapIWgrivobT834pCj5HZSTWw4Gui+MtV3s8RzZeJeCyGeFXg=
-X-Received: by 2002:a65:6a05:0:b0:42c:87a0:ea77 with SMTP id
- m5-20020a656a05000000b0042c87a0ea77mr84260pgu.75.1662491501469; Tue, 06 Sep
- 2022 12:11:41 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=yyFnJEeFnbtMtSAcAH7sHUm0rKeS0DESBmJhkjy5TGc=;
+        b=qiqh0YWmMWgqcWHkD+xHS4CbA6F7g48IGLrvQQTLx3QyB/VLEYwC5liAGe+4e/THxN
+         nyPmZXFGSXDIZEVV/RKcs62VluzPUzJDEnWAOjbX/o69Rl+MK6+7grzqCkyznilO+4jC
+         TBNu9gSSB3wtLbd2WAXFX9tsEEReWnEQ+DnvUNSxxROQFsgISh5OHYnDdeLb8YgiuiPa
+         +ayor60AjYGHTa4ATVJZJ867jz0RdBxly4BQonCXSapDd8sPvm59Sg4NEy5EQ1S0bGwF
+         3C5qMpFOpxb/DeSLfQ6YjAzQveW0bvER4ak3/CnANRMmcav27Tqvw4ISFE5bu+vbfJK8
+         YYnA==
+X-Gm-Message-State: ACgBeo2JM+rDd5iO0yTifrPN70pnQlFj5en5d63uQ9cgtNd4zQyEHnwj
+        dAWm+B6fFRWagwIzOsj6uf+EV7To5Jc=
+X-Google-Smtp-Source: AA6agR7xbGZJz+r8GBQ5cCQNhGe6geu50+9kj45mDYEXGZ2g9FZs01fWU+k90FnIU309Y8wheyw+Ew==
+X-Received: by 2002:a05:6870:6317:b0:10e:631c:5e63 with SMTP id s23-20020a056870631700b0010e631c5e63mr13640198oao.262.1662491642901;
+        Tue, 06 Sep 2022 12:14:02 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id a19-20020a544e13000000b0033e8629b323sm5711600oiy.35.2022.09.06.12.14.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 12:14:02 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 12:11:51 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        feng xiangjun <fengxj325@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] drivers/base: Fix unsigned comparison to -1 in
+ CPUMAP_FILE_MAX_BYTES
+Message-ID: <YxebdxbVGuU655MB@yury-laptop>
+References: <20220906160430.1169837-1-pauld@redhat.com>
+ <YxeM8WKek/3gp8Fl@yury-laptop>
+ <YxeYJcFVEURPRQu/@lorien.usersys.redhat.com>
 MIME-Version: 1.0
-References: <20220901222707.477402-1-shy828301@gmail.com> <e6ad1084-c301-9f11-1fa7-7614bf859aaf@nvidia.com>
- <a969abc5-1ad0-4073-a1f9-82f0431a0104@redhat.com> <YxdPi2E63aO0Dgyd@nvidia.com>
- <4516a349-49cb-fd7b-176a-f1a9479906d9@redhat.com> <YxdZlCly2ad1rtcI@nvidia.com>
- <40486dbb-9f19-6fa6-d46d-99d2b033883d@redhat.com>
-In-Reply-To: <40486dbb-9f19-6fa6-d46d-99d2b033883d@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 6 Sep 2022 12:11:28 -0700
-Message-ID: <CAHbLzkrot3t5XwvHS4wveOZeK2OxcbC+8DX=UThQTcaFp-Ym_Q@mail.gmail.com>
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, peterx@redhat.com,
-        kirill.shutemov@linux.intel.com, hughd@google.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxeYJcFVEURPRQu/@lorien.usersys.redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 7:44 AM David Hildenbrand <david@redhat.com> wrote:
->
-> On 06.09.22 16:30, Jason Gunthorpe wrote:
-> > On Tue, Sep 06, 2022 at 03:57:30PM +0200, David Hildenbrand wrote:
+On Tue, Sep 06, 2022 at 02:57:41PM -0400, Phil Auld wrote:
+> On Tue, Sep 06, 2022 at 11:09:53AM -0700 Yury Norov wrote:
+> > On Tue, Sep 06, 2022 at 12:04:30PM -0400, Phil Auld wrote:
+> > > As PAGE_SIZE is unsigned long, -1 > PAGE_SIZE when NR_CPUS <= 3.
+> > > This leads to very large file sizes:
+> > > 
+> > > topology$ ls -l
+> > > total 0
+> > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 core_cpus
+> > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_cpus_list
+> > > -r--r--r-- 1 root root                 4096 Sep  5 10:58 core_id
+> > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 core_siblings
+> > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 core_siblings_list
+> > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 die_cpus
+> > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_cpus_list
+> > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 die_id
+> > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 11:59 package_cpus
+> > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 package_cpus_list
+> > > -r--r--r-- 1 root root                 4096 Sep  5 10:58 physical_package_id
+> > > -r--r--r-- 1 root root 18446744073709551615 Sep  5 10:10 thread_siblings
+> > > -r--r--r-- 1 root root                 4096 Sep  5 11:59 thread_siblings_list
+> > > 
+> > > Adjust the inequality to catch the case when NR_CPUS is configured
+> > > to a small value.
+> > > 
+> > > Fixes: 7ee951acd31a ("drivers/base: fix userspace break from using bin_attributes for cpumap and cpulist")
+> > > Reported-by: feng xiangjun <fengxj325@gmail.com>
+> > > Signed-off-by: Phil Auld <pauld@redhat.com>
+> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > Cc: Yury Norov <yury.norov@gmail.com>
+> > > Cc: stable@vger.kernel.org
+> > > Cc: feng xiangjun <fengxj325@gmail.com>
+> > > ---
+> > >  include/linux/cpumask.h | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> > > index bd047864c7ac..7b1349612d6d 100644
+> > > --- a/include/linux/cpumask.h
+> > > +++ b/include/linux/cpumask.h
+> > > @@ -1127,9 +1127,10 @@ cpumap_print_list_to_buf(char *buf, const struct cpumask *mask,
+> > >   * cover a worst-case of every other cpu being on one of two nodes for a
+> > >   * very large NR_CPUS.
+> > >   *
+> > > - *  Use PAGE_SIZE as a minimum for smaller configurations.
+> > > + *  Use PAGE_SIZE as a minimum for smaller configurations while avoiding
+> > > + *  unsigned comparison to -1.
+> > >   */
+> > > -#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32 - 1) > PAGE_SIZE) \
+> > > +#define CPUMAP_FILE_MAX_BYTES  ((((NR_CPUS * 9)/32) > PAGE_SIZE + 1) \
+> > 
+> > Maybe it would be easier to read with less braces and '>=' instead of '>'?
+> >   #define CPUMAP_FILE_MAX_BYTES \
+> >         (NR_CPUS * 9 / 32 >= PAGE_SIZE ? NR_CPUS * 9 / 32 - 1 : PAGE_SIZE)
+> > 
+> > Anyways, this is a good catch. If you think it doesn't worth an
+> > update, I can take it in bitmap-for-next as-is.
 > >
-> >>> READ_ONCE primarily is a marker that the data being read is unstable
-> >>> and that the compiler must avoid all instability when reading it. eg
-> >>> in this case the compiler could insanely double read the value, even
-> >>> though the 'if' requires only a single read. This would result in
-> >>> corrupt calculation.
-> >>
-> >> As we have a full memory barrier + compile barrier, the compiler might
-> >> indeed do double reads and all that stuff. BUT, it has to re-read after we
-> >> incremented the refcount, and IMHO that's the important part to detect the
-> >> change.
-> >
-> > Yes, it is important, but it is not the only important part.
-> >
-> > The compiler still has to exectute "if (*a != b)" *correctly*.
-> >
-> > This is what READ_ONCE is for. It doesn't set order, it doesn't
-> > implement a barrier, it tells the compiler that '*a' is unstable data
-> > and the compiler cannot make assumptions based on the idea that
-> > reading '*a' multiple times will always return the same value.
-> >
-> > If the compiler makes those assumptions then maybe even though 'if (*a
-> > != b)' is the reality, it could mis-compute '*a == b'. You enter into
-> > undefined behavior here.
-> >
-> > Though it is all very unlikely, the general memory model standard is
-> > to annotate with READ_ONCE.
->
-> The only thing I could see going wrong in the comparison once the stars
-> alingn would be something like the following:
->
-> if (*a != b)
->
-> implemented as
->
-> if ((*a).lower != b.lower && (*a).higher != b.higher)
->
->
-> This could only go wrong if we have more than one change such that:
->
-> Original:
->
-> *a = 0x00000000ffffffffull;
->
->
-> First modification:
-> *a = 0xffffffffffffffffull;
->
-> Second modification:
-> *a = 0x00000000eeeeeeeeull;
+> 
+> It would work as
+>    #define CPUMAP_FILE_MAX_BYTES  (((NR_CPUS * 9)/32 > PAGE_SIZE) \
+>    	   			     ? (NR_CPUS * 9)/32 - 1 : PAGE_SIZE)
+> 
+> Since 4097 > PAGE_SIZE and then you'd get PAGE_SIZE anyway. That is we could just
+> leave the 1 out of the inequality completely. 
+> 
+> If I recall at least some of the parens are needed to make the compiler happy.
+> 
+> I can resend with the above if you want.  
 
-IIUC this is typically a 32-bit thing.
-
->
->
-> If we race with both modifications, we could see that ffffffff matches,
-> and could see that 00000000 matches as well.
->
->
-> So I agree that we should change it, but not necessarily as an urgent
-> fix and not necessarily in this patch. It's best to adjust all gup_*
-> functions in one patch.
->
-> ... I do wonder if we want to reuse ptep_get_lockless() instead of the
-> READ_ONCE(). CONFIG_GUP_GET_PTE_LOW_HIGH is confusing.
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+Yes, please

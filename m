@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBF75AE5F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CA15AE5F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Sep 2022 12:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239574AbiIFKw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 06:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S239799AbiIFKxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 06:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240025AbiIFKwT (ORCPT
+        with ESMTP id S239468AbiIFKwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:52:19 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75184BA6C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 03:50:29 -0700 (PDT)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MMMWP5jc8z688r1;
-        Tue,  6 Sep 2022 18:46:25 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Sep 2022 12:50:27 +0200
-Received: from [10.126.175.248] (10.126.175.248) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Sep 2022 11:50:26 +0100
-Message-ID: <3fa23318-6fa7-eba0-30b8-1fb71e6c327e@huawei.com>
-Date:   Tue, 6 Sep 2022 11:50:26 +0100
+        Tue, 6 Sep 2022 06:52:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD4E7C74F;
+        Tue,  6 Sep 2022 03:50:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A324733B3F;
+        Tue,  6 Sep 2022 10:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662461451; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xDqAYOny8a4GZp9lQU20DqwzzLF8VePC5H3lgg4Lr0c=;
+        b=hpYnwzXtwNmctKmpwUxO/1Vi96rDc8ufxofx8B5JZh5Q6B457yiyEcnmM+HYK/wgUqb6Ch
+        OcllPU4Vh/r7YgcLJ/gGuaOvh5YXyE7KNMls0LdkXAJ5l66+9zkMkit2VQrNtIsROED5cw
+        du4V++AH2tf06dNPht1c2Pv0jzE3w18=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662461451;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xDqAYOny8a4GZp9lQU20DqwzzLF8VePC5H3lgg4Lr0c=;
+        b=2cuduUF22x8Q5pj0EfXxp62FaSpwasgZKMy2Kfu8N7QlCz/dfPL+4tj4R+TXcJCnL5BmQZ
+        +On4r66BSXUOiPDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11D5A13A19;
+        Tue,  6 Sep 2022 10:50:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UB3GAgsmF2NeFAAAMHmgww
+        (envelope-from <jslaby@suse.cz>); Tue, 06 Sep 2022 10:50:51 +0000
+Message-ID: <2130ad22-bf5d-f5df-e51a-12632055ab3c@suse.cz>
+Date:   Tue, 6 Sep 2022 12:50:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH v2 1/2] iova: Remove some magazine pointer NULL checks
-To:     Ethan Zhao <haifeng.zhao@linux.intel.com>, <robin.murphy@arm.com>,
-        <joro@8bytes.org>, <will@kernel.org>
-CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>
-References: <1662369083-238529-1-git-send-email-john.garry@huawei.com>
- <1662369083-238529-2-git-send-email-john.garry@huawei.com>
- <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
-In-Reply-To: <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/3] tty: serial: use DEFINE_UART_PORT_TX_HELPER()
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>
+References: <20220901110657.3305-1-jslaby@suse.cz>
+ <20220901110657.3305-3-jslaby@suse.cz>
+ <89b44cd-6550-32b2-9bd-ae8dde6b48cd@linux.intel.com>
+From:   Jiri Slaby <jslaby@suse.cz>
+In-Reply-To: <89b44cd-6550-32b2-9bd-ae8dde6b48cd@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.175.248]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 10:28, Ethan Zhao wrote:
-
-Hi Ethan,
-
->> Signed-off-by: John Garry <john.garry@huawei.com>
->> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
->> ---
->>   drivers/iommu/iova.c | 7 ++-----
->>   1 file changed, 2 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
->> index 47d1983dfa2a..580fdf669922 100644
->> --- a/drivers/iommu/iova.c
->> +++ b/drivers/iommu/iova.c
->> @@ -661,9 +661,6 @@ iova_magazine_free_pfns(struct iova_magazine *mag, 
->> struct iova_domain *iovad)
->>       unsigned long flags;
->>       int i;
->> -    if (!mag)
->> -        return;
->> -
+On 02. 09. 22, 16:21, Ilpo Järvinen wrote:
+>> --- a/drivers/tty/serial/sa1100.c
+>> +++ b/drivers/tty/serial/sa1100.c
+>> @@ -226,45 +226,34 @@ sa1100_rx_chars(struct sa1100_port *sport)
+>>   	tty_flip_buffer_push(&sport->port.state->port);
+>>   }
+>>   
+>> -static void sa1100_tx_chars(struct sa1100_port *sport)
+>> +static bool sa1100_tx_ready(struct uart_port *port)
+>>   {
+>> -	struct circ_buf *xmit = &sport->port.state->xmit;
+>> +	struct sa1100_port *sport =
+>> +		container_of(port, struct sa1100_port, port);
+>>   
+>> -	if (sport->port.x_char) {
+>> -		UART_PUT_CHAR(sport, sport->port.x_char);
+>> -		sport->port.icount.tx++;
+>> -		sport->port.x_char = 0;
+>> -		return;
+>> -	}
+>> +	return UART_GET_UTSR1(sport) & UTSR1_TNF;
+>> +}
+>> +
+>> +static void sa1100_put_char(struct uart_port *port, unsigned char ch)
+>> +{
+>> +	struct sa1100_port *sport =
+>> +		container_of(port, struct sa1100_port, port);
+>> +
+>> +	UART_PUT_CHAR(sport, ch);
+>> +}
 > 
-> iommu_probe_device
->    ops->probe_finalize(dev);
->      intel_iommu_probe_finalize
->         iommu_setup_dma_ops
->           iommu_dma_init_domain(domain, dma_base, dma_limit, dev)
->             iova_domain_init_rcaches
->               {
->               ...
->               cpu_rcache->loaded = iova_magazine_alloc(GFP_KERNEL);
->               cpu_rcache->prev = iova_magazine_alloc(GFP_KERNEL);
->             if (!cpu_rcache->loaded || !cpu_rcache->prev) {
->                  ret = -ENOMEM;
->                        goto out_err;
-> 
-> Do you mean iova_magazine_alloc() is impossible to fail ?
+> Perhaps not to add into this change itself, but I just point out these
+> would be useful in addition to what is changed:
+> 	- Get rid of UART_PUT_CHAR()
 
-No, iova_magazine_alloc() may fail and return NULL. But if it does then 
-we set iovad rcache pointer = NULL in the error path and don't use the 
-rcache.
+Right, that would make the above easier.
 
-However we have a !iovad->rcache check on the "fast" alloc but not 
-"insert". I need to check why that is again.
+> 	- sa1100_console_putchar() could use sa1100_tx_ready()
+That could be a nice cleanup. But looking at the history, I am not sure 
+anyone cares enough about the driver (and cleaning it up :P). And I'm 
+not much into it.
 
-Thanks,
-john
+I've just sent v3 including your comments addressed.
+
+thanks,
+-- 
+js
+suse labs
+

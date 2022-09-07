@@ -2,176 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD165B0589
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9C85B0393
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiIGNoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S229517AbiIGMFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiIGNnd (ORCPT
+        with ESMTP id S229478AbiIGMFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:43:33 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8084C9D8D5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:42:42 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220907134240epoutp03c8ef1fd60a24c6d604b5acaa36ae1403~Sl9a0JF7w0081600816epoutp03e
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:42:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220907134240epoutp03c8ef1fd60a24c6d604b5acaa36ae1403~Sl9a0JF7w0081600816epoutp03e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662558160;
-        bh=gSif8NMM6wosPp4czbq6ghp4X8l/PNF06f6zjCg20J4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RUoIN0gYAYDxiz5CleIJWbt4VTmlZ3C52vCoX/1tMQwElBD0mj8NTYnItpsdkCGFi
-         Rb+Dvbn6VV6Q83MDYaEibf2O+0Z7rdz5kgmCQmr3SCv/T/nJvm9qA9S+b4KTsAIKmQ
-         QMwnbvdMUn9Mk8DTOMv8SQbshIH7r9D0mU4Px4VQ=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220907134240epcas5p28b2f86dd0e4f0da92c4e47ffd09a1eba~Sl9aPlwok0998509985epcas5p2c;
-        Wed,  7 Sep 2022 13:42:40 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MN3NF5gpLz4x9Pp; Wed,  7 Sep
-        2022 13:42:37 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5E.69.53458.DCF98136; Wed,  7 Sep 2022 22:42:37 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2~SjLHHpNUm2030720307epcas5p20;
-        Wed,  7 Sep 2022 10:18:27 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220907101827epsmtrp1e3eff56e01088162beff031f9e566d64~SjLHGv0t40915809158epsmtrp1s;
-        Wed,  7 Sep 2022 10:18:27 +0000 (GMT)
-X-AuditID: b6c32a4a-a5bff7000000d0d2-e3-63189fcd52b7
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9C.B8.18644.3FF68136; Wed,  7 Sep 2022 19:18:27 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220907101825epsmtip154204b88be3cf7dd290da6f4ee1397bd~SjLFJqolx3175831758epsmtip1p;
-        Wed,  7 Sep 2022 10:18:25 +0000 (GMT)
-From:   Smitha T Murthy <smitha.t@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        Wed, 7 Sep 2022 08:05:06 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60051A2D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:05:04 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id z20so15709429ljq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=DhMnHgvZLgQGk2ZGophI8BLsqGSYtn3vHSRE9tq/2lc=;
+        b=kRm2RsAxbIs+iSLZ9oKd4TeqeEG/9qQUTTx/tagPGA+qeulAYcrw+eohBuBmuED+s2
+         PvzTUdaUSNIi06z+eT9QEj2j0AB8YzKDbuB04a9cnKShu5TOXNQWb+EW6PsUatONg072
+         fSu5amYp4xHISIc7Ry9woaIZ21OR9M0SMkoWxqNe2MA+p4A5ksu014Ky5rpM4O5+rdWT
+         gXSTMgIA7t6C2YIolvzBjj1aaiHcb5ZLwFAtrJVjKVLBZpW6Ca7xsduJv9dUXRFJ146/
+         Ry4GLNXz18Y8yycbwf6kG9Te4Cs7kowtQiiA0t4sGbhoO1sWk5R5gvB7mcSduHrLM/8w
+         p2dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=DhMnHgvZLgQGk2ZGophI8BLsqGSYtn3vHSRE9tq/2lc=;
+        b=w2p5qbaiIKMqEV/ODCcAR3Nw4MDs5aX8GPu70nybI0gK7qjUwanIORj0v5k87A6Xux
+         kLYZNIHB3x/sTeRCAS6FqWcFxNPvfX7UwKqfbiRyrNPkjuCCQozfOnCJpgjP3OScQ8UX
+         DCFJQ41D9lUus0L7TaH3heljqpliTPAnCean8Yg4S1HhuBAltOgpgcAnLosJn3Z4e+im
+         1vFhmDlr/F2VRWQ/8tLYOLN6ELQXm/GqGc+0mGafx6PTkvI3shwUqPSBiNVVTqFWSJ7w
+         dR2re33phcPPL1n56FS5q+8mLvpb0+4lB7cWkTH7o2GIIgIEF5LOU4HnMXBstF5kKb9D
+         EFTg==
+X-Gm-Message-State: ACgBeo2jgVhSHEoxm0tX59j9K8rmSWTWAbTVqVptpjMjYzAcDqSJH/Lj
+        eS2GuWZ6NmxSe8OijKd51/d8jA==
+X-Google-Smtp-Source: AA6agR6+5p1Hswq0aeSZ4aWoRWOZfD9rclbT9lObRE+Z3z0CQkpT/Unkl/wOyWCdDOyoAf+AFv9MgQ==
+X-Received: by 2002:a05:651c:218:b0:263:aeac:5939 with SMTP id y24-20020a05651c021800b00263aeac5939mr848435ljn.64.1662552302499;
+        Wed, 07 Sep 2022 05:05:02 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id l18-20020a2e7012000000b00261ca0f940esm2503661ljc.62.2022.09.07.05.04.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 05:04:59 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, aakarsh.jain@samsung.com,
-        Smitha T Murthy <smitha.t@samsung.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 3/3] media: s5p-mfc: Fix to handle reference queue during
- finishing
-Date:   Wed,  7 Sep 2022 16:02:27 +0530
-Message-Id: <20220907103227.61088-3-smitha.t@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220907103227.61088-1-smitha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgk+LIzCtJLcpLzFFi42LZdlhTQ/fsfIlkg2/XtCye7pjJavFg3jY2
-        i/uLP7NYHNq8ld1i0+NrrBYPX4VbXN41h82iZ8NWVou1R+6yWyzb9IfJYtHWL+wWd/dsY7RY
-        sPERowOvx+I9L5k8Nq3qZPPYvKTeo2/LKkaPf01z2T0+b5ILYIvKtslITUxJLVJIzUvOT8nM
-        S7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBulNJoSwxpxQoFJBYXKykb2dTlF9a
-        kqqQkV9cYquUWpCSU2BSoFecmFtcmpeul5daYmVoYGBkClSYkJ3xv3ERc8EtwYodF96zNjB+
-        4Oti5OSQEDCRWLduPWsXIxeHkMBuRonLO7cwQzifGCXObD/OBOF8ZpT4NmcbUBkHWMu+B6UQ
-        8V2MEuc73kIVNTNJTPrzkQlkLpuAjsS396fZQGwRgVSJV+vWgu1gFuhmkrg7fz0zSEJYIFTi
-        zd73rCA2i4CqxOydb8CaeQUsJd5/3sAEcaC8xOoNB8DqOQWsJN4dmQ8V/8su8f1REITtIvHp
-        20VmCFtY4tXxLewQtpTEy/42KDtd4v7nZkYIu0BibsMWqDn2EgeuzGEB+YxZQFNi/S59iLCs
-        xNRT68BKmAX4JHp/P4Eq55XYMQ/GVpJYdOYE1HgJiatvt7JC2B4SJ5dMArOFBHoZJdZPFp3A
-        KDcLYcMCRsZVjJKpBcW56anFpgVGeanl8EhLzs/dxAhOilpeOxgfPvigd4iRiYPxEKMEB7OS
-        CG/KDpFkId6UxMqq1KL8+KLSnNTiQ4ymwOCbyCwlmpwPTMt5JfGGJpYGJmZmZiaWxmaGSuK8
-        U7QZk4UE0hNLUrNTUwtSi2D6mDg4pRqYLLhmRW/VZ3rZZMTKqPblvY+V47PjxgxrXxkUKRd7
-        b+HVXiRcGH4hxOe9zPxgc+NwGzFW9sl3/xxcz9XitT3Z9JD2ijeeB4L8Yt4eZb+so39w1Ywn
-        KbxHn5Z1JCS3SV8s5lHR/3NN5JPs6tVyc8X1WcO6zBszTb403BPYIxNQekbj0zd2xg0T79R+
-        nTr3wp6Pms9uqlbcbgz4+0VtsRgn4+rnt69dKevbw7ui/bRokGuKuP4p67u96eqXEk9odv5n
-        rVsda62ob1R1zfdo/e4l1aLPHnktqOo3b13w9sKP5vceNS+55ldFnXXS/F5/loujXSDgxJnk
-        dTNDIwrjbt2M4bi2wWT3I5XYNU4uv2SUWIozEg21mIuKEwFaJPM7EwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGLMWRmVeSWpSXmKPExsWy7bCSnO7nfIlkg9a9chZPd8xktXgwbxub
-        xf3Fn1ksDm3eym6x6fE1VouHr8ItLu+aw2bRs2Erq8XaI3fZLZZt+sNksWjrF3aLu3u2MVos
-        2PiI0YHXY/Gel0wem1Z1snlsXlLv0bdlFaPHv6a57B6fN8kFsEVx2aSk5mSWpRbp2yVwZfxv
-        XMRccEuwYseF96wNjB/4uhg5OCQETCT2PSjtYuTiEBLYwSjRuuQSWxcjJ1BcQmLl70mMELaw
-        xMp/z9khihqZJH717AYrYhPQkfj2/jSYLSKQLjHpzlcWkCJmgelMEntWPWEH2SAsECxx+rwj
-        SA2LgKrE7J1vmEBsXgFLifefNzBBLJCXWL3hADOIzSlgJfHuyHwmkFYhoJrjF6smMPItYGRY
-        xSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHLRaWjsY96z6oHeIkYmD8RCjBAezkghv
-        yg6RZCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqY0kXN
-        LETuqP/8X3D9ru6RbvOpX2tYpihNOfZ2quMzhpkNe5N5HFZZqcV1ds87yRD4far7nKctj9a4
-        eTD/OP1Eo96QpcY39t3+ExaiIqu2LnPTD+hVZT19bk0d35KlNn8c9N+WXU4/oTnjkmTavn77
-        9NWhcu2LGm69tvDPYdryNa/V8hrP1N+PvY32pvGXSSnUyC+vUXu04ex2xmNS5lNvLbXL2Xaq
-        pJidf8nnmBLTjTuKXvGqZXy4Jf+v75ZmZ5z2pw2N55SnqcxePyXu2szmO5/CW7PPv+UXmWpW
-        xebzvP31Ub3XeQJ7PNkMhacI+Uc+CNj8ON3YcpKQLsOLNV1PbV93Fsxad8vqW/9zsSP5SizF
-        GYmGWsxFxYkA1MJTBMkCAAA=
-X-CMS-MailID: 20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2
-References: <20220907103227.61088-1-smitha.t@samsung.com>
-        <CGME20220907101827epcas5p2afa088ce5a591040094d2b49b928f3c2@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RESEND PATCH] dt-bindings: interconnect: fsl,imx8m-noc: drop Leonard Crestez
+Date:   Wed,  7 Sep 2022 14:04:52 +0200
+Message-Id: <20220907120452.52161-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On receiving last buffer driver puts MFC to MFCINST_FINISHING state which in
-turn skips transferring of frame from SRC to REF queue. This causes driver to
-stop MFC encoding and last frame is lost.
+Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
+Access denied:), so change maintainer to Peng Fan from NXP.
 
-This patch guarantees safe handling of frames during MFCINST_FINISHING and
-correct clearing of workbit to avoid early stopping of encoding.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Peng Fan <peng.fan@nxp.com>
 
-Fixes: af93574678108 ("[media] MFC: Add MFC 5.1 V4L2 driver")
-
-Cc: stable@vger.kernel.org
-Cc: linux-fsd@tesla.com
-Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
 ---
- drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-index b65e506665af..e064bdd74f2e 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-@@ -1218,6 +1218,7 @@ static int enc_post_frame_start(struct s5p_mfc_ctx *ctx)
- 	unsigned long mb_y_addr, mb_c_addr;
- 	int slice_type;
- 	unsigned int strm_size;
-+	bool src_ready;
+Resend with ack.
+---
+ .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+index 7d8d0896e979..f7a5e31c506e 100644
+--- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
++++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Generic i.MX bus frequency device
  
- 	slice_type = s5p_mfc_hw_call(dev->mfc_ops, get_enc_slice_type, dev);
- 	strm_size = s5p_mfc_hw_call(dev->mfc_ops, get_enc_strm_size, dev);
-@@ -1257,7 +1258,8 @@ static int enc_post_frame_start(struct s5p_mfc_ctx *ctx)
- 			}
- 		}
- 	}
--	if ((ctx->src_queue_cnt > 0) && (ctx->state == MFCINST_RUNNING)) {
-+	if ((ctx->src_queue_cnt > 0) && (ctx->state == MFCINST_RUNNING ||
-+				ctx->state == MFCINST_FINISHING)) {
- 		mb_entry = list_entry(ctx->src_queue.next, struct s5p_mfc_buf,
- 									list);
- 		if (mb_entry->flags & MFC_BUF_FLAG_USED) {
-@@ -1288,7 +1290,13 @@ static int enc_post_frame_start(struct s5p_mfc_ctx *ctx)
- 		vb2_set_plane_payload(&mb_entry->b->vb2_buf, 0, strm_size);
- 		vb2_buffer_done(&mb_entry->b->vb2_buf, VB2_BUF_STATE_DONE);
- 	}
--	if ((ctx->src_queue_cnt == 0) || (ctx->dst_queue_cnt == 0))
-+
-+	src_ready = true;
-+	if ((ctx->state == MFCINST_RUNNING) && (ctx->src_queue_cnt == 0))
-+		src_ready = false;
-+	if ((ctx->state == MFCINST_FINISHING) && (ctx->ref_queue_cnt == 0))
-+		src_ready = false;
-+	if ((!src_ready) || (ctx->dst_queue_cnt == 0))
- 		clear_work_bit(ctx);
+ maintainers:
+-  - Leonard Crestez <leonard.crestez@nxp.com>
++  - Peng Fan <peng.fan@nxp.com>
  
- 	return 0;
+ description: |
+   The i.MX SoC family has multiple buses for which clock frequency (and
 -- 
-2.17.1
+2.34.1
 

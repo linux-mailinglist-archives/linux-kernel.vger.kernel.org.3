@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C585B09E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CAF5B09E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiIGQQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S230272AbiIGQPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiIGQPe (ORCPT
+        with ESMTP id S229889AbiIGQPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:15:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8E1796B1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:15:32 -0700 (PDT)
+        Wed, 7 Sep 2022 12:15:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502EE7968F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:15:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D92F3CE1CD1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBB4C43143;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEB19619C5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A28C43144;
         Wed,  7 Sep 2022 16:15:29 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oVxij-00CsVW-2t;
-        Wed, 07 Sep 2022 12:16:09 -0400
-Message-ID: <20220907161609.728013341@goodmis.org>
+        id 1oVxik-00CsW4-0H;
+        Wed, 07 Sep 2022 12:16:10 -0400
+Message-ID: <20220907161609.915329087@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 07 Sep 2022 12:15:14 -0400
+Date:   Wed, 07 Sep 2022 12:15:15 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [for-linus][PATCH 3/7] MAINTAINERS: add scripts/tracing/ to TRACING
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Gow <davidgow@google.com>,
+        Alison Schofield <alison.schofield@intel.com>
+Subject: [for-linus][PATCH 4/7] tracepoint: Allow trace events in modules with TAINT_TEST
 References: <20220907161511.694486342@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,31 +50,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Alison Schofield <alison.schofield@intel.com>
 
-The files in scripts/tracing/ belong to the TRACING subsystem.
+Commit 2852ca7fba9f ("panic: Taint kernel if tests are run")
+introduced a new taint type, TAINT_TEST, to signal that an
+in-kernel test module has been loaded.
 
-Add a corresponding file entry for TRACING.
+TAINT_TEST taint type defaults into a 'bad_taint' list for
+kernel tracing and blocks the creation of trace events. This
+causes a problem for CXL testing where loading the cxl_test
+module makes all CXL modules out-of-tree, blocking any trace
+events.
 
-Link: https://lkml.kernel.org/r/20220825115927.20598-1-lukas.bulwahn@gmail.com
+Trace events are in development for CXL at the moment and this
+issue was found in test with v6.0-rc1.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Link: https://lkml.kernel.org/r/20220829171048.263065-1-alison.schofield@intel.com
+
+Fixes: 2852ca7fba9f7 ("panic: Taint kernel if tests are run")
+Reported-by: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Tested-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/tracepoint.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b89b70af0b07..93ffebc3e6c0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20612,6 +20612,7 @@ F:	include/*/ftrace.h
- F:	include/linux/trace*.h
- F:	include/trace/
- F:	kernel/trace/
-+F:	scripts/tracing/
- F:	tools/testing/selftests/ftrace/
+diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+index 64ea283f2f86..ef42c1a11920 100644
+--- a/kernel/tracepoint.c
++++ b/kernel/tracepoint.c
+@@ -571,7 +571,8 @@ static void for_each_tracepoint_range(
+ bool trace_module_has_bad_taint(struct module *mod)
+ {
+ 	return mod->taints & ~((1 << TAINT_OOT_MODULE) | (1 << TAINT_CRAP) |
+-			       (1 << TAINT_UNSIGNED_MODULE));
++			       (1 << TAINT_UNSIGNED_MODULE) |
++			       (1 << TAINT_TEST));
+ }
  
- TRACING MMIO ACCESSES (MMIOTRACE)
+ static BLOCKING_NOTIFIER_HEAD(tracepoint_notify_list);
+@@ -647,7 +648,7 @@ static int tracepoint_module_coming(struct module *mod)
+ 	/*
+ 	 * We skip modules that taint the kernel, especially those with different
+ 	 * module headers (for forced load), to make sure we don't cause a crash.
+-	 * Staging, out-of-tree, and unsigned GPL modules are fine.
++	 * Staging, out-of-tree, unsigned GPL, and test modules are fine.
+ 	 */
+ 	if (trace_module_has_bad_taint(mod))
+ 		return 0;
 -- 
 2.35.1

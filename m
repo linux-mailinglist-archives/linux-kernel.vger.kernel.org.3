@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE7C5B0034
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB005B0035
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiIGJUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S230351AbiIGJUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiIGJTu (ORCPT
+        with ESMTP id S230203AbiIGJT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:19:50 -0400
+        Wed, 7 Sep 2022 05:19:56 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35F1F15700;
-        Wed,  7 Sep 2022 02:19:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 851EB1A393;
+        Wed,  7 Sep 2022 02:19:53 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4958B106F;
-        Wed,  7 Sep 2022 02:19:54 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B759D6E;
+        Wed,  7 Sep 2022 02:19:59 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.40.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E0FAC3F73D;
-        Wed,  7 Sep 2022 02:20:11 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DE44E3F73D;
+        Wed,  7 Sep 2022 02:20:16 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, peterz@infradead.org
@@ -32,11 +32,11 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>, x86@kernel.org,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH V3 3/4] arm64/perf: Assert all platform event flags are within PERF_EVENT_FLAG_ARCH
-Date:   Wed,  7 Sep 2022 14:49:23 +0530
-Message-Id: <20220907091924.439193-4-anshuman.khandual@arm.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Subject: [PATCH V3 4/4] x86/perf: Assert all platform event flags are within PERF_EVENT_FLAG_ARCH
+Date:   Wed,  7 Sep 2022 14:49:24 +0530
+Message-Id: <20220907091924.439193-5-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220907091924.439193-1-anshuman.khandual@arm.com>
 References: <20220907091924.439193-1-anshuman.khandual@arm.com>
@@ -53,8 +53,6 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Ensure all platform specific event flags are within PERF_EVENT_FLAG_ARCH.
 
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
@@ -62,51 +60,96 @@ Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
 Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
 Cc: linux-perf-users@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Reviewed-by: James Clark <james.clark@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- drivers/perf/arm_spe_pmu.c   | 4 +++-
- include/linux/perf/arm_pmu.h | 9 +++++----
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ arch/x86/events/perf_event.h       | 34 ++++++++++++++----------------
+ arch/x86/events/perf_event_flags.h | 22 +++++++++++++++++++
+ 2 files changed, 38 insertions(+), 18 deletions(-)
+ create mode 100644 arch/x86/events/perf_event_flags.h
 
-diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
-index b65a7d9640e1..db8a0a841062 100644
---- a/drivers/perf/arm_spe_pmu.c
-+++ b/drivers/perf/arm_spe_pmu.c
-@@ -44,7 +44,9 @@
-  * This allows us to perform the check, i.e, perfmon_capable(),
-  * in the context of the event owner, once, during the event_init().
-  */
--#define SPE_PMU_HW_FLAGS_CX			BIT(0)
-+#define SPE_PMU_HW_FLAGS_CX			0x00001
-+
-+static_assert((PERF_EVENT_FLAG_ARCH & SPE_PMU_HW_FLAGS_CX) == SPE_PMU_HW_FLAGS_CX);
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index ba3d24a6a4ec..60cf8132e1e1 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -64,27 +64,25 @@ static inline bool constraint_match(struct event_constraint *c, u64 ecode)
+ 	return ((ecode & c->cmask) - c->code) <= (u64)c->size;
+ }
  
- static void set_spe_event_has_cx(struct perf_event *event)
- {
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 0407a38b470a..0356cb6a215d 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -24,10 +24,11 @@
++#define PERF_ARCH(name, val)	\
++	PERF_X86_EVENT_##name = val,
++
  /*
-  * ARM PMU hw_event flags
+  * struct hw_perf_event.flags flags
   */
--/* Event uses a 64bit counter */
--#define ARMPMU_EVT_64BIT		1
--/* Event uses a 47bit counter */
--#define ARMPMU_EVT_47BIT		2
-+#define ARMPMU_EVT_64BIT		0x00001 /* Event uses a 64bit counter */
-+#define ARMPMU_EVT_47BIT		0x00002 /* Event uses a 47bit counter */
+-#define PERF_X86_EVENT_PEBS_LDLAT	0x00001 /* ld+ldlat data address sampling */
+-#define PERF_X86_EVENT_PEBS_ST		0x00002 /* st data address sampling */
+-#define PERF_X86_EVENT_PEBS_ST_HSW	0x00004 /* haswell style datala, store */
+-#define PERF_X86_EVENT_PEBS_LD_HSW	0x00008 /* haswell style datala, load */
+-#define PERF_X86_EVENT_PEBS_NA_HSW	0x00010 /* haswell style datala, unknown */
+-#define PERF_X86_EVENT_EXCL		0x00020 /* HT exclusivity on counter */
+-#define PERF_X86_EVENT_DYNAMIC		0x00040 /* dynamic alloc'd constraint */
+-
+-#define PERF_X86_EVENT_EXCL_ACCT	0x00100 /* accounted EXCL event */
+-#define PERF_X86_EVENT_AUTO_RELOAD	0x00200 /* use PEBS auto-reload */
+-#define PERF_X86_EVENT_LARGE_PEBS	0x00400 /* use large PEBS */
+-#define PERF_X86_EVENT_PEBS_VIA_PT	0x00800 /* use PT buffer for PEBS */
+-#define PERF_X86_EVENT_PAIR		0x01000 /* Large Increment per Cycle */
+-#define PERF_X86_EVENT_LBR_SELECT	0x02000 /* Save/Restore MSR_LBR_SELECT */
+-#define PERF_X86_EVENT_TOPDOWN		0x04000 /* Count Topdown slots/metrics events */
+-#define PERF_X86_EVENT_PEBS_STLAT	0x08000 /* st+stlat data address sampling */
+-#define PERF_X86_EVENT_AMD_BRS		0x10000 /* AMD Branch Sampling */
+-#define PERF_X86_EVENT_PEBS_LAT_HYBRID	0x20000 /* ld and st lat for hybrid */
++enum {
++#include "perf_event_flags.h"
++};
 +
-+static_assert((PERF_EVENT_FLAG_ARCH & ARMPMU_EVT_64BIT) == ARMPMU_EVT_64BIT);
-+static_assert((PERF_EVENT_FLAG_ARCH & ARMPMU_EVT_47BIT) == ARMPMU_EVT_47BIT);
++#undef PERF_ARCH
++
++#define PERF_ARCH(name, val)						\
++	static_assert((PERF_X86_EVENT_##name & PERF_EVENT_FLAG_ARCH) ==	\
++		      PERF_X86_EVENT_##name);
++
++#include "perf_event_flags.h"
++
++#undef PERF_ARCH
  
- #define HW_OP_UNSUPPORTED		0xFFFF
- #define C(_x)				PERF_COUNT_HW_CACHE_##_x
+ static inline bool is_topdown_count(struct perf_event *event)
+ {
+diff --git a/arch/x86/events/perf_event_flags.h b/arch/x86/events/perf_event_flags.h
+new file mode 100644
+index 000000000000..1dc19b9b4426
+--- /dev/null
++++ b/arch/x86/events/perf_event_flags.h
+@@ -0,0 +1,22 @@
++
++/*
++ * struct hw_perf_event.flags flags
++ */
++PERF_ARCH(PEBS_LDLAT,		0x00001) /* ld+ldlat data address sampling */
++PERF_ARCH(PEBS_ST,		0x00002) /* st data address sampling */
++PERF_ARCH(PEBS_ST_HSW,		0x00004) /* haswell style datala, store */
++PERF_ARCH(PEBS_LD_HSW,		0x00008) /* haswell style datala, load */
++PERF_ARCH(PEBS_NA_HSW,		0x00010) /* haswell style datala, unknown */
++PERF_ARCH(EXCL,			0x00020) /* HT exclusivity on counter */
++PERF_ARCH(DYNAMIC,		0x00040) /* dynamic alloc'd constraint */
++			/*	0x00080	*/
++PERF_ARCH(EXCL_ACCT,		0x00100) /* accounted EXCL event */
++PERF_ARCH(AUTO_RELOAD,		0x00200) /* use PEBS auto-reload */
++PERF_ARCH(LARGE_PEBS,		0x00400) /* use large PEBS */
++PERF_ARCH(PEBS_VIA_PT,		0x00800) /* use PT buffer for PEBS */
++PERF_ARCH(PAIR,			0x01000) /* Large Increment per Cycle */
++PERF_ARCH(LBR_SELECT,		0x02000) /* Save/Restore MSR_LBR_SELECT */
++PERF_ARCH(TOPDOWN,		0x04000) /* Count Topdown slots/metrics events */
++PERF_ARCH(PEBS_STLAT,		0x08000) /* st+stlat data address sampling */
++PERF_ARCH(AMD_BRS,		0x10000) /* AMD Branch Sampling */
++PERF_ARCH(PEBS_LAT_HYBRID,	0x20000) /* ld and st lat for hybrid */
 -- 
 2.25.1
 

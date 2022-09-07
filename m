@@ -2,91 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA4E5B088A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5355B0892
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiIGP2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S229723AbiIGPai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiIGP2i (ORCPT
+        with ESMTP id S229563AbiIGPag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:28:38 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B25061DAE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:28:37 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id iw17so8288292plb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:28:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=XYCZQP1I7mQTgZ4Sp3CF6tpzcItR+JWciM5225Cv7IE=;
-        b=C6J0LjImlh5U/JiP0IMEgrmja/qk/iwrGTNfgoPYTYa2qCOfQEeTlPu30ue1SnoHFL
-         HmaXaEv24KAj8BcS9TbtdWOhvduBcT7w6Gz1UzHJI/pdFl3Zi6TpO72lb/azpjD5TqO/
-         d2Ha0cOAENTHNRmBiujw8hXUgpVyYUIO32DL0NaxCOYIWB8Mt9P/Hjnw1dZGAGnnCbYQ
-         pUv9f33y4G3M+fAT+Sud87PCgUatszB2L8jStRzplGGAHjDw7UNCWtKOkSIwSrjn3PFh
-         53UOrKs/HUL8lkTzQ2T5QTJx6acfaN1RITDt+FR9UmfaR6CU1P/LUj/MZonQl8JrUt3c
-         ik+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=XYCZQP1I7mQTgZ4Sp3CF6tpzcItR+JWciM5225Cv7IE=;
-        b=rVCBiuF+9uBmAKE1M2lnd8jVVf2/oBpP2BTcOvy5DOzU8YyEHvIGJPlvAB/rhc5i09
-         lDyRaCHD6QXeOLQkVrUg3YdRpSwrcsEgvgOnyKXZvSXXKKL25i4+3tLiI2Fkgjdf4e/W
-         CRvevQ24iqiV8hnspRrlYh/XCFmpsXA2p52GZLmdinYuscoks8JPVXuqHJ6A9opEHHAf
-         7AD8G1XUMHy6Rf4Jsu5nFs9nPG6qMmlOr+3yV8k0vukjlhszusSaoQ80Qwh4fBqPsXo+
-         AcQ73vlyf7ffMUaZViT6G5BBg8BS5Jd1oLP//TA49aVqMkAsNA3+zNm6TMQnBEC/H4HA
-         TchA==
-X-Gm-Message-State: ACgBeo3Mhddr4alx45vEAyLV3Fvrp692JeQgaS3dEPgIai/8E67xwFLu
-        gMddQKyzSRaudXimZuAu69w=
-X-Google-Smtp-Source: AA6agR7K4Ybq1M0KAYFfWiizWg429tcJCjZSRXbytJa4v3ff4Fp6FN/Mmsv0Pc4rTu486Yon8CXlRg==
-X-Received: by 2002:a17:902:ce01:b0:172:59a6:fb3d with SMTP id k1-20020a170902ce0100b0017259a6fb3dmr4323415plg.119.1662564516532;
-        Wed, 07 Sep 2022 08:28:36 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id k62-20020a17090a4cc400b002004380686bsm7556666pjh.46.2022.09.07.08.28.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 08:28:36 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 7 Sep 2022 05:28:34 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [peterz-queue:sched/psi 11/11]
- include/linux/cgroup-defs.h:432:38: error: 'NR_PSI_RESOURCES' undeclared
- here (not in a function)
-Message-ID: <Yxi4os4PUWSARTS/@slm.duckdns.org>
-References: <202209070242.7EuRnstk-lkp@intel.com>
- <e95c6e55-a023-b6f7-1dce-4195dc22114a@bytedance.com>
+        Wed, 7 Sep 2022 11:30:36 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5486EF12;
+        Wed,  7 Sep 2022 08:30:34 -0700 (PDT)
+Received: from g550jk.localnet (31-151-115-246.dynamic.upc.nl [31.151.115.246])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id BEC95C7023;
+        Wed,  7 Sep 2022 15:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1662564630; bh=PBuavX/FI8zoNi4Yjs2NUwse88XH7Qen5TwuTvKTMFM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=uWv8uKGVTh/KDAzcw1siELCkpqZlURBcIALCy5h1bT5+OZOgnYR/yS5OzAKU/IT8W
+         DWrrGtwYeKh9WpiMUXWtH0F7EUaHUsp2namiCQUuC6x74PX7JfQwhj6ZIIRzXzzFhz
+         NZg+zJODwITdaZ9Hw9uzds8bYYNDEcRbNaSbX3MI=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: msm8953: add MDSS
+Date:   Wed, 07 Sep 2022 17:30:30 +0200
+Message-ID: <12049260.O9o76ZdvQC@g550jk>
+In-Reply-To: <CAA8EJpqjnafKyUrd1ntYFeGTDtRxgEUSu0Mg9wNGxObJ3wF0Kw@mail.gmail.com>
+References: <20220906183334.203787-1-luca@z3ntu.xyz> <20220906183334.203787-4-luca@z3ntu.xyz> <CAA8EJpqjnafKyUrd1ntYFeGTDtRxgEUSu0Mg9wNGxObJ3wF0Kw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e95c6e55-a023-b6f7-1dce-4195dc22114a@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:45:55AM +0800, Chengming Zhou wrote:
-> 2. This patchset depends on Tejun's commit e2691f6b44ed ("cgroup: Implement cgroup_file_show()") in linux-next
+Hi Dmitry,
+
+On Dienstag, 6. September 2022 21:41:11 CEST Dmitry Baryshkov wrote:
+> On Tue, 6 Sept 2022 at 21:36, Luca Weiss <luca@z3ntu.xyz> wrote:
+> > From: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > 
+> > Add the MDSS, MDP and DSI nodes that are found on msm8953 SoC.
+> > 
+> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > ---
+> > Changes since v2:
+> > - add "core" clock for mdss as suggested by Dmitry Baryshkov
+> > 
+> >  arch/arm64/boot/dts/qcom/msm8953.dtsi | 210 ++++++++++++++++++++++++++
+> >  1 file changed, 210 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> > b/arch/arm64/boot/dts/qcom/msm8953.dtsi index 3d11331e78d2..580333141a66
+> > 100644
+> > --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+> > @@ -726,6 +726,216 @@ tcsr_phy_clk_scheme_sel: syscon@193f044 {
+> > 
+> >                         reg = <0x193f044 0x4>;
+> >                 
+> >                 };
+> > 
+> > +               mdss: mdss@1a00000 {
+> > +                       compatible = "qcom,mdss";
+> > +
+> > +                       reg = <0x1a00000 0x1000>,
+> > +                             <0x1ab0000 0x1040>;
+> > +                       reg-names = "mdss_phys",
+> > +                                   "vbif_phys";
+> > +
+> > +                       power-domains = <&gcc MDSS_GDSC>;
+> > +                       interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+> > +
+> > +                       interrupt-controller;
+> > +                       #interrupt-cells = <1>;
+> > +
+> > +                       clocks = <&gcc GCC_MDSS_AHB_CLK>,
+> > +                                <&gcc GCC_MDSS_AXI_CLK>,
+> > +                                <&gcc GCC_MDSS_VSYNC_CLK>,
+> > +                                <&gcc GCC_MDSS_MDP_CLK>;
+> > +                       clock-names = "iface",
+> > +                                     "bus",
+> > +                                     "vsync",
+> > +                                     "core";
+> > +
+> > +                       #address-cells = <1>;
+> > +                       #size-cells = <1>;
+> > +                       ranges;
+> > +
+> > +                       status = "disabled";
+> > +
+> > +                       mdp: mdp@1a01000 {
+> > +                               compatible = "qcom,mdp5";
 > 
->    Maybe peterz-queue should include that first? I don't know what's the normal way to handle.
+> Could you please change this to "qcom,msm8953-mdp5", "qcom,mdp5".
 
-FYI, this patch is in the Greg's driver-core/driver-core-next branch. If
-it'd be better to route these through the cgroup tree, let me know.
+This would be the first dtsi using the two compatibles then, correct? Are there 
+any plans to adjust other SoCs?
 
-Thanks.
+> 
+> > +                               reg = <0x1a01000 0x89000>;
+> > +                               reg-names = "mdp_phys";
+> > +
+> 
+> [skipped]
+> 
+> > +
+> > +                       dsi0_phy: dsi-phy@1a94400 {
+> 
+> Let's probably use a generic name 'phy' here and for dsi1_phy.
 
--- 
-tejun
+Here also, the bindings examples all use dsi-phy@, are there any plans to 
+change that and adjust other dtsi files?
+
+> 
+> The rest looks good to me.
+
+Thanks!
+
+Regards
+Luca
+
+> 
+> > +                               compatible = "qcom,dsi-phy-14nm-8953";
+> > +                               reg = <0x1a94400 0x100>,
+> > +                                     <0x1a94500 0x300>,
+> > +                                     <0x1a94800 0x188>;
+> > +                               reg-names = "dsi_phy",
+> > +                                           "dsi_phy_lane",
+> > +                                           "dsi_pll";
+> > +
+> > +                               #clock-cells = <1>;
+> > +                               #phy-cells = <0>;
+> > +
+> > +                               clocks = <&gcc GCC_MDSS_AHB_CLK>,
+> > <&xo_board>; +                               clock-names = "iface",
+> > "ref";
+> > +
+> > +                               status = "disabled";
+> > +                       };
+
+
+
+

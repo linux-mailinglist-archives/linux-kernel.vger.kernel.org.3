@@ -2,288 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61E85B0AF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA0D5B0AF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiIGRC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S230024AbiIGRD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiIGRCt (ORCPT
+        with ESMTP id S229899AbiIGRD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:02:49 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120043.outbound.protection.outlook.com [40.107.12.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16897B14E2;
-        Wed,  7 Sep 2022 10:02:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g3YAuFwg7r/6zl6OvS59bJrZdnxONq2aVi1q0Tl6SYAKuzMQLLwOeXgBcIX2UnPowK/q92IGI2Qz1PC/SA60ARXkM1xtfxp79TPYlrzyMJGVBFxtUrO3yAWMl6HaJ494GX8Ubaw0+0BlyBGGSZl6i5ng3cLHSU+ZniK9xzlDlK1ZNKFUAQeaElq8AZGO7qLW05Z4JeAaN6R49JTV91n3Xpc8NdHowi/MJbY5VkhgCIPXQVKzxXw3ni53mdlYAmJR2+8Q/WdhgaMZQ3lqD4Zm6aCKK0dtufRbRT553oqMPRDrtc+FBVjxyDK/jM3AWWwJS04g/j1KVDenTQt8xJhGeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k7MRmX87lbBNuniAGJ7sPwH+oU4ieg2dBQ2/zQh4vZE=;
- b=Dbk27jLGhTF09G0LtZhXBCyyT4C5GQy7FRzNXQOxy+FX1/TdSI+UOZKo9PIC/HdeXxINm+w0YOk9/QBjAY1gzh/W2ZN9Ik7lXMVQnj7IU0raCWRm9sxkT7V2UuZ7PSzFcHa431DRjRTI5lXTuatJIyOk8Ag+IXpZOMMVUOcAw4Z1nK4pKFPgzxsUF7iDgb75Nnggwea82CdnSNmVL3x2zhSab7C4BWQUfgm7LcnPsN1VsQvOYRwD22u32UifthO1eVnGSBEIr4Jq0Lc9XQDSzKxe8D4O8mHav2T1SWvwb3kvf3T09dm3xRuROpEUkolpjcHFNezCtL2sLFYl5BYTvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k7MRmX87lbBNuniAGJ7sPwH+oU4ieg2dBQ2/zQh4vZE=;
- b=03GVSxOSHBJ7R6I9B9SxZgDC+ZYSwkF5uJ/patKtNalYUQx9zwu4E1zNo+Fgae0r5o0VmOeWZkVbj+phiIaU/0LzZnAl+n+OPaNwWIO2IDZPTAx1qbGn3Ps3E+Um1f5+R+lXqAHuXQ/h/NnhA03a/w4sMX6lD8qIEUHO8Z+st4rFtO4zLvVHwu2nP/06u29biRg2oO2Mv0v0iyLgA8yjuUTn5OznRNOiRpWxdtxXdspPvN0RdsMZ4fdtkNsGvFF5A60Z/2bmiv+bUq2xn0BnzuthFIdQ6NLUkhT16Jolyu7ZrUvNWIUWXP36QyHr+Fj3G/OOucs19+51BpWLHuld9w==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB3281.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:29::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Wed, 7 Sep
- 2022 17:02:41 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
- 17:02:41 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [RFC PATCH v1] spi: fsl_spi: Convert to transfer_one
-Thread-Topic: [RFC PATCH v1] spi: fsl_spi: Convert to transfer_one
-Thread-Index: AQHYswfjFH0nSutLzEaTiCSF5MGwrq3UUTYA
-Date:   Wed, 7 Sep 2022 17:02:41 +0000
-Message-ID: <36328086-961f-c84d-d8df-acbe96db3261@csgroup.eu>
-References: <753266abafe81722d86c3ddb8bac8ef1cb00fe8c.1660829841.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <753266abafe81722d86c3ddb8bac8ef1cb00fe8c.1660829841.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 41f6abec-c355-4078-1950-08da90f2c6a8
-x-ms-traffictypediagnostic: MR1P264MB3281:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mJeNkosw1fC3ZvBIBjMrcbi/DYbxojziF4caks2GyT5/7T0xWvIg+D8UBe2SKprSot1hp7t69Yat3m6GShljl5KcxJ8T5pHgImZKCkSYJBkGPXYLDMrIjan+syGV4c4vSRnhPQgZkyMeBau+cUfbBnpVxeuVBbj+HQ9citYI03h/U70+qFdOoATdTg5TpHC20SEalEfALwnRW8l2M6ZrQBPunGX6Kkpn4hGKneKFE9DfkwRhjACjcIpe1p3qaMQiY2R7ypitqHDQcecxp2uPjnoexsqGn997SAMT3imB8htQwFPXEAOiAw8SszMF1malvLWVTpyMPTNedg0e7vfZlAf9XUlr9GSE/2rPVyl0e+ZhBf/NFckF60ryL46kCorJWuDRjrKtYidvOb+pYSIotnGP9NRtrVYuWonOvFXvSFvaIG/PCuHlJ86hUrxwXLLytJCATiN4JzS2N92c0kr0BsvvQEn+qXu5gGFtU5sDHySl60p9M57T3RFcdHsRDxcLqqhOmwdK3AAhnruhIxp6QaDMnH8XRe6OdY8t4emYRRned4QP4W2YN5DgOU/9yVYVJaBlHtGXNY39m4RKYCAogt+jAOukhO/tqQBH4xSETMkMuJxT0LFv7qgxDEthW8oMqQbryS1+PiBii6wfid2jftm8206gwOHayuFHXg7gomOUq+91Dg8FPJgls0dNux5LCEoCrD5YPMcvaLdZBgSOdrHXi6l3XxT3t0hFOdQinMxRYgqe46zh/dSOHWg/bIHx8xEhEcE3R6UIxZwvOSEROXzMY54xNcmJ35uohxKPPyh1AADnT6rst0hnqwd/7I7cPk82we14E2o1Up+nxL7rRsltNOJVe43XUV4Ukfj6Ro4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(346002)(136003)(366004)(8936002)(6512007)(5660300002)(2616005)(186003)(2906002)(44832011)(41300700001)(26005)(6506007)(36756003)(31696002)(86362001)(31686004)(71200400001)(83380400001)(66574015)(6486002)(478600001)(38070700005)(66446008)(8676002)(64756008)(66476007)(66946007)(4326008)(54906003)(76116006)(66556008)(316002)(6916009)(91956017)(122000001)(38100700002)(45980500001)(43740500002)(309714004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RDcyM3N1K253NlFKSm1LNFZPWTBMZWhLenczeWxSL3FKdFFzVVJ2K29yWksw?=
- =?utf-8?B?NSsraEd4NlZnZEFZdXNtMVlZN1hKR2U1OW5SMm5Hb0dFcU1Ya3hiSk9QV0pV?=
- =?utf-8?B?cGRVcEdDYTc0dDkwcG9BbDR4TFFMNEpJQXI1aUROaS83MG9nN0JuZUZHdkov?=
- =?utf-8?B?aTdRNS9wWHBnUEQ2RWhGRWNYWGtlZ1RLRWJIenR1WHAyMi9PWXRDUmEyMUJB?=
- =?utf-8?B?Qnp6Y0xyaFBkSUwzZk5MSkphM2xSbzd2UVJlKzN3RC85anduaVJ3MmN3NHJ0?=
- =?utf-8?B?ZXd5bjM0VDljckNXK2JIMlJ5NGlHRE1KWEF5VEthNzlUSDhLUmFueWliaVVl?=
- =?utf-8?B?aDNueGd2QXJWR3FJNXZiRjBsaHNvWDRNTCtBNGRLVHNmN1p5MVpjN0Q0djNE?=
- =?utf-8?B?Q25sRVFtL1lCTFdEcUtoV04vSEtqSjBQUkVCdUlldTBhTFROTUlsSmsxa291?=
- =?utf-8?B?aVFEUE53d1JoNC9EdTdjckw1VXBMbVU1cUYxRW9IWmhteDFZb1BEL29hR05J?=
- =?utf-8?B?bGV6SHJ4R2cxRHdFby9xRjFzWVBsRDEzbkJ1a0Q0eVU4bE1VdVMyR0dob0lD?=
- =?utf-8?B?WHkrdW9iWFcySkQvY09PTFcxWTZkK25zT240ZUZnZlpUb0l5U3VYV2ZNUDRE?=
- =?utf-8?B?TmpvdDczVGY0c3UwUGo0K3BYeVdqYzRMZ1J4MHNHM2E5UWZMZkkyamhVTzdR?=
- =?utf-8?B?SmljTWpBbW5heTJYNkZjcFp5aGE1YjBLUVlpUHdBandMRHNiWGJTazFaOHhV?=
- =?utf-8?B?Z085ejJBY2NUZW4zckRLNlVtSy9oMUUvd25zU216R1BhUitCdnQ0eTNDaHlZ?=
- =?utf-8?B?TksxQWljWUFrV3gwR2I1MytReTVtUXB1anRuNDlYVk42SDVrTkJqN0YrSkpo?=
- =?utf-8?B?c1E3TnZNM3NFRTQwTk5zeHBMd0o2VFhwajhpMlhOVFBIWFZ2Z1pBNWJ5NkZH?=
- =?utf-8?B?cFVLcWVySXpBd095WS9wZDVhRnpNSS84L3hoRjZIdWpCUVZCd2RoaGZKbGI1?=
- =?utf-8?B?dE9wSG9oTWRTbFVzcTZtb2RNN1BBanJkd0E2dDdGOFRFWlYycHYwQVE1RlVr?=
- =?utf-8?B?S0RnR2pJQ3JtNEZOWHp1LzlIQk9pWndISkdEWkFjOElacTg5bTBTemk5Nmk0?=
- =?utf-8?B?dmtMUUZsWERRTHlHVnFTR09kZ01GUU9JM3ExSnhqWFAzUGNPTVQ0dm1TZ1FY?=
- =?utf-8?B?VVFHRjJFVDdSSy9pMXBlWWRobDFrSTF6TnY0dGQrTnlQN2t2Sis4MURUcjJu?=
- =?utf-8?B?NGpYT25GL0Urb2NoU0ZvcGdsVlFaRkI3MFA1TnA2OWV3TmxHRW1TYU9HdzlO?=
- =?utf-8?B?b1lVSkRPRnhrVXpyK0I0Um8wYnAyWXRlT0FuVFhBUEhXZGJsWlhsbnBIQjg5?=
- =?utf-8?B?YTUvWHVsY0hzNDVFY0JpV2syLzdxUzNDZUFmdlJMdmRRcGlkWG1GN0M0cW5C?=
- =?utf-8?B?aGVNNFh1THZJUzVkQnk5a3BCTE1UN2s4enJBTkhZSFdwVm5zVzRmSGF3bkUy?=
- =?utf-8?B?c3dWdGc3ajU0emVWUzlaak9nVVlwWWw4S0lOdDVDNHNkN21vSnVnMGtVcmFy?=
- =?utf-8?B?eFM3K0hZZ1hmWFgyanF4Q3hhK2NuWitPRlZnUWV5MzBveC96MldIdGUyalFR?=
- =?utf-8?B?Mkc5MWxaQ2RsM2NFaDJGbUhHdThVZVg4MjZkbHpxLzk0QXozV2xIemJmVzFp?=
- =?utf-8?B?Z0hGQ3hmanZzeldKenRVWGxSd0FIL0xaZnhRTUpBQ2hGOFBjd2l2a0hGaGR3?=
- =?utf-8?B?WjFGbjBMdlllOWtYQVp4M2xXSllIRldOUkNzR3pDUlUxZDVRa2s3YVNvbFJR?=
- =?utf-8?B?anNNM2tLb2Vqb1FGdU9oUVYrYllQenZlR0tGVFlhQld0QzVRRWxwTFNOSllt?=
- =?utf-8?B?eS96bzY3bkxvV2pEKzhOYlJyVEMrZEpncG5vZlRyQ2NsMlBJWmlVUmVoTjdu?=
- =?utf-8?B?QzYwRXV6Mk1iYUlzQnR0cGo1WFlRUXM2V3NVV04raytUdTFRaEpRdlBGU1Yv?=
- =?utf-8?B?dHZpWXJPT25sclIzQU40cGlHdmtLeUFlVUNnV1E2UjgwSlhUYjRYVnVKYlJq?=
- =?utf-8?B?akptMytOSnRMNjJPK2RhR3owVzJid2ZhU1FjL1NocHVtSEVpL2licmd0MFJX?=
- =?utf-8?B?VEF5ZFlabkNLRk9wT2g0bEdlblVKZ3ZJOTJON3B5OVdIWFlvc2JqRk8zSFMw?=
- =?utf-8?Q?+HK483ymMxK5PwH+rMMAiMw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3F05959E86DE164DA4D8DAB18128ABAF@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 7 Sep 2022 13:03:56 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05F2BB688
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:03:54 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1278624b7c4so19353140fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=wsH3q90wxx3Xx6OXO6OMT3se+Z7F0kym24QrbfBKhlM=;
+        b=DFqXovpQHjSoy4gHgwBVnJLZ89TaBFOkTY9V7kC9xie2NDfamyJO18cRoCGh6KIY5F
+         eJQLktqqHgtvDxFx9YHIXV1a7HJyoZL0iv2blmamlIT3r55w5x0/MlZj58bvfWVmG7sr
+         3/sCKRCXWZMEvOD6AmkNKaw3WUCiGIqRliZZ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wsH3q90wxx3Xx6OXO6OMT3se+Z7F0kym24QrbfBKhlM=;
+        b=hEp/3jupyLzDqFnLiH2xQ911DhdVWNHJk2YrjZB8/kd83knnCBThMwt7dmqTh8mwL3
+         GRKrawCJPmjnmJAEZ/tMckioeRjmqBbF4JnUWW+k6aG4Pv3hrDQ3mkoXT2kUibJ7MQjn
+         DWkd5qgyEubrpjsbUHWavW+/wF/v8CeSFZxQge2po1UwAJJabY4FjvmUla6MyRWwiBQx
+         ThWJAD6hOSFDGQ7UiTNF5vbn2+vFkc88bN0tfZc608a5Nj7zfC0YuNsJjPqeUpruJ1XY
+         RU4GT5csbj19rgXJUaqRO1CDzmcZL87sYewzYvE9MPMVGC/21KBcrUG+6UuuBh8gzgaf
+         m8tQ==
+X-Gm-Message-State: ACgBeo1KHzLZHg0QzD0QiCu9Wjy8n9YuNzgZyUTHDNKaW8JYqdEOBPvm
+        Dgsz0OAGSWu5VUlt+hWDTXcKjjF+P6HQ5Q==
+X-Google-Smtp-Source: AA6agR7GW0qHV4G7Y47RlR1jmyk4cGF2p3mpmBNnyZs703q00xqvYdF3ySHkU8FONCy2t4iqpIP++w==
+X-Received: by 2002:a05:6870:783:b0:11c:7d1c:6ede with SMTP id en3-20020a056870078300b0011c7d1c6edemr2250552oab.239.1662570232218;
+        Wed, 07 Sep 2022 10:03:52 -0700 (PDT)
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com. [209.85.210.54])
+        by smtp.gmail.com with ESMTPSA id w8-20020a4a2748000000b0044897475dd0sm5239653oow.43.2022.09.07.10.03.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 10:03:51 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id d18-20020a9d72d2000000b0063934f06268so10722286otk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:03:51 -0700 (PDT)
+X-Received: by 2002:a05:6830:58:b0:637:1974:140a with SMTP id
+ d24-20020a056830005800b006371974140amr1823656otp.362.1662570231101; Wed, 07
+ Sep 2022 10:03:51 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41f6abec-c355-4078-1950-08da90f2c6a8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 17:02:41.5268
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: a5b34WWD9olfqrdyz3Q9HLx4F0jQLejGi0DlGQCctMhaTUlh0kz8KcxkULtHN3Mvdc+GzepGl5GmMLdqAwyt5kyGkh8TbFIdzTTwnjjFsA8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3281
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220823222526.1524851-1-evgreen@chromium.org>
+ <20220823152108.v2.2.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <Ywg3r5bJs+5QAll0@kernel.org>
+In-Reply-To: <Ywg3r5bJs+5QAll0@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 7 Sep 2022 10:03:15 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7qCcpL002Cdo==r=vaDzjwMvEp=scbeKzJVG2ZZms+jQ@mail.gmail.com>
+Message-ID: <CAE=gft7qCcpL002Cdo==r=vaDzjwMvEp=scbeKzJVG2ZZms+jQ@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE4LzA4LzIwMjIgw6AgMTU6MzgsIENocmlzdG9waGUgTGVyb3kgYSDDqWNyaXTCoDoN
-Cj4gTGV0IHRoZSBjb3JlIGhhbmRsZSBhbGwgdGhlIGNoaXBzZWxlY3QgYmFrZXJ5IGFuZCByZXBs
-YWNlDQo+IHRyYW5zZmVyX29uZV9tZXNzYWdlKCkgYnkgdHJhbnNmZXJfb25lKCkgYW5kIHByZXBh
-cmVfbWVzc2FnZSgpLg0KPiANCj4gQXQgdGhlIHRpbWUgYmVpbmcsIHRoZXJlIGlzIGZzbF9zcGlf
-Y3NfY29udHJvbCgpIHRvIGhhbmRsZQ0KPiBjaGlwc2VsZWN0cy4gVGhhdCBmdW5jdGlvbiBoYW5k
-bGVzIGJvdGggR1BJTyBhbmQgbm9uLUdQSU8NCj4gY2hpcHNlbGVjdHMuIFRoZSBHUElPIGNoaXBz
-ZWxlY3RzIHdpbGwgbm93IGJlIGhhbmRsZWQgYnkNCj4gdGhlIGNvcmUgZGlyZWN0bHksIHNvIG9u
-bHkgaGFuZGxlIG5vbi1HUElPIGNoaXBzZWxlY3RzIGFuZA0KPiBob29rIGl0IHRvIC0+c2V0X2Nz
-DQoNCkFueSBjb21tZW50IGZvci9hYm91dCB0aGlzIGNvbnZlcnNpb24gPw0KRGlkIEkgZG8gaXQg
-dGhlIHJpZ2h0IHdheSA/IEFueSByZWNvbW1lbmRhdGlvbiA/DQoNClRoYW5rcw0KQ2hyaXN0b3Bo
-ZQ0KDQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUu
-bGVyb3lAY3Nncm91cC5ldT4NCj4gLS0tDQo+IFNlbmRpbmcgYXMgYW4gUkZDIGFzIEknbSBub3Qg
-MTAwJSBzdXJlIG9mIHRoZSBjb3JyZWN0bmVzcy4NCj4gSSBzdWNjZXNzZnVsbHkgdGVzdGVkIGl0
-IG9uIHRoZSBoYXJkd2FyZSBJIGhhdmUgdGhvdWdoLg0KPiBOb3Qgc3VyZSBhYm91dCB0aGUgY2hh
-bmdlIGZyb20gbS0+aXNfZG1hX21hcHBlZCB0byAhIXQtPnR4X2RtYSB8fCAhIXQtPnJ4X2RtYQ0K
-PiAtLS0NCj4gICBkcml2ZXJzL3NwaS9zcGktZnNsLXNwaS5jIHwgMTU3ICsrKysrKysrKysrLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDQzIGluc2VydGlv
-bnMoKyksIDExNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9z
-cGktZnNsLXNwaS5jIGIvZHJpdmVycy9zcGkvc3BpLWZzbC1zcGkuYw0KPiBpbmRleCBiZGY5NGNj
-N2JlMWEuLjczMTYyNGYxNTdmYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zcGkvc3BpLWZzbC1z
-cGkuYw0KPiArKysgYi9kcml2ZXJzL3NwaS9zcGktZnNsLXNwaS5jDQo+IEBAIC0xMTEsMzIgKzEx
-MSw2IEBAIHN0YXRpYyB2b2lkIGZzbF9zcGlfY2hhbmdlX21vZGUoc3RydWN0IHNwaV9kZXZpY2Ug
-KnNwaSkNCj4gICAJbG9jYWxfaXJxX3Jlc3RvcmUoZmxhZ3MpOw0KPiAgIH0NCj4gICANCj4gLXN0
-YXRpYyB2b2lkIGZzbF9zcGlfY2hpcHNlbGVjdChzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpLCBpbnQg
-dmFsdWUpDQo+IC17DQo+IC0Jc3RydWN0IG1wYzh4eHhfc3BpICptcGM4eHh4X3NwaSA9IHNwaV9t
-YXN0ZXJfZ2V0X2RldmRhdGEoc3BpLT5tYXN0ZXIpOw0KPiAtCXN0cnVjdCBmc2xfc3BpX3BsYXRm
-b3JtX2RhdGEgKnBkYXRhOw0KPiAtCXN0cnVjdCBzcGlfbXBjOHh4eF9jcwkqY3MgPSBzcGktPmNv
-bnRyb2xsZXJfc3RhdGU7DQo+IC0NCj4gLQlwZGF0YSA9IHNwaS0+ZGV2LnBhcmVudC0+cGFyZW50
-LT5wbGF0Zm9ybV9kYXRhOw0KPiAtDQo+IC0JaWYgKHZhbHVlID09IEJJVEJBTkdfQ1NfSU5BQ1RJ
-VkUpIHsNCj4gLQkJaWYgKHBkYXRhLT5jc19jb250cm9sKQ0KPiAtCQkJcGRhdGEtPmNzX2NvbnRy
-b2woc3BpLCBmYWxzZSk7DQo+IC0JfQ0KPiAtDQo+IC0JaWYgKHZhbHVlID09IEJJVEJBTkdfQ1Nf
-QUNUSVZFKSB7DQo+IC0JCW1wYzh4eHhfc3BpLT5yeF9zaGlmdCA9IGNzLT5yeF9zaGlmdDsNCj4g
-LQkJbXBjOHh4eF9zcGktPnR4X3NoaWZ0ID0gY3MtPnR4X3NoaWZ0Ow0KPiAtCQltcGM4eHh4X3Nw
-aS0+Z2V0X3J4ID0gY3MtPmdldF9yeDsNCj4gLQkJbXBjOHh4eF9zcGktPmdldF90eCA9IGNzLT5n
-ZXRfdHg7DQo+IC0NCj4gLQkJZnNsX3NwaV9jaGFuZ2VfbW9kZShzcGkpOw0KPiAtDQo+IC0JCWlm
-IChwZGF0YS0+Y3NfY29udHJvbCkNCj4gLQkJCXBkYXRhLT5jc19jb250cm9sKHNwaSwgdHJ1ZSk7
-DQo+IC0JfQ0KPiAtfQ0KPiAtDQo+ICAgc3RhdGljIHZvaWQgZnNsX3NwaV9xZV9jcHVfc2V0X3No
-aWZ0cyh1MzIgKnJ4X3NoaWZ0LCB1MzIgKnR4X3NoaWZ0LA0KPiAgIAkJCQkgICAgICBpbnQgYml0
-c19wZXJfd29yZCwgaW50IG1zYl9maXJzdCkNCj4gICB7DQo+IEBAIC0zNTQsMTUgKzMyOCwxMSBA
-QCBzdGF0aWMgaW50IGZzbF9zcGlfYnVmcyhzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpLCBzdHJ1Y3Qg
-c3BpX3RyYW5zZmVyICp0LA0KPiAgIAlyZXR1cm4gbXBjOHh4eF9zcGktPmNvdW50Ow0KPiAgIH0N
-Cj4gICANCj4gLXN0YXRpYyBpbnQgZnNsX3NwaV9kb19vbmVfbXNnKHN0cnVjdCBzcGlfbWFzdGVy
-ICptYXN0ZXIsDQo+IC0JCQkgICAgICBzdHJ1Y3Qgc3BpX21lc3NhZ2UgKm0pDQo+ICtzdGF0aWMg
-aW50IGZzbF9zcGlfcHJlcGFyZV9tZXNzYWdlKHN0cnVjdCBzcGlfY29udHJvbGxlciAqY3RsciwN
-Cj4gKwkJCQkgICBzdHJ1Y3Qgc3BpX21lc3NhZ2UgKm0pDQo+ICAgew0KPiAtCXN0cnVjdCBtcGM4
-eHh4X3NwaSAqbXBjOHh4eF9zcGkgPSBzcGlfbWFzdGVyX2dldF9kZXZkYXRhKG1hc3Rlcik7DQo+
-IC0Jc3RydWN0IHNwaV9kZXZpY2UgKnNwaSA9IG0tPnNwaTsNCj4gLQlzdHJ1Y3Qgc3BpX3RyYW5z
-ZmVyICp0LCAqZmlyc3Q7DQo+IC0JdW5zaWduZWQgaW50IGNzX2NoYW5nZTsNCj4gLQljb25zdCBp
-bnQgbnNlY3MgPSA1MDsNCj4gLQlpbnQgc3RhdHVzLCBsYXN0X2JwdzsNCj4gKwlzdHJ1Y3QgbXBj
-OHh4eF9zcGkgKm1wYzh4eHhfc3BpID0gc3BpX2NvbnRyb2xsZXJfZ2V0X2RldmRhdGEoY3Rscik7
-DQo+ICsJc3RydWN0IHNwaV90cmFuc2ZlciAqdDsNCj4gICANCj4gICAJLyoNCj4gICAJICogSW4g
-Q1BVIG1vZGUsIG9wdGltaXplIGxhcmdlIGJ5dGUgdHJhbnNmZXJzIHRvIHVzZSBsYXJnZXINCj4g
-QEAgLTM3OCw2MiArMzQ4LDMwIEBAIHN0YXRpYyBpbnQgZnNsX3NwaV9kb19vbmVfbXNnKHN0cnVj
-dCBzcGlfbWFzdGVyICptYXN0ZXIsDQo+ICAgCQkJCXQtPmJpdHNfcGVyX3dvcmQgPSAxNjsNCj4g
-ICAJCX0NCj4gICAJfQ0KPiArCXJldHVybiAwOw0KPiArfQ0KPiAgIA0KPiAtCS8qIERvbid0IGFs
-bG93IGNoYW5nZXMgaWYgQ1MgaXMgYWN0aXZlICovDQo+IC0JY3NfY2hhbmdlID0gMTsNCj4gLQls
-aXN0X2Zvcl9lYWNoX2VudHJ5KHQsICZtLT50cmFuc2ZlcnMsIHRyYW5zZmVyX2xpc3QpIHsNCj4g
-LQkJaWYgKGNzX2NoYW5nZSkNCj4gLQkJCWZpcnN0ID0gdDsNCj4gLQkJY3NfY2hhbmdlID0gdC0+
-Y3NfY2hhbmdlOw0KPiAtCQlpZiAoZmlyc3QtPnNwZWVkX2h6ICE9IHQtPnNwZWVkX2h6KSB7DQo+
-IC0JCQlkZXZfZXJyKCZzcGktPmRldiwNCj4gLQkJCQkic3BlZWRfaHogY2Fubm90IGNoYW5nZSB3
-aGlsZSBDUyBpcyBhY3RpdmVcbiIpOw0KPiAtCQkJcmV0dXJuIC1FSU5WQUw7DQo+IC0JCX0NCj4g
-LQl9DQo+IC0NCj4gLQlsYXN0X2JwdyA9IC0xOw0KPiAtCWNzX2NoYW5nZSA9IDE7DQo+IC0Jc3Rh
-dHVzID0gLUVJTlZBTDsNCj4gLQlsaXN0X2Zvcl9lYWNoX2VudHJ5KHQsICZtLT50cmFuc2ZlcnMs
-IHRyYW5zZmVyX2xpc3QpIHsNCj4gLQkJaWYgKGNzX2NoYW5nZSB8fCBsYXN0X2JwdyAhPSB0LT5i
-aXRzX3Blcl93b3JkKQ0KPiAtCQkJc3RhdHVzID0gZnNsX3NwaV9zZXR1cF90cmFuc2ZlcihzcGks
-IHQpOw0KPiAtCQlpZiAoc3RhdHVzIDwgMCkNCj4gLQkJCWJyZWFrOw0KPiAtCQlsYXN0X2JwdyA9
-IHQtPmJpdHNfcGVyX3dvcmQ7DQo+IC0NCj4gLQkJaWYgKGNzX2NoYW5nZSkgew0KPiAtCQkJZnNs
-X3NwaV9jaGlwc2VsZWN0KHNwaSwgQklUQkFOR19DU19BQ1RJVkUpOw0KPiAtCQkJbmRlbGF5KG5z
-ZWNzKTsNCj4gLQkJfQ0KPiAtCQljc19jaGFuZ2UgPSB0LT5jc19jaGFuZ2U7DQo+IC0JCWlmICh0
-LT5sZW4pDQo+IC0JCQlzdGF0dXMgPSBmc2xfc3BpX2J1ZnMoc3BpLCB0LCBtLT5pc19kbWFfbWFw
-cGVkKTsNCj4gLQkJaWYgKHN0YXR1cykgew0KPiAtCQkJc3RhdHVzID0gLUVNU0dTSVpFOw0KPiAt
-CQkJYnJlYWs7DQo+IC0JCX0NCj4gLQkJbS0+YWN0dWFsX2xlbmd0aCArPSB0LT5sZW47DQo+IC0N
-Cj4gLQkJc3BpX3RyYW5zZmVyX2RlbGF5X2V4ZWModCk7DQo+IC0NCj4gLQkJaWYgKGNzX2NoYW5n
-ZSkgew0KPiAtCQkJbmRlbGF5KG5zZWNzKTsNCj4gLQkJCWZzbF9zcGlfY2hpcHNlbGVjdChzcGks
-IEJJVEJBTkdfQ1NfSU5BQ1RJVkUpOw0KPiAtCQkJbmRlbGF5KG5zZWNzKTsNCj4gLQkJfQ0KPiAt
-CX0NCj4gK3N0YXRpYyBpbnQgZnNsX3NwaV90cmFuc2Zlcl9vbmUoc3RydWN0IHNwaV9jb250cm9s
-bGVyICpjb250cm9sbGVyLA0KPiArCQkJCXN0cnVjdCBzcGlfZGV2aWNlICpzcGksDQo+ICsJCQkJ
-c3RydWN0IHNwaV90cmFuc2ZlciAqdCkNCj4gK3sNCj4gKwlpbnQgc3RhdHVzOw0KPiAgIA0KPiAt
-CW0tPnN0YXR1cyA9IHN0YXR1czsNCj4gKwlzdGF0dXMgPSBmc2xfc3BpX3NldHVwX3RyYW5zZmVy
-KHNwaSwgdCk7DQo+ICsJaWYgKHN0YXR1cyA8IDApDQo+ICsJCXJldHVybiBzdGF0dXM7DQo+ICsJ
-aWYgKHQtPmxlbikNCj4gKwkJc3RhdHVzID0gZnNsX3NwaV9idWZzKHNwaSwgdCwgISF0LT50eF9k
-bWEgfHwgISF0LT5yeF9kbWEpOw0KPiArCWlmIChzdGF0dXMgPiAwKQ0KPiArCQlyZXR1cm4gLUVN
-U0dTSVpFOw0KPiAgIA0KPiAtCWlmIChzdGF0dXMgfHwgIWNzX2NoYW5nZSkgew0KPiAtCQluZGVs
-YXkobnNlY3MpOw0KPiAtCQlmc2xfc3BpX2NoaXBzZWxlY3Qoc3BpLCBCSVRCQU5HX0NTX0lOQUNU
-SVZFKTsNCj4gLQl9DQo+ICsJcmV0dXJuIHN0YXR1czsNCj4gK30NCj4gICANCj4gLQlmc2xfc3Bp
-X3NldHVwX3RyYW5zZmVyKHNwaSwgTlVMTCk7DQo+IC0Jc3BpX2ZpbmFsaXplX2N1cnJlbnRfbWVz
-c2FnZShtYXN0ZXIpOw0KPiAtCXJldHVybiAwOw0KPiArc3RhdGljIGludCBmc2xfc3BpX3VucHJl
-cGFyZV9tZXNzYWdlKHN0cnVjdCBzcGlfY29udHJvbGxlciAqY29udHJvbGxlciwNCj4gKwkJCQkg
-ICAgIHN0cnVjdCBzcGlfbWVzc2FnZSAqbXNnKQ0KPiArew0KPiArCXJldHVybiBmc2xfc3BpX3Nl
-dHVwX3RyYW5zZmVyKG1zZy0+c3BpLCBOVUxMKTsNCj4gICB9DQo+ICAgDQo+ICAgc3RhdGljIGlu
-dCBmc2xfc3BpX3NldHVwKHN0cnVjdCBzcGlfZGV2aWNlICpzcGkpDQo+IEBAIC00ODIsOSArNDIw
-LDYgQEAgc3RhdGljIGludCBmc2xfc3BpX3NldHVwKHN0cnVjdCBzcGlfZGV2aWNlICpzcGkpDQo+
-ICAgCQlyZXR1cm4gcmV0dmFsOw0KPiAgIAl9DQo+ICAgDQo+IC0JLyogSW5pdGlhbGl6ZSBjaGlw
-c2VsZWN0IC0gbWlnaHQgYmUgYWN0aXZlIGZvciBTUElfQ1NfSElHSCBtb2RlICovDQo+IC0JZnNs
-X3NwaV9jaGlwc2VsZWN0KHNwaSwgQklUQkFOR19DU19JTkFDVElWRSk7DQo+IC0NCj4gICAJcmV0
-dXJuIDA7DQo+ICAgfQ0KPiAgIA0KPiBAQCAtNTU3LDkgKzQ5Miw3IEBAIHN0YXRpYyB2b2lkIGZz
-bF9zcGlfZ3JsaWJfY3NfY29udHJvbChzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpLCBib29sIG9uKQ0K
-PiAgIAl1MzIgc2x2c2VsOw0KPiAgIAl1MTYgY3MgPSBzcGktPmNoaXBfc2VsZWN0Ow0KPiAgIA0K
-PiAtCWlmIChzcGktPmNzX2dwaW9kKSB7DQo+IC0JCWdwaW9kX3NldF92YWx1ZShzcGktPmNzX2dw
-aW9kLCBvbik7DQo+IC0JfSBlbHNlIGlmIChjcyA8IG1wYzh4eHhfc3BpLT5uYXRpdmVfY2hpcHNl
-bGVjdHMpIHsNCj4gKwlpZiAoY3MgPCBtcGM4eHh4X3NwaS0+bmF0aXZlX2NoaXBzZWxlY3RzKSB7
-DQo+ICAgCQlzbHZzZWwgPSBtcGM4eHh4X3NwaV9yZWFkX3JlZygmcmVnX2Jhc2UtPnNsdnNlbCk7
-DQo+ICAgCQlzbHZzZWwgPSBvbiA/IChzbHZzZWwgfCAoMSA8PCBjcykpIDogKHNsdnNlbCAmIH4o
-MSA8PCBjcykpOw0KPiAgIAkJbXBjOHh4eF9zcGlfd3JpdGVfcmVnKCZyZWdfYmFzZS0+c2x2c2Vs
-LCBzbHZzZWwpOw0KPiBAQCAtNTY4LDcgKzUwMSw2IEBAIHN0YXRpYyB2b2lkIGZzbF9zcGlfZ3Js
-aWJfY3NfY29udHJvbChzdHJ1Y3Qgc3BpX2RldmljZSAqc3BpLCBib29sIG9uKQ0KPiAgIA0KPiAg
-IHN0YXRpYyB2b2lkIGZzbF9zcGlfZ3JsaWJfcHJvYmUoc3RydWN0IGRldmljZSAqZGV2KQ0KPiAg
-IHsNCj4gLQlzdHJ1Y3QgZnNsX3NwaV9wbGF0Zm9ybV9kYXRhICpwZGF0YSA9IGRldl9nZXRfcGxh
-dGRhdGEoZGV2KTsNCj4gICAJc3RydWN0IHNwaV9tYXN0ZXIgKm1hc3RlciA9IGRldl9nZXRfZHJ2
-ZGF0YShkZXYpOw0KPiAgIAlzdHJ1Y3QgbXBjOHh4eF9zcGkgKm1wYzh4eHhfc3BpID0gc3BpX21h
-c3Rlcl9nZXRfZGV2ZGF0YShtYXN0ZXIpOw0KPiAgIAlzdHJ1Y3QgZnNsX3NwaV9yZWcgX19pb21l
-bSAqcmVnX2Jhc2UgPSBtcGM4eHh4X3NwaS0+cmVnX2Jhc2U7DQo+IEBAIC01ODgsNyArNTIwLDE4
-IEBAIHN0YXRpYyB2b2lkIGZzbF9zcGlfZ3JsaWJfcHJvYmUoc3RydWN0IGRldmljZSAqZGV2KQ0K
-PiAgIAkJbXBjOHh4eF9zcGlfd3JpdGVfcmVnKCZyZWdfYmFzZS0+c2x2c2VsLCAweGZmZmZmZmZm
-KTsNCj4gICAJfQ0KPiAgIAltYXN0ZXItPm51bV9jaGlwc2VsZWN0ID0gbXBjOHh4eF9zcGktPm5h
-dGl2ZV9jaGlwc2VsZWN0czsNCj4gLQlwZGF0YS0+Y3NfY29udHJvbCA9IGZzbF9zcGlfZ3JsaWJf
-Y3NfY29udHJvbDsNCj4gKwltYXN0ZXItPnNldF9jcyA9IGZzbF9zcGlfZ3JsaWJfY3NfY29udHJv
-bDsNCj4gK30NCj4gKw0KPiArc3RhdGljIHZvaWQgZnNsX3NwaV9jc19jb250cm9sKHN0cnVjdCBz
-cGlfZGV2aWNlICpzcGksIGJvb2wgb24pDQo+ICt7DQo+ICsJc3RydWN0IGRldmljZSAqZGV2ID0g
-c3BpLT5kZXYucGFyZW50LT5wYXJlbnQ7DQo+ICsJc3RydWN0IGZzbF9zcGlfcGxhdGZvcm1fZGF0
-YSAqcGRhdGEgPSBkZXZfZ2V0X3BsYXRkYXRhKGRldik7DQo+ICsJc3RydWN0IG1wYzh4eHhfc3Bp
-X3Byb2JlX2luZm8gKnBpbmZvID0gdG9fb2ZfcGluZm8ocGRhdGEpOw0KPiArDQo+ICsJaWYgKFdB
-Uk5fT05fT05DRSghcGluZm8tPmltbXJfc3BpX2NzKSkNCj4gKwkJcmV0dXJuOw0KPiArCWlvd3Jp
-dGUzMmJlKG9uID8gMCA6IFNQSV9CT09UX1NFTF9CSVQsIHBpbmZvLT5pbW1yX3NwaV9jcyk7DQo+
-ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyBzdHJ1Y3Qgc3BpX21hc3RlciAqZnNsX3NwaV9wcm9iZShz
-dHJ1Y3QgZGV2aWNlICpkZXYsDQo+IEBAIC02MTMsOCArNTU2LDExIEBAIHN0YXRpYyBzdHJ1Y3Qg
-c3BpX21hc3RlciAqZnNsX3NwaV9wcm9iZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ICAgDQo+ICAg
-CW1hc3Rlci0+c2V0dXAgPSBmc2xfc3BpX3NldHVwOw0KPiAgIAltYXN0ZXItPmNsZWFudXAgPSBm
-c2xfc3BpX2NsZWFudXA7DQo+IC0JbWFzdGVyLT50cmFuc2Zlcl9vbmVfbWVzc2FnZSA9IGZzbF9z
-cGlfZG9fb25lX21zZzsNCj4gKwltYXN0ZXItPnByZXBhcmVfbWVzc2FnZSA9IGZzbF9zcGlfcHJl
-cGFyZV9tZXNzYWdlOw0KPiArCW1hc3Rlci0+dHJhbnNmZXJfb25lID0gZnNsX3NwaV90cmFuc2Zl
-cl9vbmU7DQo+ICsJbWFzdGVyLT51bnByZXBhcmVfbWVzc2FnZSA9IGZzbF9zcGlfdW5wcmVwYXJl
-X21lc3NhZ2U7DQo+ICAgCW1hc3Rlci0+dXNlX2dwaW9fZGVzY3JpcHRvcnMgPSB0cnVlOw0KPiAr
-CW1hc3Rlci0+c2V0X2NzID0gZnNsX3NwaV9jc19jb250cm9sOw0KPiAgIA0KPiAgIAltcGM4eHh4
-X3NwaSA9IHNwaV9tYXN0ZXJfZ2V0X2RldmRhdGEobWFzdGVyKTsNCj4gICAJbXBjOHh4eF9zcGkt
-Pm1heF9iaXRzX3Blcl93b3JkID0gMzI7DQo+IEBAIC02ODgsMjEgKzYzNCw2IEBAIHN0YXRpYyBz
-dHJ1Y3Qgc3BpX21hc3RlciAqZnNsX3NwaV9wcm9iZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ICAg
-CXJldHVybiBFUlJfUFRSKHJldCk7DQo+ICAgfQ0KPiAgIA0KPiAtc3RhdGljIHZvaWQgZnNsX3Nw
-aV9jc19jb250cm9sKHN0cnVjdCBzcGlfZGV2aWNlICpzcGksIGJvb2wgb24pDQo+IC17DQo+IC0J
-aWYgKHNwaS0+Y3NfZ3Bpb2QpIHsNCj4gLQkJZ3Bpb2Rfc2V0X3ZhbHVlKHNwaS0+Y3NfZ3Bpb2Qs
-IG9uKTsNCj4gLQl9IGVsc2Ugew0KPiAtCQlzdHJ1Y3QgZGV2aWNlICpkZXYgPSBzcGktPmRldi5w
-YXJlbnQtPnBhcmVudDsNCj4gLQkJc3RydWN0IGZzbF9zcGlfcGxhdGZvcm1fZGF0YSAqcGRhdGEg
-PSBkZXZfZ2V0X3BsYXRkYXRhKGRldik7DQo+IC0JCXN0cnVjdCBtcGM4eHh4X3NwaV9wcm9iZV9p
-bmZvICpwaW5mbyA9IHRvX29mX3BpbmZvKHBkYXRhKTsNCj4gLQ0KPiAtCQlpZiAoV0FSTl9PTl9P
-TkNFKCFwaW5mby0+aW1tcl9zcGlfY3MpKQ0KPiAtCQkJcmV0dXJuOw0KPiAtCQlpb3dyaXRlMzJi
-ZShvbiA/IDAgOiBTUElfQk9PVF9TRUxfQklULCBwaW5mby0+aW1tcl9zcGlfY3MpOw0KPiAtCX0N
-Cj4gLX0NCj4gLQ0KPiAgIHN0YXRpYyBpbnQgb2ZfZnNsX3NwaV9wcm9iZShzdHJ1Y3QgcGxhdGZv
-cm1fZGV2aWNlICpvZmRldikNCj4gICB7DQo+ICAgCXN0cnVjdCBkZXZpY2UgKmRldiA9ICZvZmRl
-di0+ZGV2Ow0KPiBAQCAtNzQ0LDEyICs2NzUsMTAgQEAgc3RhdGljIGludCBvZl9mc2xfc3BpX3By
-b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKm9mZGV2KQ0KPiAgIAkJcmV0ID0gZ3Bpb2RfY291
-bnQoZGV2LCAiY3MiKTsNCj4gICAJCWlmIChyZXQgPCAwKQ0KPiAgIAkJCXJldCA9IDA7DQo+IC0J
-CWlmIChyZXQgPT0gMCAmJiAhc3Bpc2VsX2Jvb3QpIHsNCj4gKwkJaWYgKHJldCA9PSAwICYmICFz
-cGlzZWxfYm9vdCkNCj4gICAJCQlwZGF0YS0+bWF4X2NoaXBzZWxlY3QgPSAxOw0KPiAtCQl9IGVs
-c2Ugew0KPiArCQllbHNlDQo+ICAgCQkJcGRhdGEtPm1heF9jaGlwc2VsZWN0ID0gcmV0ICsgc3Bp
-c2VsX2Jvb3Q7DQo+IC0JCQlwZGF0YS0+Y3NfY29udHJvbCA9IGZzbF9zcGlfY3NfY29udHJvbDsN
-Cj4gLQkJfQ0KPiAgIAl9DQo+ICAgDQo+ICAgCXJldCA9IG9mX2FkZHJlc3NfdG9fcmVzb3VyY2Uo
-bnAsIDAsICZtZW0pOw==
+On Thu, Aug 25, 2022 at 8:02 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Tue, Aug 23, 2022 at 03:25:18PM -0700, Evan Green wrote:
+> > From: Matthew Garrett <matthewgarrett@google.com>
+> >
+> > Under certain circumstances it might be desirable to enable the creation
+> > of TPM-backed secrets that are only accessible to the kernel. In an
+> > ideal world this could be achieved by using TPM localities, but these
+> > don't appear to be available on consumer systems. An alternative is to
+> > simply block userland from modifying one of the resettable PCRs, leaving
+> > it available to the kernel. If the kernel ensures that no userland can
+> > access the TPM while it is carrying out work, it can reset PCR 23,
+> > extend it to an arbitrary value, create or load a secret, and then reset
+> > the PCR again. Even if userland somehow obtains the sealed material, it
+> > will be unable to unseal it since PCR 23 will never be in the
+> > appropriate state.
+> >
+> > From: Matthew Garrett <mjg59@google.com>
+> > Signed-off-by: Matthew Garrett <mjg59@google.com>
+> >
+> > Signed-off-by: Evan Green <evgreen@chromium.org>
+>
+> Same issues as the other patch.
+>
+> > ---
+> > Matthew's original version of this patch is at:
+> > https://patchwork.kernel.org/patch/12096491/
+>
+> Suggestion: find a lore URL instead for Matthew's patch,
+> and then add "Link: <lore URL>" to your commit before
+> sob's. It's a useful reference also in the commit log.
+>
+> >
+> > Changes in v2:
+> >  - Fixed sparse warnings
+> >
+> >  drivers/char/tpm/Kconfig          | 10 +++++++++
+> >  drivers/char/tpm/tpm-dev-common.c |  8 +++++++
+> >  drivers/char/tpm/tpm.h            | 21 +++++++++++++++++++
+> >  drivers/char/tpm/tpm1-cmd.c       | 35 +++++++++++++++++++++++++++++++
+> >  drivers/char/tpm/tpm2-cmd.c       | 22 +++++++++++++++++++
+> >  drivers/char/tpm/tpm2-space.c     |  2 +-
+> >  6 files changed, 97 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > index 927088b2c3d3f2..4483b61a428b11 100644
+> > --- a/drivers/char/tpm/Kconfig
+> > +++ b/drivers/char/tpm/Kconfig
+> > @@ -211,4 +211,14 @@ config TCG_FTPM_TEE
+> >         This driver proxies for firmware TPM running in TEE.
+> >
+> >  source "drivers/char/tpm/st33zp24/Kconfig"
+> > +
+> > +config TCG_TPM_RESTRICT_PCR
+> > +     bool "Restrict userland access to PCR 23"
+> > +     depends on TCG_TPM
+> > +     help
+> > +       If set, block userland from extending or resetting PCR 23. This
+> > +       allows it to be restricted to in-kernel use, preventing userland
+> > +       from being able to make use of data sealed to the TPM by the kernel.
+> > +       This is required for secure hibernation support, but should be left
+> > +       disabled if any userland may require access to PCR23.
+> >  endif # TCG_TPM
+> > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+> > index dc4c0a0a512903..7a4e618c7d1942 100644
+> > --- a/drivers/char/tpm/tpm-dev-common.c
+> > +++ b/drivers/char/tpm/tpm-dev-common.c
+> > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+> >       priv->response_read = false;
+> >       *off = 0;
+> >
+> > +     if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
+> > +             ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > +     else
+> > +             ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > +
+> > +     if (ret)
+> > +             goto out;
+> > +
+> >       /*
+> >        * If in nonblocking mode schedule an async job to send
+> >        * the command return the size.
+> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > index a80b341d38eb8c..077c3ca0a127ba 100644
+> > --- a/drivers/char/tpm/tpm.h
+> > +++ b/drivers/char/tpm/tpm.h
+> > @@ -229,6 +229,8 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+> >  unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+> >  int tpm2_probe(struct tpm_chip *chip);
+> >  int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
+> > +int tpm_find_and_validate_cc(struct tpm_chip *chip, struct tpm_space *space,
+> > +                          const void *buf, size_t bufsiz);
+> >  int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+> >  int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+> >  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+> > @@ -244,4 +246,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+> >  void tpm_bios_log_teardown(struct tpm_chip *chip);
+> >  int tpm_dev_common_init(void);
+> >  void tpm_dev_common_exit(void);
+> > +
+> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > +#define TPM_RESTRICTED_PCR 23
+> > +
+> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > +#else
+> > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > +                                   size_t size)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > +                                   size_t size)
+> > +{
+> > +     return 0;
+> > +}
+> > +#endif
+> >  #endif
+> > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> > index 8ec743dec26544..318e75ae42fb85 100644
+> > --- a/drivers/char/tpm/tpm1-cmd.c
+> > +++ b/drivers/char/tpm/tpm1-cmd.c
+> > @@ -845,3 +845,38 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+> >
+> >       return 0;
+> >  }
+> > +
+> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > +{
+> > +     struct tpm_header *header = (struct tpm_header *)buffer;
+> > +     char len, offset;
+> > +     __be32 *pcr;
+> > +     int pos;
+> > +
+> > +     switch (be32_to_cpu(header->ordinal)) {
+> > +     case TPM_ORD_PCR_EXTEND:
+> > +             if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> > +                     return -EINVAL;
+> > +             pcr = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> > +             if (be32_to_cpu(*pcr) == TPM_RESTRICTED_PCR)
+> > +                     return -EPERM;
+> > +             break;
+> > +     case TPM_ORD_PCR_RESET:
+> > +             if (size < (TPM_HEADER_SIZE + 1))
+> > +                     return -EINVAL;
+> > +             len = buffer[TPM_HEADER_SIZE];
+> > +             if (size < (TPM_HEADER_SIZE + 1 + len))
+> > +                     return -EINVAL;
+> > +             offset = TPM_RESTRICTED_PCR/3;
+> > +             if (len < offset)
+> > +                     break;
+> > +             pos = TPM_HEADER_SIZE + 1 + offset;
+> > +             if (buffer[pos] & (1 << (TPM_RESTRICTED_PCR - 2 * offset)))
+> > +                     return -EPERM;
+> > +             break;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +#endif
+> > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> > index 69126a6770386e..dbf7f5552c6782 100644
+> > --- a/drivers/char/tpm/tpm2-cmd.c
+> > +++ b/drivers/char/tpm/tpm2-cmd.c
+> > @@ -821,3 +821,25 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
+> >
+> >       return -1;
+> >  }
+> > +
+> > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > +{
+> > +     int cc = tpm_find_and_validate_cc(chip, NULL, buffer, size);
+> > +     __be32 *handle;
+> > +
+> > +     switch (cc) {
+> > +     case TPM2_CC_PCR_EXTEND:
+> > +     case TPM2_CC_PCR_RESET:
+> > +             if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> > +                     return -EINVAL;
+> > +
+> > +             handle = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> > +             if (be32_to_cpu(*handle) == TPM_RESTRICTED_PCR)
+> > +                     return -EPERM;
+> > +             break;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +#endif
+> > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> > index ffb35f0154c16c..6f51cd92c6400f 100644
+> > --- a/drivers/char/tpm/tpm2-space.c
+> > +++ b/drivers/char/tpm/tpm2-space.c
+> > @@ -262,7 +262,7 @@ static int tpm2_map_command(struct tpm_chip *chip, u32 cc, u8 *cmd)
+> >       return 0;
+> >  }
+> >
+> > -static int tpm_find_and_validate_cc(struct tpm_chip *chip,
+> > +int tpm_find_and_validate_cc(struct tpm_chip *chip,
+> >                                   struct tpm_space *space,
+> >                                   const void *cmd, size_t len)
+>
+> Split the export to a separate commit.
+
+Will do all these, thanks for taking a look.

@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517EB5AFFC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101085AFFC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiIGI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S230126AbiIGJAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGI7o (ORCPT
+        with ESMTP id S229437AbiIGJA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:59:44 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582A715FC5;
-        Wed,  7 Sep 2022 01:59:41 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id 73so13005077pga.1;
-        Wed, 07 Sep 2022 01:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=mKARXm2kMQBJjCoMq1zHo4f6Vijr8sVnvDkYWq/yY00=;
-        b=JyzYTnj4Jo1BhJLatgnyH3qO4uNfq7eYWswaPviDRn6zx52TDlV0p+EXjU0/Fj0fBp
-         M26YLiYs0SQDzb221bpFX45l30bIjt4i97wrGCR2gHdPUrD8HjxO/WD5gOTMiXWBPr7T
-         NBnSINLZz7XpDL0XyMVuWoD7KEY7VEXdKvCxDr1ujie3p4uvgNV9GqLv1WrJ8RhQLxI7
-         m8u8O860aneQz74CickxPrLWsfzQfLMHKWnxK9criXkbM7wRbOcYrTMHw+3sBXCaMpj0
-         Emt57oBDZZAVyG0XMaXOk6CQHkTX5B8Y2LBvIV4TPOzahoTWXK168Pam0ZfLgG7E82be
-         OztA==
+        Wed, 7 Sep 2022 05:00:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8ED6D9D1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662541225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wAp9Zrtj3C+q+e8Cw9C0lVMs/In1/6qMij53jvIUwa8=;
+        b=hMRYsSzXhj/N2FO5dJE7jz5qKOimAUjxMJ67Sl5SeBmMcZb3CpLqgAidibxdcWEaqOif5b
+        5PHxgAmZv4qtCC56uNa+6caBIpKNzmJep+4Q29SbgBUZwy0bwLYmCdhYtSZeP+c9phrRpS
+        ZeZPCiKfH14g5KiVnU5o1QIbC7t97sE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-441-HmNdlo5vMCyBvYmR_VG_XA-1; Wed, 07 Sep 2022 05:00:24 -0400
+X-MC-Unique: HmNdlo5vMCyBvYmR_VG_XA-1
+Received: by mail-wm1-f70.google.com with SMTP id m22-20020a7bca56000000b003a652939bd1so2355206wml.9
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 02:00:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mKARXm2kMQBJjCoMq1zHo4f6Vijr8sVnvDkYWq/yY00=;
-        b=6ADZhX1664NI1adSRckpo3kYQ+aFN6T8razeeCVtC5J8ZSiU4dHHq8RtxrMTX4/VvI
-         1XPqvb+YCTHIVBYGmOHeUAfjWeI+QOuDfK3oNmHf+c5XpZOx5jgkJnvMCxBDZ72lfAR3
-         VUsXqLIq60uj9oxC98bGxgH30auVRUEHn73V0ZFP3zUcdxS5hBfIEAKnfjRnM1IdQFXr
-         6XOaT1M2O9sM6SbxqmgFG5QGySUsIGG/wskND+jmj+X1lxZzT7gKINPr27d4yO4o++jE
-         U5FqgmTAN2bAdFi6yIEaI8onBfqa2U7lI0ceyQDraI/dlT7gSWLWIgbyJVM6UJUXpvxj
-         FUyg==
-X-Gm-Message-State: ACgBeo3dZKhSl8wyjxqaE0RS+jnOuY1ym/KggDs2IFOXyPeiTSEZA/E0
-        bGJ9xMmJLWcA7KssUDPkVOaUc7de9ib/zGmf8XE=
-X-Google-Smtp-Source: AA6agR7ugy96b6qwQ050Ysi1QiI6Gbohgqoj15UIwkoRiZqKNeVKVVYF3ex9FrK9aiSxRamzOtC48nmR7WaTNe2dVjM=
-X-Received: by 2002:a05:6a00:1307:b0:53a:9663:1bd6 with SMTP id
- j7-20020a056a00130700b0053a96631bd6mr2779063pfu.55.1662541180552; Wed, 07 Sep
- 2022 01:59:40 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=wAp9Zrtj3C+q+e8Cw9C0lVMs/In1/6qMij53jvIUwa8=;
+        b=dwc5f5MpynyXmPZCfZfITaSJWmAhQ9c3tTmIU+3VgKagk7ojNmKbzidjhFrg2gfnP5
+         MEgEuk5bjfC/EB/24iyw+cfYOc0zkXEPgKDZqYXvpMJiLM6v7mKIVz8VrtVVADyxpDVw
+         Zi5WMnRZ39DTIKd1GNDS0yHcyJoVOUTgIKm3ocwqa2Y59Cs7f0XaTHUqSZi/xtnVOY6Y
+         kXCbDrBZrM3V0ahHjKUH0RfsKMr+K4WHXyQYg6NjkJL4peUk8rd9MeHaB88WdUFZaX8U
+         FgZ9zERpgtyJSLfCxwnYOseRBPEG5OHNQrW42QxHIOnC7sebmSwT4p5XMnkYak+FX+32
+         ZJew==
+X-Gm-Message-State: ACgBeo1ggPqNJA4Z0ncFkabv/GGC3b0p0U8dv76kRGAjaxP2j8CndIwK
+        YP1JRS77WccOE+uLZRGirMSmiPAnKmLXqUGJ/Byukora7yMPbJo6RRz+Dy3v+SDb1H1XtmmI+1L
+        CrntLg6J32AY+ARnIkQNzr1pE
+X-Received: by 2002:a05:6000:186f:b0:228:e1ab:673 with SMTP id d15-20020a056000186f00b00228e1ab0673mr1186801wri.324.1662541222913;
+        Wed, 07 Sep 2022 02:00:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6dfkdI1JyDQpeuz0ufGUcxELkr0R/MjUIxyjerN/R+v+eB/JC8G8PfsVAjm2diZCZyXKbxPQ==
+X-Received: by 2002:a05:6000:186f:b0:228:e1ab:673 with SMTP id d15-20020a056000186f00b00228e1ab0673mr1186785wri.324.1662541222653;
+        Wed, 07 Sep 2022 02:00:22 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05600c358700b003a8418ee646sm27197500wmq.12.2022.09.07.02.00.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 02:00:22 -0700 (PDT)
+Message-ID: <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
+Date:   Wed, 7 Sep 2022 11:00:21 +0200
 MIME-Version: 1.0
-References: <20220907083304.605526-1-imagedong@tencent.com> <873298fe-7fc2-4417-2852-5180f81f94aa@tessares.net>
-In-Reply-To: <873298fe-7fc2-4417-2852-5180f81f94aa@tessares.net>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 7 Sep 2022 16:59:29 +0800
-Message-ID: <CADxym3YQCjpVXs8EZr_B7iJDdbjOv53kqiqZqZmJ4fh3KUbzrg@mail.gmail.com>
-Subject: Re: [PATCH net v2] net: mptcp: fix unreleased socket in accept queue
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     pabeni@redhat.com, mathew.j.martineau@linux.intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        fw@strlen.de, peter.krystad@linux.intel.com,
-        netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lpivarc@redhat.com" <lpivarc@redhat.com>,
+        "Liu, Jingqi" <jingqi.liu@intel.com>,
+        "Lu, Baolu" <baolu.lu@intel.com>
+References: <166182871735.3518559.8884121293045337358.stgit@omen>
+ <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com> <YxfX+kpajVY4vWTL@ziepe.ca>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] vfio/type1: Unpin zero pages
+In-Reply-To: <YxfX+kpajVY4vWTL@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,94 +89,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 4:51 PM Matthieu Baerts
-<matthieu.baerts@tessares.net> wrote:
->
-> Hi Menglong,
->
-> On 07/09/2022 10:33, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > The mptcp socket and its subflow sockets in accept queue can't be
-> > released after the process exit.
-> >
-> > While the release of a mptcp socket in listening state, the
-> > corresponding tcp socket will be released too. Meanwhile, the tcp
-> > socket in the unaccept queue will be released too. However, only init
-> > subflow is in the unaccept queue, and the joined subflow is not in the
-> > unaccept queue, which makes the joined subflow won't be released, and
-> > therefore the corresponding unaccepted mptcp socket will not be released
-> > to.
->
-> Thank you for the patch!
->
-> (...)
->
-> > ---
-> >  net/mptcp/protocol.c | 13 +++++++++----
-> >  net/mptcp/subflow.c  | 33 ++++++++-------------------------
-> >  2 files changed, 17 insertions(+), 29 deletions(-)
-> >
-> > diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> > index d398f3810662..fe6b7fbb145c 100644
-> > --- a/net/mptcp/protocol.c
-> > +++ b/net/mptcp/protocol.c
-> > @@ -2796,13 +2796,12 @@ static void __mptcp_destroy_sock(struct sock *sk)
-> >       sock_put(sk);
-> >  }
-> >
-> > -static void mptcp_close(struct sock *sk, long timeout)
-> > +void mptcp_close_nolock(struct sock *sk, long timeout)
->
-> I didn't look at it into details but like the previous previous, I don't
-> think this one compiles without errors: you define this (non static)
-> function here in protocol.c but you don't "expose" it in protocol.h ...
-> (see below)
->
+On 07.09.22 01:30, Jason Gunthorpe wrote:
+> On Fri, Sep 02, 2022 at 10:32:01AM +0200, David Hildenbrand wrote:
+> 
+>>> So I wonder instead of continuing to fix trickiness around the zero
+>>> page whether it is a better idea to pursue allocating a normal
+>>> page from the beginning for pinned RO mappings?
+>>
+>> That's precisely what I am working. For example, that's required to get
+>> rid of FOLL_FORCE|FOLL_WRITE for taking a R/O pin as done by RDMA:
+> 
+> And all these issues are exactly why RDMA uses FOLL_FORCE and it is,
+> IMHO, a simple bug that VFIO does not.
 
-Oops...I forgot to commit the protocol.h :)
+I consider the BUG that our longterm page pinning behaves the way it 
+currently does, not that we're not using the FOLL_FORCE flag here.
 
-> > diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-> > index c7d49fb6e7bd..cebabf2bb222 100644
-> > --- a/net/mptcp/subflow.c
-> > +++ b/net/mptcp/subflow.c
->
-> (...)
->
-> > @@ -1765,11 +1740,19 @@ void mptcp_subflow_queue_clean(struct sock *listener_ssk)
-> >               struct sock *sk = (struct sock *)msk;
-> >               bool slow;
-> >
-> > +             sock_hold(sk);
-> >               slow = lock_sock_fast_nested(sk);
-> >               next = msk->dl_next;
-> >               msk->first = NULL;
-> >               msk->dl_next = NULL;
-> > +
-> > +             /* mptcp_close_nolock() will put a extra reference on sk,
-> > +              * so we hold one here.
-> > +              */
-> > +             sock_hold(sk);
-> > +             mptcp_close_nolock(sk, 0);
->
-> ... I guess the compiler will complain if you try to use it here from
-> subflow.c, no?
->
+But it doesn't matter, I'm working on fixing/cleaning it up.
 
-Hmm...The compiler didn't, as I modified protocol.h locally. That
-'s why I didn't find this mistake :)
+> 
+>> I do wonder if that's a real issue, though. One approach would be to
+>> warn the VFIO users and allow for slightly exceeding the MEMLOCK limit
+>> for a while. Of course, that only works if we assume that such pinned
+>> zeropages are only extremely rarely longterm-pinned for a single VM
+>> instance by VFIO.
+> 
+> I'm confused, doesn't vfio increment the memlock for every page of VA
+> it pins? Why would it matter if the page was COW'd or not? It is
+> already accounted for today as though it was a unique page.
+> 
+> IOW if we add FOLL_FORCE it won't change the value of the memlock.
 
-> Also, did you have the opportunity to run the different MPTCP selftests
-> with this patch?
->
+I only briefly skimmed over the code Alex might be able to provide more 
+details and correct me if I'm wrong:
 
-Not yet. I'll do it before the next version.
+vfio_pin_pages_remote() contains a comment:
 
-Thanks!
-Menglong Dong
+"Reserved pages aren't counted against the user, externally pinned pages 
+are already counted against the user."
 
-> Cheers,
-> Matt
-> --
-> Tessares | Belgium | Hybrid Access Solutions
-> www.tessares.net
+is_invalid_reserved_pfn() should return "true" for the shared zeropage 
+and prevent us from accounting it via vfio_lock_acct(). Otherwise, 
+vfio_find_vpfn() seems to be in place to avoid double-accounting pages.
+
+-- 
+Thanks,
+
+David / dhildenb
+

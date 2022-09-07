@@ -2,115 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4215B00AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529805B00B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiIGJiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
+        id S229914AbiIGJj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiIGJir (ORCPT
+        with ESMTP id S229513AbiIGJj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:38:47 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCDFB14C7;
-        Wed,  7 Sep 2022 02:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jGLUAyN4WBC7ZkwS6LsB0mO/kpRXd9GgONv16gVjrak=; b=1Bg1Oz59XoW8AlgxRN51V8jlKR
-        xiGVymL1Q/bWZ12dS0LzK1Hq+CkBrW2E/Ly0IlKKFxGpWmdwcb/W5ES65bp8LnK14o7v9yjJ5LAaD
-        X7xuqQBcuw9R1eYLBKgp0KOqcOTy8TztqbmnBg91tykhcJSZHGuQ9/qagUrLEFItlBx9sjxXwY8/u
-        2gHuNvwPwO9NHCtdGWO2qrFj6aQ129LF0fv5fgy5Zi64UdtyRuNfS5yTelNtZYb3HPR4rY4mNWlHb
-        6MSpRS5gZJ0a8ev82RvgfsHwuViCYKsY0JcK3x9BVAjZM7CDLrxw13lW2f4khEYu+nTsBTnaztSGt
-        rRhx9RfA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34166)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oVrW4-0005Bj-Dx; Wed, 07 Sep 2022 10:38:40 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oVrW1-0000rW-7y; Wed, 07 Sep 2022 10:38:37 +0100
-Date:   Wed, 7 Sep 2022 10:38:37 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next v5 1/8] net: phylink: Document MAC_(A)SYM_PAUSE
-Message-ID: <YxhmnVIB+qT0W/5v@shell.armlinux.org.uk>
-References: <20220906161852.1538270-1-sean.anderson@seco.com>
- <20220906161852.1538270-2-sean.anderson@seco.com>
+        Wed, 7 Sep 2022 05:39:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B883C22BD9
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662543594; x=1694079594;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=L9mAPti4dY/5Rd9k0BChHr2no1/RvmenIKFeJ7EdNQo=;
+  b=Z32nobi8mG7ldJoPEptiJnIi1Nred9ngW76vdO0XrkLDIXWoxPao75GL
+   KEee65Dh/+wsowAvOyFeXyVid5FVlqkjHg4eOSB1LeLXRbY0SglhaR+IB
+   NgaP9KcdE2sLXkbtMAH75EPzT+Vc1CZo9snMGKIVSiXoHCOcpIWDDvR9i
+   XEeQeNIgjPxXIu0bDjbv6mkh90GYg3t8t9QI1stORIqlPB3NGiE89dS+Y
+   EHhUoNXN/DQjAjUjcOXYAyeXQ7AtttIv8PpvbbNy8igVxsreKcZNnUzxq
+   vSOJX3xY2OAR5eBu3eeap9WyFJq2zFCZ8wOCTui5aSRHvW1kNhiBXQ7mT
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="294412571"
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="294412571"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:39:54 -0700
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="591621518"
+Received: from jiebinsu-mobl.ccr.corp.intel.com (HELO [10.238.0.228]) ([10.238.0.228])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:39:49 -0700
+Message-ID: <a4d10f9e-ab8f-ffad-5eea-48316c436f41@intel.com>
+Date:   Wed, 7 Sep 2022 17:39:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906161852.1538270-2-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] ipc/msg.c: mitigate the lock contention with percpu
+ counter
+Content-Language: en-US
+To:     Tim Chen <tim.c.chen@linux.intel.com>,
+        Shakeel Butt <shakeelb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, vasily.averin@linux.dev,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        alexander.mikhalitsyn@virtuozzo.com, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Huang Ying <ying.huang@intel.com>, tianyou.li@intel.com,
+        wangyang.guo@intel.com, jiebin.sun@intel.com
+References: <20220902152243.479592-1-jiebin.sun@intel.com>
+ <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
+ <048517e7f95aa8460cd47a169f3dfbd8e9b70d5c.camel@linux.intel.com>
+From:   "Sun, Jiebin" <jiebin.sun@intel.com>
+In-Reply-To: <048517e7f95aa8460cd47a169f3dfbd8e9b70d5c.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:18:45PM -0400, Sean Anderson wrote:
-> This documents the possible MLO_PAUSE_* settings which can result from
-> different combinations of MLO_(A)SYM_PAUSE. These are more-or-less a
-> direct consequence of IEEE 802.3 Table 28B-2.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
-> (no changes since v3)
-> 
-> Changes in v3:
-> - New
-> 
->  include/linux/phylink.h | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/include/linux/phylink.h b/include/linux/phylink.h
-> index 6d06896fc20d..a431a0b0d217 100644
-> --- a/include/linux/phylink.h
-> +++ b/include/linux/phylink.h
-> @@ -21,6 +21,22 @@ enum {
->  	MLO_AN_FIXED,	/* Fixed-link mode */
->  	MLO_AN_INBAND,	/* In-band protocol */
->  
-> +	/* MAC_SYM_PAUSE and MAC_ASYM_PAUSE correspond to the PAUSE and
-> +	 * ASM_DIR bits used in autonegotiation, respectively. See IEEE 802.3
 
-"used in our autonegotiation advertisement" would be more clear.
+On 9/7/2022 2:44 AM, Tim Chen wrote:
+> On Fri, 2022-09-02 at 09:27 -0700, Shakeel Butt wrote:
+>> On Fri, Sep 2, 2022 at 12:04 AM Jiebin Sun <jiebin.sun@intel.com> wrote:
+>>> The msg_bytes and msg_hdrs atomic counters are frequently
+>>> updated when IPC msg queue is in heavy use, causing heavy
+>>> cache bounce and overhead. Change them to percpu_counters
+>>> greatly improve the performance. Since there is one unique
+>>> ipc namespace, additional memory cost is minimal. Reading
+>>> of the count done in msgctl call, which is infrequent. So
+>>> the need to sum up the counts in each CPU is infrequent.
+>>>
+>>> Apply the patch and test the pts/stress-ng-1.4.0
+>>> -- system v message passing (160 threads).
+>>>
+>>> Score gain: 3.38x
+>>>
+>>> CPU: ICX 8380 x 2 sockets
+>>> Core number: 40 x 2 physical cores
+>>> Benchmark: pts/stress-ng-1.4.0
+>>> -- system v message passing (160 threads)
+>>>
+>>> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
+>> [...]
+>>> +void percpu_counter_add_local(struct percpu_counter *fbc, s64 amount)
+>>> +{
+>>> +       this_cpu_add(*fbc->counters, amount);
+>>> +}
+>>> +EXPORT_SYMBOL(percpu_counter_add_local);
+>> Why not percpu_counter_add()? This may drift the fbc->count more than
+>> batch*nr_cpus. I am assuming that is not the issue for you as you
+>> always do an expensive sum in the slow path. As Andrew asked, this
+>> should be a separate patch.
+> In the IPC case, the read is always done with the accurate read using
+> percpu_counter_sum() gathering all the counts and
+> never with percpu_counter_read() that only read global count.
+> So Jiebin was not worry about accuracy.
+>
+> However, the counter is s64 and the local per cpu counter is S32.
+> So the counter size has shrunk if we only keep the count in local per
+> cpu counter, which can overflow a lot sooner and is not okay.
+>
+> Jiebin, can you try to use percpu_counter_add_batch, but using a large
+> batch size.  That should achieve what you want without needing
+> to create a percpu_counter_add_local() function, and also the overflow
+> problem.
+>
+> Tim
+>
+I have sent out the patch v4 which use percpu_counter_add_batch. If we use
+a tuned large batch size (1024), the performance gain is 3.17x (patch v4)
+vs 3.38x (patch v3) previously in stress-ng -- message. It still has
+significant performance improvement and also good balance between
+performance gain and overflow issue.
 
-> +	 * Annex 28B for more information.
-> +	 *
-> +	 * The following table lists the values of MLO_PAUSE_* (aside from
-> +	 * MLO_PAUSE_AN) which might be requested depending on the results of
-> +	 * autonegotiation or user configuration:
-> +	 *
-> +	 * MAC_SYM_PAUSE MAC_ASYM_PAUSE Valid pause modes
-> +	 * ============= ============== ==============================
-> +	 *             0              0 MLO_PAUSE_NONE
-> +	 *             0              1 MLO_PAUSE_NONE, MLO_PAUSE_TX
-> +	 *             1              0 MLO_PAUSE_NONE, MLO_PAUSE_TXRX
-> +	 *             1              1 MLO_PAUSE_NONE, MLO_PAUSE_TXRX,
-> +	 *                              MLO_PAUSE_RX
+Jiebin
 
-Any of none, tx, txrx and rx can occur with both bits set in the last
-case, the tx-only case will be due to user configuration.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>

@@ -2,120 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A50F5AFA6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B465AFA71
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiIGDKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 23:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S229634AbiIGDLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 23:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIGDKW (ORCPT
+        with ESMTP id S230026AbiIGDLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:10:22 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EAC25E87
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 20:10:18 -0700 (PDT)
-X-UUID: 16f5a9ab8ad946329790add3a972d1fc-20220907
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=t97iS4YcYk2aQLZEbYiw0ExZyEUa2KjpAGNCB69JMoA=;
-        b=dipnh0LarnZGzf7pqBEQurTAU4UsDGQ8/jRfJ+aLlVf2y+uUnfbWFmJYBGeN069KgayE9aeudRmM/vQNPyJ3MQTnoQp0WRJydocQGVK/SFYcea5UH3OPFPcw/sjYTBPOlQnFI41OBHe3MTyJ2Kfti6U/ksMDEYIONn7EgFD/MbQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:5f7a3b96-9ae9-4d82-82e1-be9e7bdcebde,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:45
-X-CID-INFO: VERSION:1.1.10,REQID:5f7a3b96-9ae9-4d82-82e1-be9e7bdcebde,OB:0,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:45
-X-CID-META: VersionHash:84eae18,CLOUDID:77eaefd0-20bd-4e5e-ace8-00692b7ab380,C
-        OID:a58702e4a18d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: 16f5a9ab8ad946329790add3a972d1fc-20220907
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 765625676; Wed, 07 Sep 2022 11:10:13 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 7 Sep 2022 11:10:12 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 7 Sep 2022 11:10:11 +0800
-Message-ID: <bfd6d40474d4d5f589a825b0cc193ae229c42d52.camel@mediatek.com>
-Subject: Re: [PATCH v4 3/6] iommu/mediatek: Add error path for loop of
- mm_dts_parse
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, <iommu@lists.linux.dev>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>,
-        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
-        <xueqi.zhang@mediatek.com>, Guenter Roeck <groeck@chromium.org>
-Date:   Wed, 7 Sep 2022 11:10:11 +0800
-In-Reply-To: <20220830083206.GT2030@kadam>
-References: <20220824064306.21495-1-yong.wu@mediatek.com>
-         <20220824064306.21495-4-yong.wu@mediatek.com> <20220830083206.GT2030@kadam>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 6 Sep 2022 23:11:07 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1F384EE2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 20:11:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662520262; x=1694056262;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AymFsAjlJTw3ZlsoyqRCEN2+vuWcpnL9wZiecOO6QIM=;
+  b=hUz7N+DcCOBgKXHwJnJ6B7mCw6wEjPn7215lgM0adkmQVOQfSnzYdc10
+   mCj7IBPqGJL6mSILiiBFrT7g6fCvON0PQkTX+zX3qZ+M+yQ4z4WxLMNO8
+   ptlXmirFgVbUs/tr4gbzNhZ1P4YopcZQTEUJ8RBQaZrXgXqCfvVMfb1WR
+   F+h9759zhD+9G8TSF1uxNth7vwbTRrGdL4sxaMAQ1NO9t999nROlC1kmp
+   wvd3qkIbskLJvb86GQv/3/8PHA4HZWF4Z6csdCBJPFS2VfNIWKSRW9V1I
+   TEm2qW+9cqu0qHH9pfQHFVqbgweR2oiOrNAJrT5kWP3n6sDSsx7bO6tfI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297550398"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="297550398"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 20:11:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="756606747"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 20:10:59 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVlSs-00061P-2x;
+        Wed, 07 Sep 2022 03:10:58 +0000
+Date:   Wed, 7 Sep 2022 11:10:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Roesch <shr@fb.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>
+Subject: [ammarfaizi2-block:kdave/linux/for-next 107/120] ERROR: modpost:
+ "balance_dirty_pages_ratelimited_flags" [fs/btrfs/btrfs.ko] undefined!
+Message-ID: <202209071127.oM1Ev8D4-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+tree:   https://github.com/ammarfaizi2/linux-block kdave/linux/for-next
+head:   0e7fbd5972c021740bb9443c9680145a2627729f
+commit: 145103680cd0f5fcd2162c89f89f2746c4198d85 [107/120] btrfs: make balance_dirty_pages nowait compatible
+config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220907/202209071127.oM1Ev8D4-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/145103680cd0f5fcd2162c89f89f2746c4198d85
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kdave/linux/for-next
+        git checkout 145103680cd0f5fcd2162c89f89f2746c4198d85
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Thanks very much for your review:)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Tue, 2022-08-30 at 11:32 +0300, Dan Carpenter wrote:
-> On Wed, Aug 24, 2022 at 02:43:03PM +0800, Yong Wu wrote:
-> > The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the
-> > i+1
-> > larb is parsed fail, we should put_device for the 0..i larbs.
-> > 
-> > There are two places need to comment:
-> > 1) The larbid may be not linear mapping, we should loop whole
-> >    the array in the error path.
-> > 2) I move this line position: "data->larb_imu[id].dev = &plarbdev-
-> > >dev;"
-> >    That means set data->larb_imu[id].dev before the error path.
-> >    then we don't need "platform_device_put(plarbdev)" again while
-> >    probe_defer case. All depend on "put_device" in the error path
-> > in error
-> >    cases.
-> 
-> I don't understand what you're saying here.  There is still a
-> platform_device_put(plarbdev) on the success path after
-> component_match_add().
-> 
-> So if we fail when i == 2 then we do:
-> 
-> 	put_device(data->larb_imu[2].dev);
-> 
-> But for the previous iterations has both platform_device_put()
-> and put_device() called for them.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Sorry for this. Right! For the goto outside the loop, it did put twice.
-I will fix this.
+>> ERROR: modpost: "balance_dirty_pages_ratelimited_flags" [fs/btrfs/btrfs.ko] undefined!
 
-> 
-> regards,
-> dan carpenter
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

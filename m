@@ -2,88 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0120D5B08BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4C65B08D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiIGPlO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Sep 2022 11:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S229480AbiIGPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIGPlM (ORCPT
+        with ESMTP id S229819AbiIGPmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:41:12 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4139C21A;
-        Wed,  7 Sep 2022 08:41:10 -0700 (PDT)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 04C0D40004;
-        Wed,  7 Sep 2022 15:41:08 +0000 (UTC)
-Message-ID: <661ee8227c96aeba7aae9fff6ac9a73f1d81e765.camel@hadess.net>
-Subject: Re: [PATCH v5 2/4] Input: joystick: xpad: Add ABS_PROFILE axis
- value to uapi
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Nate Yocom <nate@yocom.org>, dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benjamin.tissoires@redhat.com
-Date:   Wed, 07 Sep 2022 17:41:08 +0200
-In-Reply-To: <Yw0OjoVzKV3QOYah@ghaven-kernel>
-References: <20220825222420.6833-1-nate@yocom.org>
-         <20220825222420.6833-3-nate@yocom.org>
-         <3e48ef8d13337ce1c3ec68baffc612fde4740b0e.camel@hadess.net>
-         <Yw0OjoVzKV3QOYah@ghaven-kernel>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 7 Sep 2022 11:42:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F6EB1BB4;
+        Wed,  7 Sep 2022 08:41:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A26CDB81E0C;
+        Wed,  7 Sep 2022 15:41:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055C0C4347C;
+        Wed,  7 Sep 2022 15:41:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662565311;
+        bh=/S/dkwp5ZVEfvkT7cXSM0abXRYV90A8gHsHvynV/bE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aPtjXj7LVbgPklwL0BtFQvBJBVKud+/mTLi/X4cto7mqTclBGsTV5WwwKD3WqEfDF
+         e/DsY8llF4okC8r2/W0d0lQB6ZbA9lp+7glaGqUGmR+x+AQTRgeYuk08kjCZ1p1sh4
+         07dzUdk/zH2pQQi4tpM+2Gq3YIpN+7KLYlHT5GZEiXivxlxzJx7W5GVihL44Jk4/UB
+         F8wBZ3dkj3JzlzP++jXMeDpKXRwIP2D0f07e1K0rhORMmh2Afmf/Ern3ep24TrmItB
+         WW4zBCxRmcXz9zok5DZGvfLZy5VZWr95emKxduMAtdBwt+Hckdd1u0jmklJAzQdmtA
+         k+6k19kHtCyyw==
+Date:   Wed, 7 Sep 2022 16:41:44 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     luca.ceresoli@bootlin.com
+Cc:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 0/8] Add support for the internal RK3308 audio codec
+Message-ID: <Yxi7uD6RKeR3uHcF@sirena.org.uk>
+References: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9EHz1xmrlXau4N0B"
+Content-Disposition: inline
+In-Reply-To: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
+X-Cookie: You have a truly strong individuality.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-29 at 12:07 -0700, Nate Yocom wrote:
-> On Sat, Aug 27, 2022 at 12:40:46PM +0200, Bastien Nocera wrote:
-> > On Thu, 2022-08-25 at 15:24 -0700, Nate Yocom wrote:
-> > > Add an ABS_PROFILE axis for input devices which need it, e.g. X-
-> > > Box
-> > > Adaptive Controller and X-Box Elite 2.
-> > > ---
-> > >  include/uapi/linux/input-event-codes.h | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/include/uapi/linux/input-event-codes.h
-> > > b/include/uapi/linux/input-event-codes.h
-> > > index dff8e7f17074..7ad931a32970 100644
-> > > --- a/include/uapi/linux/input-event-codes.h
-> > > +++ b/include/uapi/linux/input-event-codes.h
-> > > @@ -862,6 +862,7 @@
-> > >  #define ABS_TOOL_WIDTH         0x1c
-> > >  
-> > >  #define ABS_VOLUME             0x20
-> > > +#define ABS_PROFILE            0x21
-> > >  
-> > >  #define ABS_MISC               0x28
-> > >  
-> > 
-> > 
-> > You probably also want to add it to the absolutes array in
-> > drivers/hid/hid-debug.c.
-> 
-> doh, roger.
-> 
-> > Again, you might want to wait for confirmation from Dmitry that
-> > this is
-> > the right way to do this for the profiles.
-> 
-> Makes sense.  Dmitry?
 
-Dmitry, could you please confirm whether ABS_PROFILE definition is
-correct?
+--9EHz1xmrlXau4N0B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Then Nate can update his patch so we can land the support for that
-controller.
+On Wed, Sep 07, 2022 at 04:21:16PM +0200, luca.ceresoli@bootlin.com wrote:
 
-Thanks!
+> Luca Ceresoli (8):
+>   ASoC: rockchip: rk3308: add internal audio codec bindings
+>   ASoC: rockchip: rk3308: add audio card bindings
+>   arm64: dts: rockchip: add i2s_8ch_2 and i2s_8ch_3
+>   arm64: dts: rockchip: add the internal audio codec
+>   ASoC: rockchip: i2s-tdm: Fix clk_id usage in .set_sysclk()
+>   ASoC: audio-graph: let dai_link->init be overridable
+>   ASoC: codecs: Add RK3308 internal audio codec driver
+>   ASoC: rockchip: add new RK3308 sound card
+
+Please pay attention to the ordering of your serieses when posting:
+generally any bug fixes should come first so that they can be easily
+sent as fixes, and normally DTS updates are at the very end of the
+series rather than mixed in the middle since they go via the platform
+maintainer tree normally rather than with everything else.
+
+--9EHz1xmrlXau4N0B
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMYu7cACgkQJNaLcl1U
+h9CKzAf8DdI+J5miR4E6cIrTXKZoGqR7qZhfHqflFl1gH1Y4ikj9fbdxe4vhlxEz
+nUlD7rd8x8u/c8l0lkObG4gKpZ3VMuT6Pvr5cxCHzlGyCgKb3NEMme5JhSuV8TCW
+qchsRF+ZGTXUcPqBN5ey6fl2KAboGemFxyuDLWaVD9CVsKDpoMtyOsgE8PC7sTRO
+Vdqkl33gsJZP8XRlRomBFUpC/ziINrHXBW+hBoyQBNBLJxdUT7OM7WXVsxJaJsJf
+o+lK+dLy4RD8Pnbt28qgvhMDFxNKCSGX6B0iI8lgMls3j/ZJme3+MnrNA9DwDTjM
+wKQ4TTmanyrMK0yzQd4uThtlEm/FfA==
+=rYHs
+-----END PGP SIGNATURE-----
+
+--9EHz1xmrlXau4N0B--

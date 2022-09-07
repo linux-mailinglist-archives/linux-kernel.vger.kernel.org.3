@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8ED5B1036
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751AD5B103A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiIGXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 19:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S229811AbiIGXLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 19:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIGXKr (ORCPT
+        with ESMTP id S229826AbiIGXLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 19:10:47 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C69C121B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:10:46 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 65so5865275pfx.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 16:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=D9GYa8OJDUYWVtjvzZNWj4WxHz/CsMN9FwfpuX4V0rg=;
-        b=fHmNShdgI4dnC6hErvVoYwXgDNbgsvnYw6M/vzNGlywwNb8ieN/SlRLVWwpWKkoSu1
-         vq0hcEhlT+GKynnWf9AqlWHeUPpZL08URJGii/8YbtzlfJ0IfDSoFsIU4KgaZEj4R4uU
-         m+2r1/Ucjkq3qLNSD1SgrXHQXWlvKtbJxGq1c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=D9GYa8OJDUYWVtjvzZNWj4WxHz/CsMN9FwfpuX4V0rg=;
-        b=WaCyJofOBsXjrqjeIyFLj00C6lAYX+SqzgjlIsxlBc8HLMsu2LIxk850uOES/wpGrL
-         pDzSDOXwOhoBmQo7oDSncEbymLtL41F67UBoOX6O0mzcADGaJE4WHPSHIInx89D1k8ml
-         QXStgRwQs+DuG5E+oKqZPRFafsJ5WtJcvpA8Db7OFMPZXr+Otwy/4+rlzDNpErwCQrZj
-         BeVJLgM1Zn1J9j0o395yleIsZ7KRYJrbDphaffYfjR6Ng9jezL6kXl9yVFACc1IVT44h
-         B5NmBc7m1Wjdg+b8UysTb5fEQ+CnxpWWyiZWB3kguTRxERJwbeTsRloCnNCqwMl6rUXC
-         095A==
-X-Gm-Message-State: ACgBeo0tcw3Zpe1OlS6txtZX/ctK1miWdLM51JNup5Y1UM9WsFQOLT/J
-        mkPVnobTVTo4RWuDm+xSxcuOWA==
-X-Google-Smtp-Source: AA6agR5mOZptHzyKX2MhRGXlipNiPACZtnxxJGgxQ8tn93t85KvuvocH+td73K+d6+k4fFh4O61YPw==
-X-Received: by 2002:a63:1e61:0:b0:41c:45d:7d50 with SMTP id p33-20020a631e61000000b0041c045d7d50mr5135945pgm.507.1662592245677;
-        Wed, 07 Sep 2022 16:10:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v28-20020aa799dc000000b00537ab89c66csm13683408pfi.143.2022.09.07.16.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 16:10:44 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 16:10:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        virtualization@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
- ZERO_CALL_USED_REGS enabled
-Message-ID: <202209071609.BE5BF18D6@keescook>
-References: <20220902213750.1124421-1-morbo@google.com>
- <20220902213750.1124421-3-morbo@google.com>
- <202209022251.B14BD50B29@keescook>
- <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
- <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
- <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
+        Wed, 7 Sep 2022 19:11:13 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BEA9F76F;
+        Wed,  7 Sep 2022 16:11:12 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287DqqYT020003;
+        Wed, 7 Sep 2022 16:10:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=pfpt0220; bh=383dXuZxLnT0vZl5h33GqcO0C/xKxiCwkZXbNJs55g4=;
+ b=Hd9hXvU+y6EI5IkIs6aMb2Cl7x568RAuYEkN8S4Cn4iFZ7ghmbpYeDj80SttMyeXZhf3
+ T81NAi/MJC8l7XigI1a0kgQ/Z3hclIr9Lf2URAcMGjliyjaeTz3U0L/S7wyWWTx2ai3o
+ d6Gh/lEU3G/wEpf8VfKPmC/k670ZHGXlWT4krA/nOF0wEAI4j9ZXAvesspHfOz7gFyRF
+ cV8siYmCisuNCXVCp4cbkrVju6oDzTWkC4BW1KQDB8Y6DRZYr3HQ0vV8Kg8qj/bX1It4
+ /dwefyR7ze3BrpG+00+4swmJl0plBBSxh4rWZjlZKrM7jD8LhAOE/7lrDLpWf1NdeiYs bw== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3jc6eq0r83-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 16:10:59 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 7 Sep
+ 2022 16:10:57 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 7 Sep 2022 16:10:57 -0700
+Received: from mvluser05.qlc.com (unknown [10.112.10.135])
+        by maili.marvell.com (Postfix) with ESMTP id 02BE15B6934;
+        Wed,  7 Sep 2022 16:10:56 -0700 (PDT)
+Received: from localhost (aeasi@localhost)
+        by mvluser05.qlc.com (8.14.4/8.14.4/Submit) with ESMTP id 287NAtjp027054;
+        Wed, 7 Sep 2022 16:10:55 -0700
+X-Authentication-Warning: mvluser05.qlc.com: aeasi owned process doing -bs
+Date:   Wed, 7 Sep 2022 16:10:55 -0700
+From:   Arun Easi <aeasi@marvell.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+CC:     Steven Rostedt <rostedt@goodmis.org>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-next@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: Re: [EXT] Re: [PATCH v2 1/1] tracing: Fix compile error in trace_array
+ calls when TRACING is disabled
+In-Reply-To: <32dee739-58fb-e371-2808-d40a2ee90ee0@marvell.com>
+Message-ID: <d607720a-b940-de99-2e78-bd6207d03c5a@marvell.com>
+References: <20220907185745.14382-1-aeasi@marvell.com>
+ <20220907185745.14382-2-aeasi@marvell.com>
+ <60870376-3518-896b-7a6b-a4b9ea05264f@acm.org>
+ <32dee739-58fb-e371-2808-d40a2ee90ee0@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="US-ASCII"
+X-Proofpoint-ORIG-GUID: WIfzGuLaEDXkhh1N_XnQUUtz7gTpaxwP
+X-Proofpoint-GUID: WIfzGuLaEDXkhh1N_XnQUUtz7gTpaxwP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_10,2022-09-07_02,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,34 +78,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
-> On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
-> > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
-> > >
-> > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
-> > > > > [...]
-> > > > >         callq   *pv_ops+536(%rip)
-> > > >
-> > > > Do you know which pv_ops function is this? I can't figure out where
-> > > > pte_offset_kernel() gets converted into a pv_ops call....
-> > > >
-> > > This one is _paravirt_ident_64, I believe. I think that the original
-> > > issue Nathan was seeing was with another seemingly innocuous function.
+On Wed, 7 Sep 2022, 3:52pm, Arun Easi wrote:
+
+> On Wed, 7 Sep 2022, 12:27pm, Bart Van Assche wrote:
+> 
+> > External Email
 > > 
-> > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
-> > really needs to not be touched at all by the compiler for
-> > these...special features.
+> > ----------------------------------------------------------------------
+> > On 9/7/22 11:57, Arun Easi wrote:
+> > > +#else	/* CONFIG_TRACING */
+> > > +static inline int register_ftrace_export(struct trace_export *export)
+> > > +{
+> > > +	return -EINVAL;
+> > > +}
+> > > +static inline int unregister_ftrace_export(struct trace_export *export)
+> > > +{
+> > > +	return 0;
+> > > +}
+> > 
+> > Isn't it recommended to leave a blank line between function definitions?
+> > 
+> > > +static inline int
+> > > +trace_array_printk(struct trace_array *tr, unsigned long ip,
+> > > +		       const char *fmt, ...)
+> > 
+> > This is not the recommended way to format a function definition.
 > 
-> My source tree sayeth:
+> That was mostly a Y&P from the prototype earlier in the file. Is it the 
+> linebreak after "int" you are referring to, or are there more?
 > 
->   u64 notrace _paravirt_ident_64(u64 x)
+> > Consider running git clang-format HEAD^.
+> 
+> It is a bit cryptic to me what it is complaining about (sorry 
+> clang-format newbie here):
+> 
+> # git clang-format -v HEAD^
+> Running clang-format on the following files:
+>     include/linux/trace.h
+> YAML:671:20: error: unknown enumerated scalar
+> SpaceBeforeParens: ControlStatementsExceptForEachMacros
+>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Error reading /root/aeasi/src/mkp.git/.clang-format: Invalid argument
+> error: `clang-format -lines=29:30 -lines=51:84 include/linux/trace.h` failed
+> 
+> Perhaps my clang-tools are not recent enough.
+> 
+> # clang-format --version
+> clang-format version 10.0.1 (Red Hat 10.0.1-1.module+el8.3.0+7459+90c24896)
+> 
+> Still digging..
+> 
 
-I don't see noinstr either. But it seems a reasonable thing to do?
+Never mind.
 
-Bill, does fixing up the noinstr macro and adding it here fix the
-problem?
+Moved to a different machine with newer git and "clang-format" is working 
+fine. I will post v3 shortly.
 
--- 
-Kees Cook
+Regards,
+-Arun
+
+> 
+> 
+> > 
+> > > +static inline struct trace_array *
+> > > +trace_array_get_by_name(const char *name)
+> > 
+> > Same comment here.
+> > 
+> > Thanks,
+> > 
+> > Bart.
+> > 
+> 

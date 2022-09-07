@@ -2,161 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F5A5AFA15
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FB85AFA28
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiIGCnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S229617AbiIGCqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiIGCnu (ORCPT
+        with ESMTP id S230022AbiIGCqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:43:50 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEADA792E1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 19:43:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xn0iJr/uTlZpjHICKg9CUGEEgJg3KB+9KX3FK8uq7PW7gTzPxM1qniwnvykN4yFCq/+RG4CjIMqUlgCpj5sqos16CkauYvo22ewiei/O6sbSkh2IuNWJNtc0IixcmSU8s9Yri24pXbEr03ip29O9k8oUNFGDKIR41oySeCE2lbRd6oXHKJszYE+pFzHEY4ysOT8lFeZkIxKqFG4iQRjPm3sP6WTIM81yYDhE96/6VPE02BpkitNgtAC0+gG3Y2ko3KK/swd8HQyHCXPqVe56c+9G46wWKZ0HlMtGfa1mfu2RADpzbvB5SPkJLtxQZfkHzMt2ZO+TewgdmHyl6OoOjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Stk0ASZEmo+jh4SLMUQAWSyrJwbRahQbQn/eYZGDKpU=;
- b=c2drChDbAF/vHVCv6FV9+WuLKqwHrcBM2s5TRo8Eqt8/hQK6BDBUIdHIyTNBiXhSKdacfNqdThUEjKPzMzOoLkRq/Xc/xuwt83VU6/jlqE6Gzl0hKDK48y6qUUw7DgRPAKAt5yFVyg0BJULxp8fvw32L9E0dB/FUonlzP5C+a8IOKiZpjtis7U/r7spJWhHaLSc3omOkACDQ1uLh77lCEAKQBluwMxCVJJjq17YqFGOxE3RMnOAF8hxjj44oMgIimSCFZJ96FWBsb5KE4n1LQ58WPSWf5hIPIdPP9hKZ9x6Gc+xu+7Icow3EEVoN3z7uCq14Tir21IZ1KGNsGZw8PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Stk0ASZEmo+jh4SLMUQAWSyrJwbRahQbQn/eYZGDKpU=;
- b=tgC0wpJ9Wqo4kYJCAv+v6HLOR1kxaTdSyweoPcnu+ezsU4mrL6lVLM1dDJsedHx6yatPE/UsPbnMkoJQyjkLCmIdoKSfj5TloRcvTzHzweqLgyUYJ2HImJF9qpr5RKnGqpBOgHE9yTUjc2r2uPrFWDBHaZkq1YBtn3RzHEnY8ESSg04OoZ7x71bsdC2U3xPlQqgiwm65+tiEBi0VKWAumRC13BVYU+BRUVgt4HH26PIyzSzmHtnUJavWCGwAz5oWKPxPZeyRD+3qIBC4uaXfivMjpxsVggaJiwqFNVvYr2Fq8/cSlBnsjOEdwkS3dwZBB006vhwVQV9sBUC4EgLC7Q==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by LV2PR12MB6014.namprd12.prod.outlook.com (2603:10b6:408:170::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 7 Sep
- 2022 02:43:47 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::c04:1bde:6484:efd2]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::c04:1bde:6484:efd2%4]) with mapi id 15.20.5588.017; Wed, 7 Sep 2022
- 02:43:47 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Dennis Maisenbacher <Dennis.Maisenbacher@wdc.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
-CC:     Niklas Cassel <niklas.cassel@wdc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] nvmet: fix mar and mor off-by-one errors
-Thread-Topic: [PATCH v2] nvmet: fix mar and mor off-by-one errors
-Thread-Index: AQHYwcPRcm6CrzlLu0+cYsV2b6mBrq3S8p0AgAALrACAAEV9gA==
-Date:   Wed, 7 Sep 2022 02:43:47 +0000
-Message-ID: <36b16998-3720-cc30-3ee8-b4d92c3b266d@nvidia.com>
-References: <20220906073929.3292899-1-Dennis.Maisenbacher@wdc.com>
- <d3b4ef13-62fc-1bf4-3a5d-3cc740df82b8@nvidia.com>
- <8154fb0a-4cda-a4bc-29ef-8435a3edb264@opensource.wdc.com>
-In-Reply-To: <8154fb0a-4cda-a4bc-29ef-8435a3edb264@opensource.wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 581ff2fc-beb1-46d6-4c13-08da907ac9ff
-x-ms-traffictypediagnostic: LV2PR12MB6014:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2pRFAII8vyvHvwzDIkmTesHCtf3qz0fQCUCe58aKX+TakCnCXgRsfmAEHOSQW7dUxmniNJilQWu4Zjd3ZxAjY7kfLm4IeM2D1T2c6hB+JpabNY5eRUTZQpCkU88ZJizhirjNkJSnLGpUX+V3fSm7VDeor5DARNrp1nDy7yHosnxhgtdwtv5KcHRwXgmvP0vSCo+vef71O0qEveJuRMKBYaUB3zUH20kcIFPKyOUpXXnItnRWIAl+5SssdFtx2u3PGB46k95Ik96WYiNMXWeYzSb4i4OufY7e0NBkFxqj2uWaJX9ilcdKiyKx3Z6eLi2tF5TPneQZewx3yrGldI/fK98/6yKK4pSYOsh/v4htgvJoflFTcwEt62bWciDp7chyp10MC8d/FUEwtLIzOmLTp6i0KpCS85JVaeezqzRpLPbOIlu21owKAkqEibSskjs/Q+3t1RV+p9T5lQHNil4s8+Id8dwT+K/UuR+bQH3omtxGgeKvaZ94V63qq+pnrAXqbtHhANptBxkAjVrDPAYuCs1q8jqX9yJXJgaGpqOYYkCXzi3BQPxmxjn9YKQnyqZuj38u3ZqwLkK0bUQ22cygK9e/1k5KTwW+9PSt8FJ1HQ2HKEiAIundMf8TS6ke5utzX4ht4SK1pTeQA5UT5bAcrxLUu8q7hEmcfqVAZOGverpFSAoMaC7T1mtt4S7zqChMCPdnxzfU6oRXwovS+u0dycGtaKBpOOnhmDesw4+XfIz0ZSv58TWjszGcJrvRSDXI7p4SvDZaI3KjbdM3V7AgjbgexJWqCKvCYCOJLLnzR0Mx/ZiQTnRg1sHQ8oTEg4I2+9dMyIAqFnn9gj7JgIG0pw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(136003)(39860400002)(346002)(396003)(76116006)(110136005)(2906002)(36756003)(4326008)(66946007)(66446008)(6506007)(64756008)(478600001)(41300700001)(71200400001)(66476007)(8676002)(186003)(54906003)(6486002)(6512007)(2616005)(66556008)(122000001)(316002)(91956017)(38070700005)(5660300002)(31686004)(83380400001)(31696002)(8936002)(38100700002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RFRzMHlpUXUvV2wrUU5TZk1QdzRHTm5OQTczVDFGdUNmUUVPSHlucHdxTE84?=
- =?utf-8?B?L3V3QnUzbkVvUnI1Q05yYU9NS0plMzhBSW1VdUtpQnNWekJMSk9ZMGRiemJJ?=
- =?utf-8?B?KytIZmswbzJyRUFHNDd3eUcwMXBqZ0xOcVBmUnAvTEMrY0g2cjEyYnEwUkZC?=
- =?utf-8?B?UUp1OFEvQys2UFlLUG15Qm9qK2REWURQMlU1a3lmVjdzamFCZWVMN2VGblF5?=
- =?utf-8?B?N3NydVY2SDBrUFFaaDJ5RkJHSjI5R0hEeS9VWElKTVNHNDg3Zis2UU1TUnBy?=
- =?utf-8?B?a1dzdDVKZzcvZEFYQkdidG1PZG1rUURjaDVKV2p1UnFKaFNOWkFKQmNiSUxk?=
- =?utf-8?B?SUtQbVdWYStsenAyQlJnRVc2S3plbjZPMkRMZW9qd3dPSEF2RUt4bWZETmtx?=
- =?utf-8?B?Y3IwYmZNTEd5eVYxWjdnbGkwWEJaSGlzalRkMFNQaDlsbmlxUkQ5aVorb2NX?=
- =?utf-8?B?bXFhRkh0NnF3NlppK2d4eFg2QUI1N1piMDFkVlMybjNEcmcwQ3NQMnVoUmlt?=
- =?utf-8?B?ZDZoUU14Y3FmdFNYUmVIcHBZR1hzZldrUjkrQlAzM1NLbTN0S1MvR0d4K3Uv?=
- =?utf-8?B?Ni9CdC9PbVdBUFRnbnZEUURzelZvbmpwblJ3dVhMUWZISWVlYlZaTmhhY016?=
- =?utf-8?B?Z2hSRjRUZEkvYnJLWm1RMkpNSzNKeEZpQzdUZ1JvRTJmZUVlanlsNnhPYUpl?=
- =?utf-8?B?ZTJ6Z0VSUHVhbGJMU2swZXFvL2xucGdZcmVvWEFHL2FIYXkrOS9YOGZySTRU?=
- =?utf-8?B?OTBzbUVvUDhrVlpiZGVKMWlnQml4QWRlYUYzRTRMWEhZVXRhVGU4cXFEbG1K?=
- =?utf-8?B?QmJqQWwvaUV3QnZEREc3dmRNcGhpOFcrczRac2FXUHNSbEFuMVJ1Z2lka1dx?=
- =?utf-8?B?ckd2VkFzSFdLYVcwYy9ibHRIcHhOMUdzRU9zSENnL0luMDAyRDRhdEpJejdV?=
- =?utf-8?B?Y044SVlza0FvNFRDdjhJSENMc3hCdWlYajVBSnZKdXdLL2dvdGJuYSsraEpG?=
- =?utf-8?B?MHA0N2tJdEs0K1VIOUpvRnBWSHZJVHFXdElQd0FvSXpndEVCV1QwRjVPVTRS?=
- =?utf-8?B?U2JnaGw1VHdwUU15djQxTm8ydTR6RjJpN0NvV2RDZkZpSGc5V3p1WXdQRHRs?=
- =?utf-8?B?R3g5Mzk1MFN2TFEvQ0xnK0lCa1B0WHpSTUx6aUN4NVZaV2ZkRFNsemN6STZG?=
- =?utf-8?B?MlpDWDkzMkVqYmFrTjVaWHlUajU5YXpTaHdybkRzeUJtQzcyK1k2b2Y0SXc5?=
- =?utf-8?B?dDRBZkMxWTNrS2xyUW9GVitoYkFxRHhkSzNaSnZmWTJneVBIS0VibFhjV2JF?=
- =?utf-8?B?R0V3VUFtMUJCekJSVEoxQzc0VGc5d1VRczhKamRLYjQraXpJdlcyTlZMZHQv?=
- =?utf-8?B?TkFWbjBTeVk3U1dtc1E4cXkwYXB5RGJRZjZ6V3VMQk1jNWp2Nkh2dDZCMnBk?=
- =?utf-8?B?Y0NXOUdhanJwOEJ0WTlwMjZxTVlpTUVpL2dTRjhyc25LRExoTHZqR1Jha1dW?=
- =?utf-8?B?RjBJMTRFMmNuV0xDdTZtMkM5dlByZ3FBVXdlQzExWmt5TUp5ZGNWdWJ4TldT?=
- =?utf-8?B?ZktpOC93Zy9wa0krMFFmbDIvR2padWtkRDZncWdlQmZ0L1B4TGhvMjVUSjl5?=
- =?utf-8?B?a2VYbTQwWWtISk4yOHJDRUNtNEVsQUpGbkhwZWJaRE42NFBiTm1Gc2RoV015?=
- =?utf-8?B?THFnSzVtUWxCbWdJUVRFYldWQXBNaUFmaDJkOEsxZ0tnUlNrZ2NMZWpMMCs0?=
- =?utf-8?B?SkxXRVNwYjJnZ3BOLytxVXppSWpQcERDaUprL3hTdEQxdFdsUWtFTysyYTJS?=
- =?utf-8?B?NmdBb29Db0J6YzF0T3hkczR4N3hKeTV5WWkyNEVaZXdKSEtaQ2g3NWFOVVN2?=
- =?utf-8?B?b3NrWXhzK2hVUGU3NEM2VWI2MDVGcDZkME85MFZ1M3FtZGJVNWJLWE1haUtt?=
- =?utf-8?B?QkRrWFgvQ0k3c2w5OWhqb2ZaMmh0OHlyb1IxL0trTGJHcWRyUWN4Z2dWbmc2?=
- =?utf-8?B?OXUyNnE5ekdDVHBLNVM4WllNMEptZjZWdlB4MXJzVnJNbVdZVzNxOTRWVmJV?=
- =?utf-8?B?eGczelZKNjVReVc4U1JlcEczOFkzUVlBdi9yaVJ2UTJQeE4ycGtvRnB1Y0R5?=
- =?utf-8?B?Wm1tL2Yvc0lCemRJUEZVanVQSFlURlN0QkF3SHR1REpIN0paQktQNENDVTZY?=
- =?utf-8?B?clE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1D13E1FF58A9544EA98A7D63F379F6E3@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 6 Sep 2022 22:46:14 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF90299B4E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 19:46:01 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id t65so1362566pgt.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 19:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=lYND3IwDTdM5PZTCKzxIjaS5ygiN1Dths8JY904/4Q8=;
+        b=MrwbpluAMtD46n0GaxZ16fnyV7hwPbudWKeudny7B0bWg5AXC1VFUu7CnjZ/fgbsxh
+         lAWDkNXUbPxs6NDlL3sFVcmR8AJ6jCcvjM8clIGXksJ9aDlD7bd8X4RQEqKRwLVjnTvv
+         SG6/r6UxS9d/aT8BJ35wcA9s11dppIQt24UvrGu7iuuD3EpxdYU1gtcQK30FcP8QtV71
+         PRMg6Wg6XcVfQjRPgeaIUyPAwWzQShPBWVKij+rJBVuoeVQWrm6rzEI/xuSfwkV8S6d6
+         Tzw+foNzBACGwCqht3+s2ZdvZUEAFhb61bz7WQIg/Oz3KFAQPVodMatPiAzoyjHuqUaG
+         Rwrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=lYND3IwDTdM5PZTCKzxIjaS5ygiN1Dths8JY904/4Q8=;
+        b=ICehhmFW0ZOGZMwscb0WBeSX4R5EBVXY6yFzyN+Ocvlrc3mBEYVhaA5xExwYCFBDEA
+         joOPpZ+TDc7T0d3h1uZfNzFbg3diLQ4AC3S9v3InVxszK8nQAOP0/U0W/znryqpMWmQw
+         ifhVprYhME1Zu9O7xOUg0GdNDzgcVEZc1sm+xX47TGrup9f86H4jjaQfYfTKZIRv90HC
+         w4As6oIsrr5bNSBCaC9J+j/Gu7AEvdxY8eYFrM/VQQwDMpPRuSEInl3NfCp4vepJuvp5
+         ZxCQ4LAphHavNoS56STl4NxwPU5gTCT1MeEyauU3cAIT3VT7NxU8WdAQ6RKJDKsADC3F
+         1LzA==
+X-Gm-Message-State: ACgBeo1YpvXLzkNv9qBzcFyOMlAp8UNWSZJfTCQWIwJSNHh/gTqce4ch
+        jCTuYUWvsyvUW+K7+MAOrnohvw==
+X-Google-Smtp-Source: AA6agR5X3/9kJjLX7Fc93XZpSgiHvDiCnHiaKNpgho4Hvp+FTaJqNX50nXh6Ow1DNl58OZnra9MpGQ==
+X-Received: by 2002:a63:dd51:0:b0:430:18d9:edf8 with SMTP id g17-20020a63dd51000000b0043018d9edf8mr1457175pgj.163.1662518760830;
+        Tue, 06 Sep 2022 19:46:00 -0700 (PDT)
+Received: from [10.254.68.181] ([139.177.225.237])
+        by smtp.gmail.com with ESMTPSA id x17-20020a170902ec9100b001752cb111e0sm10890765plg.69.2022.09.06.19.45.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 19:46:00 -0700 (PDT)
+Message-ID: <e95c6e55-a023-b6f7-1dce-4195dc22114a@bytedance.com>
+Date:   Wed, 7 Sep 2022 10:45:55 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 581ff2fc-beb1-46d6-4c13-08da907ac9ff
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 02:43:47.5551
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 38lFfknpyMr1LcXPt5LACZeYEwVosSzfpz82aFCHenKRqdozHm/XbfQ3ca7eqhhOagmwyMo0gThdItFdNjUbag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB6014
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.1
+Subject: Re: [peterz-queue:sched/psi 11/11]
+ include/linux/cgroup-defs.h:432:38: error: 'NR_PSI_RESOURCES' undeclared here
+ (not in a function)
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, Tejun Heo <tj@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202209070242.7EuRnstk-lkp@intel.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <202209070242.7EuRnstk-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+Pj4gICAgCWlmIChsZTMyX3RvX2NwdShyZXEtPmNtZC0+aWRlbnRpZnkubnNpZCkgPT0gTlZN
-RV9OU0lEX0FMTCkgew0KPj4+ICAgIAkJcmVxLT5lcnJvcl9sb2MgPSBvZmZzZXRvZihzdHJ1Y3Qg
-bnZtZV9pZGVudGlmeSwgbnNpZCk7DQo+Pj4gQEAgLTEzMCw4ICsxMzEsMjAgQEAgdm9pZCBudm1l
-dF9leGVjdXRlX2lkZW50aWZ5X2Nuc19jc19ucyhzdHJ1Y3QgbnZtZXRfcmVxICpyZXEpDQo+Pj4g
-ICAgCXpzemUgPSAoYmRldl96b25lX3NlY3RvcnMocmVxLT5ucy0+YmRldikgPDwgOSkgPj4NCj4+
-PiAgICAJCQkJCXJlcS0+bnMtPmJsa3NpemVfc2hpZnQ7DQo+Pj4gICAgCWlkX3pucy0+bGJhZmVb
-MF0uenN6ZSA9IGNwdV90b19sZTY0KHpzemUpOw0KPj4+IC0JaWRfem5zLT5tb3IgPSBjcHVfdG9f
-bGUzMihiZGV2X21heF9vcGVuX3pvbmVzKHJlcS0+bnMtPmJkZXYpKTsNCj4+PiAtCWlkX3pucy0+
-bWFyID0gY3B1X3RvX2xlMzIoYmRldl9tYXhfYWN0aXZlX3pvbmVzKHJlcS0+bnMtPmJkZXYpKTsN
-Cj4+PiArDQo+Pj4gKwltb3IgPSBiZGV2X21heF9vcGVuX3pvbmVzKHJlcS0+bnMtPmJkZXYpOw0K
-Pj4+ICsJaWYgKCFtb3IpDQo+Pj4gKwkJbW9yID0gVTMyX01BWDsNCj4+PiArCWVsc2UNCj4+PiAr
-CQktLW1vcjsNCj4+PiArCWlkX3pucy0+bW9yID0gY3B1X3RvX2xlMzIobW9yKTsNCj4+PiArDQo+
-Pj4gKwltYXIgPSBiZGV2X21heF9hY3RpdmVfem9uZXMocmVxLT5ucy0+YmRldik7DQo+Pj4gKwlp
-ZiAoIW1hcikNCj4+PiArCQltYXIgPSBVMzJfTUFYOw0KPj4+ICsJZWxzZQ0KPj4+ICsJCS0tbWFy
-Ow0KPj4+ICsJaWRfem5zLT5tYXIgPSBjcHVfdG9fbGUzMihtYXIpOw0KPj4+ICAgIA0KPj4NCj4+
-IGFib3ZlIDE0IGxpbmVzIG9mIGNvZGUgY2FuIGJlIHNpbXBsaWZpZWQgYXMgaW4gNC01IGxpbmVz
-IDotDQo+IA0KPiBTaW1wbGlmaWVkID8gSXQgaXMgbXVjaCBoYXJkZXIgdG8gcmVhZCBpbiBteSBv
-cGluaW9uLi4uDQo+IA0KPj4NCg0KdGhlcmUgYXJlIHR3byBpZiAuLi4gZWxzZSAuLi4gZG9pbmcg
-aWRlbnRpY2FsIHRoaW5ncyBvbiBzYW1lIGRhdGENCnR5cGUgdTMyIGFuZCBpdHMgcmV0dXJuIHR5
-cGUgaXMgYWxzbyBzYW1lIGxlMzIsDQppZiBteSBzdWdnZXN0aW9uIGlzIGhhcmQgdG8gcmVhZCB0
-aGVuIGNvbW1vbiBjb2RlIG5lZWRzDQp0byBiZSBtb3ZlZCB0byB0aGUgaGVscGVyIGFzIGl0IGlz
-IG5vdCBjbGVhciB0aGUgbmVlZCBmb3INCmNvZGUgZHVwbGljYXRpb24gZnJvbSBjb21taXQgbWVz
-c2FnZS4NCg0KLWNrDQoNCg==
+On 2022/9/7 02:33, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/psi
+> head:   51beb408c569e516780c84a2020920432ad4c5ed
+> commit: 51beb408c569e516780c84a2020920432ad4c5ed [11/11] sched/psi: Per-cgroup PSI accounting disable/re-enable interface
+> config: i386-randconfig-a001
+> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=51beb408c569e516780c84a2020920432ad4c5ed
+>         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+>         git fetch --no-tags peterz-queue sched/psi
+>         git checkout 51beb408c569e516780c84a2020920432ad4c5ed
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=i386 prepare
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from include/linux/cgroup.h:28,
+>                     from include/linux/memcontrol.h:13,
+>                     from include/linux/swap.h:9,
+>                     from include/linux/suspend.h:5,
+>                     from arch/x86/kernel/asm-offsets.c:13:
+>>> include/linux/cgroup-defs.h:432:38: error: 'NR_PSI_RESOURCES' undeclared here (not in a function)
+>      432 |         struct cgroup_file psi_files[NR_PSI_RESOURCES];
+
+Sorry, looks like there are two problems here:
+
+1. NR_PSI_RESOURCES is undeclared when !CONFIG_PSI
+
+   Should I send the below diff as a separate patch?
+
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index ab1f9b463df9..6e4372735068 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -195,6 +195,8 @@ struct psi_group {
+
+ #else /* CONFIG_PSI */
+
++#define NR_PSI_RESOURCES       0
++
+ struct psi_group { };
+
+ #endif /* CONFIG_PSI */
+
+2. This patchset depends on Tejun's commit e2691f6b44ed ("cgroup: Implement cgroup_file_show()") in linux-next
+
+   Maybe peterz-queue should include that first? I don't know what's the normal way to handle.
+
+
+Thanks.
+
+
+>          |                                      ^~~~~~~~~~~~~~~~
+>    make[2]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
+>    make[2]: Target '__build' not remade because of errors.
+>    make[1]: *** [Makefile:1205: prepare0] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:222: __sub-make] Error 2
+>    make: Target 'prepare' not remade because of errors.
+> 
+> 
+> vim +/NR_PSI_RESOURCES +432 include/linux/cgroup-defs.h
+> 
+>    377	
+>    378	struct cgroup {
+>    379		/* self css with NULL ->ss, points back to this cgroup */
+>    380		struct cgroup_subsys_state self;
+>    381	
+>    382		unsigned long flags;		/* "unsigned long" so bitops work */
+>    383	
+>    384		/*
+>    385		 * The depth this cgroup is at.  The root is at depth zero and each
+>    386		 * step down the hierarchy increments the level.  This along with
+>    387		 * ancestor_ids[] can determine whether a given cgroup is a
+>    388		 * descendant of another without traversing the hierarchy.
+>    389		 */
+>    390		int level;
+>    391	
+>    392		/* Maximum allowed descent tree depth */
+>    393		int max_depth;
+>    394	
+>    395		/*
+>    396		 * Keep track of total numbers of visible and dying descent cgroups.
+>    397		 * Dying cgroups are cgroups which were deleted by a user,
+>    398		 * but are still existing because someone else is holding a reference.
+>    399		 * max_descendants is a maximum allowed number of descent cgroups.
+>    400		 *
+>    401		 * nr_descendants and nr_dying_descendants are protected
+>    402		 * by cgroup_mutex and css_set_lock. It's fine to read them holding
+>    403		 * any of cgroup_mutex and css_set_lock; for writing both locks
+>    404		 * should be held.
+>    405		 */
+>    406		int nr_descendants;
+>    407		int nr_dying_descendants;
+>    408		int max_descendants;
+>    409	
+>    410		/*
+>    411		 * Each non-empty css_set associated with this cgroup contributes
+>    412		 * one to nr_populated_csets.  The counter is zero iff this cgroup
+>    413		 * doesn't have any tasks.
+>    414		 *
+>    415		 * All children which have non-zero nr_populated_csets and/or
+>    416		 * nr_populated_children of their own contribute one to either
+>    417		 * nr_populated_domain_children or nr_populated_threaded_children
+>    418		 * depending on their type.  Each counter is zero iff all cgroups
+>    419		 * of the type in the subtree proper don't have any tasks.
+>    420		 */
+>    421		int nr_populated_csets;
+>    422		int nr_populated_domain_children;
+>    423		int nr_populated_threaded_children;
+>    424	
+>    425		int nr_threaded_children;	/* # of live threaded child cgroups */
+>    426	
+>    427		struct kernfs_node *kn;		/* cgroup kernfs entry */
+>    428		struct cgroup_file procs_file;	/* handle for "cgroup.procs" */
+>    429		struct cgroup_file events_file;	/* handle for "cgroup.events" */
+>    430	
+>    431		/* handles for "{cpu,memory,io,irq}.pressure" */
+>  > 432		struct cgroup_file psi_files[NR_PSI_RESOURCES];
+>    433	
+>    434		/*
+>    435		 * The bitmask of subsystems enabled on the child cgroups.
+>    436		 * ->subtree_control is the one configured through
+>    437		 * "cgroup.subtree_control" while ->subtree_ss_mask is the effective
+>    438		 * one which may have more subsystems enabled.  Controller knobs
+>    439		 * are made available iff it's enabled in ->subtree_control.
+>    440		 */
+>    441		u16 subtree_control;
+>    442		u16 subtree_ss_mask;
+>    443		u16 old_subtree_control;
+>    444		u16 old_subtree_ss_mask;
+>    445	
+>    446		/* Private pointers for each registered subsystem */
+>    447		struct cgroup_subsys_state __rcu *subsys[CGROUP_SUBSYS_COUNT];
+>    448	
+>    449		struct cgroup_root *root;
+>    450	
+>    451		/*
+>    452		 * List of cgrp_cset_links pointing at css_sets with tasks in this
+>    453		 * cgroup.  Protected by css_set_lock.
+>    454		 */
+>    455		struct list_head cset_links;
+>    456	
+>    457		/*
+>    458		 * On the default hierarchy, a css_set for a cgroup with some
+>    459		 * susbsys disabled will point to css's which are associated with
+>    460		 * the closest ancestor which has the subsys enabled.  The
+>    461		 * following lists all css_sets which point to this cgroup's css
+>    462		 * for the given subsystem.
+>    463		 */
+>    464		struct list_head e_csets[CGROUP_SUBSYS_COUNT];
+>    465	
+>    466		/*
+>    467		 * If !threaded, self.  If threaded, it points to the nearest
+>    468		 * domain ancestor.  Inside a threaded subtree, cgroups are exempt
+>    469		 * from process granularity and no-internal-task constraint.
+>    470		 * Domain level resource consumptions which aren't tied to a
+>    471		 * specific task are charged to the dom_cgrp.
+>    472		 */
+>    473		struct cgroup *dom_cgrp;
+>    474		struct cgroup *old_dom_cgrp;		/* used while enabling threaded */
+>    475	
+>    476		/* per-cpu recursive resource statistics */
+>    477		struct cgroup_rstat_cpu __percpu *rstat_cpu;
+>    478		struct list_head rstat_css_list;
+>    479	
+>    480		/* cgroup basic resource statistics */
+>    481		struct cgroup_base_stat last_bstat;
+>    482		struct cgroup_base_stat bstat;
+>    483		struct prev_cputime prev_cputime;	/* for printing out cputime */
+>    484	
+>    485		/*
+>    486		 * list of pidlists, up to two for each namespace (one for procs, one
+>    487		 * for tasks); created on demand.
+>    488		 */
+>    489		struct list_head pidlists;
+>    490		struct mutex pidlist_mutex;
+>    491	
+>    492		/* used to wait for offlining of csses */
+>    493		wait_queue_head_t offline_waitq;
+>    494	
+>    495		/* used to schedule release agent */
+>    496		struct work_struct release_agent_work;
+>    497	
+>    498		/* used to track pressure stalls */
+>    499		struct psi_group *psi;
+>    500	
+>    501		/* used to store eBPF programs */
+>    502		struct cgroup_bpf bpf;
+>    503	
+>    504		/* If there is block congestion on this cgroup. */
+>    505		atomic_t congestion_count;
+>    506	
+>    507		/* Used to store internal freezer state */
+>    508		struct cgroup_freezer_state freezer;
+>    509	
+>    510		/* ids of the ancestors at each level including self */
+>    511		u64 ancestor_ids[];
+>    512	};
+>    513	
+> 

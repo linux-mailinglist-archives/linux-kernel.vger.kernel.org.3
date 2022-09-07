@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435F95B072F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE4C5B07C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiIGOlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        id S230115AbiIGO7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiIGOkj (ORCPT
+        with ESMTP id S230124AbiIGO66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:40:39 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02B26D9FB;
-        Wed,  7 Sep 2022 07:40:37 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MN4d52JXFz6S2Y6;
-        Wed,  7 Sep 2022 22:38:49 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.102.38])
-        by APP2 (Coremail) with SMTP id Syh0CgBH53BgrRhjhP0EAg--.26935S8;
-        Wed, 07 Sep 2022 22:40:35 +0800 (CST)
-From:   Wei Yongjun <weiyongjun@huaweicloud.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wei Yongjun <weiyongjun1@huawei.com>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH -next v2 5/5] misc: microchip: pci1xxxx: use module_auxiliary_driver
-Date:   Wed,  7 Sep 2022 14:58:08 +0000
-Message-Id: <20220907145808.1789249-5-weiyongjun@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220907145808.1789249-1-weiyongjun@huaweicloud.com>
-References: <20220907145808.1789249-1-weiyongjun@huaweicloud.com>
+        Wed, 7 Sep 2022 10:58:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9DEB2745
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662562735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wAgFYn04JWkSi5U/2as7gYF5HiZ1Ev8Ucg8sfjGskc4=;
+        b=guHjeCXGaRlAZYqXpYcL+Mg4scvbST+I4EnBjOJoioli1EUqEVZooo6pAALRGk80vWNUpS
+        WKpm8Tj/KrT1A1AXhlvMFjJX0i/INSD/bnuExiluvlYg3tSjkaVv0seIujOALcGGsfNd9v
+        N454moL7aCE84toIuFtdi1OwmDIFl+M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-438-XaJFF-k5O8G3Wajxg5ExDQ-1; Wed, 07 Sep 2022 10:58:54 -0400
+X-MC-Unique: XaJFF-k5O8G3Wajxg5ExDQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7799E185A7BA;
+        Wed,  7 Sep 2022 14:58:53 +0000 (UTC)
+Received: from T590 (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0597340CF916;
+        Wed,  7 Sep 2022 14:58:46 +0000 (UTC)
+Date:   Wed, 7 Sep 2022 22:58:41 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-raid@vger.kernel.org" <linux-raid@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dusty Mabe <dusty@dustymabe.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Xiao Ni <xni@redhat.com>, Song Liu <song@kernel.org>,
+        Nigel Croxon <ncroxon@redhat.com>
+Subject: Re: regression caused by block: freeze the queue earlier in
+ del_gendisk
+Message-ID: <YxixoYNB0VTc8Zd+@T590>
+References: <017845ae-fbae-70f6-5f9e-29aff2742b8c@dustymabe.com>
+ <YxBZ4BBjxvAkvI2A@T590>
+ <20220907073324.GB23826@lst.de>
+ <YxhYjaA3CrMz5njZ@T590>
+ <44ab9f7d-8f00-5f80-210e-f65f02f6fd82@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH53BgrRhjhP0EAg--.26935S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxJrWftw13tr1kXF4kJw45Awb_yoW8GFWrpF
-        ZxZryUZ34FvanxKF48A3WUZFyrGa1Ik3W2gF9Fy34FqF1DZ3WI9F4jgF98Zr1YqFWUJF1S
-        qr10yFWDGan8JrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r106r1rM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <44ab9f7d-8f00-5f80-210e-f65f02f6fd82@nvidia.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+On Wed, Sep 07, 2022 at 02:40:57PM +0000, Chaitanya Kulkarni wrote:
+> Hi all,
+> 
+> On 9/7/22 01:38, Ming Lei wrote:
+> > On Wed, Sep 07, 2022 at 09:33:24AM +0200, Christoph Hellwig wrote:
+> >> On Thu, Sep 01, 2022 at 03:06:08PM +0800, Ming Lei wrote:
+> >>> It is a bit hard to associate the above commit with reported issue.
+> >>
+> >> So the messages clearly are about something trying to open a device
+> >> that went away at the block layer, but somehow does not get removed
+> >> in time by udev (which seems to be a userspace bug in CoreOS).  But
+> >> even with that we really should not hang.
+> > 
+> > The new device should be allocated from md_probe() via blk_request_module(),
+> > and the underlying devices are virtio-blk from the fedora BZ2121791.
+> > 
+> > [1] https://bugzilla.redhat.com/show_bug.cgi?id=2121791
+> > 
+> > Thanks,
+> > Ming
+> > 
+> 
+> It would be really helpful if mdraid experts can write blktests so it
+> will get tested in the nightly builds along with other tests with
+> different distros.
 
-Use the module_auxiliary_driver() macro to make the code simpler
-by eliminating module_init and module_exit calls.
+Can't agree more, and Cc linux-raid and our raid guys.
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+And looks this one is more related with imsm.
 
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-index fa80a7788596..9cc771c604ed 100644
---- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-@@ -421,19 +421,7 @@ static struct auxiliary_driver pci1xxxx_gpio_driver = {
- 	.probe = pci1xxxx_gpio_probe,
- 	.id_table = pci1xxxx_gpio_auxiliary_id_table
- };
--
--static int __init pci1xxxx_gpio_driver_init(void)
--{
--	return auxiliary_driver_register(&pci1xxxx_gpio_driver);
--}
--
--static void __exit pci1xxxx_gpio_driver_exit(void)
--{
--	auxiliary_driver_unregister(&pci1xxxx_gpio_driver);
--}
--
--module_init(pci1xxxx_gpio_driver_init);
--module_exit(pci1xxxx_gpio_driver_exit);
-+module_auxiliary_driver(pci1xxxx_gpio_driver);
- 
- MODULE_DESCRIPTION("Microchip Technology Inc. PCI1xxxx GPIO controller");
- MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
--- 
-2.34.1
+
+Thanks,
+Ming
 

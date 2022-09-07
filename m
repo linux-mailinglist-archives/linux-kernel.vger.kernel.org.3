@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9A55AFF29
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEDE5AFF2D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiIGIgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S230152AbiIGIgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiIGIgl (ORCPT
+        with ESMTP id S230156AbiIGIgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:36:41 -0400
+        Wed, 7 Sep 2022 04:36:43 -0400
 Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F4C6F54B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:36:10 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id D3BEF2B05906;
-        Wed,  7 Sep 2022 04:36:06 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 07 Sep 2022 04:36:09 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680766EF36
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:36:19 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 4245E2B05918;
+        Wed,  7 Sep 2022 04:36:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 04:36:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1662539766; x=
-        1662546966; bh=Uk/WwEhqzmytlR18RAVkyP8K2TIlpgWEpQQ3SlVp9/0=; b=S
-        83FzDnGva4XnGZyGoLGVJ55IfLYwS5zCQV/3sBb9T3WjW4qcg0KlW6gkQVgiwYqZ
-        unsDTnPBF055FPCW3nhukz6oHSeHIhRhWFSOnqKMqM/4pLujjmCy18bmHs8/YYW2
-        tCbcUiwc4oncSpqnRJxeamUwZ2jDi0tX1lEKRKndPmU/kvrvXUNfdTmN03bGjofl
-        e+qDyAZ6oepMqsN9wOFGgN44LAI9GSWGVJULcF0Kx6aWOpGC1BXUHPLgPyVoRsX9
-        pP+CUnQbUQScJ5WEoI568EKSZ692sLUjAMed3Gjnxeder7Gnqv/Sbv8LOeH5SU5C
-        l/h+yE/GmwB6Ha5EdNlfw==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1662539773; x=
+        1662546973; bh=rLFNfQ2mi/UOeK131VY+ISj9/vvbSVnssaatn4l2ajw=; b=J
+        CjPBQQxAlWPg2C7odV5L7gB7R7vuVeN8kgJQ7iaa28d++BExy7+V5pE4aR8+ZbjH
+        Ib99hn0RC3k9OqLHu3tB5qyHDikiBh4Wg8Ll4TqUB2ucnwVE3dRKoqwqC7reyBbB
+        L4GAFUI4j8D2z9esUCjOH42UW2/uJiUV5Y8Cno7MjENu5Ba8Nba3V4mj2aZFcZX4
+        nAn5UnMzBew5+2S1K8iGPQ90UkDmQBM1k0QF2TIMYfi0ndJXHWlAHissCJP4G8xp
+        qli6HXewXKAjkfBz9TbCgyp39h9GOO6WOxWPwHxM24rQJvIqeBxPctikfMia1O1u
+        4XyGAtO/EkyqK/s3hJE1Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662539766; x=
-        1662546966; bh=Uk/WwEhqzmytlR18RAVkyP8K2TIlpgWEpQQ3SlVp9/0=; b=S
-        I9YfeklyLtkeGnOIz3aOlXLAdWLAvYFpU3R3EgLJ/sgAl/ZFe1IQiuTdjc1SnIUK
-        dwiZFkEcAAsg94bTGXJasjVGWNtz1yo9fq5hfLee1BZRFAjvucdSS8AWf1EPH3LE
-        wf11pXLupwbCCInAZG6YXFMalE5UwW8JWDAqEi8VKwM0aUjN5mKILgE6Jy8gD9QO
-        jgPmY9DUgVpGdW4b1S1tgGCkiTyQPi67tpZt44dINQSjK+gbD+tc7vGmKFO9OgB2
-        9urHl1QmPgIpYHuJtLNukTFnSaDOaro8kI0ojGQlNMUyRrGU4tMD+fXp8pdCeTCL
-        HWWDT3jaf9KVAtJGzZcbA==
-X-ME-Sender: <xms:9lcYY-SnHr6PkRDPliAO_3W4lR3_ZP-2OHGaX-VQLvAEwAeRNUGEyw>
-    <xme:9lcYYzxwCkRb2COzQX9Jo3DCKcLehTooBkhWtIiLbg-zqSXPH1tQb3BtJhJ7sggrY
-    00KHad92ZaBB_IbSpM>
-X-ME-Received: <xmr:9lcYY70J-M8JrnACmZf2NOjDJAKsqidzdQSqHvqVYF263A6Znf687pSkG2I>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662539773; x=
+        1662546973; bh=rLFNfQ2mi/UOeK131VY+ISj9/vvbSVnssaatn4l2ajw=; b=t
+        NCRLRHxqulbbxBV03PmIAmnOKYjLg6BB3AkP51Kd9rwWBgEXLFAEKwAVVL8rEIct
+        k1M0C24iHmsWnGy6e7bfU2n0uwQOzW2N7HwmpwfVip3CNRiailPddb0peJOOmNp6
+        Q/2j6QGCUa/tC8N/VexznK+eeidLaQ4dMcfp9lp+VecRB2+P5SQ0kzJK6uHcDn/6
+        kwbjoZoopdUPnCezeINTW1rgO167o67vbA/vhEbGOnuAiHF7fYr9HkgcoCmwqthA
+        kvR/MCPW9W8lrwrK8EGxeHQsnE0aIPI9j8cYZ8ReokwLYoX4H6eo0LqKnz0EmZsA
+        qI9+dWuF8bC7hGfvpX0vQ==
+X-ME-Sender: <xms:_VcYY3xPXPFnJZN-wnJtxmMSr0kRGTtOMVxgttFEryuKj1LuSlL4tw>
+    <xme:_VcYY_Rb_ckUNXJRr4nC2U0Q4ak94pm7DrtGsIykRFrW_TbSDaB7OU-zj-uTMAEBF
+    rI9MFyrCTGthBr7Rxk>
+X-ME-Received: <xmr:_VcYYxW3zfU4-h0vcRIpL4vSiZOhuMjeYGDBnESxmfLCa99wLBfFLMpyp28>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgtdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgig
     ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
     grthhtvghrnhepueeigefghfffffeifeehudeiuedvteegueefffevgfetvdffheehkeff
-    vedufeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
+    vedufeeinecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrhhomh
     epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:9lcYY6Bfe4rQOrmPyn1qRXzvuKTh0ZpL548llIxbXaf27xDBzIkCiA>
-    <xmx:9lcYY3g7NfJRCF573p_VqQfTMdq-MotXRGsolrvWocNoQCnpF3AsuA>
-    <xmx:9lcYY2q-nldF2vQdv6X6dEjPRKRYMVRKs3-I4OSD-ROh_X3CP1R9aw>
-    <xmx:9lcYY4a_zWv9j_f3p-Qv8NulihF17DXLDfJEYkcaIyjNPjwzGrsY8Xi2j8s>
+X-ME-Proxy: <xmx:_VcYYxg-U71Q2w5G9kqWzUBCLE_kxC4MVisxf1YbAv_u0hVR1hB_pw>
+    <xmx:_VcYY5DEnrCheau8dIKSAgNn4hogEMBIL4hEip9BMVz2bFIbYdnCbw>
+    <xmx:_VcYY6Kt2W31GC47vlQ-ko8X5YaT_S6Hap2yy5dOZkxa3m6DWsfp1Q>
+    <xmx:_VcYY35pKGM0K__e8jjWgvlkINmxNaorg0ufB80uZK39PeT_eXPhHLE2fpY>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 04:36:05 -0400 (EDT)
+ 7 Sep 2022 04:36:12 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     David Airlie <airlied@linux.ie>,
         Samuel Holland <samuel@sholland.org>,
@@ -72,47 +72,48 @@ To:     David Airlie <airlied@linux.ie>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Ben Skeggs <bskeggs@redhat.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
         Emma Anholt <emma@anholt.net>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Lyude Paul <lyude@redhat.com>,
         Karol Herbst <kherbst@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Maxime Ripard <maxime@cerno.tech>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
+Cc:     Dom Cobley <dom@raspberrypi.com>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Dom Cobley <dom@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         intel-gfx@lists.freedesktop.org,
         Phil Elwell <phil@raspberrypi.com>,
-        linux-sunxi@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         nouveau@lists.freedesktop.org
-Subject: Re: (subset) [PATCH v2 37/41] drm/sun4i: tv: Remove useless function
-Date:   Wed,  7 Sep 2022 10:35:06 +0200
-Message-Id: <166253967462.2236193.13305075023961875336.b4-ty@cerno.tech>
+Subject: Re: (subset) [PATCH v2 38/41] drm/sun4i: tv: Remove useless destroy function
+Date:   Wed,  7 Sep 2022 10:35:07 +0200
+Message-Id: <166253967462.2236193.13167889603983513294.b4-ty@cerno.tech>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-37-459522d653a7@cerno.tech>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech> <20220728-rpi-analog-tv-properties-v2-37-459522d653a7@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-38-459522d653a7@cerno.tech>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech> <20220728-rpi-analog-tv-properties-v2-38-459522d653a7@cerno.tech>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 15:11:51 +0200, Maxime Ripard wrote:
-> The drm_connector_to_sun4i_tv() function isn't used anywhere in the driver,
-> so let's remove it.
+On Mon, 29 Aug 2022 15:11:52 +0200, Maxime Ripard wrote:
+> Our destroy implementation is just calling the generic helper, so let's
+> just remove our function and directly use the helper.
 > 
 > 
 

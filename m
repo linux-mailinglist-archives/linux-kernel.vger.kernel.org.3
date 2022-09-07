@@ -2,150 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3265B03BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807165B03BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiIGMPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S230019AbiIGMQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIGMO7 (ORCPT
+        with ESMTP id S229730AbiIGMQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:14:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8BE27FD8;
-        Wed,  7 Sep 2022 05:14:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 08:16:14 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799C3AFAF4;
+        Wed,  7 Sep 2022 05:16:13 -0700 (PDT)
+Received: from smtp102.mailbox.org (unknown [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1186618B8;
-        Wed,  7 Sep 2022 12:14:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6B2C433D6;
-        Wed,  7 Sep 2022 12:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662552897;
-        bh=aZ2WeP3U336s63udprictr4067p8RlQvpxaoMNPC+So=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hzFdNkFe7FXDKMFLXF3Ak1yGqDSjqHDYM1cgeHmZyvL3wRZhLI+o5x/fppba/nQXr
-         BmzuvTkpIOpwukz1ple0VUnSDKKXXHuR8cL0hOt1dZYUjuS040Pjx4DdG6cEXM+Ess
-         yUG4iczoGb/1Mj0OaaQXTFseDLpSpKVBT/lHieKa6DHojxysT7iLAp/A2I0IjLJWPV
-         kl1kBGyeIsdrCNqIVdzFcORbNp4E7HfCT2qi2+cKy9wwjWUN21FKPvd3ECXaeax6Yv
-         aZEuaYpYRO9RmBTKVf93H2OychjIDjn9OKs3abmlWxE5mKD0xw/84ji/zbOGohq+/h
-         Hf9/1INmx37mw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oVtxG-008dZY-V5;
-        Wed, 07 Sep 2022 13:14:55 +0100
-Date:   Wed, 07 Sep 2022 13:14:54 +0100
-Message-ID: <87k06fv0sh.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, eric.auger@redhat.com,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        puneet.gupta@amd.com, song.bao.hua@hisilicon.com,
-        mchehab+huawei@kernel.org, f.fainelli@gmail.com,
-        jeffrey.l.hugo@gmail.com, saravanak@google.com,
-        Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com,
-        will@kernel.org, joro@8bytes.org, masahiroy@kernel.org,
-        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org,
-        harpreet.anand@amd.com, nikhil.agarwal@amd.com,
-        michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
-Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its domain as parent
-In-Reply-To: <4ca6383e-bd21-59bf-cc4e-cf3313164957@arm.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
-        <20220906134801.4079497-1-nipun.gupta@amd.com>
-        <20220906134801.4079497-5-nipun.gupta@amd.com>
-        <YxeBCsA32jnwMjSj@nvidia.com>
-        <87leqvv3g7.wl-maz@kernel.org>
-        <4ca6383e-bd21-59bf-cc4e-cf3313164957@arm.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: robin.murphy@arm.com, jgg@nvidia.com, nipun.gupta@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org, rafael@kernel.org, eric.auger@redhat.com, alex.williamson@redhat.com, cohuck@redhat.com, puneet.gupta@amd.com, song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com, saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com, will@kernel.org, joro@8bytes.org, masahiroy@kernel.org, ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com, michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4MN1SP2TzJz9sQ8;
+        Wed,  7 Sep 2022 14:16:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1662552965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Yu0YYVQDoYE6h44bljdx59LHutNAwWTa6raWx+wgdJY=;
+        b=kTqf0AbE7OoeDFyfj4tPj9eCngCfCk48PBitWUWKhtb5MbsvOQCDuUmSEKdwBhdHr6HB8N
+        FFnbWibYDy83/AT7Ot9iStqXx6MfzvAGXqW/II4iUf6AXLx9Fw9lbwnQ58uDRWCnPwRXdo
+        1B2cdwISNDzxZx6+Zd+OSJW93xLsQ4aq/NWAaio8E1VJnyJVxKUbDAJObHhrFUF4tagBW1
+        oFzc1buzxnF1zsoYN3lB8PbHMF7L7IHBtHM3ur045a6FJmVOWdkX31gc1O+AI5Pf2MDsuC
+        sFN6i8yAeWX3mebZifdZQZpo0i0qtgB7FvtSEemC1a1tVf604/UJALULCquNTg==
+Date:   Wed, 7 Sep 2022 14:16:04 +0200 (CEST)
+From:   torvic9@mailbox.org
+To:     "arequipeno@gmail.com" <arequipeno@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>
+Message-ID: <2047607620.67144.1662552964865@office.mailbox.org>
+Subject: Re: [PATCH v10 0/2] Introduce block device LED trigger
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-MBO-RS-ID: c254649fcc8c57e5546
+X-MBO-RS-META: 3meupxmoo81x8pbr15p4aja9n8y1isna
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Sep 2022 12:33:12 +0100,
-Robin Murphy <robin.murphy@arm.com> wrote:
-> 
-> On 2022-09-07 12:17, Marc Zyngier wrote:
-> > On Tue, 06 Sep 2022 18:19:06 +0100,
-> > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >> 
-> >> On Tue, Sep 06, 2022 at 07:17:58PM +0530, Nipun Gupta wrote:
-> >> 
-> >>> +static void cdx_msi_write_msg(struct irq_data *irq_data,
-> >>> +			      struct msi_msg *msg)
-> >>> +{
-> >>> +	/*
-> >>> +	 * Do nothing as CDX devices have these pre-populated
-> >>> +	 * in the hardware itself.
-> >>> +	 */
-> >>> +}
-> >> 
-> >> Huh?
-> >> 
-> >> There is no way it can be pre-populated, the addr/data pair,
-> >> especially on ARM, is completely under SW control.
-> > 
-> > There is nothing in the GIC spec that says that.
-> > 
-> >> There is some commonly used IOVA base in Linux for the ITS page, but
-> >> no HW should hardwire that.
-> > 
-> > That's not strictly true. It really depends on how this block is
-> > integrated, and there is a number of existing blocks that know *in HW*
-> > how to signal an LPI.
-> > 
-> > See, as the canonical example, how the mbigen driver doesn't need to
-> > know about the address of GITS_TRANSLATER.
-> > 
-> > Yes, this messes with translation (the access is downstream of the
-> > SMMU) if you relied on it to have some isolation, and it has a "black
-> > hole" effect as nobody can have an IOVA that overlaps with the
-> > physical address of the GITS_TRANSLATER register.
-> > 
-> > But is it illegal as per the architecture? No. It's just stupid.
-> 
-> If that were the case, then we'd also need a platform quirk so the
-> SMMU driver knows about it. Yuck.
+Hi Ian,
 
-Yup. As I said, this is stupid.
+with a heavily patched Linux 6.0-rc4 with kfence, kmemleak and slub_debug I get the
+following splat at boot:
 
-> But even then, are you suggesting there is some way to convince the
-> ITS driver to allocate a specific predetermined EventID when a driver
-> requests an MSI? Asking for a friend...
+Sep 07 11:33:11 kernel: =============================================================================
+Sep 07 11:33:11 kernel: BUG kmalloc-16 (Not tainted): Object already free
+Sep 07 11:33:11 kernel: -----------------------------------------------------------------------------
+Sep 07 11:33:11 kernel: Allocated in kernfs_fop_write_iter+0x178/0x200 age=1 cpu=0 pid=453
+Sep 07 11:33:11 kernel:  __slab_alloc.constprop.0+0x42/0x80
+Sep 07 11:33:11 kernel:  __kmalloc+0x334/0x3a0
+Sep 07 11:33:11 kernel:  kernfs_fop_write_iter+0x178/0x200
+Sep 07 11:33:11 kernel:  vfs_write+0x268/0x430
+Sep 07 11:33:11 kernel:  ksys_write+0x6f/0xf0
+Sep 07 11:33:11 kernel:  do_syscall_64+0x5c/0x90
+Sep 07 11:33:11 kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Sep 07 11:33:11 kernel: Freed in blkdev_trig_get_bdev+0x47/0x60 [ledtrig_blkdev] age=1 cpu=0 pid=453
+Sep 07 11:33:11 kernel:  kfree+0x374/0x3b0
+Sep 07 11:33:11 kernel:  blkdev_trig_get_bdev+0x47/0x60 [ledtrig_blkdev]
+Sep 07 11:33:11 kernel:  link_dev_by_path_store+0x5c/0x3f0 [ledtrig_blkdev]
+Sep 07 11:33:11 kernel:  kernfs_fop_write_iter+0x11f/0x200
+Sep 07 11:33:11 kernel:  vfs_write+0x268/0x430
+Sep 07 11:33:11 kernel:  ksys_write+0x6f/0xf0
+Sep 07 11:33:11 kernel:  do_syscall_64+0x5c/0x90
+Sep 07 11:33:11 kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Sep 07 11:33:11 kernel: Slab 0xffffeb91446ad1c0 objects=32 used=31 fp=0xffff912c1ab47b10 flags=0x4000000000000201(locked|slab|zone=2)
+Sep 07 11:33:11 kernel: Object 0xffff912c1ab47b10 @offset=2832 fp=0x0000000000000000
+Sep 07 11:33:11 kernel: Redzone  ffff912c1ab47b00: bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+Sep 07 11:33:11 kernel: Object   ffff912c1ab47b10: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
+Sep 07 11:33:11 kernel: Redzone  ffff912c1ab47b20: bb bb bb bb bb bb bb bb                          ........
+Sep 07 11:33:11 kernel: Padding  ffff912c1ab47b70: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a  ZZZZZZZZZZZZZZZZ
+[...]
+Sep 07 11:33:11 kernel: Call Trace:
+Sep 07 11:33:11 kernel:  <TASK>
+Sep 07 11:33:11 kernel:  dump_stack_lvl+0x37/0x4a
+Sep 07 11:33:11 kernel:  object_err+0x2f/0x42
+Sep 07 11:33:11 kernel:  free_debug_processing.cold+0x9c/0x126
+Sep 07 11:33:11 kernel:  ? kernfs_fop_write_iter+0xa0/0x200
+Sep 07 11:33:11 kernel:  __slab_free+0x265/0x450
+Sep 07 11:33:11 kernel:  ? _raw_spin_lock_irqsave+0x1b/0x50
+Sep 07 11:33:11 kernel:  ? _raw_spin_unlock_irqrestore+0x22/0x40
+Sep 07 11:33:11 kernel:  ? kernfs_fop_write_iter+0xa0/0x200
+Sep 07 11:33:11 kernel:  kfree+0x374/0x3b0
+Sep 07 11:33:11 kernel:  kernfs_fop_write_iter+0xa0/0x200
+Sep 07 11:33:11 kernel:  vfs_write+0x268/0x430
+Sep 07 11:33:11 kernel:  ksys_write+0x6f/0xf0
+Sep 07 11:33:11 kernel:  do_syscall_64+0x5c/0x90
+Sep 07 11:33:11 kernel:  ? do_syscall_64+0x6b/0x90
+Sep 07 11:33:11 kernel:  ? do_syscall_64+0x6b/0x90
+Sep 07 11:33:11 kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Sep 07 11:33:11 kernel: RIP: 0033:0x74dc50050e94
+Sep 07 11:33:11 kernel: Code: 15 f9 0e 0e 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 80 3d 8d 96 0e 00 00 74 13 b8 01 00 00 00 0f 05 <48> 3>
+Sep 07 11:33:11 kernel: RSP: 002b:00007fff526d4058 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
+Sep 07 11:33:11 kernel: RAX: ffffffffffffffda RBX: 000000000000000c RCX: 000074dc50050e94
+Sep 07 11:33:11 kernel: RDX: 000000000000000c RSI: 0000620ac0072430 RDI: 0000000000000005
+Sep 07 11:33:11 kernel: RBP: 0000620ac0072430 R08: 0000620ac00852a0 R09: 007265776f703a3a
+Sep 07 11:33:11 kernel: R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000005
+Sep 07 11:33:11 kernel: R13: 0000000000000000 R14: 0000000000000005 R15: 0000620ac00852a0
+Sep 07 11:33:11 kernel:  </TASK>
+Sep 07 11:33:11 kernel: Disabling lock debugging due to kernel taint
+Sep 07 11:33:11 kernel: FIX kmalloc-16: Object at 0xffff912c1ab47b10 not freed
 
-Of course not. Whoever did that has decided to hardcode the Linux
-behaviour into the HW, because it is well known that SW behaviour
-never changes. Nononono.
+I'm not 100% sure if this is an issue with ledtrig_blkdev or something else,
+but I thought I'll let you know about it.
+I have not been able to test this on a vanilla kernel yet.
 
-I am >this< tempted to sneak a change into the allocation scheme to
-start at 5 or 13 (alternatively), and to map LPIs top-down. That
-should get people thinking.
+Other than that, I hope this patchset gets included in upstream.
+I have been using it for a long time now and found it very useful.
 
 Cheers,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Tor

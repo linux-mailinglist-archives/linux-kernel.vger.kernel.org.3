@@ -2,149 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F225B0F1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B4E5B0F28
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiIGV16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S230162AbiIGVbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiIGV1z (ORCPT
+        with ESMTP id S229660AbiIGVb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:27:55 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9577B8F13;
-        Wed,  7 Sep 2022 14:27:52 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2EB531F9DF;
-        Wed,  7 Sep 2022 23:27:49 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 23:27:47 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: Add PM6125 PMIC
-Message-ID: <20220907212747.i2y6qi75avhavyr4@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-References: <20220805135729.1037079-1-marijn.suijten@somainline.org>
- <20220805135729.1037079-4-marijn.suijten@somainline.org>
- <4cef00b4-c184-ae78-3709-5ed520ca3375@linaro.org>
+        Wed, 7 Sep 2022 17:31:28 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111C1B14CF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:31:26 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id p5so4494284ljc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 14:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:from:to:cc:subject:date;
+        bh=ZfOYfQtThYd/KyFSNNpcBedgaTk1E4F3yRLEgfbAULY=;
+        b=VRxQGzqTWKt5NLlk4/wdj2oLSzWbBr8RLMvN8dSsLKXanZhEt7wkBCuhODX+wBxFOB
+         YTpixeZ69A3ll346PHc6UjYp+sEzIa6jvWfNAroxoqXtG5fVeMQheB6W+g903B1RFpz1
+         Cq3FJ1B6nb2XHFOxcTYykeMACstiOgC0BbqUGmbqeBL8KimqxYHmULsWon3QTQym9BKH
+         4tn2ZzTYfcyZoD58/obnR57g9KQEGRzIJEUkqSJhjiK++7tIBUFFCrIZUPnUwja+oNgc
+         CcQHsGOjipzC9jRFhpGz7LhorgQnalnrEH6Qtdhj0qE1s727C/8tslBuXXnbF6Tutr9I
+         97Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZfOYfQtThYd/KyFSNNpcBedgaTk1E4F3yRLEgfbAULY=;
+        b=6MSQ+x84+VI1Agv/8AgZzYO0UJU1wTcNCtd0Ui8veqyrgrkAiw9atD+iCwe/c9uWgn
+         kfcYp36bKRHCFIUg5eXK37xLYRqRBmfPeqaip08Miz/DjI9Cs0sA3xFyoLylRL0M5uw7
+         bg+sR1RB0svKb2GdlEJyBf1dAcufe1azJVx00kO7P2gS89+oIlarsRmLCp6XrJRhzk16
+         YxDxdBbuNoNlZhveUIzLLt5UGEsqaFk+ES8CNw2+Hfq0yLoF1jWvkGoOKZRhf39NxXxY
+         uGYQaY2iFkNsOEqHPEp2jBGpIcES3LoOjePSCmopIryJZOfmZ9i4BZuLZS6ouxgtNg/7
+         tfRg==
+X-Gm-Message-State: ACgBeo368Q3OhtWDktzWQlNgby5YYmmIxkMHK939H34q3yCrlTfqN/Ne
+        oj30tESid5QRiGNwwNiUSK0=
+X-Google-Smtp-Source: AA6agR63jg/DfvolpHhSn3tY0Cl+lM71H7YGuQTXytiA5QL42uEm7EIa+ryHFFQxZzUJpplqg82nJg==
+X-Received: by 2002:a2e:804a:0:b0:26b:66d3:4d51 with SMTP id p10-20020a2e804a000000b0026b66d34d51mr172137ljg.293.1662586284210;
+        Wed, 07 Sep 2022 14:31:24 -0700 (PDT)
+Received: from ?IPV6:2a02:a31a:a240:1700:e929:c054:a46d:3844? ([2a02:a31a:a240:1700:e929:c054:a46d:3844])
+        by smtp.googlemail.com with ESMTPSA id p20-20020a2e9a94000000b0026acfe1b3b4sm549047lji.17.2022.09.07.14.31.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 14:31:23 -0700 (PDT)
+From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
+X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Message-ID: <dc1d9499-d4d5-1032-f39f-d4ac4cbb8412@gmail.com>
+Date:   Wed, 7 Sep 2022 23:31:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cef00b4-c184-ae78-3709-5ed520ca3375@linaro.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.1
+Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
+ display modes
+Content-Language: pl
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+ <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
+ <20220905133755.gcmmntg3wnecyqjq@houat>
+ <10ce686a-d7c8-9ce4-3979-735ad8eab3b5@gmail.com>
+ <20220907143421.4iopqwhp3yfircsh@houat>
+In-Reply-To: <20220907143421.4iopqwhp3yfircsh@houat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-08 12:17:06, Krzysztof Kozlowski wrote:
-> On 05/08/2022 16:57, Marijn Suijten wrote:
-> > This PMIC is commonly used on boards with an SM6125 SoC and looks very
-> > similar in layout to the PM6150.
-> > 
-> > Downstream declares more nodes to be available, but these have been
-> > omitted from this patch: the pwm/lpg block is unused on my reference
-> > device making it impossible to test/validate, and the spmi-clkdiv does
-> > not have a single device-tree binding using this driver yet, hence
-> > inclusion is better postponed until ie. audio which uses these clocks is
-> > brought up.
-> > 
-> 
-> Thank you for your patch. There is something to discuss/improve.
+Hi Maxime,
 
-I can respin the series with the suggested changes (and the iio patch
-removed as that has now been applied), but note that all other PMIC dtsi
-files as of -next today still carry the "wrong" adc-tm or gpios node
-names.  Are there plans to patch those up too (if not already in a
-series that I missed)?
+W dniu 7.09.2022 o 16:34, Maxime Ripard pisze:
+> On Mon, Sep 05, 2022 at 06:44:42PM +0200, Mateusz Kwiatkowski wrote:
+>> Hi Maxime,
+>>
+>> W dniu 5.09.2022 o 15:37, Maxime Ripard pisze:
+>>>>> +    vfp = vfp_min + (porches_rem / 2);
+>>>>> +    vbp = porches - vfp;
+>>>>
+>>>> Relative position of the vertical sync within the VBI effectively moves the
+>>>> image up and down. Adding that (porches_rem / 2) moves the image up off center
+>>>> by that many pixels. I'd keep the VFP always at minimum to keep the image
+>>>> centered.
+>>>
+>>> And you would increase the back porch only then?
+>>
+>> Well, increasing vbp only gives a centered image with the default 480i/576i
+>> resolutions. However, only ever changing vbp will cause the image to be always
+>> at the bottom of the screen when the active line count is decreased (e.g.
+>> setting the resolution to 720x480 but for 50Hz "PAL" - like many game consoles
+>> did back in the day).
+>>
+>> I believe that the perfect solution would:
+>>
+>> - Use the canonical / standard-defined blanking line counts for the standard
+>>   vertical resolutions (480/486/576)
+>> - Increase vfp and vbp from there by the same number if a smaller number of
+>>   active lines is specified, so that the resulting image is centered
+>> - Likewise, decrease vfp and vbp by the same number if the active line number
+>>   is larger and there is still leeway (this should allow for seamless handling
+>>   of 480i vs. 486i for 60 Hz "NTSC")
+>
+> I'm not sure I understand how that's any different than the code you
+> initially commented on.
+>
+> I would start by taking the entire blanking area, remove the sync
+> period. We only have the two porches now, and I'm starting from the
+> minimum, adding as many pixels in both (unless it's not an even number,
+> in which case the backporch will have the extra pixel).
+>
+> Isn't it the same thing?
+> [...]
+> Unless you only want me to consider the front porch maximum?
 
-- Marijn
+I think you're confusing the "post-equalizing pulses" with the "vertical back
+porch" a little bit. The "vertical back porch" includes both the post-equalizing
+pulses and the entire rest of the VBI period, for the standard resolutions at
+least.
 
-> > +
-> > +			xo-therm@4c {
-> > +				reg = <ADC5_XO_THERM_100K_PU>;
-> > +				qcom,pre-scaling = <1 1>;
-> > +				qcom,hw-settle-time = <200>;
-> > +				qcom,ratiometric;
-> > +			};
-> > +		};
-> > +
-> > +		pm6125_adc_tm: adc-tm@3500 {
-> 
-> Generic node names, so either this is adc or thermal-sensor. Looks like
-> thermal-sensor.
-> 
-> > +			compatible = "qcom,spmi-adc-tm5";
-> > +			reg = <0x3500>;
-> > +			interrupts = <0x0 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> > +			#thermal-sensor-cells = <1>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		pm6125_rtc: rtc@6000 {
-> > +			compatible = "qcom,pm8941-rtc";
-> > +			reg = <0x6000>, <0x6100>;
-> > +			reg-names = "rtc", "alarm";
-> > +			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		pm6125_gpio: gpios@c000 {
-> 
-> s/gpios/gpio/
-> 
-> > +			compatible = "qcom,pm6125-gpio", "qcom,spmi-gpio";
-> > +			reg = <0xc000>;
-> > +			gpio-controller;
-> > +			gpio-ranges = <&pm6125_gpio 0 0 9>;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +		};
-> > +	};
-> > +
-> > +	pmic@1 {
-> > +		compatible = "qcom,pm6125", "qcom,spmi-pmic";
-> > +		reg = <0x1 SPMI_USID>;
-> > +	};
-> > +};
-> 
-> 
-> Best regards,
-> Krzysztof
+The "canonical" modelines (at least for vc4's VEC, see the notes below):
+
+- (vfp==4, vsync==6, vbp==39) for 576i
+- (vfp==7, vsync==6, vbp==32) for 480i
+- (vfp==5, vsync==6, vbp==28) for 486i (full frame NTSC as originally specified)
+
+The numbers for vfp don't exactly match the theoretical values, because:
+
+- VEC actually adds a half-line pulse on top of VFP_ODD, and in the 625-line
+  mode also on top of VFP_EVEN (not always, but let's not dwell too much)
+- Conversely, VEC subtracts the half-line pulse from VSYNC_ODD and VSYNC_EVEN
+  in the 625-line mode
+- SMPTE S170M (see https://www.itu.int/rec/R-REC-BT.1700-0-200502-I/en) defines
+  that active picture for NTSC is on lines 21-263 and 283-525; 263 and 283 are
+  half-lines that are represented as full lines in the "486i" spec
+- SMPTE 314M, which is the spec for DV, defines the 480 active lines as lines
+  23-262 and 285-524; see Table 20 on page 26 in
+  https://last.hit.bme.hu/download/firtha/video/SMPTE/SMPTE-314M%20DV25-50.pdf;
+  this means that the standard 480i frame shaves off four topmost and two
+  bottommost lines (2 and 1 per field) of the 486i full frame
+
+Note that the half-line pulses in vfp/vsync may be generated in a different way
+on encoders other than vc4's VEC. Maybe we should define some concrete
+semantics for vfp/vsync in analog TV modes, and compensate for that in the
+drivers. But anyway, that's a separate issue.
+
+My point is that, to get a centered image, you can then proportionately add
+values to those "canonical" vfp/vbp values. For example if someone specifies
+720x480 frame, but 50 Hz PAL, you should set (vfp==52, vsync==6, vbp==87).
+Those extra vbp lines will be treated as a black bar at the top of the frame,
+and extra vfp lines will be at the bottom of the frame.
+
+However if someone specifies e.g. 720x604, there's nothing more you could
+remove from vfp, so your only option is to reduce vbp compared to the standard
+mode, so you'll end up with (vfp==4, vsync==6, vbp==11). The image will not be
+centered, the topmost lines will get cropped out, but that's the best we can do
+and if someone is requesting such resolution, they most likely want to actually
+access the VBI to e.g. emit teletext.
+
+Your current code always starts at (vfp==5 or 6, vsync=6, vbp==6) and then
+increases both vfp and vbp proportionately. This puts vsync dead center in the
+VBI, which is not how it's supposed to be - and that in turn causes the image
+to be significantly shifted upwards.
+
+I hope this makes more sense to you now.
+
+Best regards,
+Mateusz Kwiatkowski

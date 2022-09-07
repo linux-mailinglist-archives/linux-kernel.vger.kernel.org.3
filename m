@@ -2,247 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4273A5B05A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83E35B05A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiIGNs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S229791AbiIGNsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIGNsU (ORCPT
+        with ESMTP id S229685AbiIGNsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Sep 2022 09:48:20 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6439AB48C
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66DB29
         for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:48:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1662558499; x=1694094499;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G6HlQVdMdBhCXUF/CrQKealiVh2uZtP+3MVwZrFwfdU=;
-  b=gWXjzXBDv1FQjMob6EuNhltTW2er6LtiA969BRDqBKsTCvIV1E/bQo7X
-   38AtFaUKbRlLFRZLFPZ5ziNfEieZj38T/NWHeC3kp2/crS6smx71SIcIp
-   JW0WWTt7mwqHSmaxDK3ao9s7O3B/0aR/xqOJmWImbi3QJEhGCLPhwJ/Zi
-   dwfMnpaYsFmWI9QcG6OncxxZN1ZiZ6G1WqkcFdw49mwDetKhzCEFJ+Vi2
-   VUh4ThyHaFC6S3e5+xMeSp+FgwALKK9KvgB3z/9EdinfN8Q8nAnzc3k8S
-   nLEUdhGO0LvJZOPFtyMGEf7OHg8yUf7cSKmFyng8KQolDKuRKykaWGlQR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="296873371"
+  bh=2hq9VsMNI2YsNBzowapDtlL+tQ7fFahjo10RC0uEpMc=;
+  b=F1f8P3OicNN5EldLOsTrHx85IhCJcn4V+HhRh31ap+HkV1F/AWOdHnRY
+   LUhtrJV8vYegtHkQ+Qfq+cW7X4sP3KJFB35xRccpesUaKMGIonmVXxWx0
+   VR1lVRI4ax5GKaoGqIL+vuykEc0HeMl3eV1rNre8D6qB8zwIQptb+IxKv
+   G0wF4WBinpjmA+5K1oWLWw1NlYxH4vr/Ne1by+/CKTEvGl3KaRKu5xUlN
+   X/k7ctEdptxlo5XC3DjF2ZX4A0iapudf22bC4/W4ug0zPSCFZGqhsqShX
+   guROfgv7S93tkiPYy8zMz3xBlUd1g5HuTQMwkgoLvc2hztD2ifCFqxl+H
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="279885603"
 X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="296873371"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:48:19 -0700
+   d="scan'208";a="279885603"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:48:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="647636746"
+   d="scan'208";a="942893438"
 Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 07 Sep 2022 06:48:17 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 07 Sep 2022 06:48:17 -0700
 Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oVvPc-0006cZ-2k;
+        id 1oVvPc-0006cT-2a;
         Wed, 07 Sep 2022 13:48:16 +0000
-Date:   Wed, 7 Sep 2022 21:47:41 +0800
+Date:   Wed, 7 Sep 2022 21:47:42 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: net/bpf/test_run.c:249:1: warning: no previous declaration for
- 'bpf_kfunc_call_test_acquire'
-Message-ID: <202209072132.nwoItdQm-lkp@intel.com>
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: [mani-mhi:mhi-next 2/3] drivers/bus/mhi/host/pci_generic.c:734:60:
+ error: assignment of member 'irq' in read-only object
+Message-ID: <202209072144.lWoBySRH-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0066f1b0e27556381402db3ff31f85d2a2265858
-commit: c1ff181ffabc292abcd1832a1c83aac2bc499e71 selftests/bpf: Extend kfunc selftests
-date:   8 months ago
-config: x86_64-randconfig-a003-20220829 (https://download.01.org/0day-ci/archive/20220907/202209072132.nwoItdQm-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git mhi-next
+head:   0a3b31f6259f4849e4e93731d4c8d7910be072a7
+commit: 4a98958ca237a4b7974ea1ec2092b3666bdd26ab [2/3] bus: mhi: host: make mhi_controller_config::event_cfg const
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220907/202209072144.lWoBySRH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1ff181ffabc292abcd1832a1c83aac2bc499e71
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c1ff181ffabc292abcd1832a1c83aac2bc499e71
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git/commit/?id=4a98958ca237a4b7974ea1ec2092b3666bdd26ab
+        git remote add mani-mhi https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git
+        git fetch --no-tags mani-mhi mhi-next
+        git checkout 4a98958ca237a4b7974ea1ec2092b3666bdd26ab
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/bpf/
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   net/bpf/test_run.c:171:14: warning: no previous declaration for 'bpf_fentry_test1' [-Wmissing-declarations]
-    int noinline bpf_fentry_test1(int a)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:176:14: warning: no previous declaration for 'bpf_fentry_test2' [-Wmissing-declarations]
-    int noinline bpf_fentry_test2(int a, u64 b)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:181:14: warning: no previous declaration for 'bpf_fentry_test3' [-Wmissing-declarations]
-    int noinline bpf_fentry_test3(char a, int b, u64 c)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:186:14: warning: no previous declaration for 'bpf_fentry_test4' [-Wmissing-declarations]
-    int noinline bpf_fentry_test4(void *a, char b, int c, u64 d)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:191:14: warning: no previous declaration for 'bpf_fentry_test5' [-Wmissing-declarations]
-    int noinline bpf_fentry_test5(u64 a, void *b, short c, int d, u64 e)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:196:14: warning: no previous declaration for 'bpf_fentry_test6' [-Wmissing-declarations]
-    int noinline bpf_fentry_test6(u64 a, void *b, short c, int d, void *e, u64 f)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:205:14: warning: no previous declaration for 'bpf_fentry_test7' [-Wmissing-declarations]
-    int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:210:14: warning: no previous declaration for 'bpf_fentry_test8' [-Wmissing-declarations]
-    int noinline bpf_fentry_test8(struct bpf_fentry_test_t *arg)
-                 ^~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:215:14: warning: no previous declaration for 'bpf_modify_return_test' [-Wmissing-declarations]
-    int noinline bpf_modify_return_test(int a, int *b)
-                 ^~~~~~~~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:221:14: warning: no previous declaration for 'bpf_kfunc_call_test1' [-Wmissing-declarations]
-    u64 noinline bpf_kfunc_call_test1(struct sock *sk, u32 a, u64 b, u32 c, u64 d)
-                 ^~~~~~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:226:14: warning: no previous declaration for 'bpf_kfunc_call_test2' [-Wmissing-declarations]
-    int noinline bpf_kfunc_call_test2(struct sock *sk, u32 a, u32 b)
-                 ^~~~~~~~~~~~~~~~~~~~
-   net/bpf/test_run.c:231:24: warning: no previous declaration for 'bpf_kfunc_call_test3' [-Wmissing-declarations]
-    struct sock * noinline bpf_kfunc_call_test3(struct sock *sk)
-                           ^~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:249:1: warning: no previous declaration for 'bpf_kfunc_call_test_acquire' [-Wmissing-declarations]
-    bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr)
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:257:15: warning: no previous declaration for 'bpf_kfunc_call_test_release' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:299:15: warning: no previous declaration for 'bpf_kfunc_call_test_pass_ctx' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:303:15: warning: no previous declaration for 'bpf_kfunc_call_test_pass1' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:307:15: warning: no previous declaration for 'bpf_kfunc_call_test_pass2' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:311:15: warning: no previous declaration for 'bpf_kfunc_call_test_fail1' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:315:15: warning: no previous declaration for 'bpf_kfunc_call_test_fail2' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_fail2(struct prog_test_fail2 *p)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:319:15: warning: no previous declaration for 'bpf_kfunc_call_test_fail3' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_fail3(struct prog_test_fail3 *p)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:323:15: warning: no previous declaration for 'bpf_kfunc_call_test_mem_len_pass1' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:327:15: warning: no previous declaration for 'bpf_kfunc_call_test_mem_len_fail1' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/test_run.c:331:15: warning: no previous declaration for 'bpf_kfunc_call_test_mem_len_fail2' [-Wmissing-declarations]
-    noinline void bpf_kfunc_call_test_mem_len_fail2(u64 *mem, int len)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/mhi/host/pci_generic.c: In function 'mhi_pci_get_irqs':
+>> drivers/bus/mhi/host/pci_generic.c:734:60: error: assignment of member 'irq' in read-only object
+     734 |                         mhi_cntrl_config->event_cfg[i].irq = 0;
+         |                                                            ^
 
 
-vim +/bpf_kfunc_call_test_acquire +249 net/bpf/test_run.c
+vim +/irq +734 drivers/bus/mhi/host/pci_generic.c
 
-   247	
-   248	noinline struct prog_test_ref_kfunc *
- > 249	bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr)
-   250	{
-   251		/* randomly return NULL */
-   252		if (get_jiffies_64() % 2)
-   253			return NULL;
-   254		return &prog_test_struct;
-   255	}
-   256	
- > 257	noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
-   258	{
-   259	}
-   260	
-   261	struct prog_test_pass1 {
-   262		int x0;
-   263		struct {
-   264			int x1;
-   265			struct {
-   266				int x2;
-   267				struct {
-   268					int x3;
-   269				};
-   270			};
-   271		};
-   272	};
-   273	
-   274	struct prog_test_pass2 {
-   275		int len;
-   276		short arr1[4];
-   277		struct {
-   278			char arr2[4];
-   279			unsigned long arr3[8];
-   280		} x;
-   281	};
-   282	
-   283	struct prog_test_fail1 {
-   284		void *p;
-   285		int x;
-   286	};
-   287	
-   288	struct prog_test_fail2 {
-   289		int x8;
-   290		struct prog_test_pass1 x;
-   291	};
-   292	
-   293	struct prog_test_fail3 {
-   294		int len;
-   295		char arr1[2];
-   296		char arr2[0];
-   297	};
-   298	
- > 299	noinline void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb)
-   300	{
-   301	}
-   302	
- > 303	noinline void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p)
-   304	{
-   305	}
-   306	
- > 307	noinline void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p)
-   308	{
-   309	}
-   310	
- > 311	noinline void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
-   312	{
-   313	}
-   314	
- > 315	noinline void bpf_kfunc_call_test_fail2(struct prog_test_fail2 *p)
-   316	{
-   317	}
-   318	
- > 319	noinline void bpf_kfunc_call_test_fail3(struct prog_test_fail3 *p)
-   320	{
-   321	}
-   322	
- > 323	noinline void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
-   324	{
-   325	}
-   326	
- > 327	noinline void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
-   328	{
-   329	}
-   330	
- > 331	noinline void bpf_kfunc_call_test_mem_len_fail2(u64 *mem, int len)
-   332	{
-   333	}
-   334	
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  708  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  709  static int mhi_pci_get_irqs(struct mhi_controller *mhi_cntrl,
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  710  			    const struct mhi_controller_config *mhi_cntrl_config)
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  711  {
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  712  	struct pci_dev *pdev = to_pci_dev(mhi_cntrl->cntrl_dev);
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  713  	int nr_vectors, i;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  714  	int *irq;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  715  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  716  	/*
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  717  	 * Alloc one MSI vector for BHI + one vector per event ring, ideally...
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  718  	 * No explicit pci_free_irq_vectors required, done by pcim_release.
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  719  	 */
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  720  	mhi_cntrl->nr_irqs = 1 + mhi_cntrl_config->num_events;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  721  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  722  	nr_vectors = pci_alloc_irq_vectors(pdev, 1, mhi_cntrl->nr_irqs, PCI_IRQ_MSI);
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  723  	if (nr_vectors < 0) {
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  724  		dev_err(&pdev->dev, "Error allocating MSI vectors %d\n",
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  725  			nr_vectors);
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  726  		return nr_vectors;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  727  	}
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  728  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  729  	if (nr_vectors < mhi_cntrl->nr_irqs) {
+b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  730  		dev_warn(&pdev->dev, "using shared MSI\n");
+b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  731  
+b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  732  		/* Patch msi vectors, use only one (shared) */
+b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  733  		for (i = 0; i < mhi_cntrl_config->num_events; i++)
+b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05 @734  			mhi_cntrl_config->event_cfg[i].irq = 0;
+b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  735  		mhi_cntrl->nr_irqs = 1;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  736  	}
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  737  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  738  	irq = devm_kcalloc(&pdev->dev, mhi_cntrl->nr_irqs, sizeof(int), GFP_KERNEL);
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  739  	if (!irq)
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  740  		return -ENOMEM;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  741  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  742  	for (i = 0; i < mhi_cntrl->nr_irqs; i++) {
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  743  		int vector = i >= nr_vectors ? (nr_vectors - 1) : i;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  744  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  745  		irq[i] = pci_irq_vector(pdev, vector);
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  746  	}
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  747  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  748  	mhi_cntrl->irq = irq;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  749  
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  750  	return 0;
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  751  }
+855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  752  
+
+:::::: The code at line 734 was first introduced by commit
+:::::: b91c3b30e2267265cd7e67cb3d0c99c48c02b001 mhi: pci_generic: Fix shared MSI vector support
+
+:::::: TO: Loic Poulain <loic.poulain@linaro.org>
+:::::: CC: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service

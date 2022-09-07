@@ -2,71 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D725AFE54
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC185AFE5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiIGIA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S230141AbiIGIBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiIGIAl (ORCPT
+        with ESMTP id S230131AbiIGIAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:00:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414265071F;
-        Wed,  7 Sep 2022 01:00:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 04:00:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AE832ED4;
+        Wed,  7 Sep 2022 01:00:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D401E615FC;
-        Wed,  7 Sep 2022 08:00:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27C8BC433B5;
-        Wed,  7 Sep 2022 08:00:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662537639;
-        bh=QBqwKvr0O1/H8f5NlSJlsM2t7ip7n9qToMpPyjgEBho=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=SCtyPwlZIQx9XS/noPjcVxrfGEHBDisTtrUzT4RorXLno0S1CCwUoK9ASFw/5fvrZ
-         g7ddpnSF9hOy/hWjIMJb/oJaQ3ToZC6pI7nDP55ON+/aqWp2QVffzyUM0n3zS9iWap
-         P5wQoLbdOOdUpCrkRXeQnGZhQyPKwmVd5p0FJc+XjCvvz05EToRew+17UFdR8Oe6jQ
-         /Pnh/J6q59oPjxRn5bkA3pnKe9wKui+dwsHSXljJKP9xEe40TP5xq9S5T+cbmPNWLw
-         8k+aP0A2CI8T1b6nDK0ulB9BRG5fZcQIIzc8EWX4fgEcq4PhF0nz5BTw9frVbxY2rL
-         CU7mIdhzyBWzw==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] bcma: Fix typo in comments
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220811152043.11446-1-dengshaomin@cdjrlc.com>
-References: <20220811152043.11446-1-dengshaomin@cdjrlc.com>
-To:     Shaomin Deng <dengshaomin@cdjrlc.com>
-Cc:     zajec5@gmail.com, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shaomin Deng <dengshaomin@cdjrlc.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <166253763613.23292.13993862811761388522.kvalo@kernel.org>
-Date:   Wed,  7 Sep 2022 08:00:37 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B8BB61F897;
+        Wed,  7 Sep 2022 08:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662537646; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MTS0xkpOCWUUwhJ2Fb/pObZ9XY5ZZUSzn2pLirlZ190=;
+        b=L2usALx8nlG2n7FXPK6l8HHte8IfBqWbOU+7ruF+DFWa5w5WR7Gw7Zh9YCf4jxfUVLEdRx
+        ss4YIQlCt78Fl4VQC/WBU1IQrzm2xArVLncGeYuZUTiv7CnFhJZ0rOGmy565N5PnYV3SGP
+        Yd6z2pNzvoE4EvqsP4vHLDr8WcDWQZw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662537646;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MTS0xkpOCWUUwhJ2Fb/pObZ9XY5ZZUSzn2pLirlZ190=;
+        b=mHn7DM52lTy5mR8njdQ2Muu5243mMdz5cfQimepAQG7RawghOa5f3FT1wPn4vu8hmR4YP+
+        1P2830mzNLk0UyCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9290813A66;
+        Wed,  7 Sep 2022 08:00:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tTLqIq5PGGO6CQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 07 Sep 2022 08:00:46 +0000
+Date:   Wed, 07 Sep 2022 10:00:46 +0200
+Message-ID: <87czc7ehqp.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        =?ISO-8859-4?Q?Nikl=E0vs_Ko=B6es=F1ikovs?= 
+        <89q1r14hd@relay.firefox.com>, Wim Taymans <wtaymans@redhat.com>
+Subject: Re: [PATCH] ALSA: usb-audio: Don't refcount multiple accesses on the single clock
+In-Reply-To: <CAHmME9oUtVgwtUY5afG5Yed1j6OVKwvLH=keCp63gDSOQRgDSA@mail.gmail.com>
+References: <20220905101403.1435037-1-Jason@zx2c4.com>
+        <87sfl6jbb3.wl-tiwai@suse.de>
+        <CAHmME9oUtVgwtUY5afG5Yed1j6OVKwvLH=keCp63gDSOQRgDSA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shaomin Deng <dengshaomin@cdjrlc.com> wrote:
-
-> Remove the repeated word "registers" in comments.
+On Mon, 05 Sep 2022 14:16:39 +0200,
+Jason A. Donenfeld wrote:
 > 
-> Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+> On Mon, Sep 5, 2022 at 1:44 PM Takashi Iwai <tiwai@suse.de> wrote:
+> > When you load snd-usb-audio with dyndbg=+p option, does it show the
+> > new error message "Mismatched sample rate xxx"?
+> 
+> No.
 
-Patch applied to wireless-next.git, thanks.
+What about the patch below?
 
-5db68fd31958 bcma: Fix typo in comments
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220811152043.11446-1-dengshaomin@cdjrlc.com/
+Takashi
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+-- 8< --
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -925,6 +925,8 @@ void snd_usb_endpoint_close(struct snd_usb_audio *chip,
+ 		endpoint_set_interface(chip, ep, false);
+ 
+ 	if (!--ep->opened) {
++		if (ep->clock_ref && !atomic_read(&ep->clock_ref->locked))
++			ep->clock_ref->rate = 0;
+ 		ep->iface = 0;
+ 		ep->altsetting = 0;
+ 		ep->cur_audiofmt = NULL;

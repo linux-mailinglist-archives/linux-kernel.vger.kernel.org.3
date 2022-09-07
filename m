@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA705AFB87
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DF45AFB88
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiIGFFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
+        id S229605AbiIGFGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiIGFFg (ORCPT
+        with ESMTP id S229541AbiIGFGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:05:36 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540BA7C1FB;
-        Tue,  6 Sep 2022 22:05:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662527135; x=1694063135;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3hKO8goXwPPBPFjOJolVzOo3e+yHPR0/w089nXehW1I=;
-  b=I0+tJ5eH0fHbcnrVEk4XkXfsu9ZIKm3I58yG/glLDcLygbPErXRkPjAe
-   /QlQdsLkbHzqDz/QhamHV4GU4yx9wxp5UaMBbLS/J2B9R5NbcnZNLBIbN
-   WRJL7d9CIHJYh9JEweEUzOuZQVl4vO9dUpaYxBSz6/JL+/rF1WVMs5XPW
-   Bq7x0DfXoWKebnu8D3IbekbYDjhj4M9PHP2UtVMNeQdfVsFwG4goKkSFg
-   J2oo5bjGk1UzBpqzlUghKjYgulHQM9BAeRDoovdRZd6uXanLoYFP/NwDE
-   CmIANsu7D+oRHS/C10hBdOXKY2IgEB/j6D/mhxAJW4q5MjBtYmFKtt/pX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="383076154"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="383076154"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 22:05:35 -0700
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="676011657"
-Received: from alinassi-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.27])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 22:05:31 -0700
-Message-ID: <4763358a-91fa-3607-dd54-749b40f977fc@intel.com>
-Date:   Wed, 7 Sep 2022 08:05:27 +0300
+        Wed, 7 Sep 2022 01:06:32 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003307C514
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:06:30 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-11eab59db71so33283716fac.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 22:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=PuiKfvs0LWAFr8O4tXDEiRE5L2gc12ma++oYFMovvEU=;
+        b=HiAdJ/axcwhcheeTKmxwxPlJ3kkpkpWVXXbMlfVAxshrVHB3RXTsEPc76wdtNg++Ul
+         hs4GW0KDXPNwRfjyV1Vx9TSn/VpKF56LdGj0hygoXLfkabTG4kCC47aNL7OS+anUL8NU
+         SHAGzhw4jhbjLjoGYRQVK8ly5/zLCX8nWH1MMTGJ2E9d93z2ozA455tVTjdP/fVASAG7
+         Eml7f5DqE2LL6uCi7afSC2RvsH1Yo7W+fYTLrXxh386gXmQNCgX/nHjAZ0uje/zGU3tH
+         3Hwh38WZoY+WSAuFEzxl0oOniXN6S1jtzddhoUCscPpQUsBy0JhbZJ/u9AnkRN/9XnLu
+         Sjrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=PuiKfvs0LWAFr8O4tXDEiRE5L2gc12ma++oYFMovvEU=;
+        b=I/dDYEXJyLOyPcWLyoupSi6I2VHSIejGO65ikvdyBMNzN8DdWSlYWQXCooroTwnl/L
+         bL0CUtUkWYaPVsyfN3Mrco+4kawrjtliKf4fBfSAjTSbWDrmesEQxLEmZ0oZXyyeJFG8
+         iw4SfYSh8M6P61Vx8Kvi113cp2exKjxI8jPtRc0qco7DAtOJjj0XuGBWfFTF5dq9yThI
+         3sn8vjuQOXmNlIFhhl31ib9FmiO7jC9gnwnCheqnNK+Hc5shNVYYDS8ukO4r6X2G7rua
+         jlNDLMu63J6uYdPUDSRbTN+Npe7kkAYYbpwygGtWwBYoAzhmct6tpkpfFYyCUwXiJvUD
+         I5+Q==
+X-Gm-Message-State: ACgBeo2wrtb5dDEEd9zh58XR2gW0dr2kemhLkj8iuR5/ctrQf/K2SVgq
+        ngBjaShOFoXyoTQ5ZdDq8jRshr/lnK8U+xMpdFF69w==
+X-Google-Smtp-Source: AA6agR68KEmYYa6UEG7EGujrK2R8QAdI92tuwkfI6jdcPL7421NRztQt6frx3ojGnuI2XSq/LIK2lBPgUVyLYIJYg9Y=
+X-Received: by 2002:a05:6870:41d0:b0:126:5d06:28a5 with SMTP id
+ z16-20020a05687041d000b001265d0628a5mr895080oac.181.1662527189600; Tue, 06
+ Sep 2022 22:06:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH V2] libperf evlist: Fix per-thread mmaps for
- multi-threaded targets
-Content-Language: en-US
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20220905114209.8389-1-adrian.hunter@intel.com>
- <YxdEQkmkZjBC6wGb@krava> <60b5c9bf-4ec9-957e-17dd-aa0a50411ff9@intel.com>
- <YxejRK2/LO7QouOZ@krava>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <YxejRK2/LO7QouOZ@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220906081604.24035-1-likexu@tencent.com> <CALMp9eSQYp-BC_hERH0jzqY1gKU3HLV2YnJDjaAoR7DxRQu=fQ@mail.gmail.com>
+ <2c9c1e8a-7ab5-8052-3e99-b4ebfd61edde@gmail.com>
+In-Reply-To: <2c9c1e8a-7ab5-8052-3e99-b4ebfd61edde@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 6 Sep 2022 22:06:18 -0700
+Message-ID: <CALMp9eRzmKAs5SvTjrG7+het7zfJqk2bFuU1fdqf8pFB2+0qvw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/pmu: omit "impossible" Intel counter MSRs from
+ MSR list
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,135 +72,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/09/22 22:45, Jiri Olsa wrote:
-> On Tue, Sep 06, 2022 at 05:04:45PM +0300, Adrian Hunter wrote:
->> On 6/09/22 15:59, Jiri Olsa wrote:
->>> On Mon, Sep 05, 2022 at 02:42:09PM +0300, Adrian Hunter wrote:
->>>
->>> SNIP
->>>
->>>> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
->>>> index e6c98a6e3908..6b1bafe267a4 100644
->>>> --- a/tools/lib/perf/evlist.c
->>>> +++ b/tools/lib/perf/evlist.c
->>>> @@ -486,6 +486,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->>>>  			if (ops->idx)
->>>>  				ops->idx(evlist, evsel, mp, idx);
->>>>  
->>>> +			pr_debug("idx %d: mmapping fd %d\n", idx, *output);
->>>>  			if (ops->mmap(map, mp, *output, evlist_cpu) < 0)
->>>>  				return -1;
->>>>  
->>>> @@ -494,6 +495,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->>>>  			if (!idx)
->>>>  				perf_evlist__set_mmap_first(evlist, map, overwrite);
->>>>  		} else {
->>>> +			pr_debug("idx %d: set output fd %d -> %d\n", idx, fd, *output);
->>>>  			if (ioctl(fd, PERF_EVENT_IOC_SET_OUTPUT, *output) != 0)
->>>>  				return -1;
->>>>  
->>>> @@ -519,6 +521,48 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->>>>  	return 0;
->>>>  }
->>>>  
->>>> +static int
->>>> +mmap_per_thread(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->>>> +		struct perf_mmap_param *mp)
->>>> +{
->>>> +	int nr_threads = perf_thread_map__nr(evlist->threads);
->>>> +	int nr_cpus    = perf_cpu_map__nr(evlist->all_cpus);
->>>> +	int cpu, thread, idx = 0;
->>>> +	int nr_mmaps = 0;
->>>> +
->>>> +	pr_debug("%s: nr cpu values (may include -1) %d nr threads %d\n",
->>>> +		 __func__, nr_cpus, nr_threads);
->>>
->>> -1 as cpu value is only for 'empty' perf_cpu_map, right?
->>
->> The cpu map is a map of valid 3rd arguments to perf_event_open, so -1
->> means all CPUs which is per-thread by necessity.
->>
->>>
->>>> +
->>>> +	/* per-thread mmaps */
->>>> +	for (thread = 0; thread < nr_threads; thread++, idx++) {
->>>> +		int output = -1;
->>>> +		int output_overwrite = -1;
->>>> +
->>>> +		if (mmap_per_evsel(evlist, ops, idx, mp, 0, thread, &output,
->>>> +				   &output_overwrite, &nr_mmaps))
->>>> +			goto out_unmap;
->>>> +	}
->>>> +
->>>> +	/* system-wide mmaps i.e. per-cpu */
->>>> +	for (cpu = 1; cpu < nr_cpus; cpu++, idx++) {
->>>> +		int output = -1;
->>>> +		int output_overwrite = -1;
->>>> +
->>>> +		if (mmap_per_evsel(evlist, ops, idx, mp, cpu, 0, &output,
->>>> +				   &output_overwrite, &nr_mmaps))
->>>> +			goto out_unmap;
->>>> +	}
->>>
->>> will this loop be executed? we are in here because all_cpus is empty, right?
->>
->> Yes it is executed.  I put back the code that was there before ae4f8ae16a07
->> ("libperf evlist: Allow mixing per-thread and per-cpu mmaps"), which uses
-> 
-> hm, but commit ae4f8ae16a07 does not have similar cpu loop
+On Tue, Sep 6, 2022 at 8:25 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> On 7/9/2022 8:37 am, Jim Mattson wrote:
+> > On Tue, Sep 6, 2022 at 1:16 AM Like Xu <like.xu.linux@gmail.com> wrote:
+> >>
+> >> From: Like Xu <likexu@tencent.com>
+> >>
+> >> According to Intel April 2022 SDM - Table 2-2. IA-32 Architectural MSRs,
+> >> combined with the address reservation ranges of PERFCTRx, EVENTSELy, and
+> >> MSR_IA32_PMCz, the theoretical effective maximum value of the Intel GP
+> >> counters is 14, instead of 18:
+> >>
+> >>    14 = 0xE = min (
+> >>      0xE = IA32_CORE_CAPABILITIES (0xCF) - IA32_PMC0 (0xC1),
+> >>      0xF = IA32_OVERCLOCKING_STATUS (0x195) - IA32_PERFEVTSEL0 (0x186),
+> >>      0xF = IA32_MCG_EXT_CTL (0x4D0) - IA32_A_PMC0 (0x4C1)
+> >>    )
+> >>
+> >> the source of the incorrect number may be:
+> >>    18 = 0x12 = IA32_PERF_STATUS (0x198) - IA32_PERFEVTSEL0 (0x186)
+> >> but the range covers IA32_OVERCLOCKING_STATUS, which is also architectural.
+> >> Cut the list to 14 entries to avoid false positives.
+> >>
+> >> Cc: Kan Liang <kan.liang@linux.intel.com>
+> >> Cc: Jim Mattson <jamttson@google.com>
+> >
+> > That should be 'jmattson.'
+>
+> Oops, my fault.
+>
+> >
+> >> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> >> Fixes: cf05a67b68b8 ("KVM: x86: omit "impossible" pmu MSRs from MSR list")
+> >
+> > I'm not sure I completely agree with the "Fixes," since
+> > IA32_OVERCLOCKING_STATUS didn't exist back then. However, Paolo did
+> > make the incorrect assumption that Intel wouldn't cut the range even
+> > further with the introduction of new MSRs.
+>
+> This new msr is added in April 2022.
+>
+> Driver-like software had to keep up with real hardware changes and
+> speculatively with potential predictable hardware changes until failure.
+>
+> >
+> > To that point, aren't you setting yourself up for a future "Fixes"
+> > referencing this change?
+>
+> (1) We have precedents like be4f3b3f8227;
+> (2) Fixes tags is introduced to help stable trees' maintainers (and their robot
+> selectors)
+> absorb suitable patches like this one. We can expect similar issues with stable
+> trees running
+> on new hardware without this fix.
+> (3) Fixing the tags does not feather the developer's nest, on the contrary the
+> upstream code
+> itself as a vehicle for our group knowledge, is reinforced.
+> >
+> > We should probably stop at the maximum number of GP PMCs supported
+> > today (8, I think).
+>
+> I actually thought that at first, until I saw the speculative offset +17 :D.
 
-It was calling mmap_per_cpu() for that case.
+The root cause of all of this pain is commit a072738e04f0 ("perf, x86:
+Implement initial P4 PMU driver"). It bumped X86_PMC_MAX_GENERIC from
+8 to 32. That eventually mutated into INTEL_PMC_MAX_GENERIC, which is
+what I consulted when I originally added the Intel PMU MSRs to
+msrs_to_save[] in
+commit e2ada66ec418 ("kvm: x86: Add Intel PMU MSRs to
+msrs_to_save[]"). My bad for just assuming that I knew what
+INTEL_PMC_MAX_GENERIC meant, based solely on its name!
 
-The 2 cases: mmap_per_cpu() and mmap_per_thread() could still be
-combined into a single function.
+Paolo fixed my commit by reducing the list to 18 PMCs, because of the
+known conflict at the time. (Note that the SDM says that there are
+actually only 18 PMCs on the P4, but I don't think Paolo factored this
+into his change.)
 
-> 
->> perf_cpu_map__empty() which only checks the first entry is -1:
->>
->> bool perf_cpu_map__empty(const struct perf_cpu_map *map)
->> {
->> 	return map ? map->map[0].cpu == -1 : true;
->> }
->>
->> But there can be more CPUs in the map, so perf_cpu_map__empty()
->> returns true for the per-thread case, as desired, even if there
->> are also system-wide CPUs.
-> 
-> I don't see how, if I'd see -1 together with other cpu values in
-> perf_cpu_map I'd think it's a bug, but I might be missing some
-> auxtrace usage,
-
-Yes, it is for system-wide collection of events that can affect
-every CPU.  Currently text_poke is always system-wide - see the
-Intel PT example.
-
-> 
-> I thought we use -1 just for empty cpu map, so in per-thread case
-> -1 is properly passed to perf_event_open syscall
-
-Yes, but it does not need to be limited to that case.
-
-> 
-> jirka
-> 
->>
->> I guess perf_cpu_map__empty() needs renaming.
->>
->>>
->>> thanks,
->>> jirka
->>>
->>>> +
->>>> +	if (nr_mmaps != evlist->nr_mmaps)
->>>> +		pr_err("Miscounted nr_mmaps %d vs %d\n", nr_mmaps, evlist->nr_mmaps);
->>>> +
->>>> +	return 0;
->>>> +
->>>> +out_unmap:
->>>> +	perf_evlist__munmap(evlist);
->>>> +	return -1;
->>>> +}
->>>
->>> SNIP
->>
-
+This is all the more reason *not* to put a static list of PMU MSRs
+into msrs_to_save[], but to dynamically add the PMU MSRs supported on
+the host. If you're on a P4, there will be 18 of them, but they range
+from 0x300 to 0x311.

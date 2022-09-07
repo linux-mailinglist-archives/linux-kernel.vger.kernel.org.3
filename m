@@ -2,161 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC555AF903
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5E25AF90A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiIGAht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S229547AbiIGAls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiIGAhr (ORCPT
+        with ESMTP id S229453AbiIGAlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:37:47 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91F885F86
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:37:45 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1279948d93dso12521603fac.10
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=uGgfGldOff2mVxZyVVSAqWj/XJ4BgayJCyvmb6JurzI=;
-        b=WGZd1/dO/NI+78DXs3vJRpCy11kM7V+gJDTstBI+Thu6ifPTHExhi2rTWsoOHYblbT
-         zGXquzL+PXM7xtXU0jPtq8foZxAbhe/j1ekopE4vncQlBSkLtLCgKyD6ozoU7wwCIs8n
-         fvfMD9xxMiRGiT6QHKHKngdjO2OdhhzkQi74qOjnz09uZZ1j+bwZTjzV4YnoeWknY/DK
-         8/kGb+EcL4tPc6K0O8lNPTfvsqX2NycCkBtKzAgjNVGR8B+Ln12ljO4gUZVu3w7UN/4w
-         9DPCtD8Oxfzw/hH8jNPeM4k02i6BToKFbv/ndYyBbPq7PioMzEreXUfqYY+RIpqtHBGR
-         7rlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uGgfGldOff2mVxZyVVSAqWj/XJ4BgayJCyvmb6JurzI=;
-        b=mgKfnE2nrPua3FGMkf/1rhWBoMBlHnDYstoEiAceLB4I8Z7x5T0LLvH7KYi0mKHlD8
-         mSEApcjB8ZLP4rg5BvqNO6huvWGzYtd0VanYvjRCkRmnUBT3xKKjouBxJyp57iOf97Ie
-         A62h/6BYXfkdQgxpkOQ6GJT4Ro4B8AN3T+sc5hyHamfDK7eHVTnI5vp1feSdNqrbielX
-         KoE27efn4yX2YzszLpaUx2f5JienVwWPXReJphDRfqJ6ofrtO7QV3mocxO2aDol501ks
-         PFMmWC1W/HXA5veur1KuV7qN0A/Pl9Kxu38pk8LkKdfWehvzAPtMDbALohQlTwLGPLcx
-         Jt0g==
-X-Gm-Message-State: ACgBeo3J2yOlysN46isv9uqGDLJ9ykY9KQ7RNYxDJuLBlCxU77qq7qUi
-        ohw/OOo3GZr+lzV6YquJk3oq/0xc90hnaesjrMKEqQ==
-X-Google-Smtp-Source: AA6agR59d9raM42PVaHIYoR50vWSZ+rIfc+UKbqN0AqnbobHfZAb6bwDEe25Px99HfKZFoSE1DHjpa+LPv0QVP50jag=
-X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
- ba22-20020a056870c59600b001016409ae62mr12916953oab.112.1662511064988; Tue, 06
- Sep 2022 17:37:44 -0700 (PDT)
+        Tue, 6 Sep 2022 20:41:46 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A458B868A2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:41:44 -0700 (PDT)
+Received: from chenhuacai$loongson.cn ( [112.20.112.163] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Wed, 7 Sep 2022 08:41:39
+ +0800 (GMT+08:00)
+X-Originating-IP: [112.20.112.163]
+Date:   Wed, 7 Sep 2022 08:41:39 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
+To:     "kernel test robot" <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Jianmin Lv" <lvjianmin@loongson.cn>
+Subject: Re: irq-loongarch-cpu.c:undefined reference to `eiointc_acpi_init'
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
+ Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
+In-Reply-To: <202209070736.fHnylLIQ-lkp@intel.com>
+References: <202209070736.fHnylLIQ-lkp@intel.com>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: puah9GZvb3Rlcl90eHQ9MjIxNzo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-References: <20220906081604.24035-1-likexu@tencent.com>
-In-Reply-To: <20220906081604.24035-1-likexu@tencent.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 6 Sep 2022 17:37:33 -0700
-Message-ID: <CALMp9eSQYp-BC_hERH0jzqY1gKU3HLV2YnJDjaAoR7DxRQu=fQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/pmu: omit "impossible" Intel counter MSRs from
- MSR list
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jamttson@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <2bbd9483.639f.18315653cd0.Coremail.chenhuacai@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf8BxP+DD6BdjjDQTAA--.4106W
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQACBmMXOFsMEwAAsN
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 1:16 AM Like Xu <like.xu.linux@gmail.com> wrote:
->
-> From: Like Xu <likexu@tencent.com>
->
-> According to Intel April 2022 SDM - Table 2-2. IA-32 Architectural MSRs,
-> combined with the address reservation ranges of PERFCTRx, EVENTSELy, and
-> MSR_IA32_PMCz, the theoretical effective maximum value of the Intel GP
-> counters is 14, instead of 18:
->
->   14 = 0xE = min (
->     0xE = IA32_CORE_CAPABILITIES (0xCF) - IA32_PMC0 (0xC1),
->     0xF = IA32_OVERCLOCKING_STATUS (0x195) - IA32_PERFEVTSEL0 (0x186),
->     0xF = IA32_MCG_EXT_CTL (0x4D0) - IA32_A_PMC0 (0x4C1)
->   )
->
-> the source of the incorrect number may be:
->   18 = 0x12 = IA32_PERF_STATUS (0x198) - IA32_PERFEVTSEL0 (0x186)
-> but the range covers IA32_OVERCLOCKING_STATUS, which is also architectural.
-> Cut the list to 14 entries to avoid false positives.
->
-> Cc: Kan Liang <kan.liang@linux.intel.com>
-> Cc: Jim Mattson <jamttson@google.com>
-
-That should be 'jmattson.'
-
-> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Fixes: cf05a67b68b8 ("KVM: x86: omit "impossible" pmu MSRs from MSR list")
-
-I'm not sure I completely agree with the "Fixes," since
-IA32_OVERCLOCKING_STATUS didn't exist back then. However, Paolo did
-make the incorrect assumption that Intel wouldn't cut the range even
-further with the introduction of new MSRs.
-
-To that point, aren't you setting yourself up for a future "Fixes"
-referencing this change?
-
-We should probably stop at the maximum number of GP PMCs supported
-today (8, I think).
-
-If Intel doubles the number of PMCs to remain competitive with AMD,
-they'll probably put PMCs 8-15 in a completely different range of MSR
-indices.
-
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/kvm/x86.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 43a6a7efc6ec..98cdd4221447 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1431,8 +1431,6 @@ static const u32 msrs_to_save_all[] = {
->         MSR_ARCH_PERFMON_PERFCTR0 + 8, MSR_ARCH_PERFMON_PERFCTR0 + 9,
->         MSR_ARCH_PERFMON_PERFCTR0 + 10, MSR_ARCH_PERFMON_PERFCTR0 + 11,
->         MSR_ARCH_PERFMON_PERFCTR0 + 12, MSR_ARCH_PERFMON_PERFCTR0 + 13,
-> -       MSR_ARCH_PERFMON_PERFCTR0 + 14, MSR_ARCH_PERFMON_PERFCTR0 + 15,
-> -       MSR_ARCH_PERFMON_PERFCTR0 + 16, MSR_ARCH_PERFMON_PERFCTR0 + 17,
->         MSR_ARCH_PERFMON_EVENTSEL0, MSR_ARCH_PERFMON_EVENTSEL1,
->         MSR_ARCH_PERFMON_EVENTSEL0 + 2, MSR_ARCH_PERFMON_EVENTSEL0 + 3,
->         MSR_ARCH_PERFMON_EVENTSEL0 + 4, MSR_ARCH_PERFMON_EVENTSEL0 + 5,
-> @@ -1440,8 +1438,6 @@ static const u32 msrs_to_save_all[] = {
->         MSR_ARCH_PERFMON_EVENTSEL0 + 8, MSR_ARCH_PERFMON_EVENTSEL0 + 9,
->         MSR_ARCH_PERFMON_EVENTSEL0 + 10, MSR_ARCH_PERFMON_EVENTSEL0 + 11,
->         MSR_ARCH_PERFMON_EVENTSEL0 + 12, MSR_ARCH_PERFMON_EVENTSEL0 + 13,
-> -       MSR_ARCH_PERFMON_EVENTSEL0 + 14, MSR_ARCH_PERFMON_EVENTSEL0 + 15,
-> -       MSR_ARCH_PERFMON_EVENTSEL0 + 16, MSR_ARCH_PERFMON_EVENTSEL0 + 17,
->         MSR_IA32_PEBS_ENABLE, MSR_IA32_DS_AREA, MSR_PEBS_DATA_CFG,
->
->         MSR_K7_EVNTSEL0, MSR_K7_EVNTSEL1, MSR_K7_EVNTSEL2, MSR_K7_EVNTSEL3,
-> @@ -6943,12 +6939,12 @@ static void kvm_init_msr_list(void)
->                                 intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
->                                 continue;
->                         break;
-> -               case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
-> +               case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 13:
->                         if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
->                             min(INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
->                                 continue;
->                         break;
-> -               case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
-> +               case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 13:
->                         if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
->                             min(INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
->                                 continue;
-> --
-> 2.37.3
->
+SSB0aGluayB0aGlzIGNhbiBiZSBmaXhlZCBhZnRlciB0aGlzIHBhdGNoIGJlIG1lcmdlZDoKaHR0
+cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIyMDgwODA4NTMxOS4zMzUwMTExLTEtY2hlbmh1
+YWNhaUBsb29uZ3Nvbi5jbi8KCj4gLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQo+IOWPkeS7tuS6ujog
+Imtlcm5lbCB0ZXN0IHJvYm90IiA8bGtwQGludGVsLmNvbT4KPiDlj5HpgIHml7bpl7Q6MjAyMi0w
+OS0wNyAwNzo1MDo0NCAo5pif5pyf5LiJKQo+IOaUtuS7tuS6ujogIkh1YWNhaSBDaGVuIiA8Y2hl
+bmh1YWNhaUBsb29uZ3Nvbi5jbj4KPiDmioTpgIE6IGtidWlsZC1hbGxAbGlzdHMuMDEub3JnLCBs
+aW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCAiTWFyYyBaeW5naWVyIiA8bWF6QGtlcm5lbC5v
+cmc+LCAiSmlhbm1pbiBMdiIgPGx2amlhbm1pbkBsb29uZ3Nvbi5jbj4KPiDkuLvpopg6IGlycS1s
+b29uZ2FyY2gtY3B1LmM6dW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgZWlvaW50Y19hY3BpX2luaXQn
+Cj4gCj4gSGkgSHVhY2FpLAo+IAo+IEZZSSwgdGhlIGVycm9yL3dhcm5pbmcgc3RpbGwgcmVtYWlu
+cy4KPiAKPiB0cmVlOiAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJu
+ZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdCBtYXN0ZXIKPiBoZWFkOiAgIGQyZWM3OTlkMWMxYmU4
+NDdkNmE3MDcwNGZlNTg2YWM0ZDE0MjY1YzgKPiBjb21taXQ6IGIyZDNlMzM1NGUyYTBkMGU5MTIz
+MDg2MThlYTMzZDAzMzdmNDA1YzMgaXJxY2hpcDogQWRkIExvb25nQXJjaCBDUFUgaW50ZXJydXB0
+IGNvbnRyb2xsZXIgc3VwcG9ydAo+IGRhdGU6ICAgNyB3ZWVrcyBhZ28KPiBjb25maWc6IGxvb25n
+YXJjaC1yYW5kY29uZmlnLXIwMTEtMjAyMjA5MDYKPiBjb21waWxlcjogbG9vbmdhcmNoNjQtbGlu
+dXgtZ2NjIChHQ0MpIDEyLjEuMAo+IHJlcHJvZHVjZSAodGhpcyBpcyBhIFc9MSBidWlsZCk6Cj4g
+ICAgICAgICB3Z2V0IGh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9pbnRlbC9sa3At
+dGVzdHMvbWFzdGVyL3NiaW4vbWFrZS5jcm9zcyAtTyB+L2Jpbi9tYWtlLmNyb3NzCj4gICAgICAg
+ICBjaG1vZCAreCB+L2Jpbi9tYWtlLmNyb3NzCj4gICAgICAgICAjIGh0dHBzOi8vZ2l0Lmtlcm5l
+bC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC9jb21taXQv
+P2lkPWIyZDNlMzM1NGUyYTBkMGU5MTIzMDg2MThlYTMzZDAzMzdmNDA1YzMKPiAgICAgICAgIGdp
+dCByZW1vdGUgYWRkIGxpbnVzIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9r
+ZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdAo+ICAgICAgICAgZ2l0IGZldGNoIC0tbm8tdGFn
+cyBsaW51cyBtYXN0ZXIKPiAgICAgICAgIGdpdCBjaGVja291dCBiMmQzZTMzNTRlMmEwZDBlOTEy
+MzA4NjE4ZWEzM2QwMzM3ZjQwNWMzCj4gICAgICAgICAjIHNhdmUgdGhlIGNvbmZpZyBmaWxlCj4g
+ICAgICAgICBta2RpciBidWlsZF9kaXIgJiYgY3AgY29uZmlnIGJ1aWxkX2Rpci8uY29uZmlnCj4g
+ICAgICAgICBDT01QSUxFUl9JTlNUQUxMX1BBVEg9JEhPTUUvMGRheSBDT01QSUxFUj1nY2MtMTIu
+MS4wIG1ha2UuY3Jvc3MgVz0xIE89YnVpbGRfZGlyIEFSQ0g9bG9vbmdhcmNoIFNIRUxMPS9iaW4v
+YmFzaAo+IAo+IElmIHlvdSBmaXggdGhlIGlzc3VlLCBraW5kbHkgYWRkIGZvbGxvd2luZyB0YWcg
+d2hlcmUgYXBwbGljYWJsZQo+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGlu
+dGVsLmNvbT4KPiAKPiBBbGwgZXJyb3JzIChuZXcgb25lcyBwcmVmaXhlZCBieSA+Pik6Cj4gCj4g
+ICAgbG9vbmdhcmNoNjQtbGludXgtbGQ6IGRyaXZlcnMvaXJxY2hpcC9pcnEtbG9vbmdhcmNoLWNw
+dS5vOiBpbiBmdW5jdGlvbiBgZWlvaW50Y19wYXJzZV9tYWR0JzoKPiA+PiBpcnEtbG9vbmdhcmNo
+LWNwdS5jOiguaW5pdC50ZXh0KzB4MTApOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBlaW9pbnRj
+X2FjcGlfaW5pdCcKPiAgICBsb29uZ2FyY2g2NC1saW51eC1sZDogZHJpdmVycy9pcnFjaGlwL2ly
+cS1sb29uZ3Nvbi1wY2gtcGljLm86IGluIGZ1bmN0aW9uIGBwY2hfbHBjX3BhcnNlX21hZHQnOgo+
+ICAgIGlycS1sb29uZ3Nvbi1wY2gtcGljLmM6KC5pbml0LnRleHQrMHgxNCk6IHVuZGVmaW5lZCBy
+ZWZlcmVuY2UgdG8gYHBjaF9scGNfYWNwaV9pbml0Jwo+IAo+IC0tIAo+IDAtREFZIENJIEtlcm5l
+bCBUZXN0IFNlcnZpY2UKPiBodHRwczovLzAxLm9yZy9sa3AKDQoNCuacrOmCruS7tuWPiuWFtumZ
+hOS7tuWQq+aciem+meiKr+S4reenkeeahOWVhuS4muenmOWvhuS/oeaBr++8jOS7hemZkOS6juWP
+kemAgee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaIlue+pOe7hOOAguemgeatouS7
+u+S9leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWMheaLrOS9huS4jemZkOS6juWF
+qOmDqOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuaIluaVo+WPke+8ieacrOmCruS7tuWPiuWF
+tumZhOS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuacrOmCruS7tu+8jOivt+aCqOer
+i+WNs+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWIoOmZpOacrOmCruS7tuOAgiAN
+ClRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZv
+cm1hdGlvbiBmcm9tIExvb25nc29uIFRlY2hub2xvZ3kgLCB3aGljaCBpcyBpbnRlbmRlZCBvbmx5
+IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNzIGlzIGxpc3RlZCBhYm92ZS4g
+QW55IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhlcmVpbiBpbiBhbnkgd2F5IChp
+bmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNjbG9zdXJl
+LCByZXByb2R1Y3Rpb24gb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVyc29ucyBvdGhlciB0aGFuIHRo
+ZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhp
+cyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGJ5IHBob25lIG9yIGVt
+YWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuIA==

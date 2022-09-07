@@ -2,233 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8E15AFC6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F925AFC6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiIGGae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S229812AbiIGGbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiIGGaA (ORCPT
+        with ESMTP id S229952AbiIGGaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:30:00 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A09357C6
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:29:46 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VOwgIzz_1662532179;
-Received: from 30.240.98.182(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VOwgIzz_1662532179)
-          by smtp.aliyun-inc.com;
-          Wed, 07 Sep 2022 14:29:40 +0800
-Message-ID: <d8fbb0c6-efe5-13bd-fb35-c6cb24ea7ff2@linux.alibaba.com>
-Date:   Wed, 7 Sep 2022 14:29:38 +0800
+        Wed, 7 Sep 2022 02:30:35 -0400
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00076.outbound.protection.outlook.com [40.107.0.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07F89BB6B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:30:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WFaeiChXHBOIFb0MofoWMVWRLmytcc/PLvrTuJHogvBpj1snaVHbEPsuxQqEz/aDl5Ko77jKSIMbHX0luHNfyFJLkx7tC6o6ltulmmxF9VVpGPjkre4A2cWb5/mEIB5h2BtSM6L+MN+E8GpZQqqq3SN1kbNW0iTvdZlbj1Qst0mqirEX/ZEpTsiXM0ArMGDC7jJPL9N3oQUivv0BoxNnlN5I8I0OnPjdIspt1aYJoiL461StjFNy9+TrTZgHBz4Bt+azN1biTg5wNLWNaMAQFziL+JRhc4lG6ELnxZWgJkSMRqIiCJxWHWXq/WFsI7djYUFQPqoYc5mkw/+tSj4aiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FNdQg3iwuxp6Al1VERFT2CgxKzNmj4NZJRAcjCYEi04=;
+ b=IvITjqaXGIfCIFIt0H38E4PYu6XOmD3bRBtaYLcERKGPocbSwcHCsHUFh7AkpEBczdbO29+1ISBwx0hGdSIxdGCwLX/iq66Hs1DerCBcbryvkAXvPvnPOJJ9nuaU70Jxv21T6HTCTkqKGU4d676xBcbUySTROfw++7Ha71qSJUlIORLNA9ez06hRzts53JwnfVY+rWlMjoo2v22Pgou7+iO9kEvDhN1fZubBPxms5by5Wcd1MqooGGUAP//0CPj0AXYiyEOuvb9qldY5FxC3d4xRYM5pOnM+C4JXMZyS0HORcmST8W08vJ0zlmW3lOLJFBmFE8EOZpnNDu9kPL8eAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sap.com; dmarc=pass action=none header.from=sap.com; dkim=pass
+ header.d=sap.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sap.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FNdQg3iwuxp6Al1VERFT2CgxKzNmj4NZJRAcjCYEi04=;
+ b=mOkUAKd70ofh59iY/mItbYtr1019e7fNRhBrObb1k7qfMnRotwPDZmCAfZSLQGlNVdqxYondptmaXFIcgdtdcscrAuYrlp0JvefejoaBqh6bZW7vCFDtfIGsppawEfG1QQoxqw74pxf2xrstaFsBZ86pyzo5x+Xta6jCUT5SmjkBC3tEd0ItAgP7JnRTmieMSziTwCZ/v2S4gMxl3Pw6G1zCGsXqFZvXvP/+jK93YK0Al63kykiMf7F2aQ39C4VpR6sXg8nQFM4smJWGEgV3Q0oRj1SDSx6ZQJZXlHH+DbX+yJ6/5dDe4KJdRa3T8Z3XK/Ot7gS8JEGUIu94eWZ8gw==
+Received: from PAXPR02MB7310.eurprd02.prod.outlook.com (2603:10a6:102:1c5::10)
+ by DU0PR02MB10014.eurprd02.prod.outlook.com (2603:10a6:10:446::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Wed, 7 Sep
+ 2022 06:30:23 +0000
+Received: from PAXPR02MB7310.eurprd02.prod.outlook.com
+ ([fe80::25a4:e5d5:aefc:fe46]) by PAXPR02MB7310.eurprd02.prod.outlook.com
+ ([fe80::25a4:e5d5:aefc:fe46%9]) with mapi id 15.20.5612.014; Wed, 7 Sep 2022
+ 06:30:23 +0000
+From:   "Czerwacki, Eial" <eial.czerwacki@sap.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Arsh, Leonid" <leonid.arsh@sap.com>,
+        "Twaig, Oren" <oren.twaig@sap.com>,
+        SAP vSMP Linux Maintainer <linux.vsmp@sap.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Borislav Petkov <bp@suse.de>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Eric Biggers <ebiggers@google.com>, Fei Li <fei1.li@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: Re: [PATCH v2] drivers/virt/vSMP: new driver
+Thread-Topic: [PATCH v2] drivers/virt/vSMP: new driver
+Thread-Index: AQHYuErwCwPojP5fak60UhGlJnJEo63SfrOAgAAxaoCAAOUoRw==
+Date:   Wed, 7 Sep 2022 06:30:23 +0000
+Message-ID: <PAXPR02MB7310EFC70B711ECB68206C3C81419@PAXPR02MB7310.eurprd02.prod.outlook.com>
+References: <PAXPR02MB731058B69D178E026C578BB481729@PAXPR02MB7310.eurprd02.prod.outlook.com>
+ <YxdQLY3RWRRuFMKd@kroah.com> <Yxd5oc9/Bz32YFtu@kroah.com>
+In-Reply-To: <Yxd5oc9/Bz32YFtu@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=sap.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR02MB7310:EE_|DU0PR02MB10014:EE_
+x-ms-office365-filtering-correlation-id: 56ec7dfd-bdf9-45ed-3a2e-08da909a71db
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OWeXKsSzK/Oki2ge53ePAuPg9kWrr4+in0aO0mf371j5dWTods0plfZdcmlMolTfL2NP2z9V6721W/xpVl8YRSHhKu1l6o6tyCJATe+nV1X9PoZ328gRQRKKE7rNwGaS/xQkJqeygh4ap2pjNZQDgu6G3E8/M8cAjAZKpZjn/PfLnXXKNgZxpm/duzZrIx2X3085DttEB79Z/2eruzX2wuCWprfYXcabpcQCJwSBnQafSqrJua6mymI2cZhJje7o1PiBsTzLaV4YECdsKhe0DTjGWzgjp0ybVG1m7FeATntsmYH0Qoh0x9AhegF0k9SUAOu4KJn+AmMZ0pJCKBCZf9OX0PnhJsxyVVmqQMhk7PI2w+3huoWm2jUH3SdS6HG2xl6BWxYBmXyO2Ww53FAdwvWnuwiGivnAmSmVd3EtAAIUOm9cIVGnzFcFkC/ojic0O8unngyh5EXaLE+s5mfKDrVRK0QfjQnMe0V+IHx7x+imiVdkrT/nJxV0imVVIhlYy683vsn1vD4xXDumc63IW2EcjXRXVLYIHfMrWK82vt7/XC2U9jooRUA0piiEHnqmNV0gf800ZbWI7+eUHGSaeE7FlHbV5eg5YIfydO3vpAAzQxkqd7OfgCwOkPb54xqrNQ52EdGSD7YjZlwMqjnCFU1czO0eTMWarGUjALtf1eyJfbloUGx0oENDl8A1R8U8ekAHWPJJh2YAlN+3tXfkn7TAxbY/DCZB9ZkXnqXjfV7VGfeNIoSeZp9oXDw/YqHNB1AU2QHCS3GU/o13b5c1PA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR02MB7310.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(376002)(346002)(136003)(396003)(38070700005)(82960400001)(122000001)(66946007)(91956017)(66476007)(64756008)(66446008)(4326008)(316002)(66556008)(8676002)(76116006)(2906002)(54906003)(83380400001)(38100700002)(6916009)(55016003)(26005)(5660300002)(7416002)(52536014)(8936002)(9686003)(186003)(71200400001)(41300700001)(7696005)(6506007)(478600001)(86362001)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?nNHQBD6PrIbQGQ8rhpZt9FaXXRE0MyM9FeZSba97cUXWRpb9Z7Njs4X0SG?=
+ =?iso-8859-1?Q?xhMJcBYUFMrPeZ9QT11tqsLQ62IsnpTVfIxXSCvV0XGtHW8JeXwS567qZK?=
+ =?iso-8859-1?Q?ddoCT7dMXfvMqonEKGzrUtpo/3TbQQbbKKbBBCQsBbhhP9SP8HAyF1vOn/?=
+ =?iso-8859-1?Q?fMyN1nkNhYzdU+zdpFaIdwzo+y4fQZ80J3HbLtOtKeXawHG/JCQ/mm8Zpi?=
+ =?iso-8859-1?Q?MPZQQzcFMXOrTOa0TgvCfOxxJ6OMZ+VhZfyZz02q4Y5fULuUKdHKu215M5?=
+ =?iso-8859-1?Q?XJNCjp0RcSoTGGyu8xrqYnLyv2a9nYN6Ct6WFVzm6DUntwOQQ9lBD67otq?=
+ =?iso-8859-1?Q?41LvszaXTYPr2z/BBT3H/hGJyajwdH+hFhAXYG2pD3FEg96V2RtemI68tn?=
+ =?iso-8859-1?Q?wOtkUhZCG7caaln4sv7LKnozPf0HB9/hFAXHhImXr71nFbUH/hmOWupV+e?=
+ =?iso-8859-1?Q?uFcIz3U/6eZcQrBBmtaEd/RpbZKlpi16sgMd6KiDrAajTrrqJ//bUjBGCX?=
+ =?iso-8859-1?Q?7KoHdEKUHW9ijKoTSB6VjoUkJwQwxxSnj5iY5c6IUAuribEJ3BFu0/RLNV?=
+ =?iso-8859-1?Q?Co+QJMYWAgjtYasFBo4GePlYq7aYkkXjMhH8CyeHR9PnDsWICU9wM+2rF7?=
+ =?iso-8859-1?Q?8SLmRPs3tN/E3mFbt2VqMPcUwBXpmMDb/XfYXuB/8W1WvRzbc3iKV5dB1+?=
+ =?iso-8859-1?Q?Oi/hELH6d0LOr8qscqiT1iA+QNw1QqAFRub7QKMI4yd8lkdC1rgiphlVsV?=
+ =?iso-8859-1?Q?lXTGXRv6QZRLHbvJ3+8U6ZnjMTKKUOY6ibhpf29cbQetuew81QVoaTHU/A?=
+ =?iso-8859-1?Q?sgjgWADHPflOZHLwOvdk9f4BQNzArgmASopmNHMy6GMVuf/LvV44B49h4C?=
+ =?iso-8859-1?Q?6WAXwe6cXGXCMTcSFUwleNBoa/8uELNXxtOK4lXKL6c4BL0u6I7nhjSbXB?=
+ =?iso-8859-1?Q?sJ4ZZdpdPB5bi4nY5WBsN0Y41zl7YqyO78D+ohIxrBKfkN00u4LuIZ9Pjn?=
+ =?iso-8859-1?Q?ETGLxaaYUrpM5d6gi6QIz9h62iXg3BFcSEbVGpxO7k7qPtY8bXO5aUJ7mi?=
+ =?iso-8859-1?Q?RxY84loAwpeLLiMUhiHwHeZ4kDwd+ylF5aAL0oV6djV++8FsF4p20bxu0G?=
+ =?iso-8859-1?Q?lSQE6+r5FVGYrHPbBZcPJdS6StfainQEbiDOlstmsZpuRy5FnWjjWYc8h5?=
+ =?iso-8859-1?Q?JB26bOb7OnceH8cm3VMtCqah1oQtwvuKt9KRQW4Yfo+TzXcTwJdKP9ETqq?=
+ =?iso-8859-1?Q?KxWezIvsjzkDkBaeIzl8ojyhgbyszLaW1Ut8EKr+h35nU8ROwiZ6iViHTV?=
+ =?iso-8859-1?Q?wJ8n0niGhrMtHm2LYIWqgj5Z0OwNOAMPiXDdOdQb1+TWu1yWwRPFp+APZM?=
+ =?iso-8859-1?Q?ZOdg7ReFS+eyXC40+NN7bijYEP0KhAQG6IfNZbBvbDn9fe4BZnvS00Uie2?=
+ =?iso-8859-1?Q?zXPpagVYftk9OEfzweJLkzBPEkqQ7H/tTBYXL3PUa0gZLDD/YtVgzh91mQ?=
+ =?iso-8859-1?Q?R8ojrCsqoJCeJCZRabvIorTBPQ51eLi3CQm+RnWDSeRT4J6ijSWjBuWlIN?=
+ =?iso-8859-1?Q?gQ7B+9Mcc/ggMXM4RWblZC8MGf7HPqt7c3y/iu9NnkvL0/dEdUEy5SeQB4?=
+ =?iso-8859-1?Q?GJibBgirx06Zla8a+CwoB5HBjWvV7QdASI?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH v6 05/21] x86/resctrl: Add domain offline callback for
- resctrl work
-To:     James Morse <james.morse@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        xhao@linux.alibaba.com
-References: <20220902154829.30399-1-james.morse@arm.com>
- <20220902154829.30399-6-james.morse@arm.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20220902154829.30399-6-james.morse@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: sap.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR02MB7310.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56ec7dfd-bdf9-45ed-3a2e-08da909a71db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 06:30:23.5433
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 42f7676c-f455-423c-82f6-dc2d99791af7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XbOSaDsdYK1AfzxWtC5pOql4JsArJpM1s28D3NeH+DBUQyYunuyhvaNNeIKmrOKEvlCDdk0wf30o8j4udFs6PA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB10014
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/9/2 下午11:48, James Morse 写道:
-> Because domains are exposed to user-space via resctrl, the filesystem
-> must update its state when CPU hotplug callbacks are triggered.
->
-> Some of this work is common to any architecture that would support
-> resctrl, but the work is tied up with the architecture code to
-> free the memory.
->
-> Move the monitor subdir removal and the cancelling of the mbm/limbo
-> works into a new resctrl_offline_domain() call. These bits are not
-> specific to the architecture. Grouping them in one function allows
-> that code to be moved to /fs/ and re-used by another architecture.
->
-> Reviewed-by: Jamie Iles <quic_jiles@quicinc.com>
-> Tested-by: Xin Hao <xhao@linux.alibaba.com>
-> Reviewed-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> Changes since v2:
->   * Moved kfree()ing to domain_destroy_mon_state() for later re-use.
->
-> Changes since v1:
->   * Removed a redundant mon_capable check
->   * Capitalisation
->   * Removed inline comment
->   * Added to the commit message
-> ---
->   arch/x86/kernel/cpu/resctrl/core.c     | 26 ++-------------
->   arch/x86/kernel/cpu/resctrl/internal.h |  2 --
->   arch/x86/kernel/cpu/resctrl/rdtgroup.c | 45 +++++++++++++++++++++++---
->   include/linux/resctrl.h                |  1 +
->   4 files changed, 44 insertions(+), 30 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-> index e37889f7a1a5..f69182973175 100644
-> --- a/arch/x86/kernel/cpu/resctrl/core.c
-> +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> @@ -523,27 +523,8 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
->   
->   	cpumask_clear_cpu(cpu, &d->cpu_mask);
->   	if (cpumask_empty(&d->cpu_mask)) {
-> -		/*
-> -		 * If resctrl is mounted, remove all the
-> -		 * per domain monitor data directories.
-> -		 */
-> -		if (static_branch_unlikely(&rdt_mon_enable_key))
-> -			rmdir_mondata_subdir_allrdtgrp(r, d->id);
-> +		resctrl_offline_domain(r, d);
->   		list_del(&d->list);
-> -		if (r->mon_capable && is_mbm_enabled())
-> -			cancel_delayed_work(&d->mbm_over);
-> -		if (is_llc_occupancy_enabled() &&  has_busy_rmid(r, d)) {
-> -			/*
-> -			 * When a package is going down, forcefully
-> -			 * decrement rmid->ebusy. There is no way to know
-> -			 * that the L3 was flushed and hence may lead to
-> -			 * incorrect counts in rare scenarios, but leaving
-> -			 * the RMID as busy creates RMID leaks if the
-> -			 * package never comes back.
-> -			 */
-> -			__check_limbo(d, true);
-> -			cancel_delayed_work(&d->cqm_limbo);
-> -		}
->   
->   		/*
->   		 * rdt_domain "d" is going to be freed below, so clear
-> @@ -551,11 +532,8 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
->   		 */
->   		if (d->plr)
->   			d->plr->d = NULL;
-> -
-> -		bitmap_free(d->rmid_busy_llc);
-> -		kfree(d->mbm_total);
-> -		kfree(d->mbm_local);
->   		domain_free(hw_dom);
-> +
->   		return;
->   	}
->   
-> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> index be48a682dbdb..e12b55f815bf 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -522,8 +522,6 @@ void free_rmid(u32 rmid);
->   int rdt_get_mon_l3_config(struct rdt_resource *r);
->   void mon_event_count(void *info);
->   int rdtgroup_mondata_show(struct seq_file *m, void *arg);
-> -void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
-> -				    unsigned int dom_id);
->   void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
->   		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
->   		    int evtid, int first);
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index 030a70326ccc..5830905a92d2 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -2499,14 +2499,12 @@ static int mon_addfile(struct kernfs_node *parent_kn, const char *name,
->    * Remove all subdirectories of mon_data of ctrl_mon groups
->    * and monitor groups with given domain id.
->    */
-> -void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r, unsigned int dom_id)
-> +static void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
-> +					   unsigned int dom_id)
->   {
->   	struct rdtgroup *prgrp, *crgrp;
->   	char name[32];
->   
-> -	if (!r->mon_capable)
-> -		return;
-> -
->   	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
->   		sprintf(name, "mon_%s_%02d", r->name, dom_id);
->   		kernfs_remove_by_name(prgrp->mon.mon_data_kn, name);
-> @@ -3233,6 +3231,45 @@ static int __init rdtgroup_setup_root(void)
->   	return ret;
->   }
->   
-> +static void domain_destroy_mon_state(struct rdt_domain *d)
-add inline ?
-> +{
-> +	bitmap_free(d->rmid_busy_llc);
-> +	kfree(d->mbm_total);
-> +	kfree(d->mbm_local);
-> +}
-> +
-> +void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d)
-> +{
-> +	lockdep_assert_held(&rdtgroup_mutex);
-> +
-> +	if (!r->mon_capable)
-> +		return;
-> +
-> +	/*
-> +	 * If resctrl is mounted, remove all the
-> +	 * per domain monitor data directories.
-> +	 */
-> +	if (static_branch_unlikely(&rdt_mon_enable_key))
-> +		rmdir_mondata_subdir_allrdtgrp(r, d->id);
-> +
-> +	if (is_mbm_enabled())
-> +		cancel_delayed_work(&d->mbm_over);
-> +	if (is_llc_occupancy_enabled() && has_busy_rmid(r, d)) {
-> +		/*
-> +		 * When a package is going down, forcefully
-> +		 * decrement rmid->ebusy. There is no way to know
-> +		 * that the L3 was flushed and hence may lead to
-> +		 * incorrect counts in rare scenarios, but leaving
-> +		 * the RMID as busy creates RMID leaks if the
-> +		 * package never comes back.
-> +		 */
-> +		__check_limbo(d, true);
-> +		cancel_delayed_work(&d->cqm_limbo);
-> +	}
-> +
-> +	domain_destroy_mon_state(d);
-> +}
-> +
->   static int domain_setup_mon_state(struct rdt_resource *r, struct rdt_domain *d)
->   {
->   	size_t tsize;
-> diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-> index d512455b4c3a..5d283bdd6162 100644
-> --- a/include/linux/resctrl.h
-> +++ b/include/linux/resctrl.h
-> @@ -193,5 +193,6 @@ int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid);
->   u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
->   			    u32 closid, enum resctrl_conf_type type);
->   int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
-> +void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
->   
->   #endif /* _RESCTRL_H */
+>On Tue, Sep 06, 2022 at 03:50:37PM +0200, Greg Kroah-Hartman wrote:=0A=
+>> On Thu, Aug 25, 2022 at 06:24:02AM +0000, Czerwacki, Eial wrote:=0A=
+>> > --- /dev/null=0A=
+>> > +++ b/drivers/virt/vsmp/Kconfig=0A=
+>> > @@ -0,0 +1,11 @@=0A=
+>> > +# SPDX-License-Identifier: GPL-2.0-only=0A=
+>> > +config VSMP=0A=
+>> > +=A0=A0 tristate "vSMP Guest Support"=0A=
+>> > +=A0=A0 depends on SYS_HYPERVISOR && X86_64 && PCI=0A=
+>> > +=A0=A0 help=0A=
+>> > +=A0=A0=A0=A0 Support for vSMP Guest Driver.=0A=
+>> > +=0A=
+>> > +=A0=A0=A0=A0 This driver allows information gathering of data from th=
+e vSMP hypervisor when=0A=
+>> > +=A0=A0=A0=A0 running on top of a vSMP-based hypervisor.=0A=
+>> > +=0A=
+>> > +=A0=A0=A0=A0 If unsure, say no.=0A=
+>> =0A=
+>> In wanting to test this out, I tried it but this depends line is wrong,=
+=0A=
+>> you have to set SYS_HYPERVISOR, you can not depend on it otherwise your=
+=0A=
+>> code will never be selected :(=0A=
+>=0A=
+>Ok, based on the conversation happening on the staging list, I took a=0A=
+>look at the code here again and have deleted a ton of it and added a=0A=
+>framework for you to add some sysfs files in the hypervisor location,=0A=
+>but this is NOT where the device/board files go, that's a different=0A=
+>add-on patch on top of this.=0A=
+>=0A=
+>Here's an updated patch, much smaller, and hopefully simpler to=0A=
+>understand and follow.=A0 I didn't touch the Documentation/ABI/ entry, but=
+=0A=
+>if you run this you should see 4 sysfs files, "version1-3" that just=0A=
+>print a single number, and "version_length" that does some i/o and gets=0A=
+>the length that you wanted to use in the past to show how to tie this=0A=
+>into the device-specific information (and not have any static=0A=
+>information.)=0A=
+>=0A=
+>Feel free to build on this for your next submission.=A0 And if you have=0A=
+>any questions about this, please let me know.=0A=
+>=0A=
+>Note, I have only built this code, not tested it, for obvious reasons :)=
+=0A=
+>=0A=
+>thanks,=0A=
+>=0A=
+oh wow! thanks a lot!=0A=
+I'll try it and of course will learn from it=0A=
+=0A=
+Eial=

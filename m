@@ -2,207 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8AB5B082E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A5B5B082F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiIGPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S230429AbiIGPMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiIGPMG (ORCPT
+        with ESMTP id S230383AbiIGPMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:12:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534405C9CD;
-        Wed,  7 Sep 2022 08:12:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F586194E;
-        Wed,  7 Sep 2022 15:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9783C433B5;
-        Wed,  7 Sep 2022 15:11:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662563522;
-        bh=pN+S07cr+afMsUnBRSfOQtlwIjBeZFGPJkhC4OrU0J8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=j3zY/8tp+V8KEFLE3LgCfxOAo3c4H1/y7Sja2TPVUclqEPfu2FMa2LmoqsS5qaLbh
-         uW36WprEiievzP8xZVQsDghFat5DLoUN+QVoWB3SRoEg7nlz3cqE08a2RgGNW+BYAD
-         zI4rYr4g3hzeAOEvxnuHurJZKQJwspW55xJ26oEYiaxxylcA9xEJubE440/nG2YTOo
-         hAseDmPr9eE6/iz31FYs/e7hpgSoOqIxIYH4FWXR+Q3EqppdUR3uJDAiPGArDXa8qX
-         IDy8wkUrkOJvBDAtxLjagCCFVwwJiWzMzAqtgy/aC2Qib+3u/bCjg5NNfOOJLXhoZX
-         Vu299nakVFwXw==
-Message-ID: <95b9c85ded369d4a81963b394e12250c1f87974a.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "neilb@suse.de" <neilb@suse.de>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
-Date:   Wed, 07 Sep 2022 11:11:58 -0400
-In-Reply-To: <9ddbc23661ab6527d73860a873391a3536451ee6.camel@hammerspace.com>
-References: <20220907111606.18831-1-jlayton@kernel.org>
-         <166255065346.30452.6121947305075322036@noble.neil.brown.name>
-         <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
-         <20220907125211.GB17729@fieldses.org>
-         <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
-         <8a71986b4fb61cd9b4adc8b4250118cbb19eec58.camel@hammerspace.com>
-         <c22baa64133a23be3aba81df23b4af866df51343.camel@kernel.org>
-         <9ddbc23661ab6527d73860a873391a3536451ee6.camel@hammerspace.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 7 Sep 2022 11:12:08 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA34F5FAEB;
+        Wed,  7 Sep 2022 08:12:05 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id u22so14839075plq.12;
+        Wed, 07 Sep 2022 08:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=5qlPV74Pp3Ds4k5ap0cTIGdjJPYtwt6BD4m9h1Xc3wk=;
+        b=g/oUwG7nDZnAY+SRO6rmpt7UgcU1TOLPhiiSgR2bw8ahfwXIMNyRkQhYP1t6pYAWTM
+         aHp4x9x0/2FncovxGQvthm7APBEysbwJiqseWxd6YVyppa0csAAvTXjum2TR1bQMvW1Y
+         TsLmcLeCz4KsYlyQ7wtbJOuA8lkWOzPFV4IpfsU4AvkL81hBLPvakmohZ+Ftc4XxHDed
+         6Xwp7Mn1Q0YCpR/AKLGqU+aFv8/Lfc/auZUPK6cs1L73VT4FcejgR9WIuPhXsmLS0tWV
+         mk7ySj+HL7wlFZjK4GqWjjGBeh0GQ1oYd7DcWb+U4mA4joVl3NBC53iMz26010VVcJpO
+         eiOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=5qlPV74Pp3Ds4k5ap0cTIGdjJPYtwt6BD4m9h1Xc3wk=;
+        b=3cPNI9TrSvCtZeKnrQ3fsItrEoGAWTIFU9/3hY+1Fxv53msg2zSfpxTbyEcj/fDfqi
+         I+xLddsAF0h9pX6aCO7gsBTAIgHj0dah2A69YeIke9JS8k16Fl3SrwckB+h03/uAZf8y
+         phS/08kjZpWr13sWWLlLqVUg+sc2fzKO9kvye2ceAIaszPtqhV5ikeILxNdYw+kZJcv9
+         ct3iUPxRfH3yACQebJLhFhUnTlekIzlweO8UoBKUbO4hXZ6RBmvLT/siBteVp1Rmbggt
+         n7VfJSlBba6pphOP18StWG3wJ6b3fTA+nGpuKNSwY3R8p/xdtXZFddxvD54d/TcLIEc8
+         HweA==
+X-Gm-Message-State: ACgBeo22tkVdmHEMssRKeRF2Jyzys91qCALIDHOO+YFr5SSsCtkOlEq3
+        lv0SdHYhtS2k73dtwbDzGFg=
+X-Google-Smtp-Source: AA6agR6diMWa4vKZ7Z2eUcq9sBc3jDRr7sDRWe6tvb628y0j9mUtz05EnKrEHAXrHxghNRqjThUp/g==
+X-Received: by 2002:a17:903:11c9:b0:172:6ea1:b727 with SMTP id q9-20020a17090311c900b001726ea1b727mr4457187plh.78.1662563525027;
+        Wed, 07 Sep 2022 08:12:05 -0700 (PDT)
+Received: from localhost ([192.55.55.51])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa79574000000b0053dec787698sm5827300pfq.175.2022.09.07.08.12.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:12:04 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 08:12:03 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Yuan Yao <yuan.yao@linux.intel.com>, isaku.yamahata@intel.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, isaku.yamahata@gmail.com,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v3 06/22] KVM: arm64: Simplify the CPUHP logic
+Message-ID: <20220907151203.GA456048@ls.amr.corp.intel.com>
+References: <cover.1662084396.git.isaku.yamahata@intel.com>
+ <72481a7bc0ff08093f4f0f04cece877ee82de0cf.1662084396.git.isaku.yamahata@intel.com>
+ <20220905070509.f5neutyqgvbklefi@yy-desk-7060>
+ <87pmgaqie6.wl-maz@kernel.org>
+ <3cc7a3dffa4f12c4aa1f546f3e2d3952@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3cc7a3dffa4f12c4aa1f546f3e2d3952@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-07 at 15:04 +0000, Trond Myklebust wrote:
-> On Wed, 2022-09-07 at 10:05 -0400, Jeff Layton wrote:
-> > On Wed, 2022-09-07 at 13:55 +0000, Trond Myklebust wrote:
-> > > On Wed, 2022-09-07 at 09:12 -0400, Jeff Layton wrote:
-> > > > On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
-> > > > > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
-> > > > > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
-> > > > > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
-> > > > > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic
-> > > > > > > > with
-> > > > > > > > respect to the
-> > > > > > > > +other changes in the inode. On a write, for instance,
-> > > > > > > > the
-> > > > > > > > i_version it usually
-> > > > > > > > +incremented before the data is copied into the
-> > > > > > > > pagecache.
-> > > > > > > > Therefore it is
-> > > > > > > > +possible to see a new i_version value while a read still
-> > > > > > > > shows the old data.
-> > > > > > >=20
-> > > > > > > Doesn't that make the value useless?
-> > > > > > >=20
-> > > > > >=20
-> > > > > > No, I don't think so. It's only really useful for comparing
-> > > > > > to an
-> > > > > > older
-> > > > > > sample anyway. If you do "statx; read; statx" and the value
-> > > > > > hasn't
-> > > > > > changed, then you know that things are stable.=20
-> > > > >=20
-> > > > > I don't see how that helps.=A0 It's still possible to get:
-> > > > >=20
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0reader=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0writer
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0------=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0------
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0i_version++
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0read
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0update page cache
-> > > > >=20
-> > > > > right?
-> > > > >=20
-> > > >=20
-> > > > Yeah, I suppose so -- the statx wouldn't necessitate any locking.
-> > > > In
-> > > > that case, maybe this is useless then other than for testing
-> > > > purposes
-> > > > and userland NFS servers.
-> > > >=20
-> > > > Would it be better to not consume a statx field with this if so?
-> > > > What
-> > > > could we use as an alternate interface? ioctl? Some sort of
-> > > > global
-> > > > virtual xattr? It does need to be something per-inode.
-> > >=20
-> > > I don't see how a non-atomic change attribute is remotely useful
-> > > even
-> > > for NFS.
-> > >=20
-> > > The main problem is not so much the above (although NFS clients are
-> > > vulnerable to that too) but the behaviour w.r.t. directory changes.
-> > >=20
-> > > If the server can't guarantee that file/directory/... creation and
-> > > unlink are atomically recorded with change attribute updates, then
-> > > the
-> > > client has to always assume that the server is lying, and that it
-> > > has
-> > > to revalidate all its caches anyway. Cue endless
-> > > readdir/lookup/getattr
-> > > requests after each and every directory modification in order to
-> > > check
-> > > that some other client didn't also sneak in a change of their own.
-> > >=20
-> >=20
-> > We generally hold the parent dir's inode->i_rwsem exclusively over
-> > most
-> > important directory changes, and the times/i_version are also updated
-> > while holding it. What we don't do is serialize reads of this value
-> > vs.
-> > the i_rwsem, so you could see new directory contents alongside an old
-> > i_version. Maybe we should be taking it for read when we query it on
-> > a
-> > directory?
->=20
-> Serialising reads is not the problem. The problem is ensuring that
-> knfsd is able to provide an atomic change_info4 structure when the
-> client modifies the directory.
-> i.e. the requirement is that if the directory changed, then that
-> modification is atomically accompanied by an update of the change
-> attribute that can be retrieved by knfsd and placed in the reply to the
-> client.
->=20
+On Mon, Sep 05, 2022 at 01:39:20PM +0100,
+Marc Zyngier <maz@kernel.org> wrote:
 
-I think we already do that for directories today via the i_rwsem. We
-hold that exclusively over directory-morphing operations, and the
-i_version is updated while holding that lock.
+> On 2022-09-05 10:29, Marc Zyngier wrote:
+> > On Mon, 05 Sep 2022 08:05:09 +0100,
+> > Yuan Yao <yuan.yao@linux.intel.com> wrote:
+> > > 
+> > > On Thu, Sep 01, 2022 at 07:17:41PM -0700, isaku.yamahata@intel.com
+> > > wrote:
+> > > > From: Marc Zyngier <maz@kernel.org>
+> > > >
+> > > > For a number of historical reasons, the KVM/arm64 hotplug setup is pretty
+> > > > complicated, and we have two extra CPUHP notifiers for vGIC and timers.
+> > > >
+> > > > It looks pretty pointless, and gets in the way of further changes.
+> > > > So let's just expose some helpers that can be called from the core
+> > > > CPUHP callback, and get rid of everything else.
+> > > >
+> > > > This gives us the opportunity to drop a useless notifier entry,
+> > > > as well as tidy-up the timer enable/disable, which was a bit odd.
+> > > >
+> > > > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > > > Signed-off-by: Chao Gao <chao.gao@intel.com>
+> > > > Reviewed-by: Oliver Upton <oupton@google.com>
+> > > > Link: https://lore.kernel.org/r/20220216031528.92558-5-chao.gao@intel.com
+> > > > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > > ---
+> > > >  arch/arm64/kvm/arch_timer.c     | 27 ++++++++++-----------------
+> > > >  arch/arm64/kvm/arm.c            |  4 ++++
+> > > >  arch/arm64/kvm/vgic/vgic-init.c | 19 ++-----------------
+> > > >  include/kvm/arm_arch_timer.h    |  4 ++++
+> > > >  include/kvm/arm_vgic.h          |  4 ++++
+> > > >  include/linux/cpuhotplug.h      |  3 ---
+> > > >  6 files changed, 24 insertions(+), 37 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/kvm/arch_timer.c b/arch/arm64/kvm/arch_timer.c
+> > > > index bb24a76b4224..33fca1a691a5 100644
+> > > > --- a/arch/arm64/kvm/arch_timer.c
+> > > > +++ b/arch/arm64/kvm/arch_timer.c
+> > > > @@ -811,10 +811,18 @@ void kvm_timer_vcpu_init(struct kvm_vcpu *vcpu)
+> > > >  	ptimer->host_timer_irq_flags = host_ptimer_irq_flags;
+> > > >  }
+> > > >
+> > > > -static void kvm_timer_init_interrupt(void *info)
+> > > > +void kvm_timer_cpu_up(void)
+> > > >  {
+> > > >  	enable_percpu_irq(host_vtimer_irq, host_vtimer_irq_flags);
+> > > > -	enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
+> > > > +	if (host_ptimer_irq)
+> > > > +		enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
+> > > > +}
+> > > > +
+> > > > +void kvm_timer_cpu_down(void)
+> > > > +{
+> > > > +	disable_percpu_irq(host_vtimer_irq);
+> > > > +	if (host_ptimer_irq)
+> > > > +		disable_percpu_irq(host_ptimer_irq);
+> > > >  }
+> > > 
+> > > Should "host_vtimer_irq" be checked yet as host_ptimer_irq ?
+> > 
+> > No, because although the ptimer interrupt is optional (on older
+> > systems, we fully emulate that timer, including the interrupt), the
+> > vtimer interrupt is always present and can be used unconditionally.
+> > 
+> > > Because
+> > > the host_{v,p}timer_irq is set in same function kvm_irq_init() which
+> > > called AFTER the on_each_cpu(_kvm_arch_hardware_enable, NULL, 1) from
+> > > init_subsystems():
+> > > 
+> > > kvm_init()
+> > >   kvm_arch_init()
+> > >     init_subsystems()
+> > >       on_each_cpu(_kvm_arch_hardware_enable, NULL, 1);
+> > >       kvm_timer_hyp_init()
+> > >         kvm_irq_init()
+> > >           host_vtimer_irq = info->virtual_irq;
+> > >           host_ptimer_irq = info->physical_irq;
+> > >   hardware_enable_all()
+> > 
+> > This, however, is a very nice catch. I doubt this results in anything
+> > really bad (the interrupt enable will fail as the interrupt number
+> > is 0, and the disable will also fail due to no prior enable), but
+> > that's extremely ugly anyway.
+> > 
+> > The best course of action AFAICS is to differentiate between the
+> > arm64-specific initialisation (which is a one-off) and the runtime
+> > stuff. Something like the hack below, that I haven't tested yet:
+> > 
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 32c1022eb4b3..65d03c28f32a 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -1671,23 +1671,27 @@ static void _kvm_arch_hardware_enable(void
+> > *discard)
+> >  {
+> >  	if (!__this_cpu_read(kvm_arm_hardware_enabled)) {
+> >  		cpu_hyp_reinit();
+> > -		kvm_vgic_cpu_up();
+> > -		kvm_timer_cpu_up();
+> >  		__this_cpu_write(kvm_arm_hardware_enabled, 1);
+> >  	}
+> >  }
+> > 
+> >  int kvm_arch_hardware_enable(void)
+> >  {
+> > +	int was_enabled = __this_cpu_read(kvm_arm_hardware_enabled);
+> > +
+> >  	_kvm_arch_hardware_enable(NULL);
+> > +
+> > +	if (!was_enabled) {
+> > +		kvm_vgic_cpu_up();
+> > +		kvm_timer_cpu_up();
+> > +	}
+> > +
+> >  	return 0;
+> >  }
+> > 
+> >  static void _kvm_arch_hardware_disable(void *discard)
+> >  {
+> >  	if (__this_cpu_read(kvm_arm_hardware_enabled)) {
+> > -		kvm_timer_cpu_down();
+> > -		kvm_vgic_cpu_down();
+> >  		cpu_hyp_reset();
+> >  		__this_cpu_write(kvm_arm_hardware_enabled, 0);
+> >  	}
+> > @@ -1695,6 +1699,11 @@ static void _kvm_arch_hardware_disable(void
+> > *discard)
+> > 
+> >  void kvm_arch_hardware_disable(void)
+> >  {
+> > +	if (__this_cpu_read(kvm_arm_hardware_enabled)) {
+> > +		kvm_timer_cpu_down();
+> > +		kvm_vgic_cpu_down();
+> > +	}
+> > +
+> >  	if (!is_protected_kvm_enabled())
+> >  		_kvm_arch_hardware_disable(NULL);
+> >  }
+> 
+> OK, this seems to work here, at least based on a sample of 2
+> systems, bringing CPUs up and down whist a VM is pinned to
+> these CPUs.
+> 
+> Isaku, can you please squash this into the original patch
+> and drop Oliver's Reviewed-by: tag, as this significantly
+> changes the logic?
+> 
+> Alternatively, I can repost this patch as a standalone change.
 
-> > Achieving atomicity with file writes though is another matter
-> > entirely.
-> > I'm not sure that's even doable or how to approach it if so.
-> > Suggestions?
->=20
-> The problem outlined by Bruce above isn't a big deal. Just check the
-> I_VERSION_QUERIED flag after the 'update_page_cache' bit, and bump the
-> i_version if that's the case. The real problem is what happens if you
-> then crash during writeback...
->=20
-
-It's a uglier than it looks at first glance. As Jan pointed out, thIt's
-possible for the initial file_modified call to succeed and then a second
-one to fail. If the time got an initial update and then the data was
-copied in, should we fail the write at that point?
-
-We may be better served by trying to also do this with the i_rwsem. I'm
-looking at that now, though it's a bit hairy given that
-vfs_getattr_nosec can be called either with or without it held.
---=20
-Jeff Layton <jlayton@kernel.org>
+I'll do with the next respin.  Anyway feel free to go before me.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

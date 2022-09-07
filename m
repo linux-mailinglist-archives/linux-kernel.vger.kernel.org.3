@@ -2,104 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20375AFCF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87ED5AFCF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiIGG6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        id S230040AbiIGG7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIGG6W (ORCPT
+        with ESMTP id S229490AbiIGG7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:58:22 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82C48FD52;
-        Tue,  6 Sep 2022 23:58:21 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1278a61bd57so15293821fac.7;
-        Tue, 06 Sep 2022 23:58:21 -0700 (PDT)
+        Wed, 7 Sep 2022 02:59:04 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9678A0332
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:58:56 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b16so18295172edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 23:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=2gNmFVx2TEGLFSa4zBsixSZnh9eQ9z4yWeNaVxeeK4g=;
+        b=W21X+LhexAUdAxr0oCHGTu0WjIq9/9ifNfTdMem+fhK3ovuwekY+R+r90ao/dkY7Sj
+         P0zLYZpzxzk9eXKsS+UJ98ZBJThUTvpxzz3LE7umfDyr2DGmyZqnjfkUxeaFsbHZRg4R
+         1csIwITrYbgJBed3YN+F5CraQ27nrZ+BOGAgU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=d2GxsBffUoX3eM3Z9JvRT1gNftYOiyqMQZCPJIetS/o=;
-        b=397koPNSKD4670SYO4FRp68vrXpBO5cEGeGBxcNN+jr9smvMTa+X1KS1PWbw6sDPGN
-         9x7+G4TnWpnkFxqonTPY/H1DII+57+USRZi21DuQoNbARLcMv4GJeKO2+vbVuers9xBP
-         KMckgp38yzWJbpFnfCZi3JkqqsG9f0rQaVMEX7IY35sf+ddpbaV48SX8li/PVcI1mTIU
-         +oRIAgQrvpdWZzKXUSkzz5J8zqiu0P+EUZHyy7xsN7QekAaZ/FUmZ/Bdp9c35kWwBoUs
-         MJol3fXMSdNqmiMrKWi/p69/Zj+9S1gMWbfaa0IA0UDywZshq22w+c5Jnqaq9xFTIxFn
-         2omw==
-X-Gm-Message-State: ACgBeo1LroH0okj1Tpnoiq78sg6HSyMs88OFhmBTaFXllEZqMuAGVP+W
-        E6W/dpGS9i8SMP6jxiHjkCv33b9BaU8g2qSWYwwzlzw0
-X-Google-Smtp-Source: AA6agR7eviQAT6IDpbbvRlqqBpL0NbF0igKjLYiuZbEZCoA+REG/y+NW3RA8tVNkQUMhLtD3+GIeVNNgs3+WFH+kyy0=
-X-Received: by 2002:a05:6808:d46:b0:345:7b42:f987 with SMTP id
- w6-20020a0568080d4600b003457b42f987mr910550oik.92.1662533901033; Tue, 06 Sep
- 2022 23:58:21 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2gNmFVx2TEGLFSa4zBsixSZnh9eQ9z4yWeNaVxeeK4g=;
+        b=54ZRXK5c83aYf/mbYJp4Zr36J51RYUzGbIy6wFBY6S75QDVhyeWpLgEGBVhInvDrEb
+         RX8PnDjCPylG9ji47TK16+pwPeXu7GVq9crjmisdhSYVGUPxq3IZ7G3/Z+b01rR/BiR+
+         sCEC5g5VU9zoL7XhPkTYWp3kAWdTUxs2N/t/6Lp9vcwLDza9ZuDwIprD6ZtneYlbCl6v
+         rHk+h6qtjcif9F7QbT5RTcj57bb2zD9x2ISH69vtmxQDcVOB2RKpx+ObWWSNGb71SxxY
+         JxJcOD5yOte2qMfXbUACDOo3leHs+uNrxdQgFzfeVxD5msnQpfoy5tdob7j8UGGOQxBU
+         9b6A==
+X-Gm-Message-State: ACgBeo10w21Ky0NYt8VI+RwZOmVMxCBSVjfipxtuqPArJI7WgKhj7KEG
+        h3o/Z4VllhYmzL6/gwgCsk/ZtPV4nnR+VQ==
+X-Google-Smtp-Source: AA6agR6Bvdxs9YoqSNE/Ldg1MqBjgM4kjkwuFObt3RQhUXcm4Ke86+QgppVIrbZOW1cascVYGteqjA==
+X-Received: by 2002:aa7:dc13:0:b0:443:3f15:8440 with SMTP id b19-20020aa7dc13000000b004433f158440mr1808846edu.274.1662533935396;
+        Tue, 06 Sep 2022 23:58:55 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id t25-20020aa7db19000000b0044e7c20d7a9sm5849339eds.37.2022.09.06.23.58.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 23:58:54 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 08:58:53 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 02/11] drm/udl: Add reset_resume
+Message-ID: <YxhBLVyRmeUcxPIj@phenom.ffwll.local>
+Mail-Followup-To: Takashi Iwai <tiwai@suse.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220906073951.2085-1-tiwai@suse.de>
+ <20220906073951.2085-3-tiwai@suse.de>
 MIME-Version: 1.0
-References: <20220907050407.2711513-1-namhyung@kernel.org> <CAPhsuW4OT3XC8oREZBNreesYyVvU9hSGs5Hgz=r-cwsQSkiXRQ@mail.gmail.com>
-In-Reply-To: <CAPhsuW4OT3XC8oREZBNreesYyVvU9hSGs5Hgz=r-cwsQSkiXRQ@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 6 Sep 2022 23:58:10 -0700
-Message-ID: <CAM9d7cjZ4jJDx0wL5BQ1f4BvT=r0S72Z_q83WwvOdB8cQGzRKw@mail.gmail.com>
-Subject: Re: [PATCH v2] perf test: Skip sigtrap test on old kernels
-To:     Song Liu <song@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Marco Elver <elver@google.com>,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906073951.2085-3-tiwai@suse.de>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+On Tue, Sep 06, 2022 at 09:39:42AM +0200, Takashi Iwai wrote:
+> From: Thomas Zimmermann <tzimmermann@suse.de>
+> 
+> Implement the reset_resume callback of struct usb_driver. Set the
+> standard channel when called.
+> 
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
+>  drivers/gpu/drm/udl/udl_drv.c  | 11 +++++++++++
+>  drivers/gpu/drm/udl/udl_drv.h  |  1 +
+>  drivers/gpu/drm/udl/udl_main.c |  2 +-
+>  3 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/udl/udl_drv.c b/drivers/gpu/drm/udl/udl_drv.c
+> index 5703277c6f52..0ba88e5472a9 100644
+> --- a/drivers/gpu/drm/udl/udl_drv.c
+> +++ b/drivers/gpu/drm/udl/udl_drv.c
+> @@ -32,6 +32,16 @@ static int udl_usb_resume(struct usb_interface *interface)
+>  	return drm_mode_config_helper_resume(dev);
+>  }
+>  
+> +static int udl_usb_reset_resume(struct usb_interface *interface)
+> +{
+> +	struct drm_device *dev = usb_get_intfdata(interface);
+> +	struct udl_device *udl = to_udl(dev);
+> +
+> +	udl_select_std_channel(udl);
+> +
+> +	return drm_mode_config_helper_resume(dev);
 
-On Tue, Sep 6, 2022 at 10:58 PM Song Liu <song@kernel.org> wrote:
->
-> On Tue, Sep 6, 2022 at 10:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > If it runs on an old kernel, perf_event_open would fail because of the
-> > new fields sigtrap and sig_data.  Just skipping the test could miss an
-> > actual bug in the kernel.
-> >
-> > Let's check BTF if it has the perf_event_attr.sigtrap field.
-> >
-> > Cc: Marco Elver <elver@google.com>
-> > Cc: Song Liu <songliubraving@fb.com>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/tests/sigtrap.c | 46 +++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 45 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
-> > index e32ece90e164..32f08ce0f2b0 100644
-> > --- a/tools/perf/tests/sigtrap.c
-> > +++ b/tools/perf/tests/sigtrap.c
-> > @@ -16,6 +16,8 @@
-> >  #include <sys/syscall.h>
-> >  #include <unistd.h>
-> >
-> > +#include <bpf/btf.h>
-> > +
->
-> Do we need "#ifdef HAVE_BPF_SKEL" for the include part?
+Bit a bikeshed, but in the driver load case it would be neat to put the
+call to udl_select_std_channel right above the call to
+drm_mode_config_reset. But that is _really_ a bikeshed :-)
 
-Right, it'd be better to move it under the #ifdef.  Will change.
+Also thanks for sending me on a bit a wild goose chase trying to figure
+out what this reset_resume hook actually does and why.
 
->
-> Other than this, looks good to me.
->
-> Acked-by: Song Liu <song@kernel.org>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Thanks for the review!
-Namhyung
+> +}
+> +
+>  /*
+>   * FIXME: Dma-buf sharing requires DMA support by the importing device.
+>   *        This function is a workaround to make USB devices work as well.
+> @@ -140,6 +150,7 @@ static struct usb_driver udl_driver = {
+>  	.disconnect = udl_usb_disconnect,
+>  	.suspend = udl_usb_suspend,
+>  	.resume = udl_usb_resume,
+> +	.reset_resume = udl_usb_reset_resume,
+>  	.id_table = id_table,
+>  };
+>  module_usb_driver(udl_driver);
+> diff --git a/drivers/gpu/drm/udl/udl_drv.h b/drivers/gpu/drm/udl/udl_drv.h
+> index 28aaf75d71cf..37c14b0ff1fc 100644
+> --- a/drivers/gpu/drm/udl/udl_drv.h
+> +++ b/drivers/gpu/drm/udl/udl_drv.h
+> @@ -95,6 +95,7 @@ int udl_render_hline(struct drm_device *dev, int log_bpp, struct urb **urb_ptr,
+>  		     u32 byte_offset, u32 device_byte_offset, u32 byte_width);
+>  
+>  int udl_drop_usb(struct drm_device *dev);
+> +int udl_select_std_channel(struct udl_device *udl);
+>  
+>  #define CMD_WRITE_RAW8   "\xAF\x60" /**< 8 bit raw write command. */
+>  #define CMD_WRITE_RL8    "\xAF\x61" /**< 8 bit run length command. */
+> diff --git a/drivers/gpu/drm/udl/udl_main.c b/drivers/gpu/drm/udl/udl_main.c
+> index fdafbf8f3c3c..7d1e6bbc165c 100644
+> --- a/drivers/gpu/drm/udl/udl_main.c
+> +++ b/drivers/gpu/drm/udl/udl_main.c
+> @@ -92,7 +92,7 @@ static int udl_parse_vendor_descriptor(struct udl_device *udl)
+>  /*
+>   * Need to ensure a channel is selected before submitting URBs
+>   */
+> -static int udl_select_std_channel(struct udl_device *udl)
+> +int udl_select_std_channel(struct udl_device *udl)
+>  {
+>  	static const u8 set_def_chn[] = {0x57, 0xCD, 0xDC, 0xA7,
+>  					 0x1C, 0x88, 0x5E, 0x15,
+> -- 
+> 2.35.3
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,229 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF505AFEFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A585AFEFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiIGI3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S229759AbiIGIaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiIGI3b (ORCPT
+        with ESMTP id S229589AbiIGIao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:29:31 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF20CE32
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:29:28 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o2-20020a17090a9f8200b0020025a22208so10284624pjp.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 01:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=dreOrS2HxR2J91rLUdu9cP+r6PUI4sNHCwWhrB7q9rw=;
-        b=haXeydyOPX9+k0ayYdLV87NOj40prLv34yG3etL88Fz4YQQP/92enzKTjH9aJ8LfCj
-         5a+3+JeCzXzPEJMBvlGnURWWll/1NRhlWKEnK6NP9LgFvjmCJ7fh4eNOzGbMJtl22S9H
-         Flk1DOBpBwGMmlREhP6WygM+KwjQMvagqWx43DfDyjheHFbBZlNKBRxwlEn+j7DteHd0
-         l1bsOlEAwc9vnwrxT2nXMhtEQqNDv98GED5efLY0hdOQWHERv/5cIJcIX1XLyBE2H6dP
-         rnuLW/eAQ1fqR4t6k4AH9c6HUyLnzyrfaN4IkxT940ACzsGDmTXmOq9+pP/1GczsWmQ1
-         IXwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dreOrS2HxR2J91rLUdu9cP+r6PUI4sNHCwWhrB7q9rw=;
-        b=x5V6uBQZvWLF8AITo457K6HFtoC4lQjFn9dC9eM6xfwaNAuf4pr6njI3S/qRRFsWfR
-         j+JQSnbaYq8g4dR3klpZAXPCYKDU+rCnSfC7VCLjDXv+ot5/sdh4Q8cX+MoBeKc0nkiS
-         tNsG8IO5IkRz+94/UId/yvfrvblTyLAD+6v2t2Nr4f4Q1jMxuXg2RUD78uDYOYwB0utv
-         /RonCA1rB/+zNyy8h6RdxBp8c07Vs/6Qf5ICQS6LoTmPQZZlSiAaZRr1IwRc4z9j9keY
-         gCX6T9ujkcl9AUqVKulBKkwJYY9aCVQzCXJl4FOaYQXIoAiQcqum+fisKXb5q+uKZVtK
-         P/ag==
-X-Gm-Message-State: ACgBeo274oMyrPdsGgSzZ0hROnYnZdNSdDcJCe/c4AxjyYqrigvbYYKa
-        LpsAFaebnYqkr+nWjh9YlugaiqVdWThnqPJimIYA2w==
-X-Google-Smtp-Source: AA6agR4LbCVgBOdmLhuENnlr57oMDLvlmofpTAxqdWc4PekaMpbd7qiBlQZ/sjV3f36KqY7kfkE7JK6XnDuLtyUpn9o=
-X-Received: by 2002:a17:90a:908:b0:200:14d8:1ff9 with SMTP id
- n8-20020a17090a090800b0020014d81ff9mr22139282pjn.16.1662539368027; Wed, 07
- Sep 2022 01:29:28 -0700 (PDT)
+        Wed, 7 Sep 2022 04:30:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2CC7F093
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:30:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7B30133B5E;
+        Wed,  7 Sep 2022 08:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662539442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZBcullYCL55qBcxn94Qah8Xofn2njMwOJzCNuYUQe5M=;
+        b=hIg1gva4IOUEnJDAUT/SxLY1VdnKSr02EhfeOD3X5wh6pvMap7pRqPFHcKzB5G4YkP8C4V
+        rzu2cXku/eRkF+AF7BuAa2FmxUKWSQYtcv3X420n2C1uJ/9xxaGOIy7whUD0vgltH1+zhC
+        Ip8FCwDQwDbjxUbFdUNXpbioVuKiqjQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662539442;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZBcullYCL55qBcxn94Qah8Xofn2njMwOJzCNuYUQe5M=;
+        b=3drsF299odbWO/n4tWkjm+eVaWzakSZvt1DwLwwkOa9XTxCRaf/bcp3iBTy7jiYdOeibul
+        B/saxyQGr+GgD6Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5664213A66;
+        Wed,  7 Sep 2022 08:30:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3WWJE7JWGGPRFgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 07 Sep 2022 08:30:42 +0000
+Date:   Wed, 7 Sep 2022 10:30:41 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH] firmware: dmi: Fortify entry point length checks
+Message-ID: <20220907103041.0a88d5c4@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20220902124032.788488-1-sudeep.holla@arm.com> <20220902124032.788488-8-sudeep.holla@arm.com>
-In-Reply-To: <20220902124032.788488-8-sudeep.holla@arm.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Wed, 7 Sep 2022 10:29:17 +0200
-Message-ID: <CAHUa44GDiKmdeLuW31QDFUYmZXxYtdMZZ2CM-_cS5P8PAqcv_A@mail.gmail.com>
-Subject: Re: [PATCH v2 07/10] firmware: arm_ffa: Rename ffa_dev_ops as ffa_ops
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>,
-        Sumit Garg <sumit.garg@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 2:40 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> Except the message APIs, all other APIs are ffa_device independent and can
-> be used without any associated ffa_device from a non ffa_driver.
->
-> In order to reflect the same, just rename ffa_dev_ops as ffa_ops to
-> avoid any confusion or to keep it simple.
->
-> Suggested-by: Sumit Garg <sumit.garg@linaro.org>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/firmware/arm_ffa/bus.c    |  2 +-
->  drivers/firmware/arm_ffa/driver.c |  2 +-
->  drivers/tee/optee/ffa_abi.c       | 14 +++++++-------
->  include/linux/arm_ffa.h           |  8 ++++----
->  4 files changed, 13 insertions(+), 13 deletions(-)
+Ensure that the SMBIOS entry point is long enough to include all the
+fields we need. Otherwise it is pointless to even attempt to verify
+its checksum.
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Also fix the maximum length check, which is technically 32, not 31.
+It does not matter in practice as the only valid values are 31 (for
+SMBIOS 2.x) and 24 (for SMBIOS 3.x), but let's still have the check
+right in case new fields are added to either structure in the future.
 
->
-> diff --git a/drivers/firmware/arm_ffa/bus.c b/drivers/firmware/arm_ffa/bus.c
-> index 69328041fbc3..99d439480612 100644
-> --- a/drivers/firmware/arm_ffa/bus.c
-> +++ b/drivers/firmware/arm_ffa/bus.c
-> @@ -168,7 +168,7 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev)
->  }
->
->  struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
-> -                                      const struct ffa_dev_ops *ops)
-> +                                      const struct ffa_ops *ops)
->  {
->         int ret;
->         struct device *dev;
-> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index e4fd35773071..2532e0f16cc9 100644
-> --- a/drivers/firmware/arm_ffa/driver.c
-> +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -666,7 +666,7 @@ static int ffa_memory_lend(struct ffa_mem_ops_args *args)
->         return ffa_memory_ops(FFA_MEM_LEND, args);
->  }
->
-> -static const struct ffa_dev_ops ffa_ops = {
-> +static const struct ffa_ops ffa_ops = {
->         .api_version_get = ffa_api_version_get,
->         .partition_info_get = ffa_partition_info_get,
->         .mode_32bit_set = ffa_mode_32bit_set,
-> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> index 7257b42d0545..2ce5b87dfb27 100644
-> --- a/drivers/tee/optee/ffa_abi.c
-> +++ b/drivers/tee/optee/ffa_abi.c
-> @@ -272,7 +272,7 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
->  {
->         struct optee *optee = tee_get_drvdata(ctx->teedev);
->         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
-> -       const struct ffa_dev_ops *ffa_ops = ffa_dev->ops;
-> +       const struct ffa_ops *ffa_ops = ffa_dev->ops;
->         struct ffa_mem_region_attributes mem_attr = {
->                 .receiver = ffa_dev->vm_id,
->                 .attrs = FFA_MEM_RW,
-> @@ -315,7 +315,7 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
->  {
->         struct optee *optee = tee_get_drvdata(ctx->teedev);
->         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
-> -       const struct ffa_dev_ops *ffa_ops = ffa_dev->ops;
-> +       const struct ffa_ops *ffa_ops = ffa_dev->ops;
->         u64 global_handle = shm->sec_world_id;
->         struct ffa_send_direct_data data = {
->                 .data0 = OPTEE_FFA_UNREGISTER_SHM,
-> @@ -342,7 +342,7 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
->                                          struct tee_shm *shm)
->  {
->         struct optee *optee = tee_get_drvdata(ctx->teedev);
-> -       const struct ffa_dev_ops *ffa_ops = optee->ffa.ffa_dev->ops;
-> +       const struct ffa_ops *ffa_ops = optee->ffa.ffa_dev->ops;
->         u64 global_handle = shm->sec_world_id;
->         int rc;
->
-> @@ -530,7 +530,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
->  {
->         struct optee *optee = tee_get_drvdata(ctx->teedev);
->         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
-> -       const struct ffa_dev_ops *ffa_ops = ffa_dev->ops;
-> +       const struct ffa_ops *ffa_ops = ffa_dev->ops;
->         struct optee_call_waiter w;
->         u32 cmd = data->data0;
->         u32 w4 = data->data1;
-> @@ -652,7 +652,7 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
->   */
->
->  static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
-> -                                       const struct ffa_dev_ops *ops)
-> +                                       const struct ffa_ops *ops)
->  {
->         struct ffa_send_direct_data data = { OPTEE_FFA_GET_API_VERSION };
->         int rc;
-> @@ -687,7 +687,7 @@ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
->  }
->
->  static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
-> -                                   const struct ffa_dev_ops *ops,
-> +                                   const struct ffa_ops *ops,
->                                     u32 *sec_caps,
->                                     unsigned int *rpc_param_count)
->  {
-> @@ -783,7 +783,7 @@ static void optee_ffa_remove(struct ffa_device *ffa_dev)
->
->  static int optee_ffa_probe(struct ffa_device *ffa_dev)
->  {
-> -       const struct ffa_dev_ops *ffa_ops;
-> +       const struct ffa_ops *ffa_ops;
->         unsigned int rpc_param_count;
->         struct tee_shm_pool *pool;
->         struct tee_device *teedev;
-> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-> index eafab07c9f58..4c4b06783035 100644
-> --- a/include/linux/arm_ffa.h
-> +++ b/include/linux/arm_ffa.h
-> @@ -17,7 +17,7 @@ struct ffa_device {
->         bool mode_32bit;
->         uuid_t uuid;
->         struct device dev;
-> -       const struct ffa_dev_ops *ops;
-> +       const struct ffa_ops *ops;
->  };
->
->  #define to_ffa_dev(d) container_of(d, struct ffa_device, dev)
-> @@ -49,7 +49,7 @@ static inline void *ffa_dev_get_drvdata(struct ffa_device *fdev)
->
->  #if IS_REACHABLE(CONFIG_ARM_FFA_TRANSPORT)
->  struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
-> -                                      const struct ffa_dev_ops *ops);
-> +                                      const struct ffa_ops *ops);
->  void ffa_device_unregister(struct ffa_device *ffa_dev);
->  int ffa_driver_register(struct ffa_driver *driver, struct module *owner,
->                         const char *mod_name);
-> @@ -59,7 +59,7 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev);
->  #else
->  static inline
->  struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
-> -                                      const struct ffa_dev_ops *ops)
-> +                                      const struct ffa_ops *ops)
->  {
->         return NULL;
->  }
-> @@ -254,7 +254,7 @@ struct ffa_mem_ops_args {
->         struct ffa_mem_region_attributes *attrs;
->  };
->
-> -struct ffa_dev_ops {
-> +struct ffa_ops {
->         u32 (*api_version_get)(void);
->         int (*partition_info_get)(const char *uuid_str,
->                                   struct ffa_partition_info *buffer);
-> --
-> 2.37.3
->
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/lkml/20220823094857.27f3d924@endymion.delvare/T/
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/firmware/dmi_scan.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+--- linux-5.19.orig/drivers/firmware/dmi_scan.c	2022-09-06 15:22:44.279728845 +0200
++++ linux-5.19/drivers/firmware/dmi_scan.c	2022-09-07 10:16:55.743362320 +0200
+@@ -568,7 +568,8 @@ static int __init dmi_present(const u8 *
+ 	u32 smbios_ver;
+ 
+ 	if (memcmp(buf, "_SM_", 4) == 0 &&
+-	    buf[5] < 32 && dmi_checksum(buf, buf[5])) {
++	    buf[5] >= 31 && buf[5] <= 32 &&
++	    dmi_checksum(buf, buf[5])) {
+ 		smbios_ver = get_unaligned_be16(buf + 6);
+ 		smbios_entry_point_size = buf[5];
+ 		memcpy(smbios_entry_point, buf, smbios_entry_point_size);
+@@ -629,7 +630,8 @@ static int __init dmi_present(const u8 *
+ static int __init dmi_smbios3_present(const u8 *buf)
+ {
+ 	if (memcmp(buf, "_SM3_", 5) == 0 &&
+-	    buf[6] < 32 && dmi_checksum(buf, buf[6])) {
++	    buf[6] >= 24 && buf[6] <= 32 &&
++	    dmi_checksum(buf, buf[6])) {
+ 		dmi_ver = get_unaligned_be24(buf + 7);
+ 		dmi_num = 0;			/* No longer specified */
+ 		dmi_len = get_unaligned_le32(buf + 12);
+
+
+-- 
+Jean Delvare
+SUSE L3 Support

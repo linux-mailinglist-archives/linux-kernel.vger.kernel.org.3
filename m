@@ -2,191 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF72B5AF93A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43B55AF942
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiIGAzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S229633AbiIGA52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiIGAzl (ORCPT
+        with ESMTP id S229608AbiIGA50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:55:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5406CF4D;
-        Tue,  6 Sep 2022 17:55:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78D9661738;
-        Wed,  7 Sep 2022 00:55:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DD1C433D7;
-        Wed,  7 Sep 2022 00:55:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662512135;
-        bh=se/afEWZU+1U6axFk6aOj2YfAlp97jvdlbAVZU/vgKY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCF4VYzOLWrXvWtPxzp1bA2kjumy/lT2NtuXJkaibzWjQo4ThXymOm7ujIeaY3lIC
-         X7PfqjW3K8o+dttODAxuWTSZjaEnSQkxbCKUPQPoCAeIb6eGtZMN5UmoENWrZz8JjG
-         2s2NyDmLWO4OR7nE5J9N5BBsxngt5UUrE7tvmr4TB7339cHMIQo24wHClpUcwFPDWg
-         xdPjbpVyE+WPqnHYSA+6ZBXBeQz2fR7qyTG7UYK/1xdNYLeNloP98Pg/OUZnDeZ2MP
-         51qMctFRTEfliB48H+LyXFkkd9FlE5iGrE48oooQ6tjE4YiZur0X2opq5Eh1HFSVpU
-         lHXpBBWf6evzg==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: [PATCH 2/2] x86/kprobes: Fix optprobe optimization check with CONFIG_RETHUNK
-Date:   Wed,  7 Sep 2022 09:55:31 +0900
-Message-Id: <166251213122.632004.14890772161914623561.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <166251211081.632004.1842371136165709807.stgit@devnote2>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
-User-Agent: StGit/0.19
+        Tue, 6 Sep 2022 20:57:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA0295E61;
+        Tue,  6 Sep 2022 17:57:24 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMkLJ3vn6znWMk;
+        Wed,  7 Sep 2022 08:54:48 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 08:57:22 +0800
+Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
+ (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 7 Sep
+ 2022 08:57:21 +0800
+Subject: Re: [PATCH net-next 2/5] net: hns3: support ndo_select_queue()
+To:     Paolo Abeni <pabeni@redhat.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>
+CC:     <edumazet@google.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lipeng321@huawei.com>,
+        <lanhao@huawei.com>
+References: <20220905081539.62131-1-huangguangbin2@huawei.com>
+ <20220905081539.62131-3-huangguangbin2@huawei.com>
+ <8b2589bd6303133fd27cab1af27b096a5f848074.camel@redhat.com>
+From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
+Message-ID: <855274c8-fa07-8405-61d6-390b7cd9853e@huawei.com>
+Date:   Wed, 7 Sep 2022 08:57:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8b2589bd6303133fd27cab1af27b096a5f848074.camel@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.67]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for padding after
-RET instruction, kprobe jump optimization always fails on the functions
-with INT3 padding inside the function body. (It already checks the INT3
-padding between functions, but not inside the function)
 
-To avoid this issue, when it finds an INT3, read following bytes and
-find the next non-INT3 instruction, and decode the function again to
-search a branch which jumps to that address. If it can not find such
-branch instruction, it thinks that INT3 does not come from RETHUNK or
-SLS.
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Fixes: 15e67227c49a ("x86: Undo return-thunk damage")
-Cc: stable@vger.kernel.org
----
- arch/x86/kernel/kprobes/opt.c |   70 +++++++++++++++++++----------------------
- 1 file changed, 33 insertions(+), 37 deletions(-)
-
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 2e41850cab06..ed77eeeef4ed 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -260,25 +260,12 @@ static int insn_is_indirect_jump(struct insn *insn)
- 	return ret;
- }
- 
--static bool is_padding_int3(unsigned long addr, unsigned long eaddr)
--{
--	unsigned char ops;
--
--	for (; addr < eaddr; addr++) {
--		if (get_kernel_nofault(ops, (void *)addr) < 0 ||
--		    ops != INT3_INSN_OPCODE)
--			return false;
--	}
--
--	return true;
--}
--
- /* Decode whole function to ensure any instructions don't jump into target */
- static int can_optimize(unsigned long paddr)
- {
--	unsigned long addr, size = 0, offset = 0;
--	struct insn insn;
- 	kprobe_opcode_t buf[MAX_INSN_SIZE];
-+	unsigned long size = 0, offset = 0;
-+	struct insn insn;
- 
- 	/* Lookup symbol including addr */
- 	if (!kallsyms_lookup_size_offset(paddr, &size, &offset))
-@@ -296,11 +283,9 @@ static int can_optimize(unsigned long paddr)
- 	if (size - offset < JMP32_INSN_SIZE)
- 		return 0;
- 
--	/* Decode instructions */
--	addr = paddr - offset;
--	while (addr < paddr - offset + size) { /* Decode until function end */
--		unsigned long recovered_insn;
--		int ret;
-+	/* Decode all instructions in the function */
-+	for_each_insn(&insn, paddr - offset, paddr - offset + size, buf) {
-+		unsigned long addr = (unsigned long)insn.kaddr;
- 
- 		if (search_exception_tables(addr))
- 			/*
-@@ -308,31 +293,42 @@ static int can_optimize(unsigned long paddr)
- 			 * we can't optimize kprobe in this function.
- 			 */
- 			return 0;
--		recovered_insn = recover_probed_instruction(buf, addr);
--		if (!recovered_insn)
--			return 0;
- 
--		ret = insn_decode_kernel(&insn, (void *)recovered_insn);
--		if (ret < 0)
-+		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE) {
-+			addr = skip_padding_int3(addr);
-+			if (!addr)
-+				return 0;
-+			/*
-+			 * If addr becomes the next function entry, this is
-+			 * the INT3 padding between functions.
-+			 */
-+			if (addr - 1 == paddr - offset + size)
-+				return 1;
-+
-+			/*
-+			 * This can be padding INT3 for CONFIG_RETHUNK or
-+			 * CONFIG_SLS. If a branch jumps to the address next
-+			 * to the INT3 sequence, this is just for padding,
-+			 * then we can continue decoding.
-+			 */
-+			for_each_insn(&insn, paddr - offset, addr, buf) {
-+				if (insn_get_branch_addr(&insn) == addr)
-+					goto found;
-+			}
-+
-+			/* This INT3 can not be decoded safely. */
- 			return 0;
-+found:
-+			/* Set loop cursor */
-+			insn.next_byte = (void *)addr;
-+			continue;
-+		}
- 
--		/*
--		 * In the case of detecting unknown breakpoint, this could be
--		 * a padding INT3 between functions. Let's check that all the
--		 * rest of the bytes are also INT3.
--		 */
--		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE)
--			return is_padding_int3(addr, paddr - offset + size) ? 1 : 0;
--
--		/* Recover address */
--		insn.kaddr = (void *)addr;
--		insn.next_byte = (void *)(addr + insn.length);
- 		/* Check any instructions don't jump into target */
- 		if (insn_is_indirect_jump(&insn) ||
- 		    insn_jump_into_range(&insn, paddr + INT3_INSN_SIZE,
- 					 DISP32_SIZE))
- 			return 0;
--		addr += insn.length;
- 	}
- 
- 	return 1;
-
+On 2022/9/6 21:15, Paolo Abeni wrote:
+> On Mon, 2022-09-05 at 16:15 +0800, Guangbin Huang wrote:
+>> To support tx packets to select queue according to its dscp field after
+>> setting dscp and tc map relationship, this patch implements
+>> ndo_select_queue() to set skb->priority according to the user's setting
+>> dscp and priority map relationship.
+>>
+>> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+>> ---
+>>   .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 46 +++++++++++++++++++
+>>   1 file changed, 46 insertions(+)
+>>
+>> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+>> index 481a300819ad..82f83e3f8162 100644
+>> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+>> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+>> @@ -2963,6 +2963,51 @@ static int hns3_nic_set_vf_mac(struct net_device *netdev, int vf_id, u8 *mac)
+>>   	return h->ae_algo->ops->set_vf_mac(h, vf_id, mac);
+>>   }
+>>   
+>> +#define HNS3_INVALID_DSCP		0xff
+>> +#define HNS3_DSCP_SHIFT			2
+>> +
+>> +static u8 hns3_get_skb_dscp(struct sk_buff *skb)
+>> +{
+>> +	__be16 protocol = skb->protocol;
+>> +	u8 dscp = HNS3_INVALID_DSCP;
+>> +
+>> +	if (protocol == htons(ETH_P_8021Q))
+>> +		protocol = vlan_get_protocol(skb);
+>> +
+>> +	if (protocol == htons(ETH_P_IP))
+>> +		dscp = ipv4_get_dsfield(ip_hdr(skb)) >> HNS3_DSCP_SHIFT;
+>> +	else if (protocol == htons(ETH_P_IPV6))
+>> +		dscp = ipv6_get_dsfield(ipv6_hdr(skb)) >> HNS3_DSCP_SHIFT;
+>> +
+>> +	return dscp;
+>> +}
+>> +
+>> +static u16 hns3_nic_select_queue(struct net_device *netdev,
+>> +				 struct sk_buff *skb,
+>> +				 struct net_device *sb_dev)
+>> +{
+>> +	struct hnae3_handle *h = hns3_get_handle(netdev);
+>> +	u8 dscp, priority;
+>> +	int ret;
+>> +
+>> +	if (h->kinfo.tc_map_mode != HNAE3_TC_MAP_MODE_DSCP ||
+>> +	    !h->ae_algo->ops->get_dscp_prio)
+>> +		goto out;
+>> +
+>> +	dscp = hns3_get_skb_dscp(skb);
+>> +	if (unlikely(dscp == HNS3_INVALID_DSCP))
+>> +		goto out;
+>> +
+>> +	ret = h->ae_algo->ops->get_dscp_prio(h, dscp, NULL, &priority);
+> 
+> This introduces an additional, unneeded indirect call in the fast path,
+> you could consider replacing the above with a direct call to
+> hclge_get_dscp_prio() - again taking care of the CONFIG_HNS3_DCB
+> dependency.
+> 
+> Cheers,
+> 
+> Paolo
+> 
+> .
+> 
+Ok.

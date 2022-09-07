@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416045B1030
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5504C5B1031
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiIGXHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 19:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S229871AbiIGXHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 19:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIGXHH (ORCPT
+        with ESMTP id S229791AbiIGXHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 19:07:07 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8FFC3F53
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:07:05 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id i9so5714530qka.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 16:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Y6pRZpUk+zqaAgkCeIzS94fxs7LngDZcMEpib2+hGHU=;
-        b=XCUZAaiRUr0RkAx/wyAOWDoxJGpoaofe4IUIO/Z4Oj23HH/8Urq1SfH3RW3VimcAP5
-         IOTaBqpNj8onlQC3ycH4M0G0A4WmAc1fT0FEeWGmMat1xZzbccHl8J4HnZYU/aknykxv
-         tRd4/RckrstTOXlmLCrRpfC5iEPklCqhMK6zyPVQUlpEFYEr6HSfvArSgh71TLa391za
-         rDDJABnJcSSOQnCQA1lgy8iDR3JABCqHo9GsZFYp6FRlXfyac/6rhXAwER6RNXhVkegu
-         ORCJhcreg7IMOa/nzMPQCFubSlyUpUI/QniDJb8ekn3YwPl1WozkLuyMLSVXRMO+Uhbv
-         8Z/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Y6pRZpUk+zqaAgkCeIzS94fxs7LngDZcMEpib2+hGHU=;
-        b=oyBpoIzZ6WUxNRWHXjxQkgl2Q0tJmwuTDKqiAap/HM8PUz456TZOOBokbwM37iYmkl
-         m3iIzKI0ljhJlEGHmwAl/3T8CHkavyGdxrKL/ctf1KGS/MTfjIyA7v/XY5pmcxMwiG1h
-         qE8hxaoio4XhEDPbqrMDinoHDz+2JGy+JNBMR6m3dW4qIPQek/m36Tgibpg2JNFYkRyX
-         R97BarZJoFVZH13Jqy7oNrCTkiIa45ahJ9t7AV/BLaN4otV8atWwN5vawmhWrZE4YAH8
-         +0g7kVLsWFWwTrzLPcB/cOJhtQwn0OGeCmBIGHoo/73ZxJGrLYjz4FeI+8CywERXlvFh
-         tcHw==
-X-Gm-Message-State: ACgBeo273FCEoqUcYlP5gtEx8tsTVGCSBFKTbs+uGzzBok5eSFMngeC/
-        u3OhVeYgdQp9OI4PkAFG9ytbsQ==
-X-Google-Smtp-Source: AA6agR46JVb2VgdODErJDQ3TfpF3Ib1qSU9Zudl8rH41hD23soYZBVWx17Pt9oLzp9F++lek2CxVTw==
-X-Received: by 2002:a05:620a:2805:b0:6bc:5d4a:9618 with SMTP id f5-20020a05620a280500b006bc5d4a9618mr4640301qkp.116.1662592024471;
-        Wed, 07 Sep 2022 16:07:04 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id bq30-20020a05620a469e00b006b95b0a714esm15301930qkb.17.2022.09.07.16.07.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 16:07:03 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1oW48M-008nme-E3;
-        Wed, 07 Sep 2022 20:07:02 -0300
-Date:   Wed, 7 Sep 2022 20:07:02 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lpivarc@redhat.com" <lpivarc@redhat.com>,
-        "Liu, Jingqi" <jingqi.liu@intel.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-Subject: Re: [PATCH] vfio/type1: Unpin zero pages
-Message-ID: <YxkkFiToNSw3CgrP@ziepe.ca>
-References: <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com>
- <YxfX+kpajVY4vWTL@ziepe.ca>
- <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
- <YxiTOyGqXHFkR/DY@ziepe.ca>
- <20220907095552.336c8f34.alex.williamson@redhat.com>
- <YxjJlM5A0OLhaA7K@ziepe.ca>
- <20220907125627.0579e592.alex.williamson@redhat.com>
- <Yxj3Ri8pfqM1SxWe@ziepe.ca>
- <20220907142416.4badb879.alex.williamson@redhat.com>
+        Wed, 7 Sep 2022 19:07:15 -0400
+Received: from alln-iport-2.cisco.com (alln-iport-2.cisco.com [173.37.142.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED61C4805
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1094; q=dns/txt; s=iport;
+  t=1662592033; x=1663801633;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WIMedRdp/vCdubl76WnqCfmpNc51ZNpLrONKBIeSt70=;
+  b=gbvtdRapPPlnzUbZdFtSd+6I/ljf+QZROg2wIkBxhZ6IGnHG5wqlOnMt
+   ZnltYAHK/i43w1zBM6KU3lJexjZnOiaB0jpY8YIUeCDUNcUUnwvWDe3zh
+   HHi0eVNAWuGDJDiC/Uq8IdGNyoLG+FDGO8wArnynktVTrgOvWqsBaCJti
+   g=;
+X-IPAS-Result: =?us-ascii?q?A0ATAACkIxljmJBdJa1aHQEBAQEJARIBBQUBgXsIAQsBg?=
+ =?us-ascii?q?3k+RYxtiHGdCBSBEQNUCwEBAQ9CBAEBhQaEZwIlNAkOAQIEAQEBAQMCAwEBA?=
+ =?us-ascii?q?QEBAQMBAQUBAQECAQcEFAEBAQEBAQEBHRkFDhAnhXWGcAsBRoE+ARKCfYMhA?=
+ =?us-ascii?q?6YXgXkygQGIHYFlFIEpAYpshVkcgUlEhAh1hAsfhlUEmBYDCQQHBUpCAwsfD?=
+ =?us-ascii?q?hY2AxUDFAMFJAcDGQ8jDQ0EHQwDAwUlAwICGwcCAgMCBhUFAgIXHhg4CAQIB?=
+ =?us-ascii?q?CskDwUCBy8FBC8CHgQFBhEIAhYCBgQEBAQVAhAIAggmFwcTMxkBBVkQCSEWB?=
+ =?us-ascii?q?igNBQYTAyBHJgUHPg8oMjU5Kx0bCoEOKgkfFQMEBAMCBhMDAyACECwxFAQpE?=
+ =?us-ascii?q?xItBytzCQIDImwDAwQoLAMJIR8HKCY8B1kSKAUDAxAiPQYDCQMCJFp9DjEUF?=
+ =?us-ascii?q?wUDEBmZB3sTo3WCFZ5Ug1yBRohGlgIaMpZykgMBlwcgoj00hFCBYTqBWzMaC?=
+ =?us-ascii?q?BsVgyJRGQ+OOY5XJDE7AgYLAQEDCYgKgkgBAQ?=
+IronPort-Data: A9a23:n+88O6k1cOwF1MnQJ5P0FVLo5gxqJkRdPkR7XQ2eYbSJt1+Wr1Gzt
+ xIWX2HSPveMZGKjedB0a4yz9h8G7JfRm4diTlRtqS8xEVtH+JHPbTi7wugcHM8zwunrFh8PA
+ xA2M4GYRCwMZiaA4E/raNANlFEkvU2ybuKU5NXsZ2YgHmeIdA970Ug5w79h3dY16TSEK1rlV
+ e3a8pW31GCNg1aYAkpMg05UgEoy1BhakGpwUm0WPZinjneH/5UmJM53yZWKEpfNatI88thW6
+ Ar05OrREmvxp3/BAz4++1rxWhVirrX6ZWBihpfKMkSvqkAqm8A87ko0HPhbbGUKog6IpNFg1
+ s5E6bK8FBgVO6KZzYzxUzEAe81/FbdN9LmCKn+lvInDiUbHaHDrhf5pCSnaP6VBpb0xWj4Ip
+ KdecWxRBvyAr7reLLaTRuBqh8knM8DDN4IEsXYmxjbcZRojacGYH/qQu4EJhl/cgOhlEPLUO
+ eEAeQFfNiTvIDYeF1QIV64xybLAan7XKm0E9w39SbAMy2zSyhFhlbvgKtzYfvSUSshP2EWVv
+ GTL+yL+GB5yHNCS1zuO/262i+Lngyz2QsQRGae++/osh0ecrkQJDxcWFlenifq0kEizX5RYM
+ UN80iQ0qrc78kDtStjmQzW3pXeFulgXXN84O/Uz7h2AzqvPpQ+fGm8CTzlcQN8hstQrQT8tk
+ FSOmrvU6SdHqraZTzeW8a2Z6GP0MikOJmhEbigBJecY3zX9iIN0izCSZ+1iK6+kkMb8RR/8n
+ i+2qSdr0t3/kvU3/6m8+FnGhRelqZ7IUhM5623rsoSNs1gRiGmNOtHA1LTL0RpTBN3DHwXe5
+ hDoj+Dbvb5RVcvS/MCYaL9VdIxF8cppJ9E1bbRHJZgq9z2392Wke+i8CxkheR85a67oldIVC
+ XI/VCtL75NVeXCtd6IyM8S6Ct8hyu7rEtGNuhHogjhmP8kZmOyvpXEGiausM4bFyxBEfUYXY
+ szzTCpUJSxGYZmLNRLvLwvn7Zclxzol2UTYTo3hwhKs3NK2PSDLE+pabQfVNb5os8toRTk5F
+ f4CZ6NmLD0CAIXDjtX/reb/0HhTdyFgXMCqwyCpXrfffloO9J4d5w/5mON9JNMNc1V9nebT9
+ Xb1QV5D1Ff6nhX6xfaiNBhehEfUdc8n9xoTZHV0VX7xgiRLSdj0ts83KcBoFYTLAcQ+l5aYu
+ dFfJZXZahmOIxyakwkggW7V9dQ9LE/x21LWZEJIolEXJvZdeuAAwfe8FiOHycXEJnPfWRcWy
+ 1F46j7mfA==
+IronPort-HdrOrdr: A9a23:n6M7jqj4w6xa9IYvsi/vQTRHLnBQXtUji2hC6mlwRA09TyVXra
+ yTdZMgpH3JYVkqNk3I9errBEDiewK+yXcK2+gs1N6ZNWGMhILCFu5fBOXZrgEIMheOk9K1rZ
+ 0BT0C7Y+eAamSTSq3BkW2FL+o=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.93,298,1654560000"; 
+   d="scan'208";a="934726692"
+Received: from rcdn-core-8.cisco.com ([173.37.93.144])
+  by alln-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 07 Sep 2022 23:07:11 +0000
+Received: from localhost.localdomain ([10.25.130.54])
+        by rcdn-core-8.cisco.com (8.15.2/8.15.2) with ESMTP id 287N79Cx032254;
+        Wed, 7 Sep 2022 23:07:09 GMT
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     xe-linux-external@cisco.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] driver: of: overlay: demote message to warning
+Date:   Wed,  7 Sep 2022 16:07:08 -0700
+Message-Id: <20220907230709.271889-1-danielwa@cisco.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907142416.4badb879.alex.williamson@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.25.130.54, [10.25.130.54]
+X-Outbound-Node: rcdn-core-8.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,28 +91,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 02:24:16PM -0600, Alex Williamson wrote:
+This warning message shows by default on the vast majority of overlays
+applied. Despite the text identifying this as a warning it is marked
+with the loglevel for error. At Cisco we filter the loglevels to only
+show error messages. We end up seeing this message but it's not really
+an error.
 
-> Also, I want to clarify, is this a recommendation relative to the
-> stable patch proposed here, or only once we get rid of shared zero page
-> pinning?  We can't simply do accounting on the shared zero page since a
-> single user can overflow the refcount.
+For this reason it makes sense to demote the message to the warning
+loglevel.
 
-Yes, here I would account properly in a way that keeps working for
-future GUP changes because if something goes wrong with this simple
-patch it has a simple fix.
+Cc: xe-linux-external@cisco.com
+Signed-off-by: Daniel Walker <danielwa@cisco.com>
+---
+ drivers/of/overlay.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Trialing it will get some good data to inform what David's patch
-should do.
+diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+index bd8ff4df723d..4ae276ed9a65 100644
+--- a/drivers/of/overlay.c
++++ b/drivers/of/overlay.c
+@@ -358,7 +358,7 @@ static int add_changeset_property(struct overlay_changeset *ovcs,
+ 	}
+ 
+ 	if (!of_node_check_flag(target->np, OF_OVERLAY))
+-		pr_err("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
++		pr_warn("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
+ 		       target->np, new_prop->name);
+ 
+ 	if (ret) {
+-- 
+2.25.1
 
-Overall have the feeling that a small group of people might grumble
-that their limits break, but with a limit adjustment they can probably
-trivially move on. It would be very interesting to see if someone
-feels like the issue is important enough to try and get something
-changed.
-
-You could also fix it by just using FOLL_FORCE (like RDMA/io_uring
-does), which fixes the larger issue Kevin noted that the ROM doesn't
-become visible to DMA.
-
-Jason

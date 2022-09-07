@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C4A5AFBD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B985AFBD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiIGFk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S229764AbiIGFlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiIGFkZ (ORCPT
+        with ESMTP id S229543AbiIGFlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:40:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3411172EDE;
-        Tue,  6 Sep 2022 22:40:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD2A7B81A3A;
-        Wed,  7 Sep 2022 05:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E172C433C1;
-        Wed,  7 Sep 2022 05:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662529220;
-        bh=UqXCQrAW++a67zSQmPX5bfVF+csV35Hce2WmFZzNGrw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PPbba7SQh/HbpZc2pTcde0XInlM5HbbjFU3jWpyOG2IL5T1mOwECyP8nrKEUmZ40S
-         dlHVd0Sc9ee9fgpJomI9TsGb2ec2PkkxW2TNKaIuT7pGcV8UoAfRYiwQepcIF/B+jR
-         fd1JyWtXUcxxhbxD5vZ8DUF/dv2OuPH7ohjF+t1M=
-Date:   Wed, 7 Sep 2022 07:40:16 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 5.15 101/107] kbuild: Unify options for BTF generation
- for vmlinux and modules
-Message-ID: <YxguwCpBEKAJJDU6@kroah.com>
-References: <20220906132821.713989422@linuxfoundation.org>
- <20220906132826.130642856@linuxfoundation.org>
- <291d739c-752f-ead3-1974-a136b986afb7@gmail.com>
+        Wed, 7 Sep 2022 01:41:06 -0400
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C64C7A530;
+        Tue,  6 Sep 2022 22:41:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1662529250; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=X1X3qs5DaixNb8/fsOtVBYiS04o+PohJB+RUMSFKVbNoMRTJsDqT0T/wqXcMcV3yWkAwwEA8ZYHlt9M13RXZgaF8qk4Np7LlgGfYYZceb9Z3RVgUXnwi4kh2GLmjcQ9qoIu3QS7i6MUOHPXuYiv3Ojovs3k4cpBxv/ykUZ0y9/0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1662529250; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=Rcq4Bn+toMirH9/FszU0mYhD55p/yIgYD9I0ba0nhsg=; 
+        b=f7BH4egKDE1oS7aMb6eNWabMEx0Hx17GDKWL0xG3s/5Xv1eCeiCgZh67iNVXyohvL/3ZfDCUCkasjh9DRQGecgVf/Yt8m6ozqfZcJGKt4VdRWfyCb9LGTzGT/Sdwt/ewiMkFsPx4nHngX/wnaDCo/TJ8/FrcO+iQ1mtTTuJa1Eg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1662529250;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=Rcq4Bn+toMirH9/FszU0mYhD55p/yIgYD9I0ba0nhsg=;
+        b=cl4c8PKR8V7lq2vRuBva3+emG264Hm3+zljfpCJyYo3FamDSM5aEK/D1D/uMkmM7
+        bjqSnbWc1lt5bjQR0LPmKpFDFjIYDBIZa732uXqBlG0PELDTr0bjfay7zIRLL8xz4fo
+        RncBVTibiZI+bUjAOfmdjUqgtdOXYX6t/pOGuyBo=
+Received: from edelgard.icenowy.me (112.94.103.212 [112.94.103.212]) by mx.zohomail.com
+        with SMTPS id 1662529249034989.0127040626833; Tue, 6 Sep 2022 22:40:49 -0700 (PDT)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH] PCI: fu740: do not use clock name when requesting clock
+Date:   Wed,  7 Sep 2022 13:40:20 +0800
+Message-Id: <20220907054020.745672-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <291d739c-752f-ead3-1974-a136b986afb7@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,53 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 11:45:00AM -0700, Florian Fainelli wrote:
-> 
-> 
-> On 9/6/2022 6:31 AM, Greg Kroah-Hartman wrote:
-> > From: Jiri Olsa <jolsa@redhat.com>
-> > 
-> > commit e27f05147bff21408c1b8410ad8e90cd286e7952 upstream.
-> > 
-> > Using new PAHOLE_FLAGS variable to pass extra arguments to
-> > pahole for both vmlinux and modules BTF data generation.
-> > 
-> > Adding new scripts/pahole-flags.sh script that detect and
-> > prints pahole options.
-> > 
-> > [ fixed issues found by kernel test robot ]
-> > 
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > Link: https://lore.kernel.org/bpf/20211029125729.70002-1-jolsa@kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >   Makefile                  |    3 +++
-> >   scripts/Makefile.modfinal |    2 +-
-> >   scripts/link-vmlinux.sh   |   11 +----------
-> >   scripts/pahole-flags.sh   |   20 ++++++++++++++++++++
-> >   4 files changed, 25 insertions(+), 11 deletions(-)
-> >   create mode 100755 scripts/pahole-flags.sh
-> 
-> My linux-stable-rc/linux-5.15.y checkout shows that scripts/pahole-flags.sh
-> does not have an executable permission and commit
-> 128e3cc0beffc92154d9af6bd8c107f46e830000 ("kbuild: Unify options for BTF
-> generation for vmlinux and modules") does have:
-> 
-> diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
-> new file mode 100644
-> index 000000000000..e6093adf4c06
-> 
-> whereas your email does have the proper 100755 permission set on the file,
-> any idea what happened here?
+The DT binding of FU740 PCIe does not enforce a clock-names property,
+and there exist some device tree that has a clock name that does not
+stick to the one used by Linux DT (e.g. the one shipped with current
+U-Boot mainline).
 
-Yeah, quilt does not like dealing with file permissions at all :(
+Drop the name in the clock request, instead just pass NULL (because
+this device should have only a single clock).
 
-We have over time, not required executable permissions on kernel files
-because of this issue.  Is it required here?  If so, I'll try to
-remember to fix it up "by hand".
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+---
+ drivers/pci/controller/dwc/pcie-fu740.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
+index 0c90583c078b..edb218a37a4f 100644
+--- a/drivers/pci/controller/dwc/pcie-fu740.c
++++ b/drivers/pci/controller/dwc/pcie-fu740.c
+@@ -315,7 +315,7 @@ static int fu740_pcie_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, PTR_ERR(afp->pwren), "unable to get pwren-gpios\n");
+ 
+ 	/* Fetch clocks */
+-	afp->pcie_aux = devm_clk_get(dev, "pcie_aux");
++	afp->pcie_aux = devm_clk_get(dev, NULL);
+ 	if (IS_ERR(afp->pcie_aux))
+ 		return dev_err_probe(dev, PTR_ERR(afp->pcie_aux),
+ 					     "pcie_aux clock source missing or invalid\n");
+-- 
+2.37.1
 
-greg k-h

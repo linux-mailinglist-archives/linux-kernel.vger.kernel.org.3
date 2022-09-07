@@ -2,119 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8F35AFA2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E745AFA33
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiIGCsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S229957AbiIGCtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiIGCsL (ORCPT
+        with ESMTP id S229941AbiIGCtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:48:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3250898D37;
-        Tue,  6 Sep 2022 19:48:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3666A61700;
-        Wed,  7 Sep 2022 02:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0281C433C1;
-        Wed,  7 Sep 2022 02:48:06 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 22:48:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Arun Easi <aeasi@marvell.com>
-Cc:     Martin Petersen <martin.petersen@oracle.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-next@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: Re: [PATCH 1/1] tracing: Fix compile error in trace_array calls
- when TRACING is disabled
-Message-ID: <20220906224845.64bc7afd@gandalf.local.home>
-In-Reply-To: <20220907023800.4095-2-aeasi@marvell.com>
-References: <20220907023800.4095-1-aeasi@marvell.com>
-        <20220907023800.4095-2-aeasi@marvell.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 6 Sep 2022 22:49:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C1699244;
+        Tue,  6 Sep 2022 19:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662518946; x=1694054946;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TbbV0IomhaWuQjuUgb4smhj3MDYoJe79ICKh/fMwL9w=;
+  b=KMDBLyCW3KTOLufB05nBwSF5A8SxeLKZYB2gssPGqZua3dEow2k3N1CV
+   6MPDjOeBQNHoOhr+0ZIE4W2FAb9zQDyZRsVX/jUkiaOqx52xgWxgQ9Vh4
+   g+K9vQYKZ4RIge5E/26/j+oJmmbD+bbxK9V/3HNotyCC8rMqLJWqpZtDo
+   EjYrywx3CWugpEDUxslrHJGo+TrQdU3tihQzGo9YC49p1wwovmrA9zoeX
+   BmNJpRMeSHaLwqNy/wYGqoB3+RKGEmAMGLJFZNamGFPlHzbcREM0wJs7K
+   STIj6d/xhWcc8sWzHkI69alXZV/hwwhQH9mJql9tr3NsXsB/wQzt3X6i4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="294347905"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="294347905"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 19:49:06 -0700
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="644422467"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.113]) ([10.238.4.113])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 19:49:03 -0700
+Message-ID: <3aa4c863-24cc-9fdf-9960-2b1983b3322b@linux.intel.com>
+Date:   Wed, 7 Sep 2022 10:49:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] perf script: Skip dummy event attr check
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc:     Hongtao Yu <hoy@fb.com>, Namhyung Kim <namhyung@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org,
+        "Liang, Kan" <kan.liang@linux.intel.com>
+References: <20220831124041.219925-1-jolsa@kernel.org>
+ <CAP-5=fX-=ph8g3VKbQXSRT8SiOZ3XqQLd3T9-ZTNZ5L+ye5L-A@mail.gmail.com>
+ <Yw+LCN2cX9peweWV@kernel.org>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <Yw+LCN2cX9peweWV@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sep 2022 19:38:00 -0700
-Arun Easi <aeasi@marvell.com> wrote:
+Hi,
 
-> Fix this compilation error seen when CONFIG_TRACING is not enabled:
+On 9/1/2022 12:23 AM, Arnaldo Carvalho de Melo wrote:
+> Em Wed, Aug 31, 2022 at 09:02:46AM -0700, Ian Rogers escreveu:
+>> On Wed, Aug 31, 2022 at 5:40 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>>>
+>>> Hongtao Yu reported problem when displaying uregs in perf script
+>>> for system wide perf.data:
+>>>
+>>>    # perf script -F uregs | head -10
+>>>    Samples for 'dummy:HG' event do not have UREGS attribute set. Cannot print 'uregs' field.
+>>>
+>>> The problem is the extra dummy event added for system wide,
+>>> which does not have proper sample_type setup.
+>>>
+>>> Skipping attr check completely for dummy event as suggested
+>>> by Namhyung, because it does not have any samples anyway.
+>>>
+>>> Reported-by: Hongtao Yu <hoy@fb.com>
+>>> Suggested-by: Namhyung Kim <namhyung@kernel.org>
+>>> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+>>
+>> Acked-by: Ian Rogers <irogers@google.com>
 > 
-> drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_init':
-> drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function
-> 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'?
-> [-Werror=implicit-function-declaration]
->  2854 |         qla_trc_array = trace_array_get_by_name("qla2xxx");
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~
->       |                         trace_array_set_clr_event
+> Thanks, applied to perf/urgent.
 > 
-> drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_uninit':
-> drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function
-> 'trace_array_put' [-Werror=implicit-function-declaration]
->  2869 |         trace_array_put(qla_trc_array);
->       |         ^~~~~~~~~~~~~~~
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Arun Easi <aeasi@marvell.com>
-> ---
->  include/linux/trace.h | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/include/linux/trace.h b/include/linux/trace.h
-> index bf16961..bf206c3 100644
-> --- a/include/linux/trace.h
-> +++ b/include/linux/trace.h
-> @@ -48,6 +48,23 @@ void osnoise_arch_unregister(void);
->  void osnoise_trace_irq_entry(int id);
->  void osnoise_trace_irq_exit(int id, const char *desc);
->  
-> +#else	/* CONFIG_TRACING */
-> +#define TRACE_EXPORT_FUNCTION	0
-> +#define TRACE_EXPORT_EVENT	0
-> +#define TRACE_EXPORT_MARKER	0
-> +struct trace_export { };
+> - Arnaldo
 
-The original for the above can just be moved out of the #ifdef
-CONFIG_TRACING. No need to "hide" them.
+I have met a similar issue on hybrid systems such as ADL, I apply the 
+patch, and it works OK for the normal mode.
+  # ./perf record  --intr-regs=di,r8,dx,cx -e 
+br_inst_retired.near_call:p -c 1000 --per-thread true
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.024 MB perf.data (25 samples) ]
 
-> +#define register_ftrace_export(export) -EINVAL
-> +#define unregister_ftrace_export(export) 0
-> +#define trace_printk_init_buffers()
-> +#define trace_array_printk(tr, ip, fmt, ...) 0
-> +#define trace_array_init_printk(tr) -EINVAL
-> +#define trace_array_put(tr)
-> +#define trace_array_get_by_name(name) NULL
-> +#define trace_array_destroy(tr) 0
+# ./perf script -F iregs |head -5
+  ABI:2    CX:0xffff90e19d024ed8    DX:0x1    DI:0xffff90e19d024ed8 
+R8:0xffffba5e437e7b30
+  ABI:2    CX:0x7f5239783000    DX:0x80000000    DI:0xffff90e1801eea00 
+  R8:0x71
+  ABI:2    CX:0x40    DX:0x60    DI:0xffffffff9fde5ab8    R8:0x40
+  ABI:2    CX:0x0    DX:0xffffffffffffffff    DI:0xffff90e1877408e8 
+R8:0x1
+  ABI:2    CX:0xcc0    DX:0x1    DI:0xffff90e187d17c60    R8:0x40
 
-With the data outside the #ifdef, the above should be converted into static
-inlines.
+But the issue still happened when running the test in the pipe mode. In 
+the pipe mode, it calls process_attr() which still checks the attr for 
+the dummy event, so the issue happened.
+
+  # ./perf record -o - --intr-regs=di,r8,dx,cx -e 
+br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf 
+script -F iregs |head -5
+Samples for 'dummy:HG' event do not have IREGS attribute set. Cannot 
+print 'iregs' field.
+0x120 [0x90]: failed to process type: 64
+
+I have one test patch which can fix the pipe mode issue.
+
+  ./perf record -o - --intr-regs=di,r8,dx,cx -e 
+br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf 
+script -F iregs |head -5
+  ABI:2    CX:0xffff90e18119e278    DX:0x0    DI:0xffff90e18119f858 
+R8:0xffff90e18119e278
+  ABI:2    CX:0x0    DX:0x1    DI:0xfffffa2844a91580    R8:0x402
+  ABI:2    CX:0x0    DX:0x0    DI:0x100cca    R8:0x0
+  ABI:2    CX:0x0    DX:0x0    DI:0xffffffff9e997ca5    R8:0x0
+  ABI:2    CX:0x113ce8000    DX:0xffff90e198f46600 
+DI:0xffff90e189de8000    R8:0x290
 
 
-> +#define osnoise_arch_register() -EINVAL
-> +#define osnoise_arch_unregister()
-> +#define osnoise_trace_irq_entry(id)
-> +#define osnoise_trace_irq_exit(id, desc)
+Fixes: b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems 
+to collect metadata records")
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+---
+  tools/perf/builtin-script.c | 2 ++
+  1 file changed, 2 insertions(+)
 
-No need to define the osnoise functions. These are only here to allow archs
-to define them. They should never be referenced when CONFIG_TRACING is not
-set.
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 9152e3e45b69..2d863cdb19fe 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -2429,6 +2429,8 @@ static int process_attr(struct perf_tool *tool, 
+union perf_event *event,
+         }
 
->  #endif	/* CONFIG_TRACING */
->  
->  #endif	/* _LINUX_TRACE_H */
+         if (evsel->core.attr.sample_type) {
++               if (evsel__is_dummy_event(evsel))
++                       return 0;
+                 err = evsel__check_attr(evsel, scr->session);
+                 if (err)
+                         return err;
+--
+2.25.1
 
+-- 
+Zhengjun Xing

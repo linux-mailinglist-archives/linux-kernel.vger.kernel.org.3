@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699A05B0239
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976915B014C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiIGK63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
+        id S229626AbiIGKIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIGK60 (ORCPT
+        with ESMTP id S229445AbiIGKIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:58:26 -0400
-X-Greylist: delayed 1501 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 03:58:21 PDT
-Received: from smart-D.hosteam.fr (smart-D.hosteam.fr [91.206.156.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0622979E4;
-        Wed,  7 Sep 2022 03:58:20 -0700 (PDT)
-Received: from mail.gatewatcher.com (unknown [192.168.3.58])
-        by smart-D.hosteam.fr (Postfix) with ESMTPS id C43602A19E0;
-        Wed,  7 Sep 2022 12:08:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gatewatcher.com;
-        s=hosteamdkim; t=1662545339;
-        bh=Gb0O+oTPwGmm0v9ITQNaFqxx7I8R0OzeKRA7GcgCDJE=;
-        h=From:To:CC:Subject:Date:From;
-        b=fPZSjQFUbQzouMsJACml/zddw5Kj2viDEG0L+JjXZFGoQtSO4rqqWD0VA+iuUNTte
-         ySAujw5MrrgdRk4qiaW5x3SMG09GUmpfvhRxGdorNnX95DAoIhszIc7whuodVKQQ8N
-         ebkOURJQ9g52MpUNrxdwLaZ+r6YKhOXBOiuKwBYw=
-Received: from gatewatcher.com (192.168.145.72) by
- GWCHR-EXCH01B.adexch.gatewatcher.com (192.168.145.5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 7 Sep 2022 12:08:59 +0200
-From:   <ludovic.cintrat@gatewatcher.com>
-To:     <ludovic.cintrat@gatewatcher.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Boris Sukholitko <boris.sukholitko@broadcom.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        Yoshiki Komachi <komachi.yoshiki@gmail.com>,
-        Paul Blakey <paulb@nvidia.com>,
-        Tom Herbert <tom@herbertland.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net v1] net: core: fix flow symmetric hash
-Date:   Wed, 7 Sep 2022 12:08:13 +0200
-Message-ID: <20220907100814.1549196-1-ludovic.cintrat@gatewatcher.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [192.168.145.72]
-X-ClientProxiedBy: GWCHR-EXCH01B.adexch.gatewatcher.com (192.168.145.5) To
- GWCHR-EXCH01B.adexch.gatewatcher.com (192.168.145.5)
+        Wed, 7 Sep 2022 06:08:21 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82516AFAC0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:08:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 29F89202A5;
+        Wed,  7 Sep 2022 10:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662545299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K63Our7m5pruz8KT61zA6eFNzbWmBaCfIqS0+X4w6nM=;
+        b=CEscT6LwfhFPqSfXuls+K91bSeXxl9wAmABYXxCKqvKiNdAyAaLOlH4mv7nr/EJxwHxLWJ
+        Bn63THGJZHgF52iivcnhoeFfGiz/lBOaNKyyajMK2s/zPa6hXvSCUg7ido7ElVCZMiU/BE
+        mUT2klR4ARq82L410wuN75WtBlcBBw8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662545299;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K63Our7m5pruz8KT61zA6eFNzbWmBaCfIqS0+X4w6nM=;
+        b=0tKzb3OalDOOAkBrZ6pIZ0B7RzjR1zaUIyUmLorRpun0grorpb6FV0TvSWp9GPD6HM1hy/
+        YFBFNrhOr2RJOTCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1007B13A66;
+        Wed,  7 Sep 2022 10:08:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E1JyA5NtGGPuQAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 07 Sep 2022 10:08:19 +0000
+Date:   Wed, 07 Sep 2022 12:08:18 +0200
+Message-ID: <874jxjmr8t.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION 5.19.x] AMD HD-audio devices missing on 5.19
+In-Reply-To: <8735d4fpfx.wl-tiwai@suse.de>
+References: <874jy4cqok.wl-tiwai@suse.de>
+        <20220823010021.GA5967@nvidia.com>
+        <87h723sdde.wl-tiwai@suse.de>
+        <87ilmjqj1f.wl-tiwai@suse.de>
+        <20220823202824.GA4516@nvidia.com>
+        <YxdqP9i0bEwUg4VJ@nvidia.com>
+        <87edwofqkd.wl-tiwai@suse.de>
+        <YxdtCMbrDQCc5N42@nvidia.com>
+        <877d2gfq0k.wl-tiwai@suse.de>
+        <Yxdwko2HIugmppl+@nvidia.com>
+        <8735d4fpfx.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -63,82 +83,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ludovic Cintrat <ludovic.cintrat@gatewatcher.com>
+On Tue, 06 Sep 2022 18:16:50 +0200,
+Takashi Iwai wrote:
+> 
+> On Tue, 06 Sep 2022 18:08:50 +0200,
+> Jason Gunthorpe wrote:
+> > 
+> > On Tue, Sep 06, 2022 at 06:04:27PM +0200, Takashi Iwai wrote:
+> > 
+> > > If you can send (or point) a patch for test, I can set up a test
+> > > kernel and ask reporters for testing it.
+> > 
+> > https://lore.kernel.org/all/20220823202824.GA4516@nvidia.com/
+> 
+> Ah, that one!
+> 
+> OK, will ask the reporters with a test kernel with that patch.
 
-__flow_hash_consistentify() wrongly swaps ipv4 addresses in few cases.
-This function is indirectly used by __skb_get_hash_symmetric(), which is
-used to fanout packets in AF_PACKET.
-Intrusion detection systems may be impacted by this issue.
+According to both reporters, unfortunately it caused a hang at boot
+somewhere.  Only the reset button helped.
 
-__flow_hash_consistentify() computes the addresses difference then swaps
-them if the difference is negative. In few cases src - dst and dst - src
-are both negative.
 
-The following snippet mimics __flow_hash_consistentify():
-
-```
- #include <stdio.h>
- #include <stdint.h>
-
- int main(int argc, char** argv) {
-
-     int diffs_d, diffd_s;
-     uint32_t dst  = 0xb225a8c0; /* 178.37.168.192 --> 192.168.37.178 */
-     uint32_t src  = 0x3225a8c0; /*  50.37.168.192 --> 192.168.37.50  */
-     uint32_t dst2 = 0x3325a8c0; /*  51.37.168.192 --> 192.168.37.51  */
-
-     diffs_d = src - dst;
-     diffd_s = dst - src;
-
-     printf("src:%08x dst:%08x, diff(s-d)=%d(0x%x) diff(d-s)=%d(0x%x)\n",
-             src, dst, diffs_d, diffs_d, diffd_s, diffd_s);
-
-     diffs_d = src - dst2;
-     diffd_s = dst2 - src;
-
-     printf("src:%08x dst:%08x, diff(s-d)=%d(0x%x) diff(d-s)=%d(0x%x)\n",
-             src, dst2, diffs_d, diffs_d, diffd_s, diffd_s);
-
-     return 0;
- }
-```
-
-Results:
-
-src:3225a8c0 dst:b225a8c0, \
-    diff(s-d)=-2147483648(0x80000000) \
-    diff(d-s)=-2147483648(0x80000000)
-
-src:3225a8c0 dst:3325a8c0, \
-    diff(s-d)=-16777216(0xff000000) \
-    diff(d-s)=16777216(0x1000000)
-
-In the first case the addresses differences are always < 0, therefore
-__flow_hash_consistentify() always swaps, thus dst->src and src->dst
-packets have differents hashes.
-
-Fixes: c3f8324188fa8 ("net: Add full IPv6 addresses to flow_keys")
-Signed-off-by: Ludovic Cintrat <ludovic.cintrat@gatewatcher.com>
----
- net/core/flow_dissector.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index 764c4cb3fe8f..5dc3860e9fc7 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -1611,9 +1611,8 @@ static inline void __flow_hash_consistentify(struct flow_keys *keys)
- 
- 	switch (keys->control.addr_type) {
- 	case FLOW_DISSECTOR_KEY_IPV4_ADDRS:
--		addr_diff = (__force u32)keys->addrs.v4addrs.dst -
--			    (__force u32)keys->addrs.v4addrs.src;
--		if (addr_diff < 0)
-+		if ((__force u32)keys->addrs.v4addrs.dst <
-+		    (__force u32)keys->addrs.v4addrs.src)
- 			swap(keys->addrs.v4addrs.src, keys->addrs.v4addrs.dst);
- 
- 		if ((__force u16)keys->ports.dst <
--- 
-2.30.2
-
+Takashi

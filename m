@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26995B1017
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 00:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C87B5B101E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiIGW6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 18:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S229774AbiIGXAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 19:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiIGW61 (ORCPT
+        with ESMTP id S229437AbiIGXAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 18:58:27 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3469E6A7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 15:58:24 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 202so19086274ybe.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 15:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ensB6iG2T4HcBnO54DOwBgrBj2kxQd/wvWtFjiwAVj4=;
-        b=ec3pOZdXR+0LpVTRq9xtvqRgWhEPNWOlfQ0mKzRaG/z4seSTW55o6CxkkBbEr2JftY
-         QIOxFCzbzFr6nl66WDfRjNHGAcuz2W4A7jc8DFtyjAuMJS274y+3N7RuBtFMZTSlO88S
-         NNZHp9ti28xH0kvkd9oi0lKPHhFzwEETdMB1V0XC+oK0QGIiV81gIGM9dh/tRKccoFH/
-         3jHFoZfu1No9YL4DeBaje9rPhu7obuP7MNTxm5c80p7NjZdt3VxFDyPAoWtPhlIMarw1
-         FoKRtXClZ55xK9N7UXCKFY14lX4YixMYO/No+d+iVll5C5V2ktcRd6Aae+fx0Y6l9FUK
-         Cp9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ensB6iG2T4HcBnO54DOwBgrBj2kxQd/wvWtFjiwAVj4=;
-        b=Z43zL9+Zv3lgJN9sDTXQCTi163aTJWlpZNirhIa/o3uOH/1p3xbYZvVKPMq7A6nKth
-         EMwSbcldxJqMmt6YRveyFH29xrz/Cj+D8Vlb3g/2+494pMM8XSj5n0XjiH56GHNeWwut
-         zcLHeV+v8XWRHLkrusNONQ9UPTbZPDIZ305lvyNdR0rXTVUHCUT671w8ysq0v15+Bf0t
-         gXcU18SAtoVVlxg2ZgR4uM5hNTPUR/lXH+atxIv2SXcUH76jYafCqW1P4ws2NkLfSfo2
-         28PbJK0gjRJUBIBHp50qg+i4T+fGxx8Xd0PoeWnk2WCDSkEUIRAxHeFV2hDyWY7go+00
-         9guQ==
-X-Gm-Message-State: ACgBeo0gYInLsl+u9PDOk1SPOzojg0ywe3ihT1tjMxg50Ff72dRqXGM0
-        FkK0O/y8Tyapw8gKkuZaTZUyGuAz298fHAvPw1005g==
-X-Google-Smtp-Source: AA6agR65qU6xB2U2255wpOaXm8Hmd9oTgqy80QJ0Bn/k9GJ5kl8p/E1l+APxsu8s42FDlwIGi/yC1fXRghpvTrC1Mho=
-X-Received: by 2002:a25:b78a:0:b0:695:900e:e211 with SMTP id
- n10-20020a25b78a000000b00695900ee211mr4602285ybh.427.1662591503842; Wed, 07
- Sep 2022 15:58:23 -0700 (PDT)
+        Wed, 7 Sep 2022 19:00:12 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682129D8ED;
+        Wed,  7 Sep 2022 16:00:04 -0700 (PDT)
+X-UUID: e508533bb1eb470bbfe9013aaeec0aa2-20220908
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WVN2su0W6cfg/UUYRpHd6lSdOO4U2GGb7/TQBMhg9MY=;
+        b=q3+BhORkSzOMfYpwhwdq/eeCPCIxaLa4AvXvrmYVEHTfaeRUwhFdPwHVzcs5T+6mydDcVJJX8KJEW6f0sMvWorBL5DtE8qkqGg45SnN3VlkvahsnC96WJRkoz9YtB7Dpyd6sJ0X1UMboiPRDn/w2wFr307xlyq0tTHzdlTbmYoQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:c9a13087-87c7-4326-9ad2-c46e2b4e6d0f,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:45
+X-CID-INFO: VERSION:1.1.10,REQID:c9a13087-87c7-4326-9ad2-c46e2b4e6d0f,OB:0,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:45
+X-CID-META: VersionHash:84eae18,CLOUDID:70f78c21-1c20-48a5-82a0-25f9c331906d,C
+        OID:0c2de187faa6,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
+        URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e508533bb1eb470bbfe9013aaeec0aa2-20220908
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 674545052; Thu, 08 Sep 2022 06:59:58 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 8 Sep 2022 06:59:57 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 8 Sep 2022 06:59:57 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <chun-jie.chen@mediatek.com>, <devicetree@vger.kernel.org>,
+        <drinkcat@chromium.org>, <jose.exposito89@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <mturquette@baylibre.com>,
+        <nfraprado@collabora.com>, <rex-bc.chen@mediatek.com>,
+        <robh+dt@kernel.org>, <sboyd@kernel.org>, <weiyi.lu@mediatek.com>,
+        <wenst@chromium.org>
+Subject: Re: [PATCH 03/10] clk: mediatek: mux: add clk notifier functions
+Date:   Thu, 8 Sep 2022 06:59:57 +0800
+Message-ID: <20220907225957.10541-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220905100416.42421-4-angelogioacchino.delregno@collabora.com>
+References: <20220905100416.42421-4-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-References: <cover.1662361354.git.cdleonard@gmail.com> <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
- <CANn89iKq4rUkCwSSD-35u+Lb8s9u-8t5bj1=aZuQ8+oYwuC-Eg@mail.gmail.com> <YxkgC1XKmCNGzk3t@gondor.apana.org.au>
-In-Reply-To: <YxkgC1XKmCNGzk3t@gondor.apana.org.au>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 7 Sep 2022 15:58:12 -0700
-Message-ID: <CANn89iLXsSotHWkUv4h0jCyNqym+Mb1N2-sfyC0sK76TZ+xPPg@mail.gmail.com>
-Subject: Re: [PATCH v8 08/26] tcp: authopt: Disable via sysctl by default
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Leonard Crestez <cdleonard@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Philip Paeps <philip@trouble.is>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 3:50 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Tue, Sep 06, 2022 at 04:11:58PM -0700, Eric Dumazet wrote:
-> >
-> > WRITE_ONCE(sysctl_tcp_authopt, val),  or even better:
-> >
-> > if (val)
-> >      cmpxchg(&sysctl_tcp_authopt, 0, val);
->
-> What's the point of the cmpxchg? Since you're simply trying to prevent
-> sysctl_tcp_authopt from going back to zero, then the if clause
-> by itself is enough:
->
->         if (val)
->                 WRITE_ONCE(sysctl_tcp_authopt, val);
+> From: Chen-Yu Tsai <wenst@chromium.org>
+> 
+> With device frequency scaling, the mux clock that (indirectly) feeds the
+> device selects between a dedicated PLL, and some other stable clocks.
+> 
+> When a clk rate change is requested, the (normally) upstream PLL is
+> reconfigured. It's possible for the clock output of the PLL to become
+> unstable during this process.
+> 
+> To avoid causing the device to glitch, the mux should temporarily be
+> switched over to another "stable" clock during the PLL rate change.
+> This is done with clk notifiers.
+> 
+> This patch adds common functions for notifiers to temporarily and
+> transparently reparent mux clocks.
+> 
+> This was loosely based on commit 8adfb08605a9 ("clk: sunxi-ng: mux: Add
+> clk notifier functions").
 >
 
-Ack.
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 
-Original patch was doing something racy, I have not though about the
-most efficient way to deal with it.

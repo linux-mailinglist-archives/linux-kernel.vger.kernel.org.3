@@ -2,186 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9619E5AFC63
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693D15AFC5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiIGG3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S229775AbiIGG2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiIGG27 (ORCPT
+        with ESMTP id S229541AbiIGG2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:28:59 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6719C1FA;
-        Tue,  6 Sep 2022 23:28:57 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MMsgR1qt7z1P87L;
-        Wed,  7 Sep 2022 14:25:07 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 7 Sep 2022 14:28:55 +0800
-Received: from localhost.localdomain (10.67.165.2) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 7 Sep 2022 14:28:54 +0800
-From:   Haoyue Xu <xuhaoyue1@hisilicon.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xuhaoyue1@hisilicon.com>, <pabeni@redhat.com>,
-        <edumazet@google.com>, <huangdaode@huawei.com>,
-        <liangwenpeng@huawei.com>, <liyangyang20@huawei.com>
-Subject: [PATCH net-next 3/3] net: amd: Switch and case should be at the same indent
-Date:   Wed, 7 Sep 2022 14:28:12 +0800
-Message-ID: <20220907062812.2259309-4-xuhaoyue1@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20220907062812.2259309-1-xuhaoyue1@hisilicon.com>
-References: <20220907062812.2259309-1-xuhaoyue1@hisilicon.com>
+        Wed, 7 Sep 2022 02:28:43 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1195A8E4E0;
+        Tue,  6 Sep 2022 23:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662532124; x=1694068124;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=4cDYIE/7ld7yTLHdxOZK80QRgY+Riw5EdEOFHWUOWjw=;
+  b=WAuIWTzRbbuehMVMHbBDPmnqcbGOErJKagx5NP8ZoNXKMyq4MDLA70ci
+   g6hT9o0UgJv+ly56v1QI7mVnpnMWcWg5DhZKyo4j2rOuQ0AqOxQ3uTCAo
+   kmicjsQA2Dy5GYoVUu/LH/dSUx9cbJ7kmFNANyzKtxXx/CSJXirIeGX1u
+   E=;
+X-IronPort-AV: E=Sophos;i="5.93,295,1654560000"; 
+   d="scan'208";a="256931908"
+Subject: Re: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix "intel,
+ vm-map" property to be optional
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-5bed4ba5.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:28:28 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-5bed4ba5.us-west-2.amazon.com (Postfix) with ESMTPS id D87F181896;
+        Wed,  7 Sep 2022 06:28:25 +0000 (UTC)
+Received: from EX19D013UWB002.ant.amazon.com (10.13.138.21) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Wed, 7 Sep 2022 06:28:24 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D013UWB002.ant.amazon.com (10.13.138.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Wed, 7 Sep 2022 06:28:24 +0000
+Received: from [192.168.97.69] (10.85.143.172) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Wed, 7 Sep 2022 06:28:21 +0000
+Message-ID: <f638f9bc-b757-c352-7be0-4f9ab6607378@amazon.com>
+Date:   Wed, 7 Sep 2022 09:28:20 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.2]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <andriy.shevchenko@intel.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220906083356.21067-1-farbere@amazon.com>
+ <20220906083356.21067-3-farbere@amazon.com>
+ <20220906165359.GA817639@roeck-us.net>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220906165359.GA817639@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-16.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guofeng Yue <yueguofeng@hisilicon.com>
+On 9/6/2022 7:53 PM, Guenter Roeck wrote:
+> On Tue, Sep 06, 2022 at 08:33:37AM +0000, Eliav Farber wrote:
+>> Change "intel,vm-map" property to be optional instead of required.
+>>
+>> The driver implementation indicates it is not mandatory to have
+>> "intel,vm-map" in the device tree:
+>>  - probe doesn't fail in case it is absent.
+>>  - explicit comment in code - "Incase intel,vm-map property is not
+>>    defined, we assume incremental channel numbers".
+>>
+>> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
+>> Signed-off-by: Eliav Farber <farbere@amazon.com>
+>> ---
+>> V3 -> V2:
+>> - Change this patch to be first in the series.
+>> - Add explanation why "intel,vm-map" is not required.
+>>
+>
+> I don't see how this change warrants dropping Rob's Acked-by tag.
+> Am I missing something ? 
 
-Cleaning some static warnings of indent.
+My apology. I wasn’t aware I had to keep the Acked-by tag.
+I'll add it in v5.
 
-Signed-off-by: Guofeng Yue <yueguofeng@hisilicon.com>
-Signed-off-by: Haoyue Xu <xuhaoyue1@hisilicon.com>
----
- drivers/net/ethernet/amd/amd8111e.c   | 35 +++++++++++++--------------
- drivers/net/ethernet/amd/atarilance.c |  6 ++---
- drivers/net/ethernet/amd/nmclan_cs.c  | 14 +++++------
- 3 files changed, 27 insertions(+), 28 deletions(-)
+--
+Regards, Eliav
 
-diff --git a/drivers/net/ethernet/amd/amd8111e.c b/drivers/net/ethernet/amd/amd8111e.c
-index 7b4d9bbb079c..ea6cfc2095e1 100644
---- a/drivers/net/ethernet/amd/amd8111e.c
-+++ b/drivers/net/ethernet/amd/amd8111e.c
-@@ -185,24 +185,23 @@ static void amd8111e_set_ext_phy(struct net_device *dev)
- 	advert = amd8111e_mdio_read(dev, lp->ext_phy_addr, MII_ADVERTISE);
- 	tmp = advert & ~(ADVERTISE_ALL | ADVERTISE_100BASE4);
- 	switch (lp->ext_phy_option) {
--
--		default:
--		case SPEED_AUTONEG: /* advertise all values */
--			tmp |= (ADVERTISE_10HALF | ADVERTISE_10FULL |
--				ADVERTISE_100HALF | ADVERTISE_100FULL);
--			break;
--		case SPEED10_HALF:
--			tmp |= ADVERTISE_10HALF;
--			break;
--		case SPEED10_FULL:
--			tmp |= ADVERTISE_10FULL;
--			break;
--		case SPEED100_HALF:
--			tmp |= ADVERTISE_100HALF;
--			break;
--		case SPEED100_FULL:
--			tmp |= ADVERTISE_100FULL;
--			break;
-+	default:
-+	case SPEED_AUTONEG: /* advertise all values */
-+		tmp |= (ADVERTISE_10HALF | ADVERTISE_10FULL |
-+			ADVERTISE_100HALF | ADVERTISE_100FULL);
-+		break;
-+	case SPEED10_HALF:
-+		tmp |= ADVERTISE_10HALF;
-+		break;
-+	case SPEED10_FULL:
-+		tmp |= ADVERTISE_10FULL;
-+		break;
-+	case SPEED100_HALF:
-+		tmp |= ADVERTISE_100HALF;
-+		break;
-+	case SPEED100_FULL:
-+		tmp |= ADVERTISE_100FULL;
-+		break;
- 	}
- 
- 	if(advert != tmp)
-diff --git a/drivers/net/ethernet/amd/atarilance.c b/drivers/net/ethernet/amd/atarilance.c
-index e5c6d99957cd..3222c48ce6ae 100644
---- a/drivers/net/ethernet/amd/atarilance.c
-+++ b/drivers/net/ethernet/amd/atarilance.c
-@@ -581,15 +581,15 @@ static unsigned long __init lance_probe1( struct net_device *dev,
- 
- 	/* Get the ethernet address */
- 	switch( lp->cardtype ) {
--	  case OLD_RIEBL:
-+	case OLD_RIEBL:
- 		/* No ethernet address! (Set some default address) */
- 		eth_hw_addr_set(dev, OldRieblDefHwaddr);
- 		break;
--	  case NEW_RIEBL:
-+	case NEW_RIEBL:
- 		lp->memcpy_f(addr, RIEBL_HWADDR_ADDR, ETH_ALEN);
- 		eth_hw_addr_set(dev, addr);
- 		break;
--	  case PAM_CARD:
-+	case PAM_CARD:
- 		i = IO->eeprom;
- 		for( i = 0; i < 6; ++i )
- 			addr[i] =
-diff --git a/drivers/net/ethernet/amd/nmclan_cs.c b/drivers/net/ethernet/amd/nmclan_cs.c
-index 684b412c77fd..823a329a921f 100644
---- a/drivers/net/ethernet/amd/nmclan_cs.c
-+++ b/drivers/net/ethernet/amd/nmclan_cs.c
-@@ -485,10 +485,10 @@ static int mace_read(mace_private *lp, unsigned int ioaddr, int reg)
-   unsigned long flags;
- 
-   switch (reg >> 4) {
--    case 0: /* register 0-15 */
-+  case 0: /* register 0-15 */
-       data = inb(ioaddr + AM2150_MACE_BASE + reg);
-       break;
--    case 1: /* register 16-31 */
-+  case 1: /* register 16-31 */
-       spin_lock_irqsave(&lp->bank_lock, flags);
-       MACEBANK(1);
-       data = inb(ioaddr + AM2150_MACE_BASE + (reg & 0x0F));
-@@ -512,10 +512,10 @@ static void mace_write(mace_private *lp, unsigned int ioaddr, int reg,
-   unsigned long flags;
- 
-   switch (reg >> 4) {
--    case 0: /* register 0-15 */
-+  case 0: /* register 0-15 */
-       outb(data & 0xFF, ioaddr + AM2150_MACE_BASE + reg);
-       break;
--    case 1: /* register 16-31 */
-+  case 1: /* register 16-31 */
-       spin_lock_irqsave(&lp->bank_lock, flags);
-       MACEBANK(1);
-       outb(data & 0xFF, ioaddr + AM2150_MACE_BASE + (reg & 0x0F));
-@@ -567,13 +567,13 @@ static int mace_init(mace_private *lp, unsigned int ioaddr,
-    * Or just set ASEL in PHYCC below!
-    */
-   switch (if_port) {
--    case 1:
-+  case 1:
-       mace_write(lp, ioaddr, MACE_PLSCC, 0x02);
-       break;
--    case 2:
-+  case 2:
-       mace_write(lp, ioaddr, MACE_PLSCC, 0x00);
-       break;
--    default:
-+  default:
-       mace_write(lp, ioaddr, MACE_PHYCC, /* ASEL */ 4);
-       /* ASEL Auto Select.  When set, the PORTSEL[1-0] bits are overridden,
- 	 and the MACE device will automatically select the operating media
--- 
-2.30.0
 

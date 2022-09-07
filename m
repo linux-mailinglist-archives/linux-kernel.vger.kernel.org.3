@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACD15B027C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F975B027F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiIGLI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S230060AbiIGLIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiIGLH4 (ORCPT
+        with ESMTP id S230009AbiIGLHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:07:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BE9A347D;
+        Wed, 7 Sep 2022 07:07:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34777A3441;
         Wed,  7 Sep 2022 04:07:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4B4BB81C29;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9542F618A6;
+        Wed,  7 Sep 2022 11:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11227C4FEB9;
         Wed,  7 Sep 2022 11:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942A5C4314C;
-        Wed,  7 Sep 2022 11:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662548868;
-        bh=0OLQo5HG5t0mohZzuG/02hbLS2lB2JW6h+/81xwTWDc=;
+        s=k20201202; t=1662548869;
+        bh=gug41xRcI/OiU0Kz768lHWGKBf59p8scVt7WnDhxAEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O5apGTyvfzRzSOtkZsR0vJYatWBow0UMxYLDAUJ0BeAjHqKQfCYkGaqDE4LPT0iJD
-         aQlTHi/rZD4TJ9W87VhTOipbREBzJjM3x5KNrYgmbNWFBtbShA2/C4nv5KNmcYaNcm
-         vGSGvrhWHsv9IlOmjQAurFL7SehUPe7l/cR5GH63keiNcjkMMUneiZOsqJj9Klz5k+
-         PkPFmqj88A9LwD35+56OukBLoWxxAwM4LVlu1cZcixc0iaYBwNEFL8roc6BvkZfby7
-         IXVKgtw+gdoZYuGRFwYheXKJhUajbzYDdcGiR5IJLiua+7KTeUGGtbSSQj6uzG9pZB
-         fAuPCc0rLx59g==
+        b=tpFKflMGympRJ0MouYO9A8Nyca2JWXCiq1eWWsKcIh5Wk8CeNjXf36ZrIafdzhdLo
+         Bgzi/6Q31PBc9Ag5Y6UMT+ZUSUSuv/sWadX0b5h+je1yDo68KTjEGKmFacRXOcyemA
+         wDdyw8PYi8lNOwOkzJiXGS1GgNh5xXltG87WcUn5ZK9NdlxyMzllmiIav9eOsKx8zI
+         lVC9Eo5ybX2imfWxY5UcmtFbK1NjiajyalL5TfXf+f66OXKdWAe+cs/TSUp+2WV+GW
+         urOBn4LSegtCWt8bPzDbRcnvX08F3E/OdfM5r1GlxEz+CQXrukc/DBT916Vyqra/zM
+         XozlOly6kHtsQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oVsuO-0004z5-MB; Wed, 07 Sep 2022 13:07:52 +0200
+        id 1oVsuO-0004z9-PF; Wed, 07 Sep 2022 13:07:52 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 07/16] phy: qcom-qmp-ufs: drop unused runtime PM implementation
-Date:   Wed,  7 Sep 2022 13:07:19 +0200
-Message-Id: <20220907110728.19092-8-johan+linaro@kernel.org>
+Subject: [PATCH 08/16] phy: qcom-qmp-ufs: drop unused defines
+Date:   Wed,  7 Sep 2022 13:07:20 +0200
+Message-Id: <20220907110728.19092-9-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220907110728.19092-1-johan+linaro@kernel.org>
 References: <20220907110728.19092-1-johan+linaro@kernel.org>
@@ -63,122 +63,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the unused and incomplete runtime PM implementation, which was
-only used by USB PHYs before splitting the QMP driver.
-
-Note that the runtime PM was never disabled (and state restored) on
-driver unbind.
-
-This effectively reverts commit ac0d239936bd ("phy: qcom-qmp: Add
-support for runtime PM").
+Drop defines and enums that are unused since the QMP driver split.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 38 -------------------------
- 1 file changed, 38 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 34 +------------------------
+ 1 file changed, 1 insertion(+), 33 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index 01a99a06fd4f..7bd3c992b841 100644
+index 7bd3c992b841..62e9007137c9 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -53,17 +53,6 @@
- #define USB3_MODE				BIT(0) /* enables USB3 mode */
- #define DP_MODE					BIT(1) /* enables DP mode */
+@@ -28,39 +28,15 @@
+ #define SW_RESET				BIT(0)
+ /* QPHY_POWER_DOWN_CONTROL */
+ #define SW_PWRDN				BIT(0)
+-#define REFCLK_DRV_DSBL				BIT(1)
+ /* QPHY_START_CONTROL bits */
+ #define SERDES_START				BIT(0)
+ #define PCS_START				BIT(1)
+-#define PLL_READY_GATE_EN			BIT(3)
+ /* QPHY_PCS_STATUS bit */
+ #define PHYSTATUS				BIT(6)
+-#define PHYSTATUS_4_20				BIT(7)
+-/* QPHY_PCS_READY_STATUS & QPHY_COM_PCS_READY_STATUS bit */
++/* QPHY_PCS_READY_STATUS bit */
+ #define PCS_READY				BIT(0)
  
--/* QPHY_PCS_AUTONOMOUS_MODE_CTRL register bits */
--#define ARCVR_DTCT_EN				BIT(0)
--#define ALFPS_DTCT_EN				BIT(1)
--#define ARCVR_DTCT_EVENT_SEL			BIT(4)
+-/* QPHY_V3_DP_COM_RESET_OVRD_CTRL register bits */
+-/* DP PHY soft reset */
+-#define SW_DPPHY_RESET				BIT(0)
+-/* mux to select DP PHY reset control, 0:HW control, 1: software reset */
+-#define SW_DPPHY_RESET_MUX			BIT(1)
+-/* USB3 PHY soft reset */
+-#define SW_USB3PHY_RESET			BIT(2)
+-/* mux to select USB3 PHY reset control, 0:HW control, 1: software reset */
+-#define SW_USB3PHY_RESET_MUX			BIT(3)
 -
--/* QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR register bits */
--#define IRQ_CLEAR				BIT(0)
+-/* QPHY_V3_DP_COM_PHY_MODE_CTRL register bits */
+-#define USB3_MODE				BIT(0) /* enables USB3 mode */
+-#define DP_MODE					BIT(1) /* enables DP mode */
 -
--/* QPHY_PCS_LFPS_RXTERM_IRQ_STATUS register bits */
--#define RCVR_DETECT				BIT(0)
+-/* QPHY_V3_PCS_MISC_CLAMP_ENABLE register bits */
+-#define CLAMP_EN				BIT(0) /* enables i/o clamp_n */
 -
- /* QPHY_V3_PCS_MISC_CLAMP_ENABLE register bits */
- #define CLAMP_EN				BIT(0) /* enables i/o clamp_n */
+ #define PHY_INIT_COMPLETE_TIMEOUT		10000
+-#define POWER_DOWN_DELAY_US_MIN			10
+-#define POWER_DOWN_DELAY_US_MAX			11
+-
+-#define MAX_PROP_NAME				32
  
-@@ -125,9 +114,6 @@ enum qphy_reg_layout {
+ /* Define the assumed distance between lanes for underspecified device trees. */
+ #define QMP_PHY_LEGACY_LANE_STRIDE		0x400
+@@ -104,19 +80,11 @@ struct qmp_phy_init_tbl {
+ 
+ /* set of registers with offsets different per-PHY */
+ enum qphy_reg_layout {
+-	/* Common block control registers */
+-	QPHY_COM_SW_RESET,
+-	QPHY_COM_POWER_DOWN_CONTROL,
+-	QPHY_COM_START_CONTROL,
+-	QPHY_COM_PCS_READY_STATUS,
+ 	/* PCS registers */
+ 	QPHY_SW_RESET,
  	QPHY_START_CTRL,
  	QPHY_PCS_READY_STATUS,
- 	QPHY_PCS_STATUS,
--	QPHY_PCS_AUTONOMOUS_MODE_CTRL,
--	QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR,
--	QPHY_PCS_LFPS_RXTERM_IRQ_STATUS,
+-	QPHY_PCS_STATUS,
  	QPHY_PCS_POWER_DOWN_CONTROL,
- 	/* PCS_MISC registers */
- 	QPHY_PCS_MISC_TYPEC_CTRL,
-@@ -635,7 +621,6 @@ struct qmp_phy_cfg {
-  * @pcs_misc: iomapped memory space for lane's pcs_misc
-  * @index: lane index
-  * @qmp: QMP phy to which this lane belongs
-- * @mode: current PHY mode
-  */
- struct qmp_phy {
- 	struct phy *phy;
-@@ -649,7 +634,6 @@ struct qmp_phy {
- 	void __iomem *pcs_misc;
- 	unsigned int index;
- 	struct qcom_qmp *qmp;
--	enum phy_mode mode;
+-	/* PCS_MISC registers */
+-	QPHY_PCS_MISC_TYPEC_CTRL,
+ 	/* Keep last to ensure regs_layout arrays are properly initialized */
+ 	QPHY_LAYOUT_SIZE
  };
- 
- /**
-@@ -1117,16 +1101,6 @@ static int qcom_qmp_phy_ufs_disable(struct phy *phy)
- 	return qcom_qmp_phy_ufs_exit(phy);
- }
- 
--static int qcom_qmp_phy_ufs_set_mode(struct phy *phy,
--				 enum phy_mode mode, int submode)
--{
--	struct qmp_phy *qphy = phy_get_drvdata(phy);
--
--	qphy->mode = mode;
--
--	return 0;
--}
--
- static int qcom_qmp_phy_ufs_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
-@@ -1162,7 +1136,6 @@ static int qcom_qmp_phy_ufs_clk_init(struct device *dev, const struct qmp_phy_cf
- static const struct phy_ops qcom_qmp_ufs_ops = {
- 	.power_on	= qcom_qmp_phy_ufs_enable,
- 	.power_off	= qcom_qmp_phy_ufs_disable,
--	.set_mode	= qcom_qmp_phy_ufs_set_mode,
- 	.owner		= THIS_MODULE,
- };
- 
-@@ -1332,14 +1305,6 @@ static int qcom_qmp_phy_ufs_probe(struct platform_device *pdev)
- 	if (!qmp->phys)
- 		return -ENOMEM;
- 
--	pm_runtime_set_active(dev);
--	pm_runtime_enable(dev);
--	/*
--	 * Prevent runtime pm from being ON by default. Users can enable
--	 * it using power/control in sysfs.
--	 */
--	pm_runtime_forbid(dev);
--
- 	id = 0;
- 	for_each_available_child_of_node(dev->of_node, child) {
- 		/* Create per-lane phy */
-@@ -1356,13 +1321,10 @@ static int qcom_qmp_phy_ufs_probe(struct platform_device *pdev)
- 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
- 	if (!IS_ERR(phy_provider))
- 		dev_info(dev, "Registered Qcom-QMP phy\n");
--	else
--		pm_runtime_disable(dev);
- 
- 	return PTR_ERR_OR_ZERO(phy_provider);
- 
- err_node_put:
--	pm_runtime_disable(dev);
- 	of_node_put(child);
- 	return ret;
- }
 -- 
 2.35.1
 

@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA6D5AFC19
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543095AFC1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiIGGBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
+        id S229864AbiIGGDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIGGB2 (ORCPT
+        with ESMTP id S229803AbiIGGDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:01:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5210883F3B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662530486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ovHoM9YpW21oT3aBioqYivK4mMYTlNS9bEeTyk27HO8=;
-        b=VA+4qBfzbqSAw5gfWQXUN3AFNoKBPZFE8iHTL1260JjV9kSJL8iVZFITfufwK4jMpih3fC
-        1nk7nEbxvGXEs4r5+tS+BihSGmq7tcCoALSzQj0OGLDhRzJtyXQ00ovcEPcdowdCzsva24
-        CZSrZ6IHDhbcqkxaz8RAAzTDwBLqBng=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-sMpKTXSHNsGUx8QJsaujwA-1; Wed, 07 Sep 2022 02:01:15 -0400
-X-MC-Unique: sMpKTXSHNsGUx8QJsaujwA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 351ED804191;
-        Wed,  7 Sep 2022 06:01:15 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-171.pek2.redhat.com [10.72.13.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D441E4010FA1;
-        Wed,  7 Sep 2022 06:01:12 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com, elic@nvidia.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] vdpa: conditionally fill max max queue pair for stats
-Date:   Wed,  7 Sep 2022 14:01:10 +0800
-Message-Id: <20220907060110.4511-1-jasowang@redhat.com>
+        Wed, 7 Sep 2022 02:03:05 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DC4895DF
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:03:04 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bz13so15250533wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 23:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FYczuPxi1SjOxRTyYdaZAVwl03tDQ3quqbW2UiDSc58=;
+        b=bSjza7uUyEFLBzo0vLRVL5O0eppMtSJAjTzKE5hrP/r1zb/jUo+utz5iZvdxtAFl2A
+         jXA2taZd5sxk8ROyfw68D+7XvmM7jP1ZhwEiqnsg+bSS8ocR8ZEIHr+PmlguwLe7l+aq
+         8+23Ma9e6mnYXXw8Vx4ruVN+w+qyfatuwKL6NUvKNs2U6+ZiUIwMSVx8uTN9A/S4iHZo
+         I+jROlIhjFdlsQRqE4Tm7CqPoFlACJs4ZgindMp4/kcu6SgnMMhmR0ULVvwMa1VG/Wvp
+         GZcoaWLLXcRT9fihVbBztEyir9sEoie8vsp8mBBbRvPtG6578Z2P4SONsZFEhrq9i9dw
+         FXQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FYczuPxi1SjOxRTyYdaZAVwl03tDQ3quqbW2UiDSc58=;
+        b=Huxg+XC3nAlz+lkqLWX3WS3Z2zqEfLxyDTPGN87lNFSQ47ly3menskpYk2HhNT7QMw
+         r+ZP17eJ0NbEwWjiN1ca7khji2IwNTUgItB1Sn8NS74XmH4seQmHhCC627PiSIYAlqIt
+         f0CEA10aOH1AfGyUfSU63+zhFfC9FUEiH1ihnGkZJfvRx6HD7upR1PWWWuE0441jDT+N
+         0MRDEyTnKucL2yTMvllZqZHDbozv+z0AWSkMif/TLQVaz5tn7q6cxjICtWztniyE6jNH
+         DXPsF2PDFxSvAOZEh0L56AWEDW8NnMsHQ+7S1SjhPYxiw/K5MPfJwVwjDyU6Xzq05w6e
+         q31g==
+X-Gm-Message-State: ACgBeo2EoqVufg/22wNzHepZ4XQiLEZcfJftpJ6IQk5cSB1/2Sts/EDM
+        tEhnhIfD9d499M9hJHnjkiZh9Mo3T+JL+f3QOuZcXQ==
+X-Google-Smtp-Source: AA6agR4W5ki12nxKxG7SUsvFAJ9Vc06JdpwPpOn7lpjTtVQ1YIwlCDryeTo4ZJMAjr2T4O+Z79WvK4aPUPirmx8Fuow=
+X-Received: by 2002:a05:6000:10cf:b0:228:df93:a9b1 with SMTP id
+ b15-20020a05600010cf00b00228df93a9b1mr989499wrx.4.1662530582482; Tue, 06 Sep
+ 2022 23:03:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220907021751.GA30945@inn2.lkp.intel.com> <332d9d42-c4ae-47a8-b3d6-32907eddb7ba@intel.com>
+In-Reply-To: <332d9d42-c4ae-47a8-b3d6-32907eddb7ba@intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 6 Sep 2022 23:02:50 -0700
+Message-ID: <CAKwvOdk8R9HS_aJfFPKyuka8TM9jPpnT21TTvQ8ffv_p+RcGUw@mail.gmail.com>
+Subject: Re: [fortify] ab66e7d1d8: BUG:kernel_failed_in_early-boot_stage,last_printk:Booting_the_kernel
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     lkp@lists.01.org, 0day robot <lkp@intel.com>,
+        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the device without multiqueue feature, we will read 0 as
-max_virtqueue_pairs from the config. So if we fill
-VDPA_ATTR_DEV_NET_CFG_MAX_VQP with the value we read from the config
-we will confuse the user.
+On Tue, Sep 6, 2022 at 10:54 PM kernel test robot <yujie.liu@intel.com> wrote:
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: ab66e7d1d8a90f6addac0da9b3ae13d77f095f76 ("[PATCH 2/3] fortify: cosmetic cleanups to __compiletime_strlen")
+> url: https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/Fix-FORTIFY-y-UBSAN_LOCAL_BOUNDS-y/20220831-045536
+> base: https://git.kernel.org/cgit/linux/kernel/git/kees/linux.git for-next/hardening
+> patch link: https://lore.kernel.org/linux-hardening/20220830205309.312864-3-ndesaulniers@google.com
 
-Fixing this by only filling the value when multiqueue is offered by
-the device so userspace can assume 1 when the attr is not provided.
-
-Fixes: 13b00b135665c("vdpa: Add support for querying vendor statistics")
-Cc: Eli Cohen <elic@nvidia.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
- drivers/vdpa/vdpa.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-index c06c02704461..bc328197263f 100644
---- a/drivers/vdpa/vdpa.c
-+++ b/drivers/vdpa/vdpa.c
-@@ -894,7 +894,6 @@ static int vdpa_fill_stats_rec(struct vdpa_device *vdev, struct sk_buff *msg,
- {
- 	struct virtio_net_config config = {};
- 	u64 features;
--	u16 max_vqp;
- 	u8 status;
- 	int err;
- 
-@@ -905,15 +904,15 @@ static int vdpa_fill_stats_rec(struct vdpa_device *vdev, struct sk_buff *msg,
- 	}
- 	vdpa_get_config_unlocked(vdev, 0, &config, sizeof(config));
- 
--	max_vqp = __virtio16_to_cpu(true, config.max_virtqueue_pairs);
--	if (nla_put_u16(msg, VDPA_ATTR_DEV_NET_CFG_MAX_VQP, max_vqp))
--		return -EMSGSIZE;
--
- 	features = vdev->config->get_driver_features(vdev);
- 	if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_NEGOTIATED_FEATURES,
- 			      features, VDPA_ATTR_PAD))
- 		return -EMSGSIZE;
- 
-+	err = vdpa_dev_net_mq_config_fill(vdev, msg, features, &config);
-+	if (err)
-+		return err;
-+
- 	if (nla_put_u32(msg, VDPA_ATTR_DEV_QUEUE_INDEX, index))
- 		return -EMSGSIZE;
- 
+Thanks for the report! Series dropped! Kees sent a v2.
 -- 
-2.25.1
-
+Thanks,
+~Nick Desaulniers

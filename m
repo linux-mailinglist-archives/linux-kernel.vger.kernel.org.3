@@ -2,87 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148675B0B94
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC1F5B0B99
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiIGRit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S229647AbiIGRjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIGRiq (ORCPT
+        with ESMTP id S229620AbiIGRjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:38:46 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC7A80F7E;
-        Wed,  7 Sep 2022 10:38:46 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1278a61bd57so19289306fac.7;
-        Wed, 07 Sep 2022 10:38:46 -0700 (PDT)
+        Wed, 7 Sep 2022 13:39:09 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1359AB438
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:39:08 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id r11-20020a05640251cb00b004484ec7e3a4so10047709edd.8
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=sHsT3YDwhM+0jjwjlaGB8MngokRR5HRxbTTGftCU/LU=;
+        b=j8sE6fYTVOBfnvhd4sm/oSb2hwD47yzJVngf0DKpeOSTOLJyqSvXgsLamHaNOmIod2
+         bk4Cr20MDfwnQXpC21xZk16bIy4vhB5m9TzxVLfg8FLLtXWa0NMwUp55v6X8db/RBu4u
+         vdLp5YlCTYUbyYd+sFgPsUKaTCh255jBSJoq2cYirvI1sABKKWEaO/BN4DfG0qGZOxSG
+         8ecj5Rxospyu93oPYwQ4JpFIxBwVhAWti1sJvk+rEHfbLh2tyqMnpU9Ays9XoM6PLE9d
+         HE6IGUKcDaH7wUhycoA8SyjTCVNRAhN3LTXZZScw1D6hva+kRupryuIkReGA4Y2ALlou
+         Uclg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jrbDME+3IknpwK7T80xrbsU1d+5VCb9CXfVWDJjbDgQ=;
-        b=j8xsYkhLvBrDxwqQ0n2Canlahf+hWyYkkqRxOVqC2mXM4y/eRAmA/qI3KqajTqrXCF
-         HXqWm0zqpLu0rxPD3ID0c9VurAYAAZmM8N5H2GAt0R1iP9Ed8UUViPW81+m1vUHO6gPP
-         KjMwHi5Bdq3HJRRJTcSRZ0jSYdLrNH9Iiw5CTsrI/javlJXEaP0HMlsTuUYB/9KJrbhz
-         IWRsM34AJ6hGV2ssblTRAnMmiIJnx1mNolJHXpUEK1cLzJoU/6437+KD+lfm3c1OC6uX
-         XnBqZTHh4PZytK90T4JvJo4l5CftBLUj/B2LM92IpSJy/eCyQME/biig/Z4LSLQZU/N+
-         Ojwg==
-X-Gm-Message-State: ACgBeo0ZMGIRFIYDV9yheD9xQ1QOYrPugkVm7ka4Q7ssB6DETS0snDsS
-        2uUolOr0IlBMMMy2LqpwBnRtEcIBhDmy48DC3dMqqROy
-X-Google-Smtp-Source: AA6agR7H9RtmXrxAWSU01huuRXY46j6q/NAqpkmfxgS1t91X3ic8OCvPFAuqLMdNvHhPew0USxOyyQfgMCptjfIQd1s=
-X-Received: by 2002:a05:6808:d46:b0:345:7b42:f987 with SMTP id
- w6-20020a0568080d4600b003457b42f987mr2016690oik.92.1662572325466; Wed, 07 Sep
- 2022 10:38:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220907064645.1197894-1-namhyung@kernel.org> <20220907064645.1197894-3-namhyung@kernel.org>
- <eea20a5c-df2a-979b-ff85-a7e2b978a4b8@intel.com>
-In-Reply-To: <eea20a5c-df2a-979b-ff85-a7e2b978a4b8@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 7 Sep 2022 10:38:34 -0700
-Message-ID: <CAM9d7cgKwidyjWOH5uf-Y2BHF0VACOrR=fdXLz5szuzbHdVaaQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] perf test: Use a test program in perf record tests
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=sHsT3YDwhM+0jjwjlaGB8MngokRR5HRxbTTGftCU/LU=;
+        b=uvbB4prs7PGqmPa2bxHMR8xuJRXuhQGl4H/PCPx6ZNcYGU8t7w/4lerdzFUGZ9zvWw
+         Wwy57PmlinEeDW9KQRtojac1y+ZA2xZkaAYKELTbq+YJGztYdGqXm2yCU6kSZH35CIln
+         YlKhiHUH7iZJuWWOyhtETZ4cS5CwDhErdP7p1y/D9N7YTyKXir9D1hteVkO50hOE8fH6
+         ZSCbxalfh8HCPZN7bcVan4KftB5/n4J1Ad2QfQUxFdsT1jnqnUDllpeSkQS2CBt47oLT
+         GsNArjRXJa5emEXT/lcUlxznwLmcoz5kekW1f9LV1cPsOUHrGTkWtf4Rqr9lpJiKAztm
+         tV4Q==
+X-Gm-Message-State: ACgBeo1Bq3j6L6bZZZuOqKRidMTLbdC+pL47G5iOfR2UKqi6RH2T+I0D
+        9pMzLY8yc5ypNrdS6KY9hRRDJFZreQ==
+X-Google-Smtp-Source: AA6agR5d9x9s9m+e7YC9j9xzF56Mb/hRV+gwOp4RgArCUr/r/3QBfUwnaKEKW086XZceJHRKAbUD+9w+eg==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:ba52:c371:837f:3864])
+ (user=elver job=sendgmr) by 2002:a05:6402:d06:b0:440:3e9d:77d with SMTP id
+ eb6-20020a0564020d0600b004403e9d077dmr3852449edb.286.1662572347297; Wed, 07
+ Sep 2022 10:39:07 -0700 (PDT)
+Date:   Wed,  7 Sep 2022 19:39:02 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220907173903.2268161-1-elver@google.com>
+Subject: [PATCH 1/2] kcsan: Instrument memcpy/memset/memmove with newer Clang
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+With Clang version 16+, -fsanitize=thread will turn
+memcpy/memset/memmove calls in instrumented functions into
+__tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
 
-On Wed, Sep 7, 2022 at 3:45 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 7/09/22 09:46, Namhyung Kim wrote:
-> > If the system has cc it could build a test program with two threads
-> > and then use it for more detailed testing.  Also it adds initial delay
-> > of 3ms to profile a multi-threaded target.  This change make the test
-> > failing but that's what we want to check for now.
->
-> So the delay is just to get a separate dummy event?
+Add these functions to the core KCSAN runtime, so that we (a) catch data
+races with mem* functions, and (b) won't run into linker errors with
+such newer compilers.
 
-No, it's actually to wait for the new thread.
+Cc: stable@vger.kernel.org # v5.10+
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ kernel/kcsan/core.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
->
-> I hit the issue from this patch:
->
-> https://lore.kernel.org/lkml/20220711180706.3418612-1-kan.liang@linux.intel.com/
->
-> That is, if I apply the patch above then the test passes, otherwise it fails always.
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index fe12dfe254ec..66ef48aa86e0 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -18,6 +18,7 @@
+ #include <linux/percpu.h>
+ #include <linux/preempt.h>
+ #include <linux/sched.h>
++#include <linux/string.h>
+ #include <linux/uaccess.h>
+ 
+ #include "encoding.h"
+@@ -1308,3 +1309,29 @@ noinline void __tsan_atomic_signal_fence(int memorder)
+ 	}
+ }
+ EXPORT_SYMBOL(__tsan_atomic_signal_fence);
++
++void *__tsan_memset(void *s, int c, size_t count);
++noinline void *__tsan_memset(void *s, int c, size_t count)
++{
++	check_access(s, count, KCSAN_ACCESS_WRITE, _RET_IP_);
++	return __memset(s, c, count);
++}
++EXPORT_SYMBOL(__tsan_memset);
++
++void *__tsan_memmove(void *dst, const void *src, size_t len);
++noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
++{
++	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
++	check_access(src, len, 0, _RET_IP_);
++	return __memmove(dst, src, len);
++}
++EXPORT_SYMBOL(__tsan_memmove);
++
++void *__tsan_memcpy(void *dst, const void *src, size_t len);
++noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
++{
++	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
++	check_access(src, len, 0, _RET_IP_);
++	return __memcpy(dst, src, len);
++}
++EXPORT_SYMBOL(__tsan_memcpy);
+-- 
+2.37.2.789.g6183377224-goog
 
-It's good to find/verify the bug with this :)
-
-Thanks,
-Namhyung

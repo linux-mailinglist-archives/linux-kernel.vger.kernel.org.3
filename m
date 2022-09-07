@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535F35B0207
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11435B020E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiIGKpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S229777AbiIGKs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiIGKpG (ORCPT
+        with ESMTP id S229477AbiIGKs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:45:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB9D40565;
-        Wed,  7 Sep 2022 03:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662547504; x=1694083504;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CS9G31DSFuHg1NRAtruzjLC9/pg4sb0QXPWD8EfCHi8=;
-  b=KT34o6p0wy5vr5GtnofHvxzkXI3x62+PqAgbyRJOnkiU8+h61T3Vh3FT
-   gw35a/VFxfPz7r9FpF1eGCoCu6hgvoRCDQTrzNZkwOKZnS+GUt71Z0F76
-   NDFsaujx8jbHsHqhqTeihCkkLrriDu7S/E4VwsLLvQ034BbYQELs3t1mA
-   g4mLiiiZ0H5vagT7tMLFQ0H7egDGSghEQoPekwJBTh3dj7FJONexn9r+b
-   Mwyg0lezyUUeFJhpziI0nrYwaKLnq4ZmuW2rwa2R4xA2KES9IqfV2QYrG
-   KNKA/zQ/BA6GsOXP7+RdxeAt/K7VfjRrPtC4jWYnScW/5Dt6tdz4Oto8c
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="294423502"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="294423502"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 03:45:04 -0700
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="676130417"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.27])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 03:45:01 -0700
-Message-ID: <eea20a5c-df2a-979b-ff85-a7e2b978a4b8@intel.com>
-Date:   Wed, 7 Sep 2022 13:44:57 +0300
+        Wed, 7 Sep 2022 06:48:57 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFFE85FF4;
+        Wed,  7 Sep 2022 03:48:57 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id y136so9273804pfb.3;
+        Wed, 07 Sep 2022 03:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=TeQlVcT77pEQtuTbf7OOQb9vpiZRFZqlXe4X8qaQLZQ=;
+        b=hnsvqfhuUA55epY9rfkfpSssISb5V7LmfXGduqnJSdY91WYQH704F/AxVEO1hlI5Jg
+         3+Gj/Tk5c0lMP5WTUbQK6idPtTAJ53brKLNpmX/gxhdoMwJnfqiUdhOjoWWGX9djgiCr
+         GGI21an9QH8JF/lPmZBfKIEyJ9eyWjk5ipMn6rnbDopuquW5KVDKCwE9PPUdFoE4yiTo
+         ewUieeOwx8l69kZ+v7tWnG2jrJ0oxMtj2bbvfmlav/kvvM4p0XgXmUP4glLk80jXAABd
+         D/oZnTLKUUcN2248bLT0ZJQTUzSKoEH9IX/kPXh6eO5eb76hr6mTaDB9xUS9Kin93iQ1
+         wusg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=TeQlVcT77pEQtuTbf7OOQb9vpiZRFZqlXe4X8qaQLZQ=;
+        b=xExwlylsRA89rJGJLr8WWPLavRdyMReOTnkROBe/rdcycx7MQfO1HG6t6aEz3t3iGk
+         1EVlC8O3eMwGLDHUjc3zW8SQYBaIefb9Sfbam3pOSw/o6FbTIfXQ7s4ULpYELunDYDX2
+         wme4aWbq5smloMYRZ/7R97kQ/+8/4G7ZW0qUDgm9zrZkiALeUWgI8WsNBFpuC+WJngxt
+         D4a7dwxxrIYwQtVRjfngGKWtJYHIAF9hIRB0BxE/StSZhxjHO9Jp6jlE/tHGdokOwDdm
+         g6UIAgt5FDT9eX2q/zhTfOACZprJ440ndFXflAmlZ+eJStq8er+DIMxeKhyGIMBSXgkx
+         6KQw==
+X-Gm-Message-State: ACgBeo2986m36Sa6pbZZjYJZS+D+KJPIw4jaUg0aP3qaGtmay91RhOu+
+        qtpuX4H8T5aVt8VdfbJwA+E=
+X-Google-Smtp-Source: AA6agR7DQtvn0PvFjeuiADxzE0kJBFyK1O5StlJvBR9RCLvr3sfWj68GbVSZ7XrldEqdfNp7fD0++Q==
+X-Received: by 2002:a63:5757:0:b0:434:fe36:3fe8 with SMTP id h23-20020a635757000000b00434fe363fe8mr860920pgm.619.1662547736634;
+        Wed, 07 Sep 2022 03:48:56 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id x14-20020aa79a4e000000b0053e22fc5b4fsm4044044pfj.0.2022.09.07.03.48.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 03:48:56 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: [PATCH v2 1/3] KVM: x86/pmu: Stop adding speculative Intel GP PMCs that don't exist yet
+Date:   Wed,  7 Sep 2022 18:48:36 +0800
+Message-Id: <20220907104838.8424-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 2/6] perf test: Use a test program in perf record tests
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-References: <20220907064645.1197894-1-namhyung@kernel.org>
- <20220907064645.1197894-3-namhyung@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220907064645.1197894-3-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,134 +71,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/09/22 09:46, Namhyung Kim wrote:
-> If the system has cc it could build a test program with two threads
-> and then use it for more detailed testing.  Also it adds initial delay
-> of 3ms to profile a multi-threaded target.  This change make the test
-> failing but that's what we want to check for now.
+From: Like Xu <likexu@tencent.com>
 
-So the delay is just to get a separate dummy event?
+The Intel April 2022 SDM - Table 2-2. IA-32 Architectural MSRs adds
+a new architectural IA32_OVERCLOCKING_STATUS msr (0x195), plus the
+presence of IA32_CORE_CAPABILITIES (0xCF), the theoretical effective
+maximum value of the Intel GP PMCs is 14 (0xCF - 0xC1) instead of 18.
 
-I hit the issue from this patch:
+But the conclusion of this speculation "14" is very fragile and can
+easily be overturned once Intel declares another meaningful arch msr
+in the above reserved range, and even worse, Intel probably put PMCs
+8-15 in a completely different range of MSR indices.
 
-https://lore.kernel.org/lkml/20220711180706.3418612-1-kan.liang@linux.intel.com/
+A conservative proposal would be to stop at the maximum number of Intel
+GP PMCs supported today. Also subsequent changes would limit both AMD
+and Intel on the number of GP counter supported by KVM.
 
-That is, if I apply the patch above then the test passes, otherwise it fails always.
+There are some boxes like Intel P4 may indeed have 18 counters, but
+those counters are in a completely different msr address range and do
+not strictly adhere to the Intel Arch PMU specification, and will not
+be supported by KVM in the near future.
 
-> 
-> If cc is not found, it falls back to use the default value 'true'.
-> 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/tests/shell/record.sh | 58 +++++++++++++++++++++++++++++---
->  1 file changed, 54 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-> index 40b087bfdb76..cea3c7b7e2cd 100755
-> --- a/tools/perf/tests/shell/record.sh
-> +++ b/tools/perf/tests/shell/record.sh
-> @@ -6,10 +6,18 @@ set -e
->  
->  err=0
->  perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +testprog=$(mktemp /tmp/__perf_test.prog.XXXXXX)
-> +testsym="test_loop"
-> +testopt="-D 3"
->  
->  cleanup() {
->    rm -f ${perfdata}
->    rm -f ${perfdata}.old
-> +
-> +  if [ "${testprog}" != "true" ]; then
-> +    rm -f ${testprog}
-> +  fi
-> +
->    trap - exit term int
->  }
->  
-> @@ -19,9 +27,49 @@ trap_cleanup() {
->  }
->  trap trap_cleanup exit term int
->  
-> +build_test_program() {
-> +  if ! [ -x "$(command -v cc)" ]; then
-> +    # No CC found. Fall back to 'true'
-> +    testprog=true
-> +    testsym=true
-> +    testopt=''
-> +    return
-> +  fi
-> +
-> +  echo "Build a test program"
-> +  cat <<EOF | cc -o ${testprog} -xc - -pthread
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <pthread.h>
-> +
-> +void test_loop(void) {
-> +  volatile int count = 1000000;
-> +
-> +  // wait for perf record
-> +  usleep(5000);
-> +
-> +  while (count--)
-> +    continue;
-> +}
-> +
-> +void *thfunc(void *arg) {
-> +  test_loop();
-> +  return NULL;
-> +}
-> +
-> +int main(void) {
-> +  pthread_t th;
-> +  pthread_create(&th, NULL, thfunc, NULL);
-> +  test_loop();
-> +  pthread_join(th, NULL);
-> +  return 0;
-> +}
-> +EOF
-> +}
-> +
->  test_per_thread() {
->    echo "Basic --per-thread mode test"
-> -  if ! perf record -o /dev/null --quiet true 2> /dev/null
-> +  if ! perf record -o /dev/null --quiet ${testprog} 2> /dev/null
->    then
->      echo "Per-thread record [Skipped event not supported]"
->      if [ $err -ne 1 ]
-> @@ -30,13 +78,13 @@ test_per_thread() {
->      fi
->      return
->    fi
-> -  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
-> +  if ! perf record --per-thread ${testopt} -o ${perfdata} ${testprog} 2> /dev/null
->    then
->      echo "Per-thread record [Failed record]"
->      err=1
->      return
->    fi
-> -  if ! perf report -i ${perfdata} -q | egrep -q true
-> +  if ! perf report -i ${perfdata} -q | egrep -q ${testsym}
->    then
->      echo "Per-thread record [Failed missing output]"
->      err=1
-> @@ -62,7 +110,7 @@ test_register_capture() {
->      return
->    fi
->    if ! perf record -o - --intr-regs=di,r8,dx,cx -e cpu/br_inst_retired.near_call/p \
-> -    -c 1000 --per-thread true 2> /dev/null \
-> +    -c 1000 --per-thread ${testopt} ${testprog} 2> /dev/null \
->      | perf script -F ip,sym,iregs -i - 2> /dev/null \
->      | egrep -q "DI:"
->    then
-> @@ -73,6 +121,8 @@ test_register_capture() {
->    echo "Register capture test [Success]"
->  }
->  
-> +build_test_program
-> +
->  test_per_thread
->  test_register_capture
->  
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Suggested-by: Jim Mattson <jmattson@google.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+Previous:
+https://lore.kernel.org/kvm/20220906081604.24035-1-likexu@tencent.com/
+V1 -> V2 Changelog:
+- Stop at the maximum number of GP PMCs supported today; (Jim)
+
+ arch/x86/kvm/x86.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 43a6a7efc6ec..884f6de11a33 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1428,20 +1428,10 @@ static const u32 msrs_to_save_all[] = {
+ 	MSR_ARCH_PERFMON_PERFCTR0 + 2, MSR_ARCH_PERFMON_PERFCTR0 + 3,
+ 	MSR_ARCH_PERFMON_PERFCTR0 + 4, MSR_ARCH_PERFMON_PERFCTR0 + 5,
+ 	MSR_ARCH_PERFMON_PERFCTR0 + 6, MSR_ARCH_PERFMON_PERFCTR0 + 7,
+-	MSR_ARCH_PERFMON_PERFCTR0 + 8, MSR_ARCH_PERFMON_PERFCTR0 + 9,
+-	MSR_ARCH_PERFMON_PERFCTR0 + 10, MSR_ARCH_PERFMON_PERFCTR0 + 11,
+-	MSR_ARCH_PERFMON_PERFCTR0 + 12, MSR_ARCH_PERFMON_PERFCTR0 + 13,
+-	MSR_ARCH_PERFMON_PERFCTR0 + 14, MSR_ARCH_PERFMON_PERFCTR0 + 15,
+-	MSR_ARCH_PERFMON_PERFCTR0 + 16, MSR_ARCH_PERFMON_PERFCTR0 + 17,
+ 	MSR_ARCH_PERFMON_EVENTSEL0, MSR_ARCH_PERFMON_EVENTSEL1,
+ 	MSR_ARCH_PERFMON_EVENTSEL0 + 2, MSR_ARCH_PERFMON_EVENTSEL0 + 3,
+ 	MSR_ARCH_PERFMON_EVENTSEL0 + 4, MSR_ARCH_PERFMON_EVENTSEL0 + 5,
+ 	MSR_ARCH_PERFMON_EVENTSEL0 + 6, MSR_ARCH_PERFMON_EVENTSEL0 + 7,
+-	MSR_ARCH_PERFMON_EVENTSEL0 + 8, MSR_ARCH_PERFMON_EVENTSEL0 + 9,
+-	MSR_ARCH_PERFMON_EVENTSEL0 + 10, MSR_ARCH_PERFMON_EVENTSEL0 + 11,
+-	MSR_ARCH_PERFMON_EVENTSEL0 + 12, MSR_ARCH_PERFMON_EVENTSEL0 + 13,
+-	MSR_ARCH_PERFMON_EVENTSEL0 + 14, MSR_ARCH_PERFMON_EVENTSEL0 + 15,
+-	MSR_ARCH_PERFMON_EVENTSEL0 + 16, MSR_ARCH_PERFMON_EVENTSEL0 + 17,
+ 	MSR_IA32_PEBS_ENABLE, MSR_IA32_DS_AREA, MSR_PEBS_DATA_CFG,
+ 
+ 	MSR_K7_EVNTSEL0, MSR_K7_EVNTSEL1, MSR_K7_EVNTSEL2, MSR_K7_EVNTSEL3,
+@@ -6943,12 +6933,12 @@ static void kvm_init_msr_list(void)
+ 				intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
+ 				continue;
+ 			break;
+-		case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
++		case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 7:
+ 			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+ 			    min(INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+ 				continue;
+ 			break;
+-		case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
++		case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 7:
+ 			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+ 			    min(INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+ 				continue;
+-- 
+2.37.3
 

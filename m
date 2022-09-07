@@ -2,231 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2904F5AFA0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8F35AFA2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiIGCmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        id S229486AbiIGCsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIGCl6 (ORCPT
+        with ESMTP id S229551AbiIGCsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:41:58 -0400
-Received: from mail3.bemta32.messagelabs.com (mail3.bemta32.messagelabs.com [195.245.230.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76F5792DA;
-        Tue,  6 Sep 2022 19:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1662518515; i=@fujitsu.com;
-        bh=FXz8g5NuKtLllkSCn8NXZeFBjCQlegQSoRfTyvz3x6g=;
-        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=eXteeUMZZs2nT62LzkX8pDYrjWYGhexMcg8CUGIkIdlgzSBZILxk6XBAM+3NyimoQ
-         zydJ905qhI+m8ATMYhhJgIKI2vaPM/2mgHvQk/qXWXeEgzITN+Po+5/eImpXd9OCVJ
-         /Pa3tl+JiyNPK6z2swUWBcmt0A338kNjWJLlok3ZpUmr77qbzvG430i5Sas4SxO5fO
-         /LhNn7JFT6+mhV0NmD+8KQgEKxlTsyFvsZ8qj6MXSrWgiYZtrKSuU9lLZji5aS16KD
-         X24GDinSesqLmSZqCPjN23aSUHsuCKsJ+jR3f1rKEs70onn5qZMYwUWiPcefb700KV
-         iJKtgw+BKp2Iw==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNIsWRWlGSWpSXmKPExsViZ8MxSfcji0S
-  ywZrpBhYzZ5xgtJjyaymzxeVdc9gsnh3qZbE4f6yf3YHVY+esu+wem1Z1snl83iTnsfXzbZYA
-  lijWzLyk/IoE1oy7H1qYC5YpVfQ3PmBqYPwk3cXIxSEksIVR4u3V9SwQznImiRVrG6Cc/YwSs
-  65/BnI4OdgENCTutdxkBLFFBGIk/h37BWYzC7hJbHozmx3EFhZwljjw5RBYPYuAisTvRYfAan
-  gFHCWebVrEBmJLCChITHn4nhnE5hRwkjj9rBWongNomaPEnat1EOWCEidnPmGBGC8hcfDFC2a
-  QEgkBJYmZ3fEQUyokGqcfYoKw1SSuntvEPIFRcBaS7llIuhcwMq1itEoqykzPKMlNzMzRNTQw
-  0DU0NNU11DUyNNdLrNJN1Est1S1PLS7RNdRLLC/WSy0u1iuuzE3OSdHLSy3ZxAiMg5Rixps7G
-  Fv7fuodYpTkYFIS5VW9IZ4sxJeUn1KZkVicEV9UmpNafIhRhoNDSYKXj0EiWUiwKDU9tSItMw
-  cYkzBpCQ4eJRGING9xQWJucWY6ROoUo6KUOO9uRqCEAEgiozQPrg2WBi4xykoJ8zIyMDAI8RS
-  kFuVmlqDKv2IU52BUEuZ1AJnCk5lXAjf9FdBiJqDFWwPFQRaXJCKkpBqYdCJWZ92VqvX2PHTm
-  /q2qaaL2a1deW/Vnp/vkf263nzDfO2f0uPqDgu/MmMnKi+wVny34c2RXoKeXoadIfifL98YHo
-  h8Em79+nt7xcqIoW4bvAgehJFZ5l8rFSvFbOBw2/jzPyanIpF5qGveVO/PTxXa5rL3Ppu9yuz
-  ftXrXxRusDi3NZvl2r5fMW8QxzOBW4p/jK5EOhRleemm0y8FD0WGe5qdQt0fRtt8vjLS9rVcW
-  iJZwz8p+qPVidl+qxoHBFEE/tB681mQassxd4FjRKaP9YY+m+6yo7s96N0zyb7E95tjPZBy26
-  X7jtn1ttoYRUXNr8qX0apcwLNLR3Pdba/p5x5kPO29rvF6ade+WqxFKckWioxVxUnAgA0cmFM
-  X4DAAA=
-X-Env-Sender: lizhijian@fujitsu.com
-X-Msg-Ref: server-16.tower-585.messagelabs.com!1662518513!997669!1
-X-Originating-IP: [62.60.8.146]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 24954 invoked from network); 7 Sep 2022 02:41:53 -0000
-Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
-  by server-16.tower-585.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 7 Sep 2022 02:41:53 -0000
-Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id 5D6041000C2;
-        Wed,  7 Sep 2022 03:41:53 +0100 (BST)
-Received: from R01UKEXCASM121.r01.fujitsu.local (R01UKEXCASM121 [10.183.43.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        Tue, 6 Sep 2022 22:48:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3250898D37;
+        Tue,  6 Sep 2022 19:48:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id 4FE1A1000C1;
-        Wed,  7 Sep 2022 03:41:53 +0100 (BST)
-Received: from 21b4d06c27e6.localdomain (10.167.225.141) by
- R01UKEXCASM121.r01.fujitsu.local (10.183.43.173) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Wed, 7 Sep 2022 03:41:50 +0100
-From:   Li Zhijian <lizhijian@fujitsu.com>
-To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>, <leon@kernel.org>,
-        <linux-rdma@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH for-next 2/2] RDMA/rxe: convert pr_warn to pr_debug
-Date:   Wed, 7 Sep 2022 02:48:21 +0000
-Message-ID: <1662518901-2-2-git-send-email-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1662518901-2-1-git-send-email-lizhijian@fujitsu.com>
-References: <1662518901-2-1-git-send-email-lizhijian@fujitsu.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3666A61700;
+        Wed,  7 Sep 2022 02:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0281C433C1;
+        Wed,  7 Sep 2022 02:48:06 +0000 (UTC)
+Date:   Tue, 6 Sep 2022 22:48:45 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Arun Easi <aeasi@marvell.com>
+Cc:     Martin Petersen <martin.petersen@oracle.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-next@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: Re: [PATCH 1/1] tracing: Fix compile error in trace_array calls
+ when TRACING is disabled
+Message-ID: <20220906224845.64bc7afd@gandalf.local.home>
+In-Reply-To: <20220907023800.4095-2-aeasi@marvell.com>
+References: <20220907023800.4095-1-aeasi@marvell.com>
+        <20220907023800.4095-2-aeasi@marvell.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.167.225.141]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM121.r01.fujitsu.local (10.183.43.173)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-They could be triggered by user APIs with invalid parameters.
+On Tue, 6 Sep 2022 19:38:00 -0700
+Arun Easi <aeasi@marvell.com> wrote:
 
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
- drivers/infiniband/sw/rxe/rxe_qp.c | 45 +++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
+> Fix this compilation error seen when CONFIG_TRACING is not enabled:
+> 
+> drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_init':
+> drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function
+> 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'?
+> [-Werror=implicit-function-declaration]
+>  2854 |         qla_trc_array = trace_array_get_by_name("qla2xxx");
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~
+>       |                         trace_array_set_clr_event
+> 
+> drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_uninit':
+> drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function
+> 'trace_array_put' [-Werror=implicit-function-declaration]
+>  2869 |         trace_array_put(qla_trc_array);
+>       |         ^~~~~~~~~~~~~~~
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Arun Easi <aeasi@marvell.com>
+> ---
+>  include/linux/trace.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/include/linux/trace.h b/include/linux/trace.h
+> index bf16961..bf206c3 100644
+> --- a/include/linux/trace.h
+> +++ b/include/linux/trace.h
+> @@ -48,6 +48,23 @@ void osnoise_arch_unregister(void);
+>  void osnoise_trace_irq_entry(int id);
+>  void osnoise_trace_irq_exit(int id, const char *desc);
+>  
+> +#else	/* CONFIG_TRACING */
+> +#define TRACE_EXPORT_FUNCTION	0
+> +#define TRACE_EXPORT_EVENT	0
+> +#define TRACE_EXPORT_MARKER	0
+> +struct trace_export { };
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_qp.c b/drivers/infiniband/sw/rxe/rxe_qp.c
-index ad7f06f4beb0..a62bab88415c 100644
---- a/drivers/infiniband/sw/rxe/rxe_qp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_qp.c
-@@ -19,34 +19,34 @@ static int rxe_qp_chk_cap(struct rxe_dev *rxe, struct ib_qp_cap *cap,
- 			  int has_srq)
- {
- 	if (cap->max_send_wr > rxe->attr.max_qp_wr) {
--		pr_warn("invalid send wr = %u > %d\n",
--			cap->max_send_wr, rxe->attr.max_qp_wr);
-+		pr_debug("invalid send wr = %u > %d\n",
-+			 cap->max_send_wr, rxe->attr.max_qp_wr);
- 		goto err1;
- 	}
- 
- 	if (cap->max_send_sge > rxe->attr.max_send_sge) {
--		pr_warn("invalid send sge = %u > %d\n",
--			cap->max_send_sge, rxe->attr.max_send_sge);
-+		pr_debug("invalid send sge = %u > %d\n",
-+			 cap->max_send_sge, rxe->attr.max_send_sge);
- 		goto err1;
- 	}
- 
- 	if (!has_srq) {
- 		if (cap->max_recv_wr > rxe->attr.max_qp_wr) {
--			pr_warn("invalid recv wr = %u > %d\n",
--				cap->max_recv_wr, rxe->attr.max_qp_wr);
-+			pr_debug("invalid recv wr = %u > %d\n",
-+				 cap->max_recv_wr, rxe->attr.max_qp_wr);
- 			goto err1;
- 		}
- 
- 		if (cap->max_recv_sge > rxe->attr.max_recv_sge) {
--			pr_warn("invalid recv sge = %u > %d\n",
--				cap->max_recv_sge, rxe->attr.max_recv_sge);
-+			pr_debug("invalid recv sge = %u > %d\n",
-+				 cap->max_recv_sge, rxe->attr.max_recv_sge);
- 			goto err1;
- 		}
- 	}
- 
- 	if (cap->max_inline_data > rxe->max_inline_data) {
--		pr_warn("invalid max inline data = %u > %d\n",
--			cap->max_inline_data, rxe->max_inline_data);
-+		pr_debug("invalid max inline data = %u > %d\n",
-+			 cap->max_inline_data, rxe->max_inline_data);
- 		goto err1;
- 	}
- 
-@@ -73,7 +73,7 @@ int rxe_qp_chk_init(struct rxe_dev *rxe, struct ib_qp_init_attr *init)
- 	}
- 
- 	if (!init->recv_cq || !init->send_cq) {
--		pr_warn("missing cq\n");
-+		pr_debug("missing cq\n");
- 		goto err1;
- 	}
- 
-@@ -82,14 +82,14 @@ int rxe_qp_chk_init(struct rxe_dev *rxe, struct ib_qp_init_attr *init)
- 
- 	if (init->qp_type == IB_QPT_GSI) {
- 		if (!rdma_is_port_valid(&rxe->ib_dev, port_num)) {
--			pr_warn("invalid port = %d\n", port_num);
-+			pr_debug("invalid port = %d\n", port_num);
- 			goto err1;
- 		}
- 
- 		port = &rxe->port;
- 
- 		if (init->qp_type == IB_QPT_GSI && port->qp_gsi_index) {
--			pr_warn("GSI QP exists for port %d\n", port_num);
-+			pr_debug("GSI QP exists for port %d\n", port_num);
- 			goto err1;
- 		}
- 	}
-@@ -402,7 +402,7 @@ int rxe_qp_chk_attr(struct rxe_dev *rxe, struct rxe_qp *qp,
- 					attr->qp_state : cur_state;
- 
- 	if (!ib_modify_qp_is_ok(cur_state, new_state, qp_type(qp), mask)) {
--		pr_warn("invalid mask or state for qp\n");
-+		pr_debug("invalid mask or state for qp\n");
- 		goto err1;
- 	}
- 
-@@ -416,7 +416,7 @@ int rxe_qp_chk_attr(struct rxe_dev *rxe, struct rxe_qp *qp,
- 
- 	if (mask & IB_QP_PORT) {
- 		if (!rdma_is_port_valid(&rxe->ib_dev, attr->port_num)) {
--			pr_warn("invalid port %d\n", attr->port_num);
-+			pr_debug("invalid port %d\n", attr->port_num);
- 			goto err1;
- 		}
- 	}
-@@ -431,12 +431,12 @@ int rxe_qp_chk_attr(struct rxe_dev *rxe, struct rxe_qp *qp,
- 		if (rxe_av_chk_attr(rxe, &attr->alt_ah_attr))
- 			goto err1;
- 		if (!rdma_is_port_valid(&rxe->ib_dev, attr->alt_port_num))  {
--			pr_warn("invalid alt port %d\n", attr->alt_port_num);
-+			pr_debug("invalid alt port %d\n", attr->alt_port_num);
- 			goto err1;
- 		}
- 		if (attr->alt_timeout > 31) {
--			pr_warn("invalid QP alt timeout %d > 31\n",
--				attr->alt_timeout);
-+			pr_debug("invalid QP alt timeout %d > 31\n",
-+				 attr->alt_timeout);
- 			goto err1;
- 		}
- 	}
-@@ -457,17 +457,16 @@ int rxe_qp_chk_attr(struct rxe_dev *rxe, struct rxe_qp *qp,
- 
- 	if (mask & IB_QP_MAX_QP_RD_ATOMIC) {
- 		if (attr->max_rd_atomic > rxe->attr.max_qp_rd_atom) {
--			pr_warn("invalid max_rd_atomic %d > %d\n",
--				attr->max_rd_atomic,
--				rxe->attr.max_qp_rd_atom);
-+			pr_debug("invalid max_rd_atomic %d > %d\n",
-+				 attr->max_rd_atomic,
-+				 rxe->attr.max_qp_rd_atom);
- 			goto err1;
- 		}
- 	}
- 
- 	if (mask & IB_QP_TIMEOUT) {
- 		if (attr->timeout > 31) {
--			pr_warn("invalid QP timeout %d > 31\n",
--				attr->timeout);
-+			pr_debug("invalid QP timeout %d > 31\n", attr->timeout);
- 			goto err1;
- 		}
- 	}
--- 
-1.8.3.1
+The original for the above can just be moved out of the #ifdef
+CONFIG_TRACING. No need to "hide" them.
+
+> +#define register_ftrace_export(export) -EINVAL
+> +#define unregister_ftrace_export(export) 0
+> +#define trace_printk_init_buffers()
+> +#define trace_array_printk(tr, ip, fmt, ...) 0
+> +#define trace_array_init_printk(tr) -EINVAL
+> +#define trace_array_put(tr)
+> +#define trace_array_get_by_name(name) NULL
+> +#define trace_array_destroy(tr) 0
+
+With the data outside the #ifdef, the above should be converted into static
+inlines.
+
+
+> +#define osnoise_arch_register() -EINVAL
+> +#define osnoise_arch_unregister()
+> +#define osnoise_trace_irq_entry(id)
+> +#define osnoise_trace_irq_exit(id, desc)
+
+No need to define the osnoise functions. These are only here to allow archs
+to define them. They should never be referenced when CONFIG_TRACING is not
+set.
+
+>  #endif	/* CONFIG_TRACING */
+>  
+>  #endif	/* _LINUX_TRACE_H */
 

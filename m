@@ -2,106 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976915B014C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8F15B014F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiIGKIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S229899AbiIGKIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiIGKIV (ORCPT
+        with ESMTP id S229765AbiIGKI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:08:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82516AFAC0
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:08:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 7 Sep 2022 06:08:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90B1B07E8;
+        Wed,  7 Sep 2022 03:08:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 29F89202A5;
-        Wed,  7 Sep 2022 10:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662545299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K63Our7m5pruz8KT61zA6eFNzbWmBaCfIqS0+X4w6nM=;
-        b=CEscT6LwfhFPqSfXuls+K91bSeXxl9wAmABYXxCKqvKiNdAyAaLOlH4mv7nr/EJxwHxLWJ
-        Bn63THGJZHgF52iivcnhoeFfGiz/lBOaNKyyajMK2s/zPa6hXvSCUg7ido7ElVCZMiU/BE
-        mUT2klR4ARq82L410wuN75WtBlcBBw8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662545299;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K63Our7m5pruz8KT61zA6eFNzbWmBaCfIqS0+X4w6nM=;
-        b=0tKzb3OalDOOAkBrZ6pIZ0B7RzjR1zaUIyUmLorRpun0grorpb6FV0TvSWp9GPD6HM1hy/
-        YFBFNrhOr2RJOTCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1007B13A66;
-        Wed,  7 Sep 2022 10:08:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id E1JyA5NtGGPuQAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 07 Sep 2022 10:08:19 +0000
-Date:   Wed, 07 Sep 2022 12:08:18 +0200
-Message-ID: <874jxjmr8t.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION 5.19.x] AMD HD-audio devices missing on 5.19
-In-Reply-To: <8735d4fpfx.wl-tiwai@suse.de>
-References: <874jy4cqok.wl-tiwai@suse.de>
-        <20220823010021.GA5967@nvidia.com>
-        <87h723sdde.wl-tiwai@suse.de>
-        <87ilmjqj1f.wl-tiwai@suse.de>
-        <20220823202824.GA4516@nvidia.com>
-        <YxdqP9i0bEwUg4VJ@nvidia.com>
-        <87edwofqkd.wl-tiwai@suse.de>
-        <YxdtCMbrDQCc5N42@nvidia.com>
-        <877d2gfq0k.wl-tiwai@suse.de>
-        <Yxdwko2HIugmppl+@nvidia.com>
-        <8735d4fpfx.wl-tiwai@suse.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 879F76185F;
+        Wed,  7 Sep 2022 10:08:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA523C433C1;
+        Wed,  7 Sep 2022 10:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662545307;
+        bh=dP9xemqn6VbnteZEmIn3ds2pIeYUmDTcWHEmiXzGBTk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Xi+zWNl38ktfZCKaIUaOuBtI3xHQV5b6MmHRUDjUig8Om3/TXY0VNI+pk5plfcCq4
+         NXZEdvYpzKspgBrw59t4Tl638/GAQIYcmaor0Kgnh3pATHhuIvrVpUrI2xye8tLXDM
+         81ixy8JsORoIQmmHMfwbSCJlmrY93lcbnDYBIak2LZkWwrqhEK4YtyFhgDX2yrKVlW
+         Il3v/E33aIQ0X4cF1z8bXahMi5W0ivMy4SjNwzT12KkUEKKP+nJQm096Nnz0rV798X
+         RaFD06sQUbOOyUteNygK59B2cVcvS1gKUMUmNxK5ztx18yxmvV5dJg1db/dPZcnPS1
+         1WDRNSTvQXi+Q==
+Message-ID: <1e0877bc528f3e9218f0070889c7288a8aaa47ba.camel@kernel.org>
+Subject: Re: [PATCH] SUNRPC: Fix potential memory leak in
+ xs_udp_send_request()
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Jianglei Nie <niejianglei2021@163.com>, chuck.lever@oracle.com,
+        trond.myklebust@hammerspace.com, anna@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 07 Sep 2022 06:08:25 -0400
+In-Reply-To: <20220907071338.56969-1-niejianglei2021@163.com>
+References: <20220907071338.56969-1-niejianglei2021@163.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 18:16:50 +0200,
-Takashi Iwai wrote:
-> 
-> On Tue, 06 Sep 2022 18:08:50 +0200,
-> Jason Gunthorpe wrote:
-> > 
-> > On Tue, Sep 06, 2022 at 06:04:27PM +0200, Takashi Iwai wrote:
-> > 
-> > > If you can send (or point) a patch for test, I can set up a test
-> > > kernel and ask reporters for testing it.
-> > 
-> > https://lore.kernel.org/all/20220823202824.GA4516@nvidia.com/
-> 
-> Ah, that one!
-> 
-> OK, will ask the reporters with a test kernel with that patch.
+On Wed, 2022-09-07 at 15:13 +0800, Jianglei Nie wrote:
+> xs_udp_send_request() allocates a memory chunk for xdr->bvec with
+> xdr_alloc_bvec(). When xprt_sock_sendmsg() finishs, xdr->bvec is not
+> released, which will lead to a memory leak.
+>=20
+> we should release the xdr->bvec with xdr_free_bvec() after
+> xprt_sock_sendmsg() like bc_sendto() does.
+>=20
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  net/sunrpc/xprtsock.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+> index e976007f4fd0..298182a3c168 100644
+> --- a/net/sunrpc/xprtsock.c
+> +++ b/net/sunrpc/xprtsock.c
+> @@ -958,6 +958,7 @@ static int xs_udp_send_request(struct rpc_rqst *req)
+>  		return status;
+>  	req->rq_xtime =3D ktime_get();
+>  	status =3D xprt_sock_sendmsg(transport->sock, &msg, xdr, 0, 0, &sent);
+> +	xdr_free_bvec(xdr);
+> =20
+>  	dprintk("RPC:       xs_udp_send_request(%u) =3D %d\n",
+>  			xdr->len, status);
 
-According to both reporters, unfortunately it caused a hang at boot
-somewhere.  Only the reset button helped.
+I think you're probably correct here.
 
+I was thinking we might have a similar bug in svc_tcp_sendmsg, but it
+looks like that one gets freed in svc_tcp_sendto.
 
-Takashi
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

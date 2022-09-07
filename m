@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DE25B0D4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0815B0D55
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiIGTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S229903AbiIGTgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiIGTea (ORCPT
+        with ESMTP id S229838AbiIGTgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:34:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DD713A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:34:21 -0700 (PDT)
+        Wed, 7 Sep 2022 15:36:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E6BC83B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:36:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662579261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        s=mimecast20190719; t=1662579359;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7MsVI8c1fxq0sSSjaJXYEOch1npprYIC2451+xAyYa0=;
-        b=iUjtBjWYDTJXmcZd3y7NVONygZYd715cujpPALtiXPzuOIPtqtY4E+VV/hzeTDzJAS4eIY
-        wDHHZMJupcQZN7hJOZ07O9Ef5UuffmWTiggcPw2bGQYTVniOqNDlse32bhFAt3QJArl9yb
-        o55zpBO8n4jAOtqGuo5+kS0NFheMtag=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=mpAWAgyga4+TA9fA5HlAdMkYKlmLpnYSbT76a8Tb7hY=;
+        b=X7VmqUeONFeA2CIb2q5RE0hmnroKBExrcY3NpTiV5Cs/UQzsqX4MABfFrn1kjREvATQoTG
+        iaT2BshRDKEykYCl7UIICGGDzGBz8AGm/eXrmuThLwqIbkmR+zG3Wf2PZhzqtp5SA+BgNd
+        a/QnTHbhoKpIGhyRoLjQIyId1Ay+37k=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-88-TMcVl7djNlWSf1cDE3ENZQ-1; Wed, 07 Sep 2022 15:34:20 -0400
-X-MC-Unique: TMcVl7djNlWSf1cDE3ENZQ-1
-Received: by mail-wm1-f71.google.com with SMTP id q10-20020a1ce90a000000b003a60123678aso2540634wmc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 12:34:20 -0700 (PDT)
+ us-mta-571-fpbF_hiyNGGhjPYZHAVt-Q-1; Wed, 07 Sep 2022 15:35:58 -0400
+X-MC-Unique: fpbF_hiyNGGhjPYZHAVt-Q-1
+Received: by mail-wr1-f71.google.com with SMTP id s1-20020adf9781000000b002286cd81376so3336932wrb.22
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 12:35:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=7MsVI8c1fxq0sSSjaJXYEOch1npprYIC2451+xAyYa0=;
-        b=RIDUQYHfABJeCgH+q32wOImPVSErW+q4Rq+YBL38xSdaXIEsa3DhAnGHUicZSwMgK7
-         G5s8YGn8Hcn+9sV2Ww6KYQv21HRjEtcRjpNthxvGAIzB4HhsOEtcTPnAcmKCLrO7VPPw
-         9HqFAAEv1TEFDd6prD4NBC40Rjv/ywd419QggorQU6Hs0upNB29FFvL/5BqdQqfAV3ko
-         RdRSkYw+dnYza21LxILTvVSzN2xqtDVBkWqGTzIljriw7LZg+MBnM3Awc490lvumEK1y
-         VgcpxJgo0Lt6+xgz4N8dIHbfpS9FdNG1er3dhbDXhkZKwgLjHj4/OoK/godSY6Yl0dCD
-         DW6w==
-X-Gm-Message-State: ACgBeo3GonaVTtU7O78jGIoq4foypKQ2vDDCyxnagz0A4z4MXu394k/G
-        4ByU5gdeSLLY7HLzX/gd730kyEujRGDgx3S+SSp93wGswqDrNutKj/NBEHrkBDxKbleEdW7b0d9
-        OHEyxUqQkWAPhj8He8AvBrp3j
-X-Received: by 2002:adf:e9c2:0:b0:228:62a5:a59b with SMTP id l2-20020adfe9c2000000b0022862a5a59bmr3023773wrn.47.1662579257739;
-        Wed, 07 Sep 2022 12:34:17 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR47W6WNql5ZeWImeEUS0k3WgwW8frzlFbU39PqtW0jo90OD5KShj425J9bGCwCzIr1xpbbM3g==
-X-Received: by 2002:adf:e9c2:0:b0:228:62a5:a59b with SMTP id l2-20020adfe9c2000000b0022862a5a59bmr3023766wrn.47.1662579257500;
-        Wed, 07 Sep 2022 12:34:17 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
-        by smtp.gmail.com with ESMTPSA id bz9-20020a056000090900b0022584c82c80sm19260207wrb.19.2022.09.07.12.34.16
+        bh=mpAWAgyga4+TA9fA5HlAdMkYKlmLpnYSbT76a8Tb7hY=;
+        b=x8cnhYDrb6hdlVrV6H07XuufJlxpHN6MkG7Y/6/eORbF6DugAunqibe1nsvo3DtydF
+         Cv5Lzs1LpvQgG+zylksVuY6CS4VaL40tD4F+LXxfRh90cYIzgoFnH2jX0UgpdWh05zAX
+         tnunmZ1d3cQvrsBVpVA5qW8celcVeIHb2hC7+4GBf6/UQ5orPyRFTY9WVpzLa56OivVA
+         4EzZrncq39EECBe9IiC5HOpU3eM3de4sy10X40D717ETedWC1QUsqDDVWjKTOD0w9azG
+         nndlustQSQ8KzM9elhBCl7WyRy49zStAo+J9Ex5wGUuqaLhVGW+TtRSV1KxYBi4QUULo
+         PCPQ==
+X-Gm-Message-State: ACgBeo3Y5ijZFv1gM0MI7viCfBKrqWsZSnH9iGWJu15EpVIHUffKsWP7
+        VPC4RXjgAZXzt6SYpjgapgoIeONJZX2vxDZsUEFjA4xxvKTyGQGb4g9/ilKjp16d3xc/M0beulp
+        /LUQ5167s9F5potnIHFCGtZ5J
+X-Received: by 2002:a5d:6c62:0:b0:222:cda4:e09e with SMTP id r2-20020a5d6c62000000b00222cda4e09emr3050004wrz.449.1662579356972;
+        Wed, 07 Sep 2022 12:35:56 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7DQVp4ThiLrF8zCJxrYqEfGa4avGnhmnwSWvOSff9WwFAQINELHmvVNNO3IJ11QLwoE6qAfw==
+X-Received: by 2002:a5d:6c62:0:b0:222:cda4:e09e with SMTP id r2-20020a5d6c62000000b00222cda4e09emr3049984wrz.449.1662579356689;
+        Wed, 07 Sep 2022 12:35:56 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id w4-20020adfee44000000b0022863c18b93sm14810197wro.13.2022.09.07.12.35.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 12:34:17 -0700 (PDT)
-Message-ID: <684b9004-fad2-3727-b215-a4b2bfe36712@redhat.com>
-Date:   Wed, 7 Sep 2022 21:34:15 +0200
+        Wed, 07 Sep 2022 12:35:55 -0700 (PDT)
+Message-ID: <2ed84b0f-5d60-919f-06a4-a5ede2f98ce5@redhat.com>
+Date:   Wed, 7 Sep 2022 21:35:52 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [v2 PATCH 2/2] powerpc/64s/radix: don't need to broadcast IPI for
- radix pmd collapse flush
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v2 14/15] vfio: Rename vfio_device_put() and
+ vfio_device_try_get()
 Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>, peterx@redhat.com,
-        kirill.shutemov@linux.intel.com, jhubbard@nvidia.com,
-        jgg@nvidia.com, hughd@google.com, akpm@linux-foundation.org,
-        aneesh.kumar@linux.ibm.com
-Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-References: <20220907180144.555485-1-shy828301@gmail.com>
- <20220907180144.555485-2-shy828301@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220907180144.555485-2-shy828301@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Kevin Tian <kevin.tian@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Yi Liu <yi.l.liu@intel.com>
+References: <20220901143747.32858-1-kevin.tian@intel.com>
+ <20220901143747.32858-15-kevin.tian@intel.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <20220901143747.32858-15-kevin.tian@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
@@ -87,49 +119,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.09.22 20:01, Yang Shi wrote:
-> The IPI broadcast is used to serialize against fast-GUP, but fast-GUP
-> will move to use RCU instead of disabling local interrupts in fast-GUP.
-> Using an IPI is the old-styled way of serializing against fast-GUP
-> although it still works as expected now.
-> 
-> And fast-GUP now fixed the potential race with THP collapse by checking
-> whether PMD is changed or not.  So IPI broadcast in radix pmd collapse
-> flush is not necessary anymore.  But it is still needed for hash TLB.
-> 
-> Suggested-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
+
+
+On 9/1/22 16:37, Kevin Tian wrote:
+> With the addition of vfio_put_device() now the names become confusing.
+>
+> vfio_put_device() is clear from object life cycle p.o.v given kref.
+>
+> vfio_device_put()/vfio_device_try_get() are helpers for tracking
+> users on a registered device.
+>
+> Now rename them:
+>
+>  - vfio_device_put() -> vfio_device_put_registration()
+>  - vfio_device_try_get() -> vfio_device_try_get_registration()
+>
+> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
+
+Eric
 > ---
->   arch/powerpc/mm/book3s64/radix_pgtable.c | 9 ---------
->   1 file changed, 9 deletions(-)
-> 
-> diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
-> index 698274109c91..e712f80fe189 100644
-> --- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-> +++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-> @@ -937,15 +937,6 @@ pmd_t radix__pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long addre
->   	pmd = *pmdp;
->   	pmd_clear(pmdp);
->   
-> -	/*
-> -	 * pmdp collapse_flush need to ensure that there are no parallel gup
-> -	 * walk after this call. This is needed so that we can have stable
-> -	 * page ref count when collapsing a page. We don't allow a collapse page
-> -	 * if we have gup taken on the page. We can ensure that by sending IPI
-> -	 * because gup walk happens with IRQ disabled.
-> -	 */
-> -	serialize_against_pte_lookup(vma->vm_mm);
-> -
->   	radix__flush_tlb_collapsed_pmd(vma->vm_mm, address);
->   
->   	return pmd;
-
-Makes sense to me
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
+>  drivers/vfio/vfio_main.c | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+> index 957d9f286550..bfa675d314ab 100644
+> --- a/drivers/vfio/vfio_main.c
+> +++ b/drivers/vfio/vfio_main.c
+> @@ -451,13 +451,13 @@ static void vfio_group_get(struct vfio_group *group)
+>   * Device objects - create, release, get, put, search
+>   */
+>  /* Device reference always implies a group reference */
+> -static void vfio_device_put(struct vfio_device *device)
+> +static void vfio_device_put_registration(struct vfio_device *device)
+>  {
+>  	if (refcount_dec_and_test(&device->refcount))
+>  		complete(&device->comp);
+>  }
+>  
+> -static bool vfio_device_try_get(struct vfio_device *device)
+> +static bool vfio_device_try_get_registration(struct vfio_device *device)
+>  {
+>  	return refcount_inc_not_zero(&device->refcount);
+>  }
+> @@ -469,7 +469,8 @@ static struct vfio_device *vfio_group_get_device(struct vfio_group *group,
+>  
+>  	mutex_lock(&group->device_lock);
+>  	list_for_each_entry(device, &group->device_list, group_next) {
+> -		if (device->dev == dev && vfio_device_try_get(device)) {
+> +		if (device->dev == dev &&
+> +		    vfio_device_try_get_registration(device)) {
+>  			mutex_unlock(&group->device_lock);
+>  			return device;
+>  		}
+> @@ -671,7 +672,7 @@ static int __vfio_register_dev(struct vfio_device *device,
+>  	if (existing_device) {
+>  		dev_WARN(device->dev, "Device already exists on group %d\n",
+>  			 iommu_group_id(group->iommu_group));
+> -		vfio_device_put(existing_device);
+> +		vfio_device_put_registration(existing_device);
+>  		if (group->type == VFIO_NO_IOMMU ||
+>  		    group->type == VFIO_EMULATED_IOMMU)
+>  			iommu_group_remove_device(device->dev);
+> @@ -730,7 +731,7 @@ static struct vfio_device *vfio_device_get_from_name(struct vfio_group *group,
+>  			ret = !strcmp(dev_name(it->dev), buf);
+>  		}
+>  
+> -		if (ret && vfio_device_try_get(it)) {
+> +		if (ret && vfio_device_try_get_registration(it)) {
+>  			device = it;
+>  			break;
+>  		}
+> @@ -750,7 +751,7 @@ void vfio_unregister_group_dev(struct vfio_device *device)
+>  	bool interrupted = false;
+>  	long rc;
+>  
+> -	vfio_device_put(device);
+> +	vfio_device_put_registration(device);
+>  	rc = try_wait_for_completion(&device->comp);
+>  	while (rc <= 0) {
+>  		if (device->ops->request)
+> @@ -1286,7 +1287,7 @@ static int vfio_group_get_device_fd(struct vfio_group *group, char *buf)
+>  err_put_fdno:
+>  	put_unused_fd(fdno);
+>  err_put_device:
+> -	vfio_device_put(device);
+> +	vfio_device_put_registration(device);
+>  	return ret;
+>  }
+>  
+> @@ -1461,7 +1462,7 @@ static int vfio_device_fops_release(struct inode *inode, struct file *filep)
+>  
+>  	vfio_device_unassign_container(device);
+>  
+> -	vfio_device_put(device);
+> +	vfio_device_put_registration(device);
+>  
+>  	return 0;
+>  }
 

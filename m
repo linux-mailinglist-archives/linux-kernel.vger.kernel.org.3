@@ -2,82 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255065B02D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD9D5B02DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiIGLZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S229673AbiIGL0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiIGLZy (ORCPT
+        with ESMTP id S229485AbiIGL0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:25:54 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5A6B0B13
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:25:53 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id s15so15588833ljp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 04:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=4OmTqg6On89kloMhcJgn+sZNlvyGPEamfza8yetGeeg=;
-        b=MzVUvvfYQ1Sbi5uIeyJaz5aBQIeXkPxUwemtZnH51H/Y2ASy/GGBtYWCgKP8GIrdHk
-         lv3RWBnycm9XaPWaXTxBv/llxoPR4lQ+awcmRBOoJN+oKSq3dhViXkSCfUU8iGE/x3Rd
-         i/N1UoWuBQCW1gAnuR4evMlLkDOt89KJ62xEUnWmApu9kYebcd3mEwo2Z0jRIeq4gogf
-         LQQ9FbUb6sx7CLC+Ie7Hmhy77xZNoIcpi46SIJTO6UYeEG4RfRUQmcChuwSzmDGqKFUg
-         lBO/lt/hDCL161W327YK/WgeDiAAmPsAfKjYNrqqmbJg81lzSrruJi9074fgVGXEEdEo
-         en8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4OmTqg6On89kloMhcJgn+sZNlvyGPEamfza8yetGeeg=;
-        b=KlNCt8T2HOe/9kcUfVyZdViVHw3h47chmIuGiNaMvwDaK4CU7GApwe5e3geDYqmpJe
-         NNl6cHx+hzSYH89KoeQOOSvAcrPCKFyxo2in+Y3CEJCPZuAzySwmoKuqXx2eF44Vxr9j
-         pWIKyYBwHldU6UwmKR7qjtQLTiAuCfyztHsKAQrPL0kzYqIS5+wli9PzajR7+GEWuHPI
-         WbzN5QYBiJF9aJihhCyrdOw73yxk61N/OJ8RbJn2SSFLWuM4aJzVyOdb5jRHs2UpN6FG
-         nKmabFWdz0mJTpj99S2hILuQxo31vwg8Nd6hUoF0JcnwkDrt3S+FVxGtUeMSatvT9OQd
-         tjTg==
-X-Gm-Message-State: ACgBeo2LeoK4uWuURRlg6YYlSLbmFOf/n6zUNgMukXldIls92noyR1B6
-        xvNFd7SHa1mQyxulAr7VRBh0sA==
-X-Google-Smtp-Source: AA6agR7VLuw5g7GtGPZdFh8wzcqVqr0jMeu9LBMCFM3k2HFnQb6wcZFU9tGmtrHX1sTPInDXxtD0mQ==
-X-Received: by 2002:a2e:9e48:0:b0:261:c713:37dd with SMTP id g8-20020a2e9e48000000b00261c71337ddmr803889ljk.385.1662549951433;
-        Wed, 07 Sep 2022 04:25:51 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z10-20020a056512370a00b004979989028bsm999385lfr.147.2022.09.07.04.25.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 04:25:50 -0700 (PDT)
-Message-ID: <783df4f0-0b7e-8604-d61f-f78e0375c321@linaro.org>
-Date:   Wed, 7 Sep 2022 13:25:48 +0200
+        Wed, 7 Sep 2022 07:26:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FFCB276E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:26:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42C9C61877
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 11:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CC3C433D7;
+        Wed,  7 Sep 2022 11:26:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662549993;
+        bh=ciKLrkYNMWLS2k+Fc43SiKpXyXILR6c+3eE5MBG7T3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LPlQbUpJ0/GfVJ79v+DQw7K+hLnoTy6P3P/Eigcwov/vXUqdo+tDEmqOzIN9xpDKO
+         pEPDX2/TJBgk0mdc+oLiMaShk9PsbyZrochyu/SWH8d31fKGpRuRaE29JayEEymV0E
+         wfsgdVdN+Vl7nVdGac+0JQ+mvPHnqaHQLiJF+762jBE6LLVAZnZT4GxIGAlkSGo1Mk
+         SIcHgX4HfZpsmQnBmMrhBv3SqaH5tOkByrDhNszmdjJKex7sSq1YKhDBmZpNOfkM1O
+         PuugOHSJpQPDlVP4OQV195vamUDYIUZ811km2Ga53mXj14L32BfHvgmvqRv/4AMu5c
+         boGUWYW12sTmQ==
+Date:   Wed, 7 Sep 2022 12:26:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     vkoul@kernel.org, yung-chuan.liao@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
+        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        kai.vehmanen@linux.intel.com, daniel.baluta@nxp.com,
+        sanyog.r.kale@intel.com, alsa-devel@alsa-project.org,
+        sound-open-firmware@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 3/7] ASoC: SOF: Intel: Don't disable Soundwire interrupt
+ before the bus has shut down
+Message-ID: <Yxh/4xQIvitrldRW@sirena.org.uk>
+References: <20220907101402.4685-1-rf@opensource.cirrus.com>
+ <20220907101402.4685-4-rf@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [Patch v2 15/15] arm64: dts: fsd: Add MFC related DT enteries
-Content-Language: en-US
-To:     Smitha T Murthy <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, aakarsh.jain@samsung.com
-References: <20220907064715.55778-1-smitha.t@samsung.com>
- <CGME20220907063413epcas5p3df6d22933ba2884730c52b6a3af2cb09@epcas5p3.samsung.com>
- <20220907064715.55778-16-smitha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220907064715.55778-16-smitha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y4vOpZSr9wJlnE+n"
+Content-Disposition: inline
+In-Reply-To: <20220907101402.4685-4-rf@opensource.cirrus.com>
+X-Cookie: You have a truly strong individuality.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,78 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 08:47, Smitha T Murthy wrote:
-> Add MFC DT node and reserve memory node for MFC usage.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
-> ---
->  arch/arm64/boot/dts/tesla/fsd-evb.dts |  4 ++++
->  arch/arm64/boot/dts/tesla/fsd.dtsi    | 22 ++++++++++++++++++++++
->  2 files changed, 26 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> index 1db6ddf03f01..17bb048f9d47 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
-> @@ -30,6 +30,10 @@
->  	};
->  };
->  
-> +&clock_mfc {
-> +	status = "okay";
 
-clock node was never disabled, so there is no need to enable it.
+--y4vOpZSr9wJlnE+n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +};
-> +
->  &fin_pll {
->  	clock-frequency = <24000000>;
->  };
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> index f35bc5a288c2..bca0ba030ee7 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> @@ -340,6 +340,18 @@
->  		#clock-cells = <0>;
->  	};
->  
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		mfc_left: region@84000000 {
-> +			compatible = "shared-dma-pool";
-> +			no-map;
-> +			reg = <0 0x84000000 0 0x8000000>;
-> +		};
-> +	};
-> +
->  	soc: soc@0 {
->  		compatible = "simple-bus";
->  		#address-cells = <2>;
-> @@ -832,6 +844,16 @@
->  			clock-names = "fin_pll", "mct";
->  		};
->  
-> +		mfc: mfc@12880000 {
-> +			compatible = "samsung,fsd-mfc";
-> +			reg = <0x0 0x12880000 0x0 0x10000>;
-> +			interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
-> +			clock-names = "mfc";
-> +			clocks = <&clock_mfc MFC_MFC_IPCLKPORT_ACLK>;
-> +			memory-region = <&mfc_left>;
-> +			status = "okay";
+On Wed, Sep 07, 2022 at 11:13:58AM +0100, Richard Fitzgerald wrote:
+> Until the Soundwire child drivers have been removed and the bus driver has
+> shut down any of them can still be actively doing something. And any of
+> them may need bus transactions to shut down their hardware. So the
+> Soundwire interrupt must not be disabled until the point that nothing can
+> be using it.
 
-Okay is by default, don't add it.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-> +		};
-> +
->  		ufs: ufs@15120000 {
->  			compatible = "tesla,fsd-ufs";
->  			reg = <0x0 0x15120000 0x0 0x200>,  /* 0: HCI standard */
+--y4vOpZSr9wJlnE+n
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
-Krzysztof
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMYf+IACgkQJNaLcl1U
+h9C1lQf/QQ7834+HysNjSeJWB8OQqFmAuvTcRvjskQ7KiMtML52BD0aYaHgAJVNA
++sPph3cYAkcu4h8OM5G4OZ1nDVHcJ9bIDQO0ybGx4V6B4IfTqm2HcBZI5XjuvAy/
+xcRiOoCR9QoWHe83pNTQMH3j0/sC6WNlE38KMokQS1MFJmx3ld0XdjmOpKhF04TM
+A9tVkWAzzJjFaK9aWY+aJRJkD4xyVJBHq9n/EtgMW4MeppzzBch7tCJrQHh1XG9i
+3kmXQRrQ7S80q9m8zI3UlfvVfTflUPK/h6o+szJTBmyeZLDG4GkPKQyWWm+EwAjY
+9UzaLD8yNp8o9DCGxb6SzOFsfMDzTA==
+=GacH
+-----END PGP SIGNATURE-----
+
+--y4vOpZSr9wJlnE+n--

@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79B35AFA5D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748055AFA65
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiIGDDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 23:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S229897AbiIGDGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 23:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGDCz (ORCPT
+        with ESMTP id S229523AbiIGDF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:02:55 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D9283BFA;
-        Tue,  6 Sep 2022 20:02:51 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id a70so1577059edf.10;
-        Tue, 06 Sep 2022 20:02:51 -0700 (PDT)
+        Tue, 6 Sep 2022 23:05:58 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35F886B75;
+        Tue,  6 Sep 2022 20:05:56 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w2so17800006edc.0;
+        Tue, 06 Sep 2022 20:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=XbE8raIYybgu/eeU8tkOPooJt1AdcsnX26x3zxOVBq4=;
-        b=bJ7Rt1Gw7E7bP1DH9ZXXWZ5TAKDKIbI8Nb9tK9Un1NZGIlW2Zjcd9d0SjfXqLgm7hd
-         L8ie2WXUswKPucleTApgfAayFMeEigInBMsdnDnoCESFtJVR5Ohigmd9paPQLlbdEqHi
-         TQ+C3DTqbSABmIzF+XdJeAlaO3Ou1DIowznR1YeytyYlc0k/PiMdDaLp38hMzRLjFz1y
-         2X/z20+5Vg1xkXB1bSYtY28yQqUczv3QRNqwzatxCt2MRK1VdOEIfKKei3pQZILKw9j7
-         mH4i0nDSWtQAu2IJV5AjxRB3Ikgai9Co0FYDn4NhIX5gqeCHnEFDvTr4Oo+SzCy/MxIT
-         liZg==
+        bh=lZhl4GKNh72f6ovup18O37psKeuslqnMIGiRFdPU76Q=;
+        b=RCD3CfGkzkX2ogxVqAP1o0I0iO4u63lKMab7CUkWxpafhcP/27B/CzHvw89JugQLCE
+         oviELWoh5CqMn+DaAkfeKeCSti6hEuOGl47tgpOZDRlMwHTmSRGnCg/5fPFo/rGAWoE9
+         AxXKE5FZJ01NTgbgIidsTJaKudhIdVIbNnjrO/aTIDWdHRY/YGg3safFxLdG/HDrNnr1
+         IAzuyILjxPMoWV27PelaY/9cHlX4Tf2PvZnoeslJmQIvh+KxqrG2XG6JE5DR7F6Btt5b
+         Oo+7Fd1h9WLSlgRA2KvbZm2e8IpZT+DUMiC+XxPMa5zzGKgFK0LvmDrcoxH+z7aGqKkC
+         mm6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=XbE8raIYybgu/eeU8tkOPooJt1AdcsnX26x3zxOVBq4=;
-        b=EOVBwGxV+c+W1Euq+U9HMw8Nmr+2lHRENcjDaB0zwSGOoAHuwFn37/pMIOQ6lxAGum
-         Q4jntQ9BzwJ0zmem9LnEyX/LZpMy+xfiwL8+A0uv3ER/5csbRqgQTvQtxWYxXIUC2GXA
-         L3VlOMpgNg2F7JeygQkP37g1aHleXylb6Q/2Gok/V8Vl/EkpcBSYZljYjo+VVhlVq3ha
-         0JBNTVBFlOUnWZDg09rKUNo0oZZ/8RQibxnyNL11tJTf1atQtqTGrlFetbJwe4YsuckP
-         u+U7Av839byAjiaCLPqw7r05Ed8+bRW2wKRE5cBQuiAM4oZJbUxZxKzLoR+PWBMnMjvb
-         nicg==
-X-Gm-Message-State: ACgBeo3wrIUTagmZwGamWJWsDoA5KpMT/Lvsvkhj1PZtEdCAJc4KNHsD
-        tprq/7zAk0qbDxOjwO5OTc5Fc8g1prhizUCbrY8=
-X-Google-Smtp-Source: AA6agR6ARo4dD4hc1YpgGSU6KS0brc6AUkEXv5WLP1LgTy3Qtdb+aiJbaM9PP5sF8yy2rjDS6FT86oUVVLXpEftniv4=
-X-Received: by 2002:a05:6402:1a4f:b0:44e:f731:f7d5 with SMTP id
- bf15-20020a0564021a4f00b0044ef731f7d5mr1233017edb.357.1662519770220; Tue, 06
- Sep 2022 20:02:50 -0700 (PDT)
+        bh=lZhl4GKNh72f6ovup18O37psKeuslqnMIGiRFdPU76Q=;
+        b=4Wfy97KwE52eaRB+6AduykI03l7D469AVr91IP9TF5yV4Fq65ho8yezpilh8Y2cpP/
+         My5dg5Ei0rsCFLO8EOLZKWB28ohYfPCX5GpJh4o4A3xlyEEHAbII4LZ8OlApFyP1Me2h
+         CDEFWoMEj33RNVGNZYFNDC+ZsXiYk+etxdxi0tg9J/v1RL/bAU9x3i0tUm6PUswMQpDD
+         WIHqLtImxuQCWQ/QX5Pt73Xx5vg5xPMKX/Fqh1wZNm+G5RZlTppVNblc1wqeO22ttHwX
+         KliLMxMGGuTdRmyqDoe0aUMkYzGhbSUQ4LvRzwu79YkytshioNNAr6rjyPTV8Y7wC5+9
+         5Mmg==
+X-Gm-Message-State: ACgBeo063cfJcZVFZPHnFse2pZQJyNepWHlBfXbrS+7dGy9gGprjFdfw
+        nAJ2UVx6jCnEpmZUXT7aGKjvom0hPkQkwxfp1x8=
+X-Google-Smtp-Source: AA6agR5ZyoPwvG4+3ilgfNPiu54CYFcndyQtTG6z0EA+LSXSC2vH24jLhLuCSEb3R1/8KW2rWqQJYD7UCOjtmPLyMj0=
+X-Received: by 2002:a05:6402:28cd:b0:448:3856:41a3 with SMTP id
+ ef13-20020a05640228cd00b00448385641a3mr1275640edb.6.1662519955333; Tue, 06
+ Sep 2022 20:05:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000008be47905e7e08b85@google.com> <YxXZT6NxSSLufivZ@krava>
-In-Reply-To: <YxXZT6NxSSLufivZ@krava>
+References: <20220906165131.59f395a9@canb.auug.org.au> <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
+ <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
+In-Reply-To: <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 6 Sep 2022 20:02:39 -0700
-Message-ID: <CAADnVQKthoffNDuO8TsjyCx1JF8jvsyh_pvmT+Q3yB493OeQeA@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in bpf_bprintf_prepare (2)
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     syzbot <syzbot+2251879aa068ad9c960d@syzkaller.appspotmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+Date:   Tue, 6 Sep 2022 20:05:44 -0700
+Message-ID: <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the slab tree
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>,
-        Song Liu <song@kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Yonghong Song <yhs@fb.com>
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marco Elver <elver@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -77,153 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 4:11 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+On Tue, Sep 6, 2022 at 11:37 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Sun, Sep 04, 2022 at 02:21:23PM -0700, syzbot wrote:
-> > Hello,
+> On Tue, Sep 6, 2022 at 12:53 AM Vlastimil Babka <vbabka@suse.cz> wrote:
 > >
-> > syzbot found the following issue on:
+> > On 9/6/22 08:51, Stephen Rothwell wrote:
+> > > Hi all,
 > >
-> > HEAD commit:    7fd22855300e Add linux-next specific files for 20220831
-> > git tree:       linux-next
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=14e5668b080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3e56c1a274c93753
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=2251879aa068ad9c960d
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17dc728b080000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=164748d7080000
+> > Hi,
 > >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+2251879aa068ad9c960d@syzkaller.appspotmail.com
+> > > After merging the slab tree, today's linux-next build (powerpc
+> > > ppc64_defconfig) failed like this:
+> > >
+> > > kernel/bpf/memalloc.c: In function 'bpf_mem_free':
+> > > kernel/bpf/memalloc.c:613:33: error: implicit declaration of function '__ksize'; did you mean 'ksize'? [-Werror=implicit-function-declaration]
+> > >    613 |         idx = bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE_SZ));
+> > >        |                                 ^~~~~~~
+> > >        |                                 ksize
 > >
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 1 PID: 3601 at kernel/bpf/helpers.c:769 try_get_fmt_tmp_buf kernel/bpf/helpers.c:769 [inline]
-> > WARNING: CPU: 1 PID: 3601 at kernel/bpf/helpers.c:769 bpf_bprintf_prepare+0xf31/0x11a0 kernel/bpf/helpers.c:817
-> > Modules linked in:
-> > CPU: 1 PID: 3601 Comm: strace-static-x Not tainted 6.0.0-rc3-next-20220831-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > RIP: 0010:try_get_fmt_tmp_buf kernel/bpf/helpers.c:769 [inline]
-> > RIP: 0010:bpf_bprintf_prepare+0xf31/0x11a0 kernel/bpf/helpers.c:817
-> > Code: ff e8 93 9f ea ff 48 83 7c 24 08 00 41 bd 04 00 00 00 0f 85 8a fa ff ff e8 7c 9f ea ff 8d 6b 03 e9 f7 f6 ff ff e8 6f 9f ea ff <0f> 0b 65 ff 0d 8e ba 71 7e bf 01 00 00 00 41 bc f0 ff ff ff e8 16
-> > RSP: 0018:ffffc90003cfeb70 EFLAGS: 00010093
-> > RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> > RDX: ffff8880219b3a80 RSI: ffffffff819186b1 RDI: 0000000000000005
-> > RBP: ffffc90003cfeca0 R08: 0000000000000005 R09: 0000000000000003
-> > R10: 0000000000000004 R11: 0000000000000001 R12: 0000000000000003
-> > R13: 0000000000000004 R14: ffffc90003cfed58 R15: 0000000000000003
-> > FS:  0000000001655340(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000000020003000 CR3: 0000000074d58000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  ____bpf_trace_printk kernel/trace/bpf_trace.c:383 [inline]
-> >  bpf_trace_printk+0xab/0x170 kernel/trace/bpf_trace.c:374
-> >  bpf_prog_0605f9f479290f07+0x2f/0x33
-> >  bpf_dispatcher_nop_func include/linux/bpf.h:904 [inline]
-> >  __bpf_prog_run include/linux/filter.h:594 [inline]
-> >  bpf_prog_run include/linux/filter.h:601 [inline]
-> >  __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
-> >  bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
-> >  __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
-> >  trace_contention_begin.constprop.0+0xda/0x1b0 include/trace/events/lock.h:95
-> >  __pv_queued_spin_lock_slowpath+0x103/0xb50 kernel/locking/qspinlock.c:405
-> >  pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
-> >  queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
-> >  queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
-> >  do_raw_spin_lock+0x200/0x2a0 kernel/locking/spinlock_debug.c:115
-> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
-> >  _raw_spin_lock_irqsave+0x41/0x50 kernel/locking/spinlock.c:162
-> >  ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
-> >  bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
-> >  bpf_prog_0605f9f479290f07+0x2f/0x33
-> >  bpf_dispatcher_nop_func include/linux/bpf.h:904 [inline]
-> >  __bpf_prog_run include/linux/filter.h:594 [inline]
-> >  bpf_prog_run include/linux/filter.h:601 [inline]
-> >  __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
-> >  bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
-> >  __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
-> >  trace_contention_begin.constprop.0+0xda/0x1b0 include/trace/events/lock.h:95
-> >  __pv_queued_spin_lock_slowpath+0x103/0xb50 kernel/locking/qspinlock.c:405
-> >  pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
-> >  queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
-> >  queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
-> >  do_raw_spin_lock+0x200/0x2a0 kernel/locking/spinlock_debug.c:115
-> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
-> >  _raw_spin_lock_irqsave+0x41/0x50 kernel/locking/spinlock.c:162
-> >  ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
-> >  bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
-> >  bpf_prog_0605f9f479290f07+0x2f/0x33
-> >  bpf_dispatcher_nop_func include/linux/bpf.h:904 [inline]
-> >  __bpf_prog_run include/linux/filter.h:594 [inline]
-> >  bpf_prog_run include/linux/filter.h:601 [inline]
-> >  __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
-> >  bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
-> >  __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
-> >  trace_contention_begin.constprop.0+0xda/0x1b0 include/trace/events/lock.h:95
-> >  __pv_queued_spin_lock_slowpath+0x103/0xb50 kernel/locking/qspinlock.c:405
-> >  pv_queued_spin_lock_slowpath arch/x86/include/asm/paravirt.h:591 [inline]
-> >  queued_spin_lock_slowpath arch/x86/include/asm/qspinlock.h:51 [inline]
-> >  queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
-> >  do_raw_spin_lock+0x200/0x2a0 kernel/locking/spinlock_debug.c:115
-> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
-> >  _raw_spin_lock_irqsave+0x41/0x50 kernel/locking/spinlock.c:162
-> >  ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
-> >  bpf_trace_printk+0xcf/0x170 kernel/trace/bpf_trace.c:374
-> >  bpf_prog_0605f9f479290f07+0x2f/0x33
-> >  bpf_dispatcher_nop_func include/linux/bpf.h:904 [inline]
-> >  __bpf_prog_run include/linux/filter.h:594 [inline]
-> >  bpf_prog_run include/linux/filter.h:601 [inline]
-> >  __bpf_trace_run kernel/trace/bpf_trace.c:2046 [inline]
-> >  bpf_trace_run2+0x110/0x340 kernel/trace/bpf_trace.c:2083
-> >  __bpf_trace_contention_begin+0xb5/0xf0 include/trace/events/lock.h:95
-> >  trace_contention_begin+0xc0/0x150 include/trace/events/lock.h:95
-> >  __mutex_lock_common kernel/locking/mutex.c:605 [inline]
-> >  __mutex_lock+0x13c/0x1350 kernel/locking/mutex.c:747
-> >  __pipe_lock fs/pipe.c:103 [inline]
-> >  pipe_write+0x132/0x1be0 fs/pipe.c:431
-> >  call_write_iter include/linux/fs.h:2188 [inline]
-> >  new_sync_write fs/read_write.c:491 [inline]
-> >  vfs_write+0x9e9/0xdd0 fs/read_write.c:578
-> >  ksys_write+0x1e8/0x250 fs/read_write.c:631
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > Could you use ksize() here? I'm guessing you picked __ksize() because
+> > kasan_unpoison_element() in mm/mempool.c did, but that's to avoid
+> > kasan_unpoison_range() in ksize() as this caller does it differently.
+> > AFAICS your function doesn't handle kasan differently, so ksize() should
+> > be fine.
 >
-> looks like __bpf_trace_contention_begin needs bpf_prog_active check
-> (like below untested), which would prevent the recursion and bail
-> out after 2nd invocation
->
-> should be easy to reproduce, will check
->
-> jirka
->
->
-> ---
-> diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-> index 6a13220d2d27..481b057cc8d9 100644
-> --- a/include/trace/bpf_probe.h
-> +++ b/include/trace/bpf_probe.h
-> @@ -4,6 +4,8 @@
->
->  #ifdef CONFIG_BPF_EVENTS
->
-> +DECLARE_PER_CPU(int, bpf_prog_active);
-> +
->  #undef __entry
->  #define __entry entry
->
-> @@ -82,7 +84,11 @@ static notrace void                                                  \
->  __bpf_trace_##call(void *__data, proto)                                        \
->  {                                                                      \
->         struct bpf_prog *prog = __data;                                 \
-> +       if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1))      \
-> +               goto out;                                               \
->         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));  \
-> +out:                                                                   \
-> +        __this_cpu_dec(bpf_prog_active);
+> Ok. Will change to use ksize().
 
-I don't think we can use this big hammer here.
-raw_tp progs attached to different hooks need to
-run on the same cpu otherwise we will lose events.
+Just pushed the following commit to address the issue:
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=1e660f7ebe0ff6ac65ee0000280392d878630a67
+
+It will get to net-next soon.

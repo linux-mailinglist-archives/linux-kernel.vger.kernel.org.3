@@ -2,50 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B626C5AFF94
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806AD5AFFC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiIGIu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S230152AbiIGJBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiIGIuv (ORCPT
+        with ESMTP id S229437AbiIGJBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:50:51 -0400
-Received: from outbound-smtp40.blacknight.com (outbound-smtp40.blacknight.com [46.22.139.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24CA6CD0D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:50:48 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp40.blacknight.com (Postfix) with ESMTPS id 76E091C4147
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:41:41 +0100 (IST)
-Received: (qmail 27017 invoked from network); 7 Sep 2022 08:41:41 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 7 Sep 2022 08:41:41 -0000
-Date:   Wed, 7 Sep 2022 09:41:35 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Abel Wu <wuyun.abel@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
-Message-ID: <20220907084135.izfqd7rga7fdk6u3@techsingularity.net>
-References: <20220712082036.5130-1-wuyun.abel@bytedance.com>
- <20220712082036.5130-2-wuyun.abel@bytedance.com>
- <20220829130831.odhemmcmuecqxkbz@techsingularity.net>
- <51009414-5ffb-b6ec-a501-7b2514a0f3cc@bytedance.com>
- <20220829145621.7cxrywgxow5ov7ki@techsingularity.net>
- <0ffb0903-431f-88fe-3a56-150b283f5304@bytedance.com>
- <20220902102528.keooutttg3hq3sy5@techsingularity.net>
- <1fc40679-b7c3-24f2-aa27-f1edab71228e@bytedance.com>
- <20220906095717.maao4qtel4fhbmfq@techsingularity.net>
- <YxhH7cB+OIMAB0dM@chenyu5-mobl1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <YxhH7cB+OIMAB0dM@chenyu5-mobl1>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Wed, 7 Sep 2022 05:01:05 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 02:01:03 PDT
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325A9E2E2;
+        Wed,  7 Sep 2022 02:01:02 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id A66422B058C3;
+        Wed,  7 Sep 2022 04:42:01 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 04:42:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662540121; x=1662543721; bh=CwqfKMH8rF
+        Jq0n8MfKf64/LLnkipF2ZC6faLaJQYssI=; b=iFbH69DPSIHen642gkFD6Df4Zc
+        hvxltbsETwdEtCI7uJxGWG+E58xlt1mLUM87ZlfIr0xQJzkQ6GpwL/1C79P+hFUG
+        HGAoRqamU1F5k7ZsvRELKOYF3gcAFccsMlCE2x+aLBGWBOLiWXrKi7OUyX2eNbkN
+        COTBF7g7lS4s8LbLwWHQ6L1IvxOBrZJtRajiEa7Meq8kMxaVBjqIf3bsOA6VYinz
+        vKnWur+5+2McBsE2hcSxYXJZ6mut+T4mrdAl0LgNyTBd1uHl9hqR6AkpEn9vgkmC
+        Ou1+WiIR6PUE3FcaPPIO3NKoDs43b9fe4E6R4atR/ghDap5NcAQPvaQAukVA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662540121; x=1662543721; bh=CwqfKMH8rFJq0n8MfKf64/LLnkip
+        F2ZC6faLaJQYssI=; b=CAy84ntWnJCf1x+Ik4W8I4eDBhM+IJW3yRGscigfGxPp
+        sW8yEM1pXDHGQF13EEiCUYVA4+FlkhsiUPNmBWrswZhfl+VKcVtz/E/drabhO3eJ
+        be5rk6oBtaOj99sElD/uTu1VszaGsykIlDFRrUcQbQJLlvDaF5wK1iAQ1tz9uMK9
+        zFR9+r+q4s+MtbS+90jrBqvQrAA5H1T6Yw68M2GVORmJY9VCmVAT/XA9Cn63yj7P
+        bs9/v+uj1kxrEC45xHlXEzEmeNfzdM5hUiI6XyNQ2Rad4uU+qWt6dvK9J0NI7JOr
+        rlq2LR3ZgTD2//XD3Z2J6I05QxVQEw4N/vsw3hLL7g==
+X-ME-Sender: <xms:WFkYY_5WoLxuHstEPz3dFmgk10HXsMyVhQMMQL2NS7d0qfH_XMTtyg>
+    <xme:WFkYY05aixySBJZI-F8Rf34EiYtu70hbvwnpr3sPTJDde15-BLUEEN01elG8qIuaE
+    cQwvKy33ekME1RCqYI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:WFkYY2ffvzUcraSjfGbccJpOVIRcEkKF_nU2nhNkUkDYWHdSBT3d7Q>
+    <xmx:WFkYYwIVQM8sUZ18dCbyqQbmz3KXMzOJ3olYkeYBpGTeV28kJlhe7Q>
+    <xmx:WFkYYzKCRCcmFzWivKUssrV0smQau_QWIvLEsuz05FY4PiwSY9LkhA>
+    <xmx:WVkYY700gHe4BIxy75yuW2HAWAom3WMC6vVUqJZq9PbYGR7MVF-Zmoze08g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C7651B60083; Wed,  7 Sep 2022 04:42:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <77b0aa7b-3183-4a05-85ff-b278aa7f8f11@www.fastmail.com>
+In-Reply-To: <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
+References: <YxdX2l88PSFGe1r4@debian> <YxeAOgEoUffHudv/@kroah.com>
+ <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
+Date:   Wed, 07 Sep 2022 10:41:39 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Kumaravel Thiagarajan" <kumaravel.thiagarajan@microchip.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: build failure of next-20220906 due to 4ec7ac90ff39 ("misc: microchip:
+ pci1xxxx: Add power management functions - suspend & resume handlers.")
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,42 +89,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 03:27:41PM +0800, Chen Yu wrote:
-> > Ok, that's rational. There will be corner cases where there was no idle
-> > CPU near the target when there is an idle core far away but it would be
-> > counter to the purpose of SIS_UTIL to care about that corner case.
-> > 
-> > >  2) Unconditionally full scan when has_idle_core is not good
-> > >     for netperf_{udp,tcp} and tbench4. It is probably because
-> > >     the SIS success rate of these workloads is already high
-> > >     enough (netperf ~= 100%, tbench4 ~= 50%, compared to that
-> > >     hackbench ~= 3.5%) which negate a lot of the benefit full
-> > >     scan brings.
-> > > 
-> > 
-> > That's also rational. For a single client/server on netperf, it's expected
-> > that the SIS success rate is high and scanning is minimal. As the client
-> > and server are sharing data on localhost and somewhat synchronous, it may
-> > even partially benefit from SMT sharing.
-> >
-> Maybe off-topic, since we monitor the success rate and also other metrics
-> for each optimization in SIS path, is it possible to merge your statistics
-> patch [1] into upstream so we don't need to rebase in the future(although
-> it is targeting kernel development)?
-> 
+On Tue, Sep 6, 2022, at 11:07 PM, Sudip Mukherjee wrote:
+> On Tue, Sep 6, 2022 at 6:15 PM Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>> On Tue, Sep 06, 2022 at 03:23:22PM +0100, Sudip Mukherjee (Codethink) wrote:
+>> >
+>> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
+>> >   311 | static int pci1xxxx_gpio_resume(struct device *dev)
+>> >       |            ^~~~~~~~~~~~~~~~~~~~
+>> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
+>> >   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
+>> >       |            ^~~~~~~~~~~~~~~~~~~~~
+>> >
+>> >
+>> > git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
+>> >
+>
+> Looking at other drivers which uses SIMPLE_DEV_PM_OPS, I think
+> pci1xxxx_gpio_suspend() and pci1xxxx_gpio_resume() needs to be under
+> "#ifdef CONFIG_PM_SLEEP".
 
-I am doubtful it is a merge candidate. While it's very useful when modifying
-SIS and gathering data on whether SIS is behaving as expected, it has little
-practical benefit when debugging problems on normal systems.  Crude estimates
-can be obtained by other methods. Probing when select_idle_sibling and
-select_idle_cpu are called reveals the SIS fast and slow paths and the
-ratio between time. Tracking the time spent in select_idle_cpu reveals
-how much time is spent finding idle cores and cpus.
+That would work, but a better fix is to use DEFINE_SIMPLE_DEV_PM_OPS()
+in place of the deprecated SIMPLE_DEV_PM_OPS().
 
-I would not object to someone trying but the changlog would benefit from
-explaining why it's practically useful. Every time I've used it, it was to
-justify another patch being merged or investigating various SIS corner cases.
-
--- 
-Mel Gorman
-SUSE Labs
+     Arnd

@@ -2,145 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88165B0633
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129485B062E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiIGONy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S229927AbiIGOMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiIGONv (ORCPT
+        with ESMTP id S229643AbiIGOMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:13:51 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B19D5AC68;
-        Wed,  7 Sep 2022 07:13:47 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MN4495FRdz9sk7;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NbQ0L84h4YdI; Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MN4494R6wz9sk5;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 839B28B78B;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id RvCiRwW5QFyp; Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.234])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 332CC8B763;
-        Wed,  7 Sep 2022 16:13:45 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 287EDNDw3203669
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 7 Sep 2022 16:13:23 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 287EBZlP3203513;
-        Wed, 7 Sep 2022 16:11:35 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v3 REBASED] spi: Add capability to perform some transfer with chipselect off
-Date:   Wed,  7 Sep 2022 16:11:25 +0200
-Message-Id: <434165c46f06d802690208a11e7ea2500e8da4c7.1662558898.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Wed, 7 Sep 2022 10:12:48 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4EE175BB;
+        Wed,  7 Sep 2022 07:12:45 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id j17so10437417qtp.12;
+        Wed, 07 Sep 2022 07:12:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Nxa+VNw3flyasK2pC4wEuT0GAzbIk8zvqt0eepx0SsY=;
+        b=BLcasJWQ6j6tJRyVL0u0kPVb4wZakIHBpZRYneO1Sve0AF1jVZp3OK2r1sokbUJMOc
+         eUD5SDJJbTIM0ZZT5nNtJ8CC75DNAa5qVLUpf/jeNFO8GjxtoxWYlPJkEBMTmVdSnbAo
+         oUJvrW6b94tO3wyDq+1PgY55bfNW3SRypTtpU0f6jcobxAjdtZf+arBo1vPqnyql12nf
+         UJ5bTzNOpSilUj0TZzNTShtq0Kr3ZCPMMPlNKgrJQuQ32UtcSxtv+FET9hLpANur1ZP1
+         OY9ViY2tiKh0ePkq0S6EspdqDPefc0Bzuv+uYqZQy9v9PKof5HvJaoY9BG1sPh/g5CjT
+         1MPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Nxa+VNw3flyasK2pC4wEuT0GAzbIk8zvqt0eepx0SsY=;
+        b=FJ32l3YHMHMZkebDWmPD7ehWJuwLUaj7g0Pz/oZrk4SwEMtOccrsCmbuhjXi5b04a4
+         qQhCK7iRdyaHpmQnCTtVRhmoLidPRY1QG/4QO71+tS4dh60Mo9zAT6HO5wahUsDbMqp0
+         ktj5K+il3W/OFHFpszDeTNEoBPjlxAk6O8aQ3ljJ9xNG7Z3VVVa4M7zMA73gYG4fEKNF
+         eJSRwrvk+NyNKZjOH3eeYq7hVEinKnpXL8Ut/xEjF4FWblYYUxifVWSd4qfVofZZEPj4
+         EXb9OWcdlMMdcbQ5kygPBGRPf3o52cnbtgmNoXgWn/FHv/3Wemj/NTK7KoYaJ39xacI8
+         KyAw==
+X-Gm-Message-State: ACgBeo2OpLPIv28s/efp47XiPSHBt+is78OPsPgKn9Mutw17XZRRLWR5
+        L1d3ErgK04axAxhsR8KscLJvTG820kYdJnSe/MM=
+X-Google-Smtp-Source: AA6agR7QXnlO6eddnh3zuWCYlRmj+jpEjQt0WJWuKyFvjCFaK/nCs9+C8McJuzclF5IozDnOf9RhzJ8Krc0uuP0gU6M=
+X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
+ p17-20020a05622a049100b0034495bf8f05mr3431126qtx.61.1662559964952; Wed, 07
+ Sep 2022 07:12:44 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662559883; l=3320; s=20211009; h=from:subject:message-id; bh=nhEy38PTRF9ranS0NmdK0DMBPj0AbmzHk2k5M/5fx/Y=; b=7JH9vrLSGNogatlUQo3OoL53sgXR5y6jdrk3XO5Qzq3rqH/1opFMfHaCL3yQCBkIO1vlXFyxiHEZ 1YCOVkFGAuJpOiyq5GWAYVJeuIGBIAr1GDkHPgql7j5SIwQ8+kGD
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220907132205.28021-1-andrea.merello@iit.it>
+In-Reply-To: <20220907132205.28021-1-andrea.merello@iit.it>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Sep 2022 17:12:09 +0300
+Message-ID: <CAHp75Vd6wGPd6MJjEqB=dyrFj36CJi-QRFzy7WsvYgHZDNgG=Q@mail.gmail.com>
+Subject: Re: [v7 00/14] Add support for Bosch BNO055 IMU
+To:     Andrea Merello <andrea.merello@iit.it>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>,
+        Andrea Merello <andrea.merello@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some components require a few clock cycles with chipselect off before
-or/and after the data transfer done with CS on.
+On Wed, Sep 7, 2022 at 4:22 PM <andrea.merello@iit.it> wrote:
+>
+> From: Andrea Merello <andrea.merello@iit.it>
+>
+> This series (tries to) add support for Bosch BNO055 IMU to Linux IIO
+> subsystem. It is made up several patches:
 
-Typically IDT 801034 QUAD PCM CODEC datasheet states "Note *: CCLK
-should have one cycle before CS goes low, and two cycles after
-CS goes high".
 
-The cycles "before" are implicitely provided by all previous activity
-on the SPI bus. But the cycles "after" must be provided in order to
-terminate the SPI transfer.
+These
 
-In order to use that kind of component, add a cs_off flag to
-spi_transfer struct. When this flag is set, the transfer is performed
-with chipselect off. This allows consummer to add a dummy transfer
-at the end of the transfer list which is performed with chipselect
-OFF, providing the required additional clock cycles.
+>   iio: imu: add Bosch Sensortec BNO055 core driver
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-Rebased on today's linus' master
+>   iio: imu: add BNO055 serdev driver
 
- drivers/spi/spi.c       | 12 +++++++++---
- include/linux/spi/spi.h |  2 ++
- 2 files changed, 11 insertions(+), 3 deletions(-)
+are huge and I will look at them later on.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 83da8862b8f2..cc5cb948978e 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1435,7 +1435,8 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 	struct spi_statistics __percpu *statm = ctlr->pcpu_statistics;
- 	struct spi_statistics __percpu *stats = msg->spi->pcpu_statistics;
- 
--	spi_set_cs(msg->spi, true, false);
-+	xfer = list_first_entry(&msg->transfers, struct spi_transfer, transfer_list);
-+	spi_set_cs(msg->spi, !xfer->cs_off, false);
- 
- 	SPI_STATISTICS_INCREMENT_FIELD(statm, messages);
- 	SPI_STATISTICS_INCREMENT_FIELD(stats, messages);
-@@ -1503,10 +1504,15 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 					 &msg->transfers)) {
- 				keep_cs = true;
- 			} else {
--				spi_set_cs(msg->spi, false, false);
-+				if (!xfer->cs_off)
-+					spi_set_cs(msg->spi, false, false);
- 				_spi_transfer_cs_change_delay(msg, xfer);
--				spi_set_cs(msg->spi, true, false);
-+				if (!list_next_entry(xfer, transfer_list)->cs_off)
-+					spi_set_cs(msg->spi, true, false);
- 			}
-+		} else if (!list_is_last(&xfer->transfer_list, &msg->transfers) &&
-+			   xfer->cs_off != list_next_entry(xfer, transfer_list)->cs_off) {
-+			spi_set_cs(msg->spi, xfer->cs_off, false);
- 		}
- 
- 		msg->actual_length += xfer->len;
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index e6c73d5ff1a8..6e6c62c59957 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -847,6 +847,7 @@ struct spi_res {
-  *      for this transfer. If 0 the default (from @spi_device) is used.
-  * @dummy_data: indicates transfer is dummy bytes transfer.
-  * @cs_change: affects chipselect after this transfer completes
-+ * @cs_off: performs the transfer with chipselect off.
-  * @cs_change_delay: delay between cs deassert and assert when
-  *      @cs_change is set and @spi_transfer is not the last in @spi_message
-  * @delay: delay to be introduced after this transfer before
-@@ -959,6 +960,7 @@ struct spi_transfer {
- 	unsigned	cs_change:1;
- 	unsigned	tx_nbits:3;
- 	unsigned	rx_nbits:3;
-+	unsigned	cs_off:1;
- #define	SPI_NBITS_SINGLE	0x01 /* 1bit transfer */
- #define	SPI_NBITS_DUAL		0x02 /* 2bits transfer */
- #define	SPI_NBITS_QUAD		0x04 /* 4bits transfer */
--- 
-2.37.1
-
+--
+With Best Regards,
+Andy Shevchenko

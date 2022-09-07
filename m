@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FDC5B0B80
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4045F5B0B5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiIGRav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S229905AbiIGRVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiIGRat (ORCPT
+        with ESMTP id S229513AbiIGRVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:30:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49FC9F1AC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:30:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61345619C0
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 17:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C814C433C1;
-        Wed,  7 Sep 2022 17:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662571845;
-        bh=sTFHKzRTmE4hLkwfjSXF938Aw9yrEtQkwAmeaka9rfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HfFLCI7fMLzE5aK8JJSfj7i0reK0wOtw+imOGRCdGPVuwmqKzItva9dK1OhkQGslA
-         y+o5Xtle1k0xknoNKl6J+1zt1ci+VWZtiC+HLBhesKckl1Bbn62GxJWQwK7p2MBHEx
-         HZ8uf4rvc28wA9U5fHIBksC4d9bBKWG6bbK7Hbx1uXlJEoLKI/E4q79mEg8tgTkcvK
-         orBj87E08K/78WOLQ7jUqmgnW4VdadULt/+dv4BhGhyDfAgPE8hqk6e0V7+vm+mZWr
-         mFJXH9DhaTFEkAPYswIIvmWkOXS/fvZXLCMC5PWocE1cMiJZRpq6SQDvH1shyidNMi
-         rcub+uixsZXEg==
-Date:   Thu, 8 Sep 2022 01:21:27 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, mhiramat@kernel.org, rostedt@goodmis.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv/kprobe: Optimize the performance of patching
- instruction slot
-Message-ID: <YxjTF2FlIJbbKq0p@xhacker>
-References: <20220907023327.85630-1-liaochang1@huawei.com>
+        Wed, 7 Sep 2022 13:21:39 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F53A5C61
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:21:37 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MN8Dw2BCLz9skr;
+        Wed,  7 Sep 2022 19:21:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id DuwBRwQWXqUM; Wed,  7 Sep 2022 19:21:36 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MN8Dw1DWKz9skq;
+        Wed,  7 Sep 2022 19:21:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0C93C8B78B;
+        Wed,  7 Sep 2022 19:21:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id MLVDGr0fKSvO; Wed,  7 Sep 2022 19:21:35 +0200 (CEST)
+Received: from [192.168.232.239] (unknown [192.168.232.239])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9AAC08B763;
+        Wed,  7 Sep 2022 19:21:35 +0200 (CEST)
+Message-ID: <7cb1285a-42e6-2b67-664f-7d206bc9fd80@csgroup.eu>
+Date:   Wed, 7 Sep 2022 19:21:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220907023327.85630-1-liaochang1@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] powerpc/lib/xor_vmx: Relax frame size for clang
+Content-Language: fr-FR
+To:     Mathieu Malaterre <malat@debian.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>, linuxppc-dev@lists.ozlabs.org
+References: <20190621085822.1527-1-malat@debian.org>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20190621085822.1527-1-malat@debian.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,46 +61,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:33:27AM +0800, Liao Chang wrote:
-> Since no race condition occurs on each instruction slot, hence it is
-> safe to patch instruction slot without stopping machine.
 
-hmm, IMHO there's race when arming kprobe under SMP, so stopping
-machine is necessary here. Maybe I misundertand something.
+
+Le 21/06/2019 à 10:58, Mathieu Malaterre a écrit :
+> When building with clang-8 the frame size limit is hit:
+> 
+>    ../arch/powerpc/lib/xor_vmx.c:119:6: error: stack frame size of 1200 bytes in function '__xor_altivec_5' [-Werror,-Wframe-larger-than=]
+> 
+> Follow the same approach as commit 9c87156cce5a ("powerpc/xmon: Relax
+> frame size for clang") until a proper fix is implemented upstream in
+> clang and relax requirement for clang.
+
+With Clang 14 I get the following errors, but only with KASAN selected.
+
+   CC      arch/powerpc/lib/xor_vmx.o
+arch/powerpc/lib/xor_vmx.c:95:6: error: stack frame size (1040) exceeds 
+limit (1024) in '__xor_altivec_4' [-Werror,-Wframe-larger-than]
+void __xor_altivec_4(unsigned long bytes,
+      ^
+arch/powerpc/lib/xor_vmx.c:124:6: error: stack frame size (1312) exceeds 
+limit (1024) in '__xor_altivec_5' [-Werror,-Wframe-larger-than]
+void __xor_altivec_5(unsigned long bytes,
+      ^
+
+
+Is this patch still relevant ?
+
+Or should frame size be relaxed when KASAN is selected ? After all the 
+stack size is multiplied by 2 when we have KASAN, so maybe the warning 
+limit should be increased as well ?
+
+Thanks
+Christophe
 
 > 
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/563
+> Cc: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Mathieu Malaterre <malat@debian.org>
 > ---
->  arch/riscv/kernel/probes/kprobes.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>   arch/powerpc/lib/Makefile | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-> index e6e950b7cf32..eff7d7fab535 100644
-> --- a/arch/riscv/kernel/probes/kprobes.c
-> +++ b/arch/riscv/kernel/probes/kprobes.c
-> @@ -24,12 +24,14 @@ post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
->  static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
->  {
->  	unsigned long offset = GET_INSN_LENGTH(p->opcode);
-> +	const kprobe_opcode_t brk_insn = __BUG_INSN_32;
-> +	kprobe_opcode_t slot[MAX_INSN_SIZE];
->  
->  	p->ainsn.api.restore = (unsigned long)p->addr + offset;
->  
-> -	patch_text(p->ainsn.api.insn, p->opcode);
-> -	patch_text((void *)((unsigned long)(p->ainsn.api.insn) + offset),
-> -		   __BUG_INSN_32);
-> +	memcpy(slot, &p->opcode, offset);
-> +	memcpy((void *)((unsigned long)slot + offset), &brk_insn, 4);
-> +	patch_text_nosync(p->ainsn.api.insn, slot, offset + 4);
->  }
->  
->  static void __kprobes arch_prepare_simulate(struct kprobe *p)
-> -- 
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
+> index c55f9c27bf79..b3f7d64caaf0 100644
+> --- a/arch/powerpc/lib/Makefile
+> +++ b/arch/powerpc/lib/Makefile
+> @@ -58,5 +58,9 @@ obj-$(CONFIG_FTR_FIXUP_SELFTEST) += feature-fixups-test.o
+>   
+>   obj-$(CONFIG_ALTIVEC)	+= xor_vmx.o xor_vmx_glue.o
+>   CFLAGS_xor_vmx.o += -maltivec $(call cc-option,-mabi=altivec)
+> +ifdef CONFIG_CC_IS_CLANG
+> +# See https://github.com/ClangBuiltLinux/linux/issues/563
+> +CFLAGS_xor_vmx.o += -Wframe-larger-than=4096
+> +endif
+>   
+>   obj-$(CONFIG_PPC64) += $(obj64-y)

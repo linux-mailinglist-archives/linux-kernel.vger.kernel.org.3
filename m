@@ -2,180 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7F65B0CF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27955B0CF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIGTPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S229718AbiIGTPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiIGTPA (ORCPT
+        with ESMTP id S229880AbiIGTPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:15:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CD129CAF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662578098;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F2hl65/5BHZV+h8ft7hHxLgHBBHzGCSnWLOyF+9Pr+8=;
-        b=U3NwU6PSfplSlk43GsylcPwMz//4YVhFZoPxSiVvV1Y4hhtYDayBkFieYq0bwk6P0SmEtw
-        nXYy8dkRSeLi9CQ0clqq3+7LzCFjgrFJ/1LWIn1Xal9ooLfwjWD82phZdRS62BmJ8+Hbwi
-        TcTkFPQqolDfYK5D2P/Doaro4WTQZjQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-533-cWG5nOZEOFCZq60BCbbSdg-1; Wed, 07 Sep 2022 15:14:57 -0400
-X-MC-Unique: cWG5nOZEOFCZq60BCbbSdg-1
-Received: by mail-wr1-f69.google.com with SMTP id j9-20020a5d4649000000b00226d830857cso3981261wrs.12
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 12:14:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=F2hl65/5BHZV+h8ft7hHxLgHBBHzGCSnWLOyF+9Pr+8=;
-        b=Iv8+vvZ5+/7IYK58BsLXUObxPjFUSKbexUFhzcAd54mDiIQR/5CM0DB3iiio2LL66Y
-         PmWMrrGv37SIwi/cr12IoFcu6C3bM0vhSod5Z/bFg3piDPP7D93QyIgfW/Zlk0KAtL7V
-         rqWHw4X6eq5TSoOIPyzHPcZfBAN9bwuxncTC6M/k8OvB6t9EbSv2v9dKw0jKHhP8Snqy
-         3QPlzLdG7NJ31HZ+v+Bz6skAMhxBtmLYJlC8anND4VdJYNiSHe38Jl+YezbPrhgUVvjY
-         hCNAH1m3BS91Xi/BGI9muFm8Qdcp4pwn2e54TV/tl4hBygObeXlrvcGSN2xcmW0q8kB7
-         aM5Q==
-X-Gm-Message-State: ACgBeo1D9kHEvyC+QeYs31KFmnwPNL4SeWmJEd58nux00TgtFzV0ci/Q
-        E3BVB6qkvqPwTA7uYmjHmhnndOMBGJFShagVfsBNxgEGg9BWGYqC4Ia/OFH1zauM638biaK4qZj
-        T8pgMyv5BkQrcPRXj3XpIXNco
-X-Received: by 2002:a05:6000:cf:b0:228:e37b:361b with SMTP id q15-20020a05600000cf00b00228e37b361bmr2599742wrx.374.1662578096102;
-        Wed, 07 Sep 2022 12:14:56 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5Mej1JLF8Idc5qNLyIzkfO5zK2VWFm2c7LZq5/eJiJrZnnv9hvkXiOQaSwnEjKeK//Gm5oog==
-X-Received: by 2002:a05:6000:cf:b0:228:e37b:361b with SMTP id q15-20020a05600000cf00b00228e37b361bmr2599728wrx.374.1662578095776;
-        Wed, 07 Sep 2022 12:14:55 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
-        by smtp.gmail.com with ESMTPSA id m18-20020adff392000000b00228b3ff1f5dsm13553530wro.117.2022.09.07.12.14.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 12:14:54 -0700 (PDT)
-Message-ID: <7ed97088-b4f0-e36f-c935-87cd1e94c574@redhat.com>
-Date:   Wed, 7 Sep 2022 21:14:54 +0200
+        Wed, 7 Sep 2022 15:15:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F49ADCD2;
+        Wed,  7 Sep 2022 12:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662578115; x=1694114115;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=VXLGR9Wd6RtBhueFT65gXUYPfx/9KwI70lZVxZ42xt8=;
+  b=IfFLDaJQMt6gA6kr9kV8FdldFg9PGEV9kpAbLg7WMmk7iWSRSzHfQ9y7
+   A0ZSYNi3DcO4qMFSEEB9iJ+u928h558YD4sUy4PURfsMq2lBHX4OrxdSm
+   QnkakVlnVFoIYF4nxNpEsesThtWEiOeFi2wkYQkgRw7nyr6vnVBMUBbo/
+   ggI23LB+Jtk9CsnYPSsEiiFct/OxtiBd4WU/DIwz94E279PugN4CiuCzv
+   Tin+23hF1Rv6vlWBo4js2b6o2ZZhW3/KCgKsI0VHt3Cajbme7JjrZsmLt
+   5dg7Qda2zsBlHfWBOTYR08hB5/jXnG/u6bkiTacybcOXG2tmbaiZZTAZd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="296974067"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="296974067"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 12:15:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="682942460"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 12:15:13 -0700
+Date:   Wed, 7 Sep 2022 12:15:12 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 1/5] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+In-Reply-To: <YxeovjbDq1IP7PZk@smile.fi.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2209071214410.3336870@rhweight-WRK1>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-2-matthew.gerlach@linux.intel.com> <YxeovjbDq1IP7PZk@smile.fi.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] vfio/type1: Unpin zero pages
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lpivarc@redhat.com" <lpivarc@redhat.com>,
-        "Liu, Jingqi" <jingqi.liu@intel.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-References: <166182871735.3518559.8884121293045337358.stgit@omen>
- <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com> <YxfX+kpajVY4vWTL@ziepe.ca>
- <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com> <YxiTOyGqXHFkR/DY@ziepe.ca>
- <20220907095552.336c8f34.alex.williamson@redhat.com>
- <YxjJlM5A0OLhaA7K@ziepe.ca>
- <20220907125627.0579e592.alex.williamson@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220907125627.0579e592.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.09.22 20:56, Alex Williamson wrote:
-> On Wed, 7 Sep 2022 13:40:52 -0300
-> Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> 
->> On Wed, Sep 07, 2022 at 09:55:52AM -0600, Alex Williamson wrote:
->>
->>>> So, if we go back far enough in the git history we will find a case
->>>> where PUP is returning something for the zero page, and that something
->>>> caused is_invalid_reserved_pfn() == false since VFIO did work at some
->>>> point.
->>>
->>> Can we assume that?  It takes a while for a refcount leak on the zero
->>> page to cause an overflow.  My assumption is that it's never worked, we
->>> pin zero pages, don't account them against the locked memory limits
->>> because our is_invalid_reserved_pfn() test returns true, and therefore
->>> we don't unpin them.
->>
->> Oh, you think it has been buggy forever? That is not great..
->>   
->>>> IHMO we should simply go back to the historical behavior - make
->>>> is_invalid_reserved_pfn() check for the zero_pfn and return
->>>> false. Meaning that PUP returned it.
->>>
->>> We've never explicitly tested for zero_pfn and as David notes,
->>> accounting the zero page against the user's locked memory limits has
->>> user visible consequences.  VMs that worked with a specific locked
->>> memory limit may no longer work.
->>
->> Yes, but the question is if that is a strict ABI we have to preserve,
->> because if you take that view it also means because VFIO has this
->> historical bug that David can't fix the FOLL_FORCE issue either.
->>
->> If the view holds for memlock then it should hold for cgroups
->> also. This means the kernel can never change anything about
->> GFP_KERNEL_ACCOUNT allocations because it might impact userspace
->> having set a tight limit there.
->>
->> It means we can't fix the bug that VFIO is using the wrong storage for
->> memlock.
->>
->> It means qemu can't change anything about how it sets up this memory,
->> ie Kevin's idea to change the ordering.
->>
->> On the other hand the "abi break" we are talking about is that a user
->> might have to increase a configured limit in a config file after a
->> kernel upgrade.
->>
->> IDK what consensus exists here, I've never heard of anyone saying
->> these limits are a strict ABI like this.. I think at least for cgroup
->> that would be so invasive as to immediately be off the table.
-> 
-> I thought we'd already agreed that we were stuck with locked_vm for
-> type1 and any compatibility mode of type1 due to this.  Native iommufd
-> support can do the right thing since userspace will need to account for
-> various new usage models anyway.
-> 
-> I've raised the issue with David for the zero page accounting, but I
-> don't know what the solution is.  libvirt automatically adds a 1GB
-> fudge factor to the VM locked memory limits to account for things like
-> ROM mappings, or at least the non-zeropage backed portion of those
-> ROMs.  I think that most management tools have adopted similar, so the
-> majority of users shouldn't notice.  However this won't cover all
-> users, so we certainly risk breaking userspace if we introduce hard
-> page accounting of zero pages.
-> 
-> I think David suggested possibly allowing some degree of exceeding
-> locked memory limits for zero page COWs.  Potentially type1 could do
-> this as well; special case handling with some heuristically determined,
-> module parameter defined limit.  We might also consider whether we
-> could just ignore zero page mappings, maybe with a optional "strict"
-> mode module option to generate an errno on such mappings.  Thanks,
 
-So far I played with the ideas
 
-a) allow slightly exceeding the limit and warn
+On Tue, 6 Sep 2022, Andy Shevchenko wrote:
 
-b) weird vfio kernel parameter to control the zeropage behavior (old vs.
-    new)
+> On Tue, Sep 06, 2022 at 12:04:22PM -0700, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Add documentation describing the extentions provided by Version
+>> 1 of the Device Feature Header (DFHv1).
+>
+> ...
+>
+>> +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUILD standard
+>> +across all types.
+>
+> GUI_L_D?
+>
 
-I certainly have in mind that we might need some toggle for vfio.
+Thanks for the review and pointing out the typo.
 
--- 
-Thanks,
-
-David / dhildenb
-
+Matthew Gerlach
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+>

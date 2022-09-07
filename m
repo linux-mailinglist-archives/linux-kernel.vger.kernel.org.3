@@ -2,112 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F2B5B00C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C91A5B00D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiIGJoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
+        id S229674AbiIGJqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiIGJn5 (ORCPT
+        with ESMTP id S229480AbiIGJqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:43:57 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C958FD7F;
-        Wed,  7 Sep 2022 02:43:55 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso11457872wmc.0;
-        Wed, 07 Sep 2022 02:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=9/xmz1K3EAur5r0xgkOcxS7AQ9x/ShM4a46yCxbHdMw=;
-        b=Y13yGzY/sn8a0Bema5ex3Ry5uO7ptoyLa47eeLKrj0zxKVsO38Y3ZzCnE3g9eguTCQ
-         BCxzutuBgX0HnsOFRIQTlEDSvuoc+vTG2MgOfikVPX8RZXzliyNrjKUdRmvu4gkv0Mit
-         i2lhdB1iJZVGO6vr7Mjgg8oAS4gfCcmhMXPC6sun17dH8ewksbogsFAAR+EgtY1wUhzQ
-         kYo8vMLaETewcX4v6QspJ1MLonnmfP26Vnl7/hwQ3kQ/iXMYQ/R2VwX2BU2tjiVkRWKI
-         JWKehPdhW+fzIH5sHS8whXUVWlbQ+NmsHDYWqYmuDixFdeGtvC8nfxSGtAYefIP6xfPy
-         VJlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=9/xmz1K3EAur5r0xgkOcxS7AQ9x/ShM4a46yCxbHdMw=;
-        b=i6365AVdpoKW58ZURIZmqmIe6Kw0zoSImgRjheLLSxAtlXacitB4LFQTTYiyo7j7TY
-         lKdlwxEa2bQUkoonusnhDeo1rmFWOravtZLQQBGOLaybT18H4stRt7h8L+NGesnApqnx
-         s5SzNo0TBVFq0wO5YkFO7jIj6sxSiaE8YuLkSG7nX/JdtWhX16MHZzhpeki5vJDN3tCe
-         HU7ZohFKVhZGvkhHqFbvSkVY5ic4C+atYR8M6FMs2UkIXRe8CURwzb2ETsnZTrl1Hhvg
-         bmWDDqvw0EuUnXae7YEvrDnSAI7yloONXilXw7R3xcbDvxfueI4Yq3K7UrSSv53jcUgV
-         hYtA==
-X-Gm-Message-State: ACgBeo2/Ll1HfWl+Ihwf3uo+u7BzP0ICX4LarNOCnrlqT10QF3ResGFA
-        GBvEn4NSy+NXhzi6stN9pFw=
-X-Google-Smtp-Source: AA6agR5TH7i3awt6RIN7dHkVIh5+jT3YkdTLuoMmsSXPSq5NwY346UDulEpBKMJB+t8/cx+IkbiyrQ==
-X-Received: by 2002:a05:600c:444b:b0:3a6:6b99:2394 with SMTP id v11-20020a05600c444b00b003a66b992394mr1458569wmn.43.1662543834068;
-        Wed, 07 Sep 2022 02:43:54 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id j17-20020a05600c411100b003a6896feef7sm17627154wmi.39.2022.09.07.02.43.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 02:43:53 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 10:43:51 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/155] 5.19.8-rc1 review
-Message-ID: <Yxhn13seD6t7vqD/@debian>
-References: <20220906132829.417117002@linuxfoundation.org>
+        Wed, 7 Sep 2022 05:46:50 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6907F97523
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6YUzk
+        P4hI4MJG55mRUTRj+Zl4JF98Rmu8opT9JrlXq8=; b=DHdneHzli0u4DWLbeWeAp
+        i2ThrnDfKt2Nzgm4BQFizqFqZ9M/dRf9y1e+CPmXbl9fYKNaD8dvNdtLb28xYmqp
+        DiglvFz5BVMjYz48OfObkQSKgOj8/m118FiBssNNwZKuweMhr9mhS0vYAutAxrXp
+        b3VfffhNpPattkbsfA2PtY=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp2 (Coremail) with SMTP id GtxpCgDnac8RaBhj0Vovbg--.51651S2;
+        Wed, 07 Sep 2022 17:44:51 +0800 (CST)
+From:   Zongmin Zhou <min_halo@163.com>
+To:     airlied@redhat.com, kraxel@redhat.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, zhouzongmin@kylinos.cn,
+        Ming Xie <xieming@kylinos.cn>
+Subject: [PATCH] drm/qxl: fix the suspend/resume issue on qxl device
+Date:   Wed,  7 Sep 2022 17:44:23 +0800
+Message-Id: <20220907094423.93581-1-min_halo@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
+Content-Type: multipart/mixed;
+        boundary="Add_By_Label_Mail_Nextpart_001"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgDnac8RaBhj0Vovbg--.51651S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAr4DKr17JrWftF4ktF1UJrb_yoW5tw18pF
+        W7GFykKrW8ArWUtF45CFZrCF1fZ39xtFWxWrWkK39xC3s8CF1kXF98t3y2vas8AFyUA3WS
+        qF4kt34Uua129aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnHUDUUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbisA51q1UMUafGbgABsm
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+--Add_By_Label_Mail_Nextpart_001
+Content-Type: text/plain;
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 06, 2022 at 03:29:08PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.8 release.
-> There are 155 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
-> Anything received after that time might be too late.
 
-Build test (gcc version 12.2.1 20220819):
-mips: 59 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+From: Zongmin Zhou <zhouzongmin@kylinos.cn>
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Details:
+Currently, when trying to suspend and resume with qxl device，
+there are some error messages after resuming,
+eventually caused to black screen and can't be recovered.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1781
-[2]. https://openqa.qa.codethink.co.uk/tests/1786
-[3]. https://openqa.qa.codethink.co.uk/tests/1788
+The first error message:
+	[   64.668577][    C3] [drm] driver is in bug mode
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+This error is due to guest qxl driver
+will call qxl_reinit_memslots(qdev) during system resume,
+but didn't call qxl_io_reset(qdev) before this,
+Then will cause the QXL_IO_MEMSLOT_ADD operation to fail on QEMU,
+qxl->guest_bug flag will be set，As a result,
+the QXL device can't communicate with guest qxl driver through the IO port.
 
---
-Regards
-Sudip
+after fix the first error,can success to resume and login to desktop,
+but shortly after that will observe the second error message :
+	[  353.095343][  T863] qxl 0000:00:02.0: object_init failed for (262144, 0x00000001)
+	[  353.096660][  T863] [drm:qxl_gem_object_create [qxl]] *ERROR* Failed to allocate GEM object (260852, 1, 4096, -12)
+	[  353.097277][  T863] [drm:qxl_alloc_ioctl [qxl]] *ERROR* qxl_alloc_ioctl: failed to create gem ret=-12
+	[  368.197538][  T863] qxl 0000:00:02.0: object_init failed for (3149824, 0x00000001)
+	[  368.197541][  T863] [drm:qxl_alloc_bo_reserved [qxl]] *ERROR* failed to allocate VRAM BO
+
+The problem is caused by calling qxl_ring_init_hdr(qdev->release_ring)
+in qxl_drm_resume() function.
+When do QXL_IO_RESET,QEMU will call init_qxl_ram(),
+so params like prod,cons,notify_on_cons and notify_on_prod
+will be set to default value.
+Ring push/pop actions for release_ring can be performed normally.
+But call qxl_ring_init_hdr(qdev->release_ring)
+will eventually set notify_on_prod to number of QXL_RELEASE_RING_SIZE,
+affect the value of notify in qxl_push_free_res() function always be false,
+QEMU will no longer send events of QXL_INTERRUPT_DISPLAY to the
+guest qxl driver，so qxl_ring_pop() will never been called anymore，
+and can't do dma_fence_signal(),result to ttm_bo_wait_ctx(bo, ctx)
+always return EBUSY,fail to call qxl_bo_create().
+
+Test scenario:
+1) start virtual machine with qemu command "-device qxl-vga"
+2) click suspend botton to enter suspend mode
+3) resume and observe the error message in kernel logs,screen will be black
+
+Let's fix this by reset io and remove the qxl_ring_init_hdr calling.
+
+Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
+Suggested-by: Ming Xie<xieming@kylinos.cn>
+---
+ drivers/gpu/drm/qxl/qxl_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/qxl/qxl_drv.c b/drivers/gpu/drm/qxl/qxl_drv.c
+index 1cb6f0c224bb..3044ca948ce2 100644
+--- a/drivers/gpu/drm/qxl/qxl_drv.c
++++ b/drivers/gpu/drm/qxl/qxl_drv.c
+@@ -194,7 +194,6 @@ static int qxl_drm_resume(struct drm_device *dev, bool thaw)
+ 	qdev->ram_header->int_mask = QXL_INTERRUPT_MASK;
+ 	if (!thaw) {
+ 		qxl_reinit_memslots(qdev);
+-		qxl_ring_init_hdr(qdev->release_ring);
+ 	}
+ 
+ 	qxl_create_monitors_object(qdev);
+@@ -220,6 +219,7 @@ static int qxl_pm_resume(struct device *dev)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev);
+ 	struct drm_device *drm_dev = pci_get_drvdata(pdev);
++	struct qxl_device *qdev = to_qxl(drm_dev);
+ 
+ 	pci_set_power_state(pdev, PCI_D0);
+ 	pci_restore_state(pdev);
+@@ -227,6 +227,7 @@ static int qxl_pm_resume(struct device *dev)
+ 		return -EIO;
+ 	}
+ 
++	qxl_io_reset(qdev);
+ 	return qxl_drm_resume(drm_dev, false);
+ }
+ 
+-- 
+2.25.1
+
+
+--Add_By_Label_Mail_Nextpart_001
+
+Content-type: Text/plain
+
+No virus found
+		Checked by Hillstone Network AntiVirus
+
+--Add_By_Label_Mail_Nextpart_001--
+

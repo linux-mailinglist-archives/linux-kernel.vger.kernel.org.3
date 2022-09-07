@@ -2,75 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B3F5AFFF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6A35AFFFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiIGJJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S230372AbiIGJKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiIGJJL (ORCPT
+        with ESMTP id S229628AbiIGJKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:09:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56049ACA07;
-        Wed,  7 Sep 2022 02:09:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8BA0B81ADD;
-        Wed,  7 Sep 2022 09:09:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CB2C43140;
-        Wed,  7 Sep 2022 09:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662541746;
-        bh=626PJkIvKnC04r4L1Ir30UYXOHHnLvLYV03pC1ltMio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PF0ZWY2OQKuqDZR1fc4EAZXGcnI/fj5AIP+EW4gn9y6nuDGpX5/YiigQL+E2SCeyv
-         uhTe0nxraWrL5npEyBgEgeI3g9OaYA3dhZD/GUN20LKgpfL4n7evmTzVSsLOpZXCso
-         rrWyBmIAGLE+MfLGmrM4th7cTVY4z7+cbj2vSJokL+I4oF0kGQBz5CZMMp77gYzhmk
-         sakrwjsNDuMkqPzFHrjT6p34So7oNACwGNmmn8HDO0TJ2OTyrgO30PLA3ehsr92oPH
-         YJ6lwKDGVIsPDStZ2LN8+CO4WehvCPiKFGYl5gBpMFsnqCCIKsEVwQgjWH8jHHNmmO
-         9aO+hYpAyq5YA==
-Date:   Wed, 7 Sep 2022 11:09:00 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v5 2/8] vfs: support STATX_DIOALIGN on block devices
-Message-ID: <20220907090900.ji3ilhyxbftptdma@wittgenstein>
-References: <20220827065851.135710-1-ebiggers@kernel.org>
- <20220827065851.135710-3-ebiggers@kernel.org>
+        Wed, 7 Sep 2022 05:10:11 -0400
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059C280B7C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:10:09 -0700 (PDT)
+Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.orange.fr with ESMTPA
+        id Vr47oZr83tFxAVr4HoSn4I; Wed, 07 Sep 2022 11:10:07 +0200
+X-ME-Helo: YC20090004.ad.ts.tri-ad.global
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 07 Sep 2022 11:10:07 +0200
+X-ME-IP: 103.175.111.222
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v8 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
+Date:   Wed,  7 Sep 2022 18:09:33 +0900
+Message-Id: <20220907090935.919-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220827065851.135710-3-ebiggers@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 11:58:45PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Add support for STATX_DIOALIGN to block devices, so that direct I/O
-> alignment restrictions are exposed to userspace in a generic way.
-> 
-> Note that this breaks the tradition of stat operating only on the block
-> device node, not the block device itself.  However, it was felt that
-> doing this is preferable, in order to make the interface useful and
-> avoid needing separate interfaces for regular files and block devices.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
+The compilers provide some builtin expression equivalent to the ffs(),
+__ffs() and ffz() functions of the kernel. The kernel uses optimized
+assembly which produces better code than the builtin
+functions. However, such assembly code can not be folded when used
+with constant expressions.
 
-Looks good to me,
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+This series relies on __builtin_constant_p to select the optimal solution:
+
+  * use kernel assembly for non constant expressions
+
+  * use compiler's __builtin function for constant expressions.
+
+
+** Statistics **
+
+Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+of __ffs() and ffz() calls (details of the calculation in each patch).
+
+
+** Changelog **
+
+v7 -> v8:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Rewrite introduction of patch 2/2 to add nuances on the
+    define/undefined behaviors of __builting_clzl(0), __ffs(0) and
+    ffz(~0UL).
+
+
+v6 -> v7:
+
+  * (no changes on code, only commit tag was modified)
+
+  * Add Reviewed-by: Yury Norov <yury.norov@gmail.com> in both patches
+
+
+v5 -> v6:
+  * Rename variable___ffs() into variable__ffs() (two underscores
+    instead of three)
+
+
+v4 -> v5:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Rewrite the commit log:
+    - Use two spaces instead of `| ' to indent code snippets.
+    - Do not use `we'.
+    - Do not use `this patch' in the commit description. Instead,
+      use imperative tone.
+  Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
+
+
+v3 -> v4:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Remove note and link to Nick's message in patch 1/2, c.f.:
+  Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 2/2.
+
+
+v2 -> v3:
+
+  * Redacted out the instructions after ret and before next function
+    in the assembly output.
+
+  * Added a note and a link to Nick's message on the constant
+    propagation missed-optimization in clang:
+    Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+
+  * Fix copy/paste typo in statistics of patch 1/2. Number of
+    occurences before patches are 1081 and not 3607 (percentage
+    reduction of 26.7% remains correct)
+
+  * Rename the functions as follow:
+    - __varible_ffs() -> variable___ffs()
+    - __variable_ffz() -> variable_ffz()
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 1/2.
+
+
+Vincent Mailhol (2):
+  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+    expressions
+  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+    expressions
+
+ arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 26 deletions(-)
+
+-- 
+2.35.1
+

@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E715AFE3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D4D5AFE44
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiIGH7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S230166AbiIGH7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiIGH7O (ORCPT
+        with ESMTP id S230113AbiIGH7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:59:14 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1F6CA896A;
-        Wed,  7 Sep 2022 00:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Msj1Q
-        C6+hqxSIXMSAOcQBdkaMXFRb0rZzELsEToclcY=; b=eROGLvT6ZOUSfEHfGlLUZ
-        ild251wKOwzt+OFp21CXsHjGFxPCgeBPf2JezhARPzQHLHOnVFUg+8Pr7uZwQrlL
-        VEtQ1aeHAY13WUSVeIjR9SDiIM52i2n/FnyhiuiVn9whB8hlIsiGJNWc8boGXQYq
-        WaUbySz05BK2jM7+zIv4gc=
-Received: from localhost.localdomain (unknown [36.112.3.164])
-        by smtp4 (Coremail) with SMTP id HNxpCgCnKeAsTxhjktH0aw--.22456S4;
-        Wed, 07 Sep 2022 15:58:49 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     pawell@cadence.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] usb: cdnsp: Fix potential memory leak in cdnsp_alloc_stream_info()
-Date:   Wed,  7 Sep 2022 15:58:35 +0800
-Message-Id: <20220907075835.60436-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Sep 2022 03:59:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39B125FE;
+        Wed,  7 Sep 2022 00:59:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8757615E3;
+        Wed,  7 Sep 2022 07:59:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E35C433D6;
+        Wed,  7 Sep 2022 07:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662537566;
+        bh=D1dAw+aNRWaAnlIYe9fxn7j36jFtAkbZ16B8SP8wQ/4=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=ayihZRm7a9rN/Coa8nH3F9D1cBh0glDsrnfJfsqMqP9b7wo80+IvnViDQJxCrPW38
+         p80xc9P47Gz7TMBJO6A7v5PDrrI4eDDpZQRCuDzg6InxfrLeim5geWyKe+DF5PBKBK
+         Bp+PBX9cHdgH7iF7RErntPueaRdFcE7qV+gq+oAqOKAiljiD1uPxlXZ4uvP9uhPU8k
+         mYZdoMlCg/MKCdUMglbJX2bSL92DzprMilD3t1MvK73OBpMaEEfe6Bdi8TRpOzkozM
+         Pwqjo/Slg3NwdlIEQJ2Ri/gMS0x3J4LihBrrgPlZEe2GsDW/tWz9C5RLacLOWS6UzA
+         2bZWVb40Ce6rA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgCnKeAsTxhjktH0aw--.22456S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GrWrXr47Kw1fWFW8AFyDtrb_yoWDXFc_ZF
-        4a9FZrGF1jkws7Gw1Fqr98urWqyr42vFWkXa12qr4fGF18ur93AryxZr4xXFW7J3y5Jrnr
-        Z348t3y5ur1kJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_F4i7UUUUU==
-X-Originating-IP: [36.112.3.164]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiQxl1jFc7bS78jwAAs-
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: wifi: mwifiex: Fix comment typo
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220811120201.10824-1-wangborong@cdjrlc.com>
+References: <20220811120201.10824-1-wangborong@cdjrlc.com>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     ganapathi017@gmail.com, amitkarwar@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Wang <wangborong@cdjrlc.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166253756181.23292.9598319261128136862.kvalo@kernel.org>
+Date:   Wed,  7 Sep 2022 07:59:23 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cdnsp_alloc_stream_info() allocates stream context array for stream_info
-->stream_ctx_array with cdnsp_alloc_stream_ctx(). When some error occurs,
-stream_info->stream_ctx_array is not released, which will lead to a
-memory leak.
+Jason Wang <wangborong@cdjrlc.com> wrote:
 
-We can fix it by releasing the stream_info->stream_ctx_array with
-cdnsp_free_stream_ctx() on the error path to avoid the potential memory
-leak.
+> The double `the' is duplicated in the comment, remove one.
+> 
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/usb/cdns3/cdnsp-mem.c | 1 +
- 1 file changed, 1 insertion(+)
+Patch applied to wireless-next.git, thanks.
 
-diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
-index 97866bfb2da9..319037848151 100644
---- a/drivers/usb/cdns3/cdnsp-mem.c
-+++ b/drivers/usb/cdns3/cdnsp-mem.c
-@@ -631,6 +631,7 @@ int cdnsp_alloc_stream_info(struct cdnsp_device *pdev,
- 			stream_info->stream_rings[cur_stream] = NULL;
- 		}
- 	}
-+	cdnsp_free_stream_ctx(pdev, pep);
- 
- cleanup_stream_rings:
- 	kfree(pep->stream_info.stream_rings);
+ed03a2af74d2 wifi: mwifiex: Fix comment typo
+
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20220811120201.10824-1-wangborong@cdjrlc.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

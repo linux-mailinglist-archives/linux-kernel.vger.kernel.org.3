@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A08C5B0988
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009F85B098B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiIGQDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S230257AbiIGQED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiIGQCm (ORCPT
+        with ESMTP id S230372AbiIGQDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:02:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A5BBC807
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:01:16 -0700 (PDT)
+        Wed, 7 Sep 2022 12:03:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C67518E05
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:02:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662566473;
+        s=mimecast20190719; t=1662566499;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Bb3nI/bWVmCMagHckP0ncEAEW5knUD+/s554XzBSy8Q=;
-        b=VEtbDaHVhRvR6Rn9GhrruBXhgiAKQlv/lk/gswCvGAgq7NE0SdNGXQHQeEzp6kvF3Wtazi
-        K1VfMj5vAl2ZvOmJJvNiBpuU7zKE+dPlMc9osNKvc2nRBNLjllu3raJ2y0O4iERVWuZIgO
-        q9JbHz1tXhSwOz9ThZcvyiZuCrwuKao=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=h9pHqkBQHX8167MxA1KNcgyy5zsR5NBPOvaAz5NiOX4=;
+        b=dG2Z3UiyITdw7HEoU0xA4KAx/Vg+ec7EAE6yokgkRADsKBhOjRAxdgs3fbVxXAAyYgzuHP
+        pd9HWETYcLIZENhs+PykSNe3TkUA9AeMerNmas8Tjy1Jmjs+Mo4IXWRssaqA1QQhsTi1IQ
+        ni159lEfUAU09vOaVZ/V5zk3AK3oh4I=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-a7GJOrclMuCKOM8r999P8w-1; Wed, 07 Sep 2022 12:01:12 -0400
-X-MC-Unique: a7GJOrclMuCKOM8r999P8w-1
-Received: by mail-pl1-f199.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so10215551plg.23
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:01:12 -0700 (PDT)
+ us-mta-350-OtG3oDeXMEKAZsg5lk1GwQ-1; Wed, 07 Sep 2022 12:01:37 -0400
+X-MC-Unique: OtG3oDeXMEKAZsg5lk1GwQ-1
+Received: by mail-pf1-f198.google.com with SMTP id f16-20020aa782d0000000b0053e242136bfso3078541pfn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:01:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to:from
          :subject:cc:to:message-id:date:x-gm-message-state:from:to:cc:subject
          :date;
-        bh=Bb3nI/bWVmCMagHckP0ncEAEW5knUD+/s554XzBSy8Q=;
-        b=C/mtSLsHWHmOUWFX65yhW0r/rFGljxuu1eBG/MQaq07QLvbpJAeRd3c59h2WQKClKh
-         QItNNL7pMEk5hxWgl577ADq3RRvhkGDou9pNLZmhOzHAZeuhOlnd+KoZRQFVgQm262Qd
-         Dusst/0IkyuvZ0y7jToW1YaqrbSB+Bg0rFjsilqkzui+4oGLb7dPkQMQOPQEXyz6QyBJ
-         5c3qlGKXDvlnn3OzK5mPcWg1NooubUWElNYS8Rvdq+FiHFdDHhx4SoqcX1JOnmMg9YkS
-         RfJrvrz1sXMuSZsgEZDKYcht9JXhE0mYAB0yOR0im1pkhdOaBcs35sQQE5R9Sg9jN35E
-         RXIg==
-X-Gm-Message-State: ACgBeo1+lpQY5CYcyLFimbbRQ2g5dvVxBS/yUvlJOIbihX7cGQafXytL
-        FwRdPtJ4tv2GznxmP7xlBsVANRuSDRn4Zu50StSNUNLODkgPqu50xwu5qDz4QVPljYz9gvE7xld
-        x+2pDUW0FcyawP5zrnvWvyTUf
-X-Received: by 2002:a17:90b:33d1:b0:1fd:6e9f:548c with SMTP id lk17-20020a17090b33d100b001fd6e9f548cmr32245245pjb.137.1662566471356;
-        Wed, 07 Sep 2022 09:01:11 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5w0TlpQTaZ2Ko9XfCN734oiu46xXdNWpFa388ApWyERn/Hez/P1sLI6h/zK1eILUvChXyCsQ==
-X-Received: by 2002:a17:90b:33d1:b0:1fd:6e9f:548c with SMTP id lk17-20020a17090b33d100b001fd6e9f548cmr32245213pjb.137.1662566471018;
-        Wed, 07 Sep 2022 09:01:11 -0700 (PDT)
+        bh=h9pHqkBQHX8167MxA1KNcgyy5zsR5NBPOvaAz5NiOX4=;
+        b=NZu56djyGd2ZXjlggD8bb48w+I0CFrzkFp+LJI2evpXp/flkqKcDB00uAb/CpD4UY9
+         2MWf/0ZB+eT29DGR9tGGQd+5bIB/+QJOWZnTxRTbiCbzd8DGH5k2b6D3wSH5pYm/wDLN
+         C14rORARyDMIz6+eChiindCwkz0JiHHCdJM6btuCpWd/F7YynDmz31qjhkkAY8MLeViQ
+         1Jz/4VeoCrbvPDBUsqX9zuyrEXGz/8/cqjw988XwhQP6QAdaSyl9tCtCia7n8rFIHFDn
+         zjYqgnikWWOvzMEuUXT55PkVV8MxDR6bPO3BC7LT6Cn2SmjgTXl5GWJYxilgCf11moKj
+         jFYw==
+X-Gm-Message-State: ACgBeo0xmRXZ5c2SRu+feZ7Mn1OcqPfH2vy/yraP/vol3QF2ONhB7yOS
+        /b4wAHb7dqPo02FNVoUSqyWTBbU2fKWac7mOndvD7VVdZ8ZbalyWILsBl8n8iX4TTFKzkiRbZRr
+        sfigWioxkFaGBAkp8xu5bvh6K
+X-Received: by 2002:a63:de07:0:b0:434:d973:5dff with SMTP id f7-20020a63de07000000b00434d9735dffmr4035111pgg.44.1662566496668;
+        Wed, 07 Sep 2022 09:01:36 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4A/tpFmu7id03CRio33v4errht27tacIBTZ0QSJ6m/c1znAJf/jOKMP7VahH/QiazNIZpWiQ==
+X-Received: by 2002:a63:de07:0:b0:434:d973:5dff with SMTP id f7-20020a63de07000000b00434d9735dffmr4035088pgg.44.1662566496417;
+        Wed, 07 Sep 2022 09:01:36 -0700 (PDT)
 Received: from localhost ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
-        by smtp.gmail.com with ESMTPSA id mh16-20020a17090b4ad000b001f8aee0d826sm14786150pjb.53.2022.09.07.09.01.08
+        by smtp.gmail.com with ESMTPSA id x17-20020a170902ec9100b001752cb111e0sm12706532plg.69.2022.09.07.09.01.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 09:01:10 -0700 (PDT)
-Date:   Thu, 08 Sep 2022 01:00:37 +0900 (JST)
-Message-Id: <20220908.010037.1643964170435041362.syoshida@redhat.com>
-To:     mareklindner@neomailbox.ch, sw@simonwunderlich.de, a@unstable.cc,
-        sven@narfation.org
-Cc:     b.a.t.m.a.n@lists.open-mesh.org, linux-kernel@vger.kernel.org,
-        syoshida@redhat.com
-Subject: Re: [PATCH] batman-adv: Fix hang up with small MTU hard-interface
+        Wed, 07 Sep 2022 09:01:36 -0700 (PDT)
+Date:   Thu, 08 Sep 2022 01:01:32 +0900 (JST)
+Message-Id: <20220908.010132.1804908388305469820.syoshida@redhat.com>
+To:     almaz.alexandrovich@paragon-software.com
+Cc:     ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
+        syoshida@redhat.com,
+        syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
+Subject: Re: [PATCH] fs/ntfs3: Fix memory leak on ntfs_fill_super() error
+ path
 From:   Shigeru Yoshida <syoshida@redhat.com>
-In-Reply-To: <20220820032516.200446-1-syoshida@redhat.com>
-References: <20220820032516.200446-1-syoshida@redhat.com>
+In-Reply-To: <20220823103205.1380235-1-syoshida@redhat.com>
+References: <20220823103205.1380235-1-syoshida@redhat.com>
 X-Mailer: Mew version 6.8 on Emacs 28.1
 Mime-Version: 1.0
 Content-Type: Text/Plain; charset=us-ascii
@@ -82,47 +83,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 ping?
 
-On Sat, 20 Aug 2022 12:25:16 +0900, Shigeru Yoshida wrote:
-> The system hangs up when batman-adv soft-interface is created on
-> hard-interface with small MTU.  For example, the following commands
-> create batman-adv soft-interface on dummy interface with zero MTU:
+On Tue, 23 Aug 2022 19:32:05 +0900, Shigeru Yoshida wrote:
+> syzbot reported kmemleak as below:
 > 
->   # ip link add name dummy0 type dummy
->   # ip link set mtu 0 dev dummy0
->   # ip link set up dev dummy0
->   # ip link add name bat0 type batadv
->   # ip link set dev dummy0 master bat0
+> BUG: memory leak
+> unreferenced object 0xffff8880122f1540 (size 32):
+>   comm "a.out", pid 6664, jiffies 4294939771 (age 25.500s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 ed ff ed ff 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff81b16052>] ntfs_init_fs_context+0x22/0x1c0
+>     [<ffffffff8164aaa7>] alloc_fs_context+0x217/0x430
+>     [<ffffffff81626dd4>] path_mount+0x704/0x1080
+>     [<ffffffff81627e7c>] __x64_sys_mount+0x18c/0x1d0
+>     [<ffffffff84593e14>] do_syscall_64+0x34/0xb0
+>     [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 > 
-> These commands cause the system hang up with the following messages:
+> This patch fixes this issue by freeing mount options on error path of
+> ntfs_fill_super().
 > 
->   [   90.578925][ T6689] batman_adv: bat0: Adding interface: dummy0
->   [   90.580884][ T6689] batman_adv: bat0: The MTU of interface dummy0 is too small (0) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
->   [   90.586264][ T6689] batman_adv: bat0: Interface activated: dummy0
->   [   90.590061][ T6689] batman_adv: bat0: Forced to purge local tt entries to fit new maximum fragment MTU (-320)
->   [   90.595517][ T6689] batman_adv: bat0: Forced to purge local tt entries to fit new maximum fragment MTU (-320)
->   [   90.598499][ T6689] batman_adv: bat0: Forced to purge local tt entries to fit new maximum fragment MTU (-320)
-> 
-> This patch fixes this issue by returning error when enabling
-> hard-interface with small MTU size.
-> 
+> Reported-by: syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
 > Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
 > ---
->  net/batman-adv/hard-interface.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  fs/ntfs3/super.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/net/batman-adv/hard-interface.c b/net/batman-adv/hard-interface.c
-> index b8f8da7ee3de..dce5557800e9 100644
-> --- a/net/batman-adv/hard-interface.c
-> +++ b/net/batman-adv/hard-interface.c
-> @@ -700,6 +700,9 @@ int batadv_hardif_enable_interface(struct batadv_hard_iface *hard_iface,
->  	int max_header_len = batadv_max_header_len();
->  	int ret;
->  
-> +	if (hard_iface->net_dev->mtu < ETH_MIN_MTU + max_header_len)
-> +		return -EINVAL;
-> +
->  	if (hard_iface->if_status != BATADV_IF_NOT_IN_USE)
->  		goto out;
+> diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+> index 47012c9bf505..c0e45f170701 100644
+> --- a/fs/ntfs3/super.c
+> +++ b/fs/ntfs3/super.c
+> @@ -1281,6 +1281,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  	 * Free resources here.
+>  	 * ntfs_fs_free will be called with fc->s_fs_info = NULL
+>  	 */
+> +	put_mount_options(sbi->options);
+>  	put_ntfs(sbi);
+>  	sb->s_fs_info = NULL;
 >  
 > -- 
 > 2.37.2

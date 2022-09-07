@@ -2,155 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4685B0ED6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7A85B0EDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiIGVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S229580AbiIGVHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiIGVFn (ORCPT
+        with ESMTP id S229704AbiIGVHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:05:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFB02529E;
-        Wed,  7 Sep 2022 14:05:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE6EE61A4E;
-        Wed,  7 Sep 2022 21:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF1BC433C1;
-        Wed,  7 Sep 2022 21:05:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662584742;
-        bh=g89Y1k2o37z4XvQht9X7eSvdZSvYxyRuWDgrnXpCuHo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Okf7h1wnsxKTzxt8+CnMQBR0g646AZKlkLkgwuNXLaKUoDv2nAZvGPYXM1hWvRGJa
-         s+2iFJvEkUYUnyxfzPGAx39iDHZH8St19iWiko9c3oa7KO0DLaboVNm+/zBaXnQGa9
-         T2C+TfPAUdQZmcof06MyUmWTTxHdBSIUJIVav347TpSF9ClYBrAFKaqir5KBAjvJdx
-         sGpUcIMFN5GNL80GXjc7wOM9q/SpchBRuLYU0rgUcjUjaskLU6BvIJEZmRCXtKay7i
-         eKOrlSWbZQygvRXDdfsCyXQkcr31LiuioiMxs9yObWem1qUNkIWfc7oiIKlp/Y44uX
-         bDef0oCDVjgMw==
-Date:   Wed, 7 Sep 2022 16:05:40 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com,
-        refactormyself@gmail.com, kw@linux.com, rajatja@google.com,
-        kenny@panix.com, kai.heng.feng@canonical.com, treding@nvidia.com,
-        jonathanh@nvidia.com, abhsahu@nvidia.com, sagupta@nvidia.com,
-        benchuanggli@gmail.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V3] PCI/ASPM: Save/restore L1SS Capability for
- suspend/resume
-Message-ID: <20220907210540.GA140988@bhelgaas>
+        Wed, 7 Sep 2022 17:07:05 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C64B8F15
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:07:03 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 123so6437201pfy.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 14:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=tm5/tm/bOKGw+ZnlX8h2AbJd7n/3kcmAPIwiCqemhIM=;
+        b=x7ypNYi2j2uvb8XQ9craSoAh2QNE3532j+e+pZG6ZhxotdgrQgsztR4QwOhk5485Yg
+         ZYQ439NwiR04A/2DWciEI4MqLu+Ay2Jt2Izj4I/uzLYqz77oMWjcZZxlr9e+u1dHV96n
+         z3Svs0OdnJkfwBaMcdAq8+qT3PqaXmAP1GSOflxkFcsP678j3vlrUN8qMCLVuOugw4rF
+         y8z7P1Czucmb1QSWC2a/hb5v0Q5lP3SvANK8TSpbKTw5ao9H68v4Z77W9jI71uqsIUs9
+         maT5vsRIJ7F/eDxUr9k0eGGr4msmgmamcpae7Jy3tUE2RViDRHov5J1aVFmsRk3Zwehz
+         kMZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=tm5/tm/bOKGw+ZnlX8h2AbJd7n/3kcmAPIwiCqemhIM=;
+        b=rQ4QeUyE04wiyP69HgBb4xCWiXU94Vtr9IfJ3B1KPEasT2Rwj3Mo6J/pnwBj8vbZU6
+         Gb64gZ5ifDKF1EptbmuLfMOHcic3xYJbL+hW6jxHCWT5TxHyk4DWR0tHbc5xA0FFWwYa
+         059HcvFupY3s3iBMYcvJh27SqeuOcnR9a/9acE4U/gPxt5yn1NTpWCzGwhU0oQBIbeGp
+         PIXd7W4FO8Y335oH//sm0tinKADfeJ2rUE9owe1aT5asW9ItXyvO/LFlb6n/tzd0VMYl
+         T52/vwgqdw+b8vxUjljdlPBOEc1I6OuHhaLD+Qq//fkO5DGDU9IhCMvCas+QCoss2awJ
+         gLlg==
+X-Gm-Message-State: ACgBeo07qTFfZUN6UB5BL7FvCF+y+ArBd3WjCXBbhHlmbwLEhfh81AzL
+        dlZpNR7tALcfY17YnNzygacC9A==
+X-Google-Smtp-Source: AA6agR6KR05rx/q/yr2bK+5wDAzujpFCnEW70ybxCculrOSDfSrMK2grU+8l7dxRUgRSY5z/y1pe5g==
+X-Received: by 2002:a63:1c2:0:b0:430:710d:4c85 with SMTP id 185-20020a6301c2000000b00430710d4c85mr4980472pgb.12.1662584822610;
+        Wed, 07 Sep 2022 14:07:02 -0700 (PDT)
+Received: from archl-hc1b.. ([103.51.75.56])
+        by smtp.gmail.com with ESMTPSA id c23-20020a63d517000000b0042ba1a95235sm10999198pgg.86.2022.09.07.14.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 14:07:02 -0700 (PDT)
+From:   Anand Moon <anand@edgeble.ai>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        David Wu <david.wu@rock-chips.com>
+Cc:     Anand Moon <anand@edgeble.ai>, Jagan Teki <jagan@edgeble.ai>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [v2 1/2] dt-bindings: net: rockchip-dwmac: add rv1126 compatible
+Date:   Wed,  7 Sep 2022 21:06:45 +0000
+Message-Id: <20220907210649.12447-1-anand@edgeble.ai>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826125526.28859-1-vidyas@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 06:25:26PM +0530, Vidya Sagar wrote:
-> Previously ASPM L1 Substates control registers (CTL1 and CTL2) weren't
-> saved and restored during suspend/resume leading to L1 Substates
-> configuration being lost post-resume.
-> 
-> Save the L1 Substates control registers so that the configuration is
-> retained post-resume.
-> 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
-> V3:
-> * Disabled L1.2 enable fields while restoring Control-1 register
+Add compatible string for RV1126 gmac, and constrain it to
+be compatible with Synopsys dwmac 4.20a.
 
-This really looks promising!  Has somebody confirmed that the
-disappearing L1SS capability problem doesn't happen here?
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+Signed-off-by: Anand Moon <anand@edgeble.ai>
+---
+v2: add missing compatible string to property
+    added reviewed by Heiko Stuebner.
+---
+ Documentation/devicetree/bindings/net/rockchip-dwmac.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +void pci_save_aspm_l1ss_state(struct pci_dev *dev)
-> +{
-> +	int aspm_l1ss;
-> +	struct pci_cap_saved_state *save_state;
-> +	u32 *cap;
-> +
-> +	if (!pci_is_pcie(dev))
-> +		return;
-> +
-> +	aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
-> +	if (!aspm_l1ss)
-> +		return;
+diff --git a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
+index 083623c8d718..b28bc6774bf0 100644
+--- a/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/rockchip-dwmac.yaml
+@@ -26,6 +26,7 @@ select:
+           - rockchip,rk3399-gmac
+           - rockchip,rk3568-gmac
+           - rockchip,rv1108-gmac
++          - rockchip,rv1126-gmac
+   required:
+     - compatible
+ 
+@@ -47,6 +48,7 @@ properties:
+               - rockchip,rk3368-gmac
+               - rockchip,rk3399-gmac
+               - rockchip,rv1108-gmac
++              - rockchip,rv1126-gmac
+       - items:
+           - enum:
+               - rockchip,rk3568-gmac
+-- 
+2.37.3
 
-Isn't it enough to check this?
-
-  if (!dev->l1ss)
-    return;
-
-> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
-> +{
-> +	int aspm_l1ss;
-> +	struct pci_cap_saved_state *save_state;
-> +	u32 *cap, l1_2_enable;
-> +
-> +	if (!pci_is_pcie(dev))
-> +		return;
-> +
-> +	aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
-> +	if (!aspm_l1ss)
-> +		return;
-> +
-> +	save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
-> +	if (!save_state)
-> +		return;
-> +
-> +	cap = (u32 *)&save_state->cap.data[0];
-> +	pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *cap++);
-> +	/* Disable L1.2 while updating.  See PCIe r5.0, sec 5.5.4, 7.8.3.3 */
-> +	l1_2_enable = *cap & PCI_L1SS_CTL1_L1_2_MASK;
-> +	pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1,
-> +			       (*cap & ~PCI_L1SS_CTL1_L1_2_MASK));
-> +	if (l1_2_enable)
-> +		pci_clear_and_set_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, 0,
-> +					l1_2_enable);
-> +}
-
-What if we did something like the following?  Then we wouldn't have to
-duplicate the fancy logic in aspm_calc_l1ss_info() and
-pci_restore_aspm_l1ss_state(), and we'd only need the big comment in
-one place.
-
-+static void aspm_program_l1ss(struct pci_dev *dev, u32 ctl1, u32 ctl2)
-+{
-+	u16 l1ss = dev->l1ss;
-+	u32 l1_2_enable;
-+
-+	/*
-+	 * Per PCIe r6.0, sec 5.5.4, T_POWER_ON in PCI_L1SS_CTL2 must be
-+	 * programmed prior to setting the L1.2 enable bits in PCI_L1SS_CTL1.
-+	 */
-+	pci_write_config_dword(dev, l1ss + PCI_L1SS_CTL2, ctl2);
-+
-+	/*
-+	 * In addition, Common_Mode_Restore_Time and LTR_L1.2_THRESHOLD in
-+	 * PCI_L1SS_CTL1 must be programmed *before* setting the L1.2
-+	 * enable bits, even though they're all in PCI_L1SS_CTL1.
-+	 */
-+	l1_2_enable = ctl1 & PCI_L1SS_CTL1_L1_2_MASK;
-+	ctl1 &= ~PCI_L1SS_CTL1_L1_2_MASK;
-+
-+	pci_write_config_dword(dev, l1ss + PCI_L1SS_CTL1, ctl1);
-+	if (l1_2_enable)
-+		pci_write_config_dword(dev, l1ss + PCI_L1SS_CTL1,
-+				       ctl1 | l1_2_enable);
-+}
-
-(This is somewhat simplified from what aspm_calc_l1ss_info() does
-today.  It looks to me like aspm_calc_l1ss_info() does more config
-reads than necessary.)

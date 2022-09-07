@@ -2,45 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C785B0792
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02CD5B079C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiIGOxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S230217AbiIGOye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiIGOxU (ORCPT
+        with ESMTP id S230231AbiIGOyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:53:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F932B275F
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:53:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2E0E106F;
-        Wed,  7 Sep 2022 07:53:05 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6006A3FA00;
-        Wed,  7 Sep 2022 07:52:58 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Subject: [PATCH v3 10/10] firmware: arm_ffa: Split up ffa_ops into info, message and memory operations
-Date:   Wed,  7 Sep 2022 15:52:40 +0100
-Message-Id: <20220907145240.1683088-11-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220907145240.1683088-1-sudeep.holla@arm.com>
-References: <20220907145240.1683088-1-sudeep.holla@arm.com>
+        Wed, 7 Sep 2022 10:54:10 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F1DB6548
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:53:46 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id i26so7110874lfp.11
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=JA9TuoAtB0Hdj8lp2ESD/D+NAeIyn8GknvA95wIowgc=;
+        b=lkyy+Vj9xIxeSsOTcc37N97vHk2IeH5ikX2Dr4G8r2ZOrH7NwWJRHJlmH3pjhlzkwv
+         jyNfkprU+TsRKtfHyIAwF1vH+1vtzai/I6nmMfUbxJGlfuFWmx/UeEl5TAr8YRUuWQ7N
+         pUfbqDirdVle8VvJHt3VeJtsR51+MRhzRZcjA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=JA9TuoAtB0Hdj8lp2ESD/D+NAeIyn8GknvA95wIowgc=;
+        b=qzPjvF+0TVTbToTq1DReiOEPoLAmglS6OJDPE/Qu1/y1QdKieBwfpedNQkbor6XN67
+         cETVUJLfrXX1xBXAdabgabLEgXVRVSko/3bJHy5d/8xIj00yFoNqd5nT9380fGftFa/m
+         koBi567B3boj5Ugpoc3jG+eSDUv71KIFEg5mpF7SKmfzfHtticAEgf9AG5rHuhM7+OKm
+         u9lbhfI2iZCyQ1359KHqYHWoyo08ubTzfU5T9EtNfAoyGnn4ptoKMmno76yCteenj8QE
+         y3NO/+Xq5JBmHgBXYFQOLStjI8QcmQGO3ZaOiJsbwLMiRgoC50nXOWeKP3C0nRTy9DDS
+         ikrw==
+X-Gm-Message-State: ACgBeo1U7oPrpeFCEeXTWRVf0QBKxYzUGyv9pqFVG759j5mfCmvah85v
+        iWx5sjJm5MoNa9pwPb/d8oUTtRzaedeiYA==
+X-Google-Smtp-Source: AA6agR6mmjQyzS2Zye5ysxfSOXNl2fN963XBefwTz+OaMyzTVqxfeXg4OwxUNnqABx0r9ZOLynZc0Q==
+X-Received: by 2002:a19:ad03:0:b0:492:d9e0:ef42 with SMTP id t3-20020a19ad03000000b00492d9e0ef42mr1263800lfc.327.1662562421724;
+        Wed, 07 Sep 2022 07:53:41 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id q17-20020ac25111000000b004946c3cf53fsm2530642lfb.59.2022.09.07.07.53.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 07:53:40 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id bq23so22850427lfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:53:39 -0700 (PDT)
+X-Received: by 2002:a05:6512:c1e:b0:494:7c8c:f5f2 with SMTP id
+ z30-20020a0565120c1e00b004947c8cf5f2mr1302375lfu.593.1662562419339; Wed, 07
+ Sep 2022 07:53:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220831172024.1613208-1-svenva@chromium.org> <20220831172024.1613208-2-svenva@chromium.org>
+ <Yxg6OayyEFWIax/r@gondor.apana.org.au>
+In-Reply-To: <Yxg6OayyEFWIax/r@gondor.apana.org.au>
+From:   Sven van Ashbrook <svenva@chromium.org>
+Date:   Wed, 7 Sep 2022 10:53:27 -0400
+X-Gmail-Original-Message-ID: <CAM7w-FW_w2h6JmvZpg2qjspESAYR21o-0Pw89JnnV8hFEdaHmw@mail.gmail.com>
+Message-ID: <CAM7w-FW_w2h6JmvZpg2qjspESAYR21o-0Pw89JnnV8hFEdaHmw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] hwrng: core: fix potential suspend/resume race condition
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alex Levin <levinale@google.com>,
+        Rajat Jain <rajatja@google.com>,
+        Andrey Pronin <apronin@google.com>,
+        Stephen Boyd <swboyd@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,234 +82,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation to make memory operations accessible for a non
-ffa_driver/device, it is better to split the ffa_ops into different
-categories of operations: info, message and memory. The info and memory
-are ffa_device independent and can be used without any associated
-ffa_device from a non ffa_driver.
+Hi Herbert,
 
-However, we don't export these info and memory APIs yet without the user.
-The first users of these APIs can export them.
+On Wed, Sep 7, 2022 at 2:29 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> The general concept seems to be fine.
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/firmware/arm_ffa/driver.c | 16 +++++++++++++--
- drivers/tee/optee/ffa_abi.c       | 33 +++++++++++++++++--------------
- include/linux/arm_ffa.h           | 14 ++++++++++++-
- 3 files changed, 45 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-index 34e12a2a98fe..490c8757b281 100644
---- a/drivers/firmware/arm_ffa/driver.c
-+++ b/drivers/firmware/arm_ffa/driver.c
-@@ -691,16 +691,28 @@ static int ffa_memory_lend(struct ffa_mem_ops_args *args)
- 	return ffa_memory_ops(FFA_MEM_LEND, args);
- }
- 
--static const struct ffa_ops ffa_ops = {
-+static const struct ffa_info_ops ffa_drv_info_ops = {
- 	.api_version_get = ffa_api_version_get,
- 	.partition_info_get = ffa_partition_info_get,
-+};
-+
-+static const struct ffa_msg_ops ffa_drv_msg_ops = {
- 	.mode_32bit_set = ffa_mode_32bit_set,
- 	.sync_send_receive = ffa_sync_send_receive,
-+};
-+
-+static const struct ffa_mem_ops ffa_drv_mem_ops = {
- 	.memory_reclaim = ffa_memory_reclaim,
- 	.memory_share = ffa_memory_share,
- 	.memory_lend = ffa_memory_lend,
- };
- 
-+static const struct ffa_ops ffa_drv_ops = {
-+	.info_ops = &ffa_drv_info_ops,
-+	.msg_ops = &ffa_drv_msg_ops,
-+	.mem_ops = &ffa_drv_mem_ops,
-+};
-+
- void ffa_device_match_uuid(struct ffa_device *ffa_dev, const uuid_t *uuid)
- {
- 	int count, idx;
-@@ -746,7 +758,7 @@ static void ffa_setup_partitions(void)
- 		 * provides UUID here for each partition as part of the
- 		 * discovery API and the same is passed.
- 		 */
--		ffa_dev = ffa_device_register(&uuid, tpbuf->id, &ffa_ops);
-+		ffa_dev = ffa_device_register(&uuid, tpbuf->id, &ffa_drv_ops);
- 		if (!ffa_dev) {
- 			pr_err("%s: failed to register partition ID 0x%x\n",
- 			       __func__, tpbuf->id);
-diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index 2ce5b87dfb27..0828240f27e6 100644
---- a/drivers/tee/optee/ffa_abi.c
-+++ b/drivers/tee/optee/ffa_abi.c
-@@ -272,7 +272,7 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
- 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
--	const struct ffa_ops *ffa_ops = ffa_dev->ops;
-+	const struct ffa_mem_ops *mem_ops = ffa_dev->ops->mem_ops;
- 	struct ffa_mem_region_attributes mem_attr = {
- 		.receiver = ffa_dev->vm_id,
- 		.attrs = FFA_MEM_RW,
-@@ -294,14 +294,14 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
- 	if (rc)
- 		return rc;
- 	args.sg = sgt.sgl;
--	rc = ffa_ops->memory_share(&args);
-+	rc = mem_ops->memory_share(&args);
- 	sg_free_table(&sgt);
- 	if (rc)
- 		return rc;
- 
- 	rc = optee_shm_add_ffa_handle(optee, shm, args.g_handle);
- 	if (rc) {
--		ffa_ops->memory_reclaim(args.g_handle, 0);
-+		mem_ops->memory_reclaim(args.g_handle, 0);
- 		return rc;
- 	}
- 
-@@ -315,7 +315,8 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
- 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
--	const struct ffa_ops *ffa_ops = ffa_dev->ops;
-+	const struct ffa_msg_ops *msg_ops = ffa_dev->ops->msg_ops;
-+	const struct ffa_mem_ops *mem_ops = ffa_dev->ops->mem_ops;
- 	u64 global_handle = shm->sec_world_id;
- 	struct ffa_send_direct_data data = {
- 		.data0 = OPTEE_FFA_UNREGISTER_SHM,
-@@ -327,11 +328,11 @@ static int optee_ffa_shm_unregister(struct tee_context *ctx,
- 	optee_shm_rem_ffa_handle(optee, global_handle);
- 	shm->sec_world_id = 0;
- 
--	rc = ffa_ops->sync_send_receive(ffa_dev, &data);
-+	rc = msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc)
- 		pr_err("Unregister SHM id 0x%llx rc %d\n", global_handle, rc);
- 
--	rc = ffa_ops->memory_reclaim(global_handle, 0);
-+	rc = mem_ops->memory_reclaim(global_handle, 0);
- 	if (rc)
- 		pr_err("mem_reclaim: 0x%llx %d", global_handle, rc);
- 
-@@ -342,7 +343,7 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
- 					 struct tee_shm *shm)
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
--	const struct ffa_ops *ffa_ops = optee->ffa.ffa_dev->ops;
-+	const struct ffa_mem_ops *mem_ops;
- 	u64 global_handle = shm->sec_world_id;
- 	int rc;
- 
-@@ -353,7 +354,8 @@ static int optee_ffa_shm_unregister_supp(struct tee_context *ctx,
- 	 */
- 
- 	optee_shm_rem_ffa_handle(optee, global_handle);
--	rc = ffa_ops->memory_reclaim(global_handle, 0);
-+	mem_ops = optee->ffa.ffa_dev->ops->mem_ops;
-+	rc = mem_ops->memory_reclaim(global_handle, 0);
- 	if (rc)
- 		pr_err("mem_reclaim: 0x%llx %d", global_handle, rc);
- 
-@@ -530,7 +532,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- {
- 	struct optee *optee = tee_get_drvdata(ctx->teedev);
- 	struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
--	const struct ffa_ops *ffa_ops = ffa_dev->ops;
-+	const struct ffa_msg_ops *msg_ops = ffa_dev->ops->msg_ops;
- 	struct optee_call_waiter w;
- 	u32 cmd = data->data0;
- 	u32 w4 = data->data1;
-@@ -541,7 +543,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- 	/* Initialize waiter */
- 	optee_cq_wait_init(&optee->call_queue, &w);
- 	while (true) {
--		rc = ffa_ops->sync_send_receive(ffa_dev, data);
-+		rc = msg_ops->sync_send_receive(ffa_dev, data);
- 		if (rc)
- 			goto done;
- 
-@@ -576,7 +578,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- 		 * OP-TEE has returned with a RPC request.
- 		 *
- 		 * Note that data->data4 (passed in register w7) is already
--		 * filled in by ffa_ops->sync_send_receive() returning
-+		 * filled in by ffa_mem_ops->sync_send_receive() returning
- 		 * above.
- 		 */
- 		cond_resched();
-@@ -654,12 +656,13 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
- static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
- 					const struct ffa_ops *ops)
- {
-+	const struct ffa_msg_ops *msg_ops = ops->msg_ops;
- 	struct ffa_send_direct_data data = { OPTEE_FFA_GET_API_VERSION };
- 	int rc;
- 
--	ops->mode_32bit_set(ffa_dev);
-+	msg_ops->mode_32bit_set(ffa_dev);
- 
--	rc = ops->sync_send_receive(ffa_dev, &data);
-+	rc = msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc) {
- 		pr_err("Unexpected error %d\n", rc);
- 		return false;
-@@ -672,7 +675,7 @@ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
- 	}
- 
- 	data = (struct ffa_send_direct_data){ OPTEE_FFA_GET_OS_VERSION };
--	rc = ops->sync_send_receive(ffa_dev, &data);
-+	rc = msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc) {
- 		pr_err("Unexpected error %d\n", rc);
- 		return false;
-@@ -694,7 +697,7 @@ static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
- 	struct ffa_send_direct_data data = { OPTEE_FFA_EXCHANGE_CAPABILITIES };
- 	int rc;
- 
--	rc = ops->sync_send_receive(ffa_dev, &data);
-+	rc = ops->msg_ops->sync_send_receive(ffa_dev, &data);
- 	if (rc) {
- 		pr_err("Unexpected error %d", rc);
- 		return false;
-diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-index 5964b6104996..5f02d2e6b9d9 100644
---- a/include/linux/arm_ffa.h
-+++ b/include/linux/arm_ffa.h
-@@ -257,16 +257,28 @@ struct ffa_mem_ops_args {
- 	struct ffa_mem_region_attributes *attrs;
- };
- 
--struct ffa_ops {
-+struct ffa_info_ops {
- 	u32 (*api_version_get)(void);
- 	int (*partition_info_get)(const char *uuid_str,
- 				  struct ffa_partition_info *buffer);
-+};
-+
-+struct ffa_msg_ops {
- 	void (*mode_32bit_set)(struct ffa_device *dev);
- 	int (*sync_send_receive)(struct ffa_device *dev,
- 				 struct ffa_send_direct_data *data);
-+};
-+
-+struct ffa_mem_ops {
- 	int (*memory_reclaim)(u64 g_handle, u32 flags);
- 	int (*memory_share)(struct ffa_mem_ops_args *args);
- 	int (*memory_lend)(struct ffa_mem_ops_args *args);
- };
- 
-+struct ffa_ops {
-+	const struct ffa_info_ops *info_ops;
-+	const struct ffa_msg_ops *msg_ops;
-+	const struct ffa_mem_ops *mem_ops;
-+};
-+
- #endif /* _LINUX_ARM_FFA_H */
--- 
-2.37.3
-
+Thank you kindly for the fast review. I plan to get a v2 out in the
+next few days.

@@ -2,80 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FDE5AFB0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27BA5AFB11
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiIGEV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        id S229638AbiIGEW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIGEVZ (ORCPT
+        with ESMTP id S229436AbiIGEWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 00:21:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F024D278
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662524481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S+P+z8TSJ/Zyfj7d1c5azECG0cOYl08GFb3K30xN3HE=;
-        b=Lpu79Qs4LxRlTr9nFiLQt8z3VqN1+EVqRtq9cv6L9TIFgnCJ8GNHQdijAMYVh+YHPMxLPp
-        hYWm22hAlZdg7toFaJlgGO9zSV+x+/SnrjCTGC7O6CF0kQ8ogZFHtkLbHCb7na8mWB2dEO
-        9OL8y22bLnAr5j8riMYXsQJtvtxGYHU=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-379-nDHV4y4MMTCjBDX8XZhevA-1; Wed, 07 Sep 2022 00:21:20 -0400
-X-MC-Unique: nDHV4y4MMTCjBDX8XZhevA-1
-Received: by mail-pf1-f199.google.com with SMTP id cj15-20020a056a00298f00b0053a700f1178so6832197pfb.14
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 21:21:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=S+P+z8TSJ/Zyfj7d1c5azECG0cOYl08GFb3K30xN3HE=;
-        b=2ztQW85mMSUlsfAse4IlW496QmYwE/67z1Uprlw7da6Ztuj8W0Bn/HR2UtmNteaoQb
-         yHC32SX8/v0Jv/uF2ckCJxIixj6e/i+Sdlq7AUVBL5muN0BgpzrGYNDFDdyX73KQHAke
-         fwLQtoEwEzLY4dfTqQVTitbtay+OiXfEQy1rfJeP0vgAfyy1Ckrm/sX5doTIyxfd5rHy
-         H4mKzenmhJs2f9EimHaVX10LvIjFJX1AR6u00If2SUoo6RQ3H1qTceauvZZGiYs+wHSe
-         7ii32Ysn/3PWRkPtE9HFq+hK9H0/C3YEVq3/HU/Ta1yDh2dBFo2mNKhPzYOa/RJrHj79
-         jdPw==
-X-Gm-Message-State: ACgBeo0QHiiRqsmZMleI4V5cuiAyJCXLu2gjuoLetKLUR4sufql9x7cG
-        DsZ/05Os2DktYXjvhQ40HELFrhxZF+win+Y51IEIS907u5wiKXW60SJmvxgerqjMU/J7s66Sn22
-        njZwzf6w47dFKfqCMvjEdx+eJ
-X-Received: by 2002:a05:6a00:22c7:b0:53a:bea5:9abd with SMTP id f7-20020a056a0022c700b0053abea59abdmr1770319pfj.3.1662524479099;
-        Tue, 06 Sep 2022 21:21:19 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7FdPkXihchbJtJv8Jd83bDgPxk3tYbsa2yRZ4rh/+Tyemh4rXUJmUXF5h6WyCU3XNVQ3nufA==
-X-Received: by 2002:a05:6a00:22c7:b0:53a:bea5:9abd with SMTP id f7-20020a056a0022c700b0053abea59abdmr1770291pfj.3.1662524478842;
-        Tue, 06 Sep 2022 21:21:18 -0700 (PDT)
-Received: from [10.72.13.171] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id b28-20020aa78edc000000b0053ae6a3c51asm11172533pfr.186.2022.09.06.21.21.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 21:21:18 -0700 (PDT)
-Message-ID: <dcf40392-26a7-b4f1-ad2c-44fac99fb330@redhat.com>
-Date:   Wed, 7 Sep 2022 12:21:06 +0800
+        Wed, 7 Sep 2022 00:22:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A29B89916;
+        Tue,  6 Sep 2022 21:22:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C33871042;
+        Tue,  6 Sep 2022 21:22:58 -0700 (PDT)
+Received: from [10.162.40.15] (unknown [10.162.40.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F22D3F534;
+        Tue,  6 Sep 2022 21:22:50 -0700 (PDT)
+Message-ID: <e091ed53-d5d0-101d-92a6-a215350e482e@arm.com>
+Date:   Wed, 7 Sep 2022 09:52:48 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [RFC v3 1/7] vhost: expose used buffers
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: linux-next: build failure after merge of the perf tree
 Content-Language: en-US
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>, eperezma@redhat.com,
-        sgarzare@redhat.com, mst@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-References: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn>
- <20220901055434.824-2-qtxuning1999@sjtu.edu.cn>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220901055434.824-2-qtxuning1999@sjtu.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220831083452.2fc938cf@canb.auug.org.au>
+ <20220907050535.243e5030@canb.auug.org.au>
+ <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
+ <20220907130011.32818436@canb.auug.org.au>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220907130011.32818436@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,71 +50,93 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/9/1 13:54, Guo Zhi 写道:
-> Follow VIRTIO 1.1 spec, only writing out a single used ring for a batch
-> of descriptors.
->
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
->   drivers/vhost/vhost.c | 16 +++++++++++++---
->   1 file changed, 13 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 40097826cff0..26862c8bf751 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -2376,10 +2376,20 @@ static int __vhost_add_used_n(struct vhost_virtqueue *vq,
->   	vring_used_elem_t __user *used;
->   	u16 old, new;
->   	int start;
-> +	int copy_n = count;
->   
-> +	/**
-> +	 * If in order feature negotiated, devices can notify the use of a batch of buffers to
-> +	 * the driver by only writing out a single used ring entry with the id corresponding
-> +	 * to the head entry of the descriptor chain describing the last buffer in the batch.
-> +	 */
-> +	if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
-> +		copy_n = 1;
-> +		heads = &heads[count - 1];
-> +	}
 
+On 9/7/22 08:30, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Wed, 7 Sep 2022 08:01:34 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+>>
+>> On 9/7/22 00:35, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> On Wed, 31 Aug 2022 08:34:52 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
+>>>>
+>>>> After merging the perf tree, today's linux-next build (native perf)
+>>>> failed like this:
+>>>>
+>>>> In file included from /usr/include/stdio.h:866,
+>>>>                  from /home/sfr/next/next/tools/perf/util/branch.h:9,
+>>>>                  from util/branch.c:2:
+>>>> In function 'fprintf',
+>>>>     inlined from 'branch_type_stat_display' at util/branch.c:152:4:
+>>>> /usr/include/powerpc64le-linux-gnu/bits/stdio2.h:105:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
+>>>>   105 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
+>>>>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>>   106 |                         __va_arg_pack ());
+>>>>       |                         ~~~~~~~~~~~~~~~~~
+>>>> cc1: all warnings being treated as errors
+>>>>
+>>>> Presumably caused by commit
+>>>>
+>>>>   9781e500dcb8 ("perf branch: Extend branch type classification")
+>>>>
+>>>> "native" here is PowerPC64 LE.
+>>>> $ gcc --version
+>>>> gcc (Debian 11.2.0-10) 11.2.0
+>>>>
+>>>> I have used the perf tree from next-20220830 for today.  
+>>>
+>>> I am still seeing this build failure.  
+>>
+>> But did you apply the fix patch from Arnaldo that removes -Wno-format-overflow
+>> compiler option for the file util/branch.c ?
+>>
+>> https://lore.kernel.org/all/YxJBh3wvAGol+Ekq@kernel.org/
+> 
+> No, I expected a fix to be in the perf tree ...
+> 
+> Also note that the following fixes the problem for me:
+> 
+> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
+> index d40776c44b06..b7b898f2872e 100644
+> --- a/tools/perf/util/branch.c
+> +++ b/tools/perf/util/branch.c
+> @@ -88,7 +88,8 @@ const char *branch_type_name(int type)
+>  		"ERET",
+>  		"IRQ",
+>  		"SERROR",
+> -		"NO_TX"
+> +		"NO_TX",
+> +		""
+>  	};
+>  
+>  	if (type >= 0 && type < PERF_BR_MAX)
 
-Would it better to have a dedicated helper like 
-vhost_add_used_in_order() here?
+This looks right, makes sense.
 
+> 
+> 
+> PERF_BR_MAX has been increased by one (when PERF_BR_EXTEND_ABI was
+> added), but a new string has not been added to the array ...
 
->   	start = vq->last_used_idx & (vq->num - 1);
->   	used = vq->used->ring + start;
-> -	if (vhost_put_used(vq, heads, start, count)) {
-> +	if (vhost_put_used(vq, heads, start, copy_n)) {
->   		vq_err(vq, "Failed to write used");
->   		return -EFAULT;
->   	}
-> @@ -2388,7 +2398,7 @@ static int __vhost_add_used_n(struct vhost_virtqueue *vq,
->   		smp_wmb();
->   		/* Log used ring entry write. */
->   		log_used(vq, ((void __user *)used - (void __user *)vq->used),
-> -			 count * sizeof *used);
-> +			 copy_n * sizeof(*used));
->   	}
->   	old = vq->last_used_idx;
->   	new = (vq->last_used_idx += count);
-> @@ -2410,7 +2420,7 @@ int vhost_add_used_n(struct vhost_virtqueue *vq, struct vring_used_elem *heads,
->   
->   	start = vq->last_used_idx & (vq->num - 1);
->   	n = vq->num - start;
-> -	if (n < count) {
-> +	if (n < count && !vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
+Right, even though new branch_new_names[] array gets queried on when type
+value is PERF_BR_EXTEND_ABI, branch_names[] should still contain an empty
+string "" just to match the now incremented PERF_BR_MAX which extends the
+array size as well. I guess the compiler detects this mismatch here and
+just complains about it.
 
+Hello Arnaldo,
 
-This seems strange, any reason for this? (Actually if we support 
-in-order we only need one used slot which fit for the case here)
+As adding empty string to the array solves the build problem, I guess we
+should fold this fix instead, rather than trying to drop the compiler
+option itself, as discussed earlier.
 
-Thanks
+The above fix should be folded into the following commit
 
+9781e500dcb8 ("perf branch: Extend branch type classification")
 
->   		r = __vhost_add_used_n(vq, heads, n);
->   		if (r < 0)
->   			return r;
+in the following perf tree - branch.
 
+git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git (perf/core)
+
+- Anshuman

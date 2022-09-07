@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4C65B08D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881735B08DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiIGPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
+        id S229714AbiIGPmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiIGPmC (ORCPT
+        with ESMTP id S229563AbiIGPma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:42:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F6EB1BB4;
-        Wed,  7 Sep 2022 08:41:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A26CDB81E0C;
-        Wed,  7 Sep 2022 15:41:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055C0C4347C;
-        Wed,  7 Sep 2022 15:41:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662565311;
-        bh=/S/dkwp5ZVEfvkT7cXSM0abXRYV90A8gHsHvynV/bE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aPtjXj7LVbgPklwL0BtFQvBJBVKud+/mTLi/X4cto7mqTclBGsTV5WwwKD3WqEfDF
-         e/DsY8llF4okC8r2/W0d0lQB6ZbA9lp+7glaGqUGmR+x+AQTRgeYuk08kjCZ1p1sh4
-         07dzUdk/zH2pQQi4tpM+2Gq3YIpN+7KLYlHT5GZEiXivxlxzJx7W5GVihL44Jk4/UB
-         F8wBZ3dkj3JzlzP++jXMeDpKXRwIP2D0f07e1K0rhORMmh2Afmf/Ern3ep24TrmItB
-         WW4zBCxRmcXz9zok5DZGvfLZy5VZWr95emKxduMAtdBwt+Hckdd1u0jmklJAzQdmtA
-         k+6k19kHtCyyw==
-Date:   Wed, 7 Sep 2022 16:41:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     luca.ceresoli@bootlin.com
-Cc:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH 0/8] Add support for the internal RK3308 audio codec
-Message-ID: <Yxi7uD6RKeR3uHcF@sirena.org.uk>
-References: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
+        Wed, 7 Sep 2022 11:42:30 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969F6B0B3A;
+        Wed,  7 Sep 2022 08:42:28 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id v2-20020a056830090200b006397457afecso10506495ott.13;
+        Wed, 07 Sep 2022 08:42:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=O0C9t0VY3tvvvQVSv0/pXgbdUBlFzo5v3zMl5r02uQU=;
+        b=bgzhqVpt3OnLIuZ4VSICRTvj52t4nOdgrYHD1y7VDdcV9Tt9EEca40jpiknKjpPhF5
+         mvRy5nQyWg6m1MFd9mmH8eJxS2rPoLGk+uD5+fAWazGRZAO2+prTERsCg73RgKR7kU81
+         YXisgGzu7p/gpS/XmEyH7vr3d1tVDf3/fIsbFTeBJjq4gedUej1rDy30B48YXxSr1vDS
+         7lREDqwoci4m1nIAh5guBSPeCrOGrYFNrt2cvMVYfD/D3Nht/dxeWUz1J4mQP8wjgbQZ
+         LXhJSEZVNEag7VwNcd+BFGxm8AHcSELLMbKJLlxKhGMvn1DBsXnsWogNb4bx1rgn5H1Q
+         rvqQ==
+X-Gm-Message-State: ACgBeo0cR1G46Dqs2qBDJFLsID4oW0UqtoMJMRAP/IXjIZYC59vdypx0
+        n2UqR98QTu4Sa78g4sOoi+oTjWMsGQ==
+X-Google-Smtp-Source: AA6agR7LI/fVhUFeKz5sWm4Jx6IOy+RzpBAsW5Hc/i9i0RkMlpD3hfgjX5MK8MKQzdWCsaBTRik4MQ==
+X-Received: by 2002:a9d:67c1:0:b0:63b:2b5c:90bd with SMTP id c1-20020a9d67c1000000b0063b2b5c90bdmr1653134otn.237.1662565347815;
+        Wed, 07 Sep 2022 08:42:27 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a11-20020a4a988b000000b00435a8024bc1sm5159957ooj.4.2022.09.07.08.42.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:42:27 -0700 (PDT)
+Received: (nullmailer pid 3505199 invoked by uid 1000);
+        Wed, 07 Sep 2022 15:42:26 -0000
+Date:   Wed, 7 Sep 2022 10:42:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        David Heidelberg <david@ixit.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v12] dt-bindings: misc: fastrpc convert bindings to yaml
+Message-ID: <20220907154226.GA3505117-robh@kernel.org>
+References: <20220907074301.3996021-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9EHz1xmrlXau4N0B"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
-X-Cookie: You have a truly strong individuality.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220907074301.3996021-1-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 07 Sep 2022 10:43:01 +0300, Abel Vesa wrote:
+> Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
+> dt-entries correctly and any future additions can go into yaml format.
+> 
+> Use compute-cb@ subnodes instead of just cb@. Add qcom,glink-channels and
+> qcom,smd-channels missing properties to make sure dtbs_check doesn't fail
+> right off the bat. Correct the name of the parent node in the example from
+> smd-edge to glink-edge.
+> 
+> Since now the qcom,fastrpc bindings document is yaml, update the
+> reference to it in qcom,glink-edge and also use $ref.
+> 
+> Also update the MAINTAINERS file to point to the yaml version.
+> 
+> Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Co-developed-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> Changes since v11:
+>  * added 'additionalProperties: false' to the patternProperties,
+>    as suggested by Krzysztof
+> 
+>  .../devicetree/bindings/misc/qcom,fastrpc.txt |  88 -------------
+>  .../bindings/misc/qcom,fastrpc.yaml           | 124 ++++++++++++++++++
+>  .../bindings/remoteproc/qcom,glink-edge.yaml  |   4 +-
+>  MAINTAINERS                                   |   2 +-
+>  4 files changed, 127 insertions(+), 91 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+>  create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> 
 
---9EHz1xmrlXau4N0B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Sep 07, 2022 at 04:21:16PM +0200, luca.ceresoli@bootlin.com wrote:
-
-> Luca Ceresoli (8):
->   ASoC: rockchip: rk3308: add internal audio codec bindings
->   ASoC: rockchip: rk3308: add audio card bindings
->   arm64: dts: rockchip: add i2s_8ch_2 and i2s_8ch_3
->   arm64: dts: rockchip: add the internal audio codec
->   ASoC: rockchip: i2s-tdm: Fix clk_id usage in .set_sysclk()
->   ASoC: audio-graph: let dai_link->init be overridable
->   ASoC: codecs: Add RK3308 internal audio codec driver
->   ASoC: rockchip: add new RK3308 sound card
-
-Please pay attention to the ordering of your serieses when posting:
-generally any bug fixes should come first so that they can be easily
-sent as fixes, and normally DTS updates are at the very end of the
-series rather than mixed in the middle since they go via the platform
-maintainer tree normally rather than with everything else.
-
---9EHz1xmrlXau4N0B
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMYu7cACgkQJNaLcl1U
-h9CKzAf8DdI+J5miR4E6cIrTXKZoGqR7qZhfHqflFl1gH1Y4ikj9fbdxe4vhlxEz
-nUlD7rd8x8u/c8l0lkObG4gKpZ3VMuT6Pvr5cxCHzlGyCgKb3NEMme5JhSuV8TCW
-qchsRF+ZGTXUcPqBN5ey6fl2KAboGemFxyuDLWaVD9CVsKDpoMtyOsgE8PC7sTRO
-Vdqkl33gsJZP8XRlRomBFUpC/ziINrHXBW+hBoyQBNBLJxdUT7OM7WXVsxJaJsJf
-o+lK+dLy4RD8Pnbt28qgvhMDFxNKCSGX6B0iI8lgMls3j/ZJme3+MnrNA9DwDTjM
-wKQ4TTmanyrMK0yzQd4uThtlEm/FfA==
-=rYHs
------END PGP SIGNATURE-----
-
---9EHz1xmrlXau4N0B--
+Applied, thanks!

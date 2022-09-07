@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9237A5AFD92
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F105AFD94
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiIGHbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S229716AbiIGHcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiIGHa1 (ORCPT
+        with ESMTP id S229821AbiIGHcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:30:27 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17F46EF14;
-        Wed,  7 Sep 2022 00:30:23 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id h1so8212792wmd.3;
-        Wed, 07 Sep 2022 00:30:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=ySTqzK77epAEdUaxdr9SqQHp6loTM9BjTxqnQisnV4Y=;
-        b=gtoLz2nrwbRfB9uwytDWgKXJ4VL4ukMunKy0Shm7qJek9eJFe42Sb/tvFghI4n+WH3
-         QibK1n0nmPYH4qVc3s0wocnybNPg84Trnt/YJQBlkY95sE3oPZ0ciEtYNOa7N4ZTI+0R
-         Jx9LjQU7Y/NIwxBWG0gT2qXmROxtMioeON/cR9bWwjiqK4nv6vzmy6uxzVaRaXAyOk7n
-         wOBd9ZQy9vmpMh1i7udNGoF9adsnImHFLAu7q+7fnB4hsRMlcwzwsRuK1iqGqdQOaFXH
-         peAVH6h5StBP/Nt0Zqxvo309L3BQUtkXad3jn/G2+ywQe9NpbJ+1QS5GZ+ergNy5c9es
-         fRMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ySTqzK77epAEdUaxdr9SqQHp6loTM9BjTxqnQisnV4Y=;
-        b=Dk1jcwFTyMwjwv6vcUio0bugId3wFfx/zrmWciVpMGpozlRbs4kM1++qW0eWYI4Vq5
-         GLfClFxiyD+KuF7lfLRC7JUrtFN5fy40lSrS8w1hiSCQt4MeBJEJ7YbNzE4xHIdwh6cD
-         Bl7MblA9c8gijudP6l0bKPeLIMgq050hjpZDfo3btE/eMGTQkLwWfEXp1/LKtCTK5l90
-         YOocoh+Ug6fwpPiQQiNTg0TxHLEVDw4PApykfSQ0ZQb8mhCGm7TxcvgbFDkJvUKzOCXM
-         fyN7J7tP+l78yn0KGkYZv1l0BrF0UFQ/1GwYASAcF4M31HXuemleWpcM1qN9P03WlQR8
-         xN/w==
-X-Gm-Message-State: ACgBeo3xUosGNjmAGuDj3tkXO2BA/d4OsrhJASXD4i8A/1jgh/WgPPqL
-        1wmYSDoxn/cydd2cwBHoDKI=
-X-Google-Smtp-Source: AA6agR6QXSOqiTjyQTtNJzk4IEUWfEuAweEZzgWXQKuhdhlaNgxNa5neINPqd9VT6tcMQnmmG9NozQ==
-X-Received: by 2002:a05:600c:512a:b0:3a8:42e4:dfe7 with SMTP id o42-20020a05600c512a00b003a842e4dfe7mr16191439wms.193.1662535821967;
-        Wed, 07 Sep 2022 00:30:21 -0700 (PDT)
-Received: from gmail.com (1F2EF41B.nat.pool.telekom.hu. [31.46.244.27])
-        by smtp.gmail.com with ESMTPSA id z14-20020a5d4c8e000000b0021e4829d359sm16071633wrs.39.2022.09.07.00.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 00:30:20 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 7 Sep 2022 09:30:18 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <YxhIim6NhyQkxOqA@gmail.com>
-References: <20220822111816.760285417@infradead.org>
- <20220822114649.055452969@infradead.org>
- <YxR5Yauhd90WN/AY@gmail.com>
- <YxctoffFFPXONESt@hirez.programming.kicks-ass.net>
+        Wed, 7 Sep 2022 03:32:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A33A6C55
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:31:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A7A2E200E9;
+        Wed,  7 Sep 2022 07:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662535908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nEZtsFP7Pfmjy7Ks9btHDFKhLuYstlIDGUPVhtQoNCY=;
+        b=EfF/e5y218vmr5vIt27j/Shzj0ikwa6Zj8ENUKuGY/42b5GaTkbpTDm/kUUz0jPxwyIWR6
+        vJ3cgZ27gCAKP5q0EdP+vLvA/Uyj4bYCQ5hIcLo2eMAAFlzOd54fQQs6ZAmBu5h2VF7xWz
+        c7odlYV6/TlVFDugdikLQ87hMWfdOwk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662535908;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nEZtsFP7Pfmjy7Ks9btHDFKhLuYstlIDGUPVhtQoNCY=;
+        b=Pb6ZZkzlkt0Fqtl9aTwGmSvclWZpIxQis4nOKFA58KLUGvgab7Iq6yFVMSOCRj+/LBDhch
+        dqYefqdyVGJxHTCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8A61913A66;
+        Wed,  7 Sep 2022 07:31:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WTBjIORIGGMGfAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 07 Sep 2022 07:31:48 +0000
+Message-ID: <4773032b-d103-a636-2d36-e9e19baa284b@suse.de>
+Date:   Wed, 7 Sep 2022 09:31:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxctoffFFPXONESt@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 09/11] drm/udl: Fix inconsistent urbs.count value
+ during udl_free_urb_list()
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220906073951.2085-1-tiwai@suse.de>
+ <20220906073951.2085-10-tiwai@suse.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220906073951.2085-10-tiwai@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------CwvdA0n67lxX2mJ26Dhv3fxH"
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,57 +74,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------CwvdA0n67lxX2mJ26Dhv3fxH
+Content-Type: multipart/mixed; boundary="------------01qYnnl4kuNRhe8vFC7lIWIm";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-ID: <4773032b-d103-a636-2d36-e9e19baa284b@suse.de>
+Subject: Re: [PATCH v2 09/11] drm/udl: Fix inconsistent urbs.count value
+ during udl_free_urb_list()
+References: <20220906073951.2085-1-tiwai@suse.de>
+ <20220906073951.2085-10-tiwai@suse.de>
+In-Reply-To: <20220906073951.2085-10-tiwai@suse.de>
 
-* Peter Zijlstra <peterz@infradead.org> wrote:
+--------------01qYnnl4kuNRhe8vFC7lIWIm
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> On Sun, Sep 04, 2022 at 12:09:37PM +0200, Ingo Molnar wrote:
-> 
-> > BTW., we should probably mark/document all PF_ holes with a PF__RESERVED 
-> > kind of scheme? Something simple, like:
-> > 
-> >    #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
-> >    #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
-> >  + #define PF__RESERVED_04000	0x00004000	/* Unused */
-> >    #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
-> >  + #define PF__RESERVED_10000	0x00010000	/* Unused */
-> >    #define PF_KSWAPD		0x00020000	/* I am kswapd */
-> >    #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
-> >    #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
-> 
-> 
-> How's this then, it immediately shows how holey it is :-)
-> 
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1722,7 +1722,9 @@ extern struct pid *cad_pid;
->  #define PF_MEMALLOC		0x00000800	/* Allocating memory */
->  #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
->  #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
-> +#define PF__HOLE__00004000	0x00004000	/* A HOLE */
->  #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
-> +#define PF__HOLE__00010000	0x00010000	/* A HOLE */
->  #define PF_KSWAPD		0x00020000	/* I am kswapd */
->  #define PF_MEMALLOC_NOFS	0x00040000	/* All allocation requests will inherit GFP_NOFS */
->  #define PF_MEMALLOC_NOIO	0x00080000	/* All allocation requests will inherit GFP_NOIO */
-> @@ -1730,9 +1732,14 @@ extern struct pid *cad_pid;
->  						 * I am cleaning dirty pages from some other bdi. */
->  #define PF_KTHREAD		0x00200000	/* I am a kernel thread */
->  #define PF_RANDOMIZE		0x00400000	/* Randomize virtual address space */
-> +#define PF__HOLE__00800000	0x00800000	/* A HOLE */
-> +#define PF__HOLE__01000000	0x01000000	/* A HOLE */
-> +#define PF__HOLE__02000000	0x02000000	/* A HOLE */
->  #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
->  #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
->  #define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to zones which allow long term pinning. */
-> +#define PF__HOLE__20000000	0x20000000	/* A HOLE */
-> +#define PF__HOLE__40000000	0x40000000	/* A HOLE */
->  #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_processes() and should not be frozen */
+SGkNCg0KQW0gMDYuMDkuMjIgdW0gMDk6Mzkgc2NocmllYiBUYWthc2hpIEl3YWk6DQo+IElu
+IHRoZSBjdXJyZW50IGRlc2lnbiwgdWRsX2dldF91cmIoKSBtYXkgYmUgY2FsbGVkIGFzeW5j
+aHJvbm91c2x5DQo+IGR1cmluZyB0aGUgZHJpdmVyIGZyZWVpbmcgaXRzIFVSTCBsaXN0IHZp
+YSB1ZGxfZnJlZV91cmJfbGlzdCgpLg0KPiBUaGUgcHJvYmxlbSBpcyB0aGF0IHRoZSBzeW5j
+IGlzIGRldGVybWluZWQgYnkgY29tcGFyaW5nIHRoZSB1cmJzLmNvdW50DQo+IGFuZCB1cmJz
+LmF2YWlsYWJsZSBmaWVsZHMsIHdoaWxlIHdlIGNsZWFyIHVyYnMuY291bnQgZmllbGQgb25s
+eSBvbmNlDQo+IGFmdGVyIHVkbF9mcmVlX3VyYl9saXN0KCkgZmluaXNoZXMsIGkuZS4gZHVy
+aW5nIHVkbF9mcmVlX3VyYl9saXN0KCksDQo+IHRoZSBzdGF0ZSBiZWNvbWVzIGluY29uc2lz
+dGVudC4NCj4gDQo+IEZvciBmaXhpbmcgdGhpcyBpbmNvbnNpc3RlbmN5IGFuZCBhbHNvIGZv
+ciBoYXJkZW5pbmcgdGhlIGxvY2tpbmcNCj4gc2NoZW1lLCB0aGlzIHBhdGNoIGRvZXMgYSBz
+bGlnaHQgcmVmYWN0b3Jpbmcgb2YgdGhlIGNvZGUgYXJvdW5kDQo+IHVkbF9nZXRfdXJiKCkg
+YW5kIHVkbF9mcmVlX3VyYl9saXN0KCkuICBOb3cgdXJicy5jb3VudCBpcyB1cGRhdGVkIGlu
+DQo+IHRoZSBzYW1lIHNwaW5sb2NrIGF0IGV4dHJhY3RpbmcgYSBVUkIgZnJvbSB0aGUgbGlz
+dCBpbg0KPiB1ZGxfZnJlZV91cmxfbGlzdCgpLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogVGFr
+YXNoaSBJd2FpIDx0aXdhaUBzdXNlLmRlPg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0v
+dWRsL3VkbF9kcnYuaCAgfCAgOCArLS0tLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3VkbC91
+ZGxfbWFpbi5jIHwgNDQgKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLQ0KPiAg
+IDIgZmlsZXMgY2hhbmdlZCwgMzEgaW5zZXJ0aW9ucygrKSwgMjEgZGVsZXRpb25zKC0pDQo+
+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmggYi9kcml2
+ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuaA0KPiBpbmRleCA1OTIzZDJlMDJiYzguLmQ5NDM2
+ODRiNWJiYiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmgN
+Cj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmgNCj4gQEAgLTc0LDEzICs3
+NCw3IEBAIHN0YXRpYyBpbmxpbmUgc3RydWN0IHVzYl9kZXZpY2UgKnVkbF90b191c2JfZGV2
+aWNlKHN0cnVjdCB1ZGxfZGV2aWNlICp1ZGwpDQo+ICAgaW50IHVkbF9tb2Rlc2V0X2luaXQo
+c3RydWN0IGRybV9kZXZpY2UgKmRldik7DQo+ICAgc3RydWN0IGRybV9jb25uZWN0b3IgKnVk
+bF9jb25uZWN0b3JfaW5pdChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KTsNCj4gICANCj4gLXN0
+cnVjdCB1cmIgKnVkbF9nZXRfdXJiX3RpbWVvdXQoc3RydWN0IGRybV9kZXZpY2UgKmRldiwg
+bG9uZyB0aW1lb3V0KTsNCj4gLQ0KPiAtI2RlZmluZSBHRVRfVVJCX1RJTUVPVVQJSFoNCj4g
+LXN0YXRpYyBpbmxpbmUgc3RydWN0IHVyYiAqdWRsX2dldF91cmIoc3RydWN0IGRybV9kZXZp
+Y2UgKmRldikNCj4gLXsNCj4gLQlyZXR1cm4gdWRsX2dldF91cmJfdGltZW91dChkZXYsIEdF
+VF9VUkJfVElNRU9VVCk7DQo+IC19DQo+ICtzdHJ1Y3QgdXJiICp1ZGxfZ2V0X3VyYihzdHJ1
+Y3QgZHJtX2RldmljZSAqZGV2KTsNCj4gICANCj4gICBpbnQgdWRsX3N1Ym1pdF91cmIoc3Ry
+dWN0IGRybV9kZXZpY2UgKmRldiwgc3RydWN0IHVyYiAqdXJiLCBzaXplX3QgbGVuKTsNCj4g
+ICBpbnQgdWRsX3N5bmNfcGVuZGluZ191cmJzKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpOw0K
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbWFpbi5jIGIvZHJpdmVy
+cy9ncHUvZHJtL3VkbC91ZGxfbWFpbi5jDQo+IGluZGV4IGRlMjhlZWZmMzE1NS4uZGY3ZWJl
+MWZkYzkwIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMN
+Cj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbWFpbi5jDQo+IEBAIC0yMyw2ICsy
+Myw4IEBADQo+ICAgI2RlZmluZSBXUklURVNfSU5fRkxJR0hUICgyMCkNCj4gICAjZGVmaW5l
+IE1BWF9WRU5ET1JfREVTQ1JJUFRPUl9TSVpFIDI1Ng0KPiAgIA0KPiArc3RhdGljIHN0cnVj
+dCB1cmIgKnVkbF9nZXRfdXJiX2xvY2tlZChzdHJ1Y3QgdWRsX2RldmljZSAqdWRsLCBsb25n
+IHRpbWVvdXQpOw0KPiArDQo+ICAgc3RhdGljIGludCB1ZGxfcGFyc2VfdmVuZG9yX2Rlc2Ny
+aXB0b3Ioc3RydWN0IHVkbF9kZXZpY2UgKnVkbCkNCj4gICB7DQo+ICAgCXN0cnVjdCB1c2Jf
+ZGV2aWNlICp1ZGV2ID0gdWRsX3RvX3VzYl9kZXZpY2UodWRsKTsNCj4gQEAgLTE0MCwyMSAr
+MTQyLDIzIEBAIHZvaWQgdWRsX3VyYl9jb21wbGV0aW9uKHN0cnVjdCB1cmIgKnVyYikNCj4g
+ICAJdWRsLT51cmJzLmF2YWlsYWJsZSsrOw0KPiAgIAlzcGluX3VubG9ja19pcnFyZXN0b3Jl
+KCZ1ZGwtPnVyYnMubG9jaywgZmxhZ3MpOw0KPiAgIA0KPiAtCXdha2VfdXAoJnVkbC0+dXJi
+cy5zbGVlcCk7DQo+ICsJd2FrZV91cF9hbGwoJnVkbC0+dXJicy5zbGVlcCk7DQo+ICAgfQ0K
+PiAgIA0KPiAgIHN0YXRpYyB2b2lkIHVkbF9mcmVlX3VyYl9saXN0KHN0cnVjdCBkcm1fZGV2
+aWNlICpkZXYpDQo+ICAgew0KPiAgIAlzdHJ1Y3QgdWRsX2RldmljZSAqdWRsID0gdG9fdWRs
+KGRldik7DQo+IC0JaW50IGNvdW50ID0gdWRsLT51cmJzLmNvdW50Ow0KPiAgIAlzdHJ1Y3Qg
+dXJiX25vZGUgKnVub2RlOw0KPiAgIAlzdHJ1Y3QgdXJiICp1cmI7DQo+ICAgDQo+ICAgCURS
+TV9ERUJVRygiV2FpdGluZyBmb3IgY29tcGxldGVzIGFuZCBmcmVlaW5nIGFsbCByZW5kZXIg
+dXJic1xuIik7DQo+ICAgDQo+ICAgCS8qIGtlZXAgd2FpdGluZyBhbmQgZnJlZWluZywgdW50
+aWwgd2UndmUgZ290ICdlbSBhbGwgKi8NCj4gLQl3aGlsZSAoY291bnQtLSkgew0KPiAtCQl1
+cmIgPSB1ZGxfZ2V0X3VyYl90aW1lb3V0KGRldiwgTUFYX1NDSEVEVUxFX1RJTUVPVVQpOw0K
+PiArCXdoaWxlICh1ZGwtPnVyYnMuY291bnQpIHsNCj4gKwkJc3Bpbl9sb2NrX2lycSgmdWRs
+LT51cmJzLmxvY2spOw0KPiArCQl1cmIgPSB1ZGxfZ2V0X3VyYl9sb2NrZWQodWRsLCBNQVhf
+U0NIRURVTEVfVElNRU9VVCk7DQo+ICsJCXVkbC0+dXJicy5jb3VudC0tOw0KPiArCQlzcGlu
+X3VubG9ja19pcnEoJnVkbC0+dXJicy5sb2NrKTsNCj4gICAJCWlmIChXQVJOX09OKCF1cmIp
+KQ0KPiAgIAkJCWJyZWFrOw0KPiAgIAkJdW5vZGUgPSB1cmItPmNvbnRleHQ7DQo+IEBAIC0x
+NjQsNyArMTY4LDggQEAgc3RhdGljIHZvaWQgdWRsX2ZyZWVfdXJiX2xpc3Qoc3RydWN0IGRy
+bV9kZXZpY2UgKmRldikNCj4gICAJCXVzYl9mcmVlX3VyYih1cmIpOw0KPiAgIAkJa2ZyZWUo
+dW5vZGUpOw0KPiAgIAl9DQo+IC0JdWRsLT51cmJzLmNvdW50ID0gMDsNCj4gKw0KPiArCXdh
+a2VfdXAoJnVkbC0+dXJicy5zbGVlcCk7DQoNCkkgbWVhbnQgdGhhdCB3ZSBzaG91bGQgbWF5
+YmUgZG8gYSB3YWtlX3VwX2FsbCgpIGhlcmUgYW5kIG5vdCBpbiB0aGUgDQpjb21wbGV0aW9u
+IGhhbmRsZXIgdWRsX3VyYl9jb21wbGV0aW9uKCkuDQoNCkluIGFueSBjYXNlDQoNCkFja2Vk
+LWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAgIH0N
+Cj4gICANCj4gICBzdGF0aWMgaW50IHVkbF9hbGxvY191cmJfbGlzdChzdHJ1Y3QgZHJtX2Rl
+dmljZSAqZGV2LCBpbnQgY291bnQsIHNpemVfdCBzaXplKQ0KPiBAQCAtMjI4LDMzICsyMzMs
+NDQgQEAgc3RhdGljIGludCB1ZGxfYWxsb2NfdXJiX2xpc3Qoc3RydWN0IGRybV9kZXZpY2Ug
+KmRldiwgaW50IGNvdW50LCBzaXplX3Qgc2l6ZSkNCj4gICAJcmV0dXJuIHVkbC0+dXJicy5j
+b3VudDsNCj4gICB9DQo+ICAgDQo+IC1zdHJ1Y3QgdXJiICp1ZGxfZ2V0X3VyYl90aW1lb3V0
+KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsIGxvbmcgdGltZW91dCkNCj4gK3N0YXRpYyBzdHJ1
+Y3QgdXJiICp1ZGxfZ2V0X3VyYl9sb2NrZWQoc3RydWN0IHVkbF9kZXZpY2UgKnVkbCwgbG9u
+ZyB0aW1lb3V0KQ0KPiAgIHsNCj4gLQlzdHJ1Y3QgdWRsX2RldmljZSAqdWRsID0gdG9fdWRs
+KGRldik7DQo+IC0Jc3RydWN0IHVyYl9ub2RlICp1bm9kZSA9IE5VTEw7DQo+ICsJc3RydWN0
+IHVyYl9ub2RlICp1bm9kZTsNCj4gICANCj4gLQlpZiAoIXVkbC0+dXJicy5jb3VudCkNCj4g
+LQkJcmV0dXJuIE5VTEw7DQo+ICsJYXNzZXJ0X3NwaW5fbG9ja2VkKCZ1ZGwtPnVyYnMubG9j
+ayk7DQo+ICAgDQo+ICAgCS8qIFdhaXQgZm9yIGFuIGluLWZsaWdodCBidWZmZXIgdG8gY29t
+cGxldGUgYW5kIGdldCByZS1xdWV1ZWQgKi8NCj4gLQlzcGluX2xvY2tfaXJxKCZ1ZGwtPnVy
+YnMubG9jayk7DQo+ICAgCWlmICghd2FpdF9ldmVudF9sb2NrX2lycV90aW1lb3V0KHVkbC0+
+dXJicy5zbGVlcCwNCj4gKwkJCQkJICF1ZGwtPnVyYnMuY291bnQgfHwNCj4gICAJCQkJCSAh
+bGlzdF9lbXB0eSgmdWRsLT51cmJzLmxpc3QpLA0KPiAgIAkJCQkJIHVkbC0+dXJicy5sb2Nr
+LCB0aW1lb3V0KSkgew0KPiAgIAkJRFJNX0lORk8oIndhaXQgZm9yIHVyYiBpbnRlcnJ1cHRl
+ZDogYXZhaWxhYmxlOiAlZFxuIiwNCj4gICAJCQkgdWRsLT51cmJzLmF2YWlsYWJsZSk7DQo+
+IC0JCWdvdG8gdW5sb2NrOw0KPiArCQlyZXR1cm4gTlVMTDsNCj4gICAJfQ0KPiAgIA0KPiAr
+CWlmICghdWRsLT51cmJzLmNvdW50KQ0KPiArCQlyZXR1cm4gTlVMTDsNCj4gKw0KPiAgIAl1
+bm9kZSA9IGxpc3RfZmlyc3RfZW50cnkoJnVkbC0+dXJicy5saXN0LCBzdHJ1Y3QgdXJiX25v
+ZGUsIGVudHJ5KTsNCj4gICAJbGlzdF9kZWxfaW5pdCgmdW5vZGUtPmVudHJ5KTsNCj4gICAJ
+dWRsLT51cmJzLmF2YWlsYWJsZS0tOw0KPiAgIA0KPiAtdW5sb2NrOg0KPiAtCXNwaW5fdW5s
+b2NrX2lycSgmdWRsLT51cmJzLmxvY2spOw0KPiAgIAlyZXR1cm4gdW5vZGUgPyB1bm9kZS0+
+dXJiIDogTlVMTDsNCj4gICB9DQo+ICAgDQo+ICsjZGVmaW5lIEdFVF9VUkJfVElNRU9VVAlI
+Wg0KPiArc3RydWN0IHVyYiAqdWRsX2dldF91cmIoc3RydWN0IGRybV9kZXZpY2UgKmRldikN
+Cj4gK3sNCj4gKwlzdHJ1Y3QgdWRsX2RldmljZSAqdWRsID0gdG9fdWRsKGRldik7DQo+ICsJ
+c3RydWN0IHVyYiAqdXJiOw0KPiArDQo+ICsJc3Bpbl9sb2NrX2lycSgmdWRsLT51cmJzLmxv
+Y2spOw0KPiArCXVyYiA9IHVkbF9nZXRfdXJiX2xvY2tlZCh1ZGwsIEdFVF9VUkJfVElNRU9V
+VCk7DQo+ICsJc3Bpbl91bmxvY2tfaXJxKCZ1ZGwtPnVyYnMubG9jayk7DQo+ICsJcmV0dXJu
+IHVyYjsNCj4gK30NCj4gKw0KPiAgIGludCB1ZGxfc3VibWl0X3VyYihzdHJ1Y3QgZHJtX2Rl
+dmljZSAqZGV2LCBzdHJ1Y3QgdXJiICp1cmIsIHNpemVfdCBsZW4pDQo+ICAgew0KPiAgIAlz
+dHJ1Y3QgdWRsX2RldmljZSAqdWRsID0gdG9fdWRsKGRldik7DQoNCi0tIA0KVGhvbWFzIFpp
+bW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29s
+dXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBH
+ZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjog
+SXZvIFRvdGV2DQo=
 
-LGTM - OTOH this looks quite a bit more cluttery than I imagined it in my 
-head. :-/ So I'd leave out the comment part at minimum. With that:
+--------------01qYnnl4kuNRhe8vFC7lIWIm--
 
-Reviewed-by: Ingo Molnar <mingo@kernel.org>
+--------------CwvdA0n67lxX2mJ26Dhv3fxH
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-	Ingo
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMYSOQFAwAAAAAACgkQlh/E3EQov+Bo
+0Q/8C5yIqCW/qbuAl1D7AD7TBVoqTEFBun8G7d8JptRACxjh3rw5M0DP0Te/v8Mj5ItFtfF9Drli
+pKdgOLC1bRVhGF6fbqRs+qDgbY9KqG8bGAWQn8LmBC3LifHZL8EVyo2PJmPbHciB4j/xIGYdZp0w
+39kYNZewYMoe/zdoOPp8IG0OAjTUQQ2JU3Gs79n74QlGFgdj9Ei29k86qZPzwP1WiuxjKR+70kuM
+dAitHdTxmnnhuqe/bHzteiKJQxGcO3Dag7ycjvBdSpskImrDtV6EmrGR+jaCAIE+KF3A1b2q2jhB
+TbaozjheuJ6V+LZJTsBDBVf+vyBQsD4Cz6iXFmPsf2Q+jTM8pDMOw3VjE/jESrI1vSNjWFbaP8Xz
+e9DzDT0xKfvuyr5M6zx2/b8bQAzVwLSjQ30/F9Rba3zvZlnquHBNugfoS9FlIU7TKCp6jdqtP/aW
+f+YtAIdrO+FEHkF00cx6VpLRvrdBCX4RFoBfuwXH/3buhg2I9Il2h3756rwLN04sHjf6eaTYcwYA
+G/GSa+P35WUYUmRU4bdgSIRjplFs/CJDTHA7s9sRe0ZPfbaZqwGVIfTdyOSYiPn71/9gwAFZ2UhG
+cncDHAEk/ikxxUotkwMaA9J+4fXzUAR8reGnmoHo4UZaGx48IsSVUNL4a0gpwwihWr8C9pAW0Nnb
+y/Q=
+=47sM
+-----END PGP SIGNATURE-----
+
+--------------CwvdA0n67lxX2mJ26Dhv3fxH--

@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201855B00C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F2B5B00C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiIGJmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S229725AbiIGJoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiIGJmG (ORCPT
+        with ESMTP id S229494AbiIGJn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:42:06 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664D78982D;
-        Wed,  7 Sep 2022 02:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bBF+Rv278ELaWQYomVC/R80IlaIGgocgfWpC09/monk=; b=BmU7sg+GF1Of3WQeA96HPNTZv0
-        SpBcXOo4lMKY6pvWPnioBiXflfXx5ILHzziKjynM8D6ix0PApYa3dKN8opEh1pAqubmJyG50wsJLu
-        6EKXCO5xB6pxs8hBozRNb+dMtAPv06fNbXJmqg/FbIUHNSHyxV6luWp5ida5Qc5P5LP+Nf0rhYl8h
-        joX9R1r0/CeCTWF//jmLhqZFQSMBgYE6wnWiqO9s27iqG9ZUbPCz4jh3bpmtYYmHIg14Ox5jWOkRG
-        9jTWq9b5QtBnB0D0VDoB0E0ezkksDNmjI5g7xdv1/Xn4GpJF74/p97JhA/W9/WSMpjATM7VrwP9Y+
-        zwxJTDGQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34170)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oVrZL-0005CI-8k; Wed, 07 Sep 2022 10:42:03 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oVrZK-0000sV-F6; Wed, 07 Sep 2022 10:42:02 +0100
-Date:   Wed, 7 Sep 2022 10:42:02 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next v5 3/8] net: phylink: Generate caps and convert
- to linkmodes separately
-Message-ID: <YxhnaqCfKMKm5zFy@shell.armlinux.org.uk>
-References: <20220906161852.1538270-1-sean.anderson@seco.com>
- <20220906161852.1538270-4-sean.anderson@seco.com>
+        Wed, 7 Sep 2022 05:43:57 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C958FD7F;
+        Wed,  7 Sep 2022 02:43:55 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso11457872wmc.0;
+        Wed, 07 Sep 2022 02:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=9/xmz1K3EAur5r0xgkOcxS7AQ9x/ShM4a46yCxbHdMw=;
+        b=Y13yGzY/sn8a0Bema5ex3Ry5uO7ptoyLa47eeLKrj0zxKVsO38Y3ZzCnE3g9eguTCQ
+         BCxzutuBgX0HnsOFRIQTlEDSvuoc+vTG2MgOfikVPX8RZXzliyNrjKUdRmvu4gkv0Mit
+         i2lhdB1iJZVGO6vr7Mjgg8oAS4gfCcmhMXPC6sun17dH8ewksbogsFAAR+EgtY1wUhzQ
+         kYo8vMLaETewcX4v6QspJ1MLonnmfP26Vnl7/hwQ3kQ/iXMYQ/R2VwX2BU2tjiVkRWKI
+         JWKehPdhW+fzIH5sHS8whXUVWlbQ+NmsHDYWqYmuDixFdeGtvC8nfxSGtAYefIP6xfPy
+         VJlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=9/xmz1K3EAur5r0xgkOcxS7AQ9x/ShM4a46yCxbHdMw=;
+        b=i6365AVdpoKW58ZURIZmqmIe6Kw0zoSImgRjheLLSxAtlXacitB4LFQTTYiyo7j7TY
+         lKdlwxEa2bQUkoonusnhDeo1rmFWOravtZLQQBGOLaybT18H4stRt7h8L+NGesnApqnx
+         s5SzNo0TBVFq0wO5YkFO7jIj6sxSiaE8YuLkSG7nX/JdtWhX16MHZzhpeki5vJDN3tCe
+         HU7ZohFKVhZGvkhHqFbvSkVY5ic4C+atYR8M6FMs2UkIXRe8CURwzb2ETsnZTrl1Hhvg
+         bmWDDqvw0EuUnXae7YEvrDnSAI7yloONXilXw7R3xcbDvxfueI4Yq3K7UrSSv53jcUgV
+         hYtA==
+X-Gm-Message-State: ACgBeo2/Ll1HfWl+Ihwf3uo+u7BzP0ICX4LarNOCnrlqT10QF3ResGFA
+        GBvEn4NSy+NXhzi6stN9pFw=
+X-Google-Smtp-Source: AA6agR5TH7i3awt6RIN7dHkVIh5+jT3YkdTLuoMmsSXPSq5NwY346UDulEpBKMJB+t8/cx+IkbiyrQ==
+X-Received: by 2002:a05:600c:444b:b0:3a6:6b99:2394 with SMTP id v11-20020a05600c444b00b003a66b992394mr1458569wmn.43.1662543834068;
+        Wed, 07 Sep 2022 02:43:54 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id j17-20020a05600c411100b003a6896feef7sm17627154wmi.39.2022.09.07.02.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 02:43:53 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 10:43:51 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/155] 5.19.8-rc1 review
+Message-ID: <Yxhn13seD6t7vqD/@debian>
+References: <20220906132829.417117002@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906161852.1538270-4-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 12:18:47PM -0400, Sean Anderson wrote:
-> @@ -409,11 +407,14 @@ void phylink_generic_validate(struct phylink_config *config,
->  			      unsigned long *supported,
->  			      struct phylink_link_state *state)
->  {
-> +	unsigned long caps;
->  	__ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
+Hi Greg,
 
-net code requires reverse christmas tree for variable declarations.
+On Tue, Sep 06, 2022 at 03:29:08PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.8 release.
+> There are 155 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
+> Anything received after that time might be too late.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Build test (gcc version 12.2.1 20220819):
+mips: 59 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1781
+[2]. https://openqa.qa.codethink.co.uk/tests/1786
+[3]. https://openqa.qa.codethink.co.uk/tests/1788
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65335B0731
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD365B0730
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiIGOlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S229697AbiIGOlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiIGOkj (ORCPT
+        with ESMTP id S229725AbiIGOkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Sep 2022 10:40:39 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5050775381;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5037B5A15F;
         Wed,  7 Sep 2022 07:40:38 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MN4d31LZCzKFfK;
-        Wed,  7 Sep 2022 22:38:47 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MN4dM2gcBzl7sW;
+        Wed,  7 Sep 2022 22:39:03 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.102.38])
-        by APP2 (Coremail) with SMTP id Syh0CgBH53BgrRhjhP0EAg--.26935S4;
+        by APP2 (Coremail) with SMTP id Syh0CgBH53BgrRhjhP0EAg--.26935S5;
         Wed, 07 Sep 2022 22:40:34 +0800 (CST)
 From:   Wei Yongjun <weiyongjun@huaweicloud.com>
 To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
@@ -27,28 +27,31 @@ To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Wei Yongjun <weiyongjun1@huawei.com>, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH -next v2 1/5] misc: microchip: pci1xxxx: fix error handling in gp_aux_bus_probe()
-Date:   Wed,  7 Sep 2022 14:58:04 +0000
-Message-Id: <20220907145808.1789249-1-weiyongjun@huaweicloud.com>
+Subject: [PATCH -next v2 2/5] misc: microchip: pci1xxxx: Fix missing spin_lock_init()
+Date:   Wed,  7 Sep 2022 14:58:05 +0000
+Message-Id: <20220907145808.1789249-2-weiyongjun@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220907145808.1789249-1-weiyongjun@huaweicloud.com>
+References: <20220907145808.1789249-1-weiyongjun@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH53BgrRhjhP0EAg--.26935S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFWrtFWDGr15XFyrZw1fZwb_yoW8GFy3pa
-        93AF17Zr18tw4Sgr48A3yUXF1rA3y0k345WrZIv345Z3Z8A3ZIkr1vgrnrXr1DGFZ8tF13
-        tr1jkFWUCa1UX3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r106r1rM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s
-        1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
-        vfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-TRANSID: Syh0CgBH53BgrRhjhP0EAg--.26935S5
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4kWryxGryfZry8Kr1Utrb_yoWkJrbE93
+        45Xr13XrWDKFyvyw42yrsrZr48Kws2vrykW3Zxtr98A342yrn3Grs5Jwn8JryfWrnrAF9r
+        Arn7ur10yr13KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_JrI_JrWl1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
+        8IrcIa0xkI8VCY1x0267AKxVWUCVW8JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+        021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F
+        4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0
+        oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7V
+        C0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j
+        6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7IU1X_-DUUUUU==
 X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -62,39 +65,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wei Yongjun <weiyongjun1@huawei.com>
 
-In some error handling path, resoures alloced may not released.
-This patch fix them.
+The driver allocates the spinlock but not initialize it.
+Use spin_lock_init() on it to initialize it correctly.
 
-Fixes: 393fc2f5948f ("misc: microchip: pci1xxxx: load auxiliary bus driver for the PIO function in the multi-function endpoint of pci1xxxx device.")
+Fixes: 7d3e4d807df2 ("misc: microchip: pci1xxxx: load gpio driver for the gpio controller auxiliary device enumerated by the auxiliary bus driver.")
 Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 ---
-v1 - > v2: add fixes tag, fix pci_alloc_irq_vectors handing
+v1 -> v2: add fixes tag
 ---
- drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-index bfc03028b34d..11f79f239006 100644
---- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
-@@ -87,12 +87,13 @@ static int gp_aux_bus_probe(struct pci_dev *pdev, const struct pci_device_id *id
- 	retval = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_ALL_TYPES);
+diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+index 230503cca2ff..47e6e87938ae 100644
+--- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
++++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+@@ -383,6 +383,7 @@ static int pci1xxxx_gpio_probe(struct auxiliary_device *aux_dev,
+ 	if (!priv)
+ 		return -ENOMEM;
  
- 	if (retval < 0)
--		return retval;
-+		goto err_aux_dev_init_1;
++	spin_lock_init(&priv->lock);
+ 	priv->aux_dev = aux_dev;
  
--	pdev->irq = pci_irq_vector(pdev, 0);
--	if (pdev->irq < 0)
--		return retval;
-+	retval = pci_irq_vector(pdev, 0);
-+	if (retval < 0)
-+		goto err_aux_dev_init_1;
- 
-+	pdev->irq = retval;
- 	aux_bus->aux_device_wrapper[1]->gp_aux_data.irq_num = pdev->irq;
- 
- 	retval = auxiliary_device_init(&aux_bus->aux_device_wrapper[1]->aux_dev);
+ 	if (!devm_request_mem_region(&aux_dev->dev, pdata->region_start, 0x800, aux_dev->name))
 -- 
 2.34.1
 

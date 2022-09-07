@@ -2,191 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093F45B0173
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFE25B0168
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiIGKPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S229780AbiIGKOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiIGKPH (ORCPT
+        with ESMTP id S229495AbiIGKOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:15:07 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BD52CDE7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:15:02 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2876a3M5006643;
-        Wed, 7 Sep 2022 05:14:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=feKchwoppPrkELgyg0NGjoUkLqBZXbRFHwDJEun2AkY=;
- b=gjFKs0vphFcvAi4tr4FhImRRKRpFkev9Qp1oiC/Q0rqgYZeCDktNokwIaP9M2PXkCn3y
- uIGbk63aFTcS7ch5G08wK1NI9P4eC5bIgCyJiV85s6xHSbdLxFXMT2RdpC3BKl6D04bk
- pRHq+/Fdib4Mqe4U11CtMZy0E+RT7a7QwZbBQlnGV+6O9vyIdelqR71mfvVsqsuRXHch
- Vlf2g8UHKtPgRtIhZSOlrwAPnMq3A4e/qpwnAomwgEzD+T2mcZqcuCdD6caW1JFISiaj
- udWNqMcBlpEs2jlBt2mDJq/dEdkOfxThcywlE8cwqwqfGTscpJv4/mANGcSS6gRQDiMF ag== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jc4b2dfns-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 05:14:18 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Wed, 7 Sep
- 2022 05:14:16 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.12 via Frontend
- Transport; Wed, 7 Sep 2022 05:14:16 -0500
-Received: from debianA11184.ad.cirrus.com (unknown [198.61.65.149])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0664C7C;
-        Wed,  7 Sep 2022 10:14:15 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <lgirdwood@gmail.com>,
-        <peter.ujfalusi@linux.intel.com>,
-        <ranjani.sridharan@linux.intel.com>,
-        <kai.vehmanen@linux.intel.com>, <daniel.baluta@nxp.com>,
-        <sanyog.r.kale@intel.com>, <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>,
-        <sound-open-firmware@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 7/7] soundwire: bus: Fix premature removal of sdw_slave objects
-Date:   Wed, 7 Sep 2022 11:14:02 +0100
-Message-ID: <20220907101402.4685-8-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220907101402.4685-1-rf@opensource.cirrus.com>
-References: <20220907101402.4685-1-rf@opensource.cirrus.com>
+        Wed, 7 Sep 2022 06:14:19 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52558A3D30;
+        Wed,  7 Sep 2022 03:14:12 -0700 (PDT)
+X-UUID: ee3f0bf849424bac817c286aeb55a4f2-20220907
+X-UUID: ee3f0bf849424bac817c286aeb55a4f2-20220907
+X-User: oushixiong@kylinos.cn
+Received: from [172.20.20.1] [(116.128.244.169)] by mailgw
+        (envelope-from <oushixiong@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
+        with ESMTP id 971097487; Wed, 07 Sep 2022 18:14:35 +0800
+Subject: Re: [PATCH v3] drm/ast: add dmabuf/prime buffer sharing support
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Dave Airlie <airlied@redhat.com>
+Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org
+References: <20220901124451.2523077-1-oushixiong@kylinos.cn>
+ <5bc77d8f-928c-1d41-9b3c-eaad1bf3cfff@suse.de>
+ <ee27c832-a1fd-bc93-9f1b-33f828195e83@amd.com>
+ <f078d10f-9613-d6b1-0ee8-50feaf7d5299@suse.de>
+From:   oushixiong <oushixiong@kylinos.cn>
+Message-ID: <d4efb102-2f09-3f95-7175-7177f57fcd25@kylinos.cn>
+Date:   Wed, 7 Sep 2022 18:14:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <f078d10f-9613-d6b1-0ee8-50feaf7d5299@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: _ls588k8dOn_DCOUtnfdFdo7W2FW14bA
-X-Proofpoint-ORIG-GUID: _ls588k8dOn_DCOUtnfdFdo7W2FW14bA
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the bus manager is removed sdw_bus_master_delete() should not
-be deleting the struct sdw_slave objects until the bus manager has
-been stopped. The first step of removing child drivers should only
-be calling device_unregister() on the child. The counterpart to
-sdw_drv_probe() is sdw_drv_remove(), not sdw_delete_slave().
+Hi,
 
-The sdw_slave objects are created by the bus manager probe() from
-ACPI/DT information. They are not created when a child driver probes
-so should not be deleted by a child driver remove.
+Firstly, the dirty() call back function is called by 
+drm_mode_dirtyfb_ioctl.
 
-Change-Id: I25cc145df12fdc7c126f8f594a5f76eedce25488
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- drivers/soundwire/bus.c   | 30 ++++++++++++++++++++++++++----
- drivers/soundwire/slave.c | 21 +++++++++++++++++----
- 2 files changed, 43 insertions(+), 8 deletions(-)
+     drm_mode_dirtyfb_ioctl
+         |__   fb->funcs->dirty(fb, file_priv, flags, r->color,clips, 
+num_clips);
+                         |__ ast_user_framebuffer_dirty
+                                     |__ ast_handle_damage
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 1327a312be86..5533eb589286 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -146,9 +146,8 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
- }
- EXPORT_SYMBOL(sdw_bus_master_add);
- 
--static int sdw_delete_slave(struct device *dev, void *data)
-+static int sdw_delete_slave(struct sdw_slave *slave)
- {
--	struct sdw_slave *slave = dev_to_sdw_dev(dev);
- 	struct sdw_bus *bus = slave->bus;
- 
- 	sdw_slave_debugfs_exit(slave);
-@@ -163,7 +162,24 @@ static int sdw_delete_slave(struct device *dev, void *data)
- 	list_del_init(&slave->node);
- 	mutex_unlock(&bus->bus_lock);
- 
-+	mutex_destroy(&slave->sdw_dev_lock);
-+	kfree(slave);
-+
-+	return 0;
-+}
-+
-+static int sdw_remove_child(struct device *dev, void *data)
-+{
-+	/*
-+	 * Do not remove the struct sdw_slave yet. This is created by
-+	 * the bus manager probe() from ACPI information and used by the
-+	 * bus manager to hold status of each peripheral. Its lifetime
-+	 * is that of the bus manager.
-+	 */
-+
-+	/* This will call sdw_drv_remove() */
- 	device_unregister(dev);
-+
- 	return 0;
- }
- 
-@@ -171,16 +187,22 @@ static int sdw_delete_slave(struct device *dev, void *data)
-  * sdw_bus_master_delete() - delete the bus master instance
-  * @bus: bus to be deleted
-  *
-- * Remove the instance, delete the child devices.
-+ * Remove the child devices, remove the master instance.
-  */
- void sdw_bus_master_delete(struct sdw_bus *bus)
- {
--	device_for_each_child(bus->dev, NULL, sdw_delete_slave);
-+	struct sdw_slave *slave, *tmp;
-+
-+	device_for_each_child(bus->dev, NULL, sdw_remove_child);
- 
- 	/* Children have been removed so it is now safe for the bus to stop */
- 	if (bus->ops->remove)
- 		bus->ops->remove(bus);
- 
-+	/* Now the bus is stopped it is safe to free things */
-+	list_for_each_entry_safe(slave, tmp, &bus->slaves, node)
-+		sdw_delete_slave(slave);
-+
- 	sdw_master_device_del(bus);
- 
- 	sdw_bus_debugfs_exit(bus);
-diff --git a/drivers/soundwire/slave.c b/drivers/soundwire/slave.c
-index c1c1a2ac293a..b6161d002b97 100644
---- a/drivers/soundwire/slave.c
-+++ b/drivers/soundwire/slave.c
-@@ -10,10 +10,23 @@
- 
- static void sdw_slave_release(struct device *dev)
- {
--	struct sdw_slave *slave = dev_to_sdw_dev(dev);
--
--	mutex_destroy(&slave->sdw_dev_lock);
--	kfree(slave);
-+	/*
-+	 * The release() callback should not be empty
-+	 * (see Documentation/core-api/kobject.rst) but the ownership
-+	 * of struct sdw_slave is muddled. It is used for two separate
-+	 * purposes:
-+	 * 1) by the bus driver to track its own state information for
-+	 *    physical devices on the bus and found in ACPI/DT, whether
-+	 *    or not there is a child driver for it;
-+	 * 2) to hold the child driver object.
-+	 *
-+	 * The struct sdw_slave cannot be freed when the child driver
-+	 * is released because it is holding info used by the bus
-+	 * driver. It is freed when the bus driver is removed.
-+	 *
-+	 * Until the ownership issue is untangled this cannot free
-+	 * the struct sdw_slave object containing the child dev.
-+	 */
- }
- 
- struct device_type sdw_slave_type = {
--- 
-2.30.2
+Secondly, due to hardware limitations, the AST  display control modules 
+can not access the dmabuf that in GTT, so it had to copy the data to AST 
+VRAM, if we do not use the dmabuf , it need to copy data from discrete 
+card's VRAM to memory,and copy the data from memory to AST VRAM.
 
+Best regards
+oushixiong
+
+
+On 2022/9/7 下午5:40, Thomas Zimmermann wrote:
+> Hi ,
+>
+> Am 07.09.22 um 10:10 schrieb Christian König:
+>> Hi Thomas,
+>>
+>> I was wondering pretty much the same thing, but then thought that 
+>> this might be the first step to direct scanout from DMA-bufs.
+>>
+>> If this isn't the case then I to see this rather critically since 
+>> that functionality belongs into userspace.
+>
+> With GEM VRAM helpers, ast currently doesn't support dma-buf sharing. 
+> I do have patches that convert it to GEM SHMEM (for other reasons), 
+> which would also add this functionality.
+>
+> I intent to post these patches in the coming days. My suggestion is to 
+> merge them first and then see how to go from there.
+>
+> Best regards
+> Thomas
+>
+>>
+>> Regards,
+>> Christian.
+>>
+>> Am 07.09.22 um 09:50 schrieb Thomas Zimmermann:
+>>> Hi,
+>>>
+>>> on a more general note, let me say that your patch doesn't seem to 
+>>> fit the ideas of how buffer sharing is supposed to work. Your patch 
+>>> does the BMC screen update 'behind the scenes.'
+>>>
+>>> Shouldn't userspace set up the DRM state for mirroring the output of 
+>>> the discrete card to the BMC?
+>>>
+>>> Best regards
+>>> Thomas
+>>>
+>>> Am 01.09.22 um 14:44 schrieb oushixiong:
+>>>>
+>>>> This patch adds ast specific codes for DRM prime feature, this is to
+>>>> allow for offloading of rending in one direction and outputs in other.
+>>>>
+>>>> This patch is designed to solve the problem that the AST is not 
+>>>> displayed
+>>>> when the server plug in a discrete graphics card at the same time.
+>>>> We call the dirty callback function to copy the rendering results 
+>>>> of the
+>>>> discrete graphics card to the ast side by dma-buf.
+>>>>
+>>>> v1->v2:
+>>>>    - Fix the comment.
+>>>> v2->v3:
+>>>>    - we remove the gem_prime_import_sg_table callback and use the
+>>>>      gem_prime_import callback, because it just map and access the 
+>>>> buffer
+>>>>      with the CPU. and do not to pin the buffer.
+>>>>
+>>>> Signed-off-by: oushixiong <oushixiong@kylinos.cn>
+>>>> Acked-by: Christian König <christian.koenig@amd.com>
+>>>> ---
+>>>>   drivers/gpu/drm/ast/ast_drv.c  |  27 +++++++
+>>>>   drivers/gpu/drm/ast/ast_mode.c | 125 
+>>>> ++++++++++++++++++++++++++++++++-
+>>>>   2 files changed, 151 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/ast/ast_drv.c 
+>>>> b/drivers/gpu/drm/ast/ast_drv.c
+>>>> index 7465c4f0156a..fd3c4bad2eb4 100644
+>>>> --- a/drivers/gpu/drm/ast/ast_drv.c
+>>>> +++ b/drivers/gpu/drm/ast/ast_drv.c
+>>>> @@ -28,6 +28,7 @@
+>>>>     #include <linux/module.h>
+>>>>   #include <linux/pci.h>
+>>>> +#include <linux/dma-buf.h>
+>>>>     #include <drm/drm_aperture.h>
+>>>>   #include <drm/drm_atomic_helper.h>
+>>>> @@ -50,6 +51,29 @@ module_param_named(modeset, ast_modeset, int, 
+>>>> 0400);
+>>>>     DEFINE_DRM_GEM_FOPS(ast_fops);
+>>>>   +static struct drm_gem_object *ast_gem_prime_import(struct 
+>>>> drm_device *dev,
+>>>> +                        struct dma_buf *dma_buf)
+>>>> +{
+>>>> +    struct drm_gem_vram_object *gbo;
+>>>> +
+>>>> +    gbo = drm_gem_vram_of_gem(dma_buf->priv);
+>>>> +    if (gbo->bo.base.dev == dev) {
+>>>> +        /*
+>>>> +         * Importing dmabuf exported from out own gem increases
+>>>> +         * refcount on gem itself instead of f_count of dmabuf.
+>>>> +         */
+>>>> +        drm_gem_object_get(&gbo->bo.base);
+>>>> +        return &gbo->bo.base;
+>>>> +    }
+>>>> +
+>>>> +    gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
+>>>> +    if (IS_ERR(gbo))
+>>>> +        return NULL;
+>>>> +
+>>>> +    get_dma_buf(dma_buf);
+>>>> +    return &gbo->bo.base;
+>>>> +}
+>>>> +
+>>>>   static const struct drm_driver ast_driver = {
+>>>>       .driver_features = DRIVER_ATOMIC |
+>>>>                  DRIVER_GEM |
+>>>> @@ -63,6 +87,9 @@ static const struct drm_driver ast_driver = {
+>>>>       .minor = DRIVER_MINOR,
+>>>>       .patchlevel = DRIVER_PATCHLEVEL,
+>>>>   +    .prime_fd_to_handle = drm_gem_prime_fd_to_handle,
+>>>> +    .gem_prime_import = ast_gem_prime_import,
+>>>> +
+>>>>       DRM_GEM_VRAM_DRIVER
+>>>>   };
+>>>>   diff --git a/drivers/gpu/drm/ast/ast_mode.c 
+>>>> b/drivers/gpu/drm/ast/ast_mode.c
+>>>> index 45b56b39ad47..65a4342c5622 100644
+>>>> --- a/drivers/gpu/drm/ast/ast_mode.c
+>>>> +++ b/drivers/gpu/drm/ast/ast_mode.c
+>>>> @@ -48,6 +48,8 @@
+>>>>   #include "ast_drv.h"
+>>>>   #include "ast_tables.h"
+>>>>   +MODULE_IMPORT_NS(DMA_BUF);
+>>>> +
+>>>>   static inline void ast_load_palette_index(struct ast_private *ast,
+>>>>                        u8 index, u8 red, u8 green,
+>>>>                        u8 blue)
+>>>> @@ -1535,8 +1537,129 @@ static const struct 
+>>>> drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
+>>>>       .atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
+>>>>   };
+>>>>   +static int ast_handle_damage(struct drm_framebuffer *fb, int x, 
+>>>> int y,
+>>>> +                    int width, int height)
+>>>> +{
+>>>> +    struct drm_gem_vram_object *dst_bo = NULL;
+>>>> +    void *dst = NULL;
+>>>> +    int ret = 0, i;
+>>>> +    unsigned long offset = 0;
+>>>> +    bool unmap = false;
+>>>> +    unsigned int bytesPerPixel;
+>>>> +    struct iosys_map map;
+>>>> +    struct iosys_map dmabuf_map;
+>>>> +
+>>>> +    bytesPerPixel = fb->format->cpp[0];
+>>>> +
+>>>> +    if (!fb->obj[0]->dma_buf)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    if (!fb->obj[0]->dma_buf->vmap_ptr.vaddr) {
+>>>> +        ret = dma_buf_vmap(fb->obj[0]->dma_buf, &dmabuf_map);
+>>>> +        if (ret)
+>>>> +            return ret;
+>>>> +    } else
+>>>> +        dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
+>>>> +
+>>>> +    dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
+>>>> +
+>>>> +    ret = drm_gem_vram_pin(dst_bo, 0);
+>>>> +    if (ret) {
+>>>> +        DRM_ERROR("ast_bo_pin failed\n");
+>>>> +        return ret;
+>>>> +    }
+>>>> +
+>>>> +    if (!dst_bo->map.vaddr) {
+>>>> +        ret = drm_gem_vram_vmap(dst_bo, &map);
+>>>> +        if (ret) {
+>>>> +            drm_gem_vram_unpin(dst_bo);
+>>>> +            DRM_ERROR("failed to vmap fbcon\n");
+>>>> +            return ret;
+>>>> +        }
+>>>> +        unmap = true;
+>>>> +    }
+>>>> +    dst = dst_bo->map.vaddr;
+>>>> +
+>>>> +    for (i = y; i < y + height; i++) {
+>>>> +        offset = i * fb->pitches[0] + (x * bytesPerPixel);
+>>>> +        memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
+>>>> +            width * bytesPerPixel);
+>>>> +    }
+>>>> +
+>>>> +    if (unmap)
+>>>> +        drm_gem_vram_vunmap(dst_bo, &map);
+>>>> +
+>>>> +    drm_gem_vram_unpin(dst_bo);
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +
+>>>> +static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
+>>>> +                struct drm_file *file,
+>>>> +                unsigned int flags,
+>>>> +                unsigned int color,
+>>>> +                struct drm_clip_rect *clips,
+>>>> +                unsigned int num_clips)
+>>>> +{
+>>>> +    int i, ret = 0;
+>>>> +
+>>>> +    drm_modeset_lock_all(fb->dev);
+>>>> +    if (fb->obj[0]->dma_buf) {
+>>>> +        ret = dma_buf_begin_cpu_access(fb->obj[0]->dma_buf,
+>>>> +                DMA_FROM_DEVICE);
+>>>> +        if (ret)
+>>>> +            goto unlock;
+>>>> +    }
+>>>> +
+>>>> +    for (i = 0; i < num_clips; i++) {
+>>>> +        ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
+>>>> +                clips[i].x2 - clips[i].x1, clips[i].y2 - 
+>>>> clips[i].y1);
+>>>> +        if (ret)
+>>>> +            break;
+>>>> +    }
+>>>> +
+>>>> +    if (fb->obj[0]->dma_buf) {
+>>>> +        dma_buf_end_cpu_access(fb->obj[0]->dma_buf,
+>>>> +                DMA_FROM_DEVICE);
+>>>> +    }
+>>>> +
+>>>> +unlock:
+>>>> +    drm_modeset_unlock_all(fb->dev);
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>> +static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
+>>>> +{
+>>>> +    struct iosys_map dmabuf_map;
+>>>> +
+>>>> +    if (fb->obj[0]->dma_buf) {
+>>>> +        dmabuf_map.is_iomem = fb->obj[0]->dma_buf->vmap_ptr.is_iomem;
+>>>> +        dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
+>>>> +        if (dmabuf_map.vaddr)
+>>>> +            dma_buf_vunmap(fb->obj[0]->dma_buf, &dmabuf_map);
+>>>> +    }
+>>>> +
+>>>> +    drm_gem_fb_destroy(fb);
+>>>> +}
+>>>> +
+>>>> +static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb 
+>>>> = {
+>>>> +    .destroy    = ast_user_framebuffer_destroy,
+>>>> +    .create_handle    = drm_gem_fb_create_handle,
+>>>> +    .dirty        = ast_user_framebuffer_dirty,
+>>>> +};
+>>>> +
+>>>> +static struct drm_framebuffer *
+>>>> +ast_gem_fb_create_with_dirty(struct drm_device *dev, struct 
+>>>> drm_file *file,
+>>>> +                const struct drm_mode_fb_cmd2 *mode_cmd)
+>>>> +{
+>>>> +    return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
+>>>> +                    &ast_gem_fb_funcs_dirtyfb);
+>>>> +}
+>>>> +
+>>>>   static const struct drm_mode_config_funcs ast_mode_config_funcs = {
+>>>> -    .fb_create = drm_gem_fb_create,
+>>>> +    .fb_create = ast_gem_fb_create_with_dirty,
+>>>>       .mode_valid = drm_vram_helper_mode_valid,
+>>>>       .atomic_check = drm_atomic_helper_check,
+>>>>       .atomic_commit = drm_atomic_helper_commit,
+>>>>
+>>>>
+>>>> Content-type: Text/plain
+>>>>
+>>>> No virus found
+>>>>         Checked by Hillstone Network AntiVirus
+>>>
+>>
+>

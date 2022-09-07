@@ -2,117 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB095B039B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F095B03A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiIGMGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S229786AbiIGMK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIGMGl (ORCPT
+        with ESMTP id S229742AbiIGMKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:06:41 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E18A6FE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:06:40 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id j12so1964291pfi.11
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=0OMCYXdwR40VgBJEbCb1Ib7nAC/48wQOIhHqsm4Pyls=;
-        b=HO4kjKdkDS/f97yEF+pCNPTD9Qua8BJsV2g6HRDvYYsaGXiL8d/7kvtOrUIj5FpP3u
-         Do171ILfzUr9ll+GMVbtMMkKuLFktC0LuKZYHCj8Aj4GRzOmL0kbSz+a68UvVjzMcfj0
-         kA6/ZHwpyBfxdjfjVvSOzG5SRoSZp9doRxmZrHtV9n6DsoCTRobj2aQgvGKLTd4t60L5
-         6xaJKWiPrdjfPfveb0kURb/8K3B6ViCYRGZl8yCKYPZ354MstcHpOPR7RalIFLu5a9IO
-         JqF8kEkTl/jJgocmBPv7hxEajpLVtL4HScdT5HN4ZgdHcuCinfyXB8Z7P5yPSwLct9bF
-         MDDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=0OMCYXdwR40VgBJEbCb1Ib7nAC/48wQOIhHqsm4Pyls=;
-        b=lQHjoYCALAJMwMSzR+QWv4yUPaSck5q6qkHyWGvXWNAMAOFP3p4qL8N1i2KYKj5KsN
-         YZwrVkoTdEZH3mNqnklcdg+BtpaT2gvGBiJLNcURmJ+gJbu4jlSQMUgPibQGz5yN00TV
-         SEOtLFEUidcS31xvTNDmjyQOiQhDj7mFDWDJ6JqVHHS1pQ6js/UEfpF7GuRIkDI8itNT
-         Pz8FROuei6gqg5H5Ntty+2ApclP2nlSJ1nj9IrMCJYBq8vwUwXvHMcWXnMGqd1cy6Ul2
-         OEF0CStWgG2HeqxI9TR1VBZsNcLGazrSdsxWhDrCOu6P2GzC/HTsPnDUlVOnVUBnWPxw
-         9S5w==
-X-Gm-Message-State: ACgBeo03Igm2kZ4dvAjggAdE7kp8AhJmUGvyq2wGSlL6ERuFPxA9PYmn
-        fKJlbre1Ydz2uEM4KSa7Hv7+Yl56FVw0GQ==
-X-Google-Smtp-Source: AA6agR4tfDHmSiKzt3i01SAQZYBf7IAftYvaZ9oaAAQ6MJ+FVM062Gti6IBQ5YC8Fh5KKcjl9nRAzw==
-X-Received: by 2002:a63:4d66:0:b0:434:8301:53e1 with SMTP id n38-20020a634d66000000b00434830153e1mr3070042pgl.369.1662552399617;
-        Wed, 07 Sep 2022 05:06:39 -0700 (PDT)
-Received: from [10.255.85.171] ([139.177.225.235])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090a474100b001fdbb2e38acsm14714571pjg.5.2022.09.07.05.06.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 05:06:39 -0700 (PDT)
-Message-ID: <d323bd95-476b-0901-855e-14c8796d1b23@bytedance.com>
-Date:   Wed, 7 Sep 2022 20:06:30 +0800
+        Wed, 7 Sep 2022 08:10:23 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA821754BD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:10:15 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id CB3B45802A6;
+        Wed,  7 Sep 2022 08:10:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 07 Sep 2022 08:10:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662552614; x=1662559814; bh=mO0DxpIxEI
+        aEUkrFxNz04g9y84A96XbiPwxWwzTH7i4=; b=fom/8HSsBSNM55Lsdc1X75CCSP
+        PN8l87PDFyGp8TPirwp7/NKdyQyE9MOsckYzTIfsGD/eOWGZT1IjEvwX6zRlR0c8
+        xyd4O5AWtoc0+t62PjFtQ3RhOXb+bOnAEcfbMUfDuJAjQ6zjcXBUAvby3kG2w20b
+        j4yfradaLCNCQ4z9shorYr//Dwuft/CPwPoHfm1ruXd0ff7C+O0fdT/9xlZ8Fyd+
+        LKIrBSAPvoJbYjAYVRV4xsznzw5wgSElrFDRTMXlahcPKe4Y7zn2SQlqk2E5IL40
+        z9dpaDBbJUAmczQMZsMKwA3iTktpgYhzh2IM5IlJ4gdMKNv+HNHxTqw5tVvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662552614; x=1662559814; bh=mO0DxpIxEIaEUkrFxNz04g9y84A9
+        6XbiPwxWwzTH7i4=; b=FbB8/owoOO+ZLDH3EfniBXdqyJiFnJp0Jors+WaT5pLQ
+        82yMu72iyNa3D+sLEkaOfuaQPmMu4qBDEhaw1y1E2VPqQsh39Vmnp2mu+yG65exK
+        9XCM6Ux2cTtPelDoWnm1jZ1K4lzccmE2LL/qG3GEJPQqpHeu4UVuOiGf65nzurBx
+        OqflA4TM4RlvQWplqnrEGlVYw2fqBkDA5EBlljW+t7sG6IOihkY/kmK8wdQS67Sx
+        J8GsmdY3H98n5BVGhwvoOrB+W0CZFuKn6e5bMYUTQKobszQuLNN7oh3oDwv8gUEz
+        kJIqZqo7NoK9rL6MFL+hUomoXuhay/dgEfYX5A+HQA==
+X-ME-Sender: <xms:I4oYYycILHs_ZLR117ki1XkoeLqqUVDpRjJmBH3yVU5Nu8j8qLUO0g>
+    <xme:I4oYY8Oe_J6AHfDLoyTjH7Fo-tMAImiY7yMs1ESDtIa0uGa2fs2vEsuKarQgBs589
+    P82kDx_abbSPcDFx-g>
+X-ME-Received: <xmr:I4oYYzgjVxWAUOuEph6TExbD6A1U6of1EhT_r60bYTyp3bjib9h7zeO9YQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:JIoYY_-6QayOoOGkUbElibmIA_OqIzRpgcohlNxcKGfCStYTFH0RnQ>
+    <xmx:JIoYY-t8VScFMm-81-zpX7DH7PQdTruT0rrK_OygWRInoFppYX5puQ>
+    <xmx:JIoYY2HuKwFropkYVWWfdzmm9aLh-9c2cP_gK9AFDAki_baEL1rWiw>
+    <xmx:JooYY6ffURLJH6mELmdqCpg36o9Zir-cBfbfKsj2XMnXFNsdtLFI7Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 08:10:11 -0400 (EDT)
+Date:   Wed, 7 Sep 2022 14:10:09 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v2 09/41] drm/connector: Add TV standard property
+Message-ID: <20220907121009.toizfolruuazcrns@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-9-459522d653a7@cerno.tech>
+ <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [Phishing Risk] Re: [Phishing Risk] [External] Re: [PATCH]
- cgroup/cpuset: Add a new isolated mems.policy type.
-To:     Tejun Heo <tj@kernel.org>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220902063303.1057-1-hezhongkun.hzk@bytedance.com>
- <YxT/liaotbiOod51@slm.duckdns.org>
- <c05bdeac-b354-0ac7-3233-27f8e5cbb38a@bytedance.com>
- <YxeBGeOaQxvlPLzo@slm.duckdns.org>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <YxeBGeOaQxvlPLzo@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nqpndwa6reldojsu"
+Content-Disposition: inline
+In-Reply-To: <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hello,
-> 
-> On Mon, Sep 05, 2022 at 06:30:38PM +0800, Zhongkun He wrote:
->> We usually use numactl to set the memory policy, but it cannot be changed
->> dynamically. In addition, the mempolicy of cpuset can provide a more
->> convenient interface for management and control panel.
-> 
-> But you can write a better tool easily in userspace to do whatever you wanna
-> do, right? If you're worried about racing against forks, you can freeze the
-> cgroup, iterate all pids applying whatever new policy and then unfreeze. We
-> can probably improve the freezer interface so that multiple users don't
-> conflict with each other but that shouldn't be too difficult to do and is
-> gonna be useful generically.
-> 
-> I don't see much point in adding something which can be almost trivially
-> implemented in userspace as a built-in kernel feature.
-> 
->> Sorry,I don't quite understand the meaning of "don't enforce anything
->> resource related". Does it mean mempolicy, such as "prefer:2" must specify
->> node? Or "cpuset.mems.policy" need to specify a default value?
->> (cpuset.mems.policy does not require a default value.)
-> 
-> In that there's no real resource being distributed hierarchically like cpu
-> cycles or memory capacities. All it's doing is changing attributes for a
-> group of processes, which can be done from userspace all the same.
-> 
-> Thanks.
-> 
-Hi Tejun, thanks for your reply.
 
-It would be better if one process had a way to dynamically modify the
-mempolicy of another process. But unfortunately there is no interface or
-system call to do that in userspace.
+--nqpndwa6reldojsu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In our use case, we hope to combine memory policy with cgroup for
-better use of resources. The current implementation may not be suitable, 
-I'll keep trying other approaches.
+Hi,
 
-Thanks again.
+On Fri, Sep 02, 2022 at 12:00:33AM +0200, Mateusz Kwiatkowski wrote:
+> W dniu 29.08.2022 o 15:11, Maxime Ripard pisze:
+> > The TV mode property has been around for a while now to select and get =
+the
+> > current TV mode output on an analog TV connector.
+> >
+> > Despite that property name being generic, its content isn't and has been
+> > driver-specific which makes it hard to build any generic behaviour on t=
+op
+> > of it, both in kernel and user-space.
+> >
+> > Let's create a new bitmask tv norm property, that can contain any of the
+> > analog TV standards currently supported by kernel drivers. Each driver =
+can
+> > then pass in a bitmask of the modes it supports.
+>=20
+> This is not a bitmask property anymore, you've just changed it to an enum.
+> The commit message is now misleading.
+>=20
+> > +static const struct drm_prop_enum_list drm_tv_mode_enum_list[] =3D {
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_NTSC_443, "NTSC-443" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_NTSC_J, "NTSC-J" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_NTSC_M, "NTSC-M" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_60, "PAL-60" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_B, "PAL-B" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_D, "PAL-D" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_G, "PAL-G" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_H, "PAL-H" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_I, "PAL-I" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_M, "PAL-M" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_N, "PAL-N" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_NC, "PAL-Nc" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_60, "SECAM-60" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_B, "SECAM-B" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_D, "SECAM-D" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_G, "SECAM-G" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_K, "SECAM-K" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_K1, "SECAM-K1" },
+> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_L, "SECAM-L" },
+> > +};
+>=20
+> I did not comment on it the last time, but this list looks a little bit r=
+andom.
+>=20
+> Compared to the standards defined by V4L2, you also define SECAM-60 (a go=
+od
+> thing to define, because why not), but don't define PAL-B1, PAL-D1, PAL-K,
+> SECAM-H, SECAM-LC (whatever that is - probably just another name for SECA=
+M-L,
+> see my comment about PAL-Nc below), or NTSC-M-KR (a Korean variant of NTS=
+C).
+>=20
+> Like I mentioned previously, I'm personally not a fan of including all th=
+ose
+> CCIR/ITU system variants, as they don't mean any difference to the output=
+ unless
+> there is an RF modulator involved. But I get it that they have already be=
+en used
+> and regressing probably wouldn't be a very good idea. But in that case ke=
+eping
+> it consistent with the set of values used by V4L2 would be wise, I think.
+
+Ack. What would be the list of standards we'd absolutely need? NSTC-M,
+NTSC-J, PAL-60, PAL-B, PAL-M, SECAM-60 and SECAM-B?
+
+> > +/**
+> > + * drm_mode_create_tv_properties - create TV specific connector proper=
+ties
+> > + * @dev: DRM device
+> > + * @supported_tv_modes: Bitmask of TV modes supported (See DRM_MODE_TV=
+_MODE_*)
+> > +
+> > + * Called by a driver's TV initialization routine, this function creat=
+es
+> > + * the TV specific connector properties for a given device.=A0 Caller =
+is
+> > + * responsible for allocating a list of format names and passing them =
+to
+> > + * this routine.
+> > + *
+> > + * Returns:
+> > + * 0 on success or a negative error code on failure.
+> > + */
+> > +int drm_mode_create_tv_properties(struct drm_device *dev,
+> > +=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0 unsigned int supported_tv_=
+modes)
+>=20
+> supported_tv_modes is supposed to be a bitmask of BIT(DRM_MODE_TV_MODE_*)
+> (or (1<<DRM_MODE_TV_MODE_*)) rather than DRM_MODE_TV_MODE_* directly, but=
+ this
+> is not said explicitly anywhere in this doc comment.
+
+The argument doc mentions that it's a "Bitmask of TV modes supported
+(See DRM_MODE_TV_MODE_*)", how would you improve it?
+
+Thanks!
+Maxime
+
+--nqpndwa6reldojsu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxiKIQAKCRDj7w1vZxhR
+xQFFAQDXwgKR9pMVMn84nPWIY7c88Fvo8DwU/8cFYEx48+uZKwEAjifIFr4Dz1pH
+ltskjsJPqZk1PnFrApehWE8PzkjhpAc=
+=FzGO
+-----END PGP SIGNATURE-----
+
+--nqpndwa6reldojsu--

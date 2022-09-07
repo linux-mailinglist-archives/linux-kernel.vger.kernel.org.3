@@ -2,165 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C415B0E74
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D0B5B0E7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiIGUsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S229869AbiIGUtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiIGUsO (ORCPT
+        with ESMTP id S230151AbiIGUtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:48:14 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B702C22B0;
-        Wed,  7 Sep 2022 13:48:12 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-11eab59db71so38942932fac.11;
-        Wed, 07 Sep 2022 13:48:12 -0700 (PDT)
+        Wed, 7 Sep 2022 16:49:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00425CE14
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:49:37 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so190761pjl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=VILwDL/sIUZC34sszkWtJPfoLU5yiUkOiwtDL7IE2b0=;
+        b=ClFo6oZego6igRhj/tOJY4x+HLqCA3i9nMX4KM0+Ag+rW9iC/gWlE9ZAyqzTQ4iqE3
+         B2sP2BYHvX4v3bo4jjmvnSWB9pRtI0U0DfznyhuIDVSYZBukRj9fEVBD2ySXsnKW5m2q
+         vIn6wNvPqNg4Ks1scp3jRgPLQMl9Hn13YAQmYf5vR1SZsjb/1hG59nidUzJkCBf5vBYA
+         ri3feTAswyIQRKCZ619KqiSAMkKHUiaMMjAxyxJb05vZJmh0xQ+4JB6Q3H8nkpq7ZwaN
+         Par5PHOTxOOac20WE6/B9l0FKuUeML6jF34zkqdwkJ/XSPH3MDgudonPiEfKBp6iw7m4
+         yhIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=OgZSfbLdmWOALRRb7JBf/hZJkZ02I3rXxvpAaPJjtss=;
-        b=oM0ttpfDJOpVyNtrbPIsvZrt6pVSyzM2a9KeeBkz/T8NNRyp8dun+zYUtmcEOvkKhw
-         aZQ1OmTFdkxuHYypCF62TF0rNyJLJ3KnLOEmsnmHDiMz3+4jGkmug3WgZPA+1GV/wQAK
-         5k/xh6LosdATqcGsZU5Ots60x+RveKTUNY5Upm5CzbZ/kSRTZoOH7ochlXs50SEBn0J4
-         4e/qqo9soXyUjZiAFm/6jV7V63g2j6BvHNVBOVnPRhvUxGt8gI67uY0Ge+3GQ1LdqVIv
-         sVitX9A4GtZAHl4lOM6wRAqEHUlRFaQ8XodnMADL+OOZrc/ieIO65Erpbc8DLvh6l1ZM
-         0W+w==
-X-Gm-Message-State: ACgBeo0oTzfWpqklRuKDS55sQXPjZnkGqebgZ6vHb7zuJMG1Ca2yPyCq
-        rDvOEWBDNlHR4gR4YivfGg==
-X-Google-Smtp-Source: AA6agR6NS6tXDzOLHfWF+BuC8XbobxkJmCcNwfL3/mQLtSgFA6uV0lRUjSxT5Zi+7Jar40NgasRRDg==
-X-Received: by 2002:a05:6870:a791:b0:10d:8606:c68b with SMTP id x17-20020a056870a79100b0010d8606c68bmr165876oao.234.1662583691370;
-        Wed, 07 Sep 2022 13:48:11 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w8-20020a9d5388000000b00616d3ec6734sm7400219otg.53.2022.09.07.13.48.10
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=VILwDL/sIUZC34sszkWtJPfoLU5yiUkOiwtDL7IE2b0=;
+        b=Iv+z5lVK3ZvXgwtqeBI220f2dCtn6eQASka/n9/PdIZd/MsLisDPcbBi4iPbKSpUjY
+         du3UO+zRLQlWl4blvMTj7HKdoGIac4BU4fYPlqHJLZjY1+2L03j+i34o/wbPLikj2LDb
+         LD1UUVF1QWraFSa4kNtIH/swW+0khyURBVGtXxcUmqaJpPoqcQq8kuL4E5lXhoI8SDY7
+         hL7QTMjYQOqUaqy2Hy8luH4A8JZdrfPAlOyqLknhGj2F9eX6rHNDNsKxT/H8W+hma0F6
+         XIIxOdkMKmURACdFh4fdPnd/zI3AWvgQZWKamfdgluRjUdYDxg0wVX37PL4FkO9Q2rYC
+         g7xg==
+X-Gm-Message-State: ACgBeo1u0PKLGzJLMMDQo616gC8nQovwHlOJddPScrTqXt1PTfwoDlyl
+        FSudyM+4lfxk0Qtk0gpAm3n4MQ==
+X-Google-Smtp-Source: AA6agR7mirZmtO2FC7GgkTq0WIz+FVoIZ5otVGbaluywI72PpIdKKFO3WQhD7jyObY6RKdBYtMAFJg==
+X-Received: by 2002:a17:90b:3c8a:b0:200:b874:804 with SMTP id pv10-20020a17090b3c8a00b00200b8740804mr342150pjb.151.1662583777293;
+        Wed, 07 Sep 2022 13:49:37 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
+        by smtp.gmail.com with ESMTPSA id e6-20020a17090301c600b001712c008f99sm12795140plh.11.2022.09.07.13.49.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 13:48:11 -0700 (PDT)
-Received: (nullmailer pid 316597 invoked by uid 1000);
-        Wed, 07 Sep 2022 20:48:10 -0000
-Date:   Wed, 7 Sep 2022 15:48:10 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Chia-Wei Wang --cc=linux-kernel @ vger . kernel . org" 
-        <chiawei_wang@aspeedtech.com>, linux-crypto@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
-Subject: Re: [PATCH v1 3/4] dt-bindings: crypto: add documentation for Aspeed
- ACRY
-Message-ID: <20220907204810.GA312863-robh@kernel.org>
-References: <20220902060012.3758637-1-neal_liu@aspeedtech.com>
- <20220902060012.3758637-4-neal_liu@aspeedtech.com>
+        Wed, 07 Sep 2022 13:49:37 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>
+Subject: [PATCH 0/4] dt-bindings: net: Convert qcom,ethqos bindings to YAML (and related fixes)
+Date:   Thu,  8 Sep 2022 02:19:20 +0530
+Message-Id: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220902060012.3758637-4-neal_liu@aspeedtech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 02:00:11PM +0800, Neal Liu wrote:
-> Add device tree binding documentation for the Aspeed
-> ECDSA/RSA ACRY Engines Controller.
-> 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> ---
->  .../bindings/crypto/aspeed,ast2600-acry.yaml  | 49 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +-
->  2 files changed, 50 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml b/Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
-> new file mode 100644
-> index 000000000000..192b40cd0a39
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/crypto/aspeed,ast2600-acry.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ASPEED ACRY ECDSA/RSA Hardware Accelerator Engines Device Tree Bindings
+This patchset converts the qcom,ethqos bindings to YAML. It also
+contains a few related fixes in the snps,dwmac bindings to support
+Qualcomm ethqos ethernet controller for qcs404 (based) and sa8155p-adp
+boards.
 
-Drop ' Device Tree Bindings'
+Note that this patchset depends on the following dts fix to avoid
+any 'make dtbs_check' errors:
+https://lore.kernel.org/linux-arm-msm/20220907204153.2039776-1-bhupesh.sharma@linaro.org/T/#u
 
-> +
-> +maintainers:
-> +  - Neal Liu <neal_liu@aspeedtech.com>
-> +
-> +description: |
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: David Miller <davem@davemloft.net>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-Don't need '|' if no formatting.
+Bhupesh Sharma (4):
+  dt-bindings: net: qcom,ethqos: Convert bindings to yaml
+  dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
+  dt-bindings: net: snps,dwmac: Update reg maxitems
+  dt-bindings: net: snps,dwmac: Update interrupt-names
 
-> +  The ACRY ECDSA/RSA engines is designed to accelerate the throughput
-> +  of ECDSA/RSA signature and verification. Basically, ACRY can be
-> +  divided into two independently engines - ECC Engine and RSA Engine.
+ .../devicetree/bindings/net/qcom,ethqos.txt   |  66 ---------
+ .../devicetree/bindings/net/qcom,ethqos.yaml  | 139 ++++++++++++++++++
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  16 +-
+ 3 files changed, 150 insertions(+), 71 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.txt
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.yaml
 
-independent
+-- 
+2.37.1
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-acry
-> +
-> +  reg:
-> +    items:
-> +      - description: acry base address & size
-> +      - description: acry sram base address & size
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/ast2600-clock.h>
-> +    acry: crypto@1e6fa000 {
-> +        compatible = "aspeed,ast2600-acry";
-> +        reg = <0x1e6fa000 0x400>, <0x1e710000 0x1800>;
-> +        interrupts = <160>;
-> +        clocks = <&syscon ASPEED_CLK_GATE_RSACLK>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 832da6d77374..09ab1c3adbb7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3214,7 +3214,7 @@ ASPEED CRYPTO DRIVER
->  M:	Neal Liu <neal_liu@aspeedtech.com>
->  L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
->  S:	Maintained
-> -F:	Documentation/devicetree/bindings/crypto/aspeed,ast2500-hace.yaml
-> +F:	Documentation/devicetree/bindings/crypto/aspeed,*
->  F:	drivers/crypto/aspeed/
->  
->  ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
-> -- 
-> 2.25.1
-> 
-> 

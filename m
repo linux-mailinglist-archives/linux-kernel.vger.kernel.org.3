@@ -2,176 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDB45B03D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE415B03D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiIGMVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S229714AbiIGMWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiIGMVk (ORCPT
+        with ESMTP id S229472AbiIGMWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:21:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1924AB197;
-        Wed,  7 Sep 2022 05:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662553299; x=1694089299;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=i5as+3xhYVCZyfsyjas1dxePnfSBwW/4rUe+OF92EJg=;
-  b=PswZREPHRKtqu4mITUeMg0f8+2FUiQGSLe5GY7nc1CgbqOqRQPD7Qz+N
-   9XvXtkRCAciiNLMPBeNJd+SLRh5Hlp16nex/DDDBTdQ6Nwx7BdE3YKgoP
-   wrl5XR8EUvs7Por1km9MqqoY6uuHDWN4VAOzj5ptxQueoUSSgnBBaflMy
-   NZu8zz2C2fVIOL7oe6wrfAtKGEDTOch8NeYmYP3HrCCQPPBntBrX1nY2/
-   lkvd9E/SNIzNzOXdmgNM59J11ix2MVCv+aituNenb0z1tivJE2ZSWtzoU
-   q+Yakdz96dkYDy+rqQzsrL8TgKgEnq9NUN05q58u8nSOu0FI/pdMz3wIp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="360801557"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="360801557"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 05:21:39 -0700
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="644594732"
-Received: from dmatouse-mobl.ger.corp.intel.com ([10.251.223.53])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 05:21:30 -0700
-Date:   Wed, 7 Sep 2022 15:21:28 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-cc:     Jiri Slaby <jirislaby@kernel.org>, Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?ISO-8859-15?Q?Andreas_F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 0/4] tty: TX helpers
-In-Reply-To: <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
-Message-ID: <cfd16d53-6aa0-e848-91d0-dce8ff72bb4d@linux.intel.com>
-References: <20220906104805.23211-1-jslaby@suse.cz> <Yxcvbk281f/vy4vb@hovoldconsulting.com> <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org> <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com> <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
+        Wed, 7 Sep 2022 08:22:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7C2AB187
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:22:09 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id q7so22156794lfu.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=+WkJBmsyH1vsBqkEXP+qbFWoUijLTNIoydGFYIhgXJI=;
+        b=CfkxBrTwWAK8tTr73FjBvDdxCOCy499JJMLu90hQ/cxz+G1eMjnyHSXykAey6okcEU
+         xsUzc356u8kqsid+5qlbMB2e69cPc0L5hsVyOjVRdVDG16B1tUWazIZDVUt2KTjJzUWp
+         vdcPGSDBr2gqdoE+5E4q6wMyE4IbkbvEofVR5gBxwIGluvC23HoQx23wqJKgo9XDEqL+
+         YdQTyxEnny4IONKqEtddIkriNQbAG/8LidAD0rjL9DToYJMsM98xT+/hN76aDqeV+VFU
+         mS+PrGCOI3g/0lhFNmVFcEbikR1tcpyt1gAKBvCTMTF0YoJ6AWkbDPuluRBQXobX/dzj
+         GHxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+WkJBmsyH1vsBqkEXP+qbFWoUijLTNIoydGFYIhgXJI=;
+        b=j4ZMkLrwvz4AEX/Sd+AXEyUWUZRjuUrYEHs9Pw5zEJ1DyXGbADgd3vF/VUFRTy5yuF
+         MSpIiE2Pg8u8yxFIjvlyhFIsSKlRz/mW1qnrIwa52YkTbjHpC1Q60UlDugvLEw0nQnpH
+         2+/Qwj8N03yLBuLFJtvxlqCh5NAfwwBvD9sCqDLURJDbg/bKUDiHYwREQ7VmLjHyLSo3
+         PfpbKST5OoaT3njTE2AMhRADroFQNzVjmDkY8yIOJHAerCt/VUHyNUA+AKwida1/bCHZ
+         Gm3YZG4mC3KgwHS+guxM2HwH47zUAD4YjYDLVp2HrzKQTd8c+hdnKIcpD+mLOZjTPA6a
+         MekQ==
+X-Gm-Message-State: ACgBeo3gCpm0kAR+1dHpwc+tYb8jb3Kz7kZYOjRyncVsUwrmQaT1bZx5
+        EEroLcHdpygE1avgKxFPzWCapg==
+X-Google-Smtp-Source: AA6agR6JoL1nZuFPzHt37TZNIcdOdWFyxLpGOtAmPbV/or30uevMdL/iW8HwmWCC7w6CRktHeU8WHg==
+X-Received: by 2002:a05:6512:b0d:b0:492:d661:b368 with SMTP id w13-20020a0565120b0d00b00492d661b368mr985485lfu.466.1662553328032;
+        Wed, 07 Sep 2022 05:22:08 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id v8-20020a056512348800b0048b256bb005sm2462006lfr.49.2022.09.07.05.22.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 05:22:07 -0700 (PDT)
+Message-ID: <5630d0e7-bdfb-36f4-6cd8-9ca986bb2a11@linaro.org>
+Date:   Wed, 7 Sep 2022 14:22:06 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1356709510-1662553299=:1717"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: pci: QCOM Add missing sc7280 aggre0,
+ aggre1 clocks
+Content-Language: en-US
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <1662171184-25211-1-git-send-email-quic_krichai@quicinc.com>
+ <1662171184-25211-3-git-send-email-quic_krichai@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1662171184-25211-3-git-send-email-quic_krichai@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 03/09/2022 04:13, Krishna chaitanya chundru wrote:
+> Add missing aggre0 and aggre1 clocks.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+> changes since v2:
+> 	- Increase the max items of clock's in common properties.
+> ---
+>  Documentation/devicetree/bindings/pci/qcom,pcie.yaml | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> index 0b69b12..b759465 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> @@ -53,11 +53,11 @@ properties:
+>    # Platform constraints are described later.
+>    clocks:
+>      minItems: 3
+> -    maxItems: 12
+> +    maxItems: 13
+>  
+>    clock-names:
+>      minItems: 3
+> -    maxItems: 12
+> +    maxItems: 13
+>  
+>    resets:
+>      minItems: 1
+> @@ -423,8 +423,8 @@ allOf:
+>      then:
+>        properties:
+>          clocks:
+> -          minItems: 11
+> -          maxItems: 11
+> +          minItems: 13
+> +          maxItems: 13
+>          clock-names:
+>            items:
+>              - const: pipe # PIPE clock
+> @@ -437,6 +437,8 @@ allOf:
+>              - const: bus_slave # Slave AXI clock
+>              - const: slave_q2a # Slave Q2A clock
+>              - const: tbu # PCIe TBU clock
+> +            - const: aggre0 # Aggre NoC PCIe CENTER SF AXI clock
+> +            - const: aggre1 # Aggre NoC PCIe1 AXI clock
+>              - const: ddrss_sf_tbu # PCIe SF TBU clock
 
---8323329-1356709510-1662553299=:1717
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Why adding them in the middle, not at the end of list? It does not match
+other variants and affects the DTB ABI (order is strict).
 
-On Wed, 7 Sep 2022, Arnd Bergmann wrote:
-
-> On Wed, Sep 7, 2022, at 12:16 PM, Ilpo Järvinen wrote:
-> > On Wed, 7 Sep 2022, Jiri Slaby wrote:
-> >> On 06. 09. 22, 13:30, Johan Hovold wrote:
-> >> > On Tue, Sep 06, 2022 at 12:48:01PM +0200, Jiri Slaby wrote:
-> >> > NAK
-> >> 
-> >> I'd love to come up with something nicer. That would be a function in
-> >> serial-core calling hooks like I had [1] for example. But provided all those
-> >> CPU workarounds/thunks, it'd be quite expensive to call two functions per
-> >> character.
-> >> 
-> >> Or creating a static inline (having ± the macro content) and the hooks as
-> >> parameters and hope for optimizations to eliminate thunks (also suggested in
-> >> the past [1]).
-> >> 
-> >> [1] https://lore.kernel.org/all/20220411105405.9519-1-jslaby@suse.cz/
-> >
-> > I second Jiri here.
-> >
-> > Saving lines in drivers is not that important compared with all removing 
-> > all the variants of the same thing that have crept there over the years.
-> >
-> > I suspect the main reason for the variants is that everybody just used 
-> > other drivers as examples and therefore we've a few "main" variant 
-> > branches depending on which of the drivers was used as an example for the 
-> > other. That is hardly a good enough reason to keep them different and as 
-> > long as each driver keeps its own function for this, it will eventually 
-> > lead to similar differentiation so e.g. a one-time band-aid similarization 
-> > would not help in the long run.
-> >
-> > Also, I don't understand why you see it unreadable when the actual code is 
-> > out in the open in that macro. It's formatted much better than e.g. 
-> > read_poll_timeout() if you want an example of something that is hardly 
-> > readable ;-). I agree though there's a learning-curve, albeit small, that 
-> > it actually creates a function but that doesn't seem to me as big of an 
-> > obstacle you seem to think.
-> 
-> I think it would help to replace the macro that defines
-> the function with a set of macros that can be used in
-> function bodies. This would avoid the __VA_ARGS__ stuff
-> and allow readers that are unfamiliar with tty drivers to
-> treat it as a function call.
-> 
-> So e.g. instead of 
-> 
-> static DEFINE_UART_PORT_TX_HELPER_LIMITED(altera_jtaguart_do_tx_chars,
-> 		true,
-> 		writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
-> 		({}));
-> 
-> the altera_jtaguart driver would contain a function like
-> 
-> static int altera_jtaguart_do_tx_chars(struct uart_port *port,
->                                        unsigned int count)
-> {
->        char ch;
-> 
->        return uart_port_tx_helper_limited(port, ch, count, true,
->                 writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
->                 ({}));
-> }
-> 
-> or some variation of that. It's a few more lines, but those
-> extra lines would help me understand what is actually going on
-> while still avoiding the usual bugs and duplication.
-> 
-> If the caller of that function is itself trivial (like
-> serial21285_tx_chars), then the intermediate function can
-> be omitted in order to save some of the extra complexity.
-
-I'd be ok with that. There's still a small startle factor associated to 
-passing that writel(...) as an argument to a "function" but it's the same 
-for other things such as read_poll_timeout() so not an end of the world.
-
--- 
- i.
-
---8323329-1356709510-1662553299=:1717--
+Best regards,
+Krzysztof

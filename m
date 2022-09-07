@@ -2,108 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B6B5B0DAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116245B0DBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiIGUCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S230009AbiIGUFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiIGUCg (ORCPT
+        with ESMTP id S229830AbiIGUFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:02:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24614BB03A;
-        Wed,  7 Sep 2022 13:02:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB60FB81E0C;
-        Wed,  7 Sep 2022 20:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04AEC433C1;
-        Wed,  7 Sep 2022 20:02:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662580953;
-        bh=i5lNnyjtXWJmJn27Py5urxTe6IXY9j5ZKnDCFNTYG0k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PFGd/NSHw8YEaJJOR7tkFN5jlXwTzcU/x/ZeIawQPQHFHSLdLZmCnHP/UMjtqEbgt
-         QtApJ6eqm1OKNY6rlBmg/TyflH4h7pH25eAoNeBESxXxYEW63X3fFI1z8+7e7Ut2lr
-         8cROkL9XjSUD/W1jzTJUPaqmTcfsb6D1YM8+uA3Ag70mCk+cVuLFDFJRXmkbc9b8Xd
-         F6yi38B6QnZ7zE0y811tcH9vI1q/uyLElITta/GJ7Vm7iiGNS8Ic6eZW4JXyF9gIfh
-         6dhEjU5xzI1B141Ra+XtTsO3FD/JlMET9DUEyCqx7PosVZaaChKLGrIpPMNmHPM1Yq
-         UxY+aQVZq9JvA==
-Date:   Wed, 7 Sep 2022 22:02:28 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 1/3] dt-bindings: i2c: mv64xxx: Document DMA properties
-Message-ID: <Yxj41IrD/WzMSeac@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20220830020824.62288-1-samuel@sholland.org>
- <20220830020824.62288-2-samuel@sholland.org>
+        Wed, 7 Sep 2022 16:05:47 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B830159251
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:05:43 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MNCtF70mVz9sdZ;
+        Wed,  7 Sep 2022 20:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1662581142; bh=cQj2iyDMliA/bCXjKY1ERkLILYcbmwXjdapERd70sJw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IVYuHBPOotuFsRzV32LbQk59Nc2o4WCdJfrgxVk5bMUHzU8Bw4h/w0fHqaORrX2nS
+         cNHd0VjAIj5bxXkUcRsQSwFW/vm3d/lt0C+0dtzTqNuHaCXlQu6npq+Vfq3D9g+lsZ
+         MWe5R0L7WgitZAZIRoKN6SikWSw9GVfVd+r/v2GA=
+X-Riseup-User-ID: 1C140A385A49F8B23FC455DD0D05073008D1958C1D7500AFA0B2AB16478369AB
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MNCt66jTPz5vh4;
+        Wed,  7 Sep 2022 20:05:34 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        michal.winiarski@intel.com,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH v3 1/2] drm/tests: Split drm_framebuffer_create_test into parameterized tests
+Date:   Wed,  7 Sep 2022 17:02:46 -0300
+Message-Id: <20220907200247.89679-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rn7f98v4cUvWaQJs"
-Content-Disposition: inline
-In-Reply-To: <20220830020824.62288-2-samuel@sholland.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The igt_check_drm_framebuffer_create is based on a loop that executes
+tests for all createbuffer_tests test cases. This could be better
+represented by parameterized tests, provided by KUnit.
 
---rn7f98v4cUvWaQJs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So, convert the igt_check_drm_framebuffer_create into parameterized tests.
 
-On Mon, Aug 29, 2022 at 09:08:22PM -0500, Samuel Holland wrote:
-> Allwinner's I2C offload engine includes bidirectional DMA support. Add
-> the properties for describing this in the devicetree. "dmas" is optional
-> because not all instances of the controller have their DRQs hooked up.
-> For example, R_I2C0 and R_I2C1 on V536 have no DRQ number assigned.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+Reviewed-by: Michał Winiarski <michal.winiarski@intel.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.191734-1-mairacanal@riseup.net/
+- Use .init for mock_drm_device instead of a global variable. (Michał Winiarski)
+- Add Michał's Reviewed-by tag.
 
-Applied to for-next, thanks!
+v2 -> v3: https://lore.kernel.org/dri-devel/20220901124210.591994-1-mairacanal@riseup.net/
+- Add David's Reviewed-by tag.
+---
+ drivers/gpu/drm/tests/drm_framebuffer_test.c | 45 ++++++++++++--------
+ 1 file changed, 27 insertions(+), 18 deletions(-)
 
+diff --git a/drivers/gpu/drm/tests/drm_framebuffer_test.c b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+index ec7a08ba4056..6b6f6ff4f591 100644
+--- a/drivers/gpu/drm/tests/drm_framebuffer_test.c
++++ b/drivers/gpu/drm/tests/drm_framebuffer_test.c
+@@ -25,7 +25,7 @@ struct drm_framebuffer_test {
+ 	const char *name;
+ };
+ 
+-static struct drm_framebuffer_test createbuffer_tests[] = {
++static const struct drm_framebuffer_test drm_framebuffer_create_cases[] = {
+ { .buffer_created = 1, .name = "ABGR8888 normal sizes",
+ 	.cmd = { .width = 600, .height = 600, .pixel_format = DRM_FORMAT_ABGR8888,
+ 		 .handles = { 1, 0, 0 }, .pitches = { 4 * 600, 0, 0 },
+@@ -330,43 +330,52 @@ static struct drm_mode_config_funcs mock_config_funcs = {
+ 	.fb_create = fb_create_mock,
+ };
+ 
+-static struct drm_device mock_drm_device = {
+-	.mode_config = {
++static int drm_framebuffer_test_init(struct kunit *test)
++{
++	struct drm_device *mock;
++
++	mock = kunit_kzalloc(test, sizeof(*mock), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, mock);
++
++	mock->mode_config = (struct drm_mode_config) {
+ 		.min_width = MIN_WIDTH,
+ 		.max_width = MAX_WIDTH,
+ 		.min_height = MIN_HEIGHT,
+ 		.max_height = MAX_HEIGHT,
+ 		.funcs = &mock_config_funcs,
+-	},
+-};
++	};
+ 
+-static int execute_drm_mode_fb_cmd2(struct drm_mode_fb_cmd2 *r)
++	test->priv = mock;
++	return 0;
++}
++
++static void drm_test_framebuffer_create(struct kunit *test)
+ {
++	const struct drm_framebuffer_test *params = test->param_value;
++	struct drm_device *mock = test->priv;
+ 	int buffer_created = 0;
+ 
+-	mock_drm_device.dev_private = &buffer_created;
+-	drm_internal_framebuffer_create(&mock_drm_device, r, NULL);
+-	return buffer_created;
++	mock->dev_private = &buffer_created;
++	drm_internal_framebuffer_create(mock, &params->cmd, NULL);
++	KUNIT_EXPECT_EQ(test, params->buffer_created, buffer_created);
+ }
+ 
+-static void igt_check_drm_framebuffer_create(struct kunit *test)
++static void drm_framebuffer_test_to_desc(const struct drm_framebuffer_test *t, char *desc)
+ {
+-	int i = 0;
+-
+-	for (i = 0; i < ARRAY_SIZE(createbuffer_tests); i++) {
+-		KUNIT_EXPECT_EQ_MSG(test, createbuffer_tests[i].buffer_created,
+-				    execute_drm_mode_fb_cmd2(&createbuffer_tests[i].cmd),
+-		     "Test %d: \"%s\" failed\n", i, createbuffer_tests[i].name);
+-	}
++	strcpy(desc, t->name);
+ }
+ 
++KUNIT_ARRAY_PARAM(drm_framebuffer_create, drm_framebuffer_create_cases,
++		  drm_framebuffer_test_to_desc);
++
+ static struct kunit_case drm_framebuffer_tests[] = {
+-	KUNIT_CASE(igt_check_drm_framebuffer_create),
++	KUNIT_CASE_PARAM(drm_test_framebuffer_create, drm_framebuffer_create_gen_params),
+ 	{ }
+ };
+ 
+ static struct kunit_suite drm_framebuffer_test_suite = {
+ 	.name = "drm_framebuffer",
++	.init = drm_framebuffer_test_init,
+ 	.test_cases = drm_framebuffer_tests,
+ };
+ 
+-- 
+2.37.3
 
---rn7f98v4cUvWaQJs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY+NQACgkQFA3kzBSg
-KbZAiw/+J2yhbseTTo5AOFkGKns7ZfvwXDVCQmYWPmc5fD1S3OAn0VfUujMVKLSa
-RMHpMPT2ULliNHTDia4KniCKyRh6iLc/gK2tZ7QzJnyilFXzWzKUfFKXS/DpR1EB
-ASVeXMVTyle7NaAwGt7J1aNrKc6ODgnTMdk85uDcxOYArLmK8dYiWtw9ZlGycFZE
-gifRFlqjGG4HhXSok/fLyT2sLxLm0SWArs4cyX9wR5vOgS/L57DaUmF2A1e7S1c+
-J2DX9N7Y6ZUKUNCGfOF+kRMOmIJ/bgujpR7E7pGv0W3h2wkSBWAJWDH9naJrk32x
-/kZSrCEVDxm3kRrJMyaSTtNOrgSTCQKYEProJ0e/eZoU2RckLwUZEWY2xL689HNf
-Sp7VEZNockVyAw5DxdoqL2iteJQUWsauI4hGeaoeFam3LpSLT+78n8qSwfhbsMwk
-AR67wmCZwvU3SM2pYJQLUkMnbo86fPEjxA5qSpArebtjG8ePTa8bP+ies0kemj2s
-IfhWL/uRo7TCE1Gcx8ZwRvPa6JYZsNHP9hgXzkYneTduPbxEpdr8GdtoxW8tlYB0
-kj9h0SEamcaPfn4REhZo19zKPfJwibu0tAeHaqOSXU7B4ha/fENWpMv5JsVDo2UG
-crD5ByPZnKcSnhEKsGO0I9BiSdqWPI/ZosFMaj+rjxfkUFjXiRc=
-=c47z
------END PGP SIGNATURE-----
-
---rn7f98v4cUvWaQJs--

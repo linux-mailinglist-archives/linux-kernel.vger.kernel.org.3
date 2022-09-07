@@ -2,91 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4DE5B061B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8FA5B0625
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiIGOGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S229729AbiIGOKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiIGOGk (ORCPT
+        with ESMTP id S229712AbiIGOKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:06:40 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6279E9C525;
-        Wed,  7 Sep 2022 07:06:38 -0700 (PDT)
-Received: from 8bytes.org (p4ff2bb62.dip0.t-ipconnect.de [79.242.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 6118D2409A7;
-        Wed,  7 Sep 2022 16:06:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1662559591;
-        bh=sD6ntPJavoL+O3jZjBfdlyQKhK42Ee+ATtCC5qSKLek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rnWXPfkRqiJXCBikZk6JRGP2BockRbTgJPogFW6R24YrO/UYOBdbDIQPctDN3LGpI
-         79/xXHT61Edm0n+vSGPYdlczsRRfdkacO6KmQgX/Kv6hNnOMuGvxYRlTiNeRqAdoGh
-         5eisSJGFeEPl9sdwLcPf/+l2Yyy8DviLlelMTM4i/bTvjcSo5ebNKYoIEDQy0YTBKO
-         jt0uBK0fCmoSFWyU5uIRYNcijnnozfeA7oB/uWHePVQatjmPma4sWvhtPveFHkv/Zd
-         5qGfNEp1V9BqTtR+QMkc0IJeFW1j8U5UpZXX6b1OmgcnRAA8Xu95xNZgC6+l1xfUpO
-         7YogNayXEccUQ==
-Date:   Wed, 7 Sep 2022 16:06:29 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
-        robin.murphy@arm.com, alex.williamson@redhat.com,
-        suravee.suthikulpanit@amd.com, marcan@marcan.st,
-        sven@svenpeter.dev, alyssa@rosenzweig.io, robdclark@gmail.com,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
-        jonathanh@nvidia.com, jean-philippe@linaro.org, cohuck@redhat.com,
-        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
-        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
-        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        kevin.tian@intel.com
-Subject: Re: [PATCH v6 1/5] iommu: Return -EMEDIUMTYPE for incompatible
- domain and device/group
-Message-ID: <YxilZbRL0WBR97oi@8bytes.org>
-References: <20220815181437.28127-1-nicolinc@nvidia.com>
- <20220815181437.28127-2-nicolinc@nvidia.com>
- <YxiRkm7qgQ4k+PIG@8bytes.org>
- <Yxig+zfA2Pr4vk6K@nvidia.com>
+        Wed, 7 Sep 2022 10:10:04 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BFC29816;
+        Wed,  7 Sep 2022 07:10:02 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id s13so7558935qvq.10;
+        Wed, 07 Sep 2022 07:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4Uh0JA5EU6H+1OexYGpjrqOI/Bfa0fFdYPaYWN4TUUs=;
+        b=H8bvtiXRiLr+7v2NbeN91wsOkgkueTmt1Kqa3UEfwGT5Njjt9ie6tdbpvOs4lH7fbZ
+         Mbe625L06UHDT66CcSNKLWld6aj5KC3xBuhsekrQGaVLxZWiA8BjUuVBrmWewy46g1kf
+         ggJjog91MPQLtoElfB2VvXJdNX1qgUxxwhHS0l0NcoCz+1dTxuRxYFs69V7pAUBglqSH
+         j6795uNXkss9AJYWcSKyMp0/HBIMgBbSH8yU4ycX5X/xM6+TdJYkNZlIZ8ZwWMgaSGMQ
+         bcguQkp22aov2NwrB9g6x0RVNV0+j7mTLQ+osRlsOBzleIuJv3cNSQR/I7Vib789qaQt
+         CL3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4Uh0JA5EU6H+1OexYGpjrqOI/Bfa0fFdYPaYWN4TUUs=;
+        b=ZvMwA948/UUVQLFBj5w04gV01fLXtnUNwr0KLReuCxYCNuG0xCrPriiLDSUnyMPZtn
+         4W8K3z0xhQWmjxg+TSxwAoXXvNuhPIjcGU+EZaA2dyxn0dd+QHUIPAKxuuPfol/STsQK
+         7rq0yj3y8b7UJaqnoRDzkFGDY1d6fKK007PEN+VP+WL8zUIZKiJreS20HedlJnkHrRiL
+         C7p2UqMUew1XN9tmPQbZPzeAkmviIsvsIAfogd/4fzFUrkZRBmZJdxHrlzBDlyTQegaY
+         gOUPfncpU87GxvhKUIHtjFj2MYnJhzCMzAprRjR1M/S4autRGAFHt5NI9qzAayk0sust
+         1Wug==
+X-Gm-Message-State: ACgBeo0rLJ0VcDzABdiSOwoFfRM6+/FGnqKW1G88q3+6LEXLpbQhWEFv
+        x/qHGJ+1XXUam9isAFWwhr+TnKMlbYPuh5Gj6P8=
+X-Google-Smtp-Source: AA6agR76HipePhpMmPr9Y+5Dx6vWNEndPbm1mC1mYYKey5QMVE53NQS66t5iCqDDAECoHzd3cPIBVDISi7Cp7sQ4bHs=
+X-Received: by 2002:a05:6214:c8f:b0:499:21eb:ba3b with SMTP id
+ r15-20020a0562140c8f00b0049921ebba3bmr3179469qvr.97.1662559801880; Wed, 07
+ Sep 2022 07:10:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxig+zfA2Pr4vk6K@nvidia.com>
+References: <20220907132205.28021-1-andrea.merello@iit.it> <20220907132205.28021-14-andrea.merello@iit.it>
+In-Reply-To: <20220907132205.28021-14-andrea.merello@iit.it>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Sep 2022 17:09:26 +0300
+Message-ID: <CAHp75Vdc8bAiqiUhEmgjNmcpY5s0fArTy26g2i0wH7srwY6RQA@mail.gmail.com>
+Subject: Re: [v7 13/14] iio: imu: add BNO055 I2C driver
+To:     Andrea Merello <andrea.merello@iit.it>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>,
+        Andrea Merello <andrea.merello@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:47:39AM -0300, Jason Gunthorpe wrote:
-> Would you be happier if we wrote it like
-> 
->  #define IOMMU_EINCOMPATIBLE_DEVICE xx
-> 
-> Which tells "which of the function parameters is actually invalid" ?
+On Wed, Sep 7, 2022 at 4:22 PM <andrea.merello@iit.it> wrote:
+>
+> From: Andrea Merello <andrea.merello@iit.it>
+>
+> Add an I2C driver for communicating to a BNO055 IMU via I2C bus and enable
+> the BNO055 core driver to work in this scenario.
+>
+> Signed-off-by: Andrea Merello <andrea.merello@iit.it>
 
-Having done some Rust hacking in the last months, I have to say I like
-to concept of error handling with Result<> there. Ideally we have a way
-to emulate that in our C code without having to change all callers.
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-What I am proposing is a way this could be emulated here, but I am open
-to other suggestions. Still better than re-using random error codes for
-special purposes.
+Hmm... It has my tag but I have noticed something to improve.
 
-Regards,
+...
 
-	Joerg
+> +#define BNO055_I2C_XFER_BURST_BREAK_THRESHOLD 3 /* FIXME */
+
+Can we elaborate what to fix and why it can't be fixed right now?
+
+...
+
+> +static const struct of_device_id __maybe_unused bno055_i2c_of_match[] = {
+> +       { .compatible = "bosch,bno055" },
+
+> +       { },
+
+No comma for the terminator entry.
+
+> +};
+
+...
+
+> +               .of_match_table = of_match_ptr(bno055_i2c_of_match),
+
+No of_match_ptr(). This will disable ACPI support along with potential
+compiler warning.
+
+-- 
+With Best Regards,
+Andy Shevchenko

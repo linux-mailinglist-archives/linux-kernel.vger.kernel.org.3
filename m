@@ -2,69 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C065AF8FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC555AF903
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiIGAgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S229576AbiIGAht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiIGAgi (ORCPT
+        with ESMTP id S229551AbiIGAhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:36:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535D1857FE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:36:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFEAD61721
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8DCBC433C1;
-        Wed,  7 Sep 2022 00:36:34 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 20:37:13 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Bing Huang <huangbing775@126.com>
-Cc:     dietmar.eggemann@arm.com, brauner@kernel.org, bristot@redhat.com,
-        bsegall@google.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, mgorman@suse.de, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org
-Subject: Re: [PATCH RESEND] sched/topology: Add __init for
- init_defrootdomain
-Message-ID: <20220906203713.4b1a2bbb@gandalf.local.home>
-In-Reply-To: <20220831093927.5904-1-huangbing775@126.com>
-References: <20220831093927.5904-1-huangbing775@126.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 6 Sep 2022 20:37:47 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91F885F86
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:37:45 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1279948d93dso12521603fac.10
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=uGgfGldOff2mVxZyVVSAqWj/XJ4BgayJCyvmb6JurzI=;
+        b=WGZd1/dO/NI+78DXs3vJRpCy11kM7V+gJDTstBI+Thu6ifPTHExhi2rTWsoOHYblbT
+         zGXquzL+PXM7xtXU0jPtq8foZxAbhe/j1ekopE4vncQlBSkLtLCgKyD6ozoU7wwCIs8n
+         fvfMD9xxMiRGiT6QHKHKngdjO2OdhhzkQi74qOjnz09uZZ1j+bwZTjzV4YnoeWknY/DK
+         8/kGb+EcL4tPc6K0O8lNPTfvsqX2NycCkBtKzAgjNVGR8B+Ln12ljO4gUZVu3w7UN/4w
+         9DPCtD8Oxfzw/hH8jNPeM4k02i6BToKFbv/ndYyBbPq7PioMzEreXUfqYY+RIpqtHBGR
+         7rlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=uGgfGldOff2mVxZyVVSAqWj/XJ4BgayJCyvmb6JurzI=;
+        b=mgKfnE2nrPua3FGMkf/1rhWBoMBlHnDYstoEiAceLB4I8Z7x5T0LLvH7KYi0mKHlD8
+         mSEApcjB8ZLP4rg5BvqNO6huvWGzYtd0VanYvjRCkRmnUBT3xKKjouBxJyp57iOf97Ie
+         A62h/6BYXfkdQgxpkOQ6GJT4Ro4B8AN3T+sc5hyHamfDK7eHVTnI5vp1feSdNqrbielX
+         KoE27efn4yX2YzszLpaUx2f5JienVwWPXReJphDRfqJ6ofrtO7QV3mocxO2aDol501ks
+         PFMmWC1W/HXA5veur1KuV7qN0A/Pl9Kxu38pk8LkKdfWehvzAPtMDbALohQlTwLGPLcx
+         Jt0g==
+X-Gm-Message-State: ACgBeo3J2yOlysN46isv9uqGDLJ9ykY9KQ7RNYxDJuLBlCxU77qq7qUi
+        ohw/OOo3GZr+lzV6YquJk3oq/0xc90hnaesjrMKEqQ==
+X-Google-Smtp-Source: AA6agR59d9raM42PVaHIYoR50vWSZ+rIfc+UKbqN0AqnbobHfZAb6bwDEe25Px99HfKZFoSE1DHjpa+LPv0QVP50jag=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr12916953oab.112.1662511064988; Tue, 06
+ Sep 2022 17:37:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906081604.24035-1-likexu@tencent.com>
+In-Reply-To: <20220906081604.24035-1-likexu@tencent.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 6 Sep 2022 17:37:33 -0700
+Message-ID: <CALMp9eSQYp-BC_hERH0jzqY1gKU3HLV2YnJDjaAoR7DxRQu=fQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/pmu: omit "impossible" Intel counter MSRs from
+ MSR list
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jamttson@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022 17:39:27 +0800
-Bing Huang <huangbing775@126.com> wrote:
+On Tue, Sep 6, 2022 at 1:16 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> From: Like Xu <likexu@tencent.com>
+>
+> According to Intel April 2022 SDM - Table 2-2. IA-32 Architectural MSRs,
+> combined with the address reservation ranges of PERFCTRx, EVENTSELy, and
+> MSR_IA32_PMCz, the theoretical effective maximum value of the Intel GP
+> counters is 14, instead of 18:
+>
+>   14 = 0xE = min (
+>     0xE = IA32_CORE_CAPABILITIES (0xCF) - IA32_PMC0 (0xC1),
+>     0xF = IA32_OVERCLOCKING_STATUS (0x195) - IA32_PERFEVTSEL0 (0x186),
+>     0xF = IA32_MCG_EXT_CTL (0x4D0) - IA32_A_PMC0 (0x4C1)
+>   )
+>
+> the source of the incorrect number may be:
+>   18 = 0x12 = IA32_PERF_STATUS (0x198) - IA32_PERFEVTSEL0 (0x186)
+> but the range covers IA32_OVERCLOCKING_STATUS, which is also architectural.
+> Cut the list to 14 entries to avoid false positives.
+>
+> Cc: Kan Liang <kan.liang@linux.intel.com>
+> Cc: Jim Mattson <jamttson@google.com>
 
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index b0bf2287dd9d..cd761f1fc60c 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -883,7 +883,7 @@ struct root_domain {
->  	struct perf_domain __rcu *pd;
->  };
->  
-> -extern void init_defrootdomain(void);
-> +extern void __init init_defrootdomain(void);
+That should be 'jmattson.'
 
-Function prototypes in headers do not need annotations like __init.
+> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Fixes: cf05a67b68b8 ("KVM: x86: omit "impossible" pmu MSRs from MSR list")
 
--- Steve
+I'm not sure I completely agree with the "Fixes," since
+IA32_OVERCLOCKING_STATUS didn't exist back then. However, Paolo did
+make the incorrect assumption that Intel wouldn't cut the range even
+further with the introduction of new MSRs.
 
->  extern int sched_init_domains(const struct cpumask *cpu_map);
->  extern void rq_attach_root(struct rq *rq, struct root_domain *rd);
->  extern void sched_get_rd(struct root_domain *rd);
+To that point, aren't you setting yourself up for a future "Fixes"
+referencing this change?
+
+We should probably stop at the maximum number of GP PMCs supported
+today (8, I think).
+
+If Intel doubles the number of PMCs to remain competitive with AMD,
+they'll probably put PMCs 8-15 in a completely different range of MSR
+indices.
+
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/x86.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 43a6a7efc6ec..98cdd4221447 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -1431,8 +1431,6 @@ static const u32 msrs_to_save_all[] = {
+>         MSR_ARCH_PERFMON_PERFCTR0 + 8, MSR_ARCH_PERFMON_PERFCTR0 + 9,
+>         MSR_ARCH_PERFMON_PERFCTR0 + 10, MSR_ARCH_PERFMON_PERFCTR0 + 11,
+>         MSR_ARCH_PERFMON_PERFCTR0 + 12, MSR_ARCH_PERFMON_PERFCTR0 + 13,
+> -       MSR_ARCH_PERFMON_PERFCTR0 + 14, MSR_ARCH_PERFMON_PERFCTR0 + 15,
+> -       MSR_ARCH_PERFMON_PERFCTR0 + 16, MSR_ARCH_PERFMON_PERFCTR0 + 17,
+>         MSR_ARCH_PERFMON_EVENTSEL0, MSR_ARCH_PERFMON_EVENTSEL1,
+>         MSR_ARCH_PERFMON_EVENTSEL0 + 2, MSR_ARCH_PERFMON_EVENTSEL0 + 3,
+>         MSR_ARCH_PERFMON_EVENTSEL0 + 4, MSR_ARCH_PERFMON_EVENTSEL0 + 5,
+> @@ -1440,8 +1438,6 @@ static const u32 msrs_to_save_all[] = {
+>         MSR_ARCH_PERFMON_EVENTSEL0 + 8, MSR_ARCH_PERFMON_EVENTSEL0 + 9,
+>         MSR_ARCH_PERFMON_EVENTSEL0 + 10, MSR_ARCH_PERFMON_EVENTSEL0 + 11,
+>         MSR_ARCH_PERFMON_EVENTSEL0 + 12, MSR_ARCH_PERFMON_EVENTSEL0 + 13,
+> -       MSR_ARCH_PERFMON_EVENTSEL0 + 14, MSR_ARCH_PERFMON_EVENTSEL0 + 15,
+> -       MSR_ARCH_PERFMON_EVENTSEL0 + 16, MSR_ARCH_PERFMON_EVENTSEL0 + 17,
+>         MSR_IA32_PEBS_ENABLE, MSR_IA32_DS_AREA, MSR_PEBS_DATA_CFG,
+>
+>         MSR_K7_EVNTSEL0, MSR_K7_EVNTSEL1, MSR_K7_EVNTSEL2, MSR_K7_EVNTSEL3,
+> @@ -6943,12 +6939,12 @@ static void kvm_init_msr_list(void)
+>                                 intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
+>                                 continue;
+>                         break;
+> -               case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
+> +               case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 13:
+>                         if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+>                             min(INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+>                                 continue;
+>                         break;
+> -               case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
+> +               case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 13:
+>                         if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+>                             min(INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+>                                 continue;
+> --
+> 2.37.3
+>

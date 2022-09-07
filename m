@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1885B097F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9775B097A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiIGQBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S230209AbiIGQBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiIGQAe (ORCPT
+        with ESMTP id S230228AbiIGQAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:00:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18F9413A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:00:04 -0700 (PDT)
+        Wed, 7 Sep 2022 12:00:32 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB22923EE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662566404; x=1694102404;
+  t=1662566403; x=1694102403;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ctTJMUTnAD3HTjtYrfTyMDMJuY75ucboxfaHNzv14NA=;
-  b=e3QKD24OYT3rz+uoeP+64t9sFtKJFqhy4dD+tHL5F1f9X9jlLbfkOxWn
-   vItiGmYCb6piFq0eBgxaBzKzw1DIcoXZphh6SkyPVhw0co/kE1NjoA1AI
-   jUN4dDetNBtXFRJUXz4X/6mjKe/dOsZHg9tDU4x9sHpDYrGbNEiD2u6Zb
-   +haq2OuNBOAZ5C9lcr1jMzRGBT+BoP11YjbHlousM0di3loQFUGiqQ2td
-   6/dlI91N1xGqxAzIooUPZlHlPXTJTUfi4Cc7ZEvkr5wfN/meh/9QQzGqi
-   b41OUujniMHS0QnGzUYc0zuXDPC+VM/R3Cz3aYyUVa2BhSugy183sBqmw
+  bh=czKBK1I1t6IX3MrJeeUjnEh9lCUYn7EwGmpszO7xZsU=;
+  b=f0YjKyBtcF92ESWCSyYoNUTCCnAYicq0EycyvXEdVCkp/F+w1jP4Uh51
+   VeVr86dOxoM5LJQHB/klL7rjrCCERed3AKJalKQs9+PEZLXMIo/ynbqZH
+   51N1zPFbv/m8NBNM/K2S6GuH3Kr1CR7KrO55Pb4KjpO+ZpRGOXvducVEw
+   mBnrEUMajlsDNFH+4JechjRHMC/UPf2klB/EzGA4OINc8+Schfjn99mXG
+   ihx6VmYkaWaPngOr5xVpMiAsIDdPq4ilA4pLGyIInRMOn5TX2WvMXHUDn
+   EN5UO6zgCYamnK1MMW/92guxFYZjJFK8AXQAnp1bHpQmP2yN+ZQ7EBmzQ
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297701606"
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="298232343"
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="297701606"
+   d="scan'208";a="298232343"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:38 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:45 -0700
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="676248239"
+   d="scan'208";a="676248308"
 Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:34 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:38 -0700
 From:   Tomas Winkler <tomas.winkler@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -48,10 +48,12 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Tomas Winkler <tomas.winkler@intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>
-Subject: [PATCH v8 14/16] mei: debugfs: add pxp mode to devstate in debugfs
-Date:   Wed,  7 Sep 2022 18:58:11 +0300
-Message-Id: <20220907155813.1427526-15-tomas.winkler@intel.com>
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Subject: [PATCH v8 15/16] drm/i915/gsc: allocate extended operational memory in LMEM
+Date:   Wed,  7 Sep 2022 18:58:12 +0300
+Message-Id: <20220907155813.1427526-16-tomas.winkler@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220907155813.1427526-1-tomas.winkler@intel.com>
 References: <20220907155813.1427526-1-tomas.winkler@intel.com>
@@ -59,70 +61,225 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pxp mode devstate to debugfs to monitor pxp state machine progress.
-This is useful to debug issues in scenarios in which the pxp state
-needs to be re-initialized, like during power transitions such as
-suspend/resume. With this debugfs the state could be monitored
-to ensure that pxp is in the ready state.
+GSC requires more operational memory than available on chip.
+Reserve 4M of LMEM for GSC operation. The memory is provided to the
+GSC as struct resource to the auxiliary data of the child device.
 
-CC: Vitaly Lubart <vitaly.lubart@intel.com>
+Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
 Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/misc/mei/debugfs.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 91 ++++++++++++++++++++++++++---
+ drivers/gpu/drm/i915/gt/intel_gsc.h |  3 +
+ 2 files changed, 87 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/misc/mei/debugfs.c b/drivers/misc/mei/debugfs.c
-index 1ce61e9e24fc..3b098d4c8e3d 100644
---- a/drivers/misc/mei/debugfs.c
-+++ b/drivers/misc/mei/debugfs.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (c) 2012-2016, Intel Corporation. All rights reserved
-+ * Copyright (c) 2012-2022, Intel Corporation. All rights reserved
-  * Intel Management Engine Interface (Intel MEI) Linux driver
-  */
+diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
+index e1040c8f2fd3..162bea57fbb5 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gsc.c
++++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
+@@ -7,6 +7,7 @@
+ #include <linux/mei_aux.h>
+ #include "i915_drv.h"
+ #include "i915_reg.h"
++#include "gem/i915_gem_region.h"
+ #include "gt/intel_gsc.h"
+ #include "gt/intel_gt.h"
  
-@@ -86,6 +86,20 @@ static int mei_dbgfs_active_show(struct seq_file *m, void *unused)
+@@ -36,12 +37,68 @@ static int gsc_irq_init(int irq)
+ 	return irq_set_chip_data(irq, NULL);
  }
- DEFINE_SHOW_ATTRIBUTE(mei_dbgfs_active);
  
-+static const char *mei_dev_pxp_mode_str(enum mei_dev_pxp_mode state)
++static int
++gsc_ext_om_alloc(struct intel_gsc *gsc, struct intel_gsc_intf *intf, size_t size)
 +{
-+#define MEI_PXP_MODE(state) case MEI_DEV_PXP_##state: return #state
-+	switch (state) {
-+	MEI_PXP_MODE(DEFAULT);
-+	MEI_PXP_MODE(INIT);
-+	MEI_PXP_MODE(SETUP);
-+	MEI_PXP_MODE(READY);
-+	default:
-+		return "unknown";
++	struct intel_gt *gt = gsc_to_gt(gsc);
++	struct drm_i915_gem_object *obj;
++	void *vaddr;
++	int err;
++
++	obj = i915_gem_object_create_lmem(gt->i915, size, I915_BO_ALLOC_CONTIGUOUS);
++	if (IS_ERR(obj)) {
++		drm_err(&gt->i915->drm, "Failed to allocate gsc memory\n");
++		return PTR_ERR(obj);
 +	}
-+#undef MEI_PXP_MODE
++
++	err = i915_gem_object_pin_pages_unlocked(obj);
++	if (err) {
++		drm_err(&gt->i915->drm, "Failed to pin pages for gsc memory\n");
++		goto out_put;
++	}
++
++	vaddr = i915_gem_object_pin_map_unlocked(obj, i915_coherent_map_type(gt->i915, obj, true));
++	if (IS_ERR(vaddr)) {
++		err = PTR_ERR(vaddr);
++		drm_err(&gt->i915->drm, "Failed to map gsc memory\n");
++		goto out_unpin;
++	}
++
++	memset(vaddr, 0, obj->base.size);
++
++	i915_gem_object_unpin_map(obj);
++
++	intf->gem_obj = obj;
++
++	return 0;
++
++out_unpin:
++	i915_gem_object_unpin_pages(obj);
++out_put:
++	i915_gem_object_put(obj);
++	return err;
 +}
 +
- static int mei_dbgfs_devstate_show(struct seq_file *m, void *unused)
- {
- 	struct mei_device *dev = m->private;
-@@ -112,6 +126,9 @@ static int mei_dbgfs_devstate_show(struct seq_file *m, void *unused)
- 	seq_printf(m, "pg:  %s, %s\n",
- 		   mei_pg_is_enabled(dev) ? "ENABLED" : "DISABLED",
- 		   mei_pg_state_str(mei_pg_state(dev)));
++static void gsc_ext_om_destroy(struct intel_gsc_intf *intf)
++{
++	struct drm_i915_gem_object *obj = fetch_and_zero(&intf->gem_obj);
 +
-+	seq_printf(m, "pxp: %s\n", mei_dev_pxp_mode_str(dev->pxp_mode));
++	if (!obj)
++		return;
 +
- 	return 0;
++	if (i915_gem_object_has_pinned_pages(obj))
++		i915_gem_object_unpin_pages(obj);
++
++	i915_gem_object_put(obj);
++}
++
+ struct gsc_def {
+ 	const char *name;
+ 	unsigned long bar;
+ 	size_t bar_size;
+ 	bool use_polling;
+ 	bool slow_firmware;
++	size_t lmem_size;
+ };
+ 
+ /* gsc resources and definitions (HECI1 and HECI2) */
+@@ -74,6 +131,7 @@ static const struct gsc_def gsc_def_dg2[] = {
+ 		.name = "mei-gsc",
+ 		.bar = DG2_GSC_HECI1_BASE,
+ 		.bar_size = GSC_BAR_LENGTH,
++		.lmem_size = SZ_4M,
+ 	},
+ 	{
+ 		.name = "mei-gscfi",
+@@ -90,26 +148,32 @@ static void gsc_release_dev(struct device *dev)
+ 	kfree(adev);
  }
- DEFINE_SHOW_ATTRIBUTE(mei_dbgfs_devstate);
+ 
+-static void gsc_destroy_one(struct intel_gsc_intf *intf)
++static void gsc_destroy_one(struct drm_i915_private *i915,
++			    struct intel_gsc *gsc, unsigned int intf_id)
+ {
++	struct intel_gsc_intf *intf = &gsc->intf[intf_id];
++
+ 	if (intf->adev) {
+ 		auxiliary_device_delete(&intf->adev->aux_dev);
+ 		auxiliary_device_uninit(&intf->adev->aux_dev);
+ 		intf->adev = NULL;
+ 	}
++
+ 	if (intf->irq >= 0)
+ 		irq_free_desc(intf->irq);
+ 	intf->irq = -1;
++
++	gsc_ext_om_destroy(intf);
+ }
+ 
+-static void gsc_init_one(struct drm_i915_private *i915,
+-			 struct intel_gsc_intf *intf,
++static void gsc_init_one(struct drm_i915_private *i915, struct intel_gsc *gsc,
+ 			 unsigned int intf_id)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
+ 	struct mei_aux_device *adev;
+ 	struct auxiliary_device *aux_dev;
+ 	const struct gsc_def *def;
++	struct intel_gsc_intf *intf = &gsc->intf[intf_id];
+ 	int ret;
+ 
+ 	intf->irq = -1;
+@@ -141,7 +205,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
+ 	intf->irq = irq_alloc_desc(0);
+ 	if (intf->irq < 0) {
+ 		drm_err(&i915->drm, "gsc irq error %d\n", intf->irq);
+-		return;
++		goto fail;
+ 	}
+ 
+ 	ret = gsc_irq_init(intf->irq);
+@@ -155,6 +219,19 @@ static void gsc_init_one(struct drm_i915_private *i915,
+ 	if (!adev)
+ 		goto fail;
+ 
++	if (def->lmem_size) {
++		drm_dbg(&i915->drm, "setting up GSC lmem\n");
++
++		if (gsc_ext_om_alloc(gsc, intf, def->lmem_size)) {
++			drm_err(&i915->drm, "setting up gsc extended operational memory failed\n");
++			kfree(adev);
++			goto fail;
++		}
++
++		adev->ext_op_mem.start = i915_gem_object_get_dma_address(intf->gem_obj, 0);
++		adev->ext_op_mem.end = adev->ext_op_mem.start + def->lmem_size;
++	}
++
+ 	adev->irq = intf->irq;
+ 	adev->bar.parent = &pdev->resource[0];
+ 	adev->bar.start = def->bar + pdev->resource[0].start;
+@@ -188,7 +265,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
+ 
+ 	return;
+ fail:
+-	gsc_destroy_one(intf);
++	gsc_destroy_one(i915, gsc, intf->id);
+ }
+ 
+ static void gsc_irq_handler(struct intel_gt *gt, unsigned int intf_id)
+@@ -229,7 +306,7 @@ void intel_gsc_init(struct intel_gsc *gsc, struct drm_i915_private *i915)
+ 		return;
+ 
+ 	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
+-		gsc_init_one(i915, &gsc->intf[i], i);
++		gsc_init_one(i915, gsc, i);
+ }
+ 
+ void intel_gsc_fini(struct intel_gsc *gsc)
+@@ -241,5 +318,5 @@ void intel_gsc_fini(struct intel_gsc *gsc)
+ 		return;
+ 
+ 	for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
+-		gsc_destroy_one(&gsc->intf[i]);
++		gsc_destroy_one(gt->i915, gsc, i);
+ }
+diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.h b/drivers/gpu/drm/i915/gt/intel_gsc.h
+index 68582f912b21..fcac1775e9c3 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gsc.h
++++ b/drivers/gpu/drm/i915/gt/intel_gsc.h
+@@ -20,11 +20,14 @@ struct mei_aux_device;
+ 
+ /**
+  * struct intel_gsc - graphics security controller
++ *
++ * @gem_obj: scratch memory GSC operations
+  * @intf : gsc interface
+  */
+ struct intel_gsc {
+ 	struct intel_gsc_intf {
+ 		struct mei_aux_device *adev;
++		struct drm_i915_gem_object *gem_obj;
+ 		int irq;
+ 		unsigned int id;
+ 	} intf[INTEL_GSC_NUM_INTERFACES];
 -- 
 2.37.2
 

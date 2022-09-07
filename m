@@ -2,113 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806AD5AFFC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A982D5AFF6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiIGJBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
+        id S230163AbiIGIoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGJBF (ORCPT
+        with ESMTP id S230122AbiIGIoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:01:05 -0400
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 02:01:03 PDT
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325A9E2E2;
-        Wed,  7 Sep 2022 02:01:02 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id A66422B058C3;
-        Wed,  7 Sep 2022 04:42:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 07 Sep 2022 04:42:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662540121; x=1662543721; bh=CwqfKMH8rF
-        Jq0n8MfKf64/LLnkipF2ZC6faLaJQYssI=; b=iFbH69DPSIHen642gkFD6Df4Zc
-        hvxltbsETwdEtCI7uJxGWG+E58xlt1mLUM87ZlfIr0xQJzkQ6GpwL/1C79P+hFUG
-        HGAoRqamU1F5k7ZsvRELKOYF3gcAFccsMlCE2x+aLBGWBOLiWXrKi7OUyX2eNbkN
-        COTBF7g7lS4s8LbLwWHQ6L1IvxOBrZJtRajiEa7Meq8kMxaVBjqIf3bsOA6VYinz
-        vKnWur+5+2McBsE2hcSxYXJZ6mut+T4mrdAl0LgNyTBd1uHl9hqR6AkpEn9vgkmC
-        Ou1+WiIR6PUE3FcaPPIO3NKoDs43b9fe4E6R4atR/ghDap5NcAQPvaQAukVA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662540121; x=1662543721; bh=CwqfKMH8rFJq0n8MfKf64/LLnkip
-        F2ZC6faLaJQYssI=; b=CAy84ntWnJCf1x+Ik4W8I4eDBhM+IJW3yRGscigfGxPp
-        sW8yEM1pXDHGQF13EEiCUYVA4+FlkhsiUPNmBWrswZhfl+VKcVtz/E/drabhO3eJ
-        be5rk6oBtaOj99sElD/uTu1VszaGsykIlDFRrUcQbQJLlvDaF5wK1iAQ1tz9uMK9
-        zFR9+r+q4s+MtbS+90jrBqvQrAA5H1T6Yw68M2GVORmJY9VCmVAT/XA9Cn63yj7P
-        bs9/v+uj1kxrEC45xHlXEzEmeNfzdM5hUiI6XyNQ2Rad4uU+qWt6dvK9J0NI7JOr
-        rlq2LR3ZgTD2//XD3Z2J6I05QxVQEw4N/vsw3hLL7g==
-X-ME-Sender: <xms:WFkYY_5WoLxuHstEPz3dFmgk10HXsMyVhQMMQL2NS7d0qfH_XMTtyg>
-    <xme:WFkYY05aixySBJZI-F8Rf34EiYtu70hbvwnpr3sPTJDde15-BLUEEN01elG8qIuaE
-    cQwvKy33ekME1RCqYI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:WFkYY2ffvzUcraSjfGbccJpOVIRcEkKF_nU2nhNkUkDYWHdSBT3d7Q>
-    <xmx:WFkYYwIVQM8sUZ18dCbyqQbmz3KXMzOJ3olYkeYBpGTeV28kJlhe7Q>
-    <xmx:WFkYYzKCRCcmFzWivKUssrV0smQau_QWIvLEsuz05FY4PiwSY9LkhA>
-    <xmx:WVkYY700gHe4BIxy75yuW2HAWAom3WMC6vVUqJZq9PbYGR7MVF-Zmoze08g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C7651B60083; Wed,  7 Sep 2022 04:42:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <77b0aa7b-3183-4a05-85ff-b278aa7f8f11@www.fastmail.com>
-In-Reply-To: <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
-References: <YxdX2l88PSFGe1r4@debian> <YxeAOgEoUffHudv/@kroah.com>
- <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
-Date:   Wed, 07 Sep 2022 10:41:39 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     "Kumaravel Thiagarajan" <kumaravel.thiagarajan@microchip.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: build failure of next-20220906 due to 4ec7ac90ff39 ("misc: microchip:
- pci1xxxx: Add power management functions - suspend & resume handlers.")
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 7 Sep 2022 04:44:13 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BBAAFAFA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:44:00 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MMwh65SxSzHnnp;
+        Wed,  7 Sep 2022 16:40:54 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 16:42:49 +0800
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 16:42:48 +0800
+Message-ID: <0da1757b-5e54-de64-7afb-a0c6caf35d11@huawei.com>
+Date:   Wed, 7 Sep 2022 16:42:48 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+CC:     <mawupeng1@huawei.com>, <akpm@linux-foundation.org>,
+        <david@redhat.com>, <ying.huang@intel.com>, <hannes@cmpxchg.org>,
+        <corbet@lwn.net>, <mcgrof@kernel.org>, <keescook@chromium.org>,
+        <yzaikin@google.com>, <songmuchun@bytedance.com>,
+        <mike.kravetz@oracle.com>, <osalvador@suse.de>,
+        <surenb@google.com>, <rppt@kernel.org>, <charante@codeaurora.org>,
+        <jsavitz@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>
+Subject: Re: [PATCH -next v3 1/2] mm: Cap zone movable's min wmark to small
+ value
+Content-Language: en-US
+To:     <mgorman@suse.de>
+References: <20220905032858.1462927-1-mawupeng1@huawei.com>
+ <20220905032858.1462927-2-mawupeng1@huawei.com>
+ <20220905092619.2533krnnx632hswc@suse.de>
+ <c69a00c8-99d5-7a55-0861-1559764bd26c@huawei.com>
+ <20220906122226.ro7coxxiatvctyth@suse.de>
+From:   mawupeng <mawupeng1@huawei.com>
+In-Reply-To: <20220906122226.ro7coxxiatvctyth@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022, at 11:07 PM, Sudip Mukherjee wrote:
-> On Tue, Sep 6, 2022 at 6:15 PM Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->> On Tue, Sep 06, 2022 at 03:23:22PM +0100, Sudip Mukherjee (Codethink) wrote:
->> >
->> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
->> >   311 | static int pci1xxxx_gpio_resume(struct device *dev)
->> >       |            ^~~~~~~~~~~~~~~~~~~~
->> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
->> >   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
->> >       |            ^~~~~~~~~~~~~~~~~~~~~
->> >
->> >
->> > git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
->> >
->
-> Looking at other drivers which uses SIMPLE_DEV_PM_OPS, I think
-> pci1xxxx_gpio_suspend() and pci1xxxx_gpio_resume() needs to be under
-> "#ifdef CONFIG_PM_SLEEP".
 
-That would work, but a better fix is to use DEFINE_SIMPLE_DEV_PM_OPS()
-in place of the deprecated SIMPLE_DEV_PM_OPS().
 
-     Arnd
+On 2022/9/6 20:22, Mel Gorman wrote:
+> On Tue, Sep 06, 2022 at 06:12:23PM +0800, mawupeng wrote:
+>>> I think there is a misunderstanding why the higher zones have a watermark
+>>> and why it might be large.
+>>>
+>>> It's not about a __GFP_HIGH or PF_MEMALLOC allocations because it's known
+>>> that few of those allocations may be movable. It's because high memory
+>>> allocations indirectly pin pages in lower zones. User-mapped memory allocated
+>>> from ZONE_MOVABLE still needs page table pages allocated from a lower zone
+>>> so there is a ratio between the size of ZONE_MOVABLE and lower zones
+>>> that limits the total amount of memory that can be allocated. Similarly,
+>>> file backed pages that may be allocated from ZONE_MOVABLE still requires
+>>> pages from lower memory for the inode and other associated kernel
+>>> objects that are allocated from lower zones.
+>>>
+>>> The intent behind the higher zones having a large min watermark is so
+>>> that kswapd reclaims pages from there first to *potentially* release
+>>> pages from lower memory. By capping pages_min for zone_movable, there is
+>>> the potential for lower memory pressure to be higher and to reach a point
+>>> where a ZONE_MOVABLE page cannot be allocated simply because there isn't
+>>> enough low memory available. Once the lower zones are all unreclaimable
+>>> (e.g. page table pages or the movable pages are not been reclaimed to free
+>>> the associated kernel structures), the system goes OOM.
+>>
+>> This i do agree with you, lower zone is actually "more important" than the
+>> higher one.
+>>
+> 
+> Very often yes.
+> 
+>> But higher min watermark for zone movable will not work since no memory
+>> allocation can use this reserve memory below min. Memory allocation
+>> with specify watermark modifier(__GFP_ATOMIC ,__GFP_HIGH ...) can use this
+>> in slowpath, however the standard movable memory allocation
+>> (gfp flag: GFP_HIGHUSER_MOVABLE) does not contain this.
+>>
+> 
+> Then a more appropriate solution may be to alter how the gap between min
+> and low is calculated. That gap determines when kswapd is active but
+> allocations are still allowed.
+> 
+>> Second, lowmem_reserve_ratio is used to "reserve" memory for lower zone.
+>> And the second patch introduce per zone watermark_scale_factor to boost
+>> normal/movable zone's watermark which can trigger early kswapd for zone
+>> movable.
+>>
+> 
+> The problem with the tunable is that this patch introduces a potentially
+> seriously problem that must then be corrected by a system administrator and
+> it'll be non-obvious what the root of the problem is or the solution. For
+> some users, they will only be able to determine is that OOM triggers
+> when there is plenty of free memory or kswapd is consuming a lot more
+> CPU than expected. They will not necessarily be able to determine that
+> watermark_scale_factor is the solution.
+> 
+>>>
+>>> It's possible that there are safe adjustments that could be made that
+>>> would detect when there is no choice except to reclaim zone reclaimable
+>>> but it would be tricky and it's not this patch. This patch changelog states
+>>>
+>>> 	However zone movable will get its min share in
+>>> 	__setup_per_zone_wmarks() which does not make any sense.
+>>>
+>>> It makes sense, higher zones allocations indirectly pin pages in lower
+>>> zones and there is a bias in reclaim to free the higher zone pages first
+>>> on the *possibility* that lower zone pages get indirectly released later.
+>>>
+>>
+>> In our Test vm with 16G of mirrored memory(normal zone) and 256 of normal
+>> momory(Movable zone), the min share for normal zone is too few since the
+>> size of min watermark is calc by zone dma/normal while this will be shared
+>> by zones(include zone movable) based on managed pages.
+>>
+>> Node 0, zone      DMA
+>>         min      39
+>>         low      743
+>>         high     1447
+>> Node 0, zone   Normal
+>>         min      180
+>>         low      3372
+>>         high     6564
+>> Node 1, zone  Movable
+>>         min      3728
+>>         low      69788
+>>         high     135848
+> 
+> The gap between min and low is massive so either adjust how that gap is
+> calculated or to avoid side-effects for other users, consider special
+> casing the gap for ZONE_MOVABLE with a comment explaining why it is
+> treated differently. To mitigate the risk further, it could be further
+> special cased to only apply when there is a massive ratio between
+> ALL_ZONES_EXCEPT_MOVABLE:ZONE_MOVABLE. Document in the changelog the
+> potential downside of more lowmem potentially getting pinned by MOVABLE
+> allocations leading to excessive kswapd activity or premature OOM.
+What I'm trying to say is that the min watermark is too low for zone normal
+since it is shared by other zone based on manager pages.
+
+        Vanilla          |         Modified         
+Node 0, zone      DMA    | Node 0, zone      DMA    
+        min      39      |         min      713     
+        low      743     |         low      1417    
+        high     1447    |         high     2121    
+Node 0, zone   Normal    | Node 0, zone   Normal    
+        min    **180**   |         min    **3234**    
+        low      3372    |         low      6426    
+        high     6564    |         high     9618    
+Node 1, zone  Movable    | Node 1, zone  Movable    
+        min    **3728**  |         min    **128**     
+        low      69788   |         low      66188   
+        high     135848  |         high     132248 
+
+You can see, after this patch, the min watermark is set to small value(128) while zone
+dma/normal's min watermark increase a lot which be useful if the system is low on memory.
+
+The gap between min and low is about 1/1000 of the zone's memory which will not be
+effected by this patch.
+  
+This patch, I am to do something for the min watermark for zone movable, In the next
+patch I want to do something to reserve memory for zone normal or just make 
+watermark_scale_factor more flexible for little normal zone and huge movable zone.
+
+What is you idea on "Cap zone movable to small value"?
+
+
+> 

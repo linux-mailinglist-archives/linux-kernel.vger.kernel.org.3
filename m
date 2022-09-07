@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C87B5B101E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49B65B1020
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiIGXAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 19:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S229771AbiIGXBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 19:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGXAM (ORCPT
+        with ESMTP id S229437AbiIGXBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 19:00:12 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682129D8ED;
-        Wed,  7 Sep 2022 16:00:04 -0700 (PDT)
-X-UUID: e508533bb1eb470bbfe9013aaeec0aa2-20220908
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WVN2su0W6cfg/UUYRpHd6lSdOO4U2GGb7/TQBMhg9MY=;
-        b=q3+BhORkSzOMfYpwhwdq/eeCPCIxaLa4AvXvrmYVEHTfaeRUwhFdPwHVzcs5T+6mydDcVJJX8KJEW6f0sMvWorBL5DtE8qkqGg45SnN3VlkvahsnC96WJRkoz9YtB7Dpyd6sJ0X1UMboiPRDn/w2wFr307xlyq0tTHzdlTbmYoQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:c9a13087-87c7-4326-9ad2-c46e2b4e6d0f,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:45
-X-CID-INFO: VERSION:1.1.10,REQID:c9a13087-87c7-4326-9ad2-c46e2b4e6d0f,OB:0,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:45
-X-CID-META: VersionHash:84eae18,CLOUDID:70f78c21-1c20-48a5-82a0-25f9c331906d,C
-        OID:0c2de187faa6,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
-        URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: e508533bb1eb470bbfe9013aaeec0aa2-20220908
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 674545052; Thu, 08 Sep 2022 06:59:58 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 8 Sep 2022 06:59:57 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 8 Sep 2022 06:59:57 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <angelogioacchino.delregno@collabora.com>
-CC:     <chun-jie.chen@mediatek.com>, <devicetree@vger.kernel.org>,
-        <drinkcat@chromium.org>, <jose.exposito89@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <miles.chen@mediatek.com>, <mturquette@baylibre.com>,
-        <nfraprado@collabora.com>, <rex-bc.chen@mediatek.com>,
-        <robh+dt@kernel.org>, <sboyd@kernel.org>, <weiyi.lu@mediatek.com>,
-        <wenst@chromium.org>
-Subject: Re: [PATCH 03/10] clk: mediatek: mux: add clk notifier functions
-Date:   Thu, 8 Sep 2022 06:59:57 +0800
-Message-ID: <20220907225957.10541-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220905100416.42421-4-angelogioacchino.delregno@collabora.com>
-References: <20220905100416.42421-4-angelogioacchino.delregno@collabora.com>
+        Wed, 7 Sep 2022 19:01:16 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BDAAF49D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:01:14 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MNHmg2Rkyz4x1d;
+        Thu,  8 Sep 2022 09:01:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662591669;
+        bh=1wst7Xpv4YpN5d2XSCKrsJPTTDlZ8FFJBBI/7ix5MqI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D7QwTp1R7NMG6eKndfx6T+gbhvz56bW4QmdyXGoz1a10YLfBg0QQ3YBZ0HxbyJ0q0
+         vELme/yMIpbK0CHHfvwoJfA71XcLgenMADVHriYPWAKj3u5biQ4M7QRibmofrH9dk8
+         LRHucWdEFOR1y036NBS1wOHP9hsK2Jsm6zvdeTg+JB+KZ5as7Re5P93HSd99SRalNF
+         xydq1OFQwZcotQIx9ewuzNhLPpExUNurA2MrAAuJZd7pcMGWenRMSsdYvEV6rIkOh6
+         BGWaoTl1343XvuSi2C29/EhfEE4g4k8sxy/ZR7G+P5P34PYe4bNpID1efGUGSfBdI0
+         jhRtGlVf5/t1Q==
+Date:   Thu, 8 Sep 2022 09:01:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joe Perches <joe@perches.com>
+Cc:     Philippe Schenker <dev@pschenker.ch>,
+        Andy Whitcroft <apw@canonical.com>,
+        linux-kernel@vger.kernel.org,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Philippe Schenker <philippe.schenker@toradex.com>
+Subject: Re: [PATCH] checkpatch: add check for fixes: tag
+Message-ID: <20220908090100.155b9b26@canb.auug.org.au>
+In-Reply-To: <1125e8a68a709e18b594f74fc9b25b9992b1582f.camel@perches.com>
+References: <20220907123547.138646-1-dev@pschenker.ch>
+        <1125e8a68a709e18b594f74fc9b25b9992b1582f.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/4QkMvq3jH8bTS8yvUfk=d4X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Chen-Yu Tsai <wenst@chromium.org>
-> 
-> With device frequency scaling, the mux clock that (indirectly) feeds the
-> device selects between a dedicated PLL, and some other stable clocks.
-> 
-> When a clk rate change is requested, the (normally) upstream PLL is
-> reconfigured. It's possible for the clock output of the PLL to become
-> unstable during this process.
-> 
-> To avoid causing the device to glitch, the mux should temporarily be
-> switched over to another "stable" clock during the PLL rate change.
-> This is done with clk notifiers.
-> 
-> This patch adds common functions for notifiers to temporarily and
-> transparently reparent mux clocks.
-> 
-> This was loosely based on commit 8adfb08605a9 ("clk: sunxi-ng: mux: Add
-> clk notifier functions").
+--Sig_/4QkMvq3jH8bTS8yvUfk=d4X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Joe,
+
+On Wed, 07 Sep 2022 08:18:31 -0700 Joe Perches <joe@perches.com> wrote:
 >
+> I think the test better if it checks for a SHA1 after fixes.
+>=20
+> And IMO
+>=20
+> 	!(foo =3D~ /bar.../)
+>=20
+> is better written as
+>=20
+> 	foo !~ /bar.../
+>=20
+> so
+>=20
+> 		if ($in_commit_log &&
+> 		    $line =3D~ /^\s*Fixes:?\s*[0-9a-f]{5,}\b/i &&
+> 		    $line !~ /^Fixes: [0-9a-f]{12,40} \(\".*\"\)/)) {
+>=20
+> Though it's arguable that the SHA1 should _only_ be length 12
+> and not longer.
 
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+It should be allowed to be longer - eventaully we will need to move on
+from 12 as the repo gets bigger.  Also, any line matching /^\s*Fixes:/i
+should be checked, because people do add extra words before the SHA1
+and sometimes just other text.  You will get some hits that are not
+meant to be Fixes tags, but very few.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4QkMvq3jH8bTS8yvUfk=d4X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMZIqwACgkQAVBC80lX
+0GxfEAgAlmSKNCC4+GTKCuPH2rpvpobiLBlnVyFGAJymO53KD9GKtRPWU/W2aRsa
+PzynD1DkVxlwYhSyIwejvmuMUiEvpfLYxDGhXGU/EJwBB8CZIX6ZKcSBA6W0iDgN
+o6r26Dx9pb4vACBGJKTEKprWURRsb2VVxYxE75G3vpsq5trfgvTh3qJeWD5KpyuM
+Rdkg5hrsTwrgzDoEkKfrEffk/7GXxoU8GXrxnf0lBjg12/XVqCL1SDO0r5iNT+O7
+aFnR9lO01UEcv3Vj8Q9Cl6yF6bYGrWQqLv/yXf8HBld7jH6tEzT60ibGkxFQuYJp
+qnEeQhfQaP9TuMcZjSwoxMxU82fp0Q==
+=JT6S
+-----END PGP SIGNATURE-----
+
+--Sig_/4QkMvq3jH8bTS8yvUfk=d4X--

@@ -2,235 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED715AFAE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CA25AFAEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiIGEAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        id S229629AbiIGEBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIGD75 (ORCPT
+        with ESMTP id S229536AbiIGEBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:59:57 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176D423177;
-        Tue,  6 Sep 2022 20:59:56 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s206so12421334pgs.3;
-        Tue, 06 Sep 2022 20:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Gnmj5Ex/DqjzpQRNGRfdTyZgVm5mtikP88bVpR4fJzM=;
-        b=bqbeoBZwGgYDYNoWifCe6sUVcoOIKi/6vNhdXlZWi+odXuwGfFpte+F+WotAI3VxnU
-         m4biV5jOhm1kmJU0NSu0A7Vzs9Xrw654aux5xbPFTrrYjngJy1tuql8WUL3L/euHbETy
-         nD/Xod1vRL5YRUcj6Z3VX4iAKRGP64S4Ae66zNR01PPNPqwJ06qm9lijDESJgvJz0a09
-         PJnNqA+59tqUjzj97qaJ+SbxO8hgFy2tjjyRRLHw76JnxHAlIfQcvVpjXwOcIabueRTc
-         PnLVeLIWAm0JPrTKzIUPFXCAS97d+kd+6qQUKBQ/R+EuPoPyviw9V8UXzeIS0xungOlW
-         Fpgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Gnmj5Ex/DqjzpQRNGRfdTyZgVm5mtikP88bVpR4fJzM=;
-        b=SRVAPDv++uy9KTqymetiugPy+WApUPR8fu/TkFc6ZPJetpt3PWeLr2OT8deYNvc/Sb
-         xVIGdWQDgNTFb28WmkBV4dq+azagnd3INZdDKdBhkQJvF27eCdcjVBaPRgYBx99LvoUG
-         YzoQqYD6bNW9T8/QdYBCKAoaywSfUWAoKlIkzEsj9Dr+nM91s3NBq/OBNedixTwXyOPZ
-         p0V5Ke2MXRYwzkjxXGmRBHqZ2+APH/nP8yuVCBCVbaXRGE9k3DUA1m7SE2alxN51AFZJ
-         6IZKtMdNGC4fIbfMbbI/2XZoNxe23Q5A+rjdcvlmCA8iYmF+mQUH0cOBs+DB6AeGNpax
-         M/WA==
-X-Gm-Message-State: ACgBeo2hljmA57A4Hh5Ob9AV3vGTRWtPOA09hW3eTEOpc19rQZmUmutE
-        +gsJDT4P58lt46CYkEObYEM=
-X-Google-Smtp-Source: AA6agR6O7dvel/ZLFrmkLY4tXDS/tRf0PX1WYWVV/PY0Hsxl3LNPF9weKZVQdUtmef+99zbe3lVfYQ==
-X-Received: by 2002:a63:91c3:0:b0:434:bafa:ce88 with SMTP id l186-20020a6391c3000000b00434baface88mr1655529pge.188.1662523195621;
-        Tue, 06 Sep 2022 20:59:55 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090a16cf00b002005fcd2cb4sm5090314pje.2.2022.09.06.20.59.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 20:59:55 -0700 (PDT)
-Message-ID: <d63e79d8-fcbc-9def-4a90-e7a4614493bb@gmail.com>
-Date:   Wed, 7 Sep 2022 11:59:45 +0800
+        Wed, 7 Sep 2022 00:01:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46677696F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:00:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2CD3B1FE78;
+        Wed,  7 Sep 2022 04:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662523258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=npuejNubOdyGQXlyaQnjNHAGxJEr1nLk2K2rggJlZR4=;
+        b=ltPEDAeAJDZd3nBa8es43GTlO0wXsuHSOxcGJOzHlNGi3XvHv1ZXCEkSpA8/iknka32Dr5
+        p7Q6g7I7Qn30Rtx/b6UsyjQWIUPcHL7YUS6TiN5tN5fyF3qg/wQNkmNr9QFW8KlbPy8r1z
+        2eK0PbuSZ6TCszdQA/NrHK0nAC0P2Uc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662523258;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=npuejNubOdyGQXlyaQnjNHAGxJEr1nLk2K2rggJlZR4=;
+        b=pQIHI3OCLZbMyrnl1GDcSg6pbXOkICpng01ByWrGUluvMAMN8RkBCiyLmHA0FRLz/uA8lI
+        xUr/QvxgcUuJpiAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8A81913486;
+        Wed,  7 Sep 2022 04:00:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id u+0aH3kXGGMPMAAAMHmgww
+        (envelope-from <osalvador@suse.de>); Wed, 07 Sep 2022 04:00:57 +0000
+Date:   Wed, 7 Sep 2022 06:00:55 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>
+Subject: Re: [PATCH v2 2/3] mm, page_owner: Add page_owner_stacks file to
+ print out only stacks and their counter
+Message-ID: <YxgXd0Z+cqRk7Y7U@localhost.localdomain>
+References: <20220905031012.4450-1-osalvador@suse.de>
+ <20220905031012.4450-3-osalvador@suse.de>
+ <YxXyThZanSl3wboo@elver.google.com>
+ <Yxb6PiwBDVuCOp1Q@localhost.localdomain>
+ <CANpmjNMNxsoyBqR4U8ybP1ZzNGfkFDcZYJfpiv73wgD=xi6TDA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH 4/4] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf
- 0x80000022
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220905123946.95223-1-likexu@tencent.com>
- <20220905123946.95223-5-likexu@tencent.com>
- <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com>
- <0e0f773b-0dde-2282-c2d0-fad2311f59a7@gmail.com>
- <CALMp9eQQe-XDUZmNtg5Z+Vv8hMu_R_fuTv2+-ZfuRwzNUmW0fA@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <CALMp9eQQe-XDUZmNtg5Z+Vv8hMu_R_fuTv2+-ZfuRwzNUmW0fA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNMNxsoyBqR4U8ybP1ZzNGfkFDcZYJfpiv73wgD=xi6TDA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/9/2022 4:08 am, Jim Mattson wrote:
-> On Tue, Sep 6, 2022 at 5:53 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> On 6/9/2022 1:36 am, Jim Mattson wrote:
->>> On Mon, Sep 5, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>>>
->>>> From: Sandipan Das <sandipan.das@amd.com>
->>>>
->>>> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some
->>>> new performance monitoring features for AMD processors.
->>>>
->>>> Bit 0 of EAX indicates support for Performance Monitoring
->>>> Version 2 (PerfMonV2) features. If found to be set during
->>>> PMU initialization, the EBX bits of the same CPUID function
->>>> can be used to determine the number of available PMCs for
->>>> different PMU types.
->>>>
->>>> Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so
->>>> that guests can make use of the PerfMonV2 features.
->>>>
->>>> Co-developed-by: Like Xu <likexu@tencent.com>
->>>> Signed-off-by: Like Xu <likexu@tencent.com>
->>>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
->>>> ---
->>>>    arch/x86/include/asm/perf_event.h |  8 ++++++++
->>>>    arch/x86/kvm/cpuid.c              | 21 ++++++++++++++++++++-
->>>>    2 files changed, 28 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
->>>> index f6fc8dd51ef4..c848f504e467 100644
->>>> --- a/arch/x86/include/asm/perf_event.h
->>>> +++ b/arch/x86/include/asm/perf_event.h
->>>> @@ -214,6 +214,14 @@ union cpuid_0x80000022_ebx {
->>>>           unsigned int            full;
->>>>    };
->>>>
->>>> +union cpuid_0x80000022_eax {
->>>> +       struct {
->>>> +               /* Performance Monitoring Version 2 Supported */
->>>> +               unsigned int    perfmon_v2:1;
->>>> +       } split;
->>>> +       unsigned int            full;
->>>> +};
->>>> +
->>>>    struct x86_pmu_capability {
->>>>           int             version;
->>>>           int             num_counters_gp;
->>>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->>>> index 75dcf7a72605..08a29ab096d2 100644
->>>> --- a/arch/x86/kvm/cpuid.c
->>>> +++ b/arch/x86/kvm/cpuid.c
->>>> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>>>                   entry->edx = 0;
->>>>                   break;
->>>>           case 0x80000000:
->>>> -               entry->eax = min(entry->eax, 0x80000021);
->>>> +               entry->eax = min(entry->eax, 0x80000022);
->>>>                   /*
->>>>                    * Serializing LFENCE is reported in a multitude of ways, and
->>>>                    * NullSegClearsBase is not reported in CPUID on Zen2; help
->>>> @@ -1203,6 +1203,25 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>>>                   if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
->>>>                           entry->eax |= BIT(6);
->>>>                   break;
->>>> +       /* AMD Extended Performance Monitoring and Debug */
->>>> +       case 0x80000022: {
->>>> +               union cpuid_0x80000022_eax eax;
->>>> +               union cpuid_0x80000022_ebx ebx;
->>>> +
->>>> +               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->>>> +               if (!enable_pmu)
->>>> +                       break;
->>>> +
->>>> +               if (kvm_pmu_cap.version > 1) {
->>>> +                       /* AMD PerfMon is only supported up to V2 in the KVM. */
->>>> +                       eax.split.perfmon_v2 = 1;
->>>> +                       ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
->>>> +                                                    KVM_AMD_PMC_MAX_GENERIC);
->>>
->>> Note that the number of core PMCs has to be at least 6 if
->>> guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE). I suppose this leaf
->>> could claim fewer, but the first 6 PMCs must work, per the v1 PMU
->>> spec. That is, software that knows about PERFCTR_CORE, but not about
->>> PMU v2, can rightfully expect 6 PMCs.
->>
->> I thought the NumCorePmc number would only make sense if
->> CPUID.80000022.eax.perfmon_v2
->> bit was present, but considering that the user space is perfectly fine with just
->> configuring the
->> NumCorePmc number without setting perfmon_v2 bit at all, so how about:
-> 
-> CPUID.80000022H might only make sense if X86_FEATURE_PERFCTR_CORE is
-> present. It's hard to know in the absence of documentation.
+On Tue, Sep 06, 2022 at 10:35:00AM +0200, Marco Elver wrote:
+> I think it's clear from the fact we're using the stack depot that any
+> printing will print stacks. To mirror the existing
+> 'stack_depot_print()', I'd go with 'stack_depot_print_all_count()'.
 
-Whenever this happens, we may always leave the definition of behavior to the 
-hypervisor.
-
+Fair enough, I will rename it then.
+ 
+> Moderately better, but still not great. Essentially you need 2
+> cursors, but with loff_t you only get 1.
 > 
->>          /* AMD Extended Performance Monitoring and Debug */
->>          case 0x80000022: {
->>                  union cpuid_0x80000022_eax eax;
->>                  union cpuid_0x80000022_ebx ebx;
->>                  bool perfctr_core;
->>
->>                  entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->>                  if (!enable_pmu)
->>                          break;
->>
->>                  perfctr_core = kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE);
->>                  if (!perfctr_core)
->>                          ebx.split.num_core_pmc = AMD64_NUM_COUNTERS;
->>                  if (kvm_pmu_cap.version > 1) {
->>                          /* AMD PerfMon is only supported up to V2 in the KVM. */
->>                          eax.split.perfmon_v2 = 1;
->>                          ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
->>                                                       KVM_AMD_PMC_MAX_GENERIC);
->>                  }
->>                  if (perfctr_core) {
->>                          ebx.split.num_core_pmc = max(ebx.split.num_core_pmc,
->>                                                       AMD64_NUM_COUNTERS_CORE);
->>                  }
+> I think the loff_t parameter can be used to encode both cursors. In
+> the kernel, loff_t is always 'long long', so it'll always be 64-bit.
 > 
-> This still isn't quite right. All AMD CPUs must support a minimum of 4 PMCs.
+> Let's assume that collisions in the hash table are rare, so the number
+> of stacks per bucket are typically small. Then you can encode the
+> index into the bucket in bits 0-31 and the bucket index in bits 32-63.
+> STACK_HASH_ORDER_MAX is 20, so 32 bits is plenty to encode the index.
 
-K7 at least. I could not confirm that all antique AMD CPUs have 4 counters w/o 
-perfctr_core.
+I see, I didn't think of it to be honest.
 
-> 
->>
->>                  entry->eax = eax.full;
->>                  entry->ebx = ebx.full;
->>                  break;
->>          }
->>
->> ?
->>
->> Once 0x80000022 appears, ebx.split.num_core_pmc will report only
->> the real "Number of Core Performance Counters" regardless of perfmon_v2.
->>
->>>
->>>
->>>> +               }
->>>> +               entry->eax = eax.full;
->>>> +               entry->ebx = ebx.full;
->>>> +               break;
->>>> +       }
->>>>           /*Add support for Centaur's CPUID instruction*/
->>>>           case 0xC0000000:
->>>>                   /*Just support up to 0xC0000004 now*/
->>>> --
->>>> 2.37.3
->>>>
+Then, the below (completely untested) should the trick:
+
+<----
+ int stack_depot_print_all_count(char *buf, size_t size, loff_t *pos)
+ {
+         int ret = 0, stack_i, table_i;
+         struct stack_record **stacks, *stack;
+         unsigned long stack_table_entries = stack_hash_mask + 1;
+ 
+         stack_i = (*pos & 31);
+         table_i = (*pos >> 32);
+ new_table:
+         stacks = &stack_table[table_i];
+         stack = ((struct stack_record *)stacks) + stack_i;
+ 
+         for (; stack; stack = stack->next, stack_i++) {
+                 if (!stack->size || stack->size < 0 ||
+                     stack->size > size || stack->handle.valid != 1 ||
+                     refcount_read(&stack->count) < 1)
+                         continue;
+ 
+                 ret += stack_trace_snprint(buf, size, stack->entries, stack->size, 0);
+                 ret += scnprintf(buf + ret, size - ret, "stack count: %d\n\n",
+                                  refcount_read(&stack->count));
+                 *pos |= stack_i;
+                 *pos |= ((long long)table_i << 32);
+                 return ret;
+         }
+ 
+         table_i++;
+         /* Keep looking all tables for valid stacks */
+         if (table_i < stack_table_entries)
+                 goto new_table;
+ 
+         return 0;
+ }
+---->
+
+I will give it a go.
+
+Thanks Marco!
+
+
+-- 
+Oscar Salvador
+SUSE Labs

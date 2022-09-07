@@ -2,192 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4252B5AFF89
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E89F5AFF95
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiIGIsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S229948AbiIGIvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiIGIsF (ORCPT
+        with ESMTP id S229906AbiIGIuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:48:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C950499B66;
-        Wed,  7 Sep 2022 01:48:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64ADF617FE;
-        Wed,  7 Sep 2022 08:48:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A623C433C1;
-        Wed,  7 Sep 2022 08:48:00 +0000 (UTC)
-Message-ID: <9270d6c8-fc8d-3a15-5469-aca3faab098b@xs4all.nl>
-Date:   Wed, 7 Sep 2022 10:47:58 +0200
+        Wed, 7 Sep 2022 04:50:55 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8BE72860;
+        Wed,  7 Sep 2022 01:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M9ffSCcPAJFL/NG3iecTA6XnLuNGeYKgtteM2yRjbw8=; b=RkCkoGesMVEcRNleJvacW27ZN9
+        eY6mqXlLytLmnVTUKkvVx8upYmP36N0nVMK6OGviCGk0MrGxxqvCKFQ2sVRWckFQAB5ga87K5lECr
+        7m0wErxJQXSkUWe0P3Qq31N3F9tBcfUN2tNLtWayNUzwxQGjlG35NgtA8f1SDxw4a6Bx/48ySEszA
+        KPjszB/XFsGfcyya0D92vkgmt8MBtS9AeDfzrSfDWIxuZ8jnpXh+c9RTwBZWtiuuZHUMtPsReO5PX
+        Cud2D6l2SHerN+rFL9hFmy6zneagpc7A2yy9HT/ovVqtGCSOiWRuqX7kFvwVUvfahUbviFXUq9k90
+        gaDEFQVA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVql3-00APB3-3s; Wed, 07 Sep 2022 08:50:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C72E130013F;
+        Wed,  7 Sep 2022 10:50:03 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9DD9B20134FB3; Wed,  7 Sep 2022 10:50:03 +0200 (CEST)
+Date:   Wed, 7 Sep 2022 10:50:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Bill Wendling <morbo@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        virtualization@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+Message-ID: <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220902213750.1124421-3-morbo@google.com>
+ <202209022251.B14BD50B29@keescook>
+ <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+ <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 00/43] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / CSI
- Rework
-Content-Language: en-US
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220826183240.604834-1-paul.kocialkowski@bootlin.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220826183240.604834-1-paul.kocialkowski@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-On 26/08/2022 20:31, Paul Kocialkowski wrote:
-> This part only concerns the rework of the CSI driver to support the MIPI CSI-2
-> and ISP workflows.
+On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
+> On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+> >
+> > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> > > > [...]
+> > > >         callq   *pv_ops+536(%rip)
+> > >
+> > > Do you know which pv_ops function is this? I can't figure out where
+> > > pte_offset_kernel() gets converted into a pv_ops call....
+> > >
+> > This one is _paravirt_ident_64, I believe. I think that the original
+> > issue Nathan was seeing was with another seemingly innocuous function.
 > 
-> Very few patches have not received any review at this point and the whole
-> thing looks good to go. Since this multi-part series has been going on for a
-> while, it would be great to see it merged soon!
+> _paravirt_ident_64 is marked noinstr, which makes me suspect that it
+> really needs to not be touched at all by the compiler for
+> these...special features.
 
-Testing with just patches 1-15 gives me these kerneldoc results:
+My source tree sayeth:
 
-kerneldoc: WARNINGS
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:79: warning: Function parameter or member 'csi_dev' not described in 'sun6i_csi_is_format_supported'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:79: warning: Excess function parameter 'csi' description in 'sun6i_csi_is_format_supported'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:86: warning: Function parameter or member 'csi_dev' not described in 'sun6i_csi_set_power'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:86: warning: Excess function parameter 'csi' description in 'sun6i_csi_set_power'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:94: warning: Function parameter or member 'csi_dev' not described in 'sun6i_csi_update_config'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:94: warning: Excess function parameter 'csi' description in 'sun6i_csi_update_config'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:102: warning: Function parameter or member 'csi_dev' not described in 'sun6i_csi_update_buf_addr'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:102: warning: Excess function parameter 'csi' description in 'sun6i_csi_update_buf_addr'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:109: warning: Function parameter or member 'csi_dev' not described in 'sun6i_csi_set_stream'
-drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:109: warning: Excess function parameter 'csi' description in 'sun6i_csi_set_stream'
+  u64 notrace _paravirt_ident_64(u64 x)
 
-If this is caused by just 1 or 2 patches, then please post a v6.1 version of just
-those patches fixing this. Otherwise perhaps a v7 is needed.
+And that function is only ever called at boot, after alternatives runs
+it's patched with:
 
-Regards,
+  mov %_ASM_ARG1, %_ASM_AX
 
-	Hans
+Anyway, if you want to take it away from the compiler, something like
+so should do.
 
-> 
-> Changes since v5:
-> - Rebased on latest media tree;
-> - Switched to using media_pad_remote_pad_first;
-> - Switched to using media_pad_remote_pad_unique.
-> 
-> Changes since v4:
-> - Removed the v4l2 controls handler from the driver;
-> - Removed the info message about video device registration;
-> - Fixed "literature" typos;
-> - Moved patches dependent on the ISP driver to its dedicated series;
-> - Rebased on the latest media tree;
-> - Added collected tags;
-> 
-> Changes since v3:
-> - Updated Kconfig to follow the latest media-wide changes;
-> - Rebased on latest changes to the driver (JPEG/sRGB colorspaces);
-> - Added helper to get a single enabled link for an entity's pad, to replace
->   source selection at link_validate time and select the remote source at
->   stream on time instead;
-> - Kept clock-managed regmap mmio;
-> - Added collected review tags;
-> - Various cosmetic cleanups;
-> 
-> Changes since all-in-one v2:
-> - Reworked capture video device registration, which stays in the main path.
-> - Reworked async subdev handling with a dedicated structure holding the
->   corresponding source to avoid matching in the driver;
-> - Added mutex for mbus format serialization;
-> - Remove useless else in link_validate;
-> - Reworked commit logs to include missing information;
-> - Cleaned up Kconfig, added PM dependency;
-> - Moved platform-specific clock rate to of match data;
-> - Added collected Reviewed-by tags;
-> - Updated copyright years;
-> 
-> Paul Kocialkowski (43):
->   media: sun6i-csi: Define and use driver name and (reworked)
->     description
->   media: sun6i-csi: Refactor main driver data structures
->   media: sun6i-csi: Tidy up platform code
->   media: sun6i-csi: Always set exclusive module clock rate
->   media: sun6i-csi: Define and use variant to get module clock rate
->   media: sun6i-csi: Use runtime pm for clocks and reset
->   media: sun6i-csi: Tidy up Kconfig
->   media: sun6i-csi: Tidy up v4l2 code
->   media: sun6i-csi: Tidy up video code
->   media: sun6i-csi: Pass and store csi device directly in video code
->   media: sun6i-csi: Register the media device after creation
->   media: sun6i-csi: Remove controls handler from the driver
->   media: sun6i-csi: Add media ops with link notify callback
->   media: sun6i-csi: Introduce and use video helper functions
->   media: sun6i-csi: Move csi buffer definition to main header file
->   media: sun6i-csi: Add bridge v4l2 subdev with port management
->   media: sun6i-csi: Rename sun6i_video to sun6i_csi_capture
->   media: sun6i-csi: Add capture state using vsync for page flip
->   media: sun6i-csi: Rework register definitions, invert misleading
->     fields
->   media: sun6i-csi: Add dimensions and format helpers to capture
->   media: sun6i-csi: Implement address configuration without indirection
->   media: sun6i-csi: Split stream sequences and irq code in capture
->   media: sun6i-csi: Move power management to runtime pm in capture
->   media: sun6i-csi: Move register configuration to capture
->   media: sun6i-csi: Rework capture format management with helper
->   media: sun6i-csi: Remove custom format helper and rework configure
->   media: sun6i-csi: Add bridge dimensions and format helpers
->   media: sun6i-csi: Get mbus code from bridge instead of storing it
->   media: sun6i-csi: Tidy capture configure code
->   media: sun6i-csi: Introduce bridge format structure, list and helper
->   media: sun6i-csi: Introduce capture format structure, list and helper
->   media: sun6i-csi: Configure registers from format tables
->   media: sun6i-csi: Introduce format match structure, list and helper
->   media: sun6i-csi: Implement capture link validation with logic
->   media: sun6i-csi: Get bridge subdev directly in capture stream ops
->   media: sun6i-csi: Move hardware control to the bridge
->   media: sun6i-csi: Rename the capture video device to sun6i-csi-capture
->   media: sun6i-csi: Cleanup headers and includes, update copyright lines
->   media: sun6i-csi: Add support for MIPI CSI-2 to the bridge code
->   media: sun6i-csi: Only configure capture when streaming
->   media: sun6i-csi: Add extra checks to the interrupt routine
->   media: sun6i-csi: Request a shared interrupt
->   MAINTAINERS: Add myself as sun6i-csi maintainer and rename/move entry
-> 
->  MAINTAINERS                                   |   17 +-
->  .../media/platform/sunxi/sun6i-csi/Kconfig    |   12 +-
->  .../media/platform/sunxi/sun6i-csi/Makefile   |    2 +-
->  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 1027 ++++------------
->  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  149 +--
->  .../sunxi/sun6i-csi/sun6i_csi_bridge.c        |  844 +++++++++++++
->  .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |   69 ++
->  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 1089 +++++++++++++++++
->  .../sunxi/sun6i-csi/sun6i_csi_capture.h       |   88 ++
->  .../platform/sunxi/sun6i-csi/sun6i_csi_reg.h  |  362 +++---
->  .../platform/sunxi/sun6i-csi/sun6i_video.c    |  685 -----------
->  .../platform/sunxi/sun6i-csi/sun6i_video.h    |   38 -
->  12 files changed, 2551 insertions(+), 1831 deletions(-)
->  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
->  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
->  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
->  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
->  delete mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
->  delete mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_video.h
-> 
 
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 7ca2d46c08cc..8922e2887779 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -80,11 +80,16 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+ }
+ 
+ #ifdef CONFIG_PARAVIRT_XXL
+-/* identity function, which can be inlined */
+-u64 notrace _paravirt_ident_64(u64 x)
+-{
+-	return x;
+-}
++extern u64 _paravirt_ident_64(u64 x);
++asm (".pushsection .entry.text, \"ax\"\n"
++     ".global _paravirt_ident_64\n"
++     "_paravirt_ident_64:\n\t"
++     ASM_ENDBR
++     "mov %" _ASM_ARG1 ", %" _ASM_AX "\n\t"
++     ASM_RET
++     ".size _paravirt_ident_64, . - _paravirt_ident_64\n\t"
++     ".type _paravirt_ident_64, @function\n\t"
++     ".popsection");
+ #endif
+ 
+ DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);

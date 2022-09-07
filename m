@@ -2,92 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E515B0692
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7925B0694
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiIGO3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:29:08 -0400
+        id S230079AbiIGO3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:29:19 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbiIGO3B (ORCPT
+        with ESMTP id S229685AbiIGO3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:29:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB6F4F1B1;
-        Wed,  7 Sep 2022 07:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=inHqbG6NSnuJ5skBNuf/ekCdeq4XFuOJvc4VpR5QXL4=; b=m+PLj/7AfIBomU+XrCnPnsSCWP
-        vmOP+WwlHmrgshXWAHq6bpC8mNVC266LHnU8+tSDwYhdo863MH2MFD0YaLoEhC2o7jzQbsAyQWUj0
-        8Ghop8M/3BEk8oUuO703ZHkkDzFmtYbLezlyf3kEBfEsoXIB/0KE4qoOwk3Dnm9AiwXy+12YirkJx
-        J4rFEUEw/sprFxvFoTHlSp3ni3ADG7owkgsp3sYkckOFsLLBfHXkRDqGfkExGD0qYK8GOluUxP1QD
-        7fbRPmB5C+mN5q/BSALV6v3lFA5Gy+0ovf+14NLA8O3XMmvl6tMT1UOAdpOI8cPD8eNMAGzpW83+X
-        jFt2tphw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVw2Y-00BQC8-TF; Wed, 07 Sep 2022 14:28:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C847730013F;
-        Wed,  7 Sep 2022 16:28:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BE3912B9CF1E2; Wed,  7 Sep 2022 16:28:28 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 16:28:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Message-ID: <YxiqjKU9xGma3Bnt@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
- <166251212072.632004.16078953024905883328.stgit@devnote2>
- <YxiVFJ9UdM5KeIXf@hirez.programming.kicks-ass.net>
- <20220907224913.dfdbea2ec6cd637438dbd09a@kernel.org>
+        Wed, 7 Sep 2022 10:29:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9444A7C509
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:29:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 320FB617D2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96623C433D6;
+        Wed,  7 Sep 2022 14:29:08 +0000 (UTC)
+Date:   Wed, 7 Sep 2022 15:29:05 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Liu Song <liusong@linux.alibaba.com>
+Cc:     will@kernel.org, james.morse@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: spectre: increase parameters that can be used
+ to turn off bhb mitigation individually
+Message-ID: <YxiqsXjQQGe0dNuA@arm.com>
+References: <1661514050-22263-1-git-send-email-liusong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907224913.dfdbea2ec6cd637438dbd09a@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1661514050-22263-1-git-send-email-liusong@linux.alibaba.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:49:13PM +0900, Masami Hiramatsu wrote:
-> On Wed, 7 Sep 2022 14:56:52 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, Aug 26, 2022 at 07:40:50PM +0800, Liu Song wrote:
+> From: Liu Song <liusong@linux.alibaba.com>
 > 
-> > On Wed, Sep 07, 2022 at 09:55:21AM +0900, Masami Hiramatsu (Google) wrote:
-> > 
-> > >  	if (!kallsyms_lookup_size_offset(paddr, NULL, &offset))
-> > >  		return 0;
-> > >  
-> > 
-> > One more thing:
-> > 
-> >   https://lkml.kernel.org/r/20220902130951.853460809@infradead.org
-> > 
-> > can result in negative offsets. The expression:
-> > 
-> > 	'paddr - offset'
-> > 
-> > will still get you to +0, but I might not have fully considered things
-> > when I wrote that patch.
+> In our environment, it was found that the mitigation BHB has a great
+> impact on the benchmark performance. For example, in the lmbench test,
+> the "process fork && exit" test performance drops by 20%.
+> So it is necessary to have the ability to turn off the mitigation
+> individually through cmdline, thus avoiding having to compile the
+> kernel by adjusting the config.
 > 
-> Hmm, isn't 'offset' unsigned? If 'paddr - offset' is still available
-> to find the function entry address, it is OK to me.
+> Signed-off-by: Liu Song <liusong@linux.alibaba.com>
 
-Yeah, but the magic of 2s complement means it doesn't matter ;-)
+If people want to disable this mitigation and know what they are doing,
+I have no objection:
+
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+
+(I guess that's more like 6.1 material)
+
+-- 
+Catalin

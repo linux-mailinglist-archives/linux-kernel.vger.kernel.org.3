@@ -2,202 +2,520 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B5D5B04FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148AB5B0502
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiIGNRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S229845AbiIGNSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiIGNRK (ORCPT
+        with ESMTP id S229751AbiIGNSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:17:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7FA15826;
-        Wed,  7 Sep 2022 06:17:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662556622; x=1694092622;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=P/522PYLlLCWVLOaKuo2OxUL3IFdUjtGrg1zfuDvgOs=;
-  b=WuYAEycqxQqr7JNY+GJUeYWZcaawcKn4JjQmRQ7+KArpouzTuBKbYOp0
-   lMxZjSd/k7dRIVyCFRyM7/s5el1+EQ857dS41+3p65gi16sJDnGGDZAPH
-   VGCHWfjmVPCZoLQKLhcmYR4EuqUzoPzSAH9/MscFJYY3aPj9Na/i7xuf8
-   VKhobDF6rXeIuOKvByOukc5Zp5j6JNqnSBb0f3ImLrFXd4EtaAKby37b+
-   lM4zkDqGDRFgi7Cbnq9Li3J/Air6DE21m4NltXCvRr61Kd8+cpv11ZtYY
-   DxhVJRo/n2DmvFKq+QUyjJbt5R135YZmTkINDMhsforxTPrr7HTOW8gGf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="358581205"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="358581205"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:17:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="676180674"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.27])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:16:58 -0700
-Message-ID: <a2d9f1f2-cf8b-4ef6-7114-52e5bdf22e70@intel.com>
-Date:   Wed, 7 Sep 2022 16:16:53 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 2/6] perf test: Use a test program in perf record tests
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-References: <20220907064645.1197894-1-namhyung@kernel.org>
- <20220907064645.1197894-3-namhyung@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220907064645.1197894-3-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 09:18:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36E417AAA;
+        Wed,  7 Sep 2022 06:18:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DAA16190C;
+        Wed,  7 Sep 2022 13:18:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 425ADC433D7;
+        Wed,  7 Sep 2022 13:18:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662556710;
+        bh=vfGds+IHhiq5Jfaq54EwwCVAb4B+ErClkegWiHk+7UQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MG9l7KiTqdxYExU+toJC8MSzf5EAzXbdQLiHk9BwAd5zmRxrQv6bCvSLfx4zxVL/S
+         XNwlv+5E3b7qHzpgDuQ1gYxk4OwbCQc3qouzcTRrFvC9Z3F9dMu0YLQgMOuRmAJNaY
+         gIRwnApYUy6K7Q8SYzHTRg3L4tyQFpPR8AmWG45n8vLBfduRJ9ILU963bBWOTEr7or
+         ORWYekYBuddCabPssufALWr5++hvRCrY9ZKCa6/8aKJFiPDDkxx/g5TeE0hDNi6mLP
+         YgeIHoAYsSxEeWTvMpVbuF4ttl42ZA3qciIUf3R2Nq0ZWfDgbZt4wtPGGUzRJSLddE
+         XimGqmLoqr9JA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oVuwl-008eKg-VP;
+        Wed, 07 Sep 2022 14:18:28 +0100
+Date:   Wed, 07 Sep 2022 14:18:27 +0100
+Message-ID: <87h71juxuk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <eric.auger@redhat.com>, <alex.williamson@redhat.com>,
+        <cohuck@redhat.com>, <puneet.gupta@amd.com>,
+        <song.bao.hua@hisilicon.com>, <mchehab+huawei@kernel.org>,
+        <f.fainelli@gmail.com>, <jeffrey.l.hugo@gmail.com>,
+        <saravanak@google.com>, <Michael.Srba@seznam.cz>,
+        <mani@kernel.org>, <yishaih@nvidia.com>, <jgg@ziepe.ca>,
+        <jgg@nvidia.com>, <robin.murphy@arm.com>, <will@kernel.org>,
+        <joro@8bytes.org>, <masahiroy@kernel.org>,
+        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <okaya@kernel.org>, <harpreet.anand@amd.com>,
+        <nikhil.agarwal@amd.com>, <michal.simek@amd.com>,
+        <aleksandar.radovanovic@amd.com>, <git@amd.com>
+Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its domain as parent
+In-Reply-To: <20220906134801.4079497-5-nipun.gupta@amd.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+        <20220906134801.4079497-1-nipun.gupta@amd.com>
+        <20220906134801.4079497-5-nipun.gupta@amd.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nipun.gupta@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org, rafael@kernel.org, eric.auger@redhat.com, alex.williamson@redhat.com, cohuck@redhat.com, puneet.gupta@amd.com, song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com, saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com, jgg@ziepe.ca, jgg@nvidia.com, robin.murphy@arm.com, will@kernel.org, joro@8bytes.org, masahiroy@kernel.org, ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com, michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/09/22 09:46, Namhyung Kim wrote:
-> If the system has cc it could build a test program with two threads
-> and then use it for more detailed testing.  Also it adds initial delay
-> of 3ms to profile a multi-threaded target.  This change make the test
-> failing but that's what we want to check for now.
+On Tue, 06 Sep 2022 14:47:58 +0100,
+Nipun Gupta <nipun.gupta@amd.com> wrote:
 > 
-> If cc is not found, it falls back to use the default value 'true'.
+> Devices on cdx bus are dynamically detected and registered using
+> platform_device_register API. As these devices are not linked to
+> of node they need a separate MSI domain for handling device ID
+> to be provided to the GIC ITS domain.
 > 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> This also introduces APIs to alloc and free IRQs for CDX domain.
+> 
+> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> Signed-off-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
 > ---
->  tools/perf/tests/shell/record.sh | 58 +++++++++++++++++++++++++++++---
->  1 file changed, 54 insertions(+), 4 deletions(-)
+>  drivers/bus/cdx/cdx.c        |  18 +++
+>  drivers/bus/cdx/cdx.h        |  19 +++
+>  drivers/bus/cdx/cdx_msi.c    | 236 +++++++++++++++++++++++++++++++++++
+>  drivers/bus/cdx/mcdi_stubs.c |   1 +
+>  include/linux/cdx/cdx_bus.h  |  19 +++
+>  5 files changed, 293 insertions(+)
+>  create mode 100644 drivers/bus/cdx/cdx_msi.c
 > 
-> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-> index 40b087bfdb76..cea3c7b7e2cd 100755
-> --- a/tools/perf/tests/shell/record.sh
-> +++ b/tools/perf/tests/shell/record.sh
-> @@ -6,10 +6,18 @@ set -e
+> diff --git a/drivers/bus/cdx/cdx.c b/drivers/bus/cdx/cdx.c
+> index fc417c32c59b..02ececce1c84 100644
+> --- a/drivers/bus/cdx/cdx.c
+> +++ b/drivers/bus/cdx/cdx.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/property.h>
+>  #include <linux/iommu.h>
+> +#include <linux/msi.h>
+>  #include <linux/cdx/cdx_bus.h>
 >  
->  err=0
->  perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +testprog=$(mktemp /tmp/__perf_test.prog.XXXXXX)
-> +testsym="test_loop"
-> +testopt="-D 3"
+>  #include "cdx.h"
+> @@ -236,6 +237,7 @@ static int cdx_device_add(struct device *parent,
+>  			  struct cdx_dev_params_t *dev_params)
+>  {
+>  	struct cdx_device *cdx_dev;
+> +	struct irq_domain *cdx_msi_domain;
+>  	int ret;
 >  
->  cleanup() {
->    rm -f ${perfdata}
->    rm -f ${perfdata}.old
-> +
-> +  if [ "${testprog}" != "true" ]; then
-> +    rm -f ${testprog}
-> +  fi
-> +
->    trap - exit term int
->  }
+>  	cdx_dev = kzalloc(sizeof(*cdx_dev), GFP_KERNEL);
+> @@ -252,6 +254,7 @@ static int cdx_device_add(struct device *parent,
 >  
-> @@ -19,9 +27,49 @@ trap_cleanup() {
->  }
->  trap trap_cleanup exit term int
+>  	/* Populate CDX dev params */
+>  	cdx_dev->req_id = dev_params->req_id;
+> +	cdx_dev->num_msi = dev_params->num_msi;
+>  	cdx_dev->vendor = dev_params->vendor;
+>  	cdx_dev->device = dev_params->device;
+>  	cdx_dev->bus_id = dev_params->bus_id;
+> @@ -269,6 +272,21 @@ static int cdx_device_add(struct device *parent,
+>  	dev_set_name(&cdx_dev->dev, "cdx-%02x:%02x", cdx_dev->bus_id,
+>  			cdx_dev->func_id);
 >  
-> +build_test_program() {
-> +  if ! [ -x "$(command -v cc)" ]; then
-> +    # No CC found. Fall back to 'true'
-> +    testprog=true
-> +    testsym=true
-> +    testopt=''
-> +    return
-> +  fi
+> +	/* If CDX MSI domain is not created, create one. */
+> +	cdx_msi_domain = cdx_find_msi_domain(parent);
+
+Why do we need such a wrapper around find_host_domain()?
+
+> +	if (!cdx_msi_domain) {
+> +		cdx_msi_domain = cdx_msi_domain_init(parent);
+
+This is racy. If device are populated in parallel, bad things will
+happen.
+
+> +		if (!cdx_msi_domain) {
+> +			dev_err(&cdx_dev->dev,
+> +				"cdx_msi_domain_init() failed: %d", ret);
+> +			kfree(cdx_dev);
+> +			return -1;
+
+Use standard error codes.
+
+> +		}
+> +	}
 > +
-> +  echo "Build a test program"
-> +  cat <<EOF | cc -o ${testprog} -xc - -pthread
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <pthread.h>
+> +	/* Set the MSI domain */
+> +	dev_set_msi_domain(&cdx_dev->dev, cdx_msi_domain);
 > +
-> +void test_loop(void) {
-> +  volatile int count = 1000000;
+>  	ret = device_add(&cdx_dev->dev);
+>  	if (ret != 0) {
+>  		dev_err(&cdx_dev->dev,
+> diff --git a/drivers/bus/cdx/cdx.h b/drivers/bus/cdx/cdx.h
+> index db0569431c10..95df440ebd73 100644
+> --- a/drivers/bus/cdx/cdx.h
+> +++ b/drivers/bus/cdx/cdx.h
+> @@ -20,6 +20,7 @@
+>   * @res: array of MMIO region entries
+>   * @res_count: number of valid MMIO regions
+>   * @req_id: Requestor ID associated with CDX device
+> + * @num_msi: Number of MSI's supported by the device
+>   */
+>  struct cdx_dev_params_t {
+>  	u16 vendor;
+> @@ -29,6 +30,24 @@ struct cdx_dev_params_t {
+>  	struct resource res[MAX_CDX_DEV_RESOURCES];
+>  	u8 res_count;
+>  	u32 req_id;
+> +	u32 num_msi;
+>  };
+>  
+> +/**
+> + * cdx_msi_domain_init - Init the CDX bus MSI domain.
+> + * @dev: Device of the CDX bus controller
+> + *
+> + * Return CDX MSI domain, NULL on failure
+> + */
+> +struct irq_domain *cdx_msi_domain_init(struct device *dev);
 > +
-> +  // wait for perf record
-> +  usleep(5000);
+> +/**
+> + * cdx_find_msi_domain - Get the CDX-MSI domain.
+> + * @dev: CDX controller generic device
+> + *
+> + * Return CDX MSI domain, NULL on error or if CDX-MSI domain is
+> + *   not yet created.
+> + */
+> +struct irq_domain *cdx_find_msi_domain(struct device *parent);
 > +
-> +  while (count--)
-> +    continue;
+>  #endif /* _CDX_H_ */
+> diff --git a/drivers/bus/cdx/cdx_msi.c b/drivers/bus/cdx/cdx_msi.c
+> new file mode 100644
+> index 000000000000..2fb7bac18393
+> --- /dev/null
+> +++ b/drivers/bus/cdx/cdx_msi.c
+> @@ -0,0 +1,236 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * AMD CDX bus driver MSI support
+> + *
+> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
+> + *
+> + */
+> +
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/msi.h>
+> +#include <linux/cdx/cdx_bus.h>
+> +
+> +#include "cdx.h"
+> +
+> +#ifdef GENERIC_MSI_DOMAIN_OPS
+> +/*
+> + * Generate a unique ID identifying the interrupt (only used within the MSI
+> + * irqdomain.  Combine the req_id with the interrupt index.
+> + */
+> +static irq_hw_number_t cdx_domain_calc_hwirq(struct cdx_device *dev,
+> +					     struct msi_desc *desc)
+> +{
+> +	/*
+> +	 * Make the base hwirq value for req_id*10000 so it is readable
+> +	 * as a decimal value in /proc/interrupts.
+> +	 */
+> +	return (irq_hw_number_t)(desc->msi_index + (dev->req_id * 10000));
+
+No, please. Use shifts, and use a script if decimal conversion fails
+you. We're not playing these games. And the cast is pointless.
+
+Yes, you have lifted it from the FSL code, bad move. /me makes a note
+to go and clean-up this crap.
+
 > +}
 > +
-> +void *thfunc(void *arg) {
-> +  test_loop();
-> +  return NULL;
+> +static void cdx_msi_set_desc(msi_alloc_info_t *arg,
+> +			     struct msi_desc *desc)
+> +{
+> +	arg->desc = desc;
+> +	arg->hwirq = cdx_domain_calc_hwirq(to_cdx_device(desc->dev), desc);
+> +}
+> +#else
+> +#define cdx_msi_set_desc NULL
+
+Why the ifdefery? This should *only* be supported with
+GENERIC_MSI_DOMAIN_OPS.
+
+> +#endif
+> +
+> +static void cdx_msi_update_dom_ops(struct msi_domain_info *info)
+> +{
+> +	struct msi_domain_ops *ops = info->ops;
+> +
+> +	if (!ops)
+> +		return;
+> +
+> +	/* set_desc should not be set by the caller */
+> +	if (!ops->set_desc)
+> +		ops->set_desc = cdx_msi_set_desc;
+
+Then why are you allowing this to be overridden?
+
 > +}
 > +
-> +int main(void) {
-> +  pthread_t th;
-> +  pthread_create(&th, NULL, thfunc, NULL);
-> +  test_loop();
-> +  pthread_join(th, NULL);
-> +  return 0;
-> +}
-> +EOF
+> +static void cdx_msi_write_msg(struct irq_data *irq_data,
+> +			      struct msi_msg *msg)
+> +{
+> +	/*
+> +	 * Do nothing as CDX devices have these pre-populated
+> +	 * in the hardware itself.
+> +	 */
+
+We talked about this in a separate thread. This is a major problem.
+
 > +}
 > +
->  test_per_thread() {
->    echo "Basic --per-thread mode test"
-> -  if ! perf record -o /dev/null --quiet true 2> /dev/null
-> +  if ! perf record -o /dev/null --quiet ${testprog} 2> /dev/null
->    then
->      echo "Per-thread record [Skipped event not supported]"
->      if [ $err -ne 1 ]
-> @@ -30,13 +78,13 @@ test_per_thread() {
->      fi
->      return
->    fi
-> -  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
-> +  if ! perf record --per-thread ${testopt} -o ${perfdata} ${testprog} 2> /dev/null
->    then
->      echo "Per-thread record [Failed record]"
->      err=1
->      return
->    fi
-> -  if ! perf report -i ${perfdata} -q | egrep -q true
-> +  if ! perf report -i ${perfdata} -q | egrep -q ${testsym}
->    then
->      echo "Per-thread record [Failed missing output]"
->      err=1
-> @@ -62,7 +110,7 @@ test_register_capture() {
->      return
->    fi
->    if ! perf record -o - --intr-regs=di,r8,dx,cx -e cpu/br_inst_retired.near_call/p \
-> -    -c 1000 --per-thread true 2> /dev/null \
-> +    -c 1000 --per-thread ${testopt} ${testprog} 2> /dev/null \
->      | perf script -F ip,sym,iregs -i - 2> /dev/null \
+> +static void cdx_msi_update_chip_ops(struct msi_domain_info *info)
+> +{
+> +	struct irq_chip *chip = info->chip;
+> +
+> +	if (!chip)
+> +		return;
+> +
+> +	/*
+> +	 * irq_write_msi_msg should not be set by the caller
+> +	 */
+> +	if (!chip->irq_write_msi_msg)
+> +		chip->irq_write_msi_msg = cdx_msi_write_msg;
 
-With the kernel patch:
+Then why the check?
 
-https://lore.kernel.org/lkml/20220711180706.3418612-1-kan.liang@linux.intel.com/
+> +}
+> +/**
+> + * cdx_msi_create_irq_domain - Create a CDX MSI interrupt domain
+> + * @fwnode:	Optional firmware node of the interrupt controller
+> + * @info:	MSI domain info
+> + * @parent:	Parent irq domain
+> + *
+> + * Updates the domain and chip ops and creates a CDX MSI
+> + * interrupt domain.
+> + *
+> + * Returns:
+> + * A domain pointer or NULL in case of failure.
+> + */
+> +static struct irq_domain *cdx_msi_create_irq_domain(struct fwnode_handle *fwnode,
+> +						    struct msi_domain_info *info,
+> +						    struct irq_domain *parent)
+> +{
+> +	if (WARN_ON((info->flags & MSI_FLAG_LEVEL_CAPABLE)))
+> +		info->flags &= ~MSI_FLAG_LEVEL_CAPABLE;
 
-I get:
+No. Just fail the domain creation. We shouldn't paper over these things.
 
-Samples for 'dummy:HG' event do not have IREGS attribute set. Cannot print 'iregs' field.
+> +	if (info->flags & MSI_FLAG_USE_DEF_DOM_OPS)
+> +		cdx_msi_update_dom_ops(info);
+> +	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
+> +		cdx_msi_update_chip_ops(info);
 
->      | egrep -q "DI:"
->    then
-> @@ -73,6 +121,8 @@ test_register_capture() {
->    echo "Register capture test [Success]"
->  }
+Under what circumstances would the default ops not be used? The only
+caller is in this file and has pre-computed values.
+
+This looks like a copy/paste from platform-msi.c.
+
+> +	info->flags |= MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS | MSI_FLAG_FREE_MSI_DESCS;
+> +
+> +	return msi_create_irq_domain(fwnode, info, parent);
+
+This whole function makes no sense. You should move everything to the
+relevant structures, and simply call msi_create_irq_domain() from the
+sole caller of this function.
+
+> +}
+> +
+> +int cdx_msi_domain_alloc_irqs(struct device *dev, unsigned int irq_count)
+> +{
+> +	struct irq_domain *msi_domain;
+> +	int ret;
+> +
+> +	msi_domain = dev_get_msi_domain(dev);
+> +	if (!msi_domain) {
+
+How can that happen?
+
+> +		dev_err(dev, "msi domain get failed\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = msi_setup_device_data(dev);
+> +	if (ret) {
+> +		dev_err(dev, "msi setup device failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	msi_lock_descs(dev);
+> +	if (msi_first_desc(dev, MSI_DESC_ALL))
+> +		ret = -EINVAL;
+> +	msi_unlock_descs(dev);
+> +	if (ret) {
+> +		dev_err(dev, "msi setup device failed: %d\n", ret);
+
+Same message twice, not very useful. Consider grouping these things at
+the end of the function and make use of a (oh Gawd) goto...
+
+> +		return ret;
+> +	}
+> +
+> +	ret = msi_domain_alloc_irqs(msi_domain, dev, irq_count);
+> +	if (ret)
+> +		dev_err(dev, "Failed to allocate IRQs\n");
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(cdx_msi_domain_alloc_irqs);
+
+EXPORT_SYMBOL_GPL(), please, for all the exports.
+
+> +
+> +void cdx_msi_domain_free_irqs(struct device *dev)
+> +{
+> +	struct irq_domain *msi_domain;
+> +
+> +	msi_domain = dev_get_msi_domain(dev);
+> +	if (!msi_domain)
+
+Again, how can that happen?
+
+> +		return;
+> +
+> +	msi_domain_free_irqs(msi_domain, dev);
+> +}
+> +EXPORT_SYMBOL(cdx_msi_domain_free_irqs);
+
+This feels like a very pointless helper, and again a copy/paste from
+the FSL code. I'd rather you change msi_domain_free_irqs() to only
+take a device and use the implicit MSI domain.
+
+> +
+> +static struct irq_chip cdx_msi_irq_chip = {
+> +	.name = "CDX-MSI",
+> +	.irq_mask = irq_chip_mask_parent,
+> +	.irq_unmask = irq_chip_unmask_parent,
+> +	.irq_eoi = irq_chip_eoi_parent,
+> +	.irq_set_affinity = msi_domain_set_affinity
+
+nit: please align things vertically.
+
+> +};
+> +
+> +static int cdx_msi_prepare(struct irq_domain *msi_domain,
+> +			   struct device *dev,
+> +			   int nvec, msi_alloc_info_t *info)
+> +{
+> +	struct cdx_device *cdx_dev = to_cdx_device(dev);
+> +	struct msi_domain_info *msi_info;
+> +	struct device *parent = dev->parent;
+> +	u32 dev_id;
+> +	int ret;
+> +
+> +	/* Retrieve device ID from requestor ID using parent device */
+> +	ret = of_map_id(parent->of_node, cdx_dev->req_id, "msi-map",
+> +			"msi-map-mask",	NULL, &dev_id);
+> +	if (ret) {
+> +		dev_err(dev, "of_map_id failed for MSI: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Set the device Id to be passed to the GIC-ITS */
+> +	info->scratchpad[0].ul = dev_id;
+> +
+> +	msi_info = msi_get_domain_info(msi_domain->parent);
+> +
+> +	/* Allocate at least 32 MSIs, and always as a power of 2 */
+
+Where is this requirement coming from?
+
+> +	nvec = max_t(int, 32, roundup_pow_of_two(nvec));
+> +	return msi_info->ops->msi_prepare(msi_domain->parent, dev, nvec, info);
+> +}
+> +
+> +static struct msi_domain_ops cdx_msi_ops __ro_after_init = {
+> +	.msi_prepare = cdx_msi_prepare,
+> +};
+> +
+> +static struct msi_domain_info cdx_msi_domain_info = {
+> +	.flags	= (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
+> +	.ops	= &cdx_msi_ops,
+> +	.chip	= &cdx_msi_irq_chip,
+> +};
+> +
+> +struct irq_domain *cdx_msi_domain_init(struct device *dev)
+> +{
+> +	struct irq_domain *parent;
+> +	struct irq_domain *cdx_msi_domain;
+> +	struct fwnode_handle *fwnode_handle;
+> +	struct device_node *parent_node;
+> +	struct device_node *np = dev->of_node;
+> +
+> +	fwnode_handle = of_node_to_fwnode(np);
+> +
+> +	parent_node = of_parse_phandle(np, "msi-map", 1);
+
+Huh. This only works because you are stuck with a single ITS per system.
+
+> +	if (!parent_node) {
+> +		dev_err(dev, "msi-map not present on cdx controller\n");
+> +		return NULL;
+> +	}
+> +
+> +	parent = irq_find_matching_fwnode(of_node_to_fwnode(parent_node),
+> +			DOMAIN_BUS_NEXUS);
+> +	if (!parent || !msi_get_domain_info(parent)) {
+> +		dev_err(dev, "unable to locate ITS domain\n");
+> +		return NULL;
+> +	}
+> +
+> +	cdx_msi_domain = cdx_msi_create_irq_domain(fwnode_handle,
+> +				&cdx_msi_domain_info, parent);
+> +	if (!cdx_msi_domain) {
+> +		dev_err(dev, "unable to create CDX-MSI domain\n");
+> +		return NULL;
+> +	}
+> +
+> +	dev_dbg(dev, "CDX-MSI domain created\n");
+> +
+> +	return cdx_msi_domain;
+> +}
+> +
+> +struct irq_domain *cdx_find_msi_domain(struct device *parent)
+> +{
+> +	return irq_find_host(parent->of_node);
+> +}
+> diff --git a/drivers/bus/cdx/mcdi_stubs.c b/drivers/bus/cdx/mcdi_stubs.c
+> index cc9d30fa02f8..2c8db1f5a057 100644
+> --- a/drivers/bus/cdx/mcdi_stubs.c
+> +++ b/drivers/bus/cdx/mcdi_stubs.c
+> @@ -45,6 +45,7 @@ int cdx_mcdi_get_func_config(struct cdx_mcdi_t *cdx_mcdi,
+>  	dev_params->res_count = 2;
 >  
-> +build_test_program
-> +
->  test_per_thread
->  test_register_capture
->  
+>  	dev_params->req_id = 0x250;
+> +	dev_params->num_msi = 4;
 
+Why the hardcoded 4? Is that part of the firmware emulation stuff?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71095B0E17
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082815B0E25
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiIGUYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S230062AbiIGU1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiIGUY1 (ORCPT
+        with ESMTP id S229984AbiIGU1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:24:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3F5C6B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662582261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5UaXSiIgbyH1ySYWRQbLchBzx/eapwdqMLWdZscfW6U=;
-        b=YOxdtNw57C8mcniVbtcXNYAZyL4ElpFxQ0FfArVLhCyrabaiqGQy6tvS+lDdRCXgtlZkuU
-        rQs6P31rdzxHqoo39zXUjbV2g34eGDfX2JPhN5nDT6ktXz5RpIae9WlO34puw4AVyAvcmQ
-        BzMfRV0PMkh/kebpcVazrbMKUcoDMlM=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-470-7jkWVr3zPw-HZA9OT1assg-1; Wed, 07 Sep 2022 16:24:20 -0400
-X-MC-Unique: 7jkWVr3zPw-HZA9OT1assg-1
-Received: by mail-io1-f69.google.com with SMTP id b21-20020a5d8915000000b0068aaf634432so10034890ion.20
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:24:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=5UaXSiIgbyH1ySYWRQbLchBzx/eapwdqMLWdZscfW6U=;
-        b=7+RL65V9f+RR9lsaP/EsBzcPcSt5mwl6SancTT1jZW/wyURQXzc0ROEvA/CGzf+CwT
-         PR6362w66d/aybipvsN9bU35IdiOiEMW86tbinBHVb48Ksc+jrVT3A4RiOFDRkGJSVcL
-         LYpgBewpGXsGLfKWSLcQCn4q6UTVbOG8LmXW+GrK43p7rck3iX8yTxAnhmz1YcoLVxc2
-         1hJgAOQT4c1q1dmxAZbOLu+8vzcCMuWnOh9E0LJce3T+8Bkwiu6s7rAvQlj8+9dT+ygL
-         mCluknboGajn7QvL/I0EBut6vbzVGmhoofiU9C5xoK1nqAtGfGE9uD54gGdbNILSOuF+
-         YSaQ==
-X-Gm-Message-State: ACgBeo3tnHfXmEKSSskh1W9b1i8arYbwWIiGiEbmtm2kRauddTXHbljo
-        9CVT2REbYft0+AdO5o+GCYxWypQ6y9F3VuNrMYnlCdJlOKAipvRlO62ij5vxJanWZgIRXsoW+sj
-        FkSQxzVTlXgqhLE54wIB2s/9E
-X-Received: by 2002:a05:6602:2d90:b0:689:bd77:5e62 with SMTP id k16-20020a0566022d9000b00689bd775e62mr2726528iow.176.1662582259107;
-        Wed, 07 Sep 2022 13:24:19 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5MWr4hcZDzqPdQ1iXI8T98Zm9Rgv5WG1hrysH/zKP4LVZnm4+Zk3jgFjKc9Hk3tXQeUa5gNg==
-X-Received: by 2002:a05:6602:2d90:b0:689:bd77:5e62 with SMTP id k16-20020a0566022d9000b00689bd775e62mr2726518iow.176.1662582258789;
-        Wed, 07 Sep 2022 13:24:18 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id b17-20020a026f51000000b0034e0cdeecc2sm7584330jae.98.2022.09.07.13.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 13:24:18 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 14:24:16 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     David Hildenbrand <david@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lpivarc@redhat.com" <lpivarc@redhat.com>,
-        "Liu, Jingqi" <jingqi.liu@intel.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-Subject: Re: [PATCH] vfio/type1: Unpin zero pages
-Message-ID: <20220907142416.4badb879.alex.williamson@redhat.com>
-In-Reply-To: <Yxj3Ri8pfqM1SxWe@ziepe.ca>
-References: <166182871735.3518559.8884121293045337358.stgit@omen>
-        <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com>
-        <YxfX+kpajVY4vWTL@ziepe.ca>
-        <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
-        <YxiTOyGqXHFkR/DY@ziepe.ca>
-        <20220907095552.336c8f34.alex.williamson@redhat.com>
-        <YxjJlM5A0OLhaA7K@ziepe.ca>
-        <20220907125627.0579e592.alex.williamson@redhat.com>
-        <Yxj3Ri8pfqM1SxWe@ziepe.ca>
-Organization: Red Hat
+        Wed, 7 Sep 2022 16:27:44 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CC1C12F7;
+        Wed,  7 Sep 2022 13:27:42 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287KKBMC023592;
+        Wed, 7 Sep 2022 20:27:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EFnBZp+qRg5HlqnBE8Ox+Rq8lJoTg3g+r/+0ivX52IU=;
+ b=DKbf97KUL6jBdapBk/nvAgFakgYNbKU+uAaQrFfMU79wVMO+nxx3xcNT+qPZH7LLoIg/
+ 5ZQ67TpOmhNt+cpYcOkVYnoaKhF9aLMN0J55o8nwRIfdMkyvlsUfXhyPjdFAl7si6//6
+ Uhm0PuwLTGnv2SgM+/GEvVLNoWNx/3GMScbo0lJWPrHoT6Uz9t2WG6KiccXTe1S+b5wQ
+ lDO1QdM/i4sfhYpIXDrbLPuLld0OlgbhON9DVZbWDZ3ssGCYVeQbfJNVHfzcAe39Jo6M
+ bypL4DtwMdInAO2PEEsWWY85bdqJkvTnf/McuL0wlGEEE5un3HjZtPOL/kjAh7lo6t5/ IA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jer1x2p56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 20:27:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 287KRcUQ001876
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Sep 2022 20:27:38 GMT
+Received: from [10.110.115.160] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 7 Sep 2022
+ 13:27:37 -0700
+Message-ID: <b7da735b-2ac9-68af-95bb-86ecc81c750c@quicinc.com>
+Date:   Wed, 7 Sep 2022 13:27:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 1/2] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Content-Language: en-US
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>
+References: <20220725191314.19456-1-quic_amelende@quicinc.com>
+ <20220725191314.19456-2-quic_amelende@quicinc.com>
+ <a47a33a5-aec7-2a52-f1e8-52c45307862e@linaro.org>
+ <0e6bf142-ca56-2414-86c4-1a18b74b3ba6@quicinc.com>
+In-Reply-To: <0e6bf142-ca56-2414-86c4-1a18b74b3ba6@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -VcN0grdqGtflX2ZQzYiXi3Dt06-h0zZ
+X-Proofpoint-GUID: -VcN0grdqGtflX2ZQzYiXi3Dt06-h0zZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_10,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ malwarescore=0 clxscore=1011 adultscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209070076
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,68 +88,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 16:55:50 -0300
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
 
-> On Wed, Sep 07, 2022 at 12:56:27PM -0600, Alex Williamson wrote:
-> 
-> > I thought we'd already agreed that we were stuck with locked_vm for
-> > type1 and any compatibility mode of type1 due to this.  Native iommufd
-> > support can do the right thing since userspace will need to account for
-> > various new usage models anyway.  
-> 
-> We did, that was for the iommufd situation (which will also hit the
-> same zeropage issue, sigh) - this discussion is about fixing a bug in
-> vfio and what many consider a bug in GUP.
-> 
-> My point is I'm still not convinced we can really consider these
-> limits as ABI because it opens a pandoras box of kernel limitations.
-> 
-> > I've raised the issue with David for the zero page accounting, but I
-> > don't know what the solution is.  libvirt automatically adds a 1GB
-> > fudge factor to the VM locked memory limits to account for things like
-> > ROM mappings, or at least the non-zeropage backed portion of those
-> > ROMs.  I think that most management tools have adopted similar, so the
-> > majority of users shouldn't notice.  However this won't cover all
-> > users, so we certainly risk breaking userspace if we introduce hard
-> > page accounting of zero pages.  
-> 
-> It sounds like things will be fine. 1GB fudge is pretty big.
-> 
-> For things like this ABI compat is not about absolute compatability in
-> the face of any userspace, but a real-world compatibility "does
-> something that actually exists break?"
+Hi,
 
-Magic 8 ball says "Cannot predict now."  Unfortunately there's a lot of
-roll-your-own scripting that goes on in this space, many users reject
-the overhead of things like libvirt, let alone deeper management
-stacks.  Private clouds have constraints that might also generate custom
-solutions.  I can't predict the degree to which libvirt is a canonical
-example.
- 
-> So I would be happier if we had an actual deployed thing that breaks..
-> I would be inclined to go with the simple fix and rely on the
-> fudge. If someone does come with an actual break then lets do one of
-> the work arounds.
+Wanted to send a reminder for this patch conversation.
 
-We should probably have a workaround in our pocket for such a case.
-
-Also, I want to clarify, is this a recommendation relative to the
-stable patch proposed here, or only once we get rid of shared zero page
-pinning?  We can't simply do accounting on the shared zero page since a
-single user can overflow the refcount.
-
-> Given the whole thing is obstensibly for security it is better to keep
-> it simple and sane then to poke it full of holes.
+Thanks,
+Anjelique
+On 8/19/2022 1:26 PM, Anjelique Melendez wrote:
 > 
-> > module parameter defined limit.  We might also consider whether we
-> > could just ignore zero page mappings, maybe with a optional "strict"
-> > mode module option to generate an errno on such mappings.  Thanks,  
+> Hi Krzysztof,
+> First I would like to apologize for my lack of response to this patch series
+> over these past few weeks. I have been out of office.
 > 
-> Once GUP is fixed vfio won't see the zero pages anymore :( That really
-> limits the choices for a work around :(
-
-I was afraid of that.  Thanks,
-
-Alex
-
+> On 7/26/2022 3:25 AM, Krzysztof Kozlowski wrote:
+>> On 25/07/2022 21:13, Anjelique Melendez wrote:
+>>> From: David Collins <quic_collinsd@quicinc.com>
+>>>
+>>> Update the description of "reg" property to add the PON_PBS base
+>>> address along with PON_HLOS base address.  Also add "reg-names"
+>>> property constraints.
+>>>
+>>> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+>>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 50 +++++++++++++++++++++++++++---
+>>>  1 file changed, 46 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>>> index 353f155d..d7b6b875 100644
+>>> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>>> @@ -15,18 +15,27 @@ description: |
+>>>  
+>>>    This DT node has pwrkey and resin as sub nodes.
+>>>  
+>>> -allOf:
+>>> -  - $ref: reboot-mode.yaml#
+>>> -
+>>>  properties:
+>>>    compatible:
+>>>      enum:
+>>>        - qcom,pm8916-pon
+>>>        - qcom,pms405-pon
+>>>        - qcom,pm8998-pon
+>>> +      - qcom,pmk8350-pon
+>>>  
+>>>    reg:
+>>> -    maxItems: 1
+>>> +    description: |
+>>> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
+>>> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
+>>> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
+>>> +      peripherals.  In that case, the PON_PBS address needs to be specified to
+>>> +      facilitate software debouncing on some PMIC.
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>> +
+>>> +  reg-names:
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>>  
+>>>    pwrkey:
+>>>      type: object
+>>> @@ -42,6 +51,39 @@ required:
+>>>  
+>>>  unevaluatedProperties: false
+>>>  
+>>> +allOf:
+>>> +  - $ref: reboot-mode.yaml#
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - qcom,pm8916-pon
+>>> +              - qcom,pms405-pon
+>>> +              - qcom,pm8998-pon
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          maxItems: 1
+>>> +        reg-names:
+>>> +          items:
+>>> +            - const: pon
+>>
+>> All your previous patches were actually missing (in commit msg, in the
+>> code) that piece of information which you add here. You now add
+>> reg-names with "pon" for older devices. I assumed previous that it is
+>> somehow needed, so I gave you the hints how it should be coded. But I
+>> don't understand - why are you doing it
+>>
+>> This should be explained in commit msg. To me it is not needed at all...
+>> unless you want to mark that first address space is entirely different
+>> for other devices?
+> Adding reg-names "pon" for older devices is simply to provide clarification
+> about what the register relates to. Similar to reg-names "hlos" and "pbs"
+> for gen3 children devices, reg-names is completely optional and is not
+> consumed by any driver.
+> 
+> Before adding the "qcom,pmk8350-pon" compatible string, the best way to
+> differentiate between a "qcom,pm8998-pon" parent with a gen1/gen2 child vs a
+> "qcom,pm8998-pon" parent with a gen3 child with only an hlos register was to
+> include reg-names. i.e.
+> 
+> pon_hlos@1300 {
+>         reg = <0x1300>;
+>         compatible = "qcom,pm8998-pon";
+> 	reg-names = "pon";
+> };
+> 
+> vs 
+> 
+> pon_hlos@1300 {
+>         reg = <0x1300>;
+>         compatible = "qcom,pm8998-pon";
+> 	reg-names = "hlos";
+> };
+> 
+> Adding the new "qcom,pmk8350-pon" compatible string would now be used to
+> differentiate between gen1/gen2 vs gen3 children, so we could get rid of the
+> addition of reg-names for older devices.
+> 
+> 
+> Similarly we could get rid of reg-names and the "qcom,pmk8350-pon" compatible
+> string as a whole like mentioned in
+> https://lore.kernel.org/all/99a5d9ac-9c20-b441-44af-26772a0e989d@linaro.org/,
+> if reg-names and the new compatible string is causing too much confusion.
+> 
+> 
+> Thanks,
+> Anjelique 
+>>
+> 
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: qcom,pmk8350-pon
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          minItems: 1
+>>> +          maxItems: 2
+>>> +        reg-names:
+>>> +          minItems: 1
+>>> +          items:
+>>> +            - const: hlos
+>>> +            - const: pbs
+>>> +
+>>>  examples:
+>>>    - |
+>>>     #include <dt-bindings/interrupt-controller/irq.h>
+>>
+>>
+>> Best regards,
+>> Krzysztof

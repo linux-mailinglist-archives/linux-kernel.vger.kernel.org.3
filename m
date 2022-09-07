@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEDA5B0F5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4324A5B0F5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiIGVn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S230261AbiIGVof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIGVnv (ORCPT
+        with ESMTP id S230255AbiIGVoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:43:51 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310BEB6562;
-        Wed,  7 Sep 2022 14:43:50 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id d1so11788299qvs.0;
-        Wed, 07 Sep 2022 14:43:50 -0700 (PDT)
+        Wed, 7 Sep 2022 17:44:32 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EC32ACE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:44:30 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u9so33462042ejy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 14:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=19EtCFA5s8dlvMjTCYlt8bRgViJnvOmLBpnbxYbIks0=;
-        b=SCjK0rr97dJdDcG1xA2fT4a5g3Z0WQcpohVAn4ncqszVFmy0+4pJJ0J5aL6/0fL6Qg
-         73VzSNcGuM0EePwwVCQR3hDyIPRHWgO1twzA8Fw0quzubHd61KaMTTGpH+9L8VA5OvmT
-         SgdZTpx1N5cNDPK4mM5vRWrTvjelPGMA8e4iMCrAl/nkrTY6NXENsLjnybXR93ICFmNy
-         JBq0a+/Qt3GcO0xdR4w6eWM7Zt7ZTeRAoZ80qZOiR12ydsLaQ8+SqbtfYBLSBOGI4OZd
-         s8eaGgYnMuJHfL/hA6lBkjbtbNhz9fd44flddM8vgXg17pBwfzuVkwdd4uosDhQHQen6
-         4nlg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=3pnUp/O3nCFTGVRKMfL8coYqAMVPLL9TVgrg8/J7HSQ=;
+        b=k85w1q5phtAxY2JdDKBchTuTrp7f8cuBZHnB0GNLY4vTTmoIWb8h1xMLTShffXHqHE
+         C7XA/cIZAPUKNwq7yalamijKSt1h3a0JIn3no5MuSU5pk2G45aQMQILVw90o60Ai7cbu
+         EK/wb0eDvWx5J3pA0oktiNEJxMI8Owe8FTm9T9rFU4jrG/GiPLa9fuSWLdnKIbbRMbcs
+         YrZfePuShMINH1nOoCvUunS7afwXQ/54giWIWPlfAgxvCPCWCF4n2z3zNDkPfoc5S/La
+         1+driF7u4YBUzpOO4DFBCW0rbxna5TW4mk+6ZfwIUTtbph57Hr7PrKChd9N5DDsI8IJj
+         SsbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=19EtCFA5s8dlvMjTCYlt8bRgViJnvOmLBpnbxYbIks0=;
-        b=uWNrAP9enMpkYj7vZtoIgeSdKTwUHZameEgXEQH0vtibactBUL0uzTVQd2kZIg7T38
-         tCtwRMw1jEEN0NCiLtwrVv7eZq5GixxEsV2iPewqtf9Wje7LiPs567fnC3ypAmABh9Qx
-         6PhGJFMkT6WPfNBn6Gzf7fqBC44qFmL63NLq4K+kImQkLaW2BMygo7O2xqgveWNVC5ml
-         o/XclWPb/N/RLk3t9Igb8NWlvF1845kInSZwTf3uBdJpZhF5Avc0JPr9NnuH6ynoLdu8
-         aw13GjI/gDhbCpN1JyQ65VaV5CNBMsjujB4LR1SEuMSATUWc1IhCuG58uZZ8tUw0a4fN
-         Ta5w==
-X-Gm-Message-State: ACgBeo0t//2AMjECRPIh/BUXdY54/r70l2kEo229O1tnUE1PeHxPFxRo
-        xViKGNNdvMQr62KjLr9idR8=
-X-Google-Smtp-Source: AA6agR4Wlof4Aw4KP2Br5u8ULITmo0xIRzW7RLjWxPAI4Oks3A1rGJ3jXiRv6IMBXLC7n6uClfo3wA==
-X-Received: by 2002:a0c:aa9e:0:b0:4a0:4909:6742 with SMTP id f30-20020a0caa9e000000b004a049096742mr5236515qvb.100.1662587029324;
-        Wed, 07 Sep 2022 14:43:49 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id a2-20020ac81082000000b0034454aff529sm13131611qtj.80.2022.09.07.14.43.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 14:43:48 -0700 (PDT)
-Message-ID: <fb03a0f3-8e0e-3b04-b68f-d586e21f72fd@gmail.com>
-Date:   Wed, 7 Sep 2022 14:43:46 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=3pnUp/O3nCFTGVRKMfL8coYqAMVPLL9TVgrg8/J7HSQ=;
+        b=4s9y0i6H2TDw1busq9vO0yFT9Jrf8Q8BkbHjDdIRi4PBKfWXdD5pKiG9QrxjPujf29
+         hgb/qFRRmwTezIbzmhDXc1+wMb1XZmfMJcyAJF7XOkU9DPpRQ9hyL2e7bwQhlaOkJezq
+         2kBh7Ear19Tf+Sn0ZgmFFrBwHzk8zYvnrvALPclUbzuy3U2fJopMykoaHzVLftrqe76a
+         +t+imxMub2tWUCxa/m4k4rKFgWNks9kkwVdj98zoEHKMR8ob1j/5FrMc6DE/8uy5rwX8
+         7pu611KJjpBC8MsNQC1vBb8ck54bCbzvexz99E8csjA8Y4Gn2nK/4iSgcjgWw+tJX2NY
+         cUGA==
+X-Gm-Message-State: ACgBeo3yVNxfnngwrTjHRJaB0w1rVik+Uk9yRen4RC7JFGOQhWpq+9FN
+        Rn5m/6Quz0H/Sr7csbWDMRw0LSqkevWKWgGPsBaJ2g==
+X-Google-Smtp-Source: AA6agR7AS8guzfQWCaB5iUTGxlD02rExzxmOMdaHtY7277E5gWoghjzg+64zoE48PMAx7P/AzSOgkPao4qsA9zpFyKQ=
+X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
+ dd6-20020a1709069b8600b0073d72cf72afmr3777313ejc.440.1662587069099; Wed, 07
+ Sep 2022 14:44:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] leds: bcm63138: refer to ARCH_BCMBCA instead of
- ARCH_BCM4908
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org
-Cc:     William Zhang <william.zhang@broadcom.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220907070001.19867-1-lukas.bulwahn@gmail.com>
-Content-Language: en-US
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220907070001.19867-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906204603.3762756-1-dmitry.torokhov@gmail.com> <20220906204603.3762756-3-dmitry.torokhov@gmail.com>
+In-Reply-To: <20220906204603.3762756-3-dmitry.torokhov@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 7 Sep 2022 23:44:18 +0200
+Message-ID: <CACRpkdYrrN-nfCFsivK6sNFEVhXvXy_aZ71pX0Axa+D41NMYJA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] media: i2c: s5c73m3: switch to using gpiod API
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 6, 2022 at 10:46 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
 
+> This patch switches the driver away from legacy gpio/of_gpio API to
+> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> make private to gpiolib.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-On 9/7/2022 12:00 AM, Lukas Bulwahn wrote:
-> Commit dd5c672d7ca9 ("arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA")
-> removes config ARCH_BCM4908 as config ARCH_BCMBCA has the same intent.
-> 
-> Probably due to concurrent development, commit a0ba692072d8 ("leds:
-> bcm63138: add support for BCM63138 controller") introduces 'LED Support
-> for Broadcom BCM63138 SoC' that depends on ARCH_BCM4908, but this use was
-> not visible during the config refactoring from the commit above. Hence,
-> these two changes create a reference to a non-existing config symbol.
-> 
-> Adjust the LEDS_BCM63138 definition to refer to ARCH_BCMBCA instead of
-> ARCH_BCM4908 to remove the reference to the non-existing config symbol
-> ARCH_BCM4908.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+I already converted this driver to gpiod:
+https://lore.kernel.org/linux-media/20220830211927.398242-1-linus.walleij@linaro.org/
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Already sent the patch twice too, I don't know what's up with media
+patches not getting applied.
+
+Yours,
+Linus Walleij

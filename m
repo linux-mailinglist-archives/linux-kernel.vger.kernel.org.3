@@ -2,258 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512325B0E20
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329675B0E2A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiIGU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
+        id S230082AbiIGU22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiIGU1W (ORCPT
+        with ESMTP id S229703AbiIGU20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:27:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A151DC1650
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:27:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6DEF106F;
-        Wed,  7 Sep 2022 13:27:27 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 880233F7B4;
-        Wed,  7 Sep 2022 13:27:16 -0700 (PDT)
-Message-ID: <26f5d7b9-48bc-7268-16f7-53e7d48c99ee@arm.com>
-Date:   Wed, 7 Sep 2022 21:27:08 +0100
+        Wed, 7 Sep 2022 16:28:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ABFC12FB;
+        Wed,  7 Sep 2022 13:28:25 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287CsQoT027894;
+        Wed, 7 Sep 2022 20:28:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=VTYnbFfItbD2eeVt8XMypC5FTJdGeIjzqhO7xjMlzVA=;
+ b=Alu5oe3DPqO0JOeSwj1rptTpY7lDqsjHt7majaTACid4yIZxRoaJgj6R+h0Xjx3gtEvg
+ E0ODkCiG92wgVwqzzAJ+NR4d86fSPfjWClHqExvtxyYdP+VohI4XEhM13y3ywXv7vJYe
+ XXKMz/sge3Xsv6eiL2lyfVg2n5JQxKWpmNdpQCwyy0fpN7zbvltfYHkCsh60Unr94093
+ XlchvTUzxlRAtyZ7B7Erzwq54SjfA4cpQMH3TbDiVp+RXHb2oVMEMoZLHcJlVmpyPb0C
+ H7eapD2yi+fvJuNfzr+9XnIgP8iQ6x6m7+E2+hAxef2kjT4fPQQXNRPYG/m72DRmVUn/ NA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jer7njm58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 20:28:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 287KSLoN004646
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Sep 2022 20:28:21 GMT
+Received: from [10.110.115.160] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 7 Sep 2022
+ 13:28:20 -0700
+Message-ID: <b9f7be44-1857-2598-c9c1-a2888889daef@quicinc.com>
+Date:   Wed, 7 Sep 2022 13:28:19 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v4 04/16] iommu: Always register bus notifiers
-Content-Language: en-GB
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, baolu.lu@linux.intel.com,
-        kevin.tian@intel.com, suravee.suthikulpanit@amd.com,
-        vasant.hegde@amd.com, mjrosato@linux.ibm.com,
-        schnelle@linux.ibm.com, linux-kernel@vger.kernel.org
-References: <cover.1660572783.git.robin.murphy@arm.com>
- <7462347bf938bd6eedb629a3a318434f6516e712.1660572783.git.robin.murphy@arm.com>
- <CAGETcx8fTP_wEq_5eo2xDb4pFY9X5t7naOdNnexPhrhZsQCVpQ@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAGETcx8fTP_wEq_5eo2xDb4pFY9X5t7naOdNnexPhrhZsQCVpQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/2] power: reset: qcom-pon: add support for
+ qcom,pmk8350-pon compatible string
+Content-Language: en-US
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220725191314.19456-1-quic_amelende@quicinc.com>
+ <20220725191314.19456-3-quic_amelende@quicinc.com>
+ <57f8d9c4-6f49-ad3d-fc82-7a0f66d1775a@linaro.org>
+ <f9853511-e64c-9daf-b4e3-e334035771a8@quicinc.com>
+In-Reply-To: <f9853511-e64c-9daf-b4e3-e334035771a8@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VGk2XdNINz_mwVWts4StFVS3G2GgBh3v
+X-Proofpoint-GUID: VGk2XdNINz_mwVWts4StFVS3G2GgBh3v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_10,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ clxscore=1015 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070076
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-07 19:50, Saravana Kannan wrote:
-> On Mon, Aug 15, 2022 at 9:20 AM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> The number of bus types that the IOMMU subsystem deals with is small and
->> manageable, so pull that list into core code as a first step towards
->> cleaning up all the boilerplate bus-awareness from drivers. Calling
->> iommu_probe_device() before bus->iommu_ops is set will simply return
->> -ENODEV and not break the notifier call chain, so there should be no
->> harm in proactively registering all our bus notifiers at init time.
->>
->> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
->> Tested-by: Matthew Rosato <mjrosato@linux.ibm.com> # s390
->> Tested-by: Niklas Schnelle <schnelle@linux.ibm.com> # s390
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->> ---
->>
->> v4: Squash iommu_bus_init() entirely, for maximum simplicity. Ignoring
->>      the return from bus_register_notifier() is common, so hopefully it's
->>      all pretty self-explanatory now.
->>
->>   drivers/iommu/iommu.c | 72 ++++++++++++++++++++++---------------------
->>   1 file changed, 37 insertions(+), 35 deletions(-)
->>
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index 780fb7071577..a8d14f2a1035 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -6,6 +6,7 @@
->>
->>   #define pr_fmt(fmt)    "iommu: " fmt
->>
->> +#include <linux/amba/bus.h>
->>   #include <linux/device.h>
->>   #include <linux/dma-iommu.h>
->>   #include <linux/kernel.h>
->> @@ -16,11 +17,13 @@
->>   #include <linux/export.h>
->>   #include <linux/slab.h>
->>   #include <linux/errno.h>
->> +#include <linux/host1x_context_bus.h>
->>   #include <linux/iommu.h>
->>   #include <linux/idr.h>
->>   #include <linux/err.h>
->>   #include <linux/pci.h>
->>   #include <linux/bitops.h>
->> +#include <linux/platform_device.h>
->>   #include <linux/property.h>
->>   #include <linux/fsl/mc.h>
->>   #include <linux/module.h>
->> @@ -75,6 +78,8 @@ static const char * const iommu_group_resv_type_string[] = {
->>   #define IOMMU_CMD_LINE_DMA_API         BIT(0)
->>   #define IOMMU_CMD_LINE_STRICT          BIT(1)
->>
->> +static int iommu_bus_notifier(struct notifier_block *nb,
->> +                             unsigned long action, void *data);
->>   static int iommu_alloc_default_domain(struct iommu_group *group,
->>                                        struct device *dev);
->>   static struct iommu_domain *__iommu_domain_alloc(struct bus_type *bus,
->> @@ -103,6 +108,22 @@ struct iommu_group_attribute iommu_group_attr_##_name =            \
->>   static LIST_HEAD(iommu_device_list);
->>   static DEFINE_SPINLOCK(iommu_device_lock);
->>
->> +static struct bus_type * const iommu_buses[] = {
->> +       &platform_bus_type,
->> +#ifdef CONFIG_PCI
->> +       &pci_bus_type,
->> +#endif
->> +#ifdef CONFIG_ARM_AMBA
->> +       &amba_bustype,
->> +#endif
->> +#ifdef CONFIG_FSL_MC_BUS
->> +       &fsl_mc_bus_type,
->> +#endif
->> +#ifdef CONFIG_TEGRA_HOST1X_CONTEXT_BUS
->> +       &host1x_context_device_bus_type,
->> +#endif
->> +};
->> +
->>   /*
->>    * Use a function instead of an array here because the domain-type is a
->>    * bit-field, so an array would waste memory.
->> @@ -126,6 +147,8 @@ static const char *iommu_domain_type_str(unsigned int t)
->>
->>   static int __init iommu_subsys_init(void)
->>   {
->> +       struct notifier_block *nb;
->> +
->>          if (!(iommu_cmd_line & IOMMU_CMD_LINE_DMA_API)) {
->>                  if (IS_ENABLED(CONFIG_IOMMU_DEFAULT_PASSTHROUGH))
->>                          iommu_set_default_passthrough(false);
->> @@ -152,6 +175,15 @@ static int __init iommu_subsys_init(void)
->>                          (iommu_cmd_line & IOMMU_CMD_LINE_STRICT) ?
->>                                  "(set via kernel command line)" : "");
->>
->> +       nb = kcalloc(ARRAY_SIZE(iommu_buses), sizeof(*nb), GFP_KERNEL);
->> +       if (!nb)
->> +               return -ENOMEM;
->> +
->> +       for (int i = 0; i < ARRAY_SIZE(iommu_buses); i++) {
->> +               nb[i].notifier_call = iommu_bus_notifier;
->> +               bus_register_notifier(iommu_buses[i], &nb[i]);
->> +       }
->> +
-> 
-> Carrying on the community's general disdain for notifiers, can we drop
-> the bus notifier and just call iommu_probe_device() directly from
-> device_add()? That way, you also won't need to keep an ifdef-ed array
-> of buses and it'll be easy to tell from driver core code that iommu
-> stuff is happening as devices are added. And I'd probably move that
-> call to be AFTER some of the fw_devlink stuff is done too.
+Hi,
 
-Yup, we're working in that general direction, this is just big and moves 
-slow :)
-
-One of the next steps after this is unpicking 
-{of,acpi}_iommu_configure() for iommu_probe_device() to take ownership 
-of firmware parsing, after which it should be sufficiently 
-self-contained that the notifier might indeed become the worst 
-impediment to further reasoning. We'll still want to limit things to the 
-small subset of buses where IOMMUs are at all relevant (one of the 
-reasons that I stopped short of trying to grovel the whole list of 
-registered buses out of the driver core here), but since there's a 
-bus-specific element involved in parsing the firmware bindings, I'm 
-expecting it to work out quite neatly in the end.
-
-> Also, would it be possible to delay this until probe (sorry, don't
-> have enough of IOMMU details in my head) and call iommu_probe_device()
-> from really_probe() like we do to set up pinctrl, etc? That'd be
-> ideal.
-
-No, that's not so good, and in fact the stuff that can currently happen 
-at driver probe time is already problematic and responsible for various 
-subtle breakage. There are things about the IOMMU topology that need to 
-be known regardless of whether drivers exist for all the devices, so now 
-that fw_devlink can take care of waiting for IOMMU drivers to load, the 
-rest of IOMMU setup (other than DMA ops) really does want to move back 
-to device_add() time.
+Wanted to send a reminder for this patch conversation.
 
 Thanks,
-Robin.
+Anjelique
 
+On 8/19/2022 1:26 PM, Anjelique Melendez wrote:
 > 
-> -Saravana
+> 
+> On 7/26/2022 3:27 AM, Krzysztof Kozlowski wrote:
+>> On 25/07/2022 21:13, Anjelique Melendez wrote:
+>>> Add support for the new "qcom,pmk8350-pon" comptaible string.
+>>>
+>>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>>> ---
+>>>  drivers/power/reset/qcom-pon.c | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
+>>> index 4a688741a88a..16bc01738be9 100644
+>>> --- a/drivers/power/reset/qcom-pon.c
+>>> +++ b/drivers/power/reset/qcom-pon.c
+>>> @@ -82,6 +82,7 @@ static const struct of_device_id pm8916_pon_id_table[] = {
+>>>  	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
+>>>  	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
+>>>  	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
+>>> +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
+>>>  	{ }
+>>>  };
+>>>  MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
+>>
+>> This is now confusing. The new device has entirely different first and
+>> second IO address spaces, but you do not code here any differences.
+>>
+> 
+> Based on previous responses to this patch series, it was decided that a new
+> "qcom,pmk8350-pon" compatible string is needed to differentiate between gen1/gen2
+> vs gen3 children pon devices. Currently the child handles obtaining the register
+> address(es) from its parent's regmap in drivers/input/misc/pm8941-pwrkey.c
+> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/misc/pm8941-pwrkey.c?h=v6.0-rc1#n287).
+> The patch that handled that change can be found at
+> https://lore.kernel.org/linux-arm-msm/20220422191239.6271-4-quic_amelende@quicinc.com/.
+> 
+> This driver, as the parent, does not actually need any changes besides adding the
+> new parent compatible string. Specifically this driver handles reboot mode support.
+> Everything needed to handle reboot mode is in the first register and reboot mode
+> is handled the same as a "qcom,pm8998-pon" parent. The split of the pon register
+> in pmk8350 does not affect reboot mode. This is why before we added a new compatible
+> string "qcom,pm8998-pon" still worked for gen3 children devices. Even though 2
+> registers could be defined in the device tree, as a 2nd register is optional for gen3
+> children devices,the fact that this driver uses of_property_read_u32() will ensure that
+> the base address used for reboot mode comes from the first register.  
+> 
+> I do understand that this can be confusing but since "qcom,pmk8350-pon" still needs the
+> shift reason = 1 we could do
+> 
+>         #define GEN1_REASON_SHIFT		2
+>         #define GEN2_REASON_SHIFT		1	
+>    +    #define GEN3_REASON_SHIFT		1
+>  
+>   	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
+>   	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
+>   	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
+>    +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN3_REASON_SHIFT },
+>  	{ }
 > 
 > 
->>          return 0;
->>   }
->>   subsys_initcall(iommu_subsys_init);
->> @@ -1775,39 +1807,6 @@ int bus_iommu_probe(struct bus_type *bus)
->>          return ret;
->>   }
->>
->> -static int iommu_bus_init(struct bus_type *bus, const struct iommu_ops *ops)
->> -{
->> -       struct notifier_block *nb;
->> -       int err;
->> -
->> -       nb = kzalloc(sizeof(struct notifier_block), GFP_KERNEL);
->> -       if (!nb)
->> -               return -ENOMEM;
->> -
->> -       nb->notifier_call = iommu_bus_notifier;
->> -
->> -       err = bus_register_notifier(bus, nb);
->> -       if (err)
->> -               goto out_free;
->> -
->> -       err = bus_iommu_probe(bus);
->> -       if (err)
->> -               goto out_err;
->> -
->> -
->> -       return 0;
->> -
->> -out_err:
->> -       /* Clean up */
->> -       bus_for_each_dev(bus, NULL, NULL, remove_iommu_group);
->> -       bus_unregister_notifier(bus, nb);
->> -
->> -out_free:
->> -       kfree(nb);
->> -
->> -       return err;
->> -}
->> -
->>   /**
->>    * bus_set_iommu - set iommu-callbacks for the bus
->>    * @bus: bus.
->> @@ -1836,9 +1835,12 @@ int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
->>          bus->iommu_ops = ops;
->>
->>          /* Do IOMMU specific setup for this bus-type */
->> -       err = iommu_bus_init(bus, ops);
->> -       if (err)
->> +       err = bus_iommu_probe(bus);
->> +       if (err) {
->> +               /* Clean up */
->> +               bus_for_each_dev(bus, NULL, NULL, remove_iommu_group);
->>                  bus->iommu_ops = NULL;
->> +       }
->>
->>          return err;
->>   }
->> --
->> 2.36.1.dirty
->>
->>
+> It would still have the exact same functionality but it may visually make more sense.
+> 
+> 
+> Thanks,
+> Anjelique
+> 

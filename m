@@ -2,220 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0815B0D55
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFF25B0D5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiIGTgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
+        id S229881AbiIGThq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiIGTgQ (ORCPT
+        with ESMTP id S229686AbiIGThn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:36:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E6BC83B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662579359;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mpAWAgyga4+TA9fA5HlAdMkYKlmLpnYSbT76a8Tb7hY=;
-        b=X7VmqUeONFeA2CIb2q5RE0hmnroKBExrcY3NpTiV5Cs/UQzsqX4MABfFrn1kjREvATQoTG
-        iaT2BshRDKEykYCl7UIICGGDzGBz8AGm/eXrmuThLwqIbkmR+zG3Wf2PZhzqtp5SA+BgNd
-        a/QnTHbhoKpIGhyRoLjQIyId1Ay+37k=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-571-fpbF_hiyNGGhjPYZHAVt-Q-1; Wed, 07 Sep 2022 15:35:58 -0400
-X-MC-Unique: fpbF_hiyNGGhjPYZHAVt-Q-1
-Received: by mail-wr1-f71.google.com with SMTP id s1-20020adf9781000000b002286cd81376so3336932wrb.22
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 12:35:57 -0700 (PDT)
+        Wed, 7 Sep 2022 15:37:43 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5A4BFEAD;
+        Wed,  7 Sep 2022 12:37:42 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r17so5340530ejy.9;
+        Wed, 07 Sep 2022 12:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
+        b=QhvIfdWKdAUVOScOUIdGm3776l+VYODIO3d9/C/f8bXO+yDukvWV0FESgq/Wmgyf1o
+         u8V0sJbiU5FPvEPDNGnrCNVL+V1bQYE1bknKnEdJ5lhR4O2GoFiAPTB8lUagGGXCHzXY
+         ZQmbMCUyJGI8q8HxjIGRy+20U4iVzYu+09iX+r4lKAtlyarKrLj04z4EZMKrJo6SX9Db
+         gItCmnWM6t4r50i3pIMpdiiySP2nE/Kd/Mi3fwlLM54xzueNFrRcrDrGA1sAg+89V4iG
+         7CxYDg6Ynb7fpqlIrQvyyTq82yJT+S2oSzpK8qJEqBDvuNZQ0b9+w0BGbl08rAodhBOe
+         qzog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=mpAWAgyga4+TA9fA5HlAdMkYKlmLpnYSbT76a8Tb7hY=;
-        b=x8cnhYDrb6hdlVrV6H07XuufJlxpHN6MkG7Y/6/eORbF6DugAunqibe1nsvo3DtydF
-         Cv5Lzs1LpvQgG+zylksVuY6CS4VaL40tD4F+LXxfRh90cYIzgoFnH2jX0UgpdWh05zAX
-         tnunmZ1d3cQvrsBVpVA5qW8celcVeIHb2hC7+4GBf6/UQ5orPyRFTY9WVpzLa56OivVA
-         4EzZrncq39EECBe9IiC5HOpU3eM3de4sy10X40D717ETedWC1QUsqDDVWjKTOD0w9azG
-         nndlustQSQ8KzM9elhBCl7WyRy49zStAo+J9Ex5wGUuqaLhVGW+TtRSV1KxYBi4QUULo
-         PCPQ==
-X-Gm-Message-State: ACgBeo3Y5ijZFv1gM0MI7viCfBKrqWsZSnH9iGWJu15EpVIHUffKsWP7
-        VPC4RXjgAZXzt6SYpjgapgoIeONJZX2vxDZsUEFjA4xxvKTyGQGb4g9/ilKjp16d3xc/M0beulp
-        /LUQ5167s9F5potnIHFCGtZ5J
-X-Received: by 2002:a5d:6c62:0:b0:222:cda4:e09e with SMTP id r2-20020a5d6c62000000b00222cda4e09emr3050004wrz.449.1662579356972;
-        Wed, 07 Sep 2022 12:35:56 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7DQVp4ThiLrF8zCJxrYqEfGa4avGnhmnwSWvOSff9WwFAQINELHmvVNNO3IJ11QLwoE6qAfw==
-X-Received: by 2002:a5d:6c62:0:b0:222:cda4:e09e with SMTP id r2-20020a5d6c62000000b00222cda4e09emr3049984wrz.449.1662579356689;
-        Wed, 07 Sep 2022 12:35:56 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id w4-20020adfee44000000b0022863c18b93sm14810197wro.13.2022.09.07.12.35.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 12:35:55 -0700 (PDT)
-Message-ID: <2ed84b0f-5d60-919f-06a4-a5ede2f98ce5@redhat.com>
-Date:   Wed, 7 Sep 2022 21:35:52 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
+        b=oP4W1IS6ldO7UDAOf9Pir7bGooUIcjeBNalEwzv8gw10Q0JZAq2y8QClUzl9RretkG
+         ol6UdW64M3xgw39CyW7evS0isV4aR05CO1EjEB5zWmHsPuwCI/vQ2NkOD/NtLHd6HZ1n
+         ZUVVWed4FSt+4rVtGpHAYhzz8IqRm3iFh/KEY5EVqZ0i8gk1mvffzAyvOLZT4VOrMwb/
+         CAgMHrpF9PRIu8vmG72VwMVHdxXMnhgp2OI7IqueZgeyC/2KRJIfQs61QnIKv6VptRYt
+         ylfienFolWzQ5272gS8ajj8nr7yg1V8/5K+swNz6Ni2wf4p5jtDkW/cknO1Lt1mAG3ZR
+         u4og==
+X-Gm-Message-State: ACgBeo3l0vZ4CgGbwxbkFDvxqMtskHQKmPsnUtct2eW32dejUHfKtpYL
+        VsTT+MYwUG6g0K/1ngCQMvdhLzjougpPyszQ1ruDWmCpBFs=
+X-Google-Smtp-Source: AA6agR7DwydpRu6XtC/zVNl1McyHODlkL/bYGYJcGJ8lGN8qaCbuq46FsrbNOrc3r4eb/7G1FcBUDYMS83PPWfsBs60=
+X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id
+ xf9-20020a17090731c900b00740ef932ffdmr3415828ejb.584.1662579461374; Wed, 07
+ Sep 2022 12:37:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH v2 14/15] vfio: Rename vfio_device_put() and
- vfio_device_try_get()
-Content-Language: en-US
-To:     Kevin Tian <kevin.tian@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Yi Liu <yi.l.liu@intel.com>
-References: <20220901143747.32858-1-kevin.tian@intel.com>
- <20220901143747.32858-15-kevin.tian@intel.com>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <20220901143747.32858-15-kevin.tian@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220904044708.7062-1-jagathjog1996@gmail.com>
+ <20220904044708.7062-3-jagathjog1996@gmail.com> <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
+In-Reply-To: <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+Date:   Thu, 8 Sep 2022 01:07:28 +0530
+Message-ID: <CAM+2Eu+xzAPEwCoGsjM5sqKjOiT5J_-dzpeB-r5XP=KoRkSXGg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] rtc: maxim: Add Maxim max31329 real time clock.
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof.
+Thank you for reviewing.
 
+On Mon, Sep 5, 2022 at 8:50 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 04/09/2022 06:47, Jagath Jog J wrote:
+> > Add real time clock support for Maxim max31329 real time clock.
+> >
+> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+>
+> Thank you for your patch. There is something to discuss/improve.
+>
+> > +     max31329->rtc->ops = &max31329_rtc_ops;
+> > +     max31329->irq = client->irq;
+> > +     max31329->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> > +     max31329->rtc->range_max = RTC_TIMESTAMP_END_2199;
+> > +     max31329->dev = &client->dev;
+> > +
+> > +     if (max31329->irq) {
+> > +             ret = devm_request_threaded_irq(&client->dev, max31329->irq,
+> > +                                             NULL, max31329_irq_handler,
+> > +                                             IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+> > +                                             "max31329", &client->dev);
+> > +             if (ret) {
+> > +                     dev_err(&client->dev, "unable to request IRQ\n");
+> > +                     max31329->irq = 0;
+> > +                     return ret;
+> > +             }
+> > +
+> > +             ret = regmap_write(max31329->regmap, MAX31329_RTC_CONFIG2_REG,
+> > +                                MAX31329_RTC_CONFIG2_ENCLKO);
+> > +             if (ret) {
+> > +                     dev_err(&client->dev, "unable to configure INT pin");
+> > +                     max31329->irq = 0;
+> > +                     return ret;
+> > +             }
+> > +
+> > +             device_set_wakeup_capable(&client->dev, true);
+>
+> Probably you should rather respect wakeup-source DT property.
 
-On 9/1/22 16:37, Kevin Tian wrote:
-> With the addition of vfio_put_device() now the names become confusing.
->
-> vfio_put_device() is clear from object life cycle p.o.v given kref.
->
-> vfio_device_put()/vfio_device_try_get() are helpers for tracking
-> users on a registered device.
->
-> Now rename them:
->
->  - vfio_device_put() -> vfio_device_put_registration()
->  - vfio_device_try_get() -> vfio_device_try_get_registration()
->
-> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Eric Auger <eric.auger@redhat.com>
+Sure, I will configure wakeup based on the value of the wakeup-source
+property from DT.
 
-Eric
-> ---
->  drivers/vfio/vfio_main.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
 >
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index 957d9f286550..bfa675d314ab 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -451,13 +451,13 @@ static void vfio_group_get(struct vfio_group *group)
->   * Device objects - create, release, get, put, search
->   */
->  /* Device reference always implies a group reference */
-> -static void vfio_device_put(struct vfio_device *device)
-> +static void vfio_device_put_registration(struct vfio_device *device)
->  {
->  	if (refcount_dec_and_test(&device->refcount))
->  		complete(&device->comp);
->  }
->  
-> -static bool vfio_device_try_get(struct vfio_device *device)
-> +static bool vfio_device_try_get_registration(struct vfio_device *device)
->  {
->  	return refcount_inc_not_zero(&device->refcount);
->  }
-> @@ -469,7 +469,8 @@ static struct vfio_device *vfio_group_get_device(struct vfio_group *group,
->  
->  	mutex_lock(&group->device_lock);
->  	list_for_each_entry(device, &group->device_list, group_next) {
-> -		if (device->dev == dev && vfio_device_try_get(device)) {
-> +		if (device->dev == dev &&
-> +		    vfio_device_try_get_registration(device)) {
->  			mutex_unlock(&group->device_lock);
->  			return device;
->  		}
-> @@ -671,7 +672,7 @@ static int __vfio_register_dev(struct vfio_device *device,
->  	if (existing_device) {
->  		dev_WARN(device->dev, "Device already exists on group %d\n",
->  			 iommu_group_id(group->iommu_group));
-> -		vfio_device_put(existing_device);
-> +		vfio_device_put_registration(existing_device);
->  		if (group->type == VFIO_NO_IOMMU ||
->  		    group->type == VFIO_EMULATED_IOMMU)
->  			iommu_group_remove_device(device->dev);
-> @@ -730,7 +731,7 @@ static struct vfio_device *vfio_device_get_from_name(struct vfio_group *group,
->  			ret = !strcmp(dev_name(it->dev), buf);
->  		}
->  
-> -		if (ret && vfio_device_try_get(it)) {
-> +		if (ret && vfio_device_try_get_registration(it)) {
->  			device = it;
->  			break;
->  		}
-> @@ -750,7 +751,7 @@ void vfio_unregister_group_dev(struct vfio_device *device)
->  	bool interrupted = false;
->  	long rc;
->  
-> -	vfio_device_put(device);
-> +	vfio_device_put_registration(device);
->  	rc = try_wait_for_completion(&device->comp);
->  	while (rc <= 0) {
->  		if (device->ops->request)
-> @@ -1286,7 +1287,7 @@ static int vfio_group_get_device_fd(struct vfio_group *group, char *buf)
->  err_put_fdno:
->  	put_unused_fd(fdno);
->  err_put_device:
-> -	vfio_device_put(device);
-> +	vfio_device_put_registration(device);
->  	return ret;
->  }
->  
-> @@ -1461,7 +1462,7 @@ static int vfio_device_fops_release(struct inode *inode, struct file *filep)
->  
->  	vfio_device_unassign_container(device);
->  
-> -	vfio_device_put(device);
-> +	vfio_device_put_registration(device);
->  
->  	return 0;
->  }
+> > +             set_bit(RTC_FEATURE_ALARM, max31329->rtc->features);
+> > +     }
+> > +
+> > +     ret = devm_rtc_register_device(max31329->rtc);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     max31329_trickle_config(&client->dev);
+> > +
+> > +     nvmem_cfg.priv = max31329->regmap;
+> > +     devm_rtc_nvmem_register(max31329->rtc, &nvmem_cfg);
+> > +
+> > +#ifdef CONFIG_COMMON_CLK
+> > +     max31329_clkout_register_clk(max31329, client);
+> > +#endif
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct of_device_id max31329_of_match[] = {
+> > +     { .compatible = "maxim,max31329", },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, max31329_of_match);
+> > +
+> > +static struct i2c_driver max31329_driver = {
+> > +     .driver = {
+> > +             .name = "rtc-max31329",
+> > +             .of_match_table = of_match_ptr(max31329_of_match),
+>
+> of_match_ptr without maybe_unused on the table should cause compile test
+> warnings. You need both or none.
 
+I will correct this in the next patch series.
+
+Thank you
+Jagath
+>
+>
+> Best regards,
+> Krzysztof

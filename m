@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89ADE5B0152
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0DD5B016B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiIGKKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        id S230167AbiIGKPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiIGKJ7 (ORCPT
+        with ESMTP id S230033AbiIGKO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:09:59 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBC33D594;
-        Wed,  7 Sep 2022 03:09:55 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MMyZN4WMLz1P83t;
-        Wed,  7 Sep 2022 18:06:04 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 7 Sep
- 2022 18:09:52 +0800
-From:   Lu Wei <luwei32@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <vulab@iscas.ac.cn>, <maheshb@google.com>,
-        <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] ipvlan: Fix out-of-bound bugs caused by unset skb->mac_header
-Date:   Wed, 7 Sep 2022 18:12:04 +0800
-Message-ID: <20220907101204.255213-1-luwei32@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 7 Sep 2022 06:14:58 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C18F24098
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:14:57 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2877p1GG032346;
+        Wed, 7 Sep 2022 05:14:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=IiVoG2fnJzlYy5zIJA+PVp/Rv31qKQR5pP87OgUZQuU=;
+ b=SQi3tDQH1HHKmBemUnVJl6u++lrEr0kRo0xFv0DLLwLqBblQDn/Yf+qCinnDBKHZdWeF
+ bAxHxKYdngd1ZCvCFJN1OBXrbZ31yKu16OVnXyh3jFI+GKrGKK73GJrJG1B4cBZ1nG7Z
+ QjjwQtYICILOGkAoq5iJjUyu0bjfiXET/KZXaF+t6eEvHhUqxaXgzLuWcII3hNmw9sNe
+ tFoBz0e6bcLDYYIVd91R1+9goh1xXz7mWYPyRGQa6q8soUS6WwMCoOyqNFiOnSe4UrBE
+ q26t4PkAvQ0B2FF+fsS4I2XmClbYXtVQOYKkVcmGd/ogKl5lsdg5aQIF6O4/4F/Slodh KQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3jc3bpw4sn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 05:14:13 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Wed, 7 Sep
+ 2022 05:14:12 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.12 via Frontend Transport; Wed, 7 Sep 2022 05:14:12 -0500
+Received: from debianA11184.ad.cirrus.com (unknown [198.61.65.149])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2C1FFB06;
+        Wed,  7 Sep 2022 10:14:05 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <lgirdwood@gmail.com>,
+        <peter.ujfalusi@linux.intel.com>,
+        <ranjani.sridharan@linux.intel.com>,
+        <kai.vehmanen@linux.intel.com>, <daniel.baluta@nxp.com>,
+        <sanyog.r.kale@intel.com>, <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>,
+        <sound-open-firmware@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH 0/7] soundwire: Fix driver removal
+Date:   Wed, 7 Sep 2022 11:13:55 +0100
+Message-ID: <20220907101402.4685-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: zO4yBel3wvibvReJBzwxEzDL20GZCnK_
+X-Proofpoint-ORIG-GUID: zO4yBel3wvibvReJBzwxEzDL20GZCnK_
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an AF_PACKET socket is used to send packets through ipvlan and the
-default xmit function of the AF_PACKET socket is changed from
-dev_queue_xmit() to packet_direct_xmit() via setsockopt() with the option
-name of PACKET_QDISC_BYPASS, the skb->mac_header may not be reset and
-remains as the initial value of 65535, this may trigger slab-out-of-bounds
-bugs as following:
+Removal of child drivers and the bus driver was broken and would
+result in a slew of various errors.
 
-=================================================================
-UG: KASAN: slab-out-of-bounds in ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
-PU: 2 PID: 1768 Comm: raw_send Kdump: loaded Not tainted 6.0.0-rc4+ #6
-ardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-1.fc33
-all Trace:
-print_address_description.constprop.0+0x1d/0x160
-print_report.cold+0x4f/0x112
-kasan_report+0xa3/0x130
-ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
-ipvlan_start_xmit+0x29/0xa0 [ipvlan]
-__dev_direct_xmit+0x2e2/0x380
-packet_direct_xmit+0x22/0x60
-packet_snd+0x7c9/0xc40
-sock_sendmsg+0x9a/0xa0
-__sys_sendto+0x18a/0x230
-__x64_sys_sendto+0x74/0x90
-do_syscall_64+0x3b/0x90
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Most of these were caused by the code shutting down in the wrong
+order, shutting down the bus driver first. The bus driver should
+be shut down after the child drivers have been removed (compare
+with the I2C and SPI subsystem for example).
 
-The root cause is:
-  1. packet_snd() only reset skb->mac_header when sock->type is SOCK_RAW
-     and skb->protocol is not specified as in packet_parse_headers()
+These patches fix that.
 
-  2. packet_direct_xmit() doesn't reset skb->mac_header as dev_queue_xmit()
+A secondary problem was over the cleanup of child drivers. The
+removal functions were not the opposite of the probe function,
+and the ownership of struct sdw_slave is tricky because it mixes
+two separate usages and currently has to be "owned" by the bus
+driver.
 
-In this case, skb->mac_header is 65535 when ipvlan_xmit_mode_l2() is
-called. So when ipvlan_xmit_mode_l2() gets mac header with eth_hdr() which
-use "skb->head + skb->mac_header", out-of-bound access occurs.
+Tested with 4 peripherals on 1 bus and 8 peripherals on 2 buses.
 
-This patch replaces eth_hdr() with skb_eth_hdr() in ipvlan_xmit_mode_l2()
-and reset mac header in multicast to solve this out-of-bound bug.
+Richard Fitzgerald (7):
+  soundwire: bus: Do not forcibly disable child pm_runtime
+  soundwire: intel_init: Separate shutdown and cleanup
+  ASoC: SOF: Intel: Don't disable Soundwire interrupt before the bus has
+    shut down
+  soundwire: bus: Add remove callback to struct sdw_master_ops
+  soundwire: intel: Don't disable interrupt until children are removed
+  soundwire: intel: Don't disable pm_runtime until children are removed
+  soundwire: bus: Fix premature removal of sdw_slave objects
 
-Fixes: 2ad7bf363841 ("ipvlan: Initial check-in of the IPVLAN driver.")
-Signed-off-by: Lu Wei <luwei32@huawei.com>
----
- drivers/net/ipvlan/ipvlan_core.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/soundwire/bus.c             | 37 ++++++++++++++++++++++++-----
+ drivers/soundwire/intel.c           | 13 ++++++++--
+ drivers/soundwire/intel_init.c      | 25 +++++++++++++++----
+ drivers/soundwire/slave.c           | 21 ++++++++++++----
+ include/linux/soundwire/sdw.h       |  3 ++-
+ include/linux/soundwire/sdw_intel.h |  2 ++
+ sound/soc/sof/intel/hda.c           | 16 ++++++++++---
+ 7 files changed, 96 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/ipvlan/ipvlan_core.c b/drivers/net/ipvlan/ipvlan_core.c
-index dfeb5b392e64..bb1c298c1e78 100644
---- a/drivers/net/ipvlan/ipvlan_core.c
-+++ b/drivers/net/ipvlan/ipvlan_core.c
-@@ -495,7 +495,6 @@ static int ipvlan_process_v6_outbound(struct sk_buff *skb)
- 
- static int ipvlan_process_outbound(struct sk_buff *skb)
- {
--	struct ethhdr *ethh = eth_hdr(skb);
- 	int ret = NET_XMIT_DROP;
- 
- 	/* The ipvlan is a pseudo-L2 device, so the packets that we receive
-@@ -505,6 +504,8 @@ static int ipvlan_process_outbound(struct sk_buff *skb)
- 	if (skb_mac_header_was_set(skb)) {
- 		/* In this mode we dont care about
- 		 * multicast and broadcast traffic */
-+		struct ethhdr *ethh = eth_hdr(skb);
-+
- 		if (is_multicast_ether_addr(ethh->h_dest)) {
- 			pr_debug_ratelimited(
- 				"Dropped {multi|broad}cast of type=[%x]\n",
-@@ -589,7 +590,7 @@ static int ipvlan_xmit_mode_l3(struct sk_buff *skb, struct net_device *dev)
- static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
- {
- 	const struct ipvl_dev *ipvlan = netdev_priv(dev);
--	struct ethhdr *eth = eth_hdr(skb);
-+	struct ethhdr *eth = skb_eth_hdr(skb);
- 	struct ipvl_addr *addr;
- 	void *lyr3h;
- 	int addr_type;
-@@ -619,6 +620,7 @@ static int ipvlan_xmit_mode_l2(struct sk_buff *skb, struct net_device *dev)
- 		return dev_forward_skb(ipvlan->phy_dev, skb);
- 
- 	} else if (is_multicast_ether_addr(eth->h_dest)) {
-+		skb_reset_mac_header(skb);
- 		ipvlan_skb_crossing_ns(skb, NULL);
- 		ipvlan_multicast_enqueue(ipvlan->port, skb, true);
- 		return NET_XMIT_SUCCESS;
 -- 
-2.31.1
+2.30.2
 

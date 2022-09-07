@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E065AFA3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C4D5AFA4A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiIGCuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S229721AbiIGCvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiIGCup (ORCPT
+        with ESMTP id S229936AbiIGCut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:50:45 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21B67A535;
-        Tue,  6 Sep 2022 19:50:43 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id l16so6954492ilj.2;
-        Tue, 06 Sep 2022 19:50:43 -0700 (PDT)
+        Tue, 6 Sep 2022 22:50:49 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4852F5;
+        Tue,  6 Sep 2022 19:50:47 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id i77so10478054ioa.7;
+        Tue, 06 Sep 2022 19:50:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=vJDBXnovG4Z5ADf3FUeK88wTNu6W40lgK1DC9Nn817Q=;
-        b=q0AHnDZ7wYM3ueGaet/aHw4TsKG5colpARqageAbcNPXSqkBHeJr+T45MyM0KsJ+6u
-         7xuPYde7UmKzfrhc6y78dDdwE4tWZttfuFvXimE3w8z5rBXMlEqvpVuqPjluVsS6bhwc
-         E+JE8IBuVyylXyo1uonjANEuXQahuKc0mkMjGVuZwUzbIdRMpd1iinkRuGqL/vemYAAQ
-         XOhWMM4VPVeyiCNrEvXv+8aIt2SSyTdT7FPfhD2ospKmKHQbU9HfilGwgkvVhE4h5bHp
-         0AECal2cLr1zhTrgdk24YKbjoNaomKVWAUGtB92ptOswyL0WDVs7O9/2BNa3Z/kWlTGn
-         ORFg==
+        bh=SmSdW9i3EThjbK8u7yyNrPgrBdo5J6YHi3eeJSF4bF4=;
+        b=lq37ClPxtvYFPIHiefWnLuttJUtWTSr8QnybwKMNtyAyuIO+jCk1JEDLP685+J2ile
+         qX8yHJQZ60am0iNNMxMkGQVwrUjech2+mB7GlRoBB4mcjMICIjfB80AWBuaxIFjGYxmr
+         hdsK6CzAnFUs9Rpq57+qQaZK9B7dQm5PHLXpaKdGSeF6y+n2Vz2/bj3hlyvy5lCiZrau
+         p+HZZ/l3eG9VTEypYqPKue4RHqbegOVXQiwkLPaUxGR/pL+oP4PAJN2T/FnMBwaiS1Uz
+         HzIv2dzTQOKL8mmp9an2p3IDc+qtJ8avdathBDhNjQWl8eytJ191APVkO9k/MoaYr4M+
+         LUSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=vJDBXnovG4Z5ADf3FUeK88wTNu6W40lgK1DC9Nn817Q=;
-        b=j6MpicSNdNK3siKtxPj4kJjzycJI7cbr/rb3dyxDwHz0wDBRREY2bXAEKL1Cj4XbgR
-         FYTcSQQs1F3tE4BREcaXlPgYJ8fK5tTv4fMLW8pGBbu292fO/RioSz909lRf8lfG/LVV
-         9Mawe9SuhmMEHxJCWz4FrVPK05nrhHK1GzJa3Q2Q6ZlQU+HQo1+G+QRtNMHHxgjez9tp
-         xBD45xuxUFoV/L3Yxp7V2Rq6BAsGK6HlpUWQneDlmV5emORENl8q7r87jGtDRvGCrh0E
-         kevX+jtVjiYIDcWZmIMzduXl1tmdcjTTsnlwOO4GFw7a8vorx4CS/T0bhLq/Rr06tVib
-         0UdQ==
-X-Gm-Message-State: ACgBeo3Uez9uhkALZFxNgwxcBTHhhWfFozcIkzckCYxDsqRAwXvKtk0s
-        vCdPCcS4qJl1P1mGe7z5uT0=
-X-Google-Smtp-Source: AA6agR7qMl6gJknV4RcjhrwOXKmIk4AJkmvXleSkpEgxVlZcajBAWhSn8CHQuHYFy6Aq3aX9FQ0rww==
-X-Received: by 2002:a92:cb8e:0:b0:2f1:8533:4e1 with SMTP id z14-20020a92cb8e000000b002f1853304e1mr844482ilo.33.1662519043299;
-        Tue, 06 Sep 2022 19:50:43 -0700 (PDT)
+        bh=SmSdW9i3EThjbK8u7yyNrPgrBdo5J6YHi3eeJSF4bF4=;
+        b=0J0wflGp8w+twW9GToCJ92O6MWLFoZdP6GH4xokByIs2/M5mEC2fhgYf089lW+Y5eX
+         l7NqqmDejkCL3k3QooC0tBiPmvSYd/D1H8zOB/s0qyBKJwwIcG7ToUGADsC924PezxxP
+         n6cToZ1kbsEnwx+CT7LOWWGP+a5yO5TpEcBAfW6XrS6hA5sMKOpMDrNZE+/EGqikHcNL
+         73ngXrRDxFZIeR4W5K1jVg5zchGsYzEf9O8/ZdKvH92Ejj3ihR46cw8QjFeedX0F8rMK
+         sFy38W26h+jICUQo/W2Y/Fa12i9qpDcgKU1MzCEJNARXSQOL6+bEZwrMz77/6euhXkjm
+         /qkg==
+X-Gm-Message-State: ACgBeo1o+/iHy7xPbVm8l6Xt5QTqpAzGMAyGh1RVaHQulwV+GUKUu1Zy
+        +FxJRKb+HfsfrymCQ1yVElI=
+X-Google-Smtp-Source: AA6agR7p+8dmCEBpGW0DjpRAYF+h6xNMbC+lI5UV/OGwDWBKw0HLY8/23zgP3M5d4tvthfPawK+7kg==
+X-Received: by 2002:a02:29c2:0:b0:34a:195e:9574 with SMTP id p185-20020a0229c2000000b0034a195e9574mr979850jap.79.1662519046481;
+        Tue, 06 Sep 2022 19:50:46 -0700 (PDT)
 Received: from localhost ([2607:fea8:a2e2:2d00::4aff])
-        by smtp.gmail.com with UTF8SMTPSA id z27-20020a056638215b00b00349f45fcb72sm6425466jaj.11.2022.09.06.19.50.41
+        by smtp.gmail.com with UTF8SMTPSA id b10-20020a05660214ca00b00689257fef39sm6780836iow.4.2022.09.06.19.50.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 19:50:42 -0700 (PDT)
+        Tue, 06 Sep 2022 19:50:46 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     bjorn.andersson@linaro.org
 Cc:     agross@kernel.org, konrad.dybcio@somainline.org,
@@ -58,9 +58,9 @@ Cc:     agross@kernel.org, konrad.dybcio@somainline.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, caleb@connolly.tech,
         jo@jsfamily.in, Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH 1/3] dt-bindings: clock: gcc-sdm845: add sdm670 global clocks
-Date:   Tue,  6 Sep 2022 22:50:33 -0400
-Message-Id: <20220907025035.15609-2-mailingradian@gmail.com>
+Subject: [PATCH 2/3] clk: qcom: gcc-sdm845: use device tree match data
+Date:   Tue,  6 Sep 2022 22:50:34 -0400
+Message-Id: <20220907025035.15609-3-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220907025035.15609-1-mailingradian@gmail.com>
 References: <20220907025035.15609-1-mailingradian@gmail.com>
@@ -76,91 +76,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Snapdragon 670 clocks will be added into the sdm845 gcc driver. Most
-of the new clocks, GDSCs, and resets already have reserved IDs but there
-are some resources that don't. Add the new clock and extra BCR from
-Snapdragon 670 and document the differences between the SoC parent clocks.
+This driver will support more than one SoC's set of clocks, and set of
+GDSCs. This behavior would be unclean with hard-coded static variables.
+Support it by grabbing clocks, GDSCs, and BCRs in the match data.
 
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 ---
- .../bindings/clock/qcom,gcc-sdm845.yaml       | 24 +++++++++++++++----
- include/dt-bindings/clock/qcom,gcc-sdm845.h   |  2 ++
- 2 files changed, 21 insertions(+), 5 deletions(-)
+ drivers/clk/qcom/gcc-sdm845.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/defaced/bindings/clock/qcom,gcc-sdm845.yaml
-index daf7906ebc40..ba94dd32e619 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-@@ -19,23 +19,21 @@ description: |
+diff --git a/drivers/clk/qcom/gcc-sdm845.c b/drivers/clk/qcom/gcc-sdm845.c
+index 58aa3ec9a7fc..cd6e4e41dc9b 100644
+--- a/drivers/clk/qcom/gcc-sdm845.c
++++ b/drivers/clk/qcom/gcc-sdm845.c
+@@ -3574,7 +3574,7 @@ static const struct qcom_cc_desc gcc_sdm845_desc = {
+ };
  
- properties:
-   compatible:
--    const: qcom,gcc-sdm845
-+    enum:
-+      - qcom,gcc-sdm670
-+      - qcom,gcc-sdm845
+ static const struct of_device_id gcc_sdm845_match_table[] = {
+-	{ .compatible = "qcom,gcc-sdm845" },
++	{ .compatible = "qcom,gcc-sdm845", .data = &gcc_sdm845_desc },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, gcc_sdm845_match_table);
+@@ -3600,6 +3600,7 @@ static const struct clk_rcg_dfs_data gcc_dfs_clocks[] = {
  
-   clocks:
-     items:
-       - description: Board XO source
-       - description: Board active XO source
-       - description: Sleep clock source
--      - description: PCIE 0 Pipe clock source
--      - description: PCIE 1 Pipe clock source
+ static int gcc_sdm845_probe(struct platform_device *pdev)
+ {
++	const struct qcom_cc_desc *gcc_desc;
+ 	struct regmap *regmap;
+ 	int ret;
  
-   clock-names:
-     items:
-       - const: bi_tcxo
-       - const: bi_tcxo_ao
-       - const: sleep_clk
--      - const: pcie_0_pipe_clk
--      - const: pcie_1_pipe_clk
+@@ -3616,7 +3617,8 @@ static int gcc_sdm845_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
-   '#clock-cells':
-     const: 1
-@@ -63,6 +61,22 @@ required:
-   - '#reset-cells'
-   - '#power-domain-cells'
+-	return qcom_cc_really_probe(pdev, &gcc_sdm845_desc, regmap);
++	gcc_desc = of_device_get_match_data(&pdev->dev);
++	return qcom_cc_really_probe(pdev, gcc_desc, regmap);
+ }
  
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: qcom,gcc-sdm845
-+then:
-+  properties:
-+    clocks:
-+      items:
-+        - description: PCIE 0 Pipe clock source
-+        - description: PCIE 1 Pipe clock source
-+    clock-names:
-+      items:
-+        - const: pcie_0_pipe_clk
-+        - const: pcie_1_pipe_clk
-+
- additionalProperties: false
- 
- examples:
-diff --git a/include/dt-bindings/clock/qcom,gcc-sdm845.h b/include/dt-bindings/clock/qcom,gcc-sdm845.h
-index 968fa65b9c42..9fef78fd031d 100644
---- a/include/dt-bindings/clock/qcom,gcc-sdm845.h
-+++ b/include/dt-bindings/clock/qcom,gcc-sdm845.h
-@@ -199,6 +199,7 @@
- #define GCC_QSPI_CNOC_PERIPH_AHB_CLK				189
- #define GCC_LPASS_Q6_AXI_CLK					190
- #define GCC_LPASS_SWAY_CLK					191
-+#define GPLL6							192
- 
- /* GCC Resets */
- #define GCC_MMSS_BCR						0
-@@ -227,6 +228,7 @@
- #define GCC_USB_PHY_CFG_AHB2PHY_BCR				23
- #define GCC_PCIE_0_PHY_BCR					24
- #define GCC_PCIE_1_PHY_BCR					25
-+#define GCC_SDCC1_BCR						26
- 
- /* GCC GDSCRs */
- #define PCIE_0_GDSC						0
+ static struct platform_driver gcc_sdm845_driver = {
 -- 
 2.37.3
 

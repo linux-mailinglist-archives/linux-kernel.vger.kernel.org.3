@@ -2,88 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B465AFA71
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E925AFA6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiIGDLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 23:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S230021AbiIGDKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 23:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiIGDLH (ORCPT
+        with ESMTP id S229962AbiIGDKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:11:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1F384EE2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 20:11:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662520262; x=1694056262;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AymFsAjlJTw3ZlsoyqRCEN2+vuWcpnL9wZiecOO6QIM=;
-  b=hUz7N+DcCOBgKXHwJnJ6B7mCw6wEjPn7215lgM0adkmQVOQfSnzYdc10
-   mCj7IBPqGJL6mSILiiBFrT7g6fCvON0PQkTX+zX3qZ+M+yQ4z4WxLMNO8
-   ptlXmirFgVbUs/tr4gbzNhZ1P4YopcZQTEUJ8RBQaZrXgXqCfvVMfb1WR
-   F+h9759zhD+9G8TSF1uxNth7vwbTRrGdL4sxaMAQ1NO9t999nROlC1kmp
-   wvd3qkIbskLJvb86GQv/3/8PHA4HZWF4Z6csdCBJPFS2VfNIWKSRW9V1I
-   TEm2qW+9cqu0qHH9pfQHFVqbgweR2oiOrNAJrT5kWP3n6sDSsx7bO6tfI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="297550398"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="297550398"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 20:11:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="756606747"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 20:10:59 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVlSs-00061P-2x;
-        Wed, 07 Sep 2022 03:10:58 +0000
-Date:   Wed, 7 Sep 2022 11:10:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stefan Roesch <shr@fb.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>
-Subject: [ammarfaizi2-block:kdave/linux/for-next 107/120] ERROR: modpost:
- "balance_dirty_pages_ratelimited_flags" [fs/btrfs/btrfs.ko] undefined!
-Message-ID: <202209071127.oM1Ev8D4-lkp@intel.com>
+        Tue, 6 Sep 2022 23:10:46 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CBF61D6D;
+        Tue,  6 Sep 2022 20:10:44 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so13386236pji.1;
+        Tue, 06 Sep 2022 20:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=cQrGSKQ0Iug5FftXe2NjDnuh5bE0DYzIRBVMnIQGO5U=;
+        b=PIRsCcxSjcV1wVuNoACJ1BGs8yLsoLAPjwkbyOItuhU2TOsXTbum9pwV+RWCTdtVW7
+         czlAdSsdpaZ/IxORawAR2L9Rjjh743X84yJkNXwVg09p0Lk2/kGcGlUQMYzZPLcKIc7l
+         l6JTPsaD7Pob8eyZVgJJwTSuqoKhvqpd2ixof+kSTtCAsTOzNKtj8pI9i+2Av1SjjyFd
+         gXWfLgDkGNd4B5ShQlmpNC8Wonz4KyZ+Qvuvltk96H65RZ8dSJEfLXSZXSsPRVJKGiG9
+         hm9LFdZlznkkTl87/Bt83FU+UWAJBNNYukQxkLXVbCwYHmuMbn2cgLsP66+YJ7osyHBm
+         nLBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=cQrGSKQ0Iug5FftXe2NjDnuh5bE0DYzIRBVMnIQGO5U=;
+        b=PsQ8phSDMOUfAosSgmbHIcFPFgwM+/qVAsuFjfrl8Ve6kC747F9vqMLcqjpdnuqhVM
+         snt6Hxjge1XSKsEzAySbIN1aD35cX9vqq13Gyu9UgOZQ6Bljzslbc0oZJYcsGse2fjca
+         cVz4Gf3YxxGrcvi4/rCHUSnzpdLWujDIeuYllbKzRmsCfOQPnLOIMTxC4/mS4eKvsP3k
+         TnVfKzqyTsNMszTqlW4g85sHDXFmHjSC0OQ1W4lz/X2iyQ+KECOCAHRkw4rG/zjdeSVB
+         LLThghq6hGjqMUzv5I8rZ8CJ2ThgOVlsPxz+eAWNRzv3ETmOFOMBX+xRcjXgdlCVsEfZ
+         mDaw==
+X-Gm-Message-State: ACgBeo2uIbNahwhBQoXyqhS1WVWn+uD5nTiFcQRe8n12mmebEl5QBxS5
+        idRSWiWr2OVXZXokhbj4K9Y=
+X-Google-Smtp-Source: AA6agR7CH+gtBNHKXZtO3w+GuqtXo9rSEShmlqrB0QA1s0fCTfTW1y1k+PEeZYHn+8E9tJ1rgaKNXQ==
+X-Received: by 2002:a17:90b:1b48:b0:1f4:f4e5:c189 with SMTP id nv8-20020a17090b1b4800b001f4f4e5c189mr27071344pjb.226.1662520243931;
+        Tue, 06 Sep 2022 20:10:43 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 205-20020a6217d6000000b00537b8deef41sm11076025pfx.136.2022.09.06.20.10.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 20:10:43 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     helgaas@kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com, bhelgaas@google.com,
+        cgel.zte@gmail.com, kw@linux.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, lpieralisi@kernel.org,
+        rjui@broadcom.com, robh@kernel.org, sbranden@broadcom.com,
+        ye.xingchen@zte.com.cn, --cc=zealci@zte.com.cn
+Subject: Re: [PATCH linux-next]
+Date:   Wed,  7 Sep 2022 03:10:38 +0000
+Message-Id: <20220907031038.340425-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220906212520.GA45166@bhelgaas>
+References: <20220906212520.GA45166@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=--subject='Re: [PATCH linux-next] PCI: iproc: Remove the unneeded result variable'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block kdave/linux/for-next
-head:   0e7fbd5972c021740bb9443c9680145a2627729f
-commit: 145103680cd0f5fcd2162c89f89f2746c4198d85 [107/120] btrfs: make balance_dirty_pages nowait compatible
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220907/202209071127.oM1Ev8D4-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/145103680cd0f5fcd2162c89f89f2746c4198d85
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kdave/linux/for-next
-        git checkout 145103680cd0f5fcd2162c89f89f2746c4198d85
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+In fact,‘cgel.zte@gmail.com’ is our company's public mail address, and ‘ye.xingchen@zte.com.cn’is my personal mail address in the company.‘ZTE’ is the name of company, and ‘CGEL’the name of our project team in company.This patch was posted by ‘ye.xingchen@zte.com.cn’.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+For some reason, the patchs needs to be reviewed by the company before it is sent out, and we have to use public mailboxes to send mails, because personal mailboxes are not allowed to send mails.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Because it is the patch I submitted, the mail about the patch will be sent to my personal mailbox through the public mailbox.
 
->> ERROR: modpost: "balance_dirty_pages_ratelimited_flags" [fs/btrfs/btrfs.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ 
+Thanks,
+YE XINGCHEN

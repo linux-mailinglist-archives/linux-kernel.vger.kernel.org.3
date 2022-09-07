@@ -2,53 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E8D5B02A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EA35B02B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiIGLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S229710AbiIGLRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiIGLQM (ORCPT
+        with ESMTP id S229731AbiIGLRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:16:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DB385AB6;
-        Wed,  7 Sep 2022 04:16:11 -0700 (PDT)
+        Wed, 7 Sep 2022 07:17:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE4C82751;
+        Wed,  7 Sep 2022 04:17:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E7A66172F;
-        Wed,  7 Sep 2022 11:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04650C433C1;
-        Wed,  7 Sep 2022 11:16:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3C8EB81BB9;
+        Wed,  7 Sep 2022 11:17:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D5AC433C1;
+        Wed,  7 Sep 2022 11:17:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662549370;
-        bh=ugbTVmVkcY78vdm1A78HKS8IKclfP9gEGvUmjHcFqVM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hOLXA3ZjIhCFFfSEYhf5cdpskdkI4gEUa8IfXi+abDj19WWNiFc8TfVGJP2LiQEBS
-         lxD73EoRJWWa1c3GCaJiHR3OiHcjs1wbBCHqB8+obEAvtD1NplyZyJLIMLynVzAkKb
-         LsH4sUqS4U+V3YJIKIHHSGtstm5RtFdfiQSTjVKjT7HWLJAS1WwOl5D5/ei25UV+bF
-         8t/APIAAaQVO1JLotcCiW17QZQ8CorxmHzN4b10RbvjO4ZTi3VDjDkGZae9Z+Cdy+7
-         r1QUmuYuBgHv6mUKHcSPF1zuwyaMT+uJSn6eXEaMZ7dKwox7RbUv1tXpciTFumQKC/
-         0GZXTD9LRn2tA==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org
-Cc:     linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: [man-pages RFC PATCH v4] statx, inode: document the new STATX_INO_VERSION field
-Date:   Wed,  7 Sep 2022 07:16:06 -0400
-Message-Id: <20220907111606.18831-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1662549451;
+        bh=FDZATRR6hD4/oumv1UZdmL/xvD/IkK/Y0Be7tHMnhk8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NdB9ShtwPJRa+2uOE2L89i6+B+Xb+kZTURs3h1ZIwYfrdOz9ZOSDvy8lINShqXMFg
+         oZBTGTcRvDOkS6h4U3l7aGVjxxqjtBlAdw0Ekz7lPF32Iuz0X5ZZCPekCqUo6bEYzT
+         +mnGjpO0MeyB2q4oS/0skrPAfOWT1dKwLfp44cH1XPqCD1qxqD+Cjie3enm77MYGlg
+         C4mATqYgqPTsjiBrU5HnvM10BFIOHKaZPjSGu/5llFInL9TehF9qyyTsoXyVFU3/Si
+         ooiocizR+Dvt1lgcNHG44qfy1Mgr8jEPPzx+3s8Ah2olCj5mVr5ST+wpEctb/Ri+yY
+         rNyoxQNyqiyoQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oVt3h-008con-84;
+        Wed, 07 Sep 2022 12:17:29 +0100
+Date:   Wed, 07 Sep 2022 12:17:28 +0100
+Message-ID: <87leqvv3g7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, eric.auger@redhat.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        puneet.gupta@amd.com, song.bao.hua@hisilicon.com,
+        mchehab+huawei@kernel.org, f.fainelli@gmail.com,
+        jeffrey.l.hugo@gmail.com, saravanak@google.com,
+        Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com,
+        robin.murphy@arm.com, will@kernel.org, joro@8bytes.org,
+        masahiroy@kernel.org, ndesaulniers@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kvm@vger.kernel.org, okaya@kernel.org, harpreet.anand@amd.com,
+        nikhil.agarwal@amd.com, michal.simek@amd.com,
+        aleksandar.radovanovic@amd.com, git@amd.com
+Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its domain as parent
+In-Reply-To: <YxeBCsA32jnwMjSj@nvidia.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+        <20220906134801.4079497-1-nipun.gupta@amd.com>
+        <20220906134801.4079497-5-nipun.gupta@amd.com>
+        <YxeBCsA32jnwMjSj@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jgg@nvidia.com, nipun.gupta@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org, rafael@kernel.org, eric.auger@redhat.com, alex.williamson@redhat.com, cohuck@redhat.com, puneet.gupta@amd.com, song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com, saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com, robin.murphy@arm.com, will@kernel.org, joro@8bytes.org, masahiroy@kernel.org, ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com, michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,120 +82,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm proposing to expose the inode change attribute via statx [1]. Document
-what this value means and what an observer can infer from it changing.
+On Tue, 06 Sep 2022 18:19:06 +0100,
+Jason Gunthorpe <jgg@nvidia.com> wrote:
+> 
+> On Tue, Sep 06, 2022 at 07:17:58PM +0530, Nipun Gupta wrote:
+> 
+> > +static void cdx_msi_write_msg(struct irq_data *irq_data,
+> > +			      struct msi_msg *msg)
+> > +{
+> > +	/*
+> > +	 * Do nothing as CDX devices have these pre-populated
+> > +	 * in the hardware itself.
+> > +	 */
+> > +}
+> 
+> Huh?
+> 
+> There is no way it can be pre-populated, the addr/data pair,
+> especially on ARM, is completely under SW control.
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
+There is nothing in the GIC spec that says that.
 
-[1]: https://lore.kernel.org/linux-nfs/20220826214703.134870-1-jlayton@kernel.org/T/#t
----
- man2/statx.2 |  8 ++++++++
- man7/inode.7 | 39 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+> There is some commonly used IOVA base in Linux for the ITS page, but
+> no HW should hardwire that.
 
-v4: add paragraph pointing out the lack of atomicity wrt other changes
+That's not strictly true. It really depends on how this block is
+integrated, and there is a number of existing blocks that know *in HW*
+how to signal an LPI.
 
-I think these patches are racing with another change to add DIO
-alignment info to statx. I imagine this will go in after that, so this
-will probably need to be respun to account for contextual differences.
+See, as the canonical example, how the mbigen driver doesn't need to
+know about the address of GITS_TRANSLATER.
 
-What I'm mostly interested in here is getting the sematics and
-description of the i_version counter nailed down.
+Yes, this messes with translation (the access is downstream of the
+SMMU) if you relied on it to have some isolation, and it has a "black
+hole" effect as nobody can have an IOVA that overlaps with the
+physical address of the GITS_TRANSLATER register.
 
-diff --git a/man2/statx.2 b/man2/statx.2
-index 0d1b4591f74c..d98d5148a442 100644
---- a/man2/statx.2
-+++ b/man2/statx.2
-@@ -62,6 +62,7 @@ struct statx {
-     __u32 stx_dev_major;   /* Major ID */
-     __u32 stx_dev_minor;   /* Minor ID */
-     __u64 stx_mnt_id;      /* Mount ID */
-+    __u64 stx_ino_version; /* Inode change attribute */
- };
- .EE
- .in
-@@ -247,6 +248,7 @@ STATX_BTIME	Want stx_btime
- STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
- 	It is deprecated and should not be used.
- STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
-+STATX_INO_VERSION	Want stx_ino_version (DRAFT)
- .TE
- .in
- .PP
-@@ -407,10 +409,16 @@ This is the same number reported by
- .BR name_to_handle_at (2)
- and corresponds to the number in the first field in one of the records in
- .IR /proc/self/mountinfo .
-+.TP
-+.I stx_ino_version
-+The inode version, also known as the inode change attribute. See
-+.BR inode (7)
-+for details.
- .PP
- For further information on the above fields, see
- .BR inode (7).
- .\"
-+.TP
- .SS File attributes
- The
- .I stx_attributes
-diff --git a/man7/inode.7 b/man7/inode.7
-index 9b255a890720..8e83836594d8 100644
---- a/man7/inode.7
-+++ b/man7/inode.7
-@@ -184,6 +184,12 @@ Last status change timestamp (ctime)
- This is the file's last status change timestamp.
- It is changed by writing or by setting inode information
- (i.e., owner, group, link count, mode, etc.).
-+.TP
-+Inode version (i_version)
-+(not returned in the \fIstat\fP structure); \fIstatx.stx_ino_version\fP
-+.IP
-+This is the inode change counter. See the discussion of
-+\fBthe inode version counter\fP, below.
- .PP
- The timestamp fields report time measured with a zero point at the
- .IR Epoch ,
-@@ -424,6 +430,39 @@ on a directory means that a file
- in that directory can be renamed or deleted only by the owner
- of the file, by the owner of the directory, and by a privileged
- process.
-+.SS The inode version counter
-+.PP
-+The
-+.I statx.stx_ino_version
-+field is the inode change counter. Any operation that would result in a
-+change to \fIstatx.stx_ctime\fP must result in an increase to this value.
-+The value must increase even in the case where the ctime change is not
-+evident due to coarse timestamp granularity.
-+.PP
-+An observer cannot infer anything from amount of increase about the
-+nature or magnitude of the change. If the returned value is different
-+from the last time it was checked, then something has made an explicit
-+data and/or metadata change to the inode.
-+.PP
-+The change to \fIstatx.stx_ino_version\fP is not atomic with respect to the
-+other changes in the inode. On a write, for instance, the i_version it usually
-+incremented before the data is copied into the pagecache. Therefore it is
-+possible to see a new i_version value while a read still shows the old data.
-+.PP
-+In the event of a system crash, this value can appear to go backward,
-+if it were queried before ever being written to the backing store. If
-+the value were then incremented again after restart, then an observer
-+could miss noticing a change.
-+.PP
-+In order to guard against this, it is recommended to also watch the
-+\fIstatx.stx_ctime\fP for changes when watching this value. As long as the
-+system clock doesn't jump backward during the crash, an observer can be
-+reasonably sure that the i_version and ctime together represent a unique inode
-+state.
-+.PP
-+The i_version is a Linux extension and is not supported by all filesystems.
-+The application must verify that the \fISTATX_INO_VERSION\fP bit is set in the
-+returned \fIstatx.stx_mask\fP before relying on this field.
- .SH STANDARDS
- If you need to obtain the definition of the
- .I blkcnt_t
+But is it illegal as per the architecture? No. It's just stupid.
+
+	M.
+
 -- 
-2.37.3
-
+Without deviation from the norm, progress is not possible.

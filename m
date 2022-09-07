@@ -2,125 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED6C5B00D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50A05B00D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiIGJqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S229736AbiIGJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiIGJqP (ORCPT
+        with ESMTP id S229480AbiIGJrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:46:15 -0400
-Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECDBAB400;
-        Wed,  7 Sep 2022 02:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1662543971; i=@fujitsu.com;
-        bh=tirKYeQVFZpCtn4kxRPrTN8XmF01/d/HAUe+01mJjBU=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=Ic8tDoGmqPFtJppVsiDegCrz3ODHSmyreE1X2857PemJz0o+Eln7pdFYi1RXtCamv
-         88ndAhzyt0G/gP64QdXtPl+n3kcUnW9loPheZ8uKhwtFVB2VxLdEg2mjUkKCfOVuJN
-         svnrTO+gSsaJ8zirKf5Fk0Jj05tyq1taUnUW4B0bi4zWqQU0U8oGo3MEu5UOM/ebN3
-         oTFfGM73qZQHwNbEvWq/a0FCjrsLfV8cCW94ezovpW788dGx1IWxEEcZguEKS+LxGi
-         KFk0hMWhpySejnuS14oBd24PSmrUuHbbUNB7k1Otdy1zlybcuDUhhTHqGu8ifqPcZ4
-         75jbee10hevIg==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBKsWRWlGSWpSXmKPExsViZ8ORqJuUIZF
-  ssP+GtMX0qRcYLbYcu8docfkJn8XpCYuYLHa/vslmsWfvSRaLy7vmsFncW/Of1WLXnx3sFit/
-  /GF14PI4tUjCY/MKLY/Fe14yeWxa1cnmsenTJHaPF5tnMnp8fHqLxePzJrkAjijWzLyk/IoE1
-  ox/myewFGznrHjwfw9zA+NG9i5GTg4hgS2MEsu21HQxcgHZy5kkjq1awAzhbGOUaLj1jQmkil
-  fATuL+pP9sIDaLgIpEw6pvbBBxQYmTM5+wgNiiAskSdw+vB7OFBXwlHt6/BWazCehIXFjwl7W
-  LkYNDRMBYYlpTIsh8ZoFrjBLbnjxjB4kLCVRIrN7OAVLOKeAqsb3nNthaZgELicVvDrJD2PIS
-  zVtnM4OUSwgoSczsjgcJSwB1Nk4/xARhq0lcPbeJeQKj0Cwkx81CMmkWkkkLGJlXMVolFWWmZ
-  5TkJmbm6BoaGOgaGprqGpvrGlrqJVbpJuqlluqWpxaX6BrpJZYX66UWF+sVV+Ym56To5aWWbG
-  IERmJKsarwDsaOlT/1DjFKcjApifLGeUkkC/El5adUZiQWZ8QXleakFh9ilOHgUJLgjQsFygk
-  WpaanVqRl5gCTAkxagoNHSYR3SjJQmre4IDG3ODMdInWKUZdjbcOBvcxCLHn5ealS4ryJ6UBF
-  AiBFGaV5cCNgCeoSo6yUMC8jAwODEE9BalFuZgmq/CtGcQ5GJWHe+jSgKTyZeSVwm14BHcEEd
-  MTWQHGQI0oSEVJSDUxlotMMF/K8mHTq60+rfRLve2fP9QwQv6AoFysyj1vNcFoSy4ynOfaWYS
-  E3o6IZ3l0vfrREwY/9X/OOoID4nFYRnY2bz/3p9IhnfTdLuXnOZVf748f3XI+dJ33p/rejDz+
-  ++L+FMWkj8zWje0WdvREnXgfnpT+0ajxgM91zsyz7B616/ZJurU3+/VabY1LjliousY+O25zz
-  +NOkLcdvnynxm7B9Qu/N2yXdfg+Xrost1Hy5bulyo0yf9OkeezqXvDI0iX+XdHTfoashKZkW+
-  e8/BP2JP1g0lfGY6eq+9Gm/fKWniUWIHhVrbSmy29vdtIR/yoUE4RXXd8YIFgWpPI173SiWWf
-  7AtLWPo/CdXqsSS3FGoqEWc1FxIgAWB9RHywMAAA==
-X-Env-Sender: ruansy.fnst@fujitsu.com
-X-Msg-Ref: server-4.tower-565.messagelabs.com!1662543970!133438!1
-X-Originating-IP: [62.60.8.97]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 15620 invoked from network); 7 Sep 2022 09:46:10 -0000
-Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
-  by server-4.tower-565.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 7 Sep 2022 09:46:10 -0000
-Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 1A961100192;
-        Wed,  7 Sep 2022 10:46:10 +0100 (BST)
-Received: from R01UKEXCASM121.r01.fujitsu.local (R01UKEXCASM121 [10.183.43.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 05:47:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDAF9D8E3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:47:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 0E01D10018D;
-        Wed,  7 Sep 2022 10:46:10 +0100 (BST)
-Received: from [192.168.22.78] (10.167.225.141) by
- R01UKEXCASM121.r01.fujitsu.local (10.183.43.173) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Wed, 7 Sep 2022 10:46:06 +0100
-Message-ID: <bf68da75-5b05-5376-c306-24f9d2b92e80@fujitsu.com>
-Date:   Wed, 7 Sep 2022 17:46:00 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A48461847
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:47:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA80C433C1;
+        Wed,  7 Sep 2022 09:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662544035;
+        bh=wxDlJ0c4hKUVZs9suWhzzgYGQD2Bvgrvh0QGKG1hKb0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KzWTPFGlB0P12wKBjBa0PAsUsgQmI+XWbylhGg2ID3BaFeW+8gAMJxPyjMHw/G6M8
+         hKWBXYwaVtUWIYMffQlH9KQsCNPVTLmrDUVe4jF5uayxgTvhwWITUrGXEDRTEzLKn2
+         PzYybZytft/jRhtY38w3yviwzoCF7ij2E/gqgoH/SaBVQ+culyJ40YOJieRJHEpdmY
+         7uEM9me+FXZjju3kW8rjTrqfdUfM1sxQw0BZia9VGkj05eLtekZRnUSEtyPeU1bNMA
+         x42tYBDiR+NmJmF9BalC781hveOE0AKOTbBi693J0/Q/wx9NLwmyr9GSi4Z/5srRgQ
+         BJkNt/w7e21uA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: fix to do sanity on destination blkaddr during recovery
+Date:   Wed,  7 Sep 2022 17:47:08 +0800
+Message-Id: <20220907094708.3679424-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v8 0/3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     <dan.j.williams@intel.com>, <djwong@kernel.org>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <nvdimm@lists.linux.dev>, <linux-xfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hch@infradead.org>,
-        <david@fromorbit.com>, <jane.chu@oracle.com>
-References: <9e9521a4-6e07-e226-2814-b78a2451656b@fujitsu.com>
- <1662114961-66-1-git-send-email-ruansy.fnst@fujitsu.com>
-In-Reply-To: <1662114961-66-1-git-send-email-ruansy.fnst@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.167.225.141]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM121.r01.fujitsu.local (10.183.43.173)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping
+As Wenqing Liu reported in bugzilla:
 
-在 2022/9/2 18:35, Shiyang Ruan 写道:
-> Changes since v7:
->    1. Add P1 to fix calculation mistake
->    2. Add P2 to move drop_pagecache_sb() to super.c for xfs to use
->    3. P3: Add invalidate all mappings after sync.
->    4. P3: Set offset&len to be start&length of device when it is to be removed.
->    5. Rebase on 6.0-rc3 + Darrick's patch[1] + Dan's patch[2].
-> 
-> Changes since v6:
->    1. Rebase on 6.0-rc2 and Darrick's patch[1].
-> 
-> [1]: https://lore.kernel.org/linux-xfs/Yv5wIa2crHioYeRr@magnolia/
-> [2]: https://lore.kernel.org/linux-xfs/166153426798.2758201.15108211981034512993.stgit@dwillia2-xfh.jf.intel.com/
-> 
-> Shiyang Ruan (3):
->    xfs: fix the calculation of length and end
->    fs: move drop_pagecache_sb() for others to use
->    mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-> 
->   drivers/dax/super.c         |  3 ++-
->   fs/drop_caches.c            | 33 ---------------------------------
->   fs/super.c                  | 34 ++++++++++++++++++++++++++++++++++
->   fs/xfs/xfs_notify_failure.c | 31 +++++++++++++++++++++++++++----
->   include/linux/fs.h          |  1 +
->   include/linux/mm.h          |  1 +
->   6 files changed, 65 insertions(+), 38 deletions(-)
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=216456
+
+loop5: detected capacity change from 0 to 131072
+F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
+F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
+F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
+F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
+F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
+F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
+F2FS-fs (loop5): Bitmap was wrongly set, blk:5634
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 1013 at fs/f2fs/segment.c:2198
+RIP: 0010:update_sit_entry+0xa55/0x10b0 [f2fs]
+Call Trace:
+ <TASK>
+ f2fs_do_replace_block+0xa98/0x1890 [f2fs]
+ f2fs_replace_block+0xeb/0x180 [f2fs]
+ recover_data+0x1a69/0x6ae0 [f2fs]
+ f2fs_recover_fsync_data+0x120d/0x1fc0 [f2fs]
+ f2fs_fill_super+0x4665/0x61e0 [f2fs]
+ mount_bdev+0x2cf/0x3b0
+ legacy_get_tree+0xed/0x1d0
+ vfs_get_tree+0x81/0x2b0
+ path_mount+0x47e/0x19d0
+ do_mount+0xce/0xf0
+ __x64_sys_mount+0x12c/0x1a0
+ do_syscall_64+0x38/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+If we enable CONFIG_F2FS_CHECK_FS config, it will trigger a kernel panic
+instead of warning.
+
+The root cause is: in fuzzed image, SIT table is inconsistent with inode
+mapping table, result in triggering such warning during SIT table update.
+
+This patch introduces a new flag DATA_GENERIC_ENHANCE_UPDATE, w/ this
+flag, data block recovery flow can check destination blkaddr's validation
+in SIT table, and skip f2fs_replace_block() to avoid inconsistent status.
+
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/checkpoint.c | 10 +++++++++-
+ fs/f2fs/f2fs.h       |  4 ++++
+ fs/f2fs/recovery.c   |  8 ++++++++
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 7bf1feb5ac78..dd7c7e7f2f4a 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -140,7 +140,7 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
+ 	unsigned int segno, offset;
+ 	bool exist;
+ 
+-	if (type != DATA_GENERIC_ENHANCE && type != DATA_GENERIC_ENHANCE_READ)
++	if (type == DATA_GENERIC)
+ 		return true;
+ 
+ 	segno = GET_SEGNO(sbi, blkaddr);
+@@ -148,6 +148,13 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
+ 	se = get_seg_entry(sbi, segno);
+ 
+ 	exist = f2fs_test_bit(offset, se->cur_valid_map);
++	if (exist && type == DATA_GENERIC_ENHANCE_UPDATE) {
++		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
++			 blkaddr, exist);
++		set_sbi_flag(sbi, SBI_NEED_FSCK);
++		return exist;
++	}
++
+ 	if (!exist && type == DATA_GENERIC_ENHANCE) {
+ 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
+ 			 blkaddr, exist);
+@@ -185,6 +192,7 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
+ 	case DATA_GENERIC:
+ 	case DATA_GENERIC_ENHANCE:
+ 	case DATA_GENERIC_ENHANCE_READ:
++	case DATA_GENERIC_ENHANCE_UPDATE:
+ 		if (unlikely(blkaddr >= MAX_BLKADDR(sbi) ||
+ 				blkaddr < MAIN_BLKADDR(sbi))) {
+ 			f2fs_warn(sbi, "access invalid blkaddr:%u",
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 35f9e1a6a1bf..baf621ca2fe7 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -266,6 +266,10 @@ enum {
+ 					 * condition of read on truncated area
+ 					 * by extent_cache
+ 					 */
++	DATA_GENERIC_ENHANCE_UPDATE,	/*
++					 * strong check on range and segment
++					 * bitmap for update case
++					 */
+ 	META_GENERIC,
+ };
+ 
+diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
+index dcd0a1e35095..8326003e6918 100644
+--- a/fs/f2fs/recovery.c
++++ b/fs/f2fs/recovery.c
+@@ -698,6 +698,14 @@ static int do_recover_data(struct f2fs_sb_info *sbi, struct inode *inode,
+ 				goto err;
+ 			}
+ 
++			if (f2fs_is_valid_blkaddr(sbi, dest,
++					DATA_GENERIC_ENHANCE_UPDATE)) {
++				f2fs_err(sbi, "Inconsistent dest blkaddr:%u, ino:%lu, ofs:%u",
++					dest, inode->i_ino, dn.ofs_in_node);
++				err = -EFSCORRUPTED;
++				goto err;
++			}
++
+ 			/* write dummy data page */
+ 			f2fs_replace_block(sbi, &dn, src, dest,
+ 						ni.version, false, false);
+-- 
+2.25.1
+

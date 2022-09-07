@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71855B0E9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB5A5B0EA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIGUw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
+        id S229777AbiIGUya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIGUwU (ORCPT
+        with ESMTP id S229477AbiIGUyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:52:20 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8935D7E808
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:52:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o4so15699915pjp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=961bjcJb8RZkBe//4EJ/jouBr4+ihtNtsy9cWq/UKK4=;
-        b=JHdCiZoOhb0lTlqvYN/LPVhqxZwmpc8tgmDHCmCPi8qK/q3XDmaM2jIVFDIiP2ruOl
-         lDrd78lC/N2jfQnXKm2v3j81YdhYtLA5hjE3ZZrqZgJ9i4Nrn78XryEVgegmNEF6RLR+
-         qyTMVXTVvEB3bQWZbcuvIjHiIUK69vC6cU8dE=
+        Wed, 7 Sep 2022 16:54:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF26CCDE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662584062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lupOQBDl9M+eSrYMhhygPunyzKVvpUXpQehMzs92JzM=;
+        b=E/nw5opgR5c4+9Zsp0XxyLJQ4XSk+FG/wl3AirlHFXqpTLPMohGIjAseXDxtvX1wADAGSc
+        khrC3sDwlBrBu2/OR2R8AZoKl7ckHEyrDd2xKgPEeSOibFWi4+lY6qX+GKsYHfxBtFSJK8
+        6Se58iLvf8uxjo3gpIFhXSfVSo/I2Bc=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-341-M6vPeadBPhGvG-TysW9STQ-1; Wed, 07 Sep 2022 16:54:21 -0400
+X-MC-Unique: M6vPeadBPhGvG-TysW9STQ-1
+Received: by mail-qk1-f200.google.com with SMTP id bm11-20020a05620a198b00b006bb2388ef0cso12800813qkb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:54:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=961bjcJb8RZkBe//4EJ/jouBr4+ihtNtsy9cWq/UKK4=;
-        b=gCysCx2qfccJmKLG9doPpEpINffcWB2JS/xwbWWqYjig5trnWNcwBNWvUGugUycJmn
-         4O+hiRT7VkA3qCHrNpBbHrqFRawd3gmzJG84Tt9Y2gqe6c2oYFbaEa1mzMJc0HooI1Yn
-         yhSO91mB/O8QW5MHRzAfy9u8c548AQj53GCziBu+pgNPGZpezW9kF/FcyodEtde5619Q
-         +lPIoit+B86bS5Exz/iBwWWWCbneyRGhtP6wyKrSk79ui2x/PCGLksIUSibCDqjqALw1
-         UMCQMykSj2JcHgBPZRzqRGG2/C/wXcB363wSz9n6rnE0EjMlQVrVIlCPL+pr2s3JYhW7
-         vK+Q==
-X-Gm-Message-State: ACgBeo1pDgwmJzTYoXQmwXtcbUjeoUb63yIeIOXN8w4kHO+7c8K3hoaq
-        w0iOn/LHPJolvl1gK8+efKSK1KuTv/BBrA==
-X-Google-Smtp-Source: AA6agR5xQ4U5ksu1Yv0DD/tWF2DnB705zTjv3ljSQ42PNxjEI4Ir4sJ8yhnyqHUWy6fxxFz2hnLwTg==
-X-Received: by 2002:a17:90a:e7c2:b0:1f5:85ab:938c with SMTP id kb2-20020a17090ae7c200b001f585ab938cmr349043pjb.133.1662583938848;
-        Wed, 07 Sep 2022 13:52:18 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:5ec9:e2a6:c584:3a7b])
-        by smtp.gmail.com with ESMTPSA id d22-20020a656b96000000b0041c35462316sm11028192pgw.26.2022.09.07.13.52.16
+        bh=lupOQBDl9M+eSrYMhhygPunyzKVvpUXpQehMzs92JzM=;
+        b=ut7G9uyfBA6Y6eyMQ+2D81nyNZZLgNKeBwZYYGUN4GA75WhW5IKSHGF96kywaLrCOg
+         6nH+0AaBuavccql/n6chNP6odMf9Xl9jXusgFQocHoGwrCLg+/vZebvmtprkM5EA6K55
+         SDPpFyBeOQvd4tl0lDaFsabbMVsDTEcWucUpgHkIQbo+sYt/ZiRVP5kiWPR9gS6+Iv3E
+         6h9kSoQCXT1QuG7bXNQn5SU++ERk4058MglDMy30+D4g+6EunxYn5k94bvvnEMExRXuj
+         v40jKPWHsFaiKFMdTA1XozcEp3BhccEppFodSEr6VE5Gw3I2phxR4hfg5E2tCkm20t3y
+         Bu3Q==
+X-Gm-Message-State: ACgBeo1QMtJ19mI+ifewJLrR9eL+tCMroSzmLGwAd2OUFWbpaTafY9F4
+        +gMKR/x2IpA+5c5Wa4aEJwt1gNswgMORZBYPaOo7jpofkVv41xJaFBuflqrojsTrPbDwFfEfwq5
+        uJcojRX75GBJH9xj2MjHoYkiA
+X-Received: by 2002:a05:620a:4409:b0:6bb:58d6:9d3e with SMTP id v9-20020a05620a440900b006bb58d69d3emr4182716qkp.472.1662584060829;
+        Wed, 07 Sep 2022 13:54:20 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7L4bEXDaQgMSdiQE5EAuc4myKBDtzzkSS9v/3Qub/TknkF3WOqYwNNW1Kuzl3D8ReYrShccg==
+X-Received: by 2002:a05:620a:4409:b0:6bb:58d6:9d3e with SMTP id v9-20020a05620a440900b006bb58d69d3emr4182709qkp.472.1662584060629;
+        Wed, 07 Sep 2022 13:54:20 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::a])
+        by smtp.gmail.com with ESMTPSA id q34-20020a05620a2a6200b006cbbc3daaacsm224671qkp.113.2022.09.07.13.54.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 13:52:17 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 13:52:15 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] tracefs: Only clobber mode/uid/gid on remount if
- asked
-Message-ID: <YxkEfzVusTXj9JST@google.com>
-References: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
- <20220826174353.2.Iab6e5ea57963d6deca5311b27fb7226790d44406@changeid>
- <20220907074443.3376c766@gandalf.local.home>
+        Wed, 07 Sep 2022 13:54:20 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 15:54:18 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dianders@chromium.org
+Subject: Re: [PATCH v2] regulator: dt-bindings: qcom,rpmh: Indicate
+ regulator-allow-set-load dependencies
+Message-ID: <20220907205418.lqwxwyebqlt6lm7z@halaneylaptop>
+References: <20220906201959.69920-1-ahalaney@redhat.com>
+ <Yxg5+9lkHnNsI30j@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907074443.3376c766@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Yxg5+9lkHnNsI30j@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,94 +82,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
-
-On Wed, Sep 07, 2022 at 07:44:43AM -0400, Steven Rostedt wrote:
-> On Fri, 26 Aug 2022 17:44:17 -0700
-> Brian Norris <briannorris@chromium.org> wrote:
+On Wed, Sep 07, 2022 at 08:28:11AM +0200, Johan Hovold wrote:
+> On Tue, Sep 06, 2022 at 03:19:59PM -0500, Andrew Halaney wrote:
+> > For RPMH regulators it doesn't make sense to indicate
+> > regulator-allow-set-load without saying what modes you can switch to,
+> > so be sure to indicate a dependency on regulator-allowed-modes.
+> > 
+> > With this in place devicetree validation can catch issues like this:
+> > 
+> >     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
+> >             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+> > 
+> > Suggested-by: Johan Hovold <johan@kernel.org>
+> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 > 
-> > Users may have explicitly configured their tracefs permissions; we
-> > shouldn't overwrite those just because a second mount appeared.
-> > 
-> > Only clobber if the options were provided at mount time.
-> > 
-> > Note: the previous behavior was especially surprising in the presence of
-> > automounted /sys/kernel/debug/tracing/.
-> > 
-> >   # Don't change /sys/kernel/tracing/ permissions on automount.
-> >   umount /sys/kernel/debug/tracing/
-> >   stat /sys/kernel/debug/tracing/.
-> > 
-> >   # Don't change /sys/kernel/tracing/ permissions.
-> >   mount -t tracefs none /mnt/foo
-> > 
-> >   # Change /sys/kernel/tracing/ mode and uid, but not gid.
-> >   mount -t tracefs -o uid=bar,mode=0750 none /mnt/baz
-> > 
+> Looks good to me.
 > 
-> The above text doesn't make sense. Is the comments what you are doing or
-> what the system is doing? If it is what the system is doing, please show
-> the output of the stat command and how it is doing something unexpected.
-
-Sorry, I do see how the text as-is is unclear. The intention is to
-describe the new, intended behavior, and I only left the existing
-behavior as implied.
-
-> Can you show the example of what is wrong, and what you expected to happen.
-> The above is just a bunch of commands, but does not display anything that
-> is incorrect.
-
-Sure, here's a narrower description of old (unexpected) and new
-(expected) behavior, in case you were wanting to update the changelog on
-your own:
-
----
-
-Existing behavior:
-
-  ## Pre-existing status: tracefs is 0755.
-  # stat -c '%A' /sys/kernel/tracing/
-  drwxr-xr-x
-
-  ## (Re)trigger the automount.
-  # umount /sys/kernel/debug/tracing
-  # stat -c '%A' /sys/kernel/debug/tracing/.
-  drwx------
-
-  ## Unexpected: the automount changed mode for other mount instances.
-  # stat -c '%A' /sys/kernel/tracing/
-  drwx------
-
-New behavior:
-
-  ## Pre-existing status: tracefs is 0755.
-  # stat -c '%A' /sys/kernel/tracing/
-  drwxr-xr-x
-
-  ## (Re)trigger the automount.
-  # umount /sys/kernel/debug/tracing
-  # stat -c '%A' /sys/kernel/debug/tracing/.
-  drwxr-xr-x
-
-  ## Expected: the automount does not change other mount instances.
-  # stat -c '%A' /sys/kernel/tracing/
-  drwxr-xr-x
-
----
-
-There are other variations of old/new behavior (e.g., if using various
-mount options), but those are not the main reason for this patch.
-
-> > Signed-off-by: Brian Norris <briannorris@chromium.org>
+> Reviewed-by: Johan Hovold <johan+kernel@kernel.org>
+> 
 > > ---
-> > I'm open to writing an LTP test case for this, if that seems like a good
-> > idea.
+> > 
+> > v1: https://lore.kernel.org/linux-arm-msm/20220902185148.635292-1-ahalaney@redhat.com/
+> > Changes since v1:
+> >   - Dropped first two patches in the series as they were user error
+> >     (thanks Krzysztof for highlighting this!)
+> >   - No change in the remaining patch
+> > 
+> > Krzysztof also asked if this patch in particular should apply to other
+> > regulators, which I think it should for those regulator's who implement
+> > set_mode(). Unfortunately I don't know of a good way to get that
+> > information in order to apply it at a broader scope for devicetree
+> > regulator validation. At least with this in place RPMH users can get
+> > better coverage... if someone has suggestions for how to broaden the
+> > scope I'm all ears!
 > 
-> Yes, please add a test :-)
+> I guess the commit message could have tried to capture that is feature
+> of the hardware (as Linux implementation details shouldn't impact the
+> binding). And apparently there are regulators that do not need this
+> (e.g. RPM).
+> 
+> Johan
+> 
 
-Sure, I'm dusting off my LTP VM now. But in case you'd like the patch
-as-is, feel free to splice the above into the commit description.
-Otherwise, I may resend as Greg requested for patch 1, after I've got a
-test patch going.
+Thanks for the suggestion Johan. I've posted another spin with that
+addition and your (and Douglas') R-B tags over here:
 
-Brian
+    https://lore.kernel.org/linux-arm-msm/20220907204924.173030-1-ahalaney@redhat.com/T/#u
+
+Thanks,
+Andrew
+

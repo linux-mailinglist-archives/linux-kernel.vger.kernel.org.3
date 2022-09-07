@@ -2,164 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548DF5AFB84
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3FE5AFB85
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiIGFEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
+        id S229437AbiIGFFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIGFEU (ORCPT
+        with ESMTP id S229449AbiIGFFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:04:20 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C9E9C2F1;
-        Tue,  6 Sep 2022 22:04:19 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 78so12491671pgb.13;
-        Tue, 06 Sep 2022 22:04:19 -0700 (PDT)
+        Wed, 7 Sep 2022 01:05:36 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA217C1AC
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:05:35 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id t14so11236614wrx.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 22:05:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=Q5bAnJtVFnp319EIgRFa2Zj3l9LOhyIDjH73ZWT66P8=;
-        b=QN2Fh+10PlxGBEB1nyhgecUXLy1tcGt3bU5t8A00gEsdgPGA0IYD71YML0yG7OnVon
-         oZ4q6iidhcx7nEl3/vEaRoI7GAVFF5d2djWXM0XAW8X6rNTuUgljv6FPwYqohtWCoePB
-         5reK0An5RPtU8rhr5Dw9zK7jD+7QnlbSaJO876HCL8Ekj7jjSdvwvJqKkX2LBkjtCJ5j
-         DiWje0Rv4BTEdcicnrtytcDXnPXUWEHpjPaWrLmE0kVT5ODsH1f5Yrs1m5eu6S78yhoz
-         nrqph/tt6EKamrViUTK5uIuiuCa5eRWnAA/fhROTgqqGeCFEJqOCVxbZK1134Lk0QsPl
-         PGpA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=7IkNcBKROZDe2svNOYayhMA1/a0HRnLUmIvfHwVW83g=;
+        b=jl1pBdPjIR7HAtqWy+xpe+7nHp3bSmGOzUZapTfXlJD2/iSmmJeBl6Rk7IQu17M5iy
+         Fum5G6E8b2J/dmp0cUopju7+GlUuMotsE4noU4U34dXI38OYuNMVH/YvqtKHXZFdt/kZ
+         edQzy66ZVrIsygnn2PcY08npLQ7CH2eVCI1yP/ZcJjXonQMfADXUHACb2l3aFlT0TGd7
+         gfBGYDzF2E9hrb/JZ9dQQ4RpD0KXRqPv0WkG+etJi7VzNVp5tZw/FB7WsfLohdK5ai0U
+         AqsxV25fK/XVVxTRmm9tDoYa8XpP/Qb830FT2szPkixe48b8/zQ1NjA3CBMOC4TT/WD3
+         0jnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=Q5bAnJtVFnp319EIgRFa2Zj3l9LOhyIDjH73ZWT66P8=;
-        b=lj8IXV+7r0yCQO+m5LIXOJ0MhiAf+LFCS/pTtrhe6qLOIxBsE0TsJpS+nUmM3BGHhz
-         3Ct73Au6HhzS1M049zUKpy7OkzCd2x/55KAoE+7nS2YmzVZFCdAZmUwxF643umQdOCRO
-         xayfqOKSl1mSfp3zoPGCr+hK4UR0wEJHL5KiWtO4F/HAbhqm7kgZxp03mStwA4ECS6tP
-         hm+4qIb2GIFmjsc+4EoqdnGWtIApfCuv1F4qyzHn8SAknMrz3YLakN13eLzXUL9pcbkT
-         p4jVgjDWt+e0r4Bfn6MQfE6o8XGJ6klQXqeNgpHgiy+3t3DAPNFb4SgRItO+lno4OaOJ
-         YtQw==
-X-Gm-Message-State: ACgBeo0TErcu7zC1TODYNskXYV+0leZwKlsbc5ZY3FeQ7ILznITSBmOp
-        WykRJSXGjEeuaPeV9Yoxhbw=
-X-Google-Smtp-Source: AA6agR6sTiTHSLBvwr+g6HRi6Ga/xBnUJar+Hfzxq2qEV5M6iE82lFM2UvwP+JZs0fhors2gUDFqnw==
-X-Received: by 2002:a63:fe54:0:b0:42b:d11d:1490 with SMTP id x20-20020a63fe54000000b0042bd11d1490mr1937714pgj.51.1662527058372;
-        Tue, 06 Sep 2022 22:04:18 -0700 (PDT)
-Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:31b5:b507:23a9:c4ba])
-        by smtp.gmail.com with ESMTPSA id q8-20020a170902a3c800b00172897952a0sm6492116plb.283.2022.09.06.22.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 22:04:17 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v2] perf test: Skip sigtrap test on old kernels
-Date:   Tue,  6 Sep 2022 22:04:07 -0700
-Message-Id: <20220907050407.2711513-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7IkNcBKROZDe2svNOYayhMA1/a0HRnLUmIvfHwVW83g=;
+        b=Od0YYxCfY5Tvy71RavDLGX4RIxuCMoILC4pv97Z8EcTSvXOGPtljsKqi9DqwkpqPj+
+         FdtaNoBFy5n39kfM20SCeo2F8THGyfn0RbX6ToaZWAJpnzbuF3dXkNUWrbmlj3/k7u4/
+         pjCV8pwefeRehW10vrglQhgGSQeolz1WVD876NG4W+4H3UlgSqdLPAJ3SWmeh36KoBKB
+         p19CuVmpZbBGyKV1rU20JalKoo+4RgGx+VHTesk5mCSnk/uTEPMXsoLMG9Darw/XzQ8X
+         ZQEqmNRHOWmf1RZbjgbFu79MhaKzwD0GgGveliFWXt+XoQvhUPhznhTSBP8UiSJQ+F2r
+         XZUg==
+X-Gm-Message-State: ACgBeo3cfwqbqQOkZhzhwn6tWOb+9/hHV8eHhjwMZNqediZqaQipDfmi
+        jJDU0X5O5s+UnH32kujelDAOE2fb39mOcDqlju4frw==
+X-Google-Smtp-Source: AA6agR5xMz1crSLnEY2JX1frHd4Sog5WgE7koMrc+outnsENL5YUmTaNsUhsxsMOhbw8cQJfIhmyWN+8fmeYkn95+IM=
+X-Received: by 2002:a5d:6084:0:b0:228:67c1:e160 with SMTP id
+ w4-20020a5d6084000000b0022867c1e160mr794726wrt.83.1662527133494; Tue, 06 Sep
+ 2022 22:05:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220905083619.672091-1-masahiroy@kernel.org>
+In-Reply-To: <20220905083619.672091-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 6 Sep 2022 22:05:21 -0700
+Message-ID: <CAKwvOdnFZJK+MjSgQpg8MZoMPOM+G8kfhNaH6sTaLU=eP7nK+g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: move -Werror from KBUILD_CFLAGS to KBUILD_CPPFLAGS
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If it runs on an old kernel, perf_event_open would fail because of the
-new fields sigtrap and sig_data.  Just skipping the test could miss an
-actual bug in the kernel.
+On Mon, Sep 5, 2022 at 1:37 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> CONFIG_WERROR makes warnings into errors, but it only happens for *.c
+> files because -Werror is added to KBUILD_CFLAGS.
+>
+> For example, you can put a #warning directive in any preprocessed
+> source file:
+>
+>     #warning "blah blah ..."
+>
+> If it is placed in a *.c file, it emits a warning by default, and it
+> is promoted to an error when CONFIG_WERROR is enabled:
+>
+>     error: #warning "blah blah ..." [-Werror=cpp]
+>
+> If it is placed in a *.S file, it is still a warning.
+>
+> Move it to KBUILD_CPPFLAGS, so it works in the same way for *.c,
+> *.S, *.lds.S or whatever needs preprocessing.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Let's check BTF if it has the perf_event_attr.sigtrap field.
+Thanks for the patch. I see in lore you sent many more cleanups but
+didn't cc me explicitly...I should probably subscribe to that mailing
+list! I probably won't have time to review many patches until after
+Linux Plumbers Conf next week.
 
-Cc: Marco Elver <elver@google.com>
-Cc: Song Liu <songliubraving@fb.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/tests/sigtrap.c | 46 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
-index e32ece90e164..32f08ce0f2b0 100644
---- a/tools/perf/tests/sigtrap.c
-+++ b/tools/perf/tests/sigtrap.c
-@@ -16,6 +16,8 @@
- #include <sys/syscall.h>
- #include <unistd.h>
- 
-+#include <bpf/btf.h>
-+
- #include "cloexec.h"
- #include "debug.h"
- #include "event.h"
-@@ -54,6 +56,42 @@ static struct perf_event_attr make_event_attr(void)
- 	return attr;
- }
- 
-+static bool attr_has_sigtrap(void)
-+{
-+	bool ret = false;
-+
-+#ifdef HAVE_BPF_SKEL
-+
-+	struct btf *btf;
-+	const struct btf_type *t;
-+	const struct btf_member *m;
-+	const char *name;
-+	int i, id;
-+
-+	/* just assume it doesn't have the field */
-+	btf = btf__load_vmlinux_btf();
-+	if (btf == NULL)
-+		return false;
-+
-+	id = btf__find_by_name_kind(btf, "perf_event_attr", BTF_KIND_STRUCT);
-+	if (id < 0)
-+		goto out;
-+
-+	t = btf__type_by_id(btf, id);
-+	for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
-+		name = btf__name_by_offset(btf, m->name_off);
-+		if (!strcmp(name, "sigtrap")) {
-+			ret = true;
-+			break;
-+		}
-+	}
-+out:
-+	btf__free(btf);
-+#endif
-+
-+	return ret;
-+}
-+
- static void
- sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
- {
-@@ -139,7 +177,13 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
- 
- 	fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
- 	if (fd < 0) {
--		pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
-+		if (attr_has_sigtrap()) {
-+			pr_debug("FAILED sys_perf_event_open(): %s\n",
-+				 str_error_r(errno, sbuf, sizeof(sbuf)));
-+		} else {
-+			pr_debug("perf_event_attr doesn't have sigtrap\n");
-+			ret = TEST_SKIP;
-+		}
- 		goto out_restore_sigaction;
- 	}
- 
+> ---
+>
+>  Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index ebcb75442d7f..027d9163eff6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -788,7 +788,8 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
+>
+>  KBUILD_CFLAGS += $(stackp-flags-y)
+>
+> -KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+> +KBUILD_CPPFLAGS-$(CONFIG_WERROR) += -Werror
+> +KBUILD_CPPFLAGS += $(KBUILD_CPPFLAGS-y)
+>  KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+>  KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>
+> --
+> 2.34.1
+>
+
+
 -- 
-2.37.2.789.g6183377224-goog
-
+Thanks,
+~Nick Desaulniers

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C409F5B095B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939C15B0962
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiIGP7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S229559AbiIGP70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiIGP7K (ORCPT
+        with ESMTP id S229953AbiIGP7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:59:10 -0400
+        Wed, 7 Sep 2022 11:59:17 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E91E8A7D9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:59:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E47AB8F19
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662566349; x=1694102349;
+  t=1662566357; x=1694102357;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TTXR9ShdBo6b3pl//qZEyY3h/5RE4z/vTOv/CpOgz1M=;
-  b=E1dxf2U9tL3du2i79Qi5JV6+uxjyCzOn9iAv48Qs3UKTUmqgSJwevNn4
-   wS6vMv9ymT2/RT+aWv28j2Ta4OiYF0ncNFW5nTnzjC9Es12vRiWJB4Rj2
-   JJ/Een43BHfwMvGEf9sJo9vgWUw4FpCLlx+tSZQuv8qJvgD1h+CXgIdHS
-   RHfWu9NKsDFVvVDQY8xqBzjCSDq9qxJxJ7X5IhhenHYfHEWj7mRS2Q30t
-   uol4kevcjY+CiepOlDCSjriCq0aCE7Ynux20eCNU3INAcjpSCR0dmujH8
-   9SpD3xxYR7EhBS8TRjIYbLOUSQhUodF+Ko/OW/PM6n5ZgDJ3jac66um9i
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297701071"
+  bh=TyuRlis55UMm+cKEWzJQdtL+A9hqNaNXtqYaGsH3QG4=;
+  b=TCEXCl8g0M6ALugucF5n9z6ZlTdIdgrmdcH21+Im6cV2Zt+XQjVhcRuL
+   /0brC7jcGW5ALU8sT6QNqqAPw1yNa5+gGNJ8S4F3k/e7JLl6Zi65THC06
+   dezhCQalJ4EcgEpFHdwvVXDdWE/zxLRTiYeA0Vm+3eCFjp9kDrt080kNz
+   rz8A1BJB4em/LNa1UOFYLER6CWigWxoiZgwCvzAbNXGeJ7RWGdV5sR57S
+   DSWdw2U+REFM0iR+fiVyl6Q7rKXOVe1OC1zxzBOz5KTEfrYXpdZK6R7qm
+   ilgeUlIL4yh4Robr872KaaKGDR1yaGNEhcsefsVIc8iZIQ4lRhNTJpA9/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297701136"
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="297701071"
+   d="scan'208";a="297701136"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:58:59 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:03 -0700
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="676247662"
+   d="scan'208";a="676247706"
 Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:58:53 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:58:58 -0700
 From:   Tomas Winkler <tomas.winkler@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -48,11 +48,10 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Tomas Winkler <tomas.winkler@intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Subject: [PATCH v8 04/16] drm/i915/gsc: add slow_firmware flag to the gsc device definition
-Date:   Wed,  7 Sep 2022 18:58:01 +0300
-Message-Id: <20220907155813.1427526-5-tomas.winkler@intel.com>
+        Vitaly Lubart <vitaly.lubart@intel.com>
+Subject: [PATCH v8 05/16] drm/i915/gsc: add GSC XeHP SDV platform definition
+Date:   Wed,  7 Sep 2022 18:58:02 +0300
+Message-Id: <20220907155813.1427526-6-tomas.winkler@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220907155813.1427526-1-tomas.winkler@intel.com>
 References: <20220907155813.1427526-1-tomas.winkler@intel.com>
@@ -70,37 +69,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-Add slow_firmware flag to the gsc device definition
-and pass it to mei auxiliary device, this instructs
-the driver to use longer operation timeouts.
+Define GSC on XeHP SDV (Intel(R) dGPU without display)
 
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+XeHP SDV uses the same hardware settings as DG1, but uses polling
+instead of interrupts and runs the firmware in slow pace due to
+hardware limitations.
+
+Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
 Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/gpu/drm/i915/gt/intel_gsc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-index e0236ff1d072..73498c2574c8 100644
+index 73498c2574c8..e1040c8f2fd3 100644
 --- a/drivers/gpu/drm/i915/gt/intel_gsc.c
 +++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-@@ -41,6 +41,7 @@ struct gsc_def {
- 	unsigned long bar;
- 	size_t bar_size;
- 	bool use_polling;
-+	bool slow_firmware;
+@@ -56,6 +56,19 @@ static const struct gsc_def gsc_def_dg1[] = {
+ 	}
  };
  
- /* gsc resources and definitions (HECI1 and HECI2) */
-@@ -145,6 +146,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
- 	adev->bar.end = adev->bar.start + def->bar_size - 1;
- 	adev->bar.flags = IORESOURCE_MEM;
- 	adev->bar.desc = IORES_DESC_NONE;
-+	adev->slow_firmware = def->slow_firmware;
++static const struct gsc_def gsc_def_xehpsdv[] = {
++	{
++		/* HECI1 not enabled on the device. */
++	},
++	{
++		.name = "mei-gscfi",
++		.bar = DG1_GSC_HECI2_BASE,
++		.bar_size = GSC_BAR_LENGTH,
++		.use_polling = true,
++		.slow_firmware = true,
++	}
++};
++
+ static const struct gsc_def gsc_def_dg2[] = {
+ 	{
+ 		.name = "mei-gsc",
+@@ -107,6 +120,8 @@ static void gsc_init_one(struct drm_i915_private *i915,
  
- 	aux_dev = &adev->aux_dev;
- 	aux_dev->name = def->name;
+ 	if (IS_DG1(i915)) {
+ 		def = &gsc_def_dg1[intf_id];
++	} else if (IS_XEHPSDV(i915)) {
++		def = &gsc_def_xehpsdv[intf_id];
+ 	} else if (IS_DG2(i915)) {
+ 		def = &gsc_def_dg2[intf_id];
+ 	} else {
 -- 
 2.37.2
 

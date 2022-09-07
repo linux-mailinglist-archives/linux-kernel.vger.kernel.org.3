@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344A95B02E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786F35B02EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiIGLaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S229977AbiIGLbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiIGLaA (ORCPT
+        with ESMTP id S229744AbiIGLbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:30:00 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D01A72843;
-        Wed,  7 Sep 2022 04:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662550197; x=1694086197;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=TrnktqRIs+K86T7z1mbr+yegNoYFDmK9/RGPfMKeYaU=;
-  b=Ybwtqw8/9gpk3DwiA2bJfAED9wHEjA0VQhtfGuoRU3mNRwcPwTAJTiA1
-   EqrVZbHZvQQpCEoRaVs8iuJPxxjdNARmxVFTJ1ix6dhAoIJTvm4eZl/1Z
-   NO5PACLWxYSghiQ4XQhrN/g6ZUFHW8GMvCyFjAHTCDSvUyphk37+yqywl
-   D6mFII7Gh8Zqu7XEgc9W4Hia89x3O88m5vgkgriFGz/QENC9LbSsubmy7
-   845a2OZWLvfU/sfkHL7wNVV+MpWUIMk5TYB0UOeTm++SfY9kHRtb6BNQJ
-   Xj5/g/vZJPwthIYyytpiZ2RWSQ6VFaGHK0g7xZr5zyRAmFupzwWMt/YME
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="279859340"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="279859340"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 04:29:56 -0700
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="676146243"
-Received: from dmatouse-mobl.ger.corp.intel.com ([10.251.223.53])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 04:29:50 -0700
-Date:   Wed, 7 Sep 2022 14:29:49 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sergiu.Moga@microchip.com
-cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        broonie@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>, admin@hifiphile.com,
-        Kavyasree.Kotagiri@microchip.com, Tudor.Ambarus@microchip.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-spi@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 12/13] tty: serial: atmel: Make the driver aware of
- the existence of GCLK
-In-Reply-To: <f3e87d18-41aa-f1e2-e0fb-8944c9fb4910@microchip.com>
-Message-ID: <caf05bb5-26df-68ca-59a1-e84983294de@linux.intel.com>
-References: <20220906135511.144725-1-sergiu.moga@microchip.com> <20220906135511.144725-13-sergiu.moga@microchip.com> <3f98d634-789-a0bd-84e-cfc2a1de70af@linux.intel.com> <f3e87d18-41aa-f1e2-e0fb-8944c9fb4910@microchip.com>
+        Wed, 7 Sep 2022 07:31:11 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02887B0283;
+        Wed,  7 Sep 2022 04:31:11 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id y82so12928648yby.6;
+        Wed, 07 Sep 2022 04:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=htQQOB82V/42KTcLd0mWmEHX6IR774JdlYtTcKgQ5uY=;
+        b=J0hpqdXnf3ogu5jaZnQRInPEzYpKWw1bSpC3Fak9LMh0NOkMVK8yKh/D15/hBBbWls
+         rqUsCXdMRhyzCMzIx4/hnJAcGNU14dFgoDGgefZgnI9LmYthGPxnRHxP8SwpkBx2WWMc
+         APnS+XRSCbS1+z1crEqmKL7k7mQapnAg61SMc2NmRdEQc7K1oSU+vgtI/Vjy9T6KXHFU
+         UwV51QN9LhqArah47LUrNdHlpHDbqL5GiPqlW2F8/m5Jd3liEd0fR8lr5FFeOw12XBTA
+         T4zfPpc3w6QIaT/WkxMAFXHTxfzCf0uk8QJkD4CaYzGKjEQKOOWVAHhc4TVuuYOBZ0jj
+         a0ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=htQQOB82V/42KTcLd0mWmEHX6IR774JdlYtTcKgQ5uY=;
+        b=TFzkhEnxuyWYqACHewBljcuGLSuz19+MeSXXRn3mbl3sJDV/sEIpQeKFwVh3SLrc52
+         ROjZaVzUw3iWOy+k4bQgJa+6w2A9/CayLGBF5iZsfDCUsOUpBRJB41ihX1asWNhQZUly
+         /r7X5CfS1vwFNl6XLmX1rM7KGX18WC+vRBB4p+g66+GsjoWIv/emYFNjcagPTBFl7V0w
+         XnkEzRB1p7qO7fN9uQZNyqmGNDqUVgHRjDD1eGLZT4bjCBImpggIwW4xtvy+SKElQPP0
+         QaIBqDdoW/PL6vPdo476sTWTARjXXMU1n4syoA0tlBxRZHtzWWJeRFufAzEsFtKhaXmj
+         3dUg==
+X-Gm-Message-State: ACgBeo1BKtc+WSHk8N9NHzY3fr1bGtL7KxujDqO+t3JOuI3yYzL3KnnI
+        caZUNZaVz74uzmmKkfDp16IP9OzEVXLvAqryRDc=
+X-Google-Smtp-Source: AA6agR71H+G6qVXzMIzOGHX5QXC/V9UhqXsgcDMknFubEQ5fmf1ViE8QltDfcI3uiFsMdrym6KaPtNAbOoHe2iN1Hi8=
+X-Received: by 2002:a25:3b46:0:b0:69c:a60e:2e57 with SMTP id
+ i67-20020a253b46000000b0069ca60e2e57mr2192680yba.364.1662550270206; Wed, 07
+ Sep 2022 04:31:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-565948247-1662550196=:1717"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906132821.713989422@linuxfoundation.org> <YxhnDip9k6TfRCCc@debian>
+In-Reply-To: <YxhnDip9k6TfRCCc@debian>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Wed, 7 Sep 2022 12:30:34 +0100
+Message-ID: <CADVatmN3hoxBB-knoTO6BGb=1fstiOPwakCu3tXHbV21bHR8Pw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/107] 5.15.66-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Wed, Sep 7, 2022 at 10:40 AM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi Greg,
+>
+> On Tue, Sep 06, 2022 at 03:29:41PM +0200, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.66 release.
+> > There are 107 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
+> > Anything received after that time might be too late.
+>
+> Build test (gcc version 11.3.1 20220819):
 
---8323329-565948247-1662550196=:1717
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Missed reporting that the build is full of "/bin/sh: 1:
+./scripts/pahole-flags.sh: Permission denied".
+On checking it turns out, the execute permission is not set in the
+v5.15.y branch, but its set in v5.19.y branch.
 
-On Wed, 7 Sep 2022, Sergiu.Moga@microchip.com wrote:
+On v5.19.y:
+$ ls -l scripts/pahole-flags.sh
+-rwxr-xr-x 1 sudip sudip 585 Sep  6 18:03 scripts/pahole-flags.sh
 
-> On 07.09.2022 12:36, Ilpo Järvinen wrote:
-> > On Tue, 6 Sep 2022, Sergiu Moga wrote:
-> > 
-> >> Previously, the atmel serial driver did not take into account the
-> >> possibility of using the more customizable generic clock as its
-> >> baudrate generator. Unless there is a Fractional Part available to
-> >> increase accuracy, there is a high chance that we may be able to
-> >> generate a baudrate closer to the desired one by using the GCLK as the
-> >> clock source. Now, depending on the error rate between
-> >> the desired baudrate and the actual baudrate, the serial driver will
-> >> fallback on the generic clock. The generic clock must be provided
-> >> in the DT node of the serial that may need a more flexible clock source.
-> >>
-> >> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> >> ---
-
-> > Is percent accurate enough or would you perhaps want something slightly
-> > more accurate?
-> > 
-> 
-> 
-> It is accurate enough for the all the baudrates I have tested. It 
-> usually taps into the GCLK whenever high baudrates such as 921600 are 
-> used. For 115200 for example, the error rate was slightly better in the 
-> case of the peripheral clock and it acted accordingly, choosing the 
-> latter as its baudrate source clock. I do not think that a higher 
-> accuracy than this would be needed though. Say that using percent 
-> accuracy yields that the error rates are equal, but the gclk would have 
-> been better in this case by, say, a few 10 ^ -4, but the code logic does 
-> not see it so it proceeds using the peripheral clock. In that case, the 
-> error rate of the peripheral clock would still be low enough relative to 
-> the desired baudrate for the communication to function properly.
-> 
-> The higher the baudrate, the lower the error rate must be in order for 
-> things to go smoothly. For example, for a baudrate of 57600 I noticed 
-> that even an error rate as big as 6% is still enough for the 
-> communication to work properly, while in the case of 921600 anything 
-> bigger than 2% and things do not go smoothly anymore. So I guess that it 
-> would be safe to say that, unless you go for baudrates as high as tens 
-> of millions, things should work well with just percent accuracy. A 
-> higher accuracy always definetely helps, but I believe it is not needed 
-> in this case.
-> 
-> 
-> > Given you've abs() at the caller side, the error rate could be
-> > underestimated, is underestimating OK?
-> > 
-> 
-> 
-> Yes, this should be fine. While (both empirically and after looking 
-> stuff up) I noticed that in the case of negative error rates, their 
-> absolute value needs to be smaller than the one of positive error rates, 
-> it must be so by a very small margin that is negligible when estimating 
-> through percent accuracy.
-
-OK. Thanks for checking.
+on v5.15.y:
+$ ls -l scripts/pahole-flags.sh
+-rw-r--r-- 1 sudip sudip 627 Sep  7 12:27 scripts/pahole-flags.sh
 
 
 -- 
- i.
-
---8323329-565948247-1662550196=:1717--
+Regards
+Sudip

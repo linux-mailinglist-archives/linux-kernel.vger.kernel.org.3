@@ -2,141 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EFF5B0BD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077A25B0BD7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiIGRvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S230105AbiIGRxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiIGRvk (ORCPT
+        with ESMTP id S229946AbiIGRxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:51:40 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3218C71726;
-        Wed,  7 Sep 2022 10:51:39 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1279948d93dso18096307fac.10;
-        Wed, 07 Sep 2022 10:51:39 -0700 (PDT)
+        Wed, 7 Sep 2022 13:53:04 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22579E885;
+        Wed,  7 Sep 2022 10:53:02 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1278624b7c4so19688358fac.5;
+        Wed, 07 Sep 2022 10:53:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ATQFV9UxDijnVCKvjh8wgAiSEZcUIEydhgrlvOLLULw=;
-        b=IPPnEI6ako2KxEoPezfb6EpSdHRThfPVTNFafi0v7VP7ENGEn3YOWHFxl9ZN2+aLDQ
-         V5SvjdKhizUpk+OO8q/5VJfr/wHpwY1FAW1iNvtcWYjuukw9YL8mUeNdpbzAEWUmP4sI
-         vuT8NfC28SzHexZnkl0iFSjku1jOiZ34tAiNWCVoypT/TVGKeS1Vf54cYLkpQdYV5MaI
-         xnqK/vmiA+vE9FIyhGuXVHlD8IT6Lylx2CaNc8tivzJsnvjZsKCLgmL85AGF0p6nFcyo
-         IYyEe7oFhG2A6Gars/09jz/WsDmr+nwxu93pBXr4LCE3JeK5N1NPU6KnQcB9kbZ7VQIj
-         Tt5w==
-X-Gm-Message-State: ACgBeo2QVgWNy2IfMhGrp6UCX5InuKsYTHYNhxzsLlmY5w5ULb45ogRb
-        yuocNvtWRpyTS8KTMXNpUAO8V+j5XoRRXoaGrrY=
-X-Google-Smtp-Source: AA6agR7bzc4ly6e0V8xYN8ae6VkT7YfN/xsK5oXoZN+zl19bnzwzuKJgxyngYxaWXTCJhq3nJThtKLHdjHN2YhNMpVI=
-X-Received: by 2002:a05:6808:302a:b0:345:ec04:8f11 with SMTP id
- ay42-20020a056808302a00b00345ec048f11mr12709479oib.5.1662573098429; Wed, 07
- Sep 2022 10:51:38 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=0N7indwEWNDLUfh9nzv03hTWDqZDGMDUSanpWNLjPkE=;
+        b=ZRmnoTngUTwewA5ohg96sZEXphzkFfiNwoHcvceoZdfq28To/soRw8kipUa5lHDyxt
+         o3RyKCGFsQb/ueGmUV3j6Bxd1oc5G5wn+r5K2mVc5Mz3gUNfpq6/qcLffdroWuc1XVJk
+         uIz8MKds5NNAKnQoLM2vcenxzP076SKvsy97gK31zgLsY8LRnnb3WZzqCPigwCdJ7T2B
+         6GSvnumCuEaYHSXSImozDAIrLdyYMG9eK3KDxqot3HASsSwH0xiTeH9X+qxgSXVjpnGr
+         l3idncPqTydgQ4p2i+ZJrNtxvW448tOs0n6LGQRytbJVsbseiWIpU3QTGwV+xmQmYp1V
+         Zo9A==
+X-Gm-Message-State: ACgBeo2tB2ipmWsavqjG1kBJY0ew3v69ZNPQlpJhasrMTYbGhAVZLmkY
+        9smwIsrX3O/oHZeki1OwgA==
+X-Google-Smtp-Source: AA6agR7k0HGz1SBz7Bg+JULUAdmjfDYE7RHVkqJna8fZHBQdcH3EcCL3VFYCMpMNoCP853yvFELu4A==
+X-Received: by 2002:a05:6870:4614:b0:125:72da:9b2b with SMTP id z20-20020a056870461400b0012572da9b2bmr12652128oao.118.1662573181889;
+        Wed, 07 Sep 2022 10:53:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l3-20020a056870f14300b0012752d3212fsm4937419oac.53.2022.09.07.10.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 10:53:01 -0700 (PDT)
+Received: (nullmailer pid 3789429 invoked by uid 1000);
+        Wed, 07 Sep 2022 17:53:00 -0000
+Date:   Wed, 7 Sep 2022 12:53:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Richard Acayan <mailingradian@gmail.com>
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tdas@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, caleb@connolly.tech,
+        jo@jsfamily.in
+Subject: Re: [PATCH 1/3] dt-bindings: clock: gcc-sdm845: add sdm670 global
+ clocks
+Message-ID: <20220907175300.GA3779566-robh@kernel.org>
+References: <20220907025035.15609-1-mailingradian@gmail.com>
+ <20220907025035.15609-2-mailingradian@gmail.com>
 MIME-Version: 1.0
-References: <20220907071203.2729746-1-namhyung@kernel.org> <CAP-5=fXyY_aGYW4R-PZvzG3FiTtHvLfS+s9bp_oCQUaRCGrcwg@mail.gmail.com>
-In-Reply-To: <CAP-5=fXyY_aGYW4R-PZvzG3FiTtHvLfS+s9bp_oCQUaRCGrcwg@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 7 Sep 2022 10:51:27 -0700
-Message-ID: <CAM9d7chEOJJTX3F-5Nzy+BBpr5dBnayHDx9MOSmkC0axrttzJQ@mail.gmail.com>
-Subject: Re: [PATCH v3] perf test: Skip sigtrap test on old kernels
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Marco Elver <elver@google.com>, Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907025035.15609-2-mailingradian@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+On Tue, Sep 06, 2022 at 10:50:33PM -0400, Richard Acayan wrote:
+> The Snapdragon 670 clocks will be added into the sdm845 gcc driver. Most
+> of the new clocks, GDSCs, and resets already have reserved IDs but there
+> are some resources that don't. Add the new clock and extra BCR from
+> Snapdragon 670 and document the differences between the SoC parent clocks.
+> 
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>  .../bindings/clock/qcom,gcc-sdm845.yaml       | 24 +++++++++++++++----
+>  include/dt-bindings/clock/qcom,gcc-sdm845.h   |  2 ++
+>  2 files changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/defaced/bindings/clock/qcom,gcc-sdm845.yaml
+> index daf7906ebc40..ba94dd32e619 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> @@ -19,23 +19,21 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    const: qcom,gcc-sdm845
+> +    enum:
+> +      - qcom,gcc-sdm670
+> +      - qcom,gcc-sdm845
+>  
+>    clocks:
+>      items:
+>        - description: Board XO source
+>        - description: Board active XO source
+>        - description: Sleep clock source
+> -      - description: PCIE 0 Pipe clock source
+> -      - description: PCIE 1 Pipe clock source
 
-On Wed, Sep 7, 2022 at 8:48 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Wed, Sep 7, 2022 at 12:12 AM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > If it runs on an old kernel, perf_event_open would fail because of the
-> > new fields sigtrap and sig_data.  Just skipping the test could miss an
-> > actual bug in the kernel.
-> >
-> > Let's check BTF if it has the perf_event_attr.sigtrap field.
-> >
-> > Cc: Marco Elver <elver@google.com>
-> > Acked-by: Song Liu <song@kernel.org>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> > * move #include under #ifdef
-> > * return true when BPF is not supported
-> > * update comment
-> >
-> >  tools/perf/tests/sigtrap.c | 50 +++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 49 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
-> > index e32ece90e164..cdf75eab6a8a 100644
-> > --- a/tools/perf/tests/sigtrap.c
-> > +++ b/tools/perf/tests/sigtrap.c
-> > @@ -54,6 +54,48 @@ static struct perf_event_attr make_event_attr(void)
-> >         return attr;
-> >  }
-> >
-> > +#ifdef HAVE_BPF_SKEL
-> > +#include <bpf/btf.h>
-> > +
-> > +static bool attr_has_sigtrap(void)
-> > +{
-> > +       bool ret = false;
-> > +       struct btf *btf;
-> > +       const struct btf_type *t;
-> > +       const struct btf_member *m;
-> > +       const char *name;
-> > +       int i, id;
-> > +
-> > +       btf = btf__load_vmlinux_btf();
-> > +       if (btf == NULL) {
-> > +               /* should be an old kernel */
-> > +               return false;
-> > +       }
-> > +
-> > +       id = btf__find_by_name_kind(btf, "perf_event_attr", BTF_KIND_STRUCT);
-> > +       if (id < 0)
-> > +               goto out;
-> > +
-> > +       t = btf__type_by_id(btf, id);
-> > +       for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
-> > +               name = btf__name_by_offset(btf, m->name_off);
-> > +               if (!strcmp(name, "sigtrap")) {
-> > +                       ret = true;
-> > +                       break;
-> > +               }
-> > +       }
-> > +out:
-> > +       btf__free(btf);
-> > +       return ret;
-> > +}
-> > +#else  /* !HAVE_BPF_SKEL */
-> > +static bool attr_has_sigtrap(void)
-> > +{
-> > +       /* to maintain current behavior */
->
-> nit: I don't think this comment will age well and the behavior of the
-> function is a bit counterintuitive. Perhaps:
->
-> /* If we don't have libbpf then guess we're on a newer kernel with
-> sigtrap support. This will mean the test will fail on older kernels.
-> */
+You just changed the clocks from 5 to 3. Please test your changes:
 
-Thanks for the clarification, will update!
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295, 1], [4294967295], [4294967295], [4294967295]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.example.dtb: clock-controller@100000: clock-names: ['bi_tcxo', 'bi_tcxo_ao', 'sleep_clk', 'pcie_0_pipe_clk', 'pcie_1_pipe_clk'] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.example.dtb: clock-controller@100000: clocks: [[4294967295, 0], [4294967295, 1], [4294967295], [4294967295], [4294967295]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.example.dtb: clock-controller@100000: clock-names:0: 'pcie_0_pipe_clk' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.example.dtb: clock-controller@100000: clock-names:1: 'pcie_1_pipe_clk' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.example.dtb: clock-controller@100000: clock-names: ['bi_tcxo', 'bi_tcxo_ao', 'sleep_clk', 'pcie_0_pipe_clk', 'pcie_1_pipe_clk'] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
 
-Namhyung
+What you want here I think is 'minItems: 3' and then restrict the clocks 
+to 3 or 5 in the if/then schema.
+
+Rob

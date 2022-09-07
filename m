@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA675B07C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1CD5B07D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiIGO7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S230323AbiIGPBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiIGO7b (ORCPT
+        with ESMTP id S230242AbiIGPAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:59:31 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE5B98D06;
-        Wed,  7 Sep 2022 07:59:21 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287Ch0iw009079;
-        Wed, 7 Sep 2022 14:59:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=utJ/63CheCLtfUGzuhsAf2mt8WXilVYiAvkaOgTtc4Y=;
- b=d+KVhE1bw6bR41YuTTTlFDf7GZwzaf/klTww2vCA9QpkH9sJbhNw4xXhOaHUf8RiCLzF
- XEodz/w0tai/YpdcfeQ+474xvlnaTRV9tEXoG3mY2abI3vhmMMA624T6KLgz0r3n+bBX
- lQOgyNxr7iGKt5M+mWkpHFls27FLFnlpT2GmFz00oLR1Y7OfWBN0aB2Nvk6wku5O5urZ
- cvl2qjeNdSBOntAr3+qeDUC20YB/FiJPiR/ZbNRmInXn2t6MF72o4BrdssYPclw/ydbC
- ELWkrpULrzFbUhCfDV3SPxeM/Ry751ghvirLlE688X/RP447FQXi72WZhaGN/NqQBNzG yg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jer1x11u0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 14:59:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 287ExHq7006250
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Sep 2022 14:59:18 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 7 Sep 2022 07:59:17 -0700
-Date:   Wed, 7 Sep 2022 07:59:16 -0700
-From:   Mike Tipton <quic_mdtipton@quicinc.com>
-To:     Georgi Djakov <djakov@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_okukatla@quicinc.com>
-Subject: Re: [PATCH] interconnect: Replace mutex with rt_mutex
-Message-ID: <20220907145916.GA2368@hu-mdtipton-lv.qualcomm.com>
-References: <20220906191423.30109-1-quic_mdtipton@quicinc.com>
- <3c8965c0-3bc0-252e-381d-bd057fd02af5@kernel.org>
+        Wed, 7 Sep 2022 11:00:42 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1989A98C;
+        Wed,  7 Sep 2022 08:00:40 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MN51T3C6sz9y0jm;
+        Wed,  7 Sep 2022 22:56:29 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDXzpLssRhjiXMsAA--.45146S2;
+        Wed, 07 Sep 2022 16:00:10 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     memxor@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
+        haoluo@google.com, jarkko@kernel.org, jmorris@namei.org,
+        john.fastabend@gmail.com, jolsa@kernel.org,
+        keyrings@vger.kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
+        mingo@redhat.com, mykolal@fb.com, paul@paul-moore.com,
+        roberto.sassu@huawei.com, roberto.sassu@huaweicloud.com,
+        rostedt@goodmis.org, sdf@google.com, serge@hallyn.com,
+        shuah@kernel.org, song@kernel.org, yhs@fb.com
+Subject: [PATCH v17 12/12] selftests/bpf: Add tests for dynamic pointers parameters in kfuncs
+Date:   Wed,  7 Sep 2022 16:59:39 +0200
+Message-Id: <20220907145939.489784-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAP01T74L7C+F7oiBx3fL9SahdvU-9rHpQ=GaLTj0XAfeOKaXrA@mail.gmail.com>
+References: <CAP01T74L7C+F7oiBx3fL9SahdvU-9rHpQ=GaLTj0XAfeOKaXrA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <3c8965c0-3bc0-252e-381d-bd057fd02af5@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YKISfDHrKtg3l0ePqFq4AKlFQQBb1xJV
-X-Proofpoint-GUID: YKISfDHrKtg3l0ePqFq4AKlFQQBb1xJV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-07_08,2022-09-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- malwarescore=0 clxscore=1015 adultscore=0 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209070059
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwDXzpLssRhjiXMsAA--.45146S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JryUJryxurWUCFy5ur48JFb_yoWftr1kpa
+        yrWryj9r40q3W3Xrn8JFs7ur4fKr48Zw17CrZI9FyxZr1DXFZ3XF18KFy3t3Z8K395Xw45
+        Z3ySqFWruw4UJa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUva14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+        XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyT
+        uYvjfUFfHUDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj365JQAAsd
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,332 +70,309 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:35:26AM +0300, Georgi Djakov wrote:
-> Hi Mike,
-> 
-> Thanks for the patch!
-> 
-> On 6.09.22 22:14, Mike Tipton wrote:
-> > Replace mutex with rt_mutex to prevent priority inversion between
-> > clients, which can cause unacceptable delays in some cases.
-> 
-> It would be nice if you have any numbers to share in the commit text.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-I can try to dig up some numbers, but mileage will vary tremendously of
-course. Improvement is really only seen in certain high-concurrency
-scenarios.
+Add tests to ensure that only supported dynamic pointer types are accepted,
+that the passed argument is actually a dynamic pointer, that the passed
+argument is a pointer to the stack, and that bpf_verify_pkcs7_signature()
+correctly handles dynamic pointers with data set to NULL.
 
-> 
-> > Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
-> > ---
-> > 
-> > We've run into a number of cases internally and from customers where
-> > high priority, RT clients (typically display) become blocked for long
-> > periods of time on lower priority, non-RT clients. Switching to rt_mutex
-> > has proven to help performance in these cases.
-> 
-> I am wondering if avoiding the inversion on this specific lock is the right
-> solution, as there could be other locks that may cause similar issues. Do we
-> see similar issue with clocks for example or is it just with interconnects?
+The tests are currently in the deny list for s390x (JIT does not support
+calling kernel function).
 
-I raised these same concerns internally, since some of the clients
-experiencing delays also request clocks and regulators. However, I
-believe they primarily request interconnects in these critical paths and
-not clocks/regulators. At least not as frequently as they request
-interconnect. Additionally, I suspect the average interconnect latencies
-are higher than clock on our platforms, since interconnect will always
-result in blocking calls to RPM/RPMh. I also wouldn't be surprised if we
-have more consistent contention on interconnect, since certain clients
-update DDR BW quite frequently. I suppose at some point the same
-rt_mutex argument could be made for clock and regulator as well, but
-to-date we've only needed to change interconnect to see improvement.
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ .../bpf/prog_tests/kfunc_dynptr_param.c       | 164 ++++++++++++++++++
+ .../bpf/progs/test_kfunc_dynptr_param.c       |  99 +++++++++++
+ 3 files changed, 264 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
 
-I'm not sure what an alternative, generic solution would be. We have
-many clients requesting many different paths. Some are more
-latency-sensitive and higher priority than others. If these use cases
-overlap, then we're subject to these sorts of priority inversion issues.
-Bumping the priority of all clients to match the highest priority one
-isn't really possible.
+diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
+index 4e305baa5277..9a6dc3671c65 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@ -71,3 +71,4 @@ cgroup_hierarchical_stats                # JIT does not support calling kernel f
+ htab_update                              # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
+ lookup_key                               # JIT does not support calling kernel function                                (kfunc)
+ verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
++kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+new file mode 100644
+index 000000000000..c210657d4d0a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+@@ -0,0 +1,164 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (c) 2022 Facebook
++ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ */
++
++#include <test_progs.h>
++#include "test_kfunc_dynptr_param.skel.h"
++
++static size_t log_buf_sz = 1048576; /* 1 MB */
++static char obj_log_buf[1048576];
++
++static struct {
++	const char *prog_name;
++	const char *expected_verifier_err_msg;
++	int expected_runtime_err;
++} kfunc_dynptr_tests[] = {
++	{"dynptr_type_not_supp",
++	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to unsupported dynamic pointer type", 0},
++	{"not_valid_dynptr",
++	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and initialized", 0},
++	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern not to stack", 0},
++	{"dynptr_data_null", NULL, -EBADMSG},
++};
++
++static bool kfunc_not_supported;
++
++static int libbpf_print_cb(enum libbpf_print_level level, const char *fmt,
++			   va_list args)
++{
++	if (strcmp(fmt, "libbpf: extern (func ksym) '%s': not found in kernel or module BTFs\n"))
++		return 0;
++
++	if (strcmp(va_arg(args, char *), "bpf_verify_pkcs7_signature"))
++		return 0;
++
++	kfunc_not_supported = true;
++	return 0;
++}
++
++static void verify_fail(const char *prog_name, const char *expected_err_msg)
++{
++	struct test_kfunc_dynptr_param *skel;
++	LIBBPF_OPTS(bpf_object_open_opts, opts);
++	libbpf_print_fn_t old_print_cb;
++	struct bpf_program *prog;
++	int err;
++
++	opts.kernel_log_buf = obj_log_buf;
++	opts.kernel_log_size = log_buf_sz;
++	opts.kernel_log_level = 1;
++
++	skel = test_kfunc_dynptr_param__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open_opts"))
++		goto cleanup;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
++
++	bpf_program__set_autoload(prog, true);
++
++	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
++
++	kfunc_not_supported = false;
++
++	old_print_cb = libbpf_set_print(libbpf_print_cb);
++	err = test_kfunc_dynptr_param__load(skel);
++	libbpf_set_print(old_print_cb);
++
++	if (err < 0 && kfunc_not_supported) {
++		fprintf(stderr,
++		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not supported\n",
++		  __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	if (!ASSERT_ERR(err, "unexpected load success"))
++		goto cleanup;
++
++	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err_msg")) {
++		fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
++		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
++	}
++
++cleanup:
++	test_kfunc_dynptr_param__destroy(skel);
++}
++
++static void verify_success(const char *prog_name, int expected_runtime_err)
++{
++	struct test_kfunc_dynptr_param *skel;
++	libbpf_print_fn_t old_print_cb;
++	struct bpf_program *prog;
++	struct bpf_link *link;
++	__u32 next_id;
++	int err;
++
++	skel = test_kfunc_dynptr_param__open();
++	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open"))
++		return;
++
++	skel->bss->pid = getpid();
++
++	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
++
++	kfunc_not_supported = false;
++
++	old_print_cb = libbpf_set_print(libbpf_print_cb);
++	err = test_kfunc_dynptr_param__load(skel);
++	libbpf_set_print(old_print_cb);
++
++	if (err < 0 && kfunc_not_supported) {
++		fprintf(stderr,
++		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not supported\n",
++		  __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	if (!ASSERT_OK(err, "test_kfunc_dynptr_param__load"))
++		goto cleanup;
++
++	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
++
++	link = bpf_program__attach(prog);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach"))
++		goto cleanup;
++
++	err = bpf_prog_get_next_id(0, &next_id);
++
++	bpf_link__destroy(link);
++
++	if (!ASSERT_OK(err, "bpf_prog_get_next_id"))
++		goto cleanup;
++
++	ASSERT_EQ(skel->bss->err, expected_runtime_err, "err");
++
++cleanup:
++	test_kfunc_dynptr_param__destroy(skel);
++}
++
++void test_kfunc_dynptr_param(void)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(kfunc_dynptr_tests); i++) {
++		if (!test__start_subtest(kfunc_dynptr_tests[i].prog_name))
++			continue;
++
++		if (kfunc_dynptr_tests[i].expected_verifier_err_msg)
++			verify_fail(kfunc_dynptr_tests[i].prog_name,
++			  kfunc_dynptr_tests[i].expected_verifier_err_msg);
++		else
++			verify_success(kfunc_dynptr_tests[i].prog_name,
++				kfunc_dynptr_tests[i].expected_runtime_err);
++	}
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+new file mode 100644
+index 000000000000..d7d39ea009a7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ */
++
++#include "vmlinux.h"
++#include <errno.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++struct bpf_dynptr {
++	__u64 :64;
++	__u64 :64;
++} __attribute__((aligned(8)));
++
++extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
++extern void bpf_key_put(struct bpf_key *key) __ksym;
++extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
++				      struct bpf_dynptr *sig_ptr,
++				      struct bpf_key *trusted_keyring) __ksym;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++} ringbuf SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u32);
++} array_map SEC(".maps");
++
++int err, pid;
++
++char _license[] SEC("license") = "GPL";
++
++SEC("?lsm.s/bpf")
++int BPF_PROG(dynptr_type_not_supp, int cmd, union bpf_attr *attr,
++	     unsigned int size)
++{
++	char write_data[64] = "hello there, world!!";
++	struct bpf_dynptr ptr;
++
++	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0, &ptr);
++
++	return bpf_verify_pkcs7_signature(&ptr, &ptr, NULL);
++}
++
++SEC("?lsm.s/bpf")
++int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr, unsigned int size)
++{
++	unsigned long val;
++
++	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
++					  (struct bpf_dynptr *)&val, NULL);
++}
++
++SEC("?lsm.s/bpf")
++int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr, unsigned int size)
++{
++	unsigned long val;
++
++	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
++					  (struct bpf_dynptr *)val, NULL);
++}
++
++SEC("lsm.s/bpf")
++int BPF_PROG(dynptr_data_null, int cmd, union bpf_attr *attr, unsigned int size)
++{
++	struct bpf_key *trusted_keyring;
++	struct bpf_dynptr ptr;
++	__u32 *value;
++	int ret, zero = 0;
++
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	value = bpf_map_lookup_elem(&array_map, &zero);
++	if (!value)
++		return 0;
++
++	/* Pass invalid flags. */
++	ret = bpf_dynptr_from_mem(value, sizeof(*value), 1, &ptr);
++	if (ret != -EINVAL)
++		return 0;
++
++	trusted_keyring = bpf_lookup_system_key(0);
++	if (!trusted_keyring)
++		return 0;
++
++	err = bpf_verify_pkcs7_signature(&ptr, &ptr, trusted_keyring);
++
++	bpf_key_put(trusted_keyring);
++
++	return 0;
++}
+-- 
+2.25.1
 
-> 
-> >   drivers/interconnect/core.c | 80 ++++++++++++++++++-------------------
-> >   1 file changed, 40 insertions(+), 40 deletions(-)
-> > 
-> > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> > index 25debded65a8..a536c013d9ca 100644
-> > --- a/drivers/interconnect/core.c
-> > +++ b/drivers/interconnect/core.c
-> > @@ -14,7 +14,7 @@
-> >   #include <linux/interconnect-provider.h>
-> >   #include <linux/list.h>
-> >   #include <linux/module.h>
-> > -#include <linux/mutex.h>
-> > +#include <linux/rtmutex.h>
-> >   #include <linux/slab.h>
-> >   #include <linux/of.h>
-> >   #include <linux/overflow.h>
-> > @@ -28,7 +28,7 @@ static DEFINE_IDR(icc_idr);
-> >   static LIST_HEAD(icc_providers);
-> >   static int providers_count;
-> >   static bool synced_state;
-> > -static DEFINE_MUTEX(icc_lock);
-> > +static DEFINE_RT_MUTEX(icc_lock);
-> >   static struct dentry *icc_debugfs_dir;
-> >   static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
-> > @@ -47,7 +47,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
-> >   	seq_puts(s, " node                                  tag          avg         peak\n");
-> >   	seq_puts(s, "--------------------------------------------------------------------\n");
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	list_for_each_entry(provider, &icc_providers, provider_list) {
-> >   		struct icc_node *n;
-> > @@ -73,7 +73,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
-> >   		}
-> >   	}
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	return 0;
-> >   }
-> > @@ -104,7 +104,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
-> >   	int i;
-> >   	seq_puts(s, "digraph {\n\trankdir = LR\n\tnode [shape = record]\n");
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	/* draw providers as cluster subgraphs */
-> >   	cluster_index = 0;
-> > @@ -136,7 +136,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
-> >   					icc_graph_show_link(s, 1, n,
-> >   							    n->links[i]);
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	seq_puts(s, "}");
-> >   	return 0;
-> > @@ -362,7 +362,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
-> >   	if (!spec)
-> >   		return ERR_PTR(-EINVAL);
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	list_for_each_entry(provider, &icc_providers, provider_list) {
-> >   		if (provider->dev->of_node == spec->np) {
-> >   			if (provider->xlate_extended) {
-> > @@ -378,7 +378,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
-> >   			}
-> >   		}
-> >   	}
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	if (IS_ERR(node))
-> >   		return ERR_CAST(node);
-> > @@ -490,9 +490,9 @@ struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
-> >   		return ERR_CAST(dst_data);
-> >   	}
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	path = path_find(dev, src_data->node, dst_data->node);
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	if (IS_ERR(path)) {
-> >   		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
-> >   		goto free_icc_data;
-> > @@ -577,12 +577,12 @@ void icc_set_tag(struct icc_path *path, u32 tag)
-> >   	if (!path)
-> >   		return;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	for (i = 0; i < path->num_nodes; i++)
-> >   		path->reqs[i].tag = tag;
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_set_tag);
-> > @@ -632,7 +632,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
-> >   	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
-> >   		return -EINVAL;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	old_avg = path->reqs[0].avg_bw;
-> >   	old_peak = path->reqs[0].peak_bw;
-> > @@ -664,7 +664,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
-> >   		apply_constraints(path);
-> >   	}
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	trace_icc_set_bw_end(path, ret);
-> > @@ -682,12 +682,12 @@ static int __icc_enable(struct icc_path *path, bool enable)
-> >   	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
-> >   		return -EINVAL;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	for (i = 0; i < path->num_nodes; i++)
-> >   		path->reqs[i].enabled = enable;
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	return icc_set_bw(path, path->reqs[0].avg_bw,
-> >   			  path->reqs[0].peak_bw);
-> > @@ -726,7 +726,7 @@ struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
-> >   	struct icc_node *src, *dst;
-> >   	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	src = node_find(src_id);
-> >   	if (!src)
-> > @@ -748,7 +748,7 @@ struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
-> >   		path = ERR_PTR(-ENOMEM);
-> >   	}
-> >   out:
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	return path;
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_get);
-> > @@ -773,14 +773,14 @@ void icc_put(struct icc_path *path)
-> >   	if (ret)
-> >   		pr_err("%s: error (%d)\n", __func__, ret);
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	for (i = 0; i < path->num_nodes; i++) {
-> >   		node = path->reqs[i].node;
-> >   		hlist_del(&path->reqs[i].req_node);
-> >   		if (!WARN_ON(!node->provider->users))
-> >   			node->provider->users--;
-> >   	}
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	kfree_const(path->name);
-> >   	kfree(path);
-> > @@ -822,11 +822,11 @@ struct icc_node *icc_node_create(int id)
-> >   {
-> >   	struct icc_node *node;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	node = icc_node_create_nolock(id);
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	return node;
-> >   }
-> > @@ -840,7 +840,7 @@ void icc_node_destroy(int id)
-> >   {
-> >   	struct icc_node *node;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	node = node_find(id);
-> >   	if (node) {
-> > @@ -848,7 +848,7 @@ void icc_node_destroy(int id)
-> >   		WARN_ON(!hlist_empty(&node->req_list));
-> >   	}
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	kfree(node);
-> >   }
-> > @@ -876,7 +876,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
-> >   	if (!node->provider)
-> >   		return -EINVAL;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	dst = node_find(dst_id);
-> >   	if (!dst) {
-> > @@ -900,7 +900,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
-> >   	node->links[node->num_links++] = dst;
-> >   out:
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	return ret;
-> >   }
-> > @@ -925,7 +925,7 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
-> >   	if (IS_ERR_OR_NULL(dst))
-> >   		return -EINVAL;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	for (slot = 0; slot < src->num_links; slot++)
-> >   		if (src->links[slot] == dst)
-> > @@ -946,7 +946,7 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
-> >   		ret = -ENOMEM;
-> >   out:
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	return ret;
-> >   }
-> > @@ -962,7 +962,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
-> >   	if (WARN_ON(node->provider))
-> >   		return;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	node->provider = provider;
-> >   	list_add_tail(&node->node_list, &provider->nodes);
-> > @@ -988,7 +988,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
-> >   	node->avg_bw = 0;
-> >   	node->peak_bw = 0;
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_node_add);
-> > @@ -998,11 +998,11 @@ EXPORT_SYMBOL_GPL(icc_node_add);
-> >    */
-> >   void icc_node_del(struct icc_node *node)
-> >   {
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	list_del(&node->node_list);
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_node_del);
-> > @@ -1041,12 +1041,12 @@ int icc_provider_add(struct icc_provider *provider)
-> >   	if (WARN_ON(!provider->xlate && !provider->xlate_extended))
-> >   		return -EINVAL;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	INIT_LIST_HEAD(&provider->nodes);
-> >   	list_add_tail(&provider->provider_list, &icc_providers);
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   	dev_dbg(provider->dev, "interconnect provider added to topology\n");
-> > @@ -1060,22 +1060,22 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
-> >    */
-> >   void icc_provider_del(struct icc_provider *provider)
-> >   {
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	if (provider->users) {
-> >   		pr_warn("interconnect provider still has %d users\n",
-> >   			provider->users);
-> > -		mutex_unlock(&icc_lock);
-> > +		rt_mutex_unlock(&icc_lock);
-> >   		return;
-> >   	}
-> >   	if (!list_empty(&provider->nodes)) {
-> >   		pr_warn("interconnect provider still has nodes\n");
-> > -		mutex_unlock(&icc_lock);
-> > +		rt_mutex_unlock(&icc_lock);
-> >   		return;
-> >   	}
-> >   	list_del(&provider->provider_list);
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_provider_del);
-> > @@ -1110,7 +1110,7 @@ void icc_sync_state(struct device *dev)
-> >   	if (count < providers_count)
-> >   		return;
-> > -	mutex_lock(&icc_lock);
-> > +	rt_mutex_lock(&icc_lock);
-> >   	synced_state = true;
-> >   	list_for_each_entry(p, &icc_providers, provider_list) {
-> >   		dev_dbg(p->dev, "interconnect provider is in synced state\n");
-> > @@ -1123,7 +1123,7 @@ void icc_sync_state(struct device *dev)
-> >   			}
-> >   		}
-> >   	}
-> > -	mutex_unlock(&icc_lock);
-> > +	rt_mutex_unlock(&icc_lock);
-> >   }
-> >   EXPORT_SYMBOL_GPL(icc_sync_state);
-> 
-> We should also update Kconfig, otherwise i am expecting that the build will fail if
-> CONFIG_RT_MUTEXES is not enabled.
-
-You're right, it will.
-
-> 
-> Thanks,
-> Georgi

@@ -2,116 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46175AFD0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8762E5AFD0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiIGHE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S230146AbiIGHFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiIGHE5 (ORCPT
+        with ESMTP id S229478AbiIGHE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Sep 2022 03:04:57 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A7B4B0E8
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9B12DA8D
         for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:04:55 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id bj14so5576924wrb.12
+Received: by mail-pg1-x52c.google.com with SMTP id h188so12716798pgc.12
         for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 00:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lB1tmo02fRBU5l99ERq/B48ipxrlpTBOmsY3GpHVDq0=;
-        b=jpxnKj/tEOqK+taEe1NmXQq96RAJosDbqCL3MYiTan0yY9wRDEYP/c9UDDpwK3wqFe
-         3Dk94gHbTndr8sH9LH1wRMAE7OvmiI8Kv4KKf7Qh7xWteJv72aYDkReV0FfVX2hDLIHt
-         X8eIaBcG3xS0FPpWa3Q2u5awuNyRmr5qBo9yQShYvkUf/i+AYrOYrviOTZODAwAHr0+Q
-         65uYP7r9+32R+wrFTso8y4jpgB319KqVUnekM3YvXqv27A6BuhNU2Od/lhv9TldDXBN3
-         +5dlWoKjGF5CG7uoX+qiTaYcWIpaOiPskwkGvfNHu04UZ8wuB+hAxskBGugwsUPofBtJ
-         zmfw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=I3AMR95LQUDdRhrOrYRzL4GU0R24ExtqObbx/U3NJaw=;
+        b=FENiitxHMZhG0oeEMBaszeMnyMZccIVDSON/SeyX1BVWZBDkwOV+YJPr5hfR5Yr/rQ
+         eV8iqs38Nmdj8rvzdXM5DYEA5m6Bo6FIWXTG/Q6dZsebcRVRUu4L2UGI3GFrpArdTBwV
+         hZuxUhQPdDOlnO7svMxpLzz3aADVF+g9AKh/a47ArxQ7JuLDksFVC/C8mWa6z8Cr2Vhn
+         WUJSW2yiW9tCd6z3sUAKHuFneQzqeG2PN/i9rRgzH0Nv4g1eJMxxEd8zcx9GbKCkAAZV
+         Vwm4U7uTsri7dKxIIe2sjfcJk6fygHLVAFGF9wvYOqub/MB6h/Jde4jqLnQ5jXMeJd36
+         UnQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lB1tmo02fRBU5l99ERq/B48ipxrlpTBOmsY3GpHVDq0=;
-        b=MYHM+IVKKl1EO/ODwPnlxKKE5hO3hQW+boqrJd8dY3CFwyklITyTnbtEsoCtQSTWJ+
-         MwpCtbOW5Q69P44mHpfisCNuKBFftkNJRcNBBMZ1Pj4CDwkQ03DCebzdIZ/PjrgFjq0s
-         D+hMMuHOCHuuWc5anKtXyxsAobh+WlEzqP0iKobkcZI5pb9bJfDVBPrGIelO95tSrlKt
-         ephBznZds8EIRILCfUGI8dUufple4ajTMj5JP6wqSiK+QyBvPjlQ6X0wi++Y2X72Tygo
-         FMnOS/Rrt6gJGMM1c0A9U/CkEtSnW+Wnt2frB5c3iUFaZYa0CG8ZRPP17uMDarfhJKfz
-         WZOA==
-X-Gm-Message-State: ACgBeo1SLE/cfxVlSGKAhqA7HQMZqmtAqr4W5uvuN2KJZGws1cgvl1cI
-        26wFww6VKBg8fEPZbaC2KvNp48aUOyfqxdjMVS9FIA==
-X-Google-Smtp-Source: AA6agR5pYRLCrtJ2SL9u5D4Xxh0DlWfT/umzHlIpkRTMxpdM3cDXNixeG9s5u5aZnnS7L3YgztNTexOd2o1mLhJMZrI=
-X-Received: by 2002:a5d:47ac:0:b0:226:df12:412f with SMTP id
- 12-20020a5d47ac000000b00226df12412fmr1129390wrb.675.1662534294077; Wed, 07
- Sep 2022 00:04:54 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=I3AMR95LQUDdRhrOrYRzL4GU0R24ExtqObbx/U3NJaw=;
+        b=OozODKOfLAGSqckq/11fFAineQmk2YxGKDhD66q6ry0RQhl9HuGs0aK5Jox6EttWn2
+         oS/FJpiMvd/QJh5XocWvOuWVAgwxIASBmZn2oWqZJZQ9rwA23VP4eJWufhPITIpD8l4p
+         +LAZwna3e/nWu3GHxmSpotOZ4OzL7KmTFfGwy7/awgER1oY7PdgRNt7J9HKC/yNPA+6O
+         d3Bi+VmoJLwFzOyphZyU9yUV02W1v8IeoAdVPFmiSDnq8R5MUDKXld6vH5zfVVNQ+M/G
+         u191dgOIZR9+XBhXbqUsEmtF6+5S/aQPX6F9+KsUQOwwfYkTCIHHFBMg6VLXnwPr0R9i
+         rSSg==
+X-Gm-Message-State: ACgBeo3rx3zNk0eIRDqwP8NnDQVNTAsi1IP4b1Y6Jb8AX7jpUSSbFp62
+        JfB3JhAS8OyTi6NiMsZeshoEOA==
+X-Google-Smtp-Source: AA6agR7e+Hd4TYG0M71fMY0QD/aaID7FwhVT9S+fic6nUDDoGELZ0M7dIJ3rmdDFMnEfEOzIbSb6BA==
+X-Received: by 2002:a63:6b44:0:b0:434:ad17:5e1a with SMTP id g65-20020a636b44000000b00434ad175e1amr2279570pgc.452.1662534295456;
+        Wed, 07 Sep 2022 00:04:55 -0700 (PDT)
+Received: from [10.4.126.121] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id n17-20020a170902e55100b00172ea8ff334sm1233384plf.7.2022.09.07.00.04.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 00:04:54 -0700 (PDT)
+Message-ID: <430e3e5f-d446-6307-cba0-6f859bce560f@bytedance.com>
+Date:   Wed, 7 Sep 2022 15:04:48 +0800
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220905003732.752-1-mailhol.vincent@wanadoo.fr> <CAKwvOdnr_F9-voPj4cp2HG8=U32a8Hp1aLpynSQiKOrwe4txpQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdnr_F9-voPj4cp2HG8=U32a8Hp1aLpynSQiKOrwe4txpQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 7 Sep 2022 00:04:42 -0700
-Message-ID: <CAKwvOd=PgVtCwjS=Z_iqqmWsQ=+HsnEnHX2LOjRPCYFoVhAZhA@mail.gmail.com>
-Subject: Re: [PATCH v7 0/2] x86/asm/bitops: optimize ff{s,z} functions for
- constant expressions
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v3] arm64: run softirqs on the per-CPU IRQ stack
+Content-Language: en-US
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20220815124739.15948-1-zhengqi.arch@bytedance.com>
+ <595c912a-1503-d420-f32f-297b824decae@bytedance.com>
+In-Reply-To: <595c912a-1503-d420-f32f-297b824decae@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 11:26 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Sun, Sep 4, 2022 at 5:38 PM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > The compilers provide some builtin expression equivalent to the ffs(),
-> > __ffs() and ffz() functions of the kernel. The kernel uses optimized
-> > assembly which produces better code than the builtin
-> > functions. However, such assembly code can not be folded when used
-> > with constant expressions.
->
-> Another tact which may help additional sources other than just the
-> Linux kernel; it seems that compilers should be able to fold this.
->
-> Vincent, if you're interested in making such an optimization in LLVM,
-> we'd welcome the contribution, and I'd be happy to show you where to
-> make such changes within LLVM; please let me know off thread.
 
-Oh right, it already does.
-https://github.com/llvm/llvm-project/blob/ea953b9d9a65c202985a79f1f95da115829baef6/llvm/lib/Transforms/Utils/SimplifyLibCalls.cpp#L2635
-I see what's happening. Constant propagation sinks constants into a
-specialized version of ffs when there's only 1 callsite in a given
-translation unit (or multiple call sites with the same constant).
-Then dead argument elimination removes the argument, so libcall
-optimization thinks this isn't the ffs(int) you're looking for, and
-skips it.  Nice.
-https://github.com/llvm/llvm-project/issues/57599
-I guess ffs() is usually forward declared in strings.h, so we don't
-have such a static inline definition available to constant
-prop/specialize in normal C code.
+
+On 2022/8/26 12:16, Qi Zheng wrote:
+> 
+> 
+> On 2022/8/15 20:47, Qi Zheng wrote:
+>> Currently arm64 supports per-CPU IRQ stack, but softirqs
+>> are still handled in the task context.
+>>
+>> Since any call to local_bh_enable() at any level in the task's
+>> call stack may trigger a softirq processing run, which could
+>> potentially cause a task stack overflow if the combined stack
+>> footprints exceed the stack's size, let's run these softirqs
+>> on the IRQ stack as well.
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>> Acked-by: Will Deacon <will@kernel.org>
+>> ---
+>> v2: 
+>> https://lore.kernel.org/lkml/20220802065325.39740-1-zhengqi.arch@bytedance.com/
+>> v1: 
+>> https://lore.kernel.org/lkml/20220708094950.41944-1-zhengqi.arch@bytedance.com/
+>> RFC: 
+>> https://lore.kernel.org/lkml/20220707110511.52129-1-zhengqi.arch@bytedance.com/
+>>
+>> Changelog in v2 -> v3:
+>>   - rebase onto the v6.0-rc1
+
+Hi Will,
+
+Are we good to merge this patch? Or if there is anything else I need to
+do, please let me know. :)
+
+Looking forward to your reply.
+
+Thanks,
+Qi
+
+> 
+> Gentle ping.
+> 
+> Thanks,
+> Qi
+> 
+>>
+>> Changelog in v1 -> v2:
+>>   - temporarily discard [PATCH v1 2/2] to allow this patch to be 
+>> merged first
+>>   - rebase onto the v5.19
+>>   - collect Reviewed-by and Acked-by
+>>
+>> Changelog in RFC -> v1:
+>>   - fix conflicts with commit f2c5092190f2 ("arch/*: Disable softirq 
+>> stacks on PREEMPT_RT.")
+>>
+>>   arch/arm64/Kconfig      |  1 +
+>>   arch/arm64/kernel/irq.c | 13 +++++++++++++
+>>   2 files changed, 14 insertions(+)
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 571cc234d0b3..ee92f5887cf6 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -230,6 +230,7 @@ config ARM64
+>>       select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+>>       select TRACE_IRQFLAGS_SUPPORT
+>>       select TRACE_IRQFLAGS_NMI_SUPPORT
+>> +    select HAVE_SOFTIRQ_ON_OWN_STACK
+>>       help
+>>         ARM 64-bit (AArch64) Linux support.
+>> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+>> index bda49430c9ea..c36ad20a52f3 100644
+>> --- a/arch/arm64/kernel/irq.c
+>> +++ b/arch/arm64/kernel/irq.c
+>> @@ -22,6 +22,7 @@
+>>   #include <linux/vmalloc.h>
+>>   #include <asm/daifflags.h>
+>>   #include <asm/vmap_stack.h>
+>> +#include <asm/exception.h>
+>>   /* Only access this in an NMI enter/exit */
+>>   DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
+>> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
+>>   }
+>>   #endif
+>> +#ifndef CONFIG_PREEMPT_RT
+>> +static void ____do_softirq(struct pt_regs *regs)
+>> +{
+>> +    __do_softirq();
+>> +}
+>> +
+>> +void do_softirq_own_stack(void)
+>> +{
+>> +    call_on_irq_stack(NULL, ____do_softirq);
+>> +}
+>> +#endif
+>> +
+>>   static void default_handle_irq(struct pt_regs *regs)
+>>   {
+>>       panic("IRQ taken without a root IRQ handler\n");
+> 
+
 -- 
 Thanks,
-~Nick Desaulniers
+Qi

@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03CA5B0789
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5B95B0786
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiIGOw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S229887AbiIGOwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiIGOws (ORCPT
+        with ESMTP id S229875AbiIGOwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:52:48 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2318AA34C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:52:47 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id f4so10632416qkl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=fJo3B2xMqZ19itnKW4i6Qw4+xfulQDO8UT5EYIn/ENU=;
-        b=ECGvOkiswcF70gUxltzOk31c9d9JG+Kf28aYQv4dMCfu2JRSu4f23yxHIj91wnxJzV
-         SIgFjidzsT1IFPSiuhXSbP1I6jP669Vm2tj6t9abOsIdm3BQHBWP2m4T/QnsFyg7FPoS
-         TamANYtiMBSNIpM5BDRg0ontXs6yaPaclJv6OtHswO2DImzpYwzSKVcjtf3ir2nGNN96
-         7578R9fCuS9Z3e+5bsS7ACCsFNnQcRejm5D7YBajQilz6immEfPIRWamgTgdrTAf0yX+
-         kQAlK35wl8ndn1bJ2VaW8u1Ub5C/p/hUdz2Ii4fiBo4L2J+yAwePHVdKtfcAK8wE4y59
-         e2Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fJo3B2xMqZ19itnKW4i6Qw4+xfulQDO8UT5EYIn/ENU=;
-        b=OdghCjZ2AYz2r4BtfSd32gMe0Pc4yZeLH/QzgNGaeuE33w+BfHFz2j/a2Bsu7IegMz
-         /42eAYXZAuBZ4K2dhFxel4W2bVOjtiYsOTqyDupK7JfprG1wY6urptUaa5zLAQgA5wIx
-         +czIsIRyEJgFBXneqWorwLwyszKm/hMSkwZQYYkvnxhAjg9sdheOBJyYcuRvpg3yC2XX
-         yiS8x2KUPHgml8PFmKzUDy2cGzxQeWe+PNwU5NjF6NDw4GSGRah29om5II7neoh9qDLm
-         T8EpwAvI3+6dyE5gVkhPERc5H2DAcjADyKf+itOw9OFea3t9TO/YZHYzRRkL8Osk0z4H
-         cn8A==
-X-Gm-Message-State: ACgBeo3KZ5fbvnhMd4WHALP/0nufgnSHNrJP7gsuKgmrm3HTmWusjt5T
-        JntzNht/TAqCzHdckO2O4ljlQNw8ZDazkFxDq5j3c6pR3BedMQ==
-X-Google-Smtp-Source: AA6agR5Ew6RDlfvp5bEWcpFXxlI0QzrNr9squbwpxinK9hEJFdLC4HEbOK41+z5uSDtIsSHBUFG9OXHiDNL6i2jfv3w=
-X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
- v17-20020ae9e311000000b006bae711fb27mr3013495qkf.320.1662562366709; Wed, 07
- Sep 2022 07:52:46 -0700 (PDT)
+        Wed, 7 Sep 2022 10:52:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56EA7A99D5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:52:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 653FE106F;
+        Wed,  7 Sep 2022 07:52:50 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C40F93F71A;
+        Wed,  7 Sep 2022 07:52:42 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Bonnici <marc.bonnici@arm.com>,
+        Achin Gupta <achin.gupta@arm.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Valentin Laurent <valentin.laurent@trustonic.com>,
+        Lukas Hanel <lukas.hanel@trustonic.com>,
+        Coboy Chen <coboy.chen@mediatek.com>
+Subject: [PATCH v3 00/10] firmware: arm_ffa: Refactoring and initial/minor v1.1 update
+Date:   Wed,  7 Sep 2022 15:52:30 +0100
+Message-Id: <20220907145240.1683088-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220907103041.0a88d5c4@endymion.delvare>
-In-Reply-To: <20220907103041.0a88d5c4@endymion.delvare>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 7 Sep 2022 17:52:10 +0300
-Message-ID: <CAHp75VdzgWfQ=7nTvYmuxWMaPH0weF=Bzj+AEqsEhyQNeH1XHg@mail.gmail.com>
-Subject: Re: [PATCH] firmware: dmi: Fortify entry point length checks
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 11:30 AM Jean Delvare <jdelvare@suse.de> wrote:
->
-> Ensure that the SMBIOS entry point is long enough to include all the
-> fields we need. Otherwise it is pointless to even attempt to verify
-> its checksum.
->
-> Also fix the maximum length check, which is technically 32, not 31.
-> It does not matter in practice as the only valid values are 31 (for
-> SMBIOS 2.x)
+Hi All,
 
-"NOTE: This value was incorrectly stated in version 2.1 of this specification as
-1Eh. Because of this, there might be version 2.1 implementations that
-use either the 1Eh or the 1Fh value, but version 2.2 or later
-implementations must use the 1Fh value."
+This series is just some refactoring in preparation to add FF-A v1.1
+support. It doesn't have any memory layout or notification changes
+supported in v1.1 yet.
 
-> and 24 (for SMBIOS 3.x), but let's still have the check
-> right in case new fields are added to either structure in the future.
+Regards,
+Sudeep
 
-Thanks, makes sense to me. But probably needs more work :-)
+v2[2]->v3:
+	- Fixed the logic to set 32bit mode which was wrong.
+	- Ensured that we advance each partition info size by returned
+	  size even if the size is greater than the partition_info structure,
+	  we will still just copy the right size.
+
+v1[1]->v2[2]:
+	- Merged dropping of ffa_ops in optee_ffa structure and using
+	  ffa_dev->ops into single patch
+	- Added separate patch(didn't fit any patch strictly to fit in)
+	  to rename ffa_dev_ops as ffa_ops as suggested by Sumit
+	- Fixed some minor comments, handling size > structure size in
+	  partition_info_get and added extra parameter to ffa_features
+	  to get both possible output/interface properties.
+
+[1] https://lore.kernel.org/all/20220830100700.344594-1-sudeep.holla@arm.com
+[2] https://lore.kernel.org/all/20220902124032.788488-1-sudeep.holla@arm.com
+
+Sudeep Holla (10):
+  firmware: arm_ffa: Add pointer to the ffa_dev_ops in struct ffa_dev
+  tee: optee: Drop ffa_ops in optee_ffa structure using ffa_dev->ops directly
+  firmware: arm_ffa: Remove ffa_dev_ops_get()
+  firmware: arm_ffa: Add support for querying FF-A features
+  firmware: arm_ffa: Use FFA_FEATURES to detect if native versions are supported
+  firmware: arm_ffa: Make memory apis ffa_device independent
+  firmware: arm_ffa: Rename ffa_dev_ops as ffa_ops
+  firmware: arm_ffa: Add v1.1 get_partition_info support
+  firmware: arm_ffa: Set up 32bit execution mode flag using partiion property
+  firmware: arm_ffa: Split up ffa_ops into info, message and memory operations
+
+ drivers/firmware/arm_ffa/bus.c    |   4 +-
+ drivers/firmware/arm_ffa/driver.c | 131 +++++++++++++++++++++++-------
+ drivers/tee/optee/ffa_abi.c       |  46 +++++------
+ drivers/tee/optee/optee_private.h |   1 -
+ include/linux/arm_ffa.h           |  36 +++++---
+ 5 files changed, 151 insertions(+), 67 deletions(-)
 
 --
-With Best Regards,
-Andy Shevchenko
+2.37.3
+

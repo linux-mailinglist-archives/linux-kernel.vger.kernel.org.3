@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDF65AFC5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1565AFC66
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiIGG2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
+        id S229912AbiIGG3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGG2L (ORCPT
+        with ESMTP id S229830AbiIGG27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:28:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24078C00E;
-        Tue,  6 Sep 2022 23:28:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E3CEB81B6E;
-        Wed,  7 Sep 2022 06:28:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C147C433C1;
-        Wed,  7 Sep 2022 06:28:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662532088;
-        bh=KWq6t8sirh/Dx0hC8hVA1xMEpvcF9InY07/Sx6GZjVo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dk+troH/mm8ytfmLXVq5/BK3riMgMYefZY+iPzzRvWAiOMuH6Mnumq3C+YFVDi/CN
-         buYa8yU5PV7Ucx4sYMd9eE1KA/s8CEVqxWB+3DH1OtBHXn5uI/DFbDI46pvIK32+DW
-         sdVV4JussUV6VrdQgwLzO7mDSxuTh0pSW+O0VBUbfsgC7RU7rSd3QEKfiWc78bkdwE
-         CvBG7ICYq9+eIqZf2S5LQjSNH0/fsw7SWyy3dAgEmjUXul3NIXS+Lo3eRGrr6qqX3y
-         bChq43AknonEka1tGQ6Jvi5G+q2FokK9HmVVhDu6So/hrsXkKoJCTg6jw5QgmkhFzx
-         TPFFo8m3oBuyg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oVoXj-00074e-B3; Wed, 07 Sep 2022 08:28:11 +0200
-Date:   Wed, 7 Sep 2022 08:28:11 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dianders@chromium.org
-Subject: Re: [PATCH v2] regulator: dt-bindings: qcom,rpmh: Indicate
- regulator-allow-set-load dependencies
-Message-ID: <Yxg5+9lkHnNsI30j@hovoldconsulting.com>
-References: <20220906201959.69920-1-ahalaney@redhat.com>
+        Wed, 7 Sep 2022 02:28:59 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903139C2F1;
+        Tue,  6 Sep 2022 23:28:57 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMshs0DDzznVR3;
+        Wed,  7 Sep 2022 14:26:21 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 14:28:54 +0800
+Received: from localhost.localdomain (10.67.165.2) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 14:28:54 +0800
+From:   Haoyue Xu <xuhaoyue1@hisilicon.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xuhaoyue1@hisilicon.com>, <pabeni@redhat.com>,
+        <edumazet@google.com>, <huangdaode@huawei.com>,
+        <liangwenpeng@huawei.com>, <liyangyang20@huawei.com>
+Subject: [PATCH net-next 2/3] net: amd: Correct spelling errors
+Date:   Wed, 7 Sep 2022 14:28:11 +0800
+Message-ID: <20220907062812.2259309-3-xuhaoyue1@hisilicon.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20220907062812.2259309-1-xuhaoyue1@hisilicon.com>
+References: <20220907062812.2259309-1-xuhaoyue1@hisilicon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906201959.69920-1-ahalaney@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.2]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:19:59PM -0500, Andrew Halaney wrote:
-> For RPMH regulators it doesn't make sense to indicate
-> regulator-allow-set-load without saying what modes you can switch to,
-> so be sure to indicate a dependency on regulator-allowed-modes.
-> 
-> With this in place devicetree validation can catch issues like this:
-> 
->     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
->             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-> 
-> Suggested-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+From: Guofeng Yue <yueguofeng@hisilicon.com>
 
-Looks good to me.
+Find some spelling errors:
 
-Reviewed-by: Johan Hovold <johan+kernel@kernel.org>
+	interupts --> interrupts
+	lenth --> length
+	stoped --> stopped
+	contoller --> controller
 
-> ---
-> 
-> v1: https://lore.kernel.org/linux-arm-msm/20220902185148.635292-1-ahalaney@redhat.com/
-> Changes since v1:
->   - Dropped first two patches in the series as they were user error
->     (thanks Krzysztof for highlighting this!)
->   - No change in the remaining patch
-> 
-> Krzysztof also asked if this patch in particular should apply to other
-> regulators, which I think it should for those regulator's who implement
-> set_mode(). Unfortunately I don't know of a good way to get that
-> information in order to apply it at a broader scope for devicetree
-> regulator validation. At least with this in place RPMH users can get
-> better coverage... if someone has suggestions for how to broaden the
-> scope I'm all ears!
+Signed-off-by: Guofeng Yue <yueguofeng@hisilicon.com>
+Signed-off-by: Haoyue Xu <xuhaoyue1@hisilicon.com>
+---
+ drivers/net/ethernet/amd/amd8111e.c | 6 +++---
+ drivers/net/ethernet/amd/amd8111e.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I guess the commit message could have tried to capture that is feature
-of the hardware (as Linux implementation details shouldn't impact the
-binding). And apparently there are regulators that do not need this
-(e.g. RPM).
+diff --git a/drivers/net/ethernet/amd/amd8111e.c b/drivers/net/ethernet/amd/amd8111e.c
+index aaa527dc1b6f..7b4d9bbb079c 100644
+--- a/drivers/net/ethernet/amd/amd8111e.c
++++ b/drivers/net/ethernet/amd/amd8111e.c
+@@ -43,7 +43,7 @@ Revision History:
+ 	3.0.4 12/09/2003
+ 	 1. Added set_mac_address routine for bonding driver support.
+ 	 2. Tested the driver for bonding support
+-	 3. Bug fix: Fixed mismach in actual receive buffer lenth and lenth
++	 3. Bug fix: Fixed mismach in actual receive buffer length and length
+ 	    indicated to the h/w.
+ 	 4. Modified amd8111e_rx() routine to receive all the received packets
+ 	    in the first interrupt.
+@@ -1109,7 +1109,7 @@ static irqreturn_t amd8111e_interrupt(int irq, void *dev_id)
+ 	/* Check if Receive Interrupt has occurred. */
+ 	if (intr0 & RINT0) {
+ 		if (napi_schedule_prep(&lp->napi)) {
+-			/* Disable receive interupts */
++			/* Disable receive interrupts */
+ 			writel(RINTEN0, mmio + INTEN0);
+ 			/* Schedule a polling routine */
+ 			__napi_schedule(&lp->napi);
+@@ -1554,7 +1554,7 @@ static int amd8111e_enable_magicpkt(struct amd8111e_priv *lp)
+ static int amd8111e_enable_link_change(struct amd8111e_priv *lp)
+ {
+ 
+-	/* Adapter is already stoped/suspended/interrupt-disabled */
++	/* Adapter is already stopped/suspended/interrupt-disabled */
+ 	writel(VAL0 | LCMODE_SW, lp->mmio + CMD7);
+ 
+ 	/* To eliminate PCI posting bug */
+diff --git a/drivers/net/ethernet/amd/amd8111e.h b/drivers/net/ethernet/amd/amd8111e.h
+index 37da79da5f5e..9d570adb295b 100644
+--- a/drivers/net/ethernet/amd/amd8111e.h
++++ b/drivers/net/ethernet/amd/amd8111e.h
+@@ -600,7 +600,7 @@ typedef enum {
+ #define CSTATE  1
+ #define SSTATE  2
+ 
+-/* Assume contoller gets data 10 times the maximum processing time */
++/* Assume controller gets data 10 times the maximum processing time */
+ #define  REPEAT_CNT			10
+ 
+ /* amd8111e descriptor flag definitions */
+-- 
+2.30.0
 
-Johan

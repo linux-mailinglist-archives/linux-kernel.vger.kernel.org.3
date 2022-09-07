@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397075B04E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629125B04F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiIGNNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S229804AbiIGNP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiIGNM6 (ORCPT
+        with ESMTP id S229547AbiIGNO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:12:58 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E147E314;
-        Wed,  7 Sep 2022 06:12:52 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id t14so13045987wrx.8;
-        Wed, 07 Sep 2022 06:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=XhHHfhBS4JEZS5T4Cqsky8UODYiFkR3zFwNbdfWOgRM=;
-        b=cNPthfE851d7tnORcRK51E1iI5AqPMQEo0UIapDJ1GUAaS8Z4ZppZZ7rLg5TOY1tuS
-         ZQK4JcssPZtZ+Kdff2MXU4oAn9W8OdKmOU47c4ciwwvc8VP5azQaVUJAe1PXJ4JAeNVJ
-         NpWGMfDVf9SkB5y1Jf7d3M50H+FHDReUXNXtfON70iPH30Jr0e525XQLwBypbmfGG9kB
-         DcCNrQwNETpxUHoco8WOnCDHLrYOt5wx2EdQUnsyo9+QtJbnCV5yED/uhhNjO0+/fHz8
-         cfgTeIlHOoCh9mMrKmIIkNc6du8op7r5JLownxHSaCuG26MzZ76XmnF4rXSsJlPTGjPh
-         c39w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=XhHHfhBS4JEZS5T4Cqsky8UODYiFkR3zFwNbdfWOgRM=;
-        b=AALWwaLBh/kYJ2zt2atQ6EYKBaXmK/B3z6IvOhNA/Bmbx15EuP5oDr3KkKEcB5wKE2
-         CzMiTDZhvIXx1/LEjCQpmTYIOA7yqtTqTTuBhOPjuRKWsk8OU2sGvNeUTzL9BBMJkJAQ
-         UcHdyb6+p8C3+6hcIF5iozConXJut5piE5CnCPV60M0FKjWXHxr4PMQZKfjpX7et1VjL
-         h7MbXmQdukHoLQ5LUHFGhqBChD5UuGwfM/qYOHwwB6ubAJP0SKoa80mmyBQa5Nz9j+PX
-         gfx1l5VUR52QCVCAt0LISWh3jpKM/azJaPe5O9eywjAPcHk/EdI9j/a5j/xBH9MvSFyM
-         /0HA==
-X-Gm-Message-State: ACgBeo1IbkYFp6lSmVoaAKz0rLldZpwi4U+jQue0dEHxADwZakaSh+pQ
-        E5nGty56JDzvChKmAEKpHq6mbMt66vU=
-X-Google-Smtp-Source: AA6agR4RcR+HDYfOlSTd0KPvM/Pn5D6JH1gw1MsiVX4ajkgr5c2JDjkO5ziK3Y8MEQ6KyTtY0oTSDQ==
-X-Received: by 2002:adf:dbc4:0:b0:225:333d:8404 with SMTP id e4-20020adfdbc4000000b00225333d8404mr2215948wrj.671.1662556371220;
-        Wed, 07 Sep 2022 06:12:51 -0700 (PDT)
-Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
-        by smtp.gmail.com with ESMTPSA id d11-20020adffd8b000000b00228df23bd51sm3975325wrr.82.2022.09.07.06.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 06:12:50 -0700 (PDT)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Romain Perier <romain.perier@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] ARM: dts: mstar: Add pwm device node to infinity2m
-Date:   Wed,  7 Sep 2022 15:12:41 +0200
-Message-Id: <20220907131241.31941-6-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220907131241.31941-1-romain.perier@gmail.com>
-References: <20220907131241.31941-1-romain.perier@gmail.com>
+        Wed, 7 Sep 2022 09:14:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B728F220F4;
+        Wed,  7 Sep 2022 06:14:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 969DE33918;
+        Wed,  7 Sep 2022 13:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662556473; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=20S04/GX8fywwekR2znBquPlrtRvUVSM48fzA8fN7X0=;
+        b=s/NeutT0fE41mkTGWOyLceqk+H60xyNz1wa1P9x2ardCP6i1t618JoHZdrdQPeq5bknFwJ
+        v9BvO9PHj9S6qSD3Ki3XXPxtfrcr5jqRV2fKPalLp6y16rgXf8rAeDAZStrZdGXO9eIu8o
+        /46r3WEQFjXPO5YpXxDSzAvQJHKTE4E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662556473;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=20S04/GX8fywwekR2znBquPlrtRvUVSM48fzA8fN7X0=;
+        b=NG/w5m6OvFBTgTihOwzRhyC23qEayQlUVP+qG3u8ScV6uuznfD5+S7UYAtwEVsFBdwAxsG
+        qPVYtuY+JEblQeCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7318013486;
+        Wed,  7 Sep 2022 13:14:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TC62GzmZGGMAFwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 07 Sep 2022 13:14:33 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id A4502A067E; Wed,  7 Sep 2022 15:14:32 +0200 (CEST)
+Date:   Wed, 7 Sep 2022 15:14:32 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Mike Galbraith <efault@gmx.de>
+Cc:     Jan Kara <jack@suse.cz>, LKML <linux-kernel@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-ext4@vger.kernel.org
+Subject: Re: 307af6c879377 "mbcache: automatically delete entries from cache
+ on freeing" ==> PREEMPT_RT grumble
+Message-ID: <20220907131432.4i3bh3xt6egesv7g@quack3>
+References: <9f593b8ac1b731cbbf92dc1c7b497b668752b325.camel@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f593b8ac1b731cbbf92dc1c7b497b668752b325.camel@gmx.de>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds definition of the pwm device node, infinity2m has its own
-hardware variant, so use the one for ssd20xd.
+Hi Mike!
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
----
- arch/arm/boot/dts/mstar-infinity2m.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+[added ext4 list to CC]
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m.dtsi b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-index 1b485efd7156..70561e512483 100644
---- a/arch/arm/boot/dts/mstar-infinity2m.dtsi
-+++ b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-@@ -32,6 +32,14 @@ cpu1: cpu@1 {
- };
- 
- &riu {
-+	pwm: pwm@3400 {
-+		compatible = "mstar,ssd20xd-pwm";
-+		reg = <0x3400 0x400>;
-+		#pwm-cells = <2>;
-+		clocks = <&xtal_div2>;
-+		status = "disabled";
-+	};
-+
- 	smpctrl: smpctrl@204000 {
- 		reg = <0x204000 0x200>;
- 		status = "disabled";
+On Tue 06-09-22 18:21:37, Mike Galbraith wrote:
+> diff --git a/fs/mbcache.c b/fs/mbcache.c
+> index d1ebb5df2856..96f1d49d30a5 100644
+> --- a/fs/mbcache.c
+> +++ b/fs/mbcache.c
+> @ -106,21 +106,28 @@ int mb_cache_entry_create(struct mb_cache *cache, gfp_t mask, u32 key,
+>  		}
+>  	}
+>  	hlist_bl_add_head(&entry->e_hash_list, head);
+> -	hlist_bl_unlock(head);
+> -
+> +	/*
+> +	 * Add entry to LRU list before it can be found by
+> +	 * mb_cache_entry_delete() to avoid races
+> +	 */
+>  	spin_lock(&cache->c_list_lock);
+>  	list_add_tail(&entry->e_list, &cache->c_list);
+> -	/* Grab ref for LRU list */
+> -	atomic_inc(&entry->e_refcnt);
+>  	cache->c_entry_count++;
+>  	spin_unlock(&cache->c_list_lock);
+> +	hlist_bl_unlock(head);
+> 
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL(mb_cache_entry_create);
+> 
+> The above movement of hlist_bl_unlock() is a problem for RT wrt both
+> taking and releasing of ->c_list_lock, it becoming an rtmutex in RT and
+> hlist_bl_unlock() taking a preemption blocking bit spinlock.
+> 
+> Is that scope increase necessary?  If so, looks like ->c_list_lock
+> could probably become a raw_spinlock_t without anyone noticing.
+
+Well, it was an easy solution but there's relatively simple workaround that
+should remove the need of nesting. I'll send a patch.
+
+								Honza
 -- 
-2.35.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

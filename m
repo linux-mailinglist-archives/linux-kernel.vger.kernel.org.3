@@ -2,158 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EFE5B0574
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386C65B0513
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiIGNjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S229464AbiIGNYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiIGNib (ORCPT
+        with ESMTP id S229508AbiIGNYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:38:31 -0400
-Received: from es400ra01.iit.it (mx.iit.it [90.147.26.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD609E89E;
-        Wed,  7 Sep 2022 06:38:13 -0700 (PDT)
-Received: from es400ra01.iit.it (127.0.0.1) id h32fbk0171sr; Wed, 7 Sep 2022 15:22:36 +0200 (envelope-from <prvs=1249fcc2cf=Andrea.Merello@iit.it>)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iit.it;
-        s=mx; i=@iit.it; h=Received:Received:From:To:CC:Subject:Date:
-        Message-ID:In-Reply-To:References:MIME-Version:
-        Content-Transfer-Encoding:Content-Type; bh=I+LGcW2HqkjENIvmhYhT+
-        mN20z8eNbCZUrR5lhbl6YY=; b=gAQ/f3TYVFclOt99IV0w/GnwRqNa14BeUGQMV
-        4L+JWX137mwHC+3JdQzVg64/fVyIab2L4LtyzbDPGJuCKbh7TXdd3bmEfBaUhoMn
-        LM9LT1sX6tCcaB0qZSOZPYlq8DZ6T4ZKjUeep5NILtpPUvAeG96jMIvyrHi1Czui
-        o8juCs=
-Received: from mail.iit.it ([10.255.8.186])
-        by es400ra01.iit.it ([172.31.0.241]) (SonicWall 10.0.16.7295)
-        with ESMTPS (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256)
-        id o202209071322360176984-11; Wed, 07 Sep 2022 15:22:36 +0200
-Received: from poker.iit.local (10.10.20.64) by iitmxwge020.iit.local
- (10.255.8.186) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2375.31; Wed, 7 Sep
- 2022 15:22:35 +0200
-From:   <andrea.merello@iit.it>
-To:     <jic23@kernel.org>, <mchehab+huawei@kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <lars@metafoo.de>, <robh+dt@kernel.org>,
-        <andy.shevchenko@gmail.com>, <matt.ranostay@konsulko.com>,
-        <ardeleanalex@gmail.com>, <jacopo@jmondi.org>,
-        <andrea.merello@gmail.com>, <bagasdotme@gmail.com>,
-        Andrea Merello <andrea.merello@iit.it>
-Subject: [v7 14/14] docs: iio: add documentation for BNO055 driver
-Date:   Wed, 7 Sep 2022 15:22:05 +0200
-Message-ID: <20220907132205.28021-15-andrea.merello@iit.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220907132205.28021-1-andrea.merello@iit.it>
-References: <20220907132205.28021-1-andrea.merello@iit.it>
+        Wed, 7 Sep 2022 09:24:49 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD7237CE;
+        Wed,  7 Sep 2022 06:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662557088; x=1694093088;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=ppW62jt/b7nHcTDLtiv8VoBW7ZogwKQdLz3habbWlYY=;
+  b=QGzKS9sNIq9qFT5Fku7/FPm54gUaT+IoNYvZ/kzvf/JQM6uyP3kqZsTT
+   mXbFlXwyIA7hojHNzJwoy5CCfbpoLh8LoUXeef0OHNqFr50UjUrxay+zp
+   cjzgql6+DLmJSlXakhe24zs0awT4D5mrmUuiOt5JefI5GbOnDybghvWsu
+   KabDrRhHIF56GF7iZOfO2+DXdoL3/Yvfeg+WajNHo/qmZXJxKzHIQXkxl
+   oad3q8iYLe2wFekQqDwILhPjkxXp66hnDc0vL2O1LCf6e+mYE3SIQEBvO
+   h3ZuT7caCx8cqtTi5czxCOMPL9kVs5G1H2/Rx7cFAz1kgQrKqntQ6hSnd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="277261972"
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="277261972"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:24:48 -0700
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="676183385"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.27])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:24:45 -0700
+Message-ID: <0deaaf68-c92c-0fbc-4c5f-4078d4f1f15a@intel.com>
+Date:   Wed, 7 Sep 2022 16:24:41 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.10.20.64]
-X-ClientProxiedBy: IITMXWGE021.iit.local (10.255.8.187) To
- iitmxwge020.iit.local (10.255.8.186)
-X-Mlf-DSE-Version: 6948
-X-Mlf-Rules-Version: s20220810181453; ds20200715013501;
-        di20220831211829; ri20160318003319; fs20220901203539
-X-Mlf-Smartnet-Version: 20210917223710
-X-Mlf-Envelope-From: Andrea.Merello@iit.it
-X-Mlf-Version: 10.0.16.7295
-X-Mlf-License: BSV_C_AP_T_R
-X-Mlf-UniqueId: o202209071322360176984
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 2/6] perf test: Use a test program in perf record tests
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+References: <20220907064645.1197894-1-namhyung@kernel.org>
+ <20220907064645.1197894-3-namhyung@kernel.org>
+ <a2d9f1f2-cf8b-4ef6-7114-52e5bdf22e70@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <a2d9f1f2-cf8b-4ef6-7114-52e5bdf22e70@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Merello <andrea.merello@iit.it>
+On 7/09/22 16:16, Adrian Hunter wrote:
+> On 7/09/22 09:46, Namhyung Kim wrote:
+>> If the system has cc it could build a test program with two threads
+>> and then use it for more detailed testing.  Also it adds initial delay
+>> of 3ms to profile a multi-threaded target.  This change make the test
+>> failing but that's what we want to check for now.
+>>
+>> If cc is not found, it falls back to use the default value 'true'.
+>>
+>> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>> ---
+>>  tools/perf/tests/shell/record.sh | 58 +++++++++++++++++++++++++++++---
+>>  1 file changed, 54 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+>> index 40b087bfdb76..cea3c7b7e2cd 100755
+>> --- a/tools/perf/tests/shell/record.sh
+>> +++ b/tools/perf/tests/shell/record.sh
+>> @@ -6,10 +6,18 @@ set -e
+>>  
+>>  err=0
+>>  perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+>> +testprog=$(mktemp /tmp/__perf_test.prog.XXXXXX)
+>> +testsym="test_loop"
+>> +testopt="-D 3"
+>>  
+>>  cleanup() {
+>>    rm -f ${perfdata}
+>>    rm -f ${perfdata}.old
+>> +
+>> +  if [ "${testprog}" != "true" ]; then
+>> +    rm -f ${testprog}
+>> +  fi
+>> +
+>>    trap - exit term int
+>>  }
+>>  
+>> @@ -19,9 +27,49 @@ trap_cleanup() {
+>>  }
+>>  trap trap_cleanup exit term int
+>>  
+>> +build_test_program() {
+>> +  if ! [ -x "$(command -v cc)" ]; then
+>> +    # No CC found. Fall back to 'true'
+>> +    testprog=true
+>> +    testsym=true
+>> +    testopt=''
+>> +    return
+>> +  fi
+>> +
+>> +  echo "Build a test program"
+>> +  cat <<EOF | cc -o ${testprog} -xc - -pthread
+>> +#include <stdio.h>
+>> +#include <unistd.h>
+>> +#include <pthread.h>
+>> +
+>> +void test_loop(void) {
+>> +  volatile int count = 1000000;
+>> +
+>> +  // wait for perf record
+>> +  usleep(5000);
+>> +
+>> +  while (count--)
+>> +    continue;
+>> +}
+>> +
+>> +void *thfunc(void *arg) {
+>> +  test_loop();
+>> +  return NULL;
+>> +}
+>> +
+>> +int main(void) {
+>> +  pthread_t th;
+>> +  pthread_create(&th, NULL, thfunc, NULL);
+>> +  test_loop();
+>> +  pthread_join(th, NULL);
+>> +  return 0;
+>> +}
+>> +EOF
+>> +}
+>> +
+>>  test_per_thread() {
+>>    echo "Basic --per-thread mode test"
+>> -  if ! perf record -o /dev/null --quiet true 2> /dev/null
+>> +  if ! perf record -o /dev/null --quiet ${testprog} 2> /dev/null
+>>    then
+>>      echo "Per-thread record [Skipped event not supported]"
+>>      if [ $err -ne 1 ]
+>> @@ -30,13 +78,13 @@ test_per_thread() {
+>>      fi
+>>      return
+>>    fi
+>> -  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
+>> +  if ! perf record --per-thread ${testopt} -o ${perfdata} ${testprog} 2> /dev/null
+>>    then
+>>      echo "Per-thread record [Failed record]"
+>>      err=1
+>>      return
+>>    fi
+>> -  if ! perf report -i ${perfdata} -q | egrep -q true
+>> +  if ! perf report -i ${perfdata} -q | egrep -q ${testsym}
+>>    then
+>>      echo "Per-thread record [Failed missing output]"
+>>      err=1
+>> @@ -62,7 +110,7 @@ test_register_capture() {
+>>      return
+>>    fi
+>>    if ! perf record -o - --intr-regs=di,r8,dx,cx -e cpu/br_inst_retired.near_call/p \
+>> -    -c 1000 --per-thread true 2> /dev/null \
+>> +    -c 1000 --per-thread ${testopt} ${testprog} 2> /dev/null \
+>>      | perf script -F ip,sym,iregs -i - 2> /dev/null \
+> 
+> With the kernel patch:
+> 
+> https://lore.kernel.org/lkml/20220711180706.3418612-1-kan.liang@linux.intel.com/
+> 
+> I get:
+> 
+> Samples for 'dummy:HG' event do not have IREGS attribute set. Cannot print 'iregs' field.
 
-The bno055 driver is rather complex and have some oddities and not-obvious
-things that worth to document (e.g. calibration files).
+We seem to need:
 
-This patch also contains this [0] fix squashed in.
 
-[0] https://lore.kernel.org/lkml/20220704034041.15448-1-bagasdotme@gmail.com/
-
-Signed-off-by: Andrea Merello <andrea.merello@iit.it>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
- Documentation/iio/bno055.rst | 51 ++++++++++++++++++++++++++++++++++++
- Documentation/iio/index.rst  |  2 ++
- 2 files changed, 53 insertions(+)
- create mode 100644 Documentation/iio/bno055.rst
-
-diff --git a/Documentation/iio/bno055.rst b/Documentation/iio/bno055.rst
-new file mode 100644
-index 000000000000..9a489a79d8f5
---- /dev/null
-+++ b/Documentation/iio/bno055.rst
-@@ -0,0 +1,51 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==============================
-+BNO055 driver
-+==============================
-+
-+1. Overview
-+===========
-+
-+This driver supports Bosch BNO055 IMUs (on both serial and I2C busses).
-+
-+Accelerometer, magnetometer and gyroscope measures are always provided.
-+When "fusion_enable" sysfs attribute is set to 1, orientation (both Euler
-+angles and quaternion), linear velocity and gravity vector are also
-+provided, but some sensor settings (e.g. low pass filtering and range)
-+became locked (the IMU firmware controls them).
-+
-+This driver supports also IIO buffers.
-+
-+2. Calibration
-+==============
-+
-+The IMU continuously performs an autocalibration procedure if (and only if)
-+operating in fusion mode. The magnetometer autocalibration can however be
-+disabled writing 0 in the sysfs in_magn_calibration_fast_enable attribute.
-+
-+The driver provides access to autocalibration flags (i.e. you can known if
-+the IMU has successfully autocalibrated) and to the calibration data blob.
-+
-+The user can save this blob in a firmware file (i.e. in /lib/firmware) that
-+the driver looks for at probe time. If found, then the IMU is initialized
-+with this calibration data. This saves the user from performing the
-+calibration procedure every time (which consist of moving the IMU in
-+various way).
-+
-+The driver looks for calibration data file using two different names: first
-+a file whose name is suffixed with the IMU unique ID (exposed in sysfs as
-+serial_number) is searched for; this is useful when there is more than one
-+IMU instance. If this file is not found, then a "generic" calibration file
-+is searched for (which can be used when only one IMU is present, without
-+struggling with fancy names, that change on each device).
-+
-+Valid calibration file names would be e.g.
-+ bno055-caldata-0e7c26a33541515120204a35342b04ff.dat
-+ bno055-caldata.dat
-+
-+In non-fusion mode the IIO 'offset' attributes provide access to the
-+offsets from calibration data (if any), so that the user can apply them to
-+the accel, angvel and magn IIO attributes. In fusion mode they are not
-+needed (the IMU firmware internally applies those corrections) and they
-+read as zero.
-diff --git a/Documentation/iio/index.rst b/Documentation/iio/index.rst
-index 58b7a4ebac51..1b7292c58cd0 100644
---- a/Documentation/iio/index.rst
-+++ b/Documentation/iio/index.rst
-@@ -10,3 +10,5 @@ Industrial I/O
-    iio_configfs
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 13580a9c50b8d..959291903936a 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -411,7 +411,7 @@ static int evsel__do_check_stype(struct evsel *evsel, u64 sample_type, const cha
+       int type = output_type(attr->type);
+       const char *evname;
  
-    ep93xx_adc
-+
-+   bno055
--- 
-2.17.1
+-       if (attr->sample_type & sample_type)
++       if (evsel__is_dummy_event(evsel) || attr->sample_type & sample_type)
+               return 0;
+ 
+       if (output[type].user_set_fields & field) {
+diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+
+
+
+
+
+> 
+>>      | egrep -q "DI:"
+>>    then
+>> @@ -73,6 +121,8 @@ test_register_capture() {
+>>    echo "Register capture test [Success]"
+>>  }
+>>  
+>> +build_test_program
+>> +
+>>  test_per_thread
+>>  test_register_capture
+>>  
+> 
 

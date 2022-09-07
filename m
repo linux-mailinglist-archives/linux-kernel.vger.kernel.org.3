@@ -2,211 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCFD5B0D21
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917BB5B0D23
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiIGTVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S229603AbiIGTXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiIGTVc (ORCPT
+        with ESMTP id S229490AbiIGTXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:21:32 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A104C00C8;
-        Wed,  7 Sep 2022 12:21:30 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id AEBCB3200313;
-        Wed,  7 Sep 2022 15:21:25 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Wed, 07 Sep 2022 15:21:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1662578485; x=1662664885; bh=EL
-        eTSyZ4zS0CBGPjQv/fZw6BU0AoLOYg41xHNc0d8ug=; b=VO3xqacvYeGbmBrro6
-        LigXmEI2UuSPXqWSPRAsdZNiqFE2u56ms9g86HZ4Lzbh8nXVpT8wHrO0vtv5qfk7
-        WGJRHuFptgivh1Er2O83epogU2B3N+n7xW/ZnVQYSIYSVumhXgZfmwmsjWpZ57AP
-        V1O3SYoakxkD4KyLuvHZThrgJpL5jirCBcibIqPNCeetmLrsMTLfkqfaYdijJcc3
-        pgK3tqbKIJem2bCoruC0lL7Lj5WK8Zsh1EcOPX1oztZwYRx+xfA3UUVt5pudN8zu
-        UyQqyTXI1oVKVpe0JEhTXw3HFRwd41O/zFuw0rNReYqyRFdheH2CtgoyL1kF/YJH
-        Ly6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662578485; x=1662664885; bh=ELeTSyZ4zS0CBGPjQv/fZw6BU0Ao
-        LOYg41xHNc0d8ug=; b=JuHAfxwxwCza2HmKYm4TMH116CNKDtQyFVBpgDf11z4E
-        EHRBlVgF5L9InrdUrFZKI+ouiIzvLxhM3C6kzQ05S9H06hnq5sx+YzPSgJCLOHaZ
-        LRgUna1HljdtWwtc0y2yZHeXvIsAig5pp617K6H697f9ZtZVwTVaFPHHbeB4iF9Z
-        KL4q7GzcaclYUXqnhugi3GNFrGKyBFY22aR+Xx9P4dB9WXRm+cr+utRbraW3eo8v
-        /mKHSI0PWO2iwdFV6Ho+OQUqs4DehTjL4haKMPGFe+qynhtN9rkxBoIj6ChPYNI6
-        USaWKpZuxOwcQLgHoWJb6bEiK3ABkjxkhujsrJT1WA==
-X-ME-Sender: <xms:M-8YYzyH_W0LY1pllZF-du9MwGaqox9TE23wyLu8UGWPbbf2SLiaLw>
-    <xme:M-8YY7SYuJcYz66oAnTG7-IOev7syFifw6kZAITV8v1ITrxMbYYiFI14EQCbMQiXi
-    5ZVPz4GRzUZY8i0QQg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgudefjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
-    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
-    frrghtthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefg
-    hfeiveeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:M-8YY9UUG0iUvcodQL8KqTiSumQj-kpnMEqCxaXd9voljlSVE30rjw>
-    <xmx:M-8YY9iofjdbz0hC-Aj5SoRVor_JfKTLK77nkQiSfy3UwrpY0FV2Tw>
-    <xmx:M-8YY1C4A6Birg4HlhsVmdMxHZZ8BOFrZ1wgE0rMZlzGHJeqe3bSPQ>
-    <xmx:Ne8YY9YtcPMkuAriURAAUjT5UOmsVzCgtOA6jnLN3xyNuWca0grfIA>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 60126A6007C; Wed,  7 Sep 2022 15:21:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <220ab728-ed5b-415d-ab15-47a7153e8e5c@www.fastmail.com>
-In-Reply-To: <CABBYNZLWc=2y0aVRc+_k_XzfJeEJkJ_ebaViqUybvaDY49p2_g@mail.gmail.com>
-References: <20220907170935.11757-1-sven@svenpeter.dev>
- <20220907170935.11757-4-sven@svenpeter.dev>
- <CABBYNZLWc=2y0aVRc+_k_XzfJeEJkJ_ebaViqUybvaDY49p2_g@mail.gmail.com>
-Date:   Wed, 07 Sep 2022 21:21:02 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>
-Cc:     "Marcel Holtmann" <marcel@holtmann.org>,
-        "Johan Hedberg" <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/5] Bluetooth: hci_event: Add quirk to ignore byte in LE
- Extended Adv Report
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 7 Sep 2022 15:23:08 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5292DBFEAC;
+        Wed,  7 Sep 2022 12:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Q60A7O2cwDRGmCCMAGlOcenDecqVyG/8lkpDi3chEWI=; b=AK1o1uQKOcjjQNe+I5TIpp6toP
+        lNTmMu/E2WkOyC0WcER+i3nprmeTaZYYPPtGvthpbnNxJeY+EM6E+v4JRyZIAoyrq/XmcBInJTxkc
+        cxkn+Pm8VOelRq7UIJOup6jDusS8jZTy5pIjnisk6AFE0TlijpEwkeWmqVnXll3zffrlrlBB39U7H
+        Z1KPMrCqwkgcnXcVBqgem3izDEssY4pHIN/bf90z2uzTHjLxUV/8aVibKe9FrDSs/CR73YpOdZgFN
+        N+LGOoWy374qjP5jA5DA3Y+3SO17VXKJH4VOyqBN9QgTt4vCeZXsrt5uS72o2FBuqe2sunJHGex9t
+        EG5O2iYg==;
+Received: from [38.44.74.92] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oW0da-00CtuV-Pc; Wed, 07 Sep 2022 21:23:02 +0200
+Date:   Wed, 7 Sep 2022 18:22:50 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Igor Torrente <igormtorrente@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: build failure of next-20220906 due to 396369d67549 ("drm: vkms:
+ Add support to the RGB565 format")
+Message-ID: <20220907192250.jfkpwaq54f2h7stf@mail.igalia.com>
+References: <YxducgSzR6/zyHD7@debian>
+ <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
+ <20220907170451.efhz62nkxybqxtaa@mail.igalia.com>
+ <CADVatmNodAV4PB5jjARnowu=VGbgMWgBYDWPuwJe-f1WFaS8ow@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ts6kcvki5ecf2bf5"
+Content-Disposition: inline
+In-Reply-To: <CADVatmNodAV4PB5jjARnowu=VGbgMWgBYDWPuwJe-f1WFaS8ow@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
 
-On Wed, Sep 7, 2022, at 20:49, Luiz Augusto von Dentz wrote:
-> Hi Sven,
->
-> On Wed, Sep 7, 2022 at 10:10 AM Sven Peter <sven@svenpeter.dev> wrote:
->>
->> Broadcom controllers present on Apple Silicon devices use the upper
->> 8 bits of the event type in the LE Extended Advertising Report for
->> the channel on which the frame has been received.
->> Add a quirk to drop the upper byte to ensure that the advertising
->> results are parsed correctly.
->>
->> The following excerpt from a btmon trace shows a report received on
->> channel 37 by these controllers:
->>
->> > HCI Event: LE Meta Event (0x3e) plen 55
->>       LE Extended Advertising Report (0x0d)
->>         Num reports: 1
->>         Entry 0
->>           Event type: 0x2513
->>             Props: 0x0013
->>               Connectable
->>               Scannable
->>               Use legacy advertising PDUs
->>             Data status: Complete
->>             Reserved (0x2500)
->>           Legacy PDU Type: Reserved (0x2513)
->>           Address type: Public (0x00)
->>           Address: XX:XX:XX:XX:XX:XX (Shenzhen Jingxun Software [...])
->>           Primary PHY: LE 1M
->>           Secondary PHY: No packets
->>           SID: no ADI field (0xff)
->>           TX power: 127 dBm
->>           RSSI: -76 dBm (0xb4)
->>           Periodic advertising interval: 0.00 msec (0x0000)
->>           Direct address type: Public (0x00)
->>           Direct address: 00:00:00:00:00:00 (OUI 00-00-00)
->>           Data length: 0x1d
->>           [...]
->>         Flags: 0x18
->>           Simultaneous LE and BR/EDR (Controller)
->>           Simultaneous LE and BR/EDR (Host)
->>         Company: Harman International Industries, Inc. (87)
->>           Data: [...]
->>         Service Data (UUID 0xfddf):
->>         Name (complete): JBL Flip 5
->>
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->> changes from v1:
->>   - adjusted the commit message a bit to make checkpatch happy
->>
->>  include/net/bluetooth/hci.h | 11 +++++++++++
->>  net/bluetooth/hci_event.c   |  4 ++++
->>  2 files changed, 15 insertions(+)
->>
->> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
->> index cf29511b25a8..62539c1a6bf2 100644
->> --- a/include/net/bluetooth/hci.h
->> +++ b/include/net/bluetooth/hci.h
->> @@ -263,6 +263,17 @@ enum {
->>          * during the hdev->setup vendor callback.
->>          */
->>         HCI_QUIRK_BROKEN_ENHANCED_SETUP_SYNC_CONN,
->> +
->> +       /*
->> +        * When this quirk is set, the upper 8 bits of the evt_type field of
->> +        * the LE Extended Advertising Report events are discarded.
->> +        * Some Broadcom controllers found in Apple machines put the channel
->> +        * the report was received on into these reserved bits.
->> +        *
->> +        * This quirk can be set before hci_register_dev is called or
->> +        * during the hdev->setup vendor callback.
->> +        */
->> +       HCI_QUIRK_FIXUP_LE_EXT_ADV_REPORT_EVT_TYPE,
->>  };
->>
->>  /* HCI device flags */
->> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
->> index 485c814cf44a..b50d05211f0d 100644
->> --- a/net/bluetooth/hci_event.c
->> +++ b/net/bluetooth/hci_event.c
->> @@ -6471,6 +6471,10 @@ static void hci_le_ext_adv_report_evt(struct hci_dev *hdev, void *data,
->>                         break;
->>
->>                 evt_type = __le16_to_cpu(info->type);
->> +               if (test_bit(HCI_QUIRK_FIXUP_LE_EXT_ADV_REPORT_EVT_TYPE,
->> +                            &hdev->quirks))
->> +                       evt_type &= 0xff;
->> +
->
-> Don't think we really need to quirk in order to mask the reserved
-> bits, according to the 5.3 spec only bits 0-6 are actually valid, that
-> said the usage of the upper byte is sort of non-standard so I don't
-> know what is broadcom/apple thinking that they could use like this,
-> instead this should probably be placed in a vendor command or even add
-> as part of the data itself with a vendor type.
-
-Sure, I'll just mask them unconditionally then for v3.
-
-I originally thought it was a strange bug in their firmware but
-then I found their btmon-like tool called "PacketLogger" which
-actually decodes that byte and shows it in the UI as "Channel".
-It seems to be intentional :/
+--ts6kcvki5ecf2bf5
+Content-Type: multipart/mixed; boundary="kga24fbvtfkl572e"
+Content-Disposition: inline
 
 
+--kga24fbvtfkl572e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best,
+On 09/07, Sudip Mukherjee wrote:
+> Hi Melissa,
+>=20
+> On Wed, Sep 7, 2022 at 6:05 PM Melissa Wen <mwen@igalia.com> wrote:
+> >
+> > On 09/06, Sudip Mukherjee wrote:
+> > > On Tue, Sep 6, 2022 at 4:59 PM Sudip Mukherjee (Codethink)
+> > > <sudipm.mukherjee@gmail.com> wrote:
+> > > >
+> > > > Hi All,
+> > > >
+> > > > The builds of next-20220906 fails for mips, xtensa and arm allmodco=
+nfig.
+> > > >
+> > > > The errors in mips and xtensa are:
+> > > >
+> > > > ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > > ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefine=
+d!
+> > > >
+> > > > The error in arm is:
+> > > >
+> > > > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] u=
+ndefined!
+> > > > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] un=
+defined!
+> > > >
+> > > >
+> > > > Trying to do a git bisect to find out the offending commit.
+> > >
+> > > git bisect points to 396369d67549 ("drm: vkms: Add support to the
+> > > RGB565 format")
+> >
+> > Hi Sudip,
+> >
+> > Thanks for pointing out this issue.
+> >
+> > I think we can replace the macros that are triggering those compilation
+> > error by functions in drm/drm_fixed.h that do the same calculation.
+> >
+> > I checked those errors when building for arm and i386 and the issues are
+> > fixed after applying the patch below. I appreciate if you can test.
+>=20
+> Sorry, could not test as the downloaded mbox is saying patch is
+> corrupted and could not be applied. Can you please attach the patch or
+> maybe send using git send-email.
 
-Sven
+Sorry, my bad. It's attached. Let me know if goes smoothly.
+
+Thanks again,
+
+Melissa
+>=20
+>=20
+> --=20
+> Regards
+> Sudip
+
+--kga24fbvtfkl572e
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-drm-vkms-fix-32-bits-compilation-error-by-replacing-.patch"
+Content-Transfer-Encoding: quoted-printable
+
+=46rom d52824abf4d3913dfd82a927f320ad4f670545d1 Mon Sep 17 00:00:00 2001
+=46rom: Melissa Wen <mwen@igalia.com>
+Date: Wed, 7 Sep 2022 15:14:31 -0100
+Subject: [PATCH] drm/vkms: fix 32 bits compilation error by replacing macros
+
+Replace vkms_formats macro for fixed-point operations with functions
+=66rom drm/drm_fixed.h to do the same job and fix 32-bits compilation
+errors.
+
+Fixes: a19c2ac9858 ("drm: vkms: Add support to the RGB565 format")
+Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Melissa Wen <mwen@igalia.com>
+---
+ drivers/gpu/drm/vkms/vkms_formats.c | 53 +++++++++++------------------
+ 1 file changed, 19 insertions(+), 34 deletions(-)
+
+diff --git a/drivers/gpu/drm/vkms/vkms_formats.c b/drivers/gpu/drm/vkms/vkm=
+s_formats.c
+index 300abb4d1dfe..ddcd3cfeeaac 100644
+--- a/drivers/gpu/drm/vkms/vkms_formats.c
++++ b/drivers/gpu/drm/vkms/vkms_formats.c
+@@ -1,27 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0+
+=20
+-#include <drm/drm_rect.h>
++#include <linux/kernel.h>
+ #include <linux/minmax.h>
++#include <drm/drm_rect.h>
++#include <drm/drm_fixed.h>
+=20
+ #include "vkms_formats.h"
+=20
+-/* The following macros help doing fixed point arithmetic. */
+-/*
+- * With Fixed-Point scale 15 we have 17 and 15 bits of integer and fractio=
+nal
+- * parts respectively.
+- *  | 0000 0000 0000 0000 0.000 0000 0000 0000 |
+- * 31                                          0
+- */
+-#define SHIFT 15
+-
+-#define INT_TO_FIXED(a) ((a) << SHIFT)
+-#define FIXED_MUL(a, b) ((s32)(((s64)(a) * (b)) >> SHIFT))
+-#define FIXED_DIV(a, b) ((s32)(((s64)(a) << SHIFT) / (b)))
+-/* This macro converts a fixed point number to int, and round half up it */
+-#define FIXED_TO_INT_ROUND(a) (((a) + (1 << (SHIFT - 1))) >> SHIFT)
+-#define INT_TO_FIXED_DIV(a, b) (FIXED_DIV(INT_TO_FIXED(a), INT_TO_FIXED(b)=
+))
+-#define INT_TO_FIXED_DIV(a, b) (FIXED_DIV(INT_TO_FIXED(a), INT_TO_FIXED(b)=
+))
+-
+ static size_t pixel_offset(const struct vkms_frame_info *frame_info, int x=
+, int y)
+ {
+ 	return frame_info->offset + (y * frame_info->pitch)
+@@ -137,19 +122,19 @@ static void RGB565_to_argb_u16(struct line_buffer *st=
+age_buffer,
+ 	int x_limit =3D min_t(size_t, drm_rect_width(&frame_info->dst),
+ 			       stage_buffer->n_pixels);
+=20
+-	s32 fp_rb_ratio =3D INT_TO_FIXED_DIV(65535, 31);
+-	s32 fp_g_ratio =3D INT_TO_FIXED_DIV(65535, 63);
++	s32 fp_rb_ratio =3D drm_fixp_div(drm_int2fixp(65535), 31);
++	s32 fp_g_ratio =3D drm_fixp_div(drm_int2fixp(65535), 63);
+=20
+ 	for (size_t x =3D 0; x < x_limit; x++, src_pixels++) {
+ 		u16 rgb_565 =3D le16_to_cpu(*src_pixels);
+-		s32 fp_r =3D INT_TO_FIXED((rgb_565 >> 11) & 0x1f);
+-		s32 fp_g =3D INT_TO_FIXED((rgb_565 >> 5) & 0x3f);
+-		s32 fp_b =3D INT_TO_FIXED(rgb_565 & 0x1f);
++		s32 fp_r =3D drm_int2fixp((rgb_565 >> 11) & 0x1f);
++		s32 fp_g =3D drm_int2fixp((rgb_565 >> 5) & 0x3f);
++		s32 fp_b =3D drm_int2fixp(rgb_565 & 0x1f);
+=20
+ 		out_pixels[x].a =3D (u16)0xffff;
+-		out_pixels[x].r =3D FIXED_TO_INT_ROUND(FIXED_MUL(fp_r, fp_rb_ratio));
+-		out_pixels[x].g =3D FIXED_TO_INT_ROUND(FIXED_MUL(fp_g, fp_g_ratio));
+-		out_pixels[x].b =3D FIXED_TO_INT_ROUND(FIXED_MUL(fp_b, fp_rb_ratio));
++		out_pixels[x].r =3D drm_fixp2int(drm_fixp_mul(fp_r, fp_rb_ratio));
++		out_pixels[x].g =3D drm_fixp2int(drm_fixp_mul(fp_g, fp_g_ratio));
++		out_pixels[x].b =3D drm_fixp2int(drm_fixp_mul(fp_b, fp_rb_ratio));
+ 	}
+ }
+=20
+@@ -248,17 +233,17 @@ static void argb_u16_to_RGB565(struct vkms_frame_info=
+ *frame_info,
+ 	int x_limit =3D min_t(size_t, drm_rect_width(&frame_info->dst),
+ 			    src_buffer->n_pixels);
+=20
+-	s32 fp_rb_ratio =3D INT_TO_FIXED_DIV(65535, 31);
+-	s32 fp_g_ratio =3D INT_TO_FIXED_DIV(65535, 63);
++	s32 fp_rb_ratio =3D drm_fixp_div(drm_int2fixp(65535), 31);
++	s32 fp_g_ratio =3D drm_fixp_div(drm_int2fixp(65535), 63);
+=20
+ 	for (size_t x =3D 0; x < x_limit; x++, dst_pixels++) {
+-		s32 fp_r =3D INT_TO_FIXED(in_pixels[x].r);
+-		s32 fp_g =3D INT_TO_FIXED(in_pixels[x].g);
+-		s32 fp_b =3D INT_TO_FIXED(in_pixels[x].b);
++		s32 fp_r =3D drm_int2fixp(in_pixels[x].r);
++		s32 fp_g =3D drm_int2fixp(in_pixels[x].g);
++		s32 fp_b =3D drm_int2fixp(in_pixels[x].b);
+=20
+-		u16 r =3D FIXED_TO_INT_ROUND(FIXED_DIV(fp_r, fp_rb_ratio));
+-		u16 g =3D FIXED_TO_INT_ROUND(FIXED_DIV(fp_g, fp_g_ratio));
+-		u16 b =3D FIXED_TO_INT_ROUND(FIXED_DIV(fp_b, fp_rb_ratio));
++		u16 r =3D drm_fixp2int(drm_fixp_div(fp_r, fp_rb_ratio));
++		u16 g =3D drm_fixp2int(drm_fixp_div(fp_g, fp_g_ratio));
++		u16 b =3D drm_fixp2int(drm_fixp_div(fp_b, fp_rb_ratio));
+=20
+ 		*dst_pixels =3D cpu_to_le16(r << 11 | g << 5 | b);
+ 	}
+--=20
+2.35.1
+
+
+--kga24fbvtfkl572e--
+
+--ts6kcvki5ecf2bf5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmMY74EACgkQwqF3j0dL
+ehx1kBAAoJIU5Tami+4a1gE3yNrKeqUEdxsBoaVs97kcDGqtKXSdzM3SU7k39QTw
+4+pnq20IOHQnCcZZqgs97WLKdNJCy8X5Qr9DB9qGQzE4sanecWmD44iP7unHRRVv
+J31pCGJLY9DSdmFR2T4zx06gV1y1JJ99HMx90IlgKYVERAn+O9bUP5iMEu/nPN+z
+gtgZQLj9ijvmyhiA4kkoQD488iM+Jkj2q4mmCIUvThjpWIodwWrocGtMLpzHtZmp
+zzDAJ3IFXuaeQbLpa83hBtiaJ4ucYYW+b0T5OaNj1qXFzoUZrZS79EPjl1gXLo31
+RfSQiMtHRFwQuHscZSZZYFVoLNCL62X800Eb5uCHYcUZ9Vp3fA7urMOPwH76Wrbg
+Bb1I8ErvuHg5HdP0pglchLS+4WzK91hP/+mQ/XImAo2Io2J22Ywdsgv0oUOBxqvq
+RTinKVQ0UlfZ3RsIGLp1FvztESsVzpZPEDD++UY7Jl5E82OWtPmEzM9AbfQxNf7m
++sHo9iXdXFzQ1lMh/lxnIRUxAfRsN8bK9F/aquzdDAgKNYr9+sp7Ld4Ui9GNtsVy
+SEOjX5DkSCZKxYtqT2uS7ArlivmGxYPC+o4XRnlHtOx1O49Zaxryvvdntdz+tsZn
+pSZCfUZfro5+IY+MM7VCGUVxMqCeIlGo45bRe3kjKFr3TwZSb2s=
+=5FWC
+-----END PGP SIGNATURE-----
+
+--ts6kcvki5ecf2bf5--

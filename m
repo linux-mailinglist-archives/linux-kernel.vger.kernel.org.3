@@ -2,242 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954085AFC1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BB55AFC2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiIGGEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S229638AbiIGGKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiIGGE3 (ORCPT
+        with ESMTP id S229478AbiIGGJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:04:29 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD227B2D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:04:25 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMs8V6mtCznVh2;
-        Wed,  7 Sep 2022 14:01:46 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 7 Sep 2022 14:04:20 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 7 Sep 2022 14:04:20 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        <linux-kernel@vger.kernel.org>, "Vlastimil Babka" <vbabka@suse.cz>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2 3/3] mm: add pageblock_aligned() macro
-Date:   Wed, 7 Sep 2022 14:08:44 +0800
-Message-ID: <20220907060844.126891-3-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220907060844.126891-1-wangkefeng.wang@huawei.com>
-References: <20220907060844.126891-1-wangkefeng.wang@huawei.com>
+        Wed, 7 Sep 2022 02:09:58 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D815013E31
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:09:50 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id r18so756240eja.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 23:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=aHLnGYDFyf002uP87dLW7T4DlcNjggm7WzOBlYUHesM=;
+        b=GYPPKJo4fKfKSPYIOWUbod1cc/fB+KpTWhNhVJlIsS4asZ3qAyGTIoDRxrFaQ+UyyI
+         0FiEqDMS1NzZMTZIrLLdHa9s+fneFH6yuumFd2SsH/JuHVlz7PgFwUDkM8Sy0CpQTeRv
+         uCw6qbXGUhD2sVDH57m5QgMxLAbjfet1rWc3o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=aHLnGYDFyf002uP87dLW7T4DlcNjggm7WzOBlYUHesM=;
+        b=rSFe84MHje3O8WKmW+AQV2lrNNkBsesBFaWHnOC4dHNUsG4QAQT+9pFChhutstLeuw
+         uQvbg8sDNYC0sddg+IMn1GQB0PpgMEZy4SXepMwdOUjh0GR0/2E2R4n6ST5BlQUg6WyP
+         XVEF3ZcNlIcO6Fts0f4X7vMI5HJtHmcQyDAx57QEo1kIN6g2y5eAUy91qD9x7KglYxls
+         9I2HkVYQTZY+7qzhF2mvSWR1xr/oOGOYdqV0TXZjCCm9CJMcGB25QDm06CDJtcgusX1z
+         qIqtTMhMyBCdwHgcCTs+EM/Vhd0KhSFTxb7DE1qZtgM2Y+oqUHdkDSx8cG9bttbAd9Ju
+         0RNw==
+X-Gm-Message-State: ACgBeo0rUND5PmcNNDymkqrAnNqugKVfQCI0hOv5+JDgBII2EteCSIML
+        3EfN/HN3OIj/IGdHWZUpIT/ivA==
+X-Google-Smtp-Source: AA6agR7J0T3fKKGB0sCAbHDAHkXdAkQ27Aw/uDDAPCl1dXFnwMheZyZKs981ydBswzyfqDEeWSdjIQ==
+X-Received: by 2002:a17:907:7da8:b0:730:fdad:4af8 with SMTP id oz40-20020a1709077da800b00730fdad4af8mr1275966ejc.401.1662530989455;
+        Tue, 06 Sep 2022 23:09:49 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id ez19-20020a056402451300b0043df042bfc6sm9770073edb.47.2022.09.06.23.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 23:09:48 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 08:09:46 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Jim Cromie <jim.cromie@gmail.com>
+Cc:     jbaron@akamai.com, gregkh@linuxfoundation.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
+        linux@rasmusvillemoes.dk, joe@perches.com
+Subject: Re: [PATCH v6 22/57] drm_print: condense enum drm_debug_category
+Message-ID: <Yxg1qgrTIKxcJ7HE@phenom.ffwll.local>
+Mail-Followup-To: Jim Cromie <jim.cromie@gmail.com>, jbaron@akamai.com,
+        gregkh@linuxfoundation.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        seanpaul@chromium.org, robdclark@gmail.com,
+        linux@rasmusvillemoes.dk, joe@perches.com
+References: <20220904214134.408619-1-jim.cromie@gmail.com>
+ <20220904214134.408619-23-jim.cromie@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220904214134.408619-23-jim.cromie@gmail.com>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pageblock_aligned() and use it to simplify code.
+On Sun, Sep 04, 2022 at 03:40:59PM -0600, Jim Cromie wrote:
+> enum drm_debug_category has 10 categories, but is initialized with
+> bitmasks which require 10 bits of underlying storage.  By using
+> natural enumeration, and moving the BIT(cat) into drm_debug_enabled(),
+> the enum fits in 4 bits, allowing the category to be represented
+> directly in pr_debug callsites, via the ddebug.class_id field.
+> 
+> While this slightly pessimizes the bit-test in drm_debug_enabled(),
+> using dyndbg with JUMP_LABEL will avoid the function entirely.
+> 
+> NOTE: this change forecloses the possibility of doing:
+> 
+>   drm_dbg(DRM_UT_CORE|DRM_UT_KMS, "weird 2-cat experiment")
+> 
+> but thats already strongly implied by the use of the enum itself; its
+> not a normal enum if it can be 2 values simultaneously.
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-v2: fix convert in page_alloc.c
- include/linux/pageblock-flags.h |  1 +
- mm/compaction.c                 |  8 ++++----
- mm/memory_hotplug.c             |  6 ++----
- mm/page_alloc.c                 | 17 +++++++----------
- mm/page_isolation.c             |  2 +-
- 5 files changed, 15 insertions(+), 19 deletions(-)
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
-index 293c76630fa8..5f1ae07d724b 100644
---- a/include/linux/pageblock-flags.h
-+++ b/include/linux/pageblock-flags.h
-@@ -54,6 +54,7 @@ extern unsigned int pageblock_order;
- 
- #define pageblock_nr_pages	(1UL << pageblock_order)
- #define pageblock_align(pfn)	ALIGN((pfn), pageblock_nr_pages)
-+#define pageblock_aligned(pfn)	IS_ALIGNED((pfn), pageblock_nr_pages)
- #define pageblock_start_pfn(pfn)	ALIGN_DOWN((pfn), pageblock_nr_pages)
- #define pageblock_end_pfn(pfn)		ALIGN((pfn) + 1, pageblock_nr_pages)
- 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 65bef5f78897..c4e4453187a2 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -402,7 +402,7 @@ static bool test_and_set_skip(struct compact_control *cc, struct page *page,
- 	if (cc->ignore_skip_hint)
- 		return false;
- 
--	if (!IS_ALIGNED(pfn, pageblock_nr_pages))
-+	if (!pageblock_aligned(pfn))
- 		return false;
- 
- 	skip = get_pageblock_skip(page);
-@@ -884,7 +884,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- 		 * COMPACT_CLUSTER_MAX at a time so the second call must
- 		 * not falsely conclude that the block should be skipped.
- 		 */
--		if (!valid_page && IS_ALIGNED(low_pfn, pageblock_nr_pages)) {
-+		if (!valid_page && pageblock_aligned(low_pfn)) {
- 			if (!isolation_suitable(cc, page)) {
- 				low_pfn = end_pfn;
- 				page = NULL;
-@@ -1936,7 +1936,7 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
- 		 * before making it "skip" so other compaction instances do
- 		 * not scan the same block.
- 		 */
--		if (IS_ALIGNED(low_pfn, pageblock_nr_pages) &&
-+		if (pageblock_aligned(low_pfn) &&
- 		    !fast_find_block && !isolation_suitable(cc, page))
- 			continue;
- 
-@@ -2122,7 +2122,7 @@ static enum compact_result __compact_finished(struct compact_control *cc)
- 	 * migration source is unmovable/reclaimable but it's not worth
- 	 * special casing.
- 	 */
--	if (!IS_ALIGNED(cc->migrate_pfn, pageblock_nr_pages))
-+	if (!pageblock_aligned(cc->migrate_pfn))
- 		return COMPACT_CONTINUE;
- 
- 	/* Direct compactor: Is a suitable page free? */
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 9ae1f98548b1..fd40f7e9f176 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1085,8 +1085,7 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
- 	 * of the physical memory space for vmemmaps. That space is pageblock
- 	 * aligned.
- 	 */
--	if (WARN_ON_ONCE(!nr_pages ||
--			 !IS_ALIGNED(pfn, pageblock_nr_pages) ||
-+	if (WARN_ON_ONCE(!nr_pages || !pageblock_aligned(pfn) ||
- 			 !IS_ALIGNED(pfn + nr_pages, PAGES_PER_SECTION)))
- 		return -EINVAL;
- 
-@@ -1806,8 +1805,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
- 	 * of the physical memory space for vmemmaps. That space is pageblock
- 	 * aligned.
- 	 */
--	if (WARN_ON_ONCE(!nr_pages ||
--			 !IS_ALIGNED(start_pfn, pageblock_nr_pages) ||
-+	if (WARN_ON_ONCE(!nr_pages || !pageblock_aligned(start_pfn) ||
- 			 !IS_ALIGNED(start_pfn + nr_pages, PAGES_PER_SECTION)))
- 		return -EINVAL;
- 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 7f2fdb8944ae..ba5c9402a5cb 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1902,15 +1902,14 @@ static void __init deferred_free_range(unsigned long pfn,
- 	page = pfn_to_page(pfn);
- 
- 	/* Free a large naturally-aligned chunk if possible */
--	if (nr_pages == pageblock_nr_pages &&
--	    (pfn & (pageblock_nr_pages - 1)) == 0) {
-+	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
- 		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
- 		__free_pages_core(page, pageblock_order);
- 		return;
- 	}
- 
- 	for (i = 0; i < nr_pages; i++, page++, pfn++) {
--		if ((pfn & (pageblock_nr_pages - 1)) == 0)
-+		if (pageblock_aligned(pfn))
- 			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
- 		__free_pages_core(page, 0);
- 	}
-@@ -1938,7 +1937,7 @@ static inline void __init pgdat_init_report_one_done(void)
-  */
- static inline bool __init deferred_pfn_valid(unsigned long pfn)
- {
--	if (!(pfn & (pageblock_nr_pages - 1)) && !pfn_valid(pfn))
-+	if (pageblock_aligned(pfn) && !pfn_valid(pfn))
- 		return false;
- 	return true;
- }
-@@ -1950,14 +1949,13 @@ static inline bool __init deferred_pfn_valid(unsigned long pfn)
- static void __init deferred_free_pages(unsigned long pfn,
- 				       unsigned long end_pfn)
- {
--	unsigned long nr_pgmask = pageblock_nr_pages - 1;
- 	unsigned long nr_free = 0;
- 
- 	for (; pfn < end_pfn; pfn++) {
- 		if (!deferred_pfn_valid(pfn)) {
- 			deferred_free_range(pfn - nr_free, nr_free);
- 			nr_free = 0;
--		} else if (!(pfn & nr_pgmask)) {
-+		} else if (pageblock_aligned(pfn)) {
- 			deferred_free_range(pfn - nr_free, nr_free);
- 			nr_free = 1;
- 		} else {
-@@ -1977,7 +1975,6 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
- 						 unsigned long pfn,
- 						 unsigned long end_pfn)
- {
--	unsigned long nr_pgmask = pageblock_nr_pages - 1;
- 	int nid = zone_to_nid(zone);
- 	unsigned long nr_pages = 0;
- 	int zid = zone_idx(zone);
-@@ -1987,7 +1984,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
- 		if (!deferred_pfn_valid(pfn)) {
- 			page = NULL;
- 			continue;
--		} else if (!page || !(pfn & nr_pgmask)) {
-+		} else if (!page || pageblock_aligned(pfn)) {
- 			page = pfn_to_page(pfn);
- 		} else {
- 			page++;
-@@ -6770,7 +6767,7 @@ void __meminit memmap_init_range(unsigned long size, int nid, unsigned long zone
- 		 * such that unmovable allocations won't be scattered all
- 		 * over the place during system boot.
- 		 */
--		if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
-+		if (pageblock_aligned(pfn)) {
- 			set_pageblock_migratetype(page, migratetype);
- 			cond_resched();
- 		}
-@@ -6813,7 +6810,7 @@ static void __ref __init_zone_device_page(struct page *page, unsigned long pfn,
- 	 * Please note that MEMINIT_HOTPLUG path doesn't clear memmap
- 	 * because this is done early in section_activate()
- 	 */
--	if (IS_ALIGNED(pfn, pageblock_nr_pages)) {
-+	if (pageblock_aligned(pfn)) {
- 		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
- 		cond_resched();
- 	}
-diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-index abd74bd24a35..c66d61e0bc72 100644
---- a/mm/page_isolation.c
-+++ b/mm/page_isolation.c
-@@ -311,7 +311,7 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
- 	struct zone *zone;
- 	int ret;
- 
--	VM_BUG_ON(!IS_ALIGNED(boundary_pfn, pageblock_nr_pages));
-+	VM_BUG_ON(!pageblock_aligned(boundary_pfn));
- 
- 	if (isolate_before)
- 		isolate_pageblock = boundary_pfn - pageblock_nr_pages;
+I guess this would also be a good patch to apply already, so we reduce the
+patch set size somewhat?
+-Daniel
+
+> ---
+>  include/drm/drm_print.h | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
+> index 22fabdeed297..b3b470440e46 100644
+> --- a/include/drm/drm_print.h
+> +++ b/include/drm/drm_print.h
+> @@ -279,49 +279,49 @@ enum drm_debug_category {
+>  	 * @DRM_UT_CORE: Used in the generic drm code: drm_ioctl.c, drm_mm.c,
+>  	 * drm_memory.c, ...
+>  	 */
+> -	DRM_UT_CORE		= 0x01,
+> +	DRM_UT_CORE,
+>  	/**
+>  	 * @DRM_UT_DRIVER: Used in the vendor specific part of the driver: i915,
+>  	 * radeon, ... macro.
+>  	 */
+> -	DRM_UT_DRIVER		= 0x02,
+> +	DRM_UT_DRIVER,
+>  	/**
+>  	 * @DRM_UT_KMS: Used in the modesetting code.
+>  	 */
+> -	DRM_UT_KMS		= 0x04,
+> +	DRM_UT_KMS,
+>  	/**
+>  	 * @DRM_UT_PRIME: Used in the prime code.
+>  	 */
+> -	DRM_UT_PRIME		= 0x08,
+> +	DRM_UT_PRIME,
+>  	/**
+>  	 * @DRM_UT_ATOMIC: Used in the atomic code.
+>  	 */
+> -	DRM_UT_ATOMIC		= 0x10,
+> +	DRM_UT_ATOMIC,
+>  	/**
+>  	 * @DRM_UT_VBL: Used for verbose debug message in the vblank code.
+>  	 */
+> -	DRM_UT_VBL		= 0x20,
+> +	DRM_UT_VBL,
+>  	/**
+>  	 * @DRM_UT_STATE: Used for verbose atomic state debugging.
+>  	 */
+> -	DRM_UT_STATE		= 0x40,
+> +	DRM_UT_STATE,
+>  	/**
+>  	 * @DRM_UT_LEASE: Used in the lease code.
+>  	 */
+> -	DRM_UT_LEASE		= 0x80,
+> +	DRM_UT_LEASE,
+>  	/**
+>  	 * @DRM_UT_DP: Used in the DP code.
+>  	 */
+> -	DRM_UT_DP		= 0x100,
+> +	DRM_UT_DP,
+>  	/**
+>  	 * @DRM_UT_DRMRES: Used in the drm managed resources code.
+>  	 */
+> -	DRM_UT_DRMRES		= 0x200,
+> +	DRM_UT_DRMRES
+>  };
+>  
+>  static inline bool drm_debug_enabled(enum drm_debug_category category)
+>  {
+> -	return unlikely(__drm_debug & category);
+> +	return unlikely(__drm_debug & BIT(category));
+>  }
+>  
+>  /*
+> -- 
+> 2.37.2
+> 
+
 -- 
-2.35.3
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

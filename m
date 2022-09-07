@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2423F5AF9D8
+	by mail.lfdr.de (Postfix) with ESMTP id B7F2B5AF9DA
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiIGC2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiIGC2k (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229787AbiIGC2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 6 Sep 2022 22:28:40 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE00C90802;
-        Tue,  6 Sep 2022 19:28:37 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id v15so6914913iln.6;
-        Tue, 06 Sep 2022 19:28:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6adJ3vFxu7LJgVGtWumUtBEFtalw2Gru7dwbkWzIto0=;
-        b=Qzes80q1nY3NMTB/u4RR9qRposPgyIWEglwe9n8azaRLBgllpg11dzioo6lHb3SSWP
-         F8YNlr0AikuyTVa9O819Rg/M6iTu9c/OQHv7W/Exf6W01JPK4XmoD9TQyTC7yVCUcu7c
-         r0LjwIYwgVN17yVpDkSVGtd7JNkZ0CkGakzS2ReCWF9HcBOH+OYnUz0Banqdk1xtbdli
-         cUfd795MsTkTiz+16Iue5opV8OSPgxuE8n5PMh8OqSG3vaB56THP6jTBQLrDz/J+3gE2
-         nTn+DPorWFSDFWslz3xDaVFZvbY8ywySWMEr8HOD5EZ+osXBfLJ3z3WInBtlcq95+uJB
-         k1Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6adJ3vFxu7LJgVGtWumUtBEFtalw2Gru7dwbkWzIto0=;
-        b=54uhIh1vA1d3RPyxLLCyv16p6V1n97QMEdPljj8Qz/4FAyiyHdfjuOrpwX/jgLFxA9
-         7DAcbsjHQ1QcG65dK+FfCDaowOMIwIw3Q+82UNEv1dcKTYlDUOWmpys00tI1624jgd63
-         u7ZU/eUjx2RkcCX8jXzrVF3Zr7OTXgvw0ZC5Jvb4Ph+GZKKONCCGEvQsWZACGRZyI/9x
-         CAg9WdUWWR56hzKL6IrJXn3HcH3QmhlWjpjx1pOXwoqXPW6potlXQzo8n2TP0Jvjy7nC
-         olBadDkdE6lubi42v9G7s4kG4PdkqrDZNdLp9lpKb59bako5OZDO4EmMRIaPVK5pgTbC
-         QOqw==
-X-Gm-Message-State: ACgBeo2kzyibkUDF12/pujOqs1ZvPRHM6KmJREQy2bq3Y2cVqMhw02Pd
-        H6WWaebkQyASx4X5s6pMekueKMGvu0WRRRTNB2Q=
-X-Google-Smtp-Source: AA6agR5GHMpNuon9uP5D/DsqmVpozOs1KIkPUdiWqptV+F5uPCHPCS2OpvNCpBPI6O64E6+NF/6Y+LZVPqKdfFOe1CM=
-X-Received: by 2002:a05:6e02:190a:b0:2ee:9e75:ae4b with SMTP id
- w10-20020a056e02190a00b002ee9e75ae4bmr738115ilu.219.1662517717158; Tue, 06
- Sep 2022 19:28:37 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229605AbiIGC2i (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 6 Sep 2022 22:28:38 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22143915E9;
+        Tue,  6 Sep 2022 19:28:38 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286Ld8Wk014578;
+        Wed, 7 Sep 2022 02:28:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2022-7-12;
+ bh=TK2r5WsYXhV00MJj2nXZFkjMBR9MruAOWbBTHuLlIJc=;
+ b=1fO0DV8t67R/lZWDyYhpJhRjWudosAd/JqcgbCR9wRla1UVDhZSyRWSuaS3x7ProavQC
+ QZD44OjrtlS0E9iMNT9RxGXJmnvk2TyMsEP9I9VXzXAvcThfThZq+WTRQytL7H+3pp9N
+ xrXn8g4cW/IyXmaUCA23XKlmr4c1OFfcvCiuQLoqax+VkW7l/qEs6TRDS520sFlj2rJW
+ JLanqXkAYhZ4TkTUWuHqvu+eTAhKi77v+7sAh1qAZpSEdm3naDQvg0HWezddVIFdjpmf
+ +Kb4ur5iJViClLlfpHDn54676BCptdbSOtCQV9/kMWjYRvrqEh8iGenmwEz/N+JmEbww Mw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jbwh1fkcb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Sep 2022 02:28:28 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 286NRPQ3030700;
+        Wed, 7 Sep 2022 02:28:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jbwc3qa5p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Sep 2022 02:28:28 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2872SRcE016472;
+        Wed, 7 Sep 2022 02:28:27 GMT
+Received: from ca-mkp.ca.oracle.com (dhcp-10-39-192-227.vpn.oracle.com [10.39.192.227])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3jbwc3qa59-1;
+        Wed, 07 Sep 2022 02:28:27 +0000
+To:     John Garry <john.garry@huawei.com>
+Cc:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>
+Subject: Re: [PATCH 0/5] hisi_sas: Misc patches for next
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1k06fgbpa.fsf@ca-mkp.ca.oracle.com>
+References: <1662378529-101489-1-git-send-email-john.garry@huawei.com>
+Date:   Tue, 06 Sep 2022 22:28:26 -0400
+In-Reply-To: <1662378529-101489-1-git-send-email-john.garry@huawei.com> (John
+        Garry's message of "Mon, 5 Sep 2022 19:48:44 +0800")
 MIME-Version: 1.0
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
- <20220905143318.1592015-8-roberto.sassu@huaweicloud.com> <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
- <3d32decb1fda80e261d9ed08decfdca45614c4af.camel@huaweicloud.com>
-In-Reply-To: <3d32decb1fda80e261d9ed08decfdca45614c4af.camel@huaweicloud.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Wed, 7 Sep 2022 04:28:00 +0200
-Message-ID: <CAP01T76csO9pdL=KLU4s7M__GnEifmKEB0pb7genw3UN8tA=FQ@mail.gmail.com>
-Subject: Re: [PATCH v16 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     joannelkoong@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        mykolal@fb.com, dhowells@redhat.com, jarkko@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
-        bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_11,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 malwarescore=0
+ mlxscore=0 phishscore=0 mlxlogscore=962 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209070009
+X-Proofpoint-GUID: yLV69ymai6807Jo__6e3pii8-sySCSJN
+X-Proofpoint-ORIG-GUID: yLV69ymai6807Jo__6e3pii8-sySCSJN
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,119 +77,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sept 2022 at 10:08, Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On Tue, 2022-09-06 at 04:57 +0200, Kumar Kartikeya Dwivedi wrote:
-> > On Mon, 5 Sept 2022 at 16:35, Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > >
-> > > Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security
-> > > modules
-> > > the ability to check the validity of a signature against supplied
-> > > data, by
-> > > using user-provided or system-provided keys as trust anchor.
-> > >
-> > > The new kfunc makes it possible to enforce mandatory policies, as
-> > > eBPF
-> > > programs might be allowed to make security decisions only based on
-> > > data
-> > > sources the system administrator approves.
-> > >
-> > > The caller should provide the data to be verified and the signature
-> > > as eBPF
-> > > dynamic pointers (to minimize the number of parameters) and a
-> > > bpf_key
-> > > structure containing a reference to the keyring with keys trusted
-> > > for
-> > > signature verification, obtained from bpf_lookup_user_key() or
-> > > bpf_lookup_system_key().
-> > >
-> > > For bpf_key structures obtained from the former lookup function,
-> > > bpf_verify_pkcs7_signature() completes the permission check
-> > > deferred by
-> > > that function by calling key_validate(). key_task_permission() is
-> > > already
-> > > called by the PKCS#7 code.
-> > >
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > Acked-by: KP Singh <kpsingh@kernel.org>
-> > > ---
-> > >  kernel/trace/bpf_trace.c | 45
-> > > ++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 45 insertions(+)
-> > >
-> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > > index 7a7023704ac2..8e2c026b0a58 100644
-> > > --- a/kernel/trace/bpf_trace.c
-> > > +++ b/kernel/trace/bpf_trace.c
-> > > @@ -1294,12 +1294,57 @@ void bpf_key_put(struct bpf_key *bkey)
-> > >         kfree(bkey);
-> > >  }
-> > >
-> > > +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> > > +/**
-> > > + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-> > > + * @data_ptr: data to verify
-> > > + * @sig_ptr: signature of the data
-> > > + * @trusted_keyring: keyring with keys trusted for signature
-> > > verification
-> > > + *
-> > > + * Verify the PKCS#7 signature *sig_ptr* against the supplied
-> > > *data_ptr*
-> > > + * with keys in a keyring referenced by *trusted_keyring*.
-> > > + *
-> > > + * Return: 0 on success, a negative value on error.
-> > > + */
-> > > +int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-> > > +                              struct bpf_dynptr_kern *sig_ptr,
-> > > +                              struct bpf_key *trusted_keyring)
-> > > +{
-> > > +       int ret;
-> > > +
-> > > +       if (trusted_keyring->has_ref) {
-> > > +               /*
-> > > +                * Do the permission check deferred in
-> > > bpf_lookup_user_key().
-> > > +                * See bpf_lookup_user_key() for more details.
-> > > +                *
-> > > +                * A call to key_task_permission() here would be
-> > > redundant, as
-> > > +                * it is already done by keyring_search() called by
-> > > +                * find_asymmetric_key().
-> > > +                */
-> > > +               ret = key_validate(trusted_keyring->key);
-> > > +               if (ret < 0)
-> > > +                       return ret;
-> > > +       }
-> > > +
-> > > +       return verify_pkcs7_signature(data_ptr->data,
-> > > +                                     bpf_dynptr_get_size(data_ptr)
-> > > ,
-> > > +                                     sig_ptr->data,
-> > > +                                     bpf_dynptr_get_size(sig_ptr),
-> >
-> > MIssing check for data_ptr->data == NULL before making this call?
-> > Same
-> > for sig_ptr.
->
-> Patch 3 requires the dynptrs to be initialized. Isn't enough?
->
 
-No, it seems even initialized dynptr can be NULL at runtime. Look at
-both ringbuf_submit_dynptr and ringbuf_discard_dynptr.
-The verifier won't know after ringbuf_reserve_dynptr whether it set it
-to NULL or some valid pointer.
+John,
 
-dynptr_init is basically that stack slot is now STACK_DYNPTR, it says
-nothing more about the dynptr.
+> This series contains some misc patches for next, broadly divided into two
+> areas:
+> - Revert hack to limit max HW sectors for v3 HW since we now that we a
+>   proper solution in the core SCSI and DMA IOMMU code
+> - Deal with SATA disks being lost during controller reset
 
-As far as testing this goes, you can pass invalid parameters to
-ringbuf_reserve_dynptr to have it set to NULL, then make sure your
-helper returns an error at runtime for it.
+Applied to 6.1/scsi-staging, thanks!
 
-> Thanks
->
-> Roberto
->
+-- 
+Martin K. Petersen	Oracle Linux Engineering

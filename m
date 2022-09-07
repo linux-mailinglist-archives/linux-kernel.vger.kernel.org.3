@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15335AFE0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254895AFE13
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiIGHuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S229984AbiIGHut convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Sep 2022 03:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiIGHto (ORCPT
+        with ESMTP id S230150AbiIGHuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:49:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75A710F7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:49:27 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MMvSX4bjhzmWLd;
-        Wed,  7 Sep 2022 15:45:48 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 7 Sep 2022 15:49:23 +0800
-Message-ID: <eafd4aa5-eee9-3fb9-357b-721780d894d8@huawei.com>
-Date:   Wed, 7 Sep 2022 15:49:22 +0800
+        Wed, 7 Sep 2022 03:50:23 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E77A7EFD0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:50:08 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id a67so8651038ybb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 00:50:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=CBvemt91QSwjWpSOvmqvp3ctyqgTCTMhNhU8MmRcjWA=;
+        b=BwlilT49Kmi9m3lkYqn9ClUoFV5FeMOc6jWT396Up2Qt0XqYAOTXRKWXV1ingY/Jp2
+         vW6lNCeEDvM7SlWrcfiWFmQ34cQhDDXDnueZLp9/chW3ekn+c12EKkh+lfuN3/lG83jC
+         9A/rKCX4k1NIw6d+kMIXtx21rd/vt0gUGZAbmSJaa9rAn6ho7G0pxANUAYQ5O0GhRZGy
+         Kr//6pii2PlXbdFoAAycTH0Uw1izTvaViBYdOfY+pUjeEqWLXj7tSJGe8Pu02qSuc7Hr
+         DAMTRQRCEV34q7a9viyv+XHPkul3scrSRjr/X9iRrFE1JJVy2q7B/R3On7KLZEwSu0p0
+         HX8Q==
+X-Gm-Message-State: ACgBeo19Eb1pZYeViy6ZbKrVx9IFJTs3WMZNNX4p5/i9JAVgZuZH0oQw
+        U7+DttswuT7PdiKz2fqIaMcOuwCPaL5KphTmGUI=
+X-Google-Smtp-Source: AA6agR4aARSM5i/xWu7bbxL/mjmN7rxXVksnsFxFXvu8DW8Olq1Vwb1jbBuDUDtUM9KzGJmKuCwfwEomKrICNikDIVg=
+X-Received: by 2002:a25:3b17:0:b0:6a9:1d5f:4573 with SMTP id
+ i23-20020a253b17000000b006a91d5f4573mr1834315yba.423.1662537006417; Wed, 07
+ Sep 2022 00:50:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH V2] irqchip/gic-v3-its: Reclaim the dangling bits in LPI
- maps
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <tglx@linutronix.de>, <linux-kernel@vger.kernel.org>,
-        <john.garry@huawei.com>
-References: <20220831023332.191368-1-liaochang1@huawei.com>
- <87o7vtrb2i.wl-maz@kernel.org>
-From:   "liaochang (A)" <liaochang1@huawei.com>
-In-Reply-To: <87o7vtrb2i.wl-maz@kernel.org>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220905003732.752-1-mailhol.vincent@wanadoo.fr> <CAKwvOdnr_F9-voPj4cp2HG8=U32a8Hp1aLpynSQiKOrwe4txpQ@mail.gmail.com>
+ <CAKwvOd=PgVtCwjS=Z_iqqmWsQ=+HsnEnHX2LOjRPCYFoVhAZhA@mail.gmail.com>
+In-Reply-To: <CAKwvOd=PgVtCwjS=Z_iqqmWsQ=+HsnEnHX2LOjRPCYFoVhAZhA@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 7 Sep 2022 16:49:55 +0900
+Message-ID: <CAMZ6RqLH3MdcRdxDFFmy_gbepJ-tU-mqFxBg+jS8=niR4xu71A@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,BITCOIN_SPAM_02,
-        NICE_REPLY_A,PDS_BTC_ID,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marc, thanks for comment.
+On Wed. 7 Sep. 2022 at 16:04, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> On Tue, Sep 6, 2022 at 11:26 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Sun, Sep 4, 2022 at 5:38 PM Vincent Mailhol
+> > <mailhol.vincent@wanadoo.fr> wrote:
+> > >
+> > > The compilers provide some builtin expression equivalent to the ffs(),
+> > > __ffs() and ffz() functions of the kernel. The kernel uses optimized
+> > > assembly which produces better code than the builtin
+> > > functions. However, such assembly code can not be folded when used
+> > > with constant expressions.
+> >
+> > Another tact which may help additional sources other than just the
+> > Linux kernel; it seems that compilers should be able to fold this.
 
-在 2022/9/6 1:21, Marc Zyngier 写道:
-> On Wed, 31 Aug 2022 03:33:32 +0100,
-> Liao Chang <liaochang1@huawei.com> wrote:
->>
->> Following interrupt allocation process leads to some interrupts are
->> mapped in the low-level domain(Arm ITS), but they have never mapped
->> at the higher level.
->>
->> irq_domain_alloc_irqs_hierarchy(.., nr_irqs, ...)
->>   its_irq_domain_alloc(..., nr_irqs, ...)
->>     its_alloc_device_irq(..., nr_irqs, ...)
->>       bitmap_find_free_region(..., get_count_order(nr_irqs))
->>
->> Since ITS domain finds a region of zero bits, the length of which must
->> aligned to the power of two. If nr_irqs is 30, the length of zero bits
->> is actually 32, but the first 30 bits are really mapped.
->>
->> On teardown, the low-level domain only free these interrupts that
->> actually mapped, and leave last interrupts dangling in the ITS domain.
->> Thus the ITS device resources are never freed. On device driver reload,
->> dangling interrupts prevent ITS domain from allocating enough resource.
->>
->> irq_domain_free_irqs_hierarchy(..., nr_irqs, ...)
->>   its_irq_domain_free(..., irq_base + i, 1)
->>     bitmap_release_region(..., irq_base + i, get_count_order(1))
->>
->> John reported this problem to LKML and Marc provided a solution and fix
->> it in the generic code, see the discussion from Link tag. Marc's patch
->> fix John's problem, but does not take care of some corner case, look one
->> example below.
->>
->> Step1: 32 interrupts allocated in LPI domain, but return the first 30 to
->> higher driver.
->>
->>    111111111111111111111111111111 11
->>   |<------------0~29------------>|30,31|
->>
->> Step2: interrupt #16~28 are released one by one, then #0~15 and #29~31
->> still be there.
->>
->>    1111111111111111 0000000000000 1  11
->>   |<-----0~15----->|<---16~28--->|29|30,31|
->>
->> Step#: on driver teardown, generic code will invoke ITS domain code
->> twice. The first time, #0~15 will be released, the second one, only #29
->> will be released(1 align to power of two).
->>
->>    0000000000000000 0000000000000 0  11
->>   |<-----0~15----->|<---16~28--->|29|30,31|
-> 
-> Which driver is doing this? This really looks like a driver bug to
-> only free a portion of its MSI allocation, and that's definitely not
-> something that is commonly done.
+Initially, I thought that you were suggesting folding the asm code
+(which doesn’t seem trivial at all).
 
-Yes, this scenario is manipulated. I use this example to prove why current ITS
-allocation is buggy, that is the number of interrupt driver is about to release
-have to be equal with the number of allocation **last time**, even though the total
-number is same, pesudo code below reflects this problem.
+> > Vincent, if you're interested in making such an optimization in LLVM,
+> > we'd welcome the contribution, and I'd be happy to show you where to
+> > make such changes within LLVM; please let me know off thread.
+>
+> Oh right, it already does.
+> https://github.com/llvm/llvm-project/blob/ea953b9d9a65c202985a79f1f95da115829baef6/llvm/lib/Transforms/Utils/SimplifyLibCalls.cpp#L2635
+> I see what's happening. Constant propagation sinks constants into a
+> specialized version of ffs when there's only 1 callsite in a given
+> translation unit (or multiple call sites with the same constant).
+> Then dead argument elimination removes the argument, so libcall
+> optimization thinks this isn't the ffs(int) you're looking for, and
+> skips it.
 
-[Correct usage]
-virq = irq_domain_alloc_irqs(...,0,30,...)  // 32 bits are allocated actually.
-irq_domain_free_irqs(virq, 30)    // 32 bits are released actually.
+Isn’t it a wise decision to skip it? How should the optimization be
+able to decide that the redefined ffs() is equivalent to
+__builtin_ffs()?
 
-[Incorrect usage]
-virq = irq_domain_alloc_irqs(...,0,30,...)
-for(i = 0; i < 30; i++)
-	irq_domain_free_irqs(virq + i, 1)
-// driver release 30 irq, but last 2 bits are dangling due to alignment.
+More generally, if I write my own foo() which shadows a
+__builtin_foo() function, the two functions might do something totally
+different and I would be pissed off if the compiler decided to
+constant-fold my foo().
 
-> 
-> Even worse, this can result in some LPIs being released behind the
-> driver's back, exactly due to this power-of-two alignment.
-> 
-> It seems to me that you are trying to solve a problem that only exists
-> for a buggy driver. Please point me to the upstream code that has such
-> behaviour and explain why this can't be fixed in that driver itself.
+Dummy example:
 
-I indeed find no upstream code has such buggy behaviour, thanks for pointing out
-this important and undocumented rule, it is very helpful to me, please ignore this
-patch.
+===================
+char *s;
 
-> 
-> Thanks,
-> 
-> 	M.
-> 
+/* ffs: fast forward string
+ * @i: how many bytes to move forward
+ *
+ * Move forward the global s pointer by @i or strlen(s) (whoever is smaller).
+ *
+ * Return: how many bytes we move forward.
+ */
+int ffs(int i)
+{
+        int len = strlen(s);
+        int forward = i < len ? i : len;
 
--- 
-BR,
-Liao, Chang
+        s += forward;
+        return forward;
+}
+===================
+
+How would you instruct the compiler to constant-fold the kernel’s
+ffs() but not fold above dummy ffs()?
+
+> Nice.
+> https://github.com/llvm/llvm-project/issues/57599
+> I guess ffs() is usually forward declared in strings.h, so we don't
+> have such a static inline definition available to constant
+> prop/specialize in normal C code.

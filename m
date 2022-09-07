@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E725AFAA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E4F5AFAB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiIGDcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 23:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S229609AbiIGDgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 23:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiIGDcO (ORCPT
+        with ESMTP id S230054AbiIGDgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:32:14 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2BE8C00E;
-        Tue,  6 Sep 2022 20:32:09 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id f11so6411463lfa.6;
-        Tue, 06 Sep 2022 20:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=fNlTaauOCv00NkMf5wKTGx7xLqnRUF5exfJxC6A7vcA=;
-        b=UKk56UGJo388H+uhAijKuTUSQQLkQwmtyUZUT+ZBgpZ3Ps8HncEwNZAsuagzcthtlp
-         iPCoaq4oPZX+qyJtFrDpddfBUP2p3/DK2eBaXHnOUUmOqdyUvcn7tyipSZxkhn+HdlAB
-         GpphW1XTWviHybCUz0nS5qdsHJvNJf7188k601GBHznvom3K8kKvM/NDMBhTB6VWb8Dp
-         9IAK9LXWfGnCdV06kqeUDYcQ/kbspMTJxCGGYfl5soR+6tnQNa+of1p2Cb7PyB5gh7f/
-         o/mfK+LRjXBIKan4Zb8Z91VShJYrmawfghJaFfnoRBlAqYjf9hHrARQaVGnrhY19c+oj
-         5Jvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=fNlTaauOCv00NkMf5wKTGx7xLqnRUF5exfJxC6A7vcA=;
-        b=PW7s+tBWqlHiQnid18X+rNuxEmUOkK0hLu8O5rkzN2Z+zq5rQ6LxH4iMrvNio8YS7K
-         mwUWKYHpY8ty+SzYz+/AKRNhz1RUVZYxmjppcE3rjX5gj3mvskRVwi4+HFIdnKXxeeaz
-         2H7I/2yfCl7iNXsYm6rq/eW922jEaTRde23Ok4CneJiwOUMRgVKom3X/Ehu2fr0wi3P4
-         xR9bXznUMs16IKGM+ufHrzEZKKqq2RMym92JH2dS9GuJB5iNEVmkGPkZFvkD80SCPyo+
-         qFOOSWQhLz5/XEThn22hVw6SI1kP3f9cnMfx26a/6rs5YyRoy6QokVXfvsgglE7XvaWq
-         eFLA==
-X-Gm-Message-State: ACgBeo3y7p/Iud+4F1bpwUufDC89DK6OELE6BXLOU/cko8P2oVXFSvKr
-        ht/IdEjocMLBnEIrRfrxxdEiwORpCG+uKaNtq0o=
-X-Google-Smtp-Source: AA6agR4Jk1Lk1O18XLzodLspyTFUsKyssvPWuHR8tmWcEaF+3OrN8vFT/kyZwrJCxzXfpIXqd2YXqXWS3kMdhZZP6io=
-X-Received: by 2002:a19:2d0d:0:b0:491:63c9:5a5f with SMTP id
- k13-20020a192d0d000000b0049163c95a5fmr414920lfj.629.1662521527977; Tue, 06
- Sep 2022 20:32:07 -0700 (PDT)
+        Tue, 6 Sep 2022 23:36:43 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFA488DEE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 20:36:33 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 2873EYr7015668;
+        Wed, 7 Sep 2022 11:14:34 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 7 Sep
+ 2022 11:34:35 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+CC:     <linux-aspeed@lists.ozlabs.org>, <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <BMC-SW@aspeedtech.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v3] crypto: aspeed: fix format unexpected build warning
+Date:   Wed, 7 Sep 2022 11:34:31 +0800
+Message-ID: <20220907033431.402208-1-neal_liu@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <SJ0PR20MB433741383E64BA84B372BE0DE97E9@SJ0PR20MB4337.namprd20.prod.outlook.com>
-In-Reply-To: <SJ0PR20MB433741383E64BA84B372BE0DE97E9@SJ0PR20MB4337.namprd20.prod.outlook.com>
-From:   Alex Shi <seakeel@gmail.com>
-Date:   Wed, 7 Sep 2022 11:31:31 +0800
-Message-ID: <CAJy-Am=g02Ua3u5nVCZSekdWPN=F=qTkPR5_BLHubzSA0wfMCw@mail.gmail.com>
-Subject: Re: [PATCH] docs: zh_CN: Fix typo in process/howto.rst
-To:     Whye <whye314@outlook.com>
-Cc:     Alex Shi <alexs@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.10]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 2873EYr7015668
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBTZXAgNiwgMjAyMiBhdCA4OjQyIFBNIFdoeWUgPHdoeWUzMTRAb3V0bG9vay5jb20+
-IHdyb3RlOg0KPg0KPiBDb3JyZWN0IGEgd3Jvbmcgd29yZA0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBX
-aHllIDx3aHllMzE0QG91dGxvb2suY29tPg0KDQpSZXZpZXdlZC1ieTogQWxleCBTaGkgPGFsZXhz
-QGtlcm5lbC5vcmc+DQoNCj4gLS0tDQo+ICBEb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9D
-Ti9wcm9jZXNzL2hvd3RvLnJzdCB8IDIgKy0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
-bigrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90cmFu
-c2xhdGlvbnMvemhfQ04vcHJvY2Vzcy9ob3d0by5yc3QgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0
-aW9ucy96aF9DTi9wcm9jZXNzL2hvd3RvLnJzdA0KPiBpbmRleCAxNDU1MTkwZGMwODcuLjRmMTJm
-OTllMDQ2NCAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04v
-cHJvY2Vzcy9ob3d0by5yc3QNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhf
-Q04vcHJvY2Vzcy9ob3d0by5yc3QNCj4gQEAgLTI1NCw3ICsyNTQsNyBAQCBMaW51eC1uZXh0IOmb
-huaIkOa1i+ivleagkQ0KPiAgICAgICAgICBodHRwczovL2dpdC5rZXJuZWwub3JnLz9wPWxpbnV4
-L2tlcm5lbC9naXQvbmV4dC9saW51eC1uZXh0LmdpdA0KPg0KPiAg6YCa6L+H6L+Z56eN5pa55byP
-77yMTGludXgtbmV4dCDlr7nkuIvkuIDkuKrlkIjlubbpmLbmrrXlsIbov5vlhaXkuLvnur/lhoXm
-oLjnmoTlhoXlrrnnu5nlh7rkuobkuIDkuKrmpoLopoENCj4gLeWxleacm+OAgumdnuW4uOasouWG
-kumZqeeahOa1i+ivleiAhei/kOihjOa1i+ivlUxpbnV4LW5leHTjgIINCj4gK+Wxleacm+OAgumd
-nuW4uOasoui/juWGkumZqeeahOa1i+ivleiAhei/kOihjOa1i+ivlUxpbnV4LW5leHTjgIINCj4N
-Cj4gIOWkmuS4quS4u+imgeeJiOacrOeahOeos+WumueJiOWGheaguOagkQ0KPiAgLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gLS0NCj4gMi4yNS4xDQo+DQo=
+This fixes the following similar build warning when
+enabling compile test:
+
+aspeed-hace-hash.c:188:9: warning: format '%x' expects argument of type
+'unsigned int', but argument 7 has type 'size_t' {aka 'long unsigned int'}
+[-Wformat=]
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+---
+v3: Use "%pad" to print dma_addr_t type.
+v2: Use "%zu" format to print size_t.
+
+ drivers/crypto/aspeed/aspeed-hace-hash.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/crypto/aspeed/aspeed-hace-hash.c b/drivers/crypto/aspeed/aspeed-hace-hash.c
+index 0a44ffc0e13b..5a8a3a611dd4 100644
+--- a/drivers/crypto/aspeed/aspeed-hace-hash.c
++++ b/drivers/crypto/aspeed/aspeed-hace-hash.c
+@@ -185,7 +185,7 @@ static int aspeed_ahash_dma_prepare_sg(struct aspeed_hace_dev *hace_dev)
+ 	remain = (rctx->total + rctx->bufcnt) % rctx->block_size;
+ 	length = rctx->total + rctx->bufcnt - remain;
+ 
+-	AHASH_DBG(hace_dev, "%s:0x%x, %s:0x%x, %s:0x%x, %s:0x%x\n",
++	AHASH_DBG(hace_dev, "%s:0x%x, %s:%zu, %s:0x%x, %s:0x%x\n",
+ 		  "rctx total", rctx->total, "bufcnt", rctx->bufcnt,
+ 		  "length", length, "remain", remain);
+ 
+@@ -324,8 +324,8 @@ static int aspeed_hace_ahash_trigger(struct aspeed_hace_dev *hace_dev,
+ 	struct ahash_request *req = hash_engine->req;
+ 	struct aspeed_sham_reqctx *rctx = ahash_request_ctx(req);
+ 
+-	AHASH_DBG(hace_dev, "src_dma:0x%x, digest_dma:0x%x, length:0x%x\n",
+-		  hash_engine->src_dma, hash_engine->digest_dma,
++	AHASH_DBG(hace_dev, "src_dma:%pad, digest_dma:%pad, length:%zu\n",
++		  &hash_engine->src_dma, &hash_engine->digest_dma,
+ 		  hash_engine->src_length);
+ 
+ 	rctx->cmd |= HASH_CMD_INT_ENABLE;
+-- 
+2.25.1
+

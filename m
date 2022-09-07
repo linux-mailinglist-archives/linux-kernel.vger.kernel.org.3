@@ -2,81 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35D15AF962
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 03:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724E85AF963
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 03:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiIGBZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 21:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
+        id S229730AbiIGB1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 21:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIGBZE (ORCPT
+        with ESMTP id S229449AbiIGB1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 21:25:04 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A99167C6;
-        Tue,  6 Sep 2022 18:25:02 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MMkx12v2FzmWQh;
-        Wed,  7 Sep 2022 09:21:25 +0800 (CST)
-Received: from [10.174.178.66] (10.174.178.66) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 7 Sep 2022 09:24:59 +0800
-Message-ID: <0adec8a4-8cbc-d14e-f6a5-c6c288100a1e@huawei.com>
-Date:   Wed, 7 Sep 2022 09:24:58 +0800
+        Tue, 6 Sep 2022 21:27:01 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DB176D9E2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 18:27:00 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.218:47248.1217073643
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-110.188.55.54 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id F0DEB2800D4;
+        Wed,  7 Sep 2022 09:26:46 +0800 (CST)
+X-189-SAVE-TO-SEND: lic121@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id ec71a940db7a43cab5eb89777746d3ec for akpm@linux-foundation.org;
+        Wed, 07 Sep 2022 09:26:58 CST
+X-Transaction-ID: ec71a940db7a43cab5eb89777746d3ec
+X-Real-From: lic121@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: lic121@chinatelecom.cn
+Date:   Wed, 7 Sep 2022 01:26:33 +0000
+From:   Cheng Li <lic121@chinatelecom.cn>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm: use mem_map_offset instead of mem_map_next
+Message-ID: <20220907012633.GA21996@vscode.7~>
+References: <1662358159-22780-1-git-send-email-lic121@chinatelecom.cn>
+ <Yxd+Nz1wAwiIOWsd@monkey>
+ <20220906171048.1cd24a27b71ded17f89ddb00@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH net,v2] net: sched: tbf: don't call qdisc_put() while
- holding tree lock
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <jhs@mojatatu.com>, <jiri@resnulli.us>,
-        <vladbu@mellanox.com>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>
-References: <20220826013930.340121-1-shaozhengchao@huawei.com>
- <YxY8ToCVWFSV6VqQ@pop-os.localdomain>
-From:   shaozhengchao <shaozhengchao@huawei.com>
-In-Reply-To: <YxY8ToCVWFSV6VqQ@pop-os.localdomain>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.66]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906171048.1cd24a27b71ded17f89ddb00@linux-foundation.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/9/6 2:13, Cong Wang wrote:
-> On Fri, Aug 26, 2022 at 09:39:30AM +0800, Zhengchao Shao wrote:
->> The issue is the same to commit c2999f7fb05b ("net: sched: multiq: don't
->> call qdisc_put() while holding tree lock"). Qdiscs call qdisc_put() while
->> holding sch tree spinlock, which results sleeping-while-atomic BUG.
->>
+On Tue, Sep 06, 2022 at 05:10:48PM -0700, Andrew Morton wrote:
+> On Tue, 6 Sep 2022 10:07:03 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
 > 
-> Hm, did you see an actual warning here??
+> > On 09/05/22 06:09, Cheng Li wrote:
+> > > To handle discontiguity case, mem_map_next() has a parameter named
+> > > `offset`. As a function caller, one would be confused why "get
+> > > next entry" needs a parameter named "offset". The other drawback of
+> > > mem_map_next() is that the callers must take care of the map between
+> > > parameter "iter" and "offset", otherwise we may get an hole or
+> > > duplication during iteration. So we use mem_map_offset instead of
+> > > mem_map_next.
+> > > 
+> > > Signed-off-by: Cheng Li <lic121@chinatelecom.cn>
+> > > Fixes: 69d177c2fc70 ("hugetlbfs: handle pages higher order than MAX_ORDER")
+> > 
+> > The Fixes tag implies there is a user visible bug.  I do not believe this is
+> > the case here.  Is there a user visible bug?
 > 
-> The commit you mentioned above is a classful Qdisc which accepts
-> user-specified child Qdisc, but TBF technically does not, I don't think
-> you can change its default fifo.
+> A Fixes: with a cc:stable would indicate a user-visible bug.  But IMO a
+> bare Fixes: is simply a when-to-stop guide to backporters - a
+> convenience.  And, I suppose, it has some documentation benefit.
 > 
-> Thanks.
+> And if people are really that interested, they can read the dang
+> changelog ;)
+> 
 
-Hi Wang:
-	Thank you for your reply. My apologise. I don't see the
-warning here. Yes, TBF is classless qdisc, its default fifo is
-bfifo and reset or destroy process will not sleep. So, it's not
-a issue. Should I revert it, or keep it in this format(qdisc_put
-out of holding sch tree spinlock).
+Thank you for the reviews and the "Fixes" tag tips.
+
+So seems we are agrenment on replacing mem_map_offset() with nth_page().
+I may need to send the version 3 :)
+
+I learnt the "Fixes" tag usage from this kenrel contribution guide.[1]
+
+[1]
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
 
 
-Zhengchao Shao

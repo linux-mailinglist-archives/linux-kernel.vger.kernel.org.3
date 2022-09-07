@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA955B07AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F695B07B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiIGO5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
+        id S230075AbiIGO5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiIGO4m (ORCPT
+        with ESMTP id S230242AbiIGO4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:56:42 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109C8B2741
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:56:36 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id g12-20020a5d8c8c000000b006894fb842e3so9334114ion.21
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:56:36 -0700 (PDT)
+        Wed, 7 Sep 2022 10:56:54 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC6B9F76D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:56:48 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso10456916otv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=R18/KkvI0bwN1Yb6uOYkzfgE4nW++3c9UPmBBYxx7CU=;
+        b=QB8Ku1JNOE1BUAopdNjlcDp1puobGOzHlyUhKR6CWlFP15tejy6UAgQs1GfZwKadDs
+         a0gyp3nB4XZrd9rchWz256RHIKDl9/5krwM7UNHlfD50LKybxsC9CnfE4pZPYmK+4Ts5
+         t4Z9wLe8CfXRL0bSpxGpdhk2xl6jIu6MqoUrmLSWyu0NIl6qvHzY/sAigyQ4uP+A/tpi
+         YRTM4RATMRutuA03smGNmntwEwWKGWyKBcL3ggj9qxpTDBXnTQs+yn3qViuHbNXWvDLV
+         zE2vGQlvDUFm9ZR38UdkiSpxEla5mWnaJMNzf2L6bYPonYsiJkE2lFOtc+qR1Gr7Lcup
+         w2Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=M0ck3zhRmF4k7FihEXUJjiDZ+fwtcv/W6kVeRN0u1vs=;
-        b=klgeo9xXtKbvCz5Ds0gCqE6fZnhOlWVLgpF72UIVDT13bx01uT0DY7arS6g+xb2KMr
-         Jvt0Dc4FU8Ml+rsRhR3vUGuDMPDqzxifzD7y71fT20gQi4pHqpjRgyH/n9XHHORajnz3
-         HQm3/0WVayS1m1uH06EUbU7FRHk69u65Yn3NXh6Nd6zb08z/Qv3Ets7vxs0ssNporg8k
-         iIVczDu4c2p31+SGHI1uZu9RBn0SO5NmpeSnrEQoM54of0vlwuZwvzhN/v9rXXzKOomv
-         jOXBdrYUNXtLFRn/QDuYcfdmi7O0X01CAUIf8oMBy41y8th4kfbBbrIF1ebgm/ZT5gTc
-         /7kQ==
-X-Gm-Message-State: ACgBeo3oJ955KAvIRzaeOhMbMqj8/o9kyhhZic9ok19zEecSSfFQkMnI
-        z/aCZcnU/xXpLFkUJlyT9kqcP+4uaP2pyF3OQRnhPp1rQis7
-X-Google-Smtp-Source: AA6agR5t4AwuXZ/KT7KOUPlU+Fqk4GKe6LTMbwtLXUILoPhKonA+fzxicNDNAuz6+DQ9BNf8wM2+uEsL1bKVD9Zf81QNeCFbN0ub
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=R18/KkvI0bwN1Yb6uOYkzfgE4nW++3c9UPmBBYxx7CU=;
+        b=DwuxRHZdv6jWS4R9GZliH36I35kQ/9xcZORrEVuTwmWTe/OYa59/ELkJ9cMd0DMLY0
+         UWe4pzLfa+B6H1i70Y9OWgN+5nTrv+Md3AfAOAzMmQb/qMHhcQJYo3kG0bUrgdoxlh21
+         PD/GuUsqnWiRoQRWRo2TDDJcsCsghMzyBw/iDG3PjN2dz4cmY94xAjvyv1oJtB9UFqvy
+         20t103xQNxfQFle3xw5cRw5HWtEsB/AJmoO+umgtIPpuCS8DWrapevngL8DvYpN8zEau
+         fplao9sB6yKJu8GjM+cTjaGVSfh1yp+TyO3ehFAmAZdmThl8IJt5gItYloJxv9Kovld4
+         G+TQ==
+X-Gm-Message-State: ACgBeo2uVRVRajV5VF3PphQ31KRRDs2hp2xAEMjdwZNz7SUrPFi7Ga4J
+        nxCTxOucWki5McqJ2g67H4lmulFNrHVGXgP5kd4=
+X-Google-Smtp-Source: AA6agR7IWbHn3lhZ/ot+C85/TxO/QN9z4ndtsTAyaJfaazgJGihOPTdsepxkn6HDUffxyIi1P+btvKVCBiP4iT8yQic=
+X-Received: by 2002:a05:6830:54b:b0:636:eecb:1196 with SMTP id
+ l11-20020a056830054b00b00636eecb1196mr1623273otb.123.1662562607723; Wed, 07
+ Sep 2022 07:56:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3720:b0:352:7d09:a327 with SMTP id
- k32-20020a056638372000b003527d09a327mr2274515jav.283.1662562594927; Wed, 07
- Sep 2022 07:56:34 -0700 (PDT)
-Date:   Wed, 07 Sep 2022 07:56:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e33bb005e817847a@google.com>
-Subject: [syzbot] usb-testing boot error: general protection fault in copy_process
-From:   syzbot <syzbot+d3cb3281a93037d5a02e@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
-        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, luto@kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+References: <20220907112657.25150-1-yuanjilin@cdjrlc.com> <becf299e-9cf0-68bc-da31-1207e4bb71e1@arm.com>
+In-Reply-To: <becf299e-9cf0-68bc-da31-1207e4bb71e1@arm.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 7 Sep 2022 10:56:36 -0400
+Message-ID: <CADnq5_Ms18MHqyQVZ7UMQUCGGinzWtb5SkLubjSceOgrfJn+Ag@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: fix repeated words in comments
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>, airlied@linux.ie,
+        daniel@ffwll.ch, isabbasso@riseup.net,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Sep 7, 2022 at 10:50 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2022-09-07 12:26, Jilin Yuan wrote:
+> > Delete the redundant word 'we'.
+>
+> FWIW, to me it's not redundant because while indeed it is not correct,
+> it looks exactly like the kind of typo I might make of "if we", and
+> parsing it as *that* does make sense. The sentence you end up with here
+> can hardly be considered an improvement since it is still ungrammatical
+> nonsense.
 
-syzbot found the following issue on:
+Yes, I believe this was supposed to say "if we" rather than "we we".
 
-HEAD commit:    4e55e22d3d9a USB: hcd-pci: Drop the unused id parameter fr..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ba5d7d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=d3cb3281a93037d5a02e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Alex
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/26cea6f2cda1/disk-4e55e22d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/00aba451c439/vmlinux-4e55e22d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d3cb3281a93037d5a02e@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xffff000000000300: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff8200000001800-0xfff8200000001807]
-CPU: 0 PID: 36 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-syzkaller-00049-g4e55e22d3d9a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: events_unbound call_usermodehelper_exec_work
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
-RIP: 0010:kmem_cache_alloc+0x15d/0x4a0 mm/slub.c:3268
-Code: 51 08 48 8b 01 48 83 79 10 00 48 89 04 24 0f 84 7c 02 00 00 48 85 c0 0f 84 73 02 00 00 49 8b 3c 24 41 8b 4c 24 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 7b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0000:ffffc900004778f0 EFLAGS: 00010246
-
-RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000300
-RDX: 0000000000000580 RSI: 0000000000000dc0 RDI: 000000000003e300
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff88de9657
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88810016d500
-R13: 0000000000000dc0 R14: ffffffff811486fe R15: 0000000000000dc0
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kmem_cache_zalloc include/linux/slab.h:723 [inline]
- copy_signal kernel/fork.c:1689 [inline]
- copy_process+0x256e/0x6de0 kernel/fork.c:2253
- kernel_clone+0xe7/0xab0 kernel/fork.c:2673
- user_mode_thread+0xad/0xe0 kernel/fork.c:2742
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
-----------------
-Code disassembly (best guess):
-   0:	51                   	push   %rcx
-   1:	08 48 8b             	or     %cl,-0x75(%rax)
-   4:	01 48 83             	add    %ecx,-0x7d(%rax)
-   7:	79 10                	jns    0x19
-   9:	00 48 89             	add    %cl,-0x77(%rax)
-   c:	04 24                	add    $0x24,%al
-   e:	0f 84 7c 02 00 00    	je     0x290
-  14:	48 85 c0             	test   %rax,%rax
-  17:	0f 84 73 02 00 00    	je     0x290
-  1d:	49 8b 3c 24          	mov    (%r12),%rdi
-  21:	41 8b 4c 24 28       	mov    0x28(%r12),%ecx
-  26:	40 f6 c7 0f          	test   $0xf,%dil
-* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
-  2e:	0f 85 7b 02 00 00    	jne    0x2af
-  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3d:	0f 94 c0             	sete   %al
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> Robin.
+>
+> > Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
+> > index 02cb3a12dd76..6d6cc4637d41 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
+> > @@ -694,7 +694,7 @@ static int amdgpu_vce_cs_reloc(struct amdgpu_cs_parser *p, struct amdgpu_ib *ib,
+> >    * @allocated: allocated a new handle?
+> >    *
+> >    * Validates the handle and return the found session index or -EINVAL
+> > - * we we don't have another free session index.
+> > + * we don't have another free session index.
+> >    */
+> >   static int amdgpu_vce_validate_handle(struct amdgpu_cs_parser *p,
+> >                                     uint32_t handle, uint32_t *allocated)

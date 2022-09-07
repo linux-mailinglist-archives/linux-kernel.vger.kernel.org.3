@@ -2,226 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F095B03A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1675B03A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiIGMK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S229729AbiIGMKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiIGMKX (ORCPT
+        with ESMTP id S229436AbiIGMKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:10:23 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA821754BD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:10:15 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id CB3B45802A6;
-        Wed,  7 Sep 2022 08:10:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 07 Sep 2022 08:10:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1662552614; x=1662559814; bh=mO0DxpIxEI
-        aEUkrFxNz04g9y84A96XbiPwxWwzTH7i4=; b=fom/8HSsBSNM55Lsdc1X75CCSP
-        PN8l87PDFyGp8TPirwp7/NKdyQyE9MOsckYzTIfsGD/eOWGZT1IjEvwX6zRlR0c8
-        xyd4O5AWtoc0+t62PjFtQ3RhOXb+bOnAEcfbMUfDuJAjQ6zjcXBUAvby3kG2w20b
-        j4yfradaLCNCQ4z9shorYr//Dwuft/CPwPoHfm1ruXd0ff7C+O0fdT/9xlZ8Fyd+
-        LKIrBSAPvoJbYjAYVRV4xsznzw5wgSElrFDRTMXlahcPKe4Y7zn2SQlqk2E5IL40
-        z9dpaDBbJUAmczQMZsMKwA3iTktpgYhzh2IM5IlJ4gdMKNv+HNHxTqw5tVvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662552614; x=1662559814; bh=mO0DxpIxEIaEUkrFxNz04g9y84A9
-        6XbiPwxWwzTH7i4=; b=FbB8/owoOO+ZLDH3EfniBXdqyJiFnJp0Jors+WaT5pLQ
-        82yMu72iyNa3D+sLEkaOfuaQPmMu4qBDEhaw1y1E2VPqQsh39Vmnp2mu+yG65exK
-        9XCM6Ux2cTtPelDoWnm1jZ1K4lzccmE2LL/qG3GEJPQqpHeu4UVuOiGf65nzurBx
-        OqflA4TM4RlvQWplqnrEGlVYw2fqBkDA5EBlljW+t7sG6IOihkY/kmK8wdQS67Sx
-        J8GsmdY3H98n5BVGhwvoOrB+W0CZFuKn6e5bMYUTQKobszQuLNN7oh3oDwv8gUEz
-        kJIqZqo7NoK9rL6MFL+hUomoXuhay/dgEfYX5A+HQA==
-X-ME-Sender: <xms:I4oYYycILHs_ZLR117ki1XkoeLqqUVDpRjJmBH3yVU5Nu8j8qLUO0g>
-    <xme:I4oYY8Oe_J6AHfDLoyTjH7Fo-tMAImiY7yMs1ESDtIa0uGa2fs2vEsuKarQgBs589
-    P82kDx_abbSPcDFx-g>
-X-ME-Received: <xmr:I4oYYzgjVxWAUOuEph6TExbD6A1U6of1EhT_r60bYTyp3bjib9h7zeO9YQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
-    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:JIoYY_-6QayOoOGkUbElibmIA_OqIzRpgcohlNxcKGfCStYTFH0RnQ>
-    <xmx:JIoYY-t8VScFMm-81-zpX7DH7PQdTruT0rrK_OygWRInoFppYX5puQ>
-    <xmx:JIoYY2HuKwFropkYVWWfdzmm9aLh-9c2cP_gK9AFDAki_baEL1rWiw>
-    <xmx:JooYY6ffURLJH6mELmdqCpg36o9Zir-cBfbfKsj2XMnXFNsdtLFI7Q>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 08:10:11 -0400 (EDT)
-Date:   Wed, 7 Sep 2022 14:10:09 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2 09/41] drm/connector: Add TV standard property
-Message-ID: <20220907121009.toizfolruuazcrns@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-9-459522d653a7@cerno.tech>
- <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
+        Wed, 7 Sep 2022 08:10:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4DD73920;
+        Wed,  7 Sep 2022 05:10:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 247E6618AC;
+        Wed,  7 Sep 2022 12:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BCBC433D7;
+        Wed,  7 Sep 2022 12:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662552613;
+        bh=zE9+gCL4LnEvJDm5N/QIpfavvydPeHwn+m7yGhYS380=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CmGI1UCsis1JE5FJ/crWwqu1Jf9IVLSr2s/L0i7C8rTJqE27qoBe2JMkAxagQtzqH
+         teYCMh/OXeVR0mC6q6XNfRLjlSb5GjsxyuEElR9se05FGP6xoHQcZ+8whUlVb+EVrN
+         jvsqpIOLo5a705rdoHSS4YmRQPlPsCzRHAC806XmajsKXPL8JaQnr5ZSXz9XicMXi+
+         sKtMTpasocrsszcJrhxsk5S6Ke4pi67Ru4exJewCGnvV6DMZUDtat+Wbv1FoSepgfY
+         33a8M4pkXW8QHMWwIOXTk/ZosH4sDzIZkWPugYsICO6pB230kuPNnx/pObIIfFJThI
+         2Yhs10s8Zf4Ng==
+Date:   Wed, 7 Sep 2022 14:10:10 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: Re: [PATCH rcu 03/10] rcu: Add QS check in rcu_exp_handler() for
+ non-preemptible kernels
+Message-ID: <20220907121010.GA196513@lothringen>
+References: <20220831180759.GA2693289@paulmck-ThinkPad-P17-Gen-1>
+ <20220831180805.2693546-3-paulmck@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nqpndwa6reldojsu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220831180805.2693546-3-paulmck@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 31, 2022 at 11:07:58AM -0700, Paul E. McKenney wrote:
+> From: Zqiang <qiang1.zhang@intel.com>
+> 
+> Kernels built with CONFIG_PREEMPTION=n and CONFIG_PREEMPT_COUNT=y maintain
+> preempt_count() state.  Because such kernels map __rcu_read_lock()
+> and __rcu_read_unlock() to preempt_disable() and preempt_enable(),
+> respectively, this allows the expedited grace period's !CONFIG_PREEMPT_RCU
+> version of the rcu_exp_handler() IPI handler function to use
+> preempt_count() to detect quiescent states.
+> 
+> This preempt_count() usage might seem to risk failures due to
+> use of implicit RCU readers in portions of the kernel under #ifndef
+> CONFIG_PREEMPTION, except that rcu_core() already disallows such implicit
+> RCU readers.  The moral of this story is that you must use explicit
+> read-side markings such as rcu_read_lock() or preempt_disable() even if
+> the code knows that this kernel does not support preemption.
+> 
+> This commit therefore adds a preempt_count()-based check for a quiescent
+> state in the !CONFIG_PREEMPT_RCU version of the rcu_exp_handler()
+> function for kernels built with CONFIG_PREEMPT_COUNT=y, reporting an
+> immediate quiescent state when the interrupted code had both preemption
+> and softirqs enabled.
+> 
+> This change results in about a 2% reduction in expedited grace-period
+> latency in kernels built with both CONFIG_PREEMPT_RCU=n and
+> CONFIG_PREEMPT_COUNT=y.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Link: https://lore.kernel.org/all/20220622103549.2840087-1-qiang1.zhang@intel.com/
+> ---
+>  kernel/rcu/tree_exp.h | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> index be667583a5547..b07998159d1fa 100644
+> --- a/kernel/rcu/tree_exp.h
+> +++ b/kernel/rcu/tree_exp.h
+> @@ -828,11 +828,13 @@ static void rcu_exp_handler(void *unused)
+>  {
+>  	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+>  	struct rcu_node *rnp = rdp->mynode;
+> +	bool preempt_bh_enabled = !(preempt_count() & (PREEMPT_MASK |
+> SOFTIRQ_MASK));
 
---nqpndwa6reldojsu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't know if nested hardirqs still exist. I only heard old rumours
+about broken drivers. Should we take care of them?
 
-Hi,
+Also are we sure that all callers of flush_smp_call_function_queue()
+are QS?
 
-On Fri, Sep 02, 2022 at 12:00:33AM +0200, Mateusz Kwiatkowski wrote:
-> W dniu 29.08.2022 o 15:11, Maxime Ripard pisze:
-> > The TV mode property has been around for a while now to select and get =
-the
-> > current TV mode output on an analog TV connector.
-> >
-> > Despite that property name being generic, its content isn't and has been
-> > driver-specific which makes it hard to build any generic behaviour on t=
-op
-> > of it, both in kernel and user-space.
-> >
-> > Let's create a new bitmask tv norm property, that can contain any of the
-> > analog TV standards currently supported by kernel drivers. Each driver =
-can
-> > then pass in a bitmask of the modes it supports.
->=20
-> This is not a bitmask property anymore, you've just changed it to an enum.
-> The commit message is now misleading.
->=20
-> > +static const struct drm_prop_enum_list drm_tv_mode_enum_list[] =3D {
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_NTSC_443, "NTSC-443" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_NTSC_J, "NTSC-J" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_NTSC_M, "NTSC-M" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_60, "PAL-60" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_B, "PAL-B" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_D, "PAL-D" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_G, "PAL-G" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_H, "PAL-H" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_I, "PAL-I" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_M, "PAL-M" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_N, "PAL-N" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_PAL_NC, "PAL-Nc" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_60, "SECAM-60" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_B, "SECAM-B" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_D, "SECAM-D" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_G, "SECAM-G" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_K, "SECAM-K" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_K1, "SECAM-K1" },
-> > +=A0=A0 =A0{ DRM_MODE_TV_MODE_SECAM_L, "SECAM-L" },
-> > +};
->=20
-> I did not comment on it the last time, but this list looks a little bit r=
-andom.
->=20
-> Compared to the standards defined by V4L2, you also define SECAM-60 (a go=
-od
-> thing to define, because why not), but don't define PAL-B1, PAL-D1, PAL-K,
-> SECAM-H, SECAM-LC (whatever that is - probably just another name for SECA=
-M-L,
-> see my comment about PAL-Nc below), or NTSC-M-KR (a Korean variant of NTS=
-C).
->=20
-> Like I mentioned previously, I'm personally not a fan of including all th=
-ose
-> CCIR/ITU system variants, as they don't mean any difference to the output=
- unless
-> there is an RF modulator involved. But I get it that they have already be=
-en used
-> and regressing probably wouldn't be a very good idea. But in that case ke=
-eping
-> it consistent with the set of values used by V4L2 would be wise, I think.
+Let's see we know that rcu_exp_handler() can either be executed from:
 
-Ack. What would be the list of standards we'd absolutely need? NSTC-M,
-NTSC-J, PAL-60, PAL-B, PAL-M, SECAM-60 and SECAM-B?
+* hardirqs
 
-> > +/**
-> > + * drm_mode_create_tv_properties - create TV specific connector proper=
-ties
-> > + * @dev: DRM device
-> > + * @supported_tv_modes: Bitmask of TV modes supported (See DRM_MODE_TV=
-_MODE_*)
-> > +
-> > + * Called by a driver's TV initialization routine, this function creat=
-es
-> > + * the TV specific connector properties for a given device.=A0 Caller =
-is
-> > + * responsible for allocating a list of format names and passing them =
-to
-> > + * this routine.
-> > + *
-> > + * Returns:
-> > + * 0 on success or a negative error code on failure.
-> > + */
-> > +int drm_mode_create_tv_properties(struct drm_device *dev,
-> > +=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0 unsigned int supported_tv_=
-modes)
->=20
-> supported_tv_modes is supposed to be a bitmask of BIT(DRM_MODE_TV_MODE_*)
-> (or (1<<DRM_MODE_TV_MODE_*)) rather than DRM_MODE_TV_MODE_* directly, but=
- this
-> is not said explicitly anywhere in this doc comment.
+Or from process context, expected to be RCU QS states at least in idle
+as the comment above flush_smp_call_function_queue() in idle says
+(but I'd rather check all the in-process callers before stating all
+of them are in QS)
 
-The argument doc mentions that it's a "Bitmask of TV modes supported
-(See DRM_MODE_TV_MODE_*)", how would you improve it?
+* idle (in which case preemption is disabled unfortunately so the current
+test won't help)
+* stop_machine
+  _ When CPU is dead and out of RCU (rcutree_dead_cpu() called)
+    so that should be a QS.
+  _ When CPU is migrating (is it a QS then?)
 
-Thanks!
-Maxime
+If we check further that all non-IRQ callers of flush_smp_call_function_queue()
+are always quiescent states then we could deduce that !in_hardirq() means we are in
+a quiescent state, whether preemption is disabled or not.
 
---nqpndwa6reldojsu
-Content-Type: application/pgp-signature; name="signature.asc"
+In any case for the current patch, perhaps a more robust test against nested
+hardirqs would be:
 
------BEGIN PGP SIGNATURE-----
+unsigned long cnt = preempt_count();
+bool preempt_bh_enabled = (!cnt || cnt == HARDIRQ_OFFSET)
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxiKIQAKCRDj7w1vZxhR
-xQFFAQDXwgKR9pMVMn84nPWIY7c88Fvo8DwU/8cFYEx48+uZKwEAjifIFr4Dz1pH
-ltskjsJPqZk1PnFrApehWE8PzkjhpAc=
-=FzGO
------END PGP SIGNATURE-----
+Thanks.
 
---nqpndwa6reldojsu--
+>  
+>  	if (!(READ_ONCE(rnp->expmask) & rdp->grpmask) ||
+>  	    __this_cpu_read(rcu_data.cpu_no_qs.b.exp))
+>  		return;
+> -	if (rcu_is_cpu_rrupt_from_idle()) {
+> +	if (rcu_is_cpu_rrupt_from_idle() ||
+> +	    (IS_ENABLED(CONFIG_PREEMPT_COUNT) && preempt_bh_enabled)) {
+>  		rcu_report_exp_rdp(this_cpu_ptr(&rcu_data));
+>  		return;
+>  	}
+> -- 
+> 2.31.1.189.g2e36527f23
+> 

@@ -2,98 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5CC5B0AED
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C835B0AE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiIGRCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S229512AbiIGRAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiIGRCF (ORCPT
+        with ESMTP id S229469AbiIGRAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:02:05 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D57DB275A;
-        Wed,  7 Sep 2022 10:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662570119; x=1694106119;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=m8q1cRyJn4QGSaHSkQWRLJ2c+Tc4QSATGJwzbx5HRMc=;
-  b=AoCVAg3qONK/5ylWuH5vEB3VJqWOFmZ5TJFNja/LeQi5TIkzguIQ/ETe
-   uawkyS0GXrg7Fzlc9XWNemUZHBQgpOlAM+9AN2LM3K0JmonWwV9MV1D3G
-   iugitvmRE8oyljiyCGVJkzcin/UNAcOSHcanYB8mJ9VAU41hYguoi9+kI
-   PI/9QcIYhm5lC79sK4wD77mycFuhWMQRyQ9XT/fDdtxKdwTl+U5WpUAxO
-   eYi94+7SYXEQjkVizAHqOApRMvFCGdZBM8NaQ9TCkHE3TTJYWWCB+fnqG
-   2H5BOKtcPbKW/iCoWzSO76Tlc/IORZw3ziC+YOVbjSTAgMW1hU0XFm2EW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="360903181"
-X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="360903181"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 10:00:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="682893714"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 10:00:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oVyPq-009jHI-1W;
-        Wed, 07 Sep 2022 20:00:42 +0300
-Date:   Wed, 7 Sep 2022 20:00:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v1 2/9] pwm: lpss: Move exported symbols to PWM_LPSS
- namespace
-Message-ID: <YxjOOpfkSRPcUQfn@smile.fi.intel.com>
-References: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
- <20220906195735.87361-2-andriy.shevchenko@linux.intel.com>
- <20220907091144.picr3byckxco7w6m@pengutronix.de>
- <YxipACrMCQbE4xmk@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Wed, 7 Sep 2022 13:00:50 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2080.outbound.protection.outlook.com [40.107.220.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280AF6DF94;
+        Wed,  7 Sep 2022 10:00:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D89rM5rWpE4zhHmgEVTtELZIpAvMqQITX2RWKjK7CyCNpil112x5/lT+yVyktg39yoXLOsgN9lFJbulghLoPT1fGrl9vyURZTjDC2eA7621wggN+FXgwHHRzXZoOMG3jPpHYctJVmxrkjaUaUwh2sga3kkylvRo737mw1056C+sT4QN3Y1dFs2cMIBcUjBQEpKqdNYuixQF3KLAtbAkFaGCOUmn1NEnA9+g3WevtDXkoQxTa5qLcLFQcNB2VqyZm2C4cfJm8LZdXHPLcuT7HXJfuHUbZKFA92YjQD/PG7ZOnTZ4zyssHCGa24X8JN1fjDWtOjv5qWDsB+HGDfIOB1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=67mePsprQvQ5+lKyoGBOCwAN7WVSaRKEs+i5P5X54Us=;
+ b=h26ZpZM0QJqDyrzcbROHKz9fyPQ7yKR1GXoXMiiIHY5bjLlfxGjKmgsT3zjJNn6SZioq0M72sE4DQUzAfzFj8cPn5c6Ovf6+AhzKdH99KS8nveJKHQSiRne9PXJC9UDnNqKVtKtHciOQV8/FLGNskf+P6HZKhZsDkN5g2QXxsTE8dfTMRFb6hcXQcojfY3gR9UID3NHbDFCL/Ed7plpv96NWNPpv/r1020Jjid8cg6TA3BgZrQq4VdzeFXrIQkUWmM4fULKQfIrh2CXp9Wp7PngadAgUsXOAPZ+KtqaYdd/YNactlnY6/SmcYG2ASLbf2w6AtH5dB1ftHmDX8myyXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=67mePsprQvQ5+lKyoGBOCwAN7WVSaRKEs+i5P5X54Us=;
+ b=oalH/y67bvj7FpagBgaItjghHWFE/IOjwf1FyUBL3YCJr41HfgCH/I/Gxy1E4Mt7Co/zLRiSTTTSUpSG+ezWuReMwAbsC0sLR8AaIcv+bDR2UvbB2oSXr/DzW6A+73kkEi0fBI4umhkxEcdSyb/SW9yXS1r6nJf/O6wUs3TmeWjEpAAW2/uulhM2glq2Pelu+2j2ZSrl3UoNgEMghPxX4CvTEfRs8xxnDxS1BO5NCN7KrpEh0L6oCfI/4WQKuSPzk+cWDj06C14dbbFwn2KTsNKvtYoWbZU2nCTTcx7j0+Pe0sJFpb1FJ6A3CfWHeV61QgkIsoNxJfNyG5y7bpRZZQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB4340.namprd12.prod.outlook.com (2603:10b6:5:2a8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 7 Sep
+ 2022 17:00:47 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
+ 17:00:47 +0000
+Date:   Wed, 7 Sep 2022 14:00:46 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Nicolin Chen <nicolinc@nvidia.com>,
+        will@kernel.org, alex.williamson@redhat.com,
+        suravee.suthikulpanit@amd.com, marcan@marcan.st,
+        sven@svenpeter.dev, alyssa@rosenzweig.io, robdclark@gmail.com,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
+        jonathanh@nvidia.com, jean-philippe@linaro.org, cohuck@redhat.com,
+        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
+        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
+        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        kevin.tian@intel.com
+Subject: Re: [PATCH v6 1/5] iommu: Return -EMEDIUMTYPE for incompatible
+ domain and device/group
+Message-ID: <YxjOPo5FFqu2vE/g@nvidia.com>
+References: <20220815181437.28127-1-nicolinc@nvidia.com>
+ <20220815181437.28127-2-nicolinc@nvidia.com>
+ <YxiRkm7qgQ4k+PIG@8bytes.org>
+ <Yxig+zfA2Pr4vk6K@nvidia.com>
+ <9f91f187-2767-13f9-68a2-a5458b888f00@arm.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxipACrMCQbE4xmk@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <9f91f187-2767-13f9-68a2-a5458b888f00@arm.com>
+X-ClientProxiedBy: BL1PR13CA0357.namprd13.prod.outlook.com
+ (2603:10b6:208:2c6::32) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 168e2feb-1700-4911-17bf-08da90f28280
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4340:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CUlGrHzTEOVUjuZDV8dSn3PtHeEPWvp6Hf9DqaOIxtAWp63RrejBWDGoBdEtXHjAEMb0A9l5KggZUzhRS+QOR4DmUz/SQC4aIiFgOz8WKYtG9lga1kC1LGs02a3GN+4ceYOOn0WPqrKC5heAIVmUzjmefLHzRT0Bdr+QBhyabBhn4oKPTUblmnjcMEgqWpPJfFGSFCQId0IDxCb/ltYzEitNQDfSPw/U5gN5BiPFQChw9QHbPql1PghATqFnG3A9nkLQVyBOAivInSynQmFWwNJm19NdaRqUF0rqq0GeMq4uSTwtgkJgtyy7ggARRotpgLlwLg4HbIiUk39/VjrCrmmrKPRIcy+VkgIpq87Ee1IVhuzxxS5+pR3Qx0nd7TYSZKSPK6AfxwL/5qOeI00k1WZuuFzFGZhIEEaJZM8iwTZqcz0BVbz3j5J3UPA/EsmcezNMnS1Dg3ok0+6PgEU0YKtuVDI0jJXvryGlRX/3NLxjAtY79bWDvSmQYUtYGVjeaS6sz7s3l8bazXjKUr7hh1D/+UROeg2dgkytP7li6RowyDNQCc/gRzI/Jp/pX9iy+qklkth1FVXSZBW1DrjAqkzi+DR1KLWIehDVRmtZ0quDtw/5r1E6Ad1+/4ZMpP2XNOuBq8Et+2JBHMzaXoVZtoELK0ZzKyZmed3vzsAmm5quclTJUMfJg8kAhpUl5efD8eNZM4iyn3f3YwBxbWppGg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(376002)(366004)(136003)(39860400002)(36756003)(316002)(83380400001)(5660300002)(8936002)(6916009)(54906003)(2906002)(4326008)(8676002)(7416002)(7406005)(66476007)(66556008)(66946007)(478600001)(41300700001)(26005)(6486002)(53546011)(2616005)(186003)(38100700002)(6506007)(86362001)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9172dxcnzHGphmgoDTd4I40KFJfYUdupgzQHsKn7UqMLYZLH9DWXJW1RQMT7?=
+ =?us-ascii?Q?0v2LBOnjyFIQJ3LadL+pUUdUBPU47iY2Va7sFu55CluA/npkcImsyiqG/Fiu?=
+ =?us-ascii?Q?zdUuksewZKd7EHDxfzFsHyzw02AmlmhM7sUaWl3DdFEdhpenUl6rid8wD4+v?=
+ =?us-ascii?Q?2dzaxwNmfjKuqCCL/8h4k43wuYalNLOs7hYqlB/cPAmGtHN3yUDO3N1TAhMM?=
+ =?us-ascii?Q?zyYYs0dKwMAVirj8Z2BzLahFjWZvrJD7J8QbEIVf8PbUdPUXIRJd/i9Gupjy?=
+ =?us-ascii?Q?c3hw6Ax/SgvEg8PSDWfNb8xsU5Ou8FWsmymno8c8gSypGTVPvONFSeaofwMx?=
+ =?us-ascii?Q?QcExbtiLjKcZLeORI9korMHLCY70AEiMfE422Z5zJ4d7ZUVMAXbapNUhHZJG?=
+ =?us-ascii?Q?EIA0Gu34BDxHLoY4puZzO56tQHckGmPOUQd9G7kHze+cAaCHMRniOLpes53h?=
+ =?us-ascii?Q?D2Tdx3b1k783LLZ6nQdRWm32q5V2SSuC6ol89BAF7iFABYYKO7cfoHKAvQH5?=
+ =?us-ascii?Q?sN9ZSSb14MwTksL44vhMG+O+bBIZ7eZlpKpdeESd+WBPo/c4eFoQLA3yGGp0?=
+ =?us-ascii?Q?ZI3FBkgCMFnCGjhnsMevNXZC945FENOF0Wr9h85UFPNMiNBe2Oww/0b1ReFt?=
+ =?us-ascii?Q?wVykEbKwdGrEaowFgIrAXh8TwPPgS+d5ErzW17Gsa+39mtiNxvHeSORETlIc?=
+ =?us-ascii?Q?+osJMeXJxf7EoCkpcBC8nob7t7l8ZZSVNR1hvVG+grzqkvZb3AS2hL5tk+Uo?=
+ =?us-ascii?Q?hvQYmZwf+UnQ6w8ogoylTsl6CvkJi/IiyAAbNH4txZNbCCm7NkbRjGyGgfru?=
+ =?us-ascii?Q?P6z67/LE8Js/V5qRhc2ba25SHW38ghl5EfB+1K71LY5Waqwh520dRFOMdMlE?=
+ =?us-ascii?Q?j1cEUuhNBpT9YcbKUSr33FlH1Pb8uWfkg3NAzLGzsGyJwtNXZBqh1o47s3lC?=
+ =?us-ascii?Q?fQm4AqAUSE2kKHqehZ1CSQGqeuQSbImoXW/jWRtel1bhbz2NHmkuiJmG62lo?=
+ =?us-ascii?Q?FDCYQyV4mUeVtBYLeY4qdqXJUN71T2172+ZTBNNRnUQPNt0vjrH4+fKr/STr?=
+ =?us-ascii?Q?QSWjQznebPSPkhfwGtoZ2WfkgwT063UZ32qilJA5w3icEJO2d/IIwfz/nyt5?=
+ =?us-ascii?Q?Mx+IqoghMD6FA7Ojgy5/iW+hicyocF/ZQESGDkJPz+ddM1w/C76/CuOf+j9X?=
+ =?us-ascii?Q?c8ilO83CRJRkp/AbQVjtas/UfzvNPyx//A2Fo7xQlmjLI7rePenm9otFrXlg?=
+ =?us-ascii?Q?213yrvxXr/PwNledRL/ehIfFYYqaE2Tyyix8TQMVM4KMtiuIBZ2ZqyYkg/gp?=
+ =?us-ascii?Q?XZbEmdk36sx00ki1uxb5+AdpUl9UC9PpSbPcD/YU8qY0GxN/y1FOqiywJCkb?=
+ =?us-ascii?Q?Tjt1OeJi9PQPsBWpMk+bX2Z82zTAv/NWbLmmsStFNOY5nSInFTyoXy+akH85?=
+ =?us-ascii?Q?bjrqRAlyqVk47Jq65h8RnRHOuM46TI/F22dqqvipClpSr6dOXS9o+bBsfjPf?=
+ =?us-ascii?Q?1pEpLeio6wLImLs8E3dATYVYSQhRfxZ68chMoITQkfXxRaCPwZxdhSzL3+Ir?=
+ =?us-ascii?Q?Q/u8E3M0a3lYIol+oQt8s1V+x9OPDb0DBnP91FLk?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 168e2feb-1700-4911-17bf-08da90f28280
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 17:00:47.3983
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vQllXeBf3ThOaaWLFKJxHIArr2easmy8oJrdfYycivvtwNjA5ZimnyJ24etTzP7H
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4340
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 05:21:53PM +0300, Andy Shevchenko wrote:
-> On Wed, Sep 07, 2022 at 11:11:44AM +0200, Uwe Kleine-König wrote:
-> > On Tue, Sep 06, 2022 at 10:57:28PM +0300, Andy Shevchenko wrote:
-
-...
-
-> > > -EXPORT_SYMBOL_GPL(pwm_lpss_probe);
-> > > +EXPORT_SYMBOL_NS_GPL(pwm_lpss_probe, PWM_LPSS);
+On Wed, Sep 07, 2022 at 03:23:09PM +0100, Robin Murphy wrote:
+> On 2022-09-07 14:47, Jason Gunthorpe wrote:
+> > On Wed, Sep 07, 2022 at 02:41:54PM +0200, Joerg Roedel wrote:
+> > > On Mon, Aug 15, 2022 at 11:14:33AM -0700, Nicolin Chen wrote:
+> > > > Provide a dedicated errno from the IOMMU driver during attach that the
+> > > > reason attached failed is because of domain incompatability. EMEDIUMTYPE
+> > > > is chosen because it is never used within the iommu subsystem today and
+> > > > evokes a sense that the 'medium' aka the domain is incompatible.
+> > > 
+> > > I am not a fan of re-using EMEDIUMTYPE or any other special value. What
+> > > is needed here in EINVAL, but with a way to tell the caller which of the
+> > > function parameters is actually invalid.
 > > 
-> > There is something possible with more magic:
-> > 	#define DEFAULT_SYMBOL_NAMESPACE PWM_LPSS
+> > Using errnos to indicate the nature of failure is a well established
+> > unix practice, it is why we have hundreds of error codes and don't
+> > just return -EINVAL for everything.
 > > 
-> > which you only need once in pwm-lpss.c and then all exports use that
-> > namespace. (And if you pick up my suggestion for patch 1 you also
-> > benefit from that.)
+> > What don't you like about it?
+> > 
+> > Would you be happier if we wrote it like
+> > 
+> >   #define IOMMU_EINCOMPATIBLE_DEVICE xx
+> > 
+> > Which tells "which of the function parameters is actually invalid" ?
 > 
-> For a single export (even for a few of them) it's an overkill.
+> FWIW, we're now very close to being able to validate dev->iommu against
+> where the domain came from in core code, and so short-circuit ->attach_dev
+> entirely if they don't match. 
 
-Ah, you adding there 4 more. But still I think it's an overkill. It's so small
-driver that duplicating namespace in each of the exported symbols is not an
-issue, is it?
+I don't think this is a long term direction. We have systems now with
+a number of SMMU blocks and we really are going to see a need that
+they share the iommu_domains so we don't have unncessary overheads
+from duplicated io page table memory.
 
--- 
-With Best Regards,
-Andy Shevchenko
+So ultimately I'd expect to pass the iommu_domain to the driver and
+the driver will decide if the page table memory it represents is
+compatible or not. Restricting to only the same iommu instance isn't
+good..
 
+> At that point -EINVAL at the driver callback level could be assumed
+> to refer to the domain argument, while anything else could be taken
+> as something going unexpectedly wrong when the attach may otherwise
+> have worked. I've forgotten if we actually had a valid case anywhere
+> for "this is my device but even if you retry with a different domain
+> it's still never going to work", but I think we wouldn't actually
+> need that anyway - it should be clear enough to a caller that if
+> attaching to an existing domain fails, then allocating a fresh
+> domain and attaching also fails, that's the point to give up.
 
+The point was to have clear error handling, we either have permenent
+errors or 'this domain will never work with this device error'.
+
+If we treat all error as temporary and just retry randomly it can
+create a mess. For instance we might fail to attach to a perfectly
+compatible domain due to ENOMEM or something and then go on to
+successfully a create a new 2nd domain, just due to races.
+
+We can certainly code the try everything then allocate scheme, it is
+just much more fragile than having definitive error codes.
+
+Jason

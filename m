@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFF05B0E8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1E95B0E97
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiIGUuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S230258AbiIGUu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiIGUt5 (ORCPT
+        with ESMTP id S230274AbiIGUuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:49:57 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2953940544
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:49:56 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id j6-20020a17090a694600b00200bba67dadso150674pjm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=9GZb9CRFPhxp9tscSggmlKolydoK7KEFJypG3qPCQT4=;
-        b=tszoHT44RlM+zRsz3gdj4l3lxPj37/tivKl1gftfZYM71iXmWTI2fP+q73kWeCVbp1
-         bTc2AZuz0sOKt9DMej/uQeOaOcipQSItiyPH9T7GFGCQkmumJpUAu16Y3qLP12QEaEUT
-         hI8enOT8wValRxC7iAlNVa7eh4ofSdtw3R8MhdNisnA3XNW+laTsbaA3+1bisyVzcStc
-         8xu9B6M+uGVCSWli8jr520BG5Pkhg0dcppbEQYRtoS6cohQZCAFH2GUrhz9QGWPtnYj8
-         zAlunQhX4jRxPrrNESdeAre/fdrS0xpTYUuCC91xNwC9HzAiiYk0yzR2z0wfOhSOHWMN
-         9ooA==
+        Wed, 7 Sep 2022 16:50:39 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E1D52DF0;
+        Wed,  7 Sep 2022 13:50:35 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-128121a9851so3693783fac.13;
+        Wed, 07 Sep 2022 13:50:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=9GZb9CRFPhxp9tscSggmlKolydoK7KEFJypG3qPCQT4=;
-        b=yTg6P14cR3SJbk7nQ3RIkTvTLv8D21H4dgjjWsOdjdQtP0WkCRBtM46YTF9xXG1iti
-         1c9OYKegt9QfADD0Sxd9IX0gd8equsiejurf+lPMCJqXcmW+XQIxOR+VK22oDF2myO+h
-         tsSBQF7OdXBQ3A3npDc7Fxa4gTD4iZ5PJoilmSSfLfsd/xZNBFxc03AuKskQP7Oz4bDU
-         E6Chef7XNfH/SISTuLvLDwieQhW9Rk5EXyvl2CzVhCSKExwGw5jOXLM/tdwxA5Xl3e5G
-         SVfhl+SqteMJYNvYzQS2V3OCRFdLOruzoXiTMaIkQSONFa+4yU0S3I60j2FHqo302VkF
-         XKUA==
-X-Gm-Message-State: ACgBeo34J/8LRTSgNExdGRJq4m4OtxS9YI3+kvxbqmlpU4SruL+favW8
-        D0iLWd48L3sp7WD1TC83iQ9yww==
-X-Google-Smtp-Source: AA6agR5j70Jbhx0EjLhsyRaf4aRZseNE3kvGEZkZhmZ8bTfPbJcdAmpM90DukHtEZHRD8PjLoz+QHg==
-X-Received: by 2002:a17:902:e40c:b0:176:9543:883 with SMTP id m12-20020a170902e40c00b0017695430883mr5764108ple.169.1662583795724;
-        Wed, 07 Sep 2022 13:49:55 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:5362:9d7f:2354:1d0a:78e3])
-        by smtp.gmail.com with ESMTPSA id e6-20020a17090301c600b001712c008f99sm12795140plh.11.2022.09.07.13.49.51
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=XpaMqgzQduMkVaFdjS8sZuoWxamJB73mDfIYxsQEGzM=;
+        b=ZyClzmMkb0bG/2HGswZh6EglijHrXaZys50CRcQk4btN7fLAQQBqEkBeP6Wy2SSpZZ
+         12ba5PXzk+YzS2jT8aP5T56aAx1/0elPW4YKuF5Z54heKxQg0nx2qnUCBayXjScSWOjx
+         45W+c0j25Gk3GEpaWqBblPCpv7dl1L8+PPQcg6nQMSO8XULOg8eSaLafeVzC69tHRqnS
+         tsuRb5ZEenEnlU7BpCmVB/rK5a7mJkdQI1e7ay2+BdBRERqxdvZNT+NSseWfd9EyFQ1G
+         hkLk/xIpJjaLnA5KNS/ZDzhs2dTfml5+oLoC3plfEpKMw5s8Ue4a3p+U9/5nURDytZFE
+         J9BA==
+X-Gm-Message-State: ACgBeo3HRXrQhXFmTjL5p2sHUW9045UxAjbHaAnFyicbwitnhqEZqePV
+        jOhYfLY4osaOUNNpf4TFqw==
+X-Google-Smtp-Source: AA6agR4y0lnUCMGP5KqdujGB7vvUBgedIl3yykVGAFTXJQtN736AfICOgzZNv2SREifIEOY0hIcY6g==
+X-Received: by 2002:a05:6871:96:b0:11d:ca1b:db19 with SMTP id u22-20020a056871009600b0011dca1bdb19mr180703oaa.74.1662583834165;
+        Wed, 07 Sep 2022 13:50:34 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056870c14c00b0012644cc4feasm6349515oad.55.2022.09.07.13.50.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 13:49:55 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>
-Subject: [PATCH 4/4] dt-bindings: net: snps,dwmac: Update interrupt-names
-Date:   Thu,  8 Sep 2022 02:19:24 +0530
-Message-Id: <20220907204924.2040384-5-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
-References: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
+        Wed, 07 Sep 2022 13:50:33 -0700 (PDT)
+Received: (nullmailer pid 320445 invoked by uid 1000);
+        Wed, 07 Sep 2022 20:50:33 -0000
+Date:   Wed, 7 Sep 2022 15:50:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Chia-Wei Wang --cc=linux-kernel @ vger . kernel . org" 
+        <chiawei_wang@aspeedtech.com>, linux-crypto@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v1 4/4] dt-bindings: bus: add documentation for Aspeed
+ AHBC
+Message-ID: <20220907205033.GA317033-robh@kernel.org>
+References: <20220902060012.3758637-1-neal_liu@aspeedtech.com>
+ <20220902060012.3758637-5-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902060012.3758637-5-neal_liu@aspeedtech.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
-interrupt error msg") noted, not every stmmac based platform
-makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
+On Fri, Sep 02, 2022 at 02:00:12PM +0800, Neal Liu wrote:
+> Add device tree binding documentation for the Aspeed
+> Advanced High-Performance Bus (AHB) Controller.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> ---
+>  .../bindings/bus/aspeed,ast2600-ahbc.yaml     | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml b/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
+> new file mode 100644
+> index 000000000000..ca09eb531666
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
+> @@ -0,0 +1,39 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/aspeed,ast2600-ahbc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ASPEED Advanced High-Performance Bus Controller (AHBC) Device Tree Bindings
+> +
+> +maintainers:
+> +  - Neal Liu <neal_liu@aspeedtech.com>
+> +  - Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+> +
+> +description: |
+> +  Advanced High-performance Bus Controller (AHBC) supports plenty of mechanisms
+> +  including a priority arbiter, an address decoder and a data multiplexer
+> +  to control the overall operations of Advanced Highperformance
 
-So, update the 'interrupt-names' inside 'snps,dwmac' YAML
-bindings to reflect the same.
+High-performance
 
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: David Miller <davem@davemloft.net>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- Documentation/devicetree/bindings/net/snps,dwmac.yaml | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+> +  Bus (AHB). AHB is the main system bus for ARM CPU to communicate with the
+> +  related peripherals.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-ahbc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ahbc: bus@1e600000 {
+> +        compatible = "aspeed,ast2600-ahbc";
+> +        reg = <0x1e600000 0x100>;
 
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index f89ca308d55f..4d7fe4ee3d87 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -105,10 +105,12 @@ properties:
- 
-   interrupt-names:
-     minItems: 1
--    items:
--      - const: macirq
--      - const: eth_wake_irq
--      - const: eth_lpi
-+    maxItems: 3
-+    contains:
-+      enum:
-+        - macirq
-+        - eth_wake_irq
-+        - eth_lpi
- 
-   clocks:
-     minItems: 1
--- 
-2.37.1
+Shouldn't devices on the bus be child nodes? 
 
+> +    };
+> -- 
+> 2.25.1
+> 
+> 

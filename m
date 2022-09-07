@@ -2,145 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83E35B05A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093C85B05A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiIGNsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S229809AbiIGNso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiIGNsU (ORCPT
+        with ESMTP id S229685AbiIGNsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:48:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66DB29
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662558499; x=1694094499;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2hq9VsMNI2YsNBzowapDtlL+tQ7fFahjo10RC0uEpMc=;
-  b=F1f8P3OicNN5EldLOsTrHx85IhCJcn4V+HhRh31ap+HkV1F/AWOdHnRY
-   LUhtrJV8vYegtHkQ+Qfq+cW7X4sP3KJFB35xRccpesUaKMGIonmVXxWx0
-   VR1lVRI4ax5GKaoGqIL+vuykEc0HeMl3eV1rNre8D6qB8zwIQptb+IxKv
-   G0wF4WBinpjmA+5K1oWLWw1NlYxH4vr/Ne1by+/CKTEvGl3KaRKu5xUlN
-   X/k7ctEdptxlo5XC3DjF2ZX4A0iapudf22bC4/W4ug0zPSCFZGqhsqShX
-   guROfgv7S93tkiPYy8zMz3xBlUd1g5HuTQMwkgoLvc2hztD2ifCFqxl+H
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="279885603"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="279885603"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:48:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="942893438"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Sep 2022 06:48:17 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVvPc-0006cT-2a;
-        Wed, 07 Sep 2022 13:48:16 +0000
-Date:   Wed, 7 Sep 2022 21:47:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: [mani-mhi:mhi-next 2/3] drivers/bus/mhi/host/pci_generic.c:734:60:
- error: assignment of member 'irq' in read-only object
-Message-ID: <202209072144.lWoBySRH-lkp@intel.com>
-MIME-Version: 1.0
+        Wed, 7 Sep 2022 09:48:39 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DDFBF4F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:48:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ux5M9AeNG/srNWp8y4MQ80R9Wuu1/GxzdHTYB97IeLcSkVhc3L1cKsedRaH38A8ea367+Pm1SiZUScGxTXHK/+1mPhzJS2iRX7HogDS9OINB20i2Zv3mcn+ag/mcGHLLs7TlyFHPrAShlGAkIRiwcjCAIuze0mDh+wD2R5Q1PTWnn+pZwDz5YZR3fXvjakSvdiWTM94nLE9bR+8xc9nDTFk9K2+lRw5VqzFcd8NSnRCDZDYXrUe2Sa4KMP+ay9E01UO6aMTLdUrU9x6fe+g4JMFo2aTPujRPnCNMReUD+Ip2c6cmz628MH7gU+3sFgQ/2d5OUWNtLJtVLU+wBca+xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=49mzpJyI4raMY06nPTEoT/DHLNWwXMDTsH9fOWzhwgY=;
+ b=VFevFSrNK8/VniR68xjN+vYQ9OKWZwBsUnvoMg05IB8GEokh/2Is+ATG9tLk2Z/8uBk1wh4N1SG4ELwcNQTnNWV6w2UfITqayCwlitH/GJbMP52cdwfwgLsH3cOtzN0IUXi8qdlKmbEDB8HyaE5vin/iVMPjF68JktZkjcYWi0HsNKDVV/tNPxQDX3AbDo5yh10mQrnFP8sYbfIIs2iUGds/teJVHd3a+IWXV5FJSKi68G8vcHhAQb43T9BJsYnkbLbLTefqprCPz9NzHH1l3LbiNm3iEAJ4YBn36zKGUucyVOUXUMsLULGZFMVbYQ4/rZIq6FcopZUB0QiK3nORfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=49mzpJyI4raMY06nPTEoT/DHLNWwXMDTsH9fOWzhwgY=;
+ b=BNM8nqp64Wsn+Z4dolYL6vuRZunQsCrNX2dXbEEkNTcqtI4zRSL1bRYo6kThni6GCTyHGXsYfpKcKJgkz+64Pziq7WgL/gY7jZ4u4z+hDhzWcqoNoA1Sx5edgLW6dni1cVfD+e2VLC/QalGauBq3gYOMxi3eYnTMm54oYJIF1+Y2KK5gm7V94ZrjvDVsJEHB/Hgbx0LG6nWH0LJ/wzvL6Tm9mB8Tv/uN7nwtuWOI69l3HH7drb5D3GYSkRvuj43r9hzOk9/fhnFs+t4x41NM99kVTDDNmoVII2l/+MCo9R9PrzemZ5Afnv0BJVPeQME3GOO3kSvABIXPm4v6V0GUGQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MN0PR12MB6103.namprd12.prod.outlook.com (2603:10b6:208:3c9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 7 Sep
+ 2022 13:48:34 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
+ 13:48:34 +0000
+Date:   Wed, 7 Sep 2022 10:48:33 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION 5.19.x] AMD HD-audio devices missing on 5.19
+Message-ID: <YxihMchpLRPAqNWx@nvidia.com>
+References: <874jy4cqok.wl-tiwai@suse.de>
+ <20220823010021.GA5967@nvidia.com>
+ <87h723sdde.wl-tiwai@suse.de>
+ <87ilmjqj1f.wl-tiwai@suse.de>
+ <20220823202824.GA4516@nvidia.com>
+ <87bkrrl3eo.wl-tiwai@suse.de>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87bkrrl3eo.wl-tiwai@suse.de>
+X-ClientProxiedBy: BL0PR02CA0096.namprd02.prod.outlook.com
+ (2603:10b6:208:51::37) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5099cdc7-fd7e-471d-6f5b-08da90d7a86a
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6103:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MGFGOymQzET8QdyjQBQT8C3Lk3lPSgX9/ORb+LhWIZ3AKFjr7Tv6t2/ywYTh3OPzhD0AqgR3zmurR9H+PvKqGWmzvRP+7Idw39QMSrzWZPVIrwsRklfcDSwenLYVp8LJZs8dFDuoLVPFsLiJJETjsN6jcGPlSP20TJqmCsOMbPLLkVcieIxJiTewANvFRbEpWh89u3H+d310ufwRY0HMfFe15rLxu4ft8NHQLdOkfbQiy0p+9DkM2ofHC4+f11M5WCRujHilPHtNrljHIYfRLAUkLRmEjAUqaoyqAP/3hdZTyMOOjYa7ZAPeqq5pZdG6Q2l9BuOlpqGIwS9guot7Kd5LE0R6U6JtUtnNu8O3D1YmgbhzxZ7z5jV09bn7VcwjSejH73oRpmluUfZg1F40JPF26NZOA1bGaW2wL70JVvBkruzQhBBWuiAczFpCna31wa4e6IIJYlQEqPAX4iWBZ8PU7GRllugEVc10DNRVLu2YEXnqaVvah7frou0imy977dYlOFvZFZVuS7FweutiROrO/gvhz9Znvd089fFq9QmaTI6nkkaB13PVlJqkQsemt88/KHArBLZKxJv71SvvYqzmrW4FZWu3uOmHy3AvrEdxTrVhbfTA7CxaY2a82z9N774f8q8QMcjUoT89JUlaBhd3O+wo8ULx20m+FofTSAB+feKsCv5qG7s0LnbRefEOlxhaL1VEBjKjsQmSnSD6sw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(376002)(366004)(346002)(38100700002)(316002)(6916009)(54906003)(5660300002)(4744005)(8936002)(66946007)(66476007)(8676002)(4326008)(2906002)(66556008)(186003)(2616005)(83380400001)(41300700001)(478600001)(6486002)(6506007)(6512007)(86362001)(26005)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tm0Yuj6srJ+A6YD0WT1VBtQ9+Ibi0S5GG54ZxUd/k++cEmdsrtvIVMI72UYf?=
+ =?us-ascii?Q?UbB5JXh5AwvC6vN1W3PcBE8UGKQtMbZZFdmBd7aS42IccypC0+kDLM6IBxAo?=
+ =?us-ascii?Q?ZWWFj9sbOpXTKqBp6VCd21R7wdMFB63gCWKpNJh0UczeYI2vRExIcohKUkAF?=
+ =?us-ascii?Q?kHiM72d88UApZXtAwfc9XrbndIzH60rUtOh2CrXd9JgJWg6+G7FhtJ6Od9Qw?=
+ =?us-ascii?Q?vkC/d1L+PGbvsi81UGX0Di25hQbMiutNADw8/G1q6khUU0cTHX1/VgCcjgsu?=
+ =?us-ascii?Q?3OcpvRVfEH6n3FYXLsKCPMgRWJlQDv8TjxbjozF8+mCLfgsNoo9iWj0TO4TI?=
+ =?us-ascii?Q?D/jZAzIvLtrWFunakpjqX115ZwEPVDLx/fCUBJR+/xiPZMQopDYKjrqsnJQn?=
+ =?us-ascii?Q?JUHWn121cU0ZOScQPu/3SWq78V18jXaCiBoBMQOJv8i+iwr9RrIbGmMl/b92?=
+ =?us-ascii?Q?3rx4vIOiLbmzigSmF3bAnY/cZKJWk3f6G6xV8+XGnnWFa84zBxvjc6Iar/lx?=
+ =?us-ascii?Q?NBZNt1MmeSWFg5aIoZsegnOxCRF+cIUOXcY3n35pJ1Gjj+xY4pUZkOnzCZ47?=
+ =?us-ascii?Q?TUoR2dpkwSfZQ7FLvR2qjjXvGxuTAG12mg81mhbn+Hb8dkazY/BjqA/k0tAx?=
+ =?us-ascii?Q?oXVG20rZXnfipOmX7Mf07bGnZHWEp29yNfGrvAk1kF3M6O/h+pZoeKSRwbnN?=
+ =?us-ascii?Q?HAlZONiMPtb5XlITusil7JjciWC3YrISriladF5QeIYn8lkuajl66u/ueEbU?=
+ =?us-ascii?Q?0sOvMsM0Ehut3lNwG9WfkSnDq3MWrxJHTVwbcDsX3dw+rgpSfFmYgE5zV1sI?=
+ =?us-ascii?Q?/2wEGk+B+guQAFk/iX1LUuYKm0J9+fihc3Uaa1tq920IlzQKcElclZ70SHoy?=
+ =?us-ascii?Q?nlxf2YjUAHbZ7t8dQTbUO6at3W30ZUyfeRU/1GS2PRWOU5GJv3CfibAq2drg?=
+ =?us-ascii?Q?LN4vooHe+LbNKCu+vg15YjIPLd2cd4j2H+x+j/xFxc0M24n6zcgPqMzU8wnZ?=
+ =?us-ascii?Q?fA8i4qL9WfhLfv0Ajn1to7piDdTMppqzVqIRClWJGXTJI8Xdo9NVglxCQaD8?=
+ =?us-ascii?Q?AX1+vahE5KEIic9wL3Fq1fQaOikUMZNj6zIGm4nAT8Ot0FaQxie4GkFM++hc?=
+ =?us-ascii?Q?qqeB/UhesnvS8O9ea28EPIe2F9Co/ouVYTjHrn51e0pDaltGaZrq3BOAc2Bc?=
+ =?us-ascii?Q?Azg4NKaC8HCYvtZrpDYFpW5wPOlZmyZV5JI/8WyL84eFboAkdjoMRziN02UW?=
+ =?us-ascii?Q?HQ0s1YknAH0OcUmA2fXr9LyQtIHPgnvISqYcQF7Xs12A38p+5gLSn4wWiU+h?=
+ =?us-ascii?Q?Oa+iQBVURvfO7PciYhlBipRaGFPFL9PQCQreVmIyoL0HcelqqE/ZtI3mc9mR?=
+ =?us-ascii?Q?B1C7iAmSIHSNSA6GjfecGUzYpptKuLIqP02neNGcjl+SArfj+Yc0ZF/DHK5e?=
+ =?us-ascii?Q?460MRDJ3UgiSqX9cECHPLp6B+58PBUUESHNcLVLQWmq4pVXEzlYjgl1/Dwjl?=
+ =?us-ascii?Q?6VbfqHjacfDYs1ajtKkdObQwkzizEetO4mZB6XJQosPY2nNToxY6VQ3TcFBI?=
+ =?us-ascii?Q?e6kZkTHNYKx+wJjSXe8CFDzmUlPHEKxe9wbnSNBW?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5099cdc7-fd7e-471d-6f5b-08da90d7a86a
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 13:48:34.5043
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UariDeMcgGG9F7v4pP18dGdoFmB2A6BjZqiIZh+sdO+dMgSCUhUJNoYvFTsFyQyN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6103
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git mhi-next
-head:   0a3b31f6259f4849e4e93731d4c8d7910be072a7
-commit: 4a98958ca237a4b7974ea1ec2092b3666bdd26ab [2/3] bus: mhi: host: make mhi_controller_config::event_cfg const
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220907/202209072144.lWoBySRH-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git/commit/?id=4a98958ca237a4b7974ea1ec2092b3666bdd26ab
-        git remote add mani-mhi https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git
-        git fetch --no-tags mani-mhi mhi-next
-        git checkout 4a98958ca237a4b7974ea1ec2092b3666bdd26ab
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, Sep 07, 2022 at 03:28:31PM +0200, Takashi Iwai wrote:
+> >  /**
+> >   * iommu_device_use_default_domain() - Device driver wants to handle device
+> >   *                                     DMA through the kernel DMA API.
+> > @@ -3094,8 +3112,7 @@ int iommu_device_use_default_domain(struct device *dev)
+> >  
+> >  	mutex_lock(&group->mutex);
+> >  	if (group->owner_cnt) {
+> > -		if (group->domain != group->default_domain ||
+> > -		    group->owner) {
+> > +		if (group->owner || iommu_is_default_domain(group)) {
+> 
+> Isn't this rather 
+> 		if (group->owner || !iommu_is_default_domain(group)) {
+> ?
+> 
+> I'll rebuild the kernel with this change and ask reporters again.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Oh yes, good eyes, that probably crashes on boot too
 
-All errors (new ones prefixed by >>):
-
-   drivers/bus/mhi/host/pci_generic.c: In function 'mhi_pci_get_irqs':
->> drivers/bus/mhi/host/pci_generic.c:734:60: error: assignment of member 'irq' in read-only object
-     734 |                         mhi_cntrl_config->event_cfg[i].irq = 0;
-         |                                                            ^
-
-
-vim +/irq +734 drivers/bus/mhi/host/pci_generic.c
-
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  708  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  709  static int mhi_pci_get_irqs(struct mhi_controller *mhi_cntrl,
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  710  			    const struct mhi_controller_config *mhi_cntrl_config)
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  711  {
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  712  	struct pci_dev *pdev = to_pci_dev(mhi_cntrl->cntrl_dev);
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  713  	int nr_vectors, i;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  714  	int *irq;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  715  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  716  	/*
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  717  	 * Alloc one MSI vector for BHI + one vector per event ring, ideally...
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  718  	 * No explicit pci_free_irq_vectors required, done by pcim_release.
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  719  	 */
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  720  	mhi_cntrl->nr_irqs = 1 + mhi_cntrl_config->num_events;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  721  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  722  	nr_vectors = pci_alloc_irq_vectors(pdev, 1, mhi_cntrl->nr_irqs, PCI_IRQ_MSI);
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  723  	if (nr_vectors < 0) {
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  724  		dev_err(&pdev->dev, "Error allocating MSI vectors %d\n",
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  725  			nr_vectors);
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  726  		return nr_vectors;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  727  	}
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  728  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  729  	if (nr_vectors < mhi_cntrl->nr_irqs) {
-b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  730  		dev_warn(&pdev->dev, "using shared MSI\n");
-b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  731  
-b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  732  		/* Patch msi vectors, use only one (shared) */
-b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  733  		for (i = 0; i < mhi_cntrl_config->num_events; i++)
-b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05 @734  			mhi_cntrl_config->event_cfg[i].irq = 0;
-b91c3b30e226726 drivers/bus/mhi/pci_generic.c Loic Poulain 2021-01-05  735  		mhi_cntrl->nr_irqs = 1;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  736  	}
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  737  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  738  	irq = devm_kcalloc(&pdev->dev, mhi_cntrl->nr_irqs, sizeof(int), GFP_KERNEL);
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  739  	if (!irq)
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  740  		return -ENOMEM;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  741  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  742  	for (i = 0; i < mhi_cntrl->nr_irqs; i++) {
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  743  		int vector = i >= nr_vectors ? (nr_vectors - 1) : i;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  744  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  745  		irq[i] = pci_irq_vector(pdev, vector);
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  746  	}
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  747  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  748  	mhi_cntrl->irq = irq;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  749  
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  750  	return 0;
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  751  }
-855a70c12021bdc drivers/bus/mhi/pci_generic.c Loic Poulain 2020-10-21  752  
-
-:::::: The code at line 734 was first introduced by commit
-:::::: b91c3b30e2267265cd7e67cb3d0c99c48c02b001 mhi: pci_generic: Fix shared MSI vector support
-
-:::::: TO: Loic Poulain <loic.poulain@linaro.org>
-:::::: CC: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jason

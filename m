@@ -2,125 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE365B0FA5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 00:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904D45B0FA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 00:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiIGWBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 18:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S229988AbiIGWHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 18:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIGWBS (ORCPT
+        with ESMTP id S229489AbiIGWHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 18:01:18 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C8F895DE;
-        Wed,  7 Sep 2022 15:01:17 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:32958)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oW36e-0064Jr-Ba; Wed, 07 Sep 2022 16:01:12 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:53706 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oW36d-0092tB-7e; Wed, 07 Sep 2022 16:01:11 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Oleksandr Natalenko <oleksandr@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Will Deacon <will@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Stephen Kitt <steve@sk2.org>, Rob Herring <robh@kernel.org>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Renaud =?utf-8?Q?M=C3=A9trich?= <rmetrich@redhat.com>,
-        Grzegorz Halat <ghalat@redhat.com>, Qi Guo <qguo@redhat.com>
-References: <20220903064330.20772-1-oleksandr@redhat.com>
-        <87r10ob0st.fsf@email.froward.int.ebiederm.org>
-        <5599808.DvuYhMxLoT@redhat.com> <20220907173438.GA15992@redhat.com>
-Date:   Wed, 07 Sep 2022 17:00:43 -0500
-In-Reply-To: <20220907173438.GA15992@redhat.com> (Oleg Nesterov's message of
-        "Wed, 7 Sep 2022 19:34:40 +0200")
-Message-ID: <877d2ec0ac.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 7 Sep 2022 18:07:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4439D666
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 15:07:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662588455; x=1694124455;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=opm+udo9hcC/Jimt9TvXEIDH8cXQbqxDr/iB2g4r7Hc=;
+  b=geNZ3ofqQXELrtchw9i+fe+6vL1vZO9OBf1QE2Rg8/yoWrfwcUzvPHec
+   4PlxNTfbKeufxaCUQpvTYgmfHpXAhoS3dEIdJdf78TymdHbg7Woabdv/E
+   t+Mv5f+r6F4AZVHzHMG8YLUPkNvRKIkmz5uHgmBDWhc3aWzc9IKfcLe4W
+   c49XL7U3SyrWBPo1PvgeZN0itJTdHJ9MWk8dTjeC1zZe69D1JmvmdyRKb
+   aTk4CVWcPP4F1cpuyPT1cPcucJlHEt3je7pdbBcusfJOwekosCQT/jwYk
+   Ig60qQWI3d8RXvOVFGTn+5kCLcSk2sBm0mtUbwbJw05YxMcXKnG92UzbY
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297815677"
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="297815677"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 15:07:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="565695255"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 07 Sep 2022 15:07:33 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oW3Cm-00070J-24;
+        Wed, 07 Sep 2022 22:07:32 +0000
+Date:   Thu, 8 Sep 2022 06:07:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xin Hao <xhao@linux.alibaba.com>, sj@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xhao@linux.alibaba.com
+Subject: Re: [PATCH] mm/damon: Remove duplicate get_monitoring_region()
+ definitions
+Message-ID: <202209080600.L5N3msAB-lkp@intel.com>
+References: <20220907112924.65546-1-xhao@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oW36d-0092tB-7e;;;mid=<877d2ec0ac.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/MTX45R8okRsDE3mI928lifjqE1i+i1fQ=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907112924.65546-1-xhao@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 548 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (2.1%), b_tie_ro: 10 (1.8%), parse: 1.47
-        (0.3%), extract_message_metadata: 4.3 (0.8%), get_uri_detail_list:
-        1.70 (0.3%), tests_pri_-1000: 7 (1.3%), tests_pri_-950: 1.74 (0.3%),
-        tests_pri_-900: 1.48 (0.3%), tests_pri_-90: 143 (26.1%), check_bayes:
-        141 (25.7%), b_tokenize: 13 (2.4%), b_tok_get_all: 9 (1.7%),
-        b_comp_prob: 3.9 (0.7%), b_tok_touch_all: 110 (20.1%), b_finish: 0.96
-        (0.2%), tests_pri_0: 354 (64.6%), check_dkim_signature: 0.49 (0.1%),
-        check_dkim_adsp: 2.8 (0.5%), poll_dns_idle: 0.97 (0.2%), tests_pri_10:
-        2.2 (0.4%), tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] core_pattern: add CPU specifier
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+Hi Xin,
 
-> On 09/07, Oleksandr Natalenko wrote:
->>
->> The advantage of having CPU recorded in the file name is that
->> in case of multiple cores one can summarise them with a simple
->> ls+grep without invoking a fully-featured debugger to find out
->> whether the segfaults happened on the same CPU.
->
-> Besides, if you only need to gather the statistics about the faulting
-> CPU(s), you do not even need to actually dump the the core. For example,
-> something like
->
-> 	#!/usr/bin/sh
->
-> 	echo $* >> path/to/coredump-stat.txt
->
-> and
-> 	echo '| path-to-script-above %C' >/proc/sys/kernel/core_pattern
->
-> can help.
+Thank you for the patch! Yet something to improve:
 
-So I am confused.  I thought someone had modified print_fatal_signal
-to print this information.  Looking at the code now I don't see it,
-but perhaps that is in linux-next somewhere.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc4 next-20220907]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-That would seem to be the really obvious place to put this and much
-closer to the original fault so we ware more likely to record the
-cpu on which things actually happened on.
+url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Hao/mm-damon-Remove-duplicate-get_monitoring_region-definitions/20220907-193059
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 0066f1b0e27556381402db3ff31f85d2a2265858
+config: hexagon-randconfig-r041-20220907 (https://download.01.org/0day-ci/archive/20220908/202209080600.L5N3msAB-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/28cd0cc7549075eccc95a2c48fbe3bc58f17caee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xin-Hao/mm-damon-Remove-duplicate-get_monitoring_region-definitions/20220907-193059
+        git checkout 28cd0cc7549075eccc95a2c48fbe3bc58f17caee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash mm/
 
-If we don't care about the core dump just getting the information in
-syslog where it can be analyzed seems like the thing to do.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-For a developers box putting it in core pattern makes sense, isn't a
-hinderance to use.  For anyone else's box the information needs to come
-out in a way that allows automated tools to look for a pattern.
-Requiring someone to take an extra step to print the information seems
-a hinderance to automated tools doing the looking.
+All errors (new ones prefixed by >>):
 
-Eric
+   In file included from mm/damon/reclaim.c:16:
+>> mm/damon/ops-common.h:13:23: error: unknown type name 'pmd_t'
+   void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr);
+                         ^
+   1 error generated.
 
+
+vim +/pmd_t +13 mm/damon/ops-common.h
+
+46c3a0accdc48c mm/damon/prmtv-common.h SeongJae Park 2021-11-05  11  
+46c3a0accdc48c mm/damon/prmtv-common.h SeongJae Park 2021-11-05  12  void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr);
+46c3a0accdc48c mm/damon/prmtv-common.h SeongJae Park 2021-11-05 @13  void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr);
+198f0f4c58b9f4 mm/damon/prmtv-common.h SeongJae Park 2021-11-05  14  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

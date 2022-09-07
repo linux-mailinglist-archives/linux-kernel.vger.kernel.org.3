@@ -2,214 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993785B05BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1035B05C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIGNxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S229670AbiIGNx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiIGNxj (ORCPT
+        with ESMTP id S229673AbiIGNxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:53:39 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A25A9E2F8;
-        Wed,  7 Sep 2022 06:53:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tCjY/QLdprUhf7WTcDGbAKlrnkf5jVx/ryaWR+dwtH8=; b=GIwenM/qxvktpWk+ynw5s+7XBo
-        NxlXbk/3I26vSXz691UpGfggJkyclumiQG0P7Fdno0A8V7yF4hkfBMtSUnBbxCPcYkGhNrglx6VW4
-        JDP+fLL5bd5kZeEYw+zdzq3y1/WNg/rc7HnpKTnPujcHh8uHZ2r9lEZqWJPrDHL1+sS0qJZgQ5K+G
-        T5C2pNlLsN5ZnYOdW6+0TMdZC8P7Fg/OeWpOKRNxCEe+1GaQx3u7bDJG5f/y1uFUg9cV5W5/lzXJr
-        6Akgtj4N4giZsUhXhvbZeVVTqiq1ffu7wgn+/4CrODR6B1ZJRbpA5YuPKLhoSD2km2JlW4nG2smfQ
-        Rb/slnaA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34176)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oVvUM-0005SY-QH; Wed, 07 Sep 2022 14:53:10 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oVvU9-00019I-RD; Wed, 07 Sep 2022 14:52:57 +0100
-Date:   Wed, 7 Sep 2022 14:52:57 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 0/4] tty: TX helpers
-Message-ID: <YxiiOWQxGCUz9ktF@shell.armlinux.org.uk>
-References: <20220906104805.23211-1-jslaby@suse.cz>
- <Yxcvbk281f/vy4vb@hovoldconsulting.com>
- <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
- <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com>
- <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
- <cfd16d53-6aa0-e848-91d0-dce8ff72bb4d@linux.intel.com>
- <YxiONiDgGYp8MGQA@kroah.com>
- <c66f9c98-dcef-27c-d74a-ea826f6a799@linux.intel.com>
- <YxiQVTN/jX8AfO4L@kroah.com>
+        Wed, 7 Sep 2022 09:53:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DDDA220A;
+        Wed,  7 Sep 2022 06:53:47 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287DgB8n020297;
+        Wed, 7 Sep 2022 13:53:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Yyrc9saJQYLT5TPC1+9QpzBLh2OKqdf5lWreXjgpJus=;
+ b=buECoyK/d5S/taJ0Fud/O917MQmdI4xxzK5nMce9iT/blhItkELeAlhSLwp8lPZDrJTa
+ KoRH3qaHSiIK0t6Dj/5ZyEF7i2CfYwcszSpJPgSqZ6Y6w6zvKiGcXIoJrnwi+8D7qLco
+ n+6EhmNZOnPk24dBp26LTEItqxRbnu26WQjhB120c2iE1oKEkzHtx/VqPo15XrwdGgPo
+ BbuP1zWgkXpWfPr8fGIuMmU/lYPsC3TNrtJNKod14KHh8q/3P6Baa+yVLvFZQ3xP9D/p
+ 2eNkfQa6KezOudsrQ0W9H9nXbH/LvgUsrD6XDA3j1Z5nLul+zE4YcI9LCiZoHB2emydE Wg== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jevdrghqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 13:53:23 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 287DpVgn012030;
+        Wed, 7 Sep 2022 13:53:22 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01wdc.us.ibm.com with ESMTP id 3jbxj9j4sj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 13:53:22 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 287DrLpg15139558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Sep 2022 13:53:21 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEA8D7805F;
+        Wed,  7 Sep 2022 14:03:36 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB53A7805C;
+        Wed,  7 Sep 2022 14:03:35 +0000 (GMT)
+Received: from [9.65.226.72] (unknown [9.65.226.72])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Sep 2022 14:03:35 +0000 (GMT)
+Message-ID: <c7f6baa3-8181-a612-72cc-23f570f31ab3@linux.ibm.com>
+Date:   Wed, 7 Sep 2022 08:53:20 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/2] iio: si7020: Lock root adapter to wait for reset
+Content-Language: en-US
+To:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+Cc:     linux-iio@vger.kernel.org, wsa@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, miltonm@us.ibm.com, joel@jms.id.au,
+        linux-kernel@vger.kernel.org
+References: <20220906202829.1921114-1-eajames@linux.ibm.com>
+ <20220906202829.1921114-3-eajames@linux.ibm.com>
+ <31b44b63-4cf3-6fdd-b2b8-6f00070af89a@axentia.se>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <31b44b63-4cf3-6fdd-b2b8-6f00070af89a@axentia.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Ep4vgc5fXUvuSZaTcdXfT71WQ6UXbzmU
+X-Proofpoint-ORIG-GUID: Ep4vgc5fXUvuSZaTcdXfT71WQ6UXbzmU
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxiQVTN/jX8AfO4L@kroah.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_08,2022-09-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
+ adultscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070053
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 02:36:37PM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Sep 07, 2022 at 03:32:44PM +0300, Ilpo Järvinen wrote:
-> > On Wed, 7 Sep 2022, Greg Kroah-Hartman wrote:
-> > 
-> > > On Wed, Sep 07, 2022 at 03:21:28PM +0300, Ilpo Järvinen wrote:
-> > > > On Wed, 7 Sep 2022, Arnd Bergmann wrote:
-> > > > 
-> > > > > On Wed, Sep 7, 2022, at 12:16 PM, Ilpo Järvinen wrote:
-> > > > > > On Wed, 7 Sep 2022, Jiri Slaby wrote:
-> > > > > >> On 06. 09. 22, 13:30, Johan Hovold wrote:
-> > > > > >> > On Tue, Sep 06, 2022 at 12:48:01PM +0200, Jiri Slaby wrote:
-> > > > > >> > NAK
-> > > > > >> 
-> > > > > >> I'd love to come up with something nicer. That would be a function in
-> > > > > >> serial-core calling hooks like I had [1] for example. But provided all those
-> > > > > >> CPU workarounds/thunks, it'd be quite expensive to call two functions per
-> > > > > >> character.
-> > > > > >> 
-> > > > > >> Or creating a static inline (having ± the macro content) and the hooks as
-> > > > > >> parameters and hope for optimizations to eliminate thunks (also suggested in
-> > > > > >> the past [1]).
-> > > > > >> 
-> > > > > >> [1] https://lore.kernel.org/all/20220411105405.9519-1-jslaby@suse.cz/
-> > > > > >
-> > > > > > I second Jiri here.
-> > > > > >
-> > > > > > Saving lines in drivers is not that important compared with all removing 
-> > > > > > all the variants of the same thing that have crept there over the years.
-> > > > > >
-> > > > > > I suspect the main reason for the variants is that everybody just used 
-> > > > > > other drivers as examples and therefore we've a few "main" variant 
-> > > > > > branches depending on which of the drivers was used as an example for the 
-> > > > > > other. That is hardly a good enough reason to keep them different and as 
-> > > > > > long as each driver keeps its own function for this, it will eventually 
-> > > > > > lead to similar differentiation so e.g. a one-time band-aid similarization 
-> > > > > > would not help in the long run.
-> > > > > >
-> > > > > > Also, I don't understand why you see it unreadable when the actual code is 
-> > > > > > out in the open in that macro. It's formatted much better than e.g. 
-> > > > > > read_poll_timeout() if you want an example of something that is hardly 
-> > > > > > readable ;-). I agree though there's a learning-curve, albeit small, that 
-> > > > > > it actually creates a function but that doesn't seem to me as big of an 
-> > > > > > obstacle you seem to think.
-> > > > > 
-> > > > > I think it would help to replace the macro that defines
-> > > > > the function with a set of macros that can be used in
-> > > > > function bodies. This would avoid the __VA_ARGS__ stuff
-> > > > > and allow readers that are unfamiliar with tty drivers to
-> > > > > treat it as a function call.
-> > > > > 
-> > > > > So e.g. instead of 
-> > > > > 
-> > > > > static DEFINE_UART_PORT_TX_HELPER_LIMITED(altera_jtaguart_do_tx_chars,
-> > > > > 		true,
-> > > > > 		writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
-> > > > > 		({}));
-> > > > > 
-> > > > > the altera_jtaguart driver would contain a function like
-> > > > > 
-> > > > > static int altera_jtaguart_do_tx_chars(struct uart_port *port,
-> > > > >                                        unsigned int count)
-> > > > > {
-> > > > >        char ch;
-> > > > > 
-> > > > >        return uart_port_tx_helper_limited(port, ch, count, true,
-> > > > >                 writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
-> > > > >                 ({}));
-> > > > > }
-> > > > > 
-> > > > > or some variation of that. It's a few more lines, but those
-> > > > > extra lines would help me understand what is actually going on
-> > > > > while still avoiding the usual bugs and duplication.
-> > > > > 
-> > > > > If the caller of that function is itself trivial (like
-> > > > > serial21285_tx_chars), then the intermediate function can
-> > > > > be omitted in order to save some of the extra complexity.
-> > > > 
-> > > > I'd be ok with that. There's still a small startle factor associated to 
-> > > > passing that writel(...) as an argument to a "function" but it's the same 
-> > > > for other things such as read_poll_timeout() so not an end of the world.
-> > > 
-> > > That's going to incure the function-pointer-indirection-call for every
-> > > character that Jiri's original submission had, so I don't think this is
-> > > a very viable solution, sorry.
-> > 
-> > I don't think you got what Arnd meant. It must still be technically a 
-> > #define because you cannot pass
-> > 	writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG)
-> > as an argument to a real function like he did in the example above.
-> > It's similar to how read_poll_timeout() and friends are #defines despite 
-> > being lowercased.
-> 
-> Ok, no, I don't understand what Arnd meant here then :(
 
-Arnd's opening sentence when proposing the new thing was:
+On 9/7/22 02:10, Peter Rosin wrote:
+> Hi!
+>
+> First off, I'm very sorry for being too busy and too unresponsive.
+>
+> 2022-09-06 at 22:28, Eddie James wrote:
+>> Use the new mux root operations to lock the root adapter while waiting for
+>> the reset to complete. I2C commands issued after the SI7020 is starting up
+>> or after reset can potentially upset the startup sequence. Therefore, the
+>> host needs to wait for the startup sequence to finish before issuing
+>> further I2C commands.
+>>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/iio/humidity/si7020.c | 16 ++++++++++++++--
+>>   1 file changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/iio/humidity/si7020.c b/drivers/iio/humidity/si7020.c
+>> index ab6537f136ba..76ca7863f35b 100644
+>> --- a/drivers/iio/humidity/si7020.c
+>> +++ b/drivers/iio/humidity/si7020.c
+>> @@ -106,6 +106,7 @@ static const struct iio_info si7020_info = {
+>>   static int si7020_probe(struct i2c_client *client,
+>>   			const struct i2c_device_id *id)
+>>   {
+>> +	struct i2c_adapter *root;
+>>   	struct iio_dev *indio_dev;
+>>   	struct i2c_client **data;
+>>   	int ret;
+>> @@ -115,13 +116,24 @@ static int si7020_probe(struct i2c_client *client,
+>>   				     I2C_FUNC_SMBUS_READ_WORD_DATA))
+>>   		return -EOPNOTSUPP;
+>>   
+>> +	root = i2c_lock_select_bus(client->adapter);
+>> +	if (IS_ERR(root))
+>> +		return PTR_ERR(root);
+>> +
+>>   	/* Reset device, loads default settings. */
+>> -	ret = i2c_smbus_write_byte(client, SI7020CMD_RESET);
+>> -	if (ret < 0)
+>> +	ret = __i2c_smbus_xfer(root, client->addr, client->flags,
+>> +			       I2C_SMBUS_WRITE, SI7020CMD_RESET,
+>> +			       I2C_SMBUS_BYTE, NULL);
+> I'd say that this is too ugly. We should not add stuff that basically
+> hides the actual xfer from the mux like this. That is too much of a
+> break in the abstraction.
 
-"I think it would help to replace the macro that defines
-the function with a set of macros that can be used in
-function bodies."
 
-Given "a set of macros" and the quoted example, I take
-"uart_port_tx_helper_limited" to be one of those macros - it has to be
-a macro because - as others have pointed out - you can't pass
-"writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG)" to a function.
+Hm, I guess I'm not sure I follow - I see several drivers that use the 
+raw __i2c_smbus_xfer or __i2c_transfer, some without a lock in sight. If 
+it's not acceptable to use the unlocked versions in some cases, why are 
+they exported in the header file?
 
-Of course, it would have been nicer to see the definition of this
-macro, because then we can understand what the "ch" argument is to
-this macro, and how that relates to the macro argument that is
-shown in the example as a writel().
 
-Maybe a more complete example would help clear up the confusion?
-Arnd?
+>
+> Looking back, expanding on the previous series [1] so that it installs
+> the hook on the root adapter, handles smbus xfers and clears out the
+> callback afterwards is much more sensible. No?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+Maybe so, though adding the callback is a more intrusive change, in my 
+opinion, since every transfer has to check if the pointer is null.
+
+
+Thanks for your feedback!
+
+Eddie
+
+
+
+>
+> Maybe the callback in that series should also include a reference to
+> the xfer that has just been done, so that the hook can potentially
+> discriminate and only do the delay for the key xfer. But maybe that's
+> overkill?
+>
+> Cheers,
+> Peter
+>
+> [1] https://lore.kernel.org/lkml/20220518204119.38943-1-eajames@linux.ibm.com/
+>
+>> +	if (ret < 0) {
+>> +		i2c_unlock_deselect_bus(client->adapter);
+>>   		return ret;
+>> +	}
+>> +
+>>   	/* Wait the maximum power-up time after software reset. */
+>>   	msleep(15);
+>>   
+>> +	i2c_unlock_deselect_bus(client->adapter);
+>> +
+>>   	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
+>>   	if (!indio_dev)
+>>   		return -ENOMEM;

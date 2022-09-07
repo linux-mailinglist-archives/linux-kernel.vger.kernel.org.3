@@ -2,61 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8CF5B0145
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7025B0147
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiIGKGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S229734AbiIGKGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIGKFp (ORCPT
+        with ESMTP id S229604AbiIGKFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:05:45 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACCA47B87
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:05:42 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MMyYt3n3lz9skZ;
-        Wed,  7 Sep 2022 12:05:38 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yo9BJMYbhGEF; Wed,  7 Sep 2022 12:05:38 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MMyYt2rYDz9sgt;
-        Wed,  7 Sep 2022 12:05:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 50EF48B78B;
-        Wed,  7 Sep 2022 12:05:38 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id m0_okVSIYp5o; Wed,  7 Sep 2022 12:05:38 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 28AF08B763;
-        Wed,  7 Sep 2022 12:05:38 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 287A5Smk3164347
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 7 Sep 2022 12:05:28 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 287A5StM3164342;
-        Wed, 7 Sep 2022 12:05:28 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc: Make PAGE_KERNEL_xxx macros grep-friendly
-Date:   Wed,  7 Sep 2022 12:05:21 +0200
-Message-Id: <3bc3f5a51949ee7f52dba36677db23d4337c7995.1662544980.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Wed, 7 Sep 2022 06:05:54 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21337B7B5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1662545148;
+  x=1694081148;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oNTEly+VN1w0GXZfx3c8iIp7/UMbftmaEYgIr51BAs0=;
+  b=HKPmsEYCpaUn9oI2GMpJqyrPIu0LtaTR1VDRnKRxSmBtm65V9H+XXfce
+   T11BI5TrGd4m4TVZ/cXxNlTETWQomJFt81lkSmTVMvZPGQOvGWa1jfFBN
+   7sfe7KZ4ozOwApJx12gX+35Ll4qF5Da+JmsU294KrmyAsh4UA/uakOnlC
+   cx2+30AlurjXjohjgoQruYkDP0ICRLFpbIRyGmaWR0o+xNf2vmwKlCVS9
+   MlifoTHDqIzHiUMkF7GhB0E/AYnxddy25WMg8RyAOoq2lS/xjn3q/7Z4q
+   eTtBIao2OSXQvIpGPOQsqxxvvIRhX36LGRZa58FayKBAwl+Uio6TnqXBb
+   g==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] um: Prevent KASAN splats in dump_stack()
+Date:   Wed, 7 Sep 2022 12:05:33 +0200
+Message-ID: <20220907100533.1719128-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662545120; l=3633; s=20211009; h=from:subject:message-id; bh=rSI5sIEPA4VlCP2jW4e+BuUjucTreUBJZB21RUy8cSE=; b=hHdVohdySvXEA6iv9HObNNYhyIGqaP0MkDoO6JQ3xCB3kI1ooYTiQujJS+2Mw31RLK+jEPFUPSy+ bAsutGXmDY3gYep8e5jn5alLtYio9NFcFrjZljQHeUNJr0k3Aq+o
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,71 +55,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid multi-lines to help getting a complete view when using
-grep. They still remain under the 100 chars limit.
+Use READ_ONCE_NOCHECK() when reading the stack to prevent KASAN splats
+when dump_stack() is used.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Fixes: 5b301409e8bc5d7fad ("UML: add support for KASAN under x86_64")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- arch/powerpc/include/asm/book3s/32/pgtable.h | 3 +--
- arch/powerpc/include/asm/book3s/64/pgtable.h | 9 +++------
- arch/powerpc/include/asm/nohash/pgtable.h    | 3 +--
- 3 files changed, 5 insertions(+), 10 deletions(-)
+ arch/um/kernel/sysrq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h b/arch/powerpc/include/asm/book3s/32/pgtable.h
-index be9e3fd2a9bc..9da1ee5f9201 100644
---- a/arch/powerpc/include/asm/book3s/32/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/32/pgtable.h
-@@ -112,8 +112,7 @@ static inline bool pte_user(pte_t pte)
- /* Permission masks used for kernel mappings */
- #define PAGE_KERNEL	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RW)
- #define PAGE_KERNEL_NC	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | _PAGE_NO_CACHE)
--#define PAGE_KERNEL_NCG	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | \
--				 _PAGE_NO_CACHE | _PAGE_GUARDED)
-+#define PAGE_KERNEL_NCG	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | _PAGE_NO_CACHE | _PAGE_GUARDED)
- #define PAGE_KERNEL_X	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RWX)
- #define PAGE_KERNEL_RO	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RO)
- #define PAGE_KERNEL_ROX	__pgprot(_PAGE_BASE | _PAGE_KERNEL_ROX)
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/include/asm/book3s/64/pgtable.h
-index c09ca4d5ba49..4243f4af3d14 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-@@ -117,8 +117,7 @@
- #define _PAGE_KERNEL_RW		(_PAGE_PRIVILEGED | _PAGE_RW | _PAGE_DIRTY)
- #define _PAGE_KERNEL_RO		 (_PAGE_PRIVILEGED | _PAGE_READ)
- #define _PAGE_KERNEL_ROX	 (_PAGE_PRIVILEGED | _PAGE_READ | _PAGE_EXEC)
--#define _PAGE_KERNEL_RWX	(_PAGE_PRIVILEGED | _PAGE_DIRTY |	\
--				 _PAGE_RW | _PAGE_EXEC)
-+#define _PAGE_KERNEL_RWX	(_PAGE_PRIVILEGED | _PAGE_DIRTY | _PAGE_RW | _PAGE_EXEC)
- /*
-  * _PAGE_CHG_MASK masks of bits that are to be preserved across
-  * pgprot changes
-@@ -156,10 +155,8 @@
+diff --git a/arch/um/kernel/sysrq.c b/arch/um/kernel/sysrq.c
+index 7452f70d50d0..746715379f12 100644
+--- a/arch/um/kernel/sysrq.c
++++ b/arch/um/kernel/sysrq.c
+@@ -48,7 +48,8 @@ void show_stack(struct task_struct *task, unsigned long *stack,
+ 			break;
+ 		if (i && ((i % STACKSLOTS_PER_LINE) == 0))
+ 			pr_cont("\n");
+-		pr_cont(" %08lx", *stack++);
++		pr_cont(" %08lx", READ_ONCE_NOCHECK(*stack));
++		stack++;
+ 	}
  
- /* Permission masks used for kernel mappings */
- #define PAGE_KERNEL	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RW)
--#define PAGE_KERNEL_NC	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | \
--				 _PAGE_TOLERANT)
--#define PAGE_KERNEL_NCG	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | \
--				 _PAGE_NON_IDEMPOTENT)
-+#define PAGE_KERNEL_NC	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | _PAGE_TOLERANT)
-+#define PAGE_KERNEL_NCG	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | _PAGE_NON_IDEMPOTENT)
- #define PAGE_KERNEL_X	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RWX)
- #define PAGE_KERNEL_RO	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RO)
- #define PAGE_KERNEL_ROX	__pgprot(_PAGE_BASE | _PAGE_KERNEL_ROX)
-diff --git a/arch/powerpc/include/asm/nohash/pgtable.h b/arch/powerpc/include/asm/nohash/pgtable.h
-index 18b29cfee0d6..4fd73c7412d0 100644
---- a/arch/powerpc/include/asm/nohash/pgtable.h
-+++ b/arch/powerpc/include/asm/nohash/pgtable.h
-@@ -11,8 +11,7 @@
- /* Permission masks used for kernel mappings */
- #define PAGE_KERNEL	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RW)
- #define PAGE_KERNEL_NC	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | _PAGE_NO_CACHE)
--#define PAGE_KERNEL_NCG	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | \
--				 _PAGE_NO_CACHE | _PAGE_GUARDED)
-+#define PAGE_KERNEL_NCG	__pgprot(_PAGE_BASE_NC | _PAGE_KERNEL_RW | _PAGE_NO_CACHE | _PAGE_GUARDED)
- #define PAGE_KERNEL_X	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RWX)
- #define PAGE_KERNEL_RO	__pgprot(_PAGE_BASE | _PAGE_KERNEL_RO)
- #define PAGE_KERNEL_ROX	__pgprot(_PAGE_BASE | _PAGE_KERNEL_ROX)
+ 	printk("%sCall Trace:\n", loglvl);
 -- 
-2.37.1
+2.34.1
 

@@ -2,105 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A924B5B07A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02425B071F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiIGOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S229544AbiIGOiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiIGOzi (ORCPT
+        with ESMTP id S230372AbiIGOis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:55:38 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1922986B5A;
-        Wed,  7 Sep 2022 07:55:05 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 73871920CA7;
-        Wed,  7 Sep 2022 14:55:01 +0000 (UTC)
-Received: from pdx1-sub0-mail-a308 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id E49C9921720;
-        Wed,  7 Sep 2022 14:55:00 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662562501; a=rsa-sha256;
-        cv=none;
-        b=3Cbtj+QgfD5v6mvODR0gJHigGaNJYEnaTOArikKYoHobDtgMnSUxZIMqoyrHTlV/gadwmG
-        TYxRma6k31jXKiSW+5j2LQLLnzLI/2DPnTxwsGOw9rE8DWbqAEJewpHwRr4k2jo/rcdCO5
-        SXM4QWMLxKk9ISK20rz0xSkY6KJubPH9jiwBu2D6faPMRUE7suDfrnI9YU5bvHKUSRL3Lt
-        6utWWNo5pBnf0YCFWl4BC96WMA8tDxF6113U7R/gRdyC1/9cm4xD49vd2Tyov42Cf4O2DD
-        6zSl0p7yXHZW1Dma0MoJTt9dtwn09pL99Sq9cGvNWAK6d3dxWT+AHtWtKjHI6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1662562501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=/a1y1ajhOu+dgDM9IiBP6SBBRRgVgt1du7NEURDFIMM=;
-        b=iqpTyWkVqInKbOg8ZIOy+r9ry+QBIV2CIq3ge7BXD19viYNXw7rGW419dBo9iurV55rANi
-        mvVc0r1/sq4/ONHWlEpT/P6Sknas8nh2V5vKIhcsXGmFH76Q1jfTT+jNJei8+NyXpLMn4i
-        hf4X2A02Bn7y1ByN80TRxP7c4wHVWLyKzcNmdduXzv12mz7Ux/qmczAwIuRALWM3asWFN3
-        ajbUW6RvrvAj1ux2hh1UedEaM4eTFunzm7GSWeCb7CKi2axNDhKqQzdWaJ8LliIjb/WklA
-        s/Ccina+haAaZcmM2WzWWvJPk+Lls6k/SNs8rB1cNi+nS0s7lNjcxFfft8rB0g==
-ARC-Authentication-Results: i=1;
-        rspamd-f776c45b8-qkcxd;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Coil-Ski: 4eda7c667a69c7d6_1662562501274_4112141017
-X-MC-Loop-Signature: 1662562501274:3431010349
-X-MC-Ingress-Time: 1662562501274
-Received: from pdx1-sub0-mail-a308 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.117.103.197 (trex/6.7.1);
-        Wed, 07 Sep 2022 14:55:01 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a308 (Postfix) with ESMTPSA id 4MN4zk4cv2z2m;
-        Wed,  7 Sep 2022 07:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1662562500;
-        bh=/a1y1ajhOu+dgDM9IiBP6SBBRRgVgt1du7NEURDFIMM=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=YfxR/fvYcVWGXIJT6VAQgJrbTuzNrjtTJc0OM+JDu82lXV8wVoOjhxBooKVBHiVVg
-         p3NP7YDlwder/6Wef+RpEm9L1zrHd4iSkzG0PnkXCHHsiNLs6yFFpSpP4qcZLwVicQ
-         9TlXhKjFkumfGa7Ub1g6tjWCxw+AX/FcRSEhfoEw8Bzu/dajPX5SJOMIuAj9zrM5hp
-         5ouJYWBpUlNxVpiwrrRiAXtWSmWeaJwe+xGT/XZi0trAyutkRno5V1yfmmd8MTa+2Q
-         hzwClx1LL3UOFB1FuPMwMgYxfa+3oD1d8NiLPQtysqxmkQgO55s8betsUYIDaeFmqi
-         9PXJslUNSC+HQ==
-Date:   Wed, 7 Sep 2022 07:36:03 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     dan.j.williams@intel.com
-Cc:     x86@kernel.org, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
-        peterz@infradead.org, bp@alien8.de, akpm@linux-foundation.org,
-        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com,
-        a.manzanares@samsung.com, linux-kernel@vger.kernel.org, hch@lst.de
-Subject: Re: [PATCH -next] memregion: Add arch_flush_memregion() interface
-Message-ID: <20220907143603.d226eyi3uitlcmi5@offworld>
-References: <20220829212918.4039240-1-dave@stgolabs.net>
+        Wed, 7 Sep 2022 10:38:48 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C73378595
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:38:41 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7F43F580314;
+        Wed,  7 Sep 2022 10:38:40 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 10:38:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662561520; x=1662568720; bh=G+dQi/CqDE
+        Andi9GeELhOR4Fo+JzDcf4uQRnrofBKd8=; b=3FFUrZ7s6VxSN6vL5Cw4baUUa5
+        jDBnxlmgMIp8WXQLYEovPXCkQh6iup20i9PZhFoxra1kWYALiWJTZXWq3TmijN13
+        wOktSWoa4r9C2d/jfCHKOjD60uJdIV1cuw2dsF/I4D8umuBbgxF9XIjbv1CDZoRs
+        RAQLXHXxejuH5YF82ejQpmx2qR/d4wDR6lZaS5Ovf+IX5gMMSapTfn7ISApQJDjD
+        0cPaQ+8P46SeUgUy1AQdKInb+GK1uCL3syzskNavZvuCAYDUHrpX04Rp+DupVEhJ
+        EnsexyIYQUz53CjNBZqcaUnqrZP20gelrB0FmBIrMi5bOoPfrbStmlsSbntg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662561520; x=1662568720; bh=G+dQi/CqDEAndi9GeELhOR4Fo+Jz
+        Dcf4uQRnrofBKd8=; b=J1gj70TqeaZBOD/8F/Ysvvj+yYSkSbaho7x/umphLAnU
+        DUE17Aqnpoa9lFiXO0DkkIV7pC8wKxK+D2hZwIdoyWZthInu9EQK//CrgXd7BAr8
+        8fsdivkrN/oFOLjVGwBH91Yh0285SHGE/BsQMwS9TGegZp6Q5W5brP1C94HVf5Io
+        /GjHfnowkowVZDMXD3MthtXJTnw5n6pt308G7686nBE8GmwZynE/kR4xruMshW8c
+        idaoHumZSyBEg0wb9D8BPb12LjqHZD1EGRqaDa5ZJKhCd0GVZBxspLBG7bCc6E0c
+        4pBJt/G9KiCH+hndbmPhXbgfK9r4uRuAQVxjn8V+YA==
+X-ME-Sender: <xms:8KwYY9oHdo_fef7xbGZvQ7RU6e5VqNtiwYTPzfH5zP1cBvBRPYXXKg>
+    <xme:8KwYY_pPPbFPbihsZjJJ161P5ISbfJMsmByJfwS3HxBdv_w8GnpAgHW_vZwcxeZ0U
+    rxCVJgLIQv0v2LDp_I>
+X-ME-Received: <xmr:8KwYY6MBzgqAzm8k0YKFAOjcXh_JzEkVwk9KeAbf6Zes-QmlekUYjit_Kg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:8KwYY46QVtCc1FB4h9YEHP1n5sKVROo8PqNFS5ybv2YrktUHAwxqjg>
+    <xmx:8KwYY87k5h0Z88PudROgDw3LEkJ-mSadMDDDdHVsk_fUwn4PfV8fMA>
+    <xmx:8KwYYwgcrz8kjGCriG7u5kEQ0bQX_6R7ku9_agV9z6YwESV4urxPXg>
+    <xmx:8KwYY87sl9s6K8vlDCAbttgkC_W4xWTggHCz4yAWsg7BETWXCafDog>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 10:38:39 -0400 (EDT)
+Date:   Wed, 7 Sep 2022 16:38:37 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
+ display modes
+Message-ID: <20220907143837.ys76egf2yg5uyq2z@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+ <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
+ <CAMuHMdWq3aOO4-2AReDeaC2VBJb=QJF2dTMZP=DGmwCg6ZOffA@mail.gmail.com>
+ <20220905133251.js26hxdosibx4r4i@houat>
+ <6ac67d1f-e5b5-2687-372f-4146eed5cc5d@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nnvo5o5a2xq4dkin"
 Content-Disposition: inline
-In-Reply-To: <20220829212918.4039240-1-dave@stgolabs.net>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6ac67d1f-e5b5-2687-372f-4146eed5cc5d@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not sure the proper way to route this (akpm?). But unless any remaining
-objections, could this be picked up?
 
-Thanks,
-Davidlohr
+--nnvo5o5a2xq4dkin
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Sep 05, 2022 at 06:32:14PM +0200, Mateusz Kwiatkowski wrote:
+> Hi Maxime,
+>=20
+> W dniu 5.09.2022 o 15:32, Maxime Ripard pisze:
+> > Hi,
+> >
+> > On Wed, Aug 31, 2022 at 10:14:28AM +0200, Geert Uytterhoeven wrote:
+> >>>> +enum drm_mode_analog {
+> >>>> +=A0=A0=A0 DRM_MODE_ANALOG_NTSC,
+> >>>> +=A0=A0=A0 DRM_MODE_ANALOG_PAL,
+> >>>> +};
+> >>>
+> >>> Using "NTSC" and "PAL" to describe the 50Hz and 60Hz analog TV modes =
+is common,
+> >>> but strictly speaking a misnomer. Those are color encoding systems, a=
+nd your
+> >>> patchset fully supports lesser used, but standard encodings for those=
+ (e.g.
+> >>> PAL-M for 60Hz and SECAM for 50Hz). I'd propose switching to some mor=
+e neutral
+> >>> naming scheme. Some ideas:
+> >>>
+> >>> - DRM_MODE_ANALOG_60_HZ / DRM_MODE_ANALOG_50_HZ (after standard refre=
+sh rate)
+> >>> - DRM_MODE_ANALOG_525_LINES / DRM_MODE_ANALOG_625_LINES (after standa=
+rd line
+> >>>=A0=A0 count)
+> >>
+> >> IMHO these are bad names, as e.g. VGA640x480@60 is also analog, using
+> >> 60 Hz and 525 lines.=A0 Add "TV" to the name?
+> >>
+> >>> - DRM_MODE_ANALOG_JM / DRM_MODE_ANALOG_BDGHIKLN (after corresponding =
+ITU System
+> >>>=A0=A0 Letter Designations)
+> >>
+> >> Or DRM_MODE_ITU_*?
+> >> But given the long list of letters, this looks fragile to me.
+> >
+> > Does it matter at all? It's an internal API that isn't exposed at all.
+> > I'd rather have a common name that everyone can understand in this case
+> > rather than a *perfect* name where most will scratch their head
+> > wondering what it's about.
+>=20
+> You may have a point. But in that case, maybe it'd make sense to at least=
+ add
+> a short comment explaining what do you mean by "NTSC" and "PAL" in this c=
+ontext?
+
+Consider it done :)
+
+Maxime
+
+--nnvo5o5a2xq4dkin
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxis7QAKCRDj7w1vZxhR
+xTvFAP9Y3LOGR153AWzkGlQJzp68VIaTnrTJdhwA2F1nff9iPAEA5bUMZNpshaSy
+QX+PeKcbA3F+gDjgQKft9KnC247cTgA=
+=3r/y
+-----END PGP SIGNATURE-----
+
+--nnvo5o5a2xq4dkin--

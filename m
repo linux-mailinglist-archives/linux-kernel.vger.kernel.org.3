@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B635B0A68
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD165B0A46
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiIGQmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        id S230182AbiIGQlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiIGQmO (ORCPT
+        with ESMTP id S230115AbiIGQk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:42:14 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C030F75494;
-        Wed,  7 Sep 2022 09:41:47 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 1D9AF5C2956;
-        Wed,  7 Sep 2022 16:41:44 +0000 (UTC)
-Received: from pdx1-sub0-mail-a297.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 75A305C1F31;
-        Wed,  7 Sep 2022 16:41:43 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662568903; a=rsa-sha256;
-        cv=none;
-        b=oOmI+mRHBWHBsdyMUw3/ZrDkz3Nk04DF2PuXfl8emYb4plHEWDRuJjepAFId5dtaqfe60k
-        vl6f9n22T4C+wIdFYFOVoWlr3xkpDErSa1DrHt3nzDw9FLf8NpvqsleVl4S+/vUzQlYKbJ
-        faBx3uy2NV+53IQ+xasQln4mWlQ4jYDxe/0jd7fa3j6TCCFZmuuEWy2M79jYsok3niZue1
-        PGONYgP7CN6dC040dJj+agi9lG0Y6+8ns3T/fxtKqhcUWHYtBp0uRCZzkMH+/iFEGS0aGS
-        gUXaUtqEuAtV408aeS6jUzgLSa7GvTycWNiDaxTxzsOcsIESKTHNzBXueTJDcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1662568903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=2wCa/Jt/3D2I+rbeGjg1PPoBnNjJ68RfVRRwxhzeg9s=;
-        b=SqoNYL95AcZJrikt4aFRLGw4mWLAXToI3JoJF25O2Ynd/nI0+v8GW3tdeUXEE1J+3Q3cgf
-        /Z3xJoNmhPk+FhqbqEepeVeRWsL96+B6hbq+45kE9RuTqXTbm4IhY/aGCPNM+4fJwzjbDf
-        ssreFhHF7sCoAmykkGcRR0fW6FV6PwL4SJF6C4AJucq+8D5OTuk3zQymX1W4EfnRuHZfHR
-        yu9AuYTD2praR/4rmTOCPGP9mHwM1Hy1KFxiXfp3SWHPJlJw7OuAWjlYAoON1aqyh8fx01
-        apEggOAGkUHDN9UqG0ykrO4IcqLATy68PcsNV2HjwIL04bktjUZ3dVdChQwxag==
-ARC-Authentication-Results: i=1;
-        rspamd-f776c45b8-xnd69;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Gusty-Fumbling: 7fe0e4a34c79e059_1662568903912_767146359
-X-MC-Loop-Signature: 1662568903912:3198609064
-X-MC-Ingress-Time: 1662568903912
-Received: from pdx1-sub0-mail-a297.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.123.39.217 (trex/6.7.1);
-        Wed, 07 Sep 2022 16:41:43 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a297.dreamhost.com (Postfix) with ESMTPSA id 4MN7Lr5fPNzFW;
-        Wed,  7 Sep 2022 09:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1662568903;
-        bh=2wCa/Jt/3D2I+rbeGjg1PPoBnNjJ68RfVRRwxhzeg9s=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=CxmwPOEIHGF6GhHFwaqiAV0i/CGO0vUy9SrwWioqRLNWsu7UDqUkf/t05zvlw4WId
-         uzHh2WlTA6BLxr5RPUGj6m8BaW58oYsLTnhqe33Ik4Yx2AOvcSIMSY2lMGRTO3yR2e
-         rp5uQcTQhhZc+VXsyx09X2vM2DTxLJd5aC9X5AiU/LaDs4qKtZMCcnERhFVo/20upA
-         D2l5NQEfGVvd/SXUiDTyO5Bzkg+3/QGT/vEDYkAj5vwR3KlCiy+zQBJtASYndOEzkK
-         OFNygZOz+42lYsGEg/VIifEr+LWZ0z3xm31lU5NgSa9Lc3/JIVLZ33bLwpaS9DATj6
-         qYpGmT8WRwpKw==
-Date:   Wed, 7 Sep 2022 09:22:45 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     dan.j.williams@intel.com, x86@kernel.org, nvdimm@lists.linux.dev,
-        linux-cxl@vger.kernel.org, peterz@infradead.org,
-        akpm@linux-foundation.org, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, vishal.l.verma@intel.com,
-        ira.weiny@intel.com, a.manzanares@samsung.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] memregion: Add arch_flush_memregion() interface
-Message-ID: <20220907162245.5ddexpmibjbanrho@offworld>
-References: <20220829212918.4039240-1-dave@stgolabs.net>
- <YxjBSxtoav7PQVei@nazgul.tnic>
+        Wed, 7 Sep 2022 12:40:57 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279BC6D9D0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662568856; x=1694104856;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FYZ2qqW7MXI7DSE7csPj3l+dRW2sOZlt3CuxuppJKP8=;
+  b=DcDYpBJTtJTx+I1HxZKrCkheYr2MocAVcA8oNF4516jV0v0GYxFUDUMp
+   810OkIuYiQ8JHJQzfKThMiGnI3QpBD36a+MFrPdp4I/D8Lx6XLtMEgE+S
+   z1AaZGRlBFVzMIQa7jdcYqojFiLNOKKuGB/hD28oBpohex0fOZUYwJzaY
+   sRB95MwXYIC7p9VJxw9yND17eyk1jVyEH2Rc6TbQ8/WEyrFdWhnEj7Hcs
+   vplF+NFWcY8CShPdkxyl6JU1wTUI1EUT7YK5X/8v6JYoLOEvKXE4G64XF
+   iRNo+SjcvHguw7b9Fn4jLouzRmeLugVTGUbveRzoQ+I9gsHRdO86xGCXM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="279957331"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="279957331"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 09:25:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="610377837"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.58.27])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 09:25:08 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf record: Fix synthesis failure warnings
+Date:   Wed,  7 Sep 2022 19:24:58 +0300
+Message-Id: <20220907162458.72817-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YxjBSxtoav7PQVei@nazgul.tnic>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Sep 2022, Borislav Petkov wrote:
+Some calls to synthesis functions set err < 0 but only warn about the
+failure and continue.  However they do not set err back to zero, relying
+on subsequent code to do that.
 
->On Mon, Aug 29, 2022 at 02:29:18PM -0700, Davidlohr Bueso wrote:
->> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
->> index 1abd5438f126..18463cb704fb 100644
->> --- a/arch/x86/mm/pat/set_memory.c
->> +++ b/arch/x86/mm/pat/set_memory.c
->> @@ -330,6 +330,20 @@ void arch_invalidate_pmem(void *addr, size_t size)
->>  EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
->>  #endif
->>
->> +#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
->> +bool arch_has_flush_memregion(void)
->> +{
->> +	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
->
->This looks really weird. Why does this need to care about HV at all?
+That changed with the introduction of option --synth. When --synth=no
+subsequent functions that set err back to zero are not called.
 
-So the context here is:
+Fix by setting err = 0 in those cases.
 
-e2efb6359e62 ("ACPICA: Avoid cache flush inside virtual machines")
+Example:
 
->
->Does that nfit stuff even run in guests?
+ Before:
 
-No, nor does cxl. This was mostly in general a precautionary check such
-that the api is unavailable in VMs.
+   $ perf record --no-bpf-event --synth=all -o /tmp/huh uname
+   Couldn't synthesize bpf events.
+   Linux
+   [ perf record: Woken up 1 times to write data ]
+   [ perf record: Captured and wrote 0.014 MB /tmp/huh (7 samples) ]
+   $ perf record --no-bpf-event --synth=no -o /tmp/huh uname
+   Couldn't synthesize bpf events.
 
->
->> +EXPORT_SYMBOL(arch_has_flush_memregion);
->
->...
->
->> +EXPORT_SYMBOL(arch_flush_memregion);
->
->Why aren't those exports _GPL?
+ After:
 
-Fine by me.
+   $ perf record --no-bpf-event --synth=no -o /tmp/huh uname
+   Couldn't synthesize bpf events.
+   Linux
+   [ perf record: Woken up 1 times to write data ]
+   [ perf record: Captured and wrote 0.014 MB /tmp/huh (7 samples) ]
 
-Thanks,
-Davidlohr
+Fixes: 41b740b6e8a9 ("perf record: Add --synth option")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ tools/perf/builtin-record.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index bce8c941d558..7713246a393f 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1974,14 +1974,18 @@ static int record__synthesize(struct record *rec, bool tail)
+ 
+ 	err = perf_event__synthesize_bpf_events(session, process_synthesized_event,
+ 						machine, opts);
+-	if (err < 0)
++	if (err < 0) {
+ 		pr_warning("Couldn't synthesize bpf events.\n");
++		err = 0;
++	}
+ 
+ 	if (rec->opts.synth & PERF_SYNTH_CGROUP) {
+ 		err = perf_event__synthesize_cgroups(tool, process_synthesized_event,
+ 						     machine);
+-		if (err < 0)
++		if (err < 0) {
+ 			pr_warning("Couldn't synthesize cgroup events.\n");
++			err = 0;
++		}
+ 	}
+ 
+ 	if (rec->opts.nr_threads_synthesize > 1) {
+-- 
+2.25.1
+

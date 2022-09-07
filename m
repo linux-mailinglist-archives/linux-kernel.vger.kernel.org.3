@@ -2,183 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8762E5AFD0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765F15AFD11
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiIGHFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S229788AbiIGHGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIGHE5 (ORCPT
+        with ESMTP id S229478AbiIGHGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:04:57 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9B12DA8D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:04:55 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id h188so12716798pgc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 00:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=I3AMR95LQUDdRhrOrYRzL4GU0R24ExtqObbx/U3NJaw=;
-        b=FENiitxHMZhG0oeEMBaszeMnyMZccIVDSON/SeyX1BVWZBDkwOV+YJPr5hfR5Yr/rQ
-         eV8iqs38Nmdj8rvzdXM5DYEA5m6Bo6FIWXTG/Q6dZsebcRVRUu4L2UGI3GFrpArdTBwV
-         hZuxUhQPdDOlnO7svMxpLzz3aADVF+g9AKh/a47ArxQ7JuLDksFVC/C8mWa6z8Cr2Vhn
-         WUJSW2yiW9tCd6z3sUAKHuFneQzqeG2PN/i9rRgzH0Nv4g1eJMxxEd8zcx9GbKCkAAZV
-         Vwm4U7uTsri7dKxIIe2sjfcJk6fygHLVAFGF9wvYOqub/MB6h/Jde4jqLnQ5jXMeJd36
-         UnQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=I3AMR95LQUDdRhrOrYRzL4GU0R24ExtqObbx/U3NJaw=;
-        b=OozODKOfLAGSqckq/11fFAineQmk2YxGKDhD66q6ry0RQhl9HuGs0aK5Jox6EttWn2
-         oS/FJpiMvd/QJh5XocWvOuWVAgwxIASBmZn2oWqZJZQ9rwA23VP4eJWufhPITIpD8l4p
-         +LAZwna3e/nWu3GHxmSpotOZ4OzL7KmTFfGwy7/awgER1oY7PdgRNt7J9HKC/yNPA+6O
-         d3Bi+VmoJLwFzOyphZyU9yUV02W1v8IeoAdVPFmiSDnq8R5MUDKXld6vH5zfVVNQ+M/G
-         u191dgOIZR9+XBhXbqUsEmtF6+5S/aQPX6F9+KsUQOwwfYkTCIHHFBMg6VLXnwPr0R9i
-         rSSg==
-X-Gm-Message-State: ACgBeo3rx3zNk0eIRDqwP8NnDQVNTAsi1IP4b1Y6Jb8AX7jpUSSbFp62
-        JfB3JhAS8OyTi6NiMsZeshoEOA==
-X-Google-Smtp-Source: AA6agR7e+Hd4TYG0M71fMY0QD/aaID7FwhVT9S+fic6nUDDoGELZ0M7dIJ3rmdDFMnEfEOzIbSb6BA==
-X-Received: by 2002:a63:6b44:0:b0:434:ad17:5e1a with SMTP id g65-20020a636b44000000b00434ad175e1amr2279570pgc.452.1662534295456;
-        Wed, 07 Sep 2022 00:04:55 -0700 (PDT)
-Received: from [10.4.126.121] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id n17-20020a170902e55100b00172ea8ff334sm1233384plf.7.2022.09.07.00.04.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 00:04:54 -0700 (PDT)
-Message-ID: <430e3e5f-d446-6307-cba0-6f859bce560f@bytedance.com>
-Date:   Wed, 7 Sep 2022 15:04:48 +0800
+        Wed, 7 Sep 2022 03:06:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCFF83BEE;
+        Wed,  7 Sep 2022 00:06:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63558B81B72;
+        Wed,  7 Sep 2022 07:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195B0C433B5;
+        Wed,  7 Sep 2022 07:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662534375;
+        bh=MTlgsU9SS8HzkvTx7GZdrV3UvG/7Yhzfy3rKEmcPDKQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AfFsZT5u5N9g0z+tUHyRuKoPP7U4OULYkInl6z8H4VUW5+B9gI1T3Eydf4PtP6UNi
+         XHENG3/KM+J2Klo9pOuyB4F2APfOC/j1h1ejjtLmn22gZGgUtCxvqVu7NtWJc/fdsl
+         Iha+70ECJx+wuj/JPSMW9Dk9ZOmF8Ez8McSn3tQZ61EhehL7h2bTYzbm6AxTW37dX4
+         Z2ec4kVogrLn95iVYs7MDSwUJcRwptOgdJp2thyVftDULQIH4U3JyviydJuzjUxpNY
+         7tY2qF1SMn+VaCF6Or6K/x46DdGjP6ff3HGGCUi3CdiBbfX79PUpgo7YcQH4nt5M7O
+         +tr/GKjfd3Mjg==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-127a3a39131so13064959fac.13;
+        Wed, 07 Sep 2022 00:06:15 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3KS2S+zVA1is6iwk30v1rTp9dAnaqndORZ5PQZJGMGimLNvKwh
+        Cqq542NkJuCmIrTZ51Qv/dNqVBTFUwcUiEcpL5Y=
+X-Google-Smtp-Source: AA6agR57QLi6v/xhafsfnRmo52MCCxh+hujgl+DJVhXWpBVTUYMh5PIODVpRExxEX3s4DQR4scrmYy/XZaxy9d7aeYw=
+X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
+ v18-20020a056870709200b0011eff3ad984mr13118224oae.19.1662534374178; Wed, 07
+ Sep 2022 00:06:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH v3] arm64: run softirqs on the per-CPU IRQ stack
-Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20220815124739.15948-1-zhengqi.arch@bytedance.com>
- <595c912a-1503-d420-f32f-297b824decae@bytedance.com>
-In-Reply-To: <595c912a-1503-d420-f32f-297b824decae@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906035423.634617-1-guoren@kernel.org> <8db7caea-a1a0-25a3-ade0-2f1714d709c8@microchip.com>
+ <CAJF2gTQ29bn=hgubC+YU1qSw_L3W2kAt3Yi4_EknrNCkR-dRFg@mail.gmail.com>
+ <CAJF2gTRU6xWv5z7FvYkupCfmc0_EEceeowpjemoUWSAz8OgfWg@mail.gmail.com> <fb17255a-62ea-54c0-96a0-c19072c25ad5@microchip.com>
+In-Reply-To: <fb17255a-62ea-54c0-96a0-c19072c25ad5@microchip.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 7 Sep 2022 15:06:01 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS0Oe7AHcNf1+uGHX=S0bZoKHX2nS-+O72tjjrjq4wScA@mail.gmail.com>
+Message-ID: <CAJF2gTS0Oe7AHcNf1+uGHX=S0bZoKHX2nS-+O72tjjrjq4wScA@mail.gmail.com>
+Subject: Re: [PATCH V3 0/7] riscv: Add GENERIC_ENTRY, irq stack support
+To:     Conor.Dooley@microchip.com
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, bigeasy@linutronix.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 7, 2022 at 2:23 PM <Conor.Dooley@microchip.com> wrote:
+>
+> On 07/09/2022 03:52, Guo Ren wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
+the content is safe
+> >
+> > Hi Conor,
+> >
+> > I've found the root cause, you are using llvm:
+>
+> Yup, probably should have specified - sorry. I didn't realise that
+It's my typo bug. You reminded me of using clang.
 
-
-On 2022/8/26 12:16, Qi Zheng wrote:
-> 
-> 
-> On 2022/8/15 20:47, Qi Zheng wrote:
->> Currently arm64 supports per-CPU IRQ stack, but softirqs
->> are still handled in the task context.
->>
->> Since any call to local_bh_enable() at any level in the task's
->> call stack may trigger a softirq processing run, which could
->> potentially cause a task stack overflow if the combined stack
->> footprints exceed the stack's size, let's run these softirqs
->> on the IRQ stack as well.
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->> Acked-by: Will Deacon <will@kernel.org>
->> ---
->> v2: 
->> https://lore.kernel.org/lkml/20220802065325.39740-1-zhengqi.arch@bytedance.com/
->> v1: 
->> https://lore.kernel.org/lkml/20220708094950.41944-1-zhengqi.arch@bytedance.com/
->> RFC: 
->> https://lore.kernel.org/lkml/20220707110511.52129-1-zhengqi.arch@bytedance.com/
->>
->> Changelog in v2 -> v3:
->>   - rebase onto the v6.0-rc1
-
-Hi Will,
-
-Are we good to merge this patch? Or if there is anything else I need to
-do, please let me know. :)
-
-Looking forward to your reply.
-
-Thanks,
-Qi
-
-> 
-> Gentle ping.
-> 
+> that was something GCC wouldn't complain about. It was an LLVM=3D1
+> build with clang-15.
+>
+> I usually do builds with clang while testing patches as it seems
+> to be lesser used.
+>
 > Thanks,
-> Qi
-> 
->>
->> Changelog in v1 -> v2:
->>   - temporarily discard [PATCH v1 2/2] to allow this patch to be 
->> merged first
->>   - rebase onto the v5.19
->>   - collect Reviewed-by and Acked-by
->>
->> Changelog in RFC -> v1:
->>   - fix conflicts with commit f2c5092190f2 ("arch/*: Disable softirq 
->> stacks on PREEMPT_RT.")
->>
->>   arch/arm64/Kconfig      |  1 +
->>   arch/arm64/kernel/irq.c | 13 +++++++++++++
->>   2 files changed, 14 insertions(+)
->>
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index 571cc234d0b3..ee92f5887cf6 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -230,6 +230,7 @@ config ARM64
->>       select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
->>       select TRACE_IRQFLAGS_SUPPORT
->>       select TRACE_IRQFLAGS_NMI_SUPPORT
->> +    select HAVE_SOFTIRQ_ON_OWN_STACK
->>       help
->>         ARM 64-bit (AArch64) Linux support.
->> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
->> index bda49430c9ea..c36ad20a52f3 100644
->> --- a/arch/arm64/kernel/irq.c
->> +++ b/arch/arm64/kernel/irq.c
->> @@ -22,6 +22,7 @@
->>   #include <linux/vmalloc.h>
->>   #include <asm/daifflags.h>
->>   #include <asm/vmap_stack.h>
->> +#include <asm/exception.h>
->>   /* Only access this in an NMI enter/exit */
->>   DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
->> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
->>   }
->>   #endif
->> +#ifndef CONFIG_PREEMPT_RT
->> +static void ____do_softirq(struct pt_regs *regs)
->> +{
->> +    __do_softirq();
->> +}
->> +
->> +void do_softirq_own_stack(void)
->> +{
->> +    call_on_irq_stack(NULL, ____do_softirq);
->> +}
->> +#endif
->> +
->>   static void default_handle_irq(struct pt_regs *regs)
->>   {
->>       panic("IRQ taken without a root IRQ handler\n");
-> 
+> Conor.
+>
+> >
+> > $ grep "bare sym" llvm -rn |grep RISCV
+> > llvm/lib/Target/RISCV/AsmParser/RISCVAsmParser.cpp:1296: return
+> > Error(ErrorLoc, "operand must be a bare symbol name");
+> > llvm/lib/Target/RISCV/AsmParser/RISCVAsmParser.cpp:1304: return
+> > Error(ErrorLoc, "operand must be a bare symbol name");
+> >
+> > That means we could fix up Binutils with a warning at least.
+> >
+> > Thx for pointing it out.
+> >
+> > On Wed, Sep 7, 2022 at 8:54 AM Guo Ren <guoren@kernel.org> wrote:
+> >>
+> >> On Wed, Sep 7, 2022 at 1:42 AM <Conor.Dooley@microchip.com> wrote:
+> >>>
+> >>> On 06/09/2022 04:54, guoren@kernel.org wrote:
+> >>>> From: Guo Ren <guoren@linux.alibaba.com>
+> >>>>
+> >>>> The patches convert riscv to use the generic entry infrastructure fr=
+om
+> >>>> kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu t=
+o
+> >>>> prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+> >>>> feature for the IRQ_STACKS config. You can try it directly with [1].
+> >>>
+> >>> Hey Guo Ren,
+> >>> I applied this patchset to v6.0-rc4 & ran into a build error:
+> >>> /stuff/linux/arch/riscv/kernel/entry.S:347:9: error: operand must be =
+a bare symbol name
+> >>>   la a3, ((1 << (12)) << (2 + 0))
+> >> Yes, please try:
+> >> -       la      a3, IRQ_STACK_SIZE
+> >> +       li      a3, IRQ_STACK_SIZE
+> >>
+> >> la is for the symbol, not immediate. But why does my toolchain not
+> >> report the error?
+> >>
+> >> =E2=9E=9C  linux git:(generic_entry_v3) make ARCH=3Driscv
+> >> CROSS_COMPILE=3Driscv64-unknown-linux-gnu- EXTRA_CFLAGS+=3D-g
+> >> O=3D../build-riscv/ -kj62 all -kj
+> >> =E2=9E=9C  linux git:(generic_entry_v3) riscv64-unknown-linux-gnu-gcc =
+-v
+> >> Using built-in specs.
+> >> COLLECT_GCC=3Driscv64-unknown-linux-gnu-gcc
+> >> COLLECT_LTO_WRAPPER=3D/opt/riscv/libexec/gcc/riscv64-unknown-linux-gnu=
+/11.1.0/lto-wrapper
+> >> Target: riscv64-unknown-linux-gnu
+> >> Configured with:
+> >> /home/guoren/source/riscv-gnu-toolchain/riscv-gcc/configure
+> >> --target=3Driscv64-unknown-linux-gnu --prefix=3D/opt/riscv
+> >> --with-sysroot=3D/opt/riscv/sysroot --with-pkgversion=3Dg5964b5cd7272
+> >> --with-system-zlib --enable-shared --enable-tls
+> >> --enable-languages=3Dc,c++,fortran --disable-libmudflap --disable-libs=
+sp
+> >> --disable-libquadmath --disable-libsanitizer --disable-nls
+> >> --disable-bootstrap --src=3D.././riscv-gcc --enable-multilib
+> >> --with-abi=3Dlp64d --with-arch=3Drv64imafdc --with-tune=3Drocket
+> >> --with-isa-spec=3D2.2 'CFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
+> >> 'CXXFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
+> >> Thread model: posix
+> >> Supported LTO compression algorithms: zlib
+> >> gcc version 11.1.0 (g5964b5cd7272)
+> >>
+> >>
+> >>
+> >>>          ^
+> >>>    CC      arch/riscv/kernel/process.o
+> >>> make[5]: *** [/stuff/linux/scripts/Makefile.build:322: arch/riscv/ker=
+nel/entry.o] Error 1
+> >>> make[5]: *** Waiting for unfinished jobs....
+> >>>
+> >>> Thanks,
+> >>> Conor.
+> >>>>
+> >>>> [1] https://github.com/guoren83/linux/tree/generic_entry_v3
+> >>>>
+> >>>> V3:
+> >>>>   - Fixup CONFIG_COMPAT=3Dn compile error
+> >>>>   - Add THREAD_SIZE_ORDER config
+> >>>>   - Optimize elf_kexec.c warning fixup
+> >>>>   - Add static to irq_stack_ptr definition
+> >>>>
+> >>>> V2:
+> >>>>   Link: https://lore.kernel.org/linux-riscv/20220904072637.8619-1-gu=
+oren@kernel.org/
+> >>>>   - Fixup compile error by include "riscv: ptrace: Remove duplicate
+> >>>>     operation"
+> >>>>   - Fixup compile warning
+> >>>>     Reported-by: kernel test robot <lkp@intel.com>
+> >>>>   - Add test repo link in cover letter
+> >>>>
+> >>>> V1:
+> >>>>   Link: https://lore.kernel.org/linux-riscv/20220903163808.1954131-1=
+-guoren@kernel.org/
+> >>>>
+> >>>> Guo Ren (7):
+> >>>>    riscv: elf_kexec: Fixup compile warning
+> >>>>    riscv: compat_syscall_table: Fixup compile warning
+> >>>>    riscv: ptrace: Remove duplicate operation
+> >>>>    riscv: convert to generic entry
+> >>>>    riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+> >>>>    riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+> >>>>    riscv: Add config of thread stack size
+> >>>>
+> >>>>   arch/riscv/Kconfig                    |  19 ++
+> >>>>   arch/riscv/include/asm/csr.h          |   1 -
+> >>>>   arch/riscv/include/asm/entry-common.h |   8 +
+> >>>>   arch/riscv/include/asm/irq.h          |   3 +
+> >>>>   arch/riscv/include/asm/ptrace.h       |  10 +-
+> >>>>   arch/riscv/include/asm/stacktrace.h   |   5 +
+> >>>>   arch/riscv/include/asm/syscall.h      |   6 +
+> >>>>   arch/riscv/include/asm/thread_info.h  |  19 +-
+> >>>>   arch/riscv/include/asm/vmap_stack.h   |  28 +++
+> >>>>   arch/riscv/kernel/Makefile            |   1 +
+> >>>>   arch/riscv/kernel/elf_kexec.c         |   2 +-
+> >>>>   arch/riscv/kernel/entry.S             | 255 +++++-----------------=
+----
+> >>>>   arch/riscv/kernel/irq.c               |  75 ++++++++
+> >>>>   arch/riscv/kernel/ptrace.c            |  41 -----
+> >>>>   arch/riscv/kernel/signal.c            |  21 +--
+> >>>>   arch/riscv/kernel/sys_riscv.c         |  27 +++
+> >>>>   arch/riscv/kernel/traps.c             |  11 ++
+> >>>>   arch/riscv/mm/fault.c                 |  12 +-
+> >>>>   18 files changed, 259 insertions(+), 285 deletions(-)
+> >>>>   create mode 100644 arch/riscv/include/asm/entry-common.h
+> >>>>   create mode 100644 arch/riscv/include/asm/vmap_stack.h
+> >>>>
+> >>
+> >>
+> >>
+> >> --
+> >> Best Regards
+> >>   Guo Ren
+> >
+> >
+> >
+> > --
+> > Best Regards
+> >   Guo Ren
+>
 
--- 
-Thanks,
-Qi
+
+--=20
+Best Regards
+ Guo Ren

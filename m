@@ -2,118 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D24C5B0F35
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BCE5B0F3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIGVed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S230091AbiIGVhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiIGVea (ORCPT
+        with ESMTP id S229589AbiIGVhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:34:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56238E0BB
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:34:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E29396194E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 21:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E25C433D6;
-        Wed,  7 Sep 2022 21:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1662586468;
-        bh=UgoD/NLQ0MqihZ87VFspXN0wI9uOU/Esj7gHe+uAoqo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lWhoM2fwKkQ0+S3jLkEBCouMBZXU7I4Tg04RzM5+IrYRYOobXKSOVdFVr4tcHdWjO
-         EVP9+WRSEW+9l1GV5Qoh9gWaWoXbY3LYcfo1RxrZrWB2jqQx06huNTu0MnL/0ynzEG
-         zKHib011BQJcyBAO1tyDumbf/8nTVs+l35cI4WvM=
-Date:   Wed, 7 Sep 2022 14:34:27 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Jiebin Sun <jiebin.sun@intel.com>, vasily.averin@linux.dev,
-        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
-        manfred@colorfullife.com, alexander.mikhalitsyn@virtuozzo.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
-        tianyou.li@intel.com, wangyang.guo@intel.com
-Subject: Re: [PATCH v4] ipc/msg: mitigate the lock contention with percpu
- counter
-Message-Id: <20220907143427.0ce54bbf096943ffca197fee@linux-foundation.org>
-In-Reply-To: <eb13cb3e5e1625afe1bb783810f4d6b52a66a2f6.camel@linux.intel.com>
-References: <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
-        <20220907172516.1210842-1-jiebin.sun@intel.com>
-        <eb13cb3e5e1625afe1bb783810f4d6b52a66a2f6.camel@linux.intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 17:37:22 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F0A1F61D;
+        Wed,  7 Sep 2022 14:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662586641; x=1694122641;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=B4/ksnDW8Xem29FiMzcN7TgkM2msIVMY3Ax00LuxAqE=;
+  b=Ox3n59/YSBehX+KG6Dk+Ok6xbVuLn/uMMOleJYXsReqbuGau147U/P1P
+   1cvSLYGd7l1mTZMe0shbRIn/pyUXVSheYxu5FvVGqZdGwqhq2BXDD5HAF
+   TjCzjTKXKWyMm6ButWb0KKJfgXD4pnqt6H6CJrncpyD4sCfoMdlfbagmj
+   i+NqUjCY4LkQJ5Ows+iV8PMJrwl4kMM0g8HsHInDL5FzJkkVIPBBbNrPw
+   A+UzzRXVPb4WuhUHi2Z5t/diabR99D4SS5mzdUJexcwrqcL24VV4Aloe3
+   CoSZWTuicZ55+9waVx9grOxZJSSSuxwC+248gAGkp8hKF+TjD9R2RkpgA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="323191480"
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="323191480"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:37:20 -0700
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="591886845"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:37:20 -0700
+Date:   Wed, 7 Sep 2022 14:37:32 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX
+ interrupts
+In-Reply-To: <YxeqTdny7Nu7LzZo@smile.fi.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-5-matthew.gerlach@linux.intel.com> <YxeqTdny7Nu7LzZo@smile.fi.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Sep 2022 09:01:53 -0700 Tim Chen <tim.c.chen@linux.intel.com> wrote:
 
-> On Thu, 2022-09-08 at 01:25 +0800, Jiebin Sun wrote:
-> > The msg_bytes and msg_hdrs atomic counters are frequently
-> > updated when IPC msg queue is in heavy use, causing heavy
-> > cache bounce and overhead. Change them to percpu_counter
-> > greatly improve the performance. Since there is one percpu
-> > struct per namespace, additional memory cost is minimal.
-> > Reading of the count done in msgctl call, which is infrequent.
-> > So the need to sum up the counts in each CPU is infrequent.
-> > 
-> > 
-> > Apply the patch and test the pts/stress-ng-1.4.0
-> > -- system v message passing (160 threads).
-> > 
-> > Score gain: 3.17x
-> > 
-> > 
+
+On Tue, 6 Sep 2022, Andy Shevchenko wrote:
+
+> On Tue, Sep 06, 2022 at 12:04:25PM -0700, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Define and use a DFHv1 parameter to add generic support for MSIX
+>> interrupts for DFL devices.
+>
 > ...
-> >  
-> > +/* large batch size could reduce the times to sum up percpu counter */
-> > +#define MSG_PERCPU_COUNTER_BATCH 1024
-> > +
-> 
-> Jiebin, 
-> 
-> 1024 is a small size (1/4 page). 
-> The local per cpu counter could overflow to the gloabal count quickly
-> if it is limited to this size, since our count tracks msg size.
->   
-> I'll suggest something larger, say 8*1024*1024, about
-> 8MB to accommodate about 2 large page worth of data.  Maybe that
-> will further improve throughput on stress-ng by reducing contention
-> on adding to the global count.
-> 
+>
+>> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+>> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+>> +		v = readq(base);
+>> +		v = FIELD_GET(DFH_VERSION, v);
+>> +
+>> +		if (v == 1) {
+>> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
+>
+> I am already lost what v keeps...
+>
+> Perhaps
+>
+> 		v = readq(base);
+> 		switch (FIELD_GET(DFH_VERSION, v)) {
+> 		case 1:
+> 			...
+> 			break;
+> 		}
 
-I think this concept of a percpu_counter_add() which is massively
-biased to the write side and with very rare reading is a legitimate
-use-case.  Perhaps it should become an addition to the formal interface.
-Something like
+How about?
+ 		if (FIELD_GET(DFH_VERSION, readq(base)) == 1) {
+ 			...
+ 		}
+>
+>> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
+>
+> 				void __iomem *v1hdr = base + DFHv1_PARAM_HDR;
+>
+>> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
+>> +						     DFHv1_PARAM_ID_MSIX);
+>
+> 				off = dfl_find_param(v1hdr, ofst, DFHv1_PARAM_ID_MSIX);
+>
+>> +				if (off >= 0) {
+>> +					ibase = readl(base + DFHv1_PARAM_HDR +
+>> +						      off + DFHv1_PARAM_MSIX_STARTV);
+>> +					inr = readl(base + DFHv1_PARAM_HDR +
+>> +						    off + DFHv1_PARAM_MSIX_NUMV);
+>
+> 					ibase = readl(v1hdr + off + DFHv1_PARAM_MSIX_STARTV);
+> 					inr = readl(v1hdr + off + DFHv1_PARAM_MSIX_NUMV);
+>
+>> +					dev_dbg(binfo->dev, "%s start %d num %d fid 0x%x\n",
+>> +						__func__, ibase, inr, fid);
+>
+> No __func__ for dev_dbg(). Dynamic debug has this feature at runtime!
+>
+>> +				}
+>> +			}
+>> +		}
+>> +	}
+>
+> ...
+>
+>> +/*
+>
+> If it's a kernel doc, make it to be parsable as a such.
 
-/* 
- * comment goes here
- */
-static inline void percpu_counter_add_local(struct percpu_counter *fbc,
-					    s64 amount)
-{
-	percpu_counter_add_batch(fbc, amount, INT_MAX);
-}
+Yes, the intention is kernel doc. Thanks for the feedback. I
+will fix this and add the newline as suggested below.
 
-and percpu_counter_sub_local(), I guess.
+Matthew Gerlach
 
-The only instance I can see is
-block/blk-cgroup-rwstat.h:blkg_rwstat_add() which is using INT_MAX/2
-because it always uses percpu_counter_sum_positive() on the read side.
-
-But that makes two!
+>
+>> + * dfl_find_param() - find the offset of the given parameter
+>> + * @base: base pointer to start of dfl parameters in DFH
+>> + * @max: maximum offset to search
+>> + * @param: id of dfl parameter
+>> + *
+>> + * Return: positive offset on success, negative error code otherwise.
+>> + */
+>> +int dfl_find_param(void __iomem *base, resource_size_t max, int param);
+>
+> + blank line.
+>
+>>  #endif /* __LINUX_DFL_H */
+>
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+>

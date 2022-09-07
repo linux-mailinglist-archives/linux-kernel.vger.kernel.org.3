@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB66F5B0929
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8D95B0925
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiIGPsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S229796AbiIGPsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiIGPsm (ORCPT
+        with ESMTP id S229741AbiIGPsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:48:42 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780717A75B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:48:40 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id q8so10975969qvr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:48:40 -0700 (PDT)
+        Wed, 7 Sep 2022 11:48:25 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CA1BADBE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:48:23 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id b21so2089116plz.7
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lzpRMN6w3iYiB3sZ9MYq6oInOU5vUpE1BADsOiRmqjU=;
-        b=I9W0bKjLgunzSGZRX1ThnuV/MEbkicDWvQL83f8Ra1IkksPVDsr8EI8K78Kg2DDvBZ
-         D1zs2QnE97rVAM/2jPvgk5G1YTaexnupDWdjEXTJ826KqkJAs31wTp9P8KxbFjCG6ARv
-         PXgNanGBS0Yhv+VMXBibPM9Dp47Id7HMogfF7O7IgPRS0OObbWf45hK+MtkqfWW/CTd3
-         y+MCaeOQpwGOezQLU96N5p8kWCYqKN9E47H7iqi96RjXIgtwdrt9R541mQiBbslSyXk7
-         amD9mEtwcj8THrwS5lf0VDxJb3s+QqAJTw1iAcBkGfe11CNYltoYHGcidgu48UxzNwRl
-         7e2Q==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=/kPSWel6mobLfUIPD82aMK7TVuiyZeYuc3xqvzKcSuE=;
+        b=qmCNpHSx7oMT5E8bHSuoHnFgMqmTqMzbeDgsLX9BkR1z+KMoW5hzZIHMaBfZJsaOxJ
+         Yl0l9/C9Jcn9iWO7FfYmZ+ANS+1i0aT5v2LKHY24Mr4s/W/ut3YHwIcn6Osg4NwrRv6b
+         UNEYvl0Q0f80fy8D5hzdNQ5KHLjUTFB0a46NTc3/TKXHcQV6CuZAiDZ4DPbHpQwiJuYH
+         5zYYPdU9lpAx9qb4krs1P+LMZxujdCMMNGYiZnsen11pdaHZm1PkN4m96QrxEzGUWBxy
+         pR884dXngnJjjQdlfXxIjIvx90AUO08BWUpuHP77sLHfLk236EFxqC+xBDeKssn2xTJH
+         AKSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lzpRMN6w3iYiB3sZ9MYq6oInOU5vUpE1BADsOiRmqjU=;
-        b=01M61eKLkK7NyxYJaK3Tr2fte3wJDhefa+NJyTntYoK9kRb6HZ6qnaKcu0nLDItOPR
-         HpJP+HLmw2aH27pgdUiX0AyO0g2N7jxhaJY+nodGR32KLYC7R4w0OkdtvMaaRuIfXvnC
-         Kv5ulrkkuX8KzNaiVmb0VYN/36oENjvHEOZ4yHhM3G50DHC7g97hrDqPRxRSUGXzItTw
-         KPLQp6JY91A3iY+RFSV/RCGtHSM4enc/w6yKNpQWAL5cEZ11IR8U+X9pJu+27qEKm0/Y
-         Tm/vcuffBxkAcMUhnZaDzzbVFP7dsMzzoZoaKMxAQ/4/xKBa4gMkVcQb80P7lMmJWtjk
-         Z56A==
-X-Gm-Message-State: ACgBeo3NlkkfhGwoayhUo3xLQQngrWCP4ZwZf98oKNW1KJU8XPtqSyE/
-        60cDaZthe/eVu+Fbqf4ev/Mbg1Nz4xUr7FPkVYs=
-X-Google-Smtp-Source: AA6agR4ISNlLiqADrS2D08cMTxRve5NkJIe9MjHS3y5FscyHte6S5XcJajKSWFZIF4pigA0cW5t/J2+b5ubnzoT7drk=
-X-Received: by 2002:ad4:5f8f:0:b0:4a9:b75a:e33c with SMTP id
- jp15-20020ad45f8f000000b004a9b75ae33cmr3594902qvb.82.1662565719375; Wed, 07
- Sep 2022 08:48:39 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=/kPSWel6mobLfUIPD82aMK7TVuiyZeYuc3xqvzKcSuE=;
+        b=4jU3LNmP+mCXkKg7AcvaZ7R4nVcSb0LfJAMkEbC02k0Kc/nRyQiCh7jvnOJn4d21Iq
+         XXEJuFe4JnbiRGG6HED4m1cjLP8jRAGHyw3d9ikHoiBm7DNzH1ytu5CSU2ygQ3+V+mSk
+         2cxFtJ1hqG0vVZn+QeRCfb4s3q6T76UKi1D85ACZno4a4mG+YxbeGOpVgWq0SexKdNVC
+         W32a67i7agEWmrm4RwfkbcrCOKcxm+MuLQEq5cTHnTcrL1i6KBbXL3qlqsCa8kFMj/k4
+         2OoBoXWUlHcYSU/gmTvyl/8yWWNlkeeBdJ5YmQlVrM3oeMk11hK1wjzcKootLQM5cNzj
+         LwnQ==
+X-Gm-Message-State: ACgBeo0ac3mjREutx0TaLmUsMGWSoQaffgXjRbhHtNecuj4K7xQgcrtp
+        mkg1DYx+wIHLcUjaZctvozTVyw==
+X-Google-Smtp-Source: AA6agR5eOWOiHyn0TqvZYrl0cXhsJg64L8mJ6VV4UNfFTV1WWSN+P6AoiStBDmSZ1E28ipnZV8eUBw==
+X-Received: by 2002:a17:90b:4a8e:b0:1fe:1df3:bb11 with SMTP id lp14-20020a17090b4a8e00b001fe1df3bb11mr4599947pjb.22.1662565702390;
+        Wed, 07 Sep 2022 08:48:22 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b00172b87d97cbsm4487356pli.67.2022.09.07.08.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:48:21 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 15:48:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 1/4] KVM: x86: move the event handling of
+ KVM_REQ_GET_VMCS12_PAGES into a common function
+Message-ID: <Yxi9QRziGl2YhNuB@google.com>
+References: <20220828222544.1964917-1-mizhang@google.com>
+ <20220828222544.1964917-2-mizhang@google.com>
+ <YwzkvfT0AiwaojTx@google.com>
+ <20220907025042.hvfww56wskwhsjwk@yy-desk-7060>
+ <CAL715WJK1WwXFfbUiMjngV8Z-0jyu_9JeZaK4qvvdJfYvtQEYg@mail.gmail.com>
+ <20220907053523.qb7qsbqfgcg2d2vx@yy-desk-7060>
 MIME-Version: 1.0
-References: <20220907103041.0a88d5c4@endymion.delvare> <CAHp75VdzgWfQ=7nTvYmuxWMaPH0weF=Bzj+AEqsEhyQNeH1XHg@mail.gmail.com>
- <20220907172146.72460eda@endymion.delvare>
-In-Reply-To: <20220907172146.72460eda@endymion.delvare>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 7 Sep 2022 18:48:03 +0300
-Message-ID: <CAHp75Vf+PdP2AiLOHYnKUWn5KDgvy+1poBHjHZd0hnJKTsGHtg@mail.gmail.com>
-Subject: Re: [PATCH] firmware: dmi: Fortify entry point length checks
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907053523.qb7qsbqfgcg2d2vx@yy-desk-7060>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,27 +82,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 6:21 PM Jean Delvare <jdelvare@suse.de> wrote:
-> On Wed, 7 Sep 2022 17:52:10 +0300, Andy Shevchenko wrote:
-> > On Wed, Sep 7, 2022 at 11:30 AM Jean Delvare <jdelvare@suse.de> wrote:
+On Wed, Sep 07, 2022, Yuan Yao wrote:
+> On Tue, Sep 06, 2022 at 09:26:33PM -0700, Mingwei Zhang wrote:
+> > > > @@ -10700,6 +10706,12 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+> > > >               if (kvm_cpu_has_pending_timer(vcpu))
+> > > >                       kvm_inject_pending_timer_irqs(vcpu);
+> > > >
+> > > > +             if (vcpu->arch.nested_get_pages_pending) {
+> > > > +                     r = kvm_get_nested_state_pages(vcpu);
+> > > > +                     if (r <= 0)
+> > > > +                             break;
+> > > > +             }
+> > > > +
+> > >
+> > > Will this leads to skip the get_nested_state_pages for L2 first time
+> > > vmentry in every L2 running iteration ? Because with above changes
+> > > KVM_REQ_GET_NESTED_STATE_PAGES is not set in
+> > > nested_vmx_enter_non_root_mode() and
+> > > vcpu->arch.nested_get_pages_pending is not checked in
+> > > vcpu_enter_guest().
+> > >
+> > Good catch. I think the diff won't work when vcpu is runnable.
 
-...
+It works, but it's inefficient if the request comes from KVM_SET_NESTED_STATE.
+The pending KVM_REQ_UNBLOCK that comes with the flag will prevent actually running
+the guest.  Specifically, this chunk of code will detect the pending request and
+bail out of vcpu_enter_guest().
 
-> > > Also fix the maximum length check, which is technically 32, not 31.
-> > > It does not matter in practice as the only valid values are 31 (for
-> > > SMBIOS 2.x)
+	if (kvm_vcpu_exit_request(vcpu)) {
+		vcpu->mode = OUTSIDE_GUEST_MODE;
+		smp_wmb();
+		local_irq_enable();
+		preempt_enable();
+		kvm_vcpu_srcu_read_lock(vcpu);
+		r = 1;
+		goto cancel_injection;
+	}
+
+But the inefficiency is a non-issue since "true" emulation of VM-Enter will flow
+through this path (the VMRESUME/VMLAUNCH/VMRUN exit handler runs at the end of
+vcpu_enter_guest().
+
+> > It only tries to catch the vcpu block case. Even for the vcpu block case,
+> > the check of KVM_REQ_UNBLOCK is way too late. Ah, kvm_vcpu_check_block() is
+> > called by kvm_vcpu_block() which is called by vcpu_block(). The warning is
+> > triggered at the very beginning of vcpu_block(), i.e., within
+> > kvm_arch_vcpu_runnable(). So, please ignore the trace in my previous email.
 > >
-> > "NOTE: This value was incorrectly stated in version 2.1 of this specification as
-> > 1Eh. Because of this, there might be version 2.1 implementations that
-> > use either the 1Eh or the 1Fh value, but version 2.2 or later
-> > implementations must use the 1Fh value."
->
-> Good point, so maybe we should accept 0x1E and treat is silently as
-> 0x1F (which is what we have been doing implicitly so far) for maximum
-> compatibility?
+> > In addition, my minor push back for that is
+> > vcpu->arch.nested_get_pages_pending seems to be another
+> > KVM_REQ_GET_NESTED_STATE_PAGES.
+> 
+> Yeah, but in concept level it's not a REQ mask lives in the
+> vcpu->requests which can be cached by e.g. kvm_request_pending().
+> It's necessary to check vcpu->arch.nested_get_pages_pending in
+> vcpu_enter_guest() if Sean's idea is to replace
+> KVM_REQ_GET_NESTED_STATE_PAGES with nested_get_pages_pending.
 
-At least the previous comparison covers this case, if I'm not mistaken.
+Yes, they key is that it's not a request.  Requests have implicit properties:
+e.g. as above, effectively prevent running the vCPU until the request goes away,
+they can be pended from other vCPUs, etc...  And the property that is most relevant
+to this bug: except for special cases, requests only need to be serviced before
+running vCPU.
 
--- 
-With Best Regards,
-Andy Shevchenko
+And the number of requests is limited due to them being stored in a bitmap.  x86
+still has plenty of room due to kvm_vcpu.requests being a u64, but it's still
+preferable to avoid using a request unless absolutely necessary.
+
+For this case, since using a request isn't strictly needed and using a request
+would require special casing that request, my strong preference is to not use a
+request.
+
+So yes, my idea is to "just" replace the request with a flag, but there are subtly
+quite a few impliciations in not using a request.

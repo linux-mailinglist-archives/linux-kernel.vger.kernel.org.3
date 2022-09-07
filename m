@@ -2,192 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888DF5B00F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520CE5B00F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiIGJzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S230156AbiIGJzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiIGJzD (ORCPT
+        with ESMTP id S230044AbiIGJzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:55:03 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2E8248F0
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:55:00 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id bz13so16087550wrb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 02:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=D70XsnuK+JjOjhOUycDcv6x9oYap675Tz1NyjMuJJeQ=;
-        b=ArTVxjzl4jjkeDcDAykSqOnbsnE4RyYaNvtRv5H01nXkzeOrKwxou3NLe+9X5voQB9
-         k8vBvRNWJaoymUSrtwuowm9dD864p86/5v8QwkvKzkadebkZ6/ShoNbrlzL+l5SAiCCx
-         HQTor9/YFxw7z2jW2AaREh15/yMAIiW1zXxlnWXxMpFdE3L/pygM619gxQjyHSzp+hnE
-         2Qq1zVJxvO9Q2qCIF1/Remeygb1jzO3uN4hRTkbUa8jrz0U3QaC9bj0c9m7GHOJDX0jA
-         1nVB3DZ9RNPuUhyDOTG7FiAg6Ue4QvJ7H5bcqUQaTVKkpzkm902atXG64V9WZC6AEILx
-         8nqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=D70XsnuK+JjOjhOUycDcv6x9oYap675Tz1NyjMuJJeQ=;
-        b=2tV4/IUQzUdLpVtzQQYFMZa9oXTNgBQIgi5GFopxIcnAHal50H711DvJEE+E1aYN9R
-         xKlo/x5KvZmzdGlTUif4AayP3+b7oX1Xr2cQdYm7xKVGpEt/ouMiI+5drjn+tGOiN9kg
-         po1bkPB9ff2xt12fBNBXeEHhx8XDhZ5QgF+fH/MuGc3YN24f2IywbcoComVRMuVJqA1z
-         FEIqv/r8s4wrXq703HLZWPF6dW8832DfkADSzxVo1ypJlWeUi1In6IsQ7OXsb3HxXwdR
-         GflMqF8M9YIvISgDHG1TbcpQaKnbyU5U7/dr6YJW4yGtWjgtMl2NApOEEMDtYYZcbxeA
-         5tvA==
-X-Gm-Message-State: ACgBeo0fw35wwzZCqo8NBZ6cUpN5X2CzqZiF1pbhVEmYhOgGpvjIGiAp
-        Rak1mqDfi96goTbKqZnvE2R/7w==
-X-Google-Smtp-Source: AA6agR46d9IuqClGYsNh6ebHPg5a5F86IxP86Hlmd2vLbW53hk6vAwFPjS5L1FNJqf7fkT07+fz2rA==
-X-Received: by 2002:a5d:588d:0:b0:225:9818:668d with SMTP id n13-20020a5d588d000000b002259818668dmr1504825wrf.100.1662544498769;
-        Wed, 07 Sep 2022 02:54:58 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id bh5-20020a05600005c500b0021ee65426a2sm16037248wrb.65.2022.09.07.02.54.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 02:54:58 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 10:54:54 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 09/13] iommu/sva: Refactoring
- iommu_sva_bind/unbind_device()
-Message-ID: <YxhqbhMmWLeFS512@myrica>
-References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
- <20220906124458.46461-10-baolu.lu@linux.intel.com>
- <Yxd2+d/VOjdOgrR2@myrica>
- <682d8922-200d-8c89-7142-83e7b3754b8d@linux.intel.com>
+        Wed, 7 Sep 2022 05:55:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3943A24BF8;
+        Wed,  7 Sep 2022 02:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662544507; x=1694080507;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=wTz5MbuOMBDOMBq3QKGowVOjTKfUFIGm8N9GEPakT7M=;
+  b=hSCiyCvSJywfCOImk37gC1imW5dKcu0AUcQ1fB4LY6/l9MZxvorkAKHO
+   /KZRjA/o5lz41Fh4AtAyd4e6og2T5K0msuUo8z5ob50bHqBqGRCDX524k
+   RdHp6lOXbqRI7OqFPBtZvSg1P+73OACOKJw5BAOfzPWAVV1t3QHiPJkmJ
+   tex9y1Gd7vN0cH0DW63j442YvsIQqG1ffPhYEf8k817nF0M+QEaMlMIme
+   xupNTB90ibbPOuV4uCUejVx7M6T6z9AQ9Tb3qfpWM69Pzq9an7wmZ0CiE
+   z3zeY9Xm/ioaxIcJvWA5bmE/mue6J55Nl0la11g6/Y/e8empIZNQBvE2J
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="294415263"
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="294415263"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:55:06 -0700
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="644551974"
+Received: from dmatouse-mobl.ger.corp.intel.com ([10.251.223.53])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:54:58 -0700
+Date:   Wed, 7 Sep 2022 12:54:57 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?ISO-8859-15?Q?Andreas_F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/4] tty: TX helpers
+In-Reply-To: <20220906104805.23211-1-jslaby@suse.cz>
+Message-ID: <e6e551fa-2347-7b17-8a62-2b28517c76e@linux.intel.com>
+References: <20220906104805.23211-1-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <682d8922-200d-8c89-7142-83e7b3754b8d@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1229872048-1662544507=:1717"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Wed, Sep 07, 2022 at 09:27:30AM +0800, Baolu Lu wrote:
-> Hi Jean,
+--8323329-1229872048-1662544507=:1717
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 6 Sep 2022, Jiri Slaby wrote:
+
+> This series introduces DEFINE_UART_PORT_TX_HELPER +
+> DEFINE_UART_PORT_TX_HELPER_LIMITED TX helpers. See PATCH 2/4 for the
+> details. Comments welcome.
 > 
-> On 2022/9/7 0:36, Jean-Philippe Brucker wrote:
-> > On Tue, Sep 06, 2022 at 08:44:54PM +0800, Lu Baolu wrote:
-> > > +/**
-> > > + * iommu_sva_bind_device() - Bind a process address space to a device
-> > > + * @dev: the device
-> > > + * @mm: the mm to bind, caller must hold a reference to mm_users
-> > > + *
-> > > + * Create a bond between device and address space, allowing the device to access
-> > > + * the mm using the returned PASID. If a bond already exists between @device and
-> > > + * @mm, it is returned and an additional reference is taken. Caller must call
-> > > + * iommu_sva_unbind_device() to release each reference.
-> > This isn't true anymore. How about storing handle in the domain?
+> Then it switches drivers to use them. First, to
+> DEFINE_UART_PORT_TX_HELPER() in 3/4 and then
+> DEFINE_UART_PORT_TX_HELPER_LIMITED() in 4/4.
 > 
-> Yes, agreed. How about making the comments like this:
+> The diffstat of patches 3+4 is as follows:
+>  26 files changed, 191 insertions(+), 823 deletions(-)
+> which appears to be nice.
 > 
-> /**
->  * iommu_sva_bind_device() - Bind a process address space to a device
->  * @dev: the device
->  * @mm: the mm to bind, caller must hold a reference to mm_users
->  *
->  * Create a bond between device and address space, allowing the device to
->  * access the mm using the pasid returned by iommu_sva_get_pasid(). If a
->  * bond already exists between @device and @mm, an additional internal
->  * reference is taken. The reference will be released when the caller calls
->  * iommu_sva_unbind_device().
-
-Sure, that works. I'd keep "Caller must call iommu_sva_unbind_device()
-to release each reference"
-
+> Cc: Tobias Klauser <tklauser@distanz.ch>
+> Cc: Richard Genoud <richard.genoud@gmail.com>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Cc: Vladimir Zapolskiy <vz@mleia.com>
+> Cc: Liviu Dudau <liviu.dudau@arm.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: "Andreas Färber" <afaerber@suse.de>
+> Cc: Manivannan Sadhasivam <mani@kernel.org>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: "Pali Rohár" <pali@kernel.org>
+> Cc: Kevin Cernekee <cernekee@gmail.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Orson Zhai <orsonzhai@gmail.com>
+> Cc: Baolin Wang <baolin.wang7@gmail.com>
+> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: linux-riscv@lists.infradead.org
 > 
-> Storing the handle in the domain looks odd. Conceptually an iommu domain
-> represents a hardware page table and the SVA handle represents a
-> relationship between device and the page table for a consumer. It's
-> better to make them separated.
-
-Right
-
+> Jiri Slaby (4):
+>   tty: serial: move and cleanup vt8500_tx_empty()
+>   tty: serial: introduce transmit helper generators
+>   tty: serial: use DEFINE_UART_PORT_TX_HELPER()
+>   tty: serial: use DEFINE_UART_PORT_TX_HELPER_LIMITED()
 > 
-> In a separated series, probably we can discuss the possibility of
-> removing handle from the driver APIs. Just simply return the sva domain
-> instead.
-> 
-> struct iommu_domain *iommu_sva_bind_device(struct device *dev,
->                                            struct mm_struct *mm);
-> void iommu_sva_unbind_device(struct device *dev,
->                              struct iommu_domain *domain);
-> u32 iommu_sva_get_pasid(struct iommu_domain *domain);
-> 
-> If you think it's appropriate, I can send out the code for discussion.
+>  Documentation/driver-api/serial/driver.rst |  3 +
+>  drivers/tty/serial/21285.c                 | 33 ++-------
+>  drivers/tty/serial/altera_jtaguart.c       | 42 +++--------
+>  drivers/tty/serial/altera_uart.c           | 37 ++--------
+>  drivers/tty/serial/amba-pl010.c            | 37 ++--------
+>  drivers/tty/serial/apbuart.c               | 36 ++--------
+>  drivers/tty/serial/atmel_serial.c          | 29 ++------
+>  drivers/tty/serial/bcm63xx_uart.c          | 47 +++----------
+>  drivers/tty/serial/fsl_lpuart.c            | 38 +++-------
+>  drivers/tty/serial/lantiq.c                | 44 ++++--------
+>  drivers/tty/serial/lpc32xx_hs.c            | 38 ++--------
+>  drivers/tty/serial/mcf.c                   | 27 ++------
+>  drivers/tty/serial/mpc52xx_uart.c          | 43 +-----------
+>  drivers/tty/serial/mps2-uart.c             | 29 +-------
+>  drivers/tty/serial/mux.c                   | 46 ++++--------
+>  drivers/tty/serial/mvebu-uart.c            | 40 ++---------
+>  drivers/tty/serial/mxs-auart.c             | 31 ++-------
+>  drivers/tty/serial/omap-serial.c           | 47 ++++---------
+>  drivers/tty/serial/owl-uart.c              | 35 +---------
+>  drivers/tty/serial/pxa.c                   | 39 +++--------
+>  drivers/tty/serial/rp2.c                   | 36 ++--------
+>  drivers/tty/serial/sa1100.c                | 49 +++++--------
+>  drivers/tty/serial/serial_txx9.c           | 37 ++--------
+>  drivers/tty/serial/sifive.c                | 45 ++----------
+>  drivers/tty/serial/sprd_serial.c           | 38 ++--------
+>  drivers/tty/serial/st-asc.c                | 50 ++-----------
+>  drivers/tty/serial/vt8500_serial.c         | 40 ++---------
+>  include/linux/serial_core.h                | 81 ++++++++++++++++++++++
+>  28 files changed, 275 insertions(+), 822 deletions(-)
 
-Yes, I don't see a reason to keep struct iommu_sva at the moment.
-I believe we needed to keep track of bonds themselves for sva_ops and
-driver data but those are gone now.
+For the whole series:
 
-Is iommu_domain still going to represent both a device context (whole
-PASID table) and individual address spaces, or are you planning to move
-away from that?  What happens when a driver does:
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-  d1 = iommu_domain_alloc()
-  iommu_attach_device(d1)
-  d2 = iommu_sva_bind_device()
-  iommu_detach_device(d1)
+-- 
+ i.
 
-Does detach
-(a) only disable the non-PASID address space?
-(b) disable everything?
-(c) fail because the driver didn't unbind first?
-
-I'm asking because the SMMU driver is still using smmu_domain to represent
-all address spaces + the non-PASID one, and using the same type
-"iommu_domain" for the new object makes things unreadable. I think
-internally we'll want to use distinct variable names, something like
-"domain" and "address_space". If (a) is not the direction you're going,
-then it may be worth renaming the API as well.
-
-I'm also not sure why set_dev_pasid() is a domain_ops of the SVA domain,
-but acts on the parent domain which contains the PASID table. Shouldn't it
-be an IOMMU op like remove_dev_pasid(), or on the parent domain?
-
-Thanks,
-Jean
-
-> 
-> > 
-> > (Maybe also drop my Reviewed-by tags since this has changed significantly,
-> > I tend to ignore patches that have them)
-> 
-> I am sorry that after your review, the SVA domain and attach/detach
-> device pasid interfaces have undergone some changes. They mainly exist
-> in the following patches. Can you please help to take a look.
-> 
-> iommu/sva: Refactoring iommu_sva_bind/unbind_device()
-> arm-smmu-v3/sva: Add SVA domain support
-> iommu: Add IOMMU SVA domain support
-> iommu: Add attach/detach_dev_pasid iommu interfaces
-> 
-> Best regards,
-> baolu
+--8323329-1229872048-1662544507=:1717--

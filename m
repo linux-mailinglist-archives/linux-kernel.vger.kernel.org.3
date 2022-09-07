@@ -2,122 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3296F5B0E78
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C415B0E74
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiIGUsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S229939AbiIGUsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiIGUs1 (ORCPT
+        with ESMTP id S229469AbiIGUsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:48:27 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB31C22A9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:48:25 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1225219ee46so39128428fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YASIjzw1LDe+VKtphl3/fRbVIDxJaus83cpKP5HNsyw=;
-        b=VoDi7KKvOVMlkNb6NTLmj1/EUmOIK4dTzEbszNq5fElMHLBSt5uVH2td68MJlNQqR5
-         FajYEDywytSduxtlHZLRoxWfpLh5I+3SiR55tKsuUiTaAZLra7Uh17k/CWM8sjcpr+Gs
-         a67vn3vjtsB2deaAuScN0Zt7lmSAj/aZScSoQ=
+        Wed, 7 Sep 2022 16:48:14 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B702C22B0;
+        Wed,  7 Sep 2022 13:48:12 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-11eab59db71so38942932fac.11;
+        Wed, 07 Sep 2022 13:48:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YASIjzw1LDe+VKtphl3/fRbVIDxJaus83cpKP5HNsyw=;
-        b=i2s6id9rMNQarGItRimsVM8KYk4s6feXAMeAlBmzG85uzDWK/lB3cJ9tLjDhR7X7zK
-         SQRW+8w75N1LpUuhf9xYpii007KmWUeYjblj1+eW0bmHzADpjfytgUGj7pBv/LHiPAYc
-         tjGj7BSeMuTlJ3n+nByNZTnG0663zPnSG4QungyeT0nVzIUrGUASgQ7MIaA12lGnpsJo
-         pmWMlYAg/VBqD27uCNc09gtv4juFb2A38VX7TYSm15IcKRhW0up2MmZn9o+SkMC1L0Vc
-         +/fmIMc36OWedbbxPruRom/lQkcXinBg4G92le1AgoN5jEugKtQ1PYnHuNxp9+lF2XOc
-         8kmw==
-X-Gm-Message-State: ACgBeo2JmHGoIQ+oqzFtTbNTM0OtRtaylSd7y+/RYSUti4MgxeFlK2+Y
-        1wTY9VJAiC1DP99Se4KByjzVGtcGYgl93Q==
-X-Google-Smtp-Source: AA6agR686UIOfzMbVUOM4s3ps0R9euDwq6z6JpWvuzmC1va526YrZCN/BNCQiuZrv8rVysNlz05fMA==
-X-Received: by 2002:aca:1901:0:b0:344:d4b5:9a1f with SMTP id l1-20020aca1901000000b00344d4b59a1fmr123393oii.170.1662583704402;
-        Wed, 07 Sep 2022 13:48:24 -0700 (PDT)
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com. [209.85.160.41])
-        by smtp.gmail.com with ESMTPSA id j24-20020a4ad198000000b00435a59fba01sm5387810oor.47.2022.09.07.13.48.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 13:48:23 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-12803ac8113so5752783fac.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:48:23 -0700 (PDT)
-X-Received: by 2002:a05:6870:b28c:b0:127:ad43:573e with SMTP id
- c12-20020a056870b28c00b00127ad43573emr171693oao.174.1662583703304; Wed, 07
- Sep 2022 13:48:23 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=OgZSfbLdmWOALRRb7JBf/hZJkZ02I3rXxvpAaPJjtss=;
+        b=oM0ttpfDJOpVyNtrbPIsvZrt6pVSyzM2a9KeeBkz/T8NNRyp8dun+zYUtmcEOvkKhw
+         aZQ1OmTFdkxuHYypCF62TF0rNyJLJ3KnLOEmsnmHDiMz3+4jGkmug3WgZPA+1GV/wQAK
+         5k/xh6LosdATqcGsZU5Ots60x+RveKTUNY5Upm5CzbZ/kSRTZoOH7ochlXs50SEBn0J4
+         4e/qqo9soXyUjZiAFm/6jV7V63g2j6BvHNVBOVnPRhvUxGt8gI67uY0Ge+3GQ1LdqVIv
+         sVitX9A4GtZAHl4lOM6wRAqEHUlRFaQ8XodnMADL+OOZrc/ieIO65Erpbc8DLvh6l1ZM
+         0W+w==
+X-Gm-Message-State: ACgBeo0oTzfWpqklRuKDS55sQXPjZnkGqebgZ6vHb7zuJMG1Ca2yPyCq
+        rDvOEWBDNlHR4gR4YivfGg==
+X-Google-Smtp-Source: AA6agR6NS6tXDzOLHfWF+BuC8XbobxkJmCcNwfL3/mQLtSgFA6uV0lRUjSxT5Zi+7Jar40NgasRRDg==
+X-Received: by 2002:a05:6870:a791:b0:10d:8606:c68b with SMTP id x17-20020a056870a79100b0010d8606c68bmr165876oao.234.1662583691370;
+        Wed, 07 Sep 2022 13:48:11 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w8-20020a9d5388000000b00616d3ec6734sm7400219otg.53.2022.09.07.13.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 13:48:11 -0700 (PDT)
+Received: (nullmailer pid 316597 invoked by uid 1000);
+        Wed, 07 Sep 2022 20:48:10 -0000
+Date:   Wed, 7 Sep 2022 15:48:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Chia-Wei Wang --cc=linux-kernel @ vger . kernel . org" 
+        <chiawei_wang@aspeedtech.com>, linux-crypto@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v1 3/4] dt-bindings: crypto: add documentation for Aspeed
+ ACRY
+Message-ID: <20220907204810.GA312863-robh@kernel.org>
+References: <20220902060012.3758637-1-neal_liu@aspeedtech.com>
+ <20220902060012.3758637-4-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
- <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com> <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
- <Yw7L+X2cHf9qprxl@kernel.org>
-In-Reply-To: <Yw7L+X2cHf9qprxl@kernel.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 7 Sep 2022 13:47:47 -0700
-X-Gmail-Original-Message-ID: <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
-Message-ID: <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
-Subject: Re: TPM: hibernate with IMA PCR 10
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Matthew Garrett <mgarrett@aurora.tech>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902060012.3758637-4-neal_liu@aspeedtech.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
-> > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
-> > >
-> > > On 5/4/2022 7:20 PM, Evan Green wrote:
-> > > > Enabling the kernel to be able to do encryption and integrity checks on
-> > > > the hibernate image prevents a malicious userspace from escalating to
-> > > > kernel execution via hibernation resume.  [snip]
-> > >
-> > > I have a related question.
-> > >
-> > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
-> > > hibernate image is restored:
-> > >
-> > > 1. Is there a design for how PCR 10 is restored?
-> >
-> > I don't see anything that does that at present.
-> >
-> > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
-> > > restored?
-> >
-> > They're part of the running kernel state, so should re-appear without
-> > any special casing. However, in the absence of anything repopulating
-> > PCR 10, they'll no longer match the in-TPM value.
->
-> This feature could still be supported, if IMA is disabled
-> in the kernel configuration, which I see a non-issue as
-> long as config flag checks are there.
+On Fri, Sep 02, 2022 at 02:00:11PM +0800, Neal Liu wrote:
+> Add device tree binding documentation for the Aspeed
+> ECDSA/RSA ACRY Engines Controller.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> ---
+>  .../bindings/crypto/aspeed,ast2600-acry.yaml  | 49 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +-
+>  2 files changed, 50 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml b/Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
+> new file mode 100644
+> index 000000000000..192b40cd0a39
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/crypto/aspeed,ast2600-acry.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ASPEED ACRY ECDSA/RSA Hardware Accelerator Engines Device Tree Bindings
 
-Right, from what I understand about IMA, the TPM's PCR getting out of
-sync with the in-kernel measurement list across a hibernate (because
-TPM is reset) or kexec() (because in-memory list gets reset) is
-already a problem. This series doesn't really address that, in that it
-doesn't really make that situation better or worse.
+Drop ' Device Tree Bindings'
 
--Evan
+> +
+> +maintainers:
+> +  - Neal Liu <neal_liu@aspeedtech.com>
+> +
+> +description: |
+
+Don't need '|' if no formatting.
+
+> +  The ACRY ECDSA/RSA engines is designed to accelerate the throughput
+> +  of ECDSA/RSA signature and verification. Basically, ACRY can be
+> +  divided into two independently engines - ECC Engine and RSA Engine.
+
+independent
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-acry
+> +
+> +  reg:
+> +    items:
+> +      - description: acry base address & size
+> +      - description: acry sram base address & size
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +    acry: crypto@1e6fa000 {
+> +        compatible = "aspeed,ast2600-acry";
+> +        reg = <0x1e6fa000 0x400>, <0x1e710000 0x1800>;
+> +        interrupts = <160>;
+> +        clocks = <&syscon ASPEED_CLK_GATE_RSACLK>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 832da6d77374..09ab1c3adbb7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3214,7 +3214,7 @@ ASPEED CRYPTO DRIVER
+>  M:	Neal Liu <neal_liu@aspeedtech.com>
+>  L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+>  S:	Maintained
+> -F:	Documentation/devicetree/bindings/crypto/aspeed,ast2500-hace.yaml
+> +F:	Documentation/devicetree/bindings/crypto/aspeed,*
+>  F:	drivers/crypto/aspeed/
+>  
+>  ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
+> -- 
+> 2.25.1
+> 
+> 

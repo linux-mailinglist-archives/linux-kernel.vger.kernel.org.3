@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9195C5B0F74
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7575C5B0F70
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbiIGVsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S230365AbiIGVru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiIGVsX (ORCPT
+        with ESMTP id S230371AbiIGVrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:48:23 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B093C480A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:48:21 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u9so33481123ejy.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 14:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+/R8XTGRvXQTqvAr8XML9xdzybq9kmOE4MfJixg2MLI=;
-        b=BTcxONqs0yhXF+8dWjfiLFdOKd/xUabSvAO7NqrhEHtZGoYQ2KGmDrVRbsynKidinm
-         JEl8FINmdPf4Tq54yiD9FWNgsAzRf4/kuC+9ExmgscTOpEqMq/PttvPNuuDyxQmt83ng
-         SLsZ9j55agxBr/StLo4iPYaJK4rP4owe/bJT3f7m1CXVc+euPeTii0VulvZnOut4dd9j
-         xtJLgk2j4oe8HF/WqJlR2A845oq9NsdBssjoS/ULF0Rkr4i2w/7ex4m3IIHKYKzvl9QH
-         RTk86241OLYvGKkn1daSEwLN5wnH4IGEN13w7WyHhg5G0+D5jg7Y9mgWqHjfXi82i4Es
-         hF7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+/R8XTGRvXQTqvAr8XML9xdzybq9kmOE4MfJixg2MLI=;
-        b=UrZ9UQiHkNifcgibBL+5isSoNRHFxFJWx97ZEHL5hVsM8RExHAeMNB/KdmfqiwX9Y7
-         gAFB0OydeS9tVzSzXtPOtO9sLj091bu8tKuaDkcvriEOsVIjJ5zVhggfPIjUZhtbw56p
-         RZSehRH3YBiEgPEvXgF85Rcm9QgXRTjJuLt48Nvc2Atq7isPvofAatQBNa+/BX4UsG7y
-         MpIF3gPuS6VGfeye9GLBEUGbvwu3M8dlpVUP3gyvXCfl7CrKitINWbvAu4qUuWwfRPuz
-         91xhc10CJqZtHKMgi5AfmoogBaDusUui/Pd+d0BaCOXVFg92kJX8QGzsuokGNBh3h/95
-         8Qog==
-X-Gm-Message-State: ACgBeo0nye3r7t1xW+5EKWvS5w3bdegrS10DxIL45Wos/+llWENYdqLb
-        oRUHzmPSxaCMxDH7ZP87KTo17sq/N4HxdxH4RomHQg==
-X-Google-Smtp-Source: AA6agR45YzgOvEABURG6+iYvf+WmW5H2jNOcAjhQrckuIdcu1V6NSk2KkiOw4zMEqgoSv6z8gP2a8acsKlEO6ez6f1o=
-X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
- e8-20020a17090658c800b006fe91d518d2mr3800336ejs.190.1662587299605; Wed, 07
- Sep 2022 14:48:19 -0700 (PDT)
+        Wed, 7 Sep 2022 17:47:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3BC4827
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:47:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 902DDCE1D93
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 21:47:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DA2C433D6;
+        Wed,  7 Sep 2022 21:47:32 +0000 (UTC)
+Date:   Wed, 7 Sep 2022 17:48:13 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] tracefs: Only clobber mode/uid/gid on remount if
+ asked
+Message-ID: <20220907174813.182df339@gandalf.local.home>
+In-Reply-To: <20220907174604.06809ff2@gandalf.local.home>
+References: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
+        <20220826174353.2.Iab6e5ea57963d6deca5311b27fb7226790d44406@changeid>
+        <20220907174604.06809ff2@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <Yxe20ehiOnitDGus@google.com>
-In-Reply-To: <Yxe20ehiOnitDGus@google.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 7 Sep 2022 23:48:08 +0200
-Message-ID: <CACRpkdaDc1YwdS+Z4R1LEM=tzuMvCoy1qxWix-WaLRHsrZ=SUQ@mail.gmail.com>
-Subject: Re: [RFC/PATCH] remoteproc/keystone: switch to using gpiod API
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suman Anna <s-anna@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 11:08 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On Wed, 7 Sep 2022 17:46:04 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> This patch switches the driver away from legacy gpio/of_gpio API to
-> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-> make private to gpiolib.
->
-> Note that there is a behavior change in the driver: previously the
-> driver did not actually request GPIO, it simply parsed GPIO number out
-> of device tree and poked at it.
->
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> >   # Don't change /sys/kernel/tracing/ permissions on automount.
+> >   umount /sys/kernel/debug/tracing/  
+> 
+> BTW, I noticed that the above doesn't do anything. That is,
+> you cannot unmount tracefs from /sys/kernel/debug/tracing.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+I just saw your new email. I guess that's just how you were triggering the
+automount, by unmounting it. Right?
 
-Yours,
-Linus Walleij
+A lot of assumptions about what people may know ;-)
+
+I never tried it, so I really didn't know what the result of that would be.
+
+-- Steve

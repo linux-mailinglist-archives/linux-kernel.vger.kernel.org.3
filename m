@@ -2,134 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB155AFDCE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0435AFDD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiIGHps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S229498AbiIGHqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIGHpp (ORCPT
+        with ESMTP id S230017AbiIGHp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:45:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2037FFAC;
-        Wed,  7 Sep 2022 00:45:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMvSM48Bmz4wgr;
-        Wed,  7 Sep 2022 17:45:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662536741;
-        bh=bhsJcQEgyb5vhXPUdvUG6IM1FjPRH71usf9pZQ22R1M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cYRv60Mn0VD9/sCRd9f51WWo2eCrDCXr4Bzs0uDkG19XgmBhgzXAvmFA1Snjc2s+X
-         0bpBYSJ//f6SITYk+MhxISXGg/B0muwWFUbuBJQPE8Nwei7j+JNdpgArKGL+89TXLm
-         pPm0hF6l9GRDS0MTstX6c1YOEz5kj3XKKQXQZTthbl0PmpJZDDuPRe2aQrC5DJUxZW
-         4NYauY4Apix4awRLXlM4FkAkew2C0fT1c73vdBhBmXL6f0zh2jr3vCsNLg4TWnYDLc
-         4pBx0nRaXQb2HYytzoPAGqek89313v0+w0LrRQP+Idu48OWA4YYIyd5Tqm2ipBA2Ie
-         GJkcm0Gk9A8dQ==
-Date:   Wed, 7 Sep 2022 17:45:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: linux-next: build failure after merge of the slab tree
-Message-ID: <20220907174535.4852e7da@canb.auug.org.au>
-In-Reply-To: <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
-References: <20220906165131.59f395a9@canb.auug.org.au>
-        <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
-        <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
-        <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
+        Wed, 7 Sep 2022 03:45:58 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10B983BFA;
+        Wed,  7 Sep 2022 00:45:54 -0700 (PDT)
+Received: from [10.28.39.72] (10.28.39.72) by mail-sz.amlogic.com (10.28.11.5)
+ with Microsoft SMTP Server id 15.1.2507.6; Wed, 7 Sep 2022 15:45:51 +0800
+Message-ID: <aa99e72c-41c8-02d5-c47b-05277b988eb0@amlogic.com>
+Date:   Wed, 7 Sep 2022 15:45:51 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IMql38jc4ngYXPwtr.DpjJM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH RESEND v8 4/5] dt-bindings: nand: meson: convert txt to
+ yaml
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20220906060034.2528-1-liang.yang@amlogic.com>
+ <20220906060034.2528-5-liang.yang@amlogic.com>
+ <20220906143021.GA439874-robh@kernel.org>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <20220906143021.GA439874-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.28.39.72]
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/IMql38jc4ngYXPwtr.DpjJM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Rob,
 
-Hi all,
-
-On Tue, 6 Sep 2022 20:05:44 -0700 Alexei Starovoitov <alexei.starovoitov@gm=
-ail.com> wrote:
->
-> On Tue, Sep 6, 2022 at 11:37 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Sep 6, 2022 at 12:53 AM Vlastimil Babka <vbabka@suse.cz> wrote:=
- =20
-> > >
-> > > On 9/6/22 08:51, Stephen Rothwell wrote: =20
-> > > > Hi all, =20
-> > >
-> > > Hi,
-> > > =20
-> > > > After merging the slab tree, today's linux-next build (powerpc
-> > > > ppc64_defconfig) failed like this:
-> > > >
-> > > > kernel/bpf/memalloc.c: In function 'bpf_mem_free':
-> > > > kernel/bpf/memalloc.c:613:33: error: implicit declaration of functi=
-on '__ksize'; did you mean 'ksize'? [-Werror=3Dimplicit-function-declaratio=
-n]
-> > > >    613 |         idx =3D bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE=
-_SZ));
-> > > >        |                                 ^~~~~~~
-> > > >        |                                 ksize =20
-> > >
-> > > Could you use ksize() here? I'm guessing you picked __ksize() because
-> > > kasan_unpoison_element() in mm/mempool.c did, but that's to avoid
-> > > kasan_unpoison_range() in ksize() as this caller does it differently.
-> > > AFAICS your function doesn't handle kasan differently, so ksize() sho=
-uld
-> > > be fine. =20
-> >
-> > Ok. Will change to use ksize(). =20
->=20
-> Just pushed the following commit to address the issue:
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?=
-id=3D1e660f7ebe0ff6ac65ee0000280392d878630a67
->=20
-> It will get to net-next soon.
-
-I replaced my revert with that patch for today (and will discard that
-when it arrives via some other tree).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IMql38jc4ngYXPwtr.DpjJM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMYTB8ACgkQAVBC80lX
-0GyK6Qf/QTHmLJ5Q68YznFmFD9sOrzRpxcX1pruMX5LvK7xzTn3NoGEmaFSNPT1i
-2ikd8XlTRk8YIbW+k80qPoHHWJy7hfmYEEwznigEOPfgq1a/HfmUbhc4tYjRffTD
-KBwk2urFFvs59tjKt2PgH0aS2Jr7Ze/1LaY1eYnJ9mS6+wY8b6OeBarl+0qbuAop
-Ia4q0N6/Z1Nf1NrAAo+7llUdda26Ly30iJCrS9prkOfvWYy6k/B6ehgbFwDg5sV5
-1gfz3aZokZXvb5XAKVmwnQHJPq094gZ7qr59OjIkNLKQ1ZkD6pOddWzCmcuqrhQY
-mOoX0BJ/H/c5ez5x43XtgYgMwZrTYQ==
-=tqs4
------END PGP SIGNATURE-----
-
---Sig_/IMql38jc4ngYXPwtr.DpjJM--
+On 2022/9/6 22:30, Rob Herring wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> On Tue, Sep 06, 2022 at 02:00:32PM +0800, Liang Yang wrote:
+>> convert the amlogic,meson-name.txt to amlogic,meson-nand.yaml
+>>
+>> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+>> ---
+>>   .../bindings/mtd/amlogic,meson-nand.txt       | 55 ------------
+>>   .../bindings/mtd/amlogic,meson-nand.yaml      | 88 +++++++++++++++++++
+>>   2 files changed, 88 insertions(+), 55 deletions(-)
+>>   delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+>>   create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+>> deleted file mode 100644
+>> index 5d5cdfef417f..000000000000
+>> --- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+>> +++ /dev/null
+>> @@ -1,55 +0,0 @@
+>> -Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
+>> -
+>> -This file documents the properties in addition to those available in
+>> -the MTD NAND bindings.
+>> -
+>> -Required properties:
+>> -- compatible : contains one of:
+>> -  - "amlogic,meson-gxl-nfc"
+>> -  - "amlogic,meson-axg-nfc"
+>> -
+>> -- reg        : Offset and length of the register set
+>> -
+>> -- reg-names  : "nfc" is the register set for NFC controller and "emmc"
+>> -		is the register set for MCI controller.
+>> -
+>> -- clocks     :
+>> -	A list of phandle + clock-specifier pairs for the clocks listed
+>> -	in clock-names.
+>> -
+>> -- clock-names: Should contain the following:
+>> -	"core" - NFC module gate clock
+>> -	"device" - parent clock for internal NFC
+>> -
+>> -Optional children nodes:
+>> -Children nodes represent the available nand chips.
+>> -
+>> -Other properties:
+>> -see Documentation/devicetree/bindings/mtd/nand-controller.yaml for generic bindings.
+>> -
+>> -Example demonstrate on AXG SoC:
+>> -
+>> -	nand-controller@7800 {
+>> -		compatible = "amlogic,meson-axg-nfc";
+>> -		reg = <0x0 0x7800 0x0 0x100>,
+>> -		      <0x0 0x7000 0x0 0x800>;
+>> -		reg-names = "nfc", "emmc";
+>> -		#address-cells = <1>;
+>> -		#size-cells = <0>;
+>> -		interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
+>> -
+>> -		clocks = <&clkc CLKID_SD_EMMC_C>,
+>> -			 <&clkc CLKID_FCLK_DIV2>;
+>> -		clock-names = "core", "device";
+>> -
+>> -		pinctrl-names = "default";
+>> -		pinctrl-0 = <&nand_pins>;
+>> -
+>> -		nand@0 {
+>> -			reg = <0>;
+>> -			#address-cells = <1>;
+>> -			#size-cells = <1>;
+>> -
+>> -			nand-on-flash-bbt;
+>> -		};
+>> -	};
+>> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+>> new file mode 100644
+>> index 000000000000..42634e9c0d3c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+>> @@ -0,0 +1,88 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mtd/amlogic,meson-nand.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
+>> +
+>> +allOf:
+>> +  - $ref: "nand-controller.yaml"
+> 
+> Don't need quotes
+I will fix it
+> 
+>> +
+>> +maintainers:
+>> +  - liang.yang@amlogic.com
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - "amlogic,meson-gxl-nfc"
+>> +      - "amlogic,meson-axg-nfc"
+> 
+> Don't need quotes
+i will fix it
+> 
+>> +
+>> +  reg:
+>> +    maxItems: 2
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    minItems: 2
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: core
+>> +      - const: device
+>> +
+>> +patternProperties:
+>> +  "^nand@[0-7]$":
+>> +    type: object
+>> +    properties:
+>> +      reg:
+>> +        minimum: 0
+>> +        maximum: 1
+>> +
+>> +      nand-ecc-mode:
+>> +        const: hw
+>> +
+>> +      nand-ecc-step-size:
+>> +        const: 1024
+>> +
+>> +      nand-ecc-strength:
+>> +        enum: [8, 16, 24, 30, 40, 50, 60]
+>> +        description: |
+>> +          The ECC configurations that can be supported are as follows.
+>> +            meson-gxl-nfc 8, 16, 24, 30, 40, 50, 60
+>> +            meson-axg-nfc 8
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/axg-clkc.h>
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    nand-controller@ffe07800 {
+>> +      compatible = "amlogic,meson-axg-nfc";
+>> +      reg = <0xffe07800 0x100>, <0xffe07000 0x800>;
+>> +      reg-names = "nfc", "emmc";
+>> +      interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
+>> +      clocks = <&clkc CLKID_SD_EMMC_C>,  <&clkc CLKID_FCLK_DIV2>;
+>> +      clock-names = "core", "device";
+>> +
+>> +      pinctrl-0 = <&nand_pins>;
+>> +      pinctrl-names = "default";
+>> +
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      nand@0 {
+>> +        reg = <0>;
+>> +      };
+>> +    };
+>> +
+>> +...
+>> -- 
+>> 2.34.1
+>>
+>>
+> 
+> .

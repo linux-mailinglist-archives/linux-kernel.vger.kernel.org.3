@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA5B5AFBCC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6C85AFBCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiIGFfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S229576AbiIGFgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiIGFf1 (ORCPT
+        with ESMTP id S229582AbiIGFf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:35:27 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298124B49D;
-        Tue,  6 Sep 2022 22:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662528926; x=1694064926;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s/ws2IVLLDd2yoBtML6C/t5SDZcAcQIo3h0hl+fCkPk=;
-  b=AMDxu4eOgCDPC3ZRPKuvt0Pmx+XVEdlXHEQ/UtPxcixdaYSnbpNTo3B8
-   4nNHhPgGLUt/+hLGxEBsKaTq8HSa3QRX5mGdj2q9nrY15TXpRUUCImA3W
-   5GNzqg/fuOTH3BAh9+C43/qKoLi68aRD0pGBvsxiaFZ64hwdc0Xb/3p4S
-   mRefITf0v1wqziI/x2keKun5J8WT4J5lt575JKVOxvAkOive7z0N+E1E+
-   YccovW4k10OI3hPmIqxFlO8gkn3AVKVQ6IigFG3Eg2bSbUQEYsxvh3AFa
-   XBIkyWdOpEp0tDZFnjQoVVNe+80oHtpQwmTZpb40e7z+1OMe813+6RfMl
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="277177789"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="277177789"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 22:35:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="676020466"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Sep 2022 22:35:24 -0700
-Date:   Wed, 7 Sep 2022 13:35:23 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 1/4] KVM: x86: move the event handling of
- KVM_REQ_GET_VMCS12_PAGES into a common function
-Message-ID: <20220907053523.qb7qsbqfgcg2d2vx@yy-desk-7060>
-References: <20220828222544.1964917-1-mizhang@google.com>
- <20220828222544.1964917-2-mizhang@google.com>
- <YwzkvfT0AiwaojTx@google.com>
- <20220907025042.hvfww56wskwhsjwk@yy-desk-7060>
- <CAL715WJK1WwXFfbUiMjngV8Z-0jyu_9JeZaK4qvvdJfYvtQEYg@mail.gmail.com>
+        Wed, 7 Sep 2022 01:35:56 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9AC72FC1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:35:54 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 130so14391230ybz.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 22:35:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vdL0JRw13DKnZIvgWCrjye4WeG1glTwaTkY0rU3yNtQ=;
+        b=E7Amsg8JJMFe/At6cNPX5M3W6ULyiKUKC0LqZZbB6YPmWWHg9Zec0fPThMnkb+3llQ
+         4eG1BpSIrBWdA7OqvPKI7N7xE5mGR9ssMbQJaBXvd3Wc/gYXwHhFq8YsV4gDjKHEPvHG
+         PE6UpHNoii0zPILyxH42fawmVQzaxKxZ6QhXgLY1fYmRrA2c+/tUdlOBgcfRCPsskx4q
+         9xveD9t2OCOv+03GTQHquQl9YjW74ulM6vdXO/Qkbm7npP6qn6/saDTpCC46nckXCfrm
+         7m4CApkHcxl3ale/ZUHEPgHun/rJmkJM3vVQhabi+72Fae4oVLoS3IHXaioxxpY4c/X2
+         5xfw==
+X-Gm-Message-State: ACgBeo393QQgITnjPuZOdE4pRJJMvSLDVD01s9OCN67RU53cnCf+l2Zl
+        i1ZijCNpqLNjvjbne5Q9j+7vPagiP0lpLpyDBKo=
+X-Google-Smtp-Source: AA6agR4Mx3wcE7MiMBb1qrE0qoDdUpOdSsO3PayqlaD5SOV0ihZUNupGfrf4kxbOeVtJYKonXIoDGMsJXOg7K/Qp4r8=
+X-Received: by 2002:a25:e6cf:0:b0:6a9:9c99:d8a3 with SMTP id
+ d198-20020a25e6cf000000b006a99c99d8a3mr1492965ybh.500.1662528953184; Tue, 06
+ Sep 2022 22:35:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL715WJK1WwXFfbUiMjngV8Z-0jyu_9JeZaK4qvvdJfYvtQEYg@mail.gmail.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
+ <20220812114438.1574-3-mailhol.vincent@wanadoo.fr> <YwT+5GGCOKoTjfQZ@zn.tnic>
+ <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
+ <YwUR35I7+5JbLvMM@zn.tnic> <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
+ <YwXkuW3rSYY7ZJT+@zn.tnic> <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
+ <YwYmpK40ju5WUlVZ@zn.tnic> <CAMZ6RqJSdbbpFw7iZBqmADY0cAhjzFkpqs+VWCfFM_P0P-wH6w@mail.gmail.com>
+ <YxgY2MBmBIkBsdlu@nazgul.tnic>
+In-Reply-To: <YxgY2MBmBIkBsdlu@nazgul.tnic>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 7 Sep 2022 14:35:41 +0900
+Message-ID: <CAMZ6Rq+Uo4r9DXsOTgEhNEv7wWkHjBnU0498+1++qaD+4WCPKw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
+ evaluate constant expressions
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 09:26:33PM -0700, Mingwei Zhang wrote:
-> > > @@ -10700,6 +10706,12 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
-> > >               if (kvm_cpu_has_pending_timer(vcpu))
-> > >                       kvm_inject_pending_timer_irqs(vcpu);
-> > >
-> > > +             if (vcpu->arch.nested_get_pages_pending) {
-> > > +                     r = kvm_get_nested_state_pages(vcpu);
-> > > +                     if (r <= 0)
-> > > +                             break;
-> > > +             }
-> > > +
-> >
-> > Will this leads to skip the get_nested_state_pages for L2 first time
-> > vmentry in every L2 running iteration ? Because with above changes
-> > KVM_REQ_GET_NESTED_STATE_PAGES is not set in
-> > nested_vmx_enter_non_root_mode() and
-> > vcpu->arch.nested_get_pages_pending is not checked in
-> > vcpu_enter_guest().
-> >
-> Good catch. I think the diff won't work when vcpu is runnable. It only
-> tries to catch the vcpu block case. Even for the vcpu block case,  the
-> check of KVM_REQ_UNBLOCK is way too late. Ah, kvm_vcpu_check_block()
-> is called by kvm_vcpu_block() which is called by vcpu_block(). The
-> warning is triggered at the very beginning of vcpu_block(), i.e.,
-> within kvm_arch_vcpu_runnable(). So, please ignore the trace in my
-> previous email.
+On Wed. 7 Sep 2022 at 13:06, Borislav Petkov <bp@alien8.de> wrote:
+> On Sat, Aug 27, 2022 at 06:32:05AM +0900, Vincent MAILHOL wrote:
+> > Agree that this is only the surface. But, my patch series is about
+> > constant folding, not about the text of *ffs(). Here, I just *move*
+> > the existing text, I did not modify anything.
+> > Can we agree that this is a separate topic?
 >
-> In addition, my minor push back for that is
-> vcpu->arch.nested_get_pages_pending seems to be another
-> KVM_REQ_GET_NESTED_STATE_PAGES.
+> Sure we can.
+>
+> But then you can't start your commit message with:
+>
+> "__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
+> is equivalent to (unsigned long)__builtin_ctzl(~x)."
+>
+> which will bring unenlightened readers like me into the very same mess.
+>
+> So at least mention that there's a difference between the kernel
+> implementation using hw insns which are well defined on some machines
+> and what the glibc API does. So that at least people are aware that
+> there's something dangerous to be cautious about.
+>
+> Ok?
 
-Yeah, but in concept level it's not a REQ mask lives in the
-vcpu->requests which can be cached by e.g. kvm_request_pending().
-It's necessary to check vcpu->arch.nested_get_pages_pending in
-vcpu_enter_guest() if Sean's idea is to replace
-KVM_REQ_GET_NESTED_STATE_PAGES with nested_get_pages_pending.
+OK.
 
->
-> Thanks.
-> -Mingwei
->
->
-> -Mingwei
+I rephrased the beginning of the commit message as below:
+
+
+If x is not 0, __ffs(x) is equivalent to:
+  (unsigned long)__builtin_ctzl(x)
+And if x is not ~0UL, ffz(x) is equivalent to:
+  (unsigned long)__builtin_ctzl(~x)
+Because __builting_ctzl() returns an int, a cast to (unsigned long) is
+necessary to avoid potential warnings on implicit casts.
+
+Concerning the edge cases, __builtin_ctzl(0) is always undefined,
+whereas __ffs(0) and ffz(~0UL) may or may not be defined, depending on
+the processor. Regardless, for both functions, developers are asked to
+check against 0 or ~0UL so replacing __ffs() or ffz() by
+__builting_ctzl() is safe.
+
+
+
+Does this solve the issue? If yes, I will prepare the v8 right away.
+
+Yours sincerely,
+Vincent Mailhol

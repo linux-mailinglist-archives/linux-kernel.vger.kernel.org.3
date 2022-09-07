@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786F35B02EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC90D5B030F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiIGLbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S230116AbiIGLdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiIGLbL (ORCPT
+        with ESMTP id S230003AbiIGLd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:31:11 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02887B0283;
-        Wed,  7 Sep 2022 04:31:11 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id y82so12928648yby.6;
-        Wed, 07 Sep 2022 04:31:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=htQQOB82V/42KTcLd0mWmEHX6IR774JdlYtTcKgQ5uY=;
-        b=J0hpqdXnf3ogu5jaZnQRInPEzYpKWw1bSpC3Fak9LMh0NOkMVK8yKh/D15/hBBbWls
-         rqUsCXdMRhyzCMzIx4/hnJAcGNU14dFgoDGgefZgnI9LmYthGPxnRHxP8SwpkBx2WWMc
-         APnS+XRSCbS1+z1crEqmKL7k7mQapnAg61SMc2NmRdEQc7K1oSU+vgtI/Vjy9T6KXHFU
-         UwV51QN9LhqArah47LUrNdHlpHDbqL5GiPqlW2F8/m5Jd3liEd0fR8lr5FFeOw12XBTA
-         T4zfPpc3w6QIaT/WkxMAFXHTxfzCf0uk8QJkD4CaYzGKjEQKOOWVAHhc4TVuuYOBZ0jj
-         a0ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=htQQOB82V/42KTcLd0mWmEHX6IR774JdlYtTcKgQ5uY=;
-        b=TFzkhEnxuyWYqACHewBljcuGLSuz19+MeSXXRn3mbl3sJDV/sEIpQeKFwVh3SLrc52
-         ROjZaVzUw3iWOy+k4bQgJa+6w2A9/CayLGBF5iZsfDCUsOUpBRJB41ihX1asWNhQZUly
-         /r7X5CfS1vwFNl6XLmX1rM7KGX18WC+vRBB4p+g66+GsjoWIv/emYFNjcagPTBFl7V0w
-         XnkEzRB1p7qO7fN9uQZNyqmGNDqUVgHRjDD1eGLZT4bjCBImpggIwW4xtvy+SKElQPP0
-         QaIBqDdoW/PL6vPdo476sTWTARjXXMU1n4syoA0tlBxRZHtzWWJeRFufAzEsFtKhaXmj
-         3dUg==
-X-Gm-Message-State: ACgBeo1BKtc+WSHk8N9NHzY3fr1bGtL7KxujDqO+t3JOuI3yYzL3KnnI
-        caZUNZaVz74uzmmKkfDp16IP9OzEVXLvAqryRDc=
-X-Google-Smtp-Source: AA6agR71H+G6qVXzMIzOGHX5QXC/V9UhqXsgcDMknFubEQ5fmf1ViE8QltDfcI3uiFsMdrym6KaPtNAbOoHe2iN1Hi8=
-X-Received: by 2002:a25:3b46:0:b0:69c:a60e:2e57 with SMTP id
- i67-20020a253b46000000b0069ca60e2e57mr2192680yba.364.1662550270206; Wed, 07
- Sep 2022 04:31:10 -0700 (PDT)
+        Wed, 7 Sep 2022 07:33:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF3DBB69F0;
+        Wed,  7 Sep 2022 04:33:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8A4E1042;
+        Wed,  7 Sep 2022 04:33:31 -0700 (PDT)
+Received: from [10.57.15.197] (unknown [10.57.15.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63EA73F7B4;
+        Wed,  7 Sep 2022 04:33:20 -0700 (PDT)
+Message-ID: <4ca6383e-bd21-59bf-cc4e-cf3313164957@arm.com>
+Date:   Wed, 7 Sep 2022 12:33:12 +0100
 MIME-Version: 1.0
-References: <20220906132821.713989422@linuxfoundation.org> <YxhnDip9k6TfRCCc@debian>
-In-Reply-To: <YxhnDip9k6TfRCCc@debian>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Wed, 7 Sep 2022 12:30:34 +0100
-Message-ID: <CADVatmN3hoxBB-knoTO6BGb=1fstiOPwakCu3tXHbV21bHR8Pw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/107] 5.15.66-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
+ domain as parent
+Content-Language: en-GB
+To:     Marc Zyngier <maz@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, eric.auger@redhat.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        puneet.gupta@amd.com, song.bao.hua@hisilicon.com,
+        mchehab+huawei@kernel.org, f.fainelli@gmail.com,
+        jeffrey.l.hugo@gmail.com, saravanak@google.com,
+        Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com,
+        will@kernel.org, joro@8bytes.org, masahiroy@kernel.org,
+        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org,
+        harpreet.anand@amd.com, nikhil.agarwal@amd.com,
+        michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-5-nipun.gupta@amd.com> <YxeBCsA32jnwMjSj@nvidia.com>
+ <87leqvv3g7.wl-maz@kernel.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <87leqvv3g7.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,36 +61,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 10:40 AM Sudip Mukherjee (Codethink)
-<sudipm.mukherjee@gmail.com> wrote:
->
-> Hi Greg,
->
-> On Tue, Sep 06, 2022 at 03:29:41PM +0200, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.66 release.
-> > There are 107 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
-> > Anything received after that time might be too late.
->
-> Build test (gcc version 11.3.1 20220819):
+On 2022-09-07 12:17, Marc Zyngier wrote:
+> On Tue, 06 Sep 2022 18:19:06 +0100,
+> Jason Gunthorpe <jgg@nvidia.com> wrote:
+>>
+>> On Tue, Sep 06, 2022 at 07:17:58PM +0530, Nipun Gupta wrote:
+>>
+>>> +static void cdx_msi_write_msg(struct irq_data *irq_data,
+>>> +			      struct msi_msg *msg)
+>>> +{
+>>> +	/*
+>>> +	 * Do nothing as CDX devices have these pre-populated
+>>> +	 * in the hardware itself.
+>>> +	 */
+>>> +}
+>>
+>> Huh?
+>>
+>> There is no way it can be pre-populated, the addr/data pair,
+>> especially on ARM, is completely under SW control.
+> 
+> There is nothing in the GIC spec that says that.
+> 
+>> There is some commonly used IOVA base in Linux for the ITS page, but
+>> no HW should hardwire that.
+> 
+> That's not strictly true. It really depends on how this block is
+> integrated, and there is a number of existing blocks that know *in HW*
+> how to signal an LPI.
+> 
+> See, as the canonical example, how the mbigen driver doesn't need to
+> know about the address of GITS_TRANSLATER.
+> 
+> Yes, this messes with translation (the access is downstream of the
+> SMMU) if you relied on it to have some isolation, and it has a "black
+> hole" effect as nobody can have an IOVA that overlaps with the
+> physical address of the GITS_TRANSLATER register.
+> 
+> But is it illegal as per the architecture? No. It's just stupid.
 
-Missed reporting that the build is full of "/bin/sh: 1:
-./scripts/pahole-flags.sh: Permission denied".
-On checking it turns out, the execute permission is not set in the
-v5.15.y branch, but its set in v5.19.y branch.
+If that were the case, then we'd also need a platform quirk so the SMMU 
+driver knows about it. Yuck.
 
-On v5.19.y:
-$ ls -l scripts/pahole-flags.sh
--rwxr-xr-x 1 sudip sudip 585 Sep  6 18:03 scripts/pahole-flags.sh
+But even then, are you suggesting there is some way to convince the ITS 
+driver to allocate a specific predetermined EventID when a driver 
+requests an MSI? Asking for a friend...
 
-on v5.15.y:
-$ ls -l scripts/pahole-flags.sh
--rw-r--r-- 1 sudip sudip 627 Sep  7 12:27 scripts/pahole-flags.sh
-
-
--- 
-Regards
-Sudip
+Cheers,
+Robin.

@@ -2,179 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBFF5B0B3A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5369B5B0AFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiIGRMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S230128AbiIGREs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiIGRMA (ORCPT
+        with ESMTP id S230071AbiIGREm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:12:00 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FA6BFC59
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:11:26 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11eab59db71so37546618fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:11:26 -0700 (PDT)
+        Wed, 7 Sep 2022 13:04:42 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C2EDE9A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:04:40 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3457bc84d53so55552447b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=Ro6O+2s9xjG7/14chisnyJusofpe1P/Z+6Ni1HfLglw=;
-        b=SFFia7VrpSfHHqK4+wrGcNeHGpCjolBliKK6r1h6XIGRo5GSXMMhxGqrAZd7h/1Z8I
-         fZPHWdG3DVGVcrZh+RMzotY75nbYwZF3yvul2CYa8AlFvlyUYoinzuFbkei+E22aaGaF
-         hAcyyxG/Z+aKkT3k0U/r3XrRUCZZbGhXiEzNA=
+        bh=hLyrjDAXFGcKrBQvO2vsySR9eSdav05DqWhM1DrTM6w=;
+        b=kzTpMwICMFv0pmARBUEcUnfZg1NJ3terhdZgPs0jgweZObfTivz+51xhwcI+eGtziI
+         SPo4Vt3ENKnX06k7No8dIPawE+AXH8ekiD5rpIOH5Tah0qXfmTbVx6ip1lP8sNcTD0bw
+         tDJ2CbO0PAu9y4Y4mAfjPn/5Ve7iQ+LwEhahTG3JUP2t6Xnze7VGpnyD+Kh35+Hvn/vl
+         wIQhj/fLXTyoj/SR5oczmY0rKeQvGC4mROOVeES80WaiTiNcSSNP8ux08F4+S9FTpfiF
+         6a0e7HrNRcWPh3UEylSZYZGNb2wKeE/KFU3tU+qHsBjwoKot5MHwRb83I8G5IHuxrC3f
+         ft7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ro6O+2s9xjG7/14chisnyJusofpe1P/Z+6Ni1HfLglw=;
-        b=6xbcRqq44xKOlJ/m0eZJ96j1jmvAByKRNPC5m8M+uGBjl5EZE2OSN3v87g0ti4wpFM
-         fPYLQKnL2Ic2wmQA3uOuLVez2Dn5L2qhX4zbfgotBhfI6sAF+Vju6d0KFOhoqcbF2xue
-         YkMi+2+9t9BSWMG9bUjF1XY46tAXYL4isCSxz9i7DEkvmHbPGCr3GlegxCSVDVhIEF6K
-         H1qqSt3g4T3gDIeeZGxs3ZJB+IBxZAORlAfd705jKuyuWt22IHGC/QFUXueiuDBDMHsA
-         PdWhYAfP1GCrZDfYgfAFNOX6LyLVk24z1LkIDHbeAFRiQW6iZOF1VzEDjoumJLTJLMBS
-         OycA==
-X-Gm-Message-State: ACgBeo3xnGGKvPwpfyFJxIfk0eQQLAV3hUS5fQFhpBGicmCu3RYXdjXI
-        pEnTANcW1DvOXlbfQP93dX0mtJ1woZaobA==
-X-Google-Smtp-Source: AA6agR7D3A9zO7yf22nw00RPTN6OF0CqRt6fV95Wg39pcizOn994JHj/PNsC+FiBN7WvO5Y8sIdRkg==
-X-Received: by 2002:a05:6870:799:b0:11b:b0d4:81dd with SMTP id en25-20020a056870079900b0011bb0d481ddmr14139377oab.138.1662570681021;
-        Wed, 07 Sep 2022 10:11:21 -0700 (PDT)
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com. [209.85.160.51])
-        by smtp.gmail.com with ESMTPSA id x6-20020a056870e38600b00127ba61535fsm2685613oad.15.2022.09.07.10.11.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 10:11:20 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1278a61bd57so19100765fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:11:20 -0700 (PDT)
-X-Received: by 2002:a05:6870:b28c:b0:127:ad43:573e with SMTP id
- c12-20020a056870b28c00b00127ad43573emr2505114oao.174.1662570269627; Wed, 07
- Sep 2022 10:04:29 -0700 (PDT)
+        bh=hLyrjDAXFGcKrBQvO2vsySR9eSdav05DqWhM1DrTM6w=;
+        b=vEUERE27JcedY7RE+rdPxIvEA4zlUOW1fD5t1Nqhzn3K3ULsZeijNyuTnB8Erey61V
+         uap8aRJixEhX/WkpcMBC9Yo6IRdNWF7RCIThCdeW6GQ8XGb4uEYv57CJ1zZZg5JB026w
+         5XabqZYYymwNzNTcOtJpKX3b7C6PkBJX6eaCD7jJd2k1qSqnVO/TWzEFu7Y1LmtuGNtp
+         aAFLdexEF/eMYoyRVbHeBsQ9lBrvF1vuxo4g0exEsb/cwJHIx+hp93RyXl3sjE671vIH
+         1puhT4F2StqUOwog6URCeTDaj0n0QjFzXCR4IIb1iN6zYiiiy7pAbqBAtsjavZbWTgNK
+         tEtQ==
+X-Gm-Message-State: ACgBeo0/FaGQxHKM9ksQo0pV82kxRsOr7hEtinfoTmuXTW2m2cdZqV4h
+        /4HS4Av4DSB073qMevwIudVETOkfVSNUYAUyF2xt6w==
+X-Google-Smtp-Source: AA6agR7jgcXkTjKkoU/wI+WaEwUj+8Y4DmQn8qZkFiDWBQX8ngt7el8mfF55JYy4izxDZLf8Q0ntXsx1UWAci0wEAxE=
+X-Received: by 2002:a81:4fce:0:b0:344:fba8:cb88 with SMTP id
+ d197-20020a814fce000000b00344fba8cb88mr4110212ywb.278.1662570279401; Wed, 07
+ Sep 2022 10:04:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220823222526.1524851-1-evgreen@chromium.org> <e74a2c48-fd30-aa4c-9ab6-eafe652f7878@amd.com>
-In-Reply-To: <e74a2c48-fd30-aa4c-9ab6-eafe652f7878@amd.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 7 Sep 2022 10:03:53 -0700
-X-Gmail-Original-Message-ID: <CAE=gft6gjqhviovxQDY=qrBiKQH1RBkCd_f+pnNw4Tz=M0ewBg@mail.gmail.com>
-Message-ID: <CAE=gft6gjqhviovxQDY=qrBiKQH1RBkCd_f+pnNw4Tz=M0ewBg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] Encrypted Hibernation
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Jarkko Sakkinen <jarkko@kernel.org>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        apronin@chromium.org, Daniil Lunev <dlunev@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
+References: <cover.1662361354.git.cdleonard@gmail.com> <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
+ <CANn89iKq4rUkCwSSD-35u+Lb8s9u-8t5bj1=aZuQ8+oYwuC-Eg@mail.gmail.com> <b951b8fb-f2b3-bcbb-8b7f-868b1f78f9bb@gmail.com>
+In-Reply-To: <b951b8fb-f2b3-bcbb-8b7f-868b1f78f9bb@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Sep 2022 10:04:28 -0700
+Message-ID: <CANn89iJ9XGKHV1F1uhKmWqyOdDjiBebo0FOb6SfCxcvE5XzJPQ@mail.gmail.com>
+Subject: Re: [PATCH v8 08/26] tcp: authopt: Disable via sysctl by default
+To:     Leonard Crestez <cdleonard@gmail.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Philip Paeps <philip@trouble.is>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:35 AM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
+On Wed, Sep 7, 2022 at 9:53 AM Leonard Crestez <cdleonard@gmail.com> wrote:
 >
-> On 8/23/2022 17:25, Evan Green wrote:
-> > We are exploring enabling hibernation in some new scenarios. However,
-> > our security team has a few requirements, listed below:
-> > 1. The hibernate image must be encrypted with protection derived from
-> >     both the platform (eg TPM) and user authentication data (eg
-> >     password).
-> > 2. Hibernation must not be a vector by which a malicious userspace can
-> >     escalate to the kernel.
-> >
-> > Requirement #1 can be achieved solely with uswsusp, however requirement
-> > 2 necessitates mechanisms in the kernel to guarantee integrity of the
-> > hibernate image. The kernel needs a way to authenticate that it generated
-> > the hibernate image being loaded, and that the image has not been tampered
-> > with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
-> > allows us to achieve both requirements with a single computation pass.
-> >
-> > Matthew Garrett published a series [1] that aligns closely with this
-> > goal. His series utilized the fact that PCR23 is a resettable PCR that
-> > can be blocked from access by usermode. The TPM can create a sealed key
-> > tied to PCR23 in two ways. First, the TPM can attest to the value of
-> > PCR23 when the key was created, which the kernel can use on resume to
-> > verify that the kernel must have created the key (since it is the only
-> > one capable of modifying PCR23). It can also create a policy that enforces
-> > PCR23 be set to a specific value as a condition of unsealing the key,
-> > preventing usermode from unsealing the key by talking directly to the
-> > TPM.
-> >
-> > This series adopts that primitive as a foundation, tweaking and building
-> > on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
-> > hash of the image, this series uses the key directly as a gcm(aes)
-> > encryption key, which the kernel uses to encrypt and decrypt the
-> > hibernate image in chunks of 16 pages. This provides both encryption and
-> > integrity, which turns out to be a noticeable performance improvement over
-> > separate passes for encryption and hashing.
-> >
-> > The series also introduces the concept of mixing user key material into
-> > the encryption key. This allows usermode to introduce key material
-> > based on unspecified external authentication data (in our case derived
-> > from something like the user password or PIN), without requiring
-> > usermode to do a separate encryption pass.
-> >
-> > Matthew also documented issues his series had [2] related to generating
-> > fake images by booting alternate kernels without the PCR23 limiting.
-> > With access to PCR23 on the same machine, usermode can create fake
-> > hibernate images that are indistinguishable to the new kernel from
-> > genuine ones. His post outlines a solution that involves adding more
-> > PCRs into the creation data and policy, with some gyrations to make this
-> > work well on a standard PC.
-> >
-> > Our approach would be similar: on our machines PCR 0 indicates whether
-> > the system is booted in secure/verified mode or developer mode. By
-> > adding PCR0 to the policy, we can reject hibernate images made in
-> > developer mode while in verified mode (or vice versa).
-> >
-> > Additionally, mixing in the user authentication data limits both
-> > data exfiltration attacks (eg a stolen laptop) and forged hibernation
-> > image attacks to attackers that already know the authentication data (eg
-> > user's password). This, combined with our relatively sealed userspace
-> > (dm-verity on the rootfs), and some judicious clearing of the hibernate
-> > image (such as across an OS update) further reduce the risk of an online
-> > attack. The remaining attack space of a forgery from someone with
-> > physical access to the device and knowledge of the authentication data
-> > is out of scope for us, given that flipping to developer mode or
-> > reflashing RO firmware trivially achieves the same thing.
-> >
-> > A couple of patches still need to be written on top of this series. The
-> > generalized functionality to OR in additional PCRs via Kconfig (like PCR
-> > 0 or 5) still needs to be added. We'll also need a patch that disallows
-> > unencrypted forms of resume from hibernation, to fully close the door
-> > to malicious userspace. However, I wanted to get this series out first
-> > and get reactions from upstream before continuing to add to it.
+> On 9/7/22 02:11, Eric Dumazet wrote:
+> > On Mon, Sep 5, 2022 at 12:06 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+> >>
+> >> This is mainly intended to protect against local privilege escalations
+> >> through a rarely used feature so it is deliberately not namespaced.
+> >>
+> >> Enforcement is only at the setsockopt level, this should be enough to
+> >> ensure that the tcp_authopt_needed static key never turns on.
+> >>
+> >> No effort is made to handle disabling when the feature is already in
+> >> use.
+> >>
+> >> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+> >> ---
+> >>   Documentation/networking/ip-sysctl.rst |  6 ++++
+> >>   include/net/tcp_authopt.h              |  1 +
+> >>   net/ipv4/sysctl_net_ipv4.c             | 39 ++++++++++++++++++++++++++
+> >>   net/ipv4/tcp_authopt.c                 | 25 +++++++++++++++++
+> >>   4 files changed, 71 insertions(+)
+> >>
+> >> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+> >> index a759872a2883..41be0e69d767 100644
+> >> --- a/Documentation/networking/ip-sysctl.rst
+> >> +++ b/Documentation/networking/ip-sysctl.rst
+> >> @@ -1038,10 +1038,16 @@ tcp_challenge_ack_limit - INTEGER
+> >>          Note that this per netns rate limit can allow some side channel
+> >>          attacks and probably should not be enabled.
+> >>          TCP stack implements per TCP socket limits anyway.
+> >>          Default: INT_MAX (unlimited)
+> >>
+> >> +tcp_authopt - BOOLEAN
+> >> +       Enable the TCP Authentication Option (RFC5925), a replacement for TCP
+> >> +       MD5 Signatures (RFC2835).
+> >> +
+> >> +       Default: 0
+> >> +
 >
-> Something else to think about in this series is what happens with
-> `hibernation_available` in kernel/power/hibernate.c.  Currently if the
-> system is locked down hibernate is disabled, but I would think that
-> with a setup like that described here that should no longer be necessary.
+> ...
 >
+> >> +#ifdef CONFIG_TCP_AUTHOPT
+> >> +static int proc_tcp_authopt(struct ctl_table *ctl,
+> >> +                           int write, void *buffer, size_t *lenp,
+> >> +                           loff_t *ppos)
+> >> +{
+> >> +       int val = sysctl_tcp_authopt;
+> >
+> > val = READ_ONCE(sysctl_tcp_authopt);
+> >
+> >> +       struct ctl_table tmp = {
+> >> +               .data = &val,
+> >> +               .mode = ctl->mode,
+> >> +               .maxlen = sizeof(val),
+> >> +               .extra1 = SYSCTL_ZERO,
+> >> +               .extra2 = SYSCTL_ONE,
+> >> +       };
+> >> +       int err;
+> >> +
+> >> +       err = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+> >> +       if (err)
+> >> +               return err;
+> >> +       if (sysctl_tcp_authopt && !val) {
+> >
+> > READ_ONCE(sysctl_tcp_authopt)
+> >
+> > Note that this test would still be racy, because another cpu might
+> > change sysctl_tcp_authopt right after the read.
+>
+> What meaningful races are possible here? This is a variable that changes
+> from 0 to 1 at most once.
 
-Correct, I think that would be a reasonable followup to this series.
+Two cpus can issue writes of 0 and 1 values at the same time.
 
--Evan
+Depending on scheduling writing the 0 can 'win' the race and overwrite
+the value back to 0.
+
+This is in clear violation of the claim you are making (that the
+sysctl can only go once from 0 to 1)
+
+>
+> In theory if two processes attempt to assign "non-zero" at the same time
+> then one will "win" and the other will get an error but races between
+> userspace writing different values are possible for any sysctl. The
+> solution seems to be "write sysctls from a single place".
+>
+> All the checks are in sockopts - in theory if the sysctl is written on
+> one CPU then a sockopt can still fail on another CPU until caches are
+> flushed. Is this what you're worried about?
+>
+> In theory doing READ_ONCE might incur a slight penalty on sockopt but
+> not noticeable.
+
+Not at all. There is _no_ penalty using READ_ONCE(). Unless it is done
+in a loop and this prevents some compiler optimization.
+
+Please use WRITE_ONCE() and READ_ONCE() for all sysctl values used in
+TCP stack (and elsewhere)
+
+See all the silly patches we had recently.
+
+>
+> >
+> >> +               net_warn_ratelimited("Enabling TCP Authentication Option is permanent\n");
+> >> +               return -EINVAL;
+> >> +       }
+> >> +       sysctl_tcp_authopt = val;
+> >
+> > WRITE_ONCE(sysctl_tcp_authopt, val),  or even better:
+> >
+> > if (val)
+> >       cmpxchg(&sysctl_tcp_authopt, 0, val);
+> >
+> >> +       return 0;
+> >> +}
+> >> +#endif
+> >> +
+>
+> This would be useful if we did any sort of initialization here but we
+> don't. Crypto is initialized somewhere completely different.

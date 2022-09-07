@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E515AF916
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD015AF918
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiIGArX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
+        id S229588AbiIGAsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiIGArV (ORCPT
+        with ESMTP id S229447AbiIGAsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:47:21 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27C69108D;
-        Tue,  6 Sep 2022 17:47:20 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-11ee4649dfcso32454002fac.1;
-        Tue, 06 Sep 2022 17:47:20 -0700 (PDT)
+        Tue, 6 Sep 2022 20:48:01 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACC2915FA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:48:00 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id i1so13363103vsc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:48:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=aUp8DHq2D23M7Ma032JZWGdA56y+PEflLl/7xbbNcJQ=;
-        b=YBBlaZd5iyKikeNxeBwiB23EAqDm00R8TxOWx6aQuzGWGTLVn1bquh3O6kZL/lkcJp
-         0D9w0bngcw/1JJVqF51eASn2VHKFmG3PvSuzDQRrvV+81odev3jYG2fdug44TM5atffR
-         0OgZUwvh4y6rkdmV1q5iqybOCu2zCFkPpMtwNJJlOivUeVsGcwM8TjvFJYHyh4hySsUI
-         ZbDV1KqeSNIpxrm1XBwqINE7sIQ0j6rm0PYD5z3B4pME51TJOOEDpbQ28rW2T6U4rQxR
-         vTkEH0ssfilnAw1t/t3k8NcAKul88dnDwBdjsw1dzgbIrKlDrPNh0oLNNNeutlSuRbYv
-         ovpg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hxTBhCI0F5j/2VZXRiH27pSDCjgcW9IAx9MdqUjicTA=;
+        b=pR0smMM+P4+BPyuL8kqpu+hfHMn3uKgzZOeKg9mikK3AiGbd0DWuHgG+Ra594j7mlA
+         keOMF9a3Y46gU9rbxjugz3wWlG3T8QukRsf3y8Rfub8s5BCFL8nILhBJReOt4k0Ze/4f
+         7j6gzOn5rU/1tMtEbAZpVPzWik3n5wsuI3/2D34KI4Mk4/sv1YIekuy9NHbKrejDL4eM
+         JG4WPD1rj8LdelhXF7X/zzPKqfX3mE25wiGo9gBB6Q4637lCO/1A/H4yz+9lIzEryDVc
+         ptvvZh3+MYf2U3to8X3w5gliceYUgwUFd2sOTcSUCGTLsRAEH1naWSPjYzDNVXDYY4am
+         udgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=aUp8DHq2D23M7Ma032JZWGdA56y+PEflLl/7xbbNcJQ=;
-        b=nlzn2d2cpQyVIFn725JQxNV3CoLfoPNcjWPQ2b9uiCI8dF0FwA0JRAePEVP7WIwv5I
-         CFN7HlrHBCDInK1GVvNsqjc3O0jBv4LXGeVwohXpPF8m20j+Fy3OxQDuj3a2tOikuD4P
-         49R4nwOQA3wLZrlXsv+YiTJajlqA7SdKLBe0AwSsPyvjRj4aE8KkNlgDfhxa1LXPNqOw
-         SksDXn/gPYMLO+t82yMRTIltAoHfF1o2WJZxtoFJq6+cB9Qznvh5/fKTy2N/MPb2y0DI
-         M4I+ZTzEzcexCYov4PYwtS6vDbq4R1Q1IS9BlaDSl2oGTagWOkCBxdWQTTGGIhZIIKIS
-         Kukg==
-X-Gm-Message-State: ACgBeo2svpb0NRn/NI32so3oAL8+Bcqgrx74o6hCjZWOwIPeKMM5TpkV
-        vBTZ3J+gWfCs77MpJIrHhmg=
-X-Google-Smtp-Source: AA6agR5HKMpePoO5fBNDaPv5pRi3ojhMzIyrWy53rHh1MKGNOBa1HVuljJBMfgxlsvsCCW/hA8xB0A==
-X-Received: by 2002:a05:6870:4586:b0:10d:2ec7:be6 with SMTP id y6-20020a056870458600b0010d2ec70be6mr13586659oao.7.1662511639900;
-        Tue, 06 Sep 2022 17:47:19 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id o186-20020aca5ac3000000b0034564365bf2sm6021407oib.17.2022.09.06.17.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 17:47:19 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 17:45:07 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read
- in _find_next_bit
-Message-ID: <YxfpkzZhJ7GfRuKd@yury-laptop>
-References: <000000000000974e2805e802137e@google.com>
- <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hxTBhCI0F5j/2VZXRiH27pSDCjgcW9IAx9MdqUjicTA=;
+        b=7SV+j8ug/DphsfnF/x+9i/7J5Os3kvMMT0lPvz+pungDL0740Z2mkXdL4cgWF95OMX
+         5d997L/f8Xv3QD3rAm9od3UvSWbnxNY4w7Kkab9SMmWFURJq1oR0pvj+/Fo5prPbQyYu
+         6QXIWRyCt4MoNc1xDd7OixgsUln6w0f5t5vPoVZZVD7gWYB8AevgTBF+KjwxE4f8yPYs
+         H5W2wAcP+V35LX86dTqXMl1UR69yvOjHyH3sy7CXTQi6wEy2F1UN8e3anpbxjBnVEu5R
+         8gF+rP1g9xpIn9kxPkY5chFkY7Q0MGJtsi5uC7Lp+zAF0iGmYhxKoB1M8A9ya1byTh46
+         blwQ==
+X-Gm-Message-State: ACgBeo2pp14LDFI+5q60jYixUonUwRv3q2nSpeixSi4+aAS2A2sBqfyz
+        DY6ox6/s4hhA0VL/+ciQZuaQ7CkluNg5vaF2abzPvGCMsub0OQ==
+X-Google-Smtp-Source: AA6agR5yr8YF6+0QafYupObEbHLSCcL/AToRyHImwx66OLyyvYDWNl4DuIdWi+YN40kdYlI1lSoXTQPNzh1f9ypKSFY=
+X-Received: by 2002:a05:6102:304e:b0:397:6b53:5f81 with SMTP id
+ w14-20020a056102304e00b003976b535f81mr360723vsa.80.1662511679176; Tue, 06 Sep
+ 2022 17:47:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X> <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net> <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
+ <20220518012429.4zqzarvwsraxivux@treble> <20220518074152.GB10117@worktop.programming.kicks-ass.net>
+ <20220518173604.7gcrjjum6fo2m2ub@treble> <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
+In-Reply-To: <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Tue, 6 Sep 2022 17:47:23 -0700
+Message-ID: <CABCJKueB-tZmxESGP_W9JUghu-6y1Dj1DeahRsGb3bOUttctMA@mail.gmail.com>
+Subject: Re: [PATCH] objtool: Fix symbol creation
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,100 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 05:31:54PM -0700, Andrew Morton wrote:
-> (cc Yury and KASAN developers)
-> 
-> On Tue, 06 Sep 2022 06:21:39 -0700 syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com> wrote:
-> 
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    840126e36e8f Add linux-next specific files for 20220906
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1216969b080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=239c4c4e44185526
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=08ca1fa706a22cc17efe
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/1b9017e387a8/disk-840126e3.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/12182558f88d/vmlinux-840126e3.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com
-> > 
-> > ==================================================================
-> > BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
-> 
-> Presumably the for_each_clear_bitrange() in pcpu_balance_populated().
-> 
-> > Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
-> 
-> An eight byte read...
-> 
-> > CPU: 1 PID: 26 Comm: kworker/1:1 Not tainted 6.0.0-rc4-next-20220906-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-> > Workqueue: events pcpu_balance_workfn
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> >  print_address_description mm/kasan/report.c:287 [inline]
-> >  print_report+0x164/0x463 mm/kasan/report.c:398
-> >  kasan_report+0xbb/0x1f0 mm/kasan/report.c:486
-> >  _find_next_bit+0x143/0x160 lib/find_bit.c:109
-> >  find_next_bit include/linux/find.h:55 [inline]
-> >  pcpu_balance_populated mm/percpu.c:2086 [inline]
-> >  pcpu_balance_workfn+0x6c0/0xea0 mm/percpu.c:2246
-> >  process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-> >  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-> >  kthread+0x2e4/0x3a0 kernel/kthread.c:376
-> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> >  </TASK>
-> > 
-> > Allocated by task 26:
-> >  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
-> >  kasan_set_track+0x21/0x30 mm/kasan/common.c:52
-> >  ____kasan_kmalloc mm/kasan/common.c:371 [inline]
-> >  ____kasan_kmalloc mm/kasan/common.c:330 [inline]
-> >  __kasan_kmalloc+0xa1/0xb0 mm/kasan/common.c:380
-> >  kasan_kmalloc include/linux/kasan.h:211 [inline]
-> >  __do_kmalloc_node mm/slab_common.c:931 [inline]
-> >  __kmalloc+0x54/0xc0 mm/slab_common.c:944
-> >  kmalloc include/linux/slab.h:565 [inline]
-> >  kzalloc include/linux/slab.h:696 [inline]
-> >  pcpu_mem_zalloc+0x70/0xa0 mm/percpu.c:514
-> >  pcpu_alloc_chunk mm/percpu.c:1446 [inline]
-> >  pcpu_create_chunk+0x23/0x930 mm/percpu-vm.c:338
-> >  pcpu_balance_populated mm/percpu.c:2108 [inline]
-> >  pcpu_balance_workfn+0xc4e/0xea0 mm/percpu.c:2246
-> >  process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-> >  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-> >  kthread+0x2e4/0x3a0 kernel/kthread.c:376
-> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> > 
-> > The buggy address belongs to the object at ffff888017576600
-> >  which belongs to the cache kmalloc-192 of size 192
-> > The buggy address is located 184 bytes inside of
-> >  192-byte region [ffff888017576600, ffff8880175766c0)
-> 
-> At offset 184 of a 192-byte region.
-> 
-> So what's wrong with doing that?  Does KASAN have an off-by-one?
+On Wed, May 18, 2022 at 3:10 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, May 18, 2022 at 10:36:04AM -0700, Josh Poimboeuf wrote:
+> > On Wed, May 18, 2022 at 09:41:52AM +0200, Peter Zijlstra wrote:
+> > > +static int elf_update_symbol(struct elf *elf, struct section *symtab,
+> > > +                        struct section *symtab_shndx, struct symbol *sym)
+> > >  {
+> > > -   Elf_Data *data, *shndx_data = NULL;
+> > > -   Elf32_Word first_non_local;
+> > > -   struct symbol *sym;
+> > > -   Elf_Scn *s;
+> > > -
+> > > -   first_non_local = symtab->sh.sh_info;
+> > > -
+> > > -   sym = find_symbol_by_index(elf, first_non_local);
+> > > -   if (!sym) {
+> > > -           WARN("no non-local symbols !?");
+> > > -           return first_non_local;
+> > > -   }
+> > > +   Elf_Data *symtab_data = NULL, *shndx_data = NULL;
+> > > +   Elf64_Xword entsize = symtab->sh.sh_entsize;
+> > > +   Elf32_Word shndx = sym->sec->idx;
+> >
+> > So if it's a global UNDEF symbol then I think 'sym->sec' can be NULL and
+> > this blows up?
+>
+> Oh indeed, sym->sec ? sym->sec->idx : SHN_UNDEF it is.
 
-Hi Andrew, all,
+elf_update_symbol seems to be a bit broken even after this. I noticed
+it converts SHN_ABS symbols into SHN_UNDEF, which breaks some KCFI
+builds. In fact, the function drops all the special st_shndx values
+except SHN_XINDEX.
 
-This is a bug in FIND_NEXT_BIT(). It should be 
-  if (idx >= sz / BITS_PER_LONG)                                   \
-          goto out;                                                \
+Specifically, read_symbols sets sym->sec to find_section_by_index(elf,
+0) for all SHN_UNDEF and special st_shndx symbols, which means
+sym->sec is non-NULL and sym->sec->idx is always 0 (= SHN_UNDEF) for
+these symbols. As elf_update_symbol doesn't look at the actual
+st_shndx value, it ends up marking the symbols undefined.
 
-instead of 
-  if (idx > sz / BITS_PER_LONG)                                    \
-          goto out;                                                \
+This quick hack fixes the issue for me, but I'm not sure if it's the
+cleanest solution. Any thoughts?
 
-The fix is in bitmap-for-next, expected to be in -next by tomorrow.
-Sorry for the noise.
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index c25e957c1e52..7e24b09b1163 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -619,6 +619,11 @@ static int elf_update_symbol(struct elf *elf,
+struct section *symtab,
+        Elf64_Xword entsize = symtab->sh.sh_entsize;
+        int max_idx, idx = sym->idx;
+        Elf_Scn *s, *t = NULL;
++       bool is_special_shndx = sym->sym.st_shndx >= SHN_LORESERVE &&
++                               sym->sym.st_shndx != SHN_XINDEX;
++
++       if (is_special_shndx)
++               shndx = sym->sym.st_shndx;
 
-Thanks,
-Yury
+        s = elf_getscn(elf->elf, symtab->idx);
+        if (!s) {
+@@ -704,7 +709,7 @@ static int elf_update_symbol(struct elf *elf,
+struct section *symtab,
+        }
+
+        /* setup extended section index magic and write the symbol */
+-       if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
++       if ((shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) || is_special_shndx) {
+                sym->sym.st_shndx = shndx;
+                if (!shndx_data)
+                        shndx = 0;
+
+Sami

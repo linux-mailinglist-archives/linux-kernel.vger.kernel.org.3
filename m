@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567D75B09EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00575B09F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiIGQSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S229538AbiIGQTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiIGQSo (ORCPT
+        with ESMTP id S229689AbiIGQTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:18:44 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E75A9F777;
-        Wed,  7 Sep 2022 09:18:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hTu5jveGTngdfBeo0KJwi1EQ7TGAJAmVifzkfU2/CeDigHWdFq9tTYF6MDNp4hXiqP66LbXfHo77Iuq+XTjwxqEf8kF4QNT7iO/5I3rbjJvHwU71iIHbFs6Lix6eAeQklmNvPIqokVAoV4nW12yBx/YshknoRNRtm68sMivCW7wgvcxqcu9/+tqPYhSF5+8v7w5qZUjKWamCuGGOY9gpXz3agBwrVJHJgnND6wwbkJ8yHaXqEMpuJH4p5K/ScbSrf+bVDDZgjv9vQWKg+22B52p/7WEdYjYzfqD65ThlpViS1MYJvAzU66b2t+3alVCFUUTi18iA8YRcruFZaVk3KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4woffgzYz5EiZjB+u8rBpdJf3XddeREq5x4RvD/3xus=;
- b=fCPiC0UcigxFBF6TXpbF4K92BmqrCuHlqUGgcqRFUF6FdBm7E5r7Nd6LgIFn9LHm1eZL6tGQd1V77f+i0YnQMpE97c1s6QEN/vJwlNq8v6+TYH5m8IooeQCVTi8iox2kwWQbduIa73wE4GQbO4d5yGAgeh3G6yrngVXB4S53Y2WYkxyEREoMuCvch3jS60Re/KfCnapfDpNyGlRY7ZKy2tJPwnVOfiYQM1+bzeuxKH1jKvkxohFPmwipFQGrMD7hiaNOmMr5gFwLF6M2eh+RBFpKsYjUS8sKCjCL6OPgf8pIGG457lacbGVKn2M1OEbcrpobKI8q6+ONee3+pgYpUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4woffgzYz5EiZjB+u8rBpdJf3XddeREq5x4RvD/3xus=;
- b=QrGhtC/z4Mu2G8kuv4Wx+tV5ENNMBApft+UXRSTtsN21t/Gokrr4NziuzkIWef0tSRbtVPMdxqnmF6rcwe9vWF9KSF7ljMJHGMyUsb89IC/vTj1AoqYHKb0b6w1x0Y7KcB8H3tCo0B44g6YD8NtM2lArMVF4a/1yaJzcjIRgpS0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
- by MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 7 Sep
- 2022 16:18:40 +0000
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::80ca:c97:d395:1acf]) by DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::80ca:c97:d395:1acf%6]) with mapi id 15.20.5612.014; Wed, 7 Sep 2022
- 16:18:40 +0000
-Message-ID: <f905c70e-b93d-5a26-cba9-c826a1fc21fe@amd.com>
-Date:   Wed, 7 Sep 2022 12:18:37 -0400
+        Wed, 7 Sep 2022 12:19:11 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4735A3D1E;
+        Wed,  7 Sep 2022 09:19:05 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id b16so20520229edd.4;
+        Wed, 07 Sep 2022 09:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=hQ9th6n5lq83vAo1UjW41EiQHnnZngjeZzxW+Zvqg/o=;
+        b=lOFrVGRN6hHWcfmqLPAWd10+9jgWInlDzjGvPwt/sUpt/HepcEOMsaFdXsILE9OXIN
+         +UQlSJuCNc6HDjnWHhH1PbpnAF4cCs5xxM+HsRoSLKlQhEstEbAgwkFye7z/R+bdp0Hg
+         4PJ8hFSSEFVVpuvrFzKTaYhhQprBf1CZNkKsr3tS4srGrAdBEOAaZFthBbPTsAY9mTbI
+         bGfrfdwtMpKE1gjzQvWPLlNP5arKF3RqkGu565p4i9ZAs2XSyQCYa2B4Z5FAsUHPAnKq
+         t0W691Y16jVevXElPy4MXVgZDOAJUk88GOJJ5xbqillb8ykkoMKYgmiOvJUIg5Q9HhNv
+         ViUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=hQ9th6n5lq83vAo1UjW41EiQHnnZngjeZzxW+Zvqg/o=;
+        b=lofdGBAwLi4q2uIdcfD5rnrym4KghRMFlKHzG7CUgk+kQF2tXCQ7edBnuvDEHhKnm2
+         tSXNAPOtojTBLc41RSC/W38cXkZv9GkAxUvoUVCeRJMp5ju1s7qOm+ZGfRUUHdfNiORi
+         jcUPXB4CYgZVuEtVRg05sMI8dztBH3IhpDKqrlwCejJzAoKwB06mvLy3KZ344hFLzRS0
+         DVH2fMtIeLN/QpWGXwOQ2kbg9gpxpGiVWoc4MZevYA6Xzt2zDp/JcOsVREvMxFBZVYcv
+         b4fxevVDag1G5iadtVgEITRJ3sdZPM3e1L4QXKSHQWX275M6/dihhMPH3YBt/vipn2l7
+         N+sA==
+X-Gm-Message-State: ACgBeo2LvquUGTEhDRgOHoElLClqhYCcCjWuvwms3iVZU2oZ+GEBctuz
+        kriJ9OvaNfHR7U8dpeQL2NE=
+X-Google-Smtp-Source: AA6agR7JpUzIepk/dw+bCY0I5AOVf7pDgVVPlHrmFMnGg0awKBNETT2LrCH7R54WapWd4v+lKJNiFQ==
+X-Received: by 2002:aa7:da4f:0:b0:44e:864b:7a3e with SMTP id w15-20020aa7da4f000000b0044e864b7a3emr3816915eds.378.1662567543518;
+        Wed, 07 Sep 2022 09:19:03 -0700 (PDT)
+Received: from ?IPV6:2a04:241e:502:a09c:3df:1c49:9ca5:8ba3? ([2a04:241e:502:a09c:3df:1c49:9ca5:8ba3])
+        by smtp.gmail.com with ESMTPSA id b23-20020a170906039700b00715a02874acsm8631877eja.35.2022.09.07.09.19.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 09:19:02 -0700 (PDT)
+Message-ID: <4a47b4ea-750c-a569-5754-4aa0cd5218fc@gmail.com>
+Date:   Wed, 7 Sep 2022 19:19:00 +0300
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/4] drm/sched: Enable signaling for finished fence
+Subject: Re: [PATCH v8 01/26] tcp: authopt: Initial support and key management
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, shashank.sharma@amd.com,
-        amaranath.somalapuram@amd.com, Arunpravin.PaneerSelvam@amd.com,
-        sumit.semwal@linaro.org, gustavo@padovan.org, airlied@linux.ie,
-        daniel@ffwll.ch, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-References: <20220905163502.4032-1-Arvind.Yadav@amd.com>
- <20220905163502.4032-2-Arvind.Yadav@amd.com>
- <5568fad0-1503-a0f3-222e-c238fd4eefdd@amd.com>
- <ffb5acca-7c20-4497-d7d0-25508a6566d2@amd.com>
- <9b57b254-8d67-9937-5cec-783e7a4d8f56@amd.com>
-From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-In-Reply-To: <9b57b254-8d67-9937-5cec-783e7a4d8f56@amd.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Philip Paeps <philip@trouble.is>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <cover.1662361354.git.cdleonard@gmail.com>
+ <0e4c0a98509b907e33c2f80b95cc6cfe713ac2b2.1662361354.git.cdleonard@gmail.com>
+ <CANn89i+a0mMUMhUhTPoshifNzzuR_gfThPKptB8cuBiw6Bs5jw@mail.gmail.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+In-Reply-To: <CANn89i+a0mMUMhUhTPoshifNzzuR_gfThPKptB8cuBiw6Bs5jw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT3PR01CA0090.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:84::30) To DM5PR12MB1947.namprd12.prod.outlook.com
- (2603:10b6:3:111::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1947:EE_|MN0PR12MB5762:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a46d6da-d663-48d0-72ea-08da90eca01e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aM3+0poZjrJRAN0dTVeXUQfRrl0yr/Tn0i0OQY+TKuCd3eGYWAUAsNCA23q/1C3TpWgMyPyKDe1viY5APaBkd1zuvjjixTIBmuikWmcJOJthBI4NF7lMzpWO7ligsMiIGr+yqbCxqeqvadnCOqkPQaVMVw2+nrbB9pqDpgjlrMI6ba758Ka5QS1Ax/pKVWsIX+XsHw2Aa8UhDpPqARS+WGOlwwD5KkVFZYminyoTbiqsjsuKCOnrd01dGvGkaKbZf+9++vdOMYTba8SRbOMoQ/SGjxo+fmbIfNJ1fnhdxLKRi4yUuvy2vSNxnl+13x19nVRICeXgDGvp5VuaKESxgFRw88FL3Bw3JWztT4f7EhsrUt2FFbDgeQalf/E1uoNDDTvDqempHuarRaJK7Gfhikjpl6R3Y1Xj6Fw/H+GNx21xXkvY3Han8qRlMXmCOZD5la9M3WLeEMOhfVJ6nDezvfMIdEMSikueM+xA/04YTSI0d92XPX/6vRN15Ejq26yK2lRJq68lGg73RDMni5L5Z1SA7rdobQ1wrABZCIBoAIEi7J+xqtwAe8Bx3xh5S4OTTh/7fGD7MwokYyDrfIoiJ4gbL8wG2RB1fTAGUKupgOdxbk9jMbyzj6rWqOkhzOpGtgXdwoCEbPOc8KloXui2I205bXi96oQKRvAY3bYhyB/BfqWJlhE6pwVCP5OShosmkuwbcmtGepyU0lUkz0W0bFCXddDf/0wc9HMZiy4fCT5Dy1neHvS/dQ4rr2QVSzTzANKvLONPx6BFzoQUo/374qtMdA84OtlB7JrY1XfO8Qatp/zi32apFpwrST/RFiKB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(376002)(366004)(396003)(346002)(66574015)(6506007)(86362001)(6486002)(8676002)(66946007)(186003)(31696002)(66476007)(66556008)(53546011)(478600001)(44832011)(41300700001)(2616005)(8936002)(6666004)(5660300002)(2906002)(316002)(31686004)(921005)(36756003)(110136005)(6512007)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bDFuZG5Bc2tONHYycWs0ekh4dlJ1dFBMWTM3SXhrei9yaG5mY2JJWlU0N2E1?=
- =?utf-8?B?TlBZOEFCR213UHExRXdzdlovQmxpc2NpUkNrUXEwVDZoMW05dlIzSktOeEhV?=
- =?utf-8?B?NGJ1bERoemVJNUQxQUx6WjZ2UTMxclZzek85MnZ2R0NKcXFiSDArTWNTelRU?=
- =?utf-8?B?QjJhckRWemMxaHYzenVydTVrVmV2SGc0UlAxNnJSQmNqOTllWjBvc05wT2ZE?=
- =?utf-8?B?ZVVkM0VkaUFYcjlBVGsvbjVTenNSb3pMS1RDZG5sUkVXdE1rTkhRRFo0M3hm?=
- =?utf-8?B?cWxQa3g2R05DOFVFU2RnM0xYcmRiRFZsTnBjc1pwbGEzZC9DVG5VUE5nS0Fv?=
- =?utf-8?B?VzJVajJEbzF3NWRaLy9kUUROZytqNmY3TjAzMENXOU5YWktGK2V6VkE1WkZp?=
- =?utf-8?B?Tzg0bWJPb3R4V0htRUt3L3JQd0QrYjRTNDk3NUJRN1JHOFdOL0sralFiVGdp?=
- =?utf-8?B?M08xeldzcjg4UkdiRjRZNkxZRWxuWmhTcG1YYlJUMGs5Wm5jcnZZRWZxQWVx?=
- =?utf-8?B?YVVmSjNFTXM1WjMzdmxFV3F4TjZhM2ZsSjFvWEtZWlpTMHppK2xRajdLaVpn?=
- =?utf-8?B?dmMrUVZLd3ZTaDRpeHBFbmJPNEhDTXlUL3hTZndMSGNsNGJMcGpXNzdNckY2?=
- =?utf-8?B?MmlGSVpUVUJLTWthb0JYNWp6TEpiS2lRcUJER0RQZXByWWRNVXlhbzNyOGYx?=
- =?utf-8?B?VnVkSlB3Q1VlUFRRVUR5TElESllRVmdsblQwM1NnUWJGK0paand2MnNpZWxZ?=
- =?utf-8?B?SmtZbVJxOHdvNnJOUEh6bU1WN2g0YWdhM3BpVjMxdnA1dW5OeTFsUnBIaXRQ?=
- =?utf-8?B?NHpVRkwvcFM1MXVkTjQrakZ5d0pubjdKWW1IZ3ozSFRsQUhRSzVBMWx5WnpS?=
- =?utf-8?B?eTdqUkhQSXFJb1VoZi9acDk1N1JZblNkUUo0cWlWMFV3Z1dRRldJMlVESjhu?=
- =?utf-8?B?U0VuUFJjZFRSRDNQZ0VLMUJncFVFRXRNU09waytpTXpYUmdPOVdNZVpWWmpo?=
- =?utf-8?B?cEd6UUNIaE5EekxWR3d1dXJnOHFwTW5HZWg0OFp1VlM4L0tkVnBOTEpTOHZ3?=
- =?utf-8?B?L3dWZlNSb2loNFZMSDlkV1V0UWtwRSt6TU1kUEFWazFwZVI1bFFnWGZlU0Mx?=
- =?utf-8?B?YU00bVREc2NBbm0zWUZtOFp3aWQ1dkdzYnFUeWU1dE1QNVNZY2ZEU1p6ZUJ5?=
- =?utf-8?B?dE4xVFI0Mk0xYmFoWHY0RHM0OE9JeG9iNGJ4MDUwNTBPQVNzU3ZSOUcwS3Yy?=
- =?utf-8?B?ZUxrYXNTcG90ZWRkZ1hxY09mdUZwR0doNTRZcVZ3Z2dMb2ZtWlVoSVVueGlG?=
- =?utf-8?B?RVZQYUo5TmIrcC85a3VSUE43WXZSYVJyR2dxNzZ4STMyUVEyNXE5SHhrL3dh?=
- =?utf-8?B?czdWMy9CY01CeWkrclNPWmFaTGQ2N1Y0Qjk2ZWtLTk1ad2ZabDl4OVUvRGhQ?=
- =?utf-8?B?V3FiWG5qUGhSMENoNnJxWlZSSExBSzdnMittVXpGSDMvNnA4SWI2VXhjbWZt?=
- =?utf-8?B?blNhVVdnNk1NSUhSUEZqVEtHWm8wMDVTMjJacnlMMTlTd2wyRmsyL1VEbHdz?=
- =?utf-8?B?cytBdkxRNXNOak5RMElFQndTZGRXUVYzWGRLWjdnMVFKWVVuOXNnWFQ4N1Ex?=
- =?utf-8?B?Vi9DZzRrV2w2Y3RCNXRaT1ZjWDR4cFVxNjRvRG14cnp0cHlKOFY4VlBTNVpX?=
- =?utf-8?B?emdRY2pxU2ZWQVZ5b0F3SVlDVC9USGNodnZ3L3d0eFhuTXFqU2RnSUJRQ0NL?=
- =?utf-8?B?UDJETFd4a2UrTUtEdTJBT0pObkZEUUZOQlFYWGFSMlIrQXV3TTJ1ZmdyZFJ2?=
- =?utf-8?B?Y2ZkTGp3dmc3WTRPQ005YkRzL1UrclFWMjZ3dnQ0TmhlbUVhZTgyZy9oTjli?=
- =?utf-8?B?dHpoYTVxUXZUaEc2ak55K3BzOCtaRDU3SWxNaEg5OVBkUTFqdkFJTEphaFow?=
- =?utf-8?B?M2gxY0ppNGZmYU9SaEUzbFRrY1pxVTkraFh2T2JjOW9xaUZnbzRpTTd6TDNj?=
- =?utf-8?B?anExMldnaS9kc0x6aHEvbVl5bHZaVTVmUkVrQ1oxTWU5VExKS0l0VEMrTXdC?=
- =?utf-8?B?MGJkZjk4empMZXZNUXIwakt5WldnTGZsOXQ3U3NhTGlYYzNHSVNrOTZMTjAv?=
- =?utf-8?B?bGVGOHB2enFmM2pDckJpYk5IV1JGRDhGRW1PZC9kSVRFSDdxdmk4V2RXdm80?=
- =?utf-8?Q?Sl5I5fMMIWeezwcIDTO3JBvOEzQAUqcZZk1FQec+koHa?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a46d6da-d663-48d0-72ea-08da90eca01e
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 16:18:40.0940
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E1t7haCHM3M/HF/X5GEkzvC2s/BcGUiovV9pEYE2OV7SKkHWYmQsKcqL3bdz0J6pxxMYtUCDniVwrMt4WSTgRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5762
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,91 +98,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022-09-07 02:37, Christian König wrote:
-> Am 06.09.22 um 21:55 schrieb Andrey Grodzovsky:
+On 9/7/22 01:57, Eric Dumazet wrote:
+> On Mon, Sep 5, 2022 at 12:06 AM Leonard Crestez <cdleonard@gmail.com> wrote:
 >>
->> On 2022-09-06 02:34, Christian König wrote:
->>> Am 05.09.22 um 18:34 schrieb Arvind Yadav:
->>>> Here's enabling software signaling for finished fence.
->>>>
->>>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->>>> ---
->>>>
->>>> Changes in v1 :
->>>> 1- Addressing Christian's comment to remove CONFIG_DEBUG_FS check from
->>>> this patch.
->>>> 2- The version of this patch is also changed and previously
->>>> it was [PATCH 2/4]
->>>>
->>>> ---
->>>>   drivers/gpu/drm/scheduler/sched_main.c | 2 ++
->>>>   1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
->>>> b/drivers/gpu/drm/scheduler/sched_main.c
->>>> index e0ab14e0fb6b..fe72de0e2911 100644
->>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
->>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->>>> @@ -962,6 +962,8 @@ static int drm_sched_main(void *param)
->>>>               /* Drop for original kref_init of the fence */
->>>>               dma_fence_put(fence);
->>>>   + dma_fence_enable_sw_signaling(&s_fence->finished);
->>>
->>> Ok, this makes it a lot clearer. Previously I though that we have 
->>> some bug in dma_fence_add_callback().
->>>
->>> This is essentially the wrong place to call this, the finished fence 
->>> should be enabled by the caller and not here.
->>>
->>> There is also another problem in dma_fence_enable_sw_signaling(), it 
->>> returns early when the fence is already signaled:
->>>
->>>         if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>>                 return;
->>>
->>> Please remove that one first.
+>> This commit adds support to add and remove keys but does not use them
+>> further.
 >>
+>> Similar to tcp md5 a single pointer to a struct tcp_authopt_info* struct
+>> is added to struct tcp_sock, this avoids increasing memory usage. The
+>> data structures related to tcp_authopt are initialized on setsockopt and
+>> only freed on socket close.
 >>
->> Why we even need this explicit call if dma_fence_add_callback calls 
->> __dma_fence_enable_signaling anyway ?
->
-> Two different fence objects.
->
-> The dma_fence_add_callback() is done on the hw fence we get in return 
-> of submitting the job.
->
-> The dma_fence_enable_sw_signaling() here is done on the finished fence 
-> we use to signal the completion externally.
->
-> Key point is the finished fence should be used by the frontend drivers 
-> which uses the scheduler and not by the scheduler itself.
->
-> Christian.
+> 
+> Thanks Leonard.
+> 
+> Small points from my side, please find them attached.
 
+...
 
-Oh, so we need to explicitly call this because dma_fence_add_callback is 
-not always used for finished fence right ?
+>> +/* Free info and keys.
+>> + * Don't touch tp->authopt_info, it might not even be assigned yes.
+>> + */
+>> +void tcp_authopt_free(struct sock *sk, struct tcp_authopt_info *info)
+>> +{
+>> +       kfree_rcu(info, rcu);
+>> +}
+>> +
+>> +/* Free everything and clear tcp_sock.authopt_info to NULL */
+>> +void tcp_authopt_clear(struct sock *sk)
+>> +{
+>> +       struct tcp_authopt_info *info;
+>> +
+>> +       info = rcu_dereference_protected(tcp_sk(sk)->authopt_info, lockdep_sock_is_held(sk));
+>> +       if (info) {
+>> +               tcp_authopt_free(sk, info);
+>> +               tcp_sk(sk)->authopt_info = NULL;
+> 
+> RCU rules at deletion mandate that the pointer must be cleared before
+> the call_rcu()/kfree_rcu() call.
+> 
+> It is possible that current MD5 code has an issue here, let's not copy/paste it.
 
-Yea, then it makes sense that the client needs to manage this since each 
-one has his own logic what to do with it.
+OK. Is there a need for some special form of assignment or is current 
+plain form enough?
 
-Andrey
+> 
+>> +       }
+>> +}
+>> +
+>> +/* checks that ipv4 or ipv6 addr matches. */
+>> +static bool ipvx_addr_match(struct sockaddr_storage *a1,
+>> +                           struct sockaddr_storage *a2)
+>> +{
+>> +       if (a1->ss_family != a2->ss_family)
+>> +               return false;
+>> +       if (a1->ss_family == AF_INET &&
+>> +           (((struct sockaddr_in *)a1)->sin_addr.s_addr !=
+>> +            ((struct sockaddr_in *)a2)->sin_addr.s_addr))
+>> +               return false;
+>> +       if (a1->ss_family == AF_INET6 &&
+>> +           !ipv6_addr_equal(&((struct sockaddr_in6 *)a1)->sin6_addr,
+>> +                            &((struct sockaddr_in6 *)a2)->sin6_addr))
+>> +               return false;
+>> +       return true;
+>> +}
+> 
+> Always surprising to see this kind of generic helper being added in a patch.
 
+I remember looking for an equivalent and not finding it. Many places 
+have distinct code paths for ipv4 and ipv6 and my use of 
+"sockaddr_storage" as ipv4/ipv6 union is uncommon.
 
->
->>
->> Andrey
->>
->>
->>>
->>> Thanks,
->>> Christian.
->>>
->>>
->>>> +
->>>>               r = dma_fence_add_callback(fence, &sched_job->cb,
->>>>                              drm_sched_job_done_cb);
->>>>               if (r == -ENOENT)
->>>
->
+It also wastes some memory.
+
+>> +int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
+>> +{
+>> +       struct tcp_sock *tp = tcp_sk(sk);
+>> +       struct tcp_authopt_info *info;
+>> +
+>> +       memset(opt, 0, sizeof(*opt));
+>> +       sock_owned_by_me(sk);
+>> +
+>> +       info = rcu_dereference_check(tp->authopt_info, lockdep_sock_is_held(sk));
+> 
+> Probably not a big deal, but it seems the prior sock_owned_by_me()
+> might be redundant.
+
+The sock_owned_by_me call checks checks lockdep_sock_is_held
+
+The rcu_dereference_check call checks lockdep_sock_is_held || 
+rcu_read_lock_held()
+
+This is a getsockopt so caller ensures socket locking but 
+rcu_read_lock_held() == 0.
+
+The sock_owned_by_me is indeed redundant because it seems very unlikely 
+the sockopt calling conditions will be changes. It was mostly there to 
+clarify for myself because I had probably at one time with locking 
+warnings. I guess they can be removed.
+
+>> +int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
+>> +{
+>> +       struct tcp_authopt_key opt;
+>> +       struct tcp_authopt_info *info;
+>> +       struct tcp_authopt_key_info *key_info, *old_key_info;
+>> +       struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
+>> +       int err;
+>> +
+>> +       sock_owned_by_me(sk);
+>> +       if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
+>> +               return -EPERM;
+>> +
+>> +       err = _copy_from_sockptr_tolerant((u8 *)&opt, sizeof(opt), optval, optlen);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       if (opt.flags & ~TCP_AUTHOPT_KEY_KNOWN_FLAGS)
+>> +               return -EINVAL;
+>> +
+>> +       if (opt.keylen > TCP_AUTHOPT_MAXKEYLEN)
+>> +               return -EINVAL;
+>> +
+>> +       /* Delete is a special case: */
+>> +       if (opt.flags & TCP_AUTHOPT_KEY_DEL) {
+>> +               mutex_lock(&net->mutex);
+>> +               key_info = tcp_authopt_key_lookup_exact(sk, net, &opt);
+>> +               if (key_info) {
+>> +                       tcp_authopt_key_del(net, key_info);
+>> +                       err = 0;
+>> +               } else {
+>> +                       err = -ENOENT;
+>> +               }
+>> +               mutex_unlock(&net->mutex);
+>> +               return err;
+>> +       }
+>> +
+>> +       /* check key family */
+>> +       if (opt.flags & TCP_AUTHOPT_KEY_ADDR_BIND) {
+>> +               if (sk->sk_family != opt.addr.ss_family)
+>> +                       return -EINVAL;
+>> +       }
+>> +
+>> +       /* Initialize tcp_authopt_info if not already set */
+>> +       info = __tcp_authopt_info_get_or_create(sk);
+>> +       if (IS_ERR(info))
+>> +               return PTR_ERR(info);
+>> +
+>> +       key_info = kmalloc(sizeof(*key_info), GFP_KERNEL | __GFP_ZERO);
+> 
+> kzalloc() ?
+
+Yes
+
+>> +static int tcp_authopt_init_net(struct net *full_net)
+> 
+> Hmmm... our convention is to use "struct net *net"
+> 
+>> +{
+>> +       struct netns_tcp_authopt *net = &full_net->tcp_authopt;
+> 
+> Here, you should use a different name ...
+
+OK, will replace with net_ao
+
+>> @@ -2267,10 +2268,11 @@ void tcp_v4_destroy_sock(struct sock *sk)
+>>                  tcp_clear_md5_list(sk);
+>>                  kfree_rcu(rcu_dereference_protected(tp->md5sig_info, 1), rcu);
+>>                  tp->md5sig_info = NULL;
+>>          }
+>>   #endif
+>> +       tcp_authopt_clear(sk);
+> 
+> Do we really own the socket lock at this point ?
+
+Not sure how I would tell but there is a lockdep_sock_is_held check 
+inside tcp_authopt_clear. I also added sock_owned_by_me and there were 
+no warnings.

@@ -2,194 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40975B0201
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535F35B0207
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiIGKku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S229734AbiIGKpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIGKkr (ORCPT
+        with ESMTP id S229657AbiIGKpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:40:47 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F39533377
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:40:43 -0700 (PDT)
-Received: from [192.168.137.220] (unknown [171.223.99.244])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOIidRhjDZ8TAA--.15177S3;
-        Wed, 07 Sep 2022 18:40:35 +0800 (CST)
-Message-ID: <09c35d21-67dc-bbe5-532a-a41797bfe0fc@loongson.cn>
-Date:   Wed, 7 Sep 2022 18:40:34 +0800
+        Wed, 7 Sep 2022 06:45:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB9D40565;
+        Wed,  7 Sep 2022 03:45:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662547504; x=1694083504;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CS9G31DSFuHg1NRAtruzjLC9/pg4sb0QXPWD8EfCHi8=;
+  b=KT34o6p0wy5vr5GtnofHvxzkXI3x62+PqAgbyRJOnkiU8+h61T3Vh3FT
+   gw35a/VFxfPz7r9FpF1eGCoCu6hgvoRCDQTrzNZkwOKZnS+GUt71Z0F76
+   NDFsaujx8jbHsHqhqTeihCkkLrriDu7S/E4VwsLLvQ034BbYQELs3t1mA
+   g4mLiiiZ0H5vagT7tMLFQ0H7egDGSghEQoPekwJBTh3dj7FJONexn9r+b
+   Mwyg0lezyUUeFJhpziI0nrYwaKLnq4ZmuW2rwa2R4xA2KES9IqfV2QYrG
+   KNKA/zQ/BA6GsOXP7+RdxeAt/K7VfjRrPtC4jWYnScW/5Dt6tdz4Oto8c
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="294423502"
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="294423502"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 03:45:04 -0700
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="676130417"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.27])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 03:45:01 -0700
+Message-ID: <eea20a5c-df2a-979b-ff85-a7e2b978a4b8@intel.com>
+Date:   Wed, 7 Sep 2022 13:44:57 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 10/10] LoongArch/ftrace: Fix unwind state when option
- func_stack_trace
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 2/6] perf test: Use a test program in perf record tests
 Content-Language: en-US
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jeff Xie <xiehuan09@gmail.com>
-References: <20220907100626.32657-1-zhangqing@loongson.cn>
-From:   Jinyang He <hejinyang@loongson.cn>
-In-Reply-To: <20220907100626.32657-1-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+References: <20220907064645.1197894-1-namhyung@kernel.org>
+ <20220907064645.1197894-3-namhyung@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220907064645.1197894-3-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxYOIidRhjDZ8TAA--.15177S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw17Xw17tF18GFW8GrW3Jrb_yoWrWw17pF
-        95CF95WF4FgryI9rnrXr1Uur95Cr9ayr12gF9rJ34rCFnFqF1fXrn0k3s8Zan5J3ykGF1x
-        XFnYkrya9w4UtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVAFwVW8twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
-        ZEXa7VUbGQ6JUUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/7 18:06, Qing Zhang wrote:
+On 7/09/22 09:46, Namhyung Kim wrote:
+> If the system has cc it could build a test program with two threads
+> and then use it for more detailed testing.  Also it adds initial delay
+> of 3ms to profile a multi-threaded target.  This change make the test
+> failing but that's what we want to check for now.
 
-> Ftrace plays like function head exception, prologue analysis will stop soon
-> because PC is at entry.
->
->     90000000004c5a54 <callee>:
->     90000000004c5a54:	03400000  andi   $zero, $zero, 0x0   ==>move  t0, ra
->     90000000004c5a58:	03400000  andi   $zero, $zero, 0x0   ==>bl callsite
-> ==>90000000004c5a5c:	02fcc063  addi.d $sp, $sp, -208(0xf30)
->     ...
->
-> When encountering ftrace_call, save trace function ra at PT_ERA, save parent ra
-> at PT_R1, At this time, pc is the position after the two nops of callee. There is
-> no conventional prologue operation between this position and the function entry,
-> so we need to resetthe first flag to make the caller continue to unwind.
->
-> testing method:
->    echo path_openat > ./set_ftrace_filter
->    echo 1 > ./options/func_stack_trace
->    echo function > ./current_tracer
->
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+So the delay is just to get a separate dummy event?
+
+I hit the issue from this patch:
+
+https://lore.kernel.org/lkml/20220711180706.3418612-1-kan.liang@linux.intel.com/
+
+That is, if I apply the patch above then the test passes, otherwise it fails always.
+
+> 
+> If cc is not found, it falls back to use the default value 'true'.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 > ---
->   arch/loongarch/include/asm/unwind.h     |  2 +-
->   arch/loongarch/kernel/unwind_prologue.c | 33 +++++++++++++++++++++----
->   2 files changed, 29 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
-> index f66b07c3e6a1..f2b52b9ea93d 100644
-> --- a/arch/loongarch/include/asm/unwind.h
-> +++ b/arch/loongarch/include/asm/unwind.h
-> @@ -20,7 +20,7 @@ struct unwind_state {
->   	char type; /* UNWINDER_XXX */
->   	struct stack_info stack_info;
->   	struct task_struct *task;
-> -	bool first, error;
-> +	bool first, error, is_ftrace;
->   	int graph_idx;
->   	unsigned long sp, pc, ra;
->   };
-> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-> index 03f8b31a90cc..0bb19d3ae8ba 100644
-> --- a/arch/loongarch/kernel/unwind_prologue.c
-> +++ b/arch/loongarch/kernel/unwind_prologue.c
-> @@ -14,9 +14,7 @@ unsigned long unwind_get_return_address(struct unwind_state *state)
->   
->   	if (unwind_done(state))
->   		return 0;
-> -	else if (state->type)
-> -		return state->pc;
-> -	else if (state->first)
-> +	else if (state->type || state->first)
->   		return state->pc;
->   
->   	return *(unsigned long *)(state->sp);
-> @@ -42,16 +40,39 @@ static bool unwind_by_guess(struct unwind_state *state)
->   	return false;
->   }
->   
-> +static void unwind_state_fixup(struct unwind_state *state)
-> +{
-> +	static unsigned long ftrace_case = (unsigned long)ftrace_call + 4;
+>  tools/perf/tests/shell/record.sh | 58 +++++++++++++++++++++++++++++---
+>  1 file changed, 54 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+> index 40b087bfdb76..cea3c7b7e2cd 100755
+> --- a/tools/perf/tests/shell/record.sh
+> +++ b/tools/perf/tests/shell/record.sh
+> @@ -6,10 +6,18 @@ set -e
+>  
+>  err=0
+>  perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+> +testprog=$(mktemp /tmp/__perf_test.prog.XXXXXX)
+> +testsym="test_loop"
+> +testopt="-D 3"
+>  
+>  cleanup() {
+>    rm -f ${perfdata}
+>    rm -f ${perfdata}.old
 > +
-> +	if (state->pc == ftrace_case)
-> +		state->is_ftrace = true;
+> +  if [ "${testprog}" != "true" ]; then
+> +    rm -f ${testprog}
+> +  fi
+> +
+>    trap - exit term int
+>  }
+>  
+> @@ -19,9 +27,49 @@ trap_cleanup() {
+>  }
+>  trap trap_cleanup exit term int
+>  
+> +build_test_program() {
+> +  if ! [ -x "$(command -v cc)" ]; then
+> +    # No CC found. Fall back to 'true'
+> +    testprog=true
+> +    testsym=true
+> +    testopt=''
+> +    return
+> +  fi
+> +
+> +  echo "Build a test program"
+> +  cat <<EOF | cc -o ${testprog} -xc - -pthread
+> +#include <stdio.h>
+> +#include <unistd.h>
+> +#include <pthread.h>
+> +
+> +void test_loop(void) {
+> +  volatile int count = 1000000;
+> +
+> +  // wait for perf record
+> +  usleep(5000);
+> +
+> +  while (count--)
+> +    continue;
 > +}
 > +
->   static bool unwind_by_prologue(struct unwind_state *state)
->   {
->   	struct stack_info *info = &state->stack_info;
->   	union loongarch_instruction *ip, *ip_end;
->   	unsigned long frame_size = 0, frame_ra = -1;
->   	unsigned long size, offset, pc = state->pc;
-> +	struct pt_regs *regs;
->   
->   	if (state->sp >= info->end || state->sp < info->begin)
->   		return false;
->   
-> +	if (state->is_ftrace) {
-> +		/*
-> +		 * As we meet ftrace_regs_entry, reset first flag like first doing
-> +		 * tracing, Prologue analysis will stop soon because PC is at entry.
-> +		 */
-> +		regs = (struct pt_regs *)state->sp;
-> +		state->pc = regs->csr_era;
-> +		state->ra = regs->regs[1];
-> +		state->sp = regs->regs[3];
-> +		state->first = true;
-> +		state->is_ftrace = false;
-> +		return true;
-> +	}
+> +void *thfunc(void *arg) {
+> +  test_loop();
+> +  return NULL;
+> +}
 > +
->   	if (!kallsyms_lookup_size_offset(pc, &size, &offset))
->   		return false;
->   
-> @@ -97,7 +118,7 @@ static bool unwind_by_prologue(struct unwind_state *state)
->   
->   	state->pc = *(unsigned long *)(state->sp + frame_ra);
->   	state->sp = state->sp + frame_size;
-> -	return !!__kernel_text_address(state->pc);
-> +	goto out;
->   
->   first:
->   	state->first = false;
-> @@ -106,7 +127,9 @@ static bool unwind_by_prologue(struct unwind_state *state)
->   
->   	state->pc = state->ra;
->   
-> -	return !!__kernel_text_address(state->ra);
-> +out:
-> +	unwind_state_fixup(state);
-> +	return !!__kernel_text_address(state->pc);
->   }
->   
->   void unwind_start(struct unwind_state *state, struct task_struct *task,
-
-Hi, Qing
-
-Additional 'Reported-by: Jeff Xie <xiehuan09@gmail.com>' is welcome.
-
-For this patch, Tested-by: Jinyang He <hejinyang@loongson.cn>.
-
-
-Thanks,
-
-Jinyang
+> +int main(void) {
+> +  pthread_t th;
+> +  pthread_create(&th, NULL, thfunc, NULL);
+> +  test_loop();
+> +  pthread_join(th, NULL);
+> +  return 0;
+> +}
+> +EOF
+> +}
+> +
+>  test_per_thread() {
+>    echo "Basic --per-thread mode test"
+> -  if ! perf record -o /dev/null --quiet true 2> /dev/null
+> +  if ! perf record -o /dev/null --quiet ${testprog} 2> /dev/null
+>    then
+>      echo "Per-thread record [Skipped event not supported]"
+>      if [ $err -ne 1 ]
+> @@ -30,13 +78,13 @@ test_per_thread() {
+>      fi
+>      return
+>    fi
+> -  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
+> +  if ! perf record --per-thread ${testopt} -o ${perfdata} ${testprog} 2> /dev/null
+>    then
+>      echo "Per-thread record [Failed record]"
+>      err=1
+>      return
+>    fi
+> -  if ! perf report -i ${perfdata} -q | egrep -q true
+> +  if ! perf report -i ${perfdata} -q | egrep -q ${testsym}
+>    then
+>      echo "Per-thread record [Failed missing output]"
+>      err=1
+> @@ -62,7 +110,7 @@ test_register_capture() {
+>      return
+>    fi
+>    if ! perf record -o - --intr-regs=di,r8,dx,cx -e cpu/br_inst_retired.near_call/p \
+> -    -c 1000 --per-thread true 2> /dev/null \
+> +    -c 1000 --per-thread ${testopt} ${testprog} 2> /dev/null \
+>      | perf script -F ip,sym,iregs -i - 2> /dev/null \
+>      | egrep -q "DI:"
+>    then
+> @@ -73,6 +121,8 @@ test_register_capture() {
+>    echo "Register capture test [Success]"
+>  }
+>  
+> +build_test_program
+> +
+>  test_per_thread
+>  test_register_capture
+>  
 

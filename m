@@ -2,84 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322555AF9C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3450B5AF9C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiIGCTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S229750AbiIGCUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiIGCTo (ORCPT
+        with ESMTP id S229461AbiIGCUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:19:44 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AD61D33D;
-        Tue,  6 Sep 2022 19:19:43 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286Ldpow002735;
-        Wed, 7 Sep 2022 02:19:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : mime-version :
- content-type; s=corp-2022-7-12;
- bh=tiMuMtloEl6dF3vltfvZce+MAf2KzlQANPJ0FBStzsM=;
- b=1bNSHOwdR80AkUx6fNFz1np2wyvC0xh5rO+JxmBOfH26CNJjtjN0pHKjvYJdzh3xTLwP
- QIh7H+Tr4SYFWvES9ccN2Vs8jomhkWpczyh/988luPMGlw0X03/SgTN4z4ffR3dhqLda
- hSeASxjaIYS1sLUseSe/L1kDliJK1QUxurgKsbbGF+Y4pDYBgajVUd3HqfqSvdPPUUqM
- K7b2vajHMVZDtwOiSH/J8LzJHaBIw+hdEMF7HNkCUhGa8nJSdJJ2zy09YSFz4YmL7f5U
- rjli+hmD0lnFaS6yXgRKLkLHq3c2yLC9vW4orUIPgWBiXJdz8sgtJvL363asu7DOUy6b +Q== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jbxtafeeh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Sep 2022 02:19:14 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 286NTfkl024586;
-        Wed, 7 Sep 2022 02:19:13 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jbwc9yave-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Sep 2022 02:19:13 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2872JClc006033;
-        Wed, 7 Sep 2022 02:19:12 GMT
-Received: from ca-mkp.ca.oracle.com (dhcp-10-39-192-227.vpn.oracle.com [10.39.192.227])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3jbwc9yav6-1;
-        Wed, 07 Sep 2022 02:19:12 +0000
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v8] ufs: core: print UFSHCD capabilities in controller's
- sysfs node
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq11qsogc4w.fsf@ca-mkp.ca.oracle.com>
-References: <20220829081845.v8.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
-Date:   Tue, 06 Sep 2022 22:19:11 -0400
-In-Reply-To: <20220829081845.v8.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
-        (Daniil Lunev's message of "Mon, 29 Aug 2022 08:18:58 +1000")
+        Tue, 6 Sep 2022 22:20:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F353FA0E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 19:20:10 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMm8N2vTyzkYCZ;
+        Wed,  7 Sep 2022 10:16:20 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 10:20:08 +0800
+Subject: Re: [PATCH v2 2/4] mm/hwpoison: move definitions of
+ num_poisoned_pages_* to memory-failure.c
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220905062137.1455537-1-naoya.horiguchi@linux.dev>
+ <20220905062137.1455537-3-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <7f5a74ba-fc6d-2bb1-c886-8dcf4cbdf0e3@huawei.com>
+Date:   Wed, 7 Sep 2022 10:20:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_11,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 adultscore=0
- malwarescore=0 mlxlogscore=934 bulkscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209070008
-X-Proofpoint-ORIG-GUID: tEkZaeEK-d1SCqXFkqVz26S2tsypn8pO
-X-Proofpoint-GUID: tEkZaeEK-d1SCqXFkqVz26S2tsypn8pO
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220905062137.1455537-3-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,18 +59,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/9/5 14:21, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> These interfaces will be used by drivers/base/core.c by later patch, so as a
+> preparatory work move them to more common header file visible to the file.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+>  arch/parisc/kernel/pdt.c |  3 +--
+>  include/linux/mm.h       |  4 ++++
+>  include/linux/swapops.h  | 25 -------------------------
+>  mm/memory-failure.c      | 15 +++++++++++++++
+>  4 files changed, 20 insertions(+), 27 deletions(-)
+> 
+> diff --git a/arch/parisc/kernel/pdt.c b/arch/parisc/kernel/pdt.c
+> index e391b175f5ec..fdc880e2575a 100644
+> --- a/arch/parisc/kernel/pdt.c
+> +++ b/arch/parisc/kernel/pdt.c
+> @@ -18,8 +18,7 @@
+>  #include <linux/kthread.h>
+>  #include <linux/initrd.h>
+>  #include <linux/pgtable.h>
+> -#include <linux/swap.h>
+> -#include <linux/swapops.h>
+> +#include <linux/mm.h>
+>  
+>  #include <asm/pdc.h>
+>  #include <asm/pdcpat.h>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 21f8b27bd9fd..b81dd600e51a 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
 
-Daniil,
+It seems declaration of num_poisoned_pages_inc() is missing when CONFIG_MEMORY_FAILURE is defined?
+Otherwise this patch looks good to me.
 
-> Userspace may want to manually control when the data should go into
-> WriteBooster buffer. The control happens via "wb_on" node, but
-> presently, there is no simple way to check if WriteBooster is
-> supported and enabled. This change exposes the Write Booster and Clock
-> Scaling capabilities to be able to determin if the Write Booster is
-> available and if its manual control is blocked by Clock Scaling
-> mechanism.
+Thanks,
+Miaohe Lin
 
-Applied to 6.1/scsi-staging, thanks!
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> @@ -3202,6 +3202,10 @@ static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>  {
+>  	return 0;
+>  }
+> +
+> +static inline void num_poisoned_pages_inc()
+> +{
+> +}
+>  #endif
+>  
+>  #ifndef arch_memory_failure
+> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> index ddc98f96ad2c..55afc2aaba6b 100644
+> --- a/include/linux/swapops.h
+> +++ b/include/linux/swapops.h
+> @@ -459,8 +459,6 @@ static inline int is_pmd_migration_entry(pmd_t pmd)
+>  
+>  #ifdef CONFIG_MEMORY_FAILURE
+>  
+> -extern atomic_long_t num_poisoned_pages __read_mostly;
+> -
+>  /*
+>   * Support for hardware poisoned pages
+>   */
+> @@ -488,21 +486,6 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
+>  	return p;
+>  }
+>  
+> -static inline void num_poisoned_pages_inc(void)
+> -{
+> -	atomic_long_inc(&num_poisoned_pages);
+> -}
+> -
+> -static inline void num_poisoned_pages_dec(void)
+> -{
+> -	atomic_long_dec(&num_poisoned_pages);
+> -}
+> -
+> -static inline void num_poisoned_pages_sub(long i)
+> -{
+> -	atomic_long_sub(i, &num_poisoned_pages);
+> -}
+> -
+>  #else
+>  
+>  static inline swp_entry_t make_hwpoison_entry(struct page *page)
+> @@ -519,14 +502,6 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
+>  {
+>  	return NULL;
+>  }
+> -
+> -static inline void num_poisoned_pages_inc(void)
+> -{
+> -}
+> -
+> -static inline void num_poisoned_pages_sub(long i)
+> -{
+> -}
+>  #endif
+>  
+>  static inline int non_swap_entry(swp_entry_t entry)
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 7b077da568ff..b6236c721f54 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -74,6 +74,21 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>  
+>  static bool hw_memory_failure __read_mostly = false;
+>  
+> +static inline void num_poisoned_pages_inc(void)
+> +{
+> +	atomic_long_inc(&num_poisoned_pages);
+> +}
+> +
+> +static inline void num_poisoned_pages_dec(void)
+> +{
+> +	atomic_long_dec(&num_poisoned_pages);
+> +}
+> +
+> +static inline void num_poisoned_pages_sub(long i)
+> +{
+> +	atomic_long_sub(i, &num_poisoned_pages);
+> +}
+> +
+>  /*
+>   * Return values:
+>   *   1:   the page is dissolved (if needed) and taken off from buddy,
+> 
+

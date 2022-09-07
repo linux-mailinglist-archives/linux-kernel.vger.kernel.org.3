@@ -2,152 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CECC5AFDA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9699B5AFDAE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiIGHga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+        id S229587AbiIGHjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiIGHgQ (ORCPT
+        with ESMTP id S229540AbiIGHi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:36:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0949A985
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:36:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C6F8933AF3;
-        Wed,  7 Sep 2022 07:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662536166; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lavx3pafSuCTnlel3bhLPHaCbT+Rc5YoltiGr/n9cVU=;
-        b=ileNwZr2ilYDx2ez/9jRPOaYa9G4XRzXM4BWgv9ezWm8AeBVVj5Ys7HD5xzNWxJMlvjTLr
-        Wwr+xn1b/k29JRU2ISk2nqkWw8vDTw1Nn1sI7OU+fSioxGwoKmQEvfBvg8O6Q4JZO9Bu13
-        9XbTZ07uxnbfAnRbpzQHiRpSsrSpMCI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662536166;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lavx3pafSuCTnlel3bhLPHaCbT+Rc5YoltiGr/n9cVU=;
-        b=wUPzo3KmcrL+Xu4ETefwyhso6/lI+mm8HCqsX1joR+Nd6Rj5Gcl0bFs9iOhRR+UeHayeql
-        zGFm+bUK41Rm3yCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A06E913A66;
-        Wed,  7 Sep 2022 07:36:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YLFmJuZJGGOyfQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 07 Sep 2022 07:36:06 +0000
-Message-ID: <05d4b35a-7f07-ebf3-e378-69d1b5b47c53@suse.de>
-Date:   Wed, 7 Sep 2022 09:36:06 +0200
+        Wed, 7 Sep 2022 03:38:58 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62AF27B29E;
+        Wed,  7 Sep 2022 00:38:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=5F0Lv
+        wMp5Uf995lkO/Kaz7oV49tMvldju3dPm9T1C4Y=; b=e53lznAbnIsVv5a8/sJWR
+        iLV+M4ptv14xJo2wWlLLbt9f4oM0WfERvZl67bpjHKNH7oE2cS8UHjPzDUyTOQuU
+        0bzRvu6yxYjX8Z+U02/yEp9HxyNmCNwk1ssSTOKBcgTyNsRbs2xqqvAUiqAMkbWd
+        pprZXGza2JZWRTYnfc64lY=
+Received: from localhost.localdomain (unknown [36.112.3.164])
+        by smtp4 (Coremail) with SMTP id HNxpCgAn1cUiShhj2zzxaw--.48992S4;
+        Wed, 07 Sep 2022 15:37:17 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] ath11k: mhi: fix potential memory leak in ath11k_mhi_register()
+Date:   Wed,  7 Sep 2022 15:37:04 +0800
+Message-Id: <20220907073704.58806-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] drm/bochs: fix blanking
-Content-Language: en-US
-To:     Gerd Hoffmann <kraxel@redhat.com>, dri-devel@lists.freedesktop.org
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Takashi Iwai <tiwai@suse.de>,
-        "open list:DRM DRIVER FOR BOCHS VIRTUAL GPU" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220906142957.2763577-1-kraxel@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220906142957.2763577-1-kraxel@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------PwqMPL33VVpqLfh0yvaUmOOr"
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HNxpCgAn1cUiShhj2zzxaw--.48992S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF1ruF4UKw1xJFW3uF13XFb_yoW8uFyDpF
+        4fW3y7AFyrArs3WFWrtF4kJFy3ua93Ar1DKrZrGw1fGwnavF90q345JF1rXFyakw4xGFyU
+        ZF4Ut3W3Gas0qF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziCeHPUUUUU=
+X-Originating-IP: [36.112.3.164]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBOQB1jF-PPLP6bAAAsJ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------PwqMPL33VVpqLfh0yvaUmOOr
-Content-Type: multipart/mixed; boundary="------------xbTE40wtUSMN0RWOFlVesBQQ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Gerd Hoffmann <kraxel@redhat.com>, dri-devel@lists.freedesktop.org
-Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- Takashi Iwai <tiwai@suse.de>,
- "open list:DRM DRIVER FOR BOCHS VIRTUAL GPU"
- <virtualization@lists.linux-foundation.org>,
- open list <linux-kernel@vger.kernel.org>
-Message-ID: <05d4b35a-7f07-ebf3-e378-69d1b5b47c53@suse.de>
-Subject: Re: [PATCH] drm/bochs: fix blanking
-References: <20220906142957.2763577-1-kraxel@redhat.com>
-In-Reply-To: <20220906142957.2763577-1-kraxel@redhat.com>
+mhi_alloc_controller() allocates a memory space for mhi_ctrl. When gets
+some error, mhi_ctrl should be freed with mhi_free_controller(). But
+when ath11k_mhi_read_addr_from_dt() fails, the function returns without
+calling mhi_free_controller(), which will lead to a memory leak.
 
---------------xbTE40wtUSMN0RWOFlVesBQQ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+We can fix it by calling mhi_free_controller() when
+ath11k_mhi_read_addr_from_dt() fails.
 
-DQoNCkFtIDA2LjA5LjIyIHVtIDE2OjI5IHNjaHJpZWIgR2VyZCBIb2ZmbWFubjoNCj4gVkdB
-X0lTMV9SQyBpcyB0aGUgY29sb3IgbW9kZSByZWdpc3RlciAoVkdBX0lTMV9STSB0aGUgb25l
-IGZvciBtb25vY2hyb21lDQo+IG1vZGUsIG5vdGUgQyB2cy4gTSBhdCB0aGUgZW5kKS4gIFNv
-IHdoZW4gdXNpbmcgVkdBX0lTMV9SQyBtYWtlIHN1cmUgdGhlDQo+IHZnYSBkZXZpY2UgaXMg
-YWN0dWFsbHkgaW4gY29sb3IgbW9kZSBhbmQgc2V0IHRoZSBjb3JyZXNwb25kaW5nIGJpdCBp
-biB0aGUNCj4gbWlzYyByZWdpc3Rlci4NCj4gDQo+IFJlcHJvZHVjaWJsZSB3aGVuIGJvb3Rp
-bmcgVk1zIGluIFVFRkkgbW9kZSB3aXRoIHNvbWUgZWRrMiB2ZXJzaW9ucyAoZWRrMg0KPiBm
-aXggaXMgb24gdGhlIHdheSB0b28pLiAgRG9lc24ndCBoYXBwZW4gaW4gQklPUyBtb2RlIGJl
-Y2F1c2UgaW4gdGhhdA0KPiBjYXNlIHRoZSB2Z2FiaW9zIGFscmVhZHkgZmxpcHMgdGhlIGJp
-dC4NCj4gDQo+IEZpeGVzOiAyNTBlNzQzOTE1ZDQgKCJkcm0vYm9jaHM6IEFkZCBzY3JlZW4g
-Ymxhbmtpbmcgc3VwcG9ydCIpDQo+IFNpZ25lZC1vZmYtYnk6IEdlcmQgSG9mZm1hbm4gPGty
-YXhlbEByZWRoYXQuY29tPg0KDQpBY2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1t
-ZXJtYW5uQHN1c2UuZGU+DQoNCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9j
-aHMuYyB8IDIgKysNCj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+IA0K
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9jaHMuYyBiL2RyaXZlcnMv
-Z3B1L2RybS90aW55L2JvY2hzLmMNCj4gaW5kZXggMDhkZTEzNzc0ODYyLi5hNTEyNjIyODlh
-ZWYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS90aW55L2JvY2hzLmMNCj4gKysr
-IGIvZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9jaHMuYw0KPiBAQCAtMzA5LDYgKzMwOSw4IEBA
-IHN0YXRpYyB2b2lkIGJvY2hzX2h3X2Zpbmkoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4g
-ICBzdGF0aWMgdm9pZCBib2Noc19od19ibGFuayhzdHJ1Y3QgYm9jaHNfZGV2aWNlICpib2No
-cywgYm9vbCBibGFuaykNCj4gICB7DQo+ICAgCURSTV9ERUJVR19EUklWRVIoImh3X2JsYW5r
-ICVkXG4iLCBibGFuayk7DQo+ICsJLyogZW5hYmxlIGNvbG9yIGJpdCAoc28gVkdBX0lTMV9S
-QyBhY2Nlc3Mgd29ya3MpICovDQo+ICsJYm9jaHNfdmdhX3dyaXRlYihib2NocywgVkdBX01J
-U19XLCBWR0FfTUlTX0NPTE9SKTsNCj4gICAJLyogZGlzY2FyZCBhcl9mbGlwX2Zsb3AgKi8N
-Cj4gICAJKHZvaWQpYm9jaHNfdmdhX3JlYWRiKGJvY2hzLCBWR0FfSVMxX1JDKTsNCj4gICAJ
-LyogYmxhbmsgb3IgdW5ibGFuazsgd2UgbmVlZCBvbmx5IHVwZGF0ZSBpbmRleCBhbmQgc2V0
-IDB4MjAgKi8NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
-dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
-c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
-YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/net/wireless/ath/ath11k/mhi.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
---------------xbTE40wtUSMN0RWOFlVesBQQ--
+diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
+index c44df17719f6..86995e8dc913 100644
+--- a/drivers/net/wireless/ath/ath11k/mhi.c
++++ b/drivers/net/wireless/ath/ath11k/mhi.c
+@@ -402,8 +402,7 @@ int ath11k_mhi_register(struct ath11k_pci *ab_pci)
+ 	ret = ath11k_mhi_get_msi(ab_pci);
+ 	if (ret) {
+ 		ath11k_err(ab, "failed to get msi for mhi\n");
+-		mhi_free_controller(mhi_ctrl);
+-		return ret;
++		goto free_controller;
+ 	}
+ 
+ 	if (!test_bit(ATH11K_FLAG_MULTI_MSI_VECTORS, &ab->dev_flags))
+@@ -412,7 +411,7 @@ int ath11k_mhi_register(struct ath11k_pci *ab_pci)
+ 	if (test_bit(ATH11K_FLAG_FIXED_MEM_RGN, &ab->dev_flags)) {
+ 		ret = ath11k_mhi_read_addr_from_dt(mhi_ctrl);
+ 		if (ret < 0)
+-			return ret;
++			goto free_controller;
+ 	} else {
+ 		mhi_ctrl->iova_start = 0;
+ 		mhi_ctrl->iova_stop = 0xFFFFFFFF;
+@@ -440,18 +439,22 @@ int ath11k_mhi_register(struct ath11k_pci *ab_pci)
+ 	default:
+ 		ath11k_err(ab, "failed assign mhi_config for unknown hw rev %d\n",
+ 			   ab->hw_rev);
+-		mhi_free_controller(mhi_ctrl);
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto free_controller;
+ 	}
+ 
+ 	ret = mhi_register_controller(mhi_ctrl, ath11k_mhi_config);
+ 	if (ret) {
+ 		ath11k_err(ab, "failed to register to mhi bus, err = %d\n", ret);
+-		mhi_free_controller(mhi_ctrl);
+-		return ret;
++		goto free_controller;
+ 	}
+ 
+ 	return 0;
++
++free_controller:
++	mhi_free_controller(mhi_ctrl);
++	ab_pci->mhi_ctrl = NULL;
++	return ret;
+ }
+ 
+ void ath11k_mhi_unregister(struct ath11k_pci *ab_pci)
+-- 
+2.25.1
 
---------------PwqMPL33VVpqLfh0yvaUmOOr
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMYSeYFAwAAAAAACgkQlh/E3EQov+Du
-yA//fpPRnTHYgiUo1pMN3estyO1WJMP8n5t8x7yMjPBT+YosBrFkLhM+VESDxzOI/RP97/mAvRjT
-SrvvrLZXsAasEnrSo5MiJ/x/LptFF2EG8UldbWCLpdOeL2S41Wh3UtL3Dihzr10t0GlQA+AlKeeC
-J+KwJlt9FJoWM5IgmamxJvyIRKMi/Nm0jeDj/oANEHD4Cl++g5uQ2pM4QSILDnGbAQEMc1J/S519
-UfJbiO7okcFITiPHQn41ahPsn2vrUbYejI3B4+UtWo8jU0xuFZxkgci7jEr3okQjTmVtFWYHMXQ3
-7RHUli+3Yv+UB/RNIEXD4/QzsHoGGtobHvOB1auSImb5xTaJeNsbXbUYLWpaPya4tDniDs8eLa1f
-seWqD/3awsCb23Dzkt2zoCI065xw5138ci+eMs3M2PI5W3Ll2WFYRffHwA+DmPzne3p5NXXVHX4F
-yxwhaY1XpmMocWnWDveOXJX2iX9bx0EnqjbSi/U5cMAFoGwU/A3lLts5VsvDD5PJt0Z6Q+6rVi9w
-HZhigKGFl3zRyr/ivtGJrkVAvAZYR/YPQ7TLpQQ+C9eH5d6IPQkzzMGbJjG2MNwTX74EYygDe+9h
-eU6wsyAXEL44PkbW2XkMJu/jeIiwo0HMV8fm0jCMYNhGNfM3p8te1jbLcaTEDbCKSCpOR5XCHiQV
-bck=
-=01HH
------END PGP SIGNATURE-----
-
---------------PwqMPL33VVpqLfh0yvaUmOOr--

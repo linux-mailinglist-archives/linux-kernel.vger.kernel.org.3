@@ -2,83 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15C05B040F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080B65B0411
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiIGMgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S229776AbiIGMhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiIGMgp (ORCPT
+        with ESMTP id S229476AbiIGMhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:36:45 -0400
+        Wed, 7 Sep 2022 08:37:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43E6B8A5C;
-        Wed,  7 Sep 2022 05:36:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EC8AF4A5;
+        Wed,  7 Sep 2022 05:37:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C110B81CD5;
-        Wed,  7 Sep 2022 12:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EB65C433D6;
-        Wed,  7 Sep 2022 12:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662554199;
-        bh=QgJtQQyWhXkuOFpCX2/kDd53/jJ10WDfToo3fSGo0qE=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 641BEB81C29;
+        Wed,  7 Sep 2022 12:37:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A510EC433D6;
+        Wed,  7 Sep 2022 12:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662554236;
+        bh=WIHwNbc9S0mBJ0PzSmdjD+CvPdr06HeB66MNOQMDFlc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B4esvN0Z0ADEd8fI2c/TyT+AHLjmAv+u7pyIMhLxwtcMZmO6zzeLog2JmBJPNu+2Q
-         vW5yQwciydrFO0UGPT2p8vWrNdrVN4iVPH/lJbFnh+5f9JAilM+zqB7XovXOweJEwR
-         h7u4MPrdV5xPyNEssdrkhbOtkEDjbtA2sWs+VSH8=
-Date:   Wed, 7 Sep 2022 14:36:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 0/4] tty: TX helpers
-Message-ID: <YxiQVTN/jX8AfO4L@kroah.com>
-References: <20220906104805.23211-1-jslaby@suse.cz>
- <Yxcvbk281f/vy4vb@hovoldconsulting.com>
- <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
- <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com>
- <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
- <cfd16d53-6aa0-e848-91d0-dce8ff72bb4d@linux.intel.com>
- <YxiONiDgGYp8MGQA@kroah.com>
- <c66f9c98-dcef-27c-d74a-ea826f6a799@linux.intel.com>
+        b=MlKwNDn3XuQDr8wwMcEZ0F3zU2+TlkRs5xCS5yei0ErirUkCnO61JIJWETVDV1uKR
+         t8wXNmA+M5iD6RbhqEG4UoWQ8a1Qu9trgl1oByGnjvjnX41uGpgHIEAqyJYHBzyZli
+         sj6ycG+/BWbWe91JIUy4xQ1n04teXc9XY05NqQ9qazXsCE+0FVPYz5UL8QxTEqBWFY
+         4B9kh7CnjWNaEq0Gr2JNW973Jn5OAiPmVDhE5G03TuAgxrjLk6txoYDJXJ/uTxBbCk
+         JdWbA1GrOa1jbPTz5l7yNYng3NCytp4jDibUZgZc28Vy278ZNevATVoce8/lMXVkWQ
+         3BmKyRGLqmrpg==
+Date:   Wed, 7 Sep 2022 15:37:11 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Li zeming <zeming@nfschina.com>
+Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rdma/rdmavt_qp: Remove unnecessary 'NULL' values from qp
+Message-ID: <YxiQd+sO8OfYkmJq@unreal>
+References: <20220907033604.4637-1-zeming@nfschina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c66f9c98-dcef-27c-d74a-ea826f6a799@linux.intel.com>
+In-Reply-To: <20220907033604.4637-1-zeming@nfschina.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -89,99 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 03:32:44PM +0300, Ilpo Järvinen wrote:
-> On Wed, 7 Sep 2022, Greg Kroah-Hartman wrote:
+On Wed, Sep 07, 2022 at 11:36:04AM +0800, Li zeming wrote:
+> The pointer qp is assigned before it is used, it does not need to be
+> initialized and assigned.
 > 
-> > On Wed, Sep 07, 2022 at 03:21:28PM +0300, Ilpo Järvinen wrote:
-> > > On Wed, 7 Sep 2022, Arnd Bergmann wrote:
-> > > 
-> > > > On Wed, Sep 7, 2022, at 12:16 PM, Ilpo Järvinen wrote:
-> > > > > On Wed, 7 Sep 2022, Jiri Slaby wrote:
-> > > > >> On 06. 09. 22, 13:30, Johan Hovold wrote:
-> > > > >> > On Tue, Sep 06, 2022 at 12:48:01PM +0200, Jiri Slaby wrote:
-> > > > >> > NAK
-> > > > >> 
-> > > > >> I'd love to come up with something nicer. That would be a function in
-> > > > >> serial-core calling hooks like I had [1] for example. But provided all those
-> > > > >> CPU workarounds/thunks, it'd be quite expensive to call two functions per
-> > > > >> character.
-> > > > >> 
-> > > > >> Or creating a static inline (having ± the macro content) and the hooks as
-> > > > >> parameters and hope for optimizations to eliminate thunks (also suggested in
-> > > > >> the past [1]).
-> > > > >> 
-> > > > >> [1] https://lore.kernel.org/all/20220411105405.9519-1-jslaby@suse.cz/
-> > > > >
-> > > > > I second Jiri here.
-> > > > >
-> > > > > Saving lines in drivers is not that important compared with all removing 
-> > > > > all the variants of the same thing that have crept there over the years.
-> > > > >
-> > > > > I suspect the main reason for the variants is that everybody just used 
-> > > > > other drivers as examples and therefore we've a few "main" variant 
-> > > > > branches depending on which of the drivers was used as an example for the 
-> > > > > other. That is hardly a good enough reason to keep them different and as 
-> > > > > long as each driver keeps its own function for this, it will eventually 
-> > > > > lead to similar differentiation so e.g. a one-time band-aid similarization 
-> > > > > would not help in the long run.
-> > > > >
-> > > > > Also, I don't understand why you see it unreadable when the actual code is 
-> > > > > out in the open in that macro. It's formatted much better than e.g. 
-> > > > > read_poll_timeout() if you want an example of something that is hardly 
-> > > > > readable ;-). I agree though there's a learning-curve, albeit small, that 
-> > > > > it actually creates a function but that doesn't seem to me as big of an 
-> > > > > obstacle you seem to think.
-> > > > 
-> > > > I think it would help to replace the macro that defines
-> > > > the function with a set of macros that can be used in
-> > > > function bodies. This would avoid the __VA_ARGS__ stuff
-> > > > and allow readers that are unfamiliar with tty drivers to
-> > > > treat it as a function call.
-> > > > 
-> > > > So e.g. instead of 
-> > > > 
-> > > > static DEFINE_UART_PORT_TX_HELPER_LIMITED(altera_jtaguart_do_tx_chars,
-> > > > 		true,
-> > > > 		writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
-> > > > 		({}));
-> > > > 
-> > > > the altera_jtaguart driver would contain a function like
-> > > > 
-> > > > static int altera_jtaguart_do_tx_chars(struct uart_port *port,
-> > > >                                        unsigned int count)
-> > > > {
-> > > >        char ch;
-> > > > 
-> > > >        return uart_port_tx_helper_limited(port, ch, count, true,
-> > > >                 writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
-> > > >                 ({}));
-> > > > }
-> > > > 
-> > > > or some variation of that. It's a few more lines, but those
-> > > > extra lines would help me understand what is actually going on
-> > > > while still avoiding the usual bugs and duplication.
-> > > > 
-> > > > If the caller of that function is itself trivial (like
-> > > > serial21285_tx_chars), then the intermediate function can
-> > > > be omitted in order to save some of the extra complexity.
-> > > 
-> > > I'd be ok with that. There's still a small startle factor associated to 
-> > > passing that writel(...) as an argument to a "function" but it's the same 
-> > > for other things such as read_poll_timeout() so not an end of the world.
-> > 
-> > That's going to incure the function-pointer-indirection-call for every
-> > character that Jiri's original submission had, so I don't think this is
-> > a very viable solution, sorry.
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>  include/rdma/rdmavt_qp.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> I don't think you got what Arnd meant. It must still be technically a 
-> #define because you cannot pass
-> 	writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG)
-> as an argument to a real function like he did in the example above.
-> It's similar to how read_poll_timeout() and friends are #defines despite 
-> being lowercased.
+> diff --git a/include/rdma/rdmavt_qp.h b/include/rdma/rdmavt_qp.h
+> index 2e58d5e6ac0e..2afc3300d618 100644
+> --- a/include/rdma/rdmavt_qp.h
+> +++ b/include/rdma/rdmavt_qp.h
+> @@ -699,7 +699,7 @@ static inline struct rvt_qp *rvt_lookup_qpn(struct rvt_dev_info *rdi,
+>  					    struct rvt_ibport *rvp,
+>  					    u32 qpn) __must_hold(RCU)
+>  {
+> -	struct rvt_qp *qp = NULL;
+> +	struct rvt_qp *qp;
+>  
+>  	if (unlikely(qpn <= 1)) {
+>  		qp = rcu_dereference(rvp->qp[qpn]);
 
-Ok, no, I don't understand what Arnd meant here then :(
+This function is completely wrong, most likely it never returns NULL
+otherwise, we would crash in "if (qp->ibqp.qp_num == qpn)" line.
 
-confused,
+The proper change will be something like this:
 
-greg k-h
+diff --git a/include/rdma/rdmavt_qp.h b/include/rdma/rdmavt_qp.h
+index 2e58d5e6ac0e..883c328e06b6 100644
+--- a/include/rdma/rdmavt_qp.h
++++ b/include/rdma/rdmavt_qp.h
+@@ -699,19 +699,19 @@ static inline struct rvt_qp *rvt_lookup_qpn(struct rvt_dev_info *rdi,
+                                            struct rvt_ibport *rvp,
+                                            u32 qpn) __must_hold(RCU)
+ {
+-       struct rvt_qp *qp = NULL;
++       struct rvt_qp *qp;
++       u32 n;
+
+-       if (unlikely(qpn <= 1)) {
+-               qp = rcu_dereference(rvp->qp[qpn]);
+-       } else {
+-               u32 n = hash_32(qpn, rdi->qp_dev->qp_table_bits);
++       if (unlikely(qpn <= 1))
++               return rcu_dereference(rvp->qp[qpn]);
+
+-               for (qp = rcu_dereference(rdi->qp_dev->qp_table[n]); qp;
+-                       qp = rcu_dereference(qp->next))
+-                       if (qp->ibqp.qp_num == qpn)
+-                               break;
+-       }
+-       return qp;
++       n = hash_32(qpn, rdi->qp_dev->qp_table_bits);
++
++       for (qp = rcu_dereference(rdi->qp_dev->qp_table[n]); qp;
++            qp = rcu_dereference(qp->next))
++               if (qp->ibqp.qp_num == qpn)
++                       return qp;
++       return NULL;
+ }
+
+ /**
+
+
+
+> -- 
+> 2.18.2
+> 

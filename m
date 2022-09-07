@@ -2,156 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8D95B0925
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB015B0926
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiIGPsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S229902AbiIGPso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiIGPsZ (ORCPT
+        with ESMTP id S229889AbiIGPsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:48:25 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CA1BADBE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:48:23 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id b21so2089116plz.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=/kPSWel6mobLfUIPD82aMK7TVuiyZeYuc3xqvzKcSuE=;
-        b=qmCNpHSx7oMT5E8bHSuoHnFgMqmTqMzbeDgsLX9BkR1z+KMoW5hzZIHMaBfZJsaOxJ
-         Yl0l9/C9Jcn9iWO7FfYmZ+ANS+1i0aT5v2LKHY24Mr4s/W/ut3YHwIcn6Osg4NwrRv6b
-         UNEYvl0Q0f80fy8D5hzdNQ5KHLjUTFB0a46NTc3/TKXHcQV6CuZAiDZ4DPbHpQwiJuYH
-         5zYYPdU9lpAx9qb4krs1P+LMZxujdCMMNGYiZnsen11pdaHZm1PkN4m96QrxEzGUWBxy
-         pR884dXngnJjjQdlfXxIjIvx90AUO08BWUpuHP77sLHfLk236EFxqC+xBDeKssn2xTJH
-         AKSg==
+        Wed, 7 Sep 2022 11:48:37 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0B2BB00B;
+        Wed,  7 Sep 2022 08:48:33 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1280590722dso3558437fac.1;
+        Wed, 07 Sep 2022 08:48:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=/kPSWel6mobLfUIPD82aMK7TVuiyZeYuc3xqvzKcSuE=;
-        b=4jU3LNmP+mCXkKg7AcvaZ7R4nVcSb0LfJAMkEbC02k0Kc/nRyQiCh7jvnOJn4d21Iq
-         XXEJuFe4JnbiRGG6HED4m1cjLP8jRAGHyw3d9ikHoiBm7DNzH1ytu5CSU2ygQ3+V+mSk
-         2cxFtJ1hqG0vVZn+QeRCfb4s3q6T76UKi1D85ACZno4a4mG+YxbeGOpVgWq0SexKdNVC
-         W32a67i7agEWmrm4RwfkbcrCOKcxm+MuLQEq5cTHnTcrL1i6KBbXL3qlqsCa8kFMj/k4
-         2OoBoXWUlHcYSU/gmTvyl/8yWWNlkeeBdJ5YmQlVrM3oeMk11hK1wjzcKootLQM5cNzj
-         LwnQ==
-X-Gm-Message-State: ACgBeo0ac3mjREutx0TaLmUsMGWSoQaffgXjRbhHtNecuj4K7xQgcrtp
-        mkg1DYx+wIHLcUjaZctvozTVyw==
-X-Google-Smtp-Source: AA6agR5eOWOiHyn0TqvZYrl0cXhsJg64L8mJ6VV4UNfFTV1WWSN+P6AoiStBDmSZ1E28ipnZV8eUBw==
-X-Received: by 2002:a17:90b:4a8e:b0:1fe:1df3:bb11 with SMTP id lp14-20020a17090b4a8e00b001fe1df3bb11mr4599947pjb.22.1662565702390;
-        Wed, 07 Sep 2022 08:48:22 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b00172b87d97cbsm4487356pli.67.2022.09.07.08.48.21
+        bh=CxhmrY80LncaSEn1EseeN0fy0N0jYIOVE/tTa7fzMNI=;
+        b=ATdhzi4St7EhYVQEYbImlKHcBvHOK429YmeN7T1+UOAotdqHA6bv+0x9SjLiM7isDX
+         P7PFT0Ab2SnfTyYgnH4Syj3HvtLP/ClrWDL5FhhowIfmBrwZaPzn/SSlO6tK32g+hsKP
+         3nLLHrdopWCAxbLt5V8lqGkwl4nG5ysht6RMR+BMNoIhIBwzCea3h1bxBWqsBtjdZHUe
+         8dMOkHwi8qJvYFjcr6FIJlRimZcs44YiRjwJLF8pZXodhayfRHC5v017nTwhn/0xv37D
+         aK4SOGTJV1ewXg9E148vpL8+8glyHXbSrZBhkal32zmrcQiZXpoxBMzaFjAUNdvSOjrz
+         eI9g==
+X-Gm-Message-State: ACgBeo1YPaWJSP1k2dtMvMNRuX1gKvzsKFryPN4tHgAdVNQ37HGB1Ldj
+        YFkH8aVEG1ocxuHIZj84mA==
+X-Google-Smtp-Source: AA6agR5VT35lZ6gh3xyi3vhkqFTWcr8X9GgGQ+1WGG/fYM0i48irlZ8x/DTl4QwUjjnqHYchMKky3A==
+X-Received: by 2002:a05:6808:2017:b0:345:c5b4:49c3 with SMTP id q23-20020a056808201700b00345c5b449c3mr12079334oiw.212.1662565712412;
+        Wed, 07 Sep 2022 08:48:32 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k14-20020a056870148e00b00127d2005ea1sm2130916oab.18.2022.09.07.08.48.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 08:48:21 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 15:48:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 1/4] KVM: x86: move the event handling of
- KVM_REQ_GET_VMCS12_PAGES into a common function
-Message-ID: <Yxi9QRziGl2YhNuB@google.com>
-References: <20220828222544.1964917-1-mizhang@google.com>
- <20220828222544.1964917-2-mizhang@google.com>
- <YwzkvfT0AiwaojTx@google.com>
- <20220907025042.hvfww56wskwhsjwk@yy-desk-7060>
- <CAL715WJK1WwXFfbUiMjngV8Z-0jyu_9JeZaK4qvvdJfYvtQEYg@mail.gmail.com>
- <20220907053523.qb7qsbqfgcg2d2vx@yy-desk-7060>
+        Wed, 07 Sep 2022 08:48:32 -0700 (PDT)
+Received: (nullmailer pid 3515562 invoked by uid 1000);
+        Wed, 07 Sep 2022 15:48:31 -0000
+Date:   Wed, 7 Sep 2022 10:48:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Georgi Djakov <djakov@kernel.org>, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [RESEND PATCH] dt-bindings: interconnect: fsl,imx8m-noc: drop
+ Leonard Crestez
+Message-ID: <20220907154831.GA3515480-robh@kernel.org>
+References: <20220907120452.52161-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907053523.qb7qsbqfgcg2d2vx@yy-desk-7060>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220907120452.52161-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022, Yuan Yao wrote:
-> On Tue, Sep 06, 2022 at 09:26:33PM -0700, Mingwei Zhang wrote:
-> > > > @@ -10700,6 +10706,12 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
-> > > >               if (kvm_cpu_has_pending_timer(vcpu))
-> > > >                       kvm_inject_pending_timer_irqs(vcpu);
-> > > >
-> > > > +             if (vcpu->arch.nested_get_pages_pending) {
-> > > > +                     r = kvm_get_nested_state_pages(vcpu);
-> > > > +                     if (r <= 0)
-> > > > +                             break;
-> > > > +             }
-> > > > +
-> > >
-> > > Will this leads to skip the get_nested_state_pages for L2 first time
-> > > vmentry in every L2 running iteration ? Because with above changes
-> > > KVM_REQ_GET_NESTED_STATE_PAGES is not set in
-> > > nested_vmx_enter_non_root_mode() and
-> > > vcpu->arch.nested_get_pages_pending is not checked in
-> > > vcpu_enter_guest().
-> > >
-> > Good catch. I think the diff won't work when vcpu is runnable.
-
-It works, but it's inefficient if the request comes from KVM_SET_NESTED_STATE.
-The pending KVM_REQ_UNBLOCK that comes with the flag will prevent actually running
-the guest.  Specifically, this chunk of code will detect the pending request and
-bail out of vcpu_enter_guest().
-
-	if (kvm_vcpu_exit_request(vcpu)) {
-		vcpu->mode = OUTSIDE_GUEST_MODE;
-		smp_wmb();
-		local_irq_enable();
-		preempt_enable();
-		kvm_vcpu_srcu_read_lock(vcpu);
-		r = 1;
-		goto cancel_injection;
-	}
-
-But the inefficiency is a non-issue since "true" emulation of VM-Enter will flow
-through this path (the VMRESUME/VMLAUNCH/VMRUN exit handler runs at the end of
-vcpu_enter_guest().
-
-> > It only tries to catch the vcpu block case. Even for the vcpu block case,
-> > the check of KVM_REQ_UNBLOCK is way too late. Ah, kvm_vcpu_check_block() is
-> > called by kvm_vcpu_block() which is called by vcpu_block(). The warning is
-> > triggered at the very beginning of vcpu_block(), i.e., within
-> > kvm_arch_vcpu_runnable(). So, please ignore the trace in my previous email.
-> >
-> > In addition, my minor push back for that is
-> > vcpu->arch.nested_get_pages_pending seems to be another
-> > KVM_REQ_GET_NESTED_STATE_PAGES.
+On Wed, 07 Sep 2022 14:04:52 +0200, Krzysztof Kozlowski wrote:
+> Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
+> Access denied:), so change maintainer to Peng Fan from NXP.
 > 
-> Yeah, but in concept level it's not a REQ mask lives in the
-> vcpu->requests which can be cached by e.g. kvm_request_pending().
-> It's necessary to check vcpu->arch.nested_get_pages_pending in
-> vcpu_enter_guest() if Sean's idea is to replace
-> KVM_REQ_GET_NESTED_STATE_PAGES with nested_get_pages_pending.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Peng Fan <peng.fan@nxp.com>
+> 
+> ---
+> 
+> Resend with ack.
+> ---
+>  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Yes, they key is that it's not a request.  Requests have implicit properties:
-e.g. as above, effectively prevent running the vCPU until the request goes away,
-they can be pended from other vCPUs, etc...  And the property that is most relevant
-to this bug: except for special cases, requests only need to be serviced before
-running vCPU.
-
-And the number of requests is limited due to them being stored in a bitmap.  x86
-still has plenty of room due to kvm_vcpu.requests being a u64, but it's still
-preferable to avoid using a request unless absolutely necessary.
-
-For this case, since using a request isn't strictly needed and using a request
-would require special casing that request, my strong preference is to not use a
-request.
-
-So yes, my idea is to "just" replace the request with a flag, but there are subtly
-quite a few impliciations in not using a request.
+Applied, thanks!

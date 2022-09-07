@@ -2,36 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFCF5B024D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7BF5B0251
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiIGLCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S229852AbiIGLEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIGLCq (ORCPT
+        with ESMTP id S229595AbiIGLEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:02:46 -0400
+        Wed, 7 Sep 2022 07:04:39 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B22D1A1A6A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:02:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61C5013F00
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:04:38 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3A06106F;
-        Wed,  7 Sep 2022 04:02:50 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AC3E3F7B4;
-        Wed,  7 Sep 2022 04:02:43 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH v2] arm64: Enable docker support in defconfig
-Date:   Wed,  7 Sep 2022 12:02:35 +0100
-Message-Id: <20220907110235.14708-1-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.37.3
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F0E61042;
+        Wed,  7 Sep 2022 04:04:44 -0700 (PDT)
+Received: from bogus (unknown [10.57.45.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 581903F7B4;
+        Wed,  7 Sep 2022 04:04:36 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 12:04:33 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Bonnici <marc.bonnici@arm.com>,
+        Achin Gupta <achin.gupta@arm.com>,
+        Valentin Laurent <valentin.laurent@trustonic.com>,
+        Lukas Hanel <lukas.hanel@trustonic.com>,
+        Coboy Chen <coboy.chen@mediatek.com>
+Subject: Re: [PATCH v2 08/10] firmware: arm_ffa: Add v1.1 get_partition_info
+ support
+Message-ID: <20220907110433.rnuhlrtjm32w63qz@bogus>
+References: <20220902124032.788488-1-sudeep.holla@arm.com>
+ <20220902124032.788488-9-sudeep.holla@arm.com>
+ <CAHUa44FR7PN99CK6Qq4tSoKWm7uEgctJOLEW5F3jhZhSV19QXg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHUa44FR7PN99CK6Qq4tSoKWm7uEgctJOLEW5F3jhZhSV19QXg@mail.gmail.com>
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -41,86 +51,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arm64 defconfig does not support the docker usecase.
+On Wed, Sep 07, 2022 at 10:38:05AM +0200, Jens Wiklander wrote:
+> On Fri, Sep 2, 2022 at 2:40 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > FF-A v1.1 adds support to discovery the UUIDs of the partitions that was
+> > missing in v1.0 and which the driver workarounds by using UUIDs supplied
+> > by the ffa_drivers.
+> >
+> > Add the v1.1 get_partition_info support and disable the workaround if
+> > the detected FF-A version is greater than v1.0.
+> >
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > ---
+> >  drivers/firmware/arm_ffa/driver.c | 42 +++++++++++++++++++++++++------
+> >  include/linux/arm_ffa.h           |  1 +
+> >  2 files changed, 35 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> > index 2532e0f16cc9..dd6ab2f81580 100644
+> > --- a/drivers/firmware/arm_ffa/driver.c
+> > +++ b/drivers/firmware/arm_ffa/driver.c
+> > @@ -264,18 +264,24 @@ static int ffa_rxtx_unmap(u16 vm_id)
+> >         return 0;
+> >  }
+> >
+> > +#define PARTITION_INFO_GET_RETURN_COUNT_ONLY   BIT(0)
+> > +
+> >  /* buffer must be sizeof(struct ffa_partition_info) * num_partitions */
+> >  static int
+> >  __ffa_partition_info_get(u32 uuid0, u32 uuid1, u32 uuid2, u32 uuid3,
+> >                          struct ffa_partition_info *buffer, int num_partitions)
+> >  {
+> > -       int count;
+> > +       int idx, count, flags = 0, size;
+> >         ffa_value_t partition_info;
+> >
+> > +       if (!buffer || !num_partitions) /* Just get the count for now */
+> > +               flags = PARTITION_INFO_GET_RETURN_COUNT_ONLY;
+> > +
+> >         mutex_lock(&drv_info->rx_lock);
+> >         invoke_ffa_fn((ffa_value_t){
+> >                       .a0 = FFA_PARTITION_INFO_GET,
+> >                       .a1 = uuid0, .a2 = uuid1, .a3 = uuid2, .a4 = uuid3,
+> > +                     .a5 = flags,
+> >                       }, &partition_info);
+> >
+> >         if (partition_info.a0 == FFA_ERROR) {
+> > @@ -285,8 +291,18 @@ __ffa_partition_info_get(u32 uuid0, u32 uuid1, u32 uuid2, u32 uuid3,
+> >
+> >         count = partition_info.a2;
+> >
+> > +       if (drv_info->version > FFA_VERSION_1_0) {
+> > +               size = partition_info.a3;
+> > +               if (size > sizeof(*buffer))
+> > +                       size = sizeof(*buffer);
+> 
+> Below when calculating the address in the source buffer with
+> "drv_info->rx_buffer + idx * size" you should use the size from
+> partition_info.a3 even if it's larger than sizeof(*buffer). The amount
+> of bytes to copy looks correct though. Does that make sense?
+>
 
-Enable the missing configuration options.
+Good spot, I missed to see that. It makes complete sense. I will fix it.
 
-The resulting .config was validated with [1].
-
-...
-
-Generally Necessary:
-- cgroup hierarchy: properly mounted [/sys/fs/cgroup]
-- apparmor: enabled and tools installed
-- CONFIG_NAMESPACES: enabled
-- CONFIG_NET_NS: enabled
-- CONFIG_PID_NS: enabled
-- CONFIG_IPC_NS: enabled
-- CONFIG_UTS_NS: enabled
-- CONFIG_CGROUPS: enabled
-- CONFIG_CGROUP_CPUACCT: enabled
-- CONFIG_CGROUP_DEVICE: enabled
-- CONFIG_CGROUP_FREEZER: enabled
-- CONFIG_CGROUP_SCHED: enabled
-- CONFIG_CPUSETS: enabled
-- CONFIG_MEMCG: enabled
-- CONFIG_KEYS: enabled
-- CONFIG_VETH: enabled (as module)
-- CONFIG_BRIDGE: enabled (as module)
-- CONFIG_BRIDGE_NETFILTER: enabled (as module)
-- CONFIG_IP_NF_FILTER: enabled (as module)
-- CONFIG_IP_NF_TARGET_MASQUERADE: enabled (as module)
-- CONFIG_NETFILTER_XT_MATCH_ADDRTYPE: enabled (as module)
-- CONFIG_NETFILTER_XT_MATCH_CONNTRACK: enabled (as module)
-- CONFIG_NETFILTER_XT_MATCH_IPVS: enabled (as module)
-- CONFIG_NETFILTER_XT_MARK: enabled (as module)
-- CONFIG_IP_NF_NAT: enabled (as module)
-- CONFIG_NF_NAT: enabled (as module)
-- CONFIG_POSIX_MQUEUE: enabled
-- CONFIG_CGROUP_BPF: enabled
-
-...
-
-[1] https://github.com/moby/moby/blob/master/contrib/check-config.sh
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- arch/arm64/configs/defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index d5b2d2dd4904..eee149e5ab60 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -18,6 +18,7 @@ CONFIG_NUMA_BALANCING=y
- CONFIG_MEMCG=y
- CONFIG_BLK_CGROUP=y
- CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
- CONFIG_CGROUP_HUGETLB=y
- CONFIG_CPUSETS=y
- CONFIG_CGROUP_DEVICE=y
-@@ -139,12 +140,16 @@ CONFIG_IP_PNP_DHCP=y
- CONFIG_IP_PNP_BOOTP=y
- CONFIG_IPV6=m
- CONFIG_NETFILTER=y
-+CONFIG_BRIDGE_NETFILTER=m
- CONFIG_NF_CONNTRACK=m
- CONFIG_NF_CONNTRACK_EVENTS=y
-+CONFIG_NETFILTER_XT_MARK=m
- CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
- CONFIG_NETFILTER_XT_TARGET_LOG=m
- CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
- CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
-+CONFIG_NETFILTER_XT_MATCH_IPVS=m
-+CONFIG_IP_VS=m
- CONFIG_IP_NF_IPTABLES=m
- CONFIG_IP_NF_FILTER=m
- CONFIG_IP_NF_TARGET_REJECT=m
 -- 
-2.37.3
-
+Regards,
+Sudeep

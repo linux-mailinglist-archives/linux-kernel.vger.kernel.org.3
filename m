@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CA55B0F19
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F225B0F1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiIGV04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        id S230137AbiIGV16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiIGV0y (ORCPT
+        with ESMTP id S229696AbiIGV1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:26:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64ECB2769;
-        Wed,  7 Sep 2022 14:26:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 17:27:55 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9577B8F13;
+        Wed,  7 Sep 2022 14:27:52 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6488CB81ED5;
-        Wed,  7 Sep 2022 21:26:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2EE4C433D6;
-        Wed,  7 Sep 2022 21:26:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662586011;
-        bh=6pTepJ3oeIprLS4jKNueGfIkkF3Dt0U1u/bTrZo1byA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NlQKyVswE4LE9ey6AEdaLIXxDgZifJE6y4KB48xeTuD2qFTy7lDbTzJIA+/bEA5BZ
-         fUHMlNhKlTNysc+rtS1rRMla1MdpLtoABCtBvtGYfgzX7zms8vHxCG3Hf9wX4RoQ1n
-         EiaYTA3G3ODyL2cVNpNgYcexysW388boWGDK9b01sf6c2XBTRCItQwqhLnywHFl137
-         zjBFuBW+fm9HecdJr6VgA2kGT/9ooq9qPU0c6d577VXlA/iO4KsOAX//LiaF3Q/C72
-         tCEWiGH6/jsej1oaYo7j93akwsKSomtANh4BrC5HFKnx70yb5uG7DqepVVuo4x4PF5
-         UMSHU/SbVfx8A==
-Date:   Wed, 7 Sep 2022 16:26:49 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     William McVicker <willmcvicker@google.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Sajid Dalvi <sdalvi@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI/PM: Switch D3Hot delay to also use usleep_range
-Message-ID: <20220907212649.GA152425@bhelgaas>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2EB531F9DF;
+        Wed,  7 Sep 2022 23:27:49 +0200 (CEST)
+Date:   Wed, 7 Sep 2022 23:27:47 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: Add PM6125 PMIC
+Message-ID: <20220907212747.i2y6qi75avhavyr4@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20220805135729.1037079-1-marijn.suijten@somainline.org>
+ <20220805135729.1037079-4-marijn.suijten@somainline.org>
+ <4cef00b4-c184-ae78-3709-5ed520ca3375@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yxfgp9DgYc3XU602@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <4cef00b4-c184-ae78-3709-5ed520ca3375@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,34 +71,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 12:07:03AM +0000, William McVicker wrote:
-> On 09/02/2022, Bjorn Helgaas wrote:
-
-> >    static void pci_dev_d3_sleep(struct pci_dev *dev)
-> >    {
-> >         unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
-> >         unsigned int upper;
+On 2022-08-08 12:17:06, Krzysztof Kozlowski wrote:
+> On 05/08/2022 16:57, Marijn Suijten wrote:
+> > This PMIC is commonly used on boards with an SM6125 SoC and looks very
+> > similar in layout to the PM6150.
 > > 
-> >         if (delay_ms) {
-> >                 /* 20% upper bound, 1ms minimum */
-> >                 upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U)
-> >                 usleep_range(delay_ms * USEC_PER_MSEC,
-> >                              (delay_ms + upper) * USEC_PER_MSEC);
-> >         }
-> >    }
+> > Downstream declares more nodes to be available, but these have been
+> > omitted from this patch: the pwm/lpg block is unused on my reference
+> > device making it impossible to test/validate, and the spmi-clkdiv does
+> > not have a single device-tree binding using this driver yet, hence
+> > inclusion is better postponed until ie. audio which uses these clocks is
+> > brought up.
 > > 
-> > Since the Intel quirk is for 120ms, a 20% upper bound would make the
-> > range 120-144ms.  Would that be a problem?  Those chips are ancient;
-> > the list is untouched since it was added in 2006.  The point of
-> > usleep_range() is to allow the scheduler to coalesce the wakeup with
-> > other events, so it seems unlikely we'd ever wait the whole 144ms.  I
-> > vote for optimizing the readability over sleep/resume time for
-> > already-broken chips.
 > 
-> I'm totally fine with this, but I don't really know what the impact
-> would be to those old Intel chips.
+> Thank you for your patch. There is something to discuss/improve.
 
-Worst-case, a few more ms to wakeup.  Since we're starting with a huge
-120ms *per device* delay, I think that's acceptable.  Let's do this.
+I can respin the series with the suggested changes (and the iio patch
+removed as that has now been applied), but note that all other PMIC dtsi
+files as of -next today still carry the "wrong" adc-tm or gpios node
+names.  Are there plans to patch those up too (if not already in a
+series that I missed)?
 
-Bjorn
+- Marijn
+
+> > +
+> > +			xo-therm@4c {
+> > +				reg = <ADC5_XO_THERM_100K_PU>;
+> > +				qcom,pre-scaling = <1 1>;
+> > +				qcom,hw-settle-time = <200>;
+> > +				qcom,ratiometric;
+> > +			};
+> > +		};
+> > +
+> > +		pm6125_adc_tm: adc-tm@3500 {
+> 
+> Generic node names, so either this is adc or thermal-sensor. Looks like
+> thermal-sensor.
+> 
+> > +			compatible = "qcom,spmi-adc-tm5";
+> > +			reg = <0x3500>;
+> > +			interrupts = <0x0 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +			#thermal-sensor-cells = <1>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		pm6125_rtc: rtc@6000 {
+> > +			compatible = "qcom,pm8941-rtc";
+> > +			reg = <0x6000>, <0x6100>;
+> > +			reg-names = "rtc", "alarm";
+> > +			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		pm6125_gpio: gpios@c000 {
+> 
+> s/gpios/gpio/
+> 
+> > +			compatible = "qcom,pm6125-gpio", "qcom,spmi-gpio";
+> > +			reg = <0xc000>;
+> > +			gpio-controller;
+> > +			gpio-ranges = <&pm6125_gpio 0 0 9>;
+> > +			#gpio-cells = <2>;
+> > +			interrupt-controller;
+> > +			#interrupt-cells = <2>;
+> > +		};
+> > +	};
+> > +
+> > +	pmic@1 {
+> > +		compatible = "qcom,pm6125", "qcom,spmi-pmic";
+> > +		reg = <0x1 SPMI_USID>;
+> > +	};
+> > +};
+> 
+> 
+> Best regards,
+> Krzysztof

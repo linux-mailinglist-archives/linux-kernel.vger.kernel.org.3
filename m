@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27C55B05F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508B75B05F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiIGOBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
+        id S229837AbiIGOB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiIGOBJ (ORCPT
+        with ESMTP id S229627AbiIGOBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:01:09 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C93B1A077;
-        Wed,  7 Sep 2022 07:01:04 -0700 (PDT)
-Received: from nazgul.tnic (unknown [84.201.196.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E81161EC06C2;
-        Wed,  7 Sep 2022 16:00:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1662559259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=sxStWTfxn2dypJIOH/2fbSCIkvshh9DlNn17kfCiO1M=;
-        b=rdv/6PCxOWQ6trByYJT/u8O35xl1DwgpQ/aVyb4TRg2GyFhTtHCoTOMv3N3tGXuoEEkhvZ
-        M0Jk1fftoubrTSNVrX5Q1Tt8EM/HhVk3/CqP+i8c9VMWvmBFeawjMw2355aJ1W2Fyyr1q1
-        88OzRnQzx+FuHUAGEbfsLIHYw9BvBJ0=
-Date:   Wed, 7 Sep 2022 16:01:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, saikrishna12468@gmail.com, git@amd.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-Subject: Re: [PATCH v4 2/2] edac: zynqmp_ocm: Add EDAC support for ZynqMP OCM
-Message-ID: <YxikJCguJWunfh6x@nazgul.tnic>
-References: <20220907111531.703-1-sai.krishna.potthuri@amd.com>
- <20220907111531.703-3-sai.krishna.potthuri@amd.com>
+        Wed, 7 Sep 2022 10:01:21 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BC46DAD6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:01:20 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id b9so10517937qka.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/s29LV2sR+vq6yN67Lm8Tg/CBgP8Mafr42Z5nWlRis4=;
+        b=a1EH48PXO2HWnFkMr2lckeI3ZeIMzujU9/AVEutHPRJbwWB4FXTYrKVICugf0zgD0l
+         C9ijJ0XmodomYxoNRd906F8T7JlQv9gPAn1QGXrESsy99SvMcFO0ta/O0ftnRkTuypMa
+         r7vpYltcScc+dBchRLYT/A/bAm/k53n+hTneU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/s29LV2sR+vq6yN67Lm8Tg/CBgP8Mafr42Z5nWlRis4=;
+        b=jVbYNR/9LbKheKKNmXyQC+dBRZ2x1teCVFFKwi0fAX7WKr/AvMJS/XKRtHc9uu4C0Z
+         T6Vw/SakODbDctqn3eQRb6he4vtm98a1SLctpXj7nWEd63dmMLxXkI37iIQ7ACVpFwNd
+         4vAyQnB7vB3WvSb5mgpGwj6xLi7QOu7xgTDR8owpqe2ANrdgHlC5Q/xQ65+kX1+Z06s9
+         J14QnerJulQOP5DUpzTmaNLQ6v+QPLp0Yv2EVfQq7wLDi44aJ+N4aJ2RG3W/NL4nSQSq
+         Laki9NhLuCitoVYFkMIuDImnSFXKd4NEdG7rCWrv60z6kI3G3HVTDE0bG/3Yo2TCIvFG
+         0YMQ==
+X-Gm-Message-State: ACgBeo2nubCR+0qflQiKeWOi20KyId7m7uiQ11vJLH/5t0+pyAAFQqbI
+        sG354tEvTTenz7uKcgF9VnDY7g==
+X-Google-Smtp-Source: AA6agR7Vf1kI9nc64NEmeizsB7LyogdUqy4T6UbinGSXFJslNqEA7lhb3SWeJvZiL15yTsHtKnb1hw==
+X-Received: by 2002:a37:4553:0:b0:6be:6c1d:92ff with SMTP id s80-20020a374553000000b006be6c1d92ffmr2819196qka.151.1662559279446;
+        Wed, 07 Sep 2022 07:01:19 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id 6-20020a370c06000000b006bbbd4ce6e1sm13319885qkm.35.2022.09.07.07.01.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 07:01:18 -0700 (PDT)
+Message-ID: <b106edc3-2557-0669-86bf-10c08739a86a@joelfernandes.org>
+Date:   Wed, 7 Sep 2022 10:01:16 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220907111531.703-3-sai.krishna.potthuri@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
+ implementation
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org, boqun.feng@gmail.com
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-7-joel@joelfernandes.org>
+ <20220902152132.GA115525@lothringen> <Yxa5Ch574cRZxRdo@google.com>
+ <20220906151757.GA183806@lothringen>
+ <cde6586e-ae61-5e85-3c9a-1ce7dd2464ed@joelfernandes.org>
+ <20220907100349.GB194889@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20220907100349.GB194889@lothringen>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 04:45:31PM +0530, Sai Krishna Potthuri wrote:
-> Add EDAC support for Xilinx ZynqMP OCM Controller, this driver
-> reports CE and UE errors based on the interrupts, and also creates ue/ce
-> sysfs entries for error injection.
+
+
+On 9/7/2022 6:03 AM, Frederic Weisbecker wrote:
+> On Tue, Sep 06, 2022 at 12:15:19PM -0400, Joel Fernandes wrote:
+>>>> +
+>>>> +	// We had CBs in the bypass list before. There is nothing else to do if:
+>>>> +	// There were only non-lazy CBs before, in this case, the bypass timer
+>>>
+>>> Kind of misleading. I would replace "There were only non-lazy CBs before" with
+>>> "There was at least one non-lazy CBs before".
+>>
+>> I really mean "There were only non-lazy CBs ever queued in the bypass list
+>> before". That's the bypass_is_lazy variable. So I did not fully understand your
+>> suggested comment change.
 > 
-> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+> I may well be missing something but to me it seems that:
+> 
+> bypass_is_lazy = all bypass callbacks are lazy
+> !bypass_is_lazy = there is at least one non-lazy bypass callback
+> 
+> And indeed as long as there is at least one non-lazy callback, we don't
+> want to rely on the LAZY timer.
+> 
+> Am I overlooking something?
 
-I think you folks need to brush up on
+No you are not over looking and you are very right that I may need to change the
+comment.
 
-Documentation/process/submitting-patches.rst
+To clarify my intent, a wake up or timer adjustment needs to be done only if:
 
-in order to build your SOB chain properly.
+1. Bypass list was fully empty before (this is the first bypass list entry).
 
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 58ab63642e72..08adedfd42b5 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -539,4 +539,13 @@ config EDAC_DMC520
->  	  Support for error detection and correction on the
->  	  SoCs with ARM DMC-520 DRAM controller.
->  
-> +config EDAC_ZYNQMP_OCM
-> +	tristate "Xilinx ZynqMP OCM Controller"
-> +	depends on ARCH_ZYNQMP || COMPILE_TEST
+Or both the below conditions are met:
 
-We already have an EDAC driver which depends on ARCH_ZYNQMP - the
-Synopsys one. Can this one be made part of it?
+1. Bypass list had only lazy CBs before.
 
-Thx.
+2. The new CB is non-lazy.
 
--- 
-Regards/Gruss,
-    Boris.
+Instead of saying, "nothing needs to be done if...", I will change it to:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+        // A wake up of the grace period kthread or timer adjustment needs to
+        // be done only if:
+        // 1. Bypass list was empty before (this is the first bypass queue).
+        //      Or, both the below conditions are met:
+        // 1. Bypass list had only lazy CBs before.
+        // 2. The new CB is non-lazy.
+
+That sounds less confusing...
+
+Or, I can just make the edit you suggested... let me know either way!
+
+Thanks!
+
+ - Joel

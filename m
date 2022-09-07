@@ -2,127 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6358C5AFBE8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C6B5AFBEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiIGFq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S229620AbiIGFrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIGFq0 (ORCPT
+        with ESMTP id S229482AbiIGFro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:46:26 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50156371BB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:46:25 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VOwWds8_1662529577;
-Received: from 30.240.98.182(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VOwWds8_1662529577)
-          by smtp.aliyun-inc.com;
-          Wed, 07 Sep 2022 13:46:19 +0800
-Message-ID: <a05e0397-50be-2f99-e461-60852c8efb3c@linux.alibaba.com>
-Date:   Wed, 7 Sep 2022 13:46:17 +0800
+        Wed, 7 Sep 2022 01:47:44 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177D066111
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:47:36 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id r17so530720ejy.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 22:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=YtQGFFP4vhfdUxZhJrZK2jqmDRC5K71pRjy06kzufEA=;
+        b=D4MSYe3HuhjfTCnhlWTUWIOL1gN6qSsC/IeXJ+WxDvobPcnhhWhthaLWp0Je7KM9C9
+         xxNzLsp/6fSpM6Eo3j+14h/npT0wAePR8BbgHcgnA0v9OHztxQZcZ2kh5hfdkdywI7gT
+         OoVvmsCvGYfkaVg+Um+yGHT49wN9zNqGX2DyA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YtQGFFP4vhfdUxZhJrZK2jqmDRC5K71pRjy06kzufEA=;
+        b=VdzkRslBIW3mSH5QKVzDW6CMXROsi+N+ZHoV6aUup99qlfZZXQXj1Tvj6LliiJf2bn
+         T3/qPvJ5KG6LJBQBMmAjAfM9BiuVJWzpiMrz3F9dyTbPVy70LJqtP8bW30cXZSDPvIIF
+         3zoheCFLcYE7cYefAYfXpv96C1C16NL+rH333BwcXV0YP0WQFsHxSI3RmVCkbm5Nt7gI
+         RQEKh48b+b2QU3HqiPBKMQLABCZs71em4DaKkhbCMNjBNutRAG5962Y55kjZyugZzoGm
+         lskah+fcjMR8StcPNvoEjsaUZ/A7fCUH5EjnYiPh9uuDHAv1LtL+s9Iufxcat5YUDOm6
+         ZiRw==
+X-Gm-Message-State: ACgBeo1tzafXU7kmxKWln7VYwFPxn/fo9o+jtYFqnOMMNKgXhGbenzra
+        rpRSTdXy9uGYtTr6MUVgQSI/YQ==
+X-Google-Smtp-Source: AA6agR6l0Nv5Ojf99/mgkxk+bfFH+4lR+cupi/L8llhX+dNx0PezxjkLx3qkT51MqwmWQ0AJP9vECQ==
+X-Received: by 2002:a17:907:6d8a:b0:73b:d9e4:e628 with SMTP id sb10-20020a1709076d8a00b0073bd9e4e628mr1189348ejc.75.1662529654688;
+        Tue, 06 Sep 2022 22:47:34 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id e10-20020a1709062d4a00b0073dafb227c0sm7799536eji.161.2022.09.06.22.47.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 22:47:34 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 07:47:32 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>
+Subject: Re: build failure of next-20220906 due to 396369d67549 ("drm: vkms:
+ Add support to the RGB565 format")
+Message-ID: <YxgwdGtNTnDdIqAv@phenom.ffwll.local>
+Mail-Followup-To: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>
+References: <YxducgSzR6/zyHD7@debian>
+ <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
+ <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH v5 00/21] x86/resctrl: Make resctrl_arch_rmid_read()
- return values in bytes
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        James Morse <james.morse@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com
-References: <20220622164629.20795-1-james.morse@arm.com>
- <f5ab048c-4a3a-8292-8a08-5fdaff739381@linux.alibaba.com>
- <5adf4968-b079-2fd3-dd61-09ed16f74080@intel.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <5adf4968-b079-2fd3-dd61-09ed16f74080@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 06, 2022 at 08:35:49PM -0300, Igor Matheus Andrade Torrente wrote:
+> On 9/6/22 18:26, Sudip Mukherjee wrote:
+> > On Tue, Sep 6, 2022 at 4:59 PM Sudip Mukherjee (Codethink)
+> > <sudipm.mukherjee@gmail.com> wrote:
+> > > 
+> > > Hi All,
+> > > 
+> > > The builds of next-20220906 fails for mips, xtensa and arm allmodconfig.
+> > > 
+> > > The errors in mips and xtensa are:
+> > > 
+> > > ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > 
+> > > The error in arm is:
+> > > 
+> > > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > 
+> > > 
+> > > Trying to do a git bisect to find out the offending commit.
+> > 
+> > git bisect points to 396369d67549 ("drm: vkms: Add support to the
+> > RGB565 format")
+> 
+> Are these architectures incapable of doing 64bits int division?
 
-在 2022/8/24 上午1:09, Reinette Chatre 写道:
-> Hi,
->
-> On 7/3/2022 8:54 AM, Xin Hao wrote:
->> Hi  james,
->>
->> I have a review all of the patches, it looks goot to me, but i also test them once again, i have a little confusion with my test.
->>
->> # mkdir p1
->>
->> # echo "L3:0=001;1=001" > p1/schemata
->>
->> # [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat schemata
->>      MB:0=100;1=100
->>      L3:0=001;1=001
->>
->> # memhog -r1000000 1000m > /mnt/log &
->>
->> [1] 53023
->> [root@iZbp1bu26qv0j3ddyusot3Z p1]# echo 53023 > tasks
->> [
->> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat mon_data/mon_L3_00/llc_occupancy
->> 3833856
->> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat mon_data/mon_L3_00/llc_occupancy
->> 3620864
->> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat mon_data/mon_L3_00/llc_occupancy
->> 3727360
->> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat size
->>      MB:0=100;1=100
->>      L3:0=3407872;1=3407872
->>
->> Obviously, the value has been overflowed,  Can you explain why？
-> Are you seeing different behavior before and after you apply this
-> series?
-No,they have the same test result。
->
-> I do not think the conclusion should immediately be that there is an
-> overflow issue. Have you perhaps run into the scenario "Notes on
-> cache occupancy monitoring and control" described in
-> Documentation/x86/resctrl.rst?
->
-> When "memhog" starts it can allocate to the entire L3 for a while
-> before it is moved to the constrained resource group. It's cache
-> lines are not evicted as part of this move so it is not unusual for
-> it to have more lines in L3 than it is allowed to allocate into.
+Yeah 32bit archs in general can't do that, and you have to use the right
+macros because otherwise gcc falls back to its own built-ins, and those
+don't exist in the kernel since the kernel isn't (cannot!) linked against
+any userspace library.
 
-Yes as you said, the mon_data/mon_L3_00/llc_occupancy does not 
-immediately become the value small than the set by schemata,  it may 
-takes a few minutes to reduce to the set value.
+For pretty much this reasons it's really good to build test against 32bit
+x86, or probably more relevant these days, 32bit arm.
 
-I don't quite understand why it takes so long to see the llc_occupancy 
-degrage.
-
->
-> Understanding the occupancy values require understanding of the workload
-> as well as the system environment.
->
-> Depending on the workload's data usage (for example if it keeps loading
-> new data - note that if the workload keeps loading the same data and the
-> data is already present in an area of cache that the workload cannot
-> allocate into then the data read would still result in a cache hit for the
-> workload, the data would not be moved to the area the
-> workload can allocate into) and other workloads on the system (there is
-> other load present also that evicts the lines owned by the workload) the
-> L3 occupancy rate should go down after a while to match the space it
-> can allocate into.
->
-> Reinette
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

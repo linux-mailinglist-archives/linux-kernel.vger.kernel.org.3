@@ -2,108 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8965D5AFFCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E63A75AFFCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiIGJBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S230234AbiIGJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiIGJB3 (ORCPT
+        with ESMTP id S230286AbiIGJBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:01:29 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BC5A61D7;
-        Wed,  7 Sep 2022 02:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CW4HRExqenMAZ4nkOPhRQPHqMmykNX/6bRKuv9UMQPI=; b=G8oTDE1SgmYhSa6dJfZN9QQQPA
-        LW7945Y4wGjJiecaY/8nTlvXM34hsZSqAdAdWbDRIWZozsISVbo6j0L4RvmoEe9KymC8JlUCj5r44
-        63tumJP9Bqvv8Xe8DP6Zd44npmx8j4Cv4c15tdMACWx/JDKS7GMPtUmYWAz5r8wdyLOZRo61KjwZQ
-        LnOWcHt5RVT22uM/5Z/aRV6GQTPkKqXJx1nO7D4tmSR94O1fl+n9WpVvzr5tF82a+/ar+sXQWOusz
-        I5Me0fl8Mioo/ZgK4BCzWCy19CrniKXwmXtdXsYb4cwh5itlpRTA2pdr8Zxmz9OqwuvOWVHP2kfqR
-        lFf1orbg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVqvx-00APHN-7C; Wed, 07 Sep 2022 09:01:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C74C1300244;
-        Wed,  7 Sep 2022 11:01:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 77B5B2B98B8C4; Wed,  7 Sep 2022 11:01:20 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 11:01:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: [PATCH] objtool,x86: Teach decode about LOOP* instructions
-Message-ID: <Yxhd4EMKyoFoH9y4@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
- <166251212072.632004.16078953024905883328.stgit@devnote2>
- <YxhDBAhYrs0Sfqjt@hirez.programming.kicks-ass.net>
+        Wed, 7 Sep 2022 05:01:45 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A633AF480
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:01:39 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y127so13978386pfy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 02:01:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ELHyy9g5JRbfhKbhnhJOnuhdaHcEpPG9qj9a/5f8Kwg=;
+        b=VOYtGdgtdkV8vp8Blh4Ol8K/8wn14f6F4+jLWUhWrYO0tb0bu7ZuQlUVq+aLyAS0rp
+         R34HmstexRj3/pL5NOhYihAFoKKtJ+z7S5pgkqwB54hm4ULsrdy4auxOB2cw/ecSQf08
+         hyRaoyx77iru9pL2CcOP4w+wtEK9ybUqcODsKmCsYD3PhOwTEAE0xzexFbhlSTqUd9/H
+         NesIrO53RHkfa9QVOaDWEr8srFZn1T+aG+k6l1b30kq0r7EhjMVj7lQqqbyIPe0hzL4j
+         ijC00cuDu6B/BDJPA5QvN2HV0QcOSUwbVgSxzloHG5PNv/pa6SNZBvlvISKOApRF66Il
+         7vBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ELHyy9g5JRbfhKbhnhJOnuhdaHcEpPG9qj9a/5f8Kwg=;
+        b=Gfchee/Ldrc2u3H+QajZhf5yEwgXgFMG9+jDeBIKcxjdN5l4VWacvtwmuZgyKTlYgk
+         n941lYVxYGX7Z8IIJt04w3E0XkfGwbiVNjagPppf39D16JJUlc8SnHitkfYjSQPnoosk
+         nsyYPsERntuqn0sqFFMwGr9PsUTx5taNfuNCNp5EEVMjflsiw5A0i4g+a8BdFRtc6wFz
+         XkcWCzBQS0+L0NQb8MYRtDNmGYOd/D+KBPpSYIBJ4qhp/frrhQcwGG4g6LXOv0EXdmko
+         xylrmM1zg9Wtb0kvMGcgrsoW9YHOgDGf9mT5t0SPANFQT/sv7sFYa1w1UAcZw8ISbBRc
+         leVg==
+X-Gm-Message-State: ACgBeo08XChy43B/k5erYHzAjADF450dsNxs5K1j2WJV1ARLqOLusZNG
+        smfNUmnpg+1V1mcBREUiC/ScHlCp0XoLcDMBX+Z+GQ==
+X-Google-Smtp-Source: AA6agR7I+o8bSYOvyVGo/YjKwv8NK6ti1P4v5vZFfGP57JboHhl2jnqU0sIu8B+AddxliSXBsQrwncKnC++7Rwq8pWg=
+X-Received: by 2002:a05:6a00:1a04:b0:52a:d4dc:5653 with SMTP id
+ g4-20020a056a001a0400b0052ad4dc5653mr2705863pfv.69.1662541297803; Wed, 07 Sep
+ 2022 02:01:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxhDBAhYrs0Sfqjt@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220902124032.788488-1-sudeep.holla@arm.com> <20220902124032.788488-10-sudeep.holla@arm.com>
+In-Reply-To: <20220902124032.788488-10-sudeep.holla@arm.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Wed, 7 Sep 2022 11:01:27 +0200
+Message-ID: <CAHUa44Gq+7_XT2+ccAMxC=ZFh4vV=YuUGLGx0MMYrZ1wne83bw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/10] firmware: arm_ffa: Set up 32bit execution mode
+ flag using partiion property
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org,
+        Marc Bonnici <marc.bonnici@arm.com>,
+        Achin Gupta <achin.gupta@arm.com>,
+        Valentin Laurent <valentin.laurent@trustonic.com>,
+        Lukas Hanel <lukas.hanel@trustonic.com>,
+        Coboy Chen <coboy.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 09:06:45AM +0200, Peter Zijlstra wrote:
-> On Wed, Sep 07, 2022 at 09:55:21AM +0900, Masami Hiramatsu (Google) wrote:
-> 
-> > +/* Return the jump target address or 0 */
-> > +static inline unsigned long insn_get_branch_addr(struct insn *insn)
-> > +{
-> > +	switch (insn->opcode.bytes[0]) {
-> > +	case 0xe0:	/* loopne */
-> > +	case 0xe1:	/* loope */
-> > +	case 0xe2:	/* loop */
-> 
-> Oh cute, objtool doesn't know about those, let me go add them.
+On Fri, Sep 2, 2022 at 2:40 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> FF-A v1.1 adds a flag in the partition properties to indicate if the
+> partition runs in the AArch32 or AArch64 execution state. Use the same
+> to set-up the 32-bit execution flag mode in the ffa_dev automatically
+> and ignore any requests to do the same from the ffa_driver.
+>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/firmware/arm_ffa/driver.c | 13 ++++++++++++-
+>  include/linux/arm_ffa.h           |  2 ++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> index dd6ab2f81580..dbbe15592173 100644
+> --- a/drivers/firmware/arm_ffa/driver.c
+> +++ b/drivers/firmware/arm_ffa/driver.c
+> @@ -647,11 +647,19 @@ static int ffa_partition_info_get(const char *uuid_str,
+>         return 0;
+>  }
+>
+> -static void ffa_mode_32bit_set(struct ffa_device *dev)
+> +static void _ffa_mode_32bit_set(struct ffa_device *dev)
+>  {
+>         dev->mode_32bit = true;
+>  }
+>
+> +static void ffa_mode_32bit_set(struct ffa_device *dev)
+> +{
+> +       if (drv_info->version > FFA_VERSION_1_0)
+> +               return;
+> +
+> +       _ffa_mode_32bit_set(dev);
+> +}
+> +
+>  static int ffa_sync_send_receive(struct ffa_device *dev,
+>                                  struct ffa_send_direct_data *data)
+>  {
+> @@ -743,6 +751,9 @@ static void ffa_setup_partitions(void)
+>                                __func__, tpbuf->id);
+>                         continue;
+>                 }
+> +
+> +               if (tpbuf->properties & FFA_PARTITION_AARCH64_EXEC)
 
----
-Subject: objtool,x86: Teach decode about LOOP* instructions
+Shouldn't this be !(tpbuf->properties & FFA_PARTITION_AARCH64_EXEC)?
 
-With kprobes also needing to follow control flow; it was found that
-objtool is missing the branches from the LOOP* instructions.
+Before this, we used 64-bit calling convention by default for FF-A
+v1.0. I suppose we would like to keep that behaviour.
 
-Reported-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- tools/objtool/arch/x86/decode.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Cheers,
+Jens
 
-diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
-index c260006106be..1c253b4b7ce0 100644
---- a/tools/objtool/arch/x86/decode.c
-+++ b/tools/objtool/arch/x86/decode.c
-@@ -635,6 +635,12 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 		*type = INSN_CONTEXT_SWITCH;
- 		break;
- 
-+	case 0xe0: /* loopne */
-+	case 0xe1: /* loope */
-+	case 0xe2: /* loop */
-+		*type = INSN_JUMP_CONDITIONAL;
-+		break;
-+
- 	case 0xe8:
- 		*type = INSN_CALL;
- 		/*
-
+> +                       _ffa_mode_32bit_set(ffa_dev);
+>         }
+>         kfree(pbuf);
+>  }
+> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
+> index 09567ffd1f49..5964b6104996 100644
+> --- a/include/linux/arm_ffa.h
+> +++ b/include/linux/arm_ffa.h
+> @@ -106,6 +106,8 @@ struct ffa_partition_info {
+>  #define FFA_PARTITION_DIRECT_SEND      BIT(1)
+>  /* partition can send and receive indirect messages. */
+>  #define FFA_PARTITION_INDIRECT_MSG     BIT(2)
+> +/* partition runs in the AArch64 execution state. */
+> +#define FFA_PARTITION_AARCH64_EXEC     BIT(8)
+>         u32 properties;
+>         u32 uuid[4];
+>  };
+> --
+> 2.37.3
+>

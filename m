@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2D15B0040
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0A15B0123
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiIGJVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S230205AbiIGKAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiIGJVY (ORCPT
+        with ESMTP id S230079AbiIGJ7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:21:24 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DBA86FE2;
-        Wed,  7 Sep 2022 02:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662542482; x=1694078482;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=0aD11024owXiWys0CYVqLXLWsO/hlSbQMpdnFQamO0s=;
-  b=ijUB9cxMUP47lrbQe7vzijd2jl4I2q08vHG4+VIm7VLMqxt5rgmEAeYz
-   +dCQz/yz8bfVr+WDm3ixZP3wn6o+aDTqIFJQ/CDKC/qWMh3ucpceKZ973
-   Of7Dwy9jOdxj17CurQAQJ+di9zmPYQ8tHWhhcIUfkAEjx55pFoh4fqmLQ
-   8X4mzI6L2s1tyqCxugwYShJ2nXxJ7cjVXRyl+6WehcJdVMC2FAknSaFBA
-   N4O9QPE/ttUUp50aBI8KN5DHMjhEsN1MuYannBMhHrI9/tZ87N0QFh3gw
-   jItJ4XR85Js4l8RJc+VepuUjEDngDRBTQuWRZKDoY2uoXzXy6uTrRoG1T
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="276564373"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="276564373"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:21:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="676096363"
-Received: from dmatouse-mobl.ger.corp.intel.com ([10.251.223.53])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:21:13 -0700
-Date:   Wed, 7 Sep 2022 12:21:06 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        broonie@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>, admin@hifiphile.com,
-        kavyasree.kotagiri@microchip.com, tudor.ambarus@microchip.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-spi@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 08/13] tty: serial: atmel: Define GCLK as USART baudrate
- source clock
-In-Reply-To: <20220906135511.144725-9-sergiu.moga@microchip.com>
-Message-ID: <5d3e3a73-8b13-fb23-a32c-565046ec3c27@linux.intel.com>
-References: <20220906135511.144725-1-sergiu.moga@microchip.com> <20220906135511.144725-9-sergiu.moga@microchip.com>
+        Wed, 7 Sep 2022 05:59:35 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA018B7EF6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:59:04 -0700 (PDT)
+X-UUID: 9bdc8eb97ef345e3b24c13d13cebed45-20220907
+X-Spam-Fingerprint: 0
+X-GW-Reason: 11109
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 121
+        audit/email.address 1
+        dict/adv 1
+        dict/operate 1
+X-CPASD-INFO: 044c42c310a74cff8dbd9cb65df565c8@eYRug2FkkWNdUKODg6axoFiVkpRpj4K
+        Fd56GZmRlj1iVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBhXoZgUZB3f3Zug2Vgkw==
+X-CLOUD-ID: 044c42c310a74cff8dbd9cb65df565c8
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:1.0,URL:-5,TVAL:196.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:176.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:1.0,CFOB:1.0,SPC:0,SIG:-
+        5,AUF:7,DUF:4278,ACD:73,DCD:73,SL:0,EISP:0,AG:0,CFC:0.786,CFSR:0.037,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 9bdc8eb97ef345e3b24c13d13cebed45-20220907
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 9bdc8eb97ef345e3b24c13d13cebed45-20220907
+X-User: chenzhang@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <chenzhang@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 2063516333; Wed, 07 Sep 2022 17:24:33 +0800
+From:   chen zhang <chenzhang@kylinos.cn>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     chenzhang_0901@163.com, linux-kernel@vger.kernel.org,
+        chen zhang <chenzhang@kylinos.cn>
+Subject: [PATCH] sched/fair: fix a -Wmissing-prototypes warning
+Date:   Wed,  7 Sep 2022 17:23:53 +0800
+Message-Id: <20220907092353.65757-1-chenzhang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sep 2022, Sergiu Moga wrote:
+We get a warning when building kernel with W=1:
 
-> Define the bit that represents the choice of having GCLK as a baudrate
-> source clock inside the USCLKS bitmask of the Mode Register of
-> USART IP's.
-> 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> ---
-> 
-> 
-> v1 -> v2:
-> - Nothing, this patch was not here before
-> 
-> 
-> 
->  drivers/tty/serial/atmel_serial.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/atmel_serial.h b/drivers/tty/serial/atmel_serial.h
-> index 0d8a0f9cc5c3..70d0611e56fd 100644
-> --- a/drivers/tty/serial/atmel_serial.h
-> +++ b/drivers/tty/serial/atmel_serial.h
-> @@ -49,6 +49,7 @@
->  #define	ATMEL_US_USCLKS		GENMASK(5, 4)	/* Clock Selection */
->  #define		ATMEL_US_USCLKS_MCK		(0 <<  4)
->  #define		ATMEL_US_USCLKS_MCK_DIV8	(1 <<  4)
-> +#define		ATMEL_US_USCLKS_GCLK		(2 <<  4)
+  kernel/sched/fair.c:11510:6: warning: no previous prototype for ‘task_vruntime_update’ [-Werror=missing-prototypes]
 
-This would be FIELD_PREP(ATMEL_US_USCLKS, 2) from linux/bitfield.h.
+Add the missing declaration in head file to fix this. And remove
+the unnecessary declaration in kernel/sched/core.c.
 
-They should all be converted to use FIELD_PREP(), IMHO (in a separate 
-patch).
+Signed-off-by: chen zhang <chenzhang@kylinos.cn>
+---
+ kernel/sched/core.c  | 2 --
+ kernel/sched/sched.h | 2 ++
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  #define		ATMEL_US_USCLKS_SCK		(3 <<  4)
->  #define	ATMEL_US_CHRL		GENMASK(7, 6)	/* Character Length */
->  #define		ATMEL_US_CHRL_5			(0 <<  6)
-> 
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index b60422300af6..5a354b4bcd0c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5874,8 +5874,6 @@ static inline struct task_struct *pick_task(struct rq *rq)
+ 	BUG(); /* The idle class should always have a runnable task. */
+ }
+ 
+-extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
+-
+ static void queue_core_balance(struct rq *rq);
+ 
+ static struct task_struct *
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index f616e0cec20c..ae8554356108 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2268,6 +2268,8 @@ static inline bool sched_fair_runnable(struct rq *rq)
+ extern struct task_struct *pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf);
+ extern struct task_struct *pick_next_task_idle(struct rq *rq);
+ 
++extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
++
+ #define SCA_CHECK		0x01
+ #define SCA_MIGRATE_DISABLE	0x02
+ #define SCA_MIGRATE_ENABLE	0x04
 -- 
- i.
+2.25.1
 

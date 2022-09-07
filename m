@@ -2,139 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85B15B07BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC575B083A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiIGO6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S230437AbiIGPNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiIGO6g (ORCPT
+        with ESMTP id S230425AbiIGPNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:58:36 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C105723B;
-        Wed,  7 Sep 2022 07:58:35 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id p187so11668026iod.8;
-        Wed, 07 Sep 2022 07:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UYoV6lACJxTZHGkj9WSsFQois6n/KilMymp2vYe4Djk=;
-        b=N14ELD6J03DJOp1u7J8N9CDZYA1UJl30H6MZSP1ro0LUfYb03sSZzHlx5heAW61Cpz
-         dv30ZiWH3qHigi8/PaT8H8fhbsfuNNoV5jOJMW9YmcdloxGj8UPWHPYiyuey5vX2nVrr
-         qS+uVTcHVbL9gFTKqtP4SxvsGKffZVl1+vJhO3DBoTJ6NnjdsfKxXGnPIBTucaG0Miue
-         Jyg1AXPcz9IAN3BPluHD16byjUFCkwOvXRwz5mO7NXGVNwy9RaHTa42A8xz/XKdal7i5
-         bWCI9lzicUfvipABqP920TqivxB5e3g7iX+SuwZYnajtVerui0DPsnhuJsG8DFuQx5z9
-         4HsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UYoV6lACJxTZHGkj9WSsFQois6n/KilMymp2vYe4Djk=;
-        b=ODdhPouiTepyaCx2hLzzqnBcroCR8+3RTBXB9MJDRZmb3J0qT/UUlNdg65MjWIZ0A6
-         L9Fhs3fVqQjEZwZJTuTpywzl7GG+544FTYEjjiLOMi65XG6xAxYkI/gtOU1Zew/q3wCd
-         rJnkm0sP8DoeZ+ahow5zNgrPjXV4t+uJXMZ7Ej8iNjysEGyba0MJP3tdlzOxMyTjv1OK
-         s8ArxrVt2WWkI+2iBEsyV8nw1OFkKrdJbOS8Y60PHP4udT3zdV12V96fjSN9S8SR0PnB
-         O0HVaAQsefweA0yhOxKGcSuaiukJ7KF6zJJiM3v/OMlVbymUUKbU3EHpz+yrOb63sHhM
-         6cWA==
-X-Gm-Message-State: ACgBeo0+nYByIbZ73t+j8GunsglSMwXe9AR8JnYFWicRqYaJcUKIqBk0
-        q7hSQSG1mEIDLcI8ClmpLeXo5mT+liIqowLKpp/euLqZ5+k=
-X-Google-Smtp-Source: AA6agR7rn3vjpC/MurFyLxG08yrX7ZjhZA6SRUunTu+TNMfEj9FlTVY9nglwbjHtCgf2go9eZusSPxCSDHjIsb6A360=
-X-Received: by 2002:a05:6638:3802:b0:351:d8a5:6d58 with SMTP id
- i2-20020a056638380200b00351d8a56d58mr2401344jav.206.1662562714982; Wed, 07
- Sep 2022 07:58:34 -0700 (PDT)
+        Wed, 7 Sep 2022 11:13:14 -0400
+Received: from mailgw02.garantiserver.com (mailgw02.dnsflare.com [185.85.205.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B02B729D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:13:05 -0700 (PDT)
+Received: from 204139.dnsflare.com ([185.85.204.139]:45374)
+        by mailgw02.garantiserver.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <opening@chevron.com>)
+        id 1oVwgB-0005xn-1l
+        for linux-kernel@vger.kernel.org;
+        Wed, 07 Sep 2022 18:09:27 +0300
+Received: from 204139.dnsflare.com (localhost [127.0.0.1])
+        by 204139.dnsflare.com (Postfix) with ESMTP id 67C4E20E5E8D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 18:09:27 +0300 (+03)
+X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000,
+        BODYTEXTP_SIZE_400_LESS 0.000000, BODY_SIZE_1000_LESS 0.000000,
+        BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_200_299 0.000000,
+        BODY_SIZE_5000_LESS 0.000000, BODY_SIZE_7000_LESS 0.000000,
+        CTE_QUOTED_PRINTABLE 0.000000, DKIM_SIGNATURE 0.000000,
+        FROM_NAME_PHRASE 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
+        IN_REP_TO 0.000000, MULTIPLE_RCPTS 0.100000, NO_CTA_URI_FOUND 0.000000,
+        NO_URI_HTTPS 0.000000, REFERENCES 0.000000, REPLYTO_FROM_DIFF_ADDY 0.100000,
+        SMALL_BODY 0.000000, TO_UNDISCLOSED_RECIPIENTS 0.000000,
+        WEBMAIL_SOURCE 0.000000, WEBMAIL_USER_AGENT 0.000000, __ANY_URI 0.000000,
+        __AUTH_RES_DKIM_PASS 0.000000, __BODY_NO_MAILTO 0.000000, __CT 0.000000,
+        __CTE 0.000000, __CT_TEXT_PLAIN 0.000000, __FRAUD_JOB 0.000000,
+        __FROM_DOMAIN_NOT_IN_BODY 0.000000, __FROM_NAME_NOT_IN_BODY 0.000000,
+        __FUR_HEADER 0.000000, __HAS_FROM 0.000000, __HAS_MSGID 0.000000,
+        __HAS_REFERENCES 0.000000, __HAS_REPLYTO 0.000000,
+        __HIGHBIT_ASCII_MIX 0.000000, __IN_REP_TO 0.000000,
+        __MIME_TEXT_ONLY 0.000000, __MIME_TEXT_P 0.000000, __MIME_TEXT_P1 0.000000,
+        __MIME_VERSION 0.000000, __MSGID_32HEX 0.000000, __NO_HTML_TAG_RAW 0.000000,
+        __O365_FILTER_URI_ONLY 0.000000, __PHISH_SPEAR_STRUCTURE_1 0.000000,
+        __PHISH_SPEAR_STRUCTURE_2 0.000000, __REFERENCES 0.000000,
+        __SANE_MSGID 0.000000, __SUBJ_ALPHA_END 0.000000, __TO_MALFORMED_3 0.000000,
+        __URI_MAILTO 0.000000, __URI_NO_WWW 0.000000, __URI_NS 0.000000,
+        __USER_AGENT 0.000000, __USER_AGENT_ROUNDCUBE_WEBMAIL 0.000000
+X-SASI-Probability: 8%
+X-SASI-RCODE: 200
+X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2022.9.7.143918
+Authentication-Results: 204139.dnsflare.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=ornekdomain.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ornekdomain.com;
+         h=content-transfer-encoding:user-agent:message-id:references
+        :in-reply-to:reply-to:subject:subject:to:from:from:date:date
+        :content-type:content-type:mime-version; s=dkim; t=1662563367;
+         x=1665155368; bh=mCR9JnDguuueTX/tcXrmjUC0HG34iXdTZAlbbyv5Yqo=; b=
+        eIfghcsgqV99lq8UZRcm9BduvbEPiKwq89QXpRJ6efM8GlQQSqEq1LR91WMW9KKD
+        M2wFxMKi6B43IObpHv4I47fnbm2Ydi9NJx0z68pIe6vHOZeeKk+AKLyfGrpfFHB/
+        r/Gd+WAz0C/RzoHPFOVFXghszTSIiSX5fhIMwbzsN/Y=
+X-Virus-Scanned: Debian amavisd-new at dione.dnsflare.com
+X-Spam-Score: 3.996
+X-Spam-Level: ****
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_40,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,KHOP_HELO_FCRDNS,ODD_FREEM_REPTO,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+Received: from 204139.dnsflare.com ([127.0.0.1])
+        by 204139.dnsflare.com (204139.dnsflare.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Nl_1GTWo0BQe for <linux-kernel@vger.kernel.org>;
+        Wed,  7 Sep 2022 18:09:27 +0300 (+03)
+Received: from _ (localhost [127.0.0.1])
+        by 204139.dnsflare.com (Postfix) with ESMTPSA id DDF6620E5E94;
+        Wed,  7 Sep 2022 17:57:58 +0300 (+03)
 MIME-Version: 1.0
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
- <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
- <b846cedb14235db6950a55e7eec2eff9e9ab56ec.camel@huaweicloud.com> <57cedc7a3008248b5147d03e2f4bd0b33ad9a146.camel@huaweicloud.com>
-In-Reply-To: <57cedc7a3008248b5147d03e2f4bd0b33ad9a146.camel@huaweicloud.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Wed, 7 Sep 2022 16:57:57 +0200
-Message-ID: <CAP01T764z59qczE37=jf-zPkS2zPuzDyCjdngBDnG-GOovG-rQ@mail.gmail.com>
-Subject: Re: [PATCH v16 00/12] bpf: Add kfuncs for PKCS#7 signature verification
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date:   Wed, 07 Sep 2022 15:57:58 +0100
+From:   Chevron Energy Corporation <opening@chevron.com>
+To:     undisclosed-recipients:;
+Subject: Job Opportunity at Chevron
+Reply-To: chevron.uk@europe.com
+Mail-Reply-To: chevron.uk@europe.com
+In-Reply-To: <1d34d275eff93e4e7cec68b60872fdcc@chevron.com>
+References: <1d34d275eff93e4e7cec68b60872fdcc@chevron.com>
+Message-ID: <a27fc3b33b05e6a1eaa5738967e6f134@chevron.com>
+X-Sender: opening@chevron.com
+User-Agent: Roundcube Webmail
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 16:49, Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On Tue, 2022-09-06 at 09:35 +0200, Roberto Sassu wrote:
-> > On Mon, 2022-09-05 at 21:26 +0200, Kumar Kartikeya Dwivedi wrote:
-> > > On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > >
-> > > > One of the desirable features in security is the ability to
-> > > > restrict import
-> > > > of data to a given system based on data authenticity. If data
-> > > > import can be
-> > > > restricted, it would be possible to enforce a system-wide policy
-> > > > based on
-> > > > the signing keys the system owner trusts.
-> > > >
-> > > > This feature is widely used in the kernel. For example, if the
-> > > > restriction
-> > > > is enabled, kernel modules can be plugged in only if they are
-> > > > signed with a
-> > > > key whose public part is in the primary or secondary keyring.
-> > > >
-> > > > For eBPF, it can be useful as well. For example, it might be
-> > > > useful
-> > > > to
-> > > > authenticate data an eBPF program makes security decisions on.
-> > > >
-> > > > [...]
-> > >
-> > > CI is crashing with NULL deref for test_progs-no_alu32 with llvm-
-> > > 16,
-> > > but I don't think the problem is in this series. This is most
-> > > likely
-> > > unrelated to BPF, as the crash happens inside
-> > > kernel/time/tick-sched.c:tick_nohz_restart_sched_tick.
-> > >
-> > > This was the same case in
-> > > https://lore.kernel.org/bpf/CAP01T74steDfP6O8QOshoto3e3RnHhKtAeTbnrPBZS3YJXjvbA@mail.gmail.com.
-> > >
-> > > So,
-> > > https://github.com/kernel-patches/bpf/runs/8194263557?check_suite_focus=true
-> > > and
-> > > https://github.com/kernel-patches/bpf/runs/7982907380?check_suite_focus=true
-> > >
-> > > look similar to me, and may not be related to BPF. They only
-> > > trigger
-> > > during runs compiled using LLVM 16, so maybe some compiler
-> > > transformation is surfacing the problem?
-> >
-> > Yes, I saw that too. Not sure what the cause could be.
-> >
->
-> Another occurrence, this time with gcc:
->
-> https://github.com/robertosassu/vmtest/runs/8230071814?check_suite_focus=true
->
+Chevron Corporation is currently recruiting foreign applicants on=20
+various job positions available kindly apply by sending your CV/r=C3=A9su=
+m=C3=A9=20
+to chevron.uk@europe.com for more details.
 
-... and it seems like this run does not even have your patches, right?
-
-> Roberto
->
+HR Management

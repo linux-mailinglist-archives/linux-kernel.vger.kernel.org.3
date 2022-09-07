@@ -2,164 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B505B0CDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2839D5B0CEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiIGTG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S229754AbiIGTMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiIGTGj (ORCPT
+        with ESMTP id S229516AbiIGTMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:06:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195D1A1D4B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:06:38 -0700 (PDT)
+        Wed, 7 Sep 2022 15:12:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BE2BBA58;
+        Wed,  7 Sep 2022 12:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662577599; x=1694113599;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=89awUURDT6cbgsNq6+FtxZiow24nG3RycW6hZU2senM=;
-  b=F5b+5telfzHII8st2yYDNcjwtVD+Us22CSS2EBMIw8w7yFpPAMsOf6WS
-   PmH7DW9BFWjUyTmcH412zdskz1d5ond8cvCRirnUaZs0UjYTxiIZYtoZv
-   hTwaVVpVRMIKR1eiEdvZvVPOJXhRJYODX9IlPqirQCsQmqF4NGE67Rex1
-   wscFHGWWXUMHL2aE9MkIoXPiul9akTYhVGMh6N8n/19RcaNSGmHcXsivu
-   ZOjyv98/wYSGg4NKsg5Hf0443Xmr9LwB4HcbPxTSGZGY8FjyU8l9Kq3rr
-   yYEswj0uC5je7XmAUKe7Sr4lBK+n5cT+HlBKSrEnBmkifgHYYTIn+NFf7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="280004280"
+  t=1662577969; x=1694113969;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3zy6M8QkCJjBXQedcYlPk/BRgB9EsK3lxB77sfemVLg=;
+  b=OeGfTd36Z4ZO6OqNc8DTpiaHiWdHi4FbpaxpF4ph1+fOkn3cudcGWC+E
+   hPRqMFCJ0OaqBgg7Xqqypndk7t6EXGo/n6HND3mzCta/wC0n1ivJ4mfO1
+   n7B1iZfNbeflOEzTNKLc1sMElaKfKDrN64Ku01ddmuDzEnRX+WVpPOZbK
+   sKAIHzzu/tsIkwUeJML5v5GGZydfL0u1TAU4Ikk7lCzmjKfI4wRY9MzCj
+   FjB63RReZyJKvKX9r1uN8cfELFKEU4DeM3LRDe405eouX5ThIQuBag8wI
+   4zRv4Uy4duOpuujR77JOTRjr8j+ZTRBdh8KVmJJnEU7xSEoq5bORfUTLa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="295709013"
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="280004280"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 12:06:38 -0700
+   d="scan'208";a="295709013"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 12:12:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="565643561"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga003.jf.intel.com with ESMTP; 07 Sep 2022 12:06:38 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Sep 2022 12:06:38 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Sep 2022 12:06:37 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 7 Sep 2022 12:06:37 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 7 Sep 2022 12:06:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dXJFa9qLaBT/lzn8QjA4V7KLY8JRUgSCgU14VEqM2krjGkfBOYb0oOa573rxxOkzpYg759ubxOzgZ4CjBanIe3sqRglSm90AI6/BydeSKMb9MMnROFIoIoXIdjsVZQHbOvJV4Sd5IqbZPEQtJmcaveba7E1Ge8GuvNQaMT7oCDweqoh2edkMfFhRwyhJTUL0VzkjGnZKsdOV+IkFPtrjUrxS71iSsVCLtruqOShLZrLyRDFHjnUy9DhL9nFLHGHEQq1oiFKAj7NfxoyXbC6WMTCktKMWHO+y/Qp4BTg2+39XKfBpSdEZ78/23+GRqcbUDbelryxKq8cutkGEKLbyBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=42HqOHcB4E9KhpSi2bopvRAVWjUzrBuYrcGP1KKIdlM=;
- b=ONeYzi6z1HM7U70zgd10PsJ+8KQxDoWoD4h6hf1/TiqW+HSOp+2m9YncEwtdr5iCc8IKII3OJry5VXf1i5tsVe4hjTf9usgfkXBWD+H0RJgv31fANawP5HSDwRM1/62SQ6rykoJsPtLqSYSlMMfeBLMw20T8w1kuN4mqc63O2Ifwi2WWYarLm66NJX3uuLi4++A47x6D/0MV5tcUxa+asUkmfoioLpDOsHdM912cmNk8Wf1TQdAp8/RKaTNnZ6r3Hvrl9c8DYv9LNzdCoRQ8koDrtooW6TiFx00Ff6Rn4TxxnUdvUdUA4mlg5dQwvPQZ6Y2wfU9aVl6Ruyvs0Xm6mA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com (2603:10b6:5:39d::5) by
- CY4PR11MB1832.namprd11.prod.outlook.com (2603:10b6:903:127::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Wed, 7 Sep
- 2022 19:06:34 +0000
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::1977:59e7:5a28:24e1]) by DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::1977:59e7:5a28:24e1%9]) with mapi id 15.20.5588.017; Wed, 7 Sep 2022
- 19:06:33 +0000
-Message-ID: <cf73d4ca-4e19-aaff-8b45-ccd32f95a496@intel.com>
-Date:   Wed, 7 Sep 2022 12:06:30 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [Intel-gfx] [PATCH v8 07/16] mei: gsc: wait for reset thread on
- stop
-Content-Language: en-US
-To:     Tomas Winkler <tomas.winkler@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <intel-gfx@lists.freedesktop.org>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>
-References: <20220907155813.1427526-1-tomas.winkler@intel.com>
- <20220907155813.1427526-8-tomas.winkler@intel.com>
-From:   "Ceraolo Spurio, Daniele" <daniele.ceraolospurio@intel.com>
-In-Reply-To: <20220907155813.1427526-8-tomas.winkler@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR17CA0044.namprd17.prod.outlook.com
- (2603:10b6:a03:167::21) To DM4PR11MB5488.namprd11.prod.outlook.com
- (2603:10b6:5:39d::5)
+   d="scan'208";a="943030796"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Sep 2022 12:12:26 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oW0TJ-0006sf-2l;
+        Wed, 07 Sep 2022 19:12:25 +0000
+Date:   Thu, 8 Sep 2022 03:11:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>,
+        netdev@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, bryan.whitehead@microchip.com,
+        UNGLinuxDriver@microchip.com, Ian.Saturley@microchip.com
+Subject: Re: [PATCH net-next V1 2/2] net: lan743x: Add support for Rx IP &
+ TCP checksum offload
+Message-ID: <202209080357.QlM4jMJx-lkp@intel.com>
+References: <20220907062127.15473-3-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0aeef8fc-c152-47e3-b7d2-08da91041469
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1832:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: btQ76fGMc+Meud1H2g74bhoiVid8nKSCXBoR+XIZOUkwvmLlLm0vuLgTTGu6ZkIqmPMxBOxE3jrz1VZX3OvAY90+78weeEEePuqPdR7np4qRtKPYgqvVdDsh+AGAjDWFaWdhB7I+KzcNeoY9+H6LEDxZy1oDhu8OZNTEiAsdHid8L8wfDD858OasofvUyD1FCOGyr+HwtKuy86iUwTRA9hbhPvESZH9AqSH0WEca2oGNbo8Jgqcq77SHiNr4a1fY4ha+7ovLvqgaMkBzcbzl/EGPKPhkogYVKAuRY5WJrzRnlKxRS0vWWrl4o61k1RtTVgUjYZxb1ph9FrsJ49l+VuOm5O3RqX8ETKqYvqGHHqqDkFm8gjfBvg97xClKBWaafpDXF4cdQ/9QpnyIO3H2glYWwXPCVlFXE8Jet1lClyiqveUYnWRdsiOj93SJjBuW/tzMEQFs1O3IIr+StWxqZxIaxJC113sIxDgOXfPA6Mdg6SKZQwBU74b3WKIClzLu5qnkYzMwP5MA2aVStPegJQXOLXfjp5pP7fr1otoARkn6xWlynx5aIZdwuK7/HDZpY6PeyPkidOxMYsMomiisghlWfpjRJS0gHyq9GZaxXJOBqbhIMEr+qNw6BPQODFmxOFyhDt3IILRdSDl48SGQdkMNTjlc1DMu1gFm1Ibp7UD8G3w0ulFM5WfnifPl4fGgJRMaUI209oz7hMbBZE7Koe4hMnhE9B0EbtcGRe9yDwB7RlCGup96F8J8wCuSm/tQGlI9BkvYfz/g2886fpQw2J3/gutTUuTwbxFshQSV9RU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5488.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(136003)(346002)(396003)(366004)(41300700001)(6506007)(186003)(53546011)(6512007)(2616005)(26005)(107886003)(5660300002)(4326008)(83380400001)(8936002)(8676002)(54906003)(66476007)(6486002)(66946007)(66556008)(478600001)(110136005)(316002)(38100700002)(31696002)(2906002)(86362001)(82960400001)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TkhNU0liZ0dsdXUxekhCYzRnMG5nUGxsMVhmS05RK1puTkhTMEI0TUJaMjBK?=
- =?utf-8?B?WGgzRFd2dFJhMmJDeXdmTElsVzZ5RitOSDRYaWUzcWIwNk5nalFIa1lFR1lz?=
- =?utf-8?B?aHIwUGZXaFplMStHdXZUSEhqd2F3c0dWMEM3ZjZxMWZNUEV1YlRBSnY1M3Fn?=
- =?utf-8?B?eW95cEJFWXhuOHJpWFE5alMzNGdibmVxTVNtMi9GU1VBRmFlUi9JcGhVRFZ6?=
- =?utf-8?B?dFNxN2orUGNHY3JHOXlMUXA4OFRVVTVkbkRHQkZZaTR4OEdwejJLRzlSbVk2?=
- =?utf-8?B?TGI3ZVowVjRxcUxkNlVxNi9tVzZkRFU5N3JIVEZCYmZ6N3prVnNyMFYzZGw3?=
- =?utf-8?B?V3RMYmdidEp1R0hNaHRUcEpoSmVEL05CR2pLcHlyUmJDN1haM2MrcDNHQXo5?=
- =?utf-8?B?czhsWGNrTW5FcWwwdk5HSklFdkludlVKaUxpMmRPZTA2RWVpVXhNVDI1UG1p?=
- =?utf-8?B?cHp2Q1N5NnBwVnloc0VCMFhSRmljd3RkRlp5MVdIMlFpWThzN1d3RGxKRGZo?=
- =?utf-8?B?c3B1KzlnTjlDSmcvWGk5NDB5UFVQRlVIUnJwQ1Q3Y2UxNTlVK0xHc0tKSjB2?=
- =?utf-8?B?dXZDWmM3QXhiTE84WTRSNHFHQTNTODlTclFnM3MzOVFRZ3NYSU9aTzZqUHF5?=
- =?utf-8?B?QnE2UXJJMU85akxRTDJlWnpOV1h6M1dtc3lIWSt0NDlFSExzaFY4ODFUUHpa?=
- =?utf-8?B?SnFaWTRnR1ZybzRjR3REaGRWK2VESzNpU0xtckxaK2dWL0wvSDcrb2JqYUR4?=
- =?utf-8?B?YVhickxmTWloUThrU0RRUGo2T2J4VHRDTXpzWXliclI2QS9KWFZDK0ZmdmlE?=
- =?utf-8?B?bkFNWTBacWxNQVZVdm1FM252VDZkVDJkY09GUUQrazR6ZjZndmVsdXV1MGd6?=
- =?utf-8?B?ZUNHTjEwaXdlZWI0VTlzWUZDbTh5ZzdJdllTSEMreFBOSllPOGNWOEVKNXRO?=
- =?utf-8?B?bklBNWNZNnRjT3hHU1JnWjF0WHlpVTZlZjdVQ1drT0ZxeURoYjl5KzVWT2hn?=
- =?utf-8?B?TnhuOGRnNHdRZENoSGhMNXJOeFY5OGtoQ0dEcnZFVVhZbmhac0c1eno5YTQ3?=
- =?utf-8?B?RmhRNDZFMmVncHFJSXAzRi9xbGNzdmtFVkNzb2Iwb3ZVR0xyOHNURDQwV0c5?=
- =?utf-8?B?WWxHemhZQjRXOUVDQnNDK0ljZWs0MEx0aThwRXZCZ3ZGdXhOTGdiS3JQSmIx?=
- =?utf-8?B?U0YzSS90ZTBSSng0UkZOS3EyeW9sR09qTm5JVExpUjIzOEhaRkdmRjZFaGpm?=
- =?utf-8?B?aWQ4c2NVYUg0eE4vc2pyZ3JuUGhxNkFRUUU1Mm4yVGRRamJoRzFsU0hlQ2NQ?=
- =?utf-8?B?WmlwL09URzl3UnQ1VjVhSDU1czU2M2dwOXJsMTFFbUhOV3VjcmNYNC8xQUl0?=
- =?utf-8?B?SkdsYytvaERzZkNUWGVvYmlFOFNsZlByMlp0YmxRR0QwQ2svZW80WEYzc1lI?=
- =?utf-8?B?RWw4cnIwOUxiOGhBamVuck9VMzc0VG50T3U0dko3Ukg0bEhGdDdBcm45S2ls?=
- =?utf-8?B?cmZNSVZnenZLTU5IWHhab1p6TFRCMzdBdm4xeW9xTWxhbjZPSXlqUnFlaFpM?=
- =?utf-8?B?OGVKZzc1QmxhcnIrVjE0TlllTnJ5VTJmcjRqRmJrWE04RUF1TDRYMVV3VHdK?=
- =?utf-8?B?dGx2OVRkY2dhSzlQZFRFdFdYYVAwTTh3OEtNbGQvUDFqeTFzZFhKbU5zSkYv?=
- =?utf-8?B?VFVGQlloYWkyamlYUHNPSnFWTXY5VzEyL2dvaUFQandQUjFxOFFiRHpVN01h?=
- =?utf-8?B?N2ZzRERtMGdmdWNFTFA1dnlyd2VIRWV3eUl5UUFvZzQ3dnlrcUU5dXoxUHF0?=
- =?utf-8?B?MDlCSG9JWEI0U25GS2ExR3dCU05EcDVaZVlmY25tdmtndkNtVTRBcTlTNzBz?=
- =?utf-8?B?VjVqOWd0QUNjQ0sycXE5TVJ4SnIyOG9sVW8zb0JTM2diWjZYZzF2cUREMzND?=
- =?utf-8?B?bG1Od3FOWGJXNUFuam9PaTRkUW1NNkRzR0REL3haZWpUSWtldTI3SnA2cDFw?=
- =?utf-8?B?SEtEV3dEdnJ5RHBQdnRPNXFtNWRvRHZXTG9PcXNXQmlzSnFETnNtTVVjTVBp?=
- =?utf-8?B?TnhxL01FN1JYVEhZRFkrbE9LUE5lSGZkbkM2N2I2OGJIbUdKYUVwNEpNZzhj?=
- =?utf-8?B?R29IV1FvN0dyU1ozeGxGcDFzS2kxYmFDdnE0amwxcFQ5dmhlSDlWZGxqNnNh?=
- =?utf-8?Q?3QJhFzkmP7LnGko0rqMXcBg=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0aeef8fc-c152-47e3-b7d2-08da91041469
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5488.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 19:06:33.5965
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BePYizhbEmqV0NzA4Yx+62XpgDnLgEWvNuPEEjgabfsfm2dDb5Rodwg5VLIMBfFMIVUpHmU47LM4MuzOgylmwGFme6vBe1ZGA9l5Lua2CDg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1832
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907062127.15473-3-Raju.Lakkaraju@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -168,47 +67,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Raju,
 
+Thank you for the patch! Perhaps something to improve:
 
-On 9/7/2022 8:58 AM, Tomas Winkler wrote:
-> From: Alexander Usyskin <alexander.usyskin@intel.com>
->
-> Wait for reset work to complete before initiating
-> stop reset flow sequence.
->
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+[auto build test WARNING on net-next/master]
 
-This is unchanged from the previously reviewed rev (apart from the fixed 
-date in the header), so this still applies:
+url:    https://github.com/intel-lab-lkp/linux/commits/Raju-Lakkaraju/net-lan743x-Fix-to-use-multiqueue-start-stop-APIs/20220907-143456
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 2786bcff28bd88955fc61adf9cb7370fbc182bad
+config: sparc-randconfig-s043-20220907 (https://download.01.org/0day-ci/archive/20220908/202209080357.QlM4jMJx-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/d965e2dd24f617d68ded6f3cbeb69aa8271d5221
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Raju-Lakkaraju/net-lan743x-Fix-to-use-multiqueue-start-stop-APIs/20220907-143456
+        git checkout d965e2dd24f617d68ded6f3cbeb69aa8271d5221
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash drivers/net/ethernet/microchip/
 
-Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Daniele
+sparse warnings: (new ones prefixed by >>)
+>> drivers/net/ethernet/microchip/lan743x_main.c:2600:28: sparse: sparse: restricted __le32 degrades to integer
+   drivers/net/ethernet/microchip/lan743x_main.c:2601:28: sparse: sparse: restricted __le32 degrades to integer
+   drivers/net/ethernet/microchip/lan743x_main.c:2602:29: sparse: sparse: restricted __le32 degrades to integer
 
-> ---
->   drivers/misc/mei/init.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/misc/mei/init.c b/drivers/misc/mei/init.c
-> index eb052005ca86..bc054baf496c 100644
-> --- a/drivers/misc/mei/init.c
-> +++ b/drivers/misc/mei/init.c
-> @@ -1,6 +1,6 @@
->   // SPDX-License-Identifier: GPL-2.0
->   /*
-> - * Copyright (c) 2012-2019, Intel Corporation. All rights reserved.
-> + * Copyright (c) 2012-2022, Intel Corporation. All rights reserved.
->    * Intel Management Engine Interface (Intel MEI) Linux driver
->    */
->   
-> @@ -320,6 +320,8 @@ void mei_stop(struct mei_device *dev)
->   
->   	mei_clear_interrupts(dev);
->   	mei_synchronize_irq(dev);
-> +	/* to catch HW-initiated reset */
-> +	mei_cancel_work(dev);
->   
->   	mutex_lock(&dev->device_lock);
->   
+vim +2600 drivers/net/ethernet/microchip/lan743x_main.c
 
+  2544	
+  2545	static int lan743x_rx_process_buffer(struct lan743x_rx *rx)
+  2546	{
+  2547		int current_head_index = le32_to_cpu(*rx->head_cpu_ptr);
+  2548		struct lan743x_rx_descriptor *descriptor, *desc_ext;
+  2549		struct net_device *netdev = rx->adapter->netdev;
+  2550		int result = RX_PROCESS_RESULT_NOTHING_TO_DO;
+  2551		struct lan743x_rx_buffer_info *buffer_info;
+  2552		int frame_length, buffer_length;
+  2553		bool is_ice, is_tce, is_icsm;
+  2554		int extension_index = -1;
+  2555		bool is_last, is_first;
+  2556		struct sk_buff *skb;
+  2557	
+  2558		if (current_head_index < 0 || current_head_index >= rx->ring_size)
+  2559			goto done;
+  2560	
+  2561		if (rx->last_head < 0 || rx->last_head >= rx->ring_size)
+  2562			goto done;
+  2563	
+  2564		if (rx->last_head == current_head_index)
+  2565			goto done;
+  2566	
+  2567		descriptor = &rx->ring_cpu_ptr[rx->last_head];
+  2568		if (le32_to_cpu(descriptor->data0) & RX_DESC_DATA0_OWN_)
+  2569			goto done;
+  2570		buffer_info = &rx->buffer_info[rx->last_head];
+  2571	
+  2572		is_last = le32_to_cpu(descriptor->data0) & RX_DESC_DATA0_LS_;
+  2573		is_first = le32_to_cpu(descriptor->data0) & RX_DESC_DATA0_FS_;
+  2574	
+  2575		if (is_last && le32_to_cpu(descriptor->data0) & RX_DESC_DATA0_EXT_) {
+  2576			/* extension is expected to follow */
+  2577			int index = lan743x_rx_next_index(rx, rx->last_head);
+  2578	
+  2579			if (index == current_head_index)
+  2580				/* extension not yet available */
+  2581				goto done;
+  2582			desc_ext = &rx->ring_cpu_ptr[index];
+  2583			if (le32_to_cpu(desc_ext->data0) & RX_DESC_DATA0_OWN_)
+  2584				/* extension not yet available */
+  2585				goto done;
+  2586			if (!(le32_to_cpu(desc_ext->data0) & RX_DESC_DATA0_EXT_))
+  2587				goto move_forward;
+  2588			extension_index = index;
+  2589		}
+  2590	
+  2591		/* Only the last buffer in a multi-buffer frame contains the total frame
+  2592		 * length. The chip occasionally sends more buffers than strictly
+  2593		 * required to reach the total frame length.
+  2594		 * Handle this by adding all buffers to the skb in their entirety.
+  2595		 * Once the real frame length is known, trim the skb.
+  2596		 */
+  2597		frame_length =
+  2598			RX_DESC_DATA0_FRAME_LENGTH_GET_(le32_to_cpu(descriptor->data0));
+  2599		buffer_length = buffer_info->buffer_length;
+> 2600		is_ice = descriptor->data1 & RX_DESC_DATA1_STATUS_ICE_;
+  2601		is_tce = descriptor->data1 & RX_DESC_DATA1_STATUS_TCE_;
+  2602		is_icsm = descriptor->data1 & RX_DESC_DATA1_STATUS_ICSM_;
+  2603	
+  2604		netdev_dbg(netdev, "%s%schunk: %d/%d",
+  2605			   is_first ? "first " : "      ",
+  2606			   is_last  ? "last  " : "      ",
+  2607			   frame_length, buffer_length);
+  2608	
+  2609		/* save existing skb, allocate new skb and map to dma */
+  2610		skb = buffer_info->skb;
+  2611		if (lan743x_rx_init_ring_element(rx, rx->last_head,
+  2612						 GFP_ATOMIC | GFP_DMA)) {
+  2613			/* failed to allocate next skb.
+  2614			 * Memory is very low.
+  2615			 * Drop this packet and reuse buffer.
+  2616			 */
+  2617			lan743x_rx_reuse_ring_element(rx, rx->last_head);
+  2618			/* drop packet that was being assembled */
+  2619			dev_kfree_skb_irq(rx->skb_head);
+  2620			rx->skb_head = NULL;
+  2621			goto process_extension;
+  2622		}
+  2623	
+  2624		/* add buffers to skb via skb->frag_list */
+  2625		if (is_first) {
+  2626			skb_reserve(skb, RX_HEAD_PADDING);
+  2627			skb_put(skb, buffer_length - RX_HEAD_PADDING);
+  2628			if (rx->skb_head)
+  2629				dev_kfree_skb_irq(rx->skb_head);
+  2630			rx->skb_head = skb;
+  2631		} else if (rx->skb_head) {
+  2632			skb_put(skb, buffer_length);
+  2633			if (skb_shinfo(rx->skb_head)->frag_list)
+  2634				rx->skb_tail->next = skb;
+  2635			else
+  2636				skb_shinfo(rx->skb_head)->frag_list = skb;
+  2637			rx->skb_tail = skb;
+  2638			rx->skb_head->len += skb->len;
+  2639			rx->skb_head->data_len += skb->len;
+  2640			rx->skb_head->truesize += skb->truesize;
+  2641		} else {
+  2642			/* packet to assemble has already been dropped because one or
+  2643			 * more of its buffers could not be allocated
+  2644			 */
+  2645			netdev_dbg(netdev, "drop buffer intended for dropped packet");
+  2646			dev_kfree_skb_irq(skb);
+  2647		}
+  2648	
+  2649	process_extension:
+  2650		if (extension_index >= 0) {
+  2651			u32 ts_sec;
+  2652			u32 ts_nsec;
+  2653	
+  2654			ts_sec = le32_to_cpu(desc_ext->data1);
+  2655			ts_nsec = (le32_to_cpu(desc_ext->data2) &
+  2656				  RX_DESC_DATA2_TS_NS_MASK_);
+  2657			if (rx->skb_head)
+  2658				skb_hwtstamps(rx->skb_head)->hwtstamp =
+  2659					ktime_set(ts_sec, ts_nsec);
+  2660			lan743x_rx_reuse_ring_element(rx, extension_index);
+  2661			rx->last_head = extension_index;
+  2662			netdev_dbg(netdev, "process extension");
+  2663		}
+  2664	
+  2665		if (is_last && rx->skb_head)
+  2666			rx->skb_head = lan743x_rx_trim_skb(rx->skb_head, frame_length);
+  2667	
+  2668		if (is_last && rx->skb_head) {
+  2669			rx->skb_head->protocol = eth_type_trans(rx->skb_head,
+  2670								rx->adapter->netdev);
+  2671			if (rx->adapter->netdev->features & NETIF_F_RXCSUM) {
+  2672				if (!is_ice && !is_tce && !is_icsm)
+  2673					skb->ip_summed = CHECKSUM_UNNECESSARY;
+  2674			}
+  2675			netdev_dbg(netdev, "sending %d byte frame to OS",
+  2676				   rx->skb_head->len);
+  2677			napi_gro_receive(&rx->napi, rx->skb_head);
+  2678			rx->skb_head = NULL;
+  2679		}
+  2680	
+  2681	move_forward:
+  2682		/* push tail and head forward */
+  2683		rx->last_tail = rx->last_head;
+  2684		rx->last_head = lan743x_rx_next_index(rx, rx->last_head);
+  2685		result = RX_PROCESS_RESULT_BUFFER_RECEIVED;
+  2686	done:
+  2687		return result;
+  2688	}
+  2689	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

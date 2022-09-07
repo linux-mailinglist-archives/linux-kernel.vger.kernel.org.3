@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E675B0F7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699815B0F82
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiIGVwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S230390AbiIGVwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiIGVv4 (ORCPT
+        with ESMTP id S230337AbiIGVv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:51:56 -0400
+        Wed, 7 Sep 2022 17:51:57 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B932A570D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:51:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7523BBC9E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:51:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662587515; x=1694123515;
+  t=1662587516; x=1694123516;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=H3KUXVJQNNP110a+603fcMPCmYPYLmydZeLg2k8GqE4=;
-  b=fMV2qKU5KFEJ6vQ/lJnY3UrtZ4mKwj1qjnSYZfMyQ+T2tmVwFFituR8W
-   l0T/UXNCOC23RGkATT5AFOmnth+uan57hwZUr6fmCOooqmqOuZb7/dy52
-   ATNSDVqP1bd2g4mMGhdoZjZOTGn8PJvfBumTiCv/sGiSfBWVzfrCvIOWu
-   INxIvxM1HUCUwRdWYVrCtzmSsUuR3n+b6Al7z/NhK2aN14Tad5YtYqePB
-   sfhyGvgMgd4SjeMDH/tL0p6kx00RbtJy4bjSIA1OI0BPaQjw8Hwj7MzAw
-   KrKyPsS2Wmray58bpSeksSpbBkWZsiyvuTKROcx3c8GwcHQDEznldM6JZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="295740272"
+  bh=XpL0iOQ4ux+sfLhmUe6gUOmb++/+QHM06dKBcLpqo1A=;
+  b=TXiM0eJFdfA62gFRa/56sU+AcEW0jr5x2ehbqzVxrta7RLzuAzNDarr6
+   clDqH5paG8a/bc9zzQUk81l2x7GIK8fP2d//YgWRMEIXP5dRPI+am0J/+
+   pLeMsJdTDaNSB/LkYkF/DbA5mU439m7FpST6y/qQzfA8zDZ0yVdfN3W9I
+   bdWB6xZAcFc+Z8qsvdZ93FJb4oY09RsdyGuUpT9ZxdFNS5+4dxbcOiD43
+   ivL21p15FpelTwoFOxMY/yIWVXum9u9XrAhR6Fg/e3dUWzfApGsewMDSf
+   rWEuF2vYRjBbmsavJ9TS6ud5JS5wTU5/Kh3FoiqETXpOAvMvLX29xjcS1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="295740280"
 X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="295740272"
+   d="scan'208";a="295740280"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:51:43 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:51:46 -0700
 X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="790207852"
+   d="scan'208";a="790207859"
 Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:51:39 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:51:43 -0700
 From:   Tomas Winkler <tomas.winkler@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -50,9 +50,9 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
         Vitaly Lubart <vitaly.lubart@intel.com>,
         Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Subject: [PATCH v9 03/16] mei: add slow_firmware flag to the mei auxiliary device
-Date:   Thu,  8 Sep 2022 00:51:00 +0300
-Message-Id: <20220907215113.1596567-4-tomas.winkler@intel.com>
+Subject: [PATCH v9 04/16] drm/i915/gsc: add slow_firmware flag to the gsc device definition
+Date:   Thu,  8 Sep 2022 00:51:01 +0300
+Message-Id: <20220907215113.1596567-5-tomas.winkler@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220907215113.1596567-1-tomas.winkler@intel.com>
 References: <20220907215113.1596567-1-tomas.winkler@intel.com>
@@ -68,9 +68,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add slow_firmware flag to the mei auxiliary device info
-to inform the mei driver about slow underlying firmware.
-Such firmware will require to use larger operation timeouts.
+From: Alexander Usyskin <alexander.usyskin@intel.com>
+
+Add slow_firmware flag to the gsc device definition
+and pass it to mei auxiliary device, this instructs
+the driver to use longer operation timeouts.
 
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
@@ -78,28 +80,29 @@ Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
 ---
 V9: Rebase
 
- include/linux/mei_aux.h | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/mei_aux.h b/include/linux/mei_aux.h
-index a0cb587006d5..4894d8bf4159 100644
---- a/include/linux/mei_aux.h
-+++ b/include/linux/mei_aux.h
-@@ -12,11 +12,14 @@
-  * @aux_dev: - auxiliary device object
-  * @irq: interrupt driving the mei auxiliary device
-  * @bar: mmio resource bar reserved to mei auxiliary device
-+ * @slow_firmware: The device has slow underlying firmware.
-+ *                 Such firmware will require to use larger operation timeouts.
-  */
- struct mei_aux_device {
- 	struct auxiliary_device aux_dev;
- 	int irq;
- 	struct resource bar;
+diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
+index e0236ff1d072..73498c2574c8 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gsc.c
++++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
+@@ -41,6 +41,7 @@ struct gsc_def {
+ 	unsigned long bar;
+ 	size_t bar_size;
+ 	bool use_polling;
 +	bool slow_firmware;
  };
  
- #define auxiliary_dev_to_mei_aux_dev(auxiliary_dev) \
+ /* gsc resources and definitions (HECI1 and HECI2) */
+@@ -145,6 +146,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
+ 	adev->bar.end = adev->bar.start + def->bar_size - 1;
+ 	adev->bar.flags = IORESOURCE_MEM;
+ 	adev->bar.desc = IORES_DESC_NONE;
++	adev->slow_firmware = def->slow_firmware;
+ 
+ 	aux_dev = &adev->aux_dev;
+ 	aux_dev->name = def->name;
 -- 
 2.37.2
 

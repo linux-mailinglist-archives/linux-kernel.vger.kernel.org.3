@@ -2,206 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666045B01E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7785B01EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiIGKZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        id S230195AbiIGKaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiIGKZY (ORCPT
+        with ESMTP id S230103AbiIGKaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:25:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87D15C958;
-        Wed,  7 Sep 2022 03:25:15 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD57C6601F5A;
-        Wed,  7 Sep 2022 11:25:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662546314;
-        bh=dGTIe7ZAAKDcOJ9oH8UOqLoDDKuOUNjmja0Csb9f/Xk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YE1aXPGzXFYIYfGLRtolH893wbL41ZfPcqDcKR3SEZmKWM8UJTsqZYwnNdBm8i78V
-         VaHph7aB9YaYXQet6chjjmqaFsIwnqICLTjn14qZlf8vfUQwielFkBD5LDKooM9JCc
-         PJ1iofAlVyd5AkdKCHZO1Ra7GOLEiDr7zWAbkaKYbxTzDUuG4bWkr0vV0VbFrcWmU4
-         2Uqs3QE3s/ipOV5oNccnUdzU1VaNLGjIi8ZpxFcEG9ED2QNcn2CIhibLQu0dr6eA5F
-         DQU41PA2tFHDK4hA4kDbc0rD1RYdZi0injG3rf4D9fE2mXqZ47Sis97cOXmQ1h+gu/
-         RmKW3kVP6c7KA==
-Message-ID: <bab5a55b-cbd3-4119-af39-794e38f5a0ee@collabora.com>
-Date:   Wed, 7 Sep 2022 13:25:09 +0300
+        Wed, 7 Sep 2022 06:30:10 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A22D237FD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:30:09 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bt10so21747064lfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 03:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Yh7EP9E1bY57iyGLbA3U+rsfppFelPTsU7HrsvIKkms=;
+        b=S2I+xRADc9Pg/U+U8TdBBI1ZkPWcrte3gR+yOuHYUiDu71CVKzuiuvDhZm8SytmMYS
+         hR/2OzNyqcUkAi7ASqbWfk/3rtsnCgiMNfNAhQFMbC8b/c1VRv/1TXjAbpqU7vAdx1we
+         S69wh2KOCuAbUb/8L4u/HPsJZxO1TvU/XcxsIQH0uk3W0/oFjHF+PWdSeuY0Z0v7RaLM
+         ziLcYarw11N3zYKzUWCQ6CIS1Fx+TnC1EFo0GbeJEv4Xs03Ql4Hue31tLeSvS4SICcxC
+         N1NOwtcd/myxIDm1TsHMhKH6p0/5Y8MieWI74GqCCIGbIqDfU9u+tM0o2HbUbQwCrxXl
+         B86g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Yh7EP9E1bY57iyGLbA3U+rsfppFelPTsU7HrsvIKkms=;
+        b=w2JOF7NdZp+H9hPJ/RmG0U8oIeh+65VY+zIVZ8uaASWwW/HQIvE+va+R9s+8e/EpCE
+         b73xWgbrlWTYtoHlwPLcip0cyZbBhuaCXdswzCO5FGdGxk0NCtplfyuB+CjWtyNM5cvw
+         eHuLRjLWKRAMNliFkQpl9moz4zCqzO9XecvatMSf2YRX9A/j5D1cn+WkU/xHRIw0GRja
+         /X+mctRWN98Yc/wWhEmfu4JY2J39FQviGJtynRpCoQ/77ujk891+wK2TS7vo83ffuoXR
+         GS6ct2KuCLvG+00Nc2nNL0AwZsvJp+OVLBDokPuw+c408gqZdyG8bMji9wcZLaJVistq
+         bKZg==
+X-Gm-Message-State: ACgBeo0X7Fkt/jpiepGk+CXcAX9jdcfm3Yi3EGSLZKrU2Hap2Q1HRJqy
+        3M3QzWjLJ3CQHEYx9JUbteL+3S4Iot3WKqZuyWANCw==
+X-Google-Smtp-Source: AA6agR7e9UFEyOx7xlO9YPEcerymB//PN3t+H86LvxXaUPkJBx1JVWMFdhoYsKnQWjD+W97muc1Pbb+KITSjmaJ/zC8=
+X-Received: by 2002:a05:6512:1293:b0:494:96ee:80c1 with SMTP id
+ u19-20020a056512129300b0049496ee80c1mr857731lfs.417.1662546607161; Wed, 07
+ Sep 2022 03:30:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
- <YvOav/vF2awVWIu0@phenom.ffwll.local>
- <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
- <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
- <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
- <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
- <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
- <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com>
- <CAF6AEGuR1cRQYaQBYGnMBzy=XJUcN2o2gzabZaGO2Dj62Uq1DA@mail.gmail.com>
- <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
- <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com>
- <2ce5ff0a-9ab2-d146-04db-487a64714fce@gmail.com>
- <cf8cd8da-08d2-5e70-a239-2a67da37c9ea@collabora.com>
- <e9bde303-6474-aa0b-7880-cf7d8b163983@collabora.com>
- <5988bf07-dd2e-a7ad-1ed9-831a402c3c5d@gmail.com>
- <CAF6AEGvnqV4ySs6rNWu0pkeSNJMhgN1rvind8dC-nV1Sv3kk8g@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGvnqV4ySs6rNWu0pkeSNJMhgN1rvind8dC-nV1Sv3kk8g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220907100533.1719128-1-vincent.whitchurch@axis.com>
+In-Reply-To: <20220907100533.1719128-1-vincent.whitchurch@axis.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 7 Sep 2022 12:29:55 +0200
+Message-ID: <CACT4Y+aBpkfgEvM6rE9Kg5U0MwcHnUA+Fm_2F4g9A4QQ3hav4g@mail.gmail.com>
+Subject: Re: [PATCH] um: Prevent KASAN splats in dump_stack()
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>, kernel@axis.com,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 19:47, Rob Clark wrote:
-> On Tue, Aug 23, 2022 at 3:01 AM Christian König
-> <ckoenig.leichtzumerken@gmail.com> wrote:
->>
->> Am 22.08.22 um 19:26 schrieb Dmitry Osipenko:
->>> On 8/16/22 22:55, Dmitry Osipenko wrote:
->>>> On 8/16/22 15:03, Christian König wrote:
->>>>> Am 16.08.22 um 13:44 schrieb Dmitry Osipenko:
->>>>>> [SNIP]
->>>>>>> The other complication I noticed is that we don't seem to keep around
->>>>>>> the fd after importing to a GEM handle.  And I could imagine that
->>>>>>> doing so could cause issues with too many fd's.  So I guess the best
->>>>>>> thing is to keep the status quo and let drivers that cannot mmap
->>>>>>> imported buffers just fail mmap?
->>>>>> That actually should be all the drivers excluding those that use
->>>>>> DRM-SHMEM because only DRM-SHMEM uses dma_buf_mmap(), that's why it
->>>>>> works for Panfrost. I'm pretty sure mmaping of imported GEMs doesn't
->>>>>> work for the MSM driver, isn't it?
->>>>>>
->>>>>> Intel and AMD drivers don't allow to map the imported dma-bufs. Both
->>>>>> refuse to do the mapping.
->>>>>>
->>>>>> Although, AMDGPU "succeeds" to do the mapping using
->>>>>> AMDGPU_GEM_DOMAIN_GTT, but then touching the mapping causes bus fault,
->>>>>> hence mapping actually fails. I think it might be the AMDGPU
->>>>>> driver/libdrm bug, haven't checked yet.
->>>>> That's then certainly broken somehow. Amdgpu should nerve ever have
->>>>> allowed to mmap() imported DMA-bufs and the last time I check it didn't.
->>>> I'll take a closer look. So far I can only tell that it's a kernel
->>>> driver issue because once I re-applied this "Don't map imported GEMs"
->>>> patch, AMDGPU began to refuse mapping AMDGPU_GEM_DOMAIN_GTT.
->>>>
->>>>>> So we're back to the point that neither of DRM drivers need to map
->>>>>> imported dma-bufs and this was never tested. In this case this patch is
->>>>>> valid, IMO.
->>>> Actually, I'm now looking at Etnaviv and Nouveau and seems they should
->>>> map imported dma-buf properly. I know that people ran Android on
->>>> Etnaviv. So maybe devices with a separated GPU/display need to map
->>>> imported display BO for Android support. Wish somebody who ran Android
->>>> on one of these devices using upstream drivers could give a definitive
->>>> answer. I may try to test Nouveau later on.
->>>>
->>> Nouveau+Intel combo doesn't work because of [1] that says:
->>>
->>> "Refuse to fault imported pages. This should be handled (if at all) by
->>> redirecting mmap to the exporter."
->>>
->>> [1]
->>> https://elixir.bootlin.com/linux/v5.19/source/drivers/gpu/drm/ttm/ttm_bo_vm.c#L154
->>>
->>> Interestingly, I noticed that there are IGT tests which check prime
->>> mmaping of Nouveau+Intel [2] (added 9 years ago), but they fail as well,
->>> as expected. The fact that IGT has such tests is interesting because it
->>> suggests that the mapping worked in the past. It's also surprising that
->>> nobody cared to fix the failing tests. For the reference, I checked
->>> v5.18 and today's linux-next.
->>>
->>> [2]
->>> https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/prime_nv_test.c#L132
->>>
->>> Starting subtest: nv_write_i915_cpu_mmap_read
->>> Received signal SIGBUS.
->>> Stack trace:
->>>   #0 [fatal_sig_handler+0x163]
->>>   #1 [__sigaction+0x50]
->>>   #2 [__igt_unique____real_main354+0x406]
->>>   #3 [main+0x23]
->>>   #4 [__libc_start_call_main+0x80]
->>>   #5 [__libc_start_main+0x89]
->>>   #6 [_start+0x25]
->>> Subtest nv_write_i915_cpu_mmap_read: CRASH (0,005s)
->>>
->>> Starting subtest: nv_write_i915_gtt_mmap_read
->>> Received signal SIGBUS.
->>> Stack trace:
->>>   #0 [fatal_sig_handler+0x163]
->>>   #1 [__sigaction+0x50]
->>>   #2 [__igt_unique____real_main354+0x33d]
->>>   #3 [main+0x23]
->>>   #4 [__libc_start_call_main+0x80]
->>>   #5 [__libc_start_main+0x89]
->>>   #6 [_start+0x25]
->>> Subtest nv_write_i915_gtt_mmap_read: CRASH (0,004s)
->>>
->>> I'm curious about the Etnaviv driver because it uses own shmem
->>> implementation and maybe it has a working mmaping of imported GEMs since
->>> it imports the dma-buf pages into Entaviv BO. Although, it should be
->>> risking to map pages using a different caching attributes (WC) from the
->>> exporter, which is prohibited on ARM ad then one may try to map imported
->>> udmabuf.
+On Wed, 7 Sept 2022 at 12:05, Vincent Whitchurch
+<vincent.whitchurch@axis.com> wrote:
+>
+> Use READ_ONCE_NOCHECK() when reading the stack to prevent KASAN splats
+> when dump_stack() is used.
+>
+> Fixes: 5b301409e8bc5d7fad ("UML: add support for KASAN under x86_64")
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-I see now that Etnaviv uses dma_buf_mmap(), so it should be okay.
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
->>> Apparently, the Intel DG TTM driver should be able to map imported
->>> dma-buf because it sets TTM_TT_FLAG_EXTERNAL_MAPPABLE.
->>
->> Even with that flag set it is illegal to map the pages directly by an
->> importer.
->>
->> If that ever worked then the only real solution is to redirect mmap()
->> calls on importer BOs to dma_buf_mmap().
-> 
-> Yeah, I think this is the best option.  Forcing userspace to hang on
-> to the fd just in case someone calls readpix would be pretty harsh.
-
-Actually, I proposed this couple months ago [1].
-
-[1] https://patchwork.freedesktop.org/patch/487481/
-
-What's not clear to me is how userspace is supposed to sync CPU accesses
-for imported GEMs. Either userspace need to use dma_buf_sync UAPI for
-dmabuf of imported GEM or importer driver should do that, or there is
-some other option?
-
--- 
-Best regards,
-Dmitry
+> ---
+>  arch/um/kernel/sysrq.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/um/kernel/sysrq.c b/arch/um/kernel/sysrq.c
+> index 7452f70d50d0..746715379f12 100644
+> --- a/arch/um/kernel/sysrq.c
+> +++ b/arch/um/kernel/sysrq.c
+> @@ -48,7 +48,8 @@ void show_stack(struct task_struct *task, unsigned long *stack,
+>                         break;
+>                 if (i && ((i % STACKSLOTS_PER_LINE) == 0))
+>                         pr_cont("\n");
+> -               pr_cont(" %08lx", *stack++);
+> +               pr_cont(" %08lx", READ_ONCE_NOCHECK(*stack));
+> +               stack++;
+>         }
+>
+>         printk("%sCall Trace:\n", loglvl);
+> --
+> 2.34.1
+>

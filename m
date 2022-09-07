@@ -2,417 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36275AFDA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CECC5AFDA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiIGHfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S229721AbiIGHga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiIGHfr (ORCPT
+        with ESMTP id S229956AbiIGHgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:35:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75477B290;
-        Wed,  7 Sep 2022 00:35:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 03:36:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0949A985
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:36:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D746C616EF;
-        Wed,  7 Sep 2022 07:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528D8C433D6;
-        Wed,  7 Sep 2022 07:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662536131;
-        bh=w4yJl1ATtBKrtZppiLS1T3dhPzUmlYqnc54i5qQ8Sps=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Rvsu/m0Cw3QykDlkVXEPIiFOzr14aMPdtu6rVrFUYLFCosaOuUO0tdDknWq9XcHvc
-         57d6OdgRJND34T+1ga2dCJmNQW4wSjEvqUefUfa6zQpYQ3ReLDQigoZOmFR7JIkFZT
-         g2zfN4+CoSC2AFQliouEgf4isQ0Z5iElfepniz1TLlBSzulGv2Sc3H9cDnRTDJo87K
-         kPmY3zjs63kGUYaeOo4YJjJgUwyaJX6kOnEstx/jOEEDEjJxvCfL9+h+tx6r1Ibt4Z
-         MfmMGUdyseAM9sifumz9HgIkpLS78lzLEqQognCEQDqurXQ8Ky2erUSL9Nkt1OOPrP
-         ygRgUPqDUMWXg==
-Message-ID: <3c8965c0-3bc0-252e-381d-bd057fd02af5@kernel.org>
-Date:   Wed, 7 Sep 2022 10:35:26 +0300
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C6F8933AF3;
+        Wed,  7 Sep 2022 07:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662536166; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lavx3pafSuCTnlel3bhLPHaCbT+Rc5YoltiGr/n9cVU=;
+        b=ileNwZr2ilYDx2ez/9jRPOaYa9G4XRzXM4BWgv9ezWm8AeBVVj5Ys7HD5xzNWxJMlvjTLr
+        Wwr+xn1b/k29JRU2ISk2nqkWw8vDTw1Nn1sI7OU+fSioxGwoKmQEvfBvg8O6Q4JZO9Bu13
+        9XbTZ07uxnbfAnRbpzQHiRpSsrSpMCI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662536166;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lavx3pafSuCTnlel3bhLPHaCbT+Rc5YoltiGr/n9cVU=;
+        b=wUPzo3KmcrL+Xu4ETefwyhso6/lI+mm8HCqsX1joR+Nd6Rj5Gcl0bFs9iOhRR+UeHayeql
+        zGFm+bUK41Rm3yCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A06E913A66;
+        Wed,  7 Sep 2022 07:36:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YLFmJuZJGGOyfQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 07 Sep 2022 07:36:06 +0000
+Message-ID: <05d4b35a-7f07-ebf3-e378-69d1b5b47c53@suse.de>
+Date:   Wed, 7 Sep 2022 09:36:06 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH] interconnect: Replace mutex with rt_mutex
-To:     Mike Tipton <quic_mdtipton@quicinc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_okukatla@quicinc.com
-References: <20220906191423.30109-1-quic_mdtipton@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm/bochs: fix blanking
 Content-Language: en-US
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220906191423.30109-1-quic_mdtipton@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Gerd Hoffmann <kraxel@redhat.com>, dri-devel@lists.freedesktop.org
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Takashi Iwai <tiwai@suse.de>,
+        "open list:DRM DRIVER FOR BOCHS VIRTUAL GPU" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220906142957.2763577-1-kraxel@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220906142957.2763577-1-kraxel@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------PwqMPL33VVpqLfh0yvaUmOOr"
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------PwqMPL33VVpqLfh0yvaUmOOr
+Content-Type: multipart/mixed; boundary="------------xbTE40wtUSMN0RWOFlVesBQQ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Gerd Hoffmann <kraxel@redhat.com>, dri-devel@lists.freedesktop.org
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Takashi Iwai <tiwai@suse.de>,
+ "open list:DRM DRIVER FOR BOCHS VIRTUAL GPU"
+ <virtualization@lists.linux-foundation.org>,
+ open list <linux-kernel@vger.kernel.org>
+Message-ID: <05d4b35a-7f07-ebf3-e378-69d1b5b47c53@suse.de>
+Subject: Re: [PATCH] drm/bochs: fix blanking
+References: <20220906142957.2763577-1-kraxel@redhat.com>
+In-Reply-To: <20220906142957.2763577-1-kraxel@redhat.com>
 
-Thanks for the patch!
+--------------xbTE40wtUSMN0RWOFlVesBQQ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 6.09.22 22:14, Mike Tipton wrote:
-> Replace mutex with rt_mutex to prevent priority inversion between
-> clients, which can cause unacceptable delays in some cases.
+DQoNCkFtIDA2LjA5LjIyIHVtIDE2OjI5IHNjaHJpZWIgR2VyZCBIb2ZmbWFubjoNCj4gVkdB
+X0lTMV9SQyBpcyB0aGUgY29sb3IgbW9kZSByZWdpc3RlciAoVkdBX0lTMV9STSB0aGUgb25l
+IGZvciBtb25vY2hyb21lDQo+IG1vZGUsIG5vdGUgQyB2cy4gTSBhdCB0aGUgZW5kKS4gIFNv
+IHdoZW4gdXNpbmcgVkdBX0lTMV9SQyBtYWtlIHN1cmUgdGhlDQo+IHZnYSBkZXZpY2UgaXMg
+YWN0dWFsbHkgaW4gY29sb3IgbW9kZSBhbmQgc2V0IHRoZSBjb3JyZXNwb25kaW5nIGJpdCBp
+biB0aGUNCj4gbWlzYyByZWdpc3Rlci4NCj4gDQo+IFJlcHJvZHVjaWJsZSB3aGVuIGJvb3Rp
+bmcgVk1zIGluIFVFRkkgbW9kZSB3aXRoIHNvbWUgZWRrMiB2ZXJzaW9ucyAoZWRrMg0KPiBm
+aXggaXMgb24gdGhlIHdheSB0b28pLiAgRG9lc24ndCBoYXBwZW4gaW4gQklPUyBtb2RlIGJl
+Y2F1c2UgaW4gdGhhdA0KPiBjYXNlIHRoZSB2Z2FiaW9zIGFscmVhZHkgZmxpcHMgdGhlIGJp
+dC4NCj4gDQo+IEZpeGVzOiAyNTBlNzQzOTE1ZDQgKCJkcm0vYm9jaHM6IEFkZCBzY3JlZW4g
+Ymxhbmtpbmcgc3VwcG9ydCIpDQo+IFNpZ25lZC1vZmYtYnk6IEdlcmQgSG9mZm1hbm4gPGty
+YXhlbEByZWRoYXQuY29tPg0KDQpBY2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1t
+ZXJtYW5uQHN1c2UuZGU+DQoNCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9j
+aHMuYyB8IDIgKysNCj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+IA0K
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9jaHMuYyBiL2RyaXZlcnMv
+Z3B1L2RybS90aW55L2JvY2hzLmMNCj4gaW5kZXggMDhkZTEzNzc0ODYyLi5hNTEyNjIyODlh
+ZWYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS90aW55L2JvY2hzLmMNCj4gKysr
+IGIvZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9jaHMuYw0KPiBAQCAtMzA5LDYgKzMwOSw4IEBA
+IHN0YXRpYyB2b2lkIGJvY2hzX2h3X2Zpbmkoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4g
+ICBzdGF0aWMgdm9pZCBib2Noc19od19ibGFuayhzdHJ1Y3QgYm9jaHNfZGV2aWNlICpib2No
+cywgYm9vbCBibGFuaykNCj4gICB7DQo+ICAgCURSTV9ERUJVR19EUklWRVIoImh3X2JsYW5r
+ICVkXG4iLCBibGFuayk7DQo+ICsJLyogZW5hYmxlIGNvbG9yIGJpdCAoc28gVkdBX0lTMV9S
+QyBhY2Nlc3Mgd29ya3MpICovDQo+ICsJYm9jaHNfdmdhX3dyaXRlYihib2NocywgVkdBX01J
+U19XLCBWR0FfTUlTX0NPTE9SKTsNCj4gICAJLyogZGlzY2FyZCBhcl9mbGlwX2Zsb3AgKi8N
+Cj4gICAJKHZvaWQpYm9jaHNfdmdhX3JlYWRiKGJvY2hzLCBWR0FfSVMxX1JDKTsNCj4gICAJ
+LyogYmxhbmsgb3IgdW5ibGFuazsgd2UgbmVlZCBvbmx5IHVwZGF0ZSBpbmRleCBhbmQgc2V0
+IDB4MjAgKi8NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
+dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
+c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
+YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-It would be nice if you have any numbers to share in the commit text.
+--------------xbTE40wtUSMN0RWOFlVesBQQ--
 
-> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
-> ---
-> 
-> We've run into a number of cases internally and from customers where
-> high priority, RT clients (typically display) become blocked for long
-> periods of time on lower priority, non-RT clients. Switching to rt_mutex
-> has proven to help performance in these cases.
+--------------PwqMPL33VVpqLfh0yvaUmOOr
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-I am wondering if avoiding the inversion on this specific lock is the right
-solution, as there could be other locks that may cause similar issues. Do we
-see similar issue with clocks for example or is it just with interconnects?
+-----BEGIN PGP SIGNATURE-----
 
->   drivers/interconnect/core.c | 80 ++++++++++++++++++-------------------
->   1 file changed, 40 insertions(+), 40 deletions(-)
-> 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 25debded65a8..a536c013d9ca 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -14,7 +14,7 @@
->   #include <linux/interconnect-provider.h>
->   #include <linux/list.h>
->   #include <linux/module.h>
-> -#include <linux/mutex.h>
-> +#include <linux/rtmutex.h>
->   #include <linux/slab.h>
->   #include <linux/of.h>
->   #include <linux/overflow.h>
-> @@ -28,7 +28,7 @@ static DEFINE_IDR(icc_idr);
->   static LIST_HEAD(icc_providers);
->   static int providers_count;
->   static bool synced_state;
-> -static DEFINE_MUTEX(icc_lock);
-> +static DEFINE_RT_MUTEX(icc_lock);
->   static struct dentry *icc_debugfs_dir;
->   
->   static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
-> @@ -47,7 +47,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
->   	seq_puts(s, " node                                  tag          avg         peak\n");
->   	seq_puts(s, "--------------------------------------------------------------------\n");
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	list_for_each_entry(provider, &icc_providers, provider_list) {
->   		struct icc_node *n;
-> @@ -73,7 +73,7 @@ static int icc_summary_show(struct seq_file *s, void *data)
->   		}
->   	}
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	return 0;
->   }
-> @@ -104,7 +104,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
->   	int i;
->   
->   	seq_puts(s, "digraph {\n\trankdir = LR\n\tnode [shape = record]\n");
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	/* draw providers as cluster subgraphs */
->   	cluster_index = 0;
-> @@ -136,7 +136,7 @@ static int icc_graph_show(struct seq_file *s, void *data)
->   					icc_graph_show_link(s, 1, n,
->   							    n->links[i]);
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   	seq_puts(s, "}");
->   
->   	return 0;
-> @@ -362,7 +362,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
->   	if (!spec)
->   		return ERR_PTR(-EINVAL);
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   	list_for_each_entry(provider, &icc_providers, provider_list) {
->   		if (provider->dev->of_node == spec->np) {
->   			if (provider->xlate_extended) {
-> @@ -378,7 +378,7 @@ struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
->   			}
->   		}
->   	}
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	if (IS_ERR(node))
->   		return ERR_CAST(node);
-> @@ -490,9 +490,9 @@ struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
->   		return ERR_CAST(dst_data);
->   	}
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   	path = path_find(dev, src_data->node, dst_data->node);
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   	if (IS_ERR(path)) {
->   		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
->   		goto free_icc_data;
-> @@ -577,12 +577,12 @@ void icc_set_tag(struct icc_path *path, u32 tag)
->   	if (!path)
->   		return;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	for (i = 0; i < path->num_nodes; i++)
->   		path->reqs[i].tag = tag;
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   }
->   EXPORT_SYMBOL_GPL(icc_set_tag);
->   
-> @@ -632,7 +632,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
->   	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
->   		return -EINVAL;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	old_avg = path->reqs[0].avg_bw;
->   	old_peak = path->reqs[0].peak_bw;
-> @@ -664,7 +664,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
->   		apply_constraints(path);
->   	}
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	trace_icc_set_bw_end(path, ret);
->   
-> @@ -682,12 +682,12 @@ static int __icc_enable(struct icc_path *path, bool enable)
->   	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
->   		return -EINVAL;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	for (i = 0; i < path->num_nodes; i++)
->   		path->reqs[i].enabled = enable;
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	return icc_set_bw(path, path->reqs[0].avg_bw,
->   			  path->reqs[0].peak_bw);
-> @@ -726,7 +726,7 @@ struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
->   	struct icc_node *src, *dst;
->   	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	src = node_find(src_id);
->   	if (!src)
-> @@ -748,7 +748,7 @@ struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
->   		path = ERR_PTR(-ENOMEM);
->   	}
->   out:
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   	return path;
->   }
->   EXPORT_SYMBOL_GPL(icc_get);
-> @@ -773,14 +773,14 @@ void icc_put(struct icc_path *path)
->   	if (ret)
->   		pr_err("%s: error (%d)\n", __func__, ret);
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   	for (i = 0; i < path->num_nodes; i++) {
->   		node = path->reqs[i].node;
->   		hlist_del(&path->reqs[i].req_node);
->   		if (!WARN_ON(!node->provider->users))
->   			node->provider->users--;
->   	}
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	kfree_const(path->name);
->   	kfree(path);
-> @@ -822,11 +822,11 @@ struct icc_node *icc_node_create(int id)
->   {
->   	struct icc_node *node;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	node = icc_node_create_nolock(id);
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	return node;
->   }
-> @@ -840,7 +840,7 @@ void icc_node_destroy(int id)
->   {
->   	struct icc_node *node;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	node = node_find(id);
->   	if (node) {
-> @@ -848,7 +848,7 @@ void icc_node_destroy(int id)
->   		WARN_ON(!hlist_empty(&node->req_list));
->   	}
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	kfree(node);
->   }
-> @@ -876,7 +876,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
->   	if (!node->provider)
->   		return -EINVAL;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	dst = node_find(dst_id);
->   	if (!dst) {
-> @@ -900,7 +900,7 @@ int icc_link_create(struct icc_node *node, const int dst_id)
->   	node->links[node->num_links++] = dst;
->   
->   out:
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	return ret;
->   }
-> @@ -925,7 +925,7 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
->   	if (IS_ERR_OR_NULL(dst))
->   		return -EINVAL;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	for (slot = 0; slot < src->num_links; slot++)
->   		if (src->links[slot] == dst)
-> @@ -946,7 +946,7 @@ int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
->   		ret = -ENOMEM;
->   
->   out:
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	return ret;
->   }
-> @@ -962,7 +962,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->   	if (WARN_ON(node->provider))
->   		return;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	node->provider = provider;
->   	list_add_tail(&node->node_list, &provider->nodes);
-> @@ -988,7 +988,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->   	node->avg_bw = 0;
->   	node->peak_bw = 0;
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   }
->   EXPORT_SYMBOL_GPL(icc_node_add);
->   
-> @@ -998,11 +998,11 @@ EXPORT_SYMBOL_GPL(icc_node_add);
->    */
->   void icc_node_del(struct icc_node *node)
->   {
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	list_del(&node->node_list);
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   }
->   EXPORT_SYMBOL_GPL(icc_node_del);
->   
-> @@ -1041,12 +1041,12 @@ int icc_provider_add(struct icc_provider *provider)
->   	if (WARN_ON(!provider->xlate && !provider->xlate_extended))
->   		return -EINVAL;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   
->   	INIT_LIST_HEAD(&provider->nodes);
->   	list_add_tail(&provider->provider_list, &icc_providers);
->   
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   
->   	dev_dbg(provider->dev, "interconnect provider added to topology\n");
->   
-> @@ -1060,22 +1060,22 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
->    */
->   void icc_provider_del(struct icc_provider *provider)
->   {
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   	if (provider->users) {
->   		pr_warn("interconnect provider still has %d users\n",
->   			provider->users);
-> -		mutex_unlock(&icc_lock);
-> +		rt_mutex_unlock(&icc_lock);
->   		return;
->   	}
->   
->   	if (!list_empty(&provider->nodes)) {
->   		pr_warn("interconnect provider still has nodes\n");
-> -		mutex_unlock(&icc_lock);
-> +		rt_mutex_unlock(&icc_lock);
->   		return;
->   	}
->   
->   	list_del(&provider->provider_list);
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   }
->   EXPORT_SYMBOL_GPL(icc_provider_del);
->   
-> @@ -1110,7 +1110,7 @@ void icc_sync_state(struct device *dev)
->   	if (count < providers_count)
->   		return;
->   
-> -	mutex_lock(&icc_lock);
-> +	rt_mutex_lock(&icc_lock);
->   	synced_state = true;
->   	list_for_each_entry(p, &icc_providers, provider_list) {
->   		dev_dbg(p->dev, "interconnect provider is in synced state\n");
-> @@ -1123,7 +1123,7 @@ void icc_sync_state(struct device *dev)
->   			}
->   		}
->   	}
-> -	mutex_unlock(&icc_lock);
-> +	rt_mutex_unlock(&icc_lock);
->   }
->   EXPORT_SYMBOL_GPL(icc_sync_state);
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMYSeYFAwAAAAAACgkQlh/E3EQov+Du
+yA//fpPRnTHYgiUo1pMN3estyO1WJMP8n5t8x7yMjPBT+YosBrFkLhM+VESDxzOI/RP97/mAvRjT
+SrvvrLZXsAasEnrSo5MiJ/x/LptFF2EG8UldbWCLpdOeL2S41Wh3UtL3Dihzr10t0GlQA+AlKeeC
+J+KwJlt9FJoWM5IgmamxJvyIRKMi/Nm0jeDj/oANEHD4Cl++g5uQ2pM4QSILDnGbAQEMc1J/S519
+UfJbiO7okcFITiPHQn41ahPsn2vrUbYejI3B4+UtWo8jU0xuFZxkgci7jEr3okQjTmVtFWYHMXQ3
+7RHUli+3Yv+UB/RNIEXD4/QzsHoGGtobHvOB1auSImb5xTaJeNsbXbUYLWpaPya4tDniDs8eLa1f
+seWqD/3awsCb23Dzkt2zoCI065xw5138ci+eMs3M2PI5W3Ll2WFYRffHwA+DmPzne3p5NXXVHX4F
+yxwhaY1XpmMocWnWDveOXJX2iX9bx0EnqjbSi/U5cMAFoGwU/A3lLts5VsvDD5PJt0Z6Q+6rVi9w
+HZhigKGFl3zRyr/ivtGJrkVAvAZYR/YPQ7TLpQQ+C9eH5d6IPQkzzMGbJjG2MNwTX74EYygDe+9h
+eU6wsyAXEL44PkbW2XkMJu/jeIiwo0HMV8fm0jCMYNhGNfM3p8te1jbLcaTEDbCKSCpOR5XCHiQV
+bck=
+=01HH
+-----END PGP SIGNATURE-----
 
-We should also update Kconfig, otherwise i am expecting that the build will fail if
-CONFIG_RT_MUTEXES is not enabled.
-
-Thanks,
-Georgi
+--------------PwqMPL33VVpqLfh0yvaUmOOr--

@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DA05AFA57
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710395AFA87
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiIGDA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 23:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S229704AbiIGDUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 23:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiIGDAV (ORCPT
+        with ESMTP id S229884AbiIGDUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:00:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5511EEC4;
-        Tue,  6 Sep 2022 20:00:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMn710t0Pz4xDK;
-        Wed,  7 Sep 2022 13:00:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662519613;
-        bh=AWrG22HsG40nFWEUvbc9CiDwEjFs/Llqm0vlEFXRFA8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gaoYIDfRJ9UCJHb31CKusDYxzY+a5mYX995fC1QLu1Ehf55PXp9X4RMvzW9Tcjenc
-         f7CF3uTfXjGMOKAP6vRK+bNs4wj3ddVxKVqEE6CMMZ4sfDiXgSyRxd6OkDPL1Dg4Hg
-         LIAEdb7xeH9pijEikyFeh+Emd//dQ1pOmbujE1ApYxYnnAlyIWrYHPoEmLHd8w2fQL
-         blAykyGF4JYyrnMFAWiImBr9u+8XSTNSPft6kb+kk1Q7r4yuiKNoF9m6p5TIa2FO0W
-         /W1jEVI1DS6EWCLYiuNUfERRMU+V7JZ7yJbhzY8tH+AB0KpLLXjLYol6v3B4relRre
-         xaNeuXm1WFbpw==
-Date:   Wed, 7 Sep 2022 13:00:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <20220907130011.32818436@canb.auug.org.au>
-In-Reply-To: <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
-References: <20220831083452.2fc938cf@canb.auug.org.au>
-        <20220907050535.243e5030@canb.auug.org.au>
-        <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JVAmzB6om6HkpojjuskFSzT";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 23:20:04 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D743FA00
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 20:20:01 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7C8B61A0365;
+        Wed,  7 Sep 2022 05:20:00 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4F19A1A03B2;
+        Wed,  7 Sep 2022 05:20:00 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D24CE180031F;
+        Wed,  7 Sep 2022 11:19:58 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ASoC: fsl_asrc: Add initialization finishing check in runtime resume
+Date:   Wed,  7 Sep 2022 11:01:55 +0800
+Message-Id: <1662519715-21891-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/JVAmzB6om6HkpojjuskFSzT
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+If the initialization is not finished, then filling input data to
+the FIFO may fail. So it is better to add initialization finishing
+check in the runtime resume for suspend & resume case.
 
-Hi all,
+And consider the case of three instances working in parallel,
+increase the retry times to 50 for more initialization time.
 
-On Wed, 7 Sep 2022 08:01:34 +0530 Anshuman Khandual <anshuman.khandual@arm.=
-com> wrote:
->
-> On 9/7/22 00:35, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > On Wed, 31 Aug 2022 08:34:52 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> >>
-> >> After merging the perf tree, today's linux-next build (native perf)
-> >> failed like this:
-> >>
-> >> In file included from /usr/include/stdio.h:866,
-> >>                  from /home/sfr/next/next/tools/perf/util/branch.h:9,
-> >>                  from util/branch.c:2:
-> >> In function 'fprintf',
-> >>     inlined from 'branch_type_stat_display' at util/branch.c:152:4:
-> >> /usr/include/powerpc64le-linux-gnu/bits/stdio2.h:105:10: error: '%8s' =
-directive argument is null [-Werror=3Dformat-overflow=3D]
-> >>   105 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __f=
-mt,
-> >>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~
-> >>   106 |                         __va_arg_pack ());
-> >>       |                         ~~~~~~~~~~~~~~~~~
-> >> cc1: all warnings being treated as errors
-> >>
-> >> Presumably caused by commit
-> >>
-> >>   9781e500dcb8 ("perf branch: Extend branch type classification")
-> >>
-> >> "native" here is PowerPC64 LE.
-> >> $ gcc --version
-> >> gcc (Debian 11.2.0-10) 11.2.0
-> >>
-> >> I have used the perf tree from next-20220830 for today. =20
-> >=20
-> > I am still seeing this build failure. =20
->=20
-> But did you apply the fix patch from Arnaldo that removes -Wno-format-ove=
-rflow
-> compiler option for the file util/branch.c ?
->=20
-> https://lore.kernel.org/all/YxJBh3wvAGol+Ekq@kernel.org/
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+changes in v2:
+- update comments.
 
-No, I expected a fix to be in the perf tree ...
+ sound/soc/fsl/fsl_asrc.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-Also note that the following fixes the problem for me:
+diff --git a/sound/soc/fsl/fsl_asrc.c b/sound/soc/fsl/fsl_asrc.c
+index aa5edf32d988..b394b762025d 100644
+--- a/sound/soc/fsl/fsl_asrc.c
++++ b/sound/soc/fsl/fsl_asrc.c
+@@ -20,6 +20,7 @@
+ 
+ #define IDEAL_RATIO_DECIMAL_DEPTH 26
+ #define DIVIDER_NUM  64
++#define INIT_TRY_NUM 50
+ 
+ #define pair_err(fmt, ...) \
+ 	dev_err(&asrc->pdev->dev, "Pair %c: " fmt, 'A' + index, ##__VA_ARGS__)
+@@ -579,7 +580,7 @@ static void fsl_asrc_start_pair(struct fsl_asrc_pair *pair)
+ {
+ 	struct fsl_asrc *asrc = pair->asrc;
+ 	enum asrc_pair_index index = pair->index;
+-	int reg, retry = 10, i;
++	int reg, retry = INIT_TRY_NUM, i;
+ 
+ 	/* Enable the current pair */
+ 	regmap_update_bits(asrc->regmap, REG_ASRCTR,
+@@ -592,6 +593,10 @@ static void fsl_asrc_start_pair(struct fsl_asrc_pair *pair)
+ 		reg &= ASRCFG_INIRQi_MASK(index);
+ 	} while (!reg && --retry);
+ 
++	/* NOTE: Doesn't treat initialization timeout as error */
++	if (!retry)
++		dev_warn(&asrc->pdev->dev, "initialization isn't finished\n");
++
+ 	/* Make the input fifo to ASRC STALL level */
+ 	regmap_read(asrc->regmap, REG_ASRCNCR, &reg);
+ 	for (i = 0; i < pair->channels * 4; i++)
+@@ -1257,6 +1262,7 @@ static int fsl_asrc_runtime_resume(struct device *dev)
+ {
+ 	struct fsl_asrc *asrc = dev_get_drvdata(dev);
+ 	struct fsl_asrc_priv *asrc_priv = asrc->private;
++	int reg, retry = INIT_TRY_NUM;
+ 	int i, ret;
+ 	u32 asrctr;
+ 
+@@ -1295,6 +1301,20 @@ static int fsl_asrc_runtime_resume(struct device *dev)
+ 	regmap_update_bits(asrc->regmap, REG_ASRCTR,
+ 			   ASRCTR_ASRCEi_ALL_MASK, asrctr);
+ 
++	/* Wait for status of initialization for every enabled pairs */
++	do {
++		udelay(5);
++		regmap_read(asrc->regmap, REG_ASRCFG, &reg);
++		reg = (reg >> ASRCFG_INIRQi_SHIFT(0)) & 0x7;
++	} while ((reg != ((asrctr >> ASRCTR_ASRCEi_SHIFT(0)) & 0x7)) && --retry);
++
++	/*
++	 * NOTE: Doesn't treat initialization timeout as error
++	 * Some of pair maybe success, then still can continue.
++	 */
++	if (!retry)
++		dev_warn(dev, "initialization isn't finished\n");
++
+ 	return 0;
+ 
+ disable_asrck_clk:
+-- 
+2.34.1
 
-diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-index d40776c44b06..b7b898f2872e 100644
---- a/tools/perf/util/branch.c
-+++ b/tools/perf/util/branch.c
-@@ -88,7 +88,8 @@ const char *branch_type_name(int type)
- 		"ERET",
- 		"IRQ",
- 		"SERROR",
--		"NO_TX"
-+		"NO_TX",
-+		""
- 	};
-=20
- 	if (type >=3D 0 && type < PERF_BR_MAX)
-
-
-PERF_BR_MAX has been increased by one (when PERF_BR_EXTEND_ABI was
-added), but a new string has not been added to the array ...
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/JVAmzB6om6HkpojjuskFSzT
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMYCTsACgkQAVBC80lX
-0GyyqAf/T1LM5r9YpZaFxgEvJ/8Q4rMacCoXmNDz9ptU7STW8JzpiE1l6sK5Qtpc
-1E7CKauRkOst9sNygxXO7SU3BI/LedD5h+pYDob0inSF87CR4Pz39KDMcqtUp7+7
-rR9lw8Gbxz90tGZe67gQ2JwY1YTtg3idCgG0qwNEuu+Jm0yxjTHg50+1rHbXpGa8
-VwV4u90yqIiqfhruAT3IJEK3T0qd+g1GS4TzspXSx7/wekEPou0uKZQbRA3AuvXR
-SaOr8bnfCW/A+FXfrb9T2IP8TEZi4a86wBXxJbQECQuuWsBJ3QDrW368gq1BXxy/
-Q1n/EZlOamk3St56m91gUIWWxkGjWg==
-=oWZ1
------END PGP SIGNATURE-----
-
---Sig_/JVAmzB6om6HkpojjuskFSzT--

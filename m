@@ -2,40 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710395AFA87
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F585AFA5B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiIGDUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 23:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S229658AbiIGDCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 23:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiIGDUE (ORCPT
+        with ESMTP id S229437AbiIGDCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:20:04 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D743FA00
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 20:20:01 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7C8B61A0365;
-        Wed,  7 Sep 2022 05:20:00 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4F19A1A03B2;
-        Wed,  7 Sep 2022 05:20:00 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D24CE180031F;
-        Wed,  7 Sep 2022 11:19:58 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: fsl_asrc: Add initialization finishing check in runtime resume
-Date:   Wed,  7 Sep 2022 11:01:55 +0800
-Message-Id: <1662519715-21891-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 6 Sep 2022 23:02:39 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC083056;
+        Tue,  6 Sep 2022 20:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=3Tp5ZhNYXm0i/DPFn+aAH7H47byqpVrpKeYl5Ch2pN8=; b=Ol9g3wUgd4tK8mxRwHC7DTcVYt
+        4yvOSlYjNIz5eBiHUWvBpB1GTWf+sBAo63Ye9T7gTcOmHvcYovJDkMfglnw4sf3+UYJ1UE3cN8qvk
+        3t91Wfb6zAD3V+eKmN5ygcXwzu9gHQU+jHiP/nzkgLsjHR4qI/3Gok7bq5Z3OuGxUyiPEKTMykCup
+        PsonLRiEAUqqJrtyAsYHNoCqxC7QhbZo8szZXQyqrG3zgD36q8g5mI6UpcjpfPDRHxjX+Z6/MFz7C
+        MpD/M/wHpbHseyBXSxeT50nxeuesW4+6JOWNhRactFNIsS2f8gZUfYD+RSJZ3Rex4L2VRucxQVUlN
+        12/4FRwg==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVlKN-001pdO-MJ; Wed, 07 Sep 2022 03:02:11 +0000
+Message-ID: <712da429-6d0d-325f-1c53-39326faa2d41@infradead.org>
+Date:   Tue, 6 Sep 2022 20:02:10 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2] crypto: aspeed: fix format unexpected build warning
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Neal Liu <neal_liu@aspeedtech.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        BMC-SW@aspeedtech.com, kernel test robot <lkp@intel.com>
+References: <20220905052449.1830669-1-neal_liu@aspeedtech.com>
+ <Yxf+W/mJvnSKzQgM@gondor.apana.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Yxf+W/mJvnSKzQgM@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,82 +59,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the initialization is not finished, then filling input data to
-the FIFO may fail. So it is better to add initialization finishing
-check in the runtime resume for suspend & resume case.
 
-And consider the case of three instances working in parallel,
-increase the retry times to 50 for more initialization time.
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
-changes in v2:
-- update comments.
+On 9/6/22 19:13, Herbert Xu wrote:
+> On Mon, Sep 05, 2022 at 01:24:49PM +0800, Neal Liu wrote:
+>>
+>> @@ -324,7 +324,7 @@ static int aspeed_hace_ahash_trigger(struct aspeed_hace_dev *hace_dev,
+>>  	struct ahash_request *req = hash_engine->req;
+>>  	struct aspeed_sham_reqctx *rctx = ahash_request_ctx(req);
+>>  
+>> -	AHASH_DBG(hace_dev, "src_dma:0x%x, digest_dma:0x%x, length:0x%x\n",
+>> +	AHASH_DBG(hace_dev, "src_dma:%zu, digest_dma:%zu, length:%zu\n",
+>>  		  hash_engine->src_dma, hash_engine->digest_dma,
+>>  		  hash_engine->src_length);
+> 
+> Shouldn't we use %pad instead of %zu for dma_addr_t (you'll also
+> need to pass in a dma_addr_t pointer instead of the value)?
 
- sound/soc/fsl/fsl_asrc.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+That sounds correct.
+I only looked at the size_t parts...
 
-diff --git a/sound/soc/fsl/fsl_asrc.c b/sound/soc/fsl/fsl_asrc.c
-index aa5edf32d988..b394b762025d 100644
---- a/sound/soc/fsl/fsl_asrc.c
-+++ b/sound/soc/fsl/fsl_asrc.c
-@@ -20,6 +20,7 @@
- 
- #define IDEAL_RATIO_DECIMAL_DEPTH 26
- #define DIVIDER_NUM  64
-+#define INIT_TRY_NUM 50
- 
- #define pair_err(fmt, ...) \
- 	dev_err(&asrc->pdev->dev, "Pair %c: " fmt, 'A' + index, ##__VA_ARGS__)
-@@ -579,7 +580,7 @@ static void fsl_asrc_start_pair(struct fsl_asrc_pair *pair)
- {
- 	struct fsl_asrc *asrc = pair->asrc;
- 	enum asrc_pair_index index = pair->index;
--	int reg, retry = 10, i;
-+	int reg, retry = INIT_TRY_NUM, i;
- 
- 	/* Enable the current pair */
- 	regmap_update_bits(asrc->regmap, REG_ASRCTR,
-@@ -592,6 +593,10 @@ static void fsl_asrc_start_pair(struct fsl_asrc_pair *pair)
- 		reg &= ASRCFG_INIRQi_MASK(index);
- 	} while (!reg && --retry);
- 
-+	/* NOTE: Doesn't treat initialization timeout as error */
-+	if (!retry)
-+		dev_warn(&asrc->pdev->dev, "initialization isn't finished\n");
-+
- 	/* Make the input fifo to ASRC STALL level */
- 	regmap_read(asrc->regmap, REG_ASRCNCR, &reg);
- 	for (i = 0; i < pair->channels * 4; i++)
-@@ -1257,6 +1262,7 @@ static int fsl_asrc_runtime_resume(struct device *dev)
- {
- 	struct fsl_asrc *asrc = dev_get_drvdata(dev);
- 	struct fsl_asrc_priv *asrc_priv = asrc->private;
-+	int reg, retry = INIT_TRY_NUM;
- 	int i, ret;
- 	u32 asrctr;
- 
-@@ -1295,6 +1301,20 @@ static int fsl_asrc_runtime_resume(struct device *dev)
- 	regmap_update_bits(asrc->regmap, REG_ASRCTR,
- 			   ASRCTR_ASRCEi_ALL_MASK, asrctr);
- 
-+	/* Wait for status of initialization for every enabled pairs */
-+	do {
-+		udelay(5);
-+		regmap_read(asrc->regmap, REG_ASRCFG, &reg);
-+		reg = (reg >> ASRCFG_INIRQi_SHIFT(0)) & 0x7;
-+	} while ((reg != ((asrctr >> ASRCTR_ASRCEi_SHIFT(0)) & 0x7)) && --retry);
-+
-+	/*
-+	 * NOTE: Doesn't treat initialization timeout as error
-+	 * Some of pair maybe success, then still can continue.
-+	 */
-+	if (!retry)
-+		dev_warn(dev, "initialization isn't finished\n");
-+
- 	return 0;
- 
- disable_asrck_clk:
 -- 
-2.34.1
-
+~Randy

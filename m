@@ -2,185 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E1E5AFD9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DD05AFD9E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiIGHe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S229909AbiIGHfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiIGHeM (ORCPT
+        with ESMTP id S229895AbiIGHfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:34:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F6BA6ADB
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:34:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 7 Sep 2022 03:35:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEFC5F98D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:35:18 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2876NbP8026200;
+        Wed, 7 Sep 2022 07:35:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=WPWMtIvGpQnxPLV6mOT1LP/qsbfR3oGYV9JqlZPkNx4=;
+ b=X9sMmUXbqNAOAk31d7JkgeVPafmELhngilZrcrH6ZI5EQN1gEsggXdoe+SJVeAisg3Ii
+ h4rPuDcR+d9Lk51oujUHPp0l63W+DqJ3SM5FC+k0j/gmZo1JSv+cYqYlVK/Nbt5VeiHM
+ /DWYmMdZPwPjfuXJ7kxigsax7C2hnMvzUT3adzbyLrl5TJjl4WlV9P/SmhuHd3udHDe9
+ 5c0dLkP5JqyaQMgz2xQPNBvtgZEAfBXMViDxwBfbLDezeG6EN+73I211spaqu07vpvu/
+ B6cUMX7xB3oejYux7WsWvV79CRj0rMnO0V04yWmq2Zw9yTmY+Cbwqazqs8Lm6OaMMEux LA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jep08a0wp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 07:35:07 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2877RRLt031889;
+        Wed, 7 Sep 2022 07:35:07 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jep08a0tj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 07:35:06 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2877KO7q002396;
+        Wed, 7 Sep 2022 07:35:04 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3jbxj8khj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 07:35:04 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2877Z2EN35520938
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Sep 2022 07:35:02 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 002BFAE045;
+        Wed,  7 Sep 2022 07:35:02 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E4ACAE055;
+        Wed,  7 Sep 2022 07:35:01 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Sep 2022 07:35:01 +0000 (GMT)
+Received: from intelligence.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D706033AF0;
-        Wed,  7 Sep 2022 07:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662536046; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qrgqRLKYqzJy/2FZojSUcL2Jcc7L3jihwjPqjEwMUeI=;
-        b=mfZsiae/A5spmWgfD/SGHmUdbqeUVjGAIMDqfDaWpl8bcnkLc+D+sxyMcI/AH6wtieoRdr
-        SegfLVtDCoFLO/YY6pZ/zX43nczWK2uEbzaL/JkT/da6O3MwIYeUEur0zsinnj1grpObgD
-        76rvLCkmRzEwHmujlzV64O7biMrvLH8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662536046;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qrgqRLKYqzJy/2FZojSUcL2Jcc7L3jihwjPqjEwMUeI=;
-        b=W/il+N90dpDKCgw70hJTc4Odl3/FLXcwYFSWpqVa68xrr1Y0X/MLtTUjeHRH0bsbgfR7pr
-        P24JjLqINQXUsqCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEBFC13A66;
-        Wed,  7 Sep 2022 07:34:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DX19LW5JGGPofAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 07 Sep 2022 07:34:06 +0000
-Message-ID: <c07b50fa-1741-0be8-a811-30208a92f521@suse.de>
-Date:   Wed, 7 Sep 2022 09:34:06 +0200
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id EB5CD600A6;
+        Wed,  7 Sep 2022 17:34:50 +1000 (AEST)
+Message-ID: <744e04b545ed8f9a87c9728041169bb9b55edfad.camel@linux.ibm.com>
+Subject: Re: [PATCH linux-next] ocxl: Remove the unneeded result variable
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     cgel.zte@gmail.com, fbarrat@linux.ibm.com
+Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Date:   Wed, 07 Sep 2022 17:34:43 +1000
+In-Reply-To: <20220906072006.337099-1-ye.xingchen@zte.com.cn>
+References: <20220906072006.337099-1-ye.xingchen@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 11/11] drm/udl: Sync pending URBs at the end of suspend
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220906073951.2085-1-tiwai@suse.de>
- <20220906073951.2085-12-tiwai@suse.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220906073951.2085-12-tiwai@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------xAzix0aZwShacW15M00GqG08"
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mieZ9fv_Ehh8vtpj8Z4aaVLoScdr0XZm
+X-Proofpoint-ORIG-GUID: 5Yms27kvnICqZOSTtzg2GeVTPJ4Tb07s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_04,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 impostorscore=0 suspectscore=0
+ clxscore=1011 bulkscore=0 malwarescore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=815 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070031
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------xAzix0aZwShacW15M00GqG08
-Content-Type: multipart/mixed; boundary="------------U2x83S9QmW0V2D7a7GHadken";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-ID: <c07b50fa-1741-0be8-a811-30208a92f521@suse.de>
-Subject: Re: [PATCH v2 11/11] drm/udl: Sync pending URBs at the end of suspend
-References: <20220906073951.2085-1-tiwai@suse.de>
- <20220906073951.2085-12-tiwai@suse.de>
-In-Reply-To: <20220906073951.2085-12-tiwai@suse.de>
+On Tue, 2022-09-06 at 07:20 +0000, cgel.zte@gmail.com wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Return the value opal_npu_spa_clear_cache() directly instead of
+> storing
+> it in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
---------------U2x83S9QmW0V2D7a7GHadken
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
 
-SGkNCg0KQW0gMDYuMDkuMjIgdW0gMDk6Mzkgc2NocmllYiBUYWthc2hpIEl3YWk6DQo+IEl0
-J3MgYmV0dGVyIHRvIHBlcmZvcm0gdGhlIHN5bmMgYXQgdGhlIHZlcnkgbGFzdCBvZiB0aGUg
-c3VzcGVuZA0KPiBpbnN0ZWFkIG9mIHRoZSBwaXBlLWRpc2FibGUgZnVuY3Rpb24sIHNvIHRo
-YXQgd2UgY2FuIGNhdGNoIGFsbCBwZW5kaW5nDQo+IFVSQnMgKGlmIGFueSkuDQo+IA0KPiBX
-aGlsZSB3ZSdyZSBhdCBpdCwgZHJvcCB0aGUgZXJyb3IgY29kZSBmcm9tIHVkbF9zeW5jX3Bl
-bmRpbmdfdXJiKCkNCj4gc2luY2Ugd2UgYmFzaWNhbGx5IGlnbm9yZSBpdDsgaW5zdGVhZCwg
-Z2l2ZSBhIGNsZWFyIGVycm9yIG1lc3NhZ2UNCj4gaW5kaWNhdGluZyBhIHByb2JsZW0uDQo+
-IA0KPiBTaWduZWQtb2ZmLWJ5OiBUYWthc2hpIEl3YWkgPHRpd2FpQHN1c2UuZGU+DQoNCkFj
-a2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAt
-LS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuYyAgICAgfCA4ICsrKysrKyst
-DQo+ICAgZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmggICAgIHwgMiArLQ0KPiAgIGRy
-aXZlcnMvZ3B1L2RybS91ZGwvdWRsX21haW4uYyAgICB8IDYgKystLS0tDQo+ICAgZHJpdmVy
-cy9ncHUvZHJtL3VkbC91ZGxfbW9kZXNldC5jIHwgMiAtLQ0KPiAgIDQgZmlsZXMgY2hhbmdl
-ZCwgMTAgaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuYyBiL2RyaXZlcnMvZ3B1L2RybS91ZGwv
-dWRsX2Rydi5jDQo+IGluZGV4IDBiYTg4ZTU0NzJhOS4uOTFlZmZkY2VmYjZkIDEwMDY0NA0K
-PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuYw0KPiArKysgYi9kcml2ZXJz
-L2dwdS9kcm0vdWRsL3VkbF9kcnYuYw0KPiBAQCAtMjEsOCArMjEsMTQgQEAgc3RhdGljIGlu
-dCB1ZGxfdXNiX3N1c3BlbmQoc3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGVyZmFjZSwNCj4g
-ICAJCQkgICBwbV9tZXNzYWdlX3QgbWVzc2FnZSkNCj4gICB7DQo+ICAgCXN0cnVjdCBkcm1f
-ZGV2aWNlICpkZXYgPSB1c2JfZ2V0X2ludGZkYXRhKGludGVyZmFjZSk7DQo+ICsJaW50IHJl
-dDsNCj4gICANCj4gLQlyZXR1cm4gZHJtX21vZGVfY29uZmlnX2hlbHBlcl9zdXNwZW5kKGRl
-dik7DQo+ICsJcmV0ID0gZHJtX21vZGVfY29uZmlnX2hlbHBlcl9zdXNwZW5kKGRldik7DQo+
-ICsJaWYgKHJldCkNCj4gKwkJcmV0dXJuIHJldDsNCj4gKw0KPiArCXVkbF9zeW5jX3BlbmRp
-bmdfdXJicyhkZXYpOw0KPiArCXJldHVybiAwOw0KPiAgIH0NCj4gICANCj4gICBzdGF0aWMg
-aW50IHVkbF91c2JfcmVzdW1lKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRlcmZhY2UpDQo+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuaCBiL2RyaXZlcnMv
-Z3B1L2RybS91ZGwvdWRsX2Rydi5oDQo+IGluZGV4IGQ5NDM2ODRiNWJiYi4uYjRjYzdjYzU2
-OGM3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuaA0KPiAr
-KysgYi9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuaA0KPiBAQCAtNzcsNyArNzcsNyBA
-QCBzdHJ1Y3QgZHJtX2Nvbm5lY3RvciAqdWRsX2Nvbm5lY3Rvcl9pbml0KHN0cnVjdCBkcm1f
-ZGV2aWNlICpkZXYpOw0KPiAgIHN0cnVjdCB1cmIgKnVkbF9nZXRfdXJiKHN0cnVjdCBkcm1f
-ZGV2aWNlICpkZXYpOw0KPiAgIA0KPiAgIGludCB1ZGxfc3VibWl0X3VyYihzdHJ1Y3QgZHJt
-X2RldmljZSAqZGV2LCBzdHJ1Y3QgdXJiICp1cmIsIHNpemVfdCBsZW4pOw0KPiAtaW50IHVk
-bF9zeW5jX3BlbmRpbmdfdXJicyhzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KTsNCj4gK3ZvaWQg
-dWRsX3N5bmNfcGVuZGluZ191cmJzKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpOw0KPiAgIHZv
-aWQgdWRsX3VyYl9jb21wbGV0aW9uKHN0cnVjdCB1cmIgKnVyYik7DQo+ICAgDQo+ICAgaW50
-IHVkbF9pbml0KHN0cnVjdCB1ZGxfZGV2aWNlICp1ZGwpOw0KPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9ncHUvZHJtL3VkbC91ZGxfbWFpbi5jIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxf
-bWFpbi5jDQo+IGluZGV4IDgwOGE1YWI1ZTE0ZS4uNDQyMDgwZmExMDYxIDEwMDY0NA0KPiAt
-LS0gYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMNCj4gKysrIGIvZHJpdmVycy9n
-cHUvZHJtL3VkbC91ZGxfbWFpbi5jDQo+IEBAIC0yOTAsMTAgKzI5MCw5IEBAIGludCB1ZGxf
-c3VibWl0X3VyYihzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LCBzdHJ1Y3QgdXJiICp1cmIsIHNp
-emVfdCBsZW4pDQo+ICAgfQ0KPiAgIA0KPiAgIC8qIHdhaXQgdW50aWwgYWxsIHBlbmRpbmcg
-VVJCcyBoYXZlIGJlZW4gcHJvY2Vzc2VkICovDQo+IC1pbnQgdWRsX3N5bmNfcGVuZGluZ191
-cmJzKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpDQo+ICt2b2lkIHVkbF9zeW5jX3BlbmRpbmdf
-dXJicyhzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPiAgIHsNCj4gICAJc3RydWN0IHVkbF9k
-ZXZpY2UgKnVkbCA9IHRvX3VkbChkZXYpOw0KPiAtCWludCByZXQgPSAwOw0KPiAgIA0KPiAg
-IAlzcGluX2xvY2tfaXJxKCZ1ZGwtPnVyYnMubG9jayk7DQo+ICAgCS8qIDIgc2Vjb25kcyBh
-cyBhIHNhbmUgdGltZW91dCAqLw0KPiBAQCAtMzAxLDkgKzMwMCw4IEBAIGludCB1ZGxfc3lu
-Y19wZW5kaW5nX3VyYnMoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4gICAJCQkJCSB1ZGwt
-PnVyYnMuYXZhaWxhYmxlID09IHVkbC0+dXJicy5jb3VudCwNCj4gICAJCQkJCSB1ZGwtPnVy
-YnMubG9jaywNCj4gICAJCQkJCSBtc2Vjc190b19qaWZmaWVzKDIwMDApKSkNCj4gLQkJcmV0
-ID0gLUVUSU1FRE9VVDsNCj4gKwkJZHJtX2VycihkZXYsICJUaW1lb3V0IGZvciBzeW5jaW5n
-IHBlbmRpbmcgVVJCc1xuIik7DQo+ICAgCXNwaW5fdW5sb2NrX2lycSgmdWRsLT51cmJzLmxv
-Y2spOw0KPiAtCXJldHVybiByZXQ7DQo+ICAgfQ0KPiAgIA0KPiAgIGludCB1ZGxfaW5pdChz
-dHJ1Y3QgdWRsX2RldmljZSAqdWRsKQ0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
-L3VkbC91ZGxfbW9kZXNldC5jIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbW9kZXNldC5j
-DQo+IGluZGV4IDk4OTZjMTZjNzRmNS4uYzUwNmZmZjhmMGM0IDEwMDY0NA0KPiAtLS0gYS9k
-cml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tb2Rlc2V0LmMNCj4gKysrIGIvZHJpdmVycy9ncHUv
-ZHJtL3VkbC91ZGxfbW9kZXNldC5jDQo+IEBAIC0zODMsOCArMzgzLDYgQEAgdWRsX3NpbXBs
-ZV9kaXNwbGF5X3BpcGVfZGlzYWJsZShzdHJ1Y3QgZHJtX3NpbXBsZV9kaXNwbGF5X3BpcGUg
-KnBpcGUpDQo+ICAgCWJ1ZiA9IHVkbF9kdW1teV9yZW5kZXIoYnVmKTsNCj4gICANCj4gICAJ
-dWRsX3N1Ym1pdF91cmIoZGV2LCB1cmIsIGJ1ZiAtIChjaGFyICopdXJiLT50cmFuc2Zlcl9i
-dWZmZXIpOw0KPiAtDQo+IC0JdWRsX3N5bmNfcGVuZGluZ191cmJzKGRldik7DQo+ICAgfQ0K
-PiAgIA0KPiAgIHN0YXRpYyB2b2lkDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBo
-aWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkg
-R21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2
-ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+> ---
+>  arch/powerpc/platforms/powernv/ocxl.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/arch/powerpc/platforms/powernv/ocxl.c
+> b/arch/powerpc/platforms/powernv/ocxl.c
+> index 27c936075031..629067781cec 100644
+> --- a/arch/powerpc/platforms/powernv/ocxl.c
+> +++ b/arch/powerpc/platforms/powernv/ocxl.c
+> @@ -478,10 +478,8 @@ EXPORT_SYMBOL_GPL(pnv_ocxl_spa_release);
+>  int pnv_ocxl_spa_remove_pe_from_cache(void *platform_data, int
+> pe_handle)
+>  {
+>         struct spa_data *data = (struct spa_data *) platform_data;
+> -       int rc;
+>  
+> -       rc = opal_npu_spa_clear_cache(data->phb_opal_id, data->bdfn,
+> pe_handle);
+> -       return rc;
+> +       return opal_npu_spa_clear_cache(data->phb_opal_id, data-
+> >bdfn, pe_handle);
+>  }
+>  EXPORT_SYMBOL_GPL(pnv_ocxl_spa_remove_pe_from_cache);
+>  
 
---------------U2x83S9QmW0V2D7a7GHadken--
+-- 
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
 
---------------xAzix0aZwShacW15M00GqG08
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMYSW4FAwAAAAAACgkQlh/E3EQov+Dd
-XBAAlIRbxkQqU0nCslk4qFblynqSValitIE5CcRw+deDThnGrJoxsXSbLE/GQprMs7rbXgtqq+pJ
-Z4y6mXb86fyGC+js89LB1EGGaIYAYxQgJ3nNKUfa9ooIQpG3W3cqK09NvuAoDmFlbcEU9t6dX1u9
-/nBT407XEOuBhPx0LfRkkSkTNBe/Uq5Pgz2AUQ8wdhjB2FcIyvnAMsCAhJfPRZvKvp8l7a0bwP/J
-kmwUHTnuMf7YwOgufbP8jiLLUDdMhbgj+9xB5xSCYKxlNHgaJjBFn6bHuLSRBir670DE45JzuXAd
-pk30wezNrfIGuUVl4EV/33vTN/ITefgDXGt1j1/JDFF7E0bydseb+RYMEMrCeAjFP8RqRpFshygU
-4V1ONCMirQGTykJNU/ybr4vQ4z3hkOjfai6xVb/8x8MEpRkDMO7wiJZT1lhVqj8NSa9q1CUfg8iO
-Yr/lr/owMYxClJR1/hkK8TQg9zwm9GdVcoyqCDPJVrJ1I8TUPZjyD8+ImFbw13gTxBOrHKQoDHy9
-BmXXJz8MG5tHQ7bxPku4XX6vrmoj6vy9h4AWZoe6kfd9jDaOhMQzWzJx63ATOOf7OhTBX9qrhJxq
-HYA40BNEahYa3EGabFX+45P+K4Bq/XASo81Xm6mTS6xSrxRrrxST8URWbIL6iGVFGBrtgKosbmOZ
-ccY=
-=CcbM
------END PGP SIGNATURE-----
-
---------------xAzix0aZwShacW15M00GqG08--

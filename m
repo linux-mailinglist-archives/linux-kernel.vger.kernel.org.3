@@ -2,187 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388D75AF944
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7665AF945
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiIGA6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S229664AbiIGA6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIGA57 (ORCPT
+        with ESMTP id S229651AbiIGA6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:57:59 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C214797D6B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662512276; x=1694048276;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=o/MCaxqHGLZgzRxhERKBKEPSeCsgBelZjOxaZKLu3vs=;
-  b=T0DU8id7TEmmjnvoOyI6g3y/OwFzCCQH/3HnjPqODRTAZ+L5RMvfHm5x
-   zfC+b7twCYp+svriqcynbggPswAUpvd4Ji3ba0dsvn0OsaTK8NM/A42G2
-   297Mkt8rF2lb+Dn1PsFQtjohCKs65PzL4VnXvlKYMDMjwt9uS7Z9jVMOo
-   3A2DYNc9fSwNTqymBtPSTOvCZ9RX/0pZt3h1Stp+TKr3FMvUDgrrw0BdV
-   8lut9cHhdtYQt+yMNiWup5lVEVlnSbmT7fr9nhXXPa6sWcNmA5RspTIpi
-   iVTjEEZVqomNP7Eqt7bPx1zLyOrJONhGMJl1BRjHce7vNezEfkWV2dkm/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322928535"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="322928535"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 17:57:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="756573422"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 17:57:55 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVjO6-0005sW-2M;
-        Wed, 07 Sep 2022 00:57:54 +0000
-Date:   Wed, 07 Sep 2022 08:57:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/core] BUILD SUCCESS
- ee9db0e14b0575aa827579dc2471a29ec5fc6877
-Message-ID: <6317ec7f.5c4DZvUQakcyAZ5o%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 6 Sep 2022 20:58:31 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB08979F1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:58:30 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id f131so3745568ybf.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=UjaiWINnbTXgT+URtVXx1fGemLW7KAjAuDjBEcKQcpw=;
+        b=EAkdAoJF93b/9wVcZWS/8Z33Wh8Eq7xG8wCxKPHNm0Lldc4C5bChxoQDfIHIPRDYax
+         E+7oO+L2O6scu7V+5fNLALkC2gSW3KtuP3tfNpYEXGlOWDD2sTiTX6OWgeeJAcpYfcqc
+         A7KFsvQIqZJC3pSoupGeVX3b2h2lXfNqXDDwmhewWl9SZYpSIQb+K3ijuHEHBKnlI5iN
+         5YTs4xJNgeAVeEvcjs3kD0qLdfQNKm1QP8zoW0R448XpFNwDG9J12DbqDl3vZ1zKXm72
+         +HSPLoCsmPAhUhpPj99b2yJIbwOsGllYC7rvCmcvKG+KcIcU1HoAeaosy/7TBlwl5auu
+         e43Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=UjaiWINnbTXgT+URtVXx1fGemLW7KAjAuDjBEcKQcpw=;
+        b=rDVieBXGkaeg8o5O0ZEBygCGaIuhqe4woJZtu4coVKcZQP5PlSMLWr4ojdxwmO7Q+h
+         fk8lV0u7tyaESakWqBMnKCPxb4AEu/wHrGnbpbjlxGHkb5fgIMOHTT8bCm5dt9H7apV9
+         yoI2Nk/QVreNsY6CwUyFau99cp/EqFbxt5pvsnKqvWDQtE/pMy1EqSEu7PaAs3gXsrtw
+         E/EH21x1OVxzczNCZJNVS2SW7SGxCpV1E4z5T/NiYXN0WXeKc6c6BJwm6iDm3NPcVLYr
+         Tlhe2AtUin7YDDY/fSygF6sh2j+5fcv7pn0Y6NniaBsbPgszIw8fwZ5MPXZbLI4BLDoO
+         fTPg==
+X-Gm-Message-State: ACgBeo3PT8JzeJeXcFdyJKM1S/Y87gQd8T6pflBbNf/PXZS4k5eZFp9c
+        q8/smXQaUojTg4jQGpqjpEVvbD9WHDA2v7HgprGXBQ==
+X-Google-Smtp-Source: AA6agR7/aESfD9/NDPsDFtQ7YKYMRNuKLSwT1FUjw+G1bf9VJ00olfdLIYvwBbmvvuSYroc7vvTiDT6ZBY0OsHmp1Qc=
+X-Received: by 2002:a25:9781:0:b0:6a9:561a:c143 with SMTP id
+ i1-20020a259781000000b006a9561ac143mr995480ybo.59.1662512309570; Tue, 06 Sep
+ 2022 17:58:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-20-surenb@google.com>
+ <YxeiB2la/9fZEzLO@xz-m1.local> <CAJuCfpHkjHAAmKAJH=cxhFmwMawUDQJccwKa8k=xXNZZ1knT7g@mail.gmail.com>
+ <YxesBqZ+L+oeQv5e@xz-m1.local>
+In-Reply-To: <YxesBqZ+L+oeQv5e@xz-m1.local>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 6 Sep 2022 17:58:18 -0700
+Message-ID: <CAJuCfpFpOT3KOBCjcnTo9D3AWq_GT9bKNyQ4xcwLJh1UPF6FFA@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 19/28] mm: disallow do_swap_page to handle page
+ faults under VMA lock
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michel Lespinasse <michel@lespinasse.org>,
+        Jerome Glisse <jglisse@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Laurent Dufour <laurent.dufour@fr.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
+        Hugh Dickins <hughd@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Minchan Kim <minchan@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
-branch HEAD: ee9db0e14b0575aa827579dc2471a29ec5fc6877  perf: Use sample_flags for txn
+On Tue, Sep 6, 2022 at 1:22 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Tue, Sep 06, 2022 at 01:08:10PM -0700, Suren Baghdasaryan wrote:
+> > On Tue, Sep 6, 2022 at 12:39 PM Peter Xu <peterx@redhat.com> wrote:
+> > >
+> > > On Thu, Sep 01, 2022 at 10:35:07AM -0700, Suren Baghdasaryan wrote:
+> > > > Due to the possibility of do_swap_page dropping mmap_lock, abort fault
+> > > > handling under VMA lock and retry holding mmap_lock. This can be handled
+> > > > more gracefully in the future.
+> > > >
+> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > ---
+> > > >  mm/memory.c | 5 +++++
+> > > >  1 file changed, 5 insertions(+)
+> > > >
+> > > > diff --git a/mm/memory.c b/mm/memory.c
+> > > > index 9ac9944e8c62..29d2f49f922a 100644
+> > > > --- a/mm/memory.c
+> > > > +++ b/mm/memory.c
+> > > > @@ -3738,6 +3738,11 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> > > >       vm_fault_t ret = 0;
+> > > >       void *shadow = NULL;
+> > > >
+> > > > +     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+> > > > +             ret = VM_FAULT_RETRY;
+> > > > +             goto out;
+> > > > +     }
+> > > > +
+> > >
+> > > May want to fail early similarly for handle_userfault() too for similar
+> > > reason.  Thanks,
+> >
+> > I wasn't aware of a similar issue there. Will have a closer look. Thanks!
+>
+> Sure.
+>
+> Just in case this would be anything helpful - handle_userfault() will both
+> assert at the entry (mmap_assert_locked) and will in most cases release
+> read lock along the way when waiting for page fault resolutions.
+>
+> And userfaultfd should work on anonymous memory for either missing mode or
+> write protect mode.
 
-elapsed time: 892m
+Got it. Thanks for the explanation. It definitely helps!
 
-configs tested: 105
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-arc                  randconfig-r043-20220906
-m68k                             allyesconfig
-riscv                randconfig-r042-20220906
-m68k                             allmodconfig
-s390                 randconfig-r044-20220906
-powerpc                          allmodconfig
-x86_64                              defconfig
-x86_64                        randconfig-a013
-mips                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a011
-x86_64                               rhel-8.3
-powerpc                           allnoconfig
-sh                               allmodconfig
-x86_64                           allyesconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                        randconfig-a015
-i386                          randconfig-a005
-x86_64                        randconfig-a002
-arm                                 defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-i386                             allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a014
-i386                          randconfig-a012
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a016
-arm                              allyesconfig
-arm64                            allyesconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-nios2                         10m50_defconfig
-arc                          axs103_defconfig
-xtensa                          iss_defconfig
-sh                          r7780mp_defconfig
-sparc                       sparc64_defconfig
-parisc64                            defconfig
-powerpc                 canyonlands_defconfig
-arm                           viper_defconfig
-powerpc                    adder875_defconfig
-sh                        dreamcast_defconfig
-sh                   sh7770_generic_defconfig
-sh                          lboxre2_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-powerpc                mpc7448_hpc2_defconfig
-alpha                               defconfig
-arm                           sama5_defconfig
-powerpc                     tqm8548_defconfig
-sh                            titan_defconfig
-sh                     sh7710voipgw_defconfig
-i386                          randconfig-c001
-csky                             alldefconfig
-m68k                                defconfig
-powerpc                     pq2fads_defconfig
-arm                          iop32x_defconfig
-mips                           ip32_defconfig
-sh                           se7750_defconfig
-sparc64                          alldefconfig
-arm                             ezx_defconfig
-sh                          rsk7264_defconfig
-m68k                        mvme16x_defconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                    amigaone_defconfig
-arm                        cerfcube_defconfig
-sparc                            allyesconfig
-sh                           se7705_defconfig
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220906
-hexagon              randconfig-r045-20220906
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-x86_64                        randconfig-a016
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-i386                          randconfig-a004
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-powerpc                     akebono_defconfig
-powerpc                   lite5200b_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                     mpc512x_defconfig
-arm                           spitz_defconfig
-arm                       spear13xx_defconfig
-mips                      malta_kvm_defconfig
-arm                    vt8500_v6_v7_defconfig
-arm                     davinci_all_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

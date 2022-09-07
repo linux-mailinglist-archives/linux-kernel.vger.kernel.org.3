@@ -2,65 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8935B09FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B635B0A68
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiIGQW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        id S230132AbiIGQmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIGQWy (ORCPT
+        with ESMTP id S230371AbiIGQmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:22:54 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4D5481CF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:22:53 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id b2so10836676qkh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nekiICsot4RR9hlxDU0J5imMIsaSvcgmKZwZKGl6pNA=;
-        b=JcFqAmqsQUkw7LgrQ4hUzAYMoKZIjWv5PCiszH2shugD/deCxUNFP9dASl4i126T3u
-         2HMZks0zHvY46rfLovkHzV+LqA/f1YERXnYg1r7XNfoflpnt+N+2v0BE7/0xpGn+Gbop
-         EhNcDbm8m5Zc27vGbrdR1ssMvK6NGzhXHzZg+osmX+cagrT9ibXmNeiw71xFctIDp8tx
-         a/8yz5JXwZlFG4okD7eTYVREq2Esdi4cS5DC9tnDKS8+pVwrlRsLxrZPuuRyF3RlMlAb
-         B/qESnh8+xTmrLlYsG28sbNBX6G2fVhURAF9sWTVWuDktdBYKBS65+XBm52exkgUlbUe
-         ZGhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nekiICsot4RR9hlxDU0J5imMIsaSvcgmKZwZKGl6pNA=;
-        b=W2XjlfSml9aAmKzXFzTfYDDGoU31biuVXkwHilG4CLTy7Xzc4x44ElKQutahgSoQbr
-         ezjNdyyfg5FoN3rLHcgC/Jkk2t8I4Jnabyw6V1DbeKB1VtEoZz1vxwz/TPHCom3Ikt9r
-         g4ejE9iYdS1ckvcQ4Ay5LNGom+FAeIaMTvCSUFULLNneVRtiKZzvQwUrUkkZ7MJhtSjk
-         t1gDb8vA/jqQoOOwn8qdZQi/wxIjBv2ILWegPr5/6EEt9SLuzty0yVJ0YKCTwy6PEYCe
-         ZE7n9n4M6L0gZSwl/kU+clk6TZFhoozltzsEpP1KbnukT2EG3+E6XgSiMmBzDm2NZoSW
-         pdnA==
-X-Gm-Message-State: ACgBeo2tPVuRm0s1+tI5eSrFs2d5DV6KtBstBXQEi5ZcnlxFFAtax/Ui
-        s5O6MBM6m7zujeh1wmkzxX8uN8mjqjt6UOPZ9gaHcLDJQig=
-X-Google-Smtp-Source: AA6agR6F5XDirhoLKYmTdzkheCE6ubmPKsfUatGv+lYDS62N8U0diNRJ9KEz1E+by0oRoJWCavd2wmzfPwVW91rVVBU=
-X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
- v17-20020ae9e311000000b006bae711fb27mr3355681qkf.320.1662567772754; Wed, 07
- Sep 2022 09:22:52 -0700 (PDT)
+        Wed, 7 Sep 2022 12:42:14 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C030F75494;
+        Wed,  7 Sep 2022 09:41:47 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 1D9AF5C2956;
+        Wed,  7 Sep 2022 16:41:44 +0000 (UTC)
+Received: from pdx1-sub0-mail-a297.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 75A305C1F31;
+        Wed,  7 Sep 2022 16:41:43 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662568903; a=rsa-sha256;
+        cv=none;
+        b=oOmI+mRHBWHBsdyMUw3/ZrDkz3Nk04DF2PuXfl8emYb4plHEWDRuJjepAFId5dtaqfe60k
+        vl6f9n22T4C+wIdFYFOVoWlr3xkpDErSa1DrHt3nzDw9FLf8NpvqsleVl4S+/vUzQlYKbJ
+        faBx3uy2NV+53IQ+xasQln4mWlQ4jYDxe/0jd7fa3j6TCCFZmuuEWy2M79jYsok3niZue1
+        PGONYgP7CN6dC040dJj+agi9lG0Y6+8ns3T/fxtKqhcUWHYtBp0uRCZzkMH+/iFEGS0aGS
+        gUXaUtqEuAtV408aeS6jUzgLSa7GvTycWNiDaxTxzsOcsIESKTHNzBXueTJDcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1662568903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=2wCa/Jt/3D2I+rbeGjg1PPoBnNjJ68RfVRRwxhzeg9s=;
+        b=SqoNYL95AcZJrikt4aFRLGw4mWLAXToI3JoJF25O2Ynd/nI0+v8GW3tdeUXEE1J+3Q3cgf
+        /Z3xJoNmhPk+FhqbqEepeVeRWsL96+B6hbq+45kE9RuTqXTbm4IhY/aGCPNM+4fJwzjbDf
+        ssreFhHF7sCoAmykkGcRR0fW6FV6PwL4SJF6C4AJucq+8D5OTuk3zQymX1W4EfnRuHZfHR
+        yu9AuYTD2praR/4rmTOCPGP9mHwM1Hy1KFxiXfp3SWHPJlJw7OuAWjlYAoON1aqyh8fx01
+        apEggOAGkUHDN9UqG0ykrO4IcqLATy68PcsNV2HjwIL04bktjUZ3dVdChQwxag==
+ARC-Authentication-Results: i=1;
+        rspamd-f776c45b8-xnd69;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Gusty-Fumbling: 7fe0e4a34c79e059_1662568903912_767146359
+X-MC-Loop-Signature: 1662568903912:3198609064
+X-MC-Ingress-Time: 1662568903912
+Received: from pdx1-sub0-mail-a297.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.123.39.217 (trex/6.7.1);
+        Wed, 07 Sep 2022 16:41:43 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a297.dreamhost.com (Postfix) with ESMTPSA id 4MN7Lr5fPNzFW;
+        Wed,  7 Sep 2022 09:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1662568903;
+        bh=2wCa/Jt/3D2I+rbeGjg1PPoBnNjJ68RfVRRwxhzeg9s=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=CxmwPOEIHGF6GhHFwaqiAV0i/CGO0vUy9SrwWioqRLNWsu7UDqUkf/t05zvlw4WId
+         uzHh2WlTA6BLxr5RPUGj6m8BaW58oYsLTnhqe33Ik4Yx2AOvcSIMSY2lMGRTO3yR2e
+         rp5uQcTQhhZc+VXsyx09X2vM2DTxLJd5aC9X5AiU/LaDs4qKtZMCcnERhFVo/20upA
+         D2l5NQEfGVvd/SXUiDTyO5Bzkg+3/QGT/vEDYkAj5vwR3KlCiy+zQBJtASYndOEzkK
+         OFNygZOz+42lYsGEg/VIifEr+LWZ0z3xm31lU5NgSa9Lc3/JIVLZ33bLwpaS9DATj6
+         qYpGmT8WRwpKw==
+Date:   Wed, 7 Sep 2022 09:22:45 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     dan.j.williams@intel.com, x86@kernel.org, nvdimm@lists.linux.dev,
+        linux-cxl@vger.kernel.org, peterz@infradead.org,
+        akpm@linux-foundation.org, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, a.manzanares@samsung.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] memregion: Add arch_flush_memregion() interface
+Message-ID: <20220907162245.5ddexpmibjbanrho@offworld>
+References: <20220829212918.4039240-1-dave@stgolabs.net>
+ <YxjBSxtoav7PQVei@nazgul.tnic>
 MIME-Version: 1.0
-References: <20220907103041.0a88d5c4@endymion.delvare> <CAHp75VdzgWfQ=7nTvYmuxWMaPH0weF=Bzj+AEqsEhyQNeH1XHg@mail.gmail.com>
- <20220907172146.72460eda@endymion.delvare> <CAHp75Vf+PdP2AiLOHYnKUWn5KDgvy+1poBHjHZd0hnJKTsGHtg@mail.gmail.com>
- <20220907180903.5a14d3c4@endymion.delvare>
-In-Reply-To: <20220907180903.5a14d3c4@endymion.delvare>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 7 Sep 2022 19:22:16 +0300
-Message-ID: <CAHp75Ve=cmB-uXcLuQUHWAOLxe-nQ0aeTx93O9B4DkDC8NqHaA@mail.gmail.com>
-Subject: Re: [PATCH] firmware: dmi: Fortify entry point length checks
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YxjBSxtoav7PQVei@nazgul.tnic>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +102,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 7:09 PM Jean Delvare <jdelvare@suse.de> wrote:
-> On Wed, 7 Sep 2022 18:48:03 +0300, Andy Shevchenko wrote:
-> > On Wed, Sep 7, 2022 at 6:21 PM Jean Delvare <jdelvare@suse.de> wrote:
-> > > On Wed, 7 Sep 2022 17:52:10 +0300, Andy Shevchenko wrote:
+On Wed, 07 Sep 2022, Borislav Petkov wrote:
 
-...
+>On Mon, Aug 29, 2022 at 02:29:18PM -0700, Davidlohr Bueso wrote:
+>> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+>> index 1abd5438f126..18463cb704fb 100644
+>> --- a/arch/x86/mm/pat/set_memory.c
+>> +++ b/arch/x86/mm/pat/set_memory.c
+>> @@ -330,6 +330,20 @@ void arch_invalidate_pmem(void *addr, size_t size)
+>>  EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+>>  #endif
+>>
+>> +#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
+>> +bool arch_has_flush_memregion(void)
+>> +{
+>> +	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
+>
+>This looks really weird. Why does this need to care about HV at all?
 
-> > > > "NOTE: This value was incorrectly stated in version 2.1 of this specification as
-> > > > 1Eh. Because of this, there might be version 2.1 implementations that
-> > > > use either the 1Eh or the 1Fh value, but version 2.2 or later
-> > > > implementations must use the 1Fh value."
-> > >
-> > > Good point, so maybe we should accept 0x1E and treat is silently as
-> > > 0x1F (which is what we have been doing implicitly so far) for maximum
-> > > compatibility?
-> >
-> > At least the previous comparison covers this case, if I'm not mistaken.
->
-> Before my proposed change, yes. After my proposed change, no longer.
-> Let's not risk a regression, I'll change the check to:
->
->         if (memcmp(buf, "_SM_", 4) == 0 &&
->             buf[5] >= 30 && buf[5] <= 32 &&
->             dmi_checksum(buf, buf[5])) {
->
-> I'll also add a comment stating why we are allowing length 30.
->
-> Thanks for the valuable feedback,
+So the context here is:
 
-You're welcome! You may add
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-to the resulting patch.
+e2efb6359e62 ("ACPICA: Avoid cache flush inside virtual machines")
 
--- 
-With Best Regards,
-Andy Shevchenko
+>
+>Does that nfit stuff even run in guests?
+
+No, nor does cxl. This was mostly in general a precautionary check such
+that the api is unavailable in VMs.
+
+>
+>> +EXPORT_SYMBOL(arch_has_flush_memregion);
+>
+>...
+>
+>> +EXPORT_SYMBOL(arch_flush_memregion);
+>
+>Why aren't those exports _GPL?
+
+Fine by me.
+
+Thanks,
+Davidlohr

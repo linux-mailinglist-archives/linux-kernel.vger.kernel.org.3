@@ -2,190 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4D95AFB83
+	by mail.lfdr.de (Postfix) with ESMTP id 548DF5AFB84
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiIGFES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S229629AbiIGFEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIGFEQ (ORCPT
+        with ESMTP id S229449AbiIGFEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:04:16 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70075.outbound.protection.outlook.com [40.107.7.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E11B9C1D5;
-        Tue,  6 Sep 2022 22:04:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fJQu1zxp0X33ODnNQ5zFAlx65CWfMQ/wdERDBQXFi/1SGncfBRJjcKM6JPo4IsVbYubsGBb70BOUeJVwhtkf+jahM0CZMflhy23zqM18mZIVCWVR++hjikhYDY2MuIlVK9b39LtDsfYQUaFlyd7H7qZnUj+r9FsUpyFytbzIVIelgZz+y+r5rVmgQAobi+ppf1xF/IPXpQaemFsjCCAWSKKXBZamKkOj3+RRo26ykPTlZIAi8gpmDnCyLrJ+14TMyXG32xbCdXGVI2S3K6ULBE1m3XknZAfii9CMUfbZwIw6I796vLUeuQlig6+/V1Ulaue62BC2LDt7g4MYP2Nn8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n5Ew8V0B9jrsStbdXxCu/YQAcE87XnnF6nSqywplqGU=;
- b=JoLIJdpTItgVd1GdSf/UsVnei7+zFn/YtjHBkM5c/qqL9Gmc5GrQh8gdvX5Jaahst7esNxs3lX5UadBtaxhPXQmw+kBNetqxuqMAZQIWMp6W4Bw9VqRJtwA1yw80iI2vU/sQlGHGc0FblRE/CQnnBOU+gC4hMv2QIuqVYOiGhUV2l7G1fz1hzxQJAX4zBn9Aor4pNujwArqVTe/+L5Lv0Tkyu858OU8G6aFYmgdLjv1ANa9tgLaRAS11VfvqPdAWnb3YMT/Fy1C3PcjeHgB+kT1hn1iuvV7qYjACz1gs91qavdnzmHohbwwwFh4gQeMHPlxwSR01EUK+qYFhyJYaFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n5Ew8V0B9jrsStbdXxCu/YQAcE87XnnF6nSqywplqGU=;
- b=AVjxeLW3nBJhnDBBX1v/mvCJeiKl75Z70yYdMYgU7L6CawVgPi4i0Abxpq+l9vOLDYvmzZCPZaLBz3YfF8HYcKOF8Q/J1GA1nnmc96uRmmVUzbB4pBVWYkT2qrNyU/g849vptv5SSY28582YPbWasVkff9AfLPBlZGfzUXEYoRA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM0PR04MB5284.eurprd04.prod.outlook.com (2603:10a6:208:cb::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Wed, 7 Sep
- 2022 05:04:12 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2d22:3315:6f9b:82c7]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::2d22:3315:6f9b:82c7%5]) with mapi id 15.20.5588.017; Wed, 7 Sep 2022
- 05:04:12 +0000
-Message-ID: <5eab897d-c5db-8399-9476-92271d2e53e7@oss.nxp.com>
-Date:   Wed, 7 Sep 2022 13:04:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] clk: imx: clk-gate-93: fix build error with x86_64
- allmodconfig
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220906024047.1840977-1-peng.fan@oss.nxp.com>
- <Yxc6VVXs98+HpovI@linaro.org>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <Yxc6VVXs98+HpovI@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0006.apcprd04.prod.outlook.com
- (2603:1096:4:197::13) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Wed, 7 Sep 2022 01:04:20 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C9E9C2F1;
+        Tue,  6 Sep 2022 22:04:19 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 78so12491671pgb.13;
+        Tue, 06 Sep 2022 22:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=Q5bAnJtVFnp319EIgRFa2Zj3l9LOhyIDjH73ZWT66P8=;
+        b=QN2Fh+10PlxGBEB1nyhgecUXLy1tcGt3bU5t8A00gEsdgPGA0IYD71YML0yG7OnVon
+         oZ4q6iidhcx7nEl3/vEaRoI7GAVFF5d2djWXM0XAW8X6rNTuUgljv6FPwYqohtWCoePB
+         5reK0An5RPtU8rhr5Dw9zK7jD+7QnlbSaJO876HCL8Ekj7jjSdvwvJqKkX2LBkjtCJ5j
+         DiWje0Rv4BTEdcicnrtytcDXnPXUWEHpjPaWrLmE0kVT5ODsH1f5Yrs1m5eu6S78yhoz
+         nrqph/tt6EKamrViUTK5uIuiuCa5eRWnAA/fhROTgqqGeCFEJqOCVxbZK1134Lk0QsPl
+         PGpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=Q5bAnJtVFnp319EIgRFa2Zj3l9LOhyIDjH73ZWT66P8=;
+        b=lj8IXV+7r0yCQO+m5LIXOJ0MhiAf+LFCS/pTtrhe6qLOIxBsE0TsJpS+nUmM3BGHhz
+         3Ct73Au6HhzS1M049zUKpy7OkzCd2x/55KAoE+7nS2YmzVZFCdAZmUwxF643umQdOCRO
+         xayfqOKSl1mSfp3zoPGCr+hK4UR0wEJHL5KiWtO4F/HAbhqm7kgZxp03mStwA4ECS6tP
+         hm+4qIb2GIFmjsc+4EoqdnGWtIApfCuv1F4qyzHn8SAknMrz3YLakN13eLzXUL9pcbkT
+         p4jVgjDWt+e0r4Bfn6MQfE6o8XGJ6klQXqeNgpHgiy+3t3DAPNFb4SgRItO+lno4OaOJ
+         YtQw==
+X-Gm-Message-State: ACgBeo0TErcu7zC1TODYNskXYV+0leZwKlsbc5ZY3FeQ7ILznITSBmOp
+        WykRJSXGjEeuaPeV9Yoxhbw=
+X-Google-Smtp-Source: AA6agR6sTiTHSLBvwr+g6HRi6Ga/xBnUJar+Hfzxq2qEV5M6iE82lFM2UvwP+JZs0fhors2gUDFqnw==
+X-Received: by 2002:a63:fe54:0:b0:42b:d11d:1490 with SMTP id x20-20020a63fe54000000b0042bd11d1490mr1937714pgj.51.1662527058372;
+        Tue, 06 Sep 2022 22:04:18 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:31b5:b507:23a9:c4ba])
+        by smtp.gmail.com with ESMTPSA id q8-20020a170902a3c800b00172897952a0sm6492116plb.283.2022.09.06.22.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 22:04:17 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH v2] perf test: Skip sigtrap test on old kernels
+Date:   Tue,  6 Sep 2022 22:04:07 -0700
+Message-Id: <20220907050407.2711513-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1c7c2c3d-940c-44d6-8339-08da908e672f
-X-MS-TrafficTypeDiagnostic: AM0PR04MB5284:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ro6YqIYpalGjmbKMk66dV6CBJNkjvxM/FeMfOzPZU4yaff+bkNxa7qyGjOYksWwiKMfka+HSZnmFG60is/lQsffaqMzII7C4Dqonni1GT95c+kFclY2RgbgejL7gbM+CVhywDreRHdJovcEjkI5JdgLBJb4RqCcr23si47w8RQ8AzfI2ol/dIWhRran5kyIfoOcJkZ++oaYMd09H4sg2jMNouxnVoJS/mRaNfC0mQAk0xlQONjLl1UhbRUwQ1nHhHY/3usYhf0zBj5oMRYmFvOTkdhbDC+tMWXI3LwejcZlG9hTVD2VJ0nDgbqRhGjOBgAvVJou+V56v8taIoxr3NiZeyFsp/ZtNFBREV9WEf5u2t/dnpsCz6hRZPeqxqZ7ZN5icE1N0Geaigl7Q6r8cZ6VoSBb30DD7WwruRtu5OwRYRRNrEkNuHNzEAuNxFM+Rh5BNUJQCYWRGFYKZLogSqHNbj8ztEsPMEtMbdpMkA+AEYNcW5FV92fT25JVtgwi2IY0o0Anrw0o8/q+9sJYIcjT7a7SGK4saclM5CGCe3QmQ16MUoEMplfN5lczt8gyw8pq15TDYrt3NqfPakf+lGkGX8+QApk7TrOwdtyhUj9MCylOrwcHXhdLCHIZ4wteV3VTPB0L8zoOyJ4A+vOEyYlJU6aWhInYNqOGkXfqV5RUglQxN5YTuxkg3mULIknzJlnub8QqlTWgvJrl70MFtGKX0K59fY3nsvjy/Lff72tCPwbnGTWmGFdqxP4jsm17z58t7oVNTD8n80yxR0/B70hkKeqO9Xsf5l+GWYTLlIBlXLK8QX6NgYB/+mgWb40qiyTGd6NGlhzm5P49+QI/CEg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(376002)(366004)(39860400002)(5660300002)(2906002)(86362001)(6506007)(8936002)(38100700002)(44832011)(41300700001)(7416002)(6666004)(6512007)(52116002)(53546011)(26005)(38350700002)(31696002)(186003)(2616005)(66946007)(83380400001)(6486002)(66476007)(316002)(478600001)(4326008)(66556008)(31686004)(8676002)(6916009)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cXVBWlFXVlQ3c1ZRVzdqL25oWUdyR0dQcHRVVU5LTlk4NmcyRkpWcUpZVkVo?=
- =?utf-8?B?b0lBc3NpZGxCcFJVbUUybTNwaUJWUEZ4OGFZUm56b0JkRC9RS0Z2aThtSE1x?=
- =?utf-8?B?Q2JtL21SVWdFUUJWU1AxMG9tZkdSR05CZG9BdC9aVVc4OGRNN0hmWFp2V3Ez?=
- =?utf-8?B?YXJlRERFUHZaVXVNOXk2bFFHMHBtdnFVNS9EVk5OWnYzVU5GeCtDRW9FVFU0?=
- =?utf-8?B?YTVqLzdYVmtJc1gzVVpaVDE3ajIxVk1ZTEYxcjhKd1BDdllXMFNZMitCdGM1?=
- =?utf-8?B?SlJvL2U1b0tEcHJEOHlYeEtEdkpZaS9GMllDQWF2YVNZYVNRR0Q1SzE3RGlG?=
- =?utf-8?B?ZERGNWxSamRpb2dlOWlhdG9pbjBJc2RsSEIveXpuekFmSHZTSWF0T0VodkhP?=
- =?utf-8?B?YVl5SnYxZy9kbXA1TmtXaWp5UE00enh0bzNpRW10SWViQnRUdWI4MTkyMVI0?=
- =?utf-8?B?MlAvRGx2ZG51cFZ2YU9wajZpa1FIeVlGcjg1UUJ3eGhScC9DZ3dsbWtXdG9y?=
- =?utf-8?B?S0orV1VmNEhjWFNOVmhiY0dVSXJMMUtUdVdSQ2hxbFAxN0hURlpzdkNzcHZW?=
- =?utf-8?B?WGRSNjFhQkVBWlBva052R1VkNEVhNWtreG5lRFY2VjFXMHFsdHhRRnZHM3c1?=
- =?utf-8?B?TjVTTGtIYldzSDlvSm9Ib2ZKMGFnSUNUMFduVW43QTROZ09pMnNjQzkvTlE3?=
- =?utf-8?B?Y1NZVGFRV3dGZ3dCbmFXK3ZDVEJqbTZKTkR0K0JvMUcwaDZMWjUxL0NIVnpU?=
- =?utf-8?B?Mkw1ZlpQYW10a2VxcmZ6LzE5UnN1N3VmK0gySS9XeEtoWmZlak5DQVV5enNE?=
- =?utf-8?B?b1pZZm9hREtnZ3RGeEk4dFRVZUZoZkpFWGVPaXBaWXVWU0Y5NGJDcnZFUVBm?=
- =?utf-8?B?dHZUVUxCb0syZWpUblFvTzQ3ZGFQcS9hYkZBRzN1azErYW1GdmhhRC9hc1Ar?=
- =?utf-8?B?RGdHTXI2WlgydU1OOS9mdFlWMXdMOGxjdFhVL3h6Um9naDBaOURHLzU5SExJ?=
- =?utf-8?B?dEZSZzRuYklhZkJVQ2VmS3FyVGU3VWdQckFmZ08zcmhZaEEyZFdPNGVBZ0c3?=
- =?utf-8?B?REgvbk9tVTl4dVJWMFpGcVp5T0d2QzlJamkrcTBzcHUyTkhKMkVIZEo2WDlk?=
- =?utf-8?B?YTlWWmlVNEFaczJoMHBsSW5oaHhua1p6cTVtS3dYZ0NVb21kWDRONGJxbEZz?=
- =?utf-8?B?azNldWZnWWVZTWxCZmNFQVhOVUV0UDVKczFZZnNKV055eFVLNERBZ1BtRm9i?=
- =?utf-8?B?blpSV1Fzb1hWYVoyRWZDcTBBTWZaOEphRU5pVXJBZ3VwYUJCbm8ybENvaVpm?=
- =?utf-8?B?KzhxazFPbFRmNGVZRVdLN25uR1ZQeHVUL0pScWZTa2hxK2tZaiswcDdRL2x4?=
- =?utf-8?B?dkRNY3VJcThsRWZnbXgvUkxCdkdNcTFyTjdOeVc4ZktLSmUvbmZoSzVGeWZV?=
- =?utf-8?B?elQ5R3lBMkZpMWx6cGFrbjhxTk12OEo3YlVtc3ptOWhxSzZ3eW9VQytBZnJW?=
- =?utf-8?B?ZE15a2VGU0UyQklDSG8rcDM2QUN1QzdjMlRSWHd0M2FiRlNMTEZwVW42RDJE?=
- =?utf-8?B?ZENwRHRleTZzL1N6NzhTUDJ0NjBLMDFtL1BmU21iVHk1QTNLLzloVE5NbW91?=
- =?utf-8?B?Y3VzanV6RDM0U3VtZVlINmxLM2FvaTFIVTlpaHNPN3JwVnBtcTVKQVl3a1dC?=
- =?utf-8?B?YitWT3Z3cXBaMjBRY056Z2FDSXRwcVRhUGNWMUZ0dlNCNW5aNDFTZ2Y0Zjg5?=
- =?utf-8?B?NmlDNWI1MGJGS09kdzlkV3g3VXBvMThVZDlTUDJOaEVPaHl1RFNHY01OcWQ2?=
- =?utf-8?B?M2JnS2NtQzlMUWFJaTZEY2h4QVZURVpXWnB5YUJyMXpCYys4Z2dxLzZFUjJY?=
- =?utf-8?B?bmkvSENDRXV3KzU0bEVrKzJYbXdIYTBaR2l2VzQxNWxGbFpxemhibGZ5Slhu?=
- =?utf-8?B?VVp1VnlsN21qRlZuUVIwZGduZ3FqdHF0WHBsZDFSdW5JQyt6R3JOT05VY3E1?=
- =?utf-8?B?cXIwTzJRMnBMTE1GZEx3cjIreUd6dTdRcE5lQmg5TWRvT0pobGRSNVVJS1Fu?=
- =?utf-8?B?UnhESXZXSnBGcXZ6d2twSEtHSDBSYUlJYnRVNFdBYkdKVW11TlVRVGdFRHMy?=
- =?utf-8?Q?hWlFJ5OqaTZET4fY9yBuU3cz3?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c7c2c3d-940c-44d6-8339-08da908e672f
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 05:04:12.0549
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AiNw4Mla5ALyK9QjTFG91WVNIdzGgDKK+8iPfmKangF5766cDlPxJmgsqlkw7+OWO3wDlHdqeoo2m7Lq6bxFlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5284
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Abel,
+If it runs on an old kernel, perf_event_open would fail because of the
+new fields sigtrap and sig_data.  Just skipping the test could miss an
+actual bug in the kernel.
 
-On 9/6/2022 8:17 PM, Abel Vesa wrote:
-> On 22-09-06 10:40:47, Peng Fan (OSS) wrote:
->> From: Peng Fan <peng.fan@nxp.com>
->>
->> When building with x86_64 allmodconfig:
->> ERROR: modpost: missing MODULE_LICENSE() in drivers/clk/imx/clk-gate-93.o
->>
->> Fix it with 'mxc-clk-objs += clk-gate-93.o'
->>
->> Fixes: 4e9331d4e2e0 ("clk: imx: add i.MX93 clk gate")
->> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> 
-> Hi Peng,
-> 
-> Since the commit this patch fixes is just in my tree for now,
-> I squahed in the mentioned commit.
-> 
+Let's check BTF if it has the perf_event_attr.sigtrap field.
 
-Sure. Thanks for helping on it.
+Cc: Marco Elver <elver@google.com>
+Cc: Song Liu <songliubraving@fb.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/tests/sigtrap.c | 46 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
-Thanks,
-Peng.
+diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+index e32ece90e164..32f08ce0f2b0 100644
+--- a/tools/perf/tests/sigtrap.c
++++ b/tools/perf/tests/sigtrap.c
+@@ -16,6 +16,8 @@
+ #include <sys/syscall.h>
+ #include <unistd.h>
+ 
++#include <bpf/btf.h>
++
+ #include "cloexec.h"
+ #include "debug.h"
+ #include "event.h"
+@@ -54,6 +56,42 @@ static struct perf_event_attr make_event_attr(void)
+ 	return attr;
+ }
+ 
++static bool attr_has_sigtrap(void)
++{
++	bool ret = false;
++
++#ifdef HAVE_BPF_SKEL
++
++	struct btf *btf;
++	const struct btf_type *t;
++	const struct btf_member *m;
++	const char *name;
++	int i, id;
++
++	/* just assume it doesn't have the field */
++	btf = btf__load_vmlinux_btf();
++	if (btf == NULL)
++		return false;
++
++	id = btf__find_by_name_kind(btf, "perf_event_attr", BTF_KIND_STRUCT);
++	if (id < 0)
++		goto out;
++
++	t = btf__type_by_id(btf, id);
++	for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
++		name = btf__name_by_offset(btf, m->name_off);
++		if (!strcmp(name, "sigtrap")) {
++			ret = true;
++			break;
++		}
++	}
++out:
++	btf__free(btf);
++#endif
++
++	return ret;
++}
++
+ static void
+ sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
+ {
+@@ -139,7 +177,13 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+ 
+ 	fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+ 	if (fd < 0) {
+-		pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
++		if (attr_has_sigtrap()) {
++			pr_debug("FAILED sys_perf_event_open(): %s\n",
++				 str_error_r(errno, sbuf, sizeof(sbuf)));
++		} else {
++			pr_debug("perf_event_attr doesn't have sigtrap\n");
++			ret = TEST_SKIP;
++		}
+ 		goto out_restore_sigaction;
+ 	}
+ 
+-- 
+2.37.2.789.g6183377224-goog
 
-> So, it is applied.
-> 
-> Thanks!
-> 
->> ---
->>   drivers/clk/imx/Makefile | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
->> index 89fe72327788..e8aacb0ee6ac 100644
->> --- a/drivers/clk/imx/Makefile
->> +++ b/drivers/clk/imx/Makefile
->> @@ -12,6 +12,7 @@ mxc-clk-objs += clk-fixup-div.o
->>   mxc-clk-objs += clk-fixup-mux.o
->>   mxc-clk-objs += clk-frac-pll.o
->>   mxc-clk-objs += clk-gate2.o
->> +mxc-clk-objs += clk-gate-93.o
->>   mxc-clk-objs += clk-gate-exclusive.o
->>   mxc-clk-objs += clk-pfd.o
->>   mxc-clk-objs += clk-pfdv2.o
->> @@ -28,7 +29,7 @@ obj-$(CONFIG_CLK_IMX8MN) += clk-imx8mn.o
->>   obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o
->>   obj-$(CONFIG_CLK_IMX8MQ) += clk-imx8mq.o
->>   
->> -obj-$(CONFIG_CLK_IMX93) += clk-imx93.o clk-gate-93.o
->> +obj-$(CONFIG_CLK_IMX93) += clk-imx93.o
->>   
->>   obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
->>   clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o \
->> -- 
->> 2.37.1
->>

@@ -2,146 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6965AFD43
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070575AFD46
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiIGHRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S229820AbiIGHTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiIGHRj (ORCPT
+        with ESMTP id S229617AbiIGHTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:17:39 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED3BA2AA1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:17:38 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b19so14883080ljf.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 00:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
-        b=mWUos+G4meLEIpM5B5tSJgqfGT5qpSbpn+rdZVeadkZnBWLelim7TPaMEtKqFnCb5x
-         qaQW4+1W6y5PwSJsJP64h6SkRokfUsQdjuIXt2Bij29/dOMLg/gQeohNaCdr7nzHmfZV
-         Fdk75ophPXB+Bwugz3NNgr4gm51+NMBslWWEShVW08npuscO1IaDvOHL55rQrp71rEK4
-         3hldg8EwPFDOB05fqVcITdL8Zrx0NKe7zHfQdX0kNTFlbfwfrdu4CYqCM68eMo/vqwcO
-         jbzJJT5GRMI8YXbkiTJUHzQO/4gQU1XAXIRyGIq7HnR3D942NJCM+51TcEX/Mp1VNhF6
-         qH7w==
+        Wed, 7 Sep 2022 03:19:34 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF53659B;
+        Wed,  7 Sep 2022 00:19:31 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id e18so18347743edj.3;
+        Wed, 07 Sep 2022 00:19:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
-        b=Hq8HSaPqFtaXudnABPcA4f++GExCtOH2SAy9ygpOND4ail9BOkU1Suwj3vXS4Bckgi
-         o7JGEQ45xCoxyr8nxGVWiTXATOttf0dTeI3s36yg2srCO5kL5NMeM+8LFhR0rbDwGC21
-         G6rm4OcsQCr9exHRcg5FjTjrkSRKhyZ+DqJrkW3/KHYY98NihIi9MpUgkhWGjBCEur3S
-         3uUIQA0n5kURF4JfemF2afI+RqERxiTO59CpmgPVMjn2QB2RQlWUt21OM40IcuWYraGT
-         zl97UDyGtdkbvcUbdr+ySKwh1+HUukfm5otB7/s1rt7SX20VGhAyEI+SSjgmPYUKd+iR
-         vv1A==
-X-Gm-Message-State: ACgBeo0+csXdvzOF/pvzAv0maavwflCekOYlRIJJay2J+2PRuKCw1+UJ
-        v4CI4KRSYz9hJbJr8de+KDQPbPX/rys8Qjq5guQ+yQ==
-X-Google-Smtp-Source: AA6agR71di9AUXjm1EUAWrxZPkPvbGJ5UTGC0woWSGfCPIomzzbd6bY/6fvZKlDkb7mw8EwP1pyMQz6gziNPl5xaI/o=
-X-Received: by 2002:a2e:a589:0:b0:261:b223:488b with SMTP id
- m9-20020a2ea589000000b00261b223488bmr592996ljp.33.1662535056337; Wed, 07 Sep
- 2022 00:17:36 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=eDvuVooWlYd/7ooTWAPT8QHm6WSx0ZyUhFCklwIvD6g=;
+        b=x3zcoR5HYELubslUbVyJnx45vEkofm7KS3nlW15exj1s59CsNCGBEg2l7R6nX+thQP
+         S4ehsEHff2wyaeH3ygSgnuTSTpncDzuJlgnawe1DSPZl8OtWxkffh+bzBEbb2yAXgMeL
+         +Izwo7do5u9eCk3SGkwbK9TqFFBbAkPUEzHHenfdZXwjYBq7yRSeUkyQRdSoUbphE5D3
+         SRixIV2GgneREWiUaYKUFfGdxHoC+k00yEwHSrnqA0csuFmFY6MUOxErB03UX309UgKh
+         IJn3WSy3w6EeooIZzuAgoNnEV/5hTSK03fo9Ad4yxHkSD2EYajMqbbUM4bXvlsArkeAM
+         oUjg==
+X-Gm-Message-State: ACgBeo3vRNNzH0iV/nqnko+uNwUcfN+HriLnB9c2dTOubQvaOukPqQps
+        kGKPWM6sUIa9yZA5QMbkA0s=
+X-Google-Smtp-Source: AA6agR4b6OMs7NVyOZD3BsZ4zUiY75eVpvTNS6XTGEyiiqFaTR2tpXrKInonOeWWvimI/BEGP2wN9g==
+X-Received: by 2002:a05:6402:190d:b0:447:ed22:4d0d with SMTP id e13-20020a056402190d00b00447ed224d0dmr1966781edz.309.1662535169471;
+        Wed, 07 Sep 2022 00:19:29 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170906318c00b0073923a68974sm7643700ejy.206.2022.09.07.00.19.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 00:19:28 -0700 (PDT)
+Message-ID: <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
+Date:   Wed, 7 Sep 2022 09:19:25 +0200
 MIME-Version: 1.0
-References: <000000000000974e2805e802137e@google.com> <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
- <YxfpkzZhJ7GfRuKd@yury-laptop> <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
-In-Reply-To: <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 7 Sep 2022 09:17:24 +0200
-Message-ID: <CACT4Y+bXks8ohNAxdJ7gGOc=tg7bC7Pz+nBJi_J9zHa5Jhta9w@mail.gmail.com>
-Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read in _find_next_bit
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 0/4] tty: TX helpers
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+References: <20220906104805.23211-1-jslaby@suse.cz>
+ <Yxcvbk281f/vy4vb@hovoldconsulting.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <Yxcvbk281f/vy4vb@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 07:53, Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > > The buggy address belongs to the object at ffff888017576600
-> > > >  which belongs to the cache kmalloc-192 of size 192
-> > > > The buggy address is located 184 bytes inside of
-> > > >  192-byte region [ffff888017576600, ffff8880175766c0)
-> > >
-> > > At offset 184 of a 192-byte region.
-> > >
-> > > So what's wrong with doing that?  Does KASAN have an off-by-one?
-> >
-> > Hi Andrew, all,
-> >
-> > This is a bug in FIND_NEXT_BIT(). It should be
-> >   if (idx >= sz / BITS_PER_LONG)                                   \
-> >           goto out;                                                \
-> >
-> > instead of
-> >   if (idx > sz / BITS_PER_LONG)                                    \
-> >           goto out;                                                \
-> >
-> > The fix is in bitmap-for-next, expected to be in -next by tomorrow.
-> > Sorry for the noise.
->
-> OK... but why is KASAN reporting a bad access from an area
-> which appears to be OK?
+On 06. 09. 22, 13:30, Johan Hovold wrote:
+> On Tue, Sep 06, 2022 at 12:48:01PM +0200, Jiri Slaby wrote:
+>> This series introduces DEFINE_UART_PORT_TX_HELPER +
+>> DEFINE_UART_PORT_TX_HELPER_LIMITED TX helpers. See PATCH 2/4 for the
+>> details. Comments welcome.
+>>
+>> Then it switches drivers to use them. First, to
+>> DEFINE_UART_PORT_TX_HELPER() in 3/4 and then
+>> DEFINE_UART_PORT_TX_HELPER_LIMITED() in 4/4.
+>>
+>> The diffstat of patches 3+4 is as follows:
+>>   26 files changed, 191 insertions(+), 823 deletions(-)
+>> which appears to be nice.
+> 
+> Not really. This is horrid. Quality can't be measured in LoC (only).
+> 
+> The resulting code is unreadable. And for no good reason.
 
-Hi Andrew,
+IMO, it's much more readable than the original ~ 30 various (and buggy 
+-- see Ilpo's fixes) copies of this code. Apart from that, it makes 
+further rework much easier (I have switch to kfifo in my mind for example).
 
-Good point. Filed https://bugzilla.kernel.org/show_bug.cgi?id=216457 for this.
-Copy-pasting description below:
+> [ And note that you're "saving" something like 20 lines per driver:
 
-KASAN says:
+It's not about saving, it's about deduplicating and unifying.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
-Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
-...
-The buggy address belongs to the object at ffff888017576600
- which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 184 bytes inside of
- 192-byte region [ffff888017576600, ffff8880175766c0)
-...
-Memory state around the buggy address:
->ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
-                                        ^
-==================================================================
+> 	 12 files changed, 84 insertions(+), 349 deletions(-)
+> ]
+> 
+> NAK
 
-This "address is located 184 bytes inside of 192-byte region" is
-confusing b/c it does not look like an out-of-bounds access.
+I'd love to come up with something nicer. That would be a function in 
+serial-core calling hooks like I had [1] for example. But provided all 
+those CPU workarounds/thunks, it'd be quite expensive to call two 
+functions per character.
 
-What happens here is that the allocation request was for 184 bytes, so
-the last 8 bytes in the 192-byte slab are poisoned. But KASAN does not
-store the requested size in the object header, so it just prints the
-full slab size everywhere.
+Or creating a static inline (having ± the macro content) and the hooks 
+as parameters and hope for optimizations to eliminate thunks (also 
+suggested in the past [1]).
 
-User-space ASAN does store 48-bit requested size in the header. But
-KASAN uses additional bytes in the header for:
+[1] https://lore.kernel.org/all/20220411105405.9519-1-jslaby@suse.cz/
 
-struct kasan_alloc_meta {
-depot_stack_handle_t aux_stack[2];
+thanks,
+-- 
+js
+suse labs
 
-So we don't have space for requested size w/o increasing header size
-(currently should be 16 bytes).
-
-We could either try to infer requested size from the shadow (count
-poisoned bytes at the end); or improve wording of the message at least
-to make it clear that 192 is just full slab size.
-
-For context see:
-https://lore.kernel.org/all/20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org/

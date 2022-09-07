@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E355B04C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45225B0490
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiIGNJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S229712AbiIGNCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiIGNJ3 (ORCPT
+        with ESMTP id S229473AbiIGNCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:09:29 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05D82712
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:09:26 -0700 (PDT)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MN2d45H9fz6H72S;
-        Wed,  7 Sep 2022 21:08:40 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Wed, 7 Sep 2022 15:09:24 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Sep 2022 14:09:22 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <robin.murphy@arm.com>, <joro@8bytes.org>, <will@kernel.org>
-CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <jsnitsel@redhat.com>,
-        <haifeng.zhao@linux.intel.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH v3 3/3] iova: Remove iovad->rcaches check in iova_rcache_get()
-Date:   Wed, 7 Sep 2022 21:02:34 +0800
-Message-ID: <1662555754-142760-4-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1662555754-142760-1-git-send-email-john.garry@huawei.com>
-References: <1662555754-142760-1-git-send-email-john.garry@huawei.com>
+        Wed, 7 Sep 2022 09:02:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13FC66A6D;
+        Wed,  7 Sep 2022 06:02:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2434AB81CB9;
+        Wed,  7 Sep 2022 13:02:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B20FC433C1;
+        Wed,  7 Sep 2022 13:02:44 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JiTLGNM9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1662555762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6JnDWPB8zPyYC1o9rOiub0T0z17IVTGKFuNGktlGb6E=;
+        b=JiTLGNM9yFxC+uSqY9TSUolPey46SAPlKdXUh1Jlw4KXJx10ckJLg/RgnEeaeOFXdFmU/8
+        QXSDvt3HBY/GNCtvuA2Gp+CINuuH90zfiqlhMDWrVRS9KPAEqhlQSRr0dhvz4JxadMTnGN
+        BLX8JDcPy7imp+VNqa0D33ELJIYyfZs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 937252bf (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 7 Sep 2022 13:02:41 +0000 (UTC)
+Date:   Wed, 7 Sep 2022 15:02:34 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH] random: use hwgenerator randomness more frequently at
+ early boot
+Message-ID: <YxiWajR2FEW6YRud@zx2c4.com>
+References: <20220904101753.3050-1-linux@dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220904101753.3050-1-linux@dominikbrodowski.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,31 +59,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The iovad->rcaches check in iova_rcache_get() is pretty much useless
-without the same check in iova_rcache_insert().
+Hi Dominik,
 
-Instead of adding this symmetric check to fathpath iova_rcache_insert(),
-drop the check in iova_rcache_get() in favour of making the IOVA domain
-rcache init more robust to failure in future.
+On Sun, Sep 04, 2022 at 12:17:53PM +0200, Dominik Brodowski wrote:
+> Mix in randomness from hw-rng sources more frequently during early
+> boot, approximately once for every rng reseed.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/iommu/iova.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Nice idea.
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 8aece052ce72..a44ad92fc5eb 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -875,7 +875,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
- {
- 	unsigned int log_size = order_base_2(size);
- 
--	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
-+	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
- 		return 0;
- 
- 	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
--- 
-2.25.1
+> Jason, if you prefer that this patch can be applied first (as it
+> makes sense also independently of the other patch), this ordering
+> should be trivial to change.
 
+I'll apply this patch first, yea, since it's independent.
+
+> -static bool crng_has_old_seed(void)
+> +static unsigned int crng_interval(void)
+
+crng_reseed_interval() instead?
+
+Jason

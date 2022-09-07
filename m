@@ -2,124 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83055B03BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3805B0516
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiIGMQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S229781AbiIGN1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIGMQi (ORCPT
+        with ESMTP id S229705AbiIGN1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:16:38 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2129.outbound.protection.outlook.com [40.107.104.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44EEB7753;
-        Wed,  7 Sep 2022 05:16:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gd1EDrhOYdleXZUVFkLaMrhMyPBuq+NR4qKo9wrMT9+K605yOdcMwfw5fG/a04Nc/+6DgmWCTLS/LL8uGyHMEAHGjXY2cFgAK9RTuZjwU3AGtWq9Uj1eVxlSyhtaw+n853dwlFnqU/0V0LMch/WyjhsrR7zAuZHKvDDkBSHcriSm55YfEVWVmysToG4bEGkjW//gjQlXXOVGe8e+4v8X5MroAF3DyhufsA4feCjY4Wu+MAcSjKg+jyvhm7/ZHNmYv87AngQqCxEsqCJyGhrtL9y2djUWve8iyOvC0t+J0en9Obh39CRR3lC3lClXPViEdQnOLPxlebe714RylwOjCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EeqoaIoW7Rso5zUg3CjePLQcE2rg4WtD8XMXcCpFNws=;
- b=RgbjnEfmbC++nHo6GL6T/Jzmcp+Y7DpinmmAS2VRf+vknBjxjFGGjWoUyCqTWufmaViJEKac+erhksGkX8sn5Ocdw2xV49HCB8vY/dZhVFh/XlJW4ZrLrXxCE283Mg3GWgApiMUURloVrLcIibU1YFO9KBCXsUoF7YUCy45BzNPiEQWq+4+H1jsW3fOmjFXn+AOwM9x/Vj4+TKkc46kyVCJ81WaITpan2wc8UkA895xyGSq7sseNk1e0HxYKlE4r8e7ZsKUpzGKxfLh5vYrdQKcQV11aNUl6tIeBcYCWh1O6y9cD3I1Akm5LCuXxkNv6E7iEeaP0Rk2HiCdRQLYUvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.2.8) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nokia.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=nokia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EeqoaIoW7Rso5zUg3CjePLQcE2rg4WtD8XMXcCpFNws=;
- b=Zq06+bh8BUbqNqdnb+CgxxIfZdvT7ctyj9M8TlWu+J2lqRXjf0xcwH1uo+CFN4F3zWDDdXeau44gU9un+Vg2y7xcJ5GIUt4kVhkesgE9+5z1XW4vFq5+z5BAGhplmi8+VROXQ/ft4/vVAf0ZgtvntKtPc5opU9NUNM8+XRXinvc=
-Received: from AM6P194CA0032.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:90::45)
- by VI1PR07MB5488.eurprd07.prod.outlook.com (2603:10a6:803:bb::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 7 Sep
- 2022 12:16:34 +0000
-Received: from AM7EUR03FT015.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:209:90:cafe::eb) by AM6P194CA0032.outlook.office365.com
- (2603:10a6:209:90::45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
- Transport; Wed, 7 Sep 2022 12:16:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.8)
- smtp.mailfrom=nokia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia.com designates
- 131.228.2.8 as permitted sender) receiver=protection.outlook.com;
- client-ip=131.228.2.8; helo=fihe3nok0734.emea.nsn-net.net; pr=C
-Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.8) by
- AM7EUR03FT015.mail.protection.outlook.com (100.127.140.173) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.13 via Frontend Transport; Wed, 7 Sep 2022 12:16:34 +0000
-Received: from ulegcparamis.emea.nsn-net.net (ulegcparamis.emea.nsn-net.net [10.151.74.146])
-        by fihe3nok0734.emea.nsn-net.net (GMO) with ESMTP id 287CGWos026061;
-        Wed, 7 Sep 2022 12:16:33 GMT
-From:   Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-To:     devicetree@vger.kernel.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] of: irq: Report individual failures in of_irq_init()
-Date:   Wed,  7 Sep 2022 14:16:29 +0200
-Message-Id: <20220907121629.54330-1-alexander.sverdlin@nokia.com>
-X-Mailer: git-send-email 2.10.2
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7EUR03FT015:EE_|VI1PR07MB5488:EE_
+        Wed, 7 Sep 2022 09:27:02 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBF878BFD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:26:58 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220907132652epoutp043ffae99b46b38505e0cabc177a0b561d~SlvnuPRyA1156211562epoutp04k
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:26:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220907132652epoutp043ffae99b46b38505e0cabc177a0b561d~SlvnuPRyA1156211562epoutp04k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1662557212;
+        bh=+RiMUm1DRh8uWdpGnfbNgmdw1fBy5kFiKoPWMaL8sfY=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=JGbBDMX0QWLdGE+Z0II+0uZYbk6VLyX2zD2YN9ILFPxoj2jSDrIhHBTeMnqvFOtZN
+         G6ZttUqT+Sbcje3Fs+di1qqHZbSw7xSR4h4DcIqBUPDkFotRGiONwVI6ImOoDlT6N/
+         8/ECyycT/xxCbzZpnOgZfTSylwGxH6DwfxmHIVII=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220907132651epcas5p420447b118a4782c5b0fc506db6c59d7d~SlvnFMEWi2320623206epcas5p4V;
+        Wed,  7 Sep 2022 13:26:51 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4MN3211nhlz4x9Pr; Wed,  7 Sep
+        2022 13:26:49 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EB.D7.53458.91C98136; Wed,  7 Sep 2022 22:26:49 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220907121647epcas5p2d35c37079e03f8bc248cee3bbb61b929~SkybQ5vnT0100601006epcas5p2B;
+        Wed,  7 Sep 2022 12:16:47 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220907121647epsmtrp15f2c973ab7b35844b3a046bd57d43ad9~SkybN6evt1492014920epsmtrp1L;
+        Wed,  7 Sep 2022 12:16:47 +0000 (GMT)
+X-AuditID: b6c32a4a-caffb7000000d0d2-76-63189c1943d3
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.EC.14392.FAB88136; Wed,  7 Sep 2022 21:16:47 +0900 (KST)
+Received: from smithat07 (unknown [107.122.12.13]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220907121643epsmtip2b4276c0c7453b84d50ab4f86943cbb09~SkyYFeXyj2686126861epsmtip24;
+        Wed,  7 Sep 2022 12:16:43 +0000 (GMT)
+From:   "Smitha T Murthy" <smitha.t@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>, <stanimir.varbanov@linaro.org>,
+        <dillon.minfei@gmail.com>, <david.plowman@raspberrypi.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <andi@etezian.org>, <alim.akhtar@samsung.com>,
+        <aswani.reddy@samsung.com>, <pankaj.dubey@samsung.com>,
+        <linux-fsd@tesla.com>, <aakarsh.jain@samsung.com>
+In-Reply-To: <783df4f0-0b7e-8604-d61f-f78e0375c321@linaro.org>
+Subject: RE: [Patch v2 15/15] arm64: dts: fsd: Add MFC related DT enteries
+Date:   Wed, 7 Sep 2022 17:46:42 +0530
+Message-ID: <001601d8c2b3$b33e2ac0$19ba8040$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 0a66ca8c-0a13-49dc-4e58-08da90cace38
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ipMPPK72B70WrTT4EHDheBoGLcXe6P7mJYVB09aqbiJSz9QDsC3CzQsNkkz3IyLpkzzaPYfeXevE8uyvQCNHBlTWL4Bjwj2PlS3X6b8UdBObue87iFp5XO0z5xXy/oPltkUvrwTuBN7CE2RbE7wEwImK+NU5TWsg8PtiKe8dWd89zqQFuPV2ZQBrSwXC/aOUIgJt8NAQi+y8JBSepANw9Vlx3OLdRuEFz0MmGeHt+gBEAejI304M4YUKQyDVoyFCnxncyyakiReaRc1nHZIHcatzjT885Ayz6OnG0tbQcKhPxhiVt5PsR7LizE4w9rqGqMx6qE2d3rKwEW0bI86QpC6lEWIcpTeAfdo3K2o2HviA3SM2OkJuk58MwGpqnoKAdjzrXYOWmzZUTykV+tJEOr1NISymHKGKxwkbDSDBiyw1zXen7gGqvHekkEYQG4W9HoJYXOq5paUxMBbIRphW4jrG84zUE+fe5yEIDe3qK+g6WGPV0t6yZmuqiUP7kzAfDslg5l/GESuRLAqIQzfaQjaU5IVhUHi4hzUk7ZXW4TY1JSjb7DKXa7KH7HueQp86z6N3a497Kr4fviievxzPdXYvh2MpMil14CqKXl3W26l041l4LTXv0H//VzyzuNOeS4Azt7S/lWgM23U6aK0KGahTJoj2argJ9jksahfT/IvsgrhGwqJim/e+YHcYXnX2MgbBU0G/wmJUTHb+J8GwcghO5Jka9v198coKMDhU1yJtH1rKP5r30nA/TcfVvtWEXf8EyDMx1ACslxKa88VR/Ze/zI6ut2NDjg3iOgnURHAPNToOsy5jqu+85vD3h+C3HFHqkUJWIRl3rCl5RTJgfA==
-X-Forefront-Antispam-Report: CIP:131.228.2.8;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(136003)(346002)(36840700001)(46966006)(40470700004)(356005)(82960400001)(82740400003)(40460700003)(8676002)(4326008)(36860700001)(70206006)(70586007)(316002)(82310400005)(6916009)(81166007)(54906003)(2906002)(4744005)(5660300002)(40480700001)(1076003)(186003)(8936002)(2616005)(83380400001)(336012)(47076005)(478600001)(6666004)(26005)(41300700001)(36756003)(86362001)(557034005)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB5488
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIwYET59QqMDNmfP0SYfUTdtmHMHgExQ0QVAaYMvCgBZ+7aQq0CrI9A
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TeUyTZxzO2369dLiPw/GWZNh8M1nAAK1CeUs5dhj2hW2BqDgjW1htvxRG
+        r7Rlou5gOnAQD5gio+NQQWYYx2jLsQIbYBmTbAtmBdRxDhhrAeMsXoiylpaN/57f+zzP73rz
+        Y9P9KlhB7EyVntKqJAqCuQlrvRYSEsYth1L+7ZMcNNtexkCTla1MVP1ojoYmqp0Y6jW1sJDZ
+        9jUdfdPfzUBV1t8YqK3nTww1/+1ib5SNYWiuqhEgu2GcibrmXWLj9DADTTneQb9bypno1Hct
+        DNRgHWOhKyM3aKjWuEJDl1uWWCivy8pCn+dbaa9Asr6yHpDtYzWAHKm5Rye/N4yxyOpOO400
+        1hUwydHhTiZpqvmUzOtbxsgz5jpAPjtewSILrSNM0mkMJgfuO1kpWw5mxWZQEhml5VEqqVqW
+        qZLHEW/uTX89PUrIF4QJRCia4KkkSiqO2P1WSlhipsK1BoL3oUSR7XpKkeh0RER8rFadrad4
+        GWqdPo6gNDKFJlITrpModdkqebiK0scI+PydUS7h+1kZHXW1NE0RN2fhioWZC576FwIOG+KR
+        cKn7B6wQbGL74R0ALn7xpTe4B+CPo4PAEzwAsODpIG3dsjr6l5foAtDx2UOvZQ7A1oUKplvF
+        xMOhw1rNcBMBeB+Ak+Ypupug4yUY7BnmujEHj4fdIzbMjf3xJHhhaHVNg+Hb4U+tc2vYBxdB
+        x8Q08GBfeL1sBvPk2QbbFsvpnpZ48PFsLcONA/BE2FxkZnk0gdDeZ2W5m4D4MAc6Lc8wj2E3
+        vGAuAh7sDx39HgPEg6D9bL4Xy+GE84RXo4EVuWbv/Amw21buysN2FQiBTZYIz/OLsGSgkeap
+        uwWefjLjlfvA9sp1TMDLv/zsTQ/h0GILowgQhg2jGTaMZtgwguH/ahcBVge4lEanlFO6KM1O
+        FXX4vy+XqpVGsHYnoUntYGrybngvoLFBL4BsOhHgI2sPkPr5yCRHjlJadbo2W0HpekGUa9/F
+        9KCtUrXr0FT6dEGkiB8pFAojRbuEAiLQ5/wOIPXD5RI9lUVRGkq77qOxOUG5tKv7DtT4RZ9K
+        O5bxgM/fZTqYkGD/IDQieH6HfLjHF+L1hhMN0nF26pA470xyov3b3uSzOUuch7qZd53K1Y9X
+        TEN9aW8f6Ij5JO35beJAVXCQomHvP9GlN48O3rI4q1TjH9kOyZbVJTG21CedHQPvnQq5mj+/
+        rOx+LuCYOAe9fD31SEWPjC07nT9Yu2oQL7ex0yx6IY/EublNd223fVNXRvf00w7fqYl4NfbS
+        dBMymvefO9e4L3dr4h+M5jCxOnvhZnFLsaS0/LzJ9NWd0hd+3UNtPh6c+NKjN7aL7idbZh8X
+        VhpPqi8WOLgr4ZdeM21m6Kry9osP5dwSSeJFBbK0jMKkawSmy5AIQulaneRfWEv0UbAEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphleLIzCtJLcpLzFFi42LZdlhJXnd9t0SywdRuLounO2ayWjyYt43N
+        YvGP50wW9xd/ZrE4tHkru8WWK7OZLZYfP8BqMf/IOVaL7QcfsVhsfAGUvTjzLovF8/nrGC1e
+        zrrHZrH3NVDxpsfXWC0evgq3uLxrDptFz4atrBZrj9xlt1h6/SKTxbJNf5gsFm39wm7RuvcI
+        u0VL2xEmBwmPNfPWMHrsuLuE0eP6kk/MHjtn3WX3WLznJZPHplWdbB53ru1h89i8pN6j9egv
+        Fo++LasYPf41zWX36Dpync3j8yY5j1NfP7MH8EVx2aSk5mSWpRbp2yVwZexetYypYIJkxZul
+        u9gaGP8KdzFyckgImEj8v/OMEcQWEtjNKLHsCx9EXEJi5e9JjBC2sMTKf8/ZIWqeMkrcPRkB
+        YrMJ6Em8OrKYtYuRi0NE4CSjRP+ZFjCHWWAli8TdW10sII6QwBtGiatdB8DaOQXsJA5cv8IC
+        YgsLeElMu/qfGcRmEVCROLbtOZjNK2Ap8er+Y0YIW1Di5MwnYPXMAtoSvQ9bGSFseYntb+cw
+        Q5ynIPHz6TJWEFtEwE1i44Qt7BA14hIvjx5hn8AoPAvJqFlIRs1CMmoWkpYFjCyrGCVTC4pz
+        03OLDQsM81LL9YoTc4tL89L1kvNzNzGCE4qW5g7G7as+6B1iZOJgPMQowcGsJMKbskMkWYg3
+        JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQYmA5Y9xg+KyovV
+        vRe/+dPMt99aa3d9e+G01aflQhkn2zI/S+CZJP22Yf/VjvtzSvv0b/1IM+8UMO9MOp/wpFxZ
+        YlML3+W3C2ZFWftXBIcd0GJrkLMuv7qO94xJ2XuF05tO+71buiy/q+z2If+AFdLG3b/bP9/8
+        8ab4OutxHW+l4w93HDOafrvWf5ap1YuZlWcLXXcvudC9TeKr0CWxnSuLd/Uuy58bdq7vwOVu
+        8bMTGXLTf8lp+b/49E3vwinHbNNTcyVf8pYKvuNjzeLZO3P+G9mOKW9UzydcSL3D77bQSqZv
+        3akGi2u1z5lea1ctvTLNwfDPugjVWefeK81nPxHX6mqm0x9Qfjnt5v233yOklViKMxINtZiL
+        ihMBnCgR75cDAAA=
+X-CMS-MailID: 20220907121647epcas5p2d35c37079e03f8bc248cee3bbb61b929
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220907063413epcas5p3df6d22933ba2884730c52b6a3af2cb09
+References: <20220907064715.55778-1-smitha.t@samsung.com>
+        <CGME20220907063413epcas5p3df6d22933ba2884730c52b6a3af2cb09@epcas5p3.samsung.com>
+        <20220907064715.55778-16-smitha.t@samsung.com>
+        <783df4f0-0b7e-8604-d61f-f78e0375c321@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
-New pr_err(), a copy of preceeding pr_debug(), faciliates debugging.
 
-This change was inspired by a long lasting debugging of the
-octeon_irq_init_ciu() which fails completely silently and leaves the
-interrupt controller half-way configured which in turn had very non-obvious
-effects.
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+> Sent: Wednesday, September 7, 2022 4:56 PM
+> To: Smitha T Murthy <smitha.t@samsung.com>; linux-arm-
+> kernel@lists.infradead.org; linux-media@vger.kernel.org; linux-
+> kernel@vger.kernel.org; devicetree@vger.kernel.org
+> Cc: m.szyprowski@samsung.com; andrzej.hajda@intel.com;
+> mchehab@kernel.org; hverkuil-cisco@xs4all.nl;
+> ezequiel@vanguardiasur.com.ar; jernej.skrabec@gmail.com;
+> benjamin.gaignard@collabora.com; stanimir.varbanov@linaro.org;
+> dillon.minfei@gmail.com; david.plowman@raspberrypi.com;
+> mark.rutland@arm.com; robh+dt@kernel.org; krzk+dt@kernel.org;
+> andi@etezian.org; alim.akhtar@samsung.com; aswani.reddy@samsung.com;
+> pankaj.dubey@samsung.com; linux-fsd@tesla.com;
+> aakarsh.jain@samsung.com
+> Subject: Re: [Patch v2 15/15] arm64: dts: fsd: Add MFC related DT enteries
+> 
+> On 07/09/2022 08:47, Smitha T Murthy wrote:
+> > Add MFC DT node and reserve memory node for MFC usage.
+> >
+> > Cc: linux-fsd@tesla.com
+> > Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> > ---
+> >  arch/arm64/boot/dts/tesla/fsd-evb.dts |  4 ++++
+> >  arch/arm64/boot/dts/tesla/fsd.dtsi    | 22 ++++++++++++++++++++++
+> >  2 files changed, 26 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > index 1db6ddf03f01..17bb048f9d47 100644
+> > --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > @@ -30,6 +30,10 @@
+> >  	};
+> >  };
+> >
+> > +&clock_mfc {
+> > +	status = "okay";
+> 
+> clock node was never disabled, so there is no need to enable it.
+> 
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
----
+Ok I will remove it in the next series.
+ 
+> > +};
+> > +
+> >  &fin_pll {
+> >  	clock-frequency = <24000000>;
+> >  };
+> > diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > index f35bc5a288c2..bca0ba030ee7 100644
+> > --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > @@ -340,6 +340,18 @@
+> >  		#clock-cells = <0>;
+> >  	};
+> >
+> > +	reserved-memory {
+> > +		#address-cells = <2>;
+> > +		#size-cells = <2>;
+> > +		ranges;
+> > +
+> > +		mfc_left: region@84000000 {
+> > +			compatible = "shared-dma-pool";
+> > +			no-map;
+> > +			reg = <0 0x84000000 0 0x8000000>;
+> > +		};
+> > +	};
+> > +
+> >  	soc: soc@0 {
+> >  		compatible = "simple-bus";
+> >  		#address-cells = <2>;
+> > @@ -832,6 +844,16 @@
+> >  			clock-names = "fin_pll", "mct";
+> >  		};
+> >
+> > +		mfc: mfc@12880000 {
+> > +			compatible = "samsung,fsd-mfc";
+> > +			reg = <0x0 0x12880000 0x0 0x10000>;
+> > +			interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clock-names = "mfc";
+> > +			clocks = <&clock_mfc MFC_MFC_IPCLKPORT_ACLK>;
+> > +			memory-region = <&mfc_left>;
+> > +			status = "okay";
+> 
+> Okay is by default, don't add it.
+> 
 
-Changelog:
-v2:
-* Kept existing pr_debug() on Rob's request
+I will remove this in the next series.
 
- drivers/of/irq.c | 3 +++
- 1 file changed, 3 insertions(+)
+> > +		};
+> > +
+> >  		ufs: ufs@15120000 {
+> >  			compatible = "tesla,fsd-ufs";
+> >  			reg = <0x0 0x15120000 0x0 0x200>,  /* 0: HCI standard
+> */
+> 
+> 
+> Best regards,
+> Krzysztof
 
-diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-index d22f605..2bac44f 100644
---- a/drivers/of/irq.c
-+++ b/drivers/of/irq.c
-@@ -592,6 +592,9 @@ void __init of_irq_init(const struct of_device_id *matches)
- 			ret = desc->irq_init_cb(desc->dev,
- 						desc->interrupt_parent);
- 			if (ret) {
-+				pr_err("%s: Failed to init %pOF (%p), parent %p\n",
-+				       __func__, desc->dev, desc->dev,
-+				       desc->interrupt_parent);
- 				of_node_clear_flag(desc->dev, OF_POPULATED);
- 				kfree(desc);
- 				continue;
--- 
-2.10.2
+Thank you for the review.
+
+Regards,
+Smitha
 

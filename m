@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D90F5B023D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8DF5B0244
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiIGK70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S229901AbiIGLAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiIGK7M (ORCPT
+        with ESMTP id S229561AbiIGLAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:59:12 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE2C9A998
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:59:02 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id m15so2155741lfl.9
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 03:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=wKm3uG6dnmLu6065OH92LURAn1cZIHuh/RQvvLdKatw=;
-        b=j6sIX7dAOU6LiLhI+DbXtEQ3xWYTMiJ2XI0X13RPmjNrxD1IldAA7mlRE/NCrLQBrs
-         DtpWtC1fs6C4MtLbPNFbBb5rVlQpZbZeuo+cvsos4/r+ZdElChPoQOO4/5X84RMip1D+
-         cWHx04tG8V5wmoeQZhxMvyY2RwN1l4MF1n2DoyJnq12qb04khczTwh/2Ppebtfj6W4dl
-         I2nqyh40VVyforCnWUwWEKf9iflCQRLwNq42qhHa9pybEIikuI+VrECiHcZn0mnZ5O0Y
-         hwbstKKv74BTdhik0/+ZYTW4trUrZMkhkwAkVPkaSCg7cuIvAJxB6rg7MGotK/Z+XanD
-         NoRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wKm3uG6dnmLu6065OH92LURAn1cZIHuh/RQvvLdKatw=;
-        b=7hexFV4B57p1lBlheOzvd2Hz0/L454Nr4zoPS82Aa/XhoO74SvRE0wak0GToItaJNL
-         gYGuIoCu0H8UjA8EzzMTfLKm7FcIHPeTrh+axo0tlQRn1hkuTa4ou+qBlN9rJ/1X9pkr
-         Vi95na0mvrr1fD+71WeHwMkbjG7CAsWFa9GGsumSzbm1BS9Fbm529lcKRfhW6EDpRxQF
-         H8DZjvdr+dy18X6BhLLeiyX4hF4kSKoKqWbxN0tEBqklm+wVsv+OeLBitUm1wM3pTkAc
-         JT4gv6HtcA7sEzWzS1sCLYWvZJOyQUNPNS6CcszMVHBnqcqBxIQ0/DQF25ARnPDHyFT5
-         wFBg==
-X-Gm-Message-State: ACgBeo1Y5a500zuFClN9xSHlHY4l/nRIHXL80oych3huqDdM1zC/JfWL
-        QsreXLrhrTl/BVyUfVI/38mrDQ==
-X-Google-Smtp-Source: AA6agR535DSsJbmbG7MCjomzkFxhTgd6pYqx4jrn2/eODdAhxttRGXTT1odO6n5Wqo2pvRf8Yg7Pbw==
-X-Received: by 2002:a05:6512:1115:b0:497:cd1:463 with SMTP id l21-20020a056512111500b004970cd10463mr902018lfg.24.1662548341227;
-        Wed, 07 Sep 2022 03:59:01 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id bj33-20020a2eaaa1000000b002641ede39e1sm2562275ljb.9.2022.09.07.03.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 03:59:00 -0700 (PDT)
-Message-ID: <c6891245-03a7-f902-1b6f-1702b2a818bb@linaro.org>
-Date:   Wed, 7 Sep 2022 12:58:59 +0200
+        Wed, 7 Sep 2022 07:00:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D25474BBD;
+        Wed,  7 Sep 2022 04:00:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0A2851FF52;
+        Wed,  7 Sep 2022 11:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662548410; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HmaE7iOjn6DeLFkNOLr8ASPOm5MulkrwVeS3GjvYnFQ=;
+        b=XJuKUxE3K2H/o+zbOpLWLhtXEgxHdoiWAQxKGUR4cKIaV8UfyJO/UQK0u1N/Q0GiZv99Cx
+        kg8xGbUHizgdfJURCEVo7e1R7yjc93Oufl/51InNOknj8+BajqsA6lihzRcavskk7trfVf
+        XL6FEF6zeAMocGbRwpJqhrx4BFTASfU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D477413486;
+        Wed,  7 Sep 2022 11:00:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +m1RM7l5GGMSVwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 07 Sep 2022 11:00:09 +0000
+Date:   Wed, 7 Sep 2022 13:00:09 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
+References: <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+ <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+ <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
+ <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
+ <20220901201502.sn6223bayzwferxv@moria.home.lan>
+ <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
+ <20220905234649.525vorzx27ybypsn@kmo-framework>
+ <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
+ <20220906182058.iijmpzu4rtxowy37@kmo-framework>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/8] dt-bindings: Add headers for NVDEC on Tegra234
-Content-Language: en-US
-To:     Mikko Perttunen <cyndis@kapsi.fi>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
-        Ashish Mhetre <amhetre@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220906132823.2390953-1-cyndis@kapsi.fi>
- <20220906132823.2390953-3-cyndis@kapsi.fi>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220906132823.2390953-3-cyndis@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906182058.iijmpzu4rtxowy37@kmo-framework>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 15:28, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
-> 
-> Add clock, memory controller, powergate and reset dt-binding headers
-> necessary for NVDEC.
-> 
-> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+On Tue 06-09-22 14:20:58, Kent Overstreet wrote:
+[...]
+> Otherwise, saying "code has to be maintained" is a little bit like saying water
+> is wet, and we're all engineers here, I think we know that :)
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-(which is ack also for memory-controllers part, feel free to take it via
-Tegra SoC)
-
-
-Best regards,
-Krzysztof
+Hmm, it seems that further discussion doesn't really make much sense
+here. I know how to use my time better.
+-- 
+Michal Hocko
+SUSE Labs

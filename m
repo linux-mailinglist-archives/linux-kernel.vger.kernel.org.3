@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5504C5B1031
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8ED5B1036
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiIGXHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 19:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
+        id S229566AbiIGXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 19:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiIGXHP (ORCPT
+        with ESMTP id S229436AbiIGXKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 19:07:15 -0400
-Received: from alln-iport-2.cisco.com (alln-iport-2.cisco.com [173.37.142.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED61C4805
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1094; q=dns/txt; s=iport;
-  t=1662592033; x=1663801633;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WIMedRdp/vCdubl76WnqCfmpNc51ZNpLrONKBIeSt70=;
-  b=gbvtdRapPPlnzUbZdFtSd+6I/ljf+QZROg2wIkBxhZ6IGnHG5wqlOnMt
-   ZnltYAHK/i43w1zBM6KU3lJexjZnOiaB0jpY8YIUeCDUNcUUnwvWDe3zh
-   HHi0eVNAWuGDJDiC/Uq8IdGNyoLG+FDGO8wArnynktVTrgOvWqsBaCJti
-   g=;
-X-IPAS-Result: =?us-ascii?q?A0ATAACkIxljmJBdJa1aHQEBAQEJARIBBQUBgXsIAQsBg?=
- =?us-ascii?q?3k+RYxtiHGdCBSBEQNUCwEBAQ9CBAEBhQaEZwIlNAkOAQIEAQEBAQMCAwEBA?=
- =?us-ascii?q?QEBAQMBAQUBAQECAQcEFAEBAQEBAQEBHRkFDhAnhXWGcAsBRoE+ARKCfYMhA?=
- =?us-ascii?q?6YXgXkygQGIHYFlFIEpAYpshVkcgUlEhAh1hAsfhlUEmBYDCQQHBUpCAwsfD?=
- =?us-ascii?q?hY2AxUDFAMFJAcDGQ8jDQ0EHQwDAwUlAwICGwcCAgMCBhUFAgIXHhg4CAQIB?=
- =?us-ascii?q?CskDwUCBy8FBC8CHgQFBhEIAhYCBgQEBAQVAhAIAggmFwcTMxkBBVkQCSEWB?=
- =?us-ascii?q?igNBQYTAyBHJgUHPg8oMjU5Kx0bCoEOKgkfFQMEBAMCBhMDAyACECwxFAQpE?=
- =?us-ascii?q?xItBytzCQIDImwDAwQoLAMJIR8HKCY8B1kSKAUDAxAiPQYDCQMCJFp9DjEUF?=
- =?us-ascii?q?wUDEBmZB3sTo3WCFZ5Ug1yBRohGlgIaMpZykgMBlwcgoj00hFCBYTqBWzMaC?=
- =?us-ascii?q?BsVgyJRGQ+OOY5XJDE7AgYLAQEDCYgKgkgBAQ?=
-IronPort-Data: A9a23:n+88O6k1cOwF1MnQJ5P0FVLo5gxqJkRdPkR7XQ2eYbSJt1+Wr1Gzt
- xIWX2HSPveMZGKjedB0a4yz9h8G7JfRm4diTlRtqS8xEVtH+JHPbTi7wugcHM8zwunrFh8PA
- xA2M4GYRCwMZiaA4E/raNANlFEkvU2ybuKU5NXsZ2YgHmeIdA970Ug5w79h3dY16TSEK1rlV
- e3a8pW31GCNg1aYAkpMg05UgEoy1BhakGpwUm0WPZinjneH/5UmJM53yZWKEpfNatI88thW6
- Ar05OrREmvxp3/BAz4++1rxWhVirrX6ZWBihpfKMkSvqkAqm8A87ko0HPhbbGUKog6IpNFg1
- s5E6bK8FBgVO6KZzYzxUzEAe81/FbdN9LmCKn+lvInDiUbHaHDrhf5pCSnaP6VBpb0xWj4Ip
- KdecWxRBvyAr7reLLaTRuBqh8knM8DDN4IEsXYmxjbcZRojacGYH/qQu4EJhl/cgOhlEPLUO
- eEAeQFfNiTvIDYeF1QIV64xybLAan7XKm0E9w39SbAMy2zSyhFhlbvgKtzYfvSUSshP2EWVv
- GTL+yL+GB5yHNCS1zuO/262i+Lngyz2QsQRGae++/osh0ecrkQJDxcWFlenifq0kEizX5RYM
- UN80iQ0qrc78kDtStjmQzW3pXeFulgXXN84O/Uz7h2AzqvPpQ+fGm8CTzlcQN8hstQrQT8tk
- FSOmrvU6SdHqraZTzeW8a2Z6GP0MikOJmhEbigBJecY3zX9iIN0izCSZ+1iK6+kkMb8RR/8n
- i+2qSdr0t3/kvU3/6m8+FnGhRelqZ7IUhM5623rsoSNs1gRiGmNOtHA1LTL0RpTBN3DHwXe5
- hDoj+Dbvb5RVcvS/MCYaL9VdIxF8cppJ9E1bbRHJZgq9z2392Wke+i8CxkheR85a67oldIVC
- XI/VCtL75NVeXCtd6IyM8S6Ct8hyu7rEtGNuhHogjhmP8kZmOyvpXEGiausM4bFyxBEfUYXY
- szzTCpUJSxGYZmLNRLvLwvn7Zclxzol2UTYTo3hwhKs3NK2PSDLE+pabQfVNb5os8toRTk5F
- f4CZ6NmLD0CAIXDjtX/reb/0HhTdyFgXMCqwyCpXrfffloO9J4d5w/5mON9JNMNc1V9nebT9
- Xb1QV5D1Ff6nhX6xfaiNBhehEfUdc8n9xoTZHV0VX7xgiRLSdj0ts83KcBoFYTLAcQ+l5aYu
- dFfJZXZahmOIxyakwkggW7V9dQ9LE/x21LWZEJIolEXJvZdeuAAwfe8FiOHycXEJnPfWRcWy
- 1F46j7mfA==
-IronPort-HdrOrdr: A9a23:n6M7jqj4w6xa9IYvsi/vQTRHLnBQXtUji2hC6mlwRA09TyVXra
- yTdZMgpH3JYVkqNk3I9errBEDiewK+yXcK2+gs1N6ZNWGMhILCFu5fBOXZrgEIMheOk9K1rZ
- 0BT0C7Y+eAamSTSq3BkW2FL+o=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.93,298,1654560000"; 
-   d="scan'208";a="934726692"
-Received: from rcdn-core-8.cisco.com ([173.37.93.144])
-  by alln-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 07 Sep 2022 23:07:11 +0000
-Received: from localhost.localdomain ([10.25.130.54])
-        by rcdn-core-8.cisco.com (8.15.2/8.15.2) with ESMTP id 287N79Cx032254;
-        Wed, 7 Sep 2022 23:07:09 GMT
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     xe-linux-external@cisco.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] driver: of: overlay: demote message to warning
-Date:   Wed,  7 Sep 2022 16:07:08 -0700
-Message-Id: <20220907230709.271889-1-danielwa@cisco.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Sep 2022 19:10:47 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C69C121B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:10:46 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 65so5865275pfx.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 16:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=D9GYa8OJDUYWVtjvzZNWj4WxHz/CsMN9FwfpuX4V0rg=;
+        b=fHmNShdgI4dnC6hErvVoYwXgDNbgsvnYw6M/vzNGlywwNb8ieN/SlRLVWwpWKkoSu1
+         vq0hcEhlT+GKynnWf9AqlWHeUPpZL08URJGii/8YbtzlfJ0IfDSoFsIU4KgaZEj4R4uU
+         m+2r1/Ucjkq3qLNSD1SgrXHQXWlvKtbJxGq1c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=D9GYa8OJDUYWVtjvzZNWj4WxHz/CsMN9FwfpuX4V0rg=;
+        b=WaCyJofOBsXjrqjeIyFLj00C6lAYX+SqzgjlIsxlBc8HLMsu2LIxk850uOES/wpGrL
+         pDzSDOXwOhoBmQo7oDSncEbymLtL41F67UBoOX6O0mzcADGaJE4WHPSHIInx89D1k8ml
+         QXStgRwQs+DuG5E+oKqZPRFafsJ5WtJcvpA8Db7OFMPZXr+Otwy/4+rlzDNpErwCQrZj
+         BeVJLgM1Zn1J9j0o395yleIsZ7KRYJrbDphaffYfjR6Ng9jezL6kXl9yVFACc1IVT44h
+         B5NmBc7m1Wjdg+b8UysTb5fEQ+CnxpWWyiZWB3kguTRxERJwbeTsRloCnNCqwMl6rUXC
+         095A==
+X-Gm-Message-State: ACgBeo0tcw3Zpe1OlS6txtZX/ctK1miWdLM51JNup5Y1UM9WsFQOLT/J
+        mkPVnobTVTo4RWuDm+xSxcuOWA==
+X-Google-Smtp-Source: AA6agR5mOZptHzyKX2MhRGXlipNiPACZtnxxJGgxQ8tn93t85KvuvocH+td73K+d6+k4fFh4O61YPw==
+X-Received: by 2002:a63:1e61:0:b0:41c:45d:7d50 with SMTP id p33-20020a631e61000000b0041c045d7d50mr5135945pgm.507.1662592245677;
+        Wed, 07 Sep 2022 16:10:45 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v28-20020aa799dc000000b00537ab89c66csm13683408pfi.143.2022.09.07.16.10.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 16:10:44 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 16:10:43 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        virtualization@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+Message-ID: <202209071609.BE5BF18D6@keescook>
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220902213750.1124421-3-morbo@google.com>
+ <202209022251.B14BD50B29@keescook>
+ <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+ <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+ <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.25.130.54, [10.25.130.54]
-X-Outbound-Node: rcdn-core-8.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,34 +87,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This warning message shows by default on the vast majority of overlays
-applied. Despite the text identifying this as a warning it is marked
-with the loglevel for error. At Cisco we filter the loglevels to only
-show error messages. We end up seeing this message but it's not really
-an error.
+On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
+> On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
+> > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+> > >
+> > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
+> > > >
+> > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> > > > > [...]
+> > > > >         callq   *pv_ops+536(%rip)
+> > > >
+> > > > Do you know which pv_ops function is this? I can't figure out where
+> > > > pte_offset_kernel() gets converted into a pv_ops call....
+> > > >
+> > > This one is _paravirt_ident_64, I believe. I think that the original
+> > > issue Nathan was seeing was with another seemingly innocuous function.
+> > 
+> > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
+> > really needs to not be touched at all by the compiler for
+> > these...special features.
+> 
+> My source tree sayeth:
+> 
+>   u64 notrace _paravirt_ident_64(u64 x)
 
-For this reason it makes sense to demote the message to the warning
-loglevel.
+I don't see noinstr either. But it seems a reasonable thing to do?
 
-Cc: xe-linux-external@cisco.com
-Signed-off-by: Daniel Walker <danielwa@cisco.com>
----
- drivers/of/overlay.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Bill, does fixing up the noinstr macro and adding it here fix the
+problem?
 
-diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-index bd8ff4df723d..4ae276ed9a65 100644
---- a/drivers/of/overlay.c
-+++ b/drivers/of/overlay.c
-@@ -358,7 +358,7 @@ static int add_changeset_property(struct overlay_changeset *ovcs,
- 	}
- 
- 	if (!of_node_check_flag(target->np, OF_OVERLAY))
--		pr_err("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
-+		pr_warn("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
- 		       target->np, new_prop->name);
- 
- 	if (ret) {
 -- 
-2.25.1
-
+Kees Cook

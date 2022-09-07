@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4CB5B067B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A685B0684
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiIGOZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S230204AbiIGO2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiIGOZL (ORCPT
+        with ESMTP id S229881AbiIGO17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:25:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E3EB2600;
-        Wed,  7 Sep 2022 07:24:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CCDD91042;
-        Wed,  7 Sep 2022 07:23:32 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B9E63F71A;
-        Wed,  7 Sep 2022 07:23:15 -0700 (PDT)
-Message-ID: <9f91f187-2767-13f9-68a2-a5458b888f00@arm.com>
-Date:   Wed, 7 Sep 2022 15:23:09 +0100
+        Wed, 7 Sep 2022 10:27:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364C57E820;
+        Wed,  7 Sep 2022 07:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662560843; x=1694096843;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=5S1FLXojfm5RxIPVIfBw2/jOopEeQKEXob0foK9yKy0=;
+  b=lmO42N+e/U9ToVEpzPaOPGYghTC2jQH8hgF7XnDfoJwDaRWL2vSx3XSj
+   FKf4wqhDyP6WexM76jzxm+w7KvTYdnlH/6zObXxxbryutn1lMMFzDTVxY
+   bEETQMh2EOzjhhXnvjuUzcuUVKzP3xbNdFS3r8mmBh7H9ErN/eHYs3EXc
+   C4e6IwQf2Gciaf3S94xz9378A9yZgSxwetXP8j3PsQuYQbmSN6hpFcpYJ
+   OB/QGe6+mSmvw7H5qwBdCs3xuONjbCSQvmZ4Q8UlfYe/eNS+d8tUo5QT6
+   cT+Pu/YPD4TwBpePQOY27wCckLt438LPZyJe/LHyMYrsfvUVA4tVi7kAQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="294469443"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="294469443"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 07:23:34 -0700
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="703615153"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 07:23:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVvxi-009gFs-2o;
+        Wed, 07 Sep 2022 17:23:30 +0300
+Date:   Wed, 7 Sep 2022 17:23:30 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v1 4/9] pwm: lpss: Include headers we are direct user of
+Message-ID: <YxipYkbIfBkBC/iQ@smile.fi.intel.com>
+References: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
+ <20220906195735.87361-4-andriy.shevchenko@linux.intel.com>
+ <20220907091335.zls4vnacbtyrj5t5@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v6 1/5] iommu: Return -EMEDIUMTYPE for incompatible domain
- and device/group
-Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>, Joerg Roedel <joro@8bytes.org>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
-        alex.williamson@redhat.com, suravee.suthikulpanit@amd.com,
-        marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        robdclark@gmail.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
-        jonathanh@nvidia.com, jean-philippe@linaro.org, cohuck@redhat.com,
-        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
-        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
-        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        kevin.tian@intel.com
-References: <20220815181437.28127-1-nicolinc@nvidia.com>
- <20220815181437.28127-2-nicolinc@nvidia.com> <YxiRkm7qgQ4k+PIG@8bytes.org>
- <Yxig+zfA2Pr4vk6K@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Yxig+zfA2Pr4vk6K@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220907091335.zls4vnacbtyrj5t5@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-07 14:47, Jason Gunthorpe wrote:
-> On Wed, Sep 07, 2022 at 02:41:54PM +0200, Joerg Roedel wrote:
->> On Mon, Aug 15, 2022 at 11:14:33AM -0700, Nicolin Chen wrote:
->>> Provide a dedicated errno from the IOMMU driver during attach that the
->>> reason attached failed is because of domain incompatability. EMEDIUMTYPE
->>> is chosen because it is never used within the iommu subsystem today and
->>> evokes a sense that the 'medium' aka the domain is incompatible.
->>
->> I am not a fan of re-using EMEDIUMTYPE or any other special value. What
->> is needed here in EINVAL, but with a way to tell the caller which of the
->> function parameters is actually invalid.
-> 
-> Using errnos to indicate the nature of failure is a well established
-> unix practice, it is why we have hundreds of error codes and don't
-> just return -EINVAL for everything.
-> 
-> What don't you like about it?
-> 
-> Would you be happier if we wrote it like
-> 
->   #define IOMMU_EINCOMPATIBLE_DEVICE xx
-> 
-> Which tells "which of the function parameters is actually invalid" ?
+On Wed, Sep 07, 2022 at 11:13:35AM +0200, Uwe Kleine-König wrote:
+> On Tue, Sep 06, 2022 at 10:57:30PM +0300, Andy Shevchenko wrote:
+> > For the sake of integrity, include headers we are direct user of.
+> > 
+> > While at it, replace device.h with a forward declaration.
 
-FWIW, we're now very close to being able to validate dev->iommu against 
-where the domain came from in core code, and so short-circuit 
-->attach_dev entirely if they don't match. At that point -EINVAL at the 
-driver callback level could be assumed to refer to the domain argument, 
-while anything else could be taken as something going unexpectedly wrong 
-when the attach may otherwise have worked. I've forgotten if we actually 
-had a valid case anywhere for "this is my device but even if you retry 
-with a different domain it's still never going to work", but I think we 
-wouldn't actually need that anyway - it should be clear enough to a 
-caller that if attaching to an existing domain fails, then allocating a 
-fresh domain and attaching also fails, that's the point to give up.
+...
 
-Robin.
+> > +struct pwm_lpss_boardinfo;
+> 
+> the commit log doesn't explain the pwm_lpss_boardinfo part?!
+
+Indeed, during one of amendment I rephrased it forgetting about
+this small detail. (It was written in generic way to cover all
+forward declarations)
+
+I will add a word or two about this.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

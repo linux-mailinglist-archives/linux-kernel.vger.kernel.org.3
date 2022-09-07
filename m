@@ -2,273 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906605B07F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA955B07AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiIGPGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
+        id S229812AbiIGO5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiIGPF7 (ORCPT
+        with ESMTP id S230095AbiIGO4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:05:59 -0400
-X-Greylist: delayed 551 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 08:05:58 PDT
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1423E696C9;
-        Wed,  7 Sep 2022 08:05:57 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 174E0580347;
-        Wed,  7 Sep 2022 10:56:47 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 07 Sep 2022 10:56:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662562607; x=1662566207; bh=GzaX5v4M3u
-        YZGVDHmA54EWlyDj5TXPSzbZMQtn7o1Fs=; b=aUkat/PTyOzxfkwQburyZWVMDF
-        zINi9Bqjj2XPqR5mTmzwK9PzJ983akjvAiGRcJ+mXVAqSmn4wt466gsZeKIz+ADY
-        jPRHCAxfJ1NmC/vtftZ9Y8jEQl1kVZahlz/fFj0I0F9kfmNUDqIgrqbon1F7vepu
-        kHZyHd+0Z8hARWxNJP3wGVb9iX8goXOJFPLCrZnpFSFWtNtum+QA6OtlrwAm74Ug
-        5h1g0lRK6D3iHCZ7KeO/KlQx7FYYMq1UYT7IriJaF8yZ1OqNW5PPHlk3OlRLLcD3
-        b8X5A2pAYRSs884DEMxCazB1P/Iu822qLIYn5D3PIZczYB/hZLLed+Er78Ww==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662562607; x=1662566207; bh=GzaX5v4M3uYZGVDHmA54EWlyDj5T
-        XPSzbZMQtn7o1Fs=; b=zt06cd9u9mzrt83EVzh4+WAHsSJDrO81JYvgRDVbjG4c
-        qSRNA26E2GwKSRqbY0JXqQRIsnXUirNVR83xcb6/iplF/6yldHM/OID7zmuODD5e
-        pG1OuCpwyJ24/Z4taYwLfG5mCcZj8QyAVYr9lP8cDPRFQDADKW8pctsuLnu97bjw
-        dtAPMQ1UKlQe2xIyjNmjTPWDSFGVgczhzPf/0yooUnOyguIcWz1vsNe85/Oyovn6
-        407cHGyFMuazCYDdVQnZaDQFpchf2YJYj27byUnhPDFnwaf4onOPs2nTp56rj0kx
-        1hh6jAJ7APnjQRZuNr11yNox5XujqQH/DCtO6XlWwg==
-X-ME-Sender: <xms:LbEYY0R0XEj4yDOEMvVxDW4C5GF5EkDKM5fM5a4BqZlugyg8NsUCNA>
-    <xme:LbEYYxy1eE4dXRtcAJ_Dcj4iHYsL5w1iEoXLvhg3m1I_sOx8aR4ATUZqci27n-b95
-    MD_hXhU2NDji9bL4u8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:LbEYYx2dTBE22jIXfcyjTD-fdsyGl82HY25_KNX8powQgJBGPOtAtQ>
-    <xmx:LbEYY4BfZnTCJ2NIANklXIdvcvrkqWV5frmRYUfMqiW4bUckzqNS4A>
-    <xmx:LbEYY9htp88nQi1vE74onKOA4pguUjvQLc0NmRqAqX7mfWuvZZLEEw>
-    <xmx:LrEYY4PrHHi5doUy7UslZ59C8CDGdfom_mjzaz6Z4kBcqY3HCXmBLA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BBBD8B60083; Wed,  7 Sep 2022 10:56:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <2197faa3-0217-41e0-8ff0-b5396561c623@www.fastmail.com>
-In-Reply-To: <YxiiOWQxGCUz9ktF@shell.armlinux.org.uk>
-References: <20220906104805.23211-1-jslaby@suse.cz>
- <Yxcvbk281f/vy4vb@hovoldconsulting.com>
- <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
- <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com>
- <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
- <cfd16d53-6aa0-e848-91d0-dce8ff72bb4d@linux.intel.com>
- <YxiONiDgGYp8MGQA@kroah.com>
- <c66f9c98-dcef-27c-d74a-ea826f6a799@linux.intel.com>
- <YxiQVTN/jX8AfO4L@kroah.com> <YxiiOWQxGCUz9ktF@shell.armlinux.org.uk>
-Date:   Wed, 07 Sep 2022 16:56:03 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Russell King" <linux@armlinux.org.uk>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "Jiri Slaby" <jirislaby@kernel.org>,
-        "Johan Hovold" <johan@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Tobias Klauser" <tklauser@distanz.ch>,
-        "Richard Genoud" <richard.genoud@gmail.com>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
-        "Vladimir Zapolskiy" <vz@mleia.com>,
-        "Liviu Dudau" <liviu.dudau@arm.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        "Kevin Cernekee" <cernekee@gmail.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Orson Zhai" <orsonzhai@gmail.com>,
-        "Baolin Wang" <baolin.wang7@gmail.com>,
-        "Chunyan Zhang" <zhang.lyra@gmail.com>,
-        "Patrice Chotard" <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 0/4] tty: TX helpers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 7 Sep 2022 10:56:42 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109C8B2741
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:56:36 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id g12-20020a5d8c8c000000b006894fb842e3so9334114ion.21
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:56:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=M0ck3zhRmF4k7FihEXUJjiDZ+fwtcv/W6kVeRN0u1vs=;
+        b=klgeo9xXtKbvCz5Ds0gCqE6fZnhOlWVLgpF72UIVDT13bx01uT0DY7arS6g+xb2KMr
+         Jvt0Dc4FU8Ml+rsRhR3vUGuDMPDqzxifzD7y71fT20gQi4pHqpjRgyH/n9XHHORajnz3
+         HQm3/0WVayS1m1uH06EUbU7FRHk69u65Yn3NXh6Nd6zb08z/Qv3Ets7vxs0ssNporg8k
+         iIVczDu4c2p31+SGHI1uZu9RBn0SO5NmpeSnrEQoM54of0vlwuZwvzhN/v9rXXzKOomv
+         jOXBdrYUNXtLFRn/QDuYcfdmi7O0X01CAUIf8oMBy41y8th4kfbBbrIF1ebgm/ZT5gTc
+         /7kQ==
+X-Gm-Message-State: ACgBeo3oJ955KAvIRzaeOhMbMqj8/o9kyhhZic9ok19zEecSSfFQkMnI
+        z/aCZcnU/xXpLFkUJlyT9kqcP+4uaP2pyF3OQRnhPp1rQis7
+X-Google-Smtp-Source: AA6agR5t4AwuXZ/KT7KOUPlU+Fqk4GKe6LTMbwtLXUILoPhKonA+fzxicNDNAuz6+DQ9BNf8wM2+uEsL1bKVD9Zf81QNeCFbN0ub
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:3720:b0:352:7d09:a327 with SMTP id
+ k32-20020a056638372000b003527d09a327mr2274515jav.283.1662562594927; Wed, 07
+ Sep 2022 07:56:34 -0700 (PDT)
+Date:   Wed, 07 Sep 2022 07:56:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e33bb005e817847a@google.com>
+Subject: [syzbot] usb-testing boot error: general protection fault in copy_process
+From:   syzbot <syzbot+d3cb3281a93037d5a02e@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, luto@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022, at 3:52 PM, Russell King (Oracle) wrote:
-> On Wed, Sep 07, 2022 at 02:36:37PM +0200, Greg Kroah-Hartman wrote:
->
-> Of course, it would have been nicer to see the definition of this
-> macro, because then we can understand what the "ch" argument is to
-> this macro, and how that relates to the macro argument that is
-> shown in the example as a writel().
+Hello,
 
-I pulled out the 'ch' variable from the macro to avoid having
-the macro define local variables that are then passed to the
-inner expressions. 
+syzbot found the following issue on:
 
-> Maybe a more complete example would help clear up the confusion?
-> Arnd?
+HEAD commit:    4e55e22d3d9a USB: hcd-pci: Drop the unused id parameter fr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15ba5d7d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=d3cb3281a93037d5a02e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Here is a patch on top of the series that would implement the
-uart_port_tx_helper_limited() and uart_port_tx_helper()
-macros that can be used directly from drivers in place of defining
-local functions, with the (alphabetically) first two drivers
-converted to that.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/26cea6f2cda1/disk-4e55e22d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/00aba451c439/vmlinux-4e55e22d.xz
 
-I left the (now trivial) DEFINE_UART_PORT_TX_HELPER_LIMITED() and
-DEFINE_UART_PORT_TX_HELPER() macros in place to keep it building,
-but they would get removed if we decide to use something like
-my suggested approach for all drivers.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d3cb3281a93037d5a02e@syzkaller.appspotmail.com
 
-   Arnd
+general protection fault, probably for non-canonical address 0xffff000000000300: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000001800-0xfff8200000001807]
+CPU: 0 PID: 36 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-syzkaller-00049-g4e55e22d3d9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Workqueue: events_unbound call_usermodehelper_exec_work
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x15d/0x4a0 mm/slub.c:3268
+Code: 51 08 48 8b 01 48 83 79 10 00 48 89 04 24 0f 84 7c 02 00 00 48 85 c0 0f 84 73 02 00 00 49 8b 3c 24 41 8b 4c 24 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 7b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc900004778f0 EFLAGS: 00010246
 
-diff --git a/drivers/tty/serial/21285.c b/drivers/tty/serial/21285.c
-index 40cf1bb534f3..a0f5c59d6128 100644
---- a/drivers/tty/serial/21285.c
-+++ b/drivers/tty/serial/21285.c
-@@ -151,16 +151,14 @@ static irqreturn_t serial21285_rx_chars(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--static DEFINE_UART_PORT_TX_HELPER_LIMITED(serial21285_do_tx_chars,
--		!(*CSR_UARTFLG & 0x20),
--		*CSR_UARTDR = ch,
--		({}));
--
- static irqreturn_t serial21285_tx_chars(int irq, void *dev_id)
- {
- 	struct uart_port *port = dev_id;
-+	unsigned int count = 256;
-+	unsigned char ch;
- 
--	serial21285_do_tx_chars(port, 256);
-+	uart_port_tx_helper_limited(port, !(*CSR_UARTFLG & 0x20),
-+				    *CSR_UARTDR = ch, ({}), count, ch);
- 
- 	return IRQ_HANDLED;
- }
-diff --git a/drivers/tty/serial/altera_uart.c b/drivers/tty/serial/altera_uart.c
-index 70c0ad431cf9..f81dd950cd39 100644
---- a/drivers/tty/serial/altera_uart.c
-+++ b/drivers/tty/serial/altera_uart.c
-@@ -246,10 +246,14 @@ static void altera_uart_rx_chars(struct altera_uart *pp)
- 	tty_flip_buffer_push(&port->state->port);
- }
- 
--static DEFINE_UART_PORT_TX_HELPER(altera_uart_tx_chars,
--		altera_uart_readl(port, ALTERA_UART_STATUS_REG) &
--		                ALTERA_UART_STATUS_TRDY_MSK,
--		altera_uart_writel(port, ch, ALTERA_UART_TXDATA_REG));
-+static int altera_uart_tx_chars(struct uart_port *port)
-+{
-+	u8 ch;
-+
-+	return uart_port_tx_helper(port, 
-+		altera_uart_readl(port, ALTERA_UART_STATUS_REG) & ALTERA_UART_STATUS_TRDY_MSK,
-+		altera_uart_writel(port, ch, ALTERA_UART_TXDATA_REG), ch);
-+}
- 
- static irqreturn_t altera_uart_interrupt(int irq, void *data)
- {
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index 7236fc76ba22..d48d2301d1b7 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -638,13 +638,11 @@ struct uart_driver {
- 
- void uart_write_wakeup(struct uart_port *port);
- 
--#define __DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, tx_done,	  \
--		for_test, for_post, ...)				  \
--unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
--{									  \
-+#define __uart_port_tx_helper(port, tx_ready, put_char, tx_done,	  \
-+	       	for_test, for_post, ch)					  \
-+({									  \
- 	struct circ_buf *xmit = &port->state->xmit;			  \
- 	unsigned int pending;						  \
--	u8 ch;								  \
- 									  \
- 	for (; (for_test) && (tx_ready); (for_post), port->icount.tx++) { \
- 		if (port->x_char) {					  \
-@@ -672,8 +670,15 @@ unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
- 			port->ops->stop_tx(port);			  \
- 	}								  \
- 									  \
--	return pending;							  \
--}
-+	pending;							  \
-+})
-+
-+#define uart_port_tx_helper_limited(port, tx_ready, put_char, tx_done, count, ch) \
-+	__uart_port_tx_helper(port, tx_ready, put_char, tx_done, count, count--, ch)
-+
-+#define uart_port_tx_helper(port, tx_ready, put_char, ch)		  \
-+	__uart_port_tx_helper(port, tx_ready, put_char, ({}), true, ({}), ch)
-+
- 
- /**
-  * DEFINE_UART_PORT_TX_HELPER_LIMITED -- generate transmit helper for uart_port
-@@ -703,9 +708,13 @@ unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
-  * For all of them, @port->lock is held, interrupts are locally disabled and
-  * the expressions must not sleep.
-  */
--#define DEFINE_UART_PORT_TX_HELPER_LIMITED(name, tx_ready, put_char, tx_done) \
--	__DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, tx_done,	      \
--			count, count--, unsigned int count)
-+#define DEFINE_UART_PORT_TX_HELPER_LIMITED(name, tx_ready, put_char, tx_done)	\
-+unsigned int name(struct uart_port *port, unsigned int count)			\
-+{										\
-+	u8 ch;									\
-+	return uart_port_tx_helper_limited(port, tx_ready, put_char, tx_done,	\
-+					   count, ch);				\
-+}
- 
- /**
-  * DEFINE_UART_PORT_TX_HELPER -- generate transmit helper for uart_port
-@@ -715,9 +724,12 @@ unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
-  *
-  * See DEFINE_UART_PORT_TX_HELPER_LIMITED() for more details.
-  */
--#define DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char)		\
--	__DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, ({}),	\
--			true, ({}))
-+#define DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, ...)	  \
-+unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
-+{									  \
-+	u8 ch;								  \
-+	return uart_port_tx_helper(port, tx_ready, put_char, ch);	  \
-+}
- 
- /*
-  * Baud rate helpers.
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000300
+RDX: 0000000000000580 RSI: 0000000000000dc0 RDI: 000000000003e300
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff88de9657
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff88810016d500
+R13: 0000000000000dc0 R14: ffffffff811486fe R15: 0000000000000dc0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kmem_cache_zalloc include/linux/slab.h:723 [inline]
+ copy_signal kernel/fork.c:1689 [inline]
+ copy_process+0x256e/0x6de0 kernel/fork.c:2253
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2673
+ user_mode_thread+0xad/0xe0 kernel/fork.c:2742
+ call_usermodehelper_exec_work kernel/umh.c:174 [inline]
+ call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2ea/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+----------------
+Code disassembly (best guess):
+   0:	51                   	push   %rcx
+   1:	08 48 8b             	or     %cl,-0x75(%rax)
+   4:	01 48 83             	add    %ecx,-0x7d(%rax)
+   7:	79 10                	jns    0x19
+   9:	00 48 89             	add    %cl,-0x77(%rax)
+   c:	04 24                	add    $0x24,%al
+   e:	0f 84 7c 02 00 00    	je     0x290
+  14:	48 85 c0             	test   %rax,%rax
+  17:	0f 84 73 02 00 00    	je     0x290
+  1d:	49 8b 3c 24          	mov    (%r12),%rdi
+  21:	41 8b 4c 24 28       	mov    0x28(%r12),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 7b 02 00 00    	jne    0x2af
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

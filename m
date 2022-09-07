@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135375B0979
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C6C5B097D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiIGQA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S230273AbiIGQBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiIGQAN (ORCPT
+        with ESMTP id S230090AbiIGQAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:00:13 -0400
+        Wed, 7 Sep 2022 12:00:33 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BFDE0E2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:59:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0DA915CD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662566395; x=1694102395;
+  t=1662566403; x=1694102403;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sGQ1bjYMyAie3sSMiqWysbW+sG9slBLGqnQk2Rj19IY=;
-  b=XC5d/3CLNYpIGnE2QIJPLsQqtHBgG9VXKWToELxvM078yP6jJFqnuiTd
-   WkxGiRhUjNTPL4vpezgt+u1w8+Fo0AxFpT1tWzTP/Jc2siQMfNs03Sp6T
-   23U/vc6FKgSiDtOKRmxgDfzRQgtRCMJdid309YvWQ2S9KW6+K8itdnJv9
-   6dHm1wLEm/QjH4sv3lAytsdcjDGeNDrRh/lQnLEF/F/8+0co596aLaExe
-   ajl+RxfdGkfv4oY5VC9ASeb3+uSNl/h9Ze0Pt5Y+CWXtk+SfZewjUQZGl
-   t+7MqNXlD0qPsTKNPQ7ZOl+A8n24CvzBuWTUDxwrD/uKD/P3/xgJqSW6I
+  bh=hO/ygtyyqutcViUvWsaXsvt/Qi8P3M4tyR8fhZGvumg=;
+  b=HPpl33S+4gWJv9hBeay5NyRyCX1LaKPhMshz3rB3KPegETjGjQr/RUZI
+   qDmQGoDK5OKMx+rN7WfDySkxdN+ENCfhSv3II1F9zmuhuqlwYSPvMhvU3
+   Rxru66+Ph2ZUkUOR/LZh4sxDpvbOXtEe8j6or55I8xxY0MOghdcUgrGiA
+   c3TqCzpH0S7kXrQ1MiR2lbzVfVzDQVAcGLdg31IMZdhRdMiX1M/SZGjE0
+   /YI66cVe+RZwI9canfLuPOY83QLH8U2PC6lOWqJfbPWlDRfqLzmIQ3QkL
+   9UU6A7J2mVA4doA6m5z5eW/zrEXIq4fDAwgoppZSQbAI9JDBzE4qdFLLp
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297701537"
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297701570"
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="297701537"
+   d="scan'208";a="297701570"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:30 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:34 -0700
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="676248183"
+   d="scan'208";a="676248208"
 Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:26 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:30 -0700
 From:   Tomas Winkler <tomas.winkler@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -48,11 +48,10 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Tomas Winkler <tomas.winkler@intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Subject: [PATCH v8 12/16] mei: gsc: add transition to PXP mode in resume flow
-Date:   Wed,  7 Sep 2022 18:58:09 +0300
-Message-Id: <20220907155813.1427526-13-tomas.winkler@intel.com>
+        Vitaly Lubart <vitaly.lubart@intel.com>
+Subject: [PATCH v8 13/16] mei: drop ready bits check after start
+Date:   Wed,  7 Sep 2022 18:58:10 +0300
+Message-Id: <20220907155813.1427526-14-tomas.winkler@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220907155813.1427526-1-tomas.winkler@intel.com>
 References: <20220907155813.1427526-1-tomas.winkler@intel.com>
@@ -68,45 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Lubart <vitaly.lubart@intel.com>
+From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-Added transition to PXP mode in resume flow.
+The check that hardware and host ready bits are set after start
+is redundant and may fail and disable driver if there is
+back-to-back link reset issued right after start.
+This happens during pxp mode transitions when firmware
+undergo reset. Remove these checks to eliminate such failures.
 
-CC: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 ---
- drivers/misc/mei/gsc-me.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/misc/mei/init.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/misc/mei/gsc-me.c b/drivers/misc/mei/gsc-me.c
-index 6b22726aed55..75765e4df4ed 100644
---- a/drivers/misc/mei/gsc-me.c
-+++ b/drivers/misc/mei/gsc-me.c
-@@ -182,11 +182,22 @@ static int __maybe_unused mei_gsc_pm_suspend(struct device *device)
- static int __maybe_unused mei_gsc_pm_resume(struct device *device)
- {
- 	struct mei_device *dev = dev_get_drvdata(device);
-+	struct auxiliary_device *aux_dev;
-+	struct mei_aux_device *adev;
- 	int err;
-+	struct mei_me_hw *hw;
+diff --git a/drivers/misc/mei/init.c b/drivers/misc/mei/init.c
+index 1b4d5d7870b9..bac8852aad51 100644
+--- a/drivers/misc/mei/init.c
++++ b/drivers/misc/mei/init.c
+@@ -218,16 +218,6 @@ int mei_start(struct mei_device *dev)
+ 		goto err;
+ 	}
  
- 	if (!dev)
- 		return -ENODEV;
- 
-+	hw = to_me_hw(dev);
-+	aux_dev = to_auxiliary_dev(device);
-+	adev = auxiliary_dev_to_mei_aux_dev(aux_dev);
-+	if (adev->ext_op_mem.start) {
-+		mei_gsc_set_ext_op_mem(hw, &adev->ext_op_mem);
-+		dev->pxp_mode = MEI_DEV_PXP_INIT;
-+	}
-+
- 	err = mei_restart(dev);
- 	if (err)
- 		return err;
+-	if (!mei_host_is_ready(dev)) {
+-		dev_err(dev->dev, "host is not ready.\n");
+-		goto err;
+-	}
+-
+-	if (!mei_hw_is_ready(dev)) {
+-		dev_err(dev->dev, "ME is not ready.\n");
+-		goto err;
+-	}
+-
+ 	if (!mei_hbm_version_is_supported(dev)) {
+ 		dev_dbg(dev->dev, "MEI start failed.\n");
+ 		goto err;
 -- 
 2.37.2
 

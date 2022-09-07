@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9C85B0393
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB095B039B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiIGMFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S229628AbiIGMGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIGMFG (ORCPT
+        with ESMTP id S229478AbiIGMGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:05:06 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60051A2D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:05:04 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id z20so15709429ljq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:05:04 -0700 (PDT)
+        Wed, 7 Sep 2022 08:06:41 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E18A6FE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:06:40 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id j12so1964291pfi.11
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:06:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=DhMnHgvZLgQGk2ZGophI8BLsqGSYtn3vHSRE9tq/2lc=;
-        b=kRm2RsAxbIs+iSLZ9oKd4TeqeEG/9qQUTTx/tagPGA+qeulAYcrw+eohBuBmuED+s2
-         PvzTUdaUSNIi06z+eT9QEj2j0AB8YzKDbuB04a9cnKShu5TOXNQWb+EW6PsUatONg072
-         fSu5amYp4xHISIc7Ry9woaIZ21OR9M0SMkoWxqNe2MA+p4A5ksu014Ky5rpM4O5+rdWT
-         gXSTMgIA7t6C2YIolvzBjj1aaiHcb5ZLwFAtrJVjKVLBZpW6Ca7xsduJv9dUXRFJ146/
-         Ry4GLNXz18Y8yycbwf6kG9Te4Cs7kowtQiiA0t4sGbhoO1sWk5R5gvB7mcSduHrLM/8w
-         p2dg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=0OMCYXdwR40VgBJEbCb1Ib7nAC/48wQOIhHqsm4Pyls=;
+        b=HO4kjKdkDS/f97yEF+pCNPTD9Qua8BJsV2g6HRDvYYsaGXiL8d/7kvtOrUIj5FpP3u
+         Do171ILfzUr9ll+GMVbtMMkKuLFktC0LuKZYHCj8Aj4GRzOmL0kbSz+a68UvVjzMcfj0
+         kA6/ZHwpyBfxdjfjVvSOzG5SRoSZp9doRxmZrHtV9n6DsoCTRobj2aQgvGKLTd4t60L5
+         6xaJKWiPrdjfPfveb0kURb/8K3B6ViCYRGZl8yCKYPZ354MstcHpOPR7RalIFLu5a9IO
+         JqF8kEkTl/jJgocmBPv7hxEajpLVtL4HScdT5HN4ZgdHcuCinfyXB8Z7P5yPSwLct9bF
+         MDDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=DhMnHgvZLgQGk2ZGophI8BLsqGSYtn3vHSRE9tq/2lc=;
-        b=w2p5qbaiIKMqEV/ODCcAR3Nw4MDs5aX8GPu70nybI0gK7qjUwanIORj0v5k87A6Xux
-         kLYZNIHB3x/sTeRCAS6FqWcFxNPvfX7UwKqfbiRyrNPkjuCCQozfOnCJpgjP3OScQ8UX
-         DCFJQ41D9lUus0L7TaH3heljqpliTPAnCean8Yg4S1HhuBAltOgpgcAnLosJn3Z4e+im
-         1vFhmDlr/F2VRWQ/8tLYOLN6ELQXm/GqGc+0mGafx6PTkvI3shwUqPSBiNVVTqFWSJ7w
-         dR2re33phcPPL1n56FS5q+8mLvpb0+4lB7cWkTH7o2GIIgIEF5LOU4HnMXBstF5kKb9D
-         EFTg==
-X-Gm-Message-State: ACgBeo2jgVhSHEoxm0tX59j9K8rmSWTWAbTVqVptpjMjYzAcDqSJH/Lj
-        eS2GuWZ6NmxSe8OijKd51/d8jA==
-X-Google-Smtp-Source: AA6agR6+5p1Hswq0aeSZ4aWoRWOZfD9rclbT9lObRE+Z3z0CQkpT/Unkl/wOyWCdDOyoAf+AFv9MgQ==
-X-Received: by 2002:a05:651c:218:b0:263:aeac:5939 with SMTP id y24-20020a05651c021800b00263aeac5939mr848435ljn.64.1662552302499;
-        Wed, 07 Sep 2022 05:05:02 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id l18-20020a2e7012000000b00261ca0f940esm2503661ljc.62.2022.09.07.05.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 05:04:59 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND PATCH] dt-bindings: interconnect: fsl,imx8m-noc: drop Leonard Crestez
-Date:   Wed,  7 Sep 2022 14:04:52 +0200
-Message-Id: <20220907120452.52161-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=0OMCYXdwR40VgBJEbCb1Ib7nAC/48wQOIhHqsm4Pyls=;
+        b=lQHjoYCALAJMwMSzR+QWv4yUPaSck5q6qkHyWGvXWNAMAOFP3p4qL8N1i2KYKj5KsN
+         YZwrVkoTdEZH3mNqnklcdg+BtpaT2gvGBiJLNcURmJ+gJbu4jlSQMUgPibQGz5yN00TV
+         SEOtLFEUidcS31xvTNDmjyQOiQhDj7mFDWDJ6JqVHHS1pQ6js/UEfpF7GuRIkDI8itNT
+         Pz8FROuei6gqg5H5Ntty+2ApclP2nlSJ1nj9IrMCJYBq8vwUwXvHMcWXnMGqd1cy6Ul2
+         OEF0CStWgG2HeqxI9TR1VBZsNcLGazrSdsxWhDrCOu6P2GzC/HTsPnDUlVOnVUBnWPxw
+         9S5w==
+X-Gm-Message-State: ACgBeo03Igm2kZ4dvAjggAdE7kp8AhJmUGvyq2wGSlL6ERuFPxA9PYmn
+        fKJlbre1Ydz2uEM4KSa7Hv7+Yl56FVw0GQ==
+X-Google-Smtp-Source: AA6agR4tfDHmSiKzt3i01SAQZYBf7IAftYvaZ9oaAAQ6MJ+FVM062Gti6IBQ5YC8Fh5KKcjl9nRAzw==
+X-Received: by 2002:a63:4d66:0:b0:434:8301:53e1 with SMTP id n38-20020a634d66000000b00434830153e1mr3070042pgl.369.1662552399617;
+        Wed, 07 Sep 2022 05:06:39 -0700 (PDT)
+Received: from [10.255.85.171] ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090a474100b001fdbb2e38acsm14714571pjg.5.2022.09.07.05.06.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 05:06:39 -0700 (PDT)
+Message-ID: <d323bd95-476b-0901-855e-14c8796d1b23@bytedance.com>
+Date:   Wed, 7 Sep 2022 20:06:30 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [Phishing Risk] Re: [Phishing Risk] [External] Re: [PATCH]
+ cgroup/cpuset: Add a new isolated mems.policy type.
+To:     Tejun Heo <tj@kernel.org>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220902063303.1057-1-hezhongkun.hzk@bytedance.com>
+ <YxT/liaotbiOod51@slm.duckdns.org>
+ <c05bdeac-b354-0ac7-3233-27f8e5cbb38a@bytedance.com>
+ <YxeBGeOaQxvlPLzo@slm.duckdns.org>
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+In-Reply-To: <YxeBGeOaQxvlPLzo@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
-Access denied:), so change maintainer to Peng Fan from NXP.
+> Hello,
+> 
+> On Mon, Sep 05, 2022 at 06:30:38PM +0800, Zhongkun He wrote:
+>> We usually use numactl to set the memory policy, but it cannot be changed
+>> dynamically. In addition, the mempolicy of cpuset can provide a more
+>> convenient interface for management and control panel.
+> 
+> But you can write a better tool easily in userspace to do whatever you wanna
+> do, right? If you're worried about racing against forks, you can freeze the
+> cgroup, iterate all pids applying whatever new policy and then unfreeze. We
+> can probably improve the freezer interface so that multiple users don't
+> conflict with each other but that shouldn't be too difficult to do and is
+> gonna be useful generically.
+> 
+> I don't see much point in adding something which can be almost trivially
+> implemented in userspace as a built-in kernel feature.
+> 
+>> Sorry,I don't quite understand the meaning of "don't enforce anything
+>> resource related". Does it mean mempolicy, such as "prefer:2" must specify
+>> node? Or "cpuset.mems.policy" need to specify a default value?
+>> (cpuset.mems.policy does not require a default value.)
+> 
+> In that there's no real resource being distributed hierarchically like cpu
+> cycles or memory capacities. All it's doing is changing attributes for a
+> group of processes, which can be done from userspace all the same.
+> 
+> Thanks.
+> 
+Hi Tejun, thanks for your reply.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Peng Fan <peng.fan@nxp.com>
+It would be better if one process had a way to dynamically modify the
+mempolicy of another process. But unfortunately there is no interface or
+system call to do that in userspace.
 
----
+In our use case, we hope to combine memory policy with cgroup for
+better use of resources. The current implementation may not be suitable, 
+I'll keep trying other approaches.
 
-Resend with ack.
----
- .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-index 7d8d0896e979..f7a5e31c506e 100644
---- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Generic i.MX bus frequency device
- 
- maintainers:
--  - Leonard Crestez <leonard.crestez@nxp.com>
-+  - Peng Fan <peng.fan@nxp.com>
- 
- description: |
-   The i.MX SoC family has multiple buses for which clock frequency (and
--- 
-2.34.1
-
+Thanks again.

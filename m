@@ -2,130 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8CE5AFEE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C554E5AFEE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiIGIXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S229829AbiIGIXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIGIXK (ORCPT
+        with ESMTP id S229649AbiIGIX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:23:10 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3D783BD1;
-        Wed,  7 Sep 2022 01:23:09 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28788GQj024283;
-        Wed, 7 Sep 2022 08:22:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=xXa7LAAk9UwYnkv/kf2VLumlZSHOsw7QELcgqLgZJZU=;
- b=mtR3XXUg9pfFlrMabUivIDFKafCKs18+I5MU8PEe46/fUJWDolRATlXn2N8kl0T8msvo
- Y0edT7QbFQNsn3yNPNaKaio273N5vkiEjj1VLJLF6SuXoqrY8HlGdgja5+1GYpo3GD1m
- +lgLotB80rEGw05ZRyHOBt1cuKF5WhVjJXFAhD3ed1oLSDTHkiRFyeeq8IkgTJktxtsO
- +qBYuUouAcMRaED7cnHruM/vl6VO6UwDmniwP/uXrOLnM62da6JFhpLLnx/NCMDE14yP
- zuAmRvkhGEQJTiZ1AhcpLvuM4DgTG8gzhxjKvxCuFRoT2EdoJZV8t2oZ5gVPquODvcXz Fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jeq4t901g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 08:22:35 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28788Sbk026453;
-        Wed, 7 Sep 2022 08:22:34 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jeq4t900d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 08:22:33 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2878KMeV010791;
-        Wed, 7 Sep 2022 08:22:31 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jbxj8vuwa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 08:22:31 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2878MRoq17301866
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 7 Sep 2022 08:22:27 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD8014C046;
-        Wed,  7 Sep 2022 08:22:27 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 199C74C040;
-        Wed,  7 Sep 2022 08:22:27 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  7 Sep 2022 08:22:27 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        linux-s390@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 4/8] hugetlb: handle truncate racing with page faults
-References: <20220824175757.20590-1-mike.kravetz@oracle.com>
-        <20220824175757.20590-5-mike.kravetz@oracle.com>
-        <yt9dr10ok3lm.fsf@linux.ibm.com> <Yxd5z0c8NlKVlVqk@monkey>
-        <YxeL7ZMoyNmPAvY0@monkey> <YxfTA53/5pkpC7xZ@monkey>
-        <367db2b5-5242-9be6-1d5f-d13e35f84167@huawei.com>
-        <YxgD7qXPgkJ9VgJn@monkey>
-        <25ffa1bf-0025-3421-53cb-79f986468cb6@huawei.com>
-        <YxgQbSvDzQq7covC@monkey>
-Date:   Wed, 07 Sep 2022 10:22:26 +0200
-In-Reply-To: <YxgQbSvDzQq7covC@monkey> (Mike Kravetz's message of "Tue, 6 Sep
-        2022 20:30:53 -0700")
-Message-ID: <yt9d5yhzk30d.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Wed, 7 Sep 2022 04:23:28 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE73AA9C37
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:23:26 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z25so21274879lfr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 01:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=PMffZexfhPxUf0YHZ8IhoN7MwL1ZPf0n44VkkEDS57M=;
+        b=yYH6ZJP1hi7hz49sPr0A7ZzxmO+zviqS3k4RQfh7vETXvcV+RtB8a68Y1PvcZSocoE
+         aJKF76dJdcbpQ7uuFSRU3UpQyjj2/jDe4sC6Uy9EQQ/5o2wpFGTalTiKmIcZ7wEJsNNx
+         4j1bF8ySH8V47EtLL/NhRr8vbNgnJrZAQMnD+F4nqge42pwNjPDD4EJRELgw0XXzkJ08
+         J1Ygh73Vq2NCFycDpuo1Jcm8m12CUTVPQGi1oAolgyUKgU77+oDm98/IEir++HoW9btl
+         nMtsmsYMkWyfVjMBBi8Mux7KY0wKQ7KnfqMO+2ofOFIInL4eIyUz4V1EaNoCrMbyHvKA
+         LEHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=PMffZexfhPxUf0YHZ8IhoN7MwL1ZPf0n44VkkEDS57M=;
+        b=cxbBXnW5mrC2TeZJRv6Cewr//+D0RtAAXdnMJS9z89Lkiern5zpySZNKfDe1e/ubcU
+         +2MypeK8LSCy1PI+2i1mUrbEKQgH9vxE7YilRECJUZkhMkqv26hTS8gjFcxnspl5gC/j
+         xJzbn9Pc+lzToE9cgpAaL9ipKrLQMBv4QsuarPF74N8bulpS4O1fNUEHQCI4rdX5126G
+         in7A/1FyAppOZETCxMB2576vctPv3yt3CHzZAmY37DQ2mvGxxMsH3lDUpK0K4PFvayFd
+         0wlje2elqh7Fj/eVpY8yOrebU9LewOHwFZJ4IZRROT1x/3TOIkmR3MxNY/2PgXM5DeO2
+         CtSA==
+X-Gm-Message-State: ACgBeo1fOdcx2xTdb+DaadRdH+aNacBZrottKkgpXhlSYOiNXELm2Nvq
+        GnXxRMDRUFeirny3AQSVZkNf+Q==
+X-Google-Smtp-Source: AA6agR5QYYhRNSKsahw3GggztqRGmZaan4egYMA//IRllSYSBi1GGWREmQ96xwI88a8Q4T/kP8mesA==
+X-Received: by 2002:a19:380e:0:b0:497:7968:e789 with SMTP id f14-20020a19380e000000b004977968e789mr715368lfa.242.1662539005327;
+        Wed, 07 Sep 2022 01:23:25 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g5-20020a056512118500b00492df78f311sm2312204lfr.57.2022.09.07.01.23.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 01:23:24 -0700 (PDT)
+Message-ID: <e3367f73-c2da-3f6d-59a4-209efb114d9e@linaro.org>
+Date:   Wed, 7 Sep 2022 10:23:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: GJ9D6KkJ257NaDv0kCIN9UQIhXZxNtrU
-X-Proofpoint-GUID: 2RT4E0ehZUR5WGgGuvXZLFX04sl8vb4_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-07_04,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 spamscore=0 malwarescore=0 phishscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209070034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] remoteproc: report firmware name on load failures
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220831161736.749932-1-krzysztof.kozlowski@linaro.org>
+ <20220906194622.GB64477@p14s>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220906194622.GB64477@p14s>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Kravetz <mike.kravetz@oracle.com> writes:
+On 06/09/2022 21:46, Mathieu Poirier wrote:
+> On Wed, Aug 31, 2022 at 07:17:36PM +0300, Krzysztof Kozlowski wrote:
+>> remoteproc error messages like:
+>>   remoteproc remoteproc0: request_firmware failed: -2
+>>   remoteproc remoteproc1: request_firmware failed: -2
+>> are difficult to debug as one actually have no clue which device
+>> reported it and which firmware is missing.  Be verbose and print the
+>> name of the failed firmware.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/remoteproc/remoteproc_core.c | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+>> index e5279ed9a8d7..71cd7ed7a970 100644
+>> --- a/drivers/remoteproc/remoteproc_core.c
+>> +++ b/drivers/remoteproc/remoteproc_core.c
+>> @@ -1923,7 +1923,8 @@ int rproc_trigger_recovery(struct rproc *rproc)
+>>  	/* load firmware */
+>>  	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+>>  	if (ret < 0) {
+>> -		dev_err(dev, "request_firmware failed: %d\n", ret);
+>> +		dev_err(dev, "request_firmware %s failed: %d\n",
+>> +			rproc->firmware, ret);
+>>  		goto unlock_mutex;
+>>  	}
+>>  
+>> @@ -2023,7 +2024,8 @@ int rproc_boot(struct rproc *rproc)
+>>  		/* load firmware */
+>>  		ret = request_firmware(&firmware_p, rproc->firmware, dev);
+>>  		if (ret < 0) {
+>> -			dev_err(dev, "request_firmware failed: %d\n", ret);
+>> +			dev_err(dev, "request_firmware %s failed: %d\n",
+>> +				rproc->firmware, ret);
+> 
+> That information is already available in sysfs 
 
-> Would you be willing to try the patch below in your environment?
-> It addresses the stall I can create with a file that has a VERY large hole.
-> In addition, it passes libhugetlbfs tests and has run for a while in my
-> truncate/page fault race stress test.  However, it is very early code.
-> It would be nice to see if it addresses the issue in your environment.
+Hm, it's not in deferred probe reasons, so where can I find it in sysfs?
 
-Yes, that fixes the issue for me. I added some debugging yesterday
-evening after sending the initial report, and the end value in the loop
-was indeed quite large - i didn't record the exact number, but it was
-something like 0xffffffffff800001. Feel free to add my Tested-by.
+> but if you are really keen on it
+> please do the same for rproc_trigger_auto_boot().
+Sure.
 
-Thanks
-Sven
+Best regards,
+Krzysztof

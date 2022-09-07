@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F3C5B0487
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55B75B0489
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiIGM7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S229902AbiIGNAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiIGM7u (ORCPT
+        with ESMTP id S229612AbiIGNAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:59:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B4BE092;
-        Wed,  7 Sep 2022 05:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qifuXb99qjoIlKm0NFGBn67x17ezYkhxW54+3QeGgIk=; b=QsUalTTJ6u2L9/i3S1Ur5CkPKf
-        ypW9SE+7hPKkivkq4HjmaduBI9F2qEQxOhQRp+WuSxBgfw3DmO12SJX+RNuya92F70/jqjnb+odqv
-        KFwTSItzW50xOXKBQ1EUKBmMeJHDRUpgTygZ3kA5jOxsNKCgm24t7vw2IPgFE/JOC4sd9aw2NRzAr
-        PAKEdSVwqsPppEANnvqegLjolNx0cOE8uv46O2qTSLr0eiPP9ApZxmqZ0KF3WWgTroTpsWNz3QLu7
-        RTrbmTdcQd8OXlAveugTvFf5TIusGxoSN1Mksz5oggd0pabpduTjZjh11UCtuSXbkuMwzGuThtLnh
-        Fe4Vdt1A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVuee-00BMnC-Ek; Wed, 07 Sep 2022 12:59:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AD8673002A3;
-        Wed,  7 Sep 2022 14:59:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 921B4203C2334; Wed,  7 Sep 2022 14:59:41 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 14:59:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Message-ID: <YxiVvT56y0muNIKe@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
- <166251212072.632004.16078953024905883328.stgit@devnote2>
+        Wed, 7 Sep 2022 09:00:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143562B639;
+        Wed,  7 Sep 2022 06:00:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE0A6B81CE0;
+        Wed,  7 Sep 2022 13:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 707A0C433B5;
+        Wed,  7 Sep 2022 13:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662555618;
+        bh=YUbML6SnybUQenPOnS9RUhAv7AHorgG7Ue71eD2KC/I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DwfTtzg3inknXAH7yDs3OKHdlS9PVBq+gBod97j6qG8eJvbg8RHEhncGBW0nTwl2I
+         Jcq6VZ9toBNe+rpEDA2uU4UzglW6sZkuqt4znqDR2UfoK0PDNbj9oCXv4qXOIryf+M
+         W2uOMIjWsTnI0onAT1uj+RrdopTYrhsRj5AkHU6hT5dlaac5G5CXrYAdIButdPf/mS
+         6yOTIjlkmat+xIaG6ajX4rGISml4fW3wDeFDIpuQs4nNdXgwznGmccn4KVztiTK+Y2
+         oB90mcIsL3WU3DG/1uSMyVWwFZGc4xaEhRNjglRpBmEEg18Atrbn788dDPy0kDAAD5
+         NCj8umWPntiug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50680E1CABD;
+        Wed,  7 Sep 2022 13:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166251212072.632004.16078953024905883328.stgit@devnote2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net 0/3] Fixes for Felix DSA driver calculation of
+ tc-taprio guard bands
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166255561832.21322.16877680025526013164.git-patchwork-notify@kernel.org>
+Date:   Wed, 07 Sep 2022 13:00:18 +0000
+References: <20220905170125.1269498-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20220905170125.1269498-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, xiaoliang.yang_1@nxp.com,
+        claudiu.manoil@nxp.com, alexandre.belloni@bootlin.com,
+        UNGLinuxDriver@microchip.com, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com, michael@walle.cc,
+        vinicius.gomes@intel.com, fido_max@inbox.ru,
+        colin.foster@in-advantage.com, richard.pearn@nxp.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 09:55:21AM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for padding after
-> RET instruction, kprobes always failes to check the probed instruction
-> boundary by decoding the function body if the probed address is after
-> such paddings (Note that some conditional code blocks will be placed
-> after RET instruction, if compiler decides it is not on the hot path.)
-> This is because kprobes expects someone (e.g. kgdb) puts the INT3 as
-> a software breakpoint and it will replace the original instruction.
-> But There are INT3 just for padding in the function, it doesn't need
-> to recover the original instruction.
-> 
-> To avoid this issue, if kprobe finds an INT3, it gets the address of
-> next non-INT3 byte, and search a branch which jumps to the address.
-> If there is the branch, these INT3 will be for padding, so it can be
-> skipped.
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Fixes: 15e67227c49a ("x86: Undo return-thunk damage")
+Hello:
 
-I take objection with this Fixes tag.. if anything it should be the SLS
-commit that predates this.
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-  e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
+On Mon,  5 Sep 2022 20:01:22 +0300 you wrote:
+> This series fixes some bugs which are not quite new, but date from v5.13
+> when static guard bands were enabled by Michael Walle to prevent
+> tc-taprio overruns.
+> 
+> The investigation started when Xiaoliang asked privately what is the
+> expected max SDU for a traffic class when its minimum gate interval is
+> 10 us. The answer, as it turns out, is not an L1 size of 1250 octets,
+> but 1245 octets, since otherwise, the switch will not consider frames
+> for egress scheduling, because the static guard band is exactly as large
+> as the time interval. The switch needs a minimum of 33 ns outside of the
+> guard band to consider a frame for scheduling, and the reduction of the
+> max SDU by 5 provides exactly for that.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net,1/3] net: dsa: felix: tc-taprio intervals smaller than MTU should send at least one packet
+    https://git.kernel.org/netdev/net/c/11afdc6526de
+  - [v2,net,2/3] net: dsa: felix: disable cut-through forwarding for frames oversized for tc-taprio
+    https://git.kernel.org/netdev/net/c/843794bbdef8
+  - [v2,net,3/3] net: dsa: felix: access QSYS_TAG_CONFIG under tas_lock in vsc9959_sched_speed_set
+    https://git.kernel.org/netdev/net/c/a4bb481aeb9d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

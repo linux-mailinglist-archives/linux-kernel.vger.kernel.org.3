@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28F25B0660
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC9D5B0662
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiIGOWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S230180AbiIGOWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiIGOWX (ORCPT
+        with ESMTP id S230127AbiIGOWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:22:23 -0400
+        Wed, 7 Sep 2022 10:22:25 -0400
 Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427097694D;
-        Wed,  7 Sep 2022 07:22:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7902379EDB;
+        Wed,  7 Sep 2022 07:22:15 -0700 (PDT)
 Received: from booty.fritz.box (unknown [77.244.183.192])
         (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id E8775200007;
-        Wed,  7 Sep 2022 14:22:09 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 0E4D3200019;
+        Wed,  7 Sep 2022 14:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1662560531;
+        t=1662560533;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Hkh90Imkp9wad8yz7UhVbHvGQ7u2lRuqcdvVsAUHVf8=;
-        b=AhbVgluwrJrNd+ZcBjQHaMqV4FSxpzqM601IbJNxKfAAmIIxy0f7OssfjbEkcOVea1pjUp
-        x9+sKrwzlELO7L2QhPqkQUch8GB+iaLgzb2anM0ZWHYKcZvvlVXl0BswKpbCHHdAdRVZKj
-        eeJSIh3wpoQSYe2zUOJ5pFiPxRzziImWfq/Lrmp7q250f4fjQ27YcAQXNEc9NV1YTQHgSc
-        znSI++2sdpd3VvbPLBGfzGoLHHPPZaL74RMmlCHFlqzVg0cGQvYu9PoBu+eC03ViSVvMWp
-        RgL1VH4yIBqgkvwHlTxzGMgOkA2GqBen4Y6L8q2ls4dMgJM98UA+78b/DHmvxw==
+        bh=0x0N8xdASNNGJim+/6TTRqaoE75eCBfHEEUyRn2uUTs=;
+        b=CCM0A87KExaQlKFFsYRXly065FI86fsGob/0RhItQzNDnScAjh7sOUNNcoL5Adu/N/ZzgI
+        N/5BYEhHZkPJy/sMG6DhmtT/qWCVKqd4CUMg/HihWZbDmguNpAQssSgPfMQdld0kC3ObrO
+        B16fCiUAayyyd9DMA3D1obcNhpb59k0sKKzsoBQDnPZgfDXwzfDaFu2a/djAo6l0i948er
+        Mv5ZTZNVYQXYg4DMpGb/itY7Zcf81HWGALFdVvZANTuw20isR5VsyPoEgfVwtwOr8j43J2
+        iIKLpa/jg/hGDAB0G1iw/ijnXPVfHdQTnYQd27Lu+p5QwMApGb9PvZKrqgP5Iw==
 From:   luca.ceresoli@bootlin.com
 To:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org
 Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
@@ -46,9 +46,9 @@ Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Johan Jonker <jbx6244@gmail.com>,
         Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 5/8] ASoC: rockchip: i2s-tdm: Fix clk_id usage in .set_sysclk()
-Date:   Wed,  7 Sep 2022 16:21:21 +0200
-Message-Id: <20220907142124.2532620-6-luca.ceresoli@bootlin.com>
+Subject: [PATCH 6/8] ASoC: audio-graph: let dai_link->init be overridable
+Date:   Wed,  7 Sep 2022 16:21:22 +0200
+Message-Id: <20220907142124.2532620-7-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
 References: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
@@ -65,82 +65,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-There are two problems with the second parameter of
-rockchip_i2s_tdm_set_sysclk():
+We can already override dai_link->ops via a custom pointer in
+asoc_simple_priv. Do the same for dai_link->init.
 
- 1. The second argument to a .set_sysclk() op is a clk_id, not a stream
-    index, so it is incorrect to compare it with SNDRV_PCM_STREAM_PLAYBACK.
-
-    Technically this code works correctly anyway because
-    SNDRV_PCM_STREAM_PLAYBACK is defined as 0, which is also the clk_id for
-    the mclk_tx as enforced by the device tree bindings. So this is a
-    formal error, not triggering incorrect behaviour.
-
- 2. The else branch will consider any nonzero value as "rx", while only
-    value 1 should be allowed for the mclk_rx clock. This does trigger
-    incorrect behaviour if passing clk_id not equal to 0 or 1.
-
-Fix problem 1 by adding a new enum for the clock indexes as enforced in
-device tree and replace accordingly:
-
- * stream -> clk_id
- * SNDRV_PCM_STREAM_PLAYBACK -> CLK_MCLK_TX (value 0)
-
-Fix problem 2 by adding an 'else if' and returning error if clk_id is not 0
-or 1.
+This is needed for a card that need to call .set_sysclk multiple times to
+initialize more than one clock. The current code does not allow to do it
+cleanly.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- sound/soc/rockchip/rockchip_i2s_tdm.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ include/sound/simple_card_utils.h    | 1 +
+ sound/soc/generic/audio-graph-card.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/sound/soc/rockchip/rockchip_i2s_tdm.c b/sound/soc/rockchip/rockchip_i2s_tdm.c
-index 2550bd2a5e78..4aa80fedb996 100644
---- a/sound/soc/rockchip/rockchip_i2s_tdm.c
-+++ b/sound/soc/rockchip/rockchip_i2s_tdm.c
-@@ -34,6 +34,9 @@
- #define TRCM_TX 1
- #define TRCM_RX 2
+diff --git a/include/sound/simple_card_utils.h b/include/sound/simple_card_utils.h
+index a0b827f0c2f6..60dab5f68f5e 100644
+--- a/include/sound/simple_card_utils.h
++++ b/include/sound/simple_card_utils.h
+@@ -75,6 +75,7 @@ struct asoc_simple_priv {
+ 	struct snd_soc_dai_link_component dummy;
+ 	struct snd_soc_codec_conf *codec_conf;
+ 	struct gpio_desc *pa_gpio;
++	int (*init)(struct snd_soc_pcm_runtime *rtd);
+ 	const struct snd_soc_ops *ops;
+ 	unsigned int dpcm_selectable:1;
+ 	unsigned int force_dpcm:1;
+diff --git a/sound/soc/generic/audio-graph-card.c b/sound/soc/generic/audio-graph-card.c
+index b327372f2e4a..38c05eb1c650 100644
+--- a/sound/soc/generic/audio-graph-card.c
++++ b/sound/soc/generic/audio-graph-card.c
+@@ -263,6 +263,8 @@ static int graph_link_init(struct asoc_simple_priv *priv,
  
-+/* Clock indexes as enforced by the DT bindings */
-+enum { CLK_IDX_MCLK_TX, CLK_IDX_MCLK_RX };
-+
- struct txrx_config {
- 	u32 addr;
- 	u32 reg;
-@@ -969,7 +972,7 @@ static int rockchip_i2s_tdm_trigger(struct snd_pcm_substream *substream,
- 	return 0;
- }
+ 	dai_link->init		= asoc_simple_dai_init;
+ 	dai_link->ops		= &graph_ops;
++	if (priv->init)
++		dai_link->init	= priv->init;
+ 	if (priv->ops)
+ 		dai_link->ops	= priv->ops;
  
--static int rockchip_i2s_tdm_set_sysclk(struct snd_soc_dai *cpu_dai, int stream,
-+static int rockchip_i2s_tdm_set_sysclk(struct snd_soc_dai *cpu_dai, int clk_id,
- 				       unsigned int freq, int dir)
- {
- 	struct rk_i2s_tdm_dev *i2s_tdm = to_info(cpu_dai);
-@@ -978,15 +981,18 @@ static int rockchip_i2s_tdm_set_sysclk(struct snd_soc_dai *cpu_dai, int stream,
- 	if (i2s_tdm->clk_trcm) {
- 		i2s_tdm->mclk_tx_freq = freq;
- 		i2s_tdm->mclk_rx_freq = freq;
-+
-+		dev_dbg(i2s_tdm->dev, "mclk freq: %u", freq);
- 	} else {
--		if (stream == SNDRV_PCM_STREAM_PLAYBACK)
-+		if (clk_id == CLK_IDX_MCLK_TX)
- 			i2s_tdm->mclk_tx_freq = freq;
--		else
-+		else if (clk_id == CLK_IDX_MCLK_RX)
- 			i2s_tdm->mclk_rx_freq = freq;
--	}
-+		else
-+			return -ENOTSUPP;
- 
--	dev_dbg(i2s_tdm->dev, "The target mclk_%s freq is: %d\n",
--		stream ? "rx" : "tx", freq);
-+		dev_dbg(i2s_tdm->dev, "mclk[%d] freq: %u", clk_id, freq);
-+	}
- 
- 	return 0;
- }
 -- 
 2.34.1
 

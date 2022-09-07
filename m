@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934945B0DE3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9726C5B0E1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiIGUPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S229750AbiIGU1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiIGUPP (ORCPT
+        with ESMTP id S229445AbiIGU1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:15:15 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCF1796B5;
-        Wed,  7 Sep 2022 13:15:13 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id g5so23196848ybg.11;
-        Wed, 07 Sep 2022 13:15:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1oJyEVeDSMEzU8mzJzLtsZkHAbB0NAogPRJviWs53mc=;
-        b=JaJuAW/zkO0BRLKkPQRVTpT8NHx5QbwjP/4m43UyXk75ppo+Oc2Qh0rC2Htsc5sUoX
-         Idf9iPLSfVfo2En4tOq0H2KTEhZxHYC/Is25vET9zxPlMSckP0zVnUkpIUjHsG2rpk1e
-         tiQSk2pLZ7AgFytWsJYNLi28PQp147TSF9VG+WTtnGu05packMeV5wm7ShvlCfheB3y5
-         m3BKGp9eLlOILOTrwDZS+nyI2rFaH4rz63EuibsrciCXPFRSnso/QU+UtLkTSqwFJCZA
-         4lr5jb4LmRX673b1zH9mcl8KJABEY/y3786nNw6Cu8UvgYKsVwPl64M/jqCFu2Nwerdp
-         RJaQ==
-X-Gm-Message-State: ACgBeo2js93oxAwrkLMVfxOwR2+vFFy1dpkV40fjQhYpLm/I0qmsexsh
-        hYkHNTnuEL03YSSM1ewwJyLDqC0uafFLpKSeNnpCW1It
-X-Google-Smtp-Source: AA6agR44k1MSykjRc0dv3X/leHDX8g+Y7u/O6ESkT5tUgej3zmngZDIeUCzr+Ye5tXhbkv5OnZ2zgWF0pQQbsH2s4GY=
-X-Received: by 2002:a25:2785:0:b0:69b:b1d2:fd05 with SMTP id
- n127-20020a252785000000b0069bb1d2fd05mr4364345ybn.81.1662581712858; Wed, 07
- Sep 2022 13:15:12 -0700 (PDT)
+        Wed, 7 Sep 2022 16:27:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01889C12E0;
+        Wed,  7 Sep 2022 13:27:05 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287EBsFe021581;
+        Wed, 7 Sep 2022 20:26:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=V7Zp8bnNFKm8sk1OC/aidJFmR4sJxbalncMUK93Rm6A=;
+ b=NTjWryRjPjRCQz2tuhsbn+gAq+Gr4OoWX+DybWJ7GQa8vxMrMLbfCqyAm7W/jgQ+/Qol
+ 7B0XXi7oLf3jUbl8R5862q6TZreXg0QJg4VYRLwHihH/PCdGxuhj06kpr5PcJS+1XjAE
+ jNcmPl6NaYKU+CW1ZjKJGB7UIHcW/WfRY2bDKRnRth4Px8Azd2GFknle8ujo0hdEAlh4
+ hWzg9K0sTIl8O7Zq1Mrl5jJKrvE+x4HkdYZx6Nu49XHpV/f4ojWth5TZJO1Q4mOpEgsh
+ DonStUmHSJeatXFbFT5SoDa6izTEcAoPwhRFv0AafkcV5+576sltejq/C9YckKV8/Xat lg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jdys778s6-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 20:26:58 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 287KGmCr026722
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Sep 2022 20:16:48 GMT
+Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 7 Sep 2022 13:16:47 -0700
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <konrad.dybcio@somainline.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>
+Subject: [PATCH 0/4] Add Support for Qualcomm SPMI GPIOs
+Date:   Wed, 7 Sep 2022 13:15:25 -0700
+Message-ID: <20220907201528.9351-1-quic_amelende@quicinc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220831081603.3415-7-rrichter@amd.com> <20220907183709.GA136851@bhelgaas>
-In-Reply-To: <20220907183709.GA136851@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Sep 2022 22:15:01 +0200
-Message-ID: <CAJZ5v0jvxJT4B8GQ0O5AcEkn_KUH2qh=vKOONVJ-cd+1r-KoCw@mail.gmail.com>
-Subject: Re: [PATCH 06/15] PCI/ACPI: Link host bridge to its ACPI fw node
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Robert Richter <rrichter@amd.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-cxl@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -aqcnoGr80010ZSLzIUq95nxJuMfFjBU
+X-Proofpoint-ORIG-GUID: -aqcnoGr80010ZSLzIUq95nxJuMfFjBU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_10,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=755 phishscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070076
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 8:37 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Wed, Aug 31, 2022 at 10:15:54AM +0200, Robert Richter wrote:
-> > A lookup of a host bridge's corresponding acpi device (struct
-> > acpi_device) is not possible, for example:
-> >
-> >       adev = ACPI_COMPANION(&host_bridge->dev);
-> >
-> > This could be useful to find a host bridge's fwnode handle and to
-> > determine and call additional host bridge ACPI parameters and methods
-> > such as HID/CID or _UID.
-> >
-> > Make this work by linking the host bridge to its ACPI fw node.
->
-> s/acpi device/ACPI device/ to match other "ACPI" usage
-> s/fw node/fwnode/ (if it should match "fwnode handle" above)
->
-> I guess this patch makes ACPI_COMPANION() work where it didn't before,
-> right?  E.g., the two ACPI_COMPANION() uses added by this series
-> (cxl_find_next_rch() and cxl_restricted_host_probe()).
->
-> I'm not really clear on the strategy of when we should use acpi_device
-> vs acpi_handle,
+This series provides support and fixes for Qualcomm SPMI GPIOs.
 
-acpi_handle should be used for interactions with the ACPICA code, like
-when AML is evaluated, and acpi_device for pretty much everything
-else.
+Anirudh Ghayal (1):
+  pinctrl: qcom: spmi-gpio: Fix the GPIO strength mapping
 
-> but does this mean there's code in places like
-> pci_root.c that should be reworked to take advantage of this?  That
-> code evaluates _DSM and _OSC, but I think it currently uses
-> acpi_handle for that.
+Anjelique Melendez (1):
+  dt-bindings: qcom-pmic-gpio: Add PM7250B and PM8450 bindings
 
-That's fine.
+David Collins (1):
+  pinctrl: qcom: spmi-gpio: add support for LV_VIN2 and MV_VIN3 subtypes
+
+Jishnu Prakash (1):
+  pinctrl: qcom: spmi-gpio: Add compatible for PM7250B
+
+ .../bindings/pinctrl/qcom,pmic-gpio.yaml         |  3 +++
+ drivers/pinctrl/qcom/pinctrl-spmi-gpio.c         | 16 +++++++++++++++-
+ drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c         |  4 ++--
+ include/dt-bindings/pinctrl/qcom,pmic-gpio.h     |  9 +++++++--
+ 4 files changed, 27 insertions(+), 5 deletions(-)
+
+-- 
+2.35.1
+

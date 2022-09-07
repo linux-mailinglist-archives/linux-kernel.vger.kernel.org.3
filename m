@@ -2,96 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF255B02A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E8D5B02A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiIGLQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S230094AbiIGLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiIGLQK (ORCPT
+        with ESMTP id S230058AbiIGLQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:16:10 -0400
-Received: from sonic308-11.consmr.mail.ne1.yahoo.com (sonic308-11.consmr.mail.ne1.yahoo.com [66.163.187.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336C685FA0
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1662549366; bh=D28LXyMm7oFN0CSwLIk1hUi8e910eghG1BhsXXW7YFw=; h=Date:From:Subject:To:Cc:In-Reply-To:References:From:Subject:Reply-To; b=oQ4Z3ElQ6sgUjf53I4GWTpTjEtFgaf9nswr8kUtK5k8kARRmoSnBGu2Fbw1Ll7RRmmmQDjYlWTG9cSqnS+qUiOkX0KoDZKAoaikmUmtAEx49UrRhHSta+xUf7rkqoyXb31PBbFRODWQX31/bj7V7z2SmAGqI+2W9jxM/P4lGYv8=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1662549366; bh=XPNJtkWyVPHyo2TToBLjXBtiYCIBR5qNyDX0TQAz56r=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=MtMq0Kwtvy2StrIpxshT9P1wIMJBABIezVr+XsVTPVpStLmiX2Xc1OXZml3KSJAi89jHgUaNhBLFrst0ykeGJqz9cwBnLqHDjkYRTcyD79JNznG+xy4aAxTmzJh9qVUF7CLI0X+OQVwZHHXLXhocZ6np5A2yUrSVAmcf0/2vtTDKygLG19oE6yFmDPSfMzra1IfTj2ohCQA/oAyfai8NV0zpSbQwY0b1nYBggim+PmZeQq6CstyDJgKqcd1F4r0bGZNKObEcrnrLUUOoI/qz0cgCN7WB1Mx6HlVvchndhaBCHO9KK9byu+ASEGKhPBsEI0ZkmPpLPiObTXw/Q3fi5A==
-X-YMail-OSG: vSXCuRQVM1n_azo_oFbV2qtWhyzYT_9Y1dHx2H6cgGipgEd3aOI.oNgYD8BVz9T
- aa3HY0V4CtC8gdCB5PIENKud4NPY5HtsTRnDLFJwcwSVASisFm3diFUvOP41QB85iFLdvjdxPrtm
- DqcOeq6Y1qE7KPWiL4DsxJr_K6q4KT4VJeSs3v7071fRXZbTe2HJB20qtbE_7o7uw0JGxydQDuI5
- HGg_KwtcQeBNNyGtzqggr8X2RR4Irft6iFEcW2sWe1_bV31eQcu5039_UDl4NqROZZuEpcazAmaT
- 4ymPa9VUxW2qPh4lOd3A5vtttSkt9almxtPm.5top2YCQodP7PFXd8_ZEepw.g9f4hXCPTsCkOAa
- 0_kw.u3sPFei_uKNszclM6ttlxsWEjkKm7G_M8_Q6xEmpoIFugWz74GWWxzWGPVspMaC6Ms9l3up
- MxWL7CMALUwsf8Oe_pxz6MLpDDp7MjpGNQBaGf0nvIJ61qeiOrWESyTSUrvtDvghmoGqWXwOPm24
- FXupgVdIO7vpMAdGbmZ1Kedn6Zwxc.tmlri7pLDHX6SwsGnPJxH6KvPvPFwGC3RkFV8vHcr49x3.
- gOW4l3UYrer0MKo138ZeSuiEaoYSqKER3wP586SXC9KfTSZMCZQP3K12YN1fX6ft1hI8nMgqSHvm
- GUKGwTHsiQU5vOdRizSxT8_4nrebAephSJRKRRdmpHhJ0UTqaw0gygHS726TUC35G_Lm.bgMWZXB
- 1cTEgNrIMywJ5_K4KnDzzKb1BBA_jBBSbgAsGdWlFfCxMQiL0Nngkdx6X7KqBOYskgNe5zV8pLXP
- BJvcOSeGYyL7iG5m2nhIUTUKquAuapokw08xZfeTqbwcn_kmkHlLlCUQG6dW6Wmevv2C_qpv62rC
- p6VFaJpP7Yifarikyte2itVNS_kg12TyEmkIyro.fPHJEBykUdjAcfMq45jBYT_jxcuwnWveRdI8
- W0b1k7QIONsQ17opeVOqG1ad_Qtw1jvyW4_0TgQJfGJnPjznVrg_g93PeEFGfbRWBJcb0UxAmHTj
- HfwOeaRjva8DWC3e.SIx.HzfjgWGwGcgRACOVIeW6TnstSniS2TajBae7zWABEvsukLsAkgqT.X7
- OimjVqcVWFpF73YkXMtkN.z_zrwhEmoSHGA0QWTEskbKK5b5.suAiBQYrZR6FhDTeOembsh6G18I
- Bnpo55tRGNbp6LV7fa2Hs6NEU4IzcHBydQGLWmiBQ48WxSqjpSO2MQqBVnngts9Q.wwEqR9pFjY9
- .pQfkcKEJA1hJdi_dLEeHZb_cZA.yV0geonnrarBm35zsJGY.ThzSOh5lRD487qWwyDe4ra7nP14
- B9_rj7GgERjUTTmqJ3E2wqkkW5u1IaDnIVf1QjjlPgqnUp0lFiGRDI1jDQVbjdBgdEqecKbKNqaC
- MzRWtQO5rmikpBR27kebnPodDx1jNP4Vgu5EhwWl93EIqINbQZ2Jug2H2JF7n9ehHck5LBmNIscM
- XeLyjnZt9sEv7XINyi60Enn_R6eJmvDhwc6ZEtv3FOn6l_coDRFArfle8amPg0DKKcZRc7G3LXpD
- lt7hMLjLYBPRTPVns9Uf.KuJTdasIS0ONLMP8PcDkocwsDOERbJSsa6c.k4IqnTxmBxlghZUOlNA
- ssTMW8rlBo7ARxiPTf.pKL_.guU4y7WAt.Kb9YR9j3.RAKqnjqqFUX4iWC60F1W47qUBEg.6WZW9
- S9caoMKKMapEIPc_GQqmhtAGKR3apcfQ1o16ltWklW3IX8oi0ZrKqY8JE1XXP7_s_V2HWGgQGb5r
- WCD62buYBtI4sRINeL9WDYBQjg861dZnbcbCrrN5q6xl.KPgrK0r2EMuHLMnWWgQilqcHZ6Xgd.o
- mltaz88f.qPb3GnWlPxQuuRgGTJ4bct9HUIH6jKRiW42HSF2M5Ic1O.JPI_Oqabz0LfSYsPaWgoL
- UKv..tSH2QGqoguWMJLfezHvctQK5aiOmeTslB9Scs967nQjhQszn3veJoLaHNjAy2dGIyZnN7W.
- r.YQVYSX2CoHXfeAcpO.T.DCHm7FAXqSORnJTgVT_jwLnqHlxYhzE8S0PGwS.DXsgbMCHINL5qe4
- 6ZaTG..4z0oEMxoe_4mWE52bzqpLYvFTkD_Jix.nnQuCU2rQbebNPoxB0PJKJLAa20O6jXvz4Mqb
- RaVBISKdJq008.MR_eppoac.AwPeIP9WdoZPesLZlxdVQyBJ1aUGUb07fjwxuVlr.LcTPrHfSVT2
- 5DwWAZUGCKHxe
-X-Sonic-MF: <pheonix.sja@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Sep 2022 11:16:06 +0000
-Received: by hermes--production-ne1-544744cc75-n6tzz (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID fbfc95aee6bd7e475c2a52445467b5fd;
-          Wed, 07 Sep 2022 11:16:02 +0000 (UTC)
-Date:   Wed, 07 Sep 2022 07:15:54 -0400
-From:   Steven J Abner <pheonix.sja@att.net>
-Subject: Re: thermal driver patch
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
-Message-Id: <IA7UHR.UBUE22H3MNMY2@att.net>
-In-Reply-To: <NZ5JHR.JGO592OT0D961@att.net>
-References: <DL9RGR.8W3XFSCFFYXI2.ref@att.net> <DL9RGR.8W3XFSCFFYXI2@att.net>
-        <0f961ea6-4948-0b7a-e01d-d62ca4065af8@infradead.org>
-        <L9MDHR.JVBXTJ2L6TPP2@att.net>
-        <cf3a3cbd-c189-a120-124f-98d6adac058d@infradead.org>
-        <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
-        <NZ5JHR.JGO592OT0D961@att.net>
-X-Mailer: geary/3.36.1
+        Wed, 7 Sep 2022 07:16:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DB385AB6;
+        Wed,  7 Sep 2022 04:16:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E7A66172F;
+        Wed,  7 Sep 2022 11:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04650C433C1;
+        Wed,  7 Sep 2022 11:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662549370;
+        bh=ugbTVmVkcY78vdm1A78HKS8IKclfP9gEGvUmjHcFqVM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hOLXA3ZjIhCFFfSEYhf5cdpskdkI4gEUa8IfXi+abDj19WWNiFc8TfVGJP2LiQEBS
+         lxD73EoRJWWa1c3GCaJiHR3OiHcjs1wbBCHqB8+obEAvtD1NplyZyJLIMLynVzAkKb
+         LsH4sUqS4U+V3YJIKIHHSGtstm5RtFdfiQSTjVKjT7HWLJAS1WwOl5D5/ei25UV+bF
+         8t/APIAAaQVO1JLotcCiW17QZQ8CorxmHzN4b10RbvjO4ZTi3VDjDkGZae9Z+Cdy+7
+         r1QUmuYuBgHv6mUKHcSPF1zuwyaMT+uJSn6eXEaMZ7dKwox7RbUv1tXpciTFumQKC/
+         0GZXTD9LRn2tA==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-man@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: [man-pages RFC PATCH v4] statx, inode: document the new STATX_INO_VERSION field
+Date:   Wed,  7 Sep 2022 07:16:06 -0400
+Message-Id: <20220907111606.18831-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Additional info:
-After an automatic overnight suspend, from dmesg:
-[23668.033055] thermal thermal_zone0: failed to read out thermal zone 
-(-61)
-[23668.033197] PM: suspend exit
+I'm proposing to expose the inode change attribute via statx [1]. Document
+what this value means and what an observer can infer from it changing.
 
-So is it possible that driver iwlwifi is built with 'return -ENODEV;' 
-into
-its init/reset code?
-Also this code from kernel 5.18.19 instead of 5.18.12 initial report 
-messaging.
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Steve
+[1]: https://lore.kernel.org/linux-nfs/20220826214703.134870-1-jlayton@kernel.org/T/#t
+---
+ man2/statx.2 |  8 ++++++++
+ man7/inode.7 | 39 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
+v4: add paragraph pointing out the lack of atomicity wrt other changes
+
+I think these patches are racing with another change to add DIO
+alignment info to statx. I imagine this will go in after that, so this
+will probably need to be respun to account for contextual differences.
+
+What I'm mostly interested in here is getting the sematics and
+description of the i_version counter nailed down.
+
+diff --git a/man2/statx.2 b/man2/statx.2
+index 0d1b4591f74c..d98d5148a442 100644
+--- a/man2/statx.2
++++ b/man2/statx.2
+@@ -62,6 +62,7 @@ struct statx {
+     __u32 stx_dev_major;   /* Major ID */
+     __u32 stx_dev_minor;   /* Minor ID */
+     __u64 stx_mnt_id;      /* Mount ID */
++    __u64 stx_ino_version; /* Inode change attribute */
+ };
+ .EE
+ .in
+@@ -247,6 +248,7 @@ STATX_BTIME	Want stx_btime
+ STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+ 	It is deprecated and should not be used.
+ STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
++STATX_INO_VERSION	Want stx_ino_version (DRAFT)
+ .TE
+ .in
+ .PP
+@@ -407,10 +409,16 @@ This is the same number reported by
+ .BR name_to_handle_at (2)
+ and corresponds to the number in the first field in one of the records in
+ .IR /proc/self/mountinfo .
++.TP
++.I stx_ino_version
++The inode version, also known as the inode change attribute. See
++.BR inode (7)
++for details.
+ .PP
+ For further information on the above fields, see
+ .BR inode (7).
+ .\"
++.TP
+ .SS File attributes
+ The
+ .I stx_attributes
+diff --git a/man7/inode.7 b/man7/inode.7
+index 9b255a890720..8e83836594d8 100644
+--- a/man7/inode.7
++++ b/man7/inode.7
+@@ -184,6 +184,12 @@ Last status change timestamp (ctime)
+ This is the file's last status change timestamp.
+ It is changed by writing or by setting inode information
+ (i.e., owner, group, link count, mode, etc.).
++.TP
++Inode version (i_version)
++(not returned in the \fIstat\fP structure); \fIstatx.stx_ino_version\fP
++.IP
++This is the inode change counter. See the discussion of
++\fBthe inode version counter\fP, below.
+ .PP
+ The timestamp fields report time measured with a zero point at the
+ .IR Epoch ,
+@@ -424,6 +430,39 @@ on a directory means that a file
+ in that directory can be renamed or deleted only by the owner
+ of the file, by the owner of the directory, and by a privileged
+ process.
++.SS The inode version counter
++.PP
++The
++.I statx.stx_ino_version
++field is the inode change counter. Any operation that would result in a
++change to \fIstatx.stx_ctime\fP must result in an increase to this value.
++The value must increase even in the case where the ctime change is not
++evident due to coarse timestamp granularity.
++.PP
++An observer cannot infer anything from amount of increase about the
++nature or magnitude of the change. If the returned value is different
++from the last time it was checked, then something has made an explicit
++data and/or metadata change to the inode.
++.PP
++The change to \fIstatx.stx_ino_version\fP is not atomic with respect to the
++other changes in the inode. On a write, for instance, the i_version it usually
++incremented before the data is copied into the pagecache. Therefore it is
++possible to see a new i_version value while a read still shows the old data.
++.PP
++In the event of a system crash, this value can appear to go backward,
++if it were queried before ever being written to the backing store. If
++the value were then incremented again after restart, then an observer
++could miss noticing a change.
++.PP
++In order to guard against this, it is recommended to also watch the
++\fIstatx.stx_ctime\fP for changes when watching this value. As long as the
++system clock doesn't jump backward during the crash, an observer can be
++reasonably sure that the i_version and ctime together represent a unique inode
++state.
++.PP
++The i_version is a Linux extension and is not supported by all filesystems.
++The application must verify that the \fISTATX_INO_VERSION\fP bit is set in the
++returned \fIstatx.stx_mask\fP before relying on this field.
+ .SH STANDARDS
+ If you need to obtain the definition of the
+ .I blkcnt_t
+-- 
+2.37.3
 

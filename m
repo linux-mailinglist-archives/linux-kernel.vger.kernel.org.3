@@ -2,178 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEB05B035C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8545B0358
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiIGLsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
+        id S230012AbiIGLpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiIGLsD (ORCPT
+        with ESMTP id S230256AbiIGLpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:48:03 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E349754A0;
-        Wed,  7 Sep 2022 04:48:02 -0700 (PDT)
-Received: from pyrite.rasen.tech (h175-177-042-159.catv02.itscom.jp [175.177.42.159])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EC9D4DD;
-        Wed,  7 Sep 2022 13:47:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662551279;
-        bh=5Gr6bH8FY/a+xkGxzxUB9O3UJ8qXYspamAEUzoCXd/I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Cqb942fZYtP8wy6ZAcvycqM00+nUuMy+HxHOW6mxV21wa9PLGYdrAXoG4giNnEtop
-         LRxrSSO8ay+JEtmxkbgRMrFoIEjlFNRAVTi2iCdG3Elm8heH8djspN6cbmlAWMIzAa
-         6n4wGjexhsk/cfh1aVamZzhx9NAKK1CkhFP6gz2s=
-From:   Paul Elder <paul.elder@ideasonboard.com>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        linux-media@vger.kernel.org
-Cc:     Paul Elder <paul.elder@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] media: imx7-media-csi: Add support for fast-tracking queued buffers
-Date:   Wed,  7 Sep 2022 20:47:37 +0900
-Message-Id: <20220907114737.1127612-1-paul.elder@ideasonboard.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 7 Sep 2022 07:45:42 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A5F59259
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:45:40 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MN0h44lBrzZcND;
+        Wed,  7 Sep 2022 19:41:08 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 19:45:38 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 19:45:38 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] arm64: support huge vmalloc mappings
+Date:   Wed, 7 Sep 2022 19:49:50 +0800
+Message-ID: <20220907114950.125433-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CSI hardware compatible with this driver handles buffers using a
-ping-pong mechanism with two sets of destination addresses. Normally,
-when an interrupt comes in to signal the completion of one buffer, say
-FB0, it assigns the next buffer in the queue to the next FB0, and the
-hardware starts to capture into FB1 in the meantime.
+As commit 59089e0a93d ("vmalloc: replace VM_NO_HUGE_VMAP with
+VM_ALLOW_HUGE_VMAP"), the use of hugepage mappings for vmalloc
+is an opt-in strategy, so it is saftly to support huge vmalloc
+mappings on arm64, for now, it is used in kvmalloc() and
+alloc_large_system_hash().
 
-In a buffer underrun situation, in the above example without loss of
-generality, if a new buffer is queued before the interrupt for FB0 comes
-in, we can program the buffer into FB1 (which is programmed with a dummy
-buffer, as there is a buffer underrun).
-
-This of course races with the interrupt that signals FB0 completion, as
-once that interrupt comes in, we are no longer guaranteed that the
-programming of FB1 was in time and must assume it was too late. This
-race is resolved partly by locking the programming of FB1. If it came
-after the interrupt for FB0, then the variable that is used to determine
-which FB to program would have been swapped by the interrupt handler.
-
-This alone isn't sufficient, however, because the interrupt could still
-be generated (thus the hardware starts capturing into the other fb)
-while the fast-tracking routine has the irq lock. Thus, after
-programming the fb register to fast-track the buffer, the isr also must
-be checked to confirm that an interrupt didn't come in the meantime. If
-it has, we must assume that programming the register for the
-fast-tracked buffer was not in time, and queue the buffer normally.
-
-Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
-Changes in v2:
-- fix the potential race condition where the interrupt comes in while
-  the fast tracking routine has the irqlock
-- change return value from int to bool
----
- drivers/staging/media/imx/imx7-media-csi.c | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt | 2 +-
+ arch/arm64/Kconfig                              | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index a0553c24cce4..0ebef44a7627 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1296,12 +1296,75 @@ static int imx7_csi_video_buf_prepare(struct vb2_buffer *vb)
- 	return 0;
- }
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 2434c6729f1c..33b7998f0170 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3617,7 +3617,7 @@
  
-+static bool imx7_csi_fast_track_buffer(struct imx7_csi *csi,
-+				       struct imx7_csi_vb2_buffer *buf)
-+{
-+	unsigned long flags;
-+	dma_addr_t phys;
-+	int buf_num;
-+	u32 isr;
-+
-+	if (!csi->is_streaming)
-+		return false;
-+
-+	phys = vb2_dma_contig_plane_dma_addr(&buf->vbuf.vb2_buf, 0);
-+
-+	/*
-+	 * buf_num holds the fb id of the most recently (*not* the next
-+	 * anticipated) triggered interrupt. Without loss of generality, if
-+	 * buf_num is 0 and we get to this section before the irq for fb2, the
-+	 * buffer that we are fast-tracking into fb1 should be programmed in
-+	 * time to be captured into. If the irq for fb2 already happened, then
-+	 * buf_num would be 1, and we would fast-track the buffer into fb2
-+	 * instead. This guarantees that we won't try to fast-track into fb1
-+	 * and race against the start-of-capture into fb1.
-+	 *
-+	 * We only fast-track the buffer if the currently programmed buffer is
-+	 * a dummy buffer. We can check the active_vb2_buf instead as it is
-+	 * always modified along with programming the fb[1,2] registers via the
-+	 * lock (besides setup and cleanup).
-+	 */
-+
-+	spin_lock_irqsave(&csi->irqlock, flags);
-+
-+	buf_num = csi->buf_num;
-+	if (csi->active_vb2_buf[buf_num]) {
-+		spin_unlock_irqrestore(&csi->irqlock, flags);
-+		return false;
-+	}
-+
-+	imx7_csi_update_buf(csi, phys, buf_num);
-+
-+	isr = imx7_csi_reg_read(csi, CSI_CSISR);
-+	/*
-+	 * The interrupt for the /other/ fb just came (the isr hasn't run yet
-+	 * though, because we have the lock here); we can't be sure we've
-+	 * programmed buf_num fb in time, so queue the buffer to the buffer
-+	 * queue normally. No need to undo writing the fb register, since we
-+	 * won't return it as active_vb2_buf is NULL, so it's okay to
-+	 * potentially write it to both fb1 and fb2; only the one where it was
-+	 * queued normally will be returned.
-+	 */
-+	if (isr & (buf_num ? BIT_DMA_TSF_DONE_FB1 : BIT_DMA_TSF_DONE_FB2)) {
-+		spin_unlock_irqrestore(&csi->irqlock, flags);
-+		return false;
-+	}
-+
-+	csi->active_vb2_buf[buf_num] = buf;
-+
-+	spin_unlock_irqrestore(&csi->irqlock, flags);
-+	return true;
-+}
-+
- static void imx7_csi_video_buf_queue(struct vb2_buffer *vb)
- {
- 	struct imx7_csi *csi = vb2_get_drv_priv(vb->vb2_queue);
- 	struct imx7_csi_vb2_buffer *buf = to_imx7_csi_vb2_buffer(vb);
- 	unsigned long flags;
+ 	nohugeiomap	[KNL,X86,PPC,ARM64] Disable kernel huge I/O mappings.
  
-+	if (imx7_csi_fast_track_buffer(csi, buf))
-+		return;
-+
- 	spin_lock_irqsave(&csi->q_lock, flags);
+-	nohugevmalloc	[PPC] Disable kernel huge vmalloc mappings.
++	nohugevmalloc	[KNL,X86,PPC,ARM64] Disable kernel huge vmalloc mappings.
  
- 	list_add_tail(&buf->list, &csi->ready_q);
+ 	nosmt		[KNL,S390] Disable symmetric multithreading (SMT).
+ 			Equivalent to smt=1.
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index b3073f6f6c3a..500979dfde37 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -149,6 +149,7 @@ config ARM64
+ 	select HAVE_ARCH_AUDITSYSCALL
+ 	select HAVE_ARCH_BITREVERSE
+ 	select HAVE_ARCH_COMPILER_H
++	select HAVE_ARCH_HUGE_VMALLOC
+ 	select HAVE_ARCH_HUGE_VMAP
+ 	select HAVE_ARCH_JUMP_LABEL
+ 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
 -- 
-2.30.2
+2.35.3
 

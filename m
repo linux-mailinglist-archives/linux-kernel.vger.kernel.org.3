@@ -2,297 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDD45B0BE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B935B0BE8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiIGR6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
+        id S230134AbiIGR6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiIGR6C (ORCPT
+        with ESMTP id S229482AbiIGR6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:58:02 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C222AA4DA;
-        Wed,  7 Sep 2022 10:58:01 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-11e9a7135easo37949859fac.6;
-        Wed, 07 Sep 2022 10:58:01 -0700 (PDT)
+        Wed, 7 Sep 2022 13:58:32 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAE4B08A4;
+        Wed,  7 Sep 2022 10:58:31 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id gb36so32084501ejc.10;
+        Wed, 07 Sep 2022 10:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=4xioiLOgMPJ3We5Y6cKXMDxGgXtE1ROJYDQy7bUxt0k=;
+        b=gRZDPxf9542mvq2AOJyw0mKjn0nwQuapLL9CLPaGoG4dXGYoR20/koUZF2Nl/u/7vF
+         VQwKbQC4UVmdMQeRPgaLQul9bvTCRb4r0dvpdfD5vHFmH5eqoN9NBuCtRCAKA6E8nMuB
+         wniOChaRvndh/YjqBI67ZAB2RSCjLuzXdrwDV7YOb4jI8WmnSTGiLmgyiDi7QEVV+mBL
+         9+h/gINllJY+RdsKCySU+1SbZQ06+9ehlv6dx81eZ4hOfChnJUpuOBZw11ZCdvwoKPcW
+         OXw2IfvRFu/Rj5cFTpqXbzHKdaOnUPrHhXNPZWbqDgsP1cGvkgQyr7caEHgQ4xTl6XvS
+         8RFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UdQDfJDRdgGrPGjr0rQoSFWlcm9yHV7FNhW1rklMkE0=;
-        b=zs+rUhahmEXicw/Ubu+iuq+okCF//247nzn5p+pSTJql9nx7pDcUL88ZCJeovy8z0F
-         HtoKp6vObUuRpP1TezsaZyo0ddAi0Yt8pm5wLBKrMMGIDEGmt0NLHZn8BndW2CgSFSnl
-         S6KxVgd6PEB4i6H28D0T65FxzruJIti+tmRyAmV32+GnsEzzXESiceZvjSJpZCOai8xE
-         OQYCZUaNJaLrRvEbXn+XeAAd6++n2pMnc7eNlwWBBzXBfZ/B1Es+mravJ0IWIV0xRpLb
-         WpyBYa6/hFQm10teO7pxR4Fr4VK41/+qXi03WwtjpJojUFTmu1gtU9VWudo6Wyt+Hp6X
-         gyfw==
-X-Gm-Message-State: ACgBeo1eR1eligW33qMttYoQZwa9DK2JehVEPmNKsrQwgvXP2McwD8xz
-        fR1FrQQ9MOUS1RyUtvKzxw==
-X-Google-Smtp-Source: AA6agR6xKrGz+BcPw2Zi9fBkKG87AYCGD492SkFstQc2YuZbmPjB1jUx7jBedulSPqAHkVLIY16gbQ==
-X-Received: by 2002:a05:6808:e90:b0:345:49f2:a112 with SMTP id k16-20020a0568080e9000b0034549f2a112mr12928078oil.7.1662573480405;
-        Wed, 07 Sep 2022 10:58:00 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l3-20020a056870f14300b0012752d3212fsm4943445oac.53.2022.09.07.10.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 10:58:00 -0700 (PDT)
-Received: (nullmailer pid 3798414 invoked by uid 1000);
-        Wed, 07 Sep 2022 17:57:59 -0000
-Date:   Wed, 7 Sep 2022 12:57:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 09/14] ASoC: dt-bindings:: qcom,q6asm: convert to
- dtschema
-Message-ID: <20220907175759.GA3791463-robh@kernel.org>
-References: <20220907101556.37394-1-krzysztof.kozlowski@linaro.org>
- <20220907101556.37394-10-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4xioiLOgMPJ3We5Y6cKXMDxGgXtE1ROJYDQy7bUxt0k=;
+        b=N9+Xyvl4Dagjd7S9Z1SebrIX/Yg03YsPyy4/o+gPbnCpDWwAcYIh9rnL7LHVibqrv+
+         oLD4NyBJVH5j8GV4ClxFTcrsIyVzli2LeXR42ehNe9tC09hvu+AyGtieT1mASm9FfJfP
+         Pq8gYaKnCp84Ul2s0WOPoWA5FSZn11CQDzD2bPEguiMo0XgJNxvIgbHn2mY4f5Zc1l2a
+         vtSqCSgj1eRrPkQgLbnaJOivpo9QTwRYQ5e+QrRDfCCAED8vTH/CRpq/o6rhlzt6+7kp
+         Bn+gkr6yUVEPfq2x7eXwfjLNldjeJ9q9AFNnKixa5uBvTgLCpQy9eVGFS8mNlj7YlE8h
+         gmMg==
+X-Gm-Message-State: ACgBeo33rmDgkyD7C/kA7Dqlb+MVjmKwdCySlJamfb6G1uIOM+Tcro7V
+        MVp/8VDay98l217lqy1gsZQ=
+X-Google-Smtp-Source: AA6agR4udnAIlquIOSv1uLg6eHLVGBwFPQhwCyn4HjSavBmbgemILYWwhQajMrrFoSTdVmM/JpjokA==
+X-Received: by 2002:a17:906:4795:b0:73d:d6e8:52a7 with SMTP id cw21-20020a170906479500b0073dd6e852a7mr3018739ejc.59.1662573509821;
+        Wed, 07 Sep 2022 10:58:29 -0700 (PDT)
+Received: from ?IPV6:2a04:241e:502:a09c:cbe0:7b37:373:7410? ([2a04:241e:502:a09c:cbe0:7b37:373:7410])
+        by smtp.gmail.com with ESMTPSA id f10-20020aa7d84a000000b0043d1eff72b3sm5385254eds.74.2022.09.07.10.58.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 10:58:29 -0700 (PDT)
+Message-ID: <3a38fda6-eeae-8d6c-3eac-112abfc63015@gmail.com>
+Date:   Wed, 7 Sep 2022 20:58:27 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907101556.37394-10-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 08/26] tcp: authopt: Disable via sysctl by default
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Philip Paeps <philip@trouble.is>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <cover.1662361354.git.cdleonard@gmail.com>
+ <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
+ <CANn89iKq4rUkCwSSD-35u+Lb8s9u-8t5bj1=aZuQ8+oYwuC-Eg@mail.gmail.com>
+ <b951b8fb-f2b3-bcbb-8b7f-868b1f78f9bb@gmail.com>
+ <CANn89iJ9XGKHV1F1uhKmWqyOdDjiBebo0FOb6SfCxcvE5XzJPQ@mail.gmail.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+In-Reply-To: <CANn89iJ9XGKHV1F1uhKmWqyOdDjiBebo0FOb6SfCxcvE5XzJPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 12:15:51PM +0200, Krzysztof Kozlowski wrote:
-> Convert Qualcomm Audio Stream Manager (Q6ASM) bindings to DT schema.
+On 9/7/22 20:04, Eric Dumazet wrote:
+> On Wed, Sep 7, 2022 at 9:53 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>> On 9/7/22 02:11, Eric Dumazet wrote:
+>>> On Mon, Sep 5, 2022 at 12:06 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>>>>
+>>>> This is mainly intended to protect against local privilege escalations
+>>>> through a rarely used feature so it is deliberately not namespaced.
+>>>>
+>>>> Enforcement is only at the setsockopt level, this should be enough to
+>>>> ensure that the tcp_authopt_needed static key never turns on.
+>>>>
+>>>> No effort is made to handle disabling when the feature is already in
+>>>> use.
+>>>>
+>>>> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+>>>> ---
+>>>>    Documentation/networking/ip-sysctl.rst |  6 ++++
+>>>>    include/net/tcp_authopt.h              |  1 +
+>>>>    net/ipv4/sysctl_net_ipv4.c             | 39 ++++++++++++++++++++++++++
+>>>>    net/ipv4/tcp_authopt.c                 | 25 +++++++++++++++++
+>>>>    4 files changed, 71 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+>>>> index a759872a2883..41be0e69d767 100644
+>>>> --- a/Documentation/networking/ip-sysctl.rst
+>>>> +++ b/Documentation/networking/ip-sysctl.rst
+>>>> @@ -1038,10 +1038,16 @@ tcp_challenge_ack_limit - INTEGER
+>>>>           Note that this per netns rate limit can allow some side channel
+>>>>           attacks and probably should not be enabled.
+>>>>           TCP stack implements per TCP socket limits anyway.
+>>>>           Default: INT_MAX (unlimited)
+>>>>
+>>>> +tcp_authopt - BOOLEAN
+>>>> +       Enable the TCP Authentication Option (RFC5925), a replacement for TCP
+>>>> +       MD5 Signatures (RFC2835).
+>>>> +
+>>>> +       Default: 0
+>>>> +
+>>
+>> ...
+>>
+>>>> +#ifdef CONFIG_TCP_AUTHOPT
+>>>> +static int proc_tcp_authopt(struct ctl_table *ctl,
+>>>> +                           int write, void *buffer, size_t *lenp,
+>>>> +                           loff_t *ppos)
+>>>> +{
+>>>> +       int val = sysctl_tcp_authopt;
+>>>
+>>> val = READ_ONCE(sysctl_tcp_authopt);
+>>>
+>>>> +       struct ctl_table tmp = {
+>>>> +               .data = &val,
+>>>> +               .mode = ctl->mode,
+>>>> +               .maxlen = sizeof(val),
+>>>> +               .extra1 = SYSCTL_ZERO,
+>>>> +               .extra2 = SYSCTL_ONE,
+>>>> +       };
+>>>> +       int err;
+>>>> +
+>>>> +       err = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+>>>> +       if (err)
+>>>> +               return err;
+>>>> +       if (sysctl_tcp_authopt && !val) {
+>>>
+>>> READ_ONCE(sysctl_tcp_authopt)
+>>>
+>>> Note that this test would still be racy, because another cpu might
+>>> change sysctl_tcp_authopt right after the read.
+>>
+>> What meaningful races are possible here? This is a variable that changes
+>> from 0 to 1 at most once.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Two cpus can issue writes of 0 and 1 values at the same time.
 > 
-> ---
+> Depending on scheduling writing the 0 can 'win' the race and overwrite
+> the value back to 0.
 > 
-> Expected warning because the qcom,apr.yaml is being fixed in next commit:
-> 
->   Documentation/devicetree/bindings/sound/qcom,q6asm.example.dtb: apr: service@7: 'dais' does not match any of the regexes: '^.*@[0-9a-f]+$', 'pinctrl-[0-9]+'
->     From schema: /home/krzk/dev/linux/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-> 
-> Changes since v1:
-> 1. New patch.
-> ---
->  .../devicetree/bindings/sound/qcom,q6asm.txt  |  70 -----------
->  .../devicetree/bindings/sound/qcom,q6asm.yaml | 112 ++++++++++++++++++
->  2 files changed, 112 insertions(+), 70 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.txt
->  create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
+> This is in clear violation of the claim you are making (that the
+> sysctl can only go once from 0 to 1)
 
-Should be qcom,q6asm-dais.yaml or you need to add qcom,q6asm compatible?
+Not clear why anyone would attempt to write 0, maybe to ensure that it's 
+still disabled?
 
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,q6asm.txt b/Documentation/devicetree/bindings/sound/qcom,q6asm.txt
-> deleted file mode 100644
-> index 0d0075125243..000000000000
-> --- a/Documentation/devicetree/bindings/sound/qcom,q6asm.txt
-> +++ /dev/null
-> @@ -1,70 +0,0 @@
-> -Qualcomm Audio Stream Manager (Q6ASM) binding
-> -
-> -Q6ASM is one of the APR audio service on Q6DSP.
-> -Please refer to qcom,apr.txt for details of the common apr service bindings
-> -used by the apr service device.
-> -
-> -- but must contain the following property:
-> -
-> -- compatible:
-> -	Usage: required
-> -	Value type: <stringlist>
-> -	Definition: must be "qcom,q6asm-v<MAJOR-NUMBER>.<MINOR-NUMBER>".
-> -		    Or "qcom,q6asm" where the version number can be queried
-> -		    from DSP.
-> -		    example "qcom,q6asm-v2.0"
+But you're right that userspace CAN do that and the kernel CAN misbehave 
+in this scenario so it would be better to just make the changes you 
+suggested.
 
-Where is this compatible handled now? 
+>> In theory if two processes attempt to assign "non-zero" at the same time
+>> then one will "win" and the other will get an error but races between
+>> userspace writing different values are possible for any sysctl. The
+>> solution seems to be "write sysctls from a single place".
+>>
+>> All the checks are in sockopts - in theory if the sysctl is written on
+>> one CPU then a sockopt can still fail on another CPU until caches are
+>> flushed. Is this what you're worried about?
+>>
+>> In theory doing READ_ONCE might incur a slight penalty on sockopt but
+>> not noticeable.
+> 
+> Not at all. There is _no_ penalty using READ_ONCE(). Unless it is done
+> in a loop and this prevents some compiler optimization.
+> 
+> Please use WRITE_ONCE() and READ_ONCE() for all sysctl values used in
+> TCP stack (and elsewhere)
+> 
+> See all the silly patches we had recently.
 
-> -
-> -= ASM DAIs (Digital Audio Interface)
-> -"dais" subnode of the ASM node represents dai specific configuration
-> -
-> -- compatible:
-> -	Usage: required
-> -	Value type: <stringlist>
-> -	Definition: must be "qcom,q6asm-dais".
-> -
-> -- #sound-dai-cells
-> -	Usage: required
-> -	Value type: <u32>
-> -	Definition: Must be 1
-> -
-> -== ASM DAI is subnode of "dais" and represent a dai, it includes board specific
-> -configuration of each dai. Must contain the following properties.
-> -
-> -- reg
-> -	Usage: required
-> -	Value type: <u32>
-> -	Definition: Must be dai id
-> -
-> -- direction:
-> -	Usage: Required for Compress offload dais
-> -	Value type: <u32>
-> -	Definition: Specifies the direction of the dai stream
-> -			Q6ASM_DAI_TX_RX (0) for both tx and rx
-> -			Q6ASM_DAI_TX (1) for only tx (Capture/Encode)
-> -			Q6ASM_DAI_RX (2) for only rx (Playback/Decode)
-> -
-> -- is-compress-dai:
-> -	Usage: Required for Compress offload dais
-> -	Value type: <boolean>
-> -	Definition: present for Compress offload dais
-> -
-> -
-> -= EXAMPLE
-> -#include <dt-bindings/sound/qcom,q6asm.h>
-> -
-> -apr-service@7 {
-> -	compatible = "qcom,q6asm";
-> -	reg = <APR_SVC_ASM>;
-> -	q6asmdai: dais {
-> -		compatible = "qcom,q6asm-dais";
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -		#sound-dai-cells = <1>;
-> -
-> -		dai@0 {
-> -			reg = <0>;
-> -			direction = <Q6ASM_DAI_RX>;
-> -			is-compress-dai;
-> -		};
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,q6asm.yaml b/Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
-> new file mode 100644
-> index 000000000000..505bd64a0717
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/qcom,q6asm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Audio Stream Manager (Q6ASM)
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> +
-> +description:
-> +  Q6ASM is one of the APR audio services on Q6DSP. Each of its subnodes
-> +  represent a dai with board specific configuration.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,q6asm-dais
-> +
-> +  iommus:
-> +    maxItems: 1
-> +
-> +  '#sound-dai-cells':
-> +    const: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  '^dai@[0-9]+$':
-> +    type: object
-> +    description:
-> +      Q6ASM Digital Audio Interface
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +      direction:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1, 2]
-> +        description: |
-> +          The direction of the dai stream::
-> +           - Q6ASM_DAI_TX_RX (0) for both tx and rx
-> +           - Q6ASM_DAI_TX (1) for only tx (Capture/Encode)
-> +           - Q6ASM_DAI_RX (2) for only rx (Playback/Decode)
-> +
-> +      is-compress-dai:
-> +        type: boolean
-> +        description:
-> +          Compress offload dai.
-> +
-> +    dependencies:
-> +      is-compress-dai: ['direction']
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - "#sound-dai-cells"
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/qcom,apr.h>
-> +    #include <dt-bindings/sound/qcom,q6asm.h>
-> +
-> +    apr {
-> +        compatible = "qcom,apr-v2";
-> +        qcom,domain = <APR_DOMAIN_ADSP>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        service@7 {
-> +            compatible = "qcom,q6asm";
-> +            reg = <APR_SVC_ASM>;
-> +            qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
-> +
-> +            dais {
-> +                compatible = "qcom,q6asm-dais";
-> +                iommus = <&apps_smmu 0x1821 0x0>;
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                #sound-dai-cells = <1>;
-> +
-> +                dai@0 {
-> +                    reg = <0>;
-> +                };
-> +
-> +                dai@1 {
-> +                    reg = <1>;
-> +                };
-> +
-> +                dai@2 {
-> +                    reg = <2>;
-> +                    is-compress-dai;
-> +                    direction = <1>;
-> +                };
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.34.1
-> 
-> 
+OK

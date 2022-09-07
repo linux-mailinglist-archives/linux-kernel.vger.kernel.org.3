@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8206F5B02C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1E35B02C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiIGLUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S229819AbiIGLUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiIGLUd (ORCPT
+        with ESMTP id S230056AbiIGLUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:20:33 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF3889822
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:20:30 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d12so14186320plr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 04:20:30 -0700 (PDT)
+        Wed, 7 Sep 2022 07:20:37 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C629C509
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 04:20:34 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id b144so9505131pfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 04:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Stmo/b+IFMKFH7NQQb7Kt0yurZmKvJLuzBGo1PCIQOA=;
-        b=mZORR5nnp1KIcje6ldMVRn1db1BpmUJJmyvhw/8+SGCmBWLlmYit2p+4VNmS9vBEB8
-         epf3wm2sF8HX84dV6SE2vz61xe08SxQ2AiL0VuZl6doERpTRPn7oMWCTd2rb/rPOD7bV
-         CYytTdocYXdEWk2NqpHYinqSQobGT5IiorRzDWyUgjDD2nGsmsya1wiMZEbhOfALpQ2Q
-         6qz82yd4yST5HJKB9bWc2qZMMtya1P8oW7ba/2T8M7EEggy4LrfNLq9oW56C1g9mMqMx
-         eZ0A5SvZd8+EHEkCuT2+lZrj0bsF3oVWC5uvB4FYxMFeNO+dymV1iCM1rDElT4rJf5r4
-         j5lA==
+        bh=zgNdNFVnyT3RvVPbn2/w87CgJ8L2KSpB08/IQc4YsQE=;
+        b=XR+dyQcfBvYRAdbviqvY3HgN8jfgFlTfznz1Ftjck+AzAjWQ3ELl+8Uvsj/UTjDF2C
+         kaBRXGs4LpF55ccn/o4UsgVZ+1u11vPysBLmd3ptaoYjUUNVfR44kv4+elRvVzjN6jb0
+         AFRdUmGmAneNeaTyWubR6kmIFjcfYmaNE7t/x7EeeFdQQl1IaFjlPUvYNUrv2w1Ssuzj
+         etcuIqNwGsHT0u8EG4pMuO/JBgVkA8EbYUPRxhOecDbZGWDN/P2ioMamaNZ5NwF85Ee8
+         BqQEUsPgx/m80fuIm/0X4Qtrgsz1RRTxTM23LbhHLWX+hMVEyRbrp2UHTu5XSfidICh8
+         YKRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Stmo/b+IFMKFH7NQQb7Kt0yurZmKvJLuzBGo1PCIQOA=;
-        b=zn/zi6IucK2o+PhMz83XLZx9ZfJekUdw0485RxYyAxg/VtQ+fkcEGQsJdUwOtOE9ml
-         wcwjFRYBjQgUkBJbHXJDATpQWIB6XGApJgoB0L+3R4+VmDwzJd2t6MJSQEJ0ux4FrM2K
-         uZOGgZUP8crkEr4hv8QFQiy3KY7xTrGsbvFnJ6kvWMh/laUr7j+qoD+08G+/me4bVix4
-         0LbjPAW7wf/yR07kguBxlBM5Vvwb2WcNO6AfPzcZTzl8cEvNhR7nJrZ/yF4AZ/6EsAXf
-         NOWXw8/IPOz8ydMpFwNjxHk5Z3yG+l+UR0C1u8UuB/nPeiPs5Ktt+TcnMcLmsmHCaNqU
-         VRvw==
-X-Gm-Message-State: ACgBeo3bmQJ8zxRuoCdRkIHppzE6fhQKQXdhtInL1HehbyMmhzItnEtS
-        ZUy3Y7Pp1Jb4rzURjmQ/D27BMA==
-X-Google-Smtp-Source: AA6agR6ALcPUImzbs5VWlBJNpidlt9nyHKGmW2mYKaMSecNwNgFLbKRHmLbj10tMLZZ2YhdeSnjgsA==
-X-Received: by 2002:a17:902:b484:b0:170:a2d8:80f6 with SMTP id y4-20020a170902b48400b00170a2d880f6mr3233963plr.97.1662549629552;
-        Wed, 07 Sep 2022 04:20:29 -0700 (PDT)
+        bh=zgNdNFVnyT3RvVPbn2/w87CgJ8L2KSpB08/IQc4YsQE=;
+        b=wbJ4ypxz4IddPsiZvhFyMlkGkBdW+poaVRtFN/EeAP3gytKfk7pTNHExropyC9lwxw
+         ickjZ/9P59oNi1/BVExAK+T//9uQ7+SX1QkKx/bCTLRFfl47/yxnVVMQeHZevVB6CUvw
+         wpZ2EiZun5a0V7dwwjvpIp+ZjGAZLWWZk3fn3jJEHqhdonGGT9OkI7sJ24qhAPGjOrSQ
+         tGQm3ndIec+BW6xhSUe6jzH1V+3ItX1e+lw2RCXy4G3nK8M4EfmkLf8eF/N3dzm2gV3t
+         CRc3IgeoNGItRqqUMFRB+JDwqv/uZZau6VqXCToaCn4x7JgTBC+hw8oMEA3WzRM1BGVU
+         xl/A==
+X-Gm-Message-State: ACgBeo2laOp5Ze9UncMRHbyVC1A9Edshm88a4Ud1RW7QImUKnuGlmSpK
+        f7K6Aoe1AsEFTsZrJNRbFXF8oQ==
+X-Google-Smtp-Source: AA6agR6GyoYZk7c6Nnffk9vHlWOkHTJSB5mjnEosrMB01rPpaslj2Wtnu1jM1A2ZeoFMdR7jk+yTiQ==
+X-Received: by 2002:a63:5658:0:b0:42a:1663:b965 with SMTP id g24-20020a635658000000b0042a1663b965mr2958745pgm.486.1662549633605;
+        Wed, 07 Sep 2022 04:20:33 -0700 (PDT)
 Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id d12-20020a63f24c000000b0042ba0a822cbsm10334731pgk.8.2022.09.07.04.20.25
+        by smtp.gmail.com with ESMTPSA id d12-20020a63f24c000000b0042ba0a822cbsm10334731pgk.8.2022.09.07.04.20.30
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Sep 2022 04:20:29 -0700 (PDT)
+        Wed, 07 Sep 2022 04:20:33 -0700 (PDT)
 From:   Abel Wu <wuyun.abel@bytedance.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Mel Gorman <mgorman@suse.de>,
@@ -57,9 +57,9 @@ Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
         Yicong Yang <yangyicong@huawei.com>,
         linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>,
         Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH v4 3/5] sched/fair: Remove useless check in select_idle_core()
-Date:   Wed,  7 Sep 2022 19:19:58 +0800
-Message-Id: <20220907112000.1854-4-wuyun.abel@bytedance.com>
+Subject: [PATCH v4 4/5] sched/fair: Default to false in test_idle_cores()
+Date:   Wed,  7 Sep 2022 19:19:59 +0800
+Message-Id: <20220907112000.1854-5-wuyun.abel@bytedance.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220907112000.1854-1-wuyun.abel@bytedance.com>
 References: <20220907112000.1854-1-wuyun.abel@bytedance.com>
@@ -74,32 +74,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function select_idle_core() only gets called when has_idle_cores
-is true which can be possible only when sched_smt_present is enabled.
+It's uncertain whether idle cores exist or not if shared sched-
+domains are not ready, so returning "no idle cores" usually
+makes sense.
 
-This change also aligns select_idle_core() with select_idle_smt() in
-the way that the caller do the check if necessary.
+While __update_idle_core() is an exception, it checks status
+of this core and set hint to shared sched-domain if necessary.
+So the whole logic of this function depends on the existence
+of shared sched-domain, and can certainly bail out early if
+it is not available.
+
+It's somehow a little tricky, and as Josh suggested that it
+should be transient while the domain isn't ready. So remove
+the self-defined default value to make things more clearer.
 
 Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+Reviewed-by: Josh Don <joshdon@google.com>
 Acked-by: Mel Gorman <mgorman@techsingularity.net>
 ---
- kernel/sched/fair.c | 3 ---
- 1 file changed, 3 deletions(-)
+ kernel/sched/fair.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 1ad79aaaaf93..03ce65068333 100644
+index 03ce65068333..23b020c3d3a0 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -6321,9 +6321,6 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
- 	bool idle = true;
+@@ -1588,11 +1588,11 @@ numa_type numa_classify(unsigned int imbalance_pct,
+ 
+ #ifdef CONFIG_SCHED_SMT
+ /* Forward declarations of select_idle_sibling helpers */
+-static inline bool test_idle_cores(int cpu, bool def);
++static inline bool test_idle_cores(int cpu);
+ static inline int numa_idle_core(int idle_core, int cpu)
+ {
+ 	if (!static_branch_likely(&sched_smt_present) ||
+-	    idle_core >= 0 || !test_idle_cores(cpu, false))
++	    idle_core >= 0 || !test_idle_cores(cpu))
+ 		return idle_core;
+ 
+ 	/*
+@@ -6271,7 +6271,7 @@ static inline void set_idle_cores(int cpu, int val)
+ 		WRITE_ONCE(sds->has_idle_cores, val);
+ }
+ 
+-static inline bool test_idle_cores(int cpu, bool def)
++static inline bool test_idle_cores(int cpu)
+ {
+ 	struct sched_domain_shared *sds;
+ 
+@@ -6279,7 +6279,7 @@ static inline bool test_idle_cores(int cpu, bool def)
+ 	if (sds)
+ 		return READ_ONCE(sds->has_idle_cores);
+ 
+-	return def;
++	return false;
+ }
+ 
+ /*
+@@ -6295,7 +6295,7 @@ void __update_idle_core(struct rq *rq)
  	int cpu;
  
--	if (!static_branch_likely(&sched_smt_present))
--		return __select_idle_cpu(core, p);
--
+ 	rcu_read_lock();
+-	if (test_idle_cores(core, true))
++	if (test_idle_cores(core))
+ 		goto unlock;
+ 
  	for_each_cpu(cpu, cpu_smt_mask(core)) {
- 		if (!available_idle_cpu(cpu)) {
- 			idle = false;
+@@ -6367,9 +6367,9 @@ static inline void set_idle_cores(int cpu, int val)
+ {
+ }
+ 
+-static inline bool test_idle_cores(int cpu, bool def)
++static inline bool test_idle_cores(int cpu)
+ {
+-	return def;
++	return false;
+ }
+ 
+ static inline int select_idle_core(struct task_struct *p, int core, struct cpumask *cpus, int *idle_cpu)
+@@ -6608,7 +6608,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 		return target;
+ 
+ 	if (sched_smt_active()) {
+-		has_idle_core = test_idle_cores(target, false);
++		has_idle_core = test_idle_cores(target);
+ 
+ 		if (!has_idle_core && cpus_share_cache(prev, target)) {
+ 			i = select_idle_smt(p, prev);
 -- 
 2.37.3
 

@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AC05B0BB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73B85B0BBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiIGRoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S229684AbiIGRpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiIGRoc (ORCPT
+        with ESMTP id S229489AbiIGRpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:44:32 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6195BFDD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:44:24 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-11e9a7135easo37861177fac.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:44:24 -0700 (PDT)
+        Wed, 7 Sep 2022 13:45:22 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9993F67C99
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:45:20 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 130so17115498ybz.9
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4UnzWTocG2iPpAqMvQabkV9NRhaTMUyHYWRKvOA4oZs=;
+        b=gHOGoE/DwxYALJI33vb4pBn5j3ORXk2cd05bL54ID/21l2b2vQ0106kj6v+/9GglxM
+         pcmHJzYHGHwO9x8Nw6os/zYLAAmKzINCzgmvlNFCI0MI6lcgHhRQLcmS3BnuPnBFdra4
+         Y65udLpippAuS+K591wU4s+ejdivlYbrrnDG7oonBP8Gcmc1AROEiHaCaCSKPq1LhSSG
+         3MKrl/CAu9SquxByAjXIo3qHbCJcJ53YMacpOrey2nTDb9AslfdrjcHvmrsIG7QPBoeK
+         O4eTzn8/6J15sgvrGQ+/uTDNYUEwvz68zREbrWAVB7x1+Iroy8k8Mv7bAzta9Q/z/O3t
+         EeHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lqZyZGmrh/rn893VNBpt4UlIfU6KNr8EF05UjLPCWhY=;
-        b=DdNuNiBxlY37uQPhLRrmtkrcrshRTEzsmGz1F3daor52CJvJ1tUEVsC+1DwM6iVIdv
-         7j0AxHaENf+vvaad1ZI38CDADNxCsGAmspru5v3E6gGESWhDIT6+2KDYKgZtZLIkzcAk
-         +d6CAFS1ltohJPiZb+8O4c+bLk7SEUrGDwKEsYnXrtJtqAu5dYf3LirF1AcmTb2aj9eb
-         V1PIVAqy7vaE6FMYQ1fAOIyVnpC7lyqGcftkA8sYm+VJMlijxvhTBYLdzJe1sJJMrnl5
-         3vdeMeeOC/dciIASKY5SQ0RfA119WR0p2OUZn6O5jqjxkjdQp2mYfXK/4E19oDD+Q/E2
-         ZK/Q==
-X-Gm-Message-State: ACgBeo3MTgbhLjVZbggbzr/av8/0T90UYHLRb0Re9ISmiaBR8AL964rX
-        UkF396/oyspJg2Mno3xQaLtDPBGHtBxEBxBQKZlxfq7xzAU=
-X-Google-Smtp-Source: AA6agR5Tww5c9RcGH1b4fX5WRnDJKMvbV4jvwF0oYF5Y5fvxoW3ltF8vCs0ZaGyqj9sGysrlpdBcGDOHUv0Di0MdeLw=
-X-Received: by 2002:a05:6870:a184:b0:116:bd39:7f94 with SMTP id
- a4-20020a056870a18400b00116bd397f94mr15322436oaf.5.1662572664089; Wed, 07 Sep
- 2022 10:44:24 -0700 (PDT)
+        bh=4UnzWTocG2iPpAqMvQabkV9NRhaTMUyHYWRKvOA4oZs=;
+        b=XC+oX6KLzomLbusoIr0bx4UWvwyf5U7TLANMoN4h2ToEjirru6DE7gVW7UTrWOQjnT
+         bXXHzTZKn/rCLzRQi2GVrbKvlhiaivp0l5Ji8SW8d1gazwmuWaHMxKTqPRSaH+HxGw4g
+         XLq42Et9LJPUcgDwCgjN5UsxIKIhdJmKvwCuY+uKB5ZUintk/Qt5AFfY7/2Ix8+XTSIk
+         CAQmqBg2m7YZETPupWjHffWdVGR1KlIfc/7C4eLO92tN93P3Hz7+yTrKoKKmMI8AkcoO
+         RFDsFd33Xiau5GMz/bEYplwO4cZUG71rVvIJOQllzkywkwClV0e0oyy958HCWC+8jrX8
+         wBuQ==
+X-Gm-Message-State: ACgBeo2XQ27TD1En0+oxZbwmXcuLamke8Y4sC5oQK1C2gK+0XBMIuUGQ
+        x+jjkxMm2AO6aD+ijumZk0KicEmSXkoO7pnDDXTwNA==
+X-Google-Smtp-Source: AA6agR5EJfDo1S55dZcD3KuTpTr76XKXhF6Z9iRiTzeOauk5dATRDVC8XJn5mqvOcVvcK0gXefud+OOUpE0zokVNZwk=
+X-Received: by 2002:a25:1e86:0:b0:68d:549a:e4c2 with SMTP id
+ e128-20020a251e86000000b0068d549ae4c2mr3717220ybe.93.1662572719703; Wed, 07
+ Sep 2022 10:45:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220907154904.70883-1-adrian.hunter@intel.com>
-In-Reply-To: <20220907154904.70883-1-adrian.hunter@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 7 Sep 2022 10:44:13 -0700
-Message-ID: <CAM9d7cjFMSxA_E_EqAVpJeCYy0+78jsi2W1+cX-e7YAZuDKV3Q@mail.gmail.com>
-Subject: Re: [PATCH] perf script: Fix sample type validation of dummy events
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220907173903.2268161-1-elver@google.com> <20220907173903.2268161-2-elver@google.com>
+ <YxjXwBXpejAP6zoy@boqun-archlinux> <CANpmjNN2cch+HDVUYLD27sF9E39RaFrCf++KN=ZZ7j0DH8VaDw@mail.gmail.com>
+In-Reply-To: <CANpmjNN2cch+HDVUYLD27sF9E39RaFrCf++KN=ZZ7j0DH8VaDw@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 7 Sep 2022 19:44:43 +0200
+Message-ID: <CANpmjNO6zbVpM2rr7frvE6S9c0PLHi34O5d+9_v5k7fOxNQMHg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] objtool, kcsan: Add volatile read/write
+ instrumentation to whitelist
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 8:49 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Wed, 7 Sept 2022 at 19:43, Marco Elver <elver@google.com> wrote:
 >
-> Dummy events need the sample type only for ID samples and we expect perf
-> to set up their sample type correctly for that purpose. Consequently
-> there is no reason to attempt to validate the sample type against
-> user-specified fields like 'iregs'.
+> On Wed, 7 Sept 2022 at 19:42, Boqun Feng <boqun.feng@gmail.com> wrote:
+> >
+> > On Wed, Sep 07, 2022 at 07:39:03PM +0200, Marco Elver wrote:
+> > > Adds KCSAN's volatile barrier instrumentation to objtool's uaccess
+> >
+> > Confused. Are things like "__tsan_volatile_read4" considered as
+> > "barrier" for KCSAN?
 >
-> So skip sample type validation for dummy events.
->
-> Example:
->
->  Before:
->
->    $ perf record --intr-regs=di,r8,dx,cx -e br_inst_retired.near_call:p,dummy -c 1000 uname
->    Linux
->    [ perf record: Woken up 1 times to write data ]
->    [ perf record: Captured and wrote 0.017 MB (18 samples) ]
->    $ perf script -F ip,sym,iregs
->    Samples for 'dummy' event do not have IREGS attribute set. Cannot print 'iregs' field.
->
->  After:
->
->    $ perf script -F ip,sym,iregs
->     ffffffffabf816f0 perf_iterate_ctx ABI:2    CX:0x0    DX:0xffffab5802bbfb60    DI:0xffff9f5e8a2a0800    R8:0x1
->     ffffffffabe034a0 x86_pmu_filter_match ABI:2    CX:0x0    DX:0xffffab5802bbfc68    DI:0xffff9f5fc7ad0ba0    R8:0xffff9f5fbf0504a0
->     ffffffffabe315c0 fpregs_assert_state_consistent ABI:2    CX:0x0    DX:0x0    DI:0xffffffffad0e77f1    R8:0x0
->     ffffffffabf90260 perf_event_mmap ABI:2    CX:0x0    DX:0xffffffffabfcedc0    DI:0xffff9f5fbf050540    R8:0x0
->     ffffffffabee76c0 __rcu_read_unlock ABI:2    CX:0x70    DX:0xffff9f5e812a300c    DI:0x7    R8:0xffffffffadc93aa0
->     ffffffffac85a1a0 debug_smp_processor_id ABI:2    CX:0x0    DX:0xffffab5802bbfd28    DI:0xffffffffad0e77f1    R8:0xffff9f5f69b869e0
->     ffffffffac0178e0 policy_nodemask ABI:2    CX:0x7fc123152000    DX:0xffffffffadc8ac80    DI:0x100cca    R8:0x0
->         7fc1231880d0 add_to_global_resize ABI:2    CX:0x7fc1231b7650    DX:0x7ffd7e896168    DI:0x5635ea713b0c    R8:0x7fc12317aa50
->     ffffffffabfcecc0 vmacache_update ABI:2    CX:0xffff9f5f69ab8000    DX:0xffff9f5f69b861a0    DI:0x7fc123055480    R8:0x0
->     ffffffffac85a1a0 debug_smp_processor_id ABI:2    CX:0x0    DX:0x0    DI:0xffffffffad0e77f1    R8:0x1
->     ffffffffac85a1a0 debug_smp_processor_id ABI:2    CX:0x0    DX:0xffffab5802bbfdb8    DI:0xffffffffad0e77f1    R8:0xffff9f5f69b86e60
->     ffffffffac00c120 PageHeadHuge ABI:2    CX:0x53    DX:0xf    DI:0xffffe312c47c1740    R8:0xffff9f5e83cb66c8
->     ffffffffabea1530 preempt_count_add ABI:2    CX:0xffffe312c886aa40    DX:0x5635eb38a    DI:0x1    R8:0x0
->     ffffffffabfedb90 flush_tlb_batched_pending ABI:2    CX:0x103a68067    DX:0x1    DI:0xffff9f5e80262c00    R8:0xffffab5802bbfd90
->     ffffffffabfe7340 __tlb_remove_page_size ABI:2    CX:0x25    DX:0x1000    DI:0xffffab5802bbfe00    R8:0x33f905025
->     ffffffffabfee490 page_remove_rmap ABI:2    CX:0x25    DX:0x0    DI:0xffffe312c4581e00    R8:0x116078025
->     ffffffffac85a1a0 debug_smp_processor_id ABI:2    CX:0x40    DX:0x8    DI:0xffff9f622042a540    R8:0x1
->     ffffffffabe6be00 vm_area_free ABI:2    CX:0x8015000f    DX:0x80000000    DI:0xffff9f5fbf050000    R8:0x1
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> No, it's what's emitted for READ_ONCE() and WRITE_ONCE().
 
-Please see https://lore.kernel.org/all/20220831124041.219925-1-jolsa@kernel.org/
+And you rightly pointed out there's a mistake in the commit message I
+just saw. :-)
+
+If there's no v2, Paul, kindly perform a s/barrier//.
 
 Thanks,
-Namhyung
-
-
-> ---
->  tools/perf/builtin-script.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 585171479876..eb263cdf51ee 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -411,7 +411,7 @@ static int evsel__do_check_stype(struct evsel *evsel, u64 sample_type, const cha
->         int type = output_type(attr->type);
->         const char *evname;
->
-> -       if (attr->sample_type & sample_type)
-> +       if (evsel__is_dummy_event(evsel) || attr->sample_type & sample_type)
->                 return 0;
->
->         if (output[type].user_set_fields & field) {
-> --
-> 2.25.1
->
+-- Marco

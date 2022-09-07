@@ -2,53 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C3E5AFF60
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B863B5AFF68
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiIGIl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S230147AbiIGImG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiIGIlZ (ORCPT
+        with ESMTP id S229486AbiIGImE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:41:25 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAF11839F
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:40:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oQ2Oy2vE4Y+KSIGzjxEVBp2pts3FTmVlEXlZ7nc293g=; b=hfd8sybGfMqbmQOjE0SfaJqlSM
-        ZW8dYkd0/wA6tNB6f6D+D6dFo/tZQ/xyHlXU9Wl7O+eKpEKnxzrVwTMX0vxxkwukEfTNq5ABh3HcZ
-        FwcJPcC9RwsEC894NG/JLt1qPdTX/JrTk6ETN/hzZOCOvaLVFGQMeQcmJ+5vswQPYoj0G5KxnQfI2
-        foT/7Z/dxx0URlv9xjUC1aP7c5/NAHlRwMX4AuL++2cPD5TB++YGh4IUMuPUSQqCAbYunWO75mhq6
-        eZ5npMO1MQ8FunZnOPjYGzgRXtgqBUe6Ag/OoLTnjUZ2VBLJzRIHVlzDqM+lOMVubuqESbo5X/guV
-        0yTZKncQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVqak-004Nu2-82; Wed, 07 Sep 2022 08:39:26 +0000
-Date:   Wed, 7 Sep 2022 01:39:26 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        jxgao@google.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v2] swiotlb: avoid potential left shift overflow
-Message-ID: <YxhYvjpDyTzlnWnN@infradead.org>
-References: <20220819084537.52374-1-chao.gao@intel.com>
+        Wed, 7 Sep 2022 04:42:04 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF58760CD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:41:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 320A72B058ED;
+        Wed,  7 Sep 2022 04:39:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 04:39:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662539989; x=1662547189; bh=rHnQqoPJFb
+        fCoyXvlScJxF/2TX4ozlRbjwh/s/ZcTXY=; b=rlqCba81GDVgmFo9BLO/+vxElt
+        00saXH5K4+1wgARPrortKc3X6tNhaIagHxtFq9FX3QmW3eYm/dcZ/Xd4W+DrIVIq
+        q0ZxCwyGbK8ynlgCZPdKYsO6989NICVWzfThhQB+swIE/SocQxL0blVkHOFtYt2a
+        +2+eIDIfs+YcNgfST8S5UY09pFJI0qh1RWs4gmUb3i2JerXi6IRhUpSQtzv5IYsh
+        1R00Oxsydc4sydZCByQlMfEFKKC8TlhHoFWg6uhtxDCJ6cXS1GbN/TN7SCCOMP3q
+        4NhkrIyfgxjadagzbyrTdMplcJk1ooyf72O8s6MEfTM5H43N/6TUUkM/iTMg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662539989; x=1662547189; bh=rHnQqoPJFbfCoyXvlScJxF/2TX4o
+        zlRbjwh/s/ZcTXY=; b=Ft2HiBtALvBCzHSoyFouoM2RlHha3pW36vRYiiF/Aj9p
+        jgB1+hT9SxJN781aapotSR/nkYu/nTdv1O9qZsnJ5VQJfDsXDF2E1tN+Vf4mRiWm
+        G3SR4pPvfJAXEDu2a05LRJ6/2dgvjxxBVBsk9pwViUxDpoVGiuqZtFXraPe+syba
+        nVKdja+C+91rr9ysqLwQhbdr720KzsCw9Fz/J/VUWbcfg/4nkWZiYcuLP+R0Pc0C
+        HA3z5f5hC4bLUng7cKExSmOjYAXPw/PxIhiALmfh/1nzPMTG1+X572MR4zmCPVA9
+        ibD0tPdUx+IXQ3o/2bEzZzCONQqNRDoUM4Iv38uutA==
+X-ME-Sender: <xms:1VgYY9PFmBkjp0A7V2bAvop2SdEyXbVH_QNWffffyTGZZlmvW9zTOg>
+    <xme:1VgYY__oQcg990U2Ytw0kb6kVkiaTRlq3gCt6yktxijiRju56YzaqVM5TpIr3LCLa
+    m8uXyfwKPsq_TBiKeM>
+X-ME-Received: <xmr:1VgYY8Sm2V9A-f-DlbfvRBXYrF873-ZITm50jnaOpA1ZX4ooWEOKRX9mZ5I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:1VgYY5uFE1WbjoOrw3Lre0EoafBbvnBB2ypQ4HWQOs-it5Cdl6-FHw>
+    <xmx:1VgYY1fpgJSwUcfS6TGnANh5IEL_p7D07vbwqnvWXJKXepArMPGHHQ>
+    <xmx:1VgYY10gohsFHOuwqMe2C54wVRArFsMFtgg869v4JlHnNkmOqGq3bw>
+    <xmx:1VgYY6O_FMI7-UBHsQNAFH9El9UhTIjZAXjM7SKD_8RFiBosm1XRCs5wey8>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 04:39:48 -0400 (EDT)
+Date:   Wed, 7 Sep 2022 10:39:45 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Subject: Re: [PATCH v2 14/41] drm/modes: Move named modes parsing to a
+ separate function
+Message-ID: <20220907083945.3cqmz765vmnjt3ol@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-14-459522d653a7@cerno.tech>
+ <CAMuHMdV9wVgHFfwHoqtBoYzJDnjDmKTfaZkAKvTVKh1Y-2x1pA@mail.gmail.com>
+ <87czcidnb8.fsf@intel.com>
+ <20220830120330.6f5f22d35gu7cbr3@houat>
+ <875yi9etuw.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qxovco4c3ldtue3z"
 Content-Disposition: inline
-In-Reply-To: <20220819084537.52374-1-chao.gao@intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <875yi9etuw.fsf@intel.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, applied.
+
+--qxovco4c3ldtue3z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Tue, Aug 30, 2022 at 04:36:23PM +0300, Jani Nikula wrote:
+> On Tue, 30 Aug 2022, Maxime Ripard <maxime@cerno.tech> wrote:
+> > Hi,
+> >
+> > On Tue, Aug 30, 2022 at 01:43:07PM +0300, Jani Nikula wrote:
+> >> On Tue, 30 Aug 2022, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >> > On Mon, Aug 29, 2022 at 3:13 PM Maxime Ripard <maxime@cerno.tech> wr=
+ote:
+> >> >> +#define STR_STRICT_EQ(str, len, cmp) \
+> >> >> +       ((strlen(cmp) =3D=3D len) && !strncmp(str, cmp, len))
+> >> >
+> >> > This is not part of the move, but newly added.
+> >>=20
+> >> The same construct is also duplicated elsewhere in the series, and I
+> >> kept being confused by it.
+> >
+> > I'm not sure what is confusing, but I can add a comment if needed.
+>=20
+> STR_STRICT_EQ() is what's confusing. I have to look at the
+> implementation to understand what it means. What does "strict" string
+> equality mean?
+
+Same length, same sequence of characters
+
+> >
+> >> The above is precisely the same as:
+> >>=20
+> >> 	str_has_prefix(str, cmp) =3D=3D len
+> >
+> > Here, it's used to make sure we don't have a named mode starting with
+> > either e, d, or D.
+> >
+> > If I understood str_has_prefix() right, str_has_prefix("DUMB-MODE", "D")
+> > =3D=3D strlen("DUMB-MODE") would return true, while it's actually what =
+we
+> > want to avoid.
+>=20
+> That's not true, str_has_prefix("DUMB-MODE", "D") =3D=3D strlen("D") is.
+>=20
+> > It's also used indeed in drm_get_tv_mode_from_name(), where we try to
+> > match a list of names with one passed as argument.
+> >
+> > With drm_get_tv_mode_from_name("NSTC", strlen("NTSC")), we would end up
+> > calling str_has_prefix("NTSC-J", "NTSC") =3D=3D strlen("NTSC-J") which =
+would
+> > work. However, we end up calling prefix not a prefix, but an entire
+> > string we want to match against, which is very confusing to me too.
+>=20
+> If I get this right, you have a string and you want to check if that has
+> a certain prefix. Additionally, you want to check the prefix is a
+> certain length.
+>=20
+> Sure, that the prefix is a certain length is more of a property of the
+> string, which is NUL terminated later than at length, but that's doesn't
+> really matter.
+>=20
+> That condition is simply str_has_prefix(string, prefix) =3D=3D length.
+
+Ack. I'm ok with the implementation being done that way, but I'd really
+prefer to still have some macro to make the name less confusing. Would
+that work for you? What name would be better in your opinion?
+
+Thanks!
+Maxime
+
+--qxovco4c3ldtue3z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxhY0QAKCRDj7w1vZxhR
+xa5XAP9sWfv5tHnxQJpN3hRmX3ErZIQ33tjnxBrnbPX7t8NAjwD/emsxhT5EFzpt
+Y/lLUUTztSaE0qu2ofT3EG9ZeOf9fw8=
+=dNn8
+-----END PGP SIGNATURE-----
+
+--qxovco4c3ldtue3z--

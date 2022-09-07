@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C8D5B0976
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EFB5B0978
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiIGQA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S230213AbiIGQAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiIGQAB (ORCPT
+        with ESMTP id S230146AbiIGQAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:00:01 -0400
+        Wed, 7 Sep 2022 12:00:12 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C6C33407
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:59:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577B3248DD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662566383; x=1694102383;
+  t=1662566386; x=1694102386;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7LPD4nhApM8sqGjNR6JnkE4Y4ACFhfMxX7DGMWYyNmI=;
-  b=ldFqP8M77lqH9J826/7yRSwSoR93Sv82yL1uXBj8RWasSLmodoGQ8pe9
-   MplXn2ySkcAkaYUE7uStY/YOxeByZNOF8NWGNiFh9GiHfG8n1CW28VaCD
-   J2k89RRAoiXWHDFZTaEXPVOcWTO5+uKeasYkdO/M5a5VJ2mugKwF2h4qE
-   QdkhnQSw1MjoURt14eIfW4gL3uFWcJDW0yQcPnCaHnzDm7pRyKu8yv4eb
-   NYZrXEkGfSYNJF4LmtwyZH2/cy2P0H2qI88mIDWPjdrltLOWzBASkZCas
-   ovEjZrTe49zx2O6EJltaAuSddNAHaHKWmvoKNODSMtLCVRPMe3oYL+PQ0
+  bh=k8WXuqM2Btnztwxu+hZDAOvoXEutBVbE7ajm9wvLA1E=;
+  b=jWAMiCFJm9y7W/Hrm40wosgZ+Xvbf+LhqpCFTUejjPSo36kOj5lrGudr
+   nMOH9eu2pOeYjoAk6aBezhs+erYRNxVRLaisiB+4DD/2Q/isfDK2M1/ac
+   x894zuhAPKU3z6MmWxRVFgh7l1PmePrYakdsCvCLED2Zvhn1Orsq8a6m+
+   tqmhJ0RtLiKER4EnYlSQRgXYSiEpJIUF0Wr41xcWFzkguvjcWkjs9qWSa
+   zetOob5YFxzduS1jBWpS15SbqqguRsFtMV+dSenR0mqLnZIkoNkJIdv4n
+   tJz1U8lB1FV3mJK0oRANpjsqJRzPR5TJG660YNCBepK4TvK9EvG+p9sMi
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297701421"
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297701444"
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="297701421"
+   d="scan'208";a="297701444"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:18 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:22 -0700
 X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
-   d="scan'208";a="676248010"
+   d="scan'208";a="676248078"
 Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:15 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:59:18 -0700
 From:   Tomas Winkler <tomas.winkler@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Airlie <airlied@linux.ie>,
@@ -48,10 +48,11 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Tomas Winkler <tomas.winkler@intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>
-Subject: [PATCH v8 09/16] mei: bus: export common mkhi definitions into a separate header
-Date:   Wed,  7 Sep 2022 18:58:06 +0300
-Message-Id: <20220907155813.1427526-10-tomas.winkler@intel.com>
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Subject: [PATCH v8 10/16] mei: mkhi: add memory ready command
+Date:   Wed,  7 Sep 2022 18:58:07 +0300
+Message-Id: <20220907155813.1427526-11-tomas.winkler@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220907155813.1427526-1-tomas.winkler@intel.com>
 References: <20220907155813.1427526-1-tomas.winkler@intel.com>
@@ -67,100 +68,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Lubart <vitaly.lubart@intel.com>
+Add GSC memory ready command.
+The command indicates to the firmware that extend operation
+memory was setup and the firmware may enter PXP mode.
 
-Exported common mkhi definitions from bus-fixup.c into a separate
-header file mkhi.h for other driver usage.
-
-Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
+CC: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
 Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/misc/mei/bus-fixup.c | 31 +-------------------
- drivers/misc/mei/mkhi.h      | 57 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 58 insertions(+), 30 deletions(-)
- create mode 100644 drivers/misc/mei/mkhi.h
+ drivers/misc/mei/mkhi.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 344598fcf8e9..c4e527803299 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -15,6 +15,7 @@
- 
- #include "mei_dev.h"
- #include "client.h"
-+#include "mkhi.h"
- 
- #define MEI_UUID_NFC_INFO UUID_LE(0xd2de1625, 0x382d, 0x417d, \
- 			0x48, 0xa4, 0xef, 0xab, 0xba, 0x8a, 0x12, 0x06)
-@@ -89,20 +90,6 @@ struct mei_os_ver {
- 	u8  reserved2;
- } __packed;
- 
--#define MKHI_FEATURE_PTT 0x10
--
--struct mkhi_rule_id {
--	__le16 rule_type;
--	u8 feature_id;
--	u8 reserved;
--} __packed;
--
--struct mkhi_fwcaps {
--	struct mkhi_rule_id id;
--	u8 len;
--	u8 data[];
--} __packed;
--
- struct mkhi_fw_ver_block {
- 	u16 minor;
- 	u8 major;
-@@ -115,22 +102,6 @@ struct mkhi_fw_ver {
- 	struct mkhi_fw_ver_block ver[MEI_MAX_FW_VER_BLOCKS];
- } __packed;
- 
--#define MKHI_FWCAPS_GROUP_ID 0x3
--#define MKHI_FWCAPS_SET_OS_VER_APP_RULE_CMD 6
--#define MKHI_GEN_GROUP_ID 0xFF
--#define MKHI_GEN_GET_FW_VERSION_CMD 0x2
--struct mkhi_msg_hdr {
--	u8  group_id;
--	u8  command;
--	u8  reserved;
--	u8  result;
--} __packed;
--
--struct mkhi_msg {
--	struct mkhi_msg_hdr hdr;
--	u8 data[];
--} __packed;
--
- #define MKHI_OSVER_BUF_LEN (sizeof(struct mkhi_msg_hdr) + \
- 			    sizeof(struct mkhi_fwcaps) + \
- 			    sizeof(struct mei_os_ver))
 diff --git a/drivers/misc/mei/mkhi.h b/drivers/misc/mei/mkhi.h
-new file mode 100644
-index 000000000000..43cadfb1b990
---- /dev/null
+index 43cadfb1b990..c9d0b2b9dfa0 100644
+--- a/drivers/misc/mei/mkhi.h
 +++ b/drivers/misc/mei/mkhi.h
-@@ -0,0 +1,57 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2003-2022, Intel Corporation. All rights reserved.
-+ * Intel Management Engine Interface (Intel MEI) Linux driver
-+ */
-+
-+#ifndef _MEI_MKHI_H_
-+#define _MEI_MKHI_H_
-+
-+#include <linux/types.h>
-+
-+#define MKHI_FEATURE_PTT 0x10
-+
-+#define MKHI_FWCAPS_GROUP_ID 0x3
-+#define MKHI_FWCAPS_SET_OS_VER_APP_RULE_CMD 6
-+#define MKHI_GEN_GROUP_ID 0xFF
-+#define MKHI_GEN_GET_FW_VERSION_CMD 0x2
-+
+@@ -30,6 +30,13 @@
+ /* Allow transition to PXP mode without approval */
+ #define MKHI_GFX_MEM_READY_PXP_ALLOWED  0x1
+ 
 +#define MKHI_GROUP_ID_GFX              0x30
 +#define MKHI_GFX_RESET_WARN_CMD_REQ    0x0
 +#define MKHI_GFX_MEMORY_READY_CMD_REQ  0x1
@@ -168,38 +94,19 @@ index 000000000000..43cadfb1b990
 +/* Allow transition to PXP mode without approval */
 +#define MKHI_GFX_MEM_READY_PXP_ALLOWED  0x1
 +
-+#define MKHI_GROUP_ID_GFX              0x30
-+#define MKHI_GFX_RESET_WARN_CMD_REQ    0x0
-+#define MKHI_GFX_MEMORY_READY_CMD_REQ  0x1
-+
-+/* Allow transition to PXP mode without approval */
-+#define MKHI_GFX_MEM_READY_PXP_ALLOWED  0x1
-+
-+struct mkhi_rule_id {
-+	__le16 rule_type;
-+	u8 feature_id;
-+	u8 reserved;
-+} __packed;
-+
-+struct mkhi_fwcaps {
-+	struct mkhi_rule_id id;
-+	u8 len;
-+	u8 data[];
-+} __packed;
-+
-+struct mkhi_msg_hdr {
-+	u8  group_id;
-+	u8  command;
-+	u8  reserved;
-+	u8  result;
-+} __packed;
-+
-+struct mkhi_msg {
+ struct mkhi_rule_id {
+ 	__le16 rule_type;
+ 	u8 feature_id;
+@@ -54,4 +61,9 @@ struct mkhi_msg {
+ 	u8 data[];
+ } __packed;
+ 
++struct mkhi_gfx_mem_ready {
 +	struct mkhi_msg_hdr hdr;
-+	u8 data[];
++	u32    flags;
 +} __packed;
 +
-+#endif /* _MEI_MKHI_H_ */
+ #endif /* _MEI_MKHI_H_ */
 -- 
 2.37.2
 

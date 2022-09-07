@@ -2,91 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9703F5B05A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06705B05CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiIGNta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S229569AbiIGNzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIGNt1 (ORCPT
+        with ESMTP id S229492AbiIGNzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:49:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A60F15A0B;
-        Wed,  7 Sep 2022 06:49:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A741B618F8;
-        Wed,  7 Sep 2022 13:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FAF5C433C1;
-        Wed,  7 Sep 2022 13:49:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662558558;
-        bh=jfGMvvgU73fOs5THoBpnCmLJXE/C7Z0KVrauUi0QOuk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T0SVWdR71IAWnTAHA6mbr3lYG0jMFn8ck2BHcixUXeMZvifPfyGgjS8t9oRUNiXjL
-         jKTjNVoBti1VUp/SF4pRCpJbmfoOup/uBm46rg4faY/kuLIrtTiFqbyn87pWi5/EVX
-         8lsKUdes1SqI755B3RoSUV1pw9CqOoSjWgLRYKpOgvdWdyY/4bMF6+IIM0sURKlBBD
-         mEeRWlxSXkY4/jkAdramYzY7lqc4N9P2HiyQiVIdfxyDD7DpMp7dXHsdzGtP2ONhiT
-         5Lv0VVFrXPX8v6waOyBI67xviG9Qshdi8QS/X5IYH9ooD5t1TEOIruRxWjRv3nW2J8
-         HMDbvYZIn9zBg==
-Date:   Wed, 7 Sep 2022 22:49:13 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Message-Id: <20220907224913.dfdbea2ec6cd637438dbd09a@kernel.org>
-In-Reply-To: <YxiVFJ9UdM5KeIXf@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
-        <166251212072.632004.16078953024905883328.stgit@devnote2>
-        <YxiVFJ9UdM5KeIXf@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 09:55:39 -0400
+X-Greylist: delayed 108 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 06:55:38 PDT
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93D3112C;
+        Wed,  7 Sep 2022 06:55:37 -0700 (PDT)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-04.nifty.com with ESMTP id 287DoWWs003029;
+        Wed, 7 Sep 2022 22:50:32 +0900
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 287Do0XI007532;
+        Wed, 7 Sep 2022 22:50:00 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 287Do0XI007532
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662558601;
+        bh=gAIPR8Y06LZL5uermVk23B9ei5OC6Y1Yhw9VAHpRQZw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TA5H1P++AqAV1O5HW+czAVaSv+tMvJt33re/AjUdgeYOAz9w4VyiRPwR4hYTZRRle
+         tLY1LFix/SwTdcl+bxX4Wy9n089UzI++gzxvxM4dO8hF6JZVvfhRz6J3aJvnJC7WFl
+         rrpmo7qfiDGQ7YjpI9sOgLZGJvHokZAi0Lj5YFMkM6TReAQaTbdd53+BKsBeW3uA/l
+         5Nu5r8+TnS/f8zdDFOhp4DFAPRH8pjsCwRj66gobpG8lKz8Wf9l2qeINeoBUPClQIu
+         7k/eYSoFF/ag9TJqaxDpaPC5MRPJBpfjBDLiOw77WR7SvMgkqdf3+ZQjQjtM5xEVdQ
+         d+UISRgSY9zZQ==
+X-Nifty-SrcIP: [209.85.210.54]
+Received: by mail-ot1-f54.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so10277576otd.12;
+        Wed, 07 Sep 2022 06:50:00 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0VvoL74c0Tv877pAinXtMroJDy+k2Jh4fg7H7HA5xm8fPVEXKb
+        1J5LS8gjFyASwY11LETU3WOs+0C3t9zvxlrv1Jg=
+X-Google-Smtp-Source: AA6agR5PIeipmDoynoOEseujglN7M9iPc9mEEa16XHWK2DxJ5TrbiMG/i9TgzaLBhqriez+BXzcfsYEEyIZKhfN/9Ws=
+X-Received: by 2002:a05:6830:658b:b0:63b:3501:7167 with SMTP id
+ cn11-20020a056830658b00b0063b35017167mr1458523otb.343.1662558599703; Wed, 07
+ Sep 2022 06:49:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220907223452.7f781217@canb.auug.org.au>
+In-Reply-To: <20220907223452.7f781217@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 7 Sep 2022 22:49:23 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARqNU07UEEG_2ff6xTr+MAW-7Ez-7kKLXHd4n8n_0nrgQ@mail.gmail.com>
+Message-ID: <CAK7LNARqNU07UEEG_2ff6xTr+MAW-7Ez-7kKLXHd4n8n_0nrgQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 14:56:52 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, Sep 7, 2022 at 9:35 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the kbuild tree, today's linux-next build (powerpc
+> ppc44x_defconfig) failed like this:
+>
+> /home/sfr/next/next/scripts/mkuboot.sh: line 23: 153700 Bus error               ${MKIMAGE} "$@"
+>
+> Caused by commit
+>
+>   c4a7f46f7105 ("kbuild: build init/built-in.a just once")
+>
+> Reverting that commit (and the following ones) fixes the problem. It
+> looks like UIMAGE_NAME gets corrupted in scripts/Makefile.lib as the
+> arguments to mkuboot.sh change from
+>
+> A ppc -O linux -T kernel -C gzip -a 0x00700000 -e 0x007015a4 -n Linux-6.0.0-rc4 -d arch/powerpc/boot/cuImage.sam440ep.gz arch/powerpc/boot/cuImage.sam440ep
+>
+> to
+>
+> -A ppc -O linux -T kernel -C gzip -a 0x00700000 -e 0x007015a4 -n Linux-6.0.0-rc4 6.0.0-rc4 -d arch/powerpc/boot/cuImage.sam440ep.gz arch/powerpc/boot/cuImage.sam440ep
+>
+> (note the extra "6.0.0-rc4") when the above commit is present.
+>
+> So I have reverted commit c4a7f46f7105 and all the following commits in
+> the kbuild tree for today.
+>
+> I had to do the above build with -j40 to make it consistently fail.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-> On Wed, Sep 07, 2022 at 09:55:21AM +0900, Masami Hiramatsu (Google) wrote:
-> 
-> >  	if (!kallsyms_lookup_size_offset(paddr, NULL, &offset))
-> >  		return 0;
-> >  
-> 
-> One more thing:
-> 
->   https://lkml.kernel.org/r/20220902130951.853460809@infradead.org
-> 
-> can result in negative offsets. The expression:
-> 
-> 	'paddr - offset'
-> 
-> will still get you to +0, but I might not have fully considered things
-> when I wrote that patch.
 
-Hmm, isn't 'offset' unsigned? If 'paddr - offset' is still available
-to find the function entry address, it is OK to me.
+Thanks.
+arch/powerpc/boot/wrapper searches for the version string in vmlinux,
+but now it gets two lines.
 
-Thank you,
+I will fix up as follows:
+
+
+diff --git a/arch/powerpc/boot/wrapper b/arch/powerpc/boot/wrapper
+index 55978f32fa77..5bdd4dd20bbb 100755
+--- a/arch/powerpc/boot/wrapper
++++ b/arch/powerpc/boot/wrapper
+@@ -433,7 +433,7 @@ fi
+ # Extract kernel version information, some platforms want to include
+ # it in the image header
+ version=`${CROSS}strings "$kernel" | grep '^Linux version [-0-9.]' | \
+-    cut -d' ' -f3`
++    head -n1 | cut -d' ' -f3`
+ if [ -n "$version" ]; then
+     uboot_version="-n Linux-$version"
+ fi
 
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Best Regards
+Masahiro Yamada

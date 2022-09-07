@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF985B09E2
+	by mail.lfdr.de (Postfix) with ESMTP id 83E4A5B09E3
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiIGQPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S230317AbiIGQP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiIGQPb (ORCPT
+        with ESMTP id S230041AbiIGQPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:15:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0829B8000D;
-        Wed,  7 Sep 2022 09:15:31 -0700 (PDT)
+        Wed, 7 Sep 2022 12:15:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C16D8048B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:15:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52BB5619DA;
-        Wed,  7 Sep 2022 16:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0FF9C433D7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1673DB81E15
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC979C4347C;
         Wed,  7 Sep 2022 16:15:29 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oVxik-00CsXA-1S;
+        id 1oVxik-00CsXi-22;
         Wed, 07 Sep 2022 12:16:10 -0400
-Message-ID: <20220907161610.282974054@goodmis.org>
+Message-ID: <20220907161610.465598539@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 07 Sep 2022 12:15:17 -0400
+Date:   Wed, 07 Sep 2022 12:15:18 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: [for-linus][PATCH 6/7] tracing: Fix to check event_mutex is held while accessing trigger
- list
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: [for-linus][PATCH 7/7] rv/reactor: add __init/__exit annotations to module init/exit funcs
 References: <20220907161511.694486342@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +48,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-Since the check_user_trigger() is called outside of RCU
-read lock, this list_for_each_entry_rcu() caused a suspicious
-RCU usage warning.
+Add missing __init/__exit annotations to module init/exit funcs.
 
- # echo hist:keys=pid > events/sched/sched_stat_runtime/trigger
- # cat events/sched/sched_stat_runtime/trigger
-[   43.167032]
-[   43.167418] =============================
-[   43.167992] WARNING: suspicious RCU usage
-[   43.168567] 5.19.0-rc5-00029-g19ebe4651abf #59 Not tainted
-[   43.169283] -----------------------------
-[   43.169863] kernel/trace/trace_events_trigger.c:145 RCU-list traversed in non-reader section!!
-...
+Link: https://lkml.kernel.org/r/20220906141210.132607-1-xiujianfeng@huawei.com
 
-However, this file->triggers list is safe when it is accessed
-under event_mutex is held.
-To fix this warning, adds a lockdep_is_held check to the
-list_for_each_entry_rcu().
-
-Link: https://lkml.kernel.org/r/166226474977.223837.1992182913048377113.stgit@devnote2
-
-Cc: stable@vger.kernel.org
-Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Fixes: 135b881ea885 ("rv/reactor: Add the printk reactor")
+Fixes: e88043c0ac16 ("rv/reactor: Add the panic reactor")
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_events_trigger.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/trace/rv/reactor_panic.c  | 4 ++--
+ kernel/trace/rv/reactor_printk.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
-index cb866c3141af..918730d74932 100644
---- a/kernel/trace/trace_events_trigger.c
-+++ b/kernel/trace/trace_events_trigger.c
-@@ -142,7 +142,8 @@ static bool check_user_trigger(struct trace_event_file *file)
- {
- 	struct event_trigger_data *data;
+diff --git a/kernel/trace/rv/reactor_panic.c b/kernel/trace/rv/reactor_panic.c
+index b698d05dd069..d65f6c25a87c 100644
+--- a/kernel/trace/rv/reactor_panic.c
++++ b/kernel/trace/rv/reactor_panic.c
+@@ -24,13 +24,13 @@ static struct rv_reactor rv_panic = {
+ 	.react = rv_panic_reaction
+ };
  
--	list_for_each_entry_rcu(data, &file->triggers, list) {
-+	list_for_each_entry_rcu(data, &file->triggers, list,
-+				lockdep_is_held(&event_mutex)) {
- 		if (data->flags & EVENT_TRIGGER_FL_PROBE)
- 			continue;
- 		return true;
+-static int register_react_panic(void)
++static int __init register_react_panic(void)
+ {
+ 	rv_register_reactor(&rv_panic);
+ 	return 0;
+ }
+ 
+-static void unregister_react_panic(void)
++static void __exit unregister_react_panic(void)
+ {
+ 	rv_unregister_reactor(&rv_panic);
+ }
+diff --git a/kernel/trace/rv/reactor_printk.c b/kernel/trace/rv/reactor_printk.c
+index 31899f953af4..4b6b7106a477 100644
+--- a/kernel/trace/rv/reactor_printk.c
++++ b/kernel/trace/rv/reactor_printk.c
+@@ -23,13 +23,13 @@ static struct rv_reactor rv_printk = {
+ 	.react = rv_printk_reaction
+ };
+ 
+-static int register_react_printk(void)
++static int __init register_react_printk(void)
+ {
+ 	rv_register_reactor(&rv_printk);
+ 	return 0;
+ }
+ 
+-static void unregister_react_printk(void)
++static void __exit unregister_react_printk(void)
+ {
+ 	rv_unregister_reactor(&rv_printk);
+ }
 -- 
 2.35.1

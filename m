@@ -2,141 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27BA5AFB11
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA225AFB45
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiIGEW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
+        id S229668AbiIGE0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIGEWy (ORCPT
+        with ESMTP id S229513AbiIGE0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 00:22:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A29B89916;
-        Tue,  6 Sep 2022 21:22:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C33871042;
-        Tue,  6 Sep 2022 21:22:58 -0700 (PDT)
-Received: from [10.162.40.15] (unknown [10.162.40.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F22D3F534;
-        Tue,  6 Sep 2022 21:22:50 -0700 (PDT)
-Message-ID: <e091ed53-d5d0-101d-92a6-a215350e482e@arm.com>
-Date:   Wed, 7 Sep 2022 09:52:48 +0530
+        Wed, 7 Sep 2022 00:26:46 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674CE857DD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:26:45 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id fv3so7216580pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 21:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Xk596ZpOvHHkq2UiD2w1TnlOJagQ1pzq8bsWaxJ5evc=;
+        b=VbR6vuGnznGRwapx4XKG8MzL2UPiYiuvGWBZahrJX3pQG7wZK3QEGvBHy05Q9XSrFX
+         Gqku4FyamLpTWKoxpRWTkimb8j1+ztDOoZuhTOOV9zI5lku4AIreHrpGAABm0Sx3AtQd
+         i61If1vZrlrtZd2t+kq/kKZqMG6tiyVIEo+m9J27nMv8o0RSB29DLnn6qe2nSQzCrujL
+         k/YP098v2Rs3EySkVJQbZuDeP3ZB8CRSw/lKqBRgomPHommMZKIw0C8HBkkHUTiTWuaN
+         7hkm3gSV57EHXRiuZyCh1gMHuOshbR/rwIm20WNJZ9Pib9I/IT8AmL4FAX/n/jhe0khm
+         JBtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Xk596ZpOvHHkq2UiD2w1TnlOJagQ1pzq8bsWaxJ5evc=;
+        b=ym8AA6Vo8OU49R4OZjXm9ldcuNm9YRr79KKjdg0npQzicYGTZ5jlfqorz7Ux4AF0IK
+         tH0Z/E4KbSvj0y+MTFrA/W36tWSmUN7VgVHWZC9S4kA2sREIQHQjPilt+VVj+h/tMmIS
+         FK1ZX7FDUFYH+5eCGL/mkRjWBjMO68rULCXIXhTRdGuByd1IuzNiHSC+4i6jo16S6QaT
+         U6+IW5qSafSRDqNGtLeCU5QBsN5iyeOU98A2jGLJ7EZFGvphg9HAcVgQT1mKkMeWFA6Z
+         NhSNW6anvc4XdFSfw4Iba7LNsdIOEC20aaoZwb0Aml/Hh8mcIUot7BbsC+VF8I56ySB6
+         FyMQ==
+X-Gm-Message-State: ACgBeo3TY6w8+nvXyp/TYeVEczKCXKeEjoZ+Tch/IyJ9Ebx6pHLVYHoq
+        vyZroROx4nbIYuIuvn8mkvE6RVbRqaiOnbdxV1ERnw==
+X-Google-Smtp-Source: AA6agR4lOu0DWSpSqBcbjPLr4h/HKp50l+dW5WqUWFIHWuJ0VUOU2A6Gf5R0eX5bKoCUXti76ds2fABJR3PkVaEThno=
+X-Received: by 2002:a17:90b:384f:b0:1f4:ee87:9523 with SMTP id
+ nl15-20020a17090b384f00b001f4ee879523mr1873078pjb.100.1662524804735; Tue, 06
+ Sep 2022 21:26:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: linux-next: build failure after merge of the perf tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220831083452.2fc938cf@canb.auug.org.au>
- <20220907050535.243e5030@canb.auug.org.au>
- <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
- <20220907130011.32818436@canb.auug.org.au>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220907130011.32818436@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220828222544.1964917-1-mizhang@google.com> <20220828222544.1964917-2-mizhang@google.com>
+ <YwzkvfT0AiwaojTx@google.com> <20220907025042.hvfww56wskwhsjwk@yy-desk-7060>
+In-Reply-To: <20220907025042.hvfww56wskwhsjwk@yy-desk-7060>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Tue, 6 Sep 2022 21:26:33 -0700
+Message-ID: <CAL715WJK1WwXFfbUiMjngV8Z-0jyu_9JeZaK4qvvdJfYvtQEYg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] KVM: x86: move the event handling of
+ KVM_REQ_GET_VMCS12_PAGES into a common function
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > @@ -10700,6 +10706,12 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+> >               if (kvm_cpu_has_pending_timer(vcpu))
+> >                       kvm_inject_pending_timer_irqs(vcpu);
+> >
+> > +             if (vcpu->arch.nested_get_pages_pending) {
+> > +                     r = kvm_get_nested_state_pages(vcpu);
+> > +                     if (r <= 0)
+> > +                             break;
+> > +             }
+> > +
+>
+> Will this leads to skip the get_nested_state_pages for L2 first time
+> vmentry in every L2 running iteration ? Because with above changes
+> KVM_REQ_GET_NESTED_STATE_PAGES is not set in
+> nested_vmx_enter_non_root_mode() and
+> vcpu->arch.nested_get_pages_pending is not checked in
+> vcpu_enter_guest().
+>
+Good catch. I think the diff won't work when vcpu is runnable. It only
+tries to catch the vcpu block case. Even for the vcpu block case,  the
+check of KVM_REQ_UNBLOCK is way too late. Ah, kvm_vcpu_check_block()
+is called by kvm_vcpu_block() which is called by vcpu_block(). The
+warning is triggered at the very beginning of vcpu_block(), i.e.,
+within kvm_arch_vcpu_runnable(). So, please ignore the trace in my
+previous email.
+
+In addition, my minor push back for that is
+vcpu->arch.nested_get_pages_pending seems to be another
+KVM_REQ_GET_NESTED_STATE_PAGES.
+
+Thanks.
+-Mingwei
 
 
-On 9/7/22 08:30, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Wed, 7 Sep 2022 08:01:34 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
->>
->> On 9/7/22 00:35, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> On Wed, 31 Aug 2022 08:34:52 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
->>>>
->>>> After merging the perf tree, today's linux-next build (native perf)
->>>> failed like this:
->>>>
->>>> In file included from /usr/include/stdio.h:866,
->>>>                  from /home/sfr/next/next/tools/perf/util/branch.h:9,
->>>>                  from util/branch.c:2:
->>>> In function 'fprintf',
->>>>     inlined from 'branch_type_stat_display' at util/branch.c:152:4:
->>>> /usr/include/powerpc64le-linux-gnu/bits/stdio2.h:105:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
->>>>   105 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
->>>>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>   106 |                         __va_arg_pack ());
->>>>       |                         ~~~~~~~~~~~~~~~~~
->>>> cc1: all warnings being treated as errors
->>>>
->>>> Presumably caused by commit
->>>>
->>>>   9781e500dcb8 ("perf branch: Extend branch type classification")
->>>>
->>>> "native" here is PowerPC64 LE.
->>>> $ gcc --version
->>>> gcc (Debian 11.2.0-10) 11.2.0
->>>>
->>>> I have used the perf tree from next-20220830 for today.  
->>>
->>> I am still seeing this build failure.  
->>
->> But did you apply the fix patch from Arnaldo that removes -Wno-format-overflow
->> compiler option for the file util/branch.c ?
->>
->> https://lore.kernel.org/all/YxJBh3wvAGol+Ekq@kernel.org/
-> 
-> No, I expected a fix to be in the perf tree ...
-> 
-> Also note that the following fixes the problem for me:
-> 
-> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-> index d40776c44b06..b7b898f2872e 100644
-> --- a/tools/perf/util/branch.c
-> +++ b/tools/perf/util/branch.c
-> @@ -88,7 +88,8 @@ const char *branch_type_name(int type)
->  		"ERET",
->  		"IRQ",
->  		"SERROR",
-> -		"NO_TX"
-> +		"NO_TX",
-> +		""
->  	};
->  
->  	if (type >= 0 && type < PERF_BR_MAX)
-
-This looks right, makes sense.
-
-> 
-> 
-> PERF_BR_MAX has been increased by one (when PERF_BR_EXTEND_ABI was
-> added), but a new string has not been added to the array ...
-
-Right, even though new branch_new_names[] array gets queried on when type
-value is PERF_BR_EXTEND_ABI, branch_names[] should still contain an empty
-string "" just to match the now incremented PERF_BR_MAX which extends the
-array size as well. I guess the compiler detects this mismatch here and
-just complains about it.
-
-Hello Arnaldo,
-
-As adding empty string to the array solves the build problem, I guess we
-should fold this fix instead, rather than trying to drop the compiler
-option itself, as discussed earlier.
-
-The above fix should be folded into the following commit
-
-9781e500dcb8 ("perf branch: Extend branch type classification")
-
-in the following perf tree - branch.
-
-git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git (perf/core)
-
-- Anshuman
+-Mingwei

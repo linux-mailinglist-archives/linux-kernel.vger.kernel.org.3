@@ -2,110 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4615AF958
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 03:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57E55AF95A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 03:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiIGBLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 21:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
+        id S229705AbiIGBMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 21:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIGBLj (ORCPT
+        with ESMTP id S229686AbiIGBMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 21:11:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2F17CAB3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 18:11:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D3A6173D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530BFC433D6;
-        Wed,  7 Sep 2022 01:11:36 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 21:12:15 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yipeng Zou <zouyipeng@huawei.com>
-Cc:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <mingo@redhat.com>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-        <liaochang1@huawei.com>, <chris.zjh@huawei.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 1/2] tracing: hold caller_addr to
- hardirq_{enable,disable}_ip
-Message-ID: <20220906211215.0fe6183a@gandalf.local.home>
-In-Reply-To: <20220901104515.135162-2-zouyipeng@huawei.com>
-References: <20220901104515.135162-1-zouyipeng@huawei.com>
-        <20220901104515.135162-2-zouyipeng@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 6 Sep 2022 21:12:44 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9020980364;
+        Tue,  6 Sep 2022 18:12:42 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MMkhs3wQ5zKJ98;
+        Wed,  7 Sep 2022 09:10:53 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgDXKXMG8Bdj5VXqAQ--.62488S3;
+        Wed, 07 Sep 2022 09:12:40 +0800 (CST)
+Subject: Re: [PATCH] sbitmap: fix possible io hung due to lost wakeup
+To:     Keith Busch <kbusch@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, axboe@kernel.dk, osandov@fb.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20220803121504.212071-1-yukuai1@huaweicloud.com>
+ <Yxe7V3yfBcADoYLE@kbusch-mbp.dhcp.thefacebook.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <496b87d9-c89d-3d4f-8ba8-5bb706de7fd0@huaweicloud.com>
+Date:   Wed, 7 Sep 2022 09:12:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yxe7V3yfBcADoYLE@kbusch-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDXKXMG8Bdj5VXqAQ--.62488S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFW7GFWUtrW5KFW8tr48tFb_yoW5CryDpr
+        WUtF1vva1vvFWIywsrXr4jv34a939akrZ7Gr45Ka4kAr4agw42yr109rn8ury8Ars3X34r
+        JF43trZxCa4UJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
+        UU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sep 2022 18:45:14 +0800
-Yipeng Zou <zouyipeng@huawei.com> wrote:
+Hi,
 
-> Currently, The arguments passing to lockdep_hardirqs_{on,off} was fixed
-> in CALLER_ADDR0.
-> The function trace_hardirqs_on_caller should have been intended to use
-> caller_addr to represent the address that caller wants to be traced.
+ÔÚ 2022/09/07 5:27, Keith Busch Ð´µÀ:
+> On Wed, Aug 03, 2022 at 08:15:04PM +0800, Yu Kuai wrote:
+>>   	wait_cnt = atomic_dec_return(&ws->wait_cnt);
+>> -	if (wait_cnt <= 0) {
+>> -		int ret;
+>> +	/*
+>> +	 * For concurrent callers of this, callers should call this function
+>> +	 * again to wakeup a new batch on a different 'ws'.
+>> +	 */
+>> +	if (wait_cnt < 0 || !waitqueue_active(&ws->wait))
+>> +		return true;
 > 
-> For example, lockdep log in riscv showing the last {enabled,disabled} at
-> __trace_hardirqs_{on,off} all the time(if called by):
-> [   57.853175] hardirqs last  enabled at (2519): __trace_hardirqs_on+0xc/0x14
-> [   57.853848] hardirqs last disabled at (2520): __trace_hardirqs_off+0xc/0x14
+> If wait_cnt is '0', but the waitqueue_active happens to be false due to racing
+> with add_wait_queue(), this returns true so the caller will retry. The next
+> atomic_dec will set the current waitstate wait_cnt < 0, which also forces an
+> early return true. When does the wake up happen, or wait_cnt and wait_index get
+> updated in that case?
+
+If waitqueue becomes empty, then concurrent callers can go on:
+
+__sbq_wake_up
+  sbq_wake_ptr
+   for (i = 0; i < SBQ_WAIT_QUEUES; i++)
+    if (waitqueue_active(&ws->wait)) -> only choose the active waitqueue
+
+If waitqueue is not empty, it is the same with or without this patch,
+concurrent caller will have to wait for the one who wins the race:
+
+Before:
+  __sbq_wake_up
+   atomic_cmpxchg -> win the race
+   sbq_index_atomic_inc ->  concurrent callers can go
+
+After:
+  __sbq_wake_up
+  wake_up_nr -> concurrent callers can go on if waitqueue become empty
+  atomic_dec_return -> return 0
+  sbq_index_atomic_inc
+
+Thanks,
+Kuai
+>    
+>> -		wake_batch = READ_ONCE(sbq->wake_batch);
+>> +	if (wait_cnt > 0)
+>> +		return false;
+>>   
+>> -		/*
+>> -		 * Pairs with the memory barrier in sbitmap_queue_resize() to
+>> -		 * ensure that we see the batch size update before the wait
+>> -		 * count is reset.
+>> -		 */
+>> -		smp_mb__before_atomic();
+>> +	wake_batch = READ_ONCE(sbq->wake_batch);
+>>   
+>> -		/*
+>> -		 * For concurrent callers of this, the one that failed the
+>> -		 * atomic_cmpxhcg() race should call this function again
+>> -		 * to wakeup a new batch on a different 'ws'.
+>> -		 */
+>> -		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
+>> -		if (ret == wait_cnt) {
+>> -			sbq_index_atomic_inc(&sbq->wake_index);
+>> -			wake_up_nr(&ws->wait, wake_batch);
+>> -			return false;
+>> -		}
+>> +	/*
+>> +	 * Wake up first in case that concurrent callers decrease wait_cnt
+>> +	 * while waitqueue is empty.
+>> +	 */
+>> +	wake_up_nr(&ws->wait, wake_batch);
+>>   
+>> -		return true;
+>> -	}
+>> +	/*
+>> +	 * Pairs with the memory barrier in sbitmap_queue_resize() to
+>> +	 * ensure that we see the batch size update before the wait
+>> +	 * count is reset.
+>> +	 *
+>> +	 * Also pairs with the implicit barrier between decrementing wait_cnt
+>> +	 * and checking for waitqueue_active() to make sure waitqueue_active()
+>> +	 * sees result of the wakeup if atomic_dec_return() has seen the result
+>> +	 * of atomic_set().
+>> +	 */
+>> +	smp_mb__before_atomic();
+>> +
+>> +	/*
+>> +	 * Increase wake_index before updating wait_cnt, otherwise concurrent
+>> +	 * callers can see valid wait_cnt in old waitqueue, which can cause
+>> +	 * invalid wakeup on the old waitqueue.
+>> +	 */
+>> +	sbq_index_atomic_inc(&sbq->wake_index);
+>> +	atomic_set(&ws->wait_cnt, wake_batch);
+>>   
+>>   	return false;
+>>   }
+>> -- 
+>> 2.31.1
+>>
+> .
 > 
-> After use trace_hardirqs_xx_caller, we can get more effective information:
-> [   53.781428] hardirqs last  enabled at (2595): restore_all+0xe/0x66
-> [   53.782185] hardirqs last disabled at (2596): ret_from_exception+0xa/0x10
-
-I'm going to mark this as stable and send it in my next push to Linus.
-
-I'll also add:
-
-Fixes: c3bc8fd637a96 ("tracing: Centralize preemptirq tracepoints and unify their usage")
-
-The code was copied from functions that were originally called directly,
-but now that they are called indirectly, CALLER_ADDR0 is not the right
-thing to use.
-
-Thanks!
-
--- Steve
-
-
-> 
-> Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
-> ---
->  kernel/trace/trace_preemptirq.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
-> index 95b58bd757ce..1e130da1b742 100644
-> --- a/kernel/trace/trace_preemptirq.c
-> +++ b/kernel/trace/trace_preemptirq.c
-> @@ -95,14 +95,14 @@ __visible void trace_hardirqs_on_caller(unsigned long caller_addr)
->  	}
->  
->  	lockdep_hardirqs_on_prepare();
-> -	lockdep_hardirqs_on(CALLER_ADDR0);
-> +	lockdep_hardirqs_on(caller_addr);
->  }
->  EXPORT_SYMBOL(trace_hardirqs_on_caller);
->  NOKPROBE_SYMBOL(trace_hardirqs_on_caller);
->  
->  __visible void trace_hardirqs_off_caller(unsigned long caller_addr)
->  {
-> -	lockdep_hardirqs_off(CALLER_ADDR0);
-> +	lockdep_hardirqs_off(caller_addr);
->  
->  	if (!this_cpu_read(tracing_irq_cpu)) {
->  		this_cpu_write(tracing_irq_cpu, 1);
 

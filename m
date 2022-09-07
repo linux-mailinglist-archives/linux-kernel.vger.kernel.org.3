@@ -2,72 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3C25AFAF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F98D5AFAFB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiIGELa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S229695AbiIGEMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiIGELZ (ORCPT
+        with ESMTP id S229517AbiIGEMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 00:11:25 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD05332ECE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:11:22 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1662523866tngcpo18
-Received: from localhost.localdomain ( [182.148.14.0])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Sep 2022 12:11:04 +0800 (CST)
-X-QQ-SSF: 01000000000000D0F000000A0000000
-X-QQ-FEAT: bQsUcYFpAAYXdJRqwB80RHYaBxZP/Q/TG+x7ozmXciylMDFbSbygBd7c4qNHd
-        iXGZIUiievK8azdmEVoz00pm7uV/hKUlFROQSHbxNQcJYSgVN7tFAid2Tr9eH37OSjG4y8R
-        ZHtOMLA9b5Ds7DPocbpLHEAIrYa8s+Z/ZUFcmOEYGFagX6vtZRT7ptSmdtBMw0F64qdnuPc
-        45fg15gYbOMkyI6qsfm1+lOdVObeRnup9ckLA9DYZpt8MKPf/iSy47I136Np15+WwY8VEDi
-        r6zqjGLezaOGMyPvsg4iJw2ekF+4y9qZVEt/w8jGE9WHvWFkvRJ4bkVQrv02ZBId2dVqjSN
-        uIP9X+p8EaJ8z5B5shdWBMBKjvIXCL8emTDfNSOzpcvJhh1gxzZvIJfHuCyCw==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     airlied@linux.ie, daniel@ffwll.ch, Charlene.Liu@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] drm/amd/display: fix repeated words in comments
-Date:   Wed,  7 Sep 2022 12:10:58 +0800
-Message-Id: <20220907041058.935-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 7 Sep 2022 00:12:07 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DC18001D;
+        Tue,  6 Sep 2022 21:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662523925; x=1694059925;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=hF9VFjE5o4x272E7lgnZ7qAL5DuPlyB3SKdoJPydg8I=;
+  b=cf/YUZIX4cLiUuQrv0R4CPAgIjNDexB08qLNeJRYS/2lcaxI+/WI5bFU
+   kYDyBg6wS0bX5vfj0LoOY/161QcX4awy9Ou6+wqHmukRcU3cnWgXjoQIq
+   ZI16owiV8wdgtJlkU2s2rRfkZXwpiD/k35mWsc2wx8v+mDYEQoFMfpBnd
+   9UDKahjb6yMFn9xhTqpsO7WWzCxEBOcaxb2E/avdHqXkAGjRGKUqqpOk3
+   cRrb2gDsNytKvn6xBNmYrN0BANG6P2po5ATzdQddaeqnrl4AZZg9IyBMa
+   ssqVT2RRhteAkeLd5FHejlRPNs6UNdX8K7mz7xkZ91TAZTtGkF4BxWfE5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283771319"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="283771319"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 21:12:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="942729143"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Sep 2022 21:12:02 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVmPx-00065l-1e;
+        Wed, 07 Sep 2022 04:12:01 +0000
+Date:   Wed, 7 Sep 2022 12:11:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     kbuild-all@lists.01.org, Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+Message-ID: <202209071255.xlxq6qnE-lkp@intel.com>
+References: <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'in'.
+Hi Dmitry,
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/gpu/drm/amd/display/dc/dce/dce_audio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I love your patch! Yet something to improve:
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c b/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c
-index bdb6bac8dd97..c94a966c6612 100644
---- a/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c
-+++ b/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c
-@@ -300,7 +300,7 @@ static void set_high_bit_rate_capable(
- 	AZ_REG_WRITE(AZALIA_F0_CODEC_PIN_CONTROL_RESPONSE_HBR, value);
- }
- 
--/* set video latency in in ms/2+1 */
-+/* set video latency in ms/2+1 */
- static void set_video_latency(
- 	struct audio *audio,
- 	int latency_in_ms)
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on linus/master v6.0-rc4 next-20220906]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Torokhov/PCI-histb-switch-to-using-gpiod-API/20220907-044417
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220907/202209071255.xlxq6qnE-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/90d5c7ec598d196395d3a5934099b56d1c8e071a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Torokhov/PCI-histb-switch-to-using-gpiod-API/20220907-044417
+        git checkout 90d5c7ec598d196395d3a5934099b56d1c8e071a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/pci/controller/pci-mvebu.c: In function 'mvebu_pcie_irq_handler':
+>> drivers/pci/controller/pci-mvebu.c:1100:9: error: implicit declaration of function 'chained_irq_enter'; did you mean 'ct_irq_enter'? [-Werror=implicit-function-declaration]
+    1100 |         chained_irq_enter(chip, desc);
+         |         ^~~~~~~~~~~~~~~~~
+         |         ct_irq_enter
+>> drivers/pci/controller/pci-mvebu.c:1115:9: error: implicit declaration of function 'chained_irq_exit'; did you mean 'ct_irq_exit'? [-Werror=implicit-function-declaration]
+    1115 |         chained_irq_exit(chip, desc);
+         |         ^~~~~~~~~~~~~~~~
+         |         ct_irq_exit
+   cc1: some warnings being treated as errors
+
+
+vim +1100 drivers/pci/controller/pci-mvebu.c
+
+ec075262648f39 Pali Rohár 2022-02-22  1091  
+ec075262648f39 Pali Rohár 2022-02-22  1092  static void mvebu_pcie_irq_handler(struct irq_desc *desc)
+ec075262648f39 Pali Rohár 2022-02-22  1093  {
+ec075262648f39 Pali Rohár 2022-02-22  1094  	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
+ec075262648f39 Pali Rohár 2022-02-22  1095  	struct irq_chip *chip = irq_desc_get_chip(desc);
+ec075262648f39 Pali Rohár 2022-02-22  1096  	struct device *dev = &port->pcie->pdev->dev;
+ec075262648f39 Pali Rohár 2022-02-22  1097  	u32 cause, unmask, status;
+ec075262648f39 Pali Rohár 2022-02-22  1098  	int i;
+ec075262648f39 Pali Rohár 2022-02-22  1099  
+ec075262648f39 Pali Rohár 2022-02-22 @1100  	chained_irq_enter(chip, desc);
+ec075262648f39 Pali Rohár 2022-02-22  1101  
+ec075262648f39 Pali Rohár 2022-02-22  1102  	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+ec075262648f39 Pali Rohár 2022-02-22  1103  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+ec075262648f39 Pali Rohár 2022-02-22  1104  	status = cause & unmask;
+ec075262648f39 Pali Rohár 2022-02-22  1105  
+ec075262648f39 Pali Rohár 2022-02-22  1106  	/* Process legacy INTx interrupts */
+ec075262648f39 Pali Rohár 2022-02-22  1107  	for (i = 0; i < PCI_NUM_INTX; i++) {
+ec075262648f39 Pali Rohár 2022-02-22  1108  		if (!(status & PCIE_INT_INTX(i)))
+ec075262648f39 Pali Rohár 2022-02-22  1109  			continue;
+ec075262648f39 Pali Rohár 2022-02-22  1110  
+ec075262648f39 Pali Rohár 2022-02-22  1111  		if (generic_handle_domain_irq(port->intx_irq_domain, i) == -EINVAL)
+ec075262648f39 Pali Rohár 2022-02-22  1112  			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
+ec075262648f39 Pali Rohár 2022-02-22  1113  	}
+ec075262648f39 Pali Rohár 2022-02-22  1114  
+ec075262648f39 Pali Rohár 2022-02-22 @1115  	chained_irq_exit(chip, desc);
+ec075262648f39 Pali Rohár 2022-02-22  1116  }
+ec075262648f39 Pali Rohár 2022-02-22  1117  
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

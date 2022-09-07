@@ -2,100 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775C25B0BB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B055B0B6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiIGRnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S229582AbiIGRZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiIGRnQ (ORCPT
+        with ESMTP id S229713AbiIGRZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:43:16 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0578BB14DA;
-        Wed,  7 Sep 2022 10:43:13 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id B51C8224BB;
-        Wed,  7 Sep 2022 17:43:12 +0000 (UTC)
-Received: from pdx1-sub0-mail-a211 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 8974C2222A;
-        Wed,  7 Sep 2022 17:43:11 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662572592; a=rsa-sha256;
-        cv=none;
-        b=I+iIZ6ZpY/FLMWmO/0YhUwNX+WRTLi1cwr2jvdm00Qw7F2HCOBDvLaTu0AfPSA6FLY6KC/
-        0CYcZJ73VD8enIDhqevmtLIX4uI5W+2Khs9Vnx4NOxoUov21c+Wbk9kYKB2TMwcyZUK1Ul
-        B+AJNFpBHqqFTVsJ0cWRsl8cdheyVi8eo12r6v4a35GSPPvvBnIpw9zCXG7bw7AOzcy+at
-        l0RfCp9GXmsOrum69o2BsHOr+HZo8PGSxId8uYIuwJDZEVV/A+94vz6DNbcS6d3gmuRRrK
-        ifsJn+LnNe/R3iubYnvdeLP7JS7D6BOmkC323vLj4e0ppzBoI/815UAzPM8n1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1662572592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=fVAuUmQIdD5h7Yfh/vTIXCwzEOFCdi4pLkzBHSezQjs=;
-        b=liAp8W1OAa5wRTmflRs8X08AIZLRuURqVf3g9yJrFHq69wYLMfXc68nksjMM+8t3vAO2MJ
-        KoQnAMonBYw+o0NoCYyt1qed2axuTU+79QXdzNcGf2dWovVC/UKPSM16fRwsilttSOsAX5
-        kU1EGwj+aajvr8V1qcvHyW4PggrTR+ZA5vjEb8gplwfv6mqyvkWaEJ7/tTGs1sRJ2SSOIl
-        EzB3bmclrGWb36ECDirmkCYMzaKf/E/S6tK3VvXPQ5ahpD56Qmh3/Z339uyaapfbMU7RrE
-        FuTaNOmHOQMpyu4UwInfd+Y8yebqmmBSeJE50YKq+2i5qvu00JBx+QXLDqkLJg==
-ARC-Authentication-Results: i=1;
-        rspamd-686945db84-gn4mw;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Whispering-Arithmetic: 5e0a509a18e6db61_1662572592564_2644287583
-X-MC-Loop-Signature: 1662572592564:2158350637
-X-MC-Ingress-Time: 1662572592563
-Received: from pdx1-sub0-mail-a211 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.121.210.155 (trex/6.7.1);
-        Wed, 07 Sep 2022 17:43:12 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a211 (Postfix) with ESMTPSA id 4MN8jp1zm4z2h;
-        Wed,  7 Sep 2022 10:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1662572591;
-        bh=fVAuUmQIdD5h7Yfh/vTIXCwzEOFCdi4pLkzBHSezQjs=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=JtLQnms5e9XP7+PQATTL273KCVj8b9RO14Gcw9LpBQ+ddmnUEWNGlmj9H9UGO49M6
-         qhtENtbw/YP/44aC+YzW7GtMhIl/aGJc4s/O4gFHnWnWW+3V7ps7OEMYzk4xhnGNUa
-         +VHnIZY3O9FLCiOGPl4NfnCruXN9YRQqSFahLwuZ4BHhIwwydtHQmztws7obtYUM3W
-         YuYNnVWtoGv/gmlj1SPQNWxlH+441ppMkiTzk3IEodyh2eINWo+KhGsDdv4GW+uz9i
-         HnuPxmOZdxS5yozITGiBUUZidsHPvvuBlej4pm3+nGcB3tBnzr97HPZXABMDWNIy1X
-         RqrpMTFNkra/w==
-Date:   Wed, 7 Sep 2022 10:24:14 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com,
-        a.manzanares@samsung.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] memregion: Add arch_flush_memregion() interface
-Message-ID: <20220907172414.74mh75svoi6kkom3@offworld>
-References: <20220829212918.4039240-1-dave@stgolabs.net>
- <YxjBSxtoav7PQVei@nazgul.tnic>
- <20220907162245.5ddexpmibjbanrho@offworld>
- <6318cc415161f_166f2941e@dwillia2-xfh.jf.intel.com.notmuch>
+        Wed, 7 Sep 2022 13:25:39 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9BA7754E;
+        Wed,  7 Sep 2022 10:25:38 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id a15so11007200qko.4;
+        Wed, 07 Sep 2022 10:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=cWon+Fvd+4B60TMyr3bnMFYMdsAD3pS2yqIjGTbwaT4=;
+        b=VoaJy7o/RKdCCt2QujB8CI8PNsT+pZuxu1u+gLDtbyd8K/ALH+Yh28xtnuYiAm/qYB
+         5Qrv89+Vz3YBDpnyZZNAJ5+EEDvF0ePDmxls7A1nj59vni+XsBuLDKZZRJuz/uZq42e1
+         4rBiOQnc8Jf4N2CTOqu5ocVXwwei9YkcSLyhjEBaYhn09z/UoRIwmM4A4qZ7hL5WfB3I
+         awkb1Rghoiwu9QA1hF7ty9wcIqqgOGlZcFHKDJD1Ccr9NSZF13wbcAbu4PQyBhIoGJHm
+         CE1B3AHd0H372/RGPQuQiuugEozCbLqICnAbJC5Q5JuvBjw3qNAbm/m6IWVqNIjBtPvR
+         pxqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=cWon+Fvd+4B60TMyr3bnMFYMdsAD3pS2yqIjGTbwaT4=;
+        b=8DOg0ne3B6XpnfAZkrXv9YxgzyQ5yMhwgAC7gGY4L+10Y/CAPPFr+DQ7ruGXJC7XCi
+         6j2WP5pL4JMu0dPqQ0BFbl37FoWDk4HL9NOtyHRzkdQMFDBca7+AH2mgCIUPyYkIsOYO
+         f36HVJMbsAafwVfmtuiNl47OIbBgi3bWhVLUgaz9moYiHxwWs9U0ZZx16RH2kTEnp0NO
+         DkrgmlguLtBvO0aZvlV8fGWEWDKgdDIqJF5dQ6I2XePcWtxxr1S1oL6v+hzJKsskmU68
+         rKj9tylgd25KiW2zQYe10hPCSRWGQ+wYYMv2lQm/ZNJWCduTS8vzTMeLqhuFu61lh4hj
+         bOdg==
+X-Gm-Message-State: ACgBeo1ekpHyjSkSQa6ryWmqIw3m/0DmSiVOXJjyOgv6PPICh+WyzUqn
+        XwNk1diho+hG4LCTb/TK7XH0vo+lR70=
+X-Google-Smtp-Source: AA6agR66jJybsuExOf0X9daECGHdF9G6YjYlGuW1uAOynH/JcKaK/g9pXUnFmmFUmFPo51sHnnbavQ==
+X-Received: by 2002:a05:620a:687:b0:6c8:c85a:6d63 with SMTP id f7-20020a05620a068700b006c8c85a6d63mr3543014qkh.82.1662571537239;
+        Wed, 07 Sep 2022 10:25:37 -0700 (PDT)
+Received: from localhost ([2600:1700:65a0:ab60:43a8:b047:37c3:33fe])
+        by smtp.gmail.com with ESMTPSA id a26-20020a05620a103a00b006aee5df383csm13730465qkk.134.2022.09.07.10.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 10:25:36 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 10:25:35 -0700
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
+        jiri@resnulli.us, martin.lau@linux.dev, daniel@iogearbox.net,
+        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+Subject: Re: [PATCH net-next,v2 00/22] refactor the walk and lookup hook
+ functions in tc_action_ops
+Message-ID: <YxjUDwJ9/KAblwM3@pop-os.localdomain>
+References: <20220906121346.71578-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6318cc415161f_166f2941e@dwillia2-xfh.jf.intel.com.notmuch>
-User-Agent: NeoMutt/20220429
+In-Reply-To: <20220906121346.71578-1-shaozhengchao@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,53 +77,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Sep 2022, Dan Williams wrote:
+On Tue, Sep 06, 2022 at 08:13:24PM +0800, Zhengchao Shao wrote:
+> The implementation logic of the walk/lookup hook function in each action
+> module is the same. Therefore, the two functions can be reconstructed.
+> When registering tc_action_ops of each action module, the corresponding
+> net_id is saved to tc_action_ops. In this way, the net_id of the
+> corresponding module can be directly obtained in act_api without executing
+> the specific walk and lookup hook functions. Then, generic functions can
+> be added to replace the walk and lookup hook functions of each action
+> module. Last, modify each action module in alphabetical order. 
+> 
+> Reserve the walk and lookup interfaces and delete them when they are no 
+> longer used.
+> 
+> This patchset has been tested by using TDC, and I will add selftest in
+> other patchset.
+> 
+> ---
+> v1: save the net_id of each TC action module to the tc_action_ops structure
+> ---
+> 
+> Zhengchao Shao (22):
+>   net: sched: act: move global static variable net_id to tc_action_ops
+>   net: sched: act_api: implement generic walker and search for tc action
+>   net: sched: act_bpf: get rid of tcf_bpf_walker and tcf_bpf_search
+>   net: sched: act_connmark: get rid of tcf_connmark_walker and
+>     tcf_connmark_search
+>   net: sched: act_csum: get rid of tcf_csum_walker and tcf_csum_search
+>   net: sched: act_ct: get rid of tcf_ct_walker and tcf_ct_search
+>   net: sched: act_ctinfo: get rid of tcf_ctinfo_walker and
+>     tcf_ctinfo_search
+>   net: sched: act_gact: get rid of tcf_gact_walker and tcf_gact_search
+>   net: sched: act_gate: get rid of tcf_gate_walker and tcf_gate_search
+>   net: sched: act_ife: get rid of tcf_ife_walker and tcf_ife_search
+>   net: sched: act_ipt: get rid of tcf_ipt_walker/tcf_xt_walker and
+>     tcf_ipt_search/tcf_xt_search
+>   net: sched: act_mirred: get rid of tcf_mirred_walker and
+>     tcf_mirred_search
+>   net: sched: act_mpls: get rid of tcf_mpls_walker and tcf_mpls_search
+>   net: sched: act_nat: get rid of tcf_nat_walker and tcf_nat_search
+>   net: sched: act_pedit: get rid of tcf_pedit_walker and
+>     tcf_pedit_search
+>   net: sched: act_police: get rid of tcf_police_walker and
+>     tcf_police_search
+>   net: sched: act_sample: get rid of tcf_sample_walker and
+>     tcf_sample_search
+>   net: sched: act_simple: get rid of tcf_simp_walker and tcf_simp_search
+>   net: sched: act_skbedit: get rid of tcf_skbedit_walker and
+>     tcf_skbedit_search
+>   net: sched: act_skbmod: get rid of tcf_skbmod_walker and
+>     tcf_skbmod_search
+>   net: sched: act_tunnel_key: get rid of tunnel_key_walker and
+>     tunnel_key_search
+>   net: sched: act_vlan: get rid of tcf_vlan_walker and tcf_vlan_search
+> 
 
->Davidlohr Bueso wrote:
->> On Wed, 07 Sep 2022, Borislav Petkov wrote:
->>
->> >On Mon, Aug 29, 2022 at 02:29:18PM -0700, Davidlohr Bueso wrote:
->> >> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
->> >> index 1abd5438f126..18463cb704fb 100644
->> >> --- a/arch/x86/mm/pat/set_memory.c
->> >> +++ b/arch/x86/mm/pat/set_memory.c
->> >> @@ -330,6 +330,20 @@ void arch_invalidate_pmem(void *addr, size_t size)
->> >>  EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
->> >>  #endif
->> >>
->> >> +#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
->> >> +bool arch_has_flush_memregion(void)
->> >> +{
->> >> +	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
->> >
->> >This looks really weird. Why does this need to care about HV at all?
->>
->> So the context here is:
->>
->> e2efb6359e62 ("ACPICA: Avoid cache flush inside virtual machines")
->>
->> >
->> >Does that nfit stuff even run in guests?
->>
->> No, nor does cxl. This was mostly in general a precautionary check such
->> that the api is unavailable in VMs.
->
->To be clear nfit stuff and CXL does run in guests, but they do not
->support secure-erase in a guest.
+I think it is easier to review if you can fold those removal patches
+into one, pretty much like your 2nd patch. They are just cleanup's
+following a same pattern.
 
-Yes, I meant the feats this api enables.
-
->However, the QEMU CXL enabling is building the ability to do *guest
->physical* address space management, but in that case the driver can be
->paravirtualized to realize that it is not managing host-physical address
->space and does not need to flush caches. That will need some indicator
->to differentiate virtual CXL memory expanders from assigned devices. Is
->there such a thing as a PCIe-virtio extended capability to differentiate
->physical vs emulated devices?
-
-In any case such check would be specific to each user (cxl in this case),
-and outside the scope of _this_ particular api. Here we just really want to
-avoid the broken TDX guest bits.
-
-Thanks,
-Davidlohr
+Thanks.

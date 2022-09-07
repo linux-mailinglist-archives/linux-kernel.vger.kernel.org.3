@@ -2,73 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F85E5B00AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4215B00AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiIGJir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S229486AbiIGJiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIGJio (ORCPT
+        with ESMTP id S229628AbiIGJir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:38:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA72AB2D80;
-        Wed,  7 Sep 2022 02:38:42 -0700 (PDT)
+        Wed, 7 Sep 2022 05:38:47 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCDFB14C7;
+        Wed,  7 Sep 2022 02:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OsCEoNIrbCyBadFl7iEVm6YU+HPMKAlDJp0KSCt8Apk=; b=BIpFvwTuhKNBri78IDhQcy2xkI
-        sKxgRo0M6uvTIDmVoCAHnG26qtdqgDCy10xZ7zNQDMFC7Jfgz32vurDhl56V5roTmVtqo+SA8sHK2
-        i5BFlvMZZegrWtBOi2xU3BtHK3Ua72hhjzbA/8aOzS01dWEKE5CdHMmydG9K9W4Fvhp0R+kFN401c
-        eQGP0JDCeFmjUbp5JDMEMpSn0O5kQQ9hVjSINKgGECqSbvoqicf4Pz/gA1MCyh/3UspkFbz2X9o62
-        3saVOAgzFuobtUGoDUB8yCoWHPSuaEBvq68O5USirsNjXsXf2aue4k4pQWIxiA6tdgsPQv7twgmRT
-        7RgXHCmw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVrW0-00APcu-Tj; Wed, 07 Sep 2022 09:38:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7AC20300244;
-        Wed,  7 Sep 2022 11:38:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5FE82201A4E68; Wed,  7 Sep 2022 11:38:36 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 11:38:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Message-ID: <YxhmnDqSkE8CP3UX@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
- <166251212072.632004.16078953024905883328.stgit@devnote2>
- <YxhDBAhYrs0Sfqjt@hirez.programming.kicks-ass.net>
- <20220907181218.41facc0902789c77e42170ea@kernel.org>
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jGLUAyN4WBC7ZkwS6LsB0mO/kpRXd9GgONv16gVjrak=; b=1Bg1Oz59XoW8AlgxRN51V8jlKR
+        xiGVymL1Q/bWZ12dS0LzK1Hq+CkBrW2E/Ly0IlKKFxGpWmdwcb/W5ES65bp8LnK14o7v9yjJ5LAaD
+        X7xuqQBcuw9R1eYLBKgp0KOqcOTy8TztqbmnBg91tykhcJSZHGuQ9/qagUrLEFItlBx9sjxXwY8/u
+        2gHuNvwPwO9NHCtdGWO2qrFj6aQ129LF0fv5fgy5Zi64UdtyRuNfS5yTelNtZYb3HPR4rY4mNWlHb
+        6MSpRS5gZJ0a8ev82RvgfsHwuViCYKsY0JcK3x9BVAjZM7CDLrxw13lW2f4khEYu+nTsBTnaztSGt
+        rRhx9RfA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34166)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oVrW4-0005Bj-Dx; Wed, 07 Sep 2022 10:38:40 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oVrW1-0000rW-7y; Wed, 07 Sep 2022 10:38:37 +0100
+Date:   Wed, 7 Sep 2022 10:38:37 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next v5 1/8] net: phylink: Document MAC_(A)SYM_PAUSE
+Message-ID: <YxhmnVIB+qT0W/5v@shell.armlinux.org.uk>
+References: <20220906161852.1538270-1-sean.anderson@seco.com>
+ <20220906161852.1538270-2-sean.anderson@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907181218.41facc0902789c77e42170ea@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220906161852.1538270-2-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 06:12:18PM +0900, Masami Hiramatsu wrote:
-> OK, it should be updated. Where can I refer the names (especially '.dX' suffixes)?
+On Tue, Sep 06, 2022 at 12:18:45PM -0400, Sean Anderson wrote:
+> This documents the possible MLO_PAUSE_* settings which can result from
+> different combinations of MLO_(A)SYM_PAUSE. These are more-or-less a
+> direct consequence of IEEE 802.3 Table 28B-2.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
+> 
+> (no changes since v3)
+> 
+> Changes in v3:
+> - New
+> 
+>  include/linux/phylink.h | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/include/linux/phylink.h b/include/linux/phylink.h
+> index 6d06896fc20d..a431a0b0d217 100644
+> --- a/include/linux/phylink.h
+> +++ b/include/linux/phylink.h
+> @@ -21,6 +21,22 @@ enum {
+>  	MLO_AN_FIXED,	/* Fixed-link mode */
+>  	MLO_AN_INBAND,	/* In-band protocol */
+>  
+> +	/* MAC_SYM_PAUSE and MAC_ASYM_PAUSE correspond to the PAUSE and
+> +	 * ASM_DIR bits used in autonegotiation, respectively. See IEEE 802.3
 
-https://sourceware.org/binutils/docs-2.23.1/as/i386_002dMnemonics.html
+"used in our autonegotiation advertisement" would be more clear.
 
-  `.d8' or `.d32' suffix prefers 8bit or 32bit displacement in encoding.
+> +	 * Annex 28B for more information.
+> +	 *
+> +	 * The following table lists the values of MLO_PAUSE_* (aside from
+> +	 * MLO_PAUSE_AN) which might be requested depending on the results of
+> +	 * autonegotiation or user configuration:
+> +	 *
+> +	 * MAC_SYM_PAUSE MAC_ASYM_PAUSE Valid pause modes
+> +	 * ============= ============== ==============================
+> +	 *             0              0 MLO_PAUSE_NONE
+> +	 *             0              1 MLO_PAUSE_NONE, MLO_PAUSE_TX
+> +	 *             1              0 MLO_PAUSE_NONE, MLO_PAUSE_TXRX
+> +	 *             1              1 MLO_PAUSE_NONE, MLO_PAUSE_TXRX,
+> +	 *                              MLO_PAUSE_RX
+
+Any of none, tx, txrx and rx can occur with both bits set in the last
+case, the tx-only case will be due to user configuration.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,100 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E915B05B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7781A5B05E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiIGNvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S229683AbiIGN62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiIGNvP (ORCPT
+        with ESMTP id S229607AbiIGN6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:51:15 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544CDA99C3;
-        Wed,  7 Sep 2022 06:51:00 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id bq9so7592052wrb.4;
-        Wed, 07 Sep 2022 06:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=X0NRHzznEcchSri4bCoSt9nkeOdHiBAQ/5Pmte/Gyz8=;
-        b=ZPGwmIXS/RcexDoa8uMC7Qrips3KiSqFH87cKBNHhTwrJyIbh+Gf46xHCuFlLz+D3r
-         QJzjxWDnL/3wJ7vvsBEY1Rran3hIRJ8T7Apfg60js9xFLWTwZC8gcSHlapGLt6euwmcP
-         wgNbvaxAKs/vl4DLQhzcnhAGxCj/OE1Nk8s5SsnoNQWY6ejjOfEbQcy1ij3+q6g7/rNs
-         TGJ58yWg6fzHraOr7SAeKQyA5u0e1YJddwnU+sTLMYwvUCsuWPWsUM8CsZYsjyyqnDWT
-         yBluKmdQc2i0pGvqpwH6/P1b+GDm9tvhHj33kDMuK8pjZ951VJygmrra4x9ZDpFAx2Dq
-         S92Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=X0NRHzznEcchSri4bCoSt9nkeOdHiBAQ/5Pmte/Gyz8=;
-        b=PAFxZx2/kiiDouWB0+Fx/J82o9DDwoVsXjVpROJ+EFC4IGYFbEI/ar1SRGIcup0JT5
-         5TVeXztfyWH8T1PxMUUy8LH98tau7Qu2Mw5H3WdgI55vMx1ebVGZ5E6HA1EhF4fJESqq
-         7/gff0xzkM94x9Wqahyiu/3S5/JTK2raBmzFwKgCCO8LTfW9LvKx8j3E25h/Fsi56uO6
-         Mx73dOj0Gh/pt0gfpKjvmsNag7zytRtPlKs7wmhd1gnYVpQn0qxc7LcFrS3u8l6K3q06
-         YHE/UDZ8oroGBlhNDHA8Oilj9zKcTYIoygO3mIolSdENlHzkOWuFJO4d+AF4vwXiOGnS
-         j+uA==
-X-Gm-Message-State: ACgBeo0kCfzN0ardTj9uyj8c/lY+9VU54bfZZTsoy+8K/T8gBnvZ+698
-        7vb31h8eGR/wX4eeJD0RVaM=
-X-Google-Smtp-Source: AA6agR4RIMi9kvzI07nLVq88uJNBG/3Xnr/HatQQvRnewBFmASe0IG6eGxKCiJYiFkdZ1OToecCSkg==
-X-Received: by 2002:a05:6000:1867:b0:21f:f2cf:74a8 with SMTP id d7-20020a056000186700b0021ff2cf74a8mr2224870wri.344.1662558657922;
-        Wed, 07 Sep 2022 06:50:57 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id w3-20020a05600018c300b002206203ed3dsm18379698wrq.29.2022.09.07.06.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 06:50:57 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Bernie Thompson <bernie@plugable.com>,
-        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fbdev: remove redundant initialization to variable identical
-Date:   Wed,  7 Sep 2022 14:50:56 +0100
-Message-Id: <20220907135056.679617-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 7 Sep 2022 09:58:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504D91929C;
+        Wed,  7 Sep 2022 06:58:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 04692204E9;
+        Wed,  7 Sep 2022 13:58:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662559101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vSloOVBt4ejDDmCVbuxcpjAf3Vez01oYnT3kbC/eglE=;
+        b=wfbYC+GH+4qYotz04AEU4Dm7UhV9eGvv2uf62IJJg+AjU3+OLZ/jRyiPwuk7Ec0OE10q/4
+        WIEHStDXEwpi/bD95O8WqZxvQi2BB2k+7tn8VwxBgnJu+Rst6eYYYJmo5X/GhDMRtwzAOS
+        kKeMc4zJkzfKOYhMsVpESvQWwyvmXuo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662559101;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vSloOVBt4ejDDmCVbuxcpjAf3Vez01oYnT3kbC/eglE=;
+        b=ELRZ7afbYvgq3ID3xjOyZKMFv9gamlOnz0D3xdSxyyKAQVqUT+H5dRk5B1yWkmS/NSIO+w
+        vGVHL5o92da/16Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D119D13486;
+        Wed,  7 Sep 2022 13:58:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nXABM3yjGGPhNAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 07 Sep 2022 13:58:20 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B5313A067E; Wed,  7 Sep 2022 15:51:53 +0200 (CEST)
+Date:   Wed, 7 Sep 2022 15:51:53 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        NeilBrown <neilb@suse.de>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Message-ID: <20220907135153.qvgibskeuz427abw@quack3>
+References: <20220907111606.18831-1-jlayton@kernel.org>
+ <166255065346.30452.6121947305075322036@noble.neil.brown.name>
+ <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+ <20220907125211.GB17729@fieldses.org>
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable identical is being initialized with a value that is never
-read. The variable is being re-assigned later on. The initialization is
-redundant and can be removed.
+On Wed 07-09-22 09:12:34, Jeff Layton wrote:
+> On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
+> > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
+> > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
+> > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
+> > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic with respect to the
+> > > > > +other changes in the inode. On a write, for instance, the i_version it usually
+> > > > > +incremented before the data is copied into the pagecache. Therefore it is
+> > > > > +possible to see a new i_version value while a read still shows the old data.
+> > > > 
+> > > > Doesn't that make the value useless?
+> > > > 
+> > > 
+> > > No, I don't think so. It's only really useful for comparing to an older
+> > > sample anyway. If you do "statx; read; statx" and the value hasn't
+> > > changed, then you know that things are stable. 
+> > 
+> > I don't see how that helps.  It's still possible to get:
+> > 
+> > 		reader		writer
+> > 		------		------
+> > 				i_version++
+> > 		statx
+> > 		read
+> > 		statx
+> > 				update page cache
+> > 
+> > right?
+> > 
+> 
+> Yeah, I suppose so -- the statx wouldn't necessitate any locking. In
+> that case, maybe this is useless then other than for testing purposes
+> and userland NFS servers.
+> 
+> Would it be better to not consume a statx field with this if so? What
+> could we use as an alternate interface? ioctl? Some sort of global
+> virtual xattr? It does need to be something per-inode.
 
-Cleans up clang scan-build warning:
-drivers/video/fbdev/udlfb.c:373:6: warning: Value stored to 'identical'
-during its initialization is never read [deadcode.DeadStores]
+I was thinking how hard would it be to increment i_version after updating
+data but it will be rather hairy. In particular because of stuff like
+IOCB_NOWAIT support which needs to bail if i_version update is needed. So
+yeah, I don't think there's an easy way how to provide useful i_version for
+general purpose use.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/video/fbdev/udlfb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
-index c863244ef12c..216d49c9d47e 100644
---- a/drivers/video/fbdev/udlfb.c
-+++ b/drivers/video/fbdev/udlfb.c
-@@ -370,7 +370,7 @@ static int dlfb_trim_hline(const u8 *bback, const u8 **bfront, int *width_bytes)
- 	const unsigned long *back = (const unsigned long *) bback;
- 	const unsigned long *front = (const unsigned long *) *bfront;
- 	const int width = *width_bytes / sizeof(unsigned long);
--	int identical = width;
-+	int identical;
- 	int start = width;
- 	int end = width;
- 
+								Honza
 -- 
-2.37.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

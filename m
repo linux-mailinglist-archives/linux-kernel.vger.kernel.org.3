@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00575B09F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7031A5B09FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiIGQTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
+        id S229608AbiIGQWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiIGQTL (ORCPT
+        with ESMTP id S229490AbiIGQWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:19:11 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4735A3D1E;
-        Wed,  7 Sep 2022 09:19:05 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b16so20520229edd.4;
-        Wed, 07 Sep 2022 09:19:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=hQ9th6n5lq83vAo1UjW41EiQHnnZngjeZzxW+Zvqg/o=;
-        b=lOFrVGRN6hHWcfmqLPAWd10+9jgWInlDzjGvPwt/sUpt/HepcEOMsaFdXsILE9OXIN
-         +UQlSJuCNc6HDjnWHhH1PbpnAF4cCs5xxM+HsRoSLKlQhEstEbAgwkFye7z/R+bdp0Hg
-         4PJ8hFSSEFVVpuvrFzKTaYhhQprBf1CZNkKsr3tS4srGrAdBEOAaZFthBbPTsAY9mTbI
-         bGfrfdwtMpKE1gjzQvWPLlNP5arKF3RqkGu565p4i9ZAs2XSyQCYa2B4Z5FAsUHPAnKq
-         t0W691Y16jVevXElPy4MXVgZDOAJUk88GOJJ5xbqillb8ykkoMKYgmiOvJUIg5Q9HhNv
-         ViUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=hQ9th6n5lq83vAo1UjW41EiQHnnZngjeZzxW+Zvqg/o=;
-        b=lofdGBAwLi4q2uIdcfD5rnrym4KghRMFlKHzG7CUgk+kQF2tXCQ7edBnuvDEHhKnm2
-         tSXNAPOtojTBLc41RSC/W38cXkZv9GkAxUvoUVCeRJMp5ju1s7qOm+ZGfRUUHdfNiORi
-         jcUPXB4CYgZVuEtVRg05sMI8dztBH3IhpDKqrlwCejJzAoKwB06mvLy3KZ344hFLzRS0
-         DVH2fMtIeLN/QpWGXwOQ2kbg9gpxpGiVWoc4MZevYA6Xzt2zDp/JcOsVREvMxFBZVYcv
-         b4fxevVDag1G5iadtVgEITRJ3sdZPM3e1L4QXKSHQWX275M6/dihhMPH3YBt/vipn2l7
-         N+sA==
-X-Gm-Message-State: ACgBeo2LvquUGTEhDRgOHoElLClqhYCcCjWuvwms3iVZU2oZ+GEBctuz
-        kriJ9OvaNfHR7U8dpeQL2NE=
-X-Google-Smtp-Source: AA6agR7JpUzIepk/dw+bCY0I5AOVf7pDgVVPlHrmFMnGg0awKBNETT2LrCH7R54WapWd4v+lKJNiFQ==
-X-Received: by 2002:aa7:da4f:0:b0:44e:864b:7a3e with SMTP id w15-20020aa7da4f000000b0044e864b7a3emr3816915eds.378.1662567543518;
-        Wed, 07 Sep 2022 09:19:03 -0700 (PDT)
-Received: from ?IPV6:2a04:241e:502:a09c:3df:1c49:9ca5:8ba3? ([2a04:241e:502:a09c:3df:1c49:9ca5:8ba3])
-        by smtp.gmail.com with ESMTPSA id b23-20020a170906039700b00715a02874acsm8631877eja.35.2022.09.07.09.19.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 09:19:02 -0700 (PDT)
-Message-ID: <4a47b4ea-750c-a569-5754-4aa0cd5218fc@gmail.com>
-Date:   Wed, 7 Sep 2022 19:19:00 +0300
+        Wed, 7 Sep 2022 12:22:11 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C236A8CCA;
+        Wed,  7 Sep 2022 09:22:09 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id ED51E24184;
+        Wed,  7 Sep 2022 16:22:08 +0000 (UTC)
+Received: from pdx1-sub0-mail-a202.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id AF4DA24133;
+        Wed,  7 Sep 2022 16:22:07 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662567728; a=rsa-sha256;
+        cv=none;
+        b=Ru1TKPq+I/Q3zRgPOewdrZSK3VC4EnuUWWdADHPWd8WTM26avt0zpb6kw6xqcG4ajiqNJA
+        aNgAIThI9ySL6KYh30XexK5uG1zXCYpo6J2RSnDpJ8LsCtztnCSqpX3ykm4QEMOkYL4C8o
+        qFXu5e8/5HHsSlYbKJuYLJRj4XdCbDodu44/n4sWraiEwBuOJjijesRIBgxNtMZmk1LPvY
+        xF6NlnkBkNMKqSzsUPy4Pxt+4hSayi0iehHwbv4wsKdqUwBCHwACGXLjrIhTHv8s2karGv
+        lfHBnDbncccHWEdkbFXPOhvhmMVcRUMC8nHTHZ4Vvr0E9yVy2BsJM5/jMBEacQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1662567728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=Q5I72zuM+lmKwUs/n+14smqnwrEutfmQnYvhJjxKvHQ=;
+        b=dMfFuhz9gSDutrNbqKt0ZS/ijg6LWhKRcFoksy6kFU4q57WM2FEqqDkH/2owRZLKFTWLT9
+        jJMlHjN35V8XWDrdME6ewOyaXRFcO3FCsPVn/ZvcsNGl5354fTNuz77eH1zjauwGV3DOKi
+        2a9lTfT8gYlNk2z2/m/tUa6CAIib0qIqGZ7GlRXbeyr5j6kqIDZ1Ry7tpMOVxOwRwbFklb
+        xpG98s0hQO07TmWrBaUsUNuJ0aqZDBb8bRHD4OcXCZY8lwrIDJo7IgQwkMAfzj9/oUHZSQ
+        mvQmRcq3llmwlfEco7gp5qX/+8Nonn9aZ4SppPL7koNeUT+HI9Woj4IbhsRM7Q==
+ARC-Authentication-Results: i=1;
+        rspamd-686945db84-lvkj2;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Robust-Slimy: 32efb8e01087203f_1662567728265_1947120413
+X-MC-Loop-Signature: 1662567728265:2794685740
+X-MC-Ingress-Time: 1662567728265
+Received: from pdx1-sub0-mail-a202.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.108.161.89 (trex/6.7.1);
+        Wed, 07 Sep 2022 16:22:08 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a202.dreamhost.com (Postfix) with ESMTPSA id 4MN6wG3Bx4z6r;
+        Wed,  7 Sep 2022 09:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1662567727;
+        bh=Q5I72zuM+lmKwUs/n+14smqnwrEutfmQnYvhJjxKvHQ=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=hRrGO9ZE9txtfSu3RNhxninK/xIYDubR17SyPxJgngHVHIVorc2fFStCKvk4IQsTq
+         zUEsgWWJCOGMsFNdXgbMOc7roerkDQEKUvBrwrtZ7r7yu7NXo2IrDPxEBz9UkKezJm
+         gElGdMh8tgjhL1sbFSFC3fbKbggAG/jK+/uqg+WHFFTRP2l2zmnyHAEUm+7AT3qKag
+         H5qLTmEQqLjThgUPV1KoX/naxZioTYwd8FwZKPinDHNKSxCzO4cGdPk5sbAS+nQ3S+
+         SPbdPP3qO3pYb+GKpCTJ24Xv+kvSqPVQ86LTjM1T5cK2F0Js0KAsoWCf/NSOelvNPj
+         5XAvxgcZT4i8Q==
+Date:   Wed, 7 Sep 2022 09:21:58 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Robert Richter <rrichter@amd.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 3/15] cxl: Unify debug messages when calling
+ devm_cxl_add_port()
+Message-ID: <20220907162158.56jyjphzzzjgptxu@offworld>
+References: <20220831081603.3415-1-rrichter@amd.com>
+ <20220831081603.3415-4-rrichter@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 01/26] tcp: authopt: Initial support and key management
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Ahern <dsahern@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Philip Paeps <philip@trouble.is>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <cover.1662361354.git.cdleonard@gmail.com>
- <0e4c0a98509b907e33c2f80b95cc6cfe713ac2b2.1662361354.git.cdleonard@gmail.com>
- <CANn89i+a0mMUMhUhTPoshifNzzuR_gfThPKptB8cuBiw6Bs5jw@mail.gmail.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-In-Reply-To: <CANn89i+a0mMUMhUhTPoshifNzzuR_gfThPKptB8cuBiw6Bs5jw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220831081603.3415-4-rrichter@amd.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,179 +106,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/22 01:57, Eric Dumazet wrote:
-> On Mon, Sep 5, 2022 at 12:06 AM Leonard Crestez <cdleonard@gmail.com> wrote:
->>
->> This commit adds support to add and remove keys but does not use them
->> further.
->>
->> Similar to tcp md5 a single pointer to a struct tcp_authopt_info* struct
->> is added to struct tcp_sock, this avoids increasing memory usage. The
->> data structures related to tcp_authopt are initialized on setsockopt and
->> only freed on socket close.
->>
-> 
-> Thanks Leonard.
-> 
-> Small points from my side, please find them attached.
+On Wed, 31 Aug 2022, Robert Richter wrote:
 
-...
+>CXL ports are added in a couple of code paths using
+>devm_cxl_add_port(). Debug messages are individually generated, but
+>are incomplete and inconsistent. Change this by moving its generation
+>to devm_cxl_add_port(). This unifies the messages and reduces code
+>duplication. Also, generate messages on failure.
+>
+>Signed-off-by: Robert Richter <rrichter@amd.com>
+>Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
->> +/* Free info and keys.
->> + * Don't touch tp->authopt_info, it might not even be assigned yes.
->> + */
->> +void tcp_authopt_free(struct sock *sk, struct tcp_authopt_info *info)
->> +{
->> +       kfree_rcu(info, rcu);
->> +}
->> +
->> +/* Free everything and clear tcp_sock.authopt_info to NULL */
->> +void tcp_authopt_clear(struct sock *sk)
->> +{
->> +       struct tcp_authopt_info *info;
->> +
->> +       info = rcu_dereference_protected(tcp_sk(sk)->authopt_info, lockdep_sock_is_held(sk));
->> +       if (info) {
->> +               tcp_authopt_free(sk, info);
->> +               tcp_sk(sk)->authopt_info = NULL;
-> 
-> RCU rules at deletion mandate that the pointer must be cleared before
-> the call_rcu()/kfree_rcu() call.
-> 
-> It is possible that current MD5 code has an issue here, let's not copy/paste it.
-
-OK. Is there a need for some special form of assignment or is current 
-plain form enough?
-
-> 
->> +       }
->> +}
->> +
->> +/* checks that ipv4 or ipv6 addr matches. */
->> +static bool ipvx_addr_match(struct sockaddr_storage *a1,
->> +                           struct sockaddr_storage *a2)
->> +{
->> +       if (a1->ss_family != a2->ss_family)
->> +               return false;
->> +       if (a1->ss_family == AF_INET &&
->> +           (((struct sockaddr_in *)a1)->sin_addr.s_addr !=
->> +            ((struct sockaddr_in *)a2)->sin_addr.s_addr))
->> +               return false;
->> +       if (a1->ss_family == AF_INET6 &&
->> +           !ipv6_addr_equal(&((struct sockaddr_in6 *)a1)->sin6_addr,
->> +                            &((struct sockaddr_in6 *)a2)->sin6_addr))
->> +               return false;
->> +       return true;
->> +}
-> 
-> Always surprising to see this kind of generic helper being added in a patch.
-
-I remember looking for an equivalent and not finding it. Many places 
-have distinct code paths for ipv4 and ipv6 and my use of 
-"sockaddr_storage" as ipv4/ipv6 union is uncommon.
-
-It also wastes some memory.
-
->> +int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
->> +{
->> +       struct tcp_sock *tp = tcp_sk(sk);
->> +       struct tcp_authopt_info *info;
->> +
->> +       memset(opt, 0, sizeof(*opt));
->> +       sock_owned_by_me(sk);
->> +
->> +       info = rcu_dereference_check(tp->authopt_info, lockdep_sock_is_held(sk));
-> 
-> Probably not a big deal, but it seems the prior sock_owned_by_me()
-> might be redundant.
-
-The sock_owned_by_me call checks checks lockdep_sock_is_held
-
-The rcu_dereference_check call checks lockdep_sock_is_held || 
-rcu_read_lock_held()
-
-This is a getsockopt so caller ensures socket locking but 
-rcu_read_lock_held() == 0.
-
-The sock_owned_by_me is indeed redundant because it seems very unlikely 
-the sockopt calling conditions will be changes. It was mostly there to 
-clarify for myself because I had probably at one time with locking 
-warnings. I guess they can be removed.
-
->> +int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
->> +{
->> +       struct tcp_authopt_key opt;
->> +       struct tcp_authopt_info *info;
->> +       struct tcp_authopt_key_info *key_info, *old_key_info;
->> +       struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
->> +       int err;
->> +
->> +       sock_owned_by_me(sk);
->> +       if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
->> +               return -EPERM;
->> +
->> +       err = _copy_from_sockptr_tolerant((u8 *)&opt, sizeof(opt), optval, optlen);
->> +       if (err)
->> +               return err;
->> +
->> +       if (opt.flags & ~TCP_AUTHOPT_KEY_KNOWN_FLAGS)
->> +               return -EINVAL;
->> +
->> +       if (opt.keylen > TCP_AUTHOPT_MAXKEYLEN)
->> +               return -EINVAL;
->> +
->> +       /* Delete is a special case: */
->> +       if (opt.flags & TCP_AUTHOPT_KEY_DEL) {
->> +               mutex_lock(&net->mutex);
->> +               key_info = tcp_authopt_key_lookup_exact(sk, net, &opt);
->> +               if (key_info) {
->> +                       tcp_authopt_key_del(net, key_info);
->> +                       err = 0;
->> +               } else {
->> +                       err = -ENOENT;
->> +               }
->> +               mutex_unlock(&net->mutex);
->> +               return err;
->> +       }
->> +
->> +       /* check key family */
->> +       if (opt.flags & TCP_AUTHOPT_KEY_ADDR_BIND) {
->> +               if (sk->sk_family != opt.addr.ss_family)
->> +                       return -EINVAL;
->> +       }
->> +
->> +       /* Initialize tcp_authopt_info if not already set */
->> +       info = __tcp_authopt_info_get_or_create(sk);
->> +       if (IS_ERR(info))
->> +               return PTR_ERR(info);
->> +
->> +       key_info = kmalloc(sizeof(*key_info), GFP_KERNEL | __GFP_ZERO);
-> 
-> kzalloc() ?
-
-Yes
-
->> +static int tcp_authopt_init_net(struct net *full_net)
-> 
-> Hmmm... our convention is to use "struct net *net"
-> 
->> +{
->> +       struct netns_tcp_authopt *net = &full_net->tcp_authopt;
-> 
-> Here, you should use a different name ...
-
-OK, will replace with net_ao
-
->> @@ -2267,10 +2268,11 @@ void tcp_v4_destroy_sock(struct sock *sk)
->>                  tcp_clear_md5_list(sk);
->>                  kfree_rcu(rcu_dereference_protected(tp->md5sig_info, 1), rcu);
->>                  tp->md5sig_info = NULL;
->>          }
->>   #endif
->> +       tcp_authopt_clear(sk);
-> 
-> Do we really own the socket lock at this point ?
-
-Not sure how I would tell but there is a lockdep_sock_is_held check 
-inside tcp_authopt_clear. I also added sock_owned_by_me and there were 
-no warnings.
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

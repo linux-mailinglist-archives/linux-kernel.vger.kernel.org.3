@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553545AFCC3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F36D5AFCC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiIGGrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        id S229713AbiIGGrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiIGGqu (ORCPT
+        with ESMTP id S229999AbiIGGqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:46:50 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF5C82D3A;
-        Tue,  6 Sep 2022 23:46:49 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id u22so13513669plq.12;
-        Tue, 06 Sep 2022 23:46:49 -0700 (PDT)
+        Wed, 7 Sep 2022 02:46:53 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832AC83059;
+        Tue,  6 Sep 2022 23:46:52 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id p18so13545014plr.8;
+        Tue, 06 Sep 2022 23:46:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=0Od+VaN8FUmESvL1wFykrP2D7y9RzKIvl/fV42CNueI=;
-        b=PgpFZhNxIo7ULYaIKIdY0EBpoSUfwWk1WKPTuEHi1d8LICpzEKRS6mcxfSRII1Cj6a
-         tCeTMu0TdIczW6fg0Su5JQ4MK0mDj38wp5VhbREOo+3pJAdIgN/6bzyRlwA0M9TqaT3k
-         02B6HMcEec+v3Ll75Ffyv2lFJznVCp3Ii/wvascXP5KPllK11PKaBGhpKPWiM/aePRV7
-         piYzlUvH1YIImV1XFGV22BfqpFmzDwwqgagPX0MXN0QdFIDeFPimnzTC8xFnHnB5tYuo
-         ZCqaRAwFf6w2+h8RELV7tDyaTBSV6NTIQ2HfW7NJZWuzZdTyZvUeUUEtcSXHPZ0tSP3v
-         ufQQ==
+        bh=HvxZPONrRbuUvmCxwCXx0tcsdz/6p+S6Y0WSBKTWG/c=;
+        b=p3XOVyu6zm0XvHqdkPCYjoTO15xTNBblOw5dvDArdnwvbOWabVFDLk9qIv79j4RaRG
+         yWhEs1YvobUr3RrfWFaPgiNNv9UdHTqogSrz+KK9Yip1G/8OVT+7d9976doAV9xFS84V
+         Fpdj8GY6O2bptFqUj7F0JWWxInFDxii2X7UtX1+GgD2p4ju2+QuRpwbj/cdq8v4kMmyp
+         OW/g2IfjhIrrIGt0TkiqQc6BWmmYh29bpn4WE8IsXug/LMI8T9G6dEiCHCNKD2ZH+8uz
+         82sRtWJuxQLEKfhFWZt1e3vk29YSHWCbOQX8MfLWnz+vStsIUF45Xu8aWOi9CSMRrcSO
+         0eqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date;
-        bh=0Od+VaN8FUmESvL1wFykrP2D7y9RzKIvl/fV42CNueI=;
-        b=EGd4Mtjn8WnWRu8aK+PMwgEo5v7yPMeXf5wDwUsSer56nhfP4Xq+hvmFaFvJImYhUf
-         /RhabRuwtFoOb/O5DWqUaKBfN+NEdb/rYVUT7o7bG1IQ2t2ds+aebXYNjnyAwaR9mAph
-         4HuSVcUeIx0enSkCrWy7Zcw4ld6oSkQeIcgJhyWWUzpLDKZV77MFALL7oqi/yVtSG6sk
-         WYKqIlymzrYbjTs2RIiD46PWElghdYsEdDCARJb02WeyjVDJ4iQz2U+zn+9wa7zXTNy7
-         1904LCmQ60B3gO9RqvQ0iUKuoBEzbabeu0dgTJtjD9Dwe4sBW0NZYpFEMpzbRMS3I+s8
-         XoSw==
-X-Gm-Message-State: ACgBeo0HvApbGY49Ux1dlCEjsaHLS7eSRwIpGjJeiMk2KKJamFJi8XsI
-        mxz2ZxiH9H/DdpuqTsoTh6o=
-X-Google-Smtp-Source: AA6agR7U0W/TbyeRxQFgP7uDvFJpfAjNaThe/r2FhAgPFbNXqR5GBlTzsLv7fQt2In0Fl6eRHDo1/A==
-X-Received: by 2002:a17:90b:3e84:b0:1fd:ce48:979 with SMTP id rj4-20020a17090b3e8400b001fdce480979mr2335987pjb.54.1662533209356;
-        Tue, 06 Sep 2022 23:46:49 -0700 (PDT)
+        bh=HvxZPONrRbuUvmCxwCXx0tcsdz/6p+S6Y0WSBKTWG/c=;
+        b=kHSbD4ni21HWZ+ONUH8lX/Od7lrE9RAQ+Uhg/4Mo/byRxUO9LCpyQo0qRFOjq0UY0+
+         y4MT6IZvXubjgXnvXy2hXWN16wVS0oMyHgjOtAb4Uq27SlqWOYvtlH++aOfpSHd2Hlgd
+         G2RSlhimF8EfYTDh8Q1LFVetcAFclUM3HRpEqa9zd3eArbiv+chChPiXhMVHZSTEA9A5
+         tMlSjXXqGbREA7kdb38yw9u+puWOTDaOK9a6F76sWkNSqtZDM4l3W7bJPpikmPVIiicz
+         P5zDXexLY8HOYeIsoxbvHafESOvHQUo6obSMd8EDlX55K6jwXUZ/yfSP8FyY1Ucyt/8z
+         u7Zw==
+X-Gm-Message-State: ACgBeo2WCSabNTBPc8wHUIm1f2QRw1fF3qr9lV4UJjPFJW83Bv/eru9D
+        f/BjWx+kxseHXUs/jjQ7enI=
+X-Google-Smtp-Source: AA6agR4+xTCH0Mw7YOnD3q3yWcRKZFRM7ACW0uIB8IUFBL6Pbn8XyGFPSUl0MmlYtLsytoJH36HlhA==
+X-Received: by 2002:a17:90b:2242:b0:200:1c81:c108 with SMTP id hk2-20020a17090b224200b002001c81c108mr2314266pjb.89.1662533211882;
+        Tue, 06 Sep 2022 23:46:51 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:f249:9066:7da7:4a37])
-        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b00172c7a2c662sm11192192ple.48.2022.09.06.23.46.47
+        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b00172c7a2c662sm11192192ple.48.2022.09.06.23.46.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 23:46:48 -0700 (PDT)
+        Tue, 06 Sep 2022 23:46:50 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org,
         Adrian Hunter <adrian.hunter@intel.com>
-Subject: [PATCH 1/6] perf test: Do not use instructions:u explicitly
-Date:   Tue,  6 Sep 2022 23:46:40 -0700
-Message-Id: <20220907064645.1197894-2-namhyung@kernel.org>
+Subject: [PATCH 2/6] perf test: Use a test program in perf record tests
+Date:   Tue,  6 Sep 2022 23:46:41 -0700
+Message-Id: <20220907064645.1197894-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 In-Reply-To: <20220907064645.1197894-1-namhyung@kernel.org>
 References: <20220907064645.1197894-1-namhyung@kernel.org>
@@ -78,52 +78,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think it's to support non-root user tests.  But perf record can handle
-the case and fall back to a software event (cpu-clock).  Practically this
-would affect when it's run on a VM, but it seems no reason to prevent running
-the test in the guest.
+If the system has cc it could build a test program with two threads
+and then use it for more detailed testing.  Also it adds initial delay
+of 3ms to profile a multi-threaded target.  This change make the test
+failing but that's what we want to check for now.
+
+If cc is not found, it falls back to use the default value 'true'.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/tests/shell/record.sh | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/perf/tests/shell/record.sh | 58 +++++++++++++++++++++++++++++---
+ 1 file changed, 54 insertions(+), 4 deletions(-)
 
 diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-index 00c7285ce1ac..40b087bfdb76 100755
+index 40b087bfdb76..cea3c7b7e2cd 100755
 --- a/tools/perf/tests/shell/record.sh
 +++ b/tools/perf/tests/shell/record.sh
-@@ -21,18 +21,18 @@ trap trap_cleanup exit term int
+@@ -6,10 +6,18 @@ set -e
  
+ err=0
+ perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
++testprog=$(mktemp /tmp/__perf_test.prog.XXXXXX)
++testsym="test_loop"
++testopt="-D 3"
+ 
+ cleanup() {
+   rm -f ${perfdata}
+   rm -f ${perfdata}.old
++
++  if [ "${testprog}" != "true" ]; then
++    rm -f ${testprog}
++  fi
++
+   trap - exit term int
+ }
+ 
+@@ -19,9 +27,49 @@ trap_cleanup() {
+ }
+ trap trap_cleanup exit term int
+ 
++build_test_program() {
++  if ! [ -x "$(command -v cc)" ]; then
++    # No CC found. Fall back to 'true'
++    testprog=true
++    testsym=true
++    testopt=''
++    return
++  fi
++
++  echo "Build a test program"
++  cat <<EOF | cc -o ${testprog} -xc - -pthread
++#include <stdio.h>
++#include <unistd.h>
++#include <pthread.h>
++
++void test_loop(void) {
++  volatile int count = 1000000;
++
++  // wait for perf record
++  usleep(5000);
++
++  while (count--)
++    continue;
++}
++
++void *thfunc(void *arg) {
++  test_loop();
++  return NULL;
++}
++
++int main(void) {
++  pthread_t th;
++  pthread_create(&th, NULL, thfunc, NULL);
++  test_loop();
++  pthread_join(th, NULL);
++  return 0;
++}
++EOF
++}
++
  test_per_thread() {
    echo "Basic --per-thread mode test"
--  if ! perf record -e instructions:u -o ${perfdata} --quiet true 2> /dev/null
-+  if ! perf record -o /dev/null --quiet true 2> /dev/null
+-  if ! perf record -o /dev/null --quiet true 2> /dev/null
++  if ! perf record -o /dev/null --quiet ${testprog} 2> /dev/null
    then
--    echo "Per-thread record [Skipped instructions:u not supported]"
-+    echo "Per-thread record [Skipped event not supported]"
+     echo "Per-thread record [Skipped event not supported]"
      if [ $err -ne 1 ]
-     then
-       err=2
+@@ -30,13 +78,13 @@ test_per_thread() {
      fi
      return
    fi
--  if ! perf record -e instructions:u --per-thread -o ${perfdata} true 2> /dev/null
-+  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
+-  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
++  if ! perf record --per-thread ${testopt} -o ${perfdata} ${testprog} 2> /dev/null
    then
--    echo "Per-thread record of instructions:u [Failed]"
-+    echo "Per-thread record [Failed record]"
+     echo "Per-thread record [Failed record]"
      err=1
      return
    fi
-@@ -49,7 +49,7 @@ test_register_capture() {
-   echo "Register capture test"
-   if ! perf list | egrep -q 'br_inst_retired.near_call'
+-  if ! perf report -i ${perfdata} -q | egrep -q true
++  if ! perf report -i ${perfdata} -q | egrep -q ${testsym}
    then
--    echo "Register capture test [Skipped missing instruction]"
-+    echo "Register capture test [Skipped missing event]"
-     if [ $err -ne 1 ]
-     then
-       err=2
+     echo "Per-thread record [Failed missing output]"
+     err=1
+@@ -62,7 +110,7 @@ test_register_capture() {
+     return
+   fi
+   if ! perf record -o - --intr-regs=di,r8,dx,cx -e cpu/br_inst_retired.near_call/p \
+-    -c 1000 --per-thread true 2> /dev/null \
++    -c 1000 --per-thread ${testopt} ${testprog} 2> /dev/null \
+     | perf script -F ip,sym,iregs -i - 2> /dev/null \
+     | egrep -q "DI:"
+   then
+@@ -73,6 +121,8 @@ test_register_capture() {
+   echo "Register capture test [Success]"
+ }
+ 
++build_test_program
++
+ test_per_thread
+ test_register_capture
+ 
 -- 
 2.37.2.789.g6183377224-goog
 

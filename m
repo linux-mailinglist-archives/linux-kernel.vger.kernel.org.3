@@ -2,85 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6A55B1013
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 00:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26995B1017
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 00:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiIGW6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 18:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S229732AbiIGW6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 18:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiIGW56 (ORCPT
+        with ESMTP id S229713AbiIGW61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 18:57:58 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EC49D13E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 15:57:57 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id q9so14970354pgq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 15:57:57 -0700 (PDT)
+        Wed, 7 Sep 2022 18:58:27 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3469E6A7
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 15:58:24 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 202so19086274ybe.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 15:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=10mgHT7D1JugXcpwZyQXkkVRtSTijPUHWCXzbe4O+Ls=;
-        b=JcTX9Q9/VzeI3zJcRVb9BMhFG96+5e2glSlZ3ZEcQXzGdOs4cuaFR2ORaO8oIGH5Ri
-         FSN9sZiAwTSx9EWoUH/2Qs0923FRJVXJpKmlLXLN5rTyQ5PkcUsrQz0kSE8C3cuBkELL
-         pnax4RkKXV2+CKD2gMhW3hyJbN9WjgzGidM4E=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ensB6iG2T4HcBnO54DOwBgrBj2kxQd/wvWtFjiwAVj4=;
+        b=ec3pOZdXR+0LpVTRq9xtvqRgWhEPNWOlfQ0mKzRaG/z4seSTW55o6CxkkBbEr2JftY
+         QIOxFCzbzFr6nl66WDfRjNHGAcuz2W4A7jc8DFtyjAuMJS274y+3N7RuBtFMZTSlO88S
+         NNZHp9ti28xH0kvkd9oi0lKPHhFzwEETdMB1V0XC+oK0QGIiV81gIGM9dh/tRKccoFH/
+         3jHFoZfu1No9YL4DeBaje9rPhu7obuP7MNTxm5c80p7NjZdt3VxFDyPAoWtPhlIMarw1
+         FoKRtXClZ55xK9N7UXCKFY14lX4YixMYO/No+d+iVll5C5V2ktcRd6Aae+fx0Y6l9FUK
+         Cp9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=10mgHT7D1JugXcpwZyQXkkVRtSTijPUHWCXzbe4O+Ls=;
-        b=cmt0FEhwvKh9ExZZGPqJGd0sECvanRjVZd6akPm0T5YwRmAZn6SXGUvc8jYBY0GrTq
-         6WLOlqN7CYArhaqlyjl3ricoFsuc7A3grS7YYQO94C8SC0mfNufwle641GbhqZ+QwLRk
-         jeMSCqMwWBQke0rt+9MlELi7Sk3D6GgTez0cexAW5pzz4iqrPVOelOmtoZvmrAE008nw
-         UHeXtKCenPVX5ZM5Np6ypLwra5IBjq9Txp+gbBvNKNxdNCPT3+m3uSJxsdHosloMmJzo
-         w48bMRP8n06QFj2oFOeH4GfCy3J3togvSyjX+iUt958zpBENhXB0qxWRuI4zIjSAf4mc
-         GFUA==
-X-Gm-Message-State: ACgBeo156uQO70rG9ybJaCfcTtHzoYoK+AQVU+sINowvf7pdf6Ziq+/9
-        QpvEW9UbeYIlgapgc8Z8yDc0ag==
-X-Google-Smtp-Source: AA6agR6W0ILjfeSoqjoWZDM510pNCKy5+3P3n+/9F0y2Gk5Vo2ggvijQIReupjh1p3Ilysj7LTuA6A==
-X-Received: by 2002:a63:5007:0:b0:42a:29:2780 with SMTP id e7-20020a635007000000b0042a00292780mr5278391pgb.45.1662591477041;
-        Wed, 07 Sep 2022 15:57:57 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w11-20020a17090a528b00b001fd6066284dsm197002pjh.6.2022.09.07.15.57.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 15:57:56 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     bvanassche@acm.org
-Cc:     Kees Cook <keescook@chromium.org>, linux@rasmusvillemoes.dk,
-        linux-kernel@vger.kernel.org, isabbasso@riseup.net
-Subject: Re: [PATCH] lib: Improve the is_signed_type() kunit test
-Date:   Wed,  7 Sep 2022 15:57:52 -0700
-Message-Id: <166259146995.69125.7877600733909106911.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220907180329.3825417-1-bvanassche@acm.org>
-References: <20220907180329.3825417-1-bvanassche@acm.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ensB6iG2T4HcBnO54DOwBgrBj2kxQd/wvWtFjiwAVj4=;
+        b=Z43zL9+Zv3lgJN9sDTXQCTi163aTJWlpZNirhIa/o3uOH/1p3xbYZvVKPMq7A6nKth
+         EMwSbcldxJqMmt6YRveyFH29xrz/Cj+D8Vlb3g/2+494pMM8XSj5n0XjiH56GHNeWwut
+         zcLHeV+v8XWRHLkrusNONQ9UPTbZPDIZ305lvyNdR0rXTVUHCUT671w8ysq0v15+Bf0t
+         gXcU18SAtoVVlxg2ZgR4uM5hNTPUR/lXH+atxIv2SXcUH76jYafCqW1P4ws2NkLfSfo2
+         28PbJK0gjRJUBIBHp50qg+i4T+fGxx8Xd0PoeWnk2WCDSkEUIRAxHeFV2hDyWY7go+00
+         9guQ==
+X-Gm-Message-State: ACgBeo0gYInLsl+u9PDOk1SPOzojg0ywe3ihT1tjMxg50Ff72dRqXGM0
+        FkK0O/y8Tyapw8gKkuZaTZUyGuAz298fHAvPw1005g==
+X-Google-Smtp-Source: AA6agR65qU6xB2U2255wpOaXm8Hmd9oTgqy80QJ0Bn/k9GJ5kl8p/E1l+APxsu8s42FDlwIGi/yC1fXRghpvTrC1Mho=
+X-Received: by 2002:a25:b78a:0:b0:695:900e:e211 with SMTP id
+ n10-20020a25b78a000000b00695900ee211mr4602285ybh.427.1662591503842; Wed, 07
+ Sep 2022 15:58:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1662361354.git.cdleonard@gmail.com> <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
+ <CANn89iKq4rUkCwSSD-35u+Lb8s9u-8t5bj1=aZuQ8+oYwuC-Eg@mail.gmail.com> <YxkgC1XKmCNGzk3t@gondor.apana.org.au>
+In-Reply-To: <YxkgC1XKmCNGzk3t@gondor.apana.org.au>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Sep 2022 15:58:12 -0700
+Message-ID: <CANn89iLXsSotHWkUv4h0jCyNqym+Mb1N2-sfyC0sK76TZ+xPPg@mail.gmail.com>
+Subject: Re: [PATCH v8 08/26] tcp: authopt: Disable via sysctl by default
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Leonard Crestez <cdleonard@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Philip Paeps <philip@trouble.is>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 11:03:29 -0700, Bart Van Assche wrote:
-> Since the definition of is_signed_type() has been moved from
-> <linux/overflow.h> to <linux/compiler.h>, include the latter header file
-> instead of the former. Additionally, add a test for the type 'char'.
-> 
-> 
+On Wed, Sep 7, 2022 at 3:50 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Tue, Sep 06, 2022 at 04:11:58PM -0700, Eric Dumazet wrote:
+> >
+> > WRITE_ONCE(sysctl_tcp_authopt, val),  or even better:
+> >
+> > if (val)
+> >      cmpxchg(&sysctl_tcp_authopt, 0, val);
+>
+> What's the point of the cmpxchg? Since you're simply trying to prevent
+> sysctl_tcp_authopt from going back to zero, then the if clause
+> by itself is enough:
+>
+>         if (val)
+>                 WRITE_ONCE(sysctl_tcp_authopt, val);
+>
 
-Applied to for-next/hardening, thanks!
+Ack.
 
-[1/1] lib: Improve the is_signed_type() kunit test
-      https://git.kernel.org/kees/c/9d684f6d2d87
-
--- 
-Kees Cook
-
+Original patch was doing something racy, I have not though about the
+most efficient way to deal with it.

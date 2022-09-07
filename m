@@ -2,209 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B7E5AFC0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9F85AFC13
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiIGF5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S229849AbiIGF64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIGF5F (ORCPT
+        with ESMTP id S229459AbiIGF6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:57:05 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9623F5AA;
-        Tue,  6 Sep 2022 22:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662530224; x=1694066224;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FQwr62FuVekKIlqBYg9De+gonUS/CJ7o29zGWn8LlDY=;
-  b=UzMQxKpIsdYgl8Y5Ink4u6fAM850/V7vD3o8tJdMQnb623HV1Cudalq0
-   nlO9o19JmjuYH12MRBGtma28MVjBGItTHO58rwER+3sZFUnyquubfxydJ
-   +HCvQV+/VIZyfrWL1OMNO/m4PrXTKSqsUrRvIuBKqk5qtRF1PaANXyUqM
-   Sngl4mRDHAp2oztv93jfmOFova0my/GHQOJA/JA6XNsE4Pcx4zDqAWhl2
-   DfwxvsslJJC3Dg2BUWS5Q2INjs2oR6Vcq439gw1JBG+77hwuGR2pE5yLt
-   p6TDppT9Jr1dnNe5G2X/+BwG2vp46+4MnfdFdMtwHOm3sXq9jzct+FsSv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322970320"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="322970320"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 22:57:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="644474482"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga008.jf.intel.com with ESMTP; 06 Sep 2022 22:56:58 -0700
-Date:   Wed, 7 Sep 2022 13:56:57 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v3 16/22] KVM: kvm_arch.c: Remove a global variable,
- hardware_enable_failed
-Message-ID: <20220907055657.y7dcseig2qvjue6t@yy-desk-7060>
-References: <cover.1662084396.git.isaku.yamahata@intel.com>
- <91715ddc16f001bf2b76f68b57ebd59092b40591.1662084396.git.isaku.yamahata@intel.com>
+        Wed, 7 Sep 2022 01:58:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F53895F4;
+        Tue,  6 Sep 2022 22:58:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EE46B81B4E;
+        Wed,  7 Sep 2022 05:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01F32C433C1;
+        Wed,  7 Sep 2022 05:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662530327;
+        bh=Usb7RB0E/4pZu8ET3H5EzLquGfLSkSzBMYKG6bPNTzs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UN//H31Y8ALCcivYHKUF+F5B9ft7nhl9qTcm1cqjCVsXbf4nx+P0FebUGmzQU5vKM
+         vbGK0+eASpQJjpuppHcarVZ24213YeaRFzRDW1osNACF0C4ojnNFfS8teBTMLoYxjN
+         9bps6/kEJ0TuDOjjj6ORMu59Hh8sL/r4MMY1XFRjp/X+ojM3gkZhU1yk0uhnlUog/Q
+         7+CsQlnxbAJL1U44x+OoVanu7CGt88uM5Tfc8ZVTYilf4a8DanXd4sSIbWkpsFGc4H
+         jycMA9S/e+N2oS64wWJ7h7SCiYlkOgcX2Q6VCCFzuumsJgoaF0ZN40Cj2VRdPevYXX
+         ezzYrO+gUFmiw==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1274ec87ad5so18674122fac.0;
+        Tue, 06 Sep 2022 22:58:46 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1Excr8ZglEHTRa12Rkqj+51sD30PWhkpw+/ob0TAogDnFF3cBz
+        LSM/7EoNj0Uxcl28/u2lrx6fJyUEjleRuRQ8yS0=
+X-Google-Smtp-Source: AA6agR6RtWs+tc7D5XKa1brovVgMCpoLJSxZbYT4qLoxWFAdV2b9Hb63gLuxccgct1L52t1nUxgJv5AbRnVpvUromAc=
+X-Received: by 2002:a05:6870:3127:b0:11c:8c2c:9015 with SMTP id
+ v39-20020a056870312700b0011c8c2c9015mr13117547oaa.31.1662530326147; Tue, 06
+ Sep 2022 22:58:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <91715ddc16f001bf2b76f68b57ebd59092b40591.1662084396.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220907050407.2711513-1-namhyung@kernel.org>
+In-Reply-To: <20220907050407.2711513-1-namhyung@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 6 Sep 2022 22:58:35 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4OT3XC8oREZBNreesYyVvU9hSGs5Hgz=r-cwsQSkiXRQ@mail.gmail.com>
+Message-ID: <CAPhsuW4OT3XC8oREZBNreesYyVvU9hSGs5Hgz=r-cwsQSkiXRQ@mail.gmail.com>
+Subject: Re: [PATCH v2] perf test: Skip sigtrap test on old kernels
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Marco Elver <elver@google.com>,
+        Song Liu <songliubraving@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 07:17:51PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Tue, Sep 6, 2022 at 10:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> A global variable hardware_enable_failed in kvm_arch.c is used only by
-> kvm_arch_add_vm() and hardware_enable().  It doesn't have to be a global
-> variable.  Make it function local.
+> If it runs on an old kernel, perf_event_open would fail because of the
+> new fields sigtrap and sig_data.  Just skipping the test could miss an
+> actual bug in the kernel.
 >
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Let's check BTF if it has the perf_event_attr.sigtrap field.
+>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Song Liu <songliubraving@fb.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 > ---
->  virt/kvm/kvm_arch.c | 49 +++++++++++++++++++++------------------------
->  1 file changed, 23 insertions(+), 26 deletions(-)
+>  tools/perf/tests/sigtrap.c | 46 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
 >
-> diff --git a/virt/kvm/kvm_arch.c b/virt/kvm/kvm_arch.c
-> index de39d0127584..f7dcde842eb5 100644
-> --- a/virt/kvm/kvm_arch.c
-> +++ b/virt/kvm/kvm_arch.c
-> @@ -13,14 +13,13 @@
->  #include <linux/kvm_host.h>
+> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> index e32ece90e164..32f08ce0f2b0 100644
+> --- a/tools/perf/tests/sigtrap.c
+> +++ b/tools/perf/tests/sigtrap.c
+> @@ -16,6 +16,8 @@
+>  #include <sys/syscall.h>
+>  #include <unistd.h>
 >
->  static cpumask_t cpus_hardware_enabled = CPU_MASK_NONE;
-> -static atomic_t hardware_enable_failed;
->
->  __weak int kvm_arch_post_init_vm(struct kvm *kvm)
->  {
->  	return 0;
+> +#include <bpf/btf.h>
+> +
+
+Do we need "#ifdef HAVE_BPF_SKEL" for the include part?
+
+Other than this, looks good to me.
+
+Acked-by: Song Liu <song@kernel.org>
+
+>  #include "cloexec.h"
+>  #include "debug.h"
+>  #include "event.h"
+> @@ -54,6 +56,42 @@ static struct perf_event_attr make_event_attr(void)
+>         return attr;
 >  }
 >
-> -static void hardware_enable(void *caller_name)
-> +static int __hardware_enable(void *caller_name)
->  {
->  	int cpu = raw_smp_processor_id();
->  	int r;
-> @@ -28,18 +27,22 @@ static void hardware_enable(void *caller_name)
->  	WARN_ON_ONCE(preemptible());
->
->  	if (cpumask_test_cpu(cpu, &cpus_hardware_enabled))
-> -		return;
-> -
-> -	cpumask_set_cpu(cpu, &cpus_hardware_enabled);
-> -
-> +		return 0;
->  	r = kvm_arch_hardware_enable();
-> -
-> -	if (r) {
-> -		cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
-> -		atomic_inc(&hardware_enable_failed);
-> +	if (r)
->  		pr_warn("kvm: enabling virtualization on CPU%d failed during %s()\n",
->  			cpu, (const char *)caller_name);
-> -	}
-> +	else
-> +		cpumask_set_cpu(cpu, &cpus_hardware_enabled);
-> +	return r;
+> +static bool attr_has_sigtrap(void)
+> +{
+> +       bool ret = false;
+> +
+> +#ifdef HAVE_BPF_SKEL
+> +
+> +       struct btf *btf;
+> +       const struct btf_type *t;
+> +       const struct btf_member *m;
+> +       const char *name;
+> +       int i, id;
+> +
+> +       /* just assume it doesn't have the field */
+> +       btf = btf__load_vmlinux_btf();
+> +       if (btf == NULL)
+> +               return false;
+> +
+> +       id = btf__find_by_name_kind(btf, "perf_event_attr", BTF_KIND_STRUCT);
+> +       if (id < 0)
+> +               goto out;
+> +
+> +       t = btf__type_by_id(btf, id);
+> +       for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
+> +               name = btf__name_by_offset(btf, m->name_off);
+> +               if (!strcmp(name, "sigtrap")) {
+> +                       ret = true;
+> +                       break;
+> +               }
+> +       }
+> +out:
+> +       btf__free(btf);
+> +#endif
+> +
+> +       return ret;
 > +}
 > +
-> +static void hardware_enable(void *arg)
-> +{
-> +	atomic_t *failed = arg;
-> +
-> +	if (__hardware_enable((void *)__func__))
-> +		atomic_inc(failed);
->  }
-
-A side effect: The actual caller_name information introduced in Patch
-3 for hardware_enable() is lost. I tend to keep the information, but
-depends on you and other guys. :-)
-
->
->  static void hardware_disable(void *junk)
-> @@ -65,15 +68,16 @@ __weak void kvm_arch_pre_hardware_unsetup(void)
->   */
->  __weak int kvm_arch_add_vm(struct kvm *kvm, int usage_count)
+>  static void
+>  sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
 >  {
-> +	atomic_t failed;
->  	int r = 0;
+> @@ -139,7 +177,13 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
 >
->  	if (usage_count != 1)
->  		return 0;
+>         fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+>         if (fd < 0) {
+> -               pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
+> +               if (attr_has_sigtrap()) {
+> +                       pr_debug("FAILED sys_perf_event_open(): %s\n",
+> +                                str_error_r(errno, sbuf, sizeof(sbuf)));
+> +               } else {
+> +                       pr_debug("perf_event_attr doesn't have sigtrap\n");
+> +                       ret = TEST_SKIP;
+> +               }
+>                 goto out_restore_sigaction;
+>         }
 >
-> -	atomic_set(&hardware_enable_failed, 0);
-> -	on_each_cpu(hardware_enable, (void *)__func__, 1);
-> +	atomic_set(&failed, 0);
-> +	on_each_cpu(hardware_enable, &failed, 1);
->
-> -	if (atomic_read(&hardware_enable_failed)) {
-> +	if (atomic_read(&failed)) {
->  		r = -EBUSY;
->  		goto err;
->  	}
-> @@ -96,27 +100,20 @@ __weak int kvm_arch_del_vm(int usage_count)
->
->  __weak int kvm_arch_online_cpu(unsigned int cpu, int usage_count)
->  {
-> -	int ret = 0;
-> +	int ret;
->
->  	ret = kvm_arch_check_processor_compat();
->  	if (ret)
->  		return ret;
->
-> +	if (!usage_count)
-> +		return 0;
->  	/*
->  	 * Abort the CPU online process if hardware virtualization cannot
->  	 * be enabled. Otherwise running VMs would encounter unrecoverable
->  	 * errors when scheduled to this CPU.
->  	 */
-> -	if (usage_count) {
-> -		WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
-> -
-> -		hardware_enable((void *)__func__);
-> -		if (atomic_read(&hardware_enable_failed)) {
-> -			atomic_set(&hardware_enable_failed, 0);
-> -			ret = -EIO;
-> -		}
-> -	}
-> -	return ret;
-> +	return __hardware_enable((void *)__func__);
->  }
->
->  __weak int kvm_arch_offline_cpu(unsigned int cpu, int usage_count)
-> @@ -149,5 +146,5 @@ __weak void kvm_arch_resume(int usage_count)
->  		return; /* FIXME: disable KVM */
->
->  	if (usage_count)
-> -		hardware_enable((void *)__func__);
-> +		(void)__hardware_enable((void *)__func__);
->  }
 > --
-> 2.25.1
+> 2.37.2.789.g6183377224-goog
 >

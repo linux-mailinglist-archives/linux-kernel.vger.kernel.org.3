@@ -2,187 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B75B5AF8D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAA85AF8D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiIGAGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S229721AbiIGAHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiIGAG3 (ORCPT
+        with ESMTP id S229486AbiIGAHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:06:29 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85BB870B3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:06:27 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id w18so9409967qki.8
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:06:27 -0700 (PDT)
+        Tue, 6 Sep 2022 20:07:23 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1445493227
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:07:09 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id p18so12846413plr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=0x7lFEYok+4TSXWmfu3YrPmIsD3J9aswacolTfE5TUI=;
-        b=OWqGECVLza5tiFQ1B2PGMCjXKvkfCKAFI/EAQlRx29gfMWZYXb02SG4h+vUskenfLh
-         RuyRLbUCud/odSEWHEfLD9RdnQ1UMv/x0V3awA3+RPRNBh3tfPMCD5OrHCpaMcH9Nak6
-         MDq1GT+QHnFDNxKc90+tfmW3UnR8EZ+gAzSOU=
+        bh=rh1S7QUmN9msoqxI7fEuUgQGRHwthEWICM05M3Wc2aQ=;
+        b=r8Mf6Sqiq08D2xmr3VMEf6Fo6zCarWl1mXQXHKzP96Q077bnWiaFRP8QeDaVwmEvc7
+         6EL95xuZqp6FcqJqGTtNXdaDwJoUBICVw3PZrIgsO43iNMZTnnsGNf3ETRN2aEZBj82y
+         CXPV5AR/3dK+S0LMLQiCuTKHeWSzCM4nRDBAP+oeuIrHcv3gof/UEUH7edtzwHmRhUd+
+         v3K/GgE1VDgT55UhxpRKoxicP7UzoJr84BkIxtOROUYEvsCglp56Vx8fyoa9mdirVPEJ
+         vMc+9zcOqUuw0Rer5G+CTcCGCKCA3IcmZfFPkW9IF2x25+5n/EtX2Ih7Q+RGw7Sjhh1B
+         IX8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0x7lFEYok+4TSXWmfu3YrPmIsD3J9aswacolTfE5TUI=;
-        b=uBrMe4y2lFIycGiQtte01EPR9OPfYqeeN7nC5G1C4cpLy4xmWN32h2OwtWgNUpMZau
-         TnnxtEcCrGTWKTMJCvY6h7YUuqfQvPVeZnmn4AkHfSj290Qi+dbcxmdk3YpvUJS/sjsI
-         DAO8jNI6EbHZiy1PxdAfijtc0lJVG1ffrTnf9Rlvfbf9qf/CMvl6X3GurpGh0A/Ff8ZB
-         PfSvjlwh4ZFm5+meiXuz/o2x06t6KQ9eFqDp4/1ezcscFp/hfBgRGK5fSkoEF+9E1XlD
-         pM+y3kLilp6D3mHuIQvrfKJi6EZ18DaYPXdH81WS2VDFy9/DSahL+sDyaXCnxpE/xW0t
-         nmTA==
-X-Gm-Message-State: ACgBeo3mjM151iTFV+F4Q56T6FEkBKQ+/JBay69rSPvkiZ3rkdS5MZu+
-        Se0jDkFqS7s/ItX5mzP86iFrMQ==
-X-Google-Smtp-Source: AA6agR4uOmaamrYbScMsAINBw3DCa6o+DtlpA/abayjapOLkwoyvHGz/awMqdzEQ2E9PbzUOMtf/QQ==
-X-Received: by 2002:a05:620a:130d:b0:6bb:724:1bd9 with SMTP id o13-20020a05620a130d00b006bb07241bd9mr966684qkj.554.1662509187003;
-        Tue, 06 Sep 2022 17:06:27 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id c8-20020a37e108000000b006b9264191b5sm11733673qkm.32.2022.09.06.17.06.26
+        bh=rh1S7QUmN9msoqxI7fEuUgQGRHwthEWICM05M3Wc2aQ=;
+        b=7Fm02j4XQq6r56OGof8mTw3ozNPD0xH7Rb7V9UaQCTnBFKaV6qaMKoHfa5h+8/a3vY
+         w0V+lZAkuUdna9oplxvmMOSn4CbkR9WMa7DZ0Le24w4ioG4lyYdMcaSDNb28M1qs6y17
+         oJEC/56z+rGZLyBjI43VI8fMz9WdZsoEiNABt7cp7iB5fGxpboe8bM3vAm8lAQZx9iwd
+         DzvYRv/ytZW918J5oHm6T65/9IiDyUpaY4Fkj2pW2BVkuroaPE2buDZdC0GnGK3wIg3E
+         g6cW00z6FevyILUiM0FoN7sCMxyWZygp1Cl66Ac3S9X+zf4rhqfQtN2GJCBlxhMXqAAq
+         0oyw==
+X-Gm-Message-State: ACgBeo1Jd6xV4Ug4SNblVH/pvfT1rt3XipVXnEcet63VHvR+cxDDbTtJ
+        dw0dnNCUDK8a8TZdcYtqHqOuHg==
+X-Google-Smtp-Source: AA6agR5jgHStYz/eMHO539QRRnmuJXwgKGRimNvRgmfcAP6PfnrO/RUq4IWvaqCx7ILOoE9XSzYXhw==
+X-Received: by 2002:a17:90b:14d2:b0:1fb:acff:998 with SMTP id jz18-20020a17090b14d200b001fbacff0998mr1007403pjb.70.1662509228243;
+        Tue, 06 Sep 2022 17:07:08 -0700 (PDT)
+Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
+        by smtp.gmail.com with ESMTPSA id y20-20020aa78f34000000b00537b8aa0a46sm11201922pfr.96.2022.09.06.17.07.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 17:06:26 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 00:06:26 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org, boqun.feng@gmail.com
-Subject: Re: [PATCH v5 06/18] rcu: Introduce call_rcu_lazy() API
- implementation
-Message-ID: <Yxfggt1/cLBhUi/y@google.com>
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
- <20220901221720.1105021-7-joel@joelfernandes.org>
- <20220902152132.GA115525@lothringen>
- <Yxa5Ch574cRZxRdo@google.com>
- <20220906151757.GA183806@lothringen>
+        Tue, 06 Sep 2022 17:07:07 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 00:07:03 +0000
+From:   William McVicker <willmcvicker@google.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Sajid Dalvi <sdalvi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] PCI/PM: Switch D3Hot delay to also use usleep_range
+Message-ID: <Yxfgp9DgYc3XU602@google.com>
+References: <20220817230821.47048-1-willmcvicker@google.com>
+ <20220902221340.GA379310@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220906151757.GA183806@lothringen>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220902221340.GA379310@bhelgaas>
+X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 05:17:57PM +0200, Frederic Weisbecker wrote:
-> On Tue, Sep 06, 2022 at 03:05:46AM +0000, Joel Fernandes wrote:
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index 4dc86274b3e8..b201606f7c4f 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -256,6 +256,31 @@ static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
-> >  	return __wake_nocb_gp(rdp_gp, rdp, force, flags);
-> >  }
+On 09/02/2022, Bjorn Helgaas wrote:
+> On Wed, Aug 17, 2022 at 11:08:21PM +0000, Will McVicker wrote:
+> > From: Sajid Dalvi <sdalvi@google.com>
+> > 
+> > Since the PCI spec requires a 10ms D3Hot delay (defined by
+> > PCI_PM_D3HOT_WAIT) and a few of the PCI quirks update the D3Hot delay up
+> > to 120ms, let's add support for both usleep_range and msleep based on
+> > the delay time to improve the delay accuracy.
+> > 
+> > This patch is based off of a commit from Sajid Dalvi <sdalvi@google.com>
+> > in the Pixel 6 kernel tree [1]. Testing on a Pixel 6, found that the
+> > 10ms delay for the Exynos PCIe device was on average delaying for 19ms
+> > when the spec requires 10ms. Switching from msleep to uslseep_range
+> > therefore decreases the resume time on a Pixel 6 on average by 9ms.
+> 
+> Add the "PCIe r6.0, sec 5.9" spec reference for the 10ms delay for
+> transitions to or from D3hot.
+> 
+> s/D3Hot/D3hot/ to match other usage (at least in Linux; the spec does
+> use "D3Hot")
+> 
+> s/uslseep_range/usleep_range/
+> 
+> Add "()" after function names.
+
+Thanks for the suggestions! I'll update these in the next patchset.
+
+> 
+> In the subject, "Switch ... to *also* use usleep_range": what does the
+> "also" mean?  It sounds like it's referring to some other place where
+> we also use usleep_range()?
+
+I was intending to mean usleep_range() will be used when the the delay <=20 ms,
+else msleep() will be used. If we drop msleep() altogether as suggested in your
+comments below, then I can change this to be: "Switch D3hot delay to use
+usleep_range."
+
+> 
+> > [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
+> > 
+> > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > ---
+> >  drivers/pci/pci.c | 16 +++++++++++-----
+> >  1 file changed, 11 insertions(+), 5 deletions(-)
+> > 
+> > v3:
+> >  * Use DIV_ROUND_CLOSEST instead of bit manipulation.
+> >  * Minor refactor to use max() where relavant.
+> > 
+> > v2:
+> >  * Update to use 20-25% upper bound
+> >  * Update to use usleep_range() for <=20ms, else use msleep()
+> > 
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 95bc329e74c0..cfa8386314f2 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -66,13 +66,19 @@ struct pci_pme_device {
 > >  
-> > +/*
-> > + * LAZY_FLUSH_JIFFIES decides the maximum amount of time that
-> > + * can elapse before lazy callbacks are flushed. Lazy callbacks
-> > + * could be flushed much earlier for a number of other reasons
-> > + * however, LAZY_FLUSH_JIFFIES will ensure no lazy callbacks are
-> > + * left unsubmitted to RCU after those many jiffies.
-> > + */
-> > +#define LAZY_FLUSH_JIFFIES (10 * HZ)
-> > +unsigned long jiffies_till_flush = LAZY_FLUSH_JIFFIES;
-> 
-> Still not static.
-> 
-> > @@ -293,12 +322,16 @@ static void wake_nocb_gp_defer(struct rcu_data *rdp, int waketype,
-> >   * proves to be initially empty, just return false because the no-CB GP
-> >   * kthread may need to be awakened in this case.
-> >   *
-> > + * Return true if there was something to be flushed and it succeeded, otherwise
-> > + * false.
-> > + *
-> 
-> This kind of contradict the comment that follows. Not sure you need to add
-> that line because the existing comment seem to cover it.
-> 
-> >   * Note that this function always returns true if rhp is NULL.
-> 
-> >   */
-> >  static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> > -				     unsigned long j)
-> > +				     unsigned long j, unsigned long flush_flags)
+> >  static void pci_dev_d3_sleep(struct pci_dev *dev)
 > >  {
-> >  	struct rcu_cblist rcl;
-> > +	bool lazy = flush_flags & FLUSH_BP_LAZY;
+> > -	unsigned int delay = dev->d3hot_delay;
+> > +	unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
 > >  
-> >  	WARN_ON_ONCE(!rcu_rdp_is_offloaded(rdp));
-> >  	rcu_lockdep_assert_cblist_protected(rdp);
-> > @@ -326,13 +372,20 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> >   * Note that this function always returns true if rhp is NULL.
-> >   */
-> >  static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
-> > -				  unsigned long j)
-> > +				  unsigned long j, unsigned long flush_flags)
-> >  {
-> > +	bool ret;
-> > +
-> >  	if (!rcu_rdp_is_offloaded(rdp))
-> >  		return true;
-> >  	rcu_lockdep_assert_cblist_protected(rdp);
-> >  	rcu_nocb_bypass_lock(rdp);
-> > -	return rcu_nocb_do_flush_bypass(rdp, rhp, j);
-> > +	ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
-> > +
-> > +	if (flush_flags & FLUSH_BP_WAKE)
-> > +		wake_nocb_gp(rdp, true);
+> > -	if (delay < pci_pm_d3hot_delay)
+> > -		delay = pci_pm_d3hot_delay;
+> > +	if (delay_ms) {
+> > +		if (delay_ms <= 20) {
+> > +			/* Use a 20% upper bound with 1ms minimum */
+> > +			unsigned int upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U);
+> >  
+> > -	if (delay)
+> > -		msleep(delay);
+> > +			usleep_range(delay_ms * USEC_PER_MSEC,
+> > +				     (delay_ms + upper) * USEC_PER_MSEC);
+> > +		} else {
+> > +			msleep(delay_ms);
 > 
-> Why the true above?
+> I hate the fact that we have to check for those ancient Intel chips at
+> all, but having to read through the usleep_range() vs msleep() thing
+> is just painful.  
 > 
-> Also should we check if the wake up is really necessary (otherwise it means we
-> force a wake up for all rdp's from rcu_barrier())?
+> fsleep() would be much simpler, but I am sympathetic that the fsleep()
+> range of 10-20ms probably wouldn't get the benefit you want.
 > 
->        was_alldone = rcu_segcblist_pend_cbs(&rdp->cblist);
->        ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
->        if (was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist))
->        	  wake_nocb_gp(rdp, false);
+> I wish Documentation/timers/timers-howto.rst included a reason why we
+> should use msleep() instead of usleep_range() for longer sleeps.  Is
+> there a reason not to do this:
 
-You mean something like the following right? Though I'm thinking if its
-better to call wake_nocb_gp() from tree.c in entrain() and let that handle
-the wake. That way, we can get rid of the extra FLUSH_BP flags as well and
-let the flush callers deal with the wakeups..
+I'm not familiar with the reasons behind these two beside what the
+documentation states. I don't know what happens when you use usleep_range()
+with a delay >20ms.
 
-Anyway, for testing this should be good...
+> 
+>    static void pci_dev_d3_sleep(struct pci_dev *dev)
+>    {
+>         unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
+>         unsigned int upper;
+> 
+>         if (delay_ms) {
+>                 /* 20% upper bound, 1ms minimum */
+>                 upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U)
+>                 usleep_range(delay_ms * USEC_PER_MSEC,
+>                              (delay_ms + upper) * USEC_PER_MSEC);
+>         }
+>    }
+> 
+> Since the Intel quirk is for 120ms, a 20% upper bound would make the
+> range 120-144ms.  Would that be a problem?  Those chips are ancient;
+> the list is untouched since it was added in 2006.  The point of
+> usleep_range() is to allow the scheduler to coalesce the wakeup with
+> other events, so it seems unlikely we'd ever wait the whole 144ms.  I
+> vote for optimizing the readability over sleep/resume time for
+> already-broken chips.
 
----8<-----------------------
+I'm totally fine with this, but I don't really know what the impact would be to
+those old Intel chips.
 
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index bd8f39ee2cd0..e3344c262672 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -382,15 +382,19 @@ static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 				  unsigned long j, unsigned long flush_flags)
- {
- 	bool ret;
-+	bool was_alldone;
- 
- 	if (!rcu_rdp_is_offloaded(rdp))
- 		return true;
- 	rcu_lockdep_assert_cblist_protected(rdp);
- 	rcu_nocb_bypass_lock(rdp);
-+	if (flush_flags & FLUSH_BP_WAKE)
-+		was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
-+
- 	ret = rcu_nocb_do_flush_bypass(rdp, rhp, j, flush_flags);
- 
--	if (flush_flags & FLUSH_BP_WAKE)
--		wake_nocb_gp(rdp, true);
-+	if (flush_flags & FLUSH_BP_WAKE && was_alldone)
-+		wake_nocb_gp(rdp, false);
- 
- 	return ret;
- }
--- 
-2.37.2.789.g6183377224-goog
+> 
+> Bjorn
 
+Thanks,
+Will

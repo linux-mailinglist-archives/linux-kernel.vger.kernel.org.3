@@ -2,82 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8665B0580
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E065B0557
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiIGNoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S229998AbiIGNi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiIGNnN (ORCPT
+        with ESMTP id S230076AbiIGNiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:43:13 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E9B65278
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:41:58 -0700 (PDT)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MN3L43CTKz688vC;
-        Wed,  7 Sep 2022 21:40:44 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Wed, 7 Sep 2022 15:41:28 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Sep 2022 14:41:25 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <robin.murphy@arm.com>, <joro@8bytes.org>, <will@kernel.org>
-CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <jsnitsel@redhat.com>,
-        <haifeng.zhao@linux.intel.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH v4 3/3] iova: Remove iovad->rcaches check in iova_rcache_get()
-Date:   Wed, 7 Sep 2022 21:34:41 +0800
-Message-ID: <1662557681-145906-4-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1662557681-145906-1-git-send-email-john.garry@huawei.com>
-References: <1662557681-145906-1-git-send-email-john.garry@huawei.com>
+        Wed, 7 Sep 2022 09:38:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4266D9C518;
+        Wed,  7 Sep 2022 06:37:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A969B81CE0;
+        Wed,  7 Sep 2022 13:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE208C433D6;
+        Wed,  7 Sep 2022 13:37:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662557870;
+        bh=JKL1A4uDw3eUkWb1gxMvwAzQoLvUzjVP5BQQd7t5e+A=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=HOzquzxAh7+m2PKERBU0uXXOm8FN9n98uxekjmgI7YoSKdeQSrmLU/em089H9QMfD
+         VB6nZzWIrMRmpkdAcQXlr8gATjISg7fSPzl9ilRAMdtbrBc8pkouKwONq/eIplfNDw
+         SoAM3jk9Pg4Hhu5qmvzoyCisIqN7mej0jMn81LD5U3TVTirHRg2AdbkywbQvkAgbiR
+         /Vp9NT3ESVfUmmYocoEfmTR8AluwbnbJvIxA9+WKvjRCsCTz5rIp3abQG5OK63730j
+         /fNC/fAy4QuOnYv8ktoapbDbmLbllzHU9FRfUAcpofoP4h3iT4/VXD5RRhmf1D6N/X
+         sVRtGsbC0Ln0A==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>
+In-Reply-To: <20220906121110.301900-1-krzysztof.kozlowski@linaro.org>
+References: <20220906121110.301900-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: qcom,q6core: remove binding
+Message-Id: <166255786763.130875.2656165891607180417.b4-ty@kernel.org>
+Date:   Wed, 07 Sep 2022 14:37:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The iovad->rcaches check in iova_rcache_get() is pretty much useless
-without the same check in iova_rcache_insert().
+On Tue, 6 Sep 2022 14:11:10 +0200, Krzysztof Kozlowski wrote:
+> qcom,q6core is already described in soc/qcom/qcom,apr.yaml.
+> 
+> 
 
-Instead of adding this symmetric check to fastpath iova_rcache_insert(),
-drop the check in iova_rcache_get() in favour of making the IOVA domain
-rcache init more robust to failure in future.
+Applied to
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/iommu/iova.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 8aece052ce72..a44ad92fc5eb 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -875,7 +875,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
- {
- 	unsigned int log_size = order_base_2(size);
- 
--	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
-+	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
- 		return 0;
- 
- 	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
--- 
-2.25.1
+Thanks!
 
+[1/1] ASoC: dt-bindings: qcom,q6core: remove binding
+      commit: e9d967679e803e7472f06642156f0bb029e26655
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

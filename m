@@ -2,111 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FC85B0422
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC7C5B0429
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiIGMn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S229838AbiIGMqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIGMnY (ORCPT
+        with ESMTP id S229498AbiIGMqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:43:24 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2F7B602E;
-        Wed,  7 Sep 2022 05:43:24 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d12so14405809plr.6;
-        Wed, 07 Sep 2022 05:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=OxouQ5WxLpijwv6+yghkWHdrcMoOwxdw8NO7YqYNjyY=;
-        b=SX6UqCQLtoKG2CC3reO2d9Myf5PacChWgHFvZAIDQjifSOk3nrK10lWB4+B312mOD5
-         UQF8S6NuClZcNvcayy9ZVEB8+hW48A0c1ZIx7ZA+aQ1ZOcFW0aHCJIHEVAFKI7tSHCcM
-         iFmkwfYn9rggvF6V8BQJZT3lGRamSP9y1TcAueh7DK1la8BIjWZtY5Q4P178wrgW4FbR
-         RHnK1ti8goUXju6QUyixEGhDDYutYfEf6gawRR7rC3Xj06WbFX4gNxOndGcvmHtwqnza
-         0JDRlT5QrBGuCJZ7IuGbK3GDcZ8m/phF+7IoQ4oo963vBRPeVQXK7vcMl6UO8biu6rZo
-         nokA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=OxouQ5WxLpijwv6+yghkWHdrcMoOwxdw8NO7YqYNjyY=;
-        b=uqBah+MFAHvl2U8/hPevfJTfI449hb5g7ge7cBs18q+2JgfJURfw/WJ81y2FfjJJ8I
-         ujAstA9ARwqym/tbX7QUlMKifFWaueMXd/3HHovC8sLXz+ux5HFDUF7la/01P/bvIOi5
-         CErr9MdtMqZ5e3Rr5hLQXw3b1bhSuMFvyE8/F9E026hfyDxmOPq3DqjjJy7oSzZYpfHa
-         lKWR+lqzob5nybNkJATf4Mb4eiVa5fzC/9mjAmC/M55FGB70Hq1htoX5Xmc/hrjdx97P
-         EhzjfKI+oOW1grwr19xJQYqkLN4xVkKU/LgFktlBYVUjf0kTJEzjWhgnm8e+j6tIh8G9
-         2J/Q==
-X-Gm-Message-State: ACgBeo1RS8DI9+OE3AleOiEcdmDxbcncMVtsuyyf0GTZQdScTRKKshLu
-        RKsnODbdW8ShIRn70wMOOvc=
-X-Google-Smtp-Source: AA6agR6uE1c1EGxGfC6KSrOBWSEMrLUKA3oWheaqXMwdlvYTdK6x9Qjjg/P3rXJKEQb7RaeZW0HiMQ==
-X-Received: by 2002:a17:902:ce8f:b0:176:d5af:a175 with SMTP id f15-20020a170902ce8f00b00176d5afa175mr3756453plg.123.1662554603657;
-        Wed, 07 Sep 2022 05:43:23 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-9.three.co.id. [180.214.233.9])
-        by smtp.gmail.com with ESMTPSA id jb1-20020a170903258100b00176953f7997sm8823420plb.158.2022.09.07.05.43.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 05:43:23 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6F1DE103154; Wed,  7 Sep 2022 19:43:19 +0700 (WIB)
-Date:   Wed, 7 Sep 2022 19:43:19 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/155] 5.19.8-rc1 review
-Message-ID: <YxiR5/TLJz8gF4/i@debian.me>
-References: <20220906132829.417117002@linuxfoundation.org>
+        Wed, 7 Sep 2022 08:46:31 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE152B99DF;
+        Wed,  7 Sep 2022 05:46:30 -0700 (PDT)
+Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D7E246DD;
+        Wed,  7 Sep 2022 14:46:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662554789;
+        bh=eVJHmAx1xqqZnUZxB7fFigoK7ybBTgGYCFbWTRpq9x4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=f7cYNfp6DK8sWV/fU5SshfhcQLf8ecnZtjtd+lEi4xUELxO9E6tnP6fj6d1C/VNOA
+         xIxxyoy4DPKsFtJyi63cot52dgnOWOyU1e6FSXLElwjqzZ1CrZt4W1eKDG7tCz7r8h
+         GuLyTxXEBiUIuL2ziRWxgOmB+2lV4cKMvaGHA7o0=
+Message-ID: <a194a9c5-ac8e-cf86-34cd-4f3a3cb6f6ec@ideasonboard.com>
+Date:   Wed, 7 Sep 2022 15:46:26 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dqXNDUcoD0oOGUsv"
-Content-Disposition: inline
-In-Reply-To: <20220906132829.417117002@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] media: staging/intel-ipu3: Finalize subdev initialization
+ to allcoate active state
+Content-Language: en-US
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220907123359.1275322-1-luzmaximilian@gmail.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20220907123359.1275322-1-luzmaximilian@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Maximilian,
 
---dqXNDUcoD0oOGUsv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 07/09/2022 15:33, Maximilian Luz wrote:
+> Commit f69952a4dc1e ("media: subdev: add active state to struct
+> v4l2_subdev") introduced the active_state member to struct v4l2_subdev.
+> This state needs to be allocated via v4l2_subdev_init_finalize(). The
+> intel-ipu3 driver unfortunately does not do that, due to which,
 
-On Tue, Sep 06, 2022 at 03:29:08PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.8 release.
-> There are 155 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+That is fine, a driver only needs to allocate the active state if it uses
+the active state.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+> active_state is NULL and we run into an oops (NULL pointer dereference)
+> when that state is accessed.
+> 
+> In particular, this happens subdev in IOCTLs as commit 3cc7a4bbc381
+> ("media: subdev: pass also the active state to subdevs from ioctls")
+> passes that state on to the subdev IOCTLs. An example scenario where
+> this happens is running libcamera's qcam or cam on a device with IPU3,
+> for example the Microsoft Surface Book 2. In this case, the oops is
+> reproducibly in v4l2_subdev_get_try_crop(), called via
+> imgu_subdev_set_selection().
+> 
+> To fix this, allocate the active_state member via
+> v4l2_subdev_init_finalize().
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>=20
+This is not a correct fix. Sakari has sent (and maybe pushed?) this:
 
---=20
-An old man doll... just what I always wanted! - Clara
+https://lore.kernel.org/all/20220825190351.3241444-1-sakari.ailus@linux.intel.com/
 
---dqXNDUcoD0oOGUsv
-Content-Type: application/pgp-signature; name="signature.asc"
+  Tomi
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxiR4QAKCRD2uYlJVVFO
-o3N3AQCQ7ovJeAmsdf4F/zQCExVGmluCMm4OS9MtQ80FO3EbTgEA4cGk2ZeOJfYX
-IHaU7W5LTKNHEA4hgwAj+AgmoyM+Dgo=
-=d62W
------END PGP SIGNATURE-----
+> Link: https://github.com/linux-surface/linux-surface/issues/907
+> Fixes: 3cc7a4bbc381 ("media: subdev: pass also the active state to subdevs from ioctls")
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+> ---
+>   drivers/staging/media/ipu3/ipu3-v4l2.c | 12 +++++++++++-
+>   1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+> index d1c539cefba8..84ab98ba9a2e 100644
+> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
+> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+> @@ -1093,10 +1093,18 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
+>   			"failed to create subdev v4l2 ctrl with err %d", r);
+>   		goto fail_subdev;
+>   	}
+> +
+> +	r = v4l2_subdev_init_finalize(&imgu_sd->subdev);
+> +	if (r) {
+> +		dev_err(&imgu->pci_dev->dev,
+> +			"failed to initialize subdev (%d)\n", r);
+> +		goto fail_subdev;
+> +	}
+> +
+>   	r = v4l2_device_register_subdev(&imgu->v4l2_dev, &imgu_sd->subdev);
+>   	if (r) {
+>   		dev_err(&imgu->pci_dev->dev,
+> -			"failed initialize subdev (%d)\n", r);
+> +			"failed to register subdev (%d)\n", r);
+>   		goto fail_subdev;
+>   	}
+>   
+> @@ -1104,6 +1112,7 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
+>   	return 0;
+>   
+>   fail_subdev:
+> +	v4l2_subdev_cleanup(&imgu_sd->subdev);
+>   	v4l2_ctrl_handler_free(imgu_sd->subdev.ctrl_handler);
+>   	media_entity_cleanup(&imgu_sd->subdev.entity);
+>   
+> @@ -1275,6 +1284,7 @@ static void imgu_v4l2_subdev_cleanup(struct imgu_device *imgu, unsigned int i)
+>   	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[i];
+>   
+>   	v4l2_device_unregister_subdev(&imgu_pipe->imgu_sd.subdev);
+> +	v4l2_subdev_cleanup(&imgu_pipe->imgu_sd.subdev);
+>   	v4l2_ctrl_handler_free(imgu_pipe->imgu_sd.subdev.ctrl_handler);
+>   	media_entity_cleanup(&imgu_pipe->imgu_sd.subdev.entity);
+>   }
 
---dqXNDUcoD0oOGUsv--

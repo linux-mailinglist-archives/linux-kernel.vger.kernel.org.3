@@ -2,195 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE075B0954
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DA65B095E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiIGP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S229964AbiIGP7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiIGP56 (ORCPT
+        with ESMTP id S229891AbiIGP7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:57:58 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E2096759
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:57:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id k17so9014624wmr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=YZgl4dnyb1fLqxxsB9m/gywD8hhxQB+iJpjv0XCZv3k=;
-        b=GHe3D3Fp1nzIGOlU+T0DPDqLoSiCtfNeLjow+OU3RCeYo0rrXU6AYGzmrteJzcfcNG
-         8IbMElUTZXc2/PPrkqNI1/3ET176TWgAMpXMBRwhofqF5wuxi44uSz4Pp8VacNyzE1Ab
-         jiznOSBzjdfth/+WCwRYbB8eoH4gd2fbkTVYzjo9gkeM5Pw9DgpmWaGb6eF1c47efhvk
-         Fs0lJRpZ6qpONA2aMe3Q9yxrkMoovTS3V8JKf7cIOubX1n674+iJiBajE/4HWG1lWSEM
-         UECU+4FjzxKyclniILVYmv6cIk4Ts7PJahJjj3Awc1h4PfAjCyJgoQKQGvpgb6tLvi5l
-         wl5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=YZgl4dnyb1fLqxxsB9m/gywD8hhxQB+iJpjv0XCZv3k=;
-        b=bb1V6Wo8HNfDdA2cEVxShIFsHpTNYBDofuilyRYILizWOrxOTs0zVpE4aXrJQ5zPzz
-         D8Ghlsxdb/dAJnOwlj7YyYVY8DLLfU/VUXdpZsrj4/IcsOnsPv/Dele6RoFYTQfdm1fY
-         dVadBbzq5uLCwFQPIZISB35P4898g1WNuFCHy0fRb6o20XmnXhVKKv61XEW+y61QM2yU
-         MAlFSm1SoT6ywTXTAZa+Wc7XmQnPgehDBT8lKLKSzKqGJ8znHRM9fSTBMSdSEvldBBfq
-         8oqGAAA1+Cbw7HvgcHLGNzAliLB1jUHTne7BnLEKsUikRjBB29MddfxxRWNYztCxh7Lb
-         VykQ==
-X-Gm-Message-State: ACgBeo0aAuaadK07AhfntdDZ9ee6ZQTIdMV7aolb7kX2r5HJpO+D0Wcc
-        JfotCa+g0r7w4m1n/D4KqzapNQ==
-X-Google-Smtp-Source: AA6agR4I8nNkgxUAOZJ4jnslbwda1RWWniDCV+FvB/sanLgip20cgQpB04iheQ4BPw6iEeYpLC2TZQ==
-X-Received: by 2002:a1c:7414:0:b0:3a5:fd9e:e629 with SMTP id p20-20020a1c7414000000b003a5fd9ee629mr17428341wmc.194.1662566274794;
-        Wed, 07 Sep 2022 08:57:54 -0700 (PDT)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id d11-20020adfe84b000000b0021f131de6aesm17867390wrn.34.2022.09.07.08.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 08:57:54 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     ast@kernel.org
-Cc:     Punit Agrawal <punit.agrawal@bytedance.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhoufeng.zf@bytedance.com,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, jolsa@kernel.org
-Subject: [PATCH v2] bpf: Simplify code by using for_each_cpu_wrap()
-Date:   Wed,  7 Sep 2022 16:57:46 +0100
-Message-Id: <20220907155746.1750329-1-punit.agrawal@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 7 Sep 2022 11:59:14 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3AA8A7D9
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662566353; x=1694102353;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xxygWsm5AUUOaRGbBHQWjvhLG2/0eVCA9vCpC6pnZEQ=;
+  b=YW9Udfw9HRcQXbGsTlagFBx11FLjwB9l3SqQXDuQk2ydm2/DNr1UXLdA
+   yrP/okQ2ixmx3ntG8TWePM3wACEBjZ3HgkCk48dEfXkt9Ajvi4PjkjZ3d
+   BpoXC0yjQJDjIRn9mTCNuHIY4YNE0bnv9MCvt0UMDm7jSv0Uhn97wMEU1
+   9B4OyTzRFjN/0KRy/ZeK/04wWNm4Ll9M8fWTcIy/rMAhyh5hL/3R/A2Mu
+   JvYBka7F+XZpCmzqXPUNsYIgghLpUpJzlplDulzZWokdj5j4rVJmqgu25
+   611hzuTAmqNMPrFCDvirkAt5r36kq3vzedqq9kPfG4YEBBcRXyeGAKqTU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="294501370"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="294501370"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:58:40 -0700
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="676247450"
+Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 08:58:36 -0700
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Subject: [PATCH v8 00/16] GSC support for XeHP SDV and DG2
+Date:   Wed,  7 Sep 2022 18:57:57 +0300
+Message-Id: <20220907155813.1427526-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the percpu freelist code, it is a common pattern to iterate over
-the possible CPUs mask starting with the current CPU. The pattern is
-implemented using a hand rolled while loop with the loop variable
-increment being open-coded.
+Add GSC support for XeHP SDV and DG2 platforms.
 
-Simplify the code by using for_each_cpu_wrap() helper to iterate over
-the possible cpus starting with the current CPU. As a result, some of
-the special-casing in the loop also gets simplified.
+The series includes changes for the mei driver:
+- add ability to use polling instead of interrupts
+- add ability to use extended timeouts
+- setup extended operational memory for GSC
 
-No functional change intended.
+The series includes changes for the i915 driver:
+- allocate extended operational memory for GSC
+- GSC on XeHP SDV offsets and definitions
 
-Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
----
-v1 -> v2:
-* Fixed the incorrect transformation changing semantics of __pcpu_freelist_push_nmi()
+This patch set should be merged via gfx tree as
+the auxiliary device belongs there.
 
-Previous version -
-v1: https://lore.kernel.org/all/20220817130807.68279-1-punit.agrawal@bytedance.com/
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
 
- kernel/bpf/percpu_freelist.c | 48 ++++++++++++------------------------
- 1 file changed, 16 insertions(+), 32 deletions(-)
 
-diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
-index 00b874c8e889..b6e7f5c5b9ab 100644
---- a/kernel/bpf/percpu_freelist.c
-+++ b/kernel/bpf/percpu_freelist.c
-@@ -58,23 +58,21 @@ static inline void ___pcpu_freelist_push_nmi(struct pcpu_freelist *s,
- {
- 	int cpu, orig_cpu;
- 
--	orig_cpu = cpu = raw_smp_processor_id();
-+	orig_cpu = raw_smp_processor_id();
- 	while (1) {
--		struct pcpu_freelist_head *head;
-+		for_each_cpu_wrap(cpu, cpu_possible_mask, orig_cpu) {
-+			struct pcpu_freelist_head *head;
- 
--		head = per_cpu_ptr(s->freelist, cpu);
--		if (raw_spin_trylock(&head->lock)) {
--			pcpu_freelist_push_node(head, node);
--			raw_spin_unlock(&head->lock);
--			return;
-+			head = per_cpu_ptr(s->freelist, cpu);
-+			if (raw_spin_trylock(&head->lock)) {
-+				pcpu_freelist_push_node(head, node);
-+				raw_spin_unlock(&head->lock);
-+				return;
-+			}
- 		}
--		cpu = cpumask_next(cpu, cpu_possible_mask);
--		if (cpu >= nr_cpu_ids)
--			cpu = 0;
- 
- 		/* cannot lock any per cpu lock, try extralist */
--		if (cpu == orig_cpu &&
--		    pcpu_freelist_try_push_extra(s, node))
-+		if (pcpu_freelist_try_push_extra(s, node))
- 			return;
- 	}
- }
-@@ -125,13 +123,12 @@ static struct pcpu_freelist_node *___pcpu_freelist_pop(struct pcpu_freelist *s)
- {
- 	struct pcpu_freelist_head *head;
- 	struct pcpu_freelist_node *node;
--	int orig_cpu, cpu;
-+	int cpu;
- 
--	orig_cpu = cpu = raw_smp_processor_id();
--	while (1) {
-+	for_each_cpu_wrap(cpu, cpu_possible_mask, raw_smp_processor_id()) {
- 		head = per_cpu_ptr(s->freelist, cpu);
- 		if (!READ_ONCE(head->first))
--			goto next_cpu;
-+			continue;
- 		raw_spin_lock(&head->lock);
- 		node = head->first;
- 		if (node) {
-@@ -140,12 +137,6 @@ static struct pcpu_freelist_node *___pcpu_freelist_pop(struct pcpu_freelist *s)
- 			return node;
- 		}
- 		raw_spin_unlock(&head->lock);
--next_cpu:
--		cpu = cpumask_next(cpu, cpu_possible_mask);
--		if (cpu >= nr_cpu_ids)
--			cpu = 0;
--		if (cpu == orig_cpu)
--			break;
- 	}
- 
- 	/* per cpu lists are all empty, try extralist */
-@@ -164,13 +155,12 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
- {
- 	struct pcpu_freelist_head *head;
- 	struct pcpu_freelist_node *node;
--	int orig_cpu, cpu;
-+	int cpu;
- 
--	orig_cpu = cpu = raw_smp_processor_id();
--	while (1) {
-+	for_each_cpu_wrap(cpu, cpu_possible_mask, raw_smp_processor_id()) {
- 		head = per_cpu_ptr(s->freelist, cpu);
- 		if (!READ_ONCE(head->first))
--			goto next_cpu;
-+			continue;
- 		if (raw_spin_trylock(&head->lock)) {
- 			node = head->first;
- 			if (node) {
-@@ -180,12 +170,6 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
- 			}
- 			raw_spin_unlock(&head->lock);
- 		}
--next_cpu:
--		cpu = cpumask_next(cpu, cpu_possible_mask);
--		if (cpu >= nr_cpu_ids)
--			cpu = 0;
--		if (cpu == orig_cpu)
--			break;
- 	}
- 
- 	/* cannot pop from per cpu lists, try extralist */
+V2: rebase over merged DG1 series and DG2 enablement patch,
+    fix commit messages
+
+V3: rebase over latest tip
+
+V4: add missed changelog in pxp dbugfs patch
+
+V5: rebase over latest tip
+    fix changelog in pxp dbugfs patch
+    put HAX patch last to the ease of merging
+    reorder patches in the series
+
+V6: change prefix from 'drm/i915/gsc:' to 'mei' in patch:
+        mei: add slow_fw flag to the mei auxiliary device
+    Address following checkpatch warnings:
+        CHECK:PREFER_KERNEL_TYPES: Prefer kernel type 'u32' over 'uint32_t'
+        FILE: drivers/misc/mei/mkhi.h:54:
+        +	uint32_t flags; 
+        
+        -:51: CHECK:UNNECESSARY_PARENTHESES: Unnecessary parentheses around 'cldev->bus->pxp_mode != MEI_DEV_PXP_INIT'
+        #51: FILE: drivers/misc/mei/bus-fixup.c:257:
+        +	if (!cldev->bus->fw_f_fw_ver_supported &&
+        +	    (cldev->bus->pxp_mode != MEI_DEV_PXP_INIT)
+    
+    Remove some spurious code formatting changes in:
+    drm/i915/gsc: allocate extended operational memory in LMEM
+
+V7: Add new patch to add kdoc for mei_aux_device structure.
+    Rename slow_fw to slow_firmware flag.
+    Use drm_dbg/err() functions instead of dev_dbg/err() in i195
+    codebase.
+
+V8:
+   1. Update copyright dates
+   1. Add kdoc and comments to mei_me_polling_thread()
+   2. Fix pgi->d0i3 timeout in mei_me_d0i3_enter_sync()
+   3. <linux/types.h> is enough for mkhi header.
+   4. drop MCHI_GROUP_ID definition it is not used
+   5. Setup default PXP state
+   6. Add PXP mode kdoc
+   7. Add new patch mei: drop ready bits check after start
+
+
+Alexander Usyskin (5):
+  drm/i915/gsc: add slow_firmware flag to the gsc device definition
+  drm/i915/gsc: add GSC XeHP SDV platform definition
+  mei: gsc: wait for reset thread on stop
+  mei: extend timeouts on slow devices.
+  mei: drop ready bits check after start
+
+Daniele Ceraolo Spurio (1):
+  HAX: drm/i915: force INTEL_MEI_GSC on for CI
+
+Tomas Winkler (7):
+  mei: add kdoc for struct mei_aux_device
+  mei: add slow_firmware flag to the mei auxiliary device
+  mei: gsc: use polling instead of interrupts
+  mei: mkhi: add memory ready command
+  mei: gsc: setup gsc extended operational memory
+  mei: debugfs: add pxp mode to devstate in debugfs
+  drm/i915/gsc: allocate extended operational memory in LMEM
+
+Vitaly Lubart (3):
+  drm/i915/gsc: skip irq initialization if using polling
+  mei: bus: export common mkhi definitions into a separate header
+  mei: gsc: add transition to PXP mode in resume flow
+
+ drivers/gpu/drm/i915/Kconfig.debug  |   1 +
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 118 ++++++++++++++++++++++--
+ drivers/gpu/drm/i915/gt/intel_gsc.h |   3 +
+ drivers/misc/mei/bus-fixup.c        | 106 ++++++++++++++-------
+ drivers/misc/mei/client.c           |  16 ++--
+ drivers/misc/mei/debugfs.c          |  19 +++-
+ drivers/misc/mei/gsc-me.c           |  77 ++++++++++++++--
+ drivers/misc/mei/hbm.c              |  14 +--
+ drivers/misc/mei/hw-me-regs.h       |   9 +-
+ drivers/misc/mei/hw-me.c            | 138 ++++++++++++++++++++++++----
+ drivers/misc/mei/hw-me.h            |  17 +++-
+ drivers/misc/mei/hw-txe.c           |   4 +-
+ drivers/misc/mei/hw.h               |   7 +-
+ drivers/misc/mei/init.c             |  35 ++++---
+ drivers/misc/mei/main.c             |   4 +-
+ drivers/misc/mei/mei_dev.h          |  35 ++++++-
+ drivers/misc/mei/mkhi.h             |  69 ++++++++++++++
+ drivers/misc/mei/pci-me.c           |   4 +-
+ include/linux/mei_aux.h             |  12 +++
+ 19 files changed, 574 insertions(+), 114 deletions(-)
+ create mode 100644 drivers/misc/mei/mkhi.h
+
 -- 
-2.35.1
+2.37.2
 

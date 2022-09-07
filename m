@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756A55B0D97
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D9A5B0D6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiIGT6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S229655AbiIGTr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiIGT6n (ORCPT
+        with ESMTP id S229506AbiIGTr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:58:43 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3642AA5992;
-        Wed,  7 Sep 2022 12:58:41 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 287JlHCp027774;
-        Wed, 7 Sep 2022 14:47:17 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 287JlFIx027773;
-        Wed, 7 Sep 2022 14:47:15 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 7 Sep 2022 14:47:15 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Menglong Dong <menglong8.dong@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>, kuba@kernel.org,
-        miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH net-next v4] net: skb: prevent the split of kfree_skb_reason() by gcc
-Message-ID: <20220907194715.GK25951@gate.crashing.org>
-References: <CADxym3Yxq0k_W43kVjrofjNoUUag3qwmpRGLLAQL1Emot3irPQ@mail.gmail.com> <20220818165838.GM25951@gate.crashing.org> <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com> <20220819152157.GO25951@gate.crashing.org> <CADxym3Y-=6pRP=CunxRomfwXf58k0LyLm510WGtzsBnzjqdD4g@mail.gmail.com> <871qt86711.fsf@oldenburg.str.redhat.com> <CADxym3Z7WpPbX7VSZqVd+nVnbaO6HvxV7ak58TXBCqBqodU+Jg@mail.gmail.com> <87edwo65lw.fsf@oldenburg.str.redhat.com> <20220906153046.GD25951@gate.crashing.org> <87zgfbnh81.fsf@oldenburg.str.redhat.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Wed, 7 Sep 2022 15:47:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F30A345E;
+        Wed,  7 Sep 2022 12:47:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 690F0B81E77;
+        Wed,  7 Sep 2022 19:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488E8C433C1;
+        Wed,  7 Sep 2022 19:47:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662580074;
+        bh=2m8bQOz6CPem+JfZFDVne0K71gnYpKvVLgIRrmDybdQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gUZXYOCjOlaeDblqkN3vqocij75zRoua+//wm1T5ZzDD0pBG+VKSRqzKNQulS81kz
+         gqL9i682Pa3Uf6oh7GxZL6bgI4PVSLMdbrMlrg/qpE8SgqeIbjjgkDhFt+ur7/8l8B
+         4tZP1mdDg0bCEfLUoQlxcCp1H82KSgoJGfgjd/Y7jh5xQ/iCaUGeY8t58gddY3T7bD
+         Ee3Wm4LNYMxms5czvn+WOl+uaaz6PI/BV++XACIR77ZQP4Sus+ncrCZ28IdQz7/ILq
+         uOOu+eGb/UufY8tq9zjvihownF7gkSALd9TDJw4dLyP7CtaU7Uk8Kg7wBQtjkhW9c+
+         iZ4ebkEdl+/DQ==
+Date:   Wed, 7 Sep 2022 21:47:49 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Josef Johansson <josef@oderland.se>
+Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
+Message-ID: <Yxj1ZQjBfdG1u93d@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Josef Johansson <josef@oderland.se>
+References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t4qTkcah3Kmi0e32"
 Content-Disposition: inline
-In-Reply-To: <87zgfbnh81.fsf@oldenburg.str.redhat.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 08:59:26PM +0200, Florian Weimer wrote:
-> * Segher Boessenkool:
-> 
-> > On Tue, Sep 06, 2022 at 02:37:47PM +0200, Florian Weimer wrote:
-> >> > On Mon, Aug 22, 2022 at 4:01 PM Florian Weimer <fweimer@redhat.com> wrote:
-> >> > I did some research on the 'sibcalls' you mentioned above. Feel like
-> >> > It's a little similar to 'inline', and makes the callee use the same stack
-> >> > frame with the caller, which obviously will influence the result of
-> >> > '__builtin_return_address'.
-> >
-> > Sibling calls are essentially calls that can be replaced by jumps (aka
-> > "tail call"), without needing a separate entry point to the callee.
-> >
-> > Different targets can have a slightly different implementation and
-> > definition of what exactly is a sibling call, but that's the gist.
-> >
-> >> > Hmm......but I'm not able to find any attribute to disable this optimization.
-> >> > Do you have any ideas?
-> >> 
-> >> Unless something changed quite recently, GCC does not allow disabling
-> >> the optimization with a simple attribute (which would have to apply to
-> >> function pointers as well, not functions).
-> >
-> > It isn't specified what a sibling call exactly *is*, certainly not on C
-> > level (only in the generated machine code), and the details differs per
-> > target.
-> 
-> Sure, but GCC already disables this optimization in a generic fashion
-> for noreturn calls.  It should be possible to do the same based another
-> function attribute.
 
-My point is that disabling sibling calls does not necessarily do what
-you really want, certainly not on all targets.  Many targets have their
-own frame optimisations and prologue/epilogue optimisations as well.
+--t4qTkcah3Kmi0e32
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But you can just do
-  void f(void) __attribute__((optimize("no-optimize-sibling-calls")));
-(in my previous example), and that works: it disables the (generic)
-sibling call optimisation.  This may or may not do what you actually
-want though.
+On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
+> ACPI core in conjunction with platform driver core provides
+> an infrastructure to enumerate ACPI devices. Use it in order
+> to remove a lot of boilerplate code.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Josef, do you have resources to test this patch before I apply it?
 
 
-Segher
+--t4qTkcah3Kmi0e32
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY9WUACgkQFA3kzBSg
+KbZgRA/zB5zY6AwlqRdSxEQrw3ZcMMFggkIbmhIQ9NAJFW4J/gyVxoWQnWsLAIqk
+Z9SNO1/3Og+errV48b0/qgkYusdkfvt7JqsBjLpaHmuV1QBJr+BfIuXJgBCjeiyN
+WlAYbGSUWNb6gqxl+aoxmgM4waMvE7OA6JelR2G8zkzWxcBg8SpuB6mPHO8v4RrL
+TMSKodQzkfjIDGaDbsYRE9OJWZ8pCoJOGTl401Hsi3fZNL61oAb9/6fgUMQuP9hl
+nVvNIbRcnXv83vbrZseEswipa9pdiAG45que5OfOVlm6CuWe9d1/7nqYgk4tiCio
+gczA5ys+wIPlWsxBTYmmd/poXTiVnqbH9exFPpSZjYke+En/r2vTIhdgEcpFo2eM
+wYhDelFVD6u8Gkj3AOQUdFrDph5srO4SG44lgvVljS9pBReMKUmAoU7bIjfArOSf
+UPPe7joYFVsiD3BIkQjLMjwphJHl8f/m3odLDwFJRLFpRmJcV3VA4QBVH60T7iTY
+p84nmPSW4H3NT9GJ+TF83M2gqP0FeLO+vfQaKWnBqH/DSmsN3nl72ULe5VVg8gGv
+kSSCwFBylk5qtX5EbU/LwSMICDC8exYGQFyHGtgbYhypJV1lN4wWwEHV+eDcKxHz
+M2G/yVoH3aI8B3KGC7YiXgtTX/CYvFk99ZUuUT5ClfYEWgREcg==
+=nSs7
+-----END PGP SIGNATURE-----
+
+--t4qTkcah3Kmi0e32--

@@ -2,143 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB1E5B011F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458125B0122
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiIGJ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
+        id S230436AbiIGKA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiIGJ7W (ORCPT
+        with ESMTP id S230426AbiIGJ7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:59:22 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2042.outbound.protection.outlook.com [40.107.104.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0409B69C8;
-        Wed,  7 Sep 2022 02:58:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YGZYGWwxfp0ybj77Z+7d/29eFKkdC02WV2leCNw0P8B7GFyd9ZTzYo294RmpL+7yldVERdDW4HW97z1Ip1zhhLBUoBs3U4wxFY8fqbjhpZjsHmOuRARYGRq/YO4azRM3czmjcsvzFnr0wnzmbJoLSFo7lcqX+0WDc28+YThFzn68dsVmbiu/zJqXDv/e3DYwOHJLBLGpTrPyqnD0bVZ/c9nFzXPyoQnBCWvk0TT0gmp7ANwUgEmkfvKeFiVpfNKh9l25yL3vrfZdAt+Cu63ALM1R5H2vVmNwebFmgEptrcUsODG5zIWcruCPyQC/iBf5Zv33wecJKgm/+oJQ5RnCmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L1dtBXh6X/qhduiuR3xxSk02R/+ZQNXdVaOhQu8oT3o=;
- b=RH6SatcTQKk0zLgnNHSjk23tcVvEQNhVU+wYhHc6PRMdEIkn/+uFiiqrgEKCF1wyCs+oTHUcSQXfEbs6wU+X8RnNBkk49hWrCGZjiNjTKERu7DbJ7xkDeDS0+y0uIdcuIrI68Ibali8PU4SV7y5UCuGeDRGUFgYHdMk97Jl2uqKKaCM1uZducVbn34BpJINEwE0G8d+CT6KWX5lVenf6NC9j6VpBnOpyFafzEdzy1HQ0AZjjI3DE8NPvsxWwdSejLVq+fmGyx8/eM6dmSGzzHpW3kgdt8r1YicJLJPNF9VioFmhVCXncnkl2dbbT/05FRJ+uf3dSTurHnYZcytyjdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L1dtBXh6X/qhduiuR3xxSk02R/+ZQNXdVaOhQu8oT3o=;
- b=pn/3vnoKw6sxRZUdpIp4TGOjosRVWntmRK8E4OcQyN2LsIyFq08xP0goKuXG8e47kU3gNAuWA6XwS45Y71AwaaSjUFuBIQtxtQ13oQkXlt7/kU5p78FCITewRfyaIQ9X1HVB4VPqcCSI6TCc5S2mckQYKjo3F3+Z2J79CUMAtsQ=
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
- by VI1PR04MB4158.eurprd04.prod.outlook.com (2603:10a6:803:42::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Wed, 7 Sep
- 2022 09:58:46 +0000
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::6cde:8704:ed0a:c87b]) by DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::6cde:8704:ed0a:c87b%4]) with mapi id 15.20.5612.014; Wed, 7 Sep 2022
- 09:58:45 +0000
-From:   Pankaj Gupta <pankaj.gupta@nxp.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-CC:     "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "Jason@zx2c4.com" <Jason@zx2c4.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: RE: [EXT] Re: [RFC PATCH HBK: 2/8] hw-bound-key: flag-is_hbk added to
- the tfm
-Thread-Topic: [EXT] Re: [RFC PATCH HBK: 2/8] hw-bound-key: flag-is_hbk added
- to the tfm
-Thread-Index: AQHYwbSROQtM17Y3rUes00GOEj1Wxa3R9HsAgAGPkHCAAA7BgIAAHQrw
-Date:   Wed, 7 Sep 2022 09:58:45 +0000
-Message-ID: <DU2PR04MB86308DB7CFBC7A31CEB612D295419@DU2PR04MB8630.eurprd04.prod.outlook.com>
-References: <20220906065157.10662-1-pankaj.gupta@nxp.com>
- <20220906065157.10662-3-pankaj.gupta@nxp.com>
- <YxbsBiCrIQT/0xz6@gondor.apana.org.au>
- <DU2PR04MB86308036FB517BF8CAD3D32795419@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <YxhHkz+UlE9XAG/Z@gondor.apana.org.au>
-In-Reply-To: <YxhHkz+UlE9XAG/Z@gondor.apana.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU2PR04MB8630:EE_|VI1PR04MB4158:EE_
-x-ms-office365-filtering-correlation-id: 40e09fce-8c9d-48e6-77de-08da90b78dda
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wP04vsq+wJVFlW84b8xwmmG3RMmUsLYFfBuLC+Jb5E+2JS+wGbatpy+dW3/GU62auYGCLea2J4YJ2KAJ7emaf1v6y4SL16BmzaRitPobymnpJ+75VRG2i3Pje2PgvzNtQlX7GenY7isQoVa+5k0Ch0jBtQN8n1oiXPsbQxFI8qBrbXrbfEJz2wBVhXg1JGKx3v9EnUzZlxsWJy4TTEgKfbFnhmvKEKGHt8GtmuQ0+mVPWSoIjgCV7OsavNnoUKIwuH5d4gcPR32jVk83RtGVBzZGyPKq7eE2OCbZqUCz0DoGa2rrOfSQlNAILAoA2GDI3cO34P/W/P92fJuxjGNq2TBFgNV//6zQIdPf9OmgK1nE0G9S9K8v/bK2q/1t+4jgyvFVhPvDOVkk741obSZt9h0YC6Srj2gerY5tIgAdBfkyP9NfYMcL+G/gOvPLrA7cYDfllPvAj+T0HAsBMhIaQtMmeC6MuzSebw6aPmYH/h3rJ1qdgisuLTCJriuLKIOk6Dj3Adkw0Yi0lFlOhlTHA7XchcKlWzE9BU3xuc7W+W+bleFoOtrGev7FB7y1PHvxmvQ1H6J3FTRy7mOcUceFXQ/dX64gznfjueYpme+DSLCyi33IamfAW6PLxaSSraU12bLZqb7kFh5+9y14mzC9BMKg79d2juv1AiVhQK7yebJ3vIFGNPvuX0ZTMN9GPA9xQOZS7X/+XbX5K36PKHQOHwmdECi+XCFLicXBjzmLxCZBkzZkE3LJXkWb7OiVLQoiDu8o+Uf6fbQlSoP78PH8Etth6ujaFuImtvhEoO+9DvE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(39860400002)(366004)(136003)(346002)(55236004)(33656002)(53546011)(9686003)(26005)(55016003)(52536014)(316002)(64756008)(76116006)(66476007)(8676002)(478600001)(71200400001)(66946007)(54906003)(4326008)(66556008)(66446008)(2906002)(6916009)(83380400001)(86362001)(966005)(8936002)(41300700001)(38070700005)(44832011)(7416002)(5660300002)(122000001)(6506007)(7696005)(45080400002)(38100700002)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Iu4bqgpIIZ8cSjS0t5FHlrY33N5WIm8OQO8aklly1yD8AIUdsFCit9ATfgTU?=
- =?us-ascii?Q?59IMszIcfjRDoxbLgnl+W5AZiZ5ESLZgfqqBobz4308N7k122L+fGYJxAqGh?=
- =?us-ascii?Q?h3d9ia1g933aIcJeoKmslzcmS1QQ2s6cNcxuftqkQZ9pqx22s9BPgHd/SS00?=
- =?us-ascii?Q?gi5st9XbGbZxpx6GjB0QAggt/SXB77bcB8mDbpF99saaoKxR/0A+XeLmrjqf?=
- =?us-ascii?Q?s/VwI24YxCMpZQzHPJZ6GmSv1pgQWKNUr5SaieUWhfrHX/kF3+IxlB5uN3vQ?=
- =?us-ascii?Q?Y+YuU9KBgaB2Us8ZaxyKIupoJ5LLXkB4YJhRgPF/ccMV36TwmrHs3WTMD/dE?=
- =?us-ascii?Q?1rYnzxnnZUqLKlJAOKxsLghfzcAy9XR9MR0N99DHUJ3YcAeVkaOpBQlYYjyP?=
- =?us-ascii?Q?afOGcjgm19375yzipWS5oC88uoYcmTzlgSTb2QxFsI4L9OXAkrHXznE0gpFZ?=
- =?us-ascii?Q?ycXihAw9ut85t+E3Ez8k/bdaBPPI1sOc4RgZ8IIhE1e5XMNfkK1tL+hQoYTV?=
- =?us-ascii?Q?PoTPfQpFD8GxQAzBEMdhnQ73eMuy+D7XBm5xW53PhVv4TdeY5v0WSsw4hkYd?=
- =?us-ascii?Q?ctolUTLICJz9rgZ2ubFADX/uAtrWYEUgVGQVVicZ3rtuMYqPOyNY5n1ufQAn?=
- =?us-ascii?Q?2vNkMOJlq/MTClR4s26jYgB/CkphuBDdjBgLmN6jdF5ALi+PyPL3uxMcYYRv?=
- =?us-ascii?Q?Uzc+hFn+UK8P3rtll7rhHp0CTr0tA/2bGrqTbxZ72479y/WCLp4oxLqTIo4a?=
- =?us-ascii?Q?2k1Rgf4cAq9LlqmhuWWu2zn14wAlHoW6dg/HrKLbo8IWAxxVNMoHfY93ON7E?=
- =?us-ascii?Q?Sv0WfVmc0QOmRwNYg7aN59xWoE57krcWMFiVBWr5/ZjS3biliz83KsfxDWD+?=
- =?us-ascii?Q?A+HXluUx8m1RBcsjshTmyBVB5DPqIoZYkdHCAY+51buMYYwtYa06R3RekGf+?=
- =?us-ascii?Q?hKlTht2QZw4D7QT0K7hn6uUfAS7HIACIdZooGTlJXBkY67OY5ukF82A6xn66?=
- =?us-ascii?Q?j/WU8zTx95hiOYQxcxDV1vG9LzvfDz1s61VTW5FsUBWuxEKfyZchCSZEJUEq?=
- =?us-ascii?Q?N6YzFnSdB8I1l6YHhf+ECCsEQdp8tDHXGkFrs6T7TklCbGi0lCx+RJs7hU91?=
- =?us-ascii?Q?zZI3i06Uf5EUtt/u3AZiH5wQQjkH5nrdRGRpNIK8kQcsSbWJQrKJgGDG3A4B?=
- =?us-ascii?Q?HDFYMDNPUUHkubB+LOYIYU3ZnF8WvL0zkFRG74aECcWjA/nxO/Vjkng3I+Iq?=
- =?us-ascii?Q?IwPGrjULrebRItIjh6IqYHpkSWHSQKtdm5cQpG0Hnhf6At+y4+1QvU8NMDJM?=
- =?us-ascii?Q?cYwaKX90G+5fMhheG5acJvL3gOkC4qTBb5ry7748qpxakjSYBOgFY1kRmhdb?=
- =?us-ascii?Q?s25zZBXM9KGh0UIfo0YnbsQrxvlTSuu6c53hqPwiICmP+79242y53XGwjqFf?=
- =?us-ascii?Q?D4kr7Oa6Q8LbVVkXLIjE+jpDZTwvQVAZelMN0bbkTEiBTLcd8se8qGb43cZ1?=
- =?us-ascii?Q?IbX7iCwO7/Bf+HyhNyKY4ymhtSc/dKDMVwfngtMqWSIo/smx6oUlOSeSOYsD?=
- =?us-ascii?Q?vKujqXFKCPxXCs6Fg4gzA0dOSYeeX2/pQZgB+Nik?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Sep 2022 05:59:34 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83270B6038
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:58:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 5EA2F2B059D4;
+        Wed,  7 Sep 2022 05:58:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 07 Sep 2022 05:58:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662544732; x=1662551932; bh=LDbKEsPtEf
+        o0fSrPBtti05cmeMd5jnUlKEOcotKaSo4=; b=EXe+ynfe6vqHN43swOtykOC2Ct
+        uBkougsWyb9Gz9Yz4t6xtOXI72Iy/O5yYrXo+DBTDGNXxul0ebfkTVZMiYl+Kt/C
+        RtpN5Lozu8dtEN4O8yx0EK4S4KNFAsjLumNAC2ObZ/IM6gHiaCKGMIb0sRaOh8de
+        MnRVw8qAcAY2oGvUQSZ4IMLVehnSaNQNGItvETIULd/aEK7fWFBQPms2DsbU0XQp
+        ErTC1E2CGjFAV0Fj4vwOnwwjw7Whw3zyd8lgoBcRK+x6tjCXEvMZ7Ng2+Oet3ALh
+        qzKOWW02KFjsDosfRoB/u2/Ux7V+Ho/gemKefjzU75NX7Fk8asA5RNOcVEUw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662544732; x=1662551932; bh=LDbKEsPtEfo0fSrPBtti05cmeMd5
+        jnUlKEOcotKaSo4=; b=W7FoYKQ4vh4JAjO+VVj2d/KTm16IiJZNZdq9LXTgqgtQ
+        t9Rbizu4VEj/S4fOxiSbz6+Z2tpIQd8wC8qQq5TWtVj28LKmgl3ifAhYru/r6eci
+        z1M7ATIVb3UlgdYN8Kwmxq6QbLuzIHQrXBf+5yxpv33Yg4JEldWISKcPYKbgrDUQ
+        3WZuWBIT4XwBMJzeX0GnJd4QVcXPmJsMoxsr1NiQl2SyZORrtCJAIFAYjhomNmJ5
+        JkP8dSJs/6WFRM0y/aBAgzyCSKm/0F0fJYNGaMB4ie6rQ1PjPSLe0aFuITGBmcyD
+        1SCGLo3ZAqJ88e0nvhG0Sd2uczq8k08Dj/jrWCvoZg==
+X-ME-Sender: <xms:XGsYY6S6Unf05Ux7EeXWosbmBCQrWexsEhLyFWerP7--z65MfWhekg>
+    <xme:XGsYY_zrDrGlPY7_tG5XsdLoI5rl2Mph9Icxow7udrBgcSPA1LDHZNdApaoAW3e0r
+    dNZCBel3OfArF_XCXM>
+X-ME-Received: <xmr:XGsYY306D9dvzKGYL5VBDkFegfjmi41hvSTbO7IYVRbsRBLwk4ykAtH3xxg->
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeevuddthffgfeeiffejgfeghfeludegkedtgefgffejtdegtddvleduvdfh
+    teehveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:XGsYY2ChJ9bThNgL4kEeg1WjPtnTGDuEfX0G6vrd4LNllKgcAaW6Hg>
+    <xmx:XGsYYzi6nwq4Mwx4T3SErnV9u--G-Z-E2nghFzehs8FPRRT4kkz1_Q>
+    <xmx:XGsYYyo218MlI5Wiu1MgPmnxLYxtVwMOe6ydE6LUHZTCYG3D1fCnIw>
+    <xmx:XGsYY_C_UZtCfR0nP5pwZsMq51PV4Gu8iNV88j3038cccoGHrGgJOdrQSJ0>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 05:58:51 -0400 (EDT)
+Date:   Wed, 7 Sep 2022 11:58:49 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v2 00/41] drm: Analog TV Improvements
+Message-ID: <20220907095849.5v72atwuedl5iiva@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
+ <020d44e6-884b-a817-8265-3461638cac71@tronnes.org>
+ <20220905145729.ln675jko3aw6sgzs@houat>
+ <74c10e51-4034-a284-1a26-b7ba7fe45fbe@tronnes.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40e09fce-8c9d-48e6-77de-08da90b78dda
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 09:58:45.9041
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lUziX6y1HKjC6NP7/jj04+eiiyNtWZx49o17T0yWPZhlqEEmMxQw0vWoM5jwgINbjGd1/oIvAV2qjRS/FC5f7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4158
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="g7pwsshhuvzfcxhg"
+Content-Disposition: inline
+In-Reply-To: <74c10e51-4034-a284-1a26-b7ba7fe45fbe@tronnes.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -146,72 +111,84 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--g7pwsshhuvzfcxhg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> -----Original Message-----
-> From: Herbert Xu <herbert@gondor.apana.org.au>
-> Sent: Wednesday, September 7, 2022 12:56 PM
-> To: Pankaj Gupta <pankaj.gupta@nxp.com>
-> Cc: jarkko@kernel.org; a.fatoum@pengutronix.de; Jason@zx2c4.com;
-> jejb@linux.ibm.com; zohar@linux.ibm.com; dhowells@redhat.com;
-> sumit.garg@linaro.org; david@sigma-star.at; michael@walle.cc;
-> john.ernberg@actia.se; jmorris@namei.org; serge@hallyn.com;
-> davem@davemloft.net; j.luebbe@pengutronix.de; ebiggers@kernel.org;
-> richard@nod.at; keyrings@vger.kernel.org; linux-crypto@vger.kernel.org;
-> linux-integrity@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> security-module@vger.kernel.org; Sahil Malhotra
-> <sahil.malhotra@nxp.com>; Kshitiz Varshney <kshitiz.varshney@nxp.com>;
-> Horia Geanta <horia.geanta@nxp.com>; Varun Sethi <V.Sethi@nxp.com>
-> Subject: Re: [EXT] Re: [RFC PATCH HBK: 2/8] hw-bound-key: flag-is_hbk
-> added to the tfm
+On Mon, Sep 05, 2022 at 05:17:18PM +0200, Noralf Tr=F8nnes wrote:
+> Den 05.09.2022 16.57, skrev Maxime Ripard:
+> > On Fri, Sep 02, 2022 at 01:28:16PM +0200, Noralf Tr=F8nnes wrote:
+> >>
+> >>
+> >> Den 01.09.2022 21.35, skrev Noralf Tr=F8nnes:
+> >>>
+> >>>
+> >>> I have finally found a workaround for my kernel hangs.
+> >>>
+> >>> Dom had a look at my kernel and found that the VideoCore was fine, and
+> >>> he said this:
+> >>>
+> >>>> That suggests cause of lockup was on arm side rather than VC side.
+> >>>>
+> >>>> But it's hard to diagnose further. Once you've had a peripheral not
+> >>>> respond, the AXI bus locks up and no further operations are possible.
+> >>>> Usual causes of this are required clocks being stopped or domains
+> >>>> disabled and then trying to access the hardware.
+> >>>>
+> >>>
+> >>> So when I got this on my 64-bit build:
+> >>>
+> >>> [  166.702171] SError Interrupt on CPU1, code 0x00000000bf000002 -- S=
+Error
+> >>> [  166.702187] CPU: 1 PID: 8 Comm: kworker/u8:0 Tainted: G        W
+> >>>     5.19.0-rc6-00096-gba7973977976-dirty #1
+> >>> [  166.702200] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
+> >>> [  166.702206] Workqueue: events_freezable_power_ thermal_zone_device=
+_check
+> >>> [  166.702231] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS
+> >>> BTYPE=3D--)
+> >>> [  166.702242] pc : regmap_mmio_read32le+0x10/0x28
+> >>> [  166.702261] lr : regmap_mmio_read+0x44/0x70
+> >>> ...
+> >>> [  166.702606]  bcm2711_get_temp+0x58/0xb0 [bcm2711_thermal]
+> >>>
+> >>> I wondered if that reg read was stalled due to a clock being stopped.
+> >>>
+> >>> Lo and behold, disabling runtime pm and keeping the vec clock running
+> >>> all the time fixed it[1].
+> >>>
+> >>> I don't know what the problem is, but at least I can now test this pa=
+tchset.
+> >>>
+> >>> [1] https://gist.github.com/notro/23b984e7fa05cfbda2db50a421cac065
+> >>>
+> >>
+> >> It turns out I didn't have to disable runtime pm:
+> >> https://gist.github.com/notro/0adcfcb12460b54e54458afe11dc8ea2
+> >=20
+> > If the bcm2711_thermal IP needs that clock to be enabled, it should grab
+> > a reference itself, but it looks like even the device tree binding
+> > doesn't ask for one.
+> >=20
 >=20
-> Caution: EXT Email
->=20
-> On Wed, Sep 07, 2022 at 07:22:42AM +0000, Pankaj Gupta wrote:
-> >
-> > Current support, does not permit the hardware to support both types of
-> keys: HBK & Plain Key, at the same time.
-> >
-> > This change is generic and permit any driver that supports both- HBK an=
-d
-> plain-key, to differentiate and use the keys accordingly.
->=20
-> Existing drivers simply register hardware keys under a different algorith=
-m
-> name, there is no reason why they can't coexist with a plain key.
->=20
+> The first thing I tried was to unload the bcm2711_thermal module before
+> running modeset and it still hung, so I don't think that's the problem.
 
-Thanks for the comments.
+Ack. Just to confirm, is this happening on mainline or on the downstream tr=
+ee?
 
-Intention is to only secure the key buffer, at run-time.
-Not to change the working of the crypto algorithm. Algorithm would be worki=
-ng exactly same for plain and HBK.
+Maxime
 
-There are 3rd party IP(s), which uses kernel for crypto-algorithm's operati=
-ons.
-Modifying the algorithm name in these IP(s), is not always allowed or easy =
-to maintain.
+--g7pwsshhuvzfcxhg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-While, this patch-set allows to use the same algorithm name,=20
-and hence prevents any changes required to the user(3rd Party IPs) of kerne=
-l crypto layer.
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxhrWQAKCRDj7w1vZxhR
+xWOGAQDamcTrLkeNib2/AJ9OVJ5kvT4+VK4EmtvGcxdtuZTUhQD/SHMi1WIJ+4PA
+xhpQO1fhUdfbEHo8tJ554frAHeuSGgA=
+=e7c7
+-----END PGP SIGNATURE-----
 
-> Cheers,
-> --
-> Email: Herbert Xu <herbert@gondor.apana.org.au> Home Page:
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fgondo
-> r.apana.org.au%2F~herbert%2F&amp;data=3D05%7C01%7Cpankaj.gupta%40nx
-> p.com%7C9bc412605fa243702f3a08da90a2602c%7C686ea1d3bc2b4c6fa92cd9
-> 9c5c301635%7C0%7C0%7C637981324324251974%7CUnknown%7CTWFpbGZs
-> b3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn
-> 0%3D%7C3000%7C%7C%7C&amp;sdata=3Db1ImbcEMa9jticFU7yrpwHXuuQEog
-> KLrjuiE%2FFpcYyA%3D&amp;reserved=3D0
-> PGP Key:
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fgondo
-> r.apana.org.au%2F~herbert%2Fpubkey.txt&amp;data=3D05%7C01%7Cpankaj.g
-> upta%40nxp.com%7C9bc412605fa243702f3a08da90a2602c%7C686ea1d3bc2b
-> 4c6fa92cd99c5c301635%7C0%7C0%7C637981324324251974%7CUnknown%7C
-> TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiL
-> CJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DcP4js5Q0QPBJfvlrYDi0j6R
-> IGFpqHtJOSa9C7YC2IXM%3D&amp;reserved=3D0
+--g7pwsshhuvzfcxhg--

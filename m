@@ -2,138 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1498C5B1021
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644BD5B1025
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 01:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiIGXDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 19:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S229478AbiIGXEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 19:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGXDn (ORCPT
+        with ESMTP id S229579AbiIGXEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 19:03:43 -0400
-Received: from alln-iport-2.cisco.com (alln-iport-2.cisco.com [173.37.142.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD28A261C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1445; q=dns/txt; s=iport;
-  t=1662591822; x=1663801422;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SLlPm/SYAr6MHV57O37iy4qpo4ZJe+PXVGQYATH7WfQ=;
-  b=Inn6MOaqPwdSBLDKlWpc+6hIWGnIOn8PtLnZqerF0qJK7KbNQuBrv2GZ
-   F2J89pBEJnD/6Y6mDXzAxdBey8Ib5PM3K8VERVvLS47LR2QUaPhku1c6P
-   oo8bzEZPmoSHYpM+lVGDd8ztGmHPe9fREcBRBLAWiiyk9Am4h8BgyFS2t
-   0=;
-X-IPAS-Result: =?us-ascii?q?A0ATAACWIhljmJRdJa1aHQEBAQEJARIBBQUBgXsIAQsBg?=
- =?us-ascii?q?3k+RYxtiHGdCIElA1QLAQEBD0IEAQGFBoRnAiU0CQ4BAgQBAQEBAwIDAQEBA?=
- =?us-ascii?q?QEBAwEBBQEBAQIBBwQUAQEBAQEBAQEdGQUQDieFdYZ7AUaBPgESgn2DIQOmF?=
- =?us-ascii?q?YIrgQGIHYFlFIEpAYpshVkcgUlEgRWBPIIsil0iBJIxhWUDCQQHBUpCAwsfD?=
- =?us-ascii?q?hY2AxUDFAMFJAcDGQ8jDQ0EHQwDAwUlAwICGwcCAgMCBhUFAgIXHhg4CAQIB?=
- =?us-ascii?q?CskDwUCBy8FBC8CHgQFBhEIAhYCBgQEBAQVAhAIAggmFwcTMxkBBVkQCSEWB?=
- =?us-ascii?q?igNBQYTAyBHJgUHPg8oMjU5Kx0bCoEOKgkfFQMEBAMCBhMDAyACECwxFAQpE?=
- =?us-ascii?q?xItBytzCQIDImwDAwQoLAMJIR8HKCY8B1kSKAUDAxAiPQYDCQMCJBNHfQ4xF?=
- =?us-ascii?q?BcFAxAZmQYBPVEBgi9zomedH4E1g1yBRohGlgIaMpZykgQtllogonGEUIFhO?=
- =?us-ascii?q?oFbMxoIGxWDIlEZD445jlckMTsCBgsBAQMJilIBAQ?=
-IronPort-Data: A9a23:d/oTRKLpEbkkMU47FE+RO5UlxSXFcZb7ZxGr2PjKsXjdYENSgjdVx
- zEdUDqCbP7cZmr8e4wnPojg80wGvZeBndZkGwEd+CA2RRqmiyZq6fd1j6vUF3nPRiEWZBs/t
- 63yUvGZcIZsCCW0Si6FatANl1EkvU2zbue6WbWs1hxZH1c+En9w0U07xobVv6Yx6TSHK1LV0
- T/Ni5W31G+Ng1aY5UpNtspvADs21BjDkGtwUm4WPJinj3eC/5UhN6/zEInqR5fOria4KcbhL
- wrL5OnREmo0ZH7BAPv9+lrwWhVirrI/oWFih1IOM5VOjCSuqQQT/7kgGvBHZnwMyBO3rfVNx
- /JKvNuZHFJB0q3kwIzxUjFCGC14eKZB4rKCeCL5us2IxEqAeHzpqxlsJBhpZstDpaAmWicXq
- axwxDMlNnhvg8q6ybS6R+1zj+woLdLgO8UUvXQIITTxXK16HsqeHPqWjTNe9GsIv/9FDeiOX
- dIUOAdoQTbvZR4RHkhCXfrSm8/x1iWgLFW0smm9oasx/niWzwFr1rXpGMTad8bMRshPmEuc4
- GXc8AzRBhAcKczayjCY83agrvHAkDm9W48IErC8sPlwjzW7wGAeExQLUV26rOOiokG5XN1bJ
- gof/S9Gha0z/0yiSp/5XBi8iHuNpB0bRdsWFeAmgCmIw7Hd4weDAXksTTNbbtEi8sgsSlQXO
- kShhdjlA3lkt6eYDCvHsLyVtji1fyMSKAfueBPoUyMkzsb4jotogSmUDfBdIouJgfryEHbZl
- mXiQDcFu50fissC1qOe9F/Bgi6xqpWhcuLTzliMNo5Cxl4kDLNJd7BE+nCAt6ccc9zxok2p+
- SlaxJDEs4jiGLnXzESwrPMx8KZFDhpvGAfdil5mBZU68DLFF5WLIt0IsGgWyKuEzq85ldLBe
- kTfv0Za44VeeSLwK6R2eIm2Tc8tyMAM9OgJtNiJP7KigbAoJGdrGR2Cg2bLhQgBd2B3yskC1
- W+zK5rEMJrjIf0PIMCKb+kcy6Q34Ss12HneQ5v2pzz+j+TEOSHIFexebgrRBgzc0E9iiFiFm
- zq4H5baoyizrMWiCsUq2ddJdAtTfSRT6W7e8pALJoZv3TaK6El4W6OOntvNiqRunr9eka/T7
- 2qhV0pDoGcTdlWZQThmnktLMeu1Nb4m9CpTFXV1bT6AhSN5Ca7xt/h3SnfCVeR9nACV5aQqH
- 6BtlgTpKqkndwkrDBxENcal99Y8JEzw7e9MVgL8CAUCk1dbb1Sh0rfZksHHrUHi0gLfWRMCn
- oCd
-IronPort-HdrOrdr: A9a23:zoR4z62zwW9dUMbJFWxypgqjBL0kLtp133Aq2lEZdPWaSKClfq
- eV7ZYmPHDP5gr5NEtLpTniAtjifZqjz/9ICOAqVN/IYOCMggSVxe9ZgLcK6geQfhEWjtQ86U
- +lGJIOb+EZyjNB/KLH3DU=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.93,298,1654560000"; 
-   d="scan'208";a="934725774"
-Received: from rcdn-core-12.cisco.com ([173.37.93.148])
-  by alln-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 07 Sep 2022 23:03:41 +0000
-Received: from localhost.localdomain ([10.25.130.54])
-        by rcdn-core-12.cisco.com (8.15.2/8.15.2) with ESMTP id 287N3deT010146;
-        Wed, 7 Sep 2022 23:03:39 GMT
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     xe-linux-external@cisco.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC-PATCH] Makefile: dts: include directory makefile for DTC_FLAGS
-Date:   Wed,  7 Sep 2022 16:03:38 -0700
-Message-Id: <20220907230339.271633-1-danielwa@cisco.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Sep 2022 19:04:51 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C062647BB0;
+        Wed,  7 Sep 2022 16:04:49 -0700 (PDT)
+X-UUID: e35e2d48047f4bb4a56b98aa1c728807-20220908
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=w3RdqVd1gkkXkZVjFlpJYrbMBbFDmrTcM7nhqoe7Ckc=;
+        b=Fq5PPwrlPdf04Mc7k6Z0nz4g43WDqVRMof6okhajJyWIY9Qj5XhVoJhWKcZjha3I60pY9H7unFKU5G7u/aP/AvSaxLAO0TaoTh3RxnAMxVFucNX/kE+7v7+sOMenjLZKMx0ymfgOdkX6UsDg0HuftB1eQSfLYsH80FiwZ/mRqEg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:0a230f38-1199-415c-ace6-9f5ca2e10dc7,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:fb0f8d21-1c20-48a5-82a0-25f9c331906d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:-5,EDM:-3,IP:nil,URL:0,File:ni
+        l,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e35e2d48047f4bb4a56b98aa1c728807-20220908
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1440695343; Thu, 08 Sep 2022 07:04:44 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 8 Sep 2022 07:04:42 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 8 Sep 2022 07:04:42 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <chun-jie.chen@mediatek.com>, <devicetree@vger.kernel.org>,
+        <drinkcat@chromium.org>, <jose.exposito89@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <mturquette@baylibre.com>,
+        <nfraprado@collabora.com>, <rex-bc.chen@mediatek.com>,
+        <robh+dt@kernel.org>, <sboyd@kernel.org>, <weiyi.lu@mediatek.com>,
+        <wenst@chromium.org>
+Subject: Re: [PATCH 04/10] clk: mediatek: mt8183: Add clk mux notifier for MFG mux
+Date:   Thu, 8 Sep 2022 07:04:42 +0800
+Message-ID: <20220907230442.10633-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220905100416.42421-5-angelogioacchino.delregno@collabora.com>
+References: <20220905100416.42421-5-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.25.130.54, [10.25.130.54]
-X-Outbound-Node: rcdn-core-12.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current Makefile will drop the DTC_FLAGS depending on how you
-build. For example,
+> When the MFG PLL clock, which is upstream of the MFG clock, is changed,
+> the downstream clock and consumers need to be switched away from the PLL
+> over to a stable clock to avoid glitches.
+> 
+> This is done through the use of the newly added clk mux notifier. The
+> notifier is set on the mux itself instead of the upstream PLL, but in
+> practice this works, as the rate change notifitcations are propogated
+> throughout the sub-tree hanging off the PLL. Just before rate changes,
+> the MFG mux is temporarily and transparently switched to the 26 MHz
+> main crystal. After the rate change, the mux is switched back.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> [Angelo: Rebased to assign clk_ops in mtk_mux_nb]
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-make dtbs
-
-includes correct DTC_FLAGS. However if you run,
-
-make nvidia/tegra210-p2371-2180.dtb
-
-The DTC_FLAGS are dropped. This appears to be caused by the top level
-Makefile not including the Makefile from the directory where the dts lives.
-
-This normally doesn't matter because most dts files have nothing added
-from the Makefile. This changes when you have overlays, and the
-DTC_FLAGS modifier is mandatory for the dtb to work correctly.
-
-This change adds a -f argument which includes the Makefile from the
-directory where the dts file reside. This change is also required for
-dtbo files.
-
-Cc: xe-linux-external@cisco.com
-Signed-off-by: Daniel Walker <danielwa@cisco.com>
----
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index ac16bd92b156..bc245e2dc8d1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1460,10 +1460,10 @@ endif
- ifneq ($(dtstree),)
- 
- %.dtb: dtbs_prepare
--	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
-+	$(Q)$(MAKE) -f $(srctree)/$(dtstree)/$(dir $@)Makefile $(build)=$(dtstree) $(dtstree)/$@
- 
- %.dtbo: dtbs_prepare
--	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
-+	$(Q)$(MAKE) -f $(srctree)/$(dtstree)/$(dir $@)Makefile $(build)=$(dtstree) $(dtstree)/$@
- 
- PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
- dtbs: dtbs_prepare
--- 
-2.25.1
-
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 

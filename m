@@ -2,233 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F12D5B0C72
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 20:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF735B0C78
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 20:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiIGSXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 14:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S229733AbiIGSZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 14:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiIGSXY (ORCPT
+        with ESMTP id S229630AbiIGSZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 14:23:24 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6533C04E7;
-        Wed,  7 Sep 2022 11:23:21 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8D061478;
-        Wed,  7 Sep 2022 20:23:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662574999;
-        bh=/ZC46D6q/4IGsVDCdn956cKcKGh4AL69/eqqSzbZofQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GFsJSJ1MHEzUGnQ1s26JqPAU+p8zHCwUzr4ZiQpj8XrmvrJRZmzoKmihHR79cKNi2
-         BPZGvtD4jRrzjqiucxoF2oZlP3wSLMoNrYmzV1Cfuovvr7YhhM8+n1N+Ij2syB4hzJ
-         PmJfpZ6qmAachO/i6ZLe065kLj/FeYOzvuT9QxKY=
-Date:   Wed, 7 Sep 2022 21:23:03 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Elder <paul.elder@ideasonboard.com>
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        linux-media@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] media: imx7-media-csi: Add support for fast-tracking
- queued buffers
-Message-ID: <YxjhhzTylUUwjCVm@pendragon.ideasonboard.com>
-References: <20220907114737.1127612-1-paul.elder@ideasonboard.com>
- <YxjgkAjvsaZkS2cY@pendragon.ideasonboard.com>
+        Wed, 7 Sep 2022 14:25:29 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9556DB2CCE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 11:25:27 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id a67so11144988ybb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 11:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=t1RT2GVL7So8FRxhttvNmfTvwaG7wye3XjohR9wIDto=;
+        b=d+pqtCM7emIqHqqcL0FHUBGevoq1D8aCT3LyylUG8lQcnvelI9T0US5vu7KwGPVIz5
+         mzmXu8yMHa9xjZQzxqTF0/OFT6/PbcNpNEbMVWHQnSUEWUa9uberuGAQO/UfPpx5mNoE
+         8IDPGgqmMCtXrV1CSCjdVYO83arausSfcFTWgtHvxSZSQ7yJF0wgjKzWER5gVVJH6zl1
+         v9bx+QXgNeTUfPfAxLV0r78mUzP8aWPtsX7iEPZCtL7BOr3YEcBUoMhKNX/kqUr7B+XQ
+         BOZgcuBdvMpanoRIG32KLgFjh9qtARUy+mu3yK6NIznET5lMXvuweEY0jSuS6p13b8bp
+         gk5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=t1RT2GVL7So8FRxhttvNmfTvwaG7wye3XjohR9wIDto=;
+        b=cwTtvcpd0/Qr36oHbyQWQDA/iR0j62ppnq9W/Jbywzc8FiBH88rgl8qn5XhtD28opD
+         NfS7AOUaZReb0xuv9ZptF6zk8Duu4xqt3t7AlM65544pzhNsgxNewTWRlj4KDuISeWlH
+         WRIptJVH7YBGfpuejWnLob8fJvsRceKpzD6sRt1GVKV+jQIKxgGUpvRYwHnfvfPmz9L3
+         jjPvdA/c/Fb2s+Z9ar4sCDsSjmJv1n2YHPTQ3WuPKI/Zl91X2Z6TzlTN/n/Xl79dkPTf
+         NQGiL0T/ZKoWy9QRNx+4wHYDOeawAkD6qLfalQvmN5zWZgl6vj0myMaaXfeiFxyaT6ti
+         NnmQ==
+X-Gm-Message-State: ACgBeo0ZTW0DvjaAjXoI2y4wpsQ1pRQnYPzfKdlGoLgORhoHWkkpDi9f
+        4abWB87085Lf3KcWB8SoFnYlDVACkAs5LXN5VlvKRg==
+X-Google-Smtp-Source: AA6agR5g3t8dPU742opp3p0IGn/aiTc1yTYGIe5tHSK58+GIreEcSzS0Uo9FzFd2YosZaWBi6GX37ZkiUG1Bh97oglc=
+X-Received: by 2002:a25:3cc4:0:b0:696:5790:438d with SMTP id
+ j187-20020a253cc4000000b006965790438dmr3664251yba.563.1662575126653; Wed, 07
+ Sep 2022 11:25:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YxjgkAjvsaZkS2cY@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220803122655.100254-1-nipun.gupta@amd.com> <20220906134801.4079497-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-4-nipun.gupta@amd.com> <CAGETcx_W8QVe+CdpocN2rHjp08TwsW22FaJgrYW=0JNge_N6KQ@mail.gmail.com>
+ <DM6PR12MB30829DDDC62B36B17F87B204E8419@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <f5cf7bd7-4cd9-ef9c-7f25-f814b2f1e41f@arm.com>
+In-Reply-To: <f5cf7bd7-4cd9-ef9c-7f25-f814b2f1e41f@arm.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 7 Sep 2022 11:24:50 -0700
+Message-ID: <CAGETcx9LE=E2focmbEsdQV3s2NR4-9H35ODkgSxZY5_7SEJ1Qw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 3/7] iommu/arm-smmu-v3: support ops registration
+ for CDX bus
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "jgg@nvidia.com" <jgg@nvidia.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Wed, Sep 7, 2022 at 1:27 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2022-09-07 04:17, Gupta, Nipun wrote:
+> > [AMD Official Use Only - General]
+> >
+> >
+> >
+> >> -----Original Message-----
+> >> From: Saravana Kannan <saravanak@google.com>
+> >> Sent: Wednesday, September 7, 2022 5:41 AM
+> >> To: Gupta, Nipun <Nipun.Gupta@amd.com>
+> >> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> >> gregkh@linuxfoundation.org; rafael@kernel.org; eric.auger@redhat.com;
+> >> alex.williamson@redhat.com; cohuck@redhat.com; Gupta, Puneet (DCG-ENG)
+> >> <puneet.gupta@amd.com>; song.bao.hua@hisilicon.com;
+> >> mchehab+huawei@kernel.org; maz@kernel.org; f.fainelli@gmail.com;
+> >> jeffrey.l.hugo@gmail.com; Michael.Srba@seznam.cz; mani@kernel.org;
+> >> yishaih@nvidia.com; jgg@ziepe.ca; jgg@nvidia.com; robin.murphy@arm.com;
+> >> will@kernel.org; joro@8bytes.org; masahiroy@kernel.org;
+> >> ndesaulniers@google.com; linux-arm-kernel@lists.infradead.org; linux-
+> >> kbuild@vger.kernel.org; linux-kernel@vger.kernel.org;
+> >> devicetree@vger.kernel.org; kvm@vger.kernel.org; okaya@kernel.org; Anand,
+> >> Harpreet <harpreet.anand@amd.com>; Agarwal, Nikhil
+> >> <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
+> >> Radovanovic, Aleksandar <aleksandar.radovanovic@amd.com>; git (AMD-Xilinx)
+> >> <git@amd.com>
+> >> Subject: Re: [RFC PATCH v3 3/7] iommu/arm-smmu-v3: support ops registration
+> >> for CDX bus
+> >>
+> >> [CAUTION: External Email]
+> >>
+> >> On Tue, Sep 6, 2022 at 6:48 AM Nipun Gupta <nipun.gupta@amd.com> wrote:
+> >>>
+> >>> With new CDX bus supported for AMD FPGA devices on ARM
+> >>> platform, the bus requires registration for the SMMU v3
+> >>> driver.
+> >>>
+> >>> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> >>> ---
+> >>>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++--
+> >>>   1 file changed, 14 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> >> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> >>> index d32b02336411..8ec9f2baf12d 100644
+> >>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> >>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> >>> @@ -29,6 +29,7 @@
+> >>>   #include <linux/platform_device.h>
+> >>>
+> >>>   #include <linux/amba/bus.h>
+> >>> +#include <linux/cdx/cdx_bus.h>
+> >>>
+> >>>   #include "arm-smmu-v3.h"
+> >>>   #include "../../iommu-sva-lib.h"
+> >>> @@ -3690,16 +3691,27 @@ static int arm_smmu_set_bus_ops(struct
+> >> iommu_ops *ops)
+> >>>                  if (err)
+> >>>                          goto err_reset_pci_ops;
+> >>>          }
+> >>> +#endif
+> >>> +#ifdef CONFIG_CDX_BUS
+> >>> +       if (cdx_bus_type.iommu_ops != ops) {
+> >>> +               err = bus_set_iommu(&cdx_bus_type, ops);
+> >>> +               if (err)
+> >>> +                       goto err_reset_amba_ops;
+> >>> +       }
+> >>
+> >> I'm not an expert on IOMMUs, so apologies if the question is stupid.
+> >>
+> >> Why does the CDX bus need special treatment here (like PCI) when there
+> >> are so many other busses (eg: I2C, SPI, etc) that don't need any
+> >> changes here?
+> >
+> > AFAIU, the devices on I2C/SPI does not use SMMU. Apart from PCI/AMBA,
+> > FSL-MC is another similar bus (on SMMUv2) which uses SMMU ops.
+> >
+> > The devices here are behind SMMU. Robin can kindly correct or add
+> > more here from SMMU perspective.
+>
+> Indeed, there is no need to describe and handle how DMA may or may not
+> be translated for I2C/SPI/USB/etc. because they are not DMA-capable
+> buses (in those cases the relevant bus *controller* often does DMA, but
+> it does that for itself as the platform/PCI/etc. device it is).
 
-On Wed, Sep 07, 2022 at 09:18:58PM +0300, Laurent Pinchart wrote:
-> On Wed, Sep 07, 2022 at 08:47:37PM +0900, Paul Elder wrote:
-> > The CSI hardware compatible with this driver handles buffers using a
-> > ping-pong mechanism with two sets of destination addresses. Normally,
-> > when an interrupt comes in to signal the completion of one buffer, say
-> > FB0, it assigns the next buffer in the queue to the next FB0, and the
-> > hardware starts to capture into FB1 in the meantime.
-> 
-> Could you replace FB0 and FB1 with FB1 and FB2 respectively, to match
-> the naming of the registers ?
-> 
-> > In a buffer underrun situation, in the above example without loss of
-> > generality, if a new buffer is queued before the interrupt for FB0 comes
-> > in, we can program the buffer into FB1 (which is programmed with a dummy
-> > buffer, as there is a buffer underrun).
-> > 
-> > This of course races with the interrupt that signals FB0 completion, as
-> > once that interrupt comes in, we are no longer guaranteed that the
-> > programming of FB1 was in time and must assume it was too late. This
-> > race is resolved partly by locking the programming of FB1. If it came
-> > after the interrupt for FB0, then the variable that is used to determine
-> > which FB to program would have been swapped by the interrupt handler.
-> > 
-> > This alone isn't sufficient, however, because the interrupt could still
-> > be generated (thus the hardware starts capturing into the other fb)
-> > while the fast-tracking routine has the irq lock. Thus, after
-> > programming the fb register to fast-track the buffer, the isr also must
-> > be checked to confirm that an interrupt didn't come in the meantime. If
-> > it has, we must assume that programming the register for the
-> > fast-tracked buffer was not in time, and queue the buffer normally.
-> > 
-> > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-> > Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-> > 
-> > ---
-> > Changes in v2:
-> > - fix the potential race condition where the interrupt comes in while
-> >   the fast tracking routine has the irqlock
-> > - change return value from int to bool
-> > ---
-> >  drivers/staging/media/imx/imx7-media-csi.c | 63 ++++++++++++++++++++++
-> >  1 file changed, 63 insertions(+)
-> > 
-> > diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-> > index a0553c24cce4..0ebef44a7627 100644
-> > --- a/drivers/staging/media/imx/imx7-media-csi.c
-> > +++ b/drivers/staging/media/imx/imx7-media-csi.c
-> > @@ -1296,12 +1296,75 @@ static int imx7_csi_video_buf_prepare(struct vb2_buffer *vb)
-> >  	return 0;
-> >  }
-> >  
-> > +static bool imx7_csi_fast_track_buffer(struct imx7_csi *csi,
-> > +				       struct imx7_csi_vb2_buffer *buf)
-> > +{
-> > +	unsigned long flags;
-> > +	dma_addr_t phys;
-> > +	int buf_num;
-> > +	u32 isr;
-> > +
-> > +	if (!csi->is_streaming)
-> > +		return false;
-> > +
-> > +	phys = vb2_dma_contig_plane_dma_addr(&buf->vbuf.vb2_buf, 0);
-> > +
-> > +	/*
-> > +	 * buf_num holds the fb id of the most recently (*not* the next
-> > +	 * anticipated) triggered interrupt. Without loss of generality, if
-> > +	 * buf_num is 0 and we get to this section before the irq for fb2, the
-> 
-> s/fb2/FB2/ to match hardware registers and the commit message ?
-> 
-> > +	 * buffer that we are fast-tracking into fb1 should be programmed in
-> > +	 * time to be captured into. If the irq for fb2 already happened, then
-> > +	 * buf_num would be 1, and we would fast-track the buffer into fb2
-> > +	 * instead. This guarantees that we won't try to fast-track into fb1
-> > +	 * and race against the start-of-capture into fb1.
-> > +	 *
-> > +	 * We only fast-track the buffer if the currently programmed buffer is
-> > +	 * a dummy buffer. We can check the active_vb2_buf instead as it is
-> > +	 * always modified along with programming the fb[1,2] registers via the
-> > +	 * lock (besides setup and cleanup).
-> > +	 */
-> 
-> I think this needs to be updated, it still indicates we handle the race
-> just by checking buf_num. How about the following ?
-> 
-> 	/*
-> 	 * buf_num holds the framebuffer ID of the most recently (*not* the next
-> 	 * anticipated) triggered interrupt. Without loss of generality, if
-> 	 * buf_num is 0, the hardware is capturing to FB2. If FB1 has been
-> 	 * programmed with a dummy buffer (as indicated by active_vb2_buf[0]
-> 	 * being NULL), then we can fast-track the new buffer by programming its
-> 	 * address in FB1 before the hardware completes FB2, instead of adding
-> 	 * it to the buffer queue and incurring a delay of one additional frame.
-> 	 *
-> 	 * The irqlock prevents races with the interrupt handler that queues the
-> 	 * next buffer and updates buf_num, but we can still race with the
-> 	 * hardware if we program the buffer in FB1 just after the hardware
-> 	 * completes FB2 and switches to FB1 and before we notice the buf_num
-> 	 * change. The fast-tracked buffer would then be ignored by the hardware
-> 	 * while the driver would think it has successfully been processed.
-> 	 *
-> 	 * To avoid this problem, if we can't avoid the race, we can detect that
-> 	 * we have lost it by checking, after programming the buffer in FB1, if
-> 	 * the interrupt flag indicated completion of FB2 has been raised. If
-> 	 * that is not the case, fast-tracking succeeded, and we can update
-> 	 * active_vb2_buf[0]. Otherwise, we may or may not have lost the race
-> 	 * (as the interrupt flag may have been raised just after programming
-> 	 * FB1 and before we read the interrupt status register), and we need to
-> 	 * assume the worst case of a race loss and queue the buffer through the
-> 	 * slow path.
-> 	 */
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> If you're fine with these changes there's no need to submit a v3, I'll
-> update the comment and the commit message locally.
-> 
-> > +
-> > +	spin_lock_irqsave(&csi->irqlock, flags);
-> > +
-> > +	buf_num = csi->buf_num;
-> > +	if (csi->active_vb2_buf[buf_num]) {
-> > +		spin_unlock_irqrestore(&csi->irqlock, flags);
-> > +		return false;
-> > +	}
-> > +
-> > +	imx7_csi_update_buf(csi, phys, buf_num);
-> > +
-> > +	isr = imx7_csi_reg_read(csi, CSI_CSISR);
-> > +	/*
-> > +	 * The interrupt for the /other/ fb just came (the isr hasn't run yet
-> > +	 * though, because we have the lock here); we can't be sure we've
-> > +	 * programmed buf_num fb in time, so queue the buffer to the buffer
-> > +	 * queue normally. No need to undo writing the fb register, since we
-> > +	 * won't return it as active_vb2_buf is NULL, so it's okay to
-> > +	 * potentially write it to both fb1 and fb2; only the one where it was
-> > +	 * queued normally will be returned.
-> > +	 */
+Ok this is what I was guessing was the reason, but didn't want to make
+that assumption.
 
-Also, if you state that the interrupt just came, I'd move the comment to
-within the if () { ... }.
+So if there are other cases like AMBA, FSL-MC where the devices can do
+direct DMA, why do those buses not need a #ifdef section in this
+function like CDX? Or put another way, why does CDX need special treatment?
 
-> > +	if (isr & (buf_num ? BIT_DMA_TSF_DONE_FB1 : BIT_DMA_TSF_DONE_FB2)) {
-> > +		spin_unlock_irqrestore(&csi->irqlock, flags);
-> > +		return false;
-> > +	}
-> > +
-> > +	csi->active_vb2_buf[buf_num] = buf;
-> > +
-> > +	spin_unlock_irqrestore(&csi->irqlock, flags);
-> > +	return true;
-> > +}
-> > +
-> >  static void imx7_csi_video_buf_queue(struct vb2_buffer *vb)
-> >  {
-> >  	struct imx7_csi *csi = vb2_get_drv_priv(vb->vb2_queue);
-> >  	struct imx7_csi_vb2_buffer *buf = to_imx7_csi_vb2_buffer(vb);
-> >  	unsigned long flags;
-> >  
-> > +	if (imx7_csi_fast_track_buffer(csi, buf))
-> > +		return;
-> > +
-> >  	spin_lock_irqsave(&csi->q_lock, flags);
-> >  
-> >  	list_add_tail(&buf->list, &csi->ready_q);
+> Note that I have a series pending[1] that will make this patch a whole
+> lot simpler.
 
--- 
-Regards,
+Thanks for the pointer. I'll make some comments in that series about
+bus notifiers.
 
-Laurent Pinchart
+
+-Saravana
+
+>
+> Thanks,
+> Robin.
+>
+> [1]
+> https://lore.kernel.org/linux-iommu/cover.1660572783.git.robin.murphy@arm.com/T/#t
+>
+> >
+> > Thanks,
+> > Nipun
+> >
+> >>
+> >> -Saravana
+> >>
+> >>>   #endif
+> >>>          if (platform_bus_type.iommu_ops != ops) {
+> >>>                  err = bus_set_iommu(&platform_bus_type, ops);
+> >>>                  if (err)
+> >>> -                       goto err_reset_amba_ops;
+> >>> +                       goto err_reset_cdx_ops;
+> >>>          }
+> >>>
+> >>>          return 0;
+> >>>
+> >>> -err_reset_amba_ops:
+> >>> +err_reset_cdx_ops:
+> >>> +#ifdef CONFIG_CDX_BUS
+> >>> +       bus_set_iommu(&cdx_bus_type, NULL);
+> >>> +#endif
+> >>> +err_reset_amba_ops: __maybe_unused;
+> >>>   #ifdef CONFIG_ARM_AMBA
+> >>>          bus_set_iommu(&amba_bustype, NULL);
+> >>>   #endif
+> >>> --
+> >>> 2.25.1
+> >>>

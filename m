@@ -2,92 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724E85AF963
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 03:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9878C5AF964
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 03:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiIGB1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 21:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S229514AbiIGB1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 21:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiIGB1B (ORCPT
+        with ESMTP id S229449AbiIGB1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 21:27:01 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DB176D9E2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 18:27:00 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.218:47248.1217073643
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-110.188.55.54 (unknown [172.18.0.218])
-        by chinatelecom.cn (HERMES) with SMTP id F0DEB2800D4;
-        Wed,  7 Sep 2022 09:26:46 +0800 (CST)
-X-189-SAVE-TO-SEND: lic121@chinatelecom.cn
-Received: from  ([172.18.0.218])
-        by app0025 with ESMTP id ec71a940db7a43cab5eb89777746d3ec for akpm@linux-foundation.org;
-        Wed, 07 Sep 2022 09:26:58 CST
-X-Transaction-ID: ec71a940db7a43cab5eb89777746d3ec
-X-Real-From: lic121@chinatelecom.cn
-X-Receive-IP: 172.18.0.218
-X-MEDUSA-Status: 0
-Sender: lic121@chinatelecom.cn
-Date:   Wed, 7 Sep 2022 01:26:33 +0000
-From:   Cheng Li <lic121@chinatelecom.cn>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: use mem_map_offset instead of mem_map_next
-Message-ID: <20220907012633.GA21996@vscode.7~>
-References: <1662358159-22780-1-git-send-email-lic121@chinatelecom.cn>
- <Yxd+Nz1wAwiIOWsd@monkey>
- <20220906171048.1cd24a27b71ded17f89ddb00@linux-foundation.org>
+        Tue, 6 Sep 2022 21:27:38 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106F211A32;
+        Tue,  6 Sep 2022 18:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662514058; x=1694050058;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ZV1q+JgdPyql58iLRG4rBR7Tp9YEX2NHtfBPjMsBF2E=;
+  b=AMUA9Pv+WSO6P8ndU0QMVF4Uys+zrhjiksCqk6SjEfJY8gj/9T5210oO
+   vcg8nuW7vbvCyPyYPOrSp4WUcSM1UHpCvHk4gdWqXsF7NFTXamZHBUgN+
+   smrnqMNof3Lli/KZ76KnbH3UQ5PWuhaZ9DhnDcMRK5sRF5BGRC9o0VnQ8
+   z2HGVKhJvtzpCzarYS8OhCW5OGNkRLbq+GgNa8I5tnyyOt1zxYlC7L0Gf
+   OZ+SuzBFL5XDzUqP17uiNjg1LANumuLjo44yVhNYRxRLhnLdFUDxBNVgi
+   SHEc2HCPYEf3vKjqTWRnYtt7iCJ8SsCqD5zGDpkKw/zIskZTG1qqrQR7A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="295486690"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="295486690"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 18:27:37 -0700
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="591491033"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.214.40]) ([10.254.214.40])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 18:27:32 -0700
+Message-ID: <682d8922-200d-8c89-7142-83e7b3754b8d@linux.intel.com>
+Date:   Wed, 7 Sep 2022 09:27:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906171048.1cd24a27b71ded17f89ddb00@linux-foundation.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220906124458.46461-1-baolu.lu@linux.intel.com>
+ <20220906124458.46461-10-baolu.lu@linux.intel.com> <Yxd2+d/VOjdOgrR2@myrica>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v13 09/13] iommu/sva: Refactoring
+ iommu_sva_bind/unbind_device()
+In-Reply-To: <Yxd2+d/VOjdOgrR2@myrica>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 05:10:48PM -0700, Andrew Morton wrote:
-> On Tue, 6 Sep 2022 10:07:03 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+Hi Jean,
+
+On 2022/9/7 0:36, Jean-Philippe Brucker wrote:
+> On Tue, Sep 06, 2022 at 08:44:54PM +0800, Lu Baolu wrote:
+>> +/**
+>> + * iommu_sva_bind_device() - Bind a process address space to a device
+>> + * @dev: the device
+>> + * @mm: the mm to bind, caller must hold a reference to mm_users
+>> + *
+>> + * Create a bond between device and address space, allowing the device to access
+>> + * the mm using the returned PASID. If a bond already exists between @device and
+>> + * @mm, it is returned and an additional reference is taken. Caller must call
+>> + * iommu_sva_unbind_device() to release each reference.
+> This isn't true anymore. How about storing handle in the domain?
+
+Yes, agreed. How about making the comments like this:
+
+/**
+  * iommu_sva_bind_device() - Bind a process address space to a device
+  * @dev: the device
+  * @mm: the mm to bind, caller must hold a reference to mm_users
+  *
+  * Create a bond between device and address space, allowing the device to
+  * access the mm using the pasid returned by iommu_sva_get_pasid(). If a
+  * bond already exists between @device and @mm, an additional internal
+  * reference is taken. The reference will be released when the caller calls
+  * iommu_sva_unbind_device().
+
+Storing the handle in the domain looks odd. Conceptually an iommu domain
+represents a hardware page table and the SVA handle represents a
+relationship between device and the page table for a consumer. It's
+better to make them separated.
+
+In a separated series, probably we can discuss the possibility of
+removing handle from the driver APIs. Just simply return the sva domain
+instead.
+
+struct iommu_domain *iommu_sva_bind_device(struct device *dev,
+                                            struct mm_struct *mm);
+void iommu_sva_unbind_device(struct device *dev,
+                              struct iommu_domain *domain);
+u32 iommu_sva_get_pasid(struct iommu_domain *domain);
+
+If you think it's appropriate, I can send out the code for discussion.
+
 > 
-> > On 09/05/22 06:09, Cheng Li wrote:
-> > > To handle discontiguity case, mem_map_next() has a parameter named
-> > > `offset`. As a function caller, one would be confused why "get
-> > > next entry" needs a parameter named "offset". The other drawback of
-> > > mem_map_next() is that the callers must take care of the map between
-> > > parameter "iter" and "offset", otherwise we may get an hole or
-> > > duplication during iteration. So we use mem_map_offset instead of
-> > > mem_map_next.
-> > > 
-> > > Signed-off-by: Cheng Li <lic121@chinatelecom.cn>
-> > > Fixes: 69d177c2fc70 ("hugetlbfs: handle pages higher order than MAX_ORDER")
-> > 
-> > The Fixes tag implies there is a user visible bug.  I do not believe this is
-> > the case here.  Is there a user visible bug?
-> 
-> A Fixes: with a cc:stable would indicate a user-visible bug.  But IMO a
-> bare Fixes: is simply a when-to-stop guide to backporters - a
-> convenience.  And, I suppose, it has some documentation benefit.
-> 
-> And if people are really that interested, they can read the dang
-> changelog ;)
-> 
+> (Maybe also drop my Reviewed-by tags since this has changed significantly,
+> I tend to ignore patches that have them)
 
-Thank you for the reviews and the "Fixes" tag tips.
+I am sorry that after your review, the SVA domain and attach/detach
+device pasid interfaces have undergone some changes. They mainly exist
+in the following patches. Can you please help to take a look.
 
-So seems we are agrenment on replacing mem_map_offset() with nth_page().
-I may need to send the version 3 :)
+iommu/sva: Refactoring iommu_sva_bind/unbind_device()
+arm-smmu-v3/sva: Add SVA domain support
+iommu: Add IOMMU SVA domain support
+iommu: Add attach/detach_dev_pasid iommu interfaces
 
-I learnt the "Fixes" tag usage from this kenrel contribution guide.[1]
-
-[1]
-https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
-
-
+Best regards,
+baolu

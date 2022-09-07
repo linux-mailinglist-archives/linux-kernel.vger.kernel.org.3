@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CB15AFEB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF595AFEB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiIGIN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S230298AbiIGIN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbiIGINo (ORCPT
+        with ESMTP id S230388AbiIGINs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:13:44 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2987AA350
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:13:42 -0700 (PDT)
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 6EAB9804820C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:13:31 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 7132A10047D95
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:13:09 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id VqBIog8MhG7RFVqBJoywwG; Wed, 07 Sep 2022 08:13:09 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=EscXEQQA c=1 sm=1 tr=0 ts=63185295
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=xOM3xZuef0cA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=20KFwNOVAAAA:8
- a=VwQbUJbxAAAA:8 a=ag1SF4gXAAAA:8 a=VkIJ4bYSlH-4ozLDUtgA:9
- a=QEXdDO2ut3YA:10:nop_charset_2 a=AjGcO6oz07-iQ99wixmX:22
- a=Yupwre4RP9_Eg_Bd0iYG:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4A2rtVgDrZ2UAOz6av2oGnGqktMAjZu+FGdqVMPZNZA=; b=AKnIV45ZuZrQC2HvY7AvkOVz8b
-        AApYo48dmJNuIvQpDgzt+wmtDaJEXk0I/q2y76KiqzxwyQPj5aVBcmnaDDFgmqMhrxbSmwuB3STA+
-        xFziOW3z9eH3GKMYGk+RkgAJaKRm4z/794yo1iAnOTR2kh7gkbFM5OVJWQFyUVy9Aa/15MJT0rRez
-        sX0ESO1ClI/Fup5YlMdXo+HnesT/WgLdcTPLvke0AIB6E1iapn0+OcZ4GzyrDG4/Z3VGuPSUsgcc+
-        jkUBXbWLXZktP49OBHMYjcomoKneVPm+hO8kipwWKEyRzybEJ0Q6YpwXSfaFee34g51Yzawi1CCd7
-        /dflb/yw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43504 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oVqBI-0046de-Jn;
-        Wed, 07 Sep 2022 02:13:08 -0600
-Subject: Re: [PATCH 5.15 101/107] kbuild: Unify options for BTF generation for
- vmlinux and modules
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20220906132821.713989422@linuxfoundation.org>
- <20220906132826.130642856@linuxfoundation.org>
- <291d739c-752f-ead3-1974-a136b986afb7@gmail.com> <YxguwCpBEKAJJDU6@kroah.com>
-In-Reply-To: <YxguwCpBEKAJJDU6@kroah.com>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <06ea51d3-6f7f-c5c7-0b77-0d4b31ef9a52@w6rz.net>
-Date:   Wed, 7 Sep 2022 01:13:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 7 Sep 2022 04:13:48 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8154FAA35F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:13:46 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id t7so14072336wrm.10
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 01:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=mbkRCkxOuTpK3rCdT2NdC/a3ZTao5Ps9WmVjhIiZvls=;
+        b=sk8Pm679kCWo06LlDl21EZc/HmWpPNBEeJP8bUOaaDthi1z+mVK1yZW9dP3APJWwLK
+         WQSj+BRhoPO2amfmoOEJcHDCD2Peg6PSwTivvgK+aSpO+RqG4t5t8ZTdofiUUnrgr3lL
+         7AkuSuz5lV2jjMSAiqbC9Gj4Mv4NzajshOOJsI4ghnoj4Eoq9jaAVqxdwNF71jB9R28O
+         YcIta9ZSV4Dd9kLdjcEviBNy44QypoTufBTizlDJoTwoTlJNJRK84vKqD05TiivJSZIj
+         BPCIAcqAaABlHvQGbFlBIdfcgb/dGcagQWo9r7wd+9omVp+IRAa+cWABdErD/u8IrG3G
+         TOHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=mbkRCkxOuTpK3rCdT2NdC/a3ZTao5Ps9WmVjhIiZvls=;
+        b=Pxar/2rR0Y2khty2O/zZOXu0pzDTbLEoZhSSVLCA20bVQ/PEZpVM3vk74Tgo7bGYmf
+         aUEeGTuBrAPCm7kYURbO2DNjLbCE7jY9AMs77x5dr4FmUncg2viY0OowmMLfYTJya8dF
+         NR6hw3ERhtUc+bkWNth2oVzri1Oz5ExpdMOqepElteIXZVIop3bwzK+9SjFiuZJCoTle
+         +gSL2/O4autA42zyvrYlk8TPuix9P4EIZD4Qkt6N4Ayp48wueOT+huwTYTYJA+btcfoM
+         M9pKSKj21woNoBqJT7s3hdQYev9Kgaq3Xxjz/+XBmQrQmcaUpJu79ztEbz9+kIm1EfRS
+         w7MQ==
+X-Gm-Message-State: ACgBeo2PcOeX6Lowo+i1iGQlseijmqo2TOIXfF0Mk+twomyl94C50wPf
+        T6qKfslBmkgEGbKI9uUXohO45Q==
+X-Google-Smtp-Source: AA6agR4831QEpmYjEGZLA1k1jv1O4NZM4dYSRTaEMkIMcSOZBh3MF+BHVfh5m/Rh5jmx+OZnNPjTmg==
+X-Received: by 2002:a5d:48c2:0:b0:228:6226:381a with SMTP id p2-20020a5d48c2000000b002286226381amr1239472wrs.366.1662538424970;
+        Wed, 07 Sep 2022 01:13:44 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id h13-20020a5d504d000000b00228dbaea941sm5194810wrt.26.2022.09.07.01.13.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 01:13:44 -0700 (PDT)
+Message-ID: <f467244a-64c0-a938-fd88-2f014c520956@linaro.org>
+Date:   Wed, 7 Sep 2022 10:13:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH] clocksource/drivers/renesas-ostm: Add support for
+ RZ/V2L SoC
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oVqBI-0046de-Jn
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:43504
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 3
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220907080056.3460-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220907080056.3460-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/6/22 10:40 PM, Greg Kroah-Hartman wrote:
-> On Tue, Sep 06, 2022 at 11:45:00AM -0700, Florian Fainelli wrote:
->>
->> On 9/6/2022 6:31 AM, Greg Kroah-Hartman wrote:
->>> From: Jiri Olsa <jolsa@redhat.com>
->>>
->>> commit e27f05147bff21408c1b8410ad8e90cd286e7952 upstream.
->>>
->>> Using new PAHOLE_FLAGS variable to pass extra arguments to
->>> pahole for both vmlinux and modules BTF data generation.
->>>
->>> Adding new scripts/pahole-flags.sh script that detect and
->>> prints pahole options.
->>>
->>> [ fixed issues found by kernel test robot ]
->>>
->>> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
->>> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
->>> Acked-by: Andrii Nakryiko <andrii@kernel.org>
->>> Link: https://lore.kernel.org/bpf/20211029125729.70002-1-jolsa@kernel.org
->>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> ---
->>>    Makefile                  |    3 +++
->>>    scripts/Makefile.modfinal |    2 +-
->>>    scripts/link-vmlinux.sh   |   11 +----------
->>>    scripts/pahole-flags.sh   |   20 ++++++++++++++++++++
->>>    4 files changed, 25 insertions(+), 11 deletions(-)
->>>    create mode 100755 scripts/pahole-flags.sh
->> My linux-stable-rc/linux-5.15.y checkout shows that scripts/pahole-flags.sh
->> does not have an executable permission and commit
->> 128e3cc0beffc92154d9af6bd8c107f46e830000 ("kbuild: Unify options for BTF
->> generation for vmlinux and modules") does have:
->>
->> diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
->> new file mode 100644
->> index 000000000000..e6093adf4c06
->>
->> whereas your email does have the proper 100755 permission set on the file,
->> any idea what happened here?
-> Yeah, quilt does not like dealing with file permissions at all :(
->
-> We have over time, not required executable permissions on kernel files
-> because of this issue.  Is it required here?  If so, I'll try to
-> remember to fix it up "by hand".
->
-> thanks,
->
-> greg k-h
+On 07/09/2022 10:00, Lad Prabhakar wrote:
+> The OSTM block is identical on Renesas RZ/G2L and RZ/V2L SoC's, so instead
+> of adding dependency for each SoC's add dependency on ARCH_RZG2L. The
+> ARCH_RZG2L config option is already selected by ARCH_R9A07G044 and
+> ARCH_R9A07G054.
+> 
+> With the above change OSTM will be enabled on RZ/V2L SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-I'm seeing this on my RISC-V build also. The error message (repeated 
-many times) is:
+Applied, thanks
 
-/bin/sh: 1: ./scripts/pahole-flags.sh: Permission denied
 
-So the script isn't running.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

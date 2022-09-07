@@ -2,99 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEA45B0883
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44855B0886
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiIGPZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S229477AbiIGP0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiIGPYk (ORCPT
+        with ESMTP id S229695AbiIGP0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:24:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E16DFDF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662564266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0iho6+f9z5iRGGjb89HO9wY/SFqf6LDgVvj0vNpVUXY=;
-        b=SRO/rLTyXVItdachGCen2xqnkqbNDSmuMw/0Ub7BlrLpeDjmG2H/+45JuDXGEJHu7P3imy
-        BfxvTeOMIjUthzvvznWSUO/ULbu0/r/0LHMZFiAaQ6KjVJLvfXlCzk7HqJ5CaICxaGjNUB
-        tkyyEbR0cJEodwYOhJs10bX1K6OI+iU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-468-FHwvfR03N1meo_sPdLv7qA-1; Wed, 07 Sep 2022 11:24:23 -0400
-X-MC-Unique: FHwvfR03N1meo_sPdLv7qA-1
-Received: by mail-wr1-f72.google.com with SMTP id r23-20020adfb1d7000000b002286358a916so2865984wra.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:24:23 -0700 (PDT)
+        Wed, 7 Sep 2022 11:26:12 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21F312742;
+        Wed,  7 Sep 2022 08:26:11 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id z187so14964433pfb.12;
+        Wed, 07 Sep 2022 08:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=T6N91VXL3P8JDR20lw0om2klLL1DyAPfzo9iAd40Kjg=;
+        b=K8P5YEaVd5+q3A8nyGjz9haRwLkLdQ+3gkZT7IJhCoE9Z+aDbjvnVaJy3IpbnK+4Id
+         Tpxl2i7/GxiWvlli2vFfE7Ztdv8G5GRIbcWSFH25XSFKKNEWuyJ6AQ5DguaKT7l/2mSI
+         ZDskeA/7IG6yx76IgwlZRdc3SsNYF2GeoboK3BZxyQ0ZhEqj6tjBzrraJI8rORFGu3Ou
+         8wOLposlrWgOCaQjVL71crILG+qiz94TwejqdrmGgiZ3Aa4YF6/rlCdLnOr50W0B2NWZ
+         fLofVTge7UqV6obw9NLTxpzwdxdrWtMUGXkXGaV7x019QsbiXbGAhPsME/qXNJHoOHbA
+         +/Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=0iho6+f9z5iRGGjb89HO9wY/SFqf6LDgVvj0vNpVUXY=;
-        b=E6P4d3ndch9bPQ1a7hGCsAn2iaGCNEFtduIpjrgGGcREXVy3eCImJQlVrmPEzcQL9c
-         tahqyiJnM1vHHzUShi80ovH7oZNl+sqq8yNZ513hJoURaYgNwdPYwnIAwxNYenGMvDmJ
-         VQlMXaqpGyvxztl45ve0pPWNkmDcjUPfCd/iFaYB5m2KZqyhGLPT+GkWX4zSHxl5iQbG
-         jqk/G4e/crBP0zIP+B89xC30cwmQyGQS7NC59ig7nhfA4LNBzm9jj1g00Wr28c9Kmr3d
-         oxUlBGUJ+IiGl6XCjJLRO2g/BpIMz7y10tHLoQjkf9kUvHAjtSSbLli5HjWHXMVStlxt
-         AhKg==
-X-Gm-Message-State: ACgBeo2iLuJHq6hze3iiqeeS4KRqfwfGMlKDfiKzrbUEI9wToSIv0DwL
-        vnRSnJVymC4iFGz+LDGeUTiUUi0wIb2QAD/O3pNjlWPXeG4Hn0P5wQ7L0+x1dEtfM2/yc074EQ5
-        VMGV4xrfHzy1Q5d0fRxCiUZJH
-X-Received: by 2002:a05:6000:15c2:b0:228:dc85:d1b0 with SMTP id y2-20020a05600015c200b00228dc85d1b0mr2432129wry.9.1662564262260;
-        Wed, 07 Sep 2022 08:24:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR54VhhbaXXAuW8Gfur51p1bJ4MXnIleZvevw+Ruf936LdZMl4U/+HMZ3kpOi6iQ5mdfjE1jkQ==
-X-Received: by 2002:a05:6000:15c2:b0:228:dc85:d1b0 with SMTP id y2-20020a05600015c200b00228dc85d1b0mr2432113wry.9.1662564262041;
-        Wed, 07 Sep 2022 08:24:22 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
-        by smtp.gmail.com with ESMTPSA id n2-20020a5d6b82000000b00228d52b935asm8209217wrx.71.2022.09.07.08.24.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 08:24:21 -0700 (PDT)
-Message-ID: <a3aee507-6fc1-56f7-ee22-d48e674b1af3@redhat.com>
-Date:   Wed, 7 Sep 2022 17:24:20 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=T6N91VXL3P8JDR20lw0om2klLL1DyAPfzo9iAd40Kjg=;
+        b=tvsdHMlrbTB8zQBtFg/bMCaoNPToDC/9q5BmMhK2wf+LdWfwZp06JjhNUst+09Mqc8
+         CVoCkcvXDSMs8DZZVUQNAEUXwpl1HpzYtwepOmxFB9YnQ4/QHfUkCeCN/JWASjNOqY7+
+         Ut7qf+uW+VHQDCCZsbEH0P6OsLDkhCq9JdY8lCgl0zngZzrzgGWE1g6swmV+kMZqEX43
+         a/luNY13oO6QOBrAAtRIIUkUjacysVbAe4UsJ4YYwcqc2cqThbzhlFzV+eQp5UkD4UUX
+         dNchX0PB5r6PANRwCKonGW0gPV+sGS5SaLWiojIuIWwDpJrQ7nE5dSQyGuDl4T0HO3Yy
+         hCvA==
+X-Gm-Message-State: ACgBeo3+5RNkIvs3XJR17ibruHnqViLnfJNBM74hrgP55KUczydvSgiZ
+        fHjlsQj1Wm3BsYzl8r4Yl7g=
+X-Google-Smtp-Source: AA6agR4tl43GZYvunN36ftktUwWbipKnbvYHV2gfLiaXyPYbOh83fwEBmn1Apv+RIzqkQnhEqF59fA==
+X-Received: by 2002:a65:6d13:0:b0:41d:7380:e9cc with SMTP id bf19-20020a656d13000000b0041d7380e9ccmr3907155pgb.153.1662564370905;
+        Wed, 07 Sep 2022 08:26:10 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id e7-20020a63db07000000b0041a67913d5bsm10797834pgg.71.2022.09.07.08.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:26:10 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 7 Sep 2022 05:26:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Phishing Risk] Re: [Phishing Risk] [External] Re: [PATCH]
+ cgroup/cpuset: Add a new isolated mems.policy type.
+Message-ID: <Yxi4EYxMaPNkL+of@slm.duckdns.org>
+References: <20220902063303.1057-1-hezhongkun.hzk@bytedance.com>
+ <YxT/liaotbiOod51@slm.duckdns.org>
+ <c05bdeac-b354-0ac7-3233-27f8e5cbb38a@bytedance.com>
+ <YxeBGeOaQxvlPLzo@slm.duckdns.org>
+ <d323bd95-476b-0901-855e-14c8796d1b23@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 3/3] mm: add pageblock_aligned() macro
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>
-References: <20220907060844.126891-1-wangkefeng.wang@huawei.com>
- <20220907060844.126891-3-wangkefeng.wang@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220907060844.126891-3-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d323bd95-476b-0901-855e-14c8796d1b23@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.09.22 08:08, Kefeng Wang wrote:
-> Add pageblock_aligned() and use it to simplify code.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
+Hello,
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+On Wed, Sep 07, 2022 at 08:06:30PM +0800, Zhongkun He wrote:
+> It would be better if one process had a way to dynamically modify the
+> mempolicy of another process. But unfortunately there is no interface or
+> system call to do that in userspace.
+
+If you need to change the properties dynamically, I suggest adding this as a
+dynamic per-process interface first. That's more generic and useful for more
+cases.
+
+Thanks.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+tejun

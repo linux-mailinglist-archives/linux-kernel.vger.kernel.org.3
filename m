@@ -2,252 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B855B0293
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76135B0290
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiIGLMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S229970AbiIGLL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiIGLME (ORCPT
+        with ESMTP id S229906AbiIGLLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:12:04 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505FA1834E;
-        Wed,  7 Sep 2022 04:12:03 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id fv3so8078953pjb.0;
-        Wed, 07 Sep 2022 04:12:03 -0700 (PDT)
+        Wed, 7 Sep 2022 07:11:52 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245766451;
+        Wed,  7 Sep 2022 04:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662549111; x=1694085111;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=usfGbZEU0GOk+i4e+WdHJV5BzX2KfyYWNaZKIhsHj88=;
+  b=ndOqf0Y6bJwi+639i42m1+TYS8Cu5BNl5DnH5ch6aR80CijnsuccetpM
+   LlLfiC1XjulrFyGvdh0SC2VN1YXX9dxGTMmrtVxCCg/uPq1AWLsQ+UHbh
+   PBjdBOxlPHYB6gGJDAImgxLLhAv+qmq1sXNPk56POkaBAum5n7p7fY+EM
+   DkbtNudcCEVeVSm6I4kaWyQ3B8xn7DQnPVk8mkUiyA7uxCykc9hNHoESI
+   p8AwarWlRD7mrvb50qCKY8DXDXYfo9aNxXoB/exP9s4OsVPpnnnIcIylv
+   J/OwfT+DY4OiyKjgOq1G+46qsRnA8i+Rblzuk13x+ItMa+TU0Kqhqk3NA
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="172743956"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Sep 2022 04:11:50 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 7 Sep 2022 04:11:48 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 7 Sep 2022 04:11:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YjKLb3WI/GPngJ4O6TE9gQ1lTJL8PoGr1I1b72aOQO3cdzlxW45o2RizzriuCR/XKB76HcsWPaLk+QJ5N3vlIdDOOnFE9Ags1hYvbjOmqDXjfMO2+e32fHlfy197jbkMY5cw74z9bT0Tu4gBJwg8MKGkKOK7lgAtlEnMbUEGLXvfIWtAirCq+QLAz9xBYgM2/wtRYchsF+CHCTlJ3Xz5DUXLdS2ajcCnbxop5KzMMA8JfswEqi3C+x3HcIJ0aKCvA4qZIYzIZcKv/jFqpuNJZ013rnp9Z/lwgcqKkoywxtWv22dh8Cic0T18coR8drd8fPzfBy5cx1GnAVOaMXIe/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=usfGbZEU0GOk+i4e+WdHJV5BzX2KfyYWNaZKIhsHj88=;
+ b=XqfeGKKScakLU5ag3FQq7wtaL8DCO6/zWjLCXXs7HeUiritX2swjgIo83Z6pRwqcj2IClfOatsaoGwFSBbtwmQ2oMfgbPwN/aoPhz703NJuqUJJoCIMQRSjFlZtAmoqp0//t64/AjzcU/hDu97/T2DBWV1y+InRbg90jcUClkYyAp1yNfWzcL2qzHjm0oOpOexV9lsOCS2+/K9x1+3nOyYGchSsXwUOZD/F4tGwDvQfvW8HP85gwaUz8o0F+sEQpbD65xeKJOzdxitd0Cw+p++0xQjHTlmMUwh9eSXHb27dMN8bPeWE6JmDoyW6SsyufVqD3e1U8JwwqIN9qNQR+Ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=9JyQhGC5twBqhnVSFX5NB4Ii/dlVPnV+Lg33o+If3Tw=;
-        b=UBhSDsLvEo7utzJeHRlIrXtRWLWXUnfWNvyjSe3ZttdKDIc8MBErGKy2Q92ZzvRtWT
-         bb1h5pdjAiqkzlYbKCab80ujf7Ltyk3oycevvb6Mp0x9zndVf5wMQwTXuoxuFpQie6Lv
-         0Lb+bSxqL+QKvf++pKwSbMeM/rbpi5Yr21OpnugqoZTg2MXrWedhcpq6XGZJkL2TrFFD
-         Hhy0+LnJsKjHkXQk+Zs3d3y6/eRtc9j4vDE45HK+MTZsdwHolIzMEC9IH2B+F66AW5jN
-         x8rS6PgE3rN+IvFAToBDHvODpglap3OlTpZFBnqsZByO+zPhkP+tsiWV5h/AEdfBbfR1
-         3Uyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=9JyQhGC5twBqhnVSFX5NB4Ii/dlVPnV+Lg33o+If3Tw=;
-        b=8FcXSgaykiYbljOH5VMG+o6bINbYZZAtF6/UoUtyWlAG2rfQrzdfQUC8vYN9TvO9Ig
-         c8eTBt263yr0Do43Pbm86glhW/jqgfHf/Amh6VBStaqHNoaAS8kvpukeddkY7Uuw4P+m
-         lfja768ifABx062HL06D7RyVnVKNsfK//cqZH6AkP62TvGYgGwWUgbFaQEjna/Sa0y/u
-         r0n3QR1WprIQPNBZ73aBNrhyg8RtVDmlkXOdIng4Gyt4RR3RJTRV1UbrbQwPaYJ3mAwI
-         j+FpaGZtvd7gzw0uKe3TVjeH2xM1mBEUoMHhh61k/5TudO4pTCtS6S3zRBxU0Z/Ud5xV
-         JxLg==
-X-Gm-Message-State: ACgBeo1IAOdReX5lPK2BiMulS72Hij85XuFGxMlX+dyYbP3PsNMhiFhf
-        pxY0TVhXvh186d1rg6wlhEU=
-X-Google-Smtp-Source: AA6agR5rxp/8oBEHwaj8lcja+zOf+HJVJGRuIE/uxzGzja1ttN3dJ8S3cmoVGATrGirA1B4TM2Ll4g==
-X-Received: by 2002:a17:90b:2708:b0:200:40aa:5cf5 with SMTP id px8-20020a17090b270800b0020040aa5cf5mr19613370pjb.134.1662549122678;
-        Wed, 07 Sep 2022 04:12:02 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.84])
-        by smtp.gmail.com with ESMTPSA id p186-20020a625bc3000000b00535d3caa66fsm12225683pfb.197.2022.09.07.04.11.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 04:12:02 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     pabeni@redhat.com
-Cc:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        fw@strlen.de, peter.krystad@linux.intel.com,
-        netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>
-Subject: [PATCH net v3] net: mptcp: fix unreleased socket in accept queue
-Date:   Wed,  7 Sep 2022 19:11:32 +0800
-Message-Id: <20220907111132.31722-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.37.2
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=usfGbZEU0GOk+i4e+WdHJV5BzX2KfyYWNaZKIhsHj88=;
+ b=twyhoOrSDE2Ctw2HtBoXYvrR670Rt/WSvTxqJp5wsqihhojk7RnYc2Qd4UXRyLf+A8lLB9VBISNxLWAXYXblwDCBGnwDAW+5oyPVFZAFk2TBZietXe6NIvNoY7qu0hQ3RcimmsIAJ1xCsrZMUyvPNRw1EFTOjg5Ki4ESX1umV8w=
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com (2603:10b6:a02:c9::11)
+ by MW4PR11MB7055.namprd11.prod.outlook.com (2603:10b6:303:22b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 7 Sep
+ 2022 11:11:43 +0000
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::6852:5740:4bc9:d1b4]) by BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::6852:5740:4bc9:d1b4%7]) with mapi id 15.20.5588.014; Wed, 7 Sep 2022
+ 11:11:43 +0000
+From:   <Sergiu.Moga@microchip.com>
+To:     <ilpo.jarvinen@linux.intel.com>
+CC:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <Claudiu.Beznea@microchip.com>,
+        <richard.genoud@gmail.com>, <radu_nicolae.pirea@upb.ro>,
+        <gregkh@linuxfoundation.org>, <broonie@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <jirislaby@kernel.org>, <admin@hifiphile.com>,
+        <Kavyasree.Kotagiri@microchip.com>, <Tudor.Ambarus@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v2 12/13] tty: serial: atmel: Make the driver aware of the
+ existence of GCLK
+Thread-Topic: [PATCH v2 12/13] tty: serial: atmel: Make the driver aware of
+ the existence of GCLK
+Thread-Index: AQHYwfilYklHG7CAIEy/Vao1N5SW/63TtqMAgAAaqYA=
+Date:   Wed, 7 Sep 2022 11:11:43 +0000
+Message-ID: <f3e87d18-41aa-f1e2-e0fb-8944c9fb4910@microchip.com>
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-13-sergiu.moga@microchip.com>
+ <3f98d634-789-a0bd-84e-cfc2a1de70af@linux.intel.com>
+In-Reply-To: <3f98d634-789-a0bd-84e-cfc2a1de70af@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 05fe1222-bd0b-4c7e-b293-08da90c1bf03
+x-ms-traffictypediagnostic: MW4PR11MB7055:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dpdAfu2oQoz4wPYG65rS7avmqm+nEVp6o5W7GXZC8on1+x9peChxqqXHAgF1jSGVjEWf/HAWMtsssyWf3fU39ZuyOweyvVQMqQ6wRnAYaglTgTxzKpqYEA61RPJDJuCroRZAGQcoPOt3lot1jOobN4EArXsO8ehNAq3Q7S2TsiSRhubuNwpYBH0I73ICFend6kAaWo0/CqQHbxUBz/Bzn+zJzkJ8qH8kBjgnKRVuQ/LQ+uLTHK8UVDWZtIx7sc6sxg3I9rLgLJQCE0/jsbOs7FMgNCiaF/O38UOwZyqi5aSIN5T9kvNWVHaZmLYV8gA1mpn5+M4oPbFdRJ2w6VMN8ltyiQnJJzFOgMV5pq2WWmbwgpzrB2kI9YxA6CyNdXIKkLHDFI3UnVeXnKSJGk+/O3QNSUDt3lUiZQMKenpFVhIIk5Hp969kXjDGE8byT/yF4jVl+ek1Vv2u1AfqzuOQZFAK96cyzBHGCCVz6Lexr7wuYrNLqUg4fBcV/XF2b4vWosw/nUakuO+cTUWW2YeszD2WHz6L89xD2CwkWIzRnbvkS/Z3x9tQJgZcjIqjsrYbUtR0S1tz3MAWmO5yAtb/+gpfXcjHm4A6UrjhtDdkc3r7SXQP8OWdauqphyltTrZQsSrbPHmwdnJFg5EPZwfCUEvwvV71N68bU1Axbvl5/9Rz+rHg7VP9ygMwo4Hxn4SipkMOinFItweLN/9LsGXDvO7FcNGGSOUK7wVf0WFO3oMle3CMmlYLZeBuZcUg15KgFnFixYMwePW1DEeFyU7Do/T/e6t3FcinhV0vlEFeiCE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2758.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(376002)(366004)(136003)(396003)(39860400002)(8936002)(6512007)(76116006)(83380400001)(4326008)(6916009)(91956017)(6486002)(8676002)(316002)(478600001)(66556008)(71200400001)(66476007)(54906003)(64756008)(5660300002)(7416002)(2906002)(66446008)(38070700005)(66946007)(122000001)(31686004)(53546011)(86362001)(38100700002)(36756003)(31696002)(2616005)(186003)(26005)(6506007)(66574015)(41300700001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SUJCY25CYm83bERsSjBVTDNUNWRhTXJDbmpQU0tvU2hzZmZZd1VBbTVnMmdr?=
+ =?utf-8?B?STBuUTJ2Mlhid3JKZkNGb3UxbnBlOTZGM3VBUkRsWUtUVjRhU3FKYk5IZE9o?=
+ =?utf-8?B?VlpWaHV1ekNOS0VJeDNOcEJhQkhhVlZ4R29TMkRuK25GWnpoNU9lQk5zVnY5?=
+ =?utf-8?B?eVVMdjJEMElXc1pOVXdQMGdOemJyakJQU0dlUllmUUQrazJKT3hWZHZkbG5V?=
+ =?utf-8?B?RTREbVFRQ2RNOU9xSFFvYjJidHd6WVNJRW5jbVA3b3gyWWV5eFNLcFA4K0FK?=
+ =?utf-8?B?ODNZWHVTUHhvMmZmQjR3bUJucWJPYWZxelhnWEF1dDF6N1lrbkVXc2RlYXl4?=
+ =?utf-8?B?RHlLNXRxRFN1TU9Ld00rUExyQTRkZHBVbEhpSXRHc0FXb0tTWGtaL05IK2lV?=
+ =?utf-8?B?WEpwbC85MFpuL2VXYmd4RFJyWDk2bGZYQ0NpdzVYanR0cEx5MUVIUHQ3VDZP?=
+ =?utf-8?B?U3lzU0hIK1hSMXp1aU94d0FXV1p2bmR4K2ttUFBsQWJoUlpWZDhmNy9EcERQ?=
+ =?utf-8?B?TjFTNnlVTmcweHJ1MHRrZHR4NlRoTU9RNTVSQU82d0llOExZeEFVMVI1eXFu?=
+ =?utf-8?B?RnJFdXk1SWZiV0RKNDZhRDRFY0Zya0NxcUwrWGQ0ekd4Y2lMUFBrZ0UzZGxm?=
+ =?utf-8?B?R01zSU10bHVySVpyZjZYbkVWS0ZGdkd1aGdzWUl1ckxNRWJ0MTVsS2FNWEh3?=
+ =?utf-8?B?ekRadHFLWXRwSStkNkJsRVNqVkZxdGZMdFhHWHJycUc0a0lQemdyTWQ5bkRW?=
+ =?utf-8?B?aEFRa3RBd2ttKzl6NHUzQkJsSVhpdHBqbUVyZlR5NzVrZ0EzV0t4OHNlYlhu?=
+ =?utf-8?B?ZlZIdjZXVUNveHF2b3JSWGFKQXN2TjZURDhmQmluU3EvVkxRUDdIUm9HZXAx?=
+ =?utf-8?B?cVZldDNJeGlHU0wxM1IyMDdKU3lrZzFyZW03d0xlWlFkWERNUm5lV2xkajBB?=
+ =?utf-8?B?Z0ZIaFNUbk9UbHRxSEtUSnczYURxQWpvMHF4aGY1MlVkNlplTkxUWGhXa3RE?=
+ =?utf-8?B?UlB0elB3Tk1sQ3lFS0ZWaUNRdE5qdko3dTRFSHhFZDk3NlhLaUFCSDlBeTJz?=
+ =?utf-8?B?UWlOdmpLYVJDN2gxR0xMOSt6NHQ5RDBTSEI4R0NaS0RQdDFFNUlFYXBDeHlV?=
+ =?utf-8?B?OVU5eENlTFVSZFQ3LzRDZkZ1ZlluLzlFaXIydVkvNldOb1gwL1dXMG9RbHFY?=
+ =?utf-8?B?TTlFVFdjRHpHSzlyd2kwdE5aZk5DZk1NQVcybHRuYVp2S3U0b2x6VjUzbXhP?=
+ =?utf-8?B?dzcxNWpHNi9KdFRWV0ZwUTJOc1ozaFZWNnAySjVIS0YySDJBNTlheHY1RW9p?=
+ =?utf-8?B?NElVWlY3NDZwS1JyZGdYQlFYUTRSTEloSWJKdHZWd3Q5UVpZdG9GdWVpck5C?=
+ =?utf-8?B?aTY1c0NITnhPT1l5WldycXBGRmR5VzJubmMyRTFWZjcveGdxUVdkWXZPRENu?=
+ =?utf-8?B?U0lDaEpIYkM4OGRQSjA3c25GWkxJTGIwUUtjdEltc3hSckpsb2tlOEh2N2Mw?=
+ =?utf-8?B?a2NaVjExNlNCQUE0WGZWVWJ1ZVhZS2FydjZKVEgyMGVqaTFTSGxvb1g5L3Fa?=
+ =?utf-8?B?MHcySkZoVTdoZHZPTlBaai90OURORjlBelJKWnpKZzd2USsyOEw0UDg4R29Q?=
+ =?utf-8?B?TDNqdlBkdCsrdjdnSjhkLzhuczNUckR0SjkxYmlORThBQUwwcDRXTFF1eFQ4?=
+ =?utf-8?B?NU9lVXQyd2RXWEh6a1dNZDlFWXV3aFd0dHJWdEdrT2VRcUFMTXcrbjBtTGhU?=
+ =?utf-8?B?WHVrVXZCQXpwSktLaHMyYWY4anUvOGdaNUtuS25PQS92ZXRFbHJ2L2N5WW14?=
+ =?utf-8?B?K3hEMXprRmwwRVhwaDF6a3l4Q01DbnM0VUNjeGZHTFA4Qk95dDZzeDVyNUJY?=
+ =?utf-8?B?N2RIM05HV2dPenFaRkFKMm5nbHlueXdraThxak9SOXA5bzlzR0dJQmxIbkNp?=
+ =?utf-8?B?by9FcUdLVisrRWdsbm9la3hlUEFwTUJLRHR4by9wZ21oUmRPeHNFcXRyK0pt?=
+ =?utf-8?B?cXIwV3RCSHc4YkduWTBxR0trZ1FqczZncXovb3pFL2FwOU5jK2VmcVlDTGY0?=
+ =?utf-8?B?c1NFR0tLZ08xMkwzQ0llTCtocG04a3lidFhEei8vTm9UekIvZ3ZIT0hZQXVU?=
+ =?utf-8?Q?Zo51AqAqyyfJVOSxwQnBvWLvn?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A10F3E8448CC6444B1E04B56FC5D6869@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2758.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05fe1222-bd0b-4c7e-b293-08da90c1bf03
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 11:11:43.3812
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ce+COLW/pHvtgY0z2kxYYLKVqM3DbsDvu4M1cZDfHIeRAYkqBRcGBP7CWTTd0O92e+7KvSuDB+FmtpqY8Yd0WoPYSWVkSgeVnBV1zD/M6Mk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7055
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
-
-The mptcp socket and its subflow sockets in accept queue can't be
-released after the process exit.
-
-While the release of a mptcp socket in listening state, the
-corresponding tcp socket will be released too. Meanwhile, the tcp
-socket in the unaccept queue will be released too. However, only init
-subflow is in the unaccept queue, and the joined subflow is not in the
-unaccept queue, which makes the joined subflow won't be released, and
-therefore the corresponding unaccepted mptcp socket will not be released
-to.
-
-This can be reproduced easily with following steps:
-
-1. create 2 namespace and veth:
-   $ ip netns add mptcp-client
-   $ ip netns add mptcp-server
-   $ sysctl -w net.ipv4.conf.all.rp_filter=0
-   $ ip netns exec mptcp-client sysctl -w net.mptcp.enabled=1
-   $ ip netns exec mptcp-server sysctl -w net.mptcp.enabled=1
-   $ ip link add red-client netns mptcp-client type veth peer red-server \
-     netns mptcp-server
-   $ ip -n mptcp-server address add 10.0.0.1/24 dev red-server
-   $ ip -n mptcp-server address add 192.168.0.1/24 dev red-server
-   $ ip -n mptcp-client address add 10.0.0.2/24 dev red-client
-   $ ip -n mptcp-client address add 192.168.0.2/24 dev red-client
-   $ ip -n mptcp-server link set red-server up
-   $ ip -n mptcp-client link set red-client up
-
-2. configure the endpoint and limit for client and server:
-   $ ip -n mptcp-server mptcp endpoint flush
-   $ ip -n mptcp-server mptcp limits set subflow 2 add_addr_accepted 2
-   $ ip -n mptcp-client mptcp endpoint flush
-   $ ip -n mptcp-client mptcp limits set subflow 2 add_addr_accepted 2
-   $ ip -n mptcp-client mptcp endpoint add 192.168.0.2 dev red-client id \
-     1 subflow
-
-3. listen and accept on a port, such as 9999. The nc command we used
-   here is modified, which makes it use mptcp protocol by default.
-   $ ip netns exec mptcp-server nc -l -k -p 9999
-
-4. open another *two* terminal and use each of them to connect to the
-   server with the following command:
-   $ ip netns exec mptcp-client nc 10.0.0.1 9999
-   Input something after connect to triger the connection of the second
-   subflow. So that there are two established mptcp connections, with the
-   second one still unaccepted.
-
-5. exit all the nc command, and check the tcp socket in server namespace.
-   And you will find that there is one tcp socket in CLOSE_WAIT state
-   and can't release forever.
-
-Fix this by closing all of the unaccepted mptcp socket in
-mptcp_subflow_queue_clean() with mptcp_close(). As the mptcp_cancel_work()
-is called inside mptcp_close(), we can't introduce a mptcp_close_nolock()
-and call it here, which will cause deadlock.
-
-Now, we can ensure that all unaccepted mptcp sockets will be cleaned by
-mptcp_close() before they are released, so mptcp_sock_destruct(), which is
-used to clean the unaccepted mptcp socket, is not needed anymore.
-
-The selftests for mptcp is ran for this commit, and no new failures.
-However, there are some failures before this commit for mptcp_join.sh:
-
- 5 failure(s) has(ve) been detected:
-        - 27: invalid address, ADD_ADDR timeout
-        - 34: remove invalid addresses
-        - 102: userspace pm no echo w/o daemon
-        - 103: userspace pm type rejects join
-        - 105: userspace pm type prevents mp_prio
-
-Fixes: f296234c98a8 ("mptcp: Add handling of incoming MP_JOIN requests")
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Mengen Sun <mengensun@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
-v3:
-- remove mptcp_close_nolock() and call mptcp_close() directly in
-  mptcp_subflow_queue_clean(), as mptcp_close_nolock() will cause
-  dead lock.
-
-v2:
-- remove mptcp_sock_destruct()
-- introduce mptcp_close_nolock() and replace mptcp_close() with it in
-  mptcp_subflow_queue_clean()
----
- net/mptcp/protocol.c |  2 +-
- net/mptcp/protocol.h |  1 +
- net/mptcp/subflow.c  | 31 ++++++-------------------------
- 3 files changed, 8 insertions(+), 26 deletions(-)
-
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index d398f3810662..2de33626b73f 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -2796,7 +2796,7 @@ static void __mptcp_destroy_sock(struct sock *sk)
- 	sock_put(sk);
- }
- 
--static void mptcp_close(struct sock *sk, long timeout)
-+void mptcp_close(struct sock *sk, long timeout)
- {
- 	struct mptcp_subflow_context *subflow;
- 	struct mptcp_sock *msk = mptcp_sk(sk);
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 132d50833df1..102692b581dd 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -612,6 +612,7 @@ void mptcp_subflow_reset(struct sock *ssk);
- void mptcp_subflow_queue_clean(struct sock *ssk);
- void mptcp_sock_graft(struct sock *sk, struct socket *parent);
- struct socket *__mptcp_nmpc_socket(const struct mptcp_sock *msk);
-+void mptcp_close(struct sock *sk, long timeout);
- 
- bool mptcp_addresses_equal(const struct mptcp_addr_info *a,
- 			   const struct mptcp_addr_info *b, bool use_port);
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index c7d49fb6e7bd..45315a57185a 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -602,30 +602,6 @@ static bool subflow_hmac_valid(const struct request_sock *req,
- 	return !crypto_memneq(hmac, mp_opt->hmac, MPTCPOPT_HMAC_LEN);
- }
- 
--static void mptcp_sock_destruct(struct sock *sk)
--{
--	/* if new mptcp socket isn't accepted, it is free'd
--	 * from the tcp listener sockets request queue, linked
--	 * from req->sk.  The tcp socket is released.
--	 * This calls the ULP release function which will
--	 * also remove the mptcp socket, via
--	 * sock_put(ctx->conn).
--	 *
--	 * Problem is that the mptcp socket will be in
--	 * ESTABLISHED state and will not have the SOCK_DEAD flag.
--	 * Both result in warnings from inet_sock_destruct.
--	 */
--	if ((1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_CLOSE_WAIT)) {
--		sk->sk_state = TCP_CLOSE;
--		WARN_ON_ONCE(sk->sk_socket);
--		sock_orphan(sk);
--	}
--
--	/* We don't need to clear msk->subflow, as it's still NULL at this point */
--	mptcp_destroy_common(mptcp_sk(sk), 0);
--	inet_sock_destruct(sk);
--}
--
- static void mptcp_force_close(struct sock *sk)
- {
- 	/* the msk is not yet exposed to user-space */
-@@ -768,7 +744,6 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
- 			/* new mpc subflow takes ownership of the newly
- 			 * created mptcp socket
- 			 */
--			new_msk->sk_destruct = mptcp_sock_destruct;
- 			mptcp_sk(new_msk)->setsockopt_seq = ctx->setsockopt_seq;
- 			mptcp_pm_new_connection(mptcp_sk(new_msk), child, 1);
- 			mptcp_token_accept(subflow_req, mptcp_sk(new_msk));
-@@ -1770,6 +1745,12 @@ void mptcp_subflow_queue_clean(struct sock *listener_ssk)
- 		msk->first = NULL;
- 		msk->dl_next = NULL;
- 		unlock_sock_fast(sk, slow);
-+
-+		/* mptcp_close() will put a extra reference on sk,
-+		 * so we hold one here.
-+		 */
-+		sock_hold(sk);
-+		mptcp_close(sk, 0);
- 	}
- 
- 	/* we are still under the listener msk socket lock */
--- 
-2.37.2
-
+T24gMDcuMDkuMjAyMiAxMjozNiwgSWxwbyBKw6RydmluZW4gd3JvdGU6DQo+IE9uIFR1ZSwgNiBT
+ZXAgMjAyMiwgU2VyZ2l1IE1vZ2Egd3JvdGU6DQo+IA0KPj4gUHJldmlvdXNseSwgdGhlIGF0bWVs
+IHNlcmlhbCBkcml2ZXIgZGlkIG5vdCB0YWtlIGludG8gYWNjb3VudCB0aGUNCj4+IHBvc3NpYmls
+aXR5IG9mIHVzaW5nIHRoZSBtb3JlIGN1c3RvbWl6YWJsZSBnZW5lcmljIGNsb2NrIGFzIGl0cw0K
+Pj4gYmF1ZHJhdGUgZ2VuZXJhdG9yLiBVbmxlc3MgdGhlcmUgaXMgYSBGcmFjdGlvbmFsIFBhcnQg
+YXZhaWxhYmxlIHRvDQo+PiBpbmNyZWFzZSBhY2N1cmFjeSwgdGhlcmUgaXMgYSBoaWdoIGNoYW5j
+ZSB0aGF0IHdlIG1heSBiZSBhYmxlIHRvDQo+PiBnZW5lcmF0ZSBhIGJhdWRyYXRlIGNsb3NlciB0
+byB0aGUgZGVzaXJlZCBvbmUgYnkgdXNpbmcgdGhlIEdDTEsgYXMgdGhlDQo+PiBjbG9jayBzb3Vy
+Y2UuIE5vdywgZGVwZW5kaW5nIG9uIHRoZSBlcnJvciByYXRlIGJldHdlZW4NCj4+IHRoZSBkZXNp
+cmVkIGJhdWRyYXRlIGFuZCB0aGUgYWN0dWFsIGJhdWRyYXRlLCB0aGUgc2VyaWFsIGRyaXZlciB3
+aWxsDQo+PiBmYWxsYmFjayBvbiB0aGUgZ2VuZXJpYyBjbG9jay4gVGhlIGdlbmVyaWMgY2xvY2sg
+bXVzdCBiZSBwcm92aWRlZA0KPj4gaW4gdGhlIERUIG5vZGUgb2YgdGhlIHNlcmlhbCB0aGF0IG1h
+eSBuZWVkIGEgbW9yZSBmbGV4aWJsZSBjbG9jayBzb3VyY2UuDQo+Pg0KPj4gU2lnbmVkLW9mZi1i
+eTogU2VyZ2l1IE1vZ2EgPHNlcmdpdS5tb2dhQG1pY3JvY2hpcC5jb20+DQo+PiAtLS0NCj4+DQo+
+Pg0KPj4NCj4+IHYxIC0+IHYyOg0KPj4gLSB0YWtlIGludG8gYWNjb3VudCB0aGUgZGlmZmVyZW50
+IHBsYWNlbWVudCBvZiB0aGUgYmF1ZHJhdGUgY2xvY2sgc291cmNlDQo+PiBpbnRvIHRoZSBJUCdz
+IE1vZGUgUmVnaXN0ZXIgKFVTQVJUIHZzIFVBUlQpDQo+PiAtIGRvbid0IGNoZWNrIGZvciBhdG1l
+bF9wb3J0LT5nY2xrICE9IE5VTEwNCj4+IC0gdXNlIGNsa19yb3VuZF9yYXRlIGluc3RlYWQgb2Yg
+Y2xrX3NldF9yYXRlICsgY2xrX2dldF9yYXRlDQo+PiAtIHJlbW92ZSBjbGtfZGlzYWJsZV91bnBy
+ZXBhcmUgZnJvbSB0aGUgZW5kIG9mIHRoZSBwcm9iZSBtZXRob2QNCj4+DQo+Pg0KPj4NCj4+ICAg
+ZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jIHwgNTIgKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrLQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgNTEgaW5zZXJ0aW9ucygrKSwgMSBk
+ZWxldGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3R0eS9zZXJpYWwvYXRtZWxf
+c2VyaWFsLmMgYi9kcml2ZXJzL3R0eS9zZXJpYWwvYXRtZWxfc2VyaWFsLmMNCj4+IGluZGV4IDZh
+YTAxY2E1NDg5Yy4uYjJiNmZkNmVhMmE1IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy90dHkvc2Vy
+aWFsL2F0bWVsX3NlcmlhbC5jDQo+PiArKysgYi9kcml2ZXJzL3R0eS9zZXJpYWwvYXRtZWxfc2Vy
+aWFsLmMNCj4+IEBAIC0xNSw2ICsxNSw3IEBADQo+PiAgICNpbmNsdWRlIDxsaW51eC9pbml0Lmg+
+DQo+PiAgICNpbmNsdWRlIDxsaW51eC9zZXJpYWwuaD4NCj4+ICAgI2luY2x1ZGUgPGxpbnV4L2Ns
+ay5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9jbGstcHJvdmlkZXIuaD4NCj4+ICAgI2luY2x1ZGUg
+PGxpbnV4L2NvbnNvbGUuaD4NCj4+ICAgI2luY2x1ZGUgPGxpbnV4L3N5c3JxLmg+DQo+PiAgICNp
+bmNsdWRlIDxsaW51eC90dHlfZmxpcC5oPg0KPj4gQEAgLTc3LDYgKzc4LDggQEAgc3RhdGljIHZv
+aWQgYXRtZWxfc3RvcF9yeChzdHJ1Y3QgdWFydF9wb3J0ICpwb3J0KTsNCj4+ICAgI2VuZGlmDQo+
+Pg0KPj4gICAjZGVmaW5lIEFUTUVMX0lTUl9QQVNTX0xJTUlUIDI1Ng0KPj4gKyNkZWZpbmUgRVJS
+T1JfUkFURShkZXNpcmVkX3ZhbHVlLCBhY3R1YWxfdmFsdWUpIFwNCj4+ICsgICAgICgoaW50KSgx
+MDAgLSAoKGRlc2lyZWRfdmFsdWUpICogMTAwKSAvIChhY3R1YWxfdmFsdWUpKSkNCj4gDQo+IE1h
+a2UgYSBmdW5jdGlvbiBpbnN0ZWFkLg0KPiANCg0KDQpBbHJpZ2h0LCBJIHNlZSB0aGUgcG9pbnQg
+b2YgbWFraW5nIGl0IGFuIGlubGluZSBmdW5jdGlvbiBpbnN0ZWFkLg0KDQoNCj4gSXMgcGVyY2Vu
+dCBhY2N1cmF0ZSBlbm91Z2ggb3Igd291bGQgeW91IHBlcmhhcHMgd2FudCBzb21ldGhpbmcgc2xp
+Z2h0bHkNCj4gbW9yZSBhY2N1cmF0ZT8NCj4gDQoNCg0KSXQgaXMgYWNjdXJhdGUgZW5vdWdoIGZv
+ciB0aGUgYWxsIHRoZSBiYXVkcmF0ZXMgSSBoYXZlIHRlc3RlZC4gSXQgDQp1c3VhbGx5IHRhcHMg
+aW50byB0aGUgR0NMSyB3aGVuZXZlciBoaWdoIGJhdWRyYXRlcyBzdWNoIGFzIDkyMTYwMCBhcmUg
+DQp1c2VkLiBGb3IgMTE1MjAwIGZvciBleGFtcGxlLCB0aGUgZXJyb3IgcmF0ZSB3YXMgc2xpZ2h0
+bHkgYmV0dGVyIGluIHRoZSANCmNhc2Ugb2YgdGhlIHBlcmlwaGVyYWwgY2xvY2sgYW5kIGl0IGFj
+dGVkIGFjY29yZGluZ2x5LCBjaG9vc2luZyB0aGUgDQpsYXR0ZXIgYXMgaXRzIGJhdWRyYXRlIHNv
+dXJjZSBjbG9jay4gSSBkbyBub3QgdGhpbmsgdGhhdCBhIGhpZ2hlciANCmFjY3VyYWN5IHRoYW4g
+dGhpcyB3b3VsZCBiZSBuZWVkZWQgdGhvdWdoLiBTYXkgdGhhdCB1c2luZyBwZXJjZW50IA0KYWNj
+dXJhY3kgeWllbGRzIHRoYXQgdGhlIGVycm9yIHJhdGVzIGFyZSBlcXVhbCwgYnV0IHRoZSBnY2xr
+IHdvdWxkIGhhdmUgDQpiZWVuIGJldHRlciBpbiB0aGlzIGNhc2UgYnksIHNheSwgYSBmZXcgMTAg
+XiAtNCwgYnV0IHRoZSBjb2RlIGxvZ2ljIGRvZXMgDQpub3Qgc2VlIGl0IHNvIGl0IHByb2NlZWRz
+IHVzaW5nIHRoZSBwZXJpcGhlcmFsIGNsb2NrLiBJbiB0aGF0IGNhc2UsIHRoZSANCmVycm9yIHJh
+dGUgb2YgdGhlIHBlcmlwaGVyYWwgY2xvY2sgd291bGQgc3RpbGwgYmUgbG93IGVub3VnaCByZWxh
+dGl2ZSB0byANCnRoZSBkZXNpcmVkIGJhdWRyYXRlIGZvciB0aGUgY29tbXVuaWNhdGlvbiB0byBm
+dW5jdGlvbiBwcm9wZXJseS4NCg0KVGhlIGhpZ2hlciB0aGUgYmF1ZHJhdGUsIHRoZSBsb3dlciB0
+aGUgZXJyb3IgcmF0ZSBtdXN0IGJlIGluIG9yZGVyIGZvciANCnRoaW5ncyB0byBnbyBzbW9vdGhs
+eS4gRm9yIGV4YW1wbGUsIGZvciBhIGJhdWRyYXRlIG9mIDU3NjAwIEkgbm90aWNlZCANCnRoYXQg
+ZXZlbiBhbiBlcnJvciByYXRlIGFzIGJpZyBhcyA2JSBpcyBzdGlsbCBlbm91Z2ggZm9yIHRoZSAN
+CmNvbW11bmljYXRpb24gdG8gd29yayBwcm9wZXJseSwgd2hpbGUgaW4gdGhlIGNhc2Ugb2YgOTIx
+NjAwIGFueXRoaW5nIA0KYmlnZ2VyIHRoYW4gMiUgYW5kIHRoaW5ncyBkbyBub3QgZ28gc21vb3Ro
+bHkgYW55bW9yZS4gU28gSSBndWVzcyB0aGF0IGl0IA0Kd291bGQgYmUgc2FmZSB0byBzYXkgdGhh
+dCwgdW5sZXNzIHlvdSBnbyBmb3IgYmF1ZHJhdGVzIGFzIGhpZ2ggYXMgdGVucyANCm9mIG1pbGxp
+b25zLCB0aGluZ3Mgc2hvdWxkIHdvcmsgd2VsbCB3aXRoIGp1c3QgcGVyY2VudCBhY2N1cmFjeS4g
+QSANCmhpZ2hlciBhY2N1cmFjeSBhbHdheXMgZGVmaW5ldGVseSBoZWxwcywgYnV0IEkgYmVsaWV2
+ZSBpdCBpcyBub3QgbmVlZGVkIA0KaW4gdGhpcyBjYXNlLg0KDQoNCj4gR2l2ZW4geW91J3ZlIGFi
+cygpIGF0IHRoZSBjYWxsZXIgc2lkZSwgdGhlIGVycm9yIHJhdGUgY291bGQgYmUNCj4gdW5kZXJl
+c3RpbWF0ZWQsIGlzIHVuZGVyZXN0aW1hdGluZyBPSz8NCj4gDQoNCg0KWWVzLCB0aGlzIHNob3Vs
+ZCBiZSBmaW5lLiBXaGlsZSAoYm90aCBlbXBpcmljYWxseSBhbmQgYWZ0ZXIgbG9va2luZyANCnN0
+dWZmIHVwKSBJIG5vdGljZWQgdGhhdCBpbiB0aGUgY2FzZSBvZiBuZWdhdGl2ZSBlcnJvciByYXRl
+cywgdGhlaXIgDQphYnNvbHV0ZSB2YWx1ZSBuZWVkcyB0byBiZSBzbWFsbGVyIHRoYW4gdGhlIG9u
+ZSBvZiBwb3NpdGl2ZSBlcnJvciByYXRlcywgDQppdCBtdXN0IGJlIHNvIGJ5IGEgdmVyeSBzbWFs
+bCBtYXJnaW4gdGhhdCBpcyBuZWdsaWdpYmxlIHdoZW4gZXN0aW1hdGluZyANCnRocm91Z2ggcGVy
+Y2VudCBhY2N1cmFjeS4NCg0KDQo+IC0tDQo+ICAgaS4NCj4gDQo+PiAgIHN0cnVjdCBhdG1lbF9k
+bWFfYnVmZmVyIHsNCj4+ICAgICAgICB1bnNpZ25lZCBjaGFyICAgKmJ1ZjsNCj4+IEBAIC0xMTAs
+NiArMTEzLDcgQEAgc3RydWN0IGF0bWVsX3VhcnRfY2hhciB7DQo+PiAgIHN0cnVjdCBhdG1lbF91
+YXJ0X3BvcnQgew0KPj4gICAgICAgIHN0cnVjdCB1YXJ0X3BvcnQgICAgICAgIHVhcnQ7ICAgICAg
+ICAgICAvKiB1YXJ0ICovDQo+PiAgICAgICAgc3RydWN0IGNsayAgICAgICAgICAgICAgKmNsazsg
+ICAgICAgICAgIC8qIHVhcnQgY2xvY2sgKi8NCj4+ICsgICAgIHN0cnVjdCBjbGsgICAgICAgICAg
+ICAgICpnY2xrOyAgICAgICAgICAvKiB1YXJ0IGdlbmVyaWMgY2xvY2sgKi8NCj4+ICAgICAgICBp
+bnQgICAgICAgICAgICAgICAgICAgICBtYXlfd2FrZXVwOyAgICAgLyogY2FjaGVkIHZhbHVlIG9m
+IGRldmljZV9tYXlfd2FrZXVwIGZvciB0aW1lcyB3ZSBuZWVkIHRvIGRpc2FibGUgaXQgKi8NCj4+
+ICAgICAgICB1MzIgICAgICAgICAgICAgICAgICAgICBiYWNrdXBfaW1yOyAgICAgLyogSU1SIHNh
+dmVkIGR1cmluZyBzdXNwZW5kICovDQo+PiAgICAgICAgaW50ICAgICAgICAgICAgICAgICAgICAg
+YnJlYWtfYWN0aXZlOyAgIC8qIGJyZWFrIGJlaW5nIHJlY2VpdmVkICovDQo+PiBAQCAtMjExNyw2
+ICsyMTIxLDggQEAgc3RhdGljIHZvaWQgYXRtZWxfc2VyaWFsX3BtKHN0cnVjdCB1YXJ0X3BvcnQg
+KnBvcnQsIHVuc2lnbmVkIGludCBzdGF0ZSwNCj4+ICAgICAgICAgICAgICAgICAqIFRoaXMgaXMg
+Y2FsbGVkIG9uIHVhcnRfY2xvc2UoKSBvciBhIHN1c3BlbmQgZXZlbnQuDQo+PiAgICAgICAgICAg
+ICAgICAgKi8NCj4+ICAgICAgICAgICAgICAgIGNsa19kaXNhYmxlX3VucHJlcGFyZShhdG1lbF9w
+b3J0LT5jbGspOw0KPj4gKyAgICAgICAgICAgICBpZiAoX19jbGtfaXNfZW5hYmxlZChhdG1lbF9w
+b3J0LT5nY2xrKSkNCj4+ICsgICAgICAgICAgICAgICAgICAgICBjbGtfZGlzYWJsZV91bnByZXBh
+cmUoYXRtZWxfcG9ydC0+Z2Nsayk7DQo+PiAgICAgICAgICAgICAgICBicmVhazsNCj4+ICAgICAg
+ICBkZWZhdWx0Og0KPj4gICAgICAgICAgICAgICAgZGV2X2Vycihwb3J0LT5kZXYsICJhdG1lbF9z
+ZXJpYWw6IHVua25vd24gcG0gJWRcbiIsIHN0YXRlKTsNCj4+IEBAIC0yMTMxLDcgKzIxMzcsOCBA
+QCBzdGF0aWMgdm9pZCBhdG1lbF9zZXRfdGVybWlvcyhzdHJ1Y3QgdWFydF9wb3J0ICpwb3J0LCBz
+dHJ1Y3Qga3Rlcm1pb3MgKnRlcm1pb3MsDQo+PiAgIHsNCj4+ICAgICAgICBzdHJ1Y3QgYXRtZWxf
+dWFydF9wb3J0ICphdG1lbF9wb3J0ID0gdG9fYXRtZWxfdWFydF9wb3J0KHBvcnQpOw0KPj4gICAg
+ICAgIHVuc2lnbmVkIGxvbmcgZmxhZ3M7DQo+PiAtICAgICB1bnNpZ25lZCBpbnQgb2xkX21vZGUs
+IG1vZGUsIGltciwgcXVvdCwgYmF1ZCwgZGl2LCBjZCwgZnAgPSAwOw0KPj4gKyAgICAgdW5zaWdu
+ZWQgaW50IG9sZF9tb2RlLCBtb2RlLCBpbXIsIHF1b3QsIGRpdiwgY2QsIGZwID0gMDsNCj4+ICsg
+ICAgIHVuc2lnbmVkIGludCBiYXVkLCBhY3R1YWxfYmF1ZCwgZ2Nsa19yYXRlOw0KPj4NCj4+ICAg
+ICAgICAvKiBzYXZlIHRoZSBjdXJyZW50IG1vZGUgcmVnaXN0ZXIgKi8NCj4+ICAgICAgICBtb2Rl
+ID0gb2xkX21vZGUgPSBhdG1lbF91YXJ0X3JlYWRsKHBvcnQsIEFUTUVMX1VTX01SKTsNCj4+IEBA
+IC0yMjk3LDYgKzIzMDQsNDMgQEAgc3RhdGljIHZvaWQgYXRtZWxfc2V0X3Rlcm1pb3Moc3RydWN0
+IHVhcnRfcG9ydCAqcG9ydCwgc3RydWN0IGt0ZXJtaW9zICp0ZXJtaW9zLA0KPj4gICAgICAgICAg
+ICAgICAgY2QgJj0gNjU1MzU7DQo+PiAgICAgICAgfQ0KPj4NCj4+ICsgICAgIC8qDQo+PiArICAg
+ICAgKiBJZiB0aGVyZSBpcyBubyBGcmFjdGlvbmFsIFBhcnQsIHRoZXJlIGlzIGEgaGlnaCBjaGFu
+Y2UgdGhhdA0KPj4gKyAgICAgICogd2UgbWF5IGJlIGFibGUgdG8gZ2VuZXJhdGUgYSBiYXVkcmF0
+ZSBjbG9zZXIgdG8gdGhlIGRlc2lyZWQgb25lDQo+PiArICAgICAgKiBpZiB3ZSB1c2UgdGhlIEdD
+TEsgYXMgdGhlIGNsb2NrIHNvdXJjZSBkcml2aW5nIHRoZSBiYXVkcmF0ZQ0KPj4gKyAgICAgICog
+Z2VuZXJhdG9yLg0KPj4gKyAgICAgICovDQo+PiArICAgICBpZiAoIWF0bWVsX3BvcnQtPmhhc19m
+cmFjX2JhdWRyYXRlKSB7DQo+PiArICAgICAgICAgICAgIGlmIChfX2Nsa19pc19lbmFibGVkKGF0
+bWVsX3BvcnQtPmdjbGspKQ0KPj4gKyAgICAgICAgICAgICAgICAgICAgIGNsa19kaXNhYmxlX3Vu
+cHJlcGFyZShhdG1lbF9wb3J0LT5nY2xrKTsNCj4+ICsgICAgICAgICAgICAgZ2Nsa19yYXRlID0g
+Y2xrX3JvdW5kX3JhdGUoYXRtZWxfcG9ydC0+Z2NsaywgMTYgKiBiYXVkKTsNCj4+ICsgICAgICAg
+ICAgICAgYWN0dWFsX2JhdWQgPSBjbGtfZ2V0X3JhdGUoYXRtZWxfcG9ydC0+Y2xrKSAvICgxNiAq
+IGNkKTsNCj4+ICsgICAgICAgICAgICAgaWYgKGdjbGtfcmF0ZSAmJiBhYnMoRVJST1JfUkFURShi
+YXVkLCBhY3R1YWxfYmF1ZCkpID4NCj4+ICsgICAgICAgICAgICAgICAgIGFicyhFUlJPUl9SQVRF
+KGJhdWQsIGdjbGtfcmF0ZSAvIDE2KSkpIHsNCj4+ICsgICAgICAgICAgICAgICAgICAgICBjbGtf
+c2V0X3JhdGUoYXRtZWxfcG9ydC0+Z2NsaywgMTYgKiBiYXVkKTsNCj4+ICsgICAgICAgICAgICAg
+ICAgICAgICBpZiAoIWNsa19wcmVwYXJlX2VuYWJsZShhdG1lbF9wb3J0LT5nY2xrKSkgew0KPj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWYgKGF0bWVsX3BvcnQtPmlzX3VzYXJ0KSB7
+DQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1vZGUgJj0gfkFUTUVM
+X1VTX1VTQ0xLUzsNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbW9k
+ZSB8PSBBVE1FTF9VU19VU0NMS1NfR0NMSzsNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIH0gZWxzZSB7DQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1v
+ZGUgJj0gfkFUTUVMX1VBX0JSU1JDQ0s7DQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIG1vZGUgfD0gQVRNRUxfVUFfQlJTUkNDS19HQ0xLOw0KPj4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgfQ0KPj4gKw0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgLyoNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqIFNldCB0aGUgQ2xvY2sg
+RGl2aXNvciBmb3IgR0NMSyB0byAxLg0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICogU2luY2Ugd2Ugd2VyZSBhYmxlIHRvIGdlbmVyYXRlIHRoZSBzbWFsbGVzdA0KPj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICogbXVsdGlwbGUgb2YgdGhlIGRlc2lyZWQgYmF1ZHJh
+dGUgdGltZXMgMTYsDQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKiB0aGVuIHdl
+IHN1cmVseSBjYW4gZ2VuZXJhdGUgYSBiaWdnZXIgbXVsdGlwbGUNCj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAqIHdpdGggdGhlIGV4YWN0IGVycm9yIHJhdGUgZm9yIGFuIGVxdWFs
+bHkgaW5jcmVhc2VkDQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKiBDRC4gVGh1
+cyBubyBuZWVkIHRvIHRha2UgaW50byBhY2NvdW50DQo+PiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgKiBhIGhpZ2hlciB2YWx1ZSBmb3IgQ0QuDQo+PiArICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgKi8NCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNkID0gMTsN
+Cj4+ICsgICAgICAgICAgICAgICAgICAgICB9DQo+PiArICAgICAgICAgICAgIH0NCj4+ICsgICAg
+IH0NCj4+ICsNCj4+ICAgICAgICBxdW90ID0gY2QgfCBmcCA8PCBBVE1FTF9VU19GUF9PRkZTRVQ7
+DQo+Pg0KPj4gICAgICAgIGlmICghKHBvcnQtPmlzbzc4MTYuZmxhZ3MgJiBTRVJfSVNPNzgxNl9F
+TkFCTEVEKSkNCj4+IEBAIC0yODkyLDYgKzI5MzYsMTIgQEAgc3RhdGljIGludCBhdG1lbF9zZXJp
+YWxfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+ICAgICAgICBpZiAocmV0
+KQ0KPj4gICAgICAgICAgICAgICAgZ290byBlcnI7DQo+Pg0KPj4gKyAgICAgYXRtZWxfcG9ydC0+
+Z2NsayA9IGRldm1fY2xrX2dldF9vcHRpb25hbCgmcGRldi0+ZGV2LCAiZ2NsayIpOw0KPj4gKyAg
+ICAgaWYgKElTX0VSUihhdG1lbF9wb3J0LT5nY2xrKSkgew0KPj4gKyAgICAgICAgICAgICByZXQg
+PSBQVFJfRVJSKGF0bWVsX3BvcnQtPmdjbGspOw0KPj4gKyAgICAgICAgICAgICBnb3RvIGVycjsN
+Cj4+ICsgICAgIH0NCj4+ICsNCj4+ICAgICAgICByZXQgPSBhdG1lbF9pbml0X3BvcnQoYXRtZWxf
+cG9ydCwgcGRldik7DQo+PiAgICAgICAgaWYgKHJldCkNCj4+ICAgICAgICAgICAgICAgIGdvdG8g
+ZXJyX2Nsa19kaXNhYmxlX3VucHJlcGFyZTsNCj4+DQoNCg==

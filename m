@@ -2,104 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693D15AFC5D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B375AFC68
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiIGG2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        id S229552AbiIGG3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIGG2n (ORCPT
+        with ESMTP id S229771AbiIGG3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:28:43 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1195A8E4E0;
-        Tue,  6 Sep 2022 23:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1662532124; x=1694068124;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=4cDYIE/7ld7yTLHdxOZK80QRgY+Riw5EdEOFHWUOWjw=;
-  b=WAuIWTzRbbuehMVMHbBDPmnqcbGOErJKagx5NP8ZoNXKMyq4MDLA70ci
-   g6hT9o0UgJv+ly56v1QI7mVnpnMWcWg5DhZKyo4j2rOuQ0AqOxQ3uTCAo
-   kmicjsQA2Dy5GYoVUu/LH/dSUx9cbJ7kmFNANyzKtxXx/CSJXirIeGX1u
-   E=;
-X-IronPort-AV: E=Sophos;i="5.93,295,1654560000"; 
-   d="scan'208";a="256931908"
-Subject: Re: [PATCH v4 02/21] dt-bindings: hwmon: (mr75203) fix "intel,
- vm-map" property to be optional
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-5bed4ba5.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 06:28:28 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-5bed4ba5.us-west-2.amazon.com (Postfix) with ESMTPS id D87F181896;
-        Wed,  7 Sep 2022 06:28:25 +0000 (UTC)
-Received: from EX19D013UWB002.ant.amazon.com (10.13.138.21) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 7 Sep 2022 06:28:24 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX19D013UWB002.ant.amazon.com (10.13.138.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Wed, 7 Sep 2022 06:28:24 +0000
-Received: from [192.168.97.69] (10.85.143.172) by mail-relay.amazon.com
- (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Wed, 7 Sep 2022 06:28:21 +0000
-Message-ID: <f638f9bc-b757-c352-7be0-4f9ab6607378@amazon.com>
-Date:   Wed, 7 Sep 2022 09:28:20 +0300
+        Wed, 7 Sep 2022 02:29:25 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551FE9E8A1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:29:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VOwWscf_1662532140;
+Received: from 30.240.98.182(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VOwWscf_1662532140)
+          by smtp.aliyun-inc.com;
+          Wed, 07 Sep 2022 14:29:02 +0800
+Message-ID: <33bedd74-a19e-8919-64c3-432c2eaba11d@linux.alibaba.com>
+Date:   Wed, 7 Sep 2022 14:28:59 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hhhawa@amazon.com>,
-        <jonnyc@amazon.com>, <andriy.shevchenko@intel.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-3-farbere@amazon.com>
- <20220906165359.GA817639@roeck-us.net>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220906165359.GA817639@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v6 04/21] x86/resctrl: Group struct rdt_hw_domain cleanup
+To:     James Morse <james.morse@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        lcherian@marvell.com, bobo.shaobowang@huawei.com,
+        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        xhao@linux.alibaba.com
+References: <20220902154829.30399-1-james.morse@arm.com>
+ <20220902154829.30399-5-james.morse@arm.com>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20220902154829.30399-5-james.morse@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-16.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/6/2022 7:53 PM, Guenter Roeck wrote:
-> On Tue, Sep 06, 2022 at 08:33:37AM +0000, Eliav Farber wrote:
->> Change "intel,vm-map" property to be optional instead of required.
->>
->> The driver implementation indicates it is not mandatory to have
->> "intel,vm-map" in the device tree:
->>  - probe doesn't fail in case it is absent.
->>  - explicit comment in code - "Incase intel,vm-map property is not
->>    defined, we assume incremental channel numbers".
->>
->> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
->> Signed-off-by: Eliav Farber <farbere@amazon.com>
->> ---
->> V3 -> V2:
->> - Change this patch to be first in the series.
->> - Add explanation why "intel,vm-map" is not required.
->>
+
+在 2022/9/2 下午11:48, James Morse 写道:
+> domain_add_cpu() and domain_remove_cpu() need to kfree() the child
+> arrays that were allocated by domain_setup_ctrlval().
 >
-> I don't see how this change warrants dropping Rob's Acked-by tag.
-> Am I missing something ? 
-
-My apology. I wasn’t aware I had to keep the Acked-by tag.
-I'll add it in v5.
-
---
-Regards, Eliav
-
-
+> As this memory is moved around, and new arrays are created, adjusting
+> the error handling cleanup code becomes noisier.
+>
+> To simplify this, move all the kfree() calls into a domain_free() helper.
+> This depends on struct rdt_hw_domain being kzalloc()d, allowing it to
+> unconditionally kfree() all the child arrays.
+>
+> Reviewed-by: Jamie Iles <quic_jiles@quicinc.com>
+> Tested-by: Xin Hao <xhao@linux.alibaba.com>
+> Reviewed-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> Tested-by: Cristian Marussi <cristian.marussi@arm.com>
+> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+> Changes since v2:
+>   * Made domain_free() static.
+>
+> Changes since v1:
+>   * This patch is new
+> ---
+>   arch/x86/kernel/cpu/resctrl/core.c | 17 ++++++++++-------
+>   1 file changed, 10 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+> index 25f30148478b..e37889f7a1a5 100644
+> --- a/arch/x86/kernel/cpu/resctrl/core.c
+> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> @@ -414,6 +414,13 @@ void setup_default_ctrlval(struct rdt_resource *r, u32 *dc, u32 *dm)
+>   	}
+>   }
+>   
+> +static void domain_free(struct rdt_hw_domain *hw_dom)
+add inline ?
+> +{
+> +	kfree(hw_dom->ctrl_val);
+> +	kfree(hw_dom->mbps_val);
+> +	kfree(hw_dom);
+> +}
+> +
+>   static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domain *d)
+>   {
+>   	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+> @@ -488,7 +495,7 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
+>   	rdt_domain_reconfigure_cdp(r);
+>   
+>   	if (r->alloc_capable && domain_setup_ctrlval(r, d)) {
+> -		kfree(hw_dom);
+> +		domain_free(hw_dom);
+>   		return;
+>   	}
+>   
+> @@ -497,9 +504,7 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
+>   	err = resctrl_online_domain(r, d);
+>   	if (err) {
+>   		list_del(&d->list);
+> -		kfree(hw_dom->ctrl_val);
+> -		kfree(hw_dom->mbps_val);
+> -		kfree(hw_dom);
+> +		domain_free(hw_dom);
+>   	}
+>   }
+>   
+> @@ -547,12 +552,10 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
+>   		if (d->plr)
+>   			d->plr->d = NULL;
+>   
+> -		kfree(hw_dom->ctrl_val);
+> -		kfree(hw_dom->mbps_val);
+>   		bitmap_free(d->rmid_busy_llc);
+>   		kfree(d->mbm_total);
+>   		kfree(d->mbm_local);
+> -		kfree(hw_dom);
+> +		domain_free(hw_dom);
+>   		return;
+>   	}
+>   

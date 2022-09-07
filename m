@@ -2,88 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4F25B0C6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 20:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F12D5B0C72
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 20:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiIGSWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 14:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S229711AbiIGSXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 14:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIGSWm (ORCPT
+        with ESMTP id S230346AbiIGSXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 14:22:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F8CB6D3C;
-        Wed,  7 Sep 2022 11:22:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E85CA619FC;
-        Wed,  7 Sep 2022 18:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21840C433D6;
-        Wed,  7 Sep 2022 18:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662574960;
-        bh=Pkr1VvhGYTg8QJDpcdOK6Hab6jKDX9QoWXLoxDwLXps=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Pf0ROvV8VgS0K2jblECNPhnHxkA09Cg+w+nZrcEdk+FC7o03qj7YRfJLQqvCvJ0jl
-         i9q/JgljJ3sXgmcEPVdZbjtOaYPoGHoHi5Qpc3hVh/+k298XtQmsAjlRhTPp6/0eAG
-         PLFejE8hcJ3JRmqNkBC0zr7ipdCXuEfkOadpl34rkgmrEV8w5PoLaO46ZFeuofMOHR
-         ATEAY9IrQWdIp+kS6VQBIKMUsBaVZVmDmjN5MKEtwwOsr/bISzBkb94DNKNCFvqRkY
-         ocdkTM1mKQPBqUXA+p5RLNvaJ9PmSnzi/WnyhSs6ViGJDLl0Gzh8pEZE6ibe7Ri7HF
-         wgm/YE4yFUmtw==
-Date:   Wed, 7 Sep 2022 13:22:38 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Robert Richter <rrichter@amd.com>
-Cc:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 05/15] cxl/acpi: Add probe function to detect restricted
- CXL hosts in RCD mode
-Message-ID: <20220907182238.GA134795@bhelgaas>
+        Wed, 7 Sep 2022 14:23:24 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6533C04E7;
+        Wed,  7 Sep 2022 11:23:21 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8D061478;
+        Wed,  7 Sep 2022 20:23:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662574999;
+        bh=/ZC46D6q/4IGsVDCdn956cKcKGh4AL69/eqqSzbZofQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GFsJSJ1MHEzUGnQ1s26JqPAU+p8zHCwUzr4ZiQpj8XrmvrJRZmzoKmihHR79cKNi2
+         BPZGvtD4jRrzjqiucxoF2oZlP3wSLMoNrYmzV1Cfuovvr7YhhM8+n1N+Ij2syB4hzJ
+         PmJfpZ6qmAachO/i6ZLe065kLj/FeYOzvuT9QxKY=
+Date:   Wed, 7 Sep 2022 21:23:03 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Elder <paul.elder@ideasonboard.com>
+Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-media@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: imx7-media-csi: Add support for fast-tracking
+ queued buffers
+Message-ID: <YxjhhzTylUUwjCVm@pendragon.ideasonboard.com>
+References: <20220907114737.1127612-1-paul.elder@ideasonboard.com>
+ <YxjgkAjvsaZkS2cY@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220831081603.3415-6-rrichter@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YxjgkAjvsaZkS2cY@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 10:15:53AM +0200, Robert Richter wrote:
-> Restricted CXL device (RCD) mode (formerly CXL 1.1) uses a different
-> enumeration scheme other than CXL VH (formerly CXL 2.0). In RCD mode a
-> host/device (RCH-RCD) pair shows up as a legal PCIe hierarchy with an
-> ACPI host bridge ("PNP0A08" or "ACPI0016" HID) and RCiEP connected to
-> it with a description of the CXL device.
-> 
-> Add function cxl_restricted_host_probe() to probe RCD enumerated
-> devices. The function implements a loop that detects all CXL capable
-> ACPI PCI root bridges in the system (RCD mode only). The iterator
-> function cxl_find_next_rch() is introduced to walk through all of the
-> CXL hosts. The loop will then enable all CXL devices connected to the
-> host. For now, only implement an empty loop with an iterator that
-> returns all pci host bridges in the system.
-> 
-> The probe function is triggered by adding an own root device for RCHs.
-> This is different to CXL VH where an ACPI "ACPI0017" root device
-> exists. Its detection starts the CXL host detection. In RCD mode such
-> a device does not necessarily exists, so solve this by creating a
-> plain platform device that is not an ACPI device and is root only for
-> RCHs.
+Hi Paul,
 
-Drive-by nitpicks: 
-s/PCI root bridges/PCI host bridges/ to match other uses
-s/pci host bridges/PCI host bridges/ to match other "PCI" uses
-s/does not necessarily exists/does not necessarily exist/
+On Wed, Sep 07, 2022 at 09:18:58PM +0300, Laurent Pinchart wrote:
+> On Wed, Sep 07, 2022 at 08:47:37PM +0900, Paul Elder wrote:
+> > The CSI hardware compatible with this driver handles buffers using a
+> > ping-pong mechanism with two sets of destination addresses. Normally,
+> > when an interrupt comes in to signal the completion of one buffer, say
+> > FB0, it assigns the next buffer in the queue to the next FB0, and the
+> > hardware starts to capture into FB1 in the meantime.
+> 
+> Could you replace FB0 and FB1 with FB1 and FB2 respectively, to match
+> the naming of the registers ?
+> 
+> > In a buffer underrun situation, in the above example without loss of
+> > generality, if a new buffer is queued before the interrupt for FB0 comes
+> > in, we can program the buffer into FB1 (which is programmed with a dummy
+> > buffer, as there is a buffer underrun).
+> > 
+> > This of course races with the interrupt that signals FB0 completion, as
+> > once that interrupt comes in, we are no longer guaranteed that the
+> > programming of FB1 was in time and must assume it was too late. This
+> > race is resolved partly by locking the programming of FB1. If it came
+> > after the interrupt for FB0, then the variable that is used to determine
+> > which FB to program would have been swapped by the interrupt handler.
+> > 
+> > This alone isn't sufficient, however, because the interrupt could still
+> > be generated (thus the hardware starts capturing into the other fb)
+> > while the fast-tracking routine has the irq lock. Thus, after
+> > programming the fb register to fast-track the buffer, the isr also must
+> > be checked to confirm that an interrupt didn't come in the meantime. If
+> > it has, we must assume that programming the register for the
+> > fast-tracked buffer was not in time, and queue the buffer normally.
+> > 
+> > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+> > Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+> > 
+> > ---
+> > Changes in v2:
+> > - fix the potential race condition where the interrupt comes in while
+> >   the fast tracking routine has the irqlock
+> > - change return value from int to bool
+> > ---
+> >  drivers/staging/media/imx/imx7-media-csi.c | 63 ++++++++++++++++++++++
+> >  1 file changed, 63 insertions(+)
+> > 
+> > diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> > index a0553c24cce4..0ebef44a7627 100644
+> > --- a/drivers/staging/media/imx/imx7-media-csi.c
+> > +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> > @@ -1296,12 +1296,75 @@ static int imx7_csi_video_buf_prepare(struct vb2_buffer *vb)
+> >  	return 0;
+> >  }
+> >  
+> > +static bool imx7_csi_fast_track_buffer(struct imx7_csi *csi,
+> > +				       struct imx7_csi_vb2_buffer *buf)
+> > +{
+> > +	unsigned long flags;
+> > +	dma_addr_t phys;
+> > +	int buf_num;
+> > +	u32 isr;
+> > +
+> > +	if (!csi->is_streaming)
+> > +		return false;
+> > +
+> > +	phys = vb2_dma_contig_plane_dma_addr(&buf->vbuf.vb2_buf, 0);
+> > +
+> > +	/*
+> > +	 * buf_num holds the fb id of the most recently (*not* the next
+> > +	 * anticipated) triggered interrupt. Without loss of generality, if
+> > +	 * buf_num is 0 and we get to this section before the irq for fb2, the
+> 
+> s/fb2/FB2/ to match hardware registers and the commit message ?
+> 
+> > +	 * buffer that we are fast-tracking into fb1 should be programmed in
+> > +	 * time to be captured into. If the irq for fb2 already happened, then
+> > +	 * buf_num would be 1, and we would fast-track the buffer into fb2
+> > +	 * instead. This guarantees that we won't try to fast-track into fb1
+> > +	 * and race against the start-of-capture into fb1.
+> > +	 *
+> > +	 * We only fast-track the buffer if the currently programmed buffer is
+> > +	 * a dummy buffer. We can check the active_vb2_buf instead as it is
+> > +	 * always modified along with programming the fb[1,2] registers via the
+> > +	 * lock (besides setup and cleanup).
+> > +	 */
+> 
+> I think this needs to be updated, it still indicates we handle the race
+> just by checking buf_num. How about the following ?
+> 
+> 	/*
+> 	 * buf_num holds the framebuffer ID of the most recently (*not* the next
+> 	 * anticipated) triggered interrupt. Without loss of generality, if
+> 	 * buf_num is 0, the hardware is capturing to FB2. If FB1 has been
+> 	 * programmed with a dummy buffer (as indicated by active_vb2_buf[0]
+> 	 * being NULL), then we can fast-track the new buffer by programming its
+> 	 * address in FB1 before the hardware completes FB2, instead of adding
+> 	 * it to the buffer queue and incurring a delay of one additional frame.
+> 	 *
+> 	 * The irqlock prevents races with the interrupt handler that queues the
+> 	 * next buffer and updates buf_num, but we can still race with the
+> 	 * hardware if we program the buffer in FB1 just after the hardware
+> 	 * completes FB2 and switches to FB1 and before we notice the buf_num
+> 	 * change. The fast-tracked buffer would then be ignored by the hardware
+> 	 * while the driver would think it has successfully been processed.
+> 	 *
+> 	 * To avoid this problem, if we can't avoid the race, we can detect that
+> 	 * we have lost it by checking, after programming the buffer in FB1, if
+> 	 * the interrupt flag indicated completion of FB2 has been raised. If
+> 	 * that is not the case, fast-tracking succeeded, and we can update
+> 	 * active_vb2_buf[0]. Otherwise, we may or may not have lost the race
+> 	 * (as the interrupt flag may have been raised just after programming
+> 	 * FB1 and before we read the interrupt status register), and we need to
+> 	 * assume the worst case of a race loss and queue the buffer through the
+> 	 * slow path.
+> 	 */
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> If you're fine with these changes there's no need to submit a v3, I'll
+> update the comment and the commit message locally.
+> 
+> > +
+> > +	spin_lock_irqsave(&csi->irqlock, flags);
+> > +
+> > +	buf_num = csi->buf_num;
+> > +	if (csi->active_vb2_buf[buf_num]) {
+> > +		spin_unlock_irqrestore(&csi->irqlock, flags);
+> > +		return false;
+> > +	}
+> > +
+> > +	imx7_csi_update_buf(csi, phys, buf_num);
+> > +
+> > +	isr = imx7_csi_reg_read(csi, CSI_CSISR);
+> > +	/*
+> > +	 * The interrupt for the /other/ fb just came (the isr hasn't run yet
+> > +	 * though, because we have the lock here); we can't be sure we've
+> > +	 * programmed buf_num fb in time, so queue the buffer to the buffer
+> > +	 * queue normally. No need to undo writing the fb register, since we
+> > +	 * won't return it as active_vb2_buf is NULL, so it's okay to
+> > +	 * potentially write it to both fb1 and fb2; only the one where it was
+> > +	 * queued normally will be returned.
+> > +	 */
+
+Also, if you state that the interrupt just came, I'd move the comment to
+within the if () { ... }.
+
+> > +	if (isr & (buf_num ? BIT_DMA_TSF_DONE_FB1 : BIT_DMA_TSF_DONE_FB2)) {
+> > +		spin_unlock_irqrestore(&csi->irqlock, flags);
+> > +		return false;
+> > +	}
+> > +
+> > +	csi->active_vb2_buf[buf_num] = buf;
+> > +
+> > +	spin_unlock_irqrestore(&csi->irqlock, flags);
+> > +	return true;
+> > +}
+> > +
+> >  static void imx7_csi_video_buf_queue(struct vb2_buffer *vb)
+> >  {
+> >  	struct imx7_csi *csi = vb2_get_drv_priv(vb->vb2_queue);
+> >  	struct imx7_csi_vb2_buffer *buf = to_imx7_csi_vb2_buffer(vb);
+> >  	unsigned long flags;
+> >  
+> > +	if (imx7_csi_fast_track_buffer(csi, buf))
+> > +		return;
+> > +
+> >  	spin_lock_irqsave(&csi->q_lock, flags);
+> >  
+> >  	list_add_tail(&buf->list, &csi->ready_q);
+
+-- 
+Regards,
+
+Laurent Pinchart

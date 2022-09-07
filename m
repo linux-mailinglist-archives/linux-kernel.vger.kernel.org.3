@@ -2,47 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C165AFBC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA5B5AFBCC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiIGFda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S229737AbiIGFfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIGFd1 (ORCPT
+        with ESMTP id S229582AbiIGFf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:33:27 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A219DFB0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:33:24 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 3B18D40D403D;
-        Wed,  7 Sep 2022 05:33:20 +0000 (UTC)
+        Wed, 7 Sep 2022 01:35:27 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298124B49D;
+        Tue,  6 Sep 2022 22:35:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662528926; x=1694064926;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s/ws2IVLLDd2yoBtML6C/t5SDZcAcQIo3h0hl+fCkPk=;
+  b=AMDxu4eOgCDPC3ZRPKuvt0Pmx+XVEdlXHEQ/UtPxcixdaYSnbpNTo3B8
+   4nNHhPgGLUt/+hLGxEBsKaTq8HSa3QRX5mGdj2q9nrY15TXpRUUCImA3W
+   5GNzqg/fuOTH3BAh9+C43/qKoLi68aRD0pGBvsxiaFZ64hwdc0Xb/3p4S
+   mRefITf0v1wqziI/x2keKun5J8WT4J5lt575JKVOxvAkOive7z0N+E1E+
+   YccovW4k10OI3hPmIqxFlO8gkn3AVKVQ6IigFG3Eg2bSbUQEYsxvh3AFa
+   XBIkyWdOpEp0tDZFnjQoVVNe+80oHtpQwmTZpb40e7z+1OMe813+6RfMl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="277177789"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="277177789"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 22:35:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="676020466"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Sep 2022 22:35:24 -0700
+Date:   Wed, 7 Sep 2022 13:35:23 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 1/4] KVM: x86: move the event handling of
+ KVM_REQ_GET_VMCS12_PAGES into a common function
+Message-ID: <20220907053523.qb7qsbqfgcg2d2vx@yy-desk-7060>
+References: <20220828222544.1964917-1-mizhang@google.com>
+ <20220828222544.1964917-2-mizhang@google.com>
+ <YwzkvfT0AiwaojTx@google.com>
+ <20220907025042.hvfww56wskwhsjwk@yy-desk-7060>
+ <CAL715WJK1WwXFfbUiMjngV8Z-0jyu_9JeZaK4qvvdJfYvtQEYg@mail.gmail.com>
 MIME-Version: 1.0
-Date:   Wed, 07 Sep 2022 08:33:20 +0300
-From:   Alexey Izbyshev <izbyshev@ispras.ru>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: Potentially undesirable interactions between vfork() and time
- namespaces
-In-Reply-To: <874jxkcfoa.fsf@email.froward.int.ebiederm.org>
-References: <YxAq2jYvGG8QOypu@gmail.com>
- <87czcfhsme.fsf@email.froward.int.ebiederm.org>
- <bdff6cf478fc29c80997a623a57dae5f@ispras.ru>
- <874jxkcfoa.fsf@email.froward.int.ebiederm.org>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <da95e333b4c508ddf8130f8f2d2cbb92@ispras.ru>
-X-Sender: izbyshev@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL715WJK1WwXFfbUiMjngV8Z-0jyu_9JeZaK4qvvdJfYvtQEYg@mail.gmail.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,262 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-07 01:16, Eric W. Biederman wrote:
-> Alexey Izbyshev <izbyshev@ispras.ru> writes:
-> 
->> On 2022-09-01 21:11, Eric W. Biederman wrote:
->>> Andrei Vagin <avagin@gmail.com> writes:
->>> 
->>>> On Tue, Aug 30, 2022 at 6:18 PM Andrei Vagin <avagin@gmail.com> 
->>>> wrote:
->>>>> On Tue, Aug 30, 2022 at 10:49:43PM +0300, Alexey Izbyshev wrote:
->>>> <snip>
->>>>>> @@ -1030,6 +1033,10 @@ static int exec_mmap(struct mm_struct *mm)
->>>>>>         tsk->mm->vmacache_seqnum = 0;
->>>>>>         vmacache_flush(tsk);
->>>>>>         task_unlock(tsk);
->>>>>> +
->>>>>> +       if (vfork)
->>>>>> +               timens_on_fork(tsk->nsproxy, tsk);
->>>>>> +
->>>>>> Similarly, even after a normal vfork(), time namespace switch 
->>>>>> could
->>>>>> be
->>>>>> silently skipped if the parent dies before "tsk->vfork_done" is
->>>>>> read. Again,
->>>>>> I don't know whether anybody cares, but this behavior seems 
->>>>>> non-obvious and
->>>>>> probably unintended to me.
->>>>> This is the more interesting case. I will try to find out how we 
->>>>> can
->>>>> handle it properly.
->>>> It might not be a good idea to use vfork_done in this case. Let's
->>>> think about what we have and what we want to change. We don't want 
->>>> to
->>>> allow switching timens if a process mm is used by someone else. But 
->>>> we
->>>> forgot to handle execve that creates a new mm, and we can't change 
->>>> this
->>>> behavior right now because it can affect current users. Right?
->>> What we can't changes are things that will break existing programs.  
->>> If
->>> existing programs don't care we can change the behavior of the 
->>> kernel.
->>> 
->>>> So maybe the best choice, in this case, is to change behavior by 
->>>> adding
->>>> a new control that enables it. The first interface that comes to my 
->>>> mind
->>>> is to introduce a new ioctl for a namespace file descriptor. Here is 
->>>> a
->>>> draft patch below that should help to understand what I mean.
->>> I don't think adding a new control works, because programs that are
->>> calling vfork or posix_spawn today will stop working.
->>> We should recognize that basing things off of CLONE_VFORK was a bad
->>> idea
->>> as CLONE_VFORK is all about waiting for the created task to exec or
->>> exit, and really has nothing to do with creating a new mm.
->>> Instead I think the rule should be that a new time namespaces is
->>> installed as soon as we have a new mm.
->>> That will be a behavioral change if the time ns is unshared and then
->>> the
->>> program exec's instead of forking children, but I suspect it is the
->>> proper behavior all the same, and that existing userspace won't care.
->>> Especially since all of the vfork_done work is new behavior as
->>> of v6.0-rc1.
->>> 
->> While vfork_done work is indeed new, preservation of 
->> time_ns_for_children on
->> execve() instead of switching to it is how time namespaces were 
->> originally
->> implemented in 5.6. If this can be changed even now, thereby fixing 
->> the original
->> design, that's great, I just want to point out that it's not the 
->> recent 6.0 work
->> that is being fixed. Fixes/clarifications for man pages[1][2], which 
->> talk about
->> "subsequently created children", will also be needed.
->> 
->> [1] https://man7.org/linux/man-pages/man7/time_namespaces.7.html
->> [2] https://man7.org/linux/man-pages/man2/unshare.2.html
-> 
-> Sorry, yes.
-> 
-> That is something to be double checked.
-> 
-> I can't see where it would make sense to unshare a time namespace and
-> then call exec, instead of calling exit.  So I suspect we can just
-> change this behavior and no one will notice.
-> 
-One can imagine a helper binary that calls unshare, forks some children 
-in new namespaces, and then calls exec to hand off actual work to 
-another binary (which might not expect being in the new time namespace). 
-I'm purely theorizing here, however. Keeping a special case for vfork() 
-based only on FUD is likely a net negative, so it'd be nice to hear 
-actual time namespace users speak up, and switch to the solution you 
-suggested if they don't care.
+On Tue, Sep 06, 2022 at 09:26:33PM -0700, Mingwei Zhang wrote:
+> > > @@ -10700,6 +10706,12 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+> > >               if (kvm_cpu_has_pending_timer(vcpu))
+> > >                       kvm_inject_pending_timer_irqs(vcpu);
+> > >
+> > > +             if (vcpu->arch.nested_get_pages_pending) {
+> > > +                     r = kvm_get_nested_state_pages(vcpu);
+> > > +                     if (r <= 0)
+> > > +                             break;
+> > > +             }
+> > > +
+> >
+> > Will this leads to skip the get_nested_state_pages for L2 first time
+> > vmentry in every L2 running iteration ? Because with above changes
+> > KVM_REQ_GET_NESTED_STATE_PAGES is not set in
+> > nested_vmx_enter_non_root_mode() and
+> > vcpu->arch.nested_get_pages_pending is not checked in
+> > vcpu_enter_guest().
+> >
+> Good catch. I think the diff won't work when vcpu is runnable. It only
+> tries to catch the vcpu block case. Even for the vcpu block case,  the
+> check of KVM_REQ_UNBLOCK is way too late. Ah, kvm_vcpu_check_block()
+> is called by kvm_vcpu_block() which is called by vcpu_block(). The
+> warning is triggered at the very beginning of vcpu_block(), i.e.,
+> within kvm_arch_vcpu_runnable(). So, please ignore the trace in my
+> previous email.
+>
+> In addition, my minor push back for that is
+> vcpu->arch.nested_get_pages_pending seems to be another
+> KVM_REQ_GET_NESTED_STATE_PAGES.
 
-The "unshare" tool from util-linux will also change behavior if called 
-without "--fork" (e.g. "unshare --user --time"), but that would be 
-unusual usage (just as for "--pid"), so most people probably don't do 
-that (or don't care about the time namespace of the exec'ed process, but 
-care only about its children).
+Yeah, but in concept level it's not a REQ mask lives in the
+vcpu->requests which can be cached by e.g. kvm_request_pending().
+It's necessary to check vcpu->arch.nested_get_pages_pending in
+vcpu_enter_guest() if Sean's idea is to replace
+KVM_REQ_GET_NESTED_STATE_PAGES with nested_get_pages_pending.
 
->>> Ugh.  I just spotted another bug.  The function timens_on_fork as
->>> written is not safe to call without first creating a fresh copy
->>> of the nsproxy, and we don't do that during exec.  Because nsproxy
->>> is shared between tasks and processes updating the values needs to
->>> create a new nsproxy or other tasks/processes can be affected.
->>> Not hard to handle just something that needs to be addressed.
->>> Say something like this:
->>> diff --git a/fs/exec.c b/fs/exec.c
->>> index 9a5ca7b82bfc..8a6947e631dd 100644
->>> --- a/fs/exec.c
->>> +++ b/fs/exec.c
->>> @@ -979,12 +979,10 @@ static int exec_mmap(struct mm_struct *mm)
->>>  {
->>>  	struct task_struct *tsk;
->>>  	struct mm_struct *old_mm, *active_mm;
->>> -	bool vfork;
->>>  	int ret;
->>>  	/* Notify parent that we're no longer interested in the old VM */
->>>  	tsk = current;
->>> -	vfork = !!tsk->vfork_done;
->>>  	old_mm = current->mm;
->>>  	exec_mm_release(tsk, old_mm);
->>>  	if (old_mm)
->>> @@ -1030,9 +1028,6 @@ static int exec_mmap(struct mm_struct *mm)
->>>  	vmacache_flush(tsk);
->>>  	task_unlock(tsk);
->>> -	if (vfork)
->>> -		timens_on_fork(tsk->nsproxy, tsk);
->>> -
->>>  	if (old_mm) {
->>>  		mmap_read_unlock(old_mm);
->>>  		BUG_ON(active_mm != old_mm);
->>> @@ -1303,6 +1298,10 @@ int begin_new_exec(struct linux_binprm * bprm)
->>>  	bprm->mm = NULL;
->>> +	retval = exec_task_namespaces();
->>> +	if (retval)
->>> +		goto out_unlock;
->>> +
->>>  #ifdef CONFIG_POSIX_TIMERS
->>>  	spin_lock_irq(&me->sighand->siglock);
->>>  	posix_cpu_timers_exit(me);
->>> diff --git a/include/linux/nsproxy.h b/include/linux/nsproxy.h
->>> index cdb171efc7cb..fee881cded01 100644
->>> --- a/include/linux/nsproxy.h
->>> +++ b/include/linux/nsproxy.h
->>> @@ -94,6 +94,7 @@ static inline struct cred *nsset_cred(struct nsset 
->>> *set)
->>>  int copy_namespaces(unsigned long flags, struct task_struct *tsk);
->>>  void exit_task_namespaces(struct task_struct *tsk);
->>>  void switch_task_namespaces(struct task_struct *tsk, struct nsproxy 
->>> *new);
->>> +int exec_task_namespaces(void);
->>>  void free_nsproxy(struct nsproxy *ns);
->>>  int unshare_nsproxy_namespaces(unsigned long, struct nsproxy **,
->>>  	struct cred *, struct fs_struct *);
->>> diff --git a/kernel/fork.c b/kernel/fork.c
->>> index 90c85b17bf69..b4a799d9c50f 100644
->>> --- a/kernel/fork.c
->>> +++ b/kernel/fork.c
->>> @@ -2043,18 +2043,6 @@ static __latent_entropy struct task_struct
->>> *copy_process(
->>>  			return ERR_PTR(-EINVAL);
->>>  	}
->>> -	/*
->>> -	 * If the new process will be in a different time namespace
->>> -	 * do not allow it to share VM or a thread group with the forking 
->>> task.
->>> -	 *
->>> -	 * On vfork, the child process enters the target time namespace 
->>> only
->>> -	 * after exec.
->>> -	 */
->>> -	if ((clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM) {
->>> -		if (nsp->time_ns != nsp->time_ns_for_children)
->>> -			return ERR_PTR(-EINVAL);
->>> -	}
->>> -
->>>  	if (clone_flags & CLONE_PIDFD) {
->>>  		/*
->>>  		 * - CLONE_DETACHED is blocked so that we can potentially
->>> diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
->>> index b4cbb406bc28..b6647846fe42 100644
->>> --- a/kernel/nsproxy.c
->>> +++ b/kernel/nsproxy.c
->>> @@ -255,6 +255,24 @@ void exit_task_namespaces(struct task_struct *p)
->>>  	switch_task_namespaces(p, NULL);
->>>  }
->>> +int exec_task_namespaces(void)
->>> +{
->>> +	struct task_struct *tsk = current;
->>> +	struct nsproxy *new;
->>> +
->>> +	if (tsk->nsproxy->time_ns_for_children == tsk->nsproxy->time_ns)
->>> +		return 0;
->>> +
->>> +	new = create_new_namespaces(0, tsk, current_user_ns(), tsk->fs);
->>> +	if (IS_ERR(new))
->>> +		return PTR_ERR(new);
->>> +
->>> +	timens_on_fork(new, tsk);
->>> +	switch_task_namespaces(tsk, new);
->>> +	return 0;
->>> +}
->>> +
->>> +
->>>  static int check_setns_flags(unsigned long flags)
->>>  {
->>>  	if (!flags || (flags & ~(CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC 
->>> |
->>> 
->>> To keep things from being too confusing it probably makes sense to
->>> rename the nsproxy variable from time_ns_for_children to
->>> time_ns_for_new_mm.  Likewise timens_on_fork can be renamed
->>> timens_on_new_mm.
->>> 
->> Do you imply renaming "/proc/[pid]/ns/time_for_children" as well, or 
->> will it be
->> preserved for compatibility?
-> 
-> Unfortunately I don't think we can change that one.  We could add
-> another better named one, update the tools to use it.  Then wait a
-> couple of millenia and remove the current name.  Depending it might be
-> worth it, but only if you have a lot of patience.
-> 
-I agree with you and Andrei that the name in /proc shouldn't be changed. 
-I was asking only to understand the scope of changes that you suggested.
-
-> We should get the implementation details sorted out first, and the
-> in-kernel name before touching the proc files.
-> 
-FWIW, your patch looks good to me. I've also run some simple manual 
-tests with it applied on top of 6.0.0-rc4, and it works as expected.
-
-I've also noticed one missed optimization in copy_namespaces().
-
-    if (likely(!(flags & (CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC |
-                  CLONE_NEWPID | CLONE_NEWNET |
-                  CLONE_NEWCGROUP | CLONE_NEWTIME)))) {
-        if (likely(old_ns->time_ns_for_children == old_ns->time_ns)) {
-            get_nsproxy(old_ns);
-            return 0;
-        }
-    } else if (!ns_capable(user_ns, CAP_SYS_ADMIN))
-        return -EPERM;
-
-The time ns comparison on the fast path was originally added together 
-with time namespace support, and back then clone(CLONE_VM) wasn't 
-allowed with non-matching time_ns and time_ns_for_children. Then 
-Andrei's patch 133e2d3e81 allowed clone(CLONE_VM|CLONE_VFORK) in this 
-case, and your patch removes CLONE_VM restriction altogether, so 
-non-matching time_ns/time_ns_for_children are simply inherited if 
-CLONE_VM is set. However, the fast path didn't learn about that, so 
-copy_namespaces() will uselessly create a new nsproxy even though 
-timens_on_fork() won't be called. Probably the fast path check should be 
-fixed.
-
-Thanks,
-Alexey
+>
+> Thanks.
+> -Mingwei
+>
+>
+> -Mingwei

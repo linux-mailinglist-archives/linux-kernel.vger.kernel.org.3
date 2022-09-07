@@ -2,463 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7CB5B0280
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B855B0293
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiIGLIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S230085AbiIGLMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiIGLH5 (ORCPT
+        with ESMTP id S229996AbiIGLME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:07:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D877A3D71;
-        Wed,  7 Sep 2022 04:07:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7218FB81C51;
-        Wed,  7 Sep 2022 11:07:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B57C43141;
-        Wed,  7 Sep 2022 11:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662548869;
-        bh=p1SL9Dvne5eLJfHG2Q0U7k0mQStINRdc4kRr9FGwPCQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j/q/K1gVzLhpClsLF6tmBg0zE/IRvc6Cw84s3+HT6mVOp7gMrOmFKPa/rrihopULd
-         3yk3FG87HgnzvHLkHZHnEVUDWht8ehHaGf4Wetr/Br4ysxGIX18cjSUF2QkZzPsOpN
-         87aV+BzzCZpiKM3GnngXpBNzxgTryKiSF3QYiZqQQBJChtgQZd/NLgRkePC0uDP1sr
-         MtSTwpIkN2XAEbdlfK4XbGolNGM4++atAF70KzEAyWuln064hU8spx/iriTFIUJZty
-         nvx4zKFTZmR+i4dNCGQbwKJgyz0zlzOIueqdH6aSLnKs3oR8+72VBrQwS/cAT2hRTp
-         kqFbRq/ZTyw2Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oVsuP-0004zY-Fy; Wed, 07 Sep 2022 13:07:53 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        Wed, 7 Sep 2022 07:12:04 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505FA1834E;
+        Wed,  7 Sep 2022 04:12:03 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id fv3so8078953pjb.0;
+        Wed, 07 Sep 2022 04:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9JyQhGC5twBqhnVSFX5NB4Ii/dlVPnV+Lg33o+If3Tw=;
+        b=UBhSDsLvEo7utzJeHRlIrXtRWLWXUnfWNvyjSe3ZttdKDIc8MBErGKy2Q92ZzvRtWT
+         bb1h5pdjAiqkzlYbKCab80ujf7Ltyk3oycevvb6Mp0x9zndVf5wMQwTXuoxuFpQie6Lv
+         0Lb+bSxqL+QKvf++pKwSbMeM/rbpi5Yr21OpnugqoZTg2MXrWedhcpq6XGZJkL2TrFFD
+         Hhy0+LnJsKjHkXQk+Zs3d3y6/eRtc9j4vDE45HK+MTZsdwHolIzMEC9IH2B+F66AW5jN
+         x8rS6PgE3rN+IvFAToBDHvODpglap3OlTpZFBnqsZByO+zPhkP+tsiWV5h/AEdfBbfR1
+         3Uyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9JyQhGC5twBqhnVSFX5NB4Ii/dlVPnV+Lg33o+If3Tw=;
+        b=8FcXSgaykiYbljOH5VMG+o6bINbYZZAtF6/UoUtyWlAG2rfQrzdfQUC8vYN9TvO9Ig
+         c8eTBt263yr0Do43Pbm86glhW/jqgfHf/Amh6VBStaqHNoaAS8kvpukeddkY7Uuw4P+m
+         lfja768ifABx062HL06D7RyVnVKNsfK//cqZH6AkP62TvGYgGwWUgbFaQEjna/Sa0y/u
+         r0n3QR1WprIQPNBZ73aBNrhyg8RtVDmlkXOdIng4Gyt4RR3RJTRV1UbrbQwPaYJ3mAwI
+         j+FpaGZtvd7gzw0uKe3TVjeH2xM1mBEUoMHhh61k/5TudO4pTCtS6S3zRBxU0Z/Ud5xV
+         JxLg==
+X-Gm-Message-State: ACgBeo1IAOdReX5lPK2BiMulS72Hij85XuFGxMlX+dyYbP3PsNMhiFhf
+        pxY0TVhXvh186d1rg6wlhEU=
+X-Google-Smtp-Source: AA6agR5rxp/8oBEHwaj8lcja+zOf+HJVJGRuIE/uxzGzja1ttN3dJ8S3cmoVGATrGirA1B4TM2Ll4g==
+X-Received: by 2002:a17:90b:2708:b0:200:40aa:5cf5 with SMTP id px8-20020a17090b270800b0020040aa5cf5mr19613370pjb.134.1662549122678;
+        Wed, 07 Sep 2022 04:12:02 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.84])
+        by smtp.gmail.com with ESMTPSA id p186-20020a625bc3000000b00535d3caa66fsm12225683pfb.197.2022.09.07.04.11.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 04:12:02 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     pabeni@redhat.com
+Cc:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        fw@strlen.de, peter.krystad@linux.intel.com,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev,
         linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 16/16] phy: qcom-qmp-usb: shorten function prefixes
-Date:   Wed,  7 Sep 2022 13:07:28 +0200
-Message-Id: <20220907110728.19092-17-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220907110728.19092-1-johan+linaro@kernel.org>
-References: <20220907110728.19092-1-johan+linaro@kernel.org>
+        Menglong Dong <imagedong@tencent.com>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>
+Subject: [PATCH net v3] net: mptcp: fix unreleased socket in accept queue
+Date:   Wed,  7 Sep 2022 19:11:32 +0800
+Message-Id: <20220907111132.31722-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver function prefix has gotten unnecessarily long and hurts
-readability.
+From: Menglong Dong <imagedong@tencent.com>
 
-Shorten "qcom_qmp_phy_" to "qmp_" (which likely stands for "Qualcomm
-Multi PHY" or similar anyway).
+The mptcp socket and its subflow sockets in accept queue can't be
+released after the process exit.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+While the release of a mptcp socket in listening state, the
+corresponding tcp socket will be released too. Meanwhile, the tcp
+socket in the unaccept queue will be released too. However, only init
+subflow is in the unaccept queue, and the joined subflow is not in the
+unaccept queue, which makes the joined subflow won't be released, and
+therefore the corresponding unaccepted mptcp socket will not be released
+to.
+
+This can be reproduced easily with following steps:
+
+1. create 2 namespace and veth:
+   $ ip netns add mptcp-client
+   $ ip netns add mptcp-server
+   $ sysctl -w net.ipv4.conf.all.rp_filter=0
+   $ ip netns exec mptcp-client sysctl -w net.mptcp.enabled=1
+   $ ip netns exec mptcp-server sysctl -w net.mptcp.enabled=1
+   $ ip link add red-client netns mptcp-client type veth peer red-server \
+     netns mptcp-server
+   $ ip -n mptcp-server address add 10.0.0.1/24 dev red-server
+   $ ip -n mptcp-server address add 192.168.0.1/24 dev red-server
+   $ ip -n mptcp-client address add 10.0.0.2/24 dev red-client
+   $ ip -n mptcp-client address add 192.168.0.2/24 dev red-client
+   $ ip -n mptcp-server link set red-server up
+   $ ip -n mptcp-client link set red-client up
+
+2. configure the endpoint and limit for client and server:
+   $ ip -n mptcp-server mptcp endpoint flush
+   $ ip -n mptcp-server mptcp limits set subflow 2 add_addr_accepted 2
+   $ ip -n mptcp-client mptcp endpoint flush
+   $ ip -n mptcp-client mptcp limits set subflow 2 add_addr_accepted 2
+   $ ip -n mptcp-client mptcp endpoint add 192.168.0.2 dev red-client id \
+     1 subflow
+
+3. listen and accept on a port, such as 9999. The nc command we used
+   here is modified, which makes it use mptcp protocol by default.
+   $ ip netns exec mptcp-server nc -l -k -p 9999
+
+4. open another *two* terminal and use each of them to connect to the
+   server with the following command:
+   $ ip netns exec mptcp-client nc 10.0.0.1 9999
+   Input something after connect to triger the connection of the second
+   subflow. So that there are two established mptcp connections, with the
+   second one still unaccepted.
+
+5. exit all the nc command, and check the tcp socket in server namespace.
+   And you will find that there is one tcp socket in CLOSE_WAIT state
+   and can't release forever.
+
+Fix this by closing all of the unaccepted mptcp socket in
+mptcp_subflow_queue_clean() with mptcp_close(). As the mptcp_cancel_work()
+is called inside mptcp_close(), we can't introduce a mptcp_close_nolock()
+and call it here, which will cause deadlock.
+
+Now, we can ensure that all unaccepted mptcp sockets will be cleaned by
+mptcp_close() before they are released, so mptcp_sock_destruct(), which is
+used to clean the unaccepted mptcp socket, is not needed anymore.
+
+The selftests for mptcp is ran for this commit, and no new failures.
+However, there are some failures before this commit for mptcp_join.sh:
+
+ 5 failure(s) has(ve) been detected:
+        - 27: invalid address, ADD_ADDR timeout
+        - 34: remove invalid addresses
+        - 102: userspace pm no echo w/o daemon
+        - 103: userspace pm type rejects join
+        - 105: userspace pm type prevents mp_prio
+
+Fixes: f296234c98a8 ("mptcp: Add handling of incoming MP_JOIN requests")
+Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+Reviewed-by: Mengen Sun <mengensun@tencent.com>
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c |   3 +-
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 121 ++++++++++++------------
- 2 files changed, 60 insertions(+), 64 deletions(-)
+v3:
+- remove mptcp_close_nolock() and call mptcp_close() directly in
+  mptcp_subflow_queue_clean(), as mptcp_close_nolock() will cause
+  dead lock.
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index b020409b92e0..4d0eee620f37 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -1105,8 +1105,7 @@ static const struct phy_ops qcom_qmp_ufs_ops = {
- 	.owner		= THIS_MODULE,
- };
- 
--static
--int qmp_ufs_create(struct device *dev, struct device_node *np, int id,
-+static int qmp_ufs_create(struct device *dev, struct device_node *np, int id,
- 			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 08e0799e8832..41635c21e3ca 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2103,7 +2103,7 @@ static const struct qmp_phy_cfg qcm2290_usb3phy_cfg = {
- 	.is_dual_lane_phy	= true,
- };
- 
--static void qcom_qmp_phy_usb_configure_lane(void __iomem *base,
-+static void qmp_usb_configure_lane(void __iomem *base,
- 					const unsigned int *regs,
- 					const struct qmp_phy_init_tbl tbl[],
- 					int num,
-@@ -2126,27 +2126,27 @@ static void qcom_qmp_phy_usb_configure_lane(void __iomem *base,
- 	}
+v2:
+- remove mptcp_sock_destruct()
+- introduce mptcp_close_nolock() and replace mptcp_close() with it in
+  mptcp_subflow_queue_clean()
+---
+ net/mptcp/protocol.c |  2 +-
+ net/mptcp/protocol.h |  1 +
+ net/mptcp/subflow.c  | 31 ++++++-------------------------
+ 3 files changed, 8 insertions(+), 26 deletions(-)
+
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index d398f3810662..2de33626b73f 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -2796,7 +2796,7 @@ static void __mptcp_destroy_sock(struct sock *sk)
+ 	sock_put(sk);
  }
  
--static void qcom_qmp_phy_usb_configure(void __iomem *base,
-+static void qmp_usb_configure(void __iomem *base,
- 				   const unsigned int *regs,
- 				   const struct qmp_phy_init_tbl tbl[],
- 				   int num)
+-static void mptcp_close(struct sock *sk, long timeout)
++void mptcp_close(struct sock *sk, long timeout)
  {
--	qcom_qmp_phy_usb_configure_lane(base, regs, tbl, num, 0xff);
-+	qmp_usb_configure_lane(base, regs, tbl, num, 0xff);
+ 	struct mptcp_subflow_context *subflow;
+ 	struct mptcp_sock *msk = mptcp_sk(sk);
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index 132d50833df1..102692b581dd 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -612,6 +612,7 @@ void mptcp_subflow_reset(struct sock *ssk);
+ void mptcp_subflow_queue_clean(struct sock *ssk);
+ void mptcp_sock_graft(struct sock *sk, struct socket *parent);
+ struct socket *__mptcp_nmpc_socket(const struct mptcp_sock *msk);
++void mptcp_close(struct sock *sk, long timeout);
+ 
+ bool mptcp_addresses_equal(const struct mptcp_addr_info *a,
+ 			   const struct mptcp_addr_info *b, bool use_port);
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index c7d49fb6e7bd..45315a57185a 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -602,30 +602,6 @@ static bool subflow_hmac_valid(const struct request_sock *req,
+ 	return !crypto_memneq(hmac, mp_opt->hmac, MPTCPOPT_HMAC_LEN);
  }
  
--static int qcom_qmp_phy_usb_serdes_init(struct qmp_phy *qphy)
-+static int qmp_usb_serdes_init(struct qmp_phy *qphy)
+-static void mptcp_sock_destruct(struct sock *sk)
+-{
+-	/* if new mptcp socket isn't accepted, it is free'd
+-	 * from the tcp listener sockets request queue, linked
+-	 * from req->sk.  The tcp socket is released.
+-	 * This calls the ULP release function which will
+-	 * also remove the mptcp socket, via
+-	 * sock_put(ctx->conn).
+-	 *
+-	 * Problem is that the mptcp socket will be in
+-	 * ESTABLISHED state and will not have the SOCK_DEAD flag.
+-	 * Both result in warnings from inet_sock_destruct.
+-	 */
+-	if ((1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_CLOSE_WAIT)) {
+-		sk->sk_state = TCP_CLOSE;
+-		WARN_ON_ONCE(sk->sk_socket);
+-		sock_orphan(sk);
+-	}
+-
+-	/* We don't need to clear msk->subflow, as it's still NULL at this point */
+-	mptcp_destroy_common(mptcp_sk(sk), 0);
+-	inet_sock_destruct(sk);
+-}
+-
+ static void mptcp_force_close(struct sock *sk)
  {
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	void __iomem *serdes = qphy->serdes;
- 	const struct qmp_phy_init_tbl *serdes_tbl = cfg->serdes_tbl;
- 	int serdes_tbl_num = cfg->serdes_tbl_num;
- 
--	qcom_qmp_phy_usb_configure(serdes, cfg->regs, serdes_tbl, serdes_tbl_num);
-+	qmp_usb_configure(serdes, cfg->regs, serdes_tbl, serdes_tbl_num);
- 
- 	return 0;
- }
- 
--static int qcom_qmp_phy_usb_com_init(struct qmp_phy *qphy)
-+static int qmp_usb_com_init(struct qmp_phy *qphy)
- {
- 	struct qcom_qmp *qmp = qphy->qmp;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
-@@ -2218,7 +2218,7 @@ static int qcom_qmp_phy_usb_com_init(struct qmp_phy *qphy)
- 	return ret;
- }
- 
--static int qcom_qmp_phy_usb_com_exit(struct qmp_phy *qphy)
-+static int qmp_usb_com_exit(struct qmp_phy *qphy)
- {
- 	struct qcom_qmp *qmp = qphy->qmp;
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
-@@ -2232,21 +2232,21 @@ static int qcom_qmp_phy_usb_com_exit(struct qmp_phy *qphy)
- 	return 0;
- }
- 
--static int qcom_qmp_phy_usb_init(struct phy *phy)
-+static int qmp_usb_init(struct phy *phy)
- {
- 	struct qmp_phy *qphy = phy_get_drvdata(phy);
- 	struct qcom_qmp *qmp = qphy->qmp;
- 	int ret;
- 	dev_vdbg(qmp->dev, "Initializing QMP phy\n");
- 
--	ret = qcom_qmp_phy_usb_com_init(qphy);
-+	ret = qmp_usb_com_init(qphy);
- 	if (ret)
- 		return ret;
- 
- 	return 0;
- }
- 
--static int qcom_qmp_phy_usb_power_on(struct phy *phy)
-+static int qmp_usb_power_on(struct phy *phy)
- {
- 	struct qmp_phy *qphy = phy_get_drvdata(phy);
- 	struct qcom_qmp *qmp = qphy->qmp;
-@@ -2258,7 +2258,7 @@ static int qcom_qmp_phy_usb_power_on(struct phy *phy)
- 	unsigned int mask, val, ready;
- 	int ret;
- 
--	qcom_qmp_phy_usb_serdes_init(qphy);
-+	qmp_usb_serdes_init(qphy);
- 
- 	ret = clk_prepare_enable(qphy->pipe_clk);
- 	if (ret) {
-@@ -2267,24 +2267,22 @@ static int qcom_qmp_phy_usb_power_on(struct phy *phy)
+ 	/* the msk is not yet exposed to user-space */
+@@ -768,7 +744,6 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
+ 			/* new mpc subflow takes ownership of the newly
+ 			 * created mptcp socket
+ 			 */
+-			new_msk->sk_destruct = mptcp_sock_destruct;
+ 			mptcp_sk(new_msk)->setsockopt_seq = ctx->setsockopt_seq;
+ 			mptcp_pm_new_connection(mptcp_sk(new_msk), child, 1);
+ 			mptcp_token_accept(subflow_req, mptcp_sk(new_msk));
+@@ -1770,6 +1745,12 @@ void mptcp_subflow_queue_clean(struct sock *listener_ssk)
+ 		msk->first = NULL;
+ 		msk->dl_next = NULL;
+ 		unlock_sock_fast(sk, slow);
++
++		/* mptcp_close() will put a extra reference on sk,
++		 * so we hold one here.
++		 */
++		sock_hold(sk);
++		mptcp_close(sk, 0);
  	}
  
- 	/* Tx, Rx, and PCS configurations */
--	qcom_qmp_phy_usb_configure_lane(tx, cfg->regs,
--				    cfg->tx_tbl, cfg->tx_tbl_num, 1);
-+	qmp_usb_configure_lane(tx, cfg->regs, cfg->tx_tbl, cfg->tx_tbl_num, 1);
- 
- 	if (cfg->is_dual_lane_phy) {
--		qcom_qmp_phy_usb_configure_lane(qphy->tx2, cfg->regs,
--					    cfg->tx_tbl, cfg->tx_tbl_num, 2);
-+		qmp_usb_configure_lane(qphy->tx2, cfg->regs,
-+					cfg->tx_tbl, cfg->tx_tbl_num, 2);
- 	}
- 
--	qcom_qmp_phy_usb_configure_lane(rx, cfg->regs,
--				    cfg->rx_tbl, cfg->rx_tbl_num, 1);
-+	qmp_usb_configure_lane(rx, cfg->regs, cfg->rx_tbl, cfg->rx_tbl_num, 1);
- 
- 	if (cfg->is_dual_lane_phy) {
--		qcom_qmp_phy_usb_configure_lane(qphy->rx2, cfg->regs,
--					    cfg->rx_tbl, cfg->rx_tbl_num, 2);
-+		qmp_usb_configure_lane(qphy->rx2, cfg->regs,
-+					cfg->rx_tbl, cfg->rx_tbl_num, 2);
- 	}
- 
- 	/* Configure link rate, swing, etc. */
--	qcom_qmp_phy_usb_configure(pcs, cfg->regs, cfg->pcs_tbl, cfg->pcs_tbl_num);
-+	qmp_usb_configure(pcs, cfg->regs, cfg->pcs_tbl, cfg->pcs_tbl_num);
- 
- 	if (cfg->has_pwrdn_delay)
- 		usleep_range(cfg->pwrdn_delay_min, cfg->pwrdn_delay_max);
-@@ -2314,7 +2312,7 @@ static int qcom_qmp_phy_usb_power_on(struct phy *phy)
- 	return ret;
- }
- 
--static int qcom_qmp_phy_usb_power_off(struct phy *phy)
-+static int qmp_usb_power_off(struct phy *phy)
- {
- 	struct qmp_phy *qphy = phy_get_drvdata(phy);
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
-@@ -2339,42 +2337,41 @@ static int qcom_qmp_phy_usb_power_off(struct phy *phy)
- 	return 0;
- }
- 
--static int qcom_qmp_phy_usb_exit(struct phy *phy)
-+static int qmp_usb_exit(struct phy *phy)
- {
- 	struct qmp_phy *qphy = phy_get_drvdata(phy);
- 
--	qcom_qmp_phy_usb_com_exit(qphy);
-+	qmp_usb_com_exit(qphy);
- 
- 	return 0;
- }
- 
--static int qcom_qmp_phy_usb_enable(struct phy *phy)
-+static int qmp_usb_enable(struct phy *phy)
- {
- 	int ret;
- 
--	ret = qcom_qmp_phy_usb_init(phy);
-+	ret = qmp_usb_init(phy);
- 	if (ret)
- 		return ret;
- 
--	ret = qcom_qmp_phy_usb_power_on(phy);
-+	ret = qmp_usb_power_on(phy);
- 	if (ret)
--		qcom_qmp_phy_usb_exit(phy);
-+		qmp_usb_exit(phy);
- 
- 	return ret;
- }
- 
--static int qcom_qmp_phy_usb_disable(struct phy *phy)
-+static int qmp_usb_disable(struct phy *phy)
- {
- 	int ret;
- 
--	ret = qcom_qmp_phy_usb_power_off(phy);
-+	ret = qmp_usb_power_off(phy);
- 	if (ret)
- 		return ret;
--	return qcom_qmp_phy_usb_exit(phy);
-+	return qmp_usb_exit(phy);
- }
- 
--static int qcom_qmp_phy_usb_set_mode(struct phy *phy,
--				 enum phy_mode mode, int submode)
-+static int qmp_usb_set_mode(struct phy *phy, enum phy_mode mode, int submode)
- {
- 	struct qmp_phy *qphy = phy_get_drvdata(phy);
- 
-@@ -2383,7 +2380,7 @@ static int qcom_qmp_phy_usb_set_mode(struct phy *phy,
- 	return 0;
- }
- 
--static void qcom_qmp_phy_usb_enable_autonomous_mode(struct qmp_phy *qphy)
-+static void qmp_usb_enable_autonomous_mode(struct qmp_phy *qphy)
- {
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	void __iomem *pcs_usb = qphy->pcs_usb ?: qphy->pcs;
-@@ -2412,7 +2409,7 @@ static void qcom_qmp_phy_usb_enable_autonomous_mode(struct qmp_phy *qphy)
- 		qphy_clrbits(pcs_misc, QPHY_V3_PCS_MISC_CLAMP_ENABLE, CLAMP_EN);
- }
- 
--static void qcom_qmp_phy_usb_disable_autonomous_mode(struct qmp_phy *qphy)
-+static void qmp_usb_disable_autonomous_mode(struct qmp_phy *qphy)
- {
- 	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	void __iomem *pcs_usb = qphy->pcs_usb ?: qphy->pcs;
-@@ -2430,7 +2427,7 @@ static void qcom_qmp_phy_usb_disable_autonomous_mode(struct qmp_phy *qphy)
- 	qphy_clrbits(pcs_usb, cfg->regs[QPHY_PCS_LFPS_RXTERM_IRQ_CLEAR], IRQ_CLEAR);
- }
- 
--static int __maybe_unused qcom_qmp_phy_usb_runtime_suspend(struct device *dev)
-+static int __maybe_unused qmp_usb_runtime_suspend(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
- 	struct qmp_phy *qphy = qmp->phys[0];
-@@ -2447,7 +2444,7 @@ static int __maybe_unused qcom_qmp_phy_usb_runtime_suspend(struct device *dev)
- 		return 0;
- 	}
- 
--	qcom_qmp_phy_usb_enable_autonomous_mode(qphy);
-+	qmp_usb_enable_autonomous_mode(qphy);
- 
- 	clk_disable_unprepare(qphy->pipe_clk);
- 	clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
-@@ -2455,7 +2452,7 @@ static int __maybe_unused qcom_qmp_phy_usb_runtime_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused qcom_qmp_phy_usb_runtime_resume(struct device *dev)
-+static int __maybe_unused qmp_usb_runtime_resume(struct device *dev)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
- 	struct qmp_phy *qphy = qmp->phys[0];
-@@ -2484,12 +2481,12 @@ static int __maybe_unused qcom_qmp_phy_usb_runtime_resume(struct device *dev)
- 		return ret;
- 	}
- 
--	qcom_qmp_phy_usb_disable_autonomous_mode(qphy);
-+	qmp_usb_disable_autonomous_mode(qphy);
- 
- 	return 0;
- }
- 
--static int qcom_qmp_phy_usb_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
-+static int qmp_usb_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
- 	int num = cfg->num_vregs;
-@@ -2505,7 +2502,7 @@ static int qcom_qmp_phy_usb_vreg_init(struct device *dev, const struct qmp_phy_c
- 	return devm_regulator_bulk_get(dev, num, qmp->vregs);
- }
- 
--static int qcom_qmp_phy_usb_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg)
-+static int qmp_usb_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
- 	int i;
-@@ -2526,7 +2523,7 @@ static int qcom_qmp_phy_usb_reset_init(struct device *dev, const struct qmp_phy_
- 	return 0;
- }
- 
--static int qcom_qmp_phy_usb_clk_init(struct device *dev, const struct qmp_phy_cfg *cfg)
-+static int qmp_usb_clk_init(struct device *dev, const struct qmp_phy_cfg *cfg)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
- 	int num = cfg->num_clks;
-@@ -2602,15 +2599,15 @@ static int phy_pipe_clk_register(struct qcom_qmp *qmp, struct device_node *np)
- 	return devm_add_action_or_reset(qmp->dev, phy_clk_release_provider, np);
- }
- 
--static const struct phy_ops qcom_qmp_phy_usb_ops = {
--	.init		= qcom_qmp_phy_usb_enable,
--	.exit		= qcom_qmp_phy_usb_disable,
--	.set_mode	= qcom_qmp_phy_usb_set_mode,
-+static const struct phy_ops qmp_usb_ops = {
-+	.init		= qmp_usb_enable,
-+	.exit		= qmp_usb_disable,
-+	.set_mode	= qmp_usb_set_mode,
- 	.owner		= THIS_MODULE,
- };
- 
- static
--int qcom_qmp_phy_usb_create(struct device *dev, struct device_node *np, int id,
-+int qmp_usb_create(struct device *dev, struct device_node *np, int id,
- 			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
- {
- 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
-@@ -2680,7 +2677,7 @@ int qcom_qmp_phy_usb_create(struct device *dev, struct device_node *np, int id,
- 				     "failed to get lane%d pipe clock\n", id);
- 	}
- 
--	generic_phy = devm_phy_create(dev, np, &qcom_qmp_phy_usb_ops);
-+	generic_phy = devm_phy_create(dev, np, &qmp_usb_ops);
- 	if (IS_ERR(generic_phy)) {
- 		ret = PTR_ERR(generic_phy);
- 		dev_err(dev, "failed to create qphy %d\n", ret);
-@@ -2696,7 +2693,7 @@ int qcom_qmp_phy_usb_create(struct device *dev, struct device_node *np, int id,
- 	return 0;
- }
- 
--static const struct of_device_id qcom_qmp_phy_usb_of_match_table[] = {
-+static const struct of_device_id qmp_usb_of_match_table[] = {
- 	{
- 		.compatible = "qcom,ipq8074-qmp-usb3-phy",
- 		.data = &ipq8074_usb3phy_cfg,
-@@ -2757,14 +2754,14 @@ static const struct of_device_id qcom_qmp_phy_usb_of_match_table[] = {
- 	},
- 	{ },
- };
--MODULE_DEVICE_TABLE(of, qcom_qmp_phy_usb_of_match_table);
-+MODULE_DEVICE_TABLE(of, qmp_usb_of_match_table);
- 
--static const struct dev_pm_ops qcom_qmp_phy_usb_pm_ops = {
--	SET_RUNTIME_PM_OPS(qcom_qmp_phy_usb_runtime_suspend,
--			   qcom_qmp_phy_usb_runtime_resume, NULL)
-+static const struct dev_pm_ops qmp_usb_pm_ops = {
-+	SET_RUNTIME_PM_OPS(qmp_usb_runtime_suspend,
-+			   qmp_usb_runtime_resume, NULL)
- };
- 
--static int qcom_qmp_phy_usb_probe(struct platform_device *pdev)
-+static int qmp_usb_probe(struct platform_device *pdev)
- {
- 	struct qcom_qmp *qmp;
- 	struct device *dev = &pdev->dev;
-@@ -2799,15 +2796,15 @@ static int qcom_qmp_phy_usb_probe(struct platform_device *pdev)
- 			return PTR_ERR(qmp->dp_com);
- 	}
- 
--	ret = qcom_qmp_phy_usb_clk_init(dev, cfg);
-+	ret = qmp_usb_clk_init(dev, cfg);
- 	if (ret)
- 		return ret;
- 
--	ret = qcom_qmp_phy_usb_reset_init(dev, cfg);
-+	ret = qmp_usb_reset_init(dev, cfg);
- 	if (ret)
- 		return ret;
- 
--	ret = qcom_qmp_phy_usb_vreg_init(dev, cfg);
-+	ret = qmp_usb_vreg_init(dev, cfg);
- 	if (ret) {
- 		if (ret != -EPROBE_DEFER)
- 			dev_err(dev, "failed to get regulator supplies: %d\n",
-@@ -2837,7 +2834,7 @@ static int qcom_qmp_phy_usb_probe(struct platform_device *pdev)
- 	id = 0;
- 	for_each_available_child_of_node(dev->of_node, child) {
- 		/* Create per-lane phy */
--		ret = qcom_qmp_phy_usb_create(dev, child, id, serdes, cfg);
-+		ret = qmp_usb_create(dev, child, id, serdes, cfg);
- 		if (ret) {
- 			dev_err(dev, "failed to create lane%d phy, %d\n",
- 				id, ret);
-@@ -2867,16 +2864,16 @@ static int qcom_qmp_phy_usb_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static struct platform_driver qcom_qmp_phy_usb_driver = {
--	.probe		= qcom_qmp_phy_usb_probe,
-+static struct platform_driver qmp_usb_driver = {
-+	.probe		= qmp_usb_probe,
- 	.driver = {
- 		.name	= "qcom-qmp-usb-phy",
--		.pm	= &qcom_qmp_phy_usb_pm_ops,
--		.of_match_table = qcom_qmp_phy_usb_of_match_table,
-+		.pm	= &qmp_usb_pm_ops,
-+		.of_match_table = qmp_usb_of_match_table,
- 	},
- };
- 
--module_platform_driver(qcom_qmp_phy_usb_driver);
-+module_platform_driver(qmp_usb_driver);
- 
- MODULE_AUTHOR("Vivek Gautam <vivek.gautam@codeaurora.org>");
- MODULE_DESCRIPTION("Qualcomm QMP USB PHY driver");
+ 	/* we are still under the listener msk socket lock */
 -- 
-2.35.1
+2.37.2
 

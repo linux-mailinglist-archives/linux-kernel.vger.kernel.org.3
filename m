@@ -2,51 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2189C5AFA27
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BEC5AFA0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiIGCpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S229903AbiIGCn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiIGCpl (ORCPT
+        with ESMTP id S229862AbiIGCnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:45:41 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Sep 2022 19:45:35 PDT
-Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352B77C771;
-        Tue,  6 Sep 2022 19:45:34 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="67029789"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654527600"; 
-   d="scan'208";a="67029789"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Sep 2022 11:45:13 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id BB300D63BA;
-        Wed,  7 Sep 2022 11:45:11 +0900 (JST)
-Received: from m3002.s.css.fujitsu.com (msm3.b.css.fujitsu.com [10.128.233.104])
-        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id E495CD6806;
-        Wed,  7 Sep 2022 11:45:10 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.19.3.107])
-        by m3002.s.css.fujitsu.com (Postfix) with ESMTP id A03AA200B33B;
-        Wed,  7 Sep 2022 11:45:10 +0900 (JST)
-From:   Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
-To:     linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
-        zyjzyj2000@gmail.com
-Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        rpearsonhpe@gmail.com, yangx.jy@fujitsu.com, lizhijian@fujitsu.com,
-        y-goto@fujitsu.com, Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
-Subject: [RFC PATCH 7/7] RDMA/rxe: Add support for the traditional Atomic operations with ODP
-Date:   Wed,  7 Sep 2022 11:43:05 +0900
-Message-Id: <e4ae56c3cb40c8d1b6a523d48a84d7e0d9e5d8de.1662461897.git.matsuda-daisuke@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
-References: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
+        Tue, 6 Sep 2022 22:43:25 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E097B28F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 19:43:24 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id c20so9483011qtw.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 19:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=HV15brfmijT3wQpdJQzUr20Idn6RQgfVceZTRDNZ2RA=;
+        b=xSduQWMCYeluZayNSc/ZHmsirDlb9V9NS3hqmtpoPmuCjOI6hsnymMlm4dMQTQDGPD
+         J4T0+VqM2skudfqpfnDEGffA6LwWX9ZtfksqaBf8mewmSP1nOEi35pcZO/f3PgmlKhHl
+         hw2/IvrXMUi65QTYz6e377fymvUm0PBmBkNQk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HV15brfmijT3wQpdJQzUr20Idn6RQgfVceZTRDNZ2RA=;
+        b=FHp577SCLQvBpirtENWtTN687ytqFmVOz83t/YaaBz3/+rzADpRY7P8lKyUFTkVL8l
+         7x/9NOPkmcfM9AiUFsbV9cJyI1XefCZqBQOaG2HBBSpJRTlUe9JUuDpyhPella5gVTD1
+         AY6ha9++7G24/0vMSksgeSYKb0Tez66MASdOvIpcddknYDvN9h8Mf0oVfzoBwIu38qe/
+         Fpy/3ppAL004db7PQT19X26/WQyXFW2b9cd4QZwuS9FGmwBcYhlK0e6PJleGR2+rZIvF
+         YhRc+OtDxminFJFcNq0yObH5F6FpijtqS37LgXdwEhaT9KkLjCsqCVm4zbo2o94UM5QN
+         pkgA==
+X-Gm-Message-State: ACgBeo2IMCJjbmfzJBgglC8ufrQZ7UpL5ndE/MBGt6RzPmq/5w3ZSEVB
+        59ogdKPC0z4Bs2AAWALOP4je/Q==
+X-Google-Smtp-Source: AA6agR4g8U9tCuV/rPUVPEgqT2qIUDioJHoiieKqfwpb7oxjTNDvFQ9Y6HTa+FzF7YlFKwIwyKTxpQ==
+X-Received: by 2002:ac8:5a0d:0:b0:344:de4f:b187 with SMTP id n13-20020ac85a0d000000b00344de4fb187mr1431577qta.136.1662518604011;
+        Tue, 06 Sep 2022 19:43:24 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id bb9-20020a05622a1b0900b00354e5b8bba3sm6629847qtb.29.2022.09.06.19.43.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 19:43:23 -0700 (PDT)
+Message-ID: <a99c817f-4b0f-ad50-db38-8a55029d6ecc@joelfernandes.org>
+Date:   Tue, 6 Sep 2022 22:43:22 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v5 04/18] rcu: Fix late wakeup when flush of bypass cblist
+ happens
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, paulmck@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org, boqun.feng@gmail.com
+References: <20220901221720.1105021-1-joel@joelfernandes.org>
+ <20220901221720.1105021-5-joel@joelfernandes.org>
+ <Yxa5WVwwcDmCL9Dw@google.com> <20220906094852.GA174244@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20220906094852.GA174244@lothringen>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,216 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable 'fetch and add' and 'compare and swap' operations to manipulate
-data in an ODP-enabled MR. This is comprised of the following steps:
- 1. Check the driver page table(umem_odp->dma_list) to see if the target
-    page is both readable and writable.
- 2. If not, then trigger page fault to map the page.
- 3. Convert its user space address to a kernel logical address using PFNs
-    in the driver page table(umem_odp->pfn_list).
- 4. Execute the operation.
 
-umem_mutex is used to ensure that dma_list (an array of addresses of an MR)
-is not changed while it is checked and that the target page is not
-invalidated before data access completes.
 
-Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
----
- drivers/infiniband/sw/rxe/rxe.c      |  1 +
- drivers/infiniband/sw/rxe/rxe_loc.h  |  2 ++
- drivers/infiniband/sw/rxe/rxe_odp.c  | 42 ++++++++++++++++++++++++++
- drivers/infiniband/sw/rxe/rxe_resp.c | 38 ++----------------------
- drivers/infiniband/sw/rxe/rxe_resp.h | 44 ++++++++++++++++++++++++++++
- 5 files changed, 91 insertions(+), 36 deletions(-)
- create mode 100644 drivers/infiniband/sw/rxe/rxe_resp.h
+On 9/6/2022 5:48 AM, Frederic Weisbecker wrote:
+>>  		}
+>> -		rcu_nocb_unlock_irqrestore(rdp, flags);
+>> +
+>> +		// The flush succeeded and we moved CBs into the ->cblist.
+>> +		// However, the bypass timer might still be running. Wakeup the
+> That part of the comment mentioning the bypass timer looks strange...
+> 
+> 
+>> +		// GP thread by calling a helper with was_all_done set so that
+>> +		// wake up happens (needed if main CB list was empty before).
+> How about:
+> 
+>                 // The flush succeeded and we moved CBs into the regular list.
+> 		// Don't wait for the wake up timer as it may be too far ahead.
+> 		// Wake up now GP thread instead if the cblist was empty
+> 
+> Thanks.
+> 
+> Other than that the patch looks good, thanks!
+> 
 
-diff --git a/drivers/infiniband/sw/rxe/rxe.c b/drivers/infiniband/sw/rxe/rxe.c
-index dd287fc60e9d..8190af3e9afe 100644
---- a/drivers/infiniband/sw/rxe/rxe.c
-+++ b/drivers/infiniband/sw/rxe/rxe.c
-@@ -88,6 +88,7 @@ static void rxe_init_device_param(struct rxe_dev *rxe)
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_RECV;
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_WRITE;
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_READ;
-+		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_ATOMIC;
- 		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_SRQ_RECV;
- 	}
- }
-diff --git a/drivers/infiniband/sw/rxe/rxe_loc.h b/drivers/infiniband/sw/rxe/rxe_loc.h
-index 91982b5a690c..1d10a58bbd5b 100644
---- a/drivers/infiniband/sw/rxe/rxe_loc.h
-+++ b/drivers/infiniband/sw/rxe/rxe_loc.h
-@@ -194,5 +194,7 @@ int rxe_create_user_odp_mr(struct ib_pd *pd, u64 start, u64 length, u64 iova,
- 			   int access_flags, struct rxe_mr *mr);
- int rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr, int length,
- 		    enum rxe_mr_copy_dir dir);
-+enum resp_states rxe_odp_atomic_ops(struct rxe_qp *qp, struct rxe_pkt_info *pkt,
-+				    struct rxe_mr *mr);
- 
- #endif /* RXE_LOC_H */
-diff --git a/drivers/infiniband/sw/rxe/rxe_odp.c b/drivers/infiniband/sw/rxe/rxe_odp.c
-index 85c34995c704..3297d124c90e 100644
---- a/drivers/infiniband/sw/rxe/rxe_odp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_odp.c
-@@ -8,6 +8,7 @@
- #include <rdma/ib_umem_odp.h>
- 
- #include "rxe.h"
-+#include "rxe_resp.h"
- 
- bool rxe_ib_invalidate_range(struct mmu_interval_notifier *mni,
- 			     const struct mmu_notifier_range *range,
-@@ -285,3 +286,44 @@ int rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr, int length,
- 
- 	return __rxe_odp_mr_copy(mr, iova, addr, length, dir);
- }
-+
-+static inline void *rxe_odp_get_virt_atomic(struct rxe_qp *qp, struct rxe_mr *mr)
-+{
-+	struct ib_umem_odp *umem_odp = to_ib_umem_odp(mr->umem);
-+	u64 iova = qp->resp.va + qp->resp.offset;
-+	int idx;
-+	size_t offset;
-+
-+	if (rxe_odp_map_range(mr, iova, sizeof(char), 0))
-+		return NULL;
-+
-+	idx = (iova - ib_umem_start(umem_odp)) >> umem_odp->page_shift;
-+	offset = iova & (BIT(umem_odp->page_shift) - 1);
-+
-+	return rxe_odp_get_virt(umem_odp, idx, offset);
-+}
-+
-+enum resp_states rxe_odp_atomic_ops(struct rxe_qp *qp, struct rxe_pkt_info *pkt,
-+				    struct rxe_mr *mr)
-+{
-+	struct ib_umem_odp *umem_odp = to_ib_umem_odp(mr->umem);
-+	u64 *vaddr;
-+	int ret;
-+
-+	if (WARN_ON(!mr->odp_enabled))
-+		return RESPST_ERR_RKEY_VIOLATION;
-+
-+	/* umem mutex is locked here to prevent MR invalidation before memory
-+	 * access completes.
-+	 */
-+	vaddr = (u64 *)rxe_odp_get_virt_atomic(qp, mr);
-+
-+	if (pkt->mask & RXE_ATOMIC_MASK)
-+		ret = rxe_process_atomic(qp, pkt, vaddr);
-+	else
-+		/* ATOMIC WRITE operation will come here. */
-+		ret = RESPST_ERR_RKEY_VIOLATION;
-+
-+	mutex_unlock(&umem_odp->umem_mutex);
-+	return ret;
-+}
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-index bf439004c378..663e5b32c9cb 100644
---- a/drivers/infiniband/sw/rxe/rxe_resp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-@@ -9,41 +9,7 @@
- #include "rxe.h"
- #include "rxe_loc.h"
- #include "rxe_queue.h"
--
--enum resp_states {
--	RESPST_NONE,
--	RESPST_GET_REQ,
--	RESPST_CHK_PSN,
--	RESPST_CHK_OP_SEQ,
--	RESPST_CHK_OP_VALID,
--	RESPST_CHK_RESOURCE,
--	RESPST_CHK_LENGTH,
--	RESPST_CHK_RKEY,
--	RESPST_EXECUTE,
--	RESPST_READ_REPLY,
--	RESPST_ATOMIC_REPLY,
--	RESPST_COMPLETE,
--	RESPST_ACKNOWLEDGE,
--	RESPST_CLEANUP,
--	RESPST_DUPLICATE_REQUEST,
--	RESPST_ERR_MALFORMED_WQE,
--	RESPST_ERR_UNSUPPORTED_OPCODE,
--	RESPST_ERR_MISALIGNED_ATOMIC,
--	RESPST_ERR_PSN_OUT_OF_SEQ,
--	RESPST_ERR_MISSING_OPCODE_FIRST,
--	RESPST_ERR_MISSING_OPCODE_LAST_C,
--	RESPST_ERR_MISSING_OPCODE_LAST_D1E,
--	RESPST_ERR_TOO_MANY_RDMA_ATM_REQ,
--	RESPST_ERR_RNR,
--	RESPST_ERR_RKEY_VIOLATION,
--	RESPST_ERR_INVALIDATE_RKEY,
--	RESPST_ERR_LENGTH,
--	RESPST_ERR_CQ_OVERFLOW,
--	RESPST_ERROR,
--	RESPST_RESET,
--	RESPST_DONE,
--	RESPST_EXIT,
--};
-+#include "rxe_resp.h"
- 
- static char *resp_state_name[] = {
- 	[RESPST_NONE]				= "NONE",
-@@ -673,7 +639,7 @@ static enum resp_states rxe_atomic_reply(struct rxe_qp *qp,
- 			return RESPST_ERR_RKEY_VIOLATION;
- 
- 		if (mr->odp_enabled)
--			ret = RESPST_ERR_UNSUPPORTED_OPCODE;
-+			ret = rxe_odp_atomic_ops(qp, pkt, mr);
- 		else
- 			ret = rxe_atomic_ops(qp, pkt, mr);
- 	} else
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.h b/drivers/infiniband/sw/rxe/rxe_resp.h
-new file mode 100644
-index 000000000000..cb907b49175f
---- /dev/null
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB */
-+
-+#ifndef RXE_RESP_H
-+#define RXE_RESP_H
-+
-+enum resp_states {
-+	RESPST_NONE,
-+	RESPST_GET_REQ,
-+	RESPST_CHK_PSN,
-+	RESPST_CHK_OP_SEQ,
-+	RESPST_CHK_OP_VALID,
-+	RESPST_CHK_RESOURCE,
-+	RESPST_CHK_LENGTH,
-+	RESPST_CHK_RKEY,
-+	RESPST_EXECUTE,
-+	RESPST_READ_REPLY,
-+	RESPST_ATOMIC_REPLY,
-+	RESPST_COMPLETE,
-+	RESPST_ACKNOWLEDGE,
-+	RESPST_CLEANUP,
-+	RESPST_DUPLICATE_REQUEST,
-+	RESPST_ERR_MALFORMED_WQE,
-+	RESPST_ERR_UNSUPPORTED_OPCODE,
-+	RESPST_ERR_MISALIGNED_ATOMIC,
-+	RESPST_ERR_PSN_OUT_OF_SEQ,
-+	RESPST_ERR_MISSING_OPCODE_FIRST,
-+	RESPST_ERR_MISSING_OPCODE_LAST_C,
-+	RESPST_ERR_MISSING_OPCODE_LAST_D1E,
-+	RESPST_ERR_TOO_MANY_RDMA_ATM_REQ,
-+	RESPST_ERR_RNR,
-+	RESPST_ERR_RKEY_VIOLATION,
-+	RESPST_ERR_INVALIDATE_RKEY,
-+	RESPST_ERR_LENGTH,
-+	RESPST_ERR_CQ_OVERFLOW,
-+	RESPST_ERROR,
-+	RESPST_RESET,
-+	RESPST_DONE,
-+	RESPST_EXIT,
-+};
-+
-+enum resp_states rxe_process_atomic(struct rxe_qp *qp,
-+				    struct rxe_pkt_info *pkt, u64 *vaddr);
-+
-+#endif /* RXE_RESP_H */
--- 
-2.31.1
+I updated it accordingly and will send it for next revision, thank you!
 
+ - Joel

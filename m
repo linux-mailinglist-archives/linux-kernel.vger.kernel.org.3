@@ -2,103 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD5B5B0A01
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41AD5B0A03
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiIGQ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S229748AbiIGQ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIGQ0F (ORCPT
+        with ESMTP id S229663AbiIGQ03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:26:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22915C9CD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662567962;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IpRcSEjb5EFxGfzHz+GWr2U/0UjWu0SzaZNMoqBv2RY=;
-        b=PB17JnJFiIeLYQrOg0HzqpxfTEU2DtuTRtH7lTOSZCe4QYkdC689aqkvdP1hx5mc7nYt6a
-        CIQhKsJp9Unrzp8qmpnEwsI6JApwpctDAnuERCZ8yRSswNsodxHg8oa7BlDtMdQLe3lSN7
-        uPpnfUlNxU3GkAstZ3NMEW/A/B9aup0=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-629-Ne7QdE8UONWl9CBH89dHLQ-1; Wed, 07 Sep 2022 12:26:01 -0400
-X-MC-Unique: Ne7QdE8UONWl9CBH89dHLQ-1
-Received: by mail-pg1-f200.google.com with SMTP id 136-20020a63008e000000b0042d707c94fbso7683743pga.9
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:26:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:from
-         :subject:cc:to:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date;
-        bh=IpRcSEjb5EFxGfzHz+GWr2U/0UjWu0SzaZNMoqBv2RY=;
-        b=BAJM9Qa6hjsuHT8OQkFC56mzKscERANjRIS2QBO5eMQfUjg9RkclVkOjDzAq9UKEJb
-         qvbBL0wXKPuW1xq5qb6VED3YlaF0i9ZGzQHNItvkVo2vkc9upMfKhSOnRw+/yQ8Q09AH
-         PymGGyqqbLd3yYwet622Mkcr2oHoTwx7UN4dRsYgHM1pYiQQM1i9TCb9OrrIH9NVBmE6
-         sygipgrAvy0eJVwoeR1AunJMHlhicrqwcgSsCoq7WMOVc5ew/xWO8zXSNhsJVHsqslgp
-         TshgyEDQ+0oDK7W841T83rbrteeDiic7Y49F0TNlyq3W8KL9ZFAZPMFiv+TjFUSePMwk
-         DVQg==
-X-Gm-Message-State: ACgBeo1/q7lTHU8WbbpLv35PwJiZANRKSOb61ldd/iTe3y+027CTr+bR
-        XbCVOdNawQ3961UbuOJfQCz1aPWPbewSbqGkD0MaKL6GNWqmAC32Vq0CRNCGeexSN5/X1VsD46O
-        EiJFRY3MI2PVt/rX0YNcchhXc
-X-Received: by 2002:a63:191d:0:b0:434:4bb3:e016 with SMTP id z29-20020a63191d000000b004344bb3e016mr4186526pgl.133.1662567960399;
-        Wed, 07 Sep 2022 09:26:00 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6eEwwovNfgE+y8ahTg/s4MoHLKu77bE6/7AuVXsn/mNT13uNFKTeavslC0p5M82+XxmK5z8A==
-X-Received: by 2002:a63:191d:0:b0:434:4bb3:e016 with SMTP id z29-20020a63191d000000b004344bb3e016mr4186514pgl.133.1662567960128;
-        Wed, 07 Sep 2022 09:26:00 -0700 (PDT)
-Received: from localhost ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
-        by smtp.gmail.com with ESMTPSA id f4-20020a17090a654400b001faafa42a9esm9245843pjs.26.2022.09.07.09.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 09:25:59 -0700 (PDT)
-Date:   Thu, 08 Sep 2022 01:25:56 +0900 (JST)
-Message-Id: <20220908.012556.1223002692465040215.syoshida@redhat.com>
-To:     sven@narfation.org
-Cc:     mareklindner@neomailbox.ch, sw@simonwunderlich.de, a@unstable.cc,
-        b.a.t.m.a.n@lists.open-mesh.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] batman-adv: Fix hang up with small MTU
- hard-interface,Re: [PATCH] batman-adv: Fix hang up with small MTU
- hard-interface
-From:   Shigeru Yoshida <syoshida@redhat.com>
-In-Reply-To: <42632958.r4OcKK3suL@ripper>
-References: <20220820032516.200446-1-syoshida@redhat.com>
-        <20220908.010037.1643964170435041362.syoshida@redhat.com>
-        <42632958.r4OcKK3suL@ripper>
-X-Mailer: Mew version 6.8 on Emacs 28.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 12:26:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8426CD09;
+        Wed,  7 Sep 2022 09:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662567988; x=1694103988;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U7Mj6tTEbM4kCJ9BRBmFdkl2gYamUuWgTW8z+HK//c0=;
+  b=SuK0AVs5eTtq6DMc6kK4EPcswWXHv7hX/duK1CT94yeifxpeHyLPy1Jg
+   dqVxE8to5P5faSb7DNcvj8Xg9XUuJnNYG/T0kwbHNl078EIMY66MYVrC9
+   5MpLcp5lJQ23ieH8MGD6sFr7jbp/FALdF/CE+xpCq2b4ZuosNs9l3LD5z
+   9W0wjnZHpYmNDaR7x6Y35E2SVEdq2KkrMz6EHCjMaurDJsk/DlC+w4r/K
+   uWek6YcdgLS0rPYHPlX14IID862lYlHsj8T3uiCpauZXGp51PkN4m7ViJ
+   gl0VdrBngpVPGM85xWO8ZdfWcw1Sxc6947/C5N6IdzKP4/yTTsleqniV3
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="383220005"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="383220005"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 09:26:27 -0700
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="740346553"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 09:26:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVxsc-009icI-2Z;
+        Wed, 07 Sep 2022 19:26:22 +0300
+Date:   Wed, 7 Sep 2022 19:26:22 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sudarshan Ravula <sudarshan.ravula@intel.com>
+Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        pandith.n@intel.com, lakshmi.sowjanya.d@intel.com
+Subject: Re: [PATCH v1] i2c: designware: Add support to get I2C related
+ timing parameters from firmware.
+Message-ID: <YxjGLi6J4jBBZkcG@smile.fi.intel.com>
+References: <20220907160920.22006-1-sudarshan.ravula@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907160920.22006-1-sudarshan.ravula@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sven,
-
-On Wed, 07 Sep 2022 18:04:09 +0200,Wed, 07 Sep 2022 18:04:09 +0200, Sven Eckelmann wrote:
-> On Wednesday, 7 September 2022 18:00:37 CEST Shigeru Yoshida wrote:
->> ping?
+On Wed, Sep 07, 2022 at 09:39:20PM +0530, Sudarshan Ravula wrote:
+> Similar to I2C designware platform driver add i2c_parse_fw_timings() in
+> PCI driver, to get I2C related timing parameters from firmware.
 > 
-> This was applied a while ago:
+> Signed-off-by: Sudarshan Ravula <sudarshan.ravula@intel.com>
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-pcidrv.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> https://git.open-mesh.org/linux-merge.git/commit/b1cb8a71f1eaec4eb77051590f7f561f25b15e32
+> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> index 608e61209455..c001719209be 100644
+> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> @@ -243,6 +243,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+>  	int r;
+>  	struct dw_pci_controller *controller;
+>  	struct dw_scl_sda_cfg *cfg;
+> +	struct i2c_timings *t;
+>  
+>  	if (id->driver_data >= ARRAY_SIZE(dw_pci_controllers))
+>  		return dev_err_probe(&pdev->dev, -EINVAL,
+> @@ -272,12 +273,14 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+>  		return r;
+>  
+>  	dev->get_clk_rate_khz = controller->get_clk_rate_khz;
+> -	dev->timings.bus_freq_hz = I2C_MAX_FAST_MODE_FREQ;
+>  	dev->base = pcim_iomap_table(pdev)[0];
+>  	dev->dev = &pdev->dev;
+>  	dev->irq = pci_irq_vector(pdev, 0);
+>  	dev->flags |= controller->flags;
+>  
+> +	t = &dev->timings;
+> +	i2c_parse_fw_timings(&pdev->dev, t, false);
 
-Sorry, I didn't notice that.  Thank you so much!!
+Note that this is safe to drop above assignment with 'false' given here since
+i2c_dw_adjust_bus_speed(), which is called after, will set that default and if
+nothing is read from firmware the value of bus_freq_hz will be 0 as guaranteed
+by kzalloc().
 
-Thanks,
-Shigeru
-
+> +
+>  	pci_set_drvdata(pdev, dev);
+>  
+>  	if (controller->setup) {
+> -- 
+> 2.17.1
 > 
-> Kind regards,
-> 	Sven
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 

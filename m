@@ -2,202 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5065B01D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1AE5B01DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiIGKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S230440AbiIGKY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiIGKXm (ORCPT
+        with ESMTP id S230213AbiIGKYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:23:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8EE2FFF3;
-        Wed,  7 Sep 2022 03:23:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5CF91202D9;
-        Wed,  7 Sep 2022 10:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662546199; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZVOd6VzsLq3+2NgXLsXG6WSVb5nAQHjklm2vBJj3gwc=;
-        b=TMZULmgGJ0UGAVZEZTXt9pmTbssAEI/3djKPfcbHzpu6CgidfMr61+CPQKNw59KqBGP1xU
-        xiLNLKo1bnwQlfgixzCsBl24v7Z6gM28BUoGn8oO+cj77zf43eWf41llI/8DKNFRjBgJv0
-        5MAv8c6A0hjgjPM3+YN6QHYgChNndkA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662546199;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZVOd6VzsLq3+2NgXLsXG6WSVb5nAQHjklm2vBJj3gwc=;
-        b=sXg8w4N1dtErwl6IQ18gxM8+GY6Lufmi0vT/rUwna9qS6bA34X2RvvNGXkn79LOFX8B13k
-        p7yGsx2ekFe3P2DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C12813A66;
-        Wed,  7 Sep 2022 10:23:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QLqQEhdxGGOCRwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 07 Sep 2022 10:23:19 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CFD10A067E; Wed,  7 Sep 2022 12:23:18 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 12:23:18 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz, axboe@kernel.dk,
-        osandov@fb.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH] sbitmap: fix possible io hung due to lost wakeup
-Message-ID: <20220907102318.pdpzpmhah2m3ptbn@quack3>
-References: <20220803121504.212071-1-yukuai1@huaweicloud.com>
- <Yxe7V3yfBcADoYLE@kbusch-mbp.dhcp.thefacebook.com>
+        Wed, 7 Sep 2022 06:24:49 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307CBD9B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:24:36 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id l12so6972404ljg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 03:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=sjy4Jxxxofr/CNtkGo5BunwXXx20LZ0tjJE5uoNvdEQ=;
+        b=OGIExj4MjF/TqRB81wkACNnrGKX0bsArf1wuHu+JuLcWpZFBEH/FUO3li6w7en8MOc
+         BLUuPzWcKWHu0qkvn4tyyDD35IMJCiPA7kKPIJK/exdObqV1PKYINtL6jklXYs+e6dXj
+         F7o1U4W5BNFBcwAv+6CnfLHtMwchNpTO7HnZ87n+zxPlDjZf3x7Ik2H8iWNpXE4+7hmg
+         Z7aY3wk5FxM2z9e+KwbcGpO5nUaxq0kXVWtnC3vuSoEEzfC3GF5dDBe6LEvvKCxH/28x
+         tQqe4FM+4AdMY5NY0TA5lHOQNZN+Ssm8LnTdaSKmCeGKektk437RS3cB6F/hiOs8LzRd
+         igag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=sjy4Jxxxofr/CNtkGo5BunwXXx20LZ0tjJE5uoNvdEQ=;
+        b=W1IuwENWEfF/gdV3TZ6gdyQDmaNjqv+ZTU8RNjst/dSxl/9Fc7+uZBoo0E4BBUl2On
+         m5A/Z6nIsr2cegivluMCqYu2wYCupAAwLtjt0hncdjf465k0N7se4CevkSna3+tW/KdV
+         QXQGgIrOELssVUE+Xl3tiqHJMtRzM7tax8CIZSRd8XvLLboHJ0YFYUx+NYfdEOy4lLI7
+         juWIyRnLrwaYULAIplvNHmxcHssE/R0ceL/AMBMpXsjzjSWy7jBiqTq/fs/XSzN9ZgQD
+         dFHXqjyY+BNIUY4fY/ahjNjeiXAjhXciU+xj1VNKhgw4UjkuTb1OnHYkTd8MzDzg2aa5
+         Yfbw==
+X-Gm-Message-State: ACgBeo29Q3CgnDKEIIo3ux85Ya5Hbt4VaXSpU4rK6ompB6EBv5Fln4qw
+        /9+6wVWE16z8dDi5FMerZICcjQ==
+X-Google-Smtp-Source: AA6agR7LrS6Wpr0G0GMNseZ4mqfHBTC8LHNpanhfuhXUqUCYOVOmftOUiwx4o+SwlUSvSCvYDrDtOQ==
+X-Received: by 2002:a05:651c:1542:b0:249:5d86:3164 with SMTP id y2-20020a05651c154200b002495d863164mr784613ljp.500.1662546274641;
+        Wed, 07 Sep 2022 03:24:34 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q17-20020ac25111000000b004946c3cf53fsm2375739lfb.59.2022.09.07.03.24.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 03:24:33 -0700 (PDT)
+Message-ID: <115bb541-57d1-23fa-d365-4e239f933d1b@linaro.org>
+Date:   Wed, 7 Sep 2022 12:24:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxe7V3yfBcADoYLE@kbusch-mbp.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v12] dt-bindings: misc: fastrpc convert bindings to yaml
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, David Heidelberg <david@ixit.cz>
+References: <20220907074301.3996021-1-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220907074301.3996021-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 06-09-22 15:27:51, Keith Busch wrote:
-> On Wed, Aug 03, 2022 at 08:15:04PM +0800, Yu Kuai wrote:
-> >  	wait_cnt = atomic_dec_return(&ws->wait_cnt);
-> > -	if (wait_cnt <= 0) {
-> > -		int ret;
-> > +	/*
-> > +	 * For concurrent callers of this, callers should call this function
-> > +	 * again to wakeup a new batch on a different 'ws'.
-> > +	 */
-> > +	if (wait_cnt < 0 || !waitqueue_active(&ws->wait))
-> > +		return true;
+On 07/09/2022 09:43, Abel Vesa wrote:
+> Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
+> dt-entries correctly and any future additions can go into yaml format.
 > 
-> If wait_cnt is '0', but the waitqueue_active happens to be false due to racing
-> with add_wait_queue(), this returns true so the caller will retry.
-
-Well, note that sbq_wake_ptr() called to obtain 'ws' did waitqueue_active()
-check. So !waitqueue_active() should really happen only if waiter was woken
-up by someone else or so. Not that it would matter much but I wanted to
-point it out.
-
-> The next atomic_dec will set the current waitstate wait_cnt < 0, which
-> also forces an early return true. When does the wake up happen, or
-> wait_cnt and wait_index get updated in that case?
-
-I guess your concern could be rephrased as: Who's going to ever set
-ws->wait_cnt to value > 0 if we ever exit with wait_cnt == 0 due to
-!waitqueue_active() condition?
-
-And that is a good question and I think that's a bug in this patch. I think
-we need something like:
-
-	...
-	/*
-	 * For concurrent callers of this, callers should call this function
-	 * again to wakeup a new batch on a different 'ws'.
-	 */
-	if (wait_cnt < 0)
-		return true;
-	/*
-	 * If we decremented queue without waiters, retry to avoid lost
-	 * wakeups.
-	 */
-	if (wait_cnt > 0)
-		return !waitqueue_active(&ws->wait);
-
-	/*
-	 * When wait_cnt == 0, we have to be particularly careful as we are
-	 * responsible to reset wait_cnt regardless whether we've actually
-	 * woken up anybody. But in case we didn't wakeup anybody, we still
-	 * need to retry.
-	 */
-	ret = !waitqueue_active(&ws->wait);
-	wake_batch = READ_ONCE(sbq->wake_batch);
-	/*
-	 * Wake up first in case that concurrent callers decrease wait_cnt
-	 * while waitqueue is empty.
-	 */
-	wake_up_nr(&ws->wait, wake_batch);
-	...
-
-	return ret;
-
-Does this fix your concern Keith?
-
-								Honza
-
+> Use compute-cb@ subnodes instead of just cb@. Add qcom,glink-channels and
+> qcom,smd-channels missing properties to make sure dtbs_check doesn't fail
+> right off the bat. Correct the name of the parent node in the example from
+> smd-edge to glink-edge.
 > 
->   
-> > -		wake_batch = READ_ONCE(sbq->wake_batch);
-> > +	if (wait_cnt > 0)
-> > +		return false;
-> >  
-> > -		/*
-> > -		 * Pairs with the memory barrier in sbitmap_queue_resize() to
-> > -		 * ensure that we see the batch size update before the wait
-> > -		 * count is reset.
-> > -		 */
-> > -		smp_mb__before_atomic();
-> > +	wake_batch = READ_ONCE(sbq->wake_batch);
-> >  
-> > -		/*
-> > -		 * For concurrent callers of this, the one that failed the
-> > -		 * atomic_cmpxhcg() race should call this function again
-> > -		 * to wakeup a new batch on a different 'ws'.
-> > -		 */
-> > -		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
-> > -		if (ret == wait_cnt) {
-> > -			sbq_index_atomic_inc(&sbq->wake_index);
-> > -			wake_up_nr(&ws->wait, wake_batch);
-> > -			return false;
-> > -		}
-> > +	/*
-> > +	 * Wake up first in case that concurrent callers decrease wait_cnt
-> > +	 * while waitqueue is empty.
-> > +	 */
-> > +	wake_up_nr(&ws->wait, wake_batch);
-> >  
-> > -		return true;
-> > -	}
-> > +	/*
-> > +	 * Pairs with the memory barrier in sbitmap_queue_resize() to
-> > +	 * ensure that we see the batch size update before the wait
-> > +	 * count is reset.
-> > +	 *
-> > +	 * Also pairs with the implicit barrier between decrementing wait_cnt
-> > +	 * and checking for waitqueue_active() to make sure waitqueue_active()
-> > +	 * sees result of the wakeup if atomic_dec_return() has seen the result
-> > +	 * of atomic_set().
-> > +	 */
-> > +	smp_mb__before_atomic();
-> > +
-> > +	/*
-> > +	 * Increase wake_index before updating wait_cnt, otherwise concurrent
-> > +	 * callers can see valid wait_cnt in old waitqueue, which can cause
-> > +	 * invalid wakeup on the old waitqueue.
-> > +	 */
-> > +	sbq_index_atomic_inc(&sbq->wake_index);
-> > +	atomic_set(&ws->wait_cnt, wake_batch);
-> >  
-> >  	return false;
-> >  }
-> > -- 
-> > 2.31.1
-> > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Since now the qcom,fastrpc bindings document is yaml, update the
+> reference to it in qcom,glink-edge and also use $ref.
+> 
+> Also update the MAINTAINERS file to point to the yaml version.
+> 
+> Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Co-developed-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

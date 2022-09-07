@@ -2,71 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755B15AF9A2
+	by mail.lfdr.de (Postfix) with ESMTP id BF35F5AF9A3
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiIGCAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S229686AbiIGCBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiIGCA3 (ORCPT
+        with ESMTP id S229616AbiIGCBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:00:29 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9E83066
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 19:00:27 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id o123so13523184vsc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 19:00:27 -0700 (PDT)
+        Tue, 6 Sep 2022 22:01:03 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06641844E8;
+        Tue,  6 Sep 2022 19:01:03 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id o4so13082556pjp.4;
+        Tue, 06 Sep 2022 19:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=wsARz19b+rqPn9IK6GAlYftVxiNnl8OSsSaYZNoi6rM=;
-        b=Fjf1quEBH87cQ2lo1jAZw8/pXBsxTTFmjB4Du1roRZT2tFwQC1LGAhv7wb9ecLlDbZ
-         4WLHqzeKZ39AwmJOoYrHzI3/hI+v1SXBe7g8UEm2x3mQllXU2MH80Ux/HuU927Sitouy
-         Z2nhmfmrdHiLM8g0yiZrt9SnygUkclEnJfBSZ0aqRfxF3tkSOyfFd4jAkiINg7vQ4wbr
-         qeQz6r2AmY+GGLoam41+4s4qc5hrcE+t5o2rLIo/JO3tEXwslAGOxdW9smgZ2JWx9JMN
-         QwMtsW9LKWiHLrEvQaJd02SrlgpqZblqxlErh8Ty1Q7B7G2/200GHLi/c/1oxK/1nGSy
-         97XQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=YaCijregOqOjgcZeIED7JVmldRewR4dEphbJlxDQblY=;
+        b=S9pRunUxPC7r0e1w9yj0o8783wojVpjNhKP8jsT71wWMuWPsfUFzdJz0TJMPpqTsPB
+         M+Ae8ANyYrV4Sep3x0VbDc+EnMue4OoEN8RpFTpOjPkluJnGT2cqlVh1JYNiO5h/tDGK
+         RGVJLwVuP7GISwNRAdT5OiqdenVIGFNKEJzKBNq2q1BXIKHlp8tWKx0fxbOK8GA6DZwQ
+         TZfa9JbPfMPcxWCYQlbaTpn5opve5VlejEuuBRLWTpxblG8WQDMhb5np+dyWJJ6kAEEW
+         rXWcB3V4lQHvMssIFHI0kdZjP9pomfXdXnH1i/sJC8kJC91PlHbGOcBl6u1/CPq1k3ff
+         5tAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=wsARz19b+rqPn9IK6GAlYftVxiNnl8OSsSaYZNoi6rM=;
-        b=WqV3CQYwo7HZRiYWMOYRPRYdrk6q2CHV+GernCyJqmmRTq+V958PIcFtqXNWkbcbAg
-         OSesAB2f35NSa9tMNB/9W3ECCjp2W5ehdGdp33AC1Af6ZtsUPJRI912w99JdJfr7XlAO
-         QbsG+2gBQf+IGp/NvUT3c14vdI+4GTAW2sCUAZIrsShKTq49Y7jSP6dGxvLhPUoEjO3u
-         yUEMxEN+adXcYrd+VL1c8dMnzJB5vpI/NYDSNR478W1DhaMChkjopvxllJq1oR7OeqEl
-         zu7pc9lgeikvfjtQLGodgAXVvvarqMBohv3SkQdXPhwbgAUgNeAyZzTduh28XyI0LXPJ
-         F6mQ==
-X-Gm-Message-State: ACgBeo2/K5BI14EhZR2yXQ1PWC1/xTXTVrQjq6DjD3WZ+fS2+GFqltHz
-        MChTaX0rVYjdTL4gfb8rEWkrO7gv5fCcNyKweCN4HA==
-X-Google-Smtp-Source: AA6agR72eSD2FyY1WmLUjqFEq/K1rYb4p3qgCXjKN6DF4JjBjQeIvq0s2+BMqLmG4qdAmVkQp095RHnNT+lmfmMtrks=
-X-Received: by 2002:a67:fdd0:0:b0:397:c028:db6a with SMTP id
- l16-20020a67fdd0000000b00397c028db6amr450011vsq.58.1662516026551; Tue, 06 Sep
- 2022 19:00:26 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=YaCijregOqOjgcZeIED7JVmldRewR4dEphbJlxDQblY=;
+        b=WxDUq3Zq8X3Rgc4b4WifMHhrdfV384FmuJ8jN1TY9qpsynBbpON8npbKBu1EmbSBow
+         hRx7vF9EuhuALd3eriMzTB3F9jkXpXKOprButVLbX4LgKneL69guYPbWVGvB/IjE+uBk
+         hVBZPmPKjaJ2DrOgeT7bTzNTyroF0NiKXbiF1hliemI+monJP86TTYjCftE7d1d7FOm+
+         r+lyCyXZecBvF93+c/rOatz0vVxdWNVLQ1iyOqR1rhG+q5cYLPv1FfwReqxZ+KjIGSqP
+         CYb1w2B5crTaIM2jWuDTlGKR+8/go/hbm3HcuyfOuubDuJp2e0DeyPvuPz02B2rRGaxj
+         k29Q==
+X-Gm-Message-State: ACgBeo1ymCE4OcJOM8zKViDHs1TKM80vVmLyO4oYaKmb9XkOvarpPem6
+        C2Vm3DhnjAKpDX+pnlnY0iw=
+X-Google-Smtp-Source: AA6agR4W7OfcLFzEOrvTrf5AWbvTtcvq1nW6dbnnaSOnulUmzjwEL9HxLO3xrl5g0PyDmCwuPzMlMg==
+X-Received: by 2002:a17:90b:3ec7:b0:1fa:cdc1:f66 with SMTP id rm7-20020a17090b3ec700b001facdc10f66mr28531683pjb.167.1662516062292;
+        Tue, 06 Sep 2022 19:01:02 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:abc4:5d24:5a73:a96b])
+        by smtp.gmail.com with ESMTPSA id a206-20020a621ad7000000b00537d74f58cbsm2322985pfa.69.2022.09.06.19.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 19:01:01 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 19:00:57 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 10/11] watchdog: bd9576_wdt: switch to using
+ devm_fwnode_gpiod_get()
+Message-ID: <Yxf7WTFG7xEh2Gv6@google.com>
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
+ <CAHp75Vd35EOy=mP25=9fmYfqQnbafgotHw1fxk-TdGk6Oc8g8Q@mail.gmail.com>
+ <75e60144-9fa2-d6ba-bc92-edd23f7e7189@roeck-us.net>
+ <CAHp75VcisCTYoRp-=713YKtwi7BQyPKGiUhF4DkpfAFtvDXCiQ@mail.gmail.com>
+ <c696b9bf-d0ce-1c6a-0ee3-939b180891be@roeck-us.net>
+ <YxZSUlCPEE9o/s4G@google.com>
+ <73749107-35aa-0720-1a30-02a90c0540fa@roeck-us.net>
 MIME-Version: 1.0
-References: <20220902154804.1939819-1-oliver.upton@linux.dev> <20220902154804.1939819-3-oliver.upton@linux.dev>
-In-Reply-To: <20220902154804.1939819-3-oliver.upton@linux.dev>
-From:   Reiji Watanabe <reijiw@google.com>
-Date:   Tue, 6 Sep 2022 19:00:10 -0700
-Message-ID: <CAAeT=FzjL=iPEO6FeHLTzHX5V4snoVOWVx27oeShHQYRi6HeAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] KVM: arm64: Remove internal accessor helpers for
- id regs
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73749107-35aa-0720-1a30-02a90c0540fa@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,13 +115,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 8:48 AM Oliver Upton <oliver.upton@linux.dev> wrote:
->
-> The internal accessors are only ever called once. Dump out their
-> contents in the caller.
->
-> No functional change intended.
->
-> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+On Mon, Sep 05, 2022 at 03:09:05PM -0700, Guenter Roeck wrote:
+> On 9/5/22 12:47, Dmitry Torokhov wrote:
+> [ ... ]
+> > > We know that count is either 1 or 2 here, so strictly speaking
+> > > 	if (count == 1) {
+> > > 	} else {
+> > > 	}
+> > > would be sufficient. On the other side, that depends on ARRAY_SIZE() being
+> > > exactly 2, so
+> > > 	if (count == 1) {
+> > > 	} else if (count == 2) {
+> > > 	}
+> > > would also make sense. Either way is fine with me. I'll leave it up
+> > > to Dmitry to decide what he wants to do.
+> > 
+> > My goal is to drop usage of devm_gpiod_get_from_of_node(), beyond that I
+> > do not have strong preferences either way really. It is probing code, so
+> > performance is not critical, but I'm obviously satisfied with how the
+> > code looks now, or I would not have sent it.
+> > 
+> 
+> Good point.
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: Reiji Watanabe <reijiw@google.com>
+Guenter, individual patches are going through maintainer's trees, will
+you take this one?
+
+Thanks.
+
+-- 
+Dmitry

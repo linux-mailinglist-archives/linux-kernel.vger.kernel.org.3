@@ -2,154 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AF55B0175
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC785B0185
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiIGKPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S230468AbiIGKRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiIGKPI (ORCPT
+        with ESMTP id S230159AbiIGKQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:15:08 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDEC25588;
-        Wed,  7 Sep 2022 03:15:02 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id CF3012B059F7;
-        Wed,  7 Sep 2022 06:14:59 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 07 Sep 2022 06:15:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662545699; x=1662549299; bh=UmErXfxWmw
-        fotEsmsDPTW3AU+XHqokuOWaVIqSNnJFU=; b=e67eu/2Sau6rqKLtSjHFTtHnaQ
-        sYFIdetsex7+OyjkVCLZ9beeQM0Mj/IeHdY5qLHK5/qa9DCDvlLfEE0vXVsM++FW
-        DmI/pO1hL9RP2EFDsAEE3ZnAqtF6BaG2jIBVsYacgmki9ZiMgYsXxo4j1ZXSX9am
-        YWAAb2igRgEssKmR+azw8g+pGFpKueubV/O/pNMRsjRI65T0mBNq1diDNtzgyRRi
-        BgsjNAl0Lz/1ivUtK2a7FQjQi0ubIrbxh0shz6nEs/S2OgZa23RbnQvx6QX/6NnK
-        4qfC1NcLXSP+byXBtZ5fMkEPxzPtxh4drQDP4xaivqxX8mhLS+T3qZooLzIg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662545699; x=1662549299; bh=UmErXfxWmwfotEsmsDPTW3AU+XHq
-        okuOWaVIqSNnJFU=; b=gTKIwCiZt86E5s5vG5fI33tYaugRTJZhOxCAbdnOKqVO
-        koCeLg26AixgJHv7xcEnAVxt2f+uq1Qe9Ly/XZ9AZxNADVEoNEuSTGAaJ1MVz9Xv
-        vEs4uekKsxYNrk27iiUJQKpMO5V9w1ithQ8yq6Sl4fwmsTAW1q1KnTVjnJ8fY9iP
-        Pk1BQNuHauJpW3b8oe5l248mJVUiGc/KcaSWHIQV88MILHRtmTjY2juOAMF16fZw
-        9TFpjATLujFr5ARlnpjrbY4FALuKVkxhNB5Jt7IUi/vL1AUfPtj+Yah3oQmyM+jX
-        hEXnmkP2LMNTlZ6Qq+wjqmzBuITrYXXD+pOTprwL+g==
-X-ME-Sender: <xms:Im8YY4-zB8jizsFZUbdhZ7cQgbYb9bCeUnh0Z3zsNHcXxM9vVxqGqw>
-    <xme:Im8YYwsKZOjKJ7WWo353mzbZGW2tQzA0JuhJaglRtfijovoc5gsezEZ-yuGQrdEII
-    1Y3hM4PsLWPNmM17-8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Im8YY-CAIpeIMrSA33XANi56_-wSyqmDx83zlMGLBrCNm1JDzeKnaA>
-    <xmx:Im8YY4eL3awRkF6q0khiLQ5sSOmH-E4e4PH_DDBP1MlQ94HXlXLtZw>
-    <xmx:Im8YY9N2Z5S1YfDKXcAZptJ2D7xwO8QSkiH1M6PEbQFOARfWIzdRHQ>
-    <xmx:I28YY4GQNGTdhuWe697LLmw2mSLNz7DZ60kD9zrtOAKd-nrNQXqNz3_17_M>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3CDB4B60083; Wed,  7 Sep 2022 06:14:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <b348a306-3043-4ccc-9067-81759ab29143@www.fastmail.com>
-In-Reply-To: <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
-References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
- <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
-Date:   Wed, 07 Sep 2022 12:14:38 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>
-Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Davide Ciminaghi" <ciminaghi@gnudd.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-doc <linux-doc@vger.kernel.org>, x86@kernel.org
-Subject: Re: [PATCH v2 0/9] gpio: Get rid of ARCH_NR_GPIOS (v2)
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 7 Sep 2022 06:16:58 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0B43DBD1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:16:06 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id bx38so15350220ljb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 03:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=3cA7dqgK29hXFF6uJvQ4BHeA+tHJfj6koNcu22+1Hr8=;
+        b=Hy6HBAQezdf60tWZN7LIjziTj7M5/9xzdLhTneso24T91epLE3nPn9M8nxyWLbW3il
+         Q19WX3z+2P+rJzT7gZ7RysB5pIGPedgOjzYPe1GNmlgSIW4IhKgsGWvaF0uKalQLJmNC
+         sIKZY0M9eXiTUWMoH8SQ+sbPS+PjyFd7bwoxV1Vx6uD7kFv3tZAHuPWcCc93bFlVqqgz
+         ffvw96bh2JvBb8zkJ07L+PpwTfVW309r0MSM6cioLCDhaFaVj8tfzN+8w05a4x3BwnbB
+         LLbicUcFjmSf3QtHvhInoZ4q3uuC1hRUFVAT2BbW2w454cw8bNypO+Hm/AeVTZj3Tn/D
+         vuzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=3cA7dqgK29hXFF6uJvQ4BHeA+tHJfj6koNcu22+1Hr8=;
+        b=WfUpQc2b3aY5CdR62VKoA/8a6BOOXpuxe8ZPwY7zhuN/lemyJ4/J9SupKBUBc4m0R8
+         vtFT/F6L04Il+YeF9+/AMUUbzeROtYYIPW/9cDntjptVLs1GxlySq7CHlFlkUcbCWegY
+         F3iNRw64kvw5CCQREQNr5PvvMdAGF7mVq133Avjhtsu+Ejku04DXe0oWNVNFTS8WvC+g
+         NFbGiiSUzEiGfKL/eHj9/d/nda5cMtQwW2QFfqK6k6UPTCK0Kml+P/QidhaeHYp6qVqw
+         VMSD2qIRDw40mgw3rD7oliI3THVkcRTR868t7bfL7OuYi5t5wCwOhJceaNB8DKDPoUPD
+         x/VQ==
+X-Gm-Message-State: ACgBeo2mM4726/ULxuiIGTmJCpxrP/Hjxcf9GSWPEesW1IleqcFz422h
+        Xf3ijxAnktLSK30g+B4A3VqM2QZGKicWbA==
+X-Google-Smtp-Source: AA6agR5kMxBjpX/4YyjspCvud2EcoThLtvD9lUV+btA0OeIkvy3ClJ+phX0euGGDKW9B8lVVVSNYJw==
+X-Received: by 2002:a2e:a309:0:b0:26a:c623:264 with SMTP id l9-20020a2ea309000000b0026ac6230264mr717373lje.267.1662545764599;
+        Wed, 07 Sep 2022 03:16:04 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u9-20020a2ea169000000b0026ab0e480bcsm960734ljl.39.2022.09.07.03.16.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 03:16:04 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 00/14] ASoC/qcom/arm64: Qualcomm ADSP DTS and binding fixes
+Date:   Wed,  7 Sep 2022 12:15:42 +0200
+Message-Id: <20220907101556.37394-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022, at 11:58 AM, Bartosz Golaszewski wrote:
-> On Fri, Sep 2, 2022 at 2:42 PM Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
->>
->>  Documentation/driver-api/gpio/legacy.rst |   5 -
->>  arch/arm/Kconfig                         |  21 --
->>  arch/arm/include/asm/gpio.h              |   1 -
->>  arch/arm64/Kconfig                       |  12 -
->>  arch/x86/Kconfig                         |   5 -
->>  drivers/gpio/Kconfig                     |   8 -
->>  drivers/gpio/Makefile                    |   1 -
->>  drivers/gpio/gpio-aggregator.c           |   7 +-
->>  drivers/gpio/gpio-davinci.c              |   3 -
->>  drivers/gpio/gpio-sta2x11.c              | 411 -----------------------
->>  drivers/gpio/gpiolib.c                   |  13 +-
->>  include/asm-generic/gpio.h               |  55 ++-
->>  12 files changed, 33 insertions(+), 509 deletions(-)
->>  delete mode 100644 drivers/gpio/gpio-sta2x11.c
+Hi,
 
-For the arch/arm*/Kconfig and include/asm-generic changes:
+Dependencies/merging
+====================
+1. The DTS patches are independent.
+2. The binding patches should come together, because of context changes. Could
+   be one of: Qualcomm SoC, ASoC or DT tree.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Changes since v1
+================
+1. Patch 9: New patch.
+2. Patch 10: Correct also sound/qcom,q6apm-dai.yaml (Rob).
+2. Patch 13: New patch.
+3. Add Rb/Tb tags.
 
-sta2x11 is an x86 driver, so not my area, but I think it would be
-best to kill off the entire platform rather than just its gpio
-driver, since everything needs to work together and it's clearly
-not functional at the moment.
+Best regards,
+Krzysztof
 
-$ git grep -l STA2X11
-Documentation/admin-guide/media/pci-cardlist.rst
-arch/x86/Kconfig
-arch/x86/include/asm/sta2x11.h
-arch/x86/pci/Makefile
-arch/x86/pci/sta2x11-fixup.c
-drivers/ata/ahci.c
-drivers/gpio/Kconfig
-drivers/gpio/Makefile
-drivers/gpio/gpio-sta2x11.c
-drivers/i2c/busses/Kconfig
-drivers/media/pci/Makefile
-drivers/media/pci/sta2x11/Kconfig
-drivers/media/pci/sta2x11/Makefile
-drivers/media/pci/sta2x11/sta2x11_vip.c
-drivers/media/pci/sta2x11/sta2x11_vip.h
-drivers/mfd/Kconfig
-drivers/mfd/Makefile
-drivers/mfd/sta2x11-mfd.c
-include/linux/mfd/sta2x11-mfd.h
+Krzysztof Kozlowski (14):
+  arm64: dts: qcom: sdm630: align APR services node names with dtschema
+  arm64: dts: qcom: sdm845: align APR services node names with dtschema
+  arm64: dts: qcom: sm8250: align APR services node names with dtschema
+  arm64: dts: qcom: msm8996: fix APR services nodes
+  arm64: dts: qcom: sdm845: align dai node names with dtschema
+  arm64: dts: qcom: msm8996: align dai node names with dtschema
+  arm64: dts: qcom: qrb5165-rb5: align dai node names with dtschema
+  arm64: dts: qcom: sm8250: use generic name for LPASS clock controller
+  ASoC: dt-bindings:: qcom,q6asm: convert to dtschema
+  dt-bindings: soc: qcom: apr: correct service children
+  ASoC: dt-bindings: qcom,q6dsp-lpass-ports: cleanup example
+  ASoC: dt-bindings: qcom,q6dsp-lpass-clocks: cleanup example
+  ASoC: dt-bindings: qcom,q6apm-dai: adjust indentation in example
+  dt-bindings: soc: qcom: apr: add missing properties
 
-Removing the other sta2x11 bits (mfd, media, x86) should
-probably be done through the respective tree, but it would
-be good not to forget those.
+ .../bindings/soc/qcom/qcom,apr.yaml           | 111 +++++++++++++++--
+ .../bindings/sound/qcom,q6apm-dai.yaml        |  21 ++--
+ .../devicetree/bindings/sound/qcom,q6asm.txt  |  70 -----------
+ .../devicetree/bindings/sound/qcom,q6asm.yaml | 112 ++++++++++++++++++
+ .../sound/qcom,q6dsp-lpass-clocks.yaml        |  36 +++---
+ .../sound/qcom,q6dsp-lpass-ports.yaml         |  64 +++++-----
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  10 +-
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      |   4 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi          |   8 +-
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts    |   2 +-
+ .../boot/dts/qcom/sdm845-xiaomi-beryllium.dts |   2 +-
+ .../boot/dts/qcom/sdm845-xiaomi-polaris.dts   |   4 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   8 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |  10 +-
+ 14 files changed, 293 insertions(+), 169 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
 
-      Arnd
+-- 
+2.34.1
+

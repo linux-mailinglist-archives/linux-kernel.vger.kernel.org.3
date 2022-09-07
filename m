@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC915B0B3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739ED5B0B4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiIGRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S229814AbiIGRQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiIGRMc (ORCPT
+        with ESMTP id S229535AbiIGRQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:12:32 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C72BFA8B;
-        Wed,  7 Sep 2022 10:12:12 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id c11so17257307wrp.11;
-        Wed, 07 Sep 2022 10:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=eD0xuiNX3wD0z20Pv3fc/gF3yUZHFmC8co6RhSNzbeM=;
-        b=Ty1nlULRqbTYBzI09R0J4LKQcvXHU/02T1na/x0/OIdZ4mCSxDvbQw8bszgJ1Nrj8S
-         wkfomwVX9GKnQI0I1HtYHmiwbND0BjBJYwRtTzBwOX29jlE3wBO6T4qt4Ndur9Q/r1Uq
-         YhJT//FBrJfpbo3yzb4cV/AECiS2b8mr1/WWNK2HlBiRz442F92imzd2MqjAvm16b0EA
-         dqqd4x+SJ032c/pDqngfap36L3eDySgXyuirLZ6gL4OuM532yl2VajguRBKBYp9jZTzy
-         0SRIKUEE+swjeGipV125CsqX3AO+fAbkWZbDS5BDZLmroWB03aOBsSEJ0NnST3rJ6is+
-         eKAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=eD0xuiNX3wD0z20Pv3fc/gF3yUZHFmC8co6RhSNzbeM=;
-        b=qSwN3iPP7nbhLlU0ggJ+JS9hiL+8FAUzkXa8sX7FfB9Dqy0MdH62/f1IMtXEeJiMhU
-         2zOnJBU71C/AuZgrZWiXDI2SaDrAu41fu4E3fGskxnJx2r0a0i8vfCaZCZQOtDi9Y8Ns
-         gjFPuegpYKbtHdEFNl8G+bTSJgz2OqkmZhBYziKbzzQDPPrS6EvyC0m9xLST61cAIcJ7
-         TDX8TUCW++5+JN9MZzEY5lazeWoH7rk+TAjRptVs9LWMMHl5SqFLngvrEeSG3B6KJQES
-         Cn6SBkrY7NUb4WthvDzPwX8aNDq35+La4fx1gxvsRpfWmsL0X7zB8dXYTp3I2mTODlKx
-         qzNA==
-X-Gm-Message-State: ACgBeo0gfGlwaR0unzUaqtaMaVNFY95eQAl04EOcoyJVDXVliK2c3Mqs
-        WTa3UU8SFTL/HlUovXsKiF0=
-X-Google-Smtp-Source: AA6agR5yxLsnkcrpy3PeMKRCbpBup3SUjSmpp6SprsnF9G8/bK7OpI4Fjn1G7+fCIKMBDSvGQrflbA==
-X-Received: by 2002:a5d:5b17:0:b0:226:da70:619e with SMTP id bx23-20020a5d5b17000000b00226da70619emr2793441wrb.434.1662570724639;
-        Wed, 07 Sep 2022 10:12:04 -0700 (PDT)
-Received: from elementary ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id r1-20020a5d4e41000000b00228bf773b1fsm10548737wrt.7.2022.09.07.10.12.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 10:12:03 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 19:12:01 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] drm/doc: Custom Kconfig for KUnit is no longer needed
-Message-ID: <20220907171201.GA4529@elementary>
-References: <20220905184711.391022-1-michal.winiarski@intel.com>
+        Wed, 7 Sep 2022 13:16:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4829BCCC2;
+        Wed,  7 Sep 2022 10:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662571001; x=1694107001;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=FhbnyvCHPUalZVKZ0XsPpnzBkTOoT5SyRtycYuZjiVs=;
+  b=HaclRdub2IVEbHOTupV0OrIOmWDiLOltbE4HlFsQ7k7RDHbvbrYV29r9
+   +8a6lpL1Mkb/EoA95lf4XFwLHfG17siJPQ/VxKMNc/PtDdLNBHxJSmHWm
+   0bZRENwStZKpoDsYdIs8d+Rx7n4jgzNb8O6yPQ6Y7DLqvHQfp82YGgyTq
+   EoIcPLjRBhA+pHsupUWfc8LKDemJ+SxzSLqkjiNp2YPu7Aq/79K3t8fKI
+   b7+hhq3yDs61cTvafqMeQz0fsn176Wwd/FcdPRrcHGz31qZqava9o4y7o
+   Lej1RVmxqEf2wnQkK2qtAFUvkVpor8g3iK95QSc2DMT5U4SDckQ2UgY0J
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="295678033"
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="295678033"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 10:16:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="565605191"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 10:16:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oVycx-009jZe-0p;
+        Wed, 07 Sep 2022 20:14:15 +0300
+Date:   Wed, 7 Sep 2022 20:14:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v1 2/9] pwm: lpss: Move exported symbols to PWM_LPSS
+ namespace
+Message-ID: <YxjRZ7wOoLvn5wgI@smile.fi.intel.com>
+References: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
+ <20220906195735.87361-2-andriy.shevchenko@linux.intel.com>
+ <20220907091144.picr3byckxco7w6m@pengutronix.de>
+ <YxipACrMCQbE4xmk@smile.fi.intel.com>
+ <YxjOOpfkSRPcUQfn@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905184711.391022-1-michal.winiarski@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YxjOOpfkSRPcUQfn@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michał,
+On Wed, Sep 07, 2022 at 08:00:42PM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 07, 2022 at 05:21:53PM +0300, Andy Shevchenko wrote:
+> > On Wed, Sep 07, 2022 at 11:11:44AM +0200, Uwe Kleine-K�nig wrote:
+> > > On Tue, Sep 06, 2022 at 10:57:28PM +0300, Andy Shevchenko wrote:
 
-On Mon, Sep 05, 2022 at 08:47:11PM +0200, Michał Winiarski wrote:
-> When built for UML, KUnit provides virtio/PCI, which means that the
-> DMA/IOMEM UML emulation needed by DRM is already present and does not
-> need to be manually added with --kconfig_add.
-> 
-> References: commit 6fc3a8636a7b ("kunit: tool: Enable virtio/PCI by default on UML")
-> Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
-> ---
->  Documentation/gpu/drm-internals.rst | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/gpu/drm-internals.rst b/Documentation/gpu/drm-internals.rst
-> index 5fd20a306718..c264a9587d21 100644
-> --- a/Documentation/gpu/drm-internals.rst
-> +++ b/Documentation/gpu/drm-internals.rst
-> @@ -228,16 +228,11 @@ follows:
->  
->  .. code-block:: bash
->  
-> -	$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests \
-> -		--kconfig_add CONFIG_VIRTIO_UML=y \
-> -		--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
-> +	$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests
->  
->  .. note::
->  	The configuration included in ``.kunitconfig`` should be as generic as
->  	possible.
-> -	``CONFIG_VIRTIO_UML`` and ``CONFIG_UML_PCI_OVER_VIRTIO`` are not
-> -	included in it because they are only required for User Mode Linux.
-> -
->  
->  Legacy Support Code
->  ===================
-> -- 
-> 2.37.3
-> 
+...
 
-Thanks for the patch. This was in my ToDo list and I was waiting until
-6fc3a8636a7b was merged in the DRM tree, but since you already fixed it
-I can mark it as done.
+> > > > -EXPORT_SYMBOL_GPL(pwm_lpss_probe);
+> > > > +EXPORT_SYMBOL_NS_GPL(pwm_lpss_probe, PWM_LPSS);
+> > > 
+> > > There is something possible with more magic:
+> > > 	#define DEFAULT_SYMBOL_NAMESPACE PWM_LPSS
+> > > 
+> > > which you only need once in pwm-lpss.c and then all exports use that
+> > > namespace. (And if you pick up my suggestion for patch 1 you also
+> > > benefit from that.)
+> > 
+> > For a single export (even for a few of them) it's an overkill.
+> 
+> Ah, you adding there 4 more. But still I think it's an overkill. It's so small
+> driver that duplicating namespace in each of the exported symbols is not an
+> issue, is it?
 
-Thanks!
+Okay, now looking at the patch organization (I forgot that I moved NS one to be
+not the first one) your suggestion makes a point. We won't change the code we
+just introduced.
+
+That said, I would like to get your SoB or what you agree with to the patch 1
+and I make this one as you suggested.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

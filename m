@@ -2,143 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821775B04C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FB35B04D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiIGNKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S229534AbiIGNMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiIGNJ5 (ORCPT
+        with ESMTP id S229508AbiIGNMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:09:57 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2993F641D;
-        Wed,  7 Sep 2022 06:09:53 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C12DADD;
-        Wed,  7 Sep 2022 15:09:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662556192;
-        bh=TgDjbh1X5PWwjOUrKcdMzSbSbh7ByQ7P8DVTSSqcvhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B0ZEiYkpfOdxlUi2625QZOk1BNbHkCzOlXhEZhssODDTrqiQEfw7Oha+QJ0whJkCd
-         qTrzYLNrWfxhQTGIXSbfdrr2IMN58MjWI9n1vcMXSnFliM5Dh2eg95gCwnAeyN1A3p
-         H8EVUN7QKwgZNSm4D/ZQSt0mcfhQdNQDlnaBVVtU=
-Date:   Wed, 7 Sep 2022 16:09:35 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: staging/intel-ipu3: Finalize subdev
- initialization to allcoate active state
-Message-ID: <YxiYD6PVYG19EJ5q@pendragon.ideasonboard.com>
-References: <20220907123359.1275322-1-luzmaximilian@gmail.com>
- <a194a9c5-ac8e-cf86-34cd-4f3a3cb6f6ec@ideasonboard.com>
+        Wed, 7 Sep 2022 09:12:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2022E688;
+        Wed,  7 Sep 2022 06:12:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3E01B81CAB;
+        Wed,  7 Sep 2022 13:12:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457FEC433C1;
+        Wed,  7 Sep 2022 13:12:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662556358;
+        bh=V132xHGgL1w8NHdBoiYyAL47s8tfLlop3oD1g1fj82U=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=G1Jm4lJM23B3IaP893itjGYX74m99ASPpvW2J4WhPcn/YmxsxbxA3Qu8Q1WTBBOod
+         3oQ7NyGRNn9EC4E7ywA0efUlS5RaH51RNfrhInHxVLRQtqvaPQmTE0FNXCKdkOT4fq
+         hkfTcYv8lixZeuNOAKOujT24sSlMKFaPnO6Q+vw0gOlPYBGKl5UwqfYVZjThZe7B6W
+         3mzVasOKwgCIpWc3kCktbm1g06RbSMBBKbVC8OCqFvDySzCLlz5+tfdKtcyqmv72MS
+         BPibXbvvVwhBG/7CPQjwHJj98CsPU5n+dzw1m1ZgJKMUBtDa6CzGdsf1h4j2G5I2Mu
+         m6WkYDXixYGeA==
+Message-ID: <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     "J. Bruce Fields" <bfields@fieldses.org>
+Cc:     NeilBrown <neilb@suse.de>, tytso@mit.edu, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        brauner@kernel.org, fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Date:   Wed, 07 Sep 2022 09:12:34 -0400
+In-Reply-To: <20220907125211.GB17729@fieldses.org>
+References: <20220907111606.18831-1-jlayton@kernel.org>
+         <166255065346.30452.6121947305075322036@noble.neil.brown.name>
+         <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+         <20220907125211.GB17729@fieldses.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a194a9c5-ac8e-cf86-34cd-4f3a3cb6f6ec@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 03:46:26PM +0300, Tomi Valkeinen wrote:
-> Hi Maximilian,
-> 
-> On 07/09/2022 15:33, Maximilian Luz wrote:
-> > Commit f69952a4dc1e ("media: subdev: add active state to struct
-> > v4l2_subdev") introduced the active_state member to struct v4l2_subdev.
-> > This state needs to be allocated via v4l2_subdev_init_finalize(). The
-> > intel-ipu3 driver unfortunately does not do that, due to which,
-> 
-> That is fine, a driver only needs to allocate the active state if it uses
-> the active state.
-> 
-> > active_state is NULL and we run into an oops (NULL pointer dereference)
-> > when that state is accessed.
-> > 
-> > In particular, this happens subdev in IOCTLs as commit 3cc7a4bbc381
-> > ("media: subdev: pass also the active state to subdevs from ioctls")
-> > passes that state on to the subdev IOCTLs. An example scenario where
-> > this happens is running libcamera's qcam or cam on a device with IPU3,
-> > for example the Microsoft Surface Book 2. In this case, the oops is
-> > reproducibly in v4l2_subdev_get_try_crop(), called via
-> > imgu_subdev_set_selection().
-> > 
-> > To fix this, allocate the active_state member via
-> > v4l2_subdev_init_finalize().
-> 
-> This is not a correct fix. Sakari has sent (and maybe pushed?) this:
-> 
-> https://lore.kernel.org/all/20220825190351.3241444-1-sakari.ailus@linux.intel.com/
+On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
+> On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
+> > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
+> > > On Wed, 07 Sep 2022, Jeff Layton wrote:
+> > > > +The change to \fIstatx.stx_ino_version\fP is not atomic with respe=
+ct to the
+> > > > +other changes in the inode. On a write, for instance, the i_versio=
+n it usually
+> > > > +incremented before the data is copied into the pagecache. Therefor=
+e it is
+> > > > +possible to see a new i_version value while a read still shows the=
+ old data.
+> > >=20
+> > > Doesn't that make the value useless?
+> > >=20
+> >=20
+> > No, I don't think so. It's only really useful for comparing to an older
+> > sample anyway. If you do "statx; read; statx" and the value hasn't
+> > changed, then you know that things are stable.=20
+>=20
+> I don't see how that helps.  It's still possible to get:
+>=20
+> 		reader		writer
+> 		------		------
+> 				i_version++
+> 		statx
+> 		read
+> 		statx
+> 				update page cache
+>=20
+> right?
+>=20
 
-This being said, it would be nice to convert drivers to use the active
-state, but that's not related to fixing this issue.
+Yeah, I suppose so -- the statx wouldn't necessitate any locking. In
+that case, maybe this is useless then other than for testing purposes
+and userland NFS servers.
 
-> > Link: https://github.com/linux-surface/linux-surface/issues/907
-> > Fixes: 3cc7a4bbc381 ("media: subdev: pass also the active state to subdevs from ioctls")
-> > Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-> > ---
-> >   drivers/staging/media/ipu3/ipu3-v4l2.c | 12 +++++++++++-
-> >   1 file changed, 11 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> > index d1c539cefba8..84ab98ba9a2e 100644
-> > --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-> > +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> > @@ -1093,10 +1093,18 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
-> >   			"failed to create subdev v4l2 ctrl with err %d", r);
-> >   		goto fail_subdev;
-> >   	}
-> > +
-> > +	r = v4l2_subdev_init_finalize(&imgu_sd->subdev);
-> > +	if (r) {
-> > +		dev_err(&imgu->pci_dev->dev,
-> > +			"failed to initialize subdev (%d)\n", r);
-> > +		goto fail_subdev;
-> > +	}
-> > +
-> >   	r = v4l2_device_register_subdev(&imgu->v4l2_dev, &imgu_sd->subdev);
-> >   	if (r) {
-> >   		dev_err(&imgu->pci_dev->dev,
-> > -			"failed initialize subdev (%d)\n", r);
-> > +			"failed to register subdev (%d)\n", r);
-> >   		goto fail_subdev;
-> >   	}
-> >   
-> > @@ -1104,6 +1112,7 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
-> >   	return 0;
-> >   
-> >   fail_subdev:
-> > +	v4l2_subdev_cleanup(&imgu_sd->subdev);
-> >   	v4l2_ctrl_handler_free(imgu_sd->subdev.ctrl_handler);
-> >   	media_entity_cleanup(&imgu_sd->subdev.entity);
-> >   
-> > @@ -1275,6 +1284,7 @@ static void imgu_v4l2_subdev_cleanup(struct imgu_device *imgu, unsigned int i)
-> >   	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[i];
-> >   
-> >   	v4l2_device_unregister_subdev(&imgu_pipe->imgu_sd.subdev);
-> > +	v4l2_subdev_cleanup(&imgu_pipe->imgu_sd.subdev);
-> >   	v4l2_ctrl_handler_free(imgu_pipe->imgu_sd.subdev.ctrl_handler);
-> >   	media_entity_cleanup(&imgu_pipe->imgu_sd.subdev.entity);
-> >   }
-> 
+Would it be better to not consume a statx field with this if so? What
+could we use as an alternate interface? ioctl? Some sort of global
+virtual xattr? It does need to be something per-inode.
 
--- 
-Regards,
+> >=20
+> > > Surely the change number must
+> > > change no sooner than the change itself is visible, otherwise stale d=
+ata
+> > > could be cached indefinitely.
+> > >=20
+> > > If currently implementations behave this way, surely they are broken.
+> >=20
+> > It's certainly not ideal but we've never been able to offer truly atomi=
+c
+> > behavior here given that Linux is a general-purpose OS. The behavior is
+> > a little inconsistent too:
+> >=20
+> > The c/mtime update and i_version bump on directories (mostly) occur
+> > after the operation. c/mtime updates for files however are mostly drive=
+n
+> > by calls to file_update_time, which happens before data is copied to th=
+e
+> > pagecache.
+> >=20
+> > It's not clear to me why it's done this way. Maybe to ensure that the
+> > metadata is up to date in the event that a statx comes in? Improving
+> > this would be nice, but I don't see a way to do that without regressing
+> > performance.
+> > --=20
+> > Jeff Layton <jlayton@kernel.org>
 
-Laurent Pinchart
+--=20
+Jeff Layton <jlayton@kernel.org>

@@ -2,193 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BA65AFCCE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539065AFCCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiIGGsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S230080AbiIGGss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIGGsP (ORCPT
+        with ESMTP id S230045AbiIGGsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Sep 2022 02:48:15 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AABB9E89C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:47:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VOwnYjr_1662533270;
-Received: from 30.240.98.182(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VOwnYjr_1662533270)
-          by smtp.aliyun-inc.com;
-          Wed, 07 Sep 2022 14:47:52 +0800
-Message-ID: <87aa9fd2-cae8-972d-81d4-8855cbd81569@linux.alibaba.com>
-Date:   Wed, 7 Sep 2022 14:47:49 +0800
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEE58604B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:48:07 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id fy31so28178910ejc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 23:48:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=BVuk17Av+bi2jPnkL9wfgDXhvd64IxzBdo6fgEYGs04=;
+        b=l+Ix4zgCkeWJQbwso5ymf9RKOOdyJP++7E7Hn7qNe8++KSvt+whxkZnLOMrQDs0DOx
+         8Bnxfj3DRwnWqEyzdSyphQxdWMFT3V9Qs7b/tDHbUlIorwV6gri3bErqpuPWekLHhOlc
+         95QccTtWJAE1QfDqOjrgxBl7o3tHfz3Xov6eefmcjs15qr03X6yCbHQUZzOjBwtnJ2Ce
+         v3MSn5FI8PTpUV7LwrFWYTCWsHEzEAT0OYOVxybHCEP0lYHSssUuWNBoYyY5Iuisb3F8
+         v4ZMnm1GSBiSXQSM4x8txzQJ+vXfmqGl5JiI3TvxUzzycXJ69jn0CXTzpi52Mui/bNAT
+         qL5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=BVuk17Av+bi2jPnkL9wfgDXhvd64IxzBdo6fgEYGs04=;
+        b=az9fMkpPBfSUNZ3olXKirtm90klMQDYm5LUaCUD+PUqWkol00jlxx2YrBV5VW2JL/r
+         CrWCcVxQFWEvVsExb+q4EYhJmOUEMcVp9XqMyaa98YAsgqFPgcKlgoCXzzRg8kU/nEjW
+         qyX0WnpdT/5NZ8QNP0xlZsEWVtUY5copp3UkcLo8xf7DzgkymEyuJFvu0c94wnvQNKOk
+         Hzx5Z1tfafd+9iwgGQB2DZFDX6o3eBvHToMVgvKTmiKdxd1+xNjfsJOoEj+UVX6dcTNI
+         0ZsmSyfbBVPUxhVZYDrOxAUtpkXclHecVUFMt1l2F22zoNPt9oNFB2a8JOAnHu2NwAo9
+         ZRsA==
+X-Gm-Message-State: ACgBeo0cRBPMIloZc/jSdOo30Q5ymcI8O6SrQDCZ9ssJmtUBh+KozAcH
+        ScZLPDBgE6oKIHAek8bUtnPOJfuetnNAgmyLTZk=
+X-Google-Smtp-Source: AA6agR5oNcJ4xiLosx9c+PBGIQP4JwyWHajAGIDrk+o8018ZQ2ZLnOx2wULEGsptfZkH/pKAB98ijFHADY5kXzED1SI=
+X-Received: by 2002:a17:907:6d16:b0:731:17b5:699 with SMTP id
+ sa22-20020a1709076d1600b0073117b50699mr1428930ejc.23.1662533286189; Tue, 06
+ Sep 2022 23:48:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH v6 12/21] x86/resctrl: Calculate bandwidth from the
- previous __mon_event_count() chunks
-To:     James Morse <james.morse@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        xhao@linux.alibaba.com
-References: <20220902154829.30399-1-james.morse@arm.com>
- <20220902154829.30399-13-james.morse@arm.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20220902154829.30399-13-james.morse@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.7 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <tencent_E1BBF05904DFB73C478DCD592740AAE0780A@qq.com>
+ <CAJedcCxVW++iH49UFZp9ruUuTcNubWCH6Wsqe11K4COB3E8msg@mail.gmail.com>
+ <CAJedcCw1eJqjSK+yR7eQMDheNtH3Mjm+viwt00xAhnmrfpq2pw@mail.gmail.com>
+ <CAJedcCweHjD78F7iydiq6Xc2iH=t_3m=H9JKnaCooToUk32FvQ@mail.gmail.com>
+ <YxWtfjfpNsoPUrgh@kroah.com> <CAJedcCzMo51aiy=Dv7zn7VmL3gwkw7JgzwAPAB2Z27C9CnhoYA@mail.gmail.com>
+ <20220907030754.GU1089@zhen-hp.sh.intel.com>
+In-Reply-To: <20220907030754.GU1089@zhen-hp.sh.intel.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Wed, 7 Sep 2022 14:47:54 +0800
+Message-ID: <CAJedcCwPKT8Zj8aPmXz=M3zG+xvCzyo4OspaPp4-LY+DgTfteA@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915/gvt: fix double-free bug in split_2MB_gtt_entry.
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, alex000young@gmail.com,
+        security@kernel.org, dri-devel@lists.freedesktop.org,
+        tvrtko.ursulin@linux.intel.com, airlied@linux.ie,
+        intel-gfx@lists.freedesktop.org, joonas.lahtinen@linux.intel.com,
+        linux-kernel@vger.kernel.org, xmzyshypnc <1002992920@qq.com>,
+        jani.nikula@linux.intel.com, daniel@ffwll.ch,
+        rodrigo.vivi@intel.com, intel-gvt-dev@lists.freedesktop.org,
+        zhi.a.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Zhenyu,
 
-在 2022/9/2 下午11:48, James Morse 写道:
-> mbm_bw_count() is only called by the mbm_handle_overflow() worker once a
-> second. It reads the hardware register, calculates the bandwidth and
-> updates m->prev_bw_msr which is used to hold the previous hardware register
-> value.
+Very glad for your reply. I agree that the bug is hard to trigger in
+userspace. But it is possible to happen in some specific scene. For
+example, if calling pfn_valid failed, the bug will be triggered. And
+it did happened as the [1] commit description illustrates.
+
+As for the patch, I think your plan is the best. We need to free the
+spt only in bad case.
+
+[1] https://github.com/torvalds/linux/commit/39b4cbadb9a95bf3f13ea102d6ec84=
+1940916ee2
+
+Regards,
+Zheng Wang
+
+Zhenyu Wang <zhenyuw@linux.intel.com> =E4=BA=8E2022=E5=B9=B49=E6=9C=887=E6=
+=97=A5=E5=91=A8=E4=B8=89 11:33=E5=86=99=E9=81=93=EF=BC=9A
+
 >
-> Operating directly on hardware register values makes it difficult to make
-> this code architecture independent, so that it can be moved to /fs/,
-> making the mba_sc feature something resctrl supports with no additional
-> support from the architecture.
-> Prior to calling mbm_bw_count(), mbm_update() reads from the same hardware
-> register using __mon_event_count().
+> On 2022.09.06 19:36:56 +0800, Zheng Hacker wrote:
+> > Hi Greg,
+> >
+> > Alex has explained how we figured out the patch. We did analyze the
+> > code and found it possible to reach the vulnerability code. But we
+> > have no physical device in hand to test the driver. So we'd like to
+> > discuss with developers to see if the issue exists or not.
+> >
+> > Best regards,
+> > Zheng Wang.
+> >
+> > Greg KH <gregkh@linuxfoundation.org> ???2022???9???5????????? 16:04????=
+?????
+> > >
+> > > On Mon, Sep 05, 2022 at 03:46:09PM +0800, Zheng Hacker wrote:
+> > > > I rewrote the letter. Hope it works.
+> > > >
+> > > > There is a double-free security bug in split_2MB_gtt_entry.
+> > > >
+> > > > Here is a calling chain :
+> > > > ppgtt_populate_spt->ppgtt_populate_shadow_entry->split_2MB_gtt_entr=
+y.
+> > > > If intel_gvt_dma_map_guest_page failed, it will call
+> > > > ppgtt_invalidate_spt, which will finally call ppgtt_free_spt and
+> > > > kfree(spt). But the caller does not notice that, and it will call
+> > > > ppgtt_free_spt again in error path.
+> > > >
 >
-> Change mbm_bw_count() to use the current chunks value most recently saved
-> by __mon_event_count(). This removes an extra call to __rmid_read().
-> Instead of using m->prev_msr to calculate the number of chunks seen,
-> use the rr->val that was updated by __mon_event_count(). This removes an
-> extra call to mbm_overflow_count() and get_corrected_mbm_count().
-> Calculating bandwidth like this means mbm_bw_count() no longer operates
-> on hardware register values directly.
+> It's a little mess in code so in theory it might be possible but
+> intel_gvt_dma_map_guest_page won't fail in practise...
 >
-> Reviewed-by: Jamie Iles <quic_jiles@quicinc.com>
-> Tested-by: Xin Hao <xhao@linux.alibaba.com>
-> Reviewed-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
-> Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> Changes since v3:
->   * Reset rr.val before each use to avoid over counting.
->   * Fixed typos in kerneldoc.
+> > > > Fix this by returning the result of ppgtt_invalidate_spt to split_2=
+MB_gtt_entry.
+> > > >
 >
-> Changes since v2:
->   * Expanded commit message
+> I don't see why changing ret value can fix this issue, as it doesn't chan=
+ge
+> any behavior e.g caller of ppgtt_populate_spt to handle possible differen=
+t error return.
 >
-> Changes since v1:
->   * This patch was rewritten
-> ---
->   arch/x86/kernel/cpu/resctrl/internal.h |  4 ++--
->   arch/x86/kernel/cpu/resctrl/monitor.c  | 25 ++++++++++++++++---------
->   2 files changed, 18 insertions(+), 11 deletions(-)
+> As current code looks assuming that ppgtt_invalidate_spt would free spt i=
+n good case,
+> I think the real cleanup should split that assumption and handle free in =
+error case properly.
 >
-> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> index 3b9e43ba7590..46062099d69e 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -289,7 +289,7 @@ struct rftype {
->    * struct mbm_state - status for each MBM counter in each domain
->    * @chunks:	Total data moved (multiply by rdt_group.mon_scale to get bytes)
->    * @prev_msr:	Value of IA32_QM_CTR for this RMID last time we read it
-> - * @prev_bw_msr:Value of previous IA32_QM_CTR for bandwidth counting
-> + * @prev_bw_chunks: Previous chunks value read for bandwidth calculation
->    * @prev_bw:	The most recent bandwidth in MBps
->    * @delta_bw:	Difference between the current and previous bandwidth
->    * @delta_comp:	Indicates whether to compute the delta_bw
-> @@ -297,7 +297,7 @@ struct rftype {
->   struct mbm_state {
->   	u64	chunks;
->   	u64	prev_msr;
-> -	u64	prev_bw_msr;
-> +	u64	prev_bw_chunks;
->   	u32	prev_bw;
->   	u32	delta_bw;
->   	bool	delta_comp;
-> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-> index 3e69386cfe00..2d81b6cd9632 100644
-> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
-> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-> @@ -315,7 +315,7 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
->   
->   	if (rr->first) {
->   		memset(m, 0, sizeof(struct mbm_state));
-> -		m->prev_bw_msr = m->prev_msr = tval;
-> +		m->prev_msr = tval;
->   		return 0;
->   	}
->   
-> @@ -329,27 +329,32 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
->   }
->   
->   /*
-> + * mbm_bw_count() - Update bw count from values previously read by
-> + *		    __mon_event_count().
-> + * @rmid:	The rmid used to identify the cached mbm_state.
-> + * @rr:		The struct rmid_read populated by __mon_event_count().
-> + *
->    * Supporting function to calculate the memory bandwidth
-> - * and delta bandwidth in MBps.
-> + * and delta bandwidth in MBps. The chunks value previously read by
-> + * __mon_event_count() is compared with the chunks value from the previous
-> + * invocation. This must be called once per second to maintain values in MBps.
->    */
->   static void mbm_bw_count(u32 rmid, struct rmid_read *rr)
->   {
->   	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(rr->r);
->   	struct mbm_state *m = &rr->d->mbm_local[rmid];
-> -	u64 tval, cur_bw, chunks;
-> +	u64 cur_bw, chunks, cur_chunks;
->   
-> -	tval = __rmid_read(rmid, rr->evtid);
-> -	if (tval & (RMID_VAL_ERROR | RMID_VAL_UNAVAIL))
-> -		return;
-> +	cur_chunks = rr->val;
-> +	chunks = cur_chunks - m->prev_bw_chunks;
-> +	m->prev_bw_chunks = cur_chunks;
->   
-> -	chunks = mbm_overflow_count(m->prev_bw_msr, tval, hw_res->mbm_width);
-> -	cur_bw = (get_corrected_mbm_count(rmid, chunks) * hw_res->mon_scale) >> 20;
-> +	cur_bw = (chunks * hw_res->mon_scale) >> 20;
->   
->   	if (m->delta_comp)
->   		m->delta_bw = abs(cur_bw - m->prev_bw);
->   	m->delta_comp = false;
->   	m->prev_bw = cur_bw;
-> -	m->prev_bw_msr = tval;
->   }
->   
->   /*
-> @@ -516,10 +521,12 @@ static void mbm_update(struct rdt_resource *r, struct rdt_domain *d, int rmid)
->   	 */
->   	if (is_mbm_total_enabled()) {
->   		rr.evtid = QOS_L3_MBM_TOTAL_EVENT_ID;
-> +		rr.val = 0;
-In mbm_update,  there no use the rr.val, so there no need to initialize ？
->   		__mon_event_count(rmid, &rr);
->   	}
->   	if (is_mbm_local_enabled()) {
->   		rr.evtid = QOS_L3_MBM_LOCAL_EVENT_ID;
-> +		rr.val = 0;
-ditto.
->   		__mon_event_count(rmid, &rr);
->   
->   		/*
+> > > > Signed-off-by: Zheng Wang
+>
+> This misses proper email address.
+>
+> thanks
+>
+> > > >
+> > > > ---
+> > > >  drivers/gpu/drm/i915/gvt/gtt.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/=
+gvt/gtt.c
+> > > > index ce0eb03709c3..9f14fded8c0c 100644
+> > > > --- a/drivers/gpu/drm/i915/gvt/gtt.c
+> > > > +++ b/drivers/gpu/drm/i915/gvt/gtt.c
+> > > > @@ -1215,7 +1215,7 @@ static int split_2MB_gtt_entry(struct intel_v=
+gpu *vgpu,
+> > > >                 ret =3D intel_gvt_dma_map_guest_page(vgpu, start_gf=
+n + sub_index,
+> > > >                                                    PAGE_SIZE, &dma_=
+addr);
+> > > >                 if (ret) {
+> > > > -                       ppgtt_invalidate_spt(spt);
+> > > > +                       ret =3D ppgtt_invalidate_spt(spt);
+> > > >                         return ret;
+> > >
+> > > But now you just lost the original error, shouldn't this succeed even=
+ if
+> > > intel_gvt_dma_map_guest_page() failed?
+> > >
+> > > And how are you causing intel_gvt_dma_map_guest_page() to fail in a r=
+eal
+> > > system?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h

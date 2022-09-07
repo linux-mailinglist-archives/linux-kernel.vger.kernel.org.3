@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316025B0D8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AF35B0D8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiIGT4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S229965AbiIGT4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIGT4G (ORCPT
+        with ESMTP id S229531AbiIGTz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:56:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F087F8D3F8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fR+uY3bGGpxBS89mrcSW6oj49yHUnTRga6zx1F+991A=; b=KiYpUsS9UkanSdseuyWsIDa6Mg
-        2WoiL8b/BvTFlWqwKfoJzHjhyUVFYuBMXqZ5zjz+H7DEkVr4dDyrgAxgv/DPrJFpYglSTXzK6OKPj
-        6MrowD6ihkMrkZCGXrNoxCLbM5Fy9SQknaELyggJMFhXs7TTeClJto7LnCaNKmnoU1w3/X5t25UBx
-        l2OmZ5NfcGfimnx8rMEdvaRBwGWaN+b0UrsxEQ4/fASTJTP/5NLR2ksw1gOOsWkJCgBkj89SqKBkE
-        qJy9p89oiiF5Ll3fNTZ5SY26Xsxp3aVHvyS0oJyKGmh1cQDEY+KzCpohRnCij/McWb48X7rLH8B3C
-        EL98RSAw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oW19L-00Bhzo-5R; Wed, 07 Sep 2022 19:55:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A723E300074;
-        Wed,  7 Sep 2022 21:55:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5D95D2B9DA6E4; Wed,  7 Sep 2022 21:55:48 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 21:55:48 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        kernel test robot <lkp@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [peterz-queue:sched/psi 11/11]
- include/linux/cgroup-defs.h:432:38: error: 'NR_PSI_RESOURCES' undeclared
- here (not in a function)
-Message-ID: <Yxj3RN9SXl6Azs7G@hirez.programming.kicks-ass.net>
-References: <202209070242.7EuRnstk-lkp@intel.com>
- <e95c6e55-a023-b6f7-1dce-4195dc22114a@bytedance.com>
- <Yxi4os4PUWSARTS/@slm.duckdns.org>
- <YxjzAnztFtvrtr96@hirez.programming.kicks-ass.net>
- <YxjzM9vv55meOAPU@slm.duckdns.org>
+        Wed, 7 Sep 2022 15:55:56 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB4EA61CD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:55:53 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id q21so1841149qtp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 12:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=reg182tBPdMyHHqhIyhd0PReinakkrLNe0xqHZC9tHU=;
+        b=HGsl5LOrvfdnuyNEVcB+B1VQp1UuGBIOQoUWByoYPBAOyvlWj9vIrmlIosnh0QOvjp
+         9t1pLdGWzfwvo7PTNeeXZpHQeCZDCMAbxR4j6DpbkpqAtHiJ1boF9wUSCWFLMrBlcaHp
+         YoTv+kHo4THsJ/Mc63JM+YKqeESn3s2WG47rnSxevKm9v0SgRfxj/b/FSTqHN+FVbbdE
+         YRUwQy1C4ktcAsIQk6ZxdocxEK3yR01eWqg2vLczmE6Ww5bfdd1+Dl8taxY2Tf/9XWTX
+         2SLCSM/ki21AbuD+egy3jf01r8hYIK/sKWh+WkDXR3hVVPW6f8vUKxGd138OM1Q+9SRg
+         KRIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=reg182tBPdMyHHqhIyhd0PReinakkrLNe0xqHZC9tHU=;
+        b=Z7vHXhuSLU8zgocktMJf7IiAI6LM530egG8NAFS7KWlZrwzN0XnUjfTgllt7BrIB3v
+         wyj+Xd1lCPNFjHjXT2BcKW7vKLcFkeiauFeuPU70mOfDvNTetxgukSXmTnu4i0OBqRrV
+         cvJh6aT5v+wGGndpHc+FSi7Ojx/uKM6ebLIRZ9WGaKftqB1LIlkptxe+Kl0DPSD0HGfi
+         s81hQEsiTDkqEYI3aFpCulmwUfcnhWoIx6grgLuGMzwdQrbRpj4jJL6Cmj3+9Qnfsro4
+         tcvhRmcDTR0t570xLL5azcwJo45wxg2NgWaPdrii3/AuBLk6Nt+MLLNBQmsuAp730usN
+         7Bzw==
+X-Gm-Message-State: ACgBeo0YLnZci2elQN3dzYX0s8Y86b6nmISBNjQQNWE86DBfLzK/h2Gh
+        cjNO8yNriwPgkpCYWLkobXZfiUoZZIfh9Q==
+X-Google-Smtp-Source: AA6agR71wy1OO/ymcMptPhtEDcay7FQ+pBe7sqv5WOFog+U5XySjMiaLOl4gJ+FO5Lod2IyxAWvAbA==
+X-Received: by 2002:a05:622a:15c7:b0:344:5321:5874 with SMTP id d7-20020a05622a15c700b0034453215874mr4917567qty.506.1662580552067;
+        Wed, 07 Sep 2022 12:55:52 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id m8-20020ac866c8000000b003445d06a622sm12968811qtp.86.2022.09.07.12.55.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 12:55:51 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oW19K-008kzP-5v;
+        Wed, 07 Sep 2022 16:55:50 -0300
+Date:   Wed, 7 Sep 2022 16:55:50 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lpivarc@redhat.com" <lpivarc@redhat.com>,
+        "Liu, Jingqi" <jingqi.liu@intel.com>,
+        "Lu, Baolu" <baolu.lu@intel.com>
+Subject: Re: [PATCH] vfio/type1: Unpin zero pages
+Message-ID: <Yxj3Ri8pfqM1SxWe@ziepe.ca>
+References: <166182871735.3518559.8884121293045337358.stgit@omen>
+ <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com>
+ <YxfX+kpajVY4vWTL@ziepe.ca>
+ <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
+ <YxiTOyGqXHFkR/DY@ziepe.ca>
+ <20220907095552.336c8f34.alex.williamson@redhat.com>
+ <YxjJlM5A0OLhaA7K@ziepe.ca>
+ <20220907125627.0579e592.alex.williamson@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxjzM9vv55meOAPU@slm.duckdns.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220907125627.0579e592.alex.williamson@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 09:38:27AM -1000, Tejun Heo wrote:
-> On Wed, Sep 07, 2022 at 09:37:38PM +0200, Peter Zijlstra wrote:
-> > On Wed, Sep 07, 2022 at 05:28:34AM -1000, Tejun Heo wrote:
-> > > On Wed, Sep 07, 2022 at 10:45:55AM +0800, Chengming Zhou wrote:
-> > > > 2. This patchset depends on Tejun's commit e2691f6b44ed ("cgroup: Implement cgroup_file_show()") in linux-next
-> > > > 
-> > > >    Maybe peterz-queue should include that first? I don't know what's the normal way to handle.
-> > > 
-> > > FYI, this patch is in the Greg's driver-core/driver-core-next branch. If
-> > > it'd be better to route these through the cgroup tree, let me know.
-> > 
-> > I can base sched/psi off of sched/core and driver-core-next and do a
-> > separate late pull for it I suppose.
-> > 
-> > I'm guessing that is more or less what you'd end up doing too, right?
-> 
-> Yeap.
+On Wed, Sep 07, 2022 at 12:56:27PM -0600, Alex Williamson wrote:
 
-OK, I just pushed out a new sched/psi which is based on a combination of
-sched/core and driver-core-next. Lets see if the robots have more
-complaints ;-)
+> I thought we'd already agreed that we were stuck with locked_vm for
+> type1 and any compatibility mode of type1 due to this.  Native iommufd
+> support can do the right thing since userspace will need to account for
+> various new usage models anyway.
 
+We did, that was for the iommufd situation (which will also hit the
+same zeropage issue, sigh) - this discussion is about fixing a bug in
+vfio and what many consider a bug in GUP.
+
+My point is I'm still not convinced we can really consider these
+limits as ABI because it opens a pandoras box of kernel limitations.
+
+> I've raised the issue with David for the zero page accounting, but I
+> don't know what the solution is.  libvirt automatically adds a 1GB
+> fudge factor to the VM locked memory limits to account for things like
+> ROM mappings, or at least the non-zeropage backed portion of those
+> ROMs.  I think that most management tools have adopted similar, so the
+> majority of users shouldn't notice.  However this won't cover all
+> users, so we certainly risk breaking userspace if we introduce hard
+> page accounting of zero pages.
+
+It sounds like things will be fine. 1GB fudge is pretty big.
+
+For things like this ABI compat is not about absolute compatability in
+the face of any userspace, but a real-world compatibility "does
+something that actually exists break?"
+
+So I would be happier if we had an actual deployed thing that breaks..
+I would be inclined to go with the simple fix and rely on the
+fudge. If someone does come with an actual break then lets do one of
+the work arounds.
+
+Given the whole thing is obstensibly for security it is better to keep
+it simple and sane then to poke it full of holes.
+
+> module parameter defined limit.  We might also consider whether we
+> could just ignore zero page mappings, maybe with a optional "strict"
+> mode module option to generate an errno on such mappings.  Thanks,
+
+Once GUP is fixed vfio won't see the zero pages anymore :( That really
+limits the choices for a work around :(
+
+Jason 

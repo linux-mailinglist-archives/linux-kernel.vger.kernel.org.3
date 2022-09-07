@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0495B037A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E305B037C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiIGL4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S230090AbiIGL41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiIGL4T (ORCPT
+        with ESMTP id S229915AbiIGL4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:56:19 -0400
+        Wed, 7 Sep 2022 07:56:23 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DDD7FE4B;
-        Wed,  7 Sep 2022 04:56:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0D77FE40;
+        Wed,  7 Sep 2022 04:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662551778; x=1694087778;
+  t=1662551782; x=1694087782;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4C4vOH4AS9wNEL/9JtetICouMH3J9a1nV18A4BnQ+sw=;
-  b=JtAGlBRqyAM5hesEW7257AlkXiqpHq4NzLmSj6S7wfypAYtSeEZXtG6m
-   jFbrnU6cdenyajH49bxnOXz2g1LsLoL80qXFFrlyIoTLPRiazQN0v6unK
-   RZVqbDuuBBDIEzS3gPlWGGKsJdWvZqN4VoCZdQmRQmfsanmSk3oOdM1pK
-   Mm7fFKlh75QUgCcmAldEo5NbpRpJ1GI3h13qVAr04Ki0A0kzJoK4PqKR6
-   9v/vhn+LpxkaAnw37iBfIjatIRctEw8eXDAaspaU94qvU2Jq/ELPglubn
-   WW6PftLrdBjsQWmOL/Uns6J0DX56ry9hpYBzIDLU5iM9cs1qn08QToEHp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="296851220"
+  bh=I3n8tdgr/41V9HMQjef7gsGonwwy/i4gJxjnLqt2rlU=;
+  b=cOIQNhuwTtYUo1nM/EHDaKnxfxQZCaVzfTxtrQL0Qe7d5mhf1vBj3rf5
+   P4MTtSOOunIeAqT3ifuEbv8ybMsmRB0797LgOSvGSxD2OXmnxsmismuRw
+   0Fgz7IV6XJNk14/nqycHUE5wqd1QYkctRuU2/N62mb3UP5+nj12EO88ag
+   DP/PAQboaYEEczpQuJjB5GvEarzjVwK67f7mw0pNvoMfTbjcthDtazB/Z
+   5ny7Y9QeIw/TMiyfugE+dY7IC+oFBYNljMf9ig9ErsY+gerpeJXAfXakG
+   9JpQ32zfCH2WszdYoSyGuqZCRq/cj/F56pjt0X+w57X2R6U4VZN5jyYxO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="296851231"
 X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="296851220"
+   d="scan'208";a="296851231"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 04:56:18 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 04:56:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="756742666"
+   d="scan'208";a="756742687"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2022 04:56:14 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2022 04:56:18 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, grzegorz.alibozek@gmail.com,
@@ -46,9 +46,9 @@ Cc:     linux-kernel@vger.kernel.org, grzegorz.alibozek@gmail.com,
         danielmorgan@disroot.org, bernie@codewiz.org,
         saipavanchitta1998@gmail.com, rubin@starset.net,
         maniette@gmail.com, nate@kde.org
-Subject: [RFC PATCH 1/2] usb: typec: ucsi: Check the connection on resume
-Date:   Wed,  7 Sep 2022 14:56:25 +0300
-Message-Id: <20220907115626.21976-2-heikki.krogerus@linux.intel.com>
+Subject: [RFC PATCH 2/2] usb: typec: ucsi: acpi: Add PM hooks
+Date:   Wed,  7 Sep 2022 14:56:26 +0300
+Message-Id: <20220907115626.21976-3-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
 References: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
@@ -64,92 +64,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes an issue where the partner device is not unregistered
-properly after resume if it's unplugged during suspend.
+Some systems notify the driver separately after resume if
+the state of the connection changed during suspend, but
+there is no way we can rely on that.
 
 Link: https://bugzilla.kernel.org/show_bug.cgi?id=210425
 Fixes: a94ecde41f7e ("usb: typec: ucsi: ccg: enable runtime pm support")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 42 ++++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 13 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_acpi.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 7f2624f427241..33e1cee9dc184 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -183,16 +183,6 @@ int ucsi_send_command(struct ucsi *ucsi, u64 command,
- }
- EXPORT_SYMBOL_GPL(ucsi_send_command);
- 
--int ucsi_resume(struct ucsi *ucsi)
--{
--	u64 command;
--
--	/* Restore UCSI notification enable mask after system resume */
--	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
--
--	return ucsi_send_command(ucsi, command, NULL, 0);
--}
--EXPORT_SYMBOL_GPL(ucsi_resume);
- /* -------------------------------------------------------------------------- */
- 
- struct ucsi_work {
-@@ -746,6 +736,7 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 
- static int ucsi_check_connection(struct ucsi_connector *con)
- {
-+	u8 prev_flags = con->status.flags;
- 	u64 command;
- 	int ret;
- 
-@@ -756,10 +747,13 @@ static int ucsi_check_connection(struct ucsi_connector *con)
- 		return ret;
- 	}
- 
-+	if (con->status.flags == prev_flags)
-+		return 0;
-+
- 	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
--		if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
--		    UCSI_CONSTAT_PWR_OPMODE_PD)
--			ucsi_partner_task(con, ucsi_check_altmodes, 30, 0);
-+		ucsi_register_partner(con);
-+		ucsi_pwr_opmode_change(con);
-+		ucsi_partner_change(con);
- 	} else {
- 		ucsi_partner_change(con);
- 		ucsi_port_psy_changed(con);
-@@ -1280,6 +1274,28 @@ static int ucsi_init(struct ucsi *ucsi)
- 	return ret;
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 8873c1644a295..8c7008cc9942e 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -185,6 +185,20 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
+ 	return 0;
  }
  
-+int ucsi_resume(struct ucsi *ucsi)
++static int ucsi_acpi_suspend(struct device *dev)
 +{
-+	struct ucsi_connector *con;
-+	u64 command;
-+	int ret;
-+
-+	/* Restore UCSI notification enable mask after system resume */
-+	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
-+	ret = ucsi_send_command(ucsi, command, NULL, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	for (con = ucsi->connector; con->port; con++) {
-+		mutex_lock(&con->lock);
-+		ucsi_check_connection(con);
-+		mutex_unlock(&con->lock);
-+	}
-+
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(ucsi_resume);
 +
- static void ucsi_init_work(struct work_struct *work)
- {
- 	struct ucsi *ucsi = container_of(work, struct ucsi, work.work);
++static int ucsi_acpi_resume(struct device *dev)
++{
++	struct ucsi_acpi *ua = dev_get_drvdata(dev);
++
++	return ucsi_resume(ua->ucsi);
++}
++
++static DEFINE_SIMPLE_DEV_PM_OPS(ucsi_acpi_pm_ops, ucsi_acpi_suspend, ucsi_acpi_resume);
++
+ static const struct acpi_device_id ucsi_acpi_match[] = {
+ 	{ "PNP0CA0", 0 },
+ 	{ },
+@@ -194,6 +208,7 @@ MODULE_DEVICE_TABLE(acpi, ucsi_acpi_match);
+ static struct platform_driver ucsi_acpi_platform_driver = {
+ 	.driver = {
+ 		.name = "ucsi_acpi",
++		.pm = pm_ptr(&ucsi_acpi_pm_ops),
+ 		.acpi_match_table = ACPI_PTR(ucsi_acpi_match),
+ 	},
+ 	.probe = ucsi_acpi_probe,
 -- 
 2.35.1
 

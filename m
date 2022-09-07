@@ -2,78 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02CD5B079C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075135B07A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiIGOye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S230058AbiIGOzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiIGOyK (ORCPT
+        with ESMTP id S230090AbiIGOyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:54:10 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F1DB6548
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:53:46 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id i26so7110874lfp.11
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=JA9TuoAtB0Hdj8lp2ESD/D+NAeIyn8GknvA95wIowgc=;
-        b=lkyy+Vj9xIxeSsOTcc37N97vHk2IeH5ikX2Dr4G8r2ZOrH7NwWJRHJlmH3pjhlzkwv
-         jyNfkprU+TsRKtfHyIAwF1vH+1vtzai/I6nmMfUbxJGlfuFWmx/UeEl5TAr8YRUuWQ7N
-         pUfbqDirdVle8VvJHt3VeJtsR51+MRhzRZcjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=JA9TuoAtB0Hdj8lp2ESD/D+NAeIyn8GknvA95wIowgc=;
-        b=qzPjvF+0TVTbToTq1DReiOEPoLAmglS6OJDPE/Qu1/y1QdKieBwfpedNQkbor6XN67
-         cETVUJLfrXX1xBXAdabgabLEgXVRVSko/3bJHy5d/8xIj00yFoNqd5nT9380fGftFa/m
-         koBi567B3boj5Ugpoc3jG+eSDUv71KIFEg5mpF7SKmfzfHtticAEgf9AG5rHuhM7+OKm
-         u9lbhfI2iZCyQ1359KHqYHWoyo08ubTzfU5T9EtNfAoyGnn4ptoKMmno76yCteenj8QE
-         y3NO/+Xq5JBmHgBXYFQOLStjI8QcmQGO3ZaOiJsbwLMiRgoC50nXOWeKP3C0nRTy9DDS
-         ikrw==
-X-Gm-Message-State: ACgBeo1U7oPrpeFCEeXTWRVf0QBKxYzUGyv9pqFVG759j5mfCmvah85v
-        iWx5sjJm5MoNa9pwPb/d8oUTtRzaedeiYA==
-X-Google-Smtp-Source: AA6agR6mmjQyzS2Zye5ysxfSOXNl2fN963XBefwTz+OaMyzTVqxfeXg4OwxUNnqABx0r9ZOLynZc0Q==
-X-Received: by 2002:a19:ad03:0:b0:492:d9e0:ef42 with SMTP id t3-20020a19ad03000000b00492d9e0ef42mr1263800lfc.327.1662562421724;
-        Wed, 07 Sep 2022 07:53:41 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id q17-20020ac25111000000b004946c3cf53fsm2530642lfb.59.2022.09.07.07.53.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 07:53:40 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id bq23so22850427lfb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 07:53:39 -0700 (PDT)
-X-Received: by 2002:a05:6512:c1e:b0:494:7c8c:f5f2 with SMTP id
- z30-20020a0565120c1e00b004947c8cf5f2mr1302375lfu.593.1662562419339; Wed, 07
- Sep 2022 07:53:39 -0700 (PDT)
+        Wed, 7 Sep 2022 10:54:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786EDB531E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:54:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E613361957
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:54:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C091DC433D6;
+        Wed,  7 Sep 2022 14:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662562443;
+        bh=FnTuP15XLzFNLiYzDllSBtNOTSW5KL/gP6XWVJ3ejpw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ohdn/uVYqN+mXpJ77/NZg/rgPYe7ewGTDztOmZITM6VaNb8GEYm9/cGMFt2/tN2di
+         2kYrgbXRjDM1SlGRmyajY20ani3Fxqdl2BpREJzjos+HupAJGq+F8Wr1EvJ9qVLgL3
+         /7Cvj2/vodNIOTEG60Q+aoMEXKhAQJBKdzBeDPPs=
+Date:   Wed, 7 Sep 2022 16:54:00 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jim Cromie <jim.cromie@gmail.com>
+Cc:     jbaron@akamai.com, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
+        linux@rasmusvillemoes.dk, joe@perches.com
+Subject: Re: [PATCH v6 21/57] dyndbg: test DECLARE_DYNDBG_CLASSMAP, sysfs
+ nodes
+Message-ID: <YxiwiO+Ni/CvAO5Q@kroah.com>
+References: <20220904214134.408619-1-jim.cromie@gmail.com>
+ <20220904214134.408619-22-jim.cromie@gmail.com>
 MIME-Version: 1.0
-References: <20220831172024.1613208-1-svenva@chromium.org> <20220831172024.1613208-2-svenva@chromium.org>
- <Yxg6OayyEFWIax/r@gondor.apana.org.au>
-In-Reply-To: <Yxg6OayyEFWIax/r@gondor.apana.org.au>
-From:   Sven van Ashbrook <svenva@chromium.org>
-Date:   Wed, 7 Sep 2022 10:53:27 -0400
-X-Gmail-Original-Message-ID: <CAM7w-FW_w2h6JmvZpg2qjspESAYR21o-0Pw89JnnV8hFEdaHmw@mail.gmail.com>
-Message-ID: <CAM7w-FW_w2h6JmvZpg2qjspESAYR21o-0Pw89JnnV8hFEdaHmw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] hwrng: core: fix potential suspend/resume race condition
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alex Levin <levinale@google.com>,
-        Rajat Jain <rajatja@google.com>,
-        Andrey Pronin <apronin@google.com>,
-        Stephen Boyd <swboyd@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Olivia Mackall <olivia@selenic.com>,
-        linux-crypto@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220904214134.408619-22-jim.cromie@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,11 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+On Sun, Sep 04, 2022 at 03:40:58PM -0600, Jim Cromie wrote:
+> Demonstrate use of DECLARE_DYNDBG_CLASSMAP macro, and expose them as
+> sysfs-nodes for testing.
 
-On Wed, Sep 7, 2022 at 2:29 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> The general concept seems to be fine.
+Wait, why sysfs?
 
-Thank you kindly for the fast review. I plan to get a v2 out in the
-next few days.
+sysfs isn't for testing, why not use debugfs?
+
+
+> 
+> For each of the 4 class-map-types:
+> 
+>   - declare a class-map of that type,
+>   - declare the enum corresponding to those class-names
+>   - share _base across 0..30 range
+>   - add a __pr_debug_cls() call for each class-name
+>   - declare 2 sysnodes for each class-map
+>     for 'p' flag, and future 'T' flag
+> 
+> These declarations create the following sysfs parameter interface:
+> 
+>   :#> pwd
+>   /sys/module/test_dynamic_debug/parameters
+>   :#> ls
+>   T_disjoint_bits  T_disjoint_names  T_level_names  T_level_num  do_prints
+>   p_disjoint_bits  p_disjoint_names  p_level_names  p_level_num
+
+What is in these files?
+
+For sysfs stuff, you need Documentation/ABI entries so that you can't
+abuse sysfs.  With debugfs, you can do anything you want :)
+
+thanks,
+
+greg k-h

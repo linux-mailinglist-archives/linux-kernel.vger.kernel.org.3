@@ -2,98 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA535B0BC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CC55B0BC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiIGRsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S229929AbiIGRuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiIGRr7 (ORCPT
+        with ESMTP id S229830AbiIGRuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:47:59 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1157B14DA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:47:58 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 130so22689960ybw.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=PJdZjFOGYcZr+6GORZ6uuk20no/Y1w8QVrjJZltjb1s=;
-        b=sUTHKS44teHta3xPkJGc78XNjeRxZGDbLr/V4K3Ge7EQ6pEKU9jhfY3d2wYjAzjv2q
-         CIT+smVVd7OH86kPq1XdMLiMDCo79dxvJ+hck5vEPmN7TIbZrqeMAAKJHz8iq2U/7cnW
-         1nLse8ViCygV3VjUcuIokg28LJRmU/srFcIJVAbwvLLndtAoxbwtq5f25MILEthOBy28
-         vc0JQjapyHnJZ91IqLe4QqbtjVtLyd+g4gVP7xskoySnP6nQ7D2LrDy05BZGdJsjpu1l
-         9VMwGCbNEyDyXV/wAYFBNO3i4wF8H1ZdX9mZUIlt1/cPnJMEEyk4QuwuJtqGF6Mt31fj
-         5Q7w==
+        Wed, 7 Sep 2022 13:50:18 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB2C3FA32;
+        Wed,  7 Sep 2022 10:50:15 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-128121a9851so2546916fac.13;
+        Wed, 07 Sep 2022 10:50:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PJdZjFOGYcZr+6GORZ6uuk20no/Y1w8QVrjJZltjb1s=;
-        b=vnh8OKZnOku9ywUcP2epJf6FEebgrp4w5KmW9kesyMmDT2uySimEuZDMin980oHO/U
-         yEa6fuikSB1fmjoo4eXEuMrSSx7W/WjZjRo9kERpFus7X/W+m2w9YbjO8IBs+cledt8e
-         DSR2dJ/mZQl/jufEni2DzysadUan92S9fZLU/kNxdNKzu4TdhriWylyw4IXuJcy6Tfrr
-         tRbWaiH0DZBortHlhX/wNFiIlosQoBaaGDZqH13uDe582hRBzkpT90vuW9oADf3Oeyp3
-         2x2IFA8f6Hk4f8khzF0UoQ9DarRWszQP66d15UgGCWtVBE2rvEQdquqYm1K7nclzmZZL
-         WUGA==
-X-Gm-Message-State: ACgBeo3SguhyVmRUdZMZh+J/B2P4Xs/Jd9x7XzDZl/QUdTmbGLy+ZmEa
-        qHd8EQNGjZDf6e5uTOhh/0798VWCKbLCosiOZ007jA==
-X-Google-Smtp-Source: AA6agR5LSKC2erPcncwbGy8sWDcg/5azUit2GOKf4rSZd4wZKv7jqVKNxbKBmKGTWWcwlAOoaHKw3TbIacOSwgw0COA=
-X-Received: by 2002:a25:d487:0:b0:6a9:3faf:ca99 with SMTP id
- m129-20020a25d487000000b006a93fafca99mr3769610ybf.16.1662572878122; Wed, 07
- Sep 2022 10:47:58 -0700 (PDT)
+        bh=o+vZIo7vWZhi9jMgze8rEVP2MoMz8p7K3ku8PnOZlC8=;
+        b=lm69WbKrY8Bc9Ld41bUCgd3UT0V7yUOFQRcTERfXiO3LEmNMfZAd5LhtBy21sgBYb7
+         BEIy86MQwz0B9H2cz8sdy/b0SlKBgOKzWAUTdm9jT3lBuZBY93zD7ESztyyzTjOdWEQX
+         WQSPZAzIgyTCmhHm5OVXvfOIMilU9kLBMJ5sSJPdGwsl4Ldcoad59vbx0srlAYSpw3nY
+         EiS5z1huJOjr7IBUp5oRzgcRbmfe1iQ/XSh4jwtTt+MxgDSgVUdNE2CLgsdv705+rfsW
+         t4G7cB/p1WCyEAkjiX/3VIwNR6TZC3TOscQpYmycWXz69xBpZeZqfF23ALrqpgj4gRgh
+         daEQ==
+X-Gm-Message-State: ACgBeo2kQzfuFFENVEV3TUfFdMgQFE8PMxdZOHUdgIDf+U0ykJSBU5n3
+        MkFbZnqThplnxPzQ17kxL4yGc88B2hiIhDr4P4Kna7pg
+X-Google-Smtp-Source: AA6agR4BYQ2Nvxvc6Z+g6x+cYOlhaVE7imQ4sWWJnPFXNtCfQC0Oe5T49sOEGO4NWqXLBAts7C0xFWV+JSOdhYXCQPk=
+X-Received: by 2002:a05:6870:a184:b0:116:bd39:7f94 with SMTP id
+ a4-20020a056870a18400b00116bd397f94mr15334457oaf.5.1662573014962; Wed, 07 Sep
+ 2022 10:50:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220907173903.2268161-1-elver@google.com> <20220907173903.2268161-2-elver@google.com>
- <YxjXwBXpejAP6zoy@boqun-archlinux> <CANpmjNN2cch+HDVUYLD27sF9E39RaFrCf++KN=ZZ7j0DH8VaDw@mail.gmail.com>
- <YxjYY6SJhp1PtZos@boqun-archlinux>
-In-Reply-To: <YxjYY6SJhp1PtZos@boqun-archlinux>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 7 Sep 2022 19:47:22 +0200
-Message-ID: <CANpmjNPpSvWH7eV38NoPSdB0Qxov2cOsvYnSCCLy_vz4GQq3fA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] objtool, kcsan: Add volatile read/write
- instrumentation to whitelist
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev
+References: <20220907050407.2711513-1-namhyung@kernel.org> <YxhXLQ9aOuLRLrAJ@krava>
+In-Reply-To: <YxhXLQ9aOuLRLrAJ@krava>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 7 Sep 2022 10:50:04 -0700
+Message-ID: <CAM9d7chVuOyY0Nhecj0J=AU6iRkFoKY6hQ5mAMrS8k=-26WeCg@mail.gmail.com>
+Subject: Re: [PATCH v2] perf test: Skip sigtrap test on old kernels
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Marco Elver <elver@google.com>,
+        Song Liu <songliubraving@fb.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 19:45, Boqun Feng <boqun.feng@gmail.com> wrote:
+On Wed, Sep 7, 2022 at 1:32 AM Jiri Olsa <olsajiri@gmail.com> wrote:
 >
-> On Wed, Sep 07, 2022 at 07:43:32PM +0200, Marco Elver wrote:
-> > On Wed, 7 Sept 2022 at 19:42, Boqun Feng <boqun.feng@gmail.com> wrote:
-> > >
-> > > On Wed, Sep 07, 2022 at 07:39:03PM +0200, Marco Elver wrote:
-> > > > Adds KCSAN's volatile barrier instrumentation to objtool's uaccess
-> > >
-> > > Confused. Are things like "__tsan_volatile_read4" considered as
-> > > "barrier" for KCSAN?
+> On Tue, Sep 06, 2022 at 10:04:07PM -0700, Namhyung Kim wrote:
+> > If it runs on an old kernel, perf_event_open would fail because of the
+> > new fields sigtrap and sig_data.  Just skipping the test could miss an
+> > actual bug in the kernel.
 > >
-> > No, it's what's emitted for READ_ONCE() and WRITE_ONCE().
+> > Let's check BTF if it has the perf_event_attr.sigtrap field.
 > >
+> > Cc: Marco Elver <elver@google.com>
+> > Cc: Song Liu <songliubraving@fb.com>
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  tools/perf/tests/sigtrap.c | 46 +++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 45 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> > index e32ece90e164..32f08ce0f2b0 100644
+> > --- a/tools/perf/tests/sigtrap.c
+> > +++ b/tools/perf/tests/sigtrap.c
+> > @@ -16,6 +16,8 @@
+> >  #include <sys/syscall.h>
+> >  #include <unistd.h>
+> >
+> > +#include <bpf/btf.h>
+> > +
+> >  #include "cloexec.h"
+> >  #include "debug.h"
+> >  #include "event.h"
+> > @@ -54,6 +56,42 @@ static struct perf_event_attr make_event_attr(void)
+> >       return attr;
+> >  }
+> >
+> > +static bool attr_has_sigtrap(void)
+> > +{
+> > +     bool ret = false;
+> > +
+> > +#ifdef HAVE_BPF_SKEL
+> > +
+> > +     struct btf *btf;
+> > +     const struct btf_type *t;
+> > +     const struct btf_member *m;
+> > +     const char *name;
+> > +     int i, id;
+> > +
+> > +     /* just assume it doesn't have the field */
+> > +     btf = btf__load_vmlinux_btf();
+> > +     if (btf == NULL)
+> > +             return false;
+> > +
+> > +     id = btf__find_by_name_kind(btf, "perf_event_attr", BTF_KIND_STRUCT);
+> > +     if (id < 0)
+> > +             goto out;
+> > +
+> > +     t = btf__type_by_id(btf, id);
+> > +     for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
+> > +             name = btf__name_by_offset(btf, m->name_off);
+> > +             if (!strcmp(name, "sigtrap")) {
+> > +                     ret = true;
+> > +                     break;
+> > +             }
+> > +     }
+> > +out:
+> > +     btf__free(btf);
+> > +#endif
 >
-> Thanks for clarification, then I guess better to remove the word
-> "barrier" in the commit log?
+> would it be easier to call perf_event_open for simple event with
+> sigtrap set (and perhaps remove_on_exec) ? perf_copy_attr checks
+> on reserved fields
 
-Yes, that'd be best. (I think it was a copy/paste error.)
+Hmm.. right.  we could do that too.  But it might still fail if there's a
+bug in the path handling in sigtrap even for the simple case.  I'm not
+sure if it's a realistic concern though. :)
 
 Thanks,
--- Marco
+Namhyung
+
+>
+>
+> > +
+> > +     return ret;
+> > +}
+> > +
+> >  static void
+> >  sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
+> >  {
+> > @@ -139,7 +177,13 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+> >
+> >       fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+> >       if (fd < 0) {
+> > -             pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
+> > +             if (attr_has_sigtrap()) {
+> > +                     pr_debug("FAILED sys_perf_event_open(): %s\n",
+> > +                              str_error_r(errno, sbuf, sizeof(sbuf)));
+> > +             } else {
+> > +                     pr_debug("perf_event_attr doesn't have sigtrap\n");
+> > +                     ret = TEST_SKIP;
+> > +             }
+> >               goto out_restore_sigaction;
+> >       }
+> >
+> > --
+> > 2.37.2.789.g6183377224-goog
+> >

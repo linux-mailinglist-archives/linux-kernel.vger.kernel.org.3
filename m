@@ -2,121 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03C95B0443
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A194C5B0438
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiIGMvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S229867AbiIGMtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiIGMvK (ORCPT
+        with ESMTP id S229609AbiIGMtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:51:10 -0400
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601E075CD3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:51:10 -0700 (PDT)
-Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 7151A802C481
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:50:58 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 2815D1004CA7A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:48:33 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id VuToovz96mB5LVuTpogyTv; Wed, 07 Sep 2022 12:48:33 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=MaSpB7zf c=1 sm=1 tr=0 ts=63189321
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=xOM3xZuef0cA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=wvHbUn0omq4WNjlXUEIA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Bhqeq95+jE/XnbVxjfY6WURzW4826rkj6VSMea3lmI8=; b=bO1Uj/pk1sjbIcqOiUSEz2vWMK
-        CWMUIF2rDipdDU5I+bqIXN8d1q4asDSwjdIjQEGaExEpkwj/LbvFu+cAOWlugPcZWJmkC95rUetQw
-        e4HfOpamEzn/kt9eD3ahG0QDPAERBDJ2x1W6ppcpJGWodEiHbLaZzJ+REPSExAjP4id46AFKloPN+
-        Nsnbzc1XqvUzrJ9sQ9N/7We4FEpAHvzp4T2TO9lVEYpj2ylipDR6370ZI16yt2EWVFxf9ZWU8Q25w
-        2TV50VOm/kfmrMeYkAYM6m2S73zataVNv6axe0jQKPlEyFnvq5qTLUFl2123o5rnylaH9RuXd3Scw
-        UtKwKQDQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43596 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oVuTn-001RsL-Eg;
-        Wed, 07 Sep 2022 06:48:31 -0600
-Subject: Re: [PATCH 5.15 000/107] 5.15.66-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220906132821.713989422@linuxfoundation.org>
-In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <488872ac-1acc-c507-b601-efa8ae7672ee@w6rz.net>
-Date:   Wed, 7 Sep 2022 05:48:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 7 Sep 2022 08:49:02 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7294979C3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:49:01 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id cr9so10230100qtb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:49:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=UEpL02WJUezGx/kUOmp7jKU89VPDvQWvQ0H5PSEV0Qc=;
+        b=cLcsj7v2xgxU69qHLa3gCzxn+5EuUC50B2y2FzSdL5e00+SDXnNitS9HiZM6LRXtV0
+         /Kk5ngWCrpoAEUjuOGlJoUjq4yDbGLtqY6qk0V+k1XM62oKVN090W8bYzN0SdnznSbDl
+         59vBwAKjkdCCOGk6lKhAZYmiCgY+XyQuv/+y6t1kWyXm/2MiAU4AtFlQfIFrJGzECe55
+         BBMjOTj5wbGh2K7+B2mdkAaOpS9+mwhi3UBoEaBZyvdFEuU4lGzpFf4Na/xBvoEXITrC
+         7u/luSFf05JU2Xfw34yV9GvCRBGBlC13fmnLBOblItDRb01My9kyLO1kzyt8Li+75Av6
+         r7Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=UEpL02WJUezGx/kUOmp7jKU89VPDvQWvQ0H5PSEV0Qc=;
+        b=Sk1Tux5PD/QsN4Rik5b4H7Z3aqIqpVKgzwS8czvaqL164i1gC6SS3MkKaMUYvZ/Jya
+         KpwIN6aAosVRWdMg9HqAfpnPUypITQ2xPlLqEOLZud0oj9YyAl1X44+f45NJbutoscqS
+         Iu+VTkOLDqSqRXJg8/H+ccEvl0YQvBeHmNFweu1sWqxvCva//POmYEdZ1oTTu4wuqzQ0
+         tAg1r7cHPOz/B01m3TQdyix6mHzBYnd/E/l5TTIPSEPuKZk0qnx9qrd8E9OTPurK8X/w
+         wHICcY5IFwJUvzgQRRMvHpruHOUmOkwMIjbJM/hXh1igeG/PAUR8xXU3X12RsyPpEdBh
+         ByTw==
+X-Gm-Message-State: ACgBeo3AeLV6p5hJtLYoZ7faAQdwzUkCd7aXeauROiWiOidnzMRyPEGc
+        GnHPNLRGWfhDYKdRYQ9GthSRZg==
+X-Google-Smtp-Source: AA6agR7sC41RjclcS0/9MrYMSIJjSI8TYcRdY34A8NHF2XxTj0+9V49syTe2anWUvpOCCXbt6lz7mA==
+X-Received: by 2002:a05:622a:110e:b0:343:6f02:99fd with SMTP id e14-20020a05622a110e00b003436f0299fdmr2999298qty.141.1662554940897;
+        Wed, 07 Sep 2022 05:49:00 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id bi13-20020a05620a318d00b006b59f02224asm13235821qkb.60.2022.09.07.05.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 05:49:00 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oVuUF-008ZL3-GS;
+        Wed, 07 Sep 2022 09:48:59 -0300
+Date:   Wed, 7 Sep 2022 09:48:59 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lpivarc@redhat.com" <lpivarc@redhat.com>,
+        "Liu, Jingqi" <jingqi.liu@intel.com>,
+        "Lu, Baolu" <baolu.lu@intel.com>
+Subject: Re: [PATCH] vfio/type1: Unpin zero pages
+Message-ID: <YxiTOyGqXHFkR/DY@ziepe.ca>
+References: <166182871735.3518559.8884121293045337358.stgit@omen>
+ <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com>
+ <YxfX+kpajVY4vWTL@ziepe.ca>
+ <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oVuTn-001RsL-Eg
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:43596
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/6/22 6:29 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.66 release.
-> There are 107 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.66-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, Sep 07, 2022 at 11:00:21AM +0200, David Hildenbrand wrote:
+> > > I do wonder if that's a real issue, though. One approach would be to
+> > > warn the VFIO users and allow for slightly exceeding the MEMLOCK limit
+> > > for a while. Of course, that only works if we assume that such pinned
+> > > zeropages are only extremely rarely longterm-pinned for a single VM
+> > > instance by VFIO.
+> > 
+> > I'm confused, doesn't vfio increment the memlock for every page of VA
+> > it pins? Why would it matter if the page was COW'd or not? It is
+> > already accounted for today as though it was a unique page.
+> > 
+> > IOW if we add FOLL_FORCE it won't change the value of the memlock.
+> 
+> I only briefly skimmed over the code Alex might be able to provide more
+> details and correct me if I'm wrong:
+> 
+> vfio_pin_pages_remote() contains a comment:
+> 
+> "Reserved pages aren't counted against the user, externally pinned pages are
+> already counted against the user."
+> 
+> is_invalid_reserved_pfn() should return "true" for the shared zeropage and
+> prevent us from accounting it via vfio_lock_acct(). Otherwise,
+> vfio_find_vpfn() seems to be in place to avoid double-accounting pages.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+is_invalid_reserved_pfn() is supposed to return 'true' for PFNs that
+cannot be returned from pin_user_pages():
 
-Tested-by: Ron Economos <re@w6rz.net>
+/*
+ * Some mappings aren't backed by a struct page, for example an mmap'd
+ * MMIO range for our own or another device.  These use a different
+ * pfn conversion and shouldn't be tracked as locked pages.
+ * For compound pages, any driver that sets the reserved bit in head
+ * page needs to set the reserved bit in all subpages to be safe.
+ */
+static bool is_invalid_reserved_pfn(unsigned long pfn)
 
+What it is talking about by 'different pfn conversion' is the
+follow_fault_pfn() path, not the PUP path.
+
+So, it is some way for VFIO to keep track of when a pfn was returned
+by PUP vs follow_fault_pfn(), because it treats those two paths quite
+differently.
+
+I lost track of what the original cause of this bug is - however AFAIK
+pin_user_pages() used to succeed when the zero page is mapped.
+
+No other PUP user call this follow_fault_pfn() hacky path, and we
+expect things like O_DIRECT to work properly even when reading from VA
+that has the zero page mapped.
+
+So, if we go back far enough in the git history we will find a case
+where PUP is returning something for the zero page, and that something
+caused is_invalid_reserved_pfn() == false since VFIO did work at some
+point.
+
+IHMO we should simply go back to the historical behavior - make
+is_invalid_reserved_pfn() check for the zero_pfn and return
+false. Meaning that PUP returned it.
+
+Jason

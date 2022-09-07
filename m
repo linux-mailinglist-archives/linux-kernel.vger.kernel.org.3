@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474AA5B000C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EF35B000F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiIGJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S229574AbiIGJL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiIGJLa (ORCPT
+        with ESMTP id S230129AbiIGJLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:11:30 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BACB86C14
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:11:26 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id z30-20020a05660217de00b00688bd42dc1dso8670970iox.15
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 02:11:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=96oduF8kJl33Cv0ZIooHJCpu/gbgxvziNk1Od0BxYOc=;
-        b=8IDj0EjdyTTe4hiCydpfHmRvVg6Sz24jIBCt52AHwrouqlan7dIfJUYJqiNdmM9Ixp
-         oqavOx8qiKxFq7BhPStTjpiPAqx7rKLC6C02qpu1wxmjLaFiLm6ps/z/XHhnMja7elkd
-         FP+SC0cBq/dStkS3GjJ/DzDytwkh30hPUCjCJrrJKG/hFIXkkz3YcJpwbT250dfkWwqm
-         PvKrLyYU4/Nc4qpTeED1XEqtDc9z03CH7BKJDhHuGUmCnvaetq4IiDzbCRpfXvp1OhTt
-         JrNHLUTXX0qCQGdl8g79UIU6GRztcZL2w46Tkv91gF8Daegd4P7pEpzyn4o/xJbTMGIg
-         Lsmw==
-X-Gm-Message-State: ACgBeo0YuBAmaurK6zffi0Oil/hP7vU2+5QgszIFs5t6zBUmyl4pKsIM
-        rYUa/MEu1gNMXI2bLpVMlRinQuJc0ZTA1EuMn9032tTH0NsI
-X-Google-Smtp-Source: AA6agR4fD+IsphVja3NQGMW15j08WLql6AJ7IxkvZIajtzTkSPW21veXQ1GLEdeHKt+4n6fmlJpk8b473eZI/rhT0VN/Ks7/n1Ls
+        Wed, 7 Sep 2022 05:11:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFDCA7AAC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:11:47 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oVr61-00045Q-UT; Wed, 07 Sep 2022 11:11:45 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oVr5z-004PHC-47; Wed, 07 Sep 2022 11:11:45 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oVr60-00GfdK-F4; Wed, 07 Sep 2022 11:11:44 +0200
+Date:   Wed, 7 Sep 2022 11:11:44 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v1 2/9] pwm: lpss: Move exported symbols to PWM_LPSS
+ namespace
+Message-ID: <20220907091144.picr3byckxco7w6m@pengutronix.de>
+References: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
+ <20220906195735.87361-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a70f:0:b0:684:d596:b7e7 with SMTP id
- b15-20020a5ea70f000000b00684d596b7e7mr1236974iod.84.1662541885890; Wed, 07
- Sep 2022 02:11:25 -0700 (PDT)
-Date:   Wed, 07 Sep 2022 02:11:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008866ad05e812b2f5@google.com>
-Subject: [syzbot] KASAN: slab-out-of-bounds Read in fuse_inode_eq (2)
-From:   syzbot <syzbot+938055fcae46a26e5239@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nvqhqttaq7ibtbf3"
+Content-Disposition: inline
+In-Reply-To: <20220906195735.87361-2-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,184 +55,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--nvqhqttaq7ibtbf3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    e47eb90a0a9a Add linux-next specific files for 20220901
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=138d5455080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7933882276523081
-dashboard link: https://syzkaller.appspot.com/bug?extid=938055fcae46a26e5239
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Hello Andy,
 
-Unfortunately, I don't have any reproducer for this issue yet.
+On Tue, Sep 06, 2022 at 10:57:28PM +0300, Andy Shevchenko wrote:
+> Avoid unnecessary pollution of the global symbol namespace by
+> moving library functions in to a specific namespace and import
+> that into the drivers that make use of the functions.
+>=20
+> For more info: https://lwn.net/Articles/760045/
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/pwm/pwm-lpss-pci.c      | 1 +
+>  drivers/pwm/pwm-lpss-platform.c | 1 +
+>  drivers/pwm/pwm-lpss.c          | 2 +-
+>  3 files changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pwm/pwm-lpss-pci.c b/drivers/pwm/pwm-lpss-pci.c
+> index 75b778e839b3..9f2c666b95ec 100644
+> --- a/drivers/pwm/pwm-lpss-pci.c
+> +++ b/drivers/pwm/pwm-lpss-pci.c
+> @@ -92,3 +92,4 @@ module_pci_driver(pwm_lpss_driver_pci);
+> =20
+>  MODULE_DESCRIPTION("PWM PCI driver for Intel LPSS");
+>  MODULE_LICENSE("GPL v2");
+> +MODULE_IMPORT_NS(PWM_LPSS);
+> diff --git a/drivers/pwm/pwm-lpss-platform.c b/drivers/pwm/pwm-lpss-platf=
+orm.c
+> index fcd80cca2f6d..96fde1b2b967 100644
+> --- a/drivers/pwm/pwm-lpss-platform.c
+> +++ b/drivers/pwm/pwm-lpss-platform.c
+> @@ -87,4 +87,5 @@ module_platform_driver(pwm_lpss_driver_platform);
+> =20
+>  MODULE_DESCRIPTION("PWM platform driver for Intel LPSS");
+>  MODULE_LICENSE("GPL v2");
+> +MODULE_IMPORT_NS(PWM_LPSS);
+>  MODULE_ALIAS("platform:pwm-lpss");
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+938055fcae46a26e5239@syzkaller.appspotmail.com
+While it's not wrong to add the IMPORT_NS statement to each file, I'd
+had added it to pwm-lpss.h. IMHO that makes sense as every includer of
+that header needs that IMPORT_NS to actually use the symbols declared
+there.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in get_node_id fs/fuse/fuse_i.h:887 [inline]
-BUG: KASAN: slab-out-of-bounds in fuse_inode_eq+0x75/0x80 fs/fuse/inode.c:341
-Read of size 8 at addr ffff888051c95930 by task syz-executor.3/10946
+> diff --git a/drivers/pwm/pwm-lpss.c b/drivers/pwm/pwm-lpss.c
+> index 36d4e83e6b79..a82a57eb2482 100644
+> --- a/drivers/pwm/pwm-lpss.c
+> +++ b/drivers/pwm/pwm-lpss.c
+> @@ -250,7 +250,7 @@ struct pwm_lpss_chip *pwm_lpss_probe(struct device *d=
+ev, struct resource *r,
+> =20
+>  	return lpwm;
+>  }
+> -EXPORT_SYMBOL_GPL(pwm_lpss_probe);
+> +EXPORT_SYMBOL_NS_GPL(pwm_lpss_probe, PWM_LPSS);
 
-CPU: 0 PID: 10946 Comm: syz-executor.3 Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- get_node_id fs/fuse/fuse_i.h:887 [inline]
- fuse_inode_eq+0x75/0x80 fs/fuse/inode.c:341
- find_inode+0xe4/0x220 fs/inode.c:917
- ilookup5_nowait fs/inode.c:1430 [inline]
- ilookup5 fs/inode.c:1459 [inline]
- iget5_locked+0xb1/0x2c0 fs/inode.c:1240
- fuse_iget+0x1cc/0x6b0 fs/fuse/inode.c:382
- fuse_lookup_name+0x447/0x630 fs/fuse/dir.c:403
- fuse_lookup.part.0+0xdf/0x390 fs/fuse/dir.c:433
- fuse_lookup fs/fuse/dir.c:429 [inline]
- fuse_atomic_open+0x2d5/0x440 fs/fuse/dir.c:662
- atomic_open fs/namei.c:3276 [inline]
- lookup_open.isra.0+0xb8a/0x12a0 fs/namei.c:3384
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x996/0x28f0 fs/namei.c:3688
- do_filp_open+0x1b6/0x400 fs/namei.c:3718
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1308
- do_sys_open fs/open.c:1324 [inline]
- __do_sys_openat fs/open.c:1340 [inline]
- __se_sys_openat fs/open.c:1335 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1335
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1c79689279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1c78dff168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007f1c7979c050 RCX: 00007f1c79689279
-RDX: 0000000000000000 RSI: 00000000200020c0 RDI: ffffffffffffff9c
-RBP: 00007f1c796e32e9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc999facef R14: 00007f1c78dff300 R15: 0000000000022000
- </TASK>
+There is something possible with more magic:
 
-Allocated by task 29165:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:470
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3317 [inline]
- slab_alloc mm/slub.c:3325 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3332 [inline]
- kmem_cache_alloc_lru+0x255/0x730 mm/slub.c:3348
- alloc_inode_sb include/linux/fs.h:3104 [inline]
- nilfs_alloc_inode+0x24/0x150 fs/nilfs2/super.c:154
- alloc_inode+0x61/0x230 fs/inode.c:261
- iget5_locked fs/inode.c:1243 [inline]
- iget5_locked+0x1cb/0x2c0 fs/inode.c:1236
- nilfs_iget_locked+0xa0/0xd0 fs/nilfs2/inode.c:588
- nilfs_ifile_read+0x2c/0x1a0 fs/nilfs2/ifile.c:187
- nilfs_attach_checkpoint+0x258/0x4b0 fs/nilfs2/super.c:541
- nilfs_fill_super fs/nilfs2/super.c:1064 [inline]
- nilfs_mount+0xb12/0xfb0 fs/nilfs2/super.c:1317
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+	#define DEFAULT_SYMBOL_NAMESPACE PWM_LPSS
 
-The buggy address belongs to the object at ffff888051c95348
- which belongs to the cache nilfs2_inode_cache of size 1512
-The buggy address is located 0 bytes to the right of
- 1512-byte region [ffff888051c95348, ffff888051c95930)
+which you only need once in pwm-lpss.c and then all exports use that
+namespace. (And if you pick up my suggestion for patch 1 you also
+benefit from that.)
 
-The buggy address belongs to the physical page:
-page:ffffea0001472400 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888051c90000 pfn:0x51c90
-head:ffffea0001472400 order:3 compound_mapcount:0 compound_pincount:0
-memcg:ffff888078d1b801
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888146e09dc0
-raw: ffff888051c90000 000000008013000c 00000001ffffffff ffff888078d1b801
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Reclaimable, gfp_mask 0x1d2050(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 29150, tgid 29149 (syz-executor.3), ts 1182464121975, free_ts 1152885638731
- prep_new_page mm/page_alloc.c:2534 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4284
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5542
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2280
- alloc_slab_page mm/slub.c:1721 [inline]
- allocate_slab+0x228/0x370 mm/slub.c:1866
- new_slab mm/slub.c:1919 [inline]
- ___slab_alloc+0xad0/0x1440 mm/slub.c:3100
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3198
- slab_alloc_node mm/slub.c:3283 [inline]
- slab_alloc mm/slub.c:3325 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3332 [inline]
- kmem_cache_alloc_lru+0x4aa/0x730 mm/slub.c:3348
- alloc_inode_sb include/linux/fs.h:3104 [inline]
- nilfs_alloc_inode+0x24/0x150 fs/nilfs2/super.c:154
- alloc_inode+0x61/0x230 fs/inode.c:261
- iget5_locked fs/inode.c:1243 [inline]
- iget5_locked+0x1cb/0x2c0 fs/inode.c:1236
- nilfs_iget_locked+0xa0/0xd0 fs/nilfs2/inode.c:588
- nilfs_dat_read+0x84/0x360 fs/nilfs2/dat.c:483
- nilfs_load_super_root fs/nilfs2/the_nilfs.c:120 [inline]
- load_nilfs+0x368/0x1330 fs/nilfs2/the_nilfs.c:269
- nilfs_fill_super fs/nilfs2/super.c:1059 [inline]
- nilfs_mount+0xa9a/0xfb0 fs/nilfs2/super.c:1317
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1451 [inline]
- free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1501
- free_unref_page_prepare mm/page_alloc.c:3382 [inline]
- free_unref_page+0x19/0x4d0 mm/page_alloc.c:3478
- __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2514
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:447
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3317 [inline]
- slab_alloc mm/slub.c:3325 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3332 [inline]
- kmem_cache_alloc+0x2b7/0x3d0 mm/slub.c:3341
- vm_area_alloc+0x1c/0xf0 kernel/fork.c:458
- mmap_region+0x448/0x1bf0 mm/mmap.c:2604
- do_mmap+0x825/0xf50 mm/mmap.c:1411
- vm_mmap_pgoff+0x1ab/0x270 mm/util.c:520
- ksys_mmap_pgoff+0x79/0x5a0 mm/mmap.c:1457
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Best regards
+Uwe
 
-Memory state around the buggy address:
- ffff888051c95800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff888051c95880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff888051c95900: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
-                                     ^
- ffff888051c95980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888051c95a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--nvqhqttaq7ibtbf3
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+-----BEGIN PGP SIGNATURE-----
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMYYE0ACgkQwfwUeK3K
+7An7Twf+PI0WzSgVsZHz33UbHREzlbQ1QGhVUuCSH4nE8mwjD5YRpyu5pj4xYiD1
+tQ50KiHtya9hYhKvyw2DUcVpNE9P1XQeOnTnD++KRDePWEV4ptepP9MFoke2kPI5
+inW25J5TzT8IcBu3fwouFf4/RqHPrrLitu8Hw55tL3oCwlUsEQPaSTHnUEZRyoxa
+MeiRhh8+j9kCK/ybZ8ujCzEssxAw9TEyS4VgVONPtazNhsKsbZB5lYTrPE86PBpw
+fgybn6sezvhBJfyURZHCHGZwkg5vVaZj+c42zMe75dbaQDmUOvsBzTMvodpLsvsZ
+CWsMKGnoUNIepiizC4HFkfq79HOarg==
+=T8db
+-----END PGP SIGNATURE-----
+
+--nvqhqttaq7ibtbf3--

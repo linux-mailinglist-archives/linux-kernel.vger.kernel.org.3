@@ -2,119 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0FA5B0823
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8AB5B082E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiIGPMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S230423AbiIGPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiIGPL7 (ORCPT
+        with ESMTP id S230381AbiIGPMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:11:59 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6223F303D7;
-        Wed,  7 Sep 2022 08:11:58 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 6-20020a9d0106000000b0063963134d04so10487940otu.3;
-        Wed, 07 Sep 2022 08:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=wDtnxWX9qH0SSn7z37VDylIPQhTtMeAWDDFIYde2ERM=;
-        b=nZqw9OO01h+bN8a7lUuJNisfk4bwlZA1AnnNYpcpySnF7hBTYT8K36NVMXOm2pEcjw
-         0/eWNhoPo/UuX2ho3uPqHee4L1EebC505c3Z9CV8c0QF/kXPbivYvxeUz1Ef+OxXt59o
-         l38gmpmYekBNesuAXu9/sM3Ut4VcfjIAqB7glYR/tjsmrJ6q0hNUaOOfezCC4pqh/vHe
-         hsNbPguIbqIXsZlwD25n62o6a/LOLwhE92RPW0WWQosX2jVo3puO9bbln6NdiddqyyNN
-         YjApCdHlS1O8O582u/rch7EtjRRXUgtv/r+MevTY6rrElqQIwCUGEy6Z/262mtHeXTc8
-         /TeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wDtnxWX9qH0SSn7z37VDylIPQhTtMeAWDDFIYde2ERM=;
-        b=U+BDHMXSWaRkvputIzNh6c2x6bX7n4cm4rYUhWJMrGShvSiPyykSyUFWc2YfEAHx41
-         l3Xo/J3Jakm1rKwE5iS4+E6tiPkwjxeSSRTtnNO9wKESSfmh3fibvKiT9w16blDhMswu
-         vRHNfgJI314naZUo7ugSpo9LLwpTLor+AhXvsoJWD4OYdMdh/GvV647vsYw0V08McuVC
-         QRq8A4u/+f2/xPBf3A/pIATtf3dqLhvCC+VlsAwmZFiEugRjpX2DcVKfsDNQTNi3VP3+
-         jkAH2+S0kRBhKKG0yrdZKTOnvBzxD20Y1kWn8ObChC58kJ2USYTrzv0TRy6AgRdtSwkD
-         Edbg==
-X-Gm-Message-State: ACgBeo1S1v/jPKeZabBPG2uF/YJE0miaitnFaB2CAPLBXCgPF9T3vZpB
-        g0LDyFu1OdyRSrU5wlbs5KrPCnQ7pMU=
-X-Google-Smtp-Source: AA6agR49JXgz8161h9dV2enWeSGpFBSuIfyjFOTru7WIIt69r/JS20Cv9Xke1P6aRnU8kO1o0Dw+1A==
-X-Received: by 2002:a9d:6391:0:b0:651:26ae:3604 with SMTP id w17-20020a9d6391000000b0065126ae3604mr1349204otk.311.1662563517598;
-        Wed, 07 Sep 2022 08:11:57 -0700 (PDT)
-Received: from [172.31.250.1] ([47.184.51.90])
-        by smtp.gmail.com with ESMTPSA id 101-20020a9d086e000000b0063696cbb6bdsm7165899oty.62.2022.09.07.08.11.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 08:11:57 -0700 (PDT)
-Message-ID: <3097d4b8-a9d0-878c-3b95-5499ed943576@gmail.com>
-Date:   Wed, 7 Sep 2022 10:11:56 -0500
+        Wed, 7 Sep 2022 11:12:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534405C9CD;
+        Wed,  7 Sep 2022 08:12:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F586194E;
+        Wed,  7 Sep 2022 15:12:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9783C433B5;
+        Wed,  7 Sep 2022 15:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662563522;
+        bh=pN+S07cr+afMsUnBRSfOQtlwIjBeZFGPJkhC4OrU0J8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=j3zY/8tp+V8KEFLE3LgCfxOAo3c4H1/y7Sja2TPVUclqEPfu2FMa2LmoqsS5qaLbh
+         uW36WprEiievzP8xZVQsDghFat5DLoUN+QVoWB3SRoEg7nlz3cqE08a2RgGNW+BYAD
+         zI4rYr4g3hzeAOEvxnuHurJZKQJwspW55xJ26oEYiaxxylcA9xEJubE440/nG2YTOo
+         hAseDmPr9eE6/iz31FYs/e7hpgSoOqIxIYH4FWXR+Q3EqppdUR3uJDAiPGArDXa8qX
+         IDy8wkUrkOJvBDAtxLjagCCFVwwJiWzMzAqtgy/aC2Qib+3u/bCjg5NNfOOJLXhoZX
+         Vu299nakVFwXw==
+Message-ID: <95b9c85ded369d4a81963b394e12250c1f87974a.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+Date:   Wed, 07 Sep 2022 11:11:58 -0400
+In-Reply-To: <9ddbc23661ab6527d73860a873391a3536451ee6.camel@hammerspace.com>
+References: <20220907111606.18831-1-jlayton@kernel.org>
+         <166255065346.30452.6121947305075322036@noble.neil.brown.name>
+         <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+         <20220907125211.GB17729@fieldses.org>
+         <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+         <8a71986b4fb61cd9b4adc8b4250118cbb19eec58.camel@hammerspace.com>
+         <c22baa64133a23be3aba81df23b4af866df51343.camel@kernel.org>
+         <9ddbc23661ab6527d73860a873391a3536451ee6.camel@hammerspace.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v10 0/2] Introduce block device LED trigger
-Content-Language: en-US
-To:     torvic9@mailbox.org
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>
-References: <2047607620.67144.1662552964865@office.mailbox.org>
-From:   Ian Pilcher <arequipeno@gmail.com>
-In-Reply-To: <2047607620.67144.1662552964865@office.mailbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/22 07:16, torvic9@mailbox.org wrote:
-> Hi Ian,
-> 
-> with a heavily patched Linux 6.0-rc4 with kfence, kmemleak and slub_debug I get the
-> following splat at boot:
+On Wed, 2022-09-07 at 15:04 +0000, Trond Myklebust wrote:
+> On Wed, 2022-09-07 at 10:05 -0400, Jeff Layton wrote:
+> > On Wed, 2022-09-07 at 13:55 +0000, Trond Myklebust wrote:
+> > > On Wed, 2022-09-07 at 09:12 -0400, Jeff Layton wrote:
+> > > > On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
+> > > > > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
+> > > > > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
+> > > > > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
+> > > > > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic
+> > > > > > > > with
+> > > > > > > > respect to the
+> > > > > > > > +other changes in the inode. On a write, for instance,
+> > > > > > > > the
+> > > > > > > > i_version it usually
+> > > > > > > > +incremented before the data is copied into the
+> > > > > > > > pagecache.
+> > > > > > > > Therefore it is
+> > > > > > > > +possible to see a new i_version value while a read still
+> > > > > > > > shows the old data.
+> > > > > > >=20
+> > > > > > > Doesn't that make the value useless?
+> > > > > > >=20
+> > > > > >=20
+> > > > > > No, I don't think so. It's only really useful for comparing
+> > > > > > to an
+> > > > > > older
+> > > > > > sample anyway. If you do "statx; read; statx" and the value
+> > > > > > hasn't
+> > > > > > changed, then you know that things are stable.=20
+> > > > >=20
+> > > > > I don't see how that helps.=A0 It's still possible to get:
+> > > > >=20
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0reader=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0writer
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0------=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0------
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0i_version++
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0read
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0update page cache
+> > > > >=20
+> > > > > right?
+> > > > >=20
+> > > >=20
+> > > > Yeah, I suppose so -- the statx wouldn't necessitate any locking.
+> > > > In
+> > > > that case, maybe this is useless then other than for testing
+> > > > purposes
+> > > > and userland NFS servers.
+> > > >=20
+> > > > Would it be better to not consume a statx field with this if so?
+> > > > What
+> > > > could we use as an alternate interface? ioctl? Some sort of
+> > > > global
+> > > > virtual xattr? It does need to be something per-inode.
+> > >=20
+> > > I don't see how a non-atomic change attribute is remotely useful
+> > > even
+> > > for NFS.
+> > >=20
+> > > The main problem is not so much the above (although NFS clients are
+> > > vulnerable to that too) but the behaviour w.r.t. directory changes.
+> > >=20
+> > > If the server can't guarantee that file/directory/... creation and
+> > > unlink are atomically recorded with change attribute updates, then
+> > > the
+> > > client has to always assume that the server is lying, and that it
+> > > has
+> > > to revalidate all its caches anyway. Cue endless
+> > > readdir/lookup/getattr
+> > > requests after each and every directory modification in order to
+> > > check
+> > > that some other client didn't also sneak in a change of their own.
+> > >=20
+> >=20
+> > We generally hold the parent dir's inode->i_rwsem exclusively over
+> > most
+> > important directory changes, and the times/i_version are also updated
+> > while holding it. What we don't do is serialize reads of this value
+> > vs.
+> > the i_rwsem, so you could see new directory contents alongside an old
+> > i_version. Maybe we should be taking it for read when we query it on
+> > a
+> > directory?
+>=20
+> Serialising reads is not the problem. The problem is ensuring that
+> knfsd is able to provide an atomic change_info4 structure when the
+> client modifies the directory.
+> i.e. the requirement is that if the directory changed, then that
+> modification is atomically accompanied by an update of the change
+> attribute that can be retrieved by knfsd and placed in the reply to the
+> client.
+>=20
 
-Sorry about that!  I'm not sure how that slipped throgh, as I was sure
-that I tested the new version before I sent it off.
+I think we already do that for directories today via the i_rwsem. We
+hold that exclusively over directory-morphing operations, and the
+i_version is updated while holding that lock.
 
-Basically, I messed up while cleaning up the function parameter names,
-so you need to apply this:
+> > Achieving atomicity with file writes though is another matter
+> > entirely.
+> > I'm not sure that's even doable or how to approach it if so.
+> > Suggestions?
+>=20
+> The problem outlined by Bruce above isn't a big deal. Just check the
+> I_VERSION_QUERIED flag after the 'update_page_cache' bit, and bump the
+> i_version if that's the case. The real problem is what happens if you
+> then crash during writeback...
+>=20
 
---- drivers/leds/trigger/ledtrig-blkdev.c.old   2022-09-07 
-10:00:26.194484681 -0500
-+++ drivers/leds/trigger/ledtrig-blkdev.c       2022-09-04 
-11:36:16.107690614 -0500
-@@ -540,7 +540,7 @@
-                 return ERR_PTR(-ENOMEM);
+It's a uglier than it looks at first glance. As Jan pointed out, thIt's
+possible for the initial file_modified call to succeed and then a second
+one to fail. If the time got an initial update and then the data was
+copied in, should we fail the write at that point?
 
-         bdev = blkdev_get_by_path(strim(buf), BLKDEV_TRIG_FMODE, 
-THIS_MODULE);
--       kfree(path);
-+       kfree(buf);
-         return bdev;
-  }
-
-> I'm not 100% sure if this is an issue with ledtrig_blkdev or something else,
-> but I thought I'll let you know about it.
-> I have not been able to test this on a vanilla kernel yet.
-
-Defnintely my fault.
-
-> Other than that, I hope this patchset gets included in upstream.
-> I have been using it for a long time now and found it very useful.
-
-It's really hard to know if anyone is interested in/using this, so
-that's great to hear.
-
--- 
-========================================================================
-Google                                      Where SkyNet meets Idiocracy
-========================================================================
-
+We may be better served by trying to also do this with the i_rwsem. I'm
+looking at that now, though it's a bit hairy given that
+vfs_getattr_nosec can be called either with or without it held.
+--=20
+Jeff Layton <jlayton@kernel.org>

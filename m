@@ -2,160 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565B15B0E6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F6F5B0E71
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 22:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiIGUpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 16:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S229954AbiIGUqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 16:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIGUpk (ORCPT
+        with ESMTP id S229876AbiIGUqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 16:45:40 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BF1B07D7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 13:45:37 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id dv25so3831029ejb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 13:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=DdrorN8aXBAdiS3MQc998BdyvYtD7repapkoq0D0eU8=;
-        b=Z3CwM+F2x6Pj0jOEQZdrJ0yb8c6cYyZ9KR/7RWvfR51MpVGAfqiXsWrHSoEDs8im3f
-         grPlJvXctP1dtxa2ttTtoR57/jHgw8y5RP29Q/wG7ljsz98uKmLZnWHdqDZAGSeH3c8n
-         kCIYM6muoLkvg/JqKdZRyMZRr88eX82rEqeD4=
+        Wed, 7 Sep 2022 16:46:00 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E05B07D7;
+        Wed,  7 Sep 2022 13:45:58 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id z22-20020a056830129600b0063711f456ceso11052308otp.7;
+        Wed, 07 Sep 2022 13:45:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=DdrorN8aXBAdiS3MQc998BdyvYtD7repapkoq0D0eU8=;
-        b=5FlRWZMBXAS4r53E1lzXyLQBv6M6KNRMD5lyNS3uzqP7epYABHQL0Ip2WXwE7qbP/5
-         LjiJ6KVR0EWyDJnKiQiQX+6FKN7MFgj2849roVpGmuR9GgyhoW13H9PlA330xxiFv1Xp
-         spjCISGOEo6KbPXrLyalDvyBg/tf7e4L7LS7x0wQB2Pq23JqYOs+fglSjP0ArjxyKCkd
-         oiTfl1/98+pEQFsjY9trsOEq0YgA2P90Aos6IPXUXwz+92CNnmQEfnBr3lQaOGfPVXLu
-         XXcy5m4FWeb6Uu72lHZczpwSFmqHB2WrrBgtjWj34RYrB3LEEvvwkJNu23zb5RZr/cwK
-         iRoA==
-X-Gm-Message-State: ACgBeo2SRpCCxYdUsuJCY8RlLCz8dSGqG9QNyVotXH8/bhq3jnVJNnhN
-        4qUErExx49w9Q+u6hBs9mtQykDSVhBrFnBj+WxlxvA==
-X-Google-Smtp-Source: AA6agR7glr3HucH/VZYjAUKr/udgssJHsGTtsTHekQOvZu/bzF4bOvxYZj2rAX15RMN86ZNXydD1dStdQNu08HWuSQo=
-X-Received: by 2002:a17:907:7605:b0:73d:cdf7:d8e0 with SMTP id
- jx5-20020a170907760500b0073dcdf7d8e0mr3617692ejc.430.1662583536042; Wed, 07
- Sep 2022 13:45:36 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=upXcPuQ+AymjlAP813ikt1+Dlj+izCoKBqGmw9TwiEA=;
+        b=ioGn23m1vUF13Ijm00z0vCu0kZlQlab0TClekr1AlKsHeHmPSPBJBRr2DIXR7nGvJS
+         SoukVpgX9MgrQ0DadbHLy4B98LODLMO1v3BIOcElrT+Nl94OCrtpokeeIy3Qc1gHTklr
+         rXxE8vFXyeRpenjwV8VmOiVZuJejoaaa37fUkq6UQO3U8QFMt/DRnL6nJ+UPkRZcRzNw
+         b98lUT1iQeGKNF8Lcj9q2490S4Qfd3VHwyBgcqDE7f86qpQFPNNFSuT/jcQwXDfRQ0Mg
+         aikdcYF7dudpDXhcbiglHtJfmd+a2T+LVtiy8ZONppt+S8NMIzfXxjoIO15ftM2yvlc5
+         1VQQ==
+X-Gm-Message-State: ACgBeo35aXJG4uNzrfsc6lBH5Fkcf1YBEslUhnhesfOriKYWO9sOGwqq
+        1UcVtPfX2z5QCXgzlqgGf5hs5zPIag==
+X-Google-Smtp-Source: AA6agR7XOBU/6/O2TwW9lBjbS8h05cyYcmFka/myRzOWQ4uhgMLB77hg5WkWiwvPbKFR5xw241HTpg==
+X-Received: by 2002:a05:6830:4386:b0:637:3636:e29f with SMTP id s6-20020a056830438600b006373636e29fmr2072794otv.294.1662583558179;
+        Wed, 07 Sep 2022 13:45:58 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y2-20020a4ae7c2000000b0042859bebfebsm5410539oov.45.2022.09.07.13.45.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 13:45:57 -0700 (PDT)
+Received: (nullmailer pid 312607 invoked by uid 1000);
+        Wed, 07 Sep 2022 20:45:56 -0000
+Date:   Wed, 7 Sep 2022 15:45:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Peter Chiu <chui-hao.chiu@mediatek.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ryder Lee <ryder.Lee@mediatek.com>,
+        Evelyn Tsai <evelyn.tsai@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: update bindings for MT7986 SoC
+Message-ID: <20220907204556.GA307930-robh@kernel.org>
+References: <20220902024719.31943-1-chui-hao.chiu@mediatek.com>
 MIME-Version: 1.0
-References: <20220907133055.1.Ic8a1dafe960dc0f8302e189642bc88ebb785d274@changeid>
-In-Reply-To: <20220907133055.1.Ic8a1dafe960dc0f8302e189642bc88ebb785d274@changeid>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Wed, 7 Sep 2022 13:45:24 -0700
-Message-ID: <CAG9=OMPAP-BS=vqr3FmPn-antqJJKjkQc3Q0GGJRmbHkUaYmTw@mail.gmail.com>
-Subject: Re: [PATCH] dm: verity-loadpin: Only trust verity targets with enforcement
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902024719.31943-1-chui-hao.chiu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-
-On Wed, Sep 7, 2022 at 1:31 PM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> Verity targets can be configured to ignore corrupted data blocks.
-> LoadPin must only trust verity targets that are configured to
-> perform some kind of enforcement when data corruption is detected,
-> like returning an error, restarting the system or triggering a
-> panic.
->
-> Fixes: b6c1c5745ccc ("dm: Add verity helpers for LoadPin")
-> Reported-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+On Fri, Sep 02, 2022 at 10:47:19AM +0800, Peter Chiu wrote:
+> Add wifi pins in the description and set groups to string-array to support
+> multiple groups in a node.
+> 
+> Reviewed-by: Sam Shih <sam.shih@mediatek.com>
+> Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
 > ---
->
->  drivers/md/dm-verity-loadpin.c |  8 ++++++++
->  drivers/md/dm-verity-target.c  | 16 ++++++++++++++++
->  drivers/md/dm-verity.h         |  1 +
->  3 files changed, 25 insertions(+)
->
-> diff --git a/drivers/md/dm-verity-loadpin.c b/drivers/md/dm-verity-loadpin.c
-> index 387ec43aef72..4f78cc55c251 100644
-> --- a/drivers/md/dm-verity-loadpin.c
-> +++ b/drivers/md/dm-verity-loadpin.c
-> @@ -14,6 +14,7 @@ LIST_HEAD(dm_verity_loadpin_trusted_root_digests);
->
->  static bool is_trusted_verity_target(struct dm_target *ti)
->  {
-> +       int verity_mode;
->         u8 *root_digest;
->         unsigned int digest_size;
->         struct dm_verity_loadpin_trusted_root_digest *trd;
-> @@ -22,6 +23,13 @@ static bool is_trusted_verity_target(struct dm_target *ti)
->         if (!dm_is_verity_target(ti))
->                 return false;
->
-> +       verity_mode = dm_verity_get_mode(ti);
-> +
-> +       if ((verity_mode != DM_VERITY_MODE_EIO) &&
-> +           (verity_mode != DM_VERITY_MODE_RESTART) &&
-> +           (verity_mode != DM_VERITY_MODE_PANIC))
-> +               return false;
-> +
->         if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
->                 return false;
->
-> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-> index 94b6cb599db4..8a00cc42e498 100644
-> --- a/drivers/md/dm-verity-target.c
-> +++ b/drivers/md/dm-verity-target.c
-> @@ -1446,6 +1446,22 @@ bool dm_is_verity_target(struct dm_target *ti)
->         return ti->type->module == THIS_MODULE;
->  }
->
-> +/*
-> + * Get the verity mode (error behavior) of a verity target.
-> + *
-> + * Returns the verity mode of the target, or -EINVAL if 'ti' is not a verity
-> + * target.
-> + */
-> +int dm_verity_get_mode(struct dm_target *ti)
+>  .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 48 +++++++++++--------
+>  1 file changed, 28 insertions(+), 20 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+> index 4eadea55df10..b08a0a8076e0 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+> @@ -117,6 +117,10 @@ patternProperties:
+>            "i2s"             "audio"     62, 63, 64, 65
+>            "switch_int"      "eth"       66
+>            "mdc_mdio"        "eth"       67
+> +          "wf_2g"           "wifi"      74, 75, 76, 77, 78, 79, 80, 81, 82, 83
+> +          "wf_5g"           "wifi"      91, 92, 93, 94, 95, 96, 97, 98, 99, 100
+> +          "wf_dbdc"         "wifi"      74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
+> +                                        84, 85
+>  
+>          $ref: "/schemas/pinctrl/pinmux-node.yaml"
+>          properties:
+> @@ -234,7 +238,9 @@ patternProperties:
+>              then:
+>                properties:
+>                  groups:
+> -                  enum: [wf_2g, wf_5g, wf_dbdc]
+> +                  $ref: /schemas/types.yaml#/definitions/string-array
 
-nit: It might be cleaner to combine the mode check above into this
-function; eg. dm_verity_is_enforcing_mode(struct dm_target *ti).
+'groups' already has a type. You can redefine it here.
 
-> +{
-> +       struct dm_verity *v = ti->private;
-> +
-> +       if (!dm_is_verity_target(ti))
-> +               return -EINVAL;
-> +
-> +       return v->mode;
-> +}
-> +
->  /*
->   * Get the root digest of a verity target.
->   *
-> diff --git a/drivers/md/dm-verity.h b/drivers/md/dm-verity.h
-> index 45455de1b4bc..98f306ec6a33 100644
-> --- a/drivers/md/dm-verity.h
-> +++ b/drivers/md/dm-verity.h
-> @@ -134,6 +134,7 @@ extern int verity_hash_for_block(struct dm_verity *v, struct dm_verity_io *io,
->                                  sector_t block, u8 *digest, bool *is_zero);
->
->  extern bool dm_is_verity_target(struct dm_target *ti);
-> +extern int dm_verity_get_mode(struct dm_target *ti);
->  extern int dm_verity_get_root_digest(struct dm_target *ti, u8 **root_digest,
->                                      unsigned int *digest_size);
->
-> --
-> 2.37.2.789.g6183377224-goog
->
+> +                  items:
+> +                    enum: [wf_2g, wf_5g, wf_dbdc]
+>        '.*conf.*':
+>          type: object
+>          additionalProperties: false
+> @@ -248,25 +254,27 @@ patternProperties:
+>                An array of strings. Each string contains the name of a pin.
+>                There is no PIN 41 to PIN 65 above on mt7686b, you can only use
+>                those pins on mt7986a.
+> -            enum: [SYS_WATCHDOG, WF2G_LED, WF5G_LED, I2C_SCL, I2C_SDA, GPIO_0,
+> -                   GPIO_1, GPIO_2, GPIO_3, GPIO_4, GPIO_5, GPIO_6, GPIO_7,
+> -                   GPIO_8, GPIO_9, GPIO_10, GPIO_11, GPIO_12, GPIO_13, GPIO_14,
+> -                   GPIO_15, PWM0, PWM1, SPI0_CLK, SPI0_MOSI, SPI0_MISO, SPI0_CS,
+> -                   SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI, SPI1_MISO, SPI1_CS,
+> -                   SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS, SPI2_HOLD, SPI2_WP,
+> -                   UART0_RXD, UART0_TXD, PCIE_PERESET_N, UART1_RXD, UART1_TXD,
+> -                   UART1_CTS, UART1_RTS, UART2_RXD, UART2_TXD, UART2_CTS,
+> -                   UART2_RTS, EMMC_DATA_0, EMMC_DATA_1, EMMC_DATA_2,
+> -                   EMMC_DATA_3, EMMC_DATA_4, EMMC_DATA_5, EMMC_DATA_6,
+> -                   EMMC_DATA_7, EMMC_CMD, EMMC_CK, EMMC_DSL, EMMC_RSTB, PCM_DTX,
+> -                   PCM_DRX, PCM_CLK, PCM_FS, MT7531_INT, SMI_MDC, SMI_MDIO,
+> -                   WF0_DIG_RESETB, WF0_CBA_RESETB, WF0_XO_REQ, WF0_TOP_CLK,
+> -                   WF0_TOP_DATA, WF0_HB1, WF0_HB2, WF0_HB3, WF0_HB4, WF0_HB0,
+> -                   WF0_HB0_B, WF0_HB5, WF0_HB6, WF0_HB7, WF0_HB8, WF0_HB9,
+> -                   WF0_HB10, WF1_DIG_RESETB, WF1_CBA_RESETB, WF1_XO_REQ,
+> -                   WF1_TOP_CLK, WF1_TOP_DATA, WF1_HB1, WF1_HB2, WF1_HB3,
+> -                   WF1_HB4, WF1_HB0, WF1_HB0_B, WF1_HB5, WF1_HB6, WF1_HB7,
+> -                   WF1_HB8]
+> +            $ref: /schemas/types.yaml#/definitions/string-array
+> +            items:
+
+Same for 'pins'.
+
+> +              enum: [SYS_WATCHDOG, WF2G_LED, WF5G_LED, I2C_SCL, I2C_SDA, GPIO_0,
+> +                     GPIO_1, GPIO_2, GPIO_3, GPIO_4, GPIO_5, GPIO_6, GPIO_7,
+> +                     GPIO_8, GPIO_9, GPIO_10, GPIO_11, GPIO_12, GPIO_13, GPIO_14,
+> +                     GPIO_15, PWM0, PWM1, SPI0_CLK, SPI0_MOSI, SPI0_MISO, SPI0_CS,
+> +                     SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI, SPI1_MISO, SPI1_CS,
+> +                     SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS, SPI2_HOLD, SPI2_WP,
+> +                     UART0_RXD, UART0_TXD, PCIE_PERESET_N, UART1_RXD, UART1_TXD,
+> +                     UART1_CTS, UART1_RTS, UART2_RXD, UART2_TXD, UART2_CTS,
+> +                     UART2_RTS, EMMC_DATA_0, EMMC_DATA_1, EMMC_DATA_2,
+> +                     EMMC_DATA_3, EMMC_DATA_4, EMMC_DATA_5, EMMC_DATA_6,
+> +                     EMMC_DATA_7, EMMC_CMD, EMMC_CK, EMMC_DSL, EMMC_RSTB, PCM_DTX,
+> +                     PCM_DRX, PCM_CLK, PCM_FS, MT7531_INT, SMI_MDC, SMI_MDIO,
+> +                     WF0_DIG_RESETB, WF0_CBA_RESETB, WF0_XO_REQ, WF0_TOP_CLK,
+> +                     WF0_TOP_DATA, WF0_HB1, WF0_HB2, WF0_HB3, WF0_HB4, WF0_HB0,
+> +                     WF0_HB0_B, WF0_HB5, WF0_HB6, WF0_HB7, WF0_HB8, WF0_HB9,
+> +                     WF0_HB10, WF1_DIG_RESETB, WF1_CBA_RESETB, WF1_XO_REQ,
+> +                     WF1_TOP_CLK, WF1_TOP_DATA, WF1_HB1, WF1_HB2, WF1_HB3,
+> +                     WF1_HB4, WF1_HB0, WF1_HB0_B, WF1_HB5, WF1_HB6, WF1_HB7,
+> +                     WF1_HB8]
+>  
+>            bias-disable: true
+>  
+> -- 
+> 2.18.0
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 

@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288545AFFD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AB95AFFDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiIGJF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S230288AbiIGJGV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Sep 2022 05:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiIGJFz (ORCPT
+        with ESMTP id S230306AbiIGJGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:05:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1762AB7F5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:05:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19831D6E;
-        Wed,  7 Sep 2022 02:06:01 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7C553F73D;
-        Wed,  7 Sep 2022 02:06:20 -0700 (PDT)
-Message-ID: <af4182e5-c162-3067-8461-0d31bf09aea2@arm.com>
-Date:   Wed, 7 Sep 2022 10:05:48 +0100
+        Wed, 7 Sep 2022 05:06:17 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A357479EC5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:06:16 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-403-ZIK-BrzPN2uPckKgxyhbbA-1; Wed, 07 Sep 2022 10:06:14 +0100
+X-MC-Unique: ZIK-BrzPN2uPckKgxyhbbA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 7 Sep
+ 2022 10:06:12 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Wed, 7 Sep 2022 10:06:12 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Peter Zijlstra' <peterz@infradead.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+CC:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Borislav Petkov" <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH] objtool,x86: Teach decode about LOOP* instructions
+Thread-Topic: [PATCH] objtool,x86: Teach decode about LOOP* instructions
+Thread-Index: AQHYwphvHqpJ+XEnbkqFHiF9z5Fi7a3Tq+bA
+Date:   Wed, 7 Sep 2022 09:06:12 +0000
+Message-ID: <7ef4b0d724894ff394f9d8921f8c4332@AcuMS.aculab.com>
+References: <166251211081.632004.1842371136165709807.stgit@devnote2>
+ <166251212072.632004.16078953024905883328.stgit@devnote2>
+ <YxhDBAhYrs0Sfqjt@hirez.programming.kicks-ass.net>
+ <Yxhd4EMKyoFoH9y4@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yxhd4EMKyoFoH9y4@hirez.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 1/2] iova: Remove some magazine pointer NULL checks
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>,
-        Ethan Zhao <haifeng.zhao@linux.intel.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com
-References: <1662369083-238529-1-git-send-email-john.garry@huawei.com>
- <1662369083-238529-2-git-send-email-john.garry@huawei.com>
- <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
- <3fa23318-6fa7-eba0-30b8-1fb71e6c327e@huawei.com>
- <555fa5aa-a575-d783-dc97-79f63dcf2f57@arm.com>
- <cc950d77-2a97-ac75-4a1d-19aaf864a3be@huawei.com>
- <ad67a859-dc57-e30f-e422-3f9a0cb5239b@arm.com>
- <ef7622de-c1f3-c6cd-a50e-bbcbf8288b64@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ef7622de-c1f3-c6cd-a50e-bbcbf8288b64@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-07 09:46, John Garry wrote:
-> On 06/09/2022 19:25, Robin Murphy wrote:
->>>
->>> Caveat: on the chance that the IOVA domain init fails due to the 
->>> rcache init failing, then, if there were another device in the group 
->>> which probes later, its probe would be ok as the start_pfn is set. 
->>> Not Good.
->>
->> Yeah, there's a lot not to like about iommu_dma_init_domain() - I've 
->> been banking on it all getting cleaned up when I get to refactoring 
->> that area of probing (remember the issue you reported years ago with 
->> PCI groups being built in the wrong order? All related...), but in 
->> fact since the cookie management got pulled into core code, we can 
->> probably tie the IOVA domain setup to that right now without much 
->> other involvement. That could be a cheap win, so I'll give it a go soon.
+From: Peter Zijlstra
+> Sent: 07 September 2022 10:01
 > 
-> ok, great.
-> 
-> On a related topic, another thing to consider is that errors in IOVA 
-> domain init are not handled gracefully in terms of how we deal with the 
-> device probe and setting dma mapping ops, ref iommu_setup_dma_ops(). I 
-> assume you know all this.
-> 
->>
->>> - vdpa just fails to create the domain in vduse_domain_create()
->>>
->>>> That makes a fair amount of sense, but does mean that we're missing 
->>>> the equivalent in iova_rcache_insert() for it to actually work. Or 
->>>> we just remove it and tighten up the documentation to say that's not 
->>>> valid 
->>>
->>> I'd be more inclined to remove it. I would rather remove fathpath 
->>> checks as much as possible and have robust error handling in the 
->>> domain init.
->>>
->>> Afterall I do have the "remove check" craze going.
->>
->> Sure, like I say I'm happy to be consistent either way. If I do end up 
->> reinstating such a check I think I'd prefer to have it explicit in 
->> {alloc,free}_iova_fast() anyway, rather than buried in internal 
->> implementation details.
-> 
-> I'm not sure what you would like to see now, if anything.
-> 
-> I could just remove the iovad->rcache check in iova_rcache_get().  It's 
-> pretty useless (on its own) since we don't have the same check on the 
-> "insert" path.
+> On Wed, Sep 07, 2022 at 09:06:45AM +0200, Peter Zijlstra wrote:
+> > On Wed, Sep 07, 2022 at 09:55:21AM +0900, Masami Hiramatsu (Google) wrote:
+> >
+> > > +/* Return the jump target address or 0 */
+> > > +static inline unsigned long insn_get_branch_addr(struct insn *insn)
+> > > +{
+> > > +	switch (insn->opcode.bytes[0]) {
+> > > +	case 0xe0:	/* loopne */
+> > > +	case 0xe1:	/* loope */
+> > > +	case 0xe2:	/* loop */
+> >
+> > Oh cute, objtool doesn't know about those, let me go add them.
 
-Yup, just remove it. Sorting iommu-dma is yet another issue, but let's 
-skip straight to fixing that properly by allocating the IOVA domain 
-up-front with the cookie (is this the last remnant of my 7-year-old 
-misunderstanding of dma_32bit_pfn? Let's hope so...)
+Do they ever appear in the kernel?
+They are so slow on Intel cpu that finding one ought to
+deemed a bug!
 
-Thanks,
-Robin.
+Have you got jcxz (0xe3) in there?
+They are fast on both Intel and AMD cpus - so are usable.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

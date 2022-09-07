@@ -2,156 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D21C5AFF98
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4625AFF99
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiIGIva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S230080AbiIGIvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiIGIv1 (ORCPT
+        with ESMTP id S229959AbiIGIvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:51:27 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDA988DCB
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:51:25 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r4so18638896edi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 01:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=sMwf+4Qa0oDcAfmEKyOzVnlT9knkPpFo0fLzfGKsyJg=;
-        b=5rkqGiUY61CvaVbFuB7J9cW4wMJAqWUpU9RdlvXI3JIEw+3ZO7D1AmvN1YtVDfdsvl
-         8N25CQ83Ind7Y0ExV/aT2IxsgTh9r/Dwe0pFKdG5rl5jKonJlq3aYysyDNWLcYQ0ah3M
-         a+Tq94K7AdY93p1kNUeu8o3cYhxvXZHZSoiHoVpcLwzmjLVYGlslZQXEXrbp2wZX+doC
-         Ay/iHCSLaKsCpgdc2N0WDagRvVterDhQje2oN2BaGHrZH5mXgl2sPh6zPJIXkb6wErtg
-         ONDufTf0g5U2LyROr5sOd8ZfmHnxHn1fNdzNKEr7/+w2ERrK3qo4y5mNFPoruSy4z6+u
-         mxaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=sMwf+4Qa0oDcAfmEKyOzVnlT9knkPpFo0fLzfGKsyJg=;
-        b=fxzCxx+UQWiHT2SxupMnjuLQs5AVK0OMSWLdlBbI9mHjJFgkhaSjXULUHGKCeIthyX
-         7FefPT+cdkueK056abQvJAmmBBt7+oVvi3NzGCmfuJ+b50uB5iOwpXNKFYxtx7+cujYJ
-         CQLY5LRysRqE4JVgBcDZ1Yj/ZKkyA5U+sq9W85ECyMw69TFI2kQOln1mrYuGFaxyDBr7
-         nWfnIjpyt6sFWpzpF9cgrLSDcWPi0aRFpPudKBJz115VKk9w2abetKnKGMbepvJfTl2q
-         XTAOdcMgJdeGHyoI60KeAM78k3MQsEdcFHXact+nVYG81JTdGpwOFYFRxyUg2j6ly11z
-         QjJg==
-X-Gm-Message-State: ACgBeo3l42P42ejgte+8VHUqdPOPL6tuz1dvnpzPFj7vmcsy1fIDIkL3
-        7nHtW7NFj8O4eFsj+/PRtSZV1w==
-X-Google-Smtp-Source: AA6agR5oWNRcBXhwwCNsaXplqSNZ4pMAjVttS+0vtmNfaUNTs9zO4uCMcJjtIb+kzZwvt57HMP0YDg==
-X-Received: by 2002:aa7:dd0a:0:b0:44e:a27b:fec with SMTP id i10-20020aa7dd0a000000b0044ea27b0fecmr2184631edv.168.1662540683593;
-        Wed, 07 Sep 2022 01:51:23 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:ef98:1cae:6a14:a74f? ([2a02:578:8593:1200:ef98:1cae:6a14:a74f])
-        by smtp.gmail.com with ESMTPSA id l18-20020a1709063d3200b00722e50dab2csm8007228ejf.109.2022.09.07.01.51.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 01:51:23 -0700 (PDT)
-Message-ID: <873298fe-7fc2-4417-2852-5180f81f94aa@tessares.net>
-Date:   Wed, 7 Sep 2022 10:51:21 +0200
+        Wed, 7 Sep 2022 04:51:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C669A999
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:51:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 968CF33BD3;
+        Wed,  7 Sep 2022 08:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662540696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rVqiRDITeo6/2WfId1Gqy1iWaPcx504+D/1P0NH/A0w=;
+        b=B+Da76AvP5qd5n/XSoO+CQ11LjuZAJ/Tc7RSSWkiCoV5OU053CxMIqzzxpjwdZfZ1lUliV
+        DaQYMmsjZ3Yx/hxre6tWK8vt8ziWQGj51HY5B3YdZ2rDyoXwy4/d/yvPYDb5yi0jZ9V/Op
+        AWtrF6O0U27i5MBjbIP4GaPmS7RRkEw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662540696;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rVqiRDITeo6/2WfId1Gqy1iWaPcx504+D/1P0NH/A0w=;
+        b=EnwlkB6gYQpBJjD1PePOjqhi3OWJgkn/eh8l18/3C9T5ZtDr4GZlK3sQBDSu7AacMcYSZo
+        Usktknrunp9cyYBQ==
+Received: from suse.de (unknown [10.163.32.246])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 59A092C141;
+        Wed,  7 Sep 2022 08:51:34 +0000 (UTC)
+Date:   Wed, 7 Sep 2022 09:51:33 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        Yicong Yang <yangyicong@huawei.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] sched/fair: cleanup for SIS_PROP
+Message-ID: <20220907085133.nazbi7wftff46jrg@suse.de>
+References: <20220901131107.71785-1-wuyun.abel@bytedance.com>
+ <20220901131107.71785-5-wuyun.abel@bytedance.com>
+ <20220901140311.xi3y72uxdwbpxzrq@suse.de>
+ <6ab7ecbb-d0fb-dc44-cada-fcdc5b9676d0@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH net v2] net: mptcp: fix unreleased socket in accept queue
-Content-Language: en-GB
-To:     menglong8.dong@gmail.com, pabeni@redhat.com
-Cc:     mathew.j.martineau@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, fw@strlen.de,
-        peter.krystad@linux.intel.com, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>
-References: <20220907083304.605526-1-imagedong@tencent.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20220907083304.605526-1-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <6ab7ecbb-d0fb-dc44-cada-fcdc5b9676d0@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Menglong,
-
-On 07/09/2022 10:33, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
+On Wed, Sep 07, 2022 at 03:59:33PM +0800, Abel Wu wrote:
+> On 9/1/22 10:03 PM, Mel Gorman wrote:
+> > On Thu, Sep 01, 2022 at 09:11:07PM +0800, Abel Wu wrote:
+> > > The sched-domain of this cpu is only used when SIS_PROP is enabled,
+> > > and it should be irrelevant whether the local sd_llc is valid or
+> > > not, since all we care about is target sd_llc if !SIS_PROP.
+> > > 
+> > > Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> > 
+> > This could conceivably result in an uninitialised memory access if
+> > SIS_PROP was enabled while select_idle_cpu is running. I'm not sure if
+> > it can happen when jump labels are in use but I think it could happen
+> > for !CONFIG_JUMP_LABEL updating the sysctl_sched_features bitmap updated
+> > via sysctl.
+> > 
+> > The patch is still a good idea because it moves an unlikely rcu_deference
+> > out of the default path for sched features but either this_sd needs to
+> > be initialised to NULL and checked or the this_sd lookup needs to happen
+> > twice at a slight additional cost to the default-disabled SIS_PROP path.
+> > 
 > 
-> The mptcp socket and its subflow sockets in accept queue can't be
-> released after the process exit.
+> Hi Mel, please check the following resent patch, Thanks!
 > 
-> While the release of a mptcp socket in listening state, the
-> corresponding tcp socket will be released too. Meanwhile, the tcp
-> socket in the unaccept queue will be released too. However, only init
-> subflow is in the unaccept queue, and the joined subflow is not in the
-> unaccept queue, which makes the joined subflow won't be released, and
-> therefore the corresponding unaccepted mptcp socket will not be released
-> to.
+> https://lore.kernel.org/lkml/20220902033032.79846-5-wuyun.abel@bytedance.com/
 
-Thank you for the patch!
+Weird, I don't remember seeing this patch even though I'm cc'd on it. It
+looks fine so even though it's the wrong thread;
 
-(...)
+Acked-by: Mel Gorman <mgorman@suse.de>
 
-> ---
->  net/mptcp/protocol.c | 13 +++++++++----
->  net/mptcp/subflow.c  | 33 ++++++++-------------------------
->  2 files changed, 17 insertions(+), 29 deletions(-)
-> 
-> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> index d398f3810662..fe6b7fbb145c 100644
-> --- a/net/mptcp/protocol.c
-> +++ b/net/mptcp/protocol.c
-> @@ -2796,13 +2796,12 @@ static void __mptcp_destroy_sock(struct sock *sk)
->  	sock_put(sk);
->  }
->  
-> -static void mptcp_close(struct sock *sk, long timeout)
-> +void mptcp_close_nolock(struct sock *sk, long timeout)
-
-I didn't look at it into details but like the previous previous, I don't
-think this one compiles without errors: you define this (non static)
-function here in protocol.c but you don't "expose" it in protocol.h ...
-(see below)
-
-> diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-> index c7d49fb6e7bd..cebabf2bb222 100644
-> --- a/net/mptcp/subflow.c
-> +++ b/net/mptcp/subflow.c
-
-(...)
-
-> @@ -1765,11 +1740,19 @@ void mptcp_subflow_queue_clean(struct sock *listener_ssk)
->  		struct sock *sk = (struct sock *)msk;
->  		bool slow;
->  
-> +		sock_hold(sk);
->  		slow = lock_sock_fast_nested(sk);
->  		next = msk->dl_next;
->  		msk->first = NULL;
->  		msk->dl_next = NULL;
-> +
-> +		/* mptcp_close_nolock() will put a extra reference on sk,
-> +		 * so we hold one here.
-> +		 */
-> +		sock_hold(sk);
-> +		mptcp_close_nolock(sk, 0);
-
-... I guess the compiler will complain if you try to use it here from
-subflow.c, no?
-
-Also, did you have the opportunity to run the different MPTCP selftests
-with this patch?
-
-Cheers,
-Matt
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Mel Gorman
+SUSE Labs

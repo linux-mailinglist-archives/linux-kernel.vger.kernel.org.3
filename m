@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3290E5B0A06
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 252835B0A07
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiIGQ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
+        id S229780AbiIGQ1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIGQ1J (ORCPT
+        with ESMTP id S229487AbiIGQ1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:27:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8946EF19
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:27:07 -0700 (PDT)
+        Wed, 7 Sep 2022 12:27:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7E74BBB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662568027;
+        s=mimecast20190719; t=1662568034;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=vBzsv5MucxF7fpQumcXaCPDS2to+ai1JGTJ4XuvQScg=;
-        b=ZNtQ5qkGoiWDBpFTMrSKNEIQCGOzZXZMItAk5YZ9zlxI0++4Ie69HYZdfeHDDr6BmGLMM3
-        kw8frqFKnat92QubVcUaSe/dyjGSe+9ajei8TJzCu8+WL9345Gj56qRUS6rxwOeESTPrIp
-        xhmD+fb8u8OZJpTxAlrxq3tMHZh4j7E=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=iUG7ipBQJG4ElP9WSHKRtIVI/ADILdvncswgytp05ik=;
+        b=QJ8jFabncusVNauYh118088wNksooNKdMvTpoACBWi/ya9IGCQ8s21YyTyzsLcnBEHe/m8
+        a43PIZ5kNSuAgSFyKMQk7T2F5Ryf/KECoTeAz2C5BJfr9kMD3dIDOzk4L6MplX2BcaHp4z
+        DTs/9hS6lEe51LWfVgQNa4jMnYtqYc8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-448-EG8pfIBaPrmsf_dMFhFhGA-1; Wed, 07 Sep 2022 12:27:05 -0400
-X-MC-Unique: EG8pfIBaPrmsf_dMFhFhGA-1
-Received: by mail-wr1-f69.google.com with SMTP id k17-20020adfb351000000b00228853e5d71so3084817wrd.17
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:27:05 -0700 (PDT)
+ us-mta-463-S_wa12I9MHmZiKYGF7VXhQ-1; Wed, 07 Sep 2022 12:27:13 -0400
+X-MC-Unique: S_wa12I9MHmZiKYGF7VXhQ-1
+Received: by mail-wm1-f72.google.com with SMTP id j19-20020a05600c1c1300b003ab73e4c45dso8091350wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:27:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=vBzsv5MucxF7fpQumcXaCPDS2to+ai1JGTJ4XuvQScg=;
-        b=tjI6Qjg0/H0yHOkznEl5Ohywz+9ULEIpq4iutREmM7LJIE9WmVBzCS0XCUSgY+1Fsy
-         i+tV+Zsuuv1HOXM/serSDQJ5Qk0kjUVBU/t7bZ6Uj7mXobWOJ4DXnaH/nQMjMuNYR9VD
-         PfstFRQ0lB1+Ra0Vh+yibFp9n8t2rovgyCNjQ0HMCNYmA70kEHtL1s3XCOuXBOPAui8y
-         /H5T1u1VoEjHeqHYl6xS0YvAWwkZQlNURJKBu7YWSFkbdjN/x2TdH3wmqx3639tuI8aE
-         5JozXu+dUMOK3y7BpceTGPqUf+vKAXnhbBy7liToR/T4Rfnzkxgvabcf6FjicheMoTFL
-         qWqg==
-X-Gm-Message-State: ACgBeo1CR8OzeUsbDrkN4oGIARVE+W02t4EV1p4nnN536CMHUO1H2xXY
-        cDOYNpt8Z0ousDCPHk5RrbtlDiYljUA16xVWzG8G6ocOmCXRkHKoTxHqq6wJjRB8zXWvZYmuqyj
-        3embnXbQa5QaxFfNK+3T5dEkp
-X-Received: by 2002:a05:6000:1685:b0:225:309f:72a with SMTP id y5-20020a056000168500b00225309f072amr2581174wrd.644.1662568024776;
-        Wed, 07 Sep 2022 09:27:04 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4gDw6a7c/9hn4eac3DD365aIhFTrFHITe7NqhcknWkU4XxudtynHARuWVrqMZJ+JVqeomlGw==
-X-Received: by 2002:a05:6000:1685:b0:225:309f:72a with SMTP id y5-20020a056000168500b00225309f072amr2581157wrd.644.1662568024590;
-        Wed, 07 Sep 2022 09:27:04 -0700 (PDT)
+        bh=iUG7ipBQJG4ElP9WSHKRtIVI/ADILdvncswgytp05ik=;
+        b=aGKxNlemauL/WcHzMIO7ozfvN+hbnxX4qi2ffWS6DzEpUcsPKcIm6Q2eoRdoPv3GtX
+         Yf4VYoexoJHGsRi9bi4EaLMmY9ZT7SrYIOqfqPuc3YjoHHvVi6W7LVQJ9TG9hLjRpBHv
+         tAMkUZQaUP/KeJ3wXhR/t3f3yxQxnBhWMWqYEOrx7AQJDnNMaT8QA332RD9fAir5mWgA
+         N/j/TD1FwOFigBYV7UDA265Di9qDCVx+yqrIzIIuvqt6IZsFHOslSvv9wJ2HnJ7uczRc
+         57FdTi3NYF4pVYIEzfk3eFn9m/QpLfzgyd/LWnXyGsCFNJ3SUgQU58N1Ehijko8sgACf
+         z/Gw==
+X-Gm-Message-State: ACgBeo1F4diwXlD7rKOApTQiLpjDFIUlmgu6cWVi9JH5vksquxJOc1YE
+        ncsty7uuIe4SloLugJ5GMoiQ0JD2iYkkiIupyfzY8i1hl5BfMElzfCFt5tGdfiTKGfYMfXyG09D
+        jN4BpesMmYQnbj3peABdZwg2V
+X-Received: by 2002:a05:6000:15ce:b0:226:f2ab:516d with SMTP id y14-20020a05600015ce00b00226f2ab516dmr2670896wry.264.1662568029548;
+        Wed, 07 Sep 2022 09:27:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6ZYMR/UhmI3sgudI816PoCH/S1miVEIlebjV/iV5juSTnvZHaWPtk1L8mi7mTElMFYF940/Q==
+X-Received: by 2002:a05:6000:15ce:b0:226:f2ab:516d with SMTP id y14-20020a05600015ce00b00226f2ab516dmr2670880wry.264.1662568029403;
+        Wed, 07 Sep 2022 09:27:09 -0700 (PDT)
 Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05600c358700b003a8418ee646sm29367686wmq.12.2022.09.07.09.27.03
+        by smtp.gmail.com with ESMTPSA id b1-20020a05600003c100b00226332f9275sm17312579wrg.22.2022.09.07.09.27.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 09:27:04 -0700 (PDT)
+        Wed, 07 Sep 2022 09:27:08 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
@@ -69,12 +69,12 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Kees Cook <keescook@chromium.org>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v3 1/4] lib/find_bit: introduce FIND_FIRST_BIT() macro
-In-Reply-To: <20220827175807.4017673-2-yury.norov@gmail.com>
+Subject: Re: [PATCH v3 3/4] lib/find_bit: optimize find_next_bit() functions
+In-Reply-To: <20220827175807.4017673-4-yury.norov@gmail.com>
 References: <20220827175807.4017673-1-yury.norov@gmail.com>
- <20220827175807.4017673-2-yury.norov@gmail.com>
-Date:   Wed, 07 Sep 2022 17:27:03 +0100
-Message-ID: <xhsmhh71jb160.mognet@vschneid.remote.csb>
+ <20220827175807.4017673-4-yury.norov@gmail.com>
+Date:   Wed, 07 Sep 2022 17:27:08 +0100
+Message-ID: <xhsmhfsh3b15v.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -88,51 +88,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 27/08/22 10:58, Yury Norov wrote:
-> Now that we have many flavors of find_first_bit(), and expect even more,
-> it's better to have one macro that generates optimal code for all and makes
-> maintaining of slightly different functions simpler.
->
-> The logic common to all versions is moved to the new macro, and all the
-> flavors are generated by providing an FETCH macro-parameter, like
-> in this example:
->
->   #define FIND_FIRST_BIT(FETCH, MUNGE, size) ...
->
->   find_first_ornot_and_bit(addr1, addr2, addr3, size)
->   {
->         return FIND_NEXT_BIT(addr1[idx] | ~addr2[idx] & addr3[idx], /* nop */, size);
->   }
->
-> The FETCH may be of any complexity, as soon as it only refers
-> the bitmap(s) and an iterator idx.
->
-> MUNGE is here to support _le code generation for BE builds. May be
-> empty.
->
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> +#define FIND_NEXT_BIT(FETCH, MUNGE, size, start)				\
+> +({										\
+> +	unsigned long mask, idx, tmp, sz = (size), __start = (start);		\
+> +										\
+> +	if (unlikely(__start >= sz))						\
+> +		goto out;							\
+> +										\
+> +	mask = MUNGE(BITMAP_FIRST_WORD_MASK(__start));				\
+> +	idx = __start / BITS_PER_LONG;						\
+> +										\
+> +	for (tmp = (FETCH) & mask; !tmp; tmp = (FETCH)) {			\
+> +		if (idx > sz / BITS_PER_LONG)					\
 
-Just one small comment below about the /* nop */, regardless:
+Does that want to be
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+                if (idx + 1 >= sz / BITS_PER_LONG)
 
->  unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
->  {
-> -	unsigned long idx;
-> -
-> -	for (idx = 0; idx * BITS_PER_LONG < size; idx++) {
-> -		if (addr[idx])
-> -			return min(idx * BITS_PER_LONG + __ffs(addr[idx]), size);
-> -	}
-> -
-> -	return size;
-> +	return FIND_FIRST_BIT(addr[idx], /* nop */, size);
+?
 
-FWIW I thought passing an explicit identity-mapping macro would make things
-a bit clearer, but not really since you have to hunt for where that macro
-is defined (an inline "lambda x : x" would have been perfect :-)), so I
-think what you've gone for is the lesser evil.
+Consider this as used in _find_next_bit() for an all-zero 128-bit wide
+bitmap (two ULL's), providing the memory contiguous to the bitmap is also
+zero then this will only stop at idx=3, so that's fetching two ULLs too
+far.
 
->  }
->  EXPORT_SYMBOL(_find_first_bit);
+> +			goto out;						\
+> +		idx++;								\
+> +	}									\
+> +										\
+> +	sz = min(idx * BITS_PER_LONG + __ffs(MUNGE(tmp)), sz);			\
+> +out:										\
+> +	sz;									\
+> +})
 

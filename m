@@ -2,229 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8B95B00E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761A35B0124
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiIGJuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
+        id S230359AbiIGKAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiIGJuG (ORCPT
+        with ESMTP id S230441AbiIGJ7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:50:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9C6520A5;
-        Wed,  7 Sep 2022 02:50:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F9F5B81C02;
-        Wed,  7 Sep 2022 09:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93841C433D6;
-        Wed,  7 Sep 2022 09:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662544201;
-        bh=hUwrU7rajizpLziyjcQs4WTMAHKfgRP/9kdmaKkNJ14=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D0dVPFRptKPd9XbvMTsS5BW5ZnrCrmsYbKRpyDRzer3jiptFdyO4AOiiBX2CSssPA
-         djh45erZrbdHD1ppOfuHwktynQr4en6Aye3Z98LQ+kwpNUdwlThWA+qPLT69jNyBrd
-         flglSLMICIl6/7Vo+z46idRraNIlLdFs559t1h0G7CpDAvxyIArjjCFbFoJAIiON2O
-         1ZZuj7a9OKxRASyMuAz1jiIMoOkFMJzDW8qRfzM34t/n+zHVCajSCJwVaFFF1NC1nS
-         dH+Y3X4e7SfJOtYknVKA8R37BetX4jCub8wc2BHT7O4dh2CKniCE0ukxrD1f38HS23
-         rNp4DOnlpXGxA==
-Date:   Wed, 7 Sep 2022 18:49:57 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Message-Id: <20220907184957.d41f085a998b2c7485353171@kernel.org>
-In-Reply-To: <YxhQIBKzi+L0KDhc@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
-        <166251212072.632004.16078953024905883328.stgit@devnote2>
-        <YxhQIBKzi+L0KDhc@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 05:59:36 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CBBB6D7B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:59:07 -0700 (PDT)
+X-UUID: 2b3e77ac65814881ac522e7693da1f56-20220907
+X-Spam-Fingerprint: 0
+X-GW-Reason: 11109
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 121
+        audit/email.address 1
+        dict/adv 1
+        dict/operate 1
+X-CPASD-INFO: d7bf69fc2f0b4186a654f66424c10b5b@rYechmNrlJNehnKug3SDcIFnZWSWYla
+        DdG6DYV6SYYKVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3s3mchmhnlg==
+X-CLOUD-ID: d7bf69fc2f0b4186a654f66424c10b5b
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:196.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:176.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:2.0,SPC:0,SIG:-
+        5,AUF:8,DUF:4281,ACD:73,DCD:73,SL:0,EISP:0,AG:0,CFC:0.786,CFSR:0.037,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 2b3e77ac65814881ac522e7693da1f56-20220907
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 2b3e77ac65814881ac522e7693da1f56-20220907
+X-User: chenzhang@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <chenzhang@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 619361442; Wed, 07 Sep 2022 17:52:04 +0800
+From:   chen zhang <chenzhang@kylinos.cn>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     chenzhang_0901@163.com, linux-kernel@vger.kernel.org,
+        chen zhang <chenzhang@kylinos.cn>
+Subject: [PATCH] sched/fair: fix a -Wmissing-prototypes warning
+Date:   Wed,  7 Sep 2022 17:51:13 +0800
+Message-Id: <20220907095113.68153-1-chenzhang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 10:02:40 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+We get a warning when building kernel with W=1:
 
-> On Wed, Sep 07, 2022 at 09:55:21AM +0900, Masami Hiramatsu (Google) wrote:
-> 
-> >  static int can_probe(unsigned long paddr)
-> >  {
-> >  	kprobe_opcode_t buf[MAX_INSN_SIZE];
-> > +	unsigned long addr, offset = 0;
-> > +	struct insn insn;
-> >  
-> >  	if (!kallsyms_lookup_size_offset(paddr, NULL, &offset))
-> >  		return 0;
-> >  
-> > +	/* The first address must be instruction boundary. */
-> > +	if (!offset)
-> > +		return 1;
-> >  
-> > +	/* Decode instructions */
-> > +	for_each_insn(&insn, paddr - offset, paddr, buf) {
-> >  		/*
-> > +		 * CONFIG_RETHUNK or CONFIG_SLS or another debug feature
-> > +		 * may install INT3.
-> 
-> Note: they are not debug features.
+  kernel/sched/fair.c:11510:6: warning: no previous prototype for ‘task_vruntime_update’ [-Werror=missing-prototypes]
 
-Yes, sorry for confusion. CONFIG_RETHUNK/CONFIG_SLS are security
-feature, and something like kgdb is debug feature, what I meant
-here.
+Add the missing declaration in head file to fix this. And remove
+the unnecessary declaration in kernel/sched/core.c.
 
-> 
-> >  		 */
-> > +		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE) {
-> > +			/* Find the next non-INT3 instruction address */
-> > +			addr = skip_padding_int3((unsigned long)insn.kaddr);
-> > +			if (!addr)
-> > +				return 0;
-> > +			/*
-> > +			 * This can be a padding INT3 for CONFIG_RETHUNK or
-> > +			 * CONFIG_SLS. If a branch jumps to the address next
-> > +			 * to the INT3 sequence, this is just for padding,
-> > +			 * then we can continue decoding.
-> > +			 */
-> > +			for_each_insn(&insn, paddr - offset, addr, buf) {
-> > +				if (insn_get_branch_addr(&insn) == addr)
-> > +					goto found;
-> > +			}
-> >  
-> > +			/* This INT3 can not be decoded safely. */
-> >  			return 0;
-> > +found:
-> > +			/* Set loop cursor */
-> > +			insn.next_byte = (void *)addr;
-> > +			continue;
-> > +		}
-> >  	}
-> >  
-> > +	return ((unsigned long)insn.next_byte == paddr);
-> >  }
-> 
-> If I understand correctly, it'll fail on something like this:
-> 
-> foo:	insn
-> 	insn
-> 	insn
-> 	jmp 2f
-> 	int3
-> 
-> 1:	insn
-> 	insn
-> 2:	insn
-> 	jcc 1b
-> 
-> 	ret
-> 	int3
-> 
-> Which isn't weird code by any means. And soon to be generated by
-> compilers.
+Signed-off-by: chen zhang <chenzhang@kylinos.cn>
+---
+ kernel/sched/core.c  | 2 --
+ kernel/sched/sched.h | 2 ++
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hmm, yeah, I thought that was rare case.
-
-> 
-> 
-> Maybe something like:
-> 
-> struct queue {
-> 	int head, tail;
-> 	unsigned long val[16]; /* insufficient; probably should allocate something */
-> };
-> 
-> void push(struct queue *q, unsigned long val)
-> {
-> 	/* break loops, been here already */
-> 	for (int i = 0; i < q->head; i++) {
-> 		if (q->val[i] == val)
-> 			return;
-> 	}
-> 
-> 	q->val[q->head++] = val;
-> 
-> 	WARN_ON(q->head > ARRAY_SIZE(q->val)
-> }
-> 
-> unsigned long pop(struct queue *q)
-> {
-> 	if (q->tail == q->head)
-> 		return 0;
-> 
-> 	return q->val[q->tail++];
-> }
-> 
-> bool dead_end_insn(struct instruction *insn)
-> {
-> 	switch (insn->opcode.bytes[0]) {
-> 	case INT3_INSN_OPCODE:
-> 	case JMP8_INSN_OPCODE:
-> 	case JMP32_INSN_OPCODE:
-> 		return true; /* no arch execution after these */
-> 
-> 	case 0xff:
-> 		/* jmp *%reg; jmpf */
-> 		if (modrm_reg == 4 || modrm_reg == 5)
-> 			return true;
-> 		break;
-> 
-> 	default:
-> 		break;
-> 	}
-> 
-> 	return false;
-> }
-> 
-> 
-> 
-> 	struct queue q;
-> 
-> 	start = paddr - offset;
-> 	end = start + size;
-> 	push(&q, paddr - offset);
-> 
-> 	while (start = pop(&q)) {
-> 		for_each_insn(&insn, start, end, buf) {
-> 			if (insn.kaddr == paddr)
-> 				return 1;
-> 
-> 			target = insn_get_branch_addr(&insn);
-> 			if (target)
-> 				push(&q, target);
-> 
-> 			if (dead_end_insn(&insn))
-> 				break;
-> 		}
-> 	}
-> 
-> 
-> 
-> It's a bit of a pain, but I think it should cover things.
-
-Yeah, this looks good to me. What I just need is to add expanding
-queue buffer. (can we use xarray for this purpose?)
-
-Thank you!
-
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index b60422300af6..5a354b4bcd0c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5874,8 +5874,6 @@ static inline struct task_struct *pick_task(struct rq *rq)
+ 	BUG(); /* The idle class should always have a runnable task. */
+ }
+ 
+-extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
+-
+ static void queue_core_balance(struct rq *rq);
+ 
+ static struct task_struct *
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index f616e0cec20c..ae8554356108 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2268,6 +2268,8 @@ static inline bool sched_fair_runnable(struct rq *rq)
+ extern struct task_struct *pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf);
+ extern struct task_struct *pick_next_task_idle(struct rq *rq);
+ 
++extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
++
+ #define SCA_CHECK		0x01
+ #define SCA_MIGRATE_DISABLE	0x02
+ #define SCA_MIGRATE_ENABLE	0x04
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.25.1
+

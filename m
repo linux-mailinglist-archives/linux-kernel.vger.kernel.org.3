@@ -2,173 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50A05B00D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAD65B00D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiIGJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S229893AbiIGJrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIGJrR (ORCPT
+        with ESMTP id S229797AbiIGJrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:47:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDAF9D8E3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:47:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A48461847
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA80C433C1;
-        Wed,  7 Sep 2022 09:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662544035;
-        bh=wxDlJ0c4hKUVZs9suWhzzgYGQD2Bvgrvh0QGKG1hKb0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KzWTPFGlB0P12wKBjBa0PAsUsgQmI+XWbylhGg2ID3BaFeW+8gAMJxPyjMHw/G6M8
-         hKWBXYwaVtUWIYMffQlH9KQsCNPVTLmrDUVe4jF5uayxgTvhwWITUrGXEDRTEzLKn2
-         PzYybZytft/jRhtY38w3yviwzoCF7ij2E/gqgoH/SaBVQ+culyJ40YOJieRJHEpdmY
-         7uEM9me+FXZjju3kW8rjTrqfdUfM1sxQw0BZia9VGkj05eLtekZRnUSEtyPeU1bNMA
-         x42tYBDiR+NmJmF9BalC781hveOE0AKOTbBi693J0/Q/wx9NLwmyr9GSi4Z/5srRgQ
-         BJkNt/w7e21uA==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH] f2fs: fix to do sanity on destination blkaddr during recovery
-Date:   Wed,  7 Sep 2022 17:47:08 +0800
-Message-Id: <20220907094708.3679424-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Sep 2022 05:47:36 -0400
+Received: from outbound-smtp48.blacknight.com (outbound-smtp48.blacknight.com [46.22.136.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB09AFBA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:47:35 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp48.blacknight.com (Postfix) with ESMTPS id 16F97FAF13
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:47:34 +0100 (IST)
+Received: (qmail 25917 invoked from network); 7 Sep 2022 09:47:33 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 7 Sep 2022 09:47:33 -0000
+Date:   Wed, 7 Sep 2022 10:47:24 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Mel Gorman <mgorman@suse.de>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH] MM: discard __GFP_ATOMIC
+Message-ID: <20220907094724.5lanecgcjg75vxv3@techsingularity.net>
+References: <163712397076.13692.4727608274002939094@noble.neil.brown.name>
+ <YZvItUOgTgD11etC@dhcp22.suse.cz>
+ <163764199967.7248.2528204111227925210@noble.neil.brown.name>
+ <YZzvcjRYTL+XEHHz@dhcp22.suse.cz>
+ <20220430113028.9daeebeedf679aa384da5945@linux-foundation.org>
+ <Yxb4TQ0WDa85uurY@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <Yxb4TQ0WDa85uurY@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Wenqing Liu reported in bugzilla:
+On Tue, Sep 06, 2022 at 09:35:41AM +0200, Michal Hocko wrote:
+> > From: "NeilBrown" <neilb@suse.de>
+> > Subject: mm: discard __GFP_ATOMIC
+> > 
+> > __GFP_ATOMIC serves little purpose.  Its main effect is to set
+> > ALLOC_HARDER which adds a few little boosts to increase the chance of an
+> > allocation succeeding, one of which is to lower the water-mark at which it
+> > will succeed.
+> > 
+> > It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
+> > adjusts this watermark.  It is probable that other users of __GFP_HIGH
+> > should benefit from the other little bonuses that __GFP_ATOMIC gets.
+> > 
+> > __GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM. 
+> > There is little point to this.  We already get a might_sleep() warning if
+> > __GFP_DIRECT_RECLAIM is set.
+> > 
+> > __GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
+> > probable that testing ALLOC_HARDER is a better fit here.
+> > 
+> > __GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
+> > sleep.  This should test __GFP_DIRECT_RECLAIM instead.
+> > 
+> > This patch:
+> >  - removes __GFP_ATOMIC
+> >  - causes __GFP_HIGH to set ALLOC_HARDER unless __GFP_NOMEMALLOC is set
+> >    (as well as ALLOC_HIGH).
+> >  - makes other adjustments as suggested by the above.
+> > 
+> > The net result is not change to GFP_ATOMIC allocations.  Other
+> > allocations that use __GFP_HIGH will benefit from a few different extra
+> > privileges.  This affects:
+> >   xen, dm, md, ntfs3
+> >   the vermillion frame buffer
+> >   hibernation
+> >   ksm
+> >   swap
+> > all of which likely produce more benefit than cost if these selected
+> > allocation are more likely to succeed quickly.
+> 
+> This is a good summary of the current usage and existing issues. It also
+> shows that the naming is tricky and allows people to make wrong calls
+> (tegra-smmu.c). I also thing that it is wrong to couple memory reserves
+> access to the reclaim constrains/expectations of the caller.
+> 
 
-https://bugzilla.kernel.org/show_bug.cgi?id=216456
+I think it's worth trying to get rid of __GFP_ATOMIC although this patch
+needs to be rebased. Without rebasing it, I suspect there is a corner case
+for reserving high order atomic blocks. A high-order atomic allocation
+might get confused with a __GFP_HIGH high-order allocation that can sleep.
+It would not be completely irrational to have such a caller if it was in a
+path that can tolerate a stall but stalling might have visible consequences.
+I'm also worried that the patch might allow __GFP_HIGH to ignore cpusets
+which is probably not intended by direct users like ksm.
 
-loop5: detected capacity change from 0 to 131072
-F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
-F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
-F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
-F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
-F2FS-fs (loop5): recover_inode: ino = 6, name = hln, inline = 1
-F2FS-fs (loop5): recover_data: ino = 6 (i_size: recover) err = 0
-F2FS-fs (loop5): Bitmap was wrongly set, blk:5634
-------------[ cut here ]------------
-WARNING: CPU: 3 PID: 1013 at fs/f2fs/segment.c:2198
-RIP: 0010:update_sit_entry+0xa55/0x10b0 [f2fs]
-Call Trace:
- <TASK>
- f2fs_do_replace_block+0xa98/0x1890 [f2fs]
- f2fs_replace_block+0xeb/0x180 [f2fs]
- recover_data+0x1a69/0x6ae0 [f2fs]
- f2fs_recover_fsync_data+0x120d/0x1fc0 [f2fs]
- f2fs_fill_super+0x4665/0x61e0 [f2fs]
- mount_bdev+0x2cf/0x3b0
- legacy_get_tree+0xed/0x1d0
- vfs_get_tree+0x81/0x2b0
- path_mount+0x47e/0x19d0
- do_mount+0xce/0xf0
- __x64_sys_mount+0x12c/0x1a0
- do_syscall_64+0x38/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
+> > Signed-off-by: NeilBrown <neilb@suse.de>
+> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > Cc: Michal Hocko <mhocko@suse.com>
+> > Cc: Thierry Reding <thierry.reding@gmail.com>
+> > Cc: Mel Gorman <mgorman@techsingularity.net>
+> > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> 
+> Yes, I am all for dropping the gfp flag. One thing that is not really
+> entirely clear to me, though, is whether we still need 3 levels of
+> memory reserves access. Can we just drop ALLOC_HARDER? With this patch
+> applied it serves RT tasks and conflates it with __GFP_HIGH users
+> essentially. So why do we need that additional level of reserves?
 
-If we enable CONFIG_F2FS_CHECK_FS config, it will trigger a kernel panic
-instead of warning.
+I think this would fall under the "naming is hard". If __GFP_ATOMIC was
+removed, the ALLOC_ flags might need renaming to detect differences in
+high priority allocations (RT + GFP_ATOMIC), critical allocations (OOM)
+and ones that can access special reserves (GFP_ATOMIC high-order).
 
-The root cause is: in fuzzed image, SIT table is inconsistent with inode
-mapping table, result in triggering such warning during SIT table update.
-
-This patch introduces a new flag DATA_GENERIC_ENHANCE_UPDATE, w/ this
-flag, data block recovery flow can check destination blkaddr's validation
-in SIT table, and skip f2fs_replace_block() to avoid inconsistent status.
-
-Signed-off-by: Chao Yu <chao@kernel.org>
----
- fs/f2fs/checkpoint.c | 10 +++++++++-
- fs/f2fs/f2fs.h       |  4 ++++
- fs/f2fs/recovery.c   |  8 ++++++++
- 3 files changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 7bf1feb5ac78..dd7c7e7f2f4a 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -140,7 +140,7 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
- 	unsigned int segno, offset;
- 	bool exist;
- 
--	if (type != DATA_GENERIC_ENHANCE && type != DATA_GENERIC_ENHANCE_READ)
-+	if (type == DATA_GENERIC)
- 		return true;
- 
- 	segno = GET_SEGNO(sbi, blkaddr);
-@@ -148,6 +148,13 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
- 	se = get_seg_entry(sbi, segno);
- 
- 	exist = f2fs_test_bit(offset, se->cur_valid_map);
-+	if (exist && type == DATA_GENERIC_ENHANCE_UPDATE) {
-+		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
-+			 blkaddr, exist);
-+		set_sbi_flag(sbi, SBI_NEED_FSCK);
-+		return exist;
-+	}
-+
- 	if (!exist && type == DATA_GENERIC_ENHANCE) {
- 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
- 			 blkaddr, exist);
-@@ -185,6 +192,7 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
- 	case DATA_GENERIC:
- 	case DATA_GENERIC_ENHANCE:
- 	case DATA_GENERIC_ENHANCE_READ:
-+	case DATA_GENERIC_ENHANCE_UPDATE:
- 		if (unlikely(blkaddr >= MAX_BLKADDR(sbi) ||
- 				blkaddr < MAIN_BLKADDR(sbi))) {
- 			f2fs_warn(sbi, "access invalid blkaddr:%u",
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 35f9e1a6a1bf..baf621ca2fe7 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -266,6 +266,10 @@ enum {
- 					 * condition of read on truncated area
- 					 * by extent_cache
- 					 */
-+	DATA_GENERIC_ENHANCE_UPDATE,	/*
-+					 * strong check on range and segment
-+					 * bitmap for update case
-+					 */
- 	META_GENERIC,
- };
- 
-diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
-index dcd0a1e35095..8326003e6918 100644
---- a/fs/f2fs/recovery.c
-+++ b/fs/f2fs/recovery.c
-@@ -698,6 +698,14 @@ static int do_recover_data(struct f2fs_sb_info *sbi, struct inode *inode,
- 				goto err;
- 			}
- 
-+			if (f2fs_is_valid_blkaddr(sbi, dest,
-+					DATA_GENERIC_ENHANCE_UPDATE)) {
-+				f2fs_err(sbi, "Inconsistent dest blkaddr:%u, ino:%lu, ofs:%u",
-+					dest, inode->i_ino, dn.ofs_in_node);
-+				err = -EFSCORRUPTED;
-+				goto err;
-+			}
-+
- 			/* write dummy data page */
- 			f2fs_replace_block(sbi, &dn, src, dest,
- 						ni.version, false, false);
 -- 
-2.25.1
-
+Mel Gorman
+SUSE Labs

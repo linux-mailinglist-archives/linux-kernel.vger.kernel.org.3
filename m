@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08055B03B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3265B03BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiIGMOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S230006AbiIGMPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIGMOp (ORCPT
+        with ESMTP id S229517AbiIGMO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:14:45 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D7E1D337
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:14:44 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bt10so22140366lfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=zZzqtufc9pXumP3kLw1eVRjMAlOw/BriOOcyNHuUsjg=;
-        b=Ltdq21ViB9l+MyMWGdX9+o4rZDgUZXtEyBbotztaRlm02W37Q9qmyAps0gEGDKPYCY
-         g1M5Vgk6P9JxSSGOmPMhHFF+8rzT/kzjZVQG2PHuJ6wWoA8017XVen+8cTxd6iycs7HO
-         SvVCnEm9Bj5VBvyPei3r/kLA9Ys5HRH2y5+UfVZXGAvm+VD+eDKBNSnLoB87jO+g89gE
-         1fk6cz05WR/HVBLLZDxc2/oUYwQnyuDHXRXjpmXmXsOnG0FS7ViNwTrHARIMgh4D76q9
-         hSY+XXEea664pPPkwaYRkJZgDoK0rEnkjmghzNxxBkUGiNClXXO9v+VzEnNiwDOi9fDf
-         db0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zZzqtufc9pXumP3kLw1eVRjMAlOw/BriOOcyNHuUsjg=;
-        b=K+nQ4De+THdm7fUXWSHPwb3j/2OLMqNLqSP0tu//M01r9e93webukGr9Ryx/y8aWRb
-         H8s47iWXXxL6KhOiJK/gDTvf7WwuWiTJPQ58p3MQRgaUMFpcz2LFNJqXKAL62Okrr0Tt
-         ROIaDazjvxtNON0AKzJKm8NDCDTRzRYjD3DI1LElXEl0eenL83HpH8PLcnkW9Vyfc+Bn
-         Cm0eihxcnsvLRwBFrYSluWBUYrjIbJ5XtJOzWXRqzWct5XtDsGZ+5TCdU7IWRsumiYd3
-         6qxaZYkOX8O6acwRmptbAhL88+gN9B0zFYPaUoFqpiCZPHU2nvJGadtOP3pwFD5mBuQb
-         GRiQ==
-X-Gm-Message-State: ACgBeo1Utrh/Fd9MIJfTcGKNuRXzq+KOmuXoMYH23UWe73C7Hjcfnv4K
-        3lHKTIUy/2C6wnjaTJTHqJT6sA==
-X-Google-Smtp-Source: AA6agR5aK9jdLoFGwjPAeb2yNhm/clrv4Ru2F09dJXwQnidxUHmd9cz+E8BxX9OwpKd8nInK5AsAUA==
-X-Received: by 2002:ac2:41c1:0:b0:494:65a7:43ef with SMTP id d1-20020ac241c1000000b0049465a743efmr1127115lfi.592.1662552882549;
-        Wed, 07 Sep 2022 05:14:42 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be11-20020a05651c170b00b00261800f0e02sm2597096ljb.26.2022.09.07.05.14.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 05:14:42 -0700 (PDT)
-Message-ID: <bdc11331-04b4-3b98-00f5-90e2db0bee94@linaro.org>
-Date:   Wed, 7 Sep 2022 14:14:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH V4 1/8] dt-bindings: mfd: syscon: Add i.MX93 blk ctrl
- system registers
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        aisheng.dong@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220905055915.3878000-1-peng.fan@oss.nxp.com>
- <20220905055915.3878000-2-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220905055915.3878000-2-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Wed, 7 Sep 2022 08:14:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8BE27FD8;
+        Wed,  7 Sep 2022 05:14:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1186618B8;
+        Wed,  7 Sep 2022 12:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6B2C433D6;
+        Wed,  7 Sep 2022 12:14:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662552897;
+        bh=aZ2WeP3U336s63udprictr4067p8RlQvpxaoMNPC+So=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hzFdNkFe7FXDKMFLXF3Ak1yGqDSjqHDYM1cgeHmZyvL3wRZhLI+o5x/fppba/nQXr
+         BmzuvTkpIOpwukz1ple0VUnSDKKXXHuR8cL0hOt1dZYUjuS040Pjx4DdG6cEXM+Ess
+         yUG4iczoGb/1Mj0OaaQXTFseDLpSpKVBT/lHieKa6DHojxysT7iLAp/A2I0IjLJWPV
+         kl1kBGyeIsdrCNqIVdzFcORbNp4E7HfCT2qi2+cKy9wwjWUN21FKPvd3ECXaeax6Yv
+         aZEuaYpYRO9RmBTKVf93H2OychjIDjn9OKs3abmlWxE5mKD0xw/84ji/zbOGohq+/h
+         Hf9/1INmx37mw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oVtxG-008dZY-V5;
+        Wed, 07 Sep 2022 13:14:55 +0100
+Date:   Wed, 07 Sep 2022 13:14:54 +0100
+Message-ID: <87k06fv0sh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, eric.auger@redhat.com,
+        alex.williamson@redhat.com, cohuck@redhat.com,
+        puneet.gupta@amd.com, song.bao.hua@hisilicon.com,
+        mchehab+huawei@kernel.org, f.fainelli@gmail.com,
+        jeffrey.l.hugo@gmail.com, saravanak@google.com,
+        Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com,
+        will@kernel.org, joro@8bytes.org, masahiroy@kernel.org,
+        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org,
+        harpreet.anand@amd.com, nikhil.agarwal@amd.com,
+        michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
+Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its domain as parent
+In-Reply-To: <4ca6383e-bd21-59bf-cc4e-cf3313164957@arm.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+        <20220906134801.4079497-1-nipun.gupta@amd.com>
+        <20220906134801.4079497-5-nipun.gupta@amd.com>
+        <YxeBCsA32jnwMjSj@nvidia.com>
+        <87leqvv3g7.wl-maz@kernel.org>
+        <4ca6383e-bd21-59bf-cc4e-cf3313164957@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robin.murphy@arm.com, jgg@nvidia.com, nipun.gupta@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org, rafael@kernel.org, eric.auger@redhat.com, alex.williamson@redhat.com, cohuck@redhat.com, puneet.gupta@amd.com, song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com, saravanak@google.com, Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com, will@kernel.org, joro@8bytes.org, masahiroy@kernel.org, ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org, harpreet.anand@amd.com, nikhil.agarwal@amd.com, michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,16 +84,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/09/2022 07:59, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Wed, 07 Sep 2022 12:33:12 +0100,
+Robin Murphy <robin.murphy@arm.com> wrote:
 > 
-> Document i.MX93 BLK CTRL system registers.
+> On 2022-09-07 12:17, Marc Zyngier wrote:
+> > On Tue, 06 Sep 2022 18:19:06 +0100,
+> > Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >> 
+> >> On Tue, Sep 06, 2022 at 07:17:58PM +0530, Nipun Gupta wrote:
+> >> 
+> >>> +static void cdx_msi_write_msg(struct irq_data *irq_data,
+> >>> +			      struct msi_msg *msg)
+> >>> +{
+> >>> +	/*
+> >>> +	 * Do nothing as CDX devices have these pre-populated
+> >>> +	 * in the hardware itself.
+> >>> +	 */
+> >>> +}
+> >> 
+> >> Huh?
+> >> 
+> >> There is no way it can be pre-populated, the addr/data pair,
+> >> especially on ARM, is completely under SW control.
+> > 
+> > There is nothing in the GIC spec that says that.
+> > 
+> >> There is some commonly used IOVA base in Linux for the ITS page, but
+> >> no HW should hardwire that.
+> > 
+> > That's not strictly true. It really depends on how this block is
+> > integrated, and there is a number of existing blocks that know *in HW*
+> > how to signal an LPI.
+> > 
+> > See, as the canonical example, how the mbigen driver doesn't need to
+> > know about the address of GITS_TRANSLATER.
+> > 
+> > Yes, this messes with translation (the access is downstream of the
+> > SMMU) if you relied on it to have some isolation, and it has a "black
+> > hole" effect as nobody can have an IOVA that overlaps with the
+> > physical address of the GITS_TRANSLATER register.
+> > 
+> > But is it illegal as per the architecture? No. It's just stupid.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> If that were the case, then we'd also need a platform quirk so the
+> SMMU driver knows about it. Yuck.
 
+Yup. As I said, this is stupid.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> But even then, are you suggesting there is some way to convince the
+> ITS driver to allocate a specific predetermined EventID when a driver
+> requests an MSI? Asking for a friend...
 
+Of course not. Whoever did that has decided to hardcode the Linux
+behaviour into the HW, because it is well known that SW behaviour
+never changes. Nononono.
 
-Best regards,
-Krzysztof
+I am >this< tempted to sneak a change into the allocation scheme to
+start at 5 or 13 (alternatively), and to map LPIs top-down. That
+should get people thinking.
+
+Cheers,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

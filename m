@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BC55AFAD8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3EB5AFADC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 05:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiIGDu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 23:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
+        id S230071AbiIGDvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 23:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiIGDue (ORCPT
+        with ESMTP id S229914AbiIGDun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 23:50:34 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1C077E85;
-        Tue,  6 Sep 2022 20:50:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso16989870pjk.0;
-        Tue, 06 Sep 2022 20:50:18 -0700 (PDT)
+        Tue, 6 Sep 2022 23:50:43 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC5E6478;
+        Tue,  6 Sep 2022 20:50:42 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id s206so12407473pgs.3;
+        Tue, 06 Sep 2022 20:50:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=1CIYsWze9kvxihAO2AjKyRKscAwKJ3FMY57nv0NgbgA=;
-        b=Pd0grXkTCzCfzWC4owe2h02SMrm6AelcLGeLmWeyfyNtMAbn4KutMBe//+U/KD/wkP
-         kCMh9v0VHn8deHRtD5Ck4is506JjNzQczlfqKGYHLod7roUtoFwotvClbZFAUQXVLPko
-         2/rRnDpp/jJwzBZUVk/CMAaaXN8kD8doLMNqGI4yqcU4MdBKqXpUC0tNmnGpK2kwlCcT
-         1EAEK3MmnsS1UcgbHzsmqd5dBFrsbboReJ0d1+pp5VejHlKVJYx4NZw3MMcnKaGSIiKR
-         AedU26LfwrRaZ1wsNECHNQkPiA0+djSXY1GkQdEBF5eW5L4WqnONysq48s5AklZBfaX+
-         Enxg==
+        bh=SpiI/4f8FqhFil8KI2sz06Ugm43wYlDdfEt9V7Lez9o=;
+        b=hRceYyXBMlxR6vqMH0zkfXuONAT8QQStUJjFgoiHfBtSgE/8YgvDDounisz6H+qX8B
+         /E/RnprcwXdlqXLK2u7ZE0o0uj1CPNLL91lU+xSdlLDs5i7mtqggdRuqUvY3W3MJwhHR
+         e7s+PGjn7jiI0JpcC0GBCKT/nACyvxJdpCOuEPTlpTSudJv7l42angNYzpxbIsybWcPz
+         0xqH0KPZC8K7IWLl2N9yN4NGny068UL8diKoK2n9vyDsqq7NnV1smjq0ANHcGvhJZ8jN
+         VTQegIVUW0saidv+gX5B75kdOLi7KL1uXvxqC8qJUyiqj915z7Ui1yqT9cMCdMJ6ypN1
+         SaPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=1CIYsWze9kvxihAO2AjKyRKscAwKJ3FMY57nv0NgbgA=;
-        b=eUVzbU7NK+eKRfqCBg5EZblgElL9otSi1pGxY9kygB+W2KcgFm6ofBjL3Bf0uv93Uj
-         lCObKckcvALTYBXlW9ziEJwheU1CCefAacpN/oi+8LPqeLCpPWZAKP8yfuNbOrYKY/Ir
-         Dt+zQgiBZmSLwmY2FxjyP0KnJvqOtJs7MPC5pQOmK4Ffw5AbQEopMmeudY06f4Tt606Y
-         RBE1nRKEC0Ld9qSOCqLVw12M762SbelKfes5RtJvJN0D3in1v639o0IZohG2WJZpVOxg
-         JaCSNHe6gShwf1MHElYhp1rHwJ/pqsyrqFcB/I/df/EnN/0jgN+F4xMH8uuU4/0jMUl/
-         4V7w==
-X-Gm-Message-State: ACgBeo2f8xhBjBtSsHWXqZpCi+hiUNJdCHBJ922Xh4EA7GxG17lJL5jI
-        j5vAt74SkJkjxTh0tlJTkCA=
-X-Google-Smtp-Source: AA6agR40q58Z8x9XtyG7x35cGSrgNTH3RlS5QwEXF+325jIblvug+1NLjzEq5f6EruptrU1VBGBQIg==
-X-Received: by 2002:a17:903:1248:b0:172:f3c7:97a6 with SMTP id u8-20020a170903124800b00172f3c797a6mr1909589plh.128.1662522613708;
-        Tue, 06 Sep 2022 20:50:13 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709027e0e00b0016be596c8afsm10824663plm.282.2022.09.06.20.50.11
+        bh=SpiI/4f8FqhFil8KI2sz06Ugm43wYlDdfEt9V7Lez9o=;
+        b=DDubzbT6/MgfvO/NqwF4FQCCjJAagzSE10AML8FB9mPMKB8DorgtMgEexsCPtoZo3f
+         l/W57IL3fngXmwzIlwywG1O4b7lpVc03Zp4tm8QiiCydzrW2JRKXT3Ocu2v2XEWEWJDd
+         X5nHIdAY/WhIQHN8euXL9Oggu18W/L6s8v6o3u7yci9AzzGsS3SyNk2kCXogYCjJ7RSX
+         TJQCp1YsjxRkIlbus6dIkTS2DYu6bSxjJo5PXpOBgUZET0mJZdlyF1uevM0UxcLnfGqC
+         CuNaEKtYaduTVDyI07TmBg50GNxet7Ns7m8+43H8VBd+c+vCAuCP9BJbD7XXk3jmh4Zw
+         BWzw==
+X-Gm-Message-State: ACgBeo0od59KayMKn5Bs1dmx5RVu2eE62Yyb7WpNziMuK7dJqBuh0lmR
+        EsnSGnVo996t98Wum39cK8s=
+X-Google-Smtp-Source: AA6agR7mO4OR+6jVK8HVMy79jOj63dNiEmGJLTgGQXCyVoy+JtvdqrtqJfjIhTYG4diadwe6dCBBQQ==
+X-Received: by 2002:a05:6a00:1aca:b0:52f:55f8:c3ec with SMTP id f10-20020a056a001aca00b0052f55f8c3ecmr1649565pfv.25.1662522642094;
+        Tue, 06 Sep 2022 20:50:42 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-34.three.co.id. [116.206.12.34])
+        by smtp.gmail.com with ESMTPSA id 17-20020a631751000000b00434e00227a7sm606189pgx.4.2022.09.06.20.50.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 20:50:13 -0700 (PDT)
-Message-ID: <41834a9f-e8d9-11a2-d391-1ce80758128c@gmail.com>
-Date:   Wed, 7 Sep 2022 11:50:06 +0800
+        Tue, 06 Sep 2022 20:50:41 -0700 (PDT)
+Message-ID: <ae1e3abd-cafb-7059-b8ae-5bcb13d53b40@gmail.com>
+Date:   Wed, 7 Sep 2022 10:50:36 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH 3/4] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] Documentation/process/magic-number.rst: kill
 Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220905123946.95223-1-likexu@tencent.com>
- <20220905123946.95223-4-likexu@tencent.com>
- <CALMp9eSBK3xVKoqrk4j2yNqk+Jh0z-Nk-rwCTaTE0Dca5DQoPA@mail.gmail.com>
- <c9b3d50e-ec3d-3fa3-2706-5672100ffe09@gmail.com>
- <CALMp9eSQ1QkmECM4at9XDPUew0h2nxG5=YUSN=aWnQpZkXy2dw@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <CALMp9eSQ1QkmECM4at9XDPUew0h2nxG5=YUSN=aWnQpZkXy2dw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     =?UTF-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+References: <20220906003828.aqrcmjzuri5do4uq@tarta.nabijaczleweli.xyz>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220906003828.aqrcmjzuri5do4uq@tarta.nabijaczleweli.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,226 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/9/2022 4:19 am, Jim Mattson wrote:
-> On Tue, Sep 6, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> On 6/9/2022 2:00 am, Jim Mattson wrote:
->>> On Mon, Sep 5, 2022 at 5:44 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>>>
->>>> From: Like Xu <likexu@tencent.com>
->>>>
->>>> If AMD Performance Monitoring Version 2 (PerfMonV2) is detected
->>>> by the guest, it can use a new scheme to manage the Core PMCs using
->>>> the new global control and status registers.
->>>>
->>>> In addition to benefiting from the PerfMonV2 functionality in the same
->>>> way as the host (higher precision), the guest also can reduce the number
->>>> of vm-exits by lowering the total number of MSRs accesses.
->>>>
->>>> In terms of implementation details, amd_is_valid_msr() is resurrected
->>>> since three newly added MSRs could not be mapped to one vPMC.
->>>> The possibility of emulating PerfMonV2 on the mainframe has also
->>>> been eliminated for reasons of precision.
->>>>
->>>> Co-developed-by: Sandipan Das <sandipan.das@amd.com>
->>>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
->>>> Signed-off-by: Like Xu <likexu@tencent.com>
->>>> ---
->>>>    arch/x86/kvm/pmu.c     |  6 +++++
->>>>    arch/x86/kvm/svm/pmu.c | 50 +++++++++++++++++++++++++++++++++---------
->>>>    arch/x86/kvm/x86.c     | 11 ++++++++++
->>>>    3 files changed, 57 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
->>>> index 7002e1b74108..56b4f898a246 100644
->>>> --- a/arch/x86/kvm/pmu.c
->>>> +++ b/arch/x86/kvm/pmu.c
->>>> @@ -455,12 +455,15 @@ int kvm_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>>>
->>>>           switch (msr) {
->>>>           case MSR_CORE_PERF_GLOBAL_STATUS:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS:
->>>>                   msr_info->data = pmu->global_status;
->>>>                   return 0;
->>>>           case MSR_CORE_PERF_GLOBAL_CTRL:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_CTL:
->>>>                   msr_info->data = pmu->global_ctrl;
->>>>                   return 0;
->>>>           case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR:
->>>>                   msr_info->data = 0;
->>>>                   return 0;
->>>>           default:
->>>> @@ -479,12 +482,14 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>>>
->>>>           switch (msr) {
->>>>           case MSR_CORE_PERF_GLOBAL_STATUS:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS:
->>>>                   if (msr_info->host_initiated) {
->>>>                           pmu->global_status = data;
->>>>                           return 0;
->>>>                   }
->>>>                   break; /* RO MSR */
->>>>           case MSR_CORE_PERF_GLOBAL_CTRL:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_CTL:
->>>>                   if (pmu->global_ctrl == data)
->>>>                           return 0;
->>>>                   if (kvm_valid_perf_global_ctrl(pmu, data)) {
->>>> @@ -495,6 +500,7 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>>>                   }
->>>>                   break;
->>>>           case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR:
->>>>                   if (!(data & pmu->global_ovf_ctrl_mask)) {
->>>>                           if (!msr_info->host_initiated)
->>>>                                   pmu->global_status &= ~data;
->>>> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
->>>> index 3a20972e9f1a..4c7d408e3caa 100644
->>>> --- a/arch/x86/kvm/svm/pmu.c
->>>> +++ b/arch/x86/kvm/svm/pmu.c
->>>> @@ -92,12 +92,6 @@ static struct kvm_pmc *amd_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
->>>>           return amd_pmc_idx_to_pmc(vcpu_to_pmu(vcpu), idx & ~(3u << 30));
->>>>    }
->>>>
->>>> -static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
->>>> -{
->>>> -       /* All MSRs refer to exactly one PMC, so msr_idx_to_pmc is enough.  */
->>>> -       return false;
->>>> -}
->>>> -
->>>>    static struct kvm_pmc *amd_msr_idx_to_pmc(struct kvm_vcpu *vcpu, u32 msr)
->>>>    {
->>>>           struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->>>> @@ -109,6 +103,29 @@ static struct kvm_pmc *amd_msr_idx_to_pmc(struct kvm_vcpu *vcpu, u32 msr)
->>>>           return pmc;
->>>>    }
->>>>
->>>> +static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
->>>> +{
->>>> +       struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->>>> +
->>>> +       switch (msr) {
->>>> +       case MSR_K7_EVNTSEL0 ... MSR_K7_PERFCTR3:
->>>> +               return pmu->version > 0;
->>>> +       case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
->>>> +               return guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE);
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_CTL:
->>>> +       case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR:
->>>> +               return pmu->version > 1;
->>>> +       default:
->>>> +               if (msr > MSR_F15H_PERF_CTR5 &&
->>>> +                   msr < MSR_F15H_PERF_CTL0 + 2 * KVM_AMD_PMC_MAX_GENERIC)
->>>> +                       return pmu->version > 1;
->>>
->>> Should this be bounded by guest CPUID.80000022H:EBX[NumCorePmc]
->>> (unless host-initiated)?
->>
->> Indeed, how about:
->>
->>          default:
->>                  if (msr > MSR_F15H_PERF_CTR5 &&
->>                      msr < MSR_F15H_PERF_CTL0 + 2 * pmu->nr_arch_gp_counters)
->>                          return pmu->version > 1;
->>
->> and for host-initiated:
->>
->> #define MSR_F15H_PERF_MSR_MAX  \
->>          (MSR_F15H_PERF_CTR0 + 2 * (KVM_AMD_PMC_MAX_GENERIC - 1))
+On 9/6/22 07:38, наб wrote:
+> The entire file blames back to the start of git
+> (minus whitespace from the RST translation and a typo fix)
 > 
-> I think there may be an off-by-one error here.
+> There are changelog comments for March 1994 through to Linux 2.5.74,
+> struct tty_ldisc is two pointers nowadays, so naturally no magic,
+> GDA_MAGIC is defined but unused, and it's been this way
+> since start-of-git,
+> M3_CARD_MAGIC isn't defined, because
+> commit d56b9b9c464a10ab1ee51a4c6190a2b57b8ef7a6 ("[PATCH] The scheduled
+> removal of some OSS drivers") removed the entire driver in 2006,
+> CS_CARD_MAGIC likewise since
+> commit b5d425c97f7d4e92151167b01ca038e7853c6b37 ("more scheduled OSS
+> driver removal") in 2007,
+> KMALLOC_MAGIC and VMALLOC_MAGIC got killed in
+> commit e38e0cfa48ac38f4fe24453d2523852467c95b21 ("[ALSA] Remove kmalloc
+> wrappers"), six months after start of git,
+> SLAB_C_MAGIC has never appeared in git (killed in 2.4.0-test3pre6).
+>
 
-If KVM_AMD_PMC_MAX_GENERIC is 6:
+Seems like incomprehensible to me. Did you mean comparing pre-git era
+changelog to current doc?
 
-#define MSR_F15H_PERF_CTL		0xc0010200
-#define MSR_F15H_PERF_CTL5		(MSR_F15H_PERF_CTL + 10)
+Also, the subject line should be "Documentation: remove magic number doc".
 
-#define MSR_F15H_PERF_CTR		0xc0010201
-#define MSR_F15H_PERF_CTR0		MSR_F15H_PERF_CTR
-#define MSR_F15H_PERF_CTR5		(MSR_F15H_PERF_CTR + 10)
+Thanks.
 
-> 
->>
->> kvm_{set|get}_msr_common()
->>          case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_MSR_MAX:
-
-the original code is "case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:",
-
-in that case, MSR_F15H_PERF_MSR_MAX make sense, right ?
-
->>                   if (kvm_pmu_is_valid_msr(vcpu, msr))
->>                           return kvm_pmu_set_msr(vcpu, msr_info);
->> ?
->>
->>>
->>>> +               break;
->>>> +       }
->>>> +
->>>> +       return amd_msr_idx_to_pmc(vcpu, msr);
->>>> +}
->>>> +
->>>>    static int amd_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>>>    {
->>>>           struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->>>> @@ -162,20 +179,31 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>>>    static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
->>>>    {
->>>>           struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->>>> +       struct kvm_cpuid_entry2 *entry;
->>>> +       union cpuid_0x80000022_ebx ebx;
->>>>
->>>> -       if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
->>>> +       pmu->version = 1;
->>>> +       entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
->>>> +       if (kvm_pmu_cap.version > 1 && entry && (entry->eax & BIT(0))) {
->>>> +               pmu->version = 2;
->>>> +               ebx.full = entry->ebx;
->>>> +               pmu->nr_arch_gp_counters = min3((unsigned int)ebx.split.num_core_pmc,
->>>> +                                               (unsigned int)kvm_pmu_cap.num_counters_gp,
->>>> +                                               (unsigned int)KVM_AMD_PMC_MAX_GENERIC);
->>>> +               pmu->global_ctrl_mask = ~((1ull << pmu->nr_arch_gp_counters) - 1);
->>>> +               pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask;
->>>> +       } else if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
->>>>                   pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS_CORE;
->>>
->>> The logic above doesn't seem quite right, since guest_cpuid_has(vcpu,
->>> X86_FEATURE_PERFCTR_CORE) promises 6 PMCs, regardless of what
->>> CPUID.80000022 says.
->>
->> I would have expected the appearance of CPUID.80000022 to override PERFCTR_CORE,
->> now I don't think it's a good idea as you do, so how about:
->>
->> amd_pmu_refresh():
->>
->>          bool perfctr_core = guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE);
->>
->>          pmu->version = 1;
->>          if (kvm_pmu_cap.version > 1)
->>                  entry = kvm_find_cpuid_entry_index(vcpu, 0x80000022, 0);
->>
->>          if (!perfctr_core)
->>                  pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
->>          if (entry && (entry->eax & BIT(0))) {
->>                  pmu->version = 2;
->>                  ebx.full = entry->ebx;
->>                  pmu->nr_arch_gp_counters = min3((unsigned int)ebx.split.num_core_pmc,
->>                                                  (unsigned int)kvm_pmu_cap.num_counters_gp,
->>                                                  (unsigned int)KVM_AMD_PMC_MAX_GENERIC);
->>          }
->>          /* PERFCTR_CORE promises 6 PMCs, regardless of CPUID.80000022 */
->>          if (perfctr_core) {
->>                  pmu->nr_arch_gp_counters = max(pmu->nr_arch_gp_counters,
->>                                                 AMD64_NUM_COUNTERS_CORE);
->>          }
-> 
-> Even if X86_FEATURE_PERFCTR_CORE is clear, all AMD CPUs promise 4 PMCs.
-> 
->>
->>          if (pmu->version > 1) {
->>                  pmu->global_ctrl_mask = ~((1ull << pmu->nr_arch_gp_counters) - 1);
->>                  pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask;
->>          }
->>
->> ?
->>
->>
+-- 
+An old man doll... just what I always wanted! - Clara

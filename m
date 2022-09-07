@@ -2,252 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF995B0B56
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF1E5B0B59
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiIGRTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S229582AbiIGRTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiIGRTg (ORCPT
+        with ESMTP id S229436AbiIGRTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:19:36 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B88313E13;
-        Wed,  7 Sep 2022 10:19:34 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id b17so7944523ilh.0;
-        Wed, 07 Sep 2022 10:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=sAH9skRux/chFuQu9Rc4h8GuA7UNvAhFPO2U0LHdA7c=;
-        b=OG3eeLGxpzJrb5KG5sHWN9h+9tJX1BZZDjIO5lJrc61G+3WWrDbaEQ8f6feV16fBWp
-         ptn5ruffe7qN1mf69OdTBsEi7DEq1PUxtws+QTru5UFIoYL4w5H/J0PBed/dZCZObz02
-         M6oZmCNroTjcVXmVuRAtZAqI7mvfN4X6L8kSYvnFOAjx+BfcZ/QD97X+LpmQuCs0sUu5
-         iyajNcKZbqjQeEQjzc/SimfBmzW2hy3lodWjktaSYd+Vcc5KW3Aix9p5284NGyi5hgqQ
-         beu4dJh4Qe1uy/3RrpduNYU5LyEPueeuLs5KGgAI5FwKBsjiCjTzNhbXL/E8XjoPcyXV
-         klsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sAH9skRux/chFuQu9Rc4h8GuA7UNvAhFPO2U0LHdA7c=;
-        b=nz2xQC1AdxLAZBEj0qR0hLpi6Vk+inVEc+Bhr3RaZkg9spl1ds4lH3m4inatUTfyWQ
-         uZs3tPzpQj0Jw/ykDtNi/mFLj/HLNdB7tKwNgZY1Us8f4GbWD+plJ4KYS5pobp6L4PBy
-         iWugxqKs5jucgr3k0i1Ksp1ZGGXaDlJXYFht5j+saimqB2DlmYIU8+fwyq5V1H4mlirw
-         S6af0PgAa7WJe2BF9pJ9VexDgWLcCr16UPwjCRERbUaGAQ2/g0bNxapy7Uwb8LG0zuUU
-         5byIClR9T/VZ8UFs+e7rlZ+2LFBG1moHJXojaSPB97C2z0aLlE2EtwnBoqz32eQ4XJtG
-         B7lQ==
-X-Gm-Message-State: ACgBeo1KmobPRjRgm85Zdh8KGm4p+C6S8hB80I0fkm5OMFLfxYjuuQmR
-        Hx6xt6AShxkpwJlkJ16J35qqq/8xZtacMaLLWmI=
-X-Google-Smtp-Source: AA6agR6U+WYk2h4nLSnIzWFoV2UStyHu3E1LGe7APYWsBp4pvmnvLEvv+3XhA03PJTQb4hXci4Odubp5vbuUjcji0wc=
-X-Received: by 2002:a05:6e02:1d0b:b0:2eb:73fc:2235 with SMTP id
- i11-20020a056e021d0b00b002eb73fc2235mr2444495ila.164.1662571173764; Wed, 07
- Sep 2022 10:19:33 -0700 (PDT)
+        Wed, 7 Sep 2022 13:19:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0C314D20;
+        Wed,  7 Sep 2022 10:19:41 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287GDhH6029287;
+        Wed, 7 Sep 2022 17:19:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=F0xc+5czV2UbnFYrYqCz4AcqHKW1n16n1PSM0a8NBNY=;
+ b=ITvxJALMvJlYZDe/y8bDGf1RZz93VqgGeGp4afenKNBAAc81PKiLQtHdr9yIE+pTTgPi
+ AHaOoETTqnb/I15q4V4+Iqrdu0RnnyjSZveVhv9mFFr2WN1qlnWtflaTwvyaIEChRZ+D
+ vYYkKwBzxNL+u/zSrtxEaxGRRg6Yumh9y1JFjxxY4I6YQBmi3nOlY3yzqlsfDveGbIl4
+ l/z00g1y340x1PasOronXiLGmIrMpG08Vkt4HHYdSytK5q11LbVA7mXOvXY+fzvTat5s
+ ZLsX0FaOXf+AI9r2JYXeYrwCVT08RYg7dABJ9MO4HteBj24pWghhAIzcJajAPltk5SVi 7w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jexmtt5um-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 17:19:40 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 287GoKoq024102;
+        Wed, 7 Sep 2022 17:19:40 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jexmtt5u1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 17:19:40 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 287H66rX031656;
+        Wed, 7 Sep 2022 17:19:38 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jbx6hngbb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 17:19:38 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 287HJYVB26870260
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Sep 2022 17:19:34 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A35A34C040;
+        Wed,  7 Sep 2022 17:19:34 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 172104C044;
+        Wed,  7 Sep 2022 17:19:34 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.145.188.40])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Sep 2022 17:19:34 +0000 (GMT)
+Date:   Wed, 7 Sep 2022 19:19:23 +0200
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Anthony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
+        cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v3 0/2] s390/vfio-ap: fix two problems discovered in the
+ vfio_ap driver
+Message-ID: <20220907191923.57e2d624.pasic@linux.ibm.com>
+In-Reply-To: <33b8a9f4-ebe8-d836-807e-7c495c190536@linux.ibm.com>
+References: <20220823150643.427737-1-akrowiak@linux.ibm.com>
+        <33b8a9f4-ebe8-d836-807e-7c495c190536@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220906151303.2780789-1-benjamin.tissoires@redhat.com> <20220906151303.2780789-3-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220906151303.2780789-3-benjamin.tissoires@redhat.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Wed, 7 Sep 2022 19:18:58 +0200
-Message-ID: <CAP01T76kXAoumUt37mMEzqNU9k43mJq08jfNYMbSVN5b5sZ_fQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v11 2/7] bpf: split btf_check_subprog_arg_match
- in two
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PruSYUulfmdlO4hY4yOFYDUYwiAeDDjy
+X-Proofpoint-ORIG-GUID: b-_UUcdNlJ1x72Am3-ny8Al7ALjq3tNU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_08,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 phishscore=0 impostorscore=0 spamscore=0 mlxlogscore=723
+ suspectscore=0 adultscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sept 2022 at 17:13, Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> btf_check_subprog_arg_match() was used twice in verifier.c:
-> - when checking for the type mismatches between a (sub)prog declaration
->   and BTF
-> - when checking the call of a subprog to see if the provided arguments
->   are correct and valid
->
-> This is problematic when we check if the first argument of a program
-> (pointer to ctx) is correctly accessed:
-> To be able to ensure we access a valid memory in the ctx, the verifier
-> assumes the pointer to context is not null.
-> This has the side effect of marking the program accessing the entire
-> context, even if the context is never dereferenced.
->
-> For example, by checking the context access with the current code, the
-> following eBPF program would fail with -EINVAL if the ctx is set to null
-> from the userspace:
->
-> ```
-> SEC("syscall")
-> int prog(struct my_ctx *args) {
->   return 0;
-> }
-> ```
->
-> In that particular case, we do not want to actually check that the memory
-> is correct while checking for the BTF validity, but we just want to
-> ensure that the (sub)prog definition matches the BTF we have.
->
-> So split btf_check_subprog_arg_match() in two so we can actually check
-> for the memory used when in a call, and ignore that part when not.
->
-> Note that a further patch is in preparation to disentangled
-> btf_check_func_arg_match() from these two purposes, and so right now we
-> just add a new hack around that by adding a boolean to this function.
->
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> ---
->
+On Tue, 6 Sep 2022 19:17:50 -0400
+Anthony Krowiak <akrowiak@linux.ibm.com> wrote:
 
-Given I'll fix it properly in my kfunc rework, LGTM otherwise:
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> PING?
 
-> no changes in v11
->
-> new in v10
-> ---
->  include/linux/bpf.h   |  2 ++
->  kernel/bpf/btf.c      | 54 +++++++++++++++++++++++++++++++++++++++----
->  kernel/bpf/verifier.c |  2 +-
->  3 files changed, 52 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 9c1674973e03..c9c72a089579 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1943,6 +1943,8 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
->  struct bpf_reg_state;
->  int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
->                                 struct bpf_reg_state *regs);
-> +int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
-> +                          struct bpf_reg_state *regs);
->  int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
->                               const struct btf *btf, u32 func_id,
->                               struct bpf_reg_state *regs,
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 903719b89238..eca9ea78ee5f 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -6170,7 +6170,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->                                     const struct btf *btf, u32 func_id,
->                                     struct bpf_reg_state *regs,
->                                     bool ptr_to_mem_ok,
-> -                                   u32 kfunc_flags)
-> +                                   u32 kfunc_flags,
-> +                                   bool processing_call)
->  {
->         enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->         bool rel = false, kptr_get = false, trusted_arg = false;
-> @@ -6356,7 +6357,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->                                         reg_ref_tname);
->                                 return -EINVAL;
->                         }
-> -               } else if (ptr_to_mem_ok) {
-> +               } else if (ptr_to_mem_ok && processing_call) {
->                         const struct btf_type *resolve_ret;
->                         u32 type_size;
->
-> @@ -6431,7 +6432,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->         return rel ? ref_regno : 0;
->  }
->
-> -/* Compare BTF of a function with given bpf_reg_state.
-> +/* Compare BTF of a function declaration with given bpf_reg_state.
->   * Returns:
->   * EFAULT - there is a verifier bug. Abort verification.
->   * EINVAL - there is a type mismatch or BTF is not available.
-> @@ -6458,7 +6459,50 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
->                 return -EINVAL;
->
->         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> -       err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
-> +       err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, false);
-> +
-> +       /* Compiler optimizations can remove arguments from static functions
-> +        * or mismatched type can be passed into a global function.
-> +        * In such cases mark the function as unreliable from BTF point of view.
-> +        */
-> +       if (err)
-> +               prog->aux->func_info_aux[subprog].unreliable = true;
-> +       return err;
-> +}
-> +
-> +/* Compare BTF of a function call with given bpf_reg_state.
-> + * Returns:
-> + * EFAULT - there is a verifier bug. Abort verification.
-> + * EINVAL - there is a type mismatch or BTF is not available.
-> + * 0 - BTF matches with what bpf_reg_state expects.
-> + * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-> + *
-> + * NOTE: the code is duplicated from btf_check_subprog_arg_match()
-> + * because btf_check_func_arg_match() is still doing both. Once that
-> + * function is split in 2, we can call from here btf_check_subprog_arg_match()
-> + * first, and then treat the calling part in a new code path.
-> + */
-> +int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
-> +                          struct bpf_reg_state *regs)
-> +{
-> +       struct bpf_prog *prog = env->prog;
-> +       struct btf *btf = prog->aux->btf;
-> +       bool is_global;
-> +       u32 btf_id;
-> +       int err;
-> +
-> +       if (!prog->aux->func_info)
-> +               return -EINVAL;
-> +
-> +       btf_id = prog->aux->func_info[subprog].type_id;
-> +       if (!btf_id)
-> +               return -EFAULT;
-> +
-> +       if (prog->aux->func_info_aux[subprog].unreliable)
-> +               return -EINVAL;
-> +
-> +       is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> +       err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, true);
->
->         /* Compiler optimizations can remove arguments from static functions
->          * or mismatched type can be passed into a global function.
-> @@ -6474,7 +6518,7 @@ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
->                               struct bpf_reg_state *regs,
->                               u32 kfunc_flags)
->  {
-> -       return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags);
-> +       return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags, true);
->  }
->
->  /* Convert BTF of a function into bpf_reg_state if possible
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 0194a36d0b36..d27fae3ce949 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6626,7 +6626,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->         func_info_aux = env->prog->aux->func_info_aux;
->         if (func_info_aux)
->                 is_global = func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> -       err = btf_check_subprog_arg_match(env, subprog, caller->regs);
-> +       err = btf_check_subprog_call(env, subprog, caller->regs);
->         if (err == -EFAULT)
->                 return err;
->         if (is_global) {
-> --
-> 2.36.1
->
+I'm looking at the series. Expect results soon :D

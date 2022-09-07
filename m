@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC6D5B0819
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF895B081F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiIGPKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S230127AbiIGPMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiIGPKS (ORCPT
+        with ESMTP id S229482AbiIGPL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:10:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B273C8F8;
-        Wed,  7 Sep 2022 08:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 11:11:58 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA1565722E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:11:56 -0700 (PDT)
+Received: from lemmy.home.8bytes.org (p4ff2bb62.dip0.t-ipconnect.de [79.242.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E65ACB81DEE;
-        Wed,  7 Sep 2022 15:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3C75C433D7;
-        Wed,  7 Sep 2022 15:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662563414;
-        bh=y3vev92uf2aRQIN78o3qvAAHssrNc8oo+5GpspII1uE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oZKpsaGYEPHeJG3FzASD+1KmAIbVAi17hzb96TaAbfeqP8r7npOU6jb3D2n7ByG6q
-         QV3OmbTcTrIHgiOLc2Q464l9zF975+h60jp7dLNt7V8xHTPeW5nSofu99N2r1dtS/n
-         U3vkIIYPx2COAwCF3gmxCJPtUpRo4Z3BDTO+0/X5glEwVBbttNKtKt2jou2lAISmtD
-         MV94lnR/Gm6ob+FwPx00L9nxU6YGOTeppgX3lJ7//cAui1VLa5zMJOeTDpVMRkKxHG
-         6483CDdL+xLhSmUGHboJ6gZmczFPxjps7oYEFPDv3ah9rbvEwNvg9zaTU3tDlTcoIq
-         yDnA8pFon9w5Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 80102C73FE7;
-        Wed,  7 Sep 2022 15:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.8bytes.org (Postfix) with ESMTPSA id 8C935240A3E;
+        Wed,  7 Sep 2022 17:11:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1662563515;
+        bh=KmpFpEz/lyHaEET/ThZz16jqJhRrdPrH8I/CQGSh0EE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tSBsAA5F/euIUSUVa3hW4mgnDwG/+G9aXFKoTqf1dBUwtIs661DrL6++eaMjQNMkY
+         z1K4YABe5aQDz/W4H6ig14SVS+b8dK3JaieCO+WCx3/Jw9Q30GyOdroe1skonkJSqh
+         w6Qi9vAdbQmMoTyxNBKDhu4ydZYitsJajoSX/ljQ3FkXR+vdyYDvCqC1c/iEP3uMbe
+         b5iBKOFA+Eezm0z6Kcn49MKBCT8SuUx6kjhfEqXb223k1q7oGsIBacGIIwhIPwD7hT
+         GFquWshAK15inEjOsUHUncIw7LiIT/pw1ythPAVGsEkd7IKBhT7bzDViCWSMJ5A4Q3
+         w5TIWNwYAr8Xw==
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev
+Cc:     Will Deacon <will@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: [PATCH] iommu/virtio: Fix compile error with viommu_capable()
+Date:   Wed,  7 Sep 2022 17:11:54 +0200
+Message-Id: <20220907151154.21911-1-joro@8bytes.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v5] net/smc: Fix possible access to freed memory in link
- clear
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166256341452.32760.12403709624294959610.git-patchwork-notify@kernel.org>
-Date:   Wed, 07 Sep 2022 15:10:14 +0000
-References: <20220906130139.830513-1-liuyacan@corp.netease.com>
-In-Reply-To: <20220906130139.830513-1-liuyacan@corp.netease.com>
-To:     None <liuyacan@corp.netease.com>
-Cc:     wenjia@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kgraul@linux.ibm.com, kuba@kernel.org, tonylu@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        ubraun@linux.vnet.ibm.com, wintera@linux.ibm.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Joerg Roedel <jroedel@suse.de>
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+A recent fix introduced viommu_capable() but other changes
+from Robin change the function signature of the call-back it
+is used for.
 
-On Tue,  6 Sep 2022 21:01:39 +0800 you wrote:
-> From: Yacan Liu <liuyacan@corp.netease.com>
-> 
-> After modifying the QP to the Error state, all RX WR would be completed
-> with WC in IB_WC_WR_FLUSH_ERR status. Current implementation does not
-> wait for it is done, but destroy the QP and free the link group directly.
-> So there is a risk that accessing the freed memory in tasklet context.
-> 
-> [...]
+When both changes are merged a compile error will happen
+because the function pointer types mismatch. Fix that by
+updating the viommu_capable() signature after the merge.
 
-Here is the summary with links:
-  - [net,v5] net/smc: Fix possible access to freed memory in link clear
-    https://git.kernel.org/netdev/net/c/e9b1a4f867ae
+Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+---
+ drivers/iommu/virtio-iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You are awesome, thank you!
+diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+index da463db9f12a..1b12825e2df1 100644
+--- a/drivers/iommu/virtio-iommu.c
++++ b/drivers/iommu/virtio-iommu.c
+@@ -1005,7 +1005,7 @@ static int viommu_of_xlate(struct device *dev, struct of_phandle_args *args)
+ 	return iommu_fwspec_add_ids(dev, args->args, 1);
+ }
+ 
+-static bool viommu_capable(enum iommu_cap cap)
++static bool viommu_capable(struct device *dev, enum iommu_cap cap)
+ {
+ 	switch (cap) {
+ 	case IOMMU_CAP_CACHE_COHERENCY:
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.36.1
 

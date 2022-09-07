@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E225A5B0F30
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23D15B0F33
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiIGVdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
+        id S230216AbiIGVdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiIGVdL (ORCPT
+        with ESMTP id S230195AbiIGVdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:33:11 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CDE97ED1;
-        Wed,  7 Sep 2022 14:33:10 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w8so24405532lft.12;
-        Wed, 07 Sep 2022 14:33:10 -0700 (PDT)
+        Wed, 7 Sep 2022 17:33:39 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D283C1219
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:33:38 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id d18-20020a9d72d2000000b0063934f06268so11160644otk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 14:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=/boyDA5h4t0gComCI2tC20XUM0bG0YFaenoe3Hg2wq4=;
-        b=ns2/4Ix4A1RoqacdGtRk4V6LaiVNC7wMI1mqEdhORI19CX4QHtbGO6EBC64KNy4ReY
-         5obskafRb9kiepRbuFxO8SBL0FK/dvBlhZnVyHCztAyRy+p+a0KgZuI1TQXqYRZh0eOX
-         g8J+8Xa1jBD22G41n3gs/PgnaUCTpuQxtTJFokoqnYZqfOzyXlpyvnoq3hH+QfsHcLiK
-         An0nL9US8/uT/k6u7bBuOMVcGnewnA/lJSKbeUfZHq3Nn+GEVU/XbjH0tTtqN9+EbJrg
-         HDQYfe5PzRwh44qKxC3Gtz5rvjTRrBijRh8dPwaCnjESB0itfZJ6pspFHTyfSeBl7moZ
-         +DAg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date;
+        bh=QscqM0nV84svG7WCGc8n2xoost3b0ICJjoMuYYPkgIg=;
+        b=l97wHQLTtkoC2yyIythJfrgytAdirbzW+UXcePOcQqT8dD1nyb2Orof9p/7oMQ9ElD
+         tGJZ8qoD+j4jh3drrCMeXTNRJZggeV2RWHeaZ0hG0dFTTMuK9JY6Tk3/+LD16B+21Pye
+         TxaXPNmWr68NJFbOPfTIhJATk5usDAC2SYpEE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/boyDA5h4t0gComCI2tC20XUM0bG0YFaenoe3Hg2wq4=;
-        b=uh8AGlfAbIO6OEXlWY5Q2GC/vZCW4uiQB7Xvjjv2ySrsjOE0KQuKQ4oR7vmhq1w/IK
-         ONuiJbDZaTCPpnCiDgL4beZdylK6p3IAcfeVb7LHmPmhImYfkVGnfYqFPJ5kOxIdALnY
-         rnt7m+7jyD2rJtKvokL6dVRDh8gAyyLdySjjIDjVY2B8lcOJ6NEN8wk1CHZdtjwePiLV
-         j5IFKi7obbc40k8A1zX92Dsa3I0EfipoBU98knq9K1JIbAd2VLZrWHXsNEuvKqhl/cwM
-         6IYGm7YpO8EDmhLCyQchdvD39AUHQ/8Nq3PUcSGapyyw/uGnbsoP6kUgS8RBjAgN/f4e
-         gVOg==
-X-Gm-Message-State: ACgBeo01p1JodKnD4lRmYGFKB5qaYLY5HDmOlze6fdiM/W/QtnuAuWxX
-        hm60Yy/nIdhxJBhDadwkJQgmJKetVR6Zmw==
-X-Google-Smtp-Source: AA6agR7VI3n4phO54PKU/Lcg6fXhkn4jQ+RsWYWhcbS/VmsuBbUwMkj9AmWPYPOmr6FGXVRoZjYg0w==
-X-Received: by 2002:a19:ac45:0:b0:494:9978:178a with SMTP id r5-20020a19ac45000000b004949978178amr1599623lfc.505.1662586388639;
-        Wed, 07 Sep 2022 14:33:08 -0700 (PDT)
-Received: from abyss.localnet (2a01-115f-4107-5400-bd98-c56e-a036-7979.fa.ipv6.supernova.orange.pl. [2a01:115f:4107:5400:bd98:c56e:a036:7979])
-        by smtp.gmail.com with ESMTPSA id q3-20020a056512210300b004946aef1814sm2032529lfr.137.2022.09.07.14.33.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 14:33:08 -0700 (PDT)
-From:   Grzegorz =?utf-8?B?QWxpYm/FvGVr?= <grzegorz.alibozek@gmail.com>
-To:     linux-usb@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, bastian@rieck.me, andrew.co@free.fr,
-        meven29@gmail.com, pchernik@gmail.com, jorge.cep.mart@gmail.com,
-        danielmorgan@disroot.org, bernie@codewiz.org,
-        saipavanchitta1998@gmail.com, rubin@starset.net,
-        maniette@gmail.com, nate@kde.org
-Subject: Re: [RFC PATCH 0/2] usb: typec: ucsi: Check connection on resume
-Date:   Wed, 07 Sep 2022 23:33:06 +0200
-Message-ID: <4425011.LvFx2qVVIh@abyss>
-In-Reply-To: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
-References: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=QscqM0nV84svG7WCGc8n2xoost3b0ICJjoMuYYPkgIg=;
+        b=tBrLngEUAaYuxkaXGvx0jrX+9Fwqvn4q3LXwsOeppbg3AftCY3u8hpxtWlk+BJcSyh
+         mfVAjcutKjhvoTEXaQvwTFzhS2WaoVjbxgEi6kGeO4M5TogS6cahrhKwSiS6oBwSi9Bv
+         CEZDZMJD5iEzlLEme61fkA6jnCWEuEv0QuU/viXOMKN17KkvHSXSErNJakO3LrD0zWLr
+         lMzdhY0pT/YNwabB/Um/m/iJPSiRX2k6ye8UBwA4AZwV8A4vzwcAyz5SvcFoS0qv8YCv
+         ROyYKT+ia/yHChscSK+38Xw7Q2DahxstvY9jmQFmoxIze09Rt7q81nwEEmV0WHEMcr0r
+         u3kQ==
+X-Gm-Message-State: ACgBeo2hVfJfVPr5cPEcSiLko5eUqVCtapkUtC2o2z+S1iFhx/s5r0WY
+        5E6uwQQAurKrpSTUPpjv9TY9OXkQG4CTMDwMfue3ow==
+X-Google-Smtp-Source: AA6agR6xMl6s69LJEe9/ANEpj86tS5Mf5dVXH93JXMx7uTBSPGstJb9qa0FXVFjAjOE1JVl+mNneubqBOO5h7W4c6Lw=
+X-Received: by 2002:a9d:53cb:0:b0:637:1ddc:615c with SMTP id
+ i11-20020a9d53cb000000b006371ddc615cmr2302282oth.3.1662586417672; Wed, 07 Sep
+ 2022 14:33:37 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 7 Sep 2022 16:33:36 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220902043511.17130-5-quic_rjendra@quicinc.com>
+References: <20220902043511.17130-1-quic_rjendra@quicinc.com> <20220902043511.17130-5-quic_rjendra@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 7 Sep 2022 16:33:36 -0500
+Message-ID: <CAE-0n50x=h_rBaWAcTk_BBCMLpD=XQ6=BKLGp5+m8i4Lvn4fyg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sc7280: Add cpu and llcc BWMON
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-> Hi,
-> 
-> I'm sending these as an RFC first because I'm not done testing.
-> 
-> I made a small modification to my original proposal (in the bug
-> report). Now also connection during suspend should be covered.
-> 
-> I would appreciate if you guys could test these again. If everything
-> works, and the bug is fixed, let me know, and I'll add your Tested-by
-> tags to the patches.
-> 
-> thanks,
-> 
-> Heikki Krogerus (2):
->   usb: typec: ucsi: Check the connection on resume
->   usb: typec: ucsi: acpi: Add PM hooks
-> 
->  drivers/usb/typec/ucsi/ucsi.c      | 42 +++++++++++++++++++++---------
->  drivers/usb/typec/ucsi/ucsi_acpi.c | 15 +++++++++++
->  2 files changed, 44 insertions(+), 13 deletions(-)
+Quoting Rajendra Nayak (2022-09-01 21:35:11)
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 13d7f267b289..a839ba968d13 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -3275,6 +3275,82 @@
+>                         };
+>                 };
+>
+> +               pmu@9091000 {
+> +                       compatible = "qcom,sc7280-llcc-bwmon";
+> +                       reg = <0 0x9091000 0 0x1000>;
+> +
+[...]
+> +                       };
+> +               };
+> +
+> +               pmu@90b6000 {
 
-I have tested this patch on Lenovo T14 Gen2i with ac adapter and everything 
-looks good. I applied patch on linux 5.19.7.
+This unit address
 
+> +                       compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
+> +                       reg = <0 0x090b6400 0 0x600>;
 
-
+doesn't match this one. Please fix.

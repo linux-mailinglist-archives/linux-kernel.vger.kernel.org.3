@@ -2,180 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672A55AF8EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E845AF8F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiIGAZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S229528AbiIGAcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGAZJ (ORCPT
+        with ESMTP id S229437AbiIGAcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:25:09 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A889240AB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:25:03 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286Ld8DQ014578;
-        Wed, 7 Sep 2022 00:24:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=tVQWTuW31/SQ9tuEeJ9OEB5BIICGShvctYeSP7SUE4o=;
- b=RJSYNhldpFH8jh4u5IIcOhMsGl33i8d33j9Iy3RG3Ua/xKSykrjDVNOQm2y8Ank4Q+th
- m388dMiazZxKIwdS48OZbUDmqb6PS3FWKFj/9ql7x6B8i5tAY+PyMSn7usBVBpAm2wur
- E/XugpBt0ACFS9Ue0IqYCEMdoscbu1dbvrkLHpDa2ze4dluaZGImW3qsrHpRlwP8c+sZ
- eDfUxqD+j3r1KpvEURcv9JLA5WWADsQCFR5R+JO0Sr8YNJsv+SopG0ndNrZjR4OkkFEN
- xJzHmiwmpufO0bHT0jdlb0Ii0II/W7FaxEreIcPJnNEiuX6O65FcJwc5c29obMeMmG/W 4Q== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jbwh1fdwh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Sep 2022 00:24:55 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2870D7CZ027555;
-        Wed, 7 Sep 2022 00:24:54 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jbwc9vf1j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Sep 2022 00:24:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nXbrPoPI4mKypdD38j3ri0GNKsDuSMN3cf/d/r3bBWwSxYgHbdTNGqJthb/dAqi6JM9XYyvpGIVcMaq9gWsCNEWu7ueQy9844TafM8DuPl7Kb1N3/lv0TEghHT45ifTExaFI+6GEBC5EO0Gvo6nThFNlLKaDh4ko1Zhwr/Jt+4EFWONEU+NmvuZ0PPgTQGgWL0G+Npe3Z5z19WpJNf3ncIZolR/xlYPMfKnoDjaPRGgR/rl8m3pd0xmd77lWq2AFnk3UIvGxOeFlfzrPU6ZCBxqdpISaba4nI9Pe43pCksYOZqtq3tY9Ae9nad1wofpZwDdKBEVNV99mCCUUEQbPPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tVQWTuW31/SQ9tuEeJ9OEB5BIICGShvctYeSP7SUE4o=;
- b=dnZJTTfwsmUytgANrpqnULeq+DrBNa56f+JUn7MzEkV/8ntE6ExDnBrZq8lc3ZRe521qE60gmB97H3onUlg42drGkrByLJU5y9TImc4WIyi5OdY+7ohzutGbs+1SF/Y0GHYejnlNo6Pf7vSGZuGjl9oeUcNTrsuEokTAhZVhJH3icy+ajqXqjtI0CxIr89LlIjssL+vEiPWxcLbsBJ3KwD2msiCSaig8+oJVnwX3gmoHWofCIhCxiv+AUY/aGcbA/QA3THeh5Yoijy9PbttbOZjIvRuPRUlfphuz1ZhfWMCaZvfiQtXzswwvRA+xcBoWiN3+ChGn7oG9yEE/6Mf8Kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tVQWTuW31/SQ9tuEeJ9OEB5BIICGShvctYeSP7SUE4o=;
- b=pWE2NhaVv2e4kdO6vr2NOQnOHKWfECGqfGBPdE7OqNYMWwYmypx1IWFvey5nl80NLKGuFhysL60zuRpfuxsor2pl2jl9dE+9RpLWJQnb6hlvEl+xtGajWDh8pFDR6Nao3gvOMIEa1BR13dmC8mC+8W1p7LtDxLTBxDFE7AV3llg=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by DS7PR10MB4926.namprd10.prod.outlook.com (2603:10b6:5:3ac::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Wed, 7 Sep
- 2022 00:24:52 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a420:3107:436d:d223]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a420:3107:436d:d223%5]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
- 00:24:52 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v14 00/70] Introducing the Maple Tree
-Thread-Topic: [PATCH v14 00/70] Introducing the Maple Tree
-Thread-Index: AQHYwimon9+qH6EC0EalpC37Vnej1K3TEsAAgAAJXYA=
-Date:   Wed, 7 Sep 2022 00:24:52 +0000
-Message-ID: <20220907002441.55okdnja4jnshazp@revolver>
-References: <20220906194824.2110408-1-Liam.Howlett@oracle.com>
- <20220906165110.07cad9a730c630af4425ca33@linux-foundation.org>
-In-Reply-To: <20220906165110.07cad9a730c630af4425ca33@linux-foundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f68a79a7-db16-4040-7c34-08da906761fc
-x-ms-traffictypediagnostic: DS7PR10MB4926:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WZHTn9Ke/wXVNGXWT0cJ32ZjRf6JbDsoULY8NJoUiZ4mErj+byd4U6aKGvfDMEOnTPpjwCfLf9GMFIveG571hw33m1NPYFEDrXbSusIV/Kwl4fafJWUwNxhf7c5sD4i0opUk7C+b6ocmgMSfvDIblbjOaDDZpNz4NMSYeid/XsrmMJdUUBBwphKEBxCrY/am/LdEuPEfh8eQgiU+ESez1ti6zPp15uCY9cTicNIKFdnfADnXVoFY+v4WQ7D/RS8rabE3ps2dAuMYO8fRAf6EPLS7VnUPGmyEMOhi+rSMWgx7Xja+lnUDe1HXkddBN6kPf7h+tpNvGqLfcStvwiTfMgvQU6/IxuGZirsJhBzuHsQ3IOP+oBXInkbk8rbNZIPmG0WIZLaXl+0lXjJG3OjkIcY7u1o6ZwST0aXY8fvwOXSuS85P9bmRKFG1+et6OPB1nv4crHGGZsxvx6yP1IdJNA06BavDcsOzPLZLGERLVyEU6zWSC5Q0pkTnKr3L7M9uS0mHk6t3pQr3qjuIEHOFuq0jpg7fEa051VIjV+zzksKPV04R3iQnjG8emTluBsOjgh5/X+0WelS+PtN+3xPSUi0F+mV+tSuI7yAaYZfP0DOYzV2Ndlo+vB6Yhc1/CzUVOxq54ZsopM1z+tywTBEcS604Hy5KYJFvHaApEtG0ZfB4dfUfLi299h+0yRchwqUkYEA8aZ+ju2jMf+il4tzSAT5YQ9iGH+vaJaeO8Pbuoz9MLPVXe9rgbVVYDYq8JwncsCBYJo91WuHscdY47g6AyQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(396003)(136003)(366004)(346002)(39860400002)(91956017)(478600001)(6916009)(66946007)(54906003)(66476007)(6486002)(66556008)(2906002)(66446008)(122000001)(86362001)(316002)(38070700005)(38100700002)(76116006)(6506007)(41300700001)(1076003)(71200400001)(6512007)(26005)(9686003)(5660300002)(8676002)(4326008)(64756008)(186003)(33716001)(4744005)(44832011)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Wos8+h69SfR3dgGlFS1qeLrdCvJP1tjK7Vs+kWxqv5AHWe+ilYe1tGlEjUQ0?=
- =?us-ascii?Q?dA5lBjj55rveabIbvyVbODzazN7AGb7ynJC7y7iwiIgZgLU7V6cCNPod6edl?=
- =?us-ascii?Q?6Aq+2YUnVUUSSEDEJgfA6Egm8azmTBlFrtzRrSezuhsb/QoB+LQkK/x2HEiy?=
- =?us-ascii?Q?lQvXOg9a7B9MNCElx7HBwCngfny/YHXqdjTHBb68MJEUHd8uYEwvDb3di099?=
- =?us-ascii?Q?mTWQVq5yep6gUqdMYFYYZdQevkX7moZChyhaTBSPVzv8hkCO3XTrWdhvtLpp?=
- =?us-ascii?Q?pdiN5/Jj+QiMj6ab1/TvFJFuqOrKefdouXlMf6FUu6AyK3IE0e/DtEeZQ9IK?=
- =?us-ascii?Q?C8nyuNC/nbnczryYLuqQjkbCA9p48nh/QG1MU9AUzTWW7I31YD2s2XsnvR5A?=
- =?us-ascii?Q?8d0gvpWFUxDQJgNKC7Ljv28rrd4QJ67Pg6AHP8UdtAHM8duQemgROgeDGgEE?=
- =?us-ascii?Q?3xGtZ0o8GU3nrb4p8mcteP2CjqHZsv4/SrMIF9bgxHyVyrWn23Q1xI+DHoy2?=
- =?us-ascii?Q?NxKbgDhuZa+COV5MisJZH4uJ11XU7k6Wi7s0DSyotmUKSdS3HjittpEii0Kk?=
- =?us-ascii?Q?3NYpmdPAJnRpSwkkM0yUYdTdbrDfOUhPeZ59G/7+GxU8lTbegsrTRndF1qEz?=
- =?us-ascii?Q?OP4CezHezFs53eSIcll1BVoTOtbolrbi3Cli36Mh+2Gzl4UQOTnpCx/pBIWJ?=
- =?us-ascii?Q?bMBsE7ywZv6Y8fSY0RcDOmyA6PDKBW3o5PFhklabwe/URA8s4Vx9uh0HSBG9?=
- =?us-ascii?Q?HQdFFnBmlOgx4eEHmxwsNUFAaXeYmPVDqPSfB8Qasa5iGEW4nqfssFU6MMei?=
- =?us-ascii?Q?gScY7RUQO7uG1TdbfmJjsZV7UfZlUcdzyClDLFHKqVeunKvuEy6R6/iAExOt?=
- =?us-ascii?Q?JKvu8MkDiNnc1CiVj6zUYJrs5EcS2TyKqFPNXXqZPnPDdt6rwkdEROQBIbtU?=
- =?us-ascii?Q?hSAVwOkFtlxy8VyXbU3MvJjlnro1iMGCP7VzfcnFaO1elaKeWOA+YxgQVOyS?=
- =?us-ascii?Q?I/IMMK/+Q2A8CUzIACdTamohn4SiLvnjeGYzSQzH9IhWOX7axC8NTpPnB9Jj?=
- =?us-ascii?Q?Rx51KLoE3lcQRZgB0J9MorHLDJx0gf5eZgRrcpKbHbw9pTUN2Mz0Hxalqvmf?=
- =?us-ascii?Q?aNBfN41tdGHjXsrloQEocuxsZw+vnqmf++owCZ327wYEz4wu3dKw/qXVLppX?=
- =?us-ascii?Q?o8ESR5YFtIUQdOBuV4N7pU2nUl81DC9WCRl61LnbYycJWfDyOGTVcktSMMHU?=
- =?us-ascii?Q?+OtuK6CVUVNop17W7kn7dlkgAzOvB5ndslYPSoXMieYEgoe77JTogXSkW6qX?=
- =?us-ascii?Q?BriBxg9kPQqtyBGf7pPwFjuiEJOI+nhpinmmlKUW4LQn3Wm0x5445gnaQei4?=
- =?us-ascii?Q?97xF6Cs7ueY56rYAjN0s+k1X3WcbOWoAgt8lsWPHtoLgmL8zYB/1cwS6D/YN?=
- =?us-ascii?Q?F9Z2JAowoLUfq34LUNmJVtwd9QGBDYpMOQSCyE3z0mELMCyirU0OYTGWqlPg?=
- =?us-ascii?Q?6mBvD0RSWLb6zsber20/859cNcDhxY6kbt/qdAfVICL/Wdg6N9R5UTtrxfDO?=
- =?us-ascii?Q?7/0rV5tUnT2C4E2zJlSUwx/SU6kSUOhQDBjlOLGhJgZh4aNcfM+r1HyA+V+3?=
- =?us-ascii?Q?TQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <12CB6910A35FC24486EA6CF395239BDA@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f68a79a7-db16-4040-7c34-08da906761fc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 00:24:52.5845
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: U6HhWhz4X2nZapnjsHu+mXNWhIX9hTQ3WuSqvZjdQle+ZwmYSaHn4NMJAvqAaaUcFhlvKgmYNUxdXC3dj5Oc9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4926
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-06_11,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209070000
-X-Proofpoint-GUID: hS7rFloncZmfY5chIZrylcvXuHTz1_Jg
-X-Proofpoint-ORIG-GUID: hS7rFloncZmfY5chIZrylcvXuHTz1_Jg
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Sep 2022 20:32:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3998307B;
+        Tue,  6 Sep 2022 17:31:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 49B13CE1867;
+        Wed,  7 Sep 2022 00:31:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC149C433D6;
+        Wed,  7 Sep 2022 00:31:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662510715;
+        bh=d5GqSWRaVIROcs3gx0x0RWhoU7kB/AGgUcZZATND7DM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CbS9H/2bjTiy56903MB0iiQYo/y0Fz0znUXK2MHX0hDyPdaY1JjWDHqjU8xxWnguU
+         xqKsWadVCC+RhGKch3dfei1SoGbDs0EHq9Ip7OyIK20cDOwAjFlEwMzmcoF7wsOlwp
+         ahZaVvymojcaMDLngTbun68htkvHOHvZ8+eNPagU=
+Date:   Tue, 6 Sep 2022 17:31:54 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, Yury Norov <yury.norov@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read
+ in _find_next_bit
+Message-Id: <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
+In-Reply-To: <000000000000974e2805e802137e@google.com>
+References: <000000000000974e2805e802137e@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andrew Morton <akpm@linux-foundation.org> [220906 19:51]:
-> On Tue, 6 Sep 2022 19:48:38 +0000 Liam Howlett <liam.howlett@oracle.com> =
-wrote:
->=20
-> > This is the v13 + fixes and still based against mm-unstable
-> > v6.0-rc1-140-geb22a5b1b495
->=20
-> I merged up this version, thanks.
->=20
-> One fix was missed:
->=20
-> --- a/mm/memory.c~mm-remove-the-vma-linked-list-fix
-> +++ a/mm/memory.c
-> @@ -1697,6 +1697,7 @@ static void unmap_single_vma(struct mmu_
->  /**
->   * unmap_vmas - unmap a range of memory covered by a list of vma's
->   * @tlb: address of the caller's struct mmu_gather
-> + * @mt: the maple tree
->   * @vma: the starting vma
->   * @start_addr: virtual address at which to start unmapping
->   * @end_addr: virtual address at which to end unmapping
-> _
->=20
-> OK, tiny, but worrisome.  This is one of the reasons why I dislike
-> replacing patch series like this.  Hopefully we can get to the finish
-> line just with little fixups from now on?
+(cc Yury and KASAN developers)
 
-Yes.  I only wanted to respin for the changelog delta, ironically.
-Thanks for catching this.
+On Tue, 06 Sep 2022 06:21:39 -0700 syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com> wrote:
+
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    840126e36e8f Add linux-next specific files for 20220906
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1216969b080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=239c4c4e44185526
+> dashboard link: https://syzkaller.appspot.com/bug?extid=08ca1fa706a22cc17efe
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/1b9017e387a8/disk-840126e3.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/12182558f88d/vmlinux-840126e3.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
+
+Presumably the for_each_clear_bitrange() in pcpu_balance_populated().
+
+> Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
+
+An eight byte read...
+
+> CPU: 1 PID: 26 Comm: kworker/1:1 Not tainted 6.0.0-rc4-next-20220906-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> Workqueue: events pcpu_balance_workfn
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:287 [inline]
+>  print_report+0x164/0x463 mm/kasan/report.c:398
+>  kasan_report+0xbb/0x1f0 mm/kasan/report.c:486
+>  _find_next_bit+0x143/0x160 lib/find_bit.c:109
+>  find_next_bit include/linux/find.h:55 [inline]
+>  pcpu_balance_populated mm/percpu.c:2086 [inline]
+>  pcpu_balance_workfn+0x6c0/0xea0 mm/percpu.c:2246
+>  process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>  kthread+0x2e4/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> 
+> Allocated by task 26:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+>  kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+>  ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+>  ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+>  __kasan_kmalloc+0xa1/0xb0 mm/kasan/common.c:380
+>  kasan_kmalloc include/linux/kasan.h:211 [inline]
+>  __do_kmalloc_node mm/slab_common.c:931 [inline]
+>  __kmalloc+0x54/0xc0 mm/slab_common.c:944
+>  kmalloc include/linux/slab.h:565 [inline]
+>  kzalloc include/linux/slab.h:696 [inline]
+>  pcpu_mem_zalloc+0x70/0xa0 mm/percpu.c:514
+>  pcpu_alloc_chunk mm/percpu.c:1446 [inline]
+>  pcpu_create_chunk+0x23/0x930 mm/percpu-vm.c:338
+>  pcpu_balance_populated mm/percpu.c:2108 [inline]
+>  pcpu_balance_workfn+0xc4e/0xea0 mm/percpu.c:2246
+>  process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>  kthread+0x2e4/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> 
+> The buggy address belongs to the object at ffff888017576600
+>  which belongs to the cache kmalloc-192 of size 192
+> The buggy address is located 184 bytes inside of
+>  192-byte region [ffff888017576600, ffff8880175766c0)
+
+At offset 184 of a 192-byte region.
+
+So what's wrong with doing that?  Does KASAN have an off-by-one?
+
+> The buggy address belongs to the physical page:
+> page:ffffea00005d5d80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x17576
+> flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+> raw: 00fff00000000200 ffff888011841a00 dead000000000122 0000000000000000
+> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 2455007664, free_ts 0
+>  prep_new_page mm/page_alloc.c:2544 [inline]
+>  get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4294
+>  __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5552
+>  alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2113
+>  alloc_pages+0x22f/0x270 mm/mempolicy.c:2275
+>  alloc_slab_page mm/slub.c:1734 [inline]
+>  allocate_slab+0x213/0x300 mm/slub.c:1879
+>  new_slab mm/slub.c:1932 [inline]
+>  ___slab_alloc+0xad0/0x1440 mm/slub.c:3113
+>  __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3211
+>  slab_alloc_node mm/slub.c:3296 [inline]
+>  __kmem_cache_alloc_node+0x18a/0x3d0 mm/slub.c:3369
+>  __do_kmalloc_node mm/slab_common.c:930 [inline]
+>  __kmalloc_node_track_caller+0x45/0xc0 mm/slab_common.c:951
+>  __do_krealloc mm/slab_common.c:1324 [inline]
+>  krealloc+0x8c/0xf0 mm/slab_common.c:1357
+>  add_sysfs_param+0xca/0x960 kernel/params.c:651
+>  kernel_add_sysfs_param kernel/params.c:812 [inline]
+>  param_sysfs_builtin kernel/params.c:851 [inline]
+>  param_sysfs_init+0x301/0x43b kernel/params.c:970
+>  do_one_initcall+0xfe/0x650 init/main.c:1307
+>  do_initcall_level init/main.c:1382 [inline]
+>  do_initcalls init/main.c:1398 [inline]
+>  do_basic_setup init/main.c:1417 [inline]
+>  kernel_init_freeable+0x6ff/0x788 init/main.c:1637
+>  kernel_init+0x1a/0x1d0 init/main.c:1525
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> page_owner free stack trace missing
+> 
+> Memory state around the buggy address:
+>  ffff888017576580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>  ffff888017576600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+>                                         ^
+>  ffff888017576700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff888017576780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

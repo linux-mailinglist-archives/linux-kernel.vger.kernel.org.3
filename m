@@ -2,152 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7665AF945
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850965AF949
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiIGA6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        id S229672AbiIGA7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiIGA6b (ORCPT
+        with ESMTP id S229625AbiIGA7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:58:31 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB08979F1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:58:30 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id f131so3745568ybf.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:58:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UjaiWINnbTXgT+URtVXx1fGemLW7KAjAuDjBEcKQcpw=;
-        b=EAkdAoJF93b/9wVcZWS/8Z33Wh8Eq7xG8wCxKPHNm0Lldc4C5bChxoQDfIHIPRDYax
-         E+7oO+L2O6scu7V+5fNLALkC2gSW3KtuP3tfNpYEXGlOWDD2sTiTX6OWgeeJAcpYfcqc
-         A7KFsvQIqZJC3pSoupGeVX3b2h2lXfNqXDDwmhewWl9SZYpSIQb+K3ijuHEHBKnlI5iN
-         5YTs4xJNgeAVeEvcjs3kD0qLdfQNKm1QP8zoW0R448XpFNwDG9J12DbqDl3vZ1zKXm72
-         +HSPLoCsmPAhUhpPj99b2yJIbwOsGllYC7rvCmcvKG+KcIcU1HoAeaosy/7TBlwl5auu
-         e43Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UjaiWINnbTXgT+URtVXx1fGemLW7KAjAuDjBEcKQcpw=;
-        b=rDVieBXGkaeg8o5O0ZEBygCGaIuhqe4woJZtu4coVKcZQP5PlSMLWr4ojdxwmO7Q+h
-         fk8lV0u7tyaESakWqBMnKCPxb4AEu/wHrGnbpbjlxGHkb5fgIMOHTT8bCm5dt9H7apV9
-         yoI2Nk/QVreNsY6CwUyFau99cp/EqFbxt5pvsnKqvWDQtE/pMy1EqSEu7PaAs3gXsrtw
-         E/EH21x1OVxzczNCZJNVS2SW7SGxCpV1E4z5T/NiYXN0WXeKc6c6BJwm6iDm3NPcVLYr
-         Tlhe2AtUin7YDDY/fSygF6sh2j+5fcv7pn0Y6NniaBsbPgszIw8fwZ5MPXZbLI4BLDoO
-         fTPg==
-X-Gm-Message-State: ACgBeo3PT8JzeJeXcFdyJKM1S/Y87gQd8T6pflBbNf/PXZS4k5eZFp9c
-        q8/smXQaUojTg4jQGpqjpEVvbD9WHDA2v7HgprGXBQ==
-X-Google-Smtp-Source: AA6agR7/aESfD9/NDPsDFtQ7YKYMRNuKLSwT1FUjw+G1bf9VJ00olfdLIYvwBbmvvuSYroc7vvTiDT6ZBY0OsHmp1Qc=
-X-Received: by 2002:a25:9781:0:b0:6a9:561a:c143 with SMTP id
- i1-20020a259781000000b006a9561ac143mr995480ybo.59.1662512309570; Tue, 06 Sep
- 2022 17:58:29 -0700 (PDT)
+        Tue, 6 Sep 2022 20:59:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810B1FD04;
+        Tue,  6 Sep 2022 17:59:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E3B0B81AD5;
+        Wed,  7 Sep 2022 00:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2BC4314A;
+        Wed,  7 Sep 2022 00:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662512373;
+        bh=rRDkYK9iWCXx4wEvEXjdFzrW7V+WU51QfVdxnQR/Up4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cnrRuv/BitCXdq86pumAdk9NrkLBO6C5804p7tNfD3ydvcRYjgKf/u2lJtuHyL4LB
+         7ZmMNoQHTqpsyhqKEYW03c8YLCXXnD408gR/u+93zLkCFVS8ptB5c9wrE+Smuzqcxn
+         yUKsb5//1YpnFQJSbjxvoUlVMMH6FxEvjZGoHiAOoMFh27tG1zbW51W+Ud7bfAtaOd
+         znSf1k98U8FiecoSJaScPrUnTi+LfmLWevi411VPc2nv6wENP8u3EUJvwG9FHagc6H
+         JOrgXafNtKL/Cq1hZE/GkSwVdvFODfDCH9ixAaQ07jV16V2Wt/Yh4Q3Tp5jSqEXJX4
+         8ipWS734KvUbA==
+Received: by mail-ot1-f43.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so9236644oth.8;
+        Tue, 06 Sep 2022 17:59:33 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3IQZ0kdGcpxUlM2BNQMrUX8/uGHd42VQn0CHwA4ZhQST0aggJR
+        qCJw1E0FB1Q2h/aNWEuazoOpRTyyR+Z1QUuWrew=
+X-Google-Smtp-Source: AA6agR4T+5pUb7afC0nbWNUE6t9rpyPvgc4usas9mXHv8gHcqGmB5W7iv8rmSa98jv8Ovc8tvPLbDXQ/sXx4rvotOG8=
+X-Received: by 2002:a05:6830:3482:b0:638:92b7:f09b with SMTP id
+ c2-20020a056830348200b0063892b7f09bmr497235otu.140.1662512372833; Tue, 06 Sep
+ 2022 17:59:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-20-surenb@google.com>
- <YxeiB2la/9fZEzLO@xz-m1.local> <CAJuCfpHkjHAAmKAJH=cxhFmwMawUDQJccwKa8k=xXNZZ1knT7g@mail.gmail.com>
- <YxesBqZ+L+oeQv5e@xz-m1.local>
-In-Reply-To: <YxesBqZ+L+oeQv5e@xz-m1.local>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 6 Sep 2022 17:58:18 -0700
-Message-ID: <CAJuCfpFpOT3KOBCjcnTo9D3AWq_GT9bKNyQ4xcwLJh1UPF6FFA@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND 19/28] mm: disallow do_swap_page to handle page
- faults under VMA lock
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michel Lespinasse <michel@lespinasse.org>,
-        Jerome Glisse <jglisse@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Laurent Dufour <laurent.dufour@fr.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
-        Hugh Dickins <hughd@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Minchan Kim <minchan@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220906035423.634617-1-guoren@kernel.org> <20220906035423.634617-5-guoren@kernel.org>
+ <YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net>
+In-Reply-To: <YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 7 Sep 2022 08:59:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTqVc_CvxT+t4D2Z1Gy_r_nrbdgAGcELFm9tgjOaCyJYg@mail.gmail.com>
+Message-ID: <CAJF2gTTqVc_CvxT+t4D2Z1Gy_r_nrbdgAGcELFm9tgjOaCyJYg@mail.gmail.com>
+Subject: Re: [PATCH V3 4/7] riscv: convert to generic entry
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, bigeasy@linutronix.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 1:22 PM Peter Xu <peterx@redhat.com> wrote:
+On Tue, Sep 6, 2022 at 5:20 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Tue, Sep 06, 2022 at 01:08:10PM -0700, Suren Baghdasaryan wrote:
-> > On Tue, Sep 6, 2022 at 12:39 PM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > On Thu, Sep 01, 2022 at 10:35:07AM -0700, Suren Baghdasaryan wrote:
-> > > > Due to the possibility of do_swap_page dropping mmap_lock, abort fault
-> > > > handling under VMA lock and retry holding mmap_lock. This can be handled
-> > > > more gracefully in the future.
-> > > >
-> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > ---
-> > > >  mm/memory.c | 5 +++++
-> > > >  1 file changed, 5 insertions(+)
-> > > >
-> > > > diff --git a/mm/memory.c b/mm/memory.c
-> > > > index 9ac9944e8c62..29d2f49f922a 100644
-> > > > --- a/mm/memory.c
-> > > > +++ b/mm/memory.c
-> > > > @@ -3738,6 +3738,11 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> > > >       vm_fault_t ret = 0;
-> > > >       void *shadow = NULL;
-> > > >
-> > > > +     if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> > > > +             ret = VM_FAULT_RETRY;
-> > > > +             goto out;
-> > > > +     }
-> > > > +
-> > >
-> > > May want to fail early similarly for handle_userfault() too for similar
-> > > reason.  Thanks,
+> On Mon, Sep 05, 2022 at 11:54:20PM -0400, guoren@kernel.org wrote:
+>
+> > +asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
+> > +{
+> > +     struct pt_regs *old_regs;
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> > +
+> > +     irq_enter_rcu();
+> > +     old_regs = set_irq_regs(regs);
+> > +     handle_arch_irq(regs);
+> > +     set_irq_regs(old_regs);
+> > +     irq_exit_rcu();
+> > +
+> > +     irqentry_exit(regs, state);
+> > +}
+>
+> The above is right in that everything that calls irqentry_enter() should
+> be noinstr; however all the below instances get it wrong:
+>
+> >  #define DO_ERROR_INFO(name, signo, code, str)                                \
+> >  asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
+> >  {                                                                    \
+> > +     irqentry_state_t state = irqentry_enter(regs);                  \
+> >       do_trap_error(regs, signo, code, regs->epc, "Oops - " str);     \
+> > +     irqentry_exit(regs, state);                                     \
+> >  }
 > >
-> > I wasn't aware of a similar issue there. Will have a closer look. Thanks!
+> >  DO_ERROR_INFO(do_trap_unknown,
+> > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
+> >
+> >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
+> >  {
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> >       if (!handle_misaligned_load(regs))
+> >               return;
+> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> >                     "Oops - load address misaligned");
+> > +     irqentry_exit(regs, state);
+> >  }
+> >
+> >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
+> >  {
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> >       if (!handle_misaligned_store(regs))
+> >               return;
+> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> >                     "Oops - store (or AMO) address misaligned");
+> > +     irqentry_exit(regs, state);
+> >  }
+> >  #endif
+> >  DO_ERROR_INFO(do_trap_store_fault,
+> > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
+> >
+> >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
+> >  {
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> > +
+> >  #ifdef CONFIG_KPROBES
+> >       if (kprobe_single_step_handler(regs))
+> >               return;
+> > @@ -185,6 +194,8 @@ asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
+> >               regs->epc += get_break_insn_length(regs->epc);
+> >       else
+> >               die(regs, "Kernel BUG");
+> > +
+> > +     irqentry_exit(regs, state);
+> >  }
+> >  NOKPROBE_SYMBOL(do_trap_break);
 >
-> Sure.
+> > +asmlinkage void do_page_fault(struct pt_regs *regs)
+> > +{
+> > +     irqentry_state_t state = irqentry_enter(regs);
+> > +
+> > +     __do_page_fault(regs);
+> > +
+> > +     irqentry_exit(regs, state);
+> > +}
+> >  NOKPROBE_SYMBOL(do_page_fault);
 >
-> Just in case this would be anything helpful - handle_userfault() will both
-> assert at the entry (mmap_assert_locked) and will in most cases release
-> read lock along the way when waiting for page fault resolutions.
->
-> And userfaultfd should work on anonymous memory for either missing mode or
-> write protect mode.
+> Without noinstr the compiler is free to insert instrumentation (think
+> all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
+> yet ready to run this early in the entry path, for instance it could
+> rely on RCU which isn't on yet, or expect lockdep state.
+I'll add a patch to fix it in the next version. Thx for pointing it out.
 
-Got it. Thanks for the explanation. It definitely helps!
+>
+>
 
->
-> Thanks,
->
-> --
-> Peter Xu
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+
+-- 
+Best Regards
+ Guo Ren

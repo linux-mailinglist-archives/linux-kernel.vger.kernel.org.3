@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AF35B0D8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6425B0D94
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiIGT4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S229980AbiIGT5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiIGTz4 (ORCPT
+        with ESMTP id S229445AbiIGT5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:55:56 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB4EA61CD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:55:53 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id q21so1841149qtp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 12:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=reg182tBPdMyHHqhIyhd0PReinakkrLNe0xqHZC9tHU=;
-        b=HGsl5LOrvfdnuyNEVcB+B1VQp1UuGBIOQoUWByoYPBAOyvlWj9vIrmlIosnh0QOvjp
-         9t1pLdGWzfwvo7PTNeeXZpHQeCZDCMAbxR4j6DpbkpqAtHiJ1boF9wUSCWFLMrBlcaHp
-         YoTv+kHo4THsJ/Mc63JM+YKqeESn3s2WG47rnSxevKm9v0SgRfxj/b/FSTqHN+FVbbdE
-         YRUwQy1C4ktcAsIQk6ZxdocxEK3yR01eWqg2vLczmE6Ww5bfdd1+Dl8taxY2Tf/9XWTX
-         2SLCSM/ki21AbuD+egy3jf01r8hYIK/sKWh+WkDXR3hVVPW6f8vUKxGd138OM1Q+9SRg
-         KRIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=reg182tBPdMyHHqhIyhd0PReinakkrLNe0xqHZC9tHU=;
-        b=Z7vHXhuSLU8zgocktMJf7IiAI6LM530egG8NAFS7KWlZrwzN0XnUjfTgllt7BrIB3v
-         wyj+Xd1lCPNFjHjXT2BcKW7vKLcFkeiauFeuPU70mOfDvNTetxgukSXmTnu4i0OBqRrV
-         cvJh6aT5v+wGGndpHc+FSi7Ojx/uKM6ebLIRZ9WGaKftqB1LIlkptxe+Kl0DPSD0HGfi
-         s81hQEsiTDkqEYI3aFpCulmwUfcnhWoIx6grgLuGMzwdQrbRpj4jJL6Cmj3+9Qnfsro4
-         tcvhRmcDTR0t570xLL5azcwJo45wxg2NgWaPdrii3/AuBLk6Nt+MLLNBQmsuAp730usN
-         7Bzw==
-X-Gm-Message-State: ACgBeo0YLnZci2elQN3dzYX0s8Y86b6nmISBNjQQNWE86DBfLzK/h2Gh
-        cjNO8yNriwPgkpCYWLkobXZfiUoZZIfh9Q==
-X-Google-Smtp-Source: AA6agR71wy1OO/ymcMptPhtEDcay7FQ+pBe7sqv5WOFog+U5XySjMiaLOl4gJ+FO5Lod2IyxAWvAbA==
-X-Received: by 2002:a05:622a:15c7:b0:344:5321:5874 with SMTP id d7-20020a05622a15c700b0034453215874mr4917567qty.506.1662580552067;
-        Wed, 07 Sep 2022 12:55:52 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id m8-20020ac866c8000000b003445d06a622sm12968811qtp.86.2022.09.07.12.55.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 12:55:51 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1oW19K-008kzP-5v;
-        Wed, 07 Sep 2022 16:55:50 -0300
-Date:   Wed, 7 Sep 2022 16:55:50 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lpivarc@redhat.com" <lpivarc@redhat.com>,
-        "Liu, Jingqi" <jingqi.liu@intel.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-Subject: Re: [PATCH] vfio/type1: Unpin zero pages
-Message-ID: <Yxj3Ri8pfqM1SxWe@ziepe.ca>
-References: <166182871735.3518559.8884121293045337358.stgit@omen>
- <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com>
- <YxfX+kpajVY4vWTL@ziepe.ca>
- <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
- <YxiTOyGqXHFkR/DY@ziepe.ca>
- <20220907095552.336c8f34.alex.williamson@redhat.com>
- <YxjJlM5A0OLhaA7K@ziepe.ca>
- <20220907125627.0579e592.alex.williamson@redhat.com>
+        Wed, 7 Sep 2022 15:57:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5DDA2204;
+        Wed,  7 Sep 2022 12:57:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BE7B61A43;
+        Wed,  7 Sep 2022 19:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27A9C433D6;
+        Wed,  7 Sep 2022 19:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662580660;
+        bh=TnY+Y3ebzbfWHSwTLQu3Yoal7MoTYcO8OjpkAcZ1PkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XUUkJb9zVlddJ7b9OoYydbtWSahmi+hxl1X6/K0ymbsu1LPCCyBN2PtuQ3i1rGPWW
+         H9QF4Xsfwe56KjMs1k5cDcR1y0hCWbOWBC8GfT66unf7ZhVGvKk4D13F8DwNmFGFLV
+         l7H6szBuCqqewKB3pyzWUewGg1qJf4ok9QLI4EXHymp/8pWTQbu3SKBTIfxpTBm0FV
+         30m7cbKOuOsAt3g8UfgKweda/L7aO3R8PVkE25t4aLIqDaDYlUzUGEFkh5TtMqChau
+         2fMaeClwvVSV07Ohq0ljRGhRMup8Ye5glz3AWNlphsy+FTEPAXxTPr49VHC6nDDGIb
+         GFJwCzSl2R6wg==
+Date:   Wed, 7 Sep 2022 21:57:36 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-cci: specify SM8450 CCI clocks
+Message-ID: <Yxj3sP6xi7RyCKvP@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+References: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0/dDp7V2egPoGTKs"
 Content-Disposition: inline
-In-Reply-To: <20220907125627.0579e592.alex.williamson@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220901074218.21108-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,48 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 12:56:27PM -0600, Alex Williamson wrote:
 
-> I thought we'd already agreed that we were stuck with locked_vm for
-> type1 and any compatibility mode of type1 due to this.  Native iommufd
-> support can do the right thing since userspace will need to account for
-> various new usage models anyway.
+--0/dDp7V2egPoGTKs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We did, that was for the iommufd situation (which will also hit the
-same zeropage issue, sigh) - this discussion is about fixing a bug in
-vfio and what many consider a bug in GUP.
+On Thu, Sep 01, 2022 at 10:42:18AM +0300, Krzysztof Kozlowski wrote:
+> Document clocks for SM8450 Camera Control Interface I2C controller.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
 
-My point is I'm still not convinced we can really consider these
-limits as ABI because it opens a pandoras box of kernel limitations.
+Applied to for-next, thanks!
 
-> I've raised the issue with David for the zero page accounting, but I
-> don't know what the solution is.  libvirt automatically adds a 1GB
-> fudge factor to the VM locked memory limits to account for things like
-> ROM mappings, or at least the non-zeropage backed portion of those
-> ROMs.  I think that most management tools have adopted similar, so the
-> majority of users shouldn't notice.  However this won't cover all
-> users, so we certainly risk breaking userspace if we introduce hard
-> page accounting of zero pages.
 
-It sounds like things will be fine. 1GB fudge is pretty big.
+--0/dDp7V2egPoGTKs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-For things like this ABI compat is not about absolute compatability in
-the face of any userspace, but a real-world compatibility "does
-something that actually exists break?"
+-----BEGIN PGP SIGNATURE-----
 
-So I would be happier if we had an actual deployed thing that breaks..
-I would be inclined to go with the simple fix and rely on the
-fudge. If someone does come with an actual break then lets do one of
-the work arounds.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY96oACgkQFA3kzBSg
+KbYuGg//YX0JNOT1kilO+XDej6NJxgxJ/yjygJv+iFgDfJLgxVms8jf8WrJc75/B
+ckI3XOmV2fVXay0pzs+Kp4zuYGMkXOvHaHnfdhcjWN9DR7k2ZClc3aosh+fhh5qC
+bRELl7lRgzJnuYH4SkSWFhJZNMQaxqlq9AmxSqo1ajg7bkc9wMg0q/9KIv5ZXeAU
+atw6QDhv5+JJo1v3gWqhkrSqWGxZG0pdLc5Uddd5ENLYCDPQgfAb8ySWjc7TcohR
+s7X7tw5/jJARgcjZE99+a5zsFbZlaw/d9vXGV5HJLWTEtwSeVR33zhYAKoQFJlwQ
+A02yy86QY6pj8jiCBq6jpdX1puEKnKRjuEQe3Pdr23G+fE3KCSUvl8wCdDCtFTGa
+foKO4GHIE8yQBEyCzYdik8P13/8XeCfyw95dvVOQeJEZV79Q0lYX4aEppeaMYLUV
+0HNvWVUJ1VZ1Wn0ibzTDBcJVPbGxyTPNM8CK81xRENGvgU/eesZgoevJmCsFtd6K
+4vNL3Uz7S/NWnyQRtQeGszPKunqrgahZNl4kXSR9s3b/TfPOlcYYafn1d8vqTrwR
+IieGsX91cKv0xKplG6T4f26tltoG/w7m5SvUByv9/1V1xSmXlhaXdcF7fJmwOknn
+x6Uy7OxPhH7yHp/c/y0Zc23tPVzIh/Ks+GTFmHlULMJhaTk4/jI=
+=3pQC
+-----END PGP SIGNATURE-----
 
-Given the whole thing is obstensibly for security it is better to keep
-it simple and sane then to poke it full of holes.
-
-> module parameter defined limit.  We might also consider whether we
-> could just ignore zero page mappings, maybe with a optional "strict"
-> mode module option to generate an errno on such mappings.  Thanks,
-
-Once GUP is fixed vfio won't see the zero pages anymore :( That really
-limits the choices for a work around :(
-
-Jason 
+--0/dDp7V2egPoGTKs--

@@ -2,61 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCAD5AFB6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D5B5AFB6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiIGEvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S229658AbiIGEvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiIGEu6 (ORCPT
+        with ESMTP id S229625AbiIGEvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 00:50:58 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36E98035E;
-        Tue,  6 Sep 2022 21:50:57 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-127f5411b9cso1967622fac.4;
-        Tue, 06 Sep 2022 21:50:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+hb4KiQ5kfoaXxVbkb/vKbUjz/tUAwb2RSgxrzzGgOI=;
-        b=R0g1TvTqxIiWJ1L9zqRlL2CbuOiWD/3jhmcuaB75dPPtqFyPWAt3aNnUqQWbCs/kls
-         Tfo2Es4ibUxKq+jSyHRLXJcz8gWhfCINts/QoQ8KlRRNtLEtFVj9JV5V2Y8e5nFslR5I
-         gs4oSyEsCmQcqo1eYMQ4LsgOM5Kfvk+Tkuj4I408eg2pMI7HPW6BpQE+VBt39P6+dNyM
-         QOrYcN1vSkX3zqjglWyJGF1Mr6rtDpUkSHtIyuU4R6ia/n05VKQqGdhC2YwIRISs309p
-         H/xcB+7Fglz9lHo5p7M+CyI3CdKeFBEmPt1YB8KQRoNpNbfgWRrH+54b46JU97vh4i9K
-         NoFA==
-X-Gm-Message-State: ACgBeo2GAK9F0bTJ60uiRm0H5S/Atzq/NVtHJFjmZnDOqLNK6xfgV1R2
-        S29PssvZZLMqKMGq8ijEBZchLHsqajg0wApaKyc=
-X-Google-Smtp-Source: AA6agR4cN7Bn96Itu880UgqZckUA6cvOHFzwwwg/F4CzSy5m7/48AwLjjKxxpz1Fxk/5S20w83aNRHkmXt40eRHE/Nk=
-X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
- em4-20020a0568705b8400b0010cd1fa2f52mr890078oab.92.1662526256949; Tue, 06 Sep
- 2022 21:50:56 -0700 (PDT)
+        Wed, 7 Sep 2022 00:51:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A3A80512
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:51:18 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2874mt7w015380;
+        Wed, 7 Sep 2022 04:51:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=vndKWlxQYj9qgYpLvjZBBlckEdMAz+1Rb02b7fDNByo=;
+ b=YpjTPO1iwLwZIEPjdrEcEpnFUywihEfLH0TIvt/X9Gtzr5fXyITovyjn+dzOscCsRFl8
+ JSaL9zlGhpoNMI4i6Y6iwWb6k/RYi7s+8HhiR8rUbK59/MZ4lBWSyPJcJ/DJQshIG1oq
+ 3MA1OnjU+OK2oKUhXxCMguTGL7gajBt0nlYiPY1a0rdzCQ1OPcHB/KllCRl7zTCCMku0
+ hNHvhvMsEcptrWLx3coGc8HTn7F1Vw3dPHIBY4ahyuDZwFqRo1htuM0SH5W+eiTHgw8V
+ G+0i0Uo3Bh76Std0u27kXzCIrv20z9MlWokzPZ1HlxsdtrCwvaLes+d6dsVM3HZ0Q0ig 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jemkjr0u1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 04:51:01 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2874nf0l018976;
+        Wed, 7 Sep 2022 04:51:01 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jemkjr0td-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 04:51:01 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2874a9OI029407;
+        Wed, 7 Sep 2022 04:50:59 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3jbxj8ud2y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 04:50:59 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2874ouZP38928790
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Sep 2022 04:50:56 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D02FB5204E;
+        Wed,  7 Sep 2022 04:50:56 +0000 (GMT)
+Received: from [9.43.98.238] (unknown [9.43.98.238])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E3DDD52051;
+        Wed,  7 Sep 2022 04:50:53 +0000 (GMT)
+Message-ID: <92fe7b10-cbcf-6fdb-af23-4cb2f314e612@linux.ibm.com>
+Date:   Wed, 7 Sep 2022 10:20:52 +0530
 MIME-Version: 1.0
-References: <20220831124041.219925-1-jolsa@kernel.org> <CAP-5=fX-=ph8g3VKbQXSRT8SiOZ3XqQLd3T9-ZTNZ5L+ye5L-A@mail.gmail.com>
- <Yw+LCN2cX9peweWV@kernel.org> <3aa4c863-24cc-9fdf-9960-2b1983b3322b@linux.intel.com>
-In-Reply-To: <3aa4c863-24cc-9fdf-9960-2b1983b3322b@linux.intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 6 Sep 2022 21:50:47 -0700
-Message-ID: <CAM9d7chpoqB18r3TXPuTAA4_4TsCYq+p+j90vKspv++X1RBU+w@mail.gmail.com>
-Subject: Re: [PATCH] perf script: Skip dummy event attr check
-To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Hongtao Yu <hoy@fb.com>, lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        "Liang, Kan" <kan.liang@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Peter Xu <peterx@redhat.com>, david@redhat.com,
+        kirill.shutemov@linux.intel.com, jhubbard@nvidia.com,
+        jgg@nvidia.com, hughd@google.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20220901222707.477402-1-shy828301@gmail.com>
+ <YxE/vuQlWJCJMuG2@xz-m1.local>
+ <CAHbLzkqjZ_UhUbJ_f9Br7WCAgQvjrm5bMPRsKYvaFc2bzSuzrw@mail.gmail.com>
+ <YxIofPiI8jvGzcjC@xz-m1.local>
+ <CAHbLzkqGdnwY4P8jKQR0ojm6QV6b3dBi5pwrC1UJ4dqi3EqS4w@mail.gmail.com>
+ <87ilm2jj4t.fsf@linux.ibm.com>
+ <CAHbLzkohKvOFyfsVr=ry8Goi6kgxh9ig84FX0+pY4qzL4i0xWg@mail.gmail.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <CAHbLzkohKvOFyfsVr=ry8Goi6kgxh9ig84FX0+pY4qzL4i0xWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: R6no5A1uwDxNieytBvb7dfUyKxJpvrQX
+X-Proofpoint-ORIG-GUID: FtC2oqDJ3IeOedeIl4dVhqvDYT8dTLy5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_02,2022-09-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ adultscore=0 phishscore=0 suspectscore=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 mlxlogscore=759 mlxscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070017
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,111 +100,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 9/7/22 12:37 AM, Yang Shi wrote:
+> On Mon, Sep 5, 2022 at 1:56 AM Aneesh Kumar K.V
+> <aneesh.kumar@linux.ibm.com> wrote:
+>>
+>> Yang Shi <shy828301@gmail.com> writes:
+>>
+>>>
+>>> On Fri, Sep 2, 2022 at 9:00 AM Peter Xu <peterx@redhat.com> wrote:
+>>>>
+>>>> On Thu, Sep 01, 2022 at 04:50:45PM -0700, Yang Shi wrote:
+>>>>> On Thu, Sep 1, 2022 at 4:26 PM Peter Xu <peterx@redhat.com> wrote:
+>>>>>>
+>>>>>> Hi, Yang,
+>>>>>>
+>>>>>> On Thu, Sep 01, 2022 at 03:27:07PM -0700, Yang Shi wrote:
+>>>>>>> Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
+>>>>>>> introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
+>>>>>>> sufficient to handle concurrent GUP-fast in all cases, it only handles
+>>>>>>> traditional IPI-based GUP-fast correctly.
+>>>>>>
+>>>>>> If TLB flush (or, IPI broadcasts) used to work to protect against gup-fast,
+>>>>>> I'm kind of confused why it's not sufficient even if with RCU gup?  Isn't
+>>>>>> that'll keep working as long as interrupt disabled (which current fast-gup
+>>>>>> will still do)?
+>>>>>
+>>>>> Actually the wording was copied from David's commit log for his
+>>>>> PageAnonExclusive fix. My understanding is the IPI broadcast still
+>>>>> works, but it may not be supported by all architectures and not
+>>>>> preferred anymore. So we should avoid depending on IPI broadcast IIUC.
+>>>>>
+>>>>>>
+>>>>>> IIUC the issue is you suspect not all archs correctly implemented
+>>>>>> pmdp_collapse_flush(), or am I wrong?
+>>>>>
+>>>>> This is a possible fix, please see below for details.
+>>>>>
+>>>>>>
+>>>>>>> On architectures that send
+>>>>>>> an IPI broadcast on TLB flush, it works as expected.  But on the
+>>>>>>> architectures that do not use IPI to broadcast TLB flush, it may have
+>>>>>>> the below race:
+>>>>>>>
+>>>>>>>    CPU A                                          CPU B
+>>>>>>> THP collapse                                     fast GUP
+>>>>>>>                                               gup_pmd_range() <-- see valid pmd
+>>>>>>>                                                   gup_pte_range() <-- work on pte
+>>>>>>> pmdp_collapse_flush() <-- clear pmd and flush
+>>>>>>> __collapse_huge_page_isolate()
+>>>>>>>     check page pinned <-- before GUP bump refcount
+>>>>>>>                                                       pin the page
+>>>>>>>                                                       check PTE <-- no change
+>>>>>>> __collapse_huge_page_copy()
+>>>>>>>     copy data to huge page
+>>>>>>>     ptep_clear()
+>>>>>>> install huge pmd for the huge page
+>>>>>>>                                                       return the stale page
+>>>>>>> discard the stale page
+>>>>>>>
+>>>>>>> The race could be fixed by checking whether PMD is changed or not after
+>>>>>>> taking the page pin in fast GUP, just like what it does for PTE.  If the
+>>>>>>> PMD is changed it means there may be parallel THP collapse, so GUP
+>>>>>>> should back off.
+>>>>>>
+>>>>>> Could the race also be fixed by impl pmdp_collapse_flush() correctly for
+>>>>>> the archs that are missing? Do you know which arch(s) is broken with it?
+>>>>>
+>>>>> Yes, and this was suggested by me in the first place, but per the
+>>>>> suggestion from John and David, this is not the preferred way. I think
+>>>>> it is because:
+>>>>>
+>>>>> Firstly, using IPI to serialize against fast GUP is not recommended
+>>>>> anymore since fast GUP does check PTE then back off so we should avoid
+>>>>> it.
+>>>>> Secondly, if checking PMD then backing off could solve the problem,
+>>>>> why do we still need broadcast IPI? It doesn't sound performant.
+>>>>>
+>>>>>>
+>>>>>> It's just not clear to me whether this patch is an optimization or a fix,
+>>>>>> if it's a fix whether the IPI broadcast in ppc pmdp_collapse_flush() would
+>>>>>> still be needed.
+>>>>>
+>>>>> It is a fix and the fix will make IPI broadcast not useful anymore.
+>>>>
+>>>> How about another patch to remove the ppc impl too?  Then it can be a two
+>>>> patches series.
+>>>
+>>> BTW, I don't think we could remove the ppc implementation since it is
+>>> different from the generic pmdp_collapse_flush(), particularly for the
+>>> hash part IIUC.
+>>>
+>>> The generic version calls flush_tlb_range() -> hash__flush_tlb_range()
+>>> for hash, but the hash call is actually no-op. The ppc version calls
+>>> hash__pmdp_collapse_flush() -> flush_tlb_pmd_range(), which does
+>>> something useful.
+>>>
+>>
+>> We should actually rename flush_tlb_pmd_range(). It actually flush the
+>> hash page table entries.
+>>
+>> I will do the below patch for ppc64 to clarify this better
+> 
+> Thanks, Aneesh. It looks more readable. A follow-up question, I think
+> we could remove serialize_against_pte_lookup(), which just issues IPI
+> broadcast to run a dummy function. This IPI should not be needed
+> anymore with my patch. Of course, we need to keep the memory barrier.
+> 
 
-On Tue, Sep 6, 2022 at 7:49 PM Xing Zhengjun
-<zhengjun.xing@linux.intel.com> wrote:
->
-> Hi,
->
-> On 9/1/2022 12:23 AM, Arnaldo Carvalho de Melo wrote:
-> > Em Wed, Aug 31, 2022 at 09:02:46AM -0700, Ian Rogers escreveu:
-> >> On Wed, Aug 31, 2022 at 5:40 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >>>
-> >>> Hongtao Yu reported problem when displaying uregs in perf script
-> >>> for system wide perf.data:
-> >>>
-> >>>    # perf script -F uregs | head -10
-> >>>    Samples for 'dummy:HG' event do not have UREGS attribute set. Cannot print 'uregs' field.
-> >>>
-> >>> The problem is the extra dummy event added for system wide,
-> >>> which does not have proper sample_type setup.
-> >>>
-> >>> Skipping attr check completely for dummy event as suggested
-> >>> by Namhyung, because it does not have any samples anyway.
-> >>>
-> >>> Reported-by: Hongtao Yu <hoy@fb.com>
-> >>> Suggested-by: Namhyung Kim <namhyung@kernel.org>
-> >>> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> >>
-> >> Acked-by: Ian Rogers <irogers@google.com>
-> >
-> > Thanks, applied to perf/urgent.
-> >
-> > - Arnaldo
->
-> I have met a similar issue on hybrid systems such as ADL, I apply the
-> patch, and it works OK for the normal mode.
->   # ./perf record  --intr-regs=di,r8,dx,cx -e
-> br_inst_retired.near_call:p -c 1000 --per-thread true
-> [ perf record: Woken up 1 times to write data ]
-> [ perf record: Captured and wrote 0.024 MB perf.data (25 samples) ]
->
-> # ./perf script -F iregs |head -5
->   ABI:2    CX:0xffff90e19d024ed8    DX:0x1    DI:0xffff90e19d024ed8
-> R8:0xffffba5e437e7b30
->   ABI:2    CX:0x7f5239783000    DX:0x80000000    DI:0xffff90e1801eea00
->   R8:0x71
->   ABI:2    CX:0x40    DX:0x60    DI:0xffffffff9fde5ab8    R8:0x40
->   ABI:2    CX:0x0    DX:0xffffffffffffffff    DI:0xffff90e1877408e8
-> R8:0x1
->   ABI:2    CX:0xcc0    DX:0x1    DI:0xffff90e187d17c60    R8:0x40
->
-> But the issue still happened when running the test in the pipe mode. In
-> the pipe mode, it calls process_attr() which still checks the attr for
-> the dummy event, so the issue happened.
->
->   # ./perf record -o - --intr-regs=di,r8,dx,cx -e
-> br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf
-> script -F iregs |head -5
-> Samples for 'dummy:HG' event do not have IREGS attribute set. Cannot
-> print 'iregs' field.
-> 0x120 [0x90]: failed to process type: 64
->
-> I have one test patch which can fix the pipe mode issue.
->
->   ./perf record -o - --intr-regs=di,r8,dx,cx -e
-> br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf
-> script -F iregs |head -5
->   ABI:2    CX:0xffff90e18119e278    DX:0x0    DI:0xffff90e18119f858
-> R8:0xffff90e18119e278
->   ABI:2    CX:0x0    DX:0x1    DI:0xfffffa2844a91580    R8:0x402
->   ABI:2    CX:0x0    DX:0x0    DI:0x100cca    R8:0x0
->   ABI:2    CX:0x0    DX:0x0    DI:0xffffffff9e997ca5    R8:0x0
->   ABI:2    CX:0x113ce8000    DX:0xffff90e198f46600
-> DI:0xffff90e189de8000    R8:0x290
->
->
-> Fixes: b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems
-> to collect metadata records")
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> ---
->   tools/perf/builtin-script.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 9152e3e45b69..2d863cdb19fe 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -2429,6 +2429,8 @@ static int process_attr(struct perf_tool *tool,
-> union perf_event *event,
->          }
->
->          if (evsel->core.attr.sample_type) {
-> +               if (evsel__is_dummy_event(evsel))
-> +                       return 0;
 
-Maybe we can move this into evsel__check_attr().
+For radix translation yes. For hash we still need that. W.r.t memory barrier,
+radix do use radix__flush_tlb_collapsed_pmd() which does a tlb invalidate.
+IIUC that will enfocre the required memory barrier there. So you should be able
+to just remove 
 
-Thanks,
-Namhyung
+modified   arch/powerpc/mm/book3s64/radix_pgtable.c
+@@ -937,15 +937,6 @@ pmd_t radix__pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long addre
+ 	pmd = *pmdp;
+ 	pmd_clear(pmdp);
+ 
+-	/*
+-	 * pmdp collapse_flush need to ensure that there are no parallel gup
+-	 * walk after this call. This is needed so that we can have stable
+-	 * page ref count when collapsing a page. We don't allow a collapse page
+-	 * if we have gup taken on the page. We can ensure that by sending IPI
+-	 * because gup walk happens with IRQ disabled.
+-	 */
+-	serialize_against_pte_lookup(vma->vm_mm);
+-
+ 	radix__flush_tlb_collapsed_pmd(vma->vm_mm, address);
+ 
+ 	return pmd;
 
+in your patch. This will also consolidate all the related changes together.
 
->                  err = evsel__check_attr(evsel, scr->session);
->                  if (err)
->                          return err;
-> --
-> 2.25.1
->
-> --
-> Zhengjun Xing
+>>
+>> diff --git a/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h b/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h
+>> index 8b762f282190..fd30fa20c392 100644
+>> --- a/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h
+>> +++ b/arch/powerpc/include/asm/book3s/64/tlbflush-hash.h
+>> @@ -112,13 +112,12 @@ static inline void hash__flush_tlb_kernel_range(unsigned long start,
+>>
+>>  struct mmu_gather;
+>>  extern void hash__tlb_flush(struct mmu_gather *tlb);
+>> -void flush_tlb_pmd_range(struct mm_struct *mm, pmd_t *pmd, unsigned long addr);
+>>
+>>  #ifdef CONFIG_PPC_64S_HASH_MMU
+>>  /* Private function for use by PCI IO mapping code */
+>>  extern void __flush_hash_table_range(unsigned long start, unsigned long end);
+>> -extern void flush_tlb_pmd_range(struct mm_struct *mm, pmd_t *pmd,
+>> -                               unsigned long addr);
+>> +extern void flush_hash_table_pmd_range(struct mm_struct *mm, pmd_t *pmd,
+>> +                                      unsigned long addr);
+>>  #else
+>>  static inline void __flush_hash_table_range(unsigned long start, unsigned long end) { }
+>>  #endif
+>> diff --git a/arch/powerpc/mm/book3s64/hash_pgtable.c b/arch/powerpc/mm/book3s64/hash_pgtable.c
+>> index ae008b9df0e6..f30131933a01 100644
+>> --- a/arch/powerpc/mm/book3s64/hash_pgtable.c
+>> +++ b/arch/powerpc/mm/book3s64/hash_pgtable.c
+>> @@ -256,7 +256,7 @@ pmd_t hash__pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long addres
+>>          * the __collapse_huge_page_copy can result in copying
+>>          * the old content.
+>>          */
+>> -       flush_tlb_pmd_range(vma->vm_mm, &pmd, address);
+>> +       flush_hash_table_pmd_range(vma->vm_mm, &pmd, address);
+>>         return pmd;
+>>  }
+>>
+>> diff --git a/arch/powerpc/mm/book3s64/hash_tlb.c b/arch/powerpc/mm/book3s64/hash_tlb.c
+>> index eb0bccaf221e..a64ea0a7ef96 100644
+>> --- a/arch/powerpc/mm/book3s64/hash_tlb.c
+>> +++ b/arch/powerpc/mm/book3s64/hash_tlb.c
+>> @@ -221,7 +221,7 @@ void __flush_hash_table_range(unsigned long start, unsigned long end)
+>>         local_irq_restore(flags);
+>>  }
+>>
+>> -void flush_tlb_pmd_range(struct mm_struct *mm, pmd_t *pmd, unsigned long addr)
+>> +void flush_hash_table_pmd_range(struct mm_struct *mm, pmd_t *pmd, unsigned long addr)
+>>  {
+>>         pte_t *pte;
+>>         pte_t *start_pte;
+>>
+

@@ -2,150 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB7C5B081A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC6D5B0819
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiIGPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S230335AbiIGPKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiIGPKT (ORCPT
+        with ESMTP id S229740AbiIGPKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:10:19 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF67B30F7D;
-        Wed,  7 Sep 2022 08:10:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MN5Bs5Dljz9xHvx;
-        Wed,  7 Sep 2022 23:04:37 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBHw10qtBhjIYssAA--.26582S2;
-        Wed, 07 Sep 2022 16:09:42 +0100 (CET)
-Message-ID: <d447540b5adce25efaa29ef1bce001f2bc0a2d12.camel@huaweicloud.com>
-Subject: Re: [PATCH v16 00/12] bpf: Add kfuncs for PKCS#7 signature
- verification
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 07 Sep 2022 17:09:29 +0200
-In-Reply-To: <CAP01T764z59qczE37=jf-zPkS2zPuzDyCjdngBDnG-GOovG-rQ@mail.gmail.com>
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
-         <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
-         <b846cedb14235db6950a55e7eec2eff9e9ab56ec.camel@huaweicloud.com>
-         <57cedc7a3008248b5147d03e2f4bd0b33ad9a146.camel@huaweicloud.com>
-         <CAP01T764z59qczE37=jf-zPkS2zPuzDyCjdngBDnG-GOovG-rQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 7 Sep 2022 11:10:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B273C8F8;
+        Wed,  7 Sep 2022 08:10:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E65ACB81DEE;
+        Wed,  7 Sep 2022 15:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A3C75C433D7;
+        Wed,  7 Sep 2022 15:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662563414;
+        bh=y3vev92uf2aRQIN78o3qvAAHssrNc8oo+5GpspII1uE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oZKpsaGYEPHeJG3FzASD+1KmAIbVAi17hzb96TaAbfeqP8r7npOU6jb3D2n7ByG6q
+         QV3OmbTcTrIHgiOLc2Q464l9zF975+h60jp7dLNt7V8xHTPeW5nSofu99N2r1dtS/n
+         U3vkIIYPx2COAwCF3gmxCJPtUpRo4Z3BDTO+0/X5glEwVBbttNKtKt2jou2lAISmtD
+         MV94lnR/Gm6ob+FwPx00L9nxU6YGOTeppgX3lJ7//cAui1VLa5zMJOeTDpVMRkKxHG
+         6483CDdL+xLhSmUGHboJ6gZmczFPxjps7oYEFPDv3ah9rbvEwNvg9zaTU3tDlTcoIq
+         yDnA8pFon9w5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 80102C73FE7;
+        Wed,  7 Sep 2022 15:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwBHw10qtBhjIYssAA--.26582S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw1fGryUJrWxGF1kuw1xZrb_yoW5Xr1UpF
-        W8AFy5KF4ktryUCw4xKry5uFy8t3y7JF12qrn8t34UZas0vr1FkFWIyr43uFWq9r1kCw1a
-        v39IqFy7Xr1DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj365RQAAs9
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v5] net/smc: Fix possible access to freed memory in link
+ clear
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166256341452.32760.12403709624294959610.git-patchwork-notify@kernel.org>
+Date:   Wed, 07 Sep 2022 15:10:14 +0000
+References: <20220906130139.830513-1-liuyacan@corp.netease.com>
+In-Reply-To: <20220906130139.830513-1-liuyacan@corp.netease.com>
+To:     None <liuyacan@corp.netease.com>
+Cc:     wenjia@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kgraul@linux.ibm.com, kuba@kernel.org, tonylu@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        ubraun@linux.vnet.ibm.com, wintera@linux.ibm.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-07 at 16:57 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Wed, 7 Sept 2022 at 16:49, Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Tue, 2022-09-06 at 09:35 +0200, Roberto Sassu wrote:
-> > > On Mon, 2022-09-05 at 21:26 +0200, Kumar Kartikeya Dwivedi wrote:
-> > > > On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
-> > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > 
-> > > > > One of the desirable features in security is the ability to
-> > > > > restrict import
-> > > > > of data to a given system based on data authenticity. If data
-> > > > > import can be
-> > > > > restricted, it would be possible to enforce a system-wide
-> > > > > policy
-> > > > > based on
-> > > > > the signing keys the system owner trusts.
-> > > > > 
-> > > > > This feature is widely used in the kernel. For example, if
-> > > > > the
-> > > > > restriction
-> > > > > is enabled, kernel modules can be plugged in only if they are
-> > > > > signed with a
-> > > > > key whose public part is in the primary or secondary keyring.
-> > > > > 
-> > > > > For eBPF, it can be useful as well. For example, it might be
-> > > > > useful
-> > > > > to
-> > > > > authenticate data an eBPF program makes security decisions
-> > > > > on.
-> > > > > 
-> > > > > [...]
-> > > > 
-> > > > CI is crashing with NULL deref for test_progs-no_alu32 with
-> > > > llvm-
-> > > > 16,
-> > > > but I don't think the problem is in this series. This is most
-> > > > likely
-> > > > unrelated to BPF, as the crash happens inside
-> > > > kernel/time/tick-sched.c:tick_nohz_restart_sched_tick.
-> > > > 
-> > > > This was the same case in
-> > > > https://lore.kernel.org/bpf/CAP01T74steDfP6O8QOshoto3e3RnHhKtAeTbnrPBZS3YJXjvbA@mail.gmail.com.
-> > > > 
-> > > > So,
-> > > > https://github.com/kernel-patches/bpf/runs/8194263557?check_suite_focus=true
-> > > > and
-> > > > https://github.com/kernel-patches/bpf/runs/7982907380?check_suite_focus=true
-> > > > 
-> > > > look similar to me, and may not be related to BPF. They only
-> > > > trigger
-> > > > during runs compiled using LLVM 16, so maybe some compiler
-> > > > transformation is surfacing the problem?
-> > > 
-> > > Yes, I saw that too. Not sure what the cause could be.
-> > > 
-> > 
-> > Another occurrence, this time with gcc:
-> > 
-> > https://github.com/robertosassu/vmtest/runs/8230071814?check_suite_focus=true
-> > 
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Tue,  6 Sep 2022 21:01:39 +0800 you wrote:
+> From: Yacan Liu <liuyacan@corp.netease.com>
 > 
-> ... and it seems like this run does not even have your patches,
-> right?
+> After modifying the QP to the Error state, all RX WR would be completed
+> with WC in IB_WC_WR_FLUSH_ERR status. Current implementation does not
+> wait for it is done, but destroy the QP and free the link group directly.
+> So there is a risk that accessing the freed memory in tasklet context.
 > 
+> [...]
 
-Uhm, the kernel patches are there. The tests except the verifier ones
-weren't successfuly applied, probably due to the deny list.
+Here is the summary with links:
+  - [net,v5] net/smc: Fix possible access to freed memory in link clear
+    https://git.kernel.org/netdev/net/c/e9b1a4f867ae
 
-One thing in common with the failures seems when the panic happens,
-when test_progs reaches verif_twfw. I will try to execute this and
-earlier tests to reproduce the panic locally.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Roberto
 

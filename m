@@ -2,103 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69B55AFF92
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D21C5AFF98
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiIGIux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S229504AbiIGIva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiIGIup (ORCPT
+        with ESMTP id S229514AbiIGIv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:50:45 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB99D40561
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:50:43 -0700 (PDT)
-Received: from nazgul.tnic (unknown [84.201.196.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 163A41EC04F0;
-        Wed,  7 Sep 2022 10:50:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1662540638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Xp7hEi4p44/YaMgw6I5ghs8SKRBZzu64Qfp4lEGDVUE=;
-        b=rdnbgqVqTpHwwG1pYwF2zHuScR2Z1tHcze6vuIuRCEbTr5UMuW4JmyssZgyMjlWc/uT4lw
-        rBKsLyw3Xhj3Y5hKJqKhjqyj7eRxbGSH3pmSaHEDNGosWXgdYG5zf8cYf1EO45r5pNTO7T
-        ylGrelCoW526O3cMffELufeIKytaqIs=
-Date:   Wed, 7 Sep 2022 10:50:47 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to
- evaluate constant expressions
-Message-ID: <YxhbXE0lWtyNtRHh@nazgul.tnic>
-References: <YwT+5GGCOKoTjfQZ@zn.tnic>
- <CAKwvOdnc-Js8x4sv0j23crtYP73sRkNexom5ydm=r=8rYgc_5Q@mail.gmail.com>
- <YwUR35I7+5JbLvMM@zn.tnic>
- <CAMZ6Rq+-Ld41cXt+Qy3a7nkQrDp3RK-BJYW0j=HCyKH-x9S3tw@mail.gmail.com>
- <YwXkuW3rSYY7ZJT+@zn.tnic>
- <CAMZ6RqLugOnskOpyUS6OjdcdnwoXz-E8Bsw2qNaabDPYJ=139A@mail.gmail.com>
- <YwYmpK40ju5WUlVZ@zn.tnic>
- <CAMZ6RqJSdbbpFw7iZBqmADY0cAhjzFkpqs+VWCfFM_P0P-wH6w@mail.gmail.com>
- <YxgY2MBmBIkBsdlu@nazgul.tnic>
- <CAMZ6Rq+Uo4r9DXsOTgEhNEv7wWkHjBnU0498+1++qaD+4WCPKw@mail.gmail.com>
+        Wed, 7 Sep 2022 04:51:27 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDA988DCB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:51:25 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r4so18638896edi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 01:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=sMwf+4Qa0oDcAfmEKyOzVnlT9knkPpFo0fLzfGKsyJg=;
+        b=5rkqGiUY61CvaVbFuB7J9cW4wMJAqWUpU9RdlvXI3JIEw+3ZO7D1AmvN1YtVDfdsvl
+         8N25CQ83Ind7Y0ExV/aT2IxsgTh9r/Dwe0pFKdG5rl5jKonJlq3aYysyDNWLcYQ0ah3M
+         a+Tq94K7AdY93p1kNUeu8o3cYhxvXZHZSoiHoVpcLwzmjLVYGlslZQXEXrbp2wZX+doC
+         Ay/iHCSLaKsCpgdc2N0WDagRvVterDhQje2oN2BaGHrZH5mXgl2sPh6zPJIXkb6wErtg
+         ONDufTf0g5U2LyROr5sOd8ZfmHnxHn1fNdzNKEr7/+w2ERrK3qo4y5mNFPoruSy4z6+u
+         mxaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=sMwf+4Qa0oDcAfmEKyOzVnlT9knkPpFo0fLzfGKsyJg=;
+        b=fxzCxx+UQWiHT2SxupMnjuLQs5AVK0OMSWLdlBbI9mHjJFgkhaSjXULUHGKCeIthyX
+         7FefPT+cdkueK056abQvJAmmBBt7+oVvi3NzGCmfuJ+b50uB5iOwpXNKFYxtx7+cujYJ
+         CQLY5LRysRqE4JVgBcDZ1Yj/ZKkyA5U+sq9W85ECyMw69TFI2kQOln1mrYuGFaxyDBr7
+         nWfnIjpyt6sFWpzpF9cgrLSDcWPi0aRFpPudKBJz115VKk9w2abetKnKGMbepvJfTl2q
+         XTAOdcMgJdeGHyoI60KeAM78k3MQsEdcFHXact+nVYG81JTdGpwOFYFRxyUg2j6ly11z
+         QjJg==
+X-Gm-Message-State: ACgBeo3l42P42ejgte+8VHUqdPOPL6tuz1dvnpzPFj7vmcsy1fIDIkL3
+        7nHtW7NFj8O4eFsj+/PRtSZV1w==
+X-Google-Smtp-Source: AA6agR5oWNRcBXhwwCNsaXplqSNZ4pMAjVttS+0vtmNfaUNTs9zO4uCMcJjtIb+kzZwvt57HMP0YDg==
+X-Received: by 2002:aa7:dd0a:0:b0:44e:a27b:fec with SMTP id i10-20020aa7dd0a000000b0044ea27b0fecmr2184631edv.168.1662540683593;
+        Wed, 07 Sep 2022 01:51:23 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:ef98:1cae:6a14:a74f? ([2a02:578:8593:1200:ef98:1cae:6a14:a74f])
+        by smtp.gmail.com with ESMTPSA id l18-20020a1709063d3200b00722e50dab2csm8007228ejf.109.2022.09.07.01.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 01:51:23 -0700 (PDT)
+Message-ID: <873298fe-7fc2-4417-2852-5180f81f94aa@tessares.net>
+Date:   Wed, 7 Sep 2022 10:51:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+Uo4r9DXsOTgEhNEv7wWkHjBnU0498+1++qaD+4WCPKw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH net v2] net: mptcp: fix unreleased socket in accept queue
+Content-Language: en-GB
+To:     menglong8.dong@gmail.com, pabeni@redhat.com
+Cc:     mathew.j.martineau@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, fw@strlen.de,
+        peter.krystad@linux.intel.com, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>
+References: <20220907083304.605526-1-imagedong@tencent.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220907083304.605526-1-imagedong@tencent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 02:35:41PM +0900, Vincent MAILHOL wrote:
-> I rephrased the beginning of the commit message as below:
-> 
-> 
-> If x is not 0, __ffs(x) is equivalent to:
->   (unsigned long)__builtin_ctzl(x)
-> And if x is not ~0UL, ffz(x) is equivalent to:
->   (unsigned long)__builtin_ctzl(~x)
-> Because __builting_ctzl() returns an int, a cast to (unsigned long) is
-> necessary to avoid potential warnings on implicit casts.
-> 
-> Concerning the edge cases, __builtin_ctzl(0) is always undefined,
-> whereas __ffs(0) and ffz(~0UL) may or may not be defined, depending on
-> the processor. Regardless, for both functions, developers are asked to
-> check against 0 or ~0UL so replacing __ffs() or ffz() by
-> __builting_ctzl() is safe.
-> 
-> 
-> 
-> Does this solve the issue?
+Hi Menglong,
 
-Yes, that sounds better.
+On 07/09/2022 10:33, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> The mptcp socket and its subflow sockets in accept queue can't be
+> released after the process exit.
+> 
+> While the release of a mptcp socket in listening state, the
+> corresponding tcp socket will be released too. Meanwhile, the tcp
+> socket in the unaccept queue will be released too. However, only init
+> subflow is in the unaccept queue, and the joined subflow is not in the
+> unaccept queue, which makes the joined subflow won't be released, and
+> therefore the corresponding unaccepted mptcp socket will not be released
+> to.
 
-Thx.
+Thank you for the patch!
 
+(...)
+
+> ---
+>  net/mptcp/protocol.c | 13 +++++++++----
+>  net/mptcp/subflow.c  | 33 ++++++++-------------------------
+>  2 files changed, 17 insertions(+), 29 deletions(-)
+> 
+> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+> index d398f3810662..fe6b7fbb145c 100644
+> --- a/net/mptcp/protocol.c
+> +++ b/net/mptcp/protocol.c
+> @@ -2796,13 +2796,12 @@ static void __mptcp_destroy_sock(struct sock *sk)
+>  	sock_put(sk);
+>  }
+>  
+> -static void mptcp_close(struct sock *sk, long timeout)
+> +void mptcp_close_nolock(struct sock *sk, long timeout)
+
+I didn't look at it into details but like the previous previous, I don't
+think this one compiles without errors: you define this (non static)
+function here in protocol.c but you don't "expose" it in protocol.h ...
+(see below)
+
+> diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+> index c7d49fb6e7bd..cebabf2bb222 100644
+> --- a/net/mptcp/subflow.c
+> +++ b/net/mptcp/subflow.c
+
+(...)
+
+> @@ -1765,11 +1740,19 @@ void mptcp_subflow_queue_clean(struct sock *listener_ssk)
+>  		struct sock *sk = (struct sock *)msk;
+>  		bool slow;
+>  
+> +		sock_hold(sk);
+>  		slow = lock_sock_fast_nested(sk);
+>  		next = msk->dl_next;
+>  		msk->first = NULL;
+>  		msk->dl_next = NULL;
+> +
+> +		/* mptcp_close_nolock() will put a extra reference on sk,
+> +		 * so we hold one here.
+> +		 */
+> +		sock_hold(sk);
+> +		mptcp_close_nolock(sk, 0);
+
+... I guess the compiler will complain if you try to use it here from
+subflow.c, no?
+
+Also, did you have the opportunity to run the different MPTCP selftests
+with this patch?
+
+Cheers,
+Matt
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

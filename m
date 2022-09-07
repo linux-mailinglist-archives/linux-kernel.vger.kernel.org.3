@@ -2,222 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8475AFD2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAA55AFD26
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiIGHLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S229594AbiIGHLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiIGHLN (ORCPT
+        with ESMTP id S229824AbiIGHK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:11:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9038D8C444
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662534664; x=1694070664;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1c9cbfkzs9n0oEdrO+KeaRMAwrvccmd6pS64JbbS08A=;
-  b=ABfYnOSuH/BoqQTNj1zMyR9NF10wHXX9PcnawCckdu5wuuyw3PGa0JoU
-   itVTCkklrPqFQHpGrCOR0wgfvio1fcFIpYBH5q8cliN5i4y99SaaytLMb
-   C6HE/bMXSkBl1VZ5xSf86I0ZqB5aYgGUyq2qJgaOKQTQYR38XxTinDDRS
-   FJdbos2YDxfdxMwQ499mAlb1BjMUo0ZHzzEvO/LMHD/8fsgCMLU4flP0R
-   XFsmMAxbUNDtL1G5YRb1Spu+Qq8xlC4ZXYVDStDqsGQDCGFZIM2SvIKa1
-   XiL/7JanMLsRWByU8ehgx9keBEPHHcep2+ImAqigaS8IqSxrXiwRIoQAT
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="298115329"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="298115329"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 00:11:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="676053530"
-Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Sep 2022 00:11:00 -0700
-From:   Feng Tang <feng.tang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Dave Hansen <dave.hansen@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Feng Tang <feng.tang@intel.com>
-Subject: [PATCH v5 4/4] mm/slub: extend redzone check to extra allocated kmalloc space than requested
-Date:   Wed,  7 Sep 2022 15:10:23 +0800
-Message-Id: <20220907071023.3838692-5-feng.tang@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220907071023.3838692-1-feng.tang@intel.com>
-References: <20220907071023.3838692-1-feng.tang@intel.com>
+        Wed, 7 Sep 2022 03:10:57 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50100.outbound.protection.outlook.com [40.107.5.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AAD7B1E6;
+        Wed,  7 Sep 2022 00:10:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OSmmGoG8qY7VcJL6BUyn1snfWfKwvetg0L4x3nkWLC3k/tgWzsxk2F+/Thpg7xRCKFnj+rdkRevgbtSDbs3vA8fnvXng/zlFrGzoUoYl3pS+A1MbYoRQFgdd2HAFa/2iRcD3nMs4b6sXMiWHJwLiTrCpQDU4jxqXEXsdWyO1c1D4rTOxfUUH6WGUpy/TfPNRnvrtgz5O32hd8NdJhZ/mSfZOqDmu0MQ0lxZ1HVNbn4SGPVOkWEMGQHjB1oKBuhAvBlW0dKS4ltSVDQ3gP+7dmesxao3O47Lo5VL+QEwWb8gZYpJgfAFtnGgfCUVww6YparpvZuvlKtCiWtLuBDA57Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7pqRzq/gxu8GsE1eNwqiHio4BDsAX/U+dm0/TMvhXRs=;
+ b=jQqe0NlaseaABUdPtSP6sOxFjQ70VR82V6wDkjuzyfA6zD90xjL+Lq/dlpPCu/g1ZV5iojItpNwRt2+3z+gmleVP1A5S0H6c6JhwGa91ikw8bLs+HVfdCzmm+IxGRJBJz4ai9vNUpHC2+8TLUQvufI57lknsp9Mqs0yzvrEW7gjTaXNJydDfY7U2jmGKWR0EmsEJi4xNVnSbzAvImngGU09fu1aSvIvuw8Ega2KrXnQiIdGa/u0PYinS9ZcZwz8/4B9GgKXhea/3l4Y0RsNlftwyyJ9S4OllmT3yfQ/A6j/Uft9FSlXkO4CG5O+HwMrVlj295PmVHpkF/heddQ0Usw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7pqRzq/gxu8GsE1eNwqiHio4BDsAX/U+dm0/TMvhXRs=;
+ b=Gcd9R0hRPD47+yH4U6aYQkflyE8vfu6JfwVZQC30LNhDPriebKLL0e7MJGMpZxYMljJ9bRmbAsPKtaqKcqa78JuQ/oGP/SH+lDK2CcTyy6Gnu7NrdYYOR4ok1FWrGzI7i3DElhxu3LBTduPhiwEX/HdoSXo20Vk2bXPabWRHVFw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
+ by DB9PR02MB7916.eurprd02.prod.outlook.com (2603:10a6:10:33b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Wed, 7 Sep
+ 2022 07:10:51 +0000
+Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::1d88:3306:c280:3179]) by AM0PR02MB4436.eurprd02.prod.outlook.com
+ ([fe80::1d88:3306:c280:3179%6]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
+ 07:10:51 +0000
+Message-ID: <31b44b63-4cf3-6fdd-b2b8-6f00070af89a@axentia.se>
+Date:   Wed, 7 Sep 2022 09:10:50 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/2] iio: si7020: Lock root adapter to wait for reset
+Content-Language: en-US
+To:     Eddie James <eajames@linux.ibm.com>, linux-i2c@vger.kernel.org
+Cc:     linux-iio@vger.kernel.org, wsa@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, miltonm@us.ibm.com, joel@jms.id.au,
+        linux-kernel@vger.kernel.org
+References: <20220906202829.1921114-1-eajames@linux.ibm.com>
+ <20220906202829.1921114-3-eajames@linux.ibm.com>
+From:   Peter Rosin <peda@axentia.se>
+In-Reply-To: <20220906202829.1921114-3-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BEXP281CA0005.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10::15)
+ To AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aa96388c-4460-4b3c-d091-08da90a018ff
+X-MS-TrafficTypeDiagnostic: DB9PR02MB7916:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gCNTYsy+ScZBzs+3feTiGEFEZ2eF3BP0u4U9oM4/9XnQjQ6EZbwH2kTFbrbAwy1xU2q1vhilXcBug749Tl/SY1FOln7TnZwBZyMiMJ8rNm2m3J81z9WFAvQX+6m+hyuQRlkrQZEkrd6PDORhULS1HXDWUEVMPEstuo+icXvcXDBgscbU1UzHzTDFgpdpefa33puf3FdnRc1uKd7LDK15X6zRFewg+I3xJhsv9KRMmO0ErH2nYaaSR+Pv91CkkjQVLmg+CJay/kkj4tFqo0xjFlSaOkiDckq05PE5KCtklRrGoTcDdtR+eQf5cT28n12MpQY1LFnNyU3sG5v3PQZX4obIhz9tBRix9SuGpd3CYz5Nf2QfSSgDqqGtSdAlzZ3j+znkXbC27JvQ4XCdM71bNYfuVS+9emsVn1zzMJ0XcxYelrMnPXZqYPT8AyxBNDLXItz3FR6YC1+sPu6KOYZ7bqOlemjW/ws0L9cTmznNjAMMRZe9z7W1HnxzMhXw+Ba8gTha3CL08nmMSkmF/u6D/KeQ2pr0VPdl6Kb4/ou9/3dYsvhv+FxZTzRMF8m+S9cR0o1PVN+itGwj2u8Wf17XO5Cj77XfcDLdaZaEoIRK8tGeKlTjiYS8R9jo3ApgEzGKpeAnJMS24EaEj13JE98hfqG7Mm4zj18+UotzsfJf1jZxfeygvrTsaEhtHIb814l+jS0QHo/YIgw0I8vlMez+1/3NG+eT4UO21nidL8E4AuR5FGacP4044HfVBpGOjIuK2qee4zhK9/1KPrGhm+G/Xw0RrmcSTIEoCOxG1O7XYk9mn/awP5BZvAo6PbA6sMRU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39840400004)(366004)(396003)(376002)(346002)(136003)(66556008)(4326008)(478600001)(83380400001)(41300700001)(66946007)(186003)(2616005)(316002)(66476007)(31686004)(26005)(6512007)(6506007)(8676002)(36756003)(31696002)(86362001)(6486002)(2906002)(8936002)(5660300002)(966005)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmo0NmZnWlZYYkhTTkg0Yk1Sam9KSHhjUFd6Z3V2TXpIcGRPWGdNeHFQc3Q0?=
+ =?utf-8?B?d09hUi92d28yQkZ0UWZjQTIvUHlDQkJISFoxSjBEME9PeFVaZVkwa21oWDZB?=
+ =?utf-8?B?TUl5c3dPSGwvd2pwKzg3UWJnVCtlTzJaL1NnUEY3aTQ2ZmpyWm9iaUVyUkpR?=
+ =?utf-8?B?TEFUcW1kU1NhTzVNd0RseXVQejdKT0kvMFdvNjIzZnVTSDZubStVaUJTdFFU?=
+ =?utf-8?B?aG9RSXJYV0swNndqMzNvUmxGWjFNdW5OWjduMUlMNW5wUDFQM3I3SGllcG44?=
+ =?utf-8?B?di93Lzl2TExOajhYb1ZvaTZURWhKUmkwZ2ZudXMyOG1tUDdWNXhVYm9sTy9h?=
+ =?utf-8?B?NTRReS9FMy84TFJzZFdYREhyaGtpS2tMUHpNcnp2ZmsyK0o2ZnYzQUZPZmdR?=
+ =?utf-8?B?b0dqU3NZdUtDR055bGwxKzNaTXloQlg1WDVRQjNrV3pVclByVC8rZHFSZHhu?=
+ =?utf-8?B?dnBYdkdWQkJXWlN5ZlBQS28xb213ZkVudHA3bnNEQUNYWDZpR0xjMlpzZ1ZV?=
+ =?utf-8?B?SnNJVTgwRVVkb2NTdDYzRnY4K01NR1hKNE1WdGxBdWUwa2xHQlBDN3dJZHV3?=
+ =?utf-8?B?bFpqMVFrSC9BcFZvQ2NtalhJdVdBYWRRaGt5aUsyN1VpTHA0a0xjY3BGbFdK?=
+ =?utf-8?B?djVxSWI5WExlWWNvNFV3RXJSNFliSUxLYnhWOHlQbVNEUUVEUlZTTHlyRitu?=
+ =?utf-8?B?R2l3NFFMSmxhb1RwNkkzeXEvSDVFeXpoNEtuS1czTUFraVY3MFJwWHRrNk5M?=
+ =?utf-8?B?MkRWcDk1T0pDTFliRTVJQUd6cUR1b3ZwQms2RzBleHl2d0JlemJIaitjTnh0?=
+ =?utf-8?B?NE1TY0o2SDFmbjZhZFh3K0xGelVYRTh0M2h4bXJoSHZRS3d5QVBIOUljdzdn?=
+ =?utf-8?B?b2l1dEwwbHJWS2Y5M3FwZUEzY0F6MkJ5UTlObHVNeUpvZnU1TG1obFFaV3BF?=
+ =?utf-8?B?b3pFZkxabUtvTHExOXZrQmdib2wwNEFiRDg4R3MxNk0xVy8wK3YvR0Y4RHNY?=
+ =?utf-8?B?ckNpc1VtZE9aNDdkV3ZjaXByTkp2czBrT0Q1MUVyV05RdUFUWndLRG1GQmpl?=
+ =?utf-8?B?anVnRE5UTmUyTklFWGVmN21lL1Zod3JvSUl1amlhOE1CbHEwZmFHamZ5TFpY?=
+ =?utf-8?B?RVRSZVAwVkwySVNNS1ZjeHpZeFdLOWtvNzcrRFNaUmh6bFg1TTFCNm1oNmR2?=
+ =?utf-8?B?ZjZLbmEwT2xQMHNkdTJNU3J5d1VKSEdCT1R6S1BJLzJsZ2M1Z2J4VW9qdWN0?=
+ =?utf-8?B?RStxVnFrNUsvU2grMXVVam4wNEdzV0NKb04yNDExeGZ6U05DaE9oS0wwck5s?=
+ =?utf-8?B?WXRuTlJNMHo5czNuK3M0U1h5eDBxYXFtKy9rb2lweHJVWjVreEU0ZkhTc0l5?=
+ =?utf-8?B?Q2JOb296K3Y0cGZIOGlZTGVqN1VwSFZLN3pvdEdRbW92NkowQzdIVU92VmJn?=
+ =?utf-8?B?L2trbWwzNEEyTjRIYW1ESEpWd0p3bk9LV21BdlN4dWwva1FEMGRzdytLTFM0?=
+ =?utf-8?B?aHhJSDdKZlF4UXAwYitTY1lOQlJCT294dXhpTVBZU3FScU9VWDRjdjdrTytr?=
+ =?utf-8?B?eUJkK093djFieXZaeGR6Q2dJa21Ua2VjM3dhY1h6V1RkM2RhL21rR1c1bkdQ?=
+ =?utf-8?B?anRHckdVQk5TYS9pY3FHY2dBejNIVmVUTEtPbzZkLytENHVVdC85VW5nZUhE?=
+ =?utf-8?B?Rjh3S1I2UUtqYjV2N2FBdXViOTVsQWpPWFMxYXJDd3R2KzRwVlhyK2VVcFpX?=
+ =?utf-8?B?Z0RrTVR0RnMxbW04RmZnYkZhbHR0VTQzb0Zla2RFcGJMKzNoTlRTUzFhS25Z?=
+ =?utf-8?B?d3dQbmx4NnZrbGp0ZlVHeXV2TWVQaytzTVphS1htYk03aFhQZFp2cUoyQkEw?=
+ =?utf-8?B?SWJDcXlpSmdLS3FnekJWMGdVd1p0VTEyL29TOUE1cTZSVncrSlNVMCsweUx6?=
+ =?utf-8?B?ZjIyTXkyaFdtdzdHeXpqUkdLZDVoQUlGa2hRYzkvdVRCUi9iUjNXSGRpcDNQ?=
+ =?utf-8?B?OHJZaXdrQ3ZBUHd1em8zMmFmZWpFNGpJc2NldFJtMnFtNmFsTFBvdHBRNlJF?=
+ =?utf-8?B?VUgvMWRIcnprUDlSa0s0VTdRZWxBUmlNaWdJMWl1TFR5TEdDMk15NklIUGcv?=
+ =?utf-8?Q?9xHzmPwYvtUU5hX1lYkUoPSqB?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa96388c-4460-4b3c-d091-08da90a018ff
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 07:10:51.6806
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: E7fU5U+NgkBN0IQ1DOc98dxnzV77JsGpxE1G65hZxBiJKWj9YwVqJIghfTRbHkMR
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB7916
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmalloc will round up the request size to a fixed size (mostly power
-of 2), so there could be a extra space than what is requested, whose
-size is the actual buffer size minus original request size.
+Hi!
 
-To better detect out of bound access or abuse of this space, add
-redzone sanity check for it.
+First off, I'm very sorry for being too busy and too unresponsive.
 
-And in current kernel, some kmalloc user already knows the existence
-of the space and utilizes it after calling 'ksize()' to know the real
-size of the allocated buffer. So we skip the sanity check for objects
-which have been called with ksize(), as treating them as legitimate
-users.
+2022-09-06 at 22:28, Eddie James wrote:
+> Use the new mux root operations to lock the root adapter while waiting for
+> the reset to complete. I2C commands issued after the SI7020 is starting up
+> or after reset can potentially upset the startup sequence. Therefore, the
+> host needs to wait for the startup sequence to finish before issuing
+> further I2C commands.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/iio/humidity/si7020.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/humidity/si7020.c b/drivers/iio/humidity/si7020.c
+> index ab6537f136ba..76ca7863f35b 100644
+> --- a/drivers/iio/humidity/si7020.c
+> +++ b/drivers/iio/humidity/si7020.c
+> @@ -106,6 +106,7 @@ static const struct iio_info si7020_info = {
+>  static int si7020_probe(struct i2c_client *client,
+>  			const struct i2c_device_id *id)
+>  {
+> +	struct i2c_adapter *root;
+>  	struct iio_dev *indio_dev;
+>  	struct i2c_client **data;
+>  	int ret;
+> @@ -115,13 +116,24 @@ static int si7020_probe(struct i2c_client *client,
+>  				     I2C_FUNC_SMBUS_READ_WORD_DATA))
+>  		return -EOPNOTSUPP;
+>  
+> +	root = i2c_lock_select_bus(client->adapter);
+> +	if (IS_ERR(root))
+> +		return PTR_ERR(root);
+> +
+>  	/* Reset device, loads default settings. */
+> -	ret = i2c_smbus_write_byte(client, SI7020CMD_RESET);
+> -	if (ret < 0)
+> +	ret = __i2c_smbus_xfer(root, client->addr, client->flags,
+> +			       I2C_SMBUS_WRITE, SI7020CMD_RESET,
+> +			       I2C_SMBUS_BYTE, NULL);
 
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Feng Tang <feng.tang@intel.com>
----
- mm/slab.h        |  4 ++++
- mm/slab_common.c |  4 ++++
- mm/slub.c        | 57 +++++++++++++++++++++++++++++++++++++++++++++---
- 3 files changed, 62 insertions(+), 3 deletions(-)
+I'd say that this is too ugly. We should not add stuff that basically
+hides the actual xfer from the mux like this. That is too much of a
+break in the abstraction.
 
-diff --git a/mm/slab.h b/mm/slab.h
-index 20f9e2a9814f..0bc91b30b031 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -885,4 +885,8 @@ void __check_heap_object(const void *ptr, unsigned long n,
- }
- #endif
- 
-+#ifdef CONFIG_SLUB_DEBUG
-+void skip_orig_size_check(struct kmem_cache *s, const void *object);
-+#endif
-+
- #endif /* MM_SLAB_H */
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 8e13e3aac53f..5106667d6adb 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1001,6 +1001,10 @@ size_t __ksize(const void *object)
- 		return folio_size(folio);
- 	}
- 
-+#ifdef CONFIG_SLUB_DEBUG
-+	skip_orig_size_check(folio_slab(folio)->slab_cache, object);
-+#endif
-+
- 	return slab_ksize(folio_slab(folio)->slab_cache);
- }
- 
-diff --git a/mm/slub.c b/mm/slub.c
-index f523601d3fcf..2f0302136604 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -812,12 +812,27 @@ static inline void set_orig_size(struct kmem_cache *s,
- 	if (!slub_debug_orig_size(s))
- 		return;
- 
-+#ifdef CONFIG_KASAN_GENERIC
-+	/*
-+	 * KASAN could save its free meta data in the start part of object
-+	 * area, so skip the redzone check if kasan's meta data size is
-+	 * bigger enough to possibly overlap with kmalloc redzone
-+	 */
-+	if (s->kasan_info.free_meta_size_in_object * 2 >= s->object_size)
-+		orig_size = s->object_size;
-+#endif
-+
- 	p += get_info_end(s);
- 	p += sizeof(struct track) * 2;
- 
- 	*(unsigned int *)p = orig_size;
- }
- 
-+void skip_orig_size_check(struct kmem_cache *s, const void *object)
-+{
-+	set_orig_size(s, (void *)object, s->object_size);
-+}
-+
- static unsigned int get_orig_size(struct kmem_cache *s, void *object)
- {
- 	void *p = kasan_reset_tag(object);
-@@ -949,13 +964,34 @@ static __printf(3, 4) void slab_err(struct kmem_cache *s, struct slab *slab,
- static void init_object(struct kmem_cache *s, void *object, u8 val)
- {
- 	u8 *p = kasan_reset_tag(object);
-+	unsigned int orig_size = s->object_size;
- 
--	if (s->flags & SLAB_RED_ZONE)
-+	if (s->flags & SLAB_RED_ZONE) {
- 		memset(p - s->red_left_pad, val, s->red_left_pad);
- 
-+		if (slub_debug_orig_size(s) && val == SLUB_RED_ACTIVE) {
-+			unsigned int zone_start;
-+
-+			orig_size = get_orig_size(s, object);
-+			zone_start = orig_size;
-+
-+			if (!freeptr_outside_object(s))
-+				zone_start = max_t(unsigned int, orig_size,
-+						s->offset + sizeof(void *));
-+
-+			/*
-+			 * Redzone the extra allocated space by kmalloc
-+			 * than requested.
-+			 */
-+			if (zone_start < s->object_size)
-+				memset(p + zone_start, val,
-+					s->object_size - zone_start);
-+		}
-+	}
-+
- 	if (s->flags & __OBJECT_POISON) {
--		memset(p, POISON_FREE, s->object_size - 1);
--		p[s->object_size - 1] = POISON_END;
-+		memset(p, POISON_FREE, orig_size - 1);
-+		p[orig_size - 1] = POISON_END;
- 	}
- 
- 	if (s->flags & SLAB_RED_ZONE)
-@@ -1103,6 +1139,7 @@ static int check_object(struct kmem_cache *s, struct slab *slab,
- {
- 	u8 *p = object;
- 	u8 *endobject = object + s->object_size;
-+	unsigned int orig_size;
- 
- 	if (s->flags & SLAB_RED_ZONE) {
- 		if (!check_bytes_and_report(s, slab, object, "Left Redzone",
-@@ -1112,6 +1149,20 @@ static int check_object(struct kmem_cache *s, struct slab *slab,
- 		if (!check_bytes_and_report(s, slab, object, "Right Redzone",
- 			endobject, val, s->inuse - s->object_size))
- 			return 0;
-+
-+		if (slub_debug_orig_size(s) && val == SLUB_RED_ACTIVE) {
-+			orig_size = get_orig_size(s, object);
-+
-+			if (!freeptr_outside_object(s))
-+				orig_size = max_t(unsigned int, orig_size,
-+						s->offset + sizeof(void *));
-+			if (s->object_size > orig_size  &&
-+				!check_bytes_and_report(s, slab, object,
-+					"kmalloc Redzone", p + orig_size,
-+					val, s->object_size - orig_size)) {
-+				return 0;
-+			}
-+		}
- 	} else {
- 		if ((s->flags & SLAB_POISON) && s->object_size < s->inuse) {
- 			check_bytes_and_report(s, slab, p, "Alignment padding",
--- 
-2.34.1
+Looking back, expanding on the previous series [1] so that it installs
+the hook on the root adapter, handles smbus xfers and clears out the
+callback afterwards is much more sensible. No?
 
+Maybe the callback in that series should also include a reference to
+the xfer that has just been done, so that the hook can potentially
+discriminate and only do the delay for the key xfer. But maybe that's
+overkill?
+
+Cheers,
+Peter
+
+[1] https://lore.kernel.org/lkml/20220518204119.38943-1-eajames@linux.ibm.com/
+
+> +	if (ret < 0) {
+> +		i2c_unlock_deselect_bus(client->adapter);
+>  		return ret;
+> +	}
+> +
+>  	/* Wait the maximum power-up time after software reset. */
+>  	msleep(15);
+>  
+> +	i2c_unlock_deselect_bus(client->adapter);
+> +
+>  	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
+>  	if (!indio_dev)
+>  		return -ENOMEM;

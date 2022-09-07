@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D9A5B0D6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 317A15B0D6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiIGTr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S229794AbiIGToA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiIGTr5 (ORCPT
+        with ESMTP id S229480AbiIGTn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:47:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F30A345E;
-        Wed,  7 Sep 2022 12:47:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 690F0B81E77;
-        Wed,  7 Sep 2022 19:47:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488E8C433C1;
-        Wed,  7 Sep 2022 19:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662580074;
-        bh=2m8bQOz6CPem+JfZFDVne0K71gnYpKvVLgIRrmDybdQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gUZXYOCjOlaeDblqkN3vqocij75zRoua+//wm1T5ZzDD0pBG+VKSRqzKNQulS81kz
-         gqL9i682Pa3Uf6oh7GxZL6bgI4PVSLMdbrMlrg/qpE8SgqeIbjjgkDhFt+ur7/8l8B
-         4tZP1mdDg0bCEfLUoQlxcCp1H82KSgoJGfgjd/Y7jh5xQ/iCaUGeY8t58gddY3T7bD
-         Ee3Wm4LNYMxms5czvn+WOl+uaaz6PI/BV++XACIR77ZQP4Sus+ncrCZ28IdQz7/ILq
-         uOOu+eGb/UufY8tq9zjvihownF7gkSALd9TDJw4dLyP7CtaU7Uk8Kg7wBQtjkhW9c+
-         iZ4ebkEdl+/DQ==
-Date:   Wed, 7 Sep 2022 21:47:49 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Johansson <josef@oderland.se>
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
-Message-ID: <Yxj1ZQjBfdG1u93d@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Josef Johansson <josef@oderland.se>
-References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+        Wed, 7 Sep 2022 15:43:57 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B38EBD2B8;
+        Wed,  7 Sep 2022 12:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662579837; x=1694115837;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SqKdsVfuMNfF/kYon0FinpmGSA9ou1xdxHFefw2RUE0=;
+  b=EWQPOLgf3yPdy7fNut7sFuBKFIYdsQjbwnDL9AgakUdMroBpOQCWn2Gm
+   Zfhp3s2QJha8cRR4r9S11eSHmUjbuaArWU4qdf4zK9JBz46yOqbiNyA+5
+   vjnJ+vpv//bRk5JLlH/AF2r/6pD2nrQa5+nhkAD9yfXBhZsoFfjAfRHpR
+   fzSq8WLrv5lgoV++/dyzz0ANMkWyGNPyaOQLtNuWkoo2cod7hfmXq9Rla
+   xaCA8WWpDeCgDQqvnxRTVxEX+cKpzKAdUu5XK2lv1PRR/i3q9kaB89ZBh
+   rhGDv102e0i9QxwlbPGNmTlpZv8piFXOEqW8+dwD6oUIl30ki9ix1hYoE
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,297,1654585200"; 
+   d="scan'208";a="179463234"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Sep 2022 12:43:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 7 Sep 2022 12:43:34 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 7 Sep 2022 12:43:34 -0700
+Date:   Wed, 7 Sep 2022 21:47:54 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH v2] pinctrl: ocelot: Fix interrupt controller
+Message-ID: <20220907194754.nw4jpghsjzuz2jcu@soft-dev3-1.localhost>
+References: <20220907080251.3391659-1-horatiu.vultur@microchip.com>
+ <CAHp75VecfNvj3Ji1ivZk3cpwbpr8F4FX0xR5H+=CjAO_o-uuxw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t4qTkcah3Kmi0e32"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAHp75VecfNvj3Ji1ivZk3cpwbpr8F4FX0xR5H+=CjAO_o-uuxw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,40 +64,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 09/07/2022 11:36, Andy Shevchenko wrote:
+> > +        * handler.
+> > +        */
+> > +       if (active && !ack) {
+> > +               struct ocelot_irq_work *work;
+> > +
+> > +               work = kmalloc(sizeof(*work), GFP_ATOMIC);
+> > +               if (!work)
+> > +                       return;
+> > +
+> > +               work->irq_desc = desc;
+> > +               INIT_WORK(&work->irq_work, ocelot_irq_work);
+> > +               queue_work(system_wq, &work->irq_work);
+> > +       }
+> 
+> Here I see potential issues with the object lifetime. 1) The memory is
+> allocated here and what does guarantee its freeing? 2) What does
+> guarantee that work will be not scheduled if the driver or its parts
+> are gone?
 
---t4qTkcah3Kmi0e32
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You are right, if the driver is removed once the work is queued, then
+that object will not be freed or even worst get NULL pointers.
 
-On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
-> ACPI core in conjunction with platform driver core provides
-> an infrastructure to enumerate ACPI devices. Use it in order
-> to remove a lot of boilerplate code.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+A solution to this would be not to use system_wq but allocate own workqueue
+and once the driver is removed, make sure to destroy it.
+In this way we make sure that all the work is done.
 
-Josef, do you have resources to test this patch before I apply it?
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
 
-
---t4qTkcah3Kmi0e32
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMY9WUACgkQFA3kzBSg
-KbZgRA/zB5zY6AwlqRdSxEQrw3ZcMMFggkIbmhIQ9NAJFW4J/gyVxoWQnWsLAIqk
-Z9SNO1/3Og+errV48b0/qgkYusdkfvt7JqsBjLpaHmuV1QBJr+BfIuXJgBCjeiyN
-WlAYbGSUWNb6gqxl+aoxmgM4waMvE7OA6JelR2G8zkzWxcBg8SpuB6mPHO8v4RrL
-TMSKodQzkfjIDGaDbsYRE9OJWZ8pCoJOGTl401Hsi3fZNL61oAb9/6fgUMQuP9hl
-nVvNIbRcnXv83vbrZseEswipa9pdiAG45que5OfOVlm6CuWe9d1/7nqYgk4tiCio
-gczA5ys+wIPlWsxBTYmmd/poXTiVnqbH9exFPpSZjYke+En/r2vTIhdgEcpFo2eM
-wYhDelFVD6u8Gkj3AOQUdFrDph5srO4SG44lgvVljS9pBReMKUmAoU7bIjfArOSf
-UPPe7joYFVsiD3BIkQjLMjwphJHl8f/m3odLDwFJRLFpRmJcV3VA4QBVH60T7iTY
-p84nmPSW4H3NT9GJ+TF83M2gqP0FeLO+vfQaKWnBqH/DSmsN3nl72ULe5VVg8gGv
-kSSCwFBylk5qtX5EbU/LwSMICDC8exYGQFyHGtgbYhypJV1lN4wWwEHV+eDcKxHz
-M2G/yVoH3aI8B3KGC7YiXgtTX/CYvFk99ZUuUT5ClfYEWgREcg==
-=nSs7
------END PGP SIGNATURE-----
-
---t4qTkcah3Kmi0e32--
+-- 
+/Horatiu

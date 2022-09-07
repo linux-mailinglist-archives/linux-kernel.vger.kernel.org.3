@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978DB5B0FF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 00:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F0E5B0FFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 00:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiIGWlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 18:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        id S229585AbiIGWoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 18:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiIGWlg (ORCPT
+        with ESMTP id S229477AbiIGWoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 18:41:36 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2553D65579
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 15:41:33 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id t14so15557071wrx.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 15:41:33 -0700 (PDT)
+        Wed, 7 Sep 2022 18:44:19 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC85D71726;
+        Wed,  7 Sep 2022 15:44:18 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id lz22so12867255ejb.3;
+        Wed, 07 Sep 2022 15:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YH4gAbT+oR/XTHxxly1yVDATtdpiees7bO5OLCaKPwY=;
-        b=YlXSUUUmGnjsqPH9qZotOiPiwMkzhSEKyQR0uEVY076HW++qYanPJdJo29q9+PDOk8
-         UVAtc7OJ/wDLEBEdrNDHQe5Sp8ND8zLeDV0h4BpVOeYz5RQr5Wpkwt3LpTFgHYCwTuw1
-         ag4urK2VGhnppqkVCBZdUIz6794hrJAUdXwjQqsMCDsB1Carm7jsEaAgKXQom4T+6DCR
-         IOvKTIxQgoN3M6AK5iDvBy/wKYcKjSXk8e+yYQdlaRrr7YGEot3bezUW/zCH/akKTCLP
-         iAp+bC8hsKsvixINCk7H9pgoi0QbKOEjBjAzbaYsRjhC56SlaYWhMKszXAhSFZ/WtMwa
-         pRLQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=xJNlqeNd/xrr04Dfw5ABivBa4Akc5EG+Lwtk/YFuHVc=;
+        b=lYb1dK+7UqpkUWaY+4E2VuAdHXPTP7pVSZx8UVTuB34kgV8YQqPI/sUojy9bPydShz
+         ITmZwacH05i14Cec5Dmpe3qdSP4sbZ8yUPQAq/Lpk7biy1rV0kfwyvoaVwCheGe+P/7F
+         kcBWwn774jQX9l8q7XzDMq/MstWQiY4a0NZMo0QCjQ1ZLADJcMOSj1OHCmtkNZvGbnMi
+         DDe+P3x2Jfj9yqB3L0Q5Fw936CmXeH2/4i/0ojrSUeng25GhDen8lZ8nkZmVtMR06Tg5
+         1TtGhI/RefHuKq5MTBciDuWNBZfNT0qE8EWlRdbasdq/NKd/LoKqXeovcjsfgzJrnFEN
+         2s8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YH4gAbT+oR/XTHxxly1yVDATtdpiees7bO5OLCaKPwY=;
-        b=diYvJgWNafSAuwHcysO9gPurp1EzAsFa7Dm4nKob+KMUmxQ6tTNfEIJ3d3EkBPTSMk
-         eTtzfEtpc3ZTj+gaDlIoLfjNCKU3HQsXiq+wTR33d9W7wEyPxScGEHqsei7rzKzZZw/w
-         Uxb4jBIuYwEfL5+1HNmSUS0GsGQnSNL8H5ukpjOYp2E60ouzvPibKjbt+B8fowtDKqIQ
-         bs0M+kxRoZJzcy6D99bJ79jCYdQpV2mUwp2Z3Cxk89f7t2uMEAh0d+z+Ucxlna5i1NOl
-         a2iluPSUuK13mgPsRKoLXa8JW139pUeqBN4EBUjKf/3fLCBfdYpZcDPr0R7uiNl70+c3
-         WA+w==
-X-Gm-Message-State: ACgBeo1tJnC/A7CWyBnWx6wKY+xjRvaydki82XoKvIjzcxLh+hO/Khth
-        s0C0iEpGkBQTw67+bzMWh7wafIycmUSEOB5hCwojtQ==
-X-Google-Smtp-Source: AA6agR4s9n0rZWwC0Jokan10uATNxTlZgQDh/BU11g7JTUk7e1DId0idNPdXqxT0GUVDPpxC5gjMPKQpPOMTsDSjW0M=
-X-Received: by 2002:adf:bc13:0:b0:228:6d28:d2cb with SMTP id
- s19-20020adfbc13000000b002286d28d2cbmr3356293wrg.375.1662590491453; Wed, 07
- Sep 2022 15:41:31 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=xJNlqeNd/xrr04Dfw5ABivBa4Akc5EG+Lwtk/YFuHVc=;
+        b=05w+aVdjz93VFBH6H5eQxau66/lgcTUa57Xfax1O09wucOq/uVd896vzpy72sxDSbB
+         1BgDzMDfUvMgNRmDvDBklvwBSSc4hRjIWWGknYu7G00s/V6hHmG/bPtLfds5xDrJQac7
+         fBDzyziPj2bqdaQtK/2vH20i5/udxBgojRmpQ7GWMKPrbQvDVIW/Owk5dMaX13Ne6pNd
+         +4c5LXT3B2dQk16hQXZJQRoajqIHeiNVXXEdNby2bL0YblV7/XlGCk0aYZP8yZeQCLcg
+         E/fcj453xR4juQeJlwz1G0Jv2gFIFxqvmjU1EtS1b1YpyfqPAFTa5PBpIMScic/pVCVz
+         gP1w==
+X-Gm-Message-State: ACgBeo2lERGVIrzJjTh9SBzTeenLYCtZZgAR2tQ6a6//gp333wtCiJ9W
+        eMyQyaMz6thjOnFHrmZFgD8=
+X-Google-Smtp-Source: AA6agR4toEulMdoZCpOhHeaqawYckf6oKqbG0HnoiZHRq63ET2WrQq/jt6MxOwlevNSagZbT4yjD+w==
+X-Received: by 2002:a17:907:a06b:b0:771:aa05:e108 with SMTP id ia11-20020a170907a06b00b00771aa05e108mr1743919ejc.167.1662590657195;
+        Wed, 07 Sep 2022 15:44:17 -0700 (PDT)
+Received: from xws.localdomain ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id x3-20020a170906148300b0073d83f80b05sm384829ejc.94.2022.09.07.15.44.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 15:44:16 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] ipu3-imgu: Fix NULL pointer dereference in imgu_subdev_set_selection()
+Date:   Thu,  8 Sep 2022 00:44:09 +0200
+Message-Id: <20220907224409.3187482-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220614143353.1559597-1-irogers@google.com> <20220614143353.1559597-7-irogers@google.com>
- <YuZ4CEnken8U4HO5@krava> <CAP-5=fVczMiasS15UovH8kzOaNw=TC_adeqjC+xBzv8jVJ3DTQ@mail.gmail.com>
-In-Reply-To: <CAP-5=fVczMiasS15UovH8kzOaNw=TC_adeqjC+xBzv8jVJ3DTQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 7 Sep 2022 15:41:19 -0700
-Message-ID: <CAP-5=fWVN4Fig5GEwyWwwUc9_iZyZ5rObTFkyNcuFp1GApy4tg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] perf cpumap: Add range data encoding
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        German Gomez <german.gomez@arm.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,84 +77,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 12:30 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Sun, Jul 31, 2022 at 5:39 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Tue, Jun 14, 2022 at 07:33:53AM -0700, Ian Rogers wrote:
-> >
-> > SNIP
-> >
-> > > +     event = cpu_map_data__alloc(&syn_data, sizeof(struct perf_event_header));
-> > >       if (!event)
-> > >               return NULL;
-> > >
-> > > +     syn_data.data = &event->data;
-> > >       event->header.type = PERF_RECORD_CPU_MAP;
-> > > -     event->header.size = size;
-> > > -     event->data.type   = type;
-> > > -
-> > > -     cpu_map_data__synthesize(&event->data, map, type, max);
-> > > +     event->header.size = syn_data.size;
-> > > +     cpu_map_data__synthesize(&syn_data);
-> > >       return event;
-> > >  }
-> > >
-> > > +
-> > >  int perf_event__synthesize_cpu_map(struct perf_tool *tool,
-> > >                                  const struct perf_cpu_map *map,
-> > >                                  perf_event__handler_t process,
-> > > @@ -1891,24 +1894,20 @@ int perf_event__synthesize_event_update_name(struct perf_tool *tool, struct evse
-> > >  int perf_event__synthesize_event_update_cpus(struct perf_tool *tool, struct evsel *evsel,
-> > >                                            perf_event__handler_t process)
-> > >  {
-> > > -     size_t size = sizeof(struct perf_event_header) + sizeof(u64) + sizeof(u64);
-> > > +     struct synthesize_cpu_map_data syn_data = { .map = evsel->core.own_cpus };
-> > >       struct perf_record_event_update *ev;
-> > > -     int max, err;
-> > > -     u16 type;
-> > > -
-> > > -     if (!evsel->core.own_cpus)
-> > > -             return 0;
-> >
-> > all seems fine, just looks like we no longer do this check,
-> > might not be needed anymore, as that changed in past
->
-> This function is called in a test and in this file. The caller already
-> does this test and so the check is redundant plus a little confusing:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/synthetic-events.c?h=perf/core#n2062
-> As you say, it wasn't needed any more and so I removed it.
->
-> Thanks,
-> Ian
+Calling v4l2_subdev_get_try_crop() and v4l2_subdev_get_try_compose()
+with a subdev state of NULL leads to a NULL pointer dereference. This
+can currently happen in imgu_subdev_set_selection() when the state
+passed in is NULL, as this method first gets pointers to both the "try"
+and "active" states and only then decides which to use.
 
-Would be nice to land this imo. Anything outstanding?
+The same issue has been addressed for imgu_subdev_get_selection() with
+commit 30d03a0de650 ("ipu3-imgu: Fix NULL pointer dereference in active
+selection access"). However the issue still persists in
+imgu_subdev_set_selection().
 
-Thanks,
-Ian
+Therefore, apply a similar fix as done in the aforementioned commit to
+imgu_subdev_set_selection(). To keep things a bit cleaner, introduce
+helper functions for "crop" and "compose" access and use them in both
+imgu_subdev_set_selection() and imgu_subdev_get_selection().
 
-> > thanks,
-> > jirka
-> >
-> > > +     int err;
-> > >
-> > > -     ev = cpu_map_data__alloc(evsel->core.own_cpus, &size, &type, &max);
-> > > +     ev = cpu_map_data__alloc(&syn_data, sizeof(struct perf_event_header) + 2 * sizeof(u64));
-> > >       if (!ev)
-> > >               return -ENOMEM;
-> > >
-> > > +     syn_data.data = &ev->cpus.cpus;
-> > >       ev->header.type = PERF_RECORD_EVENT_UPDATE;
-> > > -     ev->header.size = (u16)size;
-> > > +     ev->header.size = (u16)syn_data.size;
-> > >       ev->type        = PERF_EVENT_UPDATE__CPUS;
-> > >       ev->id          = evsel->core.id[0];
-> > > -
-> > > -     cpu_map_data__synthesize(&ev->cpus.cpus, evsel->core.own_cpus, type, max);
-> > > +     cpu_map_data__synthesize(&syn_data);
-> > >
-> > >       err = process(tool, (union perf_event *)ev, NULL, NULL);
-> > >       free(ev);
-> > > --
-> > > 2.36.1.476.g0c4daa206d-goog
-> > >
+Fixes: 0d346d2a6f54 ("media: v4l2-subdev: add subdev-wide state struct")
+Cc: stable@vger.kernel.org # for v5.14 and later
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ drivers/staging/media/ipu3/ipu3-v4l2.c | 57 +++++++++++++++-----------
+ 1 file changed, 34 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+index ce13e746c15f..e530767e80a5 100644
+--- a/drivers/staging/media/ipu3/ipu3-v4l2.c
++++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+@@ -188,6 +188,28 @@ static int imgu_subdev_set_fmt(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
++static struct v4l2_rect *
++imgu_subdev_get_crop(struct imgu_v4l2_subdev *sd,
++		     struct v4l2_subdev_state *sd_state, unsigned int pad,
++		     enum v4l2_subdev_format_whence which)
++{
++	if (which == V4L2_SUBDEV_FORMAT_TRY)
++		return v4l2_subdev_get_try_crop(&sd->subdev, sd_state, pad);
++	else
++		return &sd->rect.eff;
++}
++
++static struct v4l2_rect *
++imgu_subdev_get_compose(struct imgu_v4l2_subdev *sd,
++			struct v4l2_subdev_state *sd_state, unsigned int pad,
++			enum v4l2_subdev_format_whence which)
++{
++	if (which == V4L2_SUBDEV_FORMAT_TRY)
++		return v4l2_subdev_get_try_compose(&sd->subdev, sd_state, pad);
++	else
++		return &sd->rect.bds;
++}
++
+ static int imgu_subdev_get_selection(struct v4l2_subdev *sd,
+ 				     struct v4l2_subdev_state *sd_state,
+ 				     struct v4l2_subdev_selection *sel)
+@@ -200,18 +222,12 @@ static int imgu_subdev_get_selection(struct v4l2_subdev *sd,
+ 
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP:
+-		if (sel->which == V4L2_SUBDEV_FORMAT_TRY)
+-			sel->r = *v4l2_subdev_get_try_crop(sd, sd_state,
+-							   sel->pad);
+-		else
+-			sel->r = imgu_sd->rect.eff;
++		sel->r = *imgu_subdev_get_crop(imgu_sd, sd_state, sel->pad,
++					       sel->which);
+ 		return 0;
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		if (sel->which == V4L2_SUBDEV_FORMAT_TRY)
+-			sel->r = *v4l2_subdev_get_try_compose(sd, sd_state,
+-							      sel->pad);
+-		else
+-			sel->r = imgu_sd->rect.bds;
++		sel->r = *imgu_subdev_get_compose(imgu_sd, sd_state, sel->pad,
++						  sel->which);
+ 		return 0;
+ 	default:
+ 		return -EINVAL;
+@@ -223,10 +239,9 @@ static int imgu_subdev_set_selection(struct v4l2_subdev *sd,
+ 				     struct v4l2_subdev_selection *sel)
+ {
+ 	struct imgu_device *imgu = v4l2_get_subdevdata(sd);
+-	struct imgu_v4l2_subdev *imgu_sd = container_of(sd,
+-							struct imgu_v4l2_subdev,
+-							subdev);
+-	struct v4l2_rect *rect, *try_sel;
++	struct imgu_v4l2_subdev *imgu_sd =
++		container_of(sd, struct imgu_v4l2_subdev, subdev);
++	struct v4l2_rect *rect;
+ 
+ 	dev_dbg(&imgu->pci_dev->dev,
+ 		 "set subdev %u sel which %u target 0x%4x rect [%ux%u]",
+@@ -238,22 +253,18 @@ static int imgu_subdev_set_selection(struct v4l2_subdev *sd,
+ 
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP:
+-		try_sel = v4l2_subdev_get_try_crop(sd, sd_state, sel->pad);
+-		rect = &imgu_sd->rect.eff;
++		rect = imgu_subdev_get_crop(imgu_sd, sd_state, sel->pad,
++					    sel->which);
+ 		break;
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		try_sel = v4l2_subdev_get_try_compose(sd, sd_state, sel->pad);
+-		rect = &imgu_sd->rect.bds;
++		rect = imgu_subdev_get_compose(imgu_sd, sd_state, sel->pad,
++					       sel->which);
+ 		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+ 
+-	if (sel->which == V4L2_SUBDEV_FORMAT_TRY)
+-		*try_sel = sel->r;
+-	else
+-		*rect = sel->r;
+-
++	*rect = sel->r;
+ 	return 0;
+ }
+ 
+-- 
+2.37.3
+

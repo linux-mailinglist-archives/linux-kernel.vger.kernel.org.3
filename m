@@ -2,79 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA775B04F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821775B04C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiIGNP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
+        id S230076AbiIGNKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiIGNPg (ORCPT
+        with ESMTP id S230055AbiIGNJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:15:36 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AF087B1DF;
-        Wed,  7 Sep 2022 06:15:15 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oVutd-0000YC-01; Wed, 07 Sep 2022 15:15:13 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id BEA7BC0EC6; Wed,  7 Sep 2022 15:08:48 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 15:08:48 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: OCTEON: irq: Fix octeon_irq_force_ciu_mapping()
-Message-ID: <20220907130848.GB17817@alpha.franken.de>
-References: <20220906095943.60296-1-alexander.sverdlin@nokia.com>
- <20220906095943.60296-3-alexander.sverdlin@nokia.com>
+        Wed, 7 Sep 2022 09:09:57 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2993F641D;
+        Wed,  7 Sep 2022 06:09:53 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C12DADD;
+        Wed,  7 Sep 2022 15:09:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662556192;
+        bh=TgDjbh1X5PWwjOUrKcdMzSbSbh7ByQ7P8DVTSSqcvhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B0ZEiYkpfOdxlUi2625QZOk1BNbHkCzOlXhEZhssODDTrqiQEfw7Oha+QJ0whJkCd
+         qTrzYLNrWfxhQTGIXSbfdrr2IMN58MjWI9n1vcMXSnFliM5Dh2eg95gCwnAeyN1A3p
+         H8EVUN7QKwgZNSm4D/ZQSt0mcfhQdNQDlnaBVVtU=
+Date:   Wed, 7 Sep 2022 16:09:35 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: staging/intel-ipu3: Finalize subdev
+ initialization to allcoate active state
+Message-ID: <YxiYD6PVYG19EJ5q@pendragon.ideasonboard.com>
+References: <20220907123359.1275322-1-luzmaximilian@gmail.com>
+ <a194a9c5-ac8e-cf86-34cd-4f3a3cb6f6ec@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220906095943.60296-3-alexander.sverdlin@nokia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a194a9c5-ac8e-cf86-34cd-4f3a3cb6f6ec@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 11:59:43AM +0200, Alexander A Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+On Wed, Sep 07, 2022 at 03:46:26PM +0300, Tomi Valkeinen wrote:
+> Hi Maximilian,
 > 
-> For irq_domain_associate() to work the virq descriptor has to be
-> pre-allocated in advance. Otherwise the following happens:
+> On 07/09/2022 15:33, Maximilian Luz wrote:
+> > Commit f69952a4dc1e ("media: subdev: add active state to struct
+> > v4l2_subdev") introduced the active_state member to struct v4l2_subdev.
+> > This state needs to be allocated via v4l2_subdev_init_finalize(). The
+> > intel-ipu3 driver unfortunately does not do that, due to which,
 > 
-> WARNING: CPU: 0 PID: 0 at .../kernel/irq/irqdomain.c:527 irq_domain_associate+0x298/0x2e8
-> error: virq128 is not allocated
-> Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 4.19.78-... #1
->         ...
-> Call Trace:
-> [<ffffffff801344c4>] show_stack+0x9c/0x130
-> [<ffffffff80769550>] dump_stack+0x90/0xd0
-> [<ffffffff801576d0>] __warn+0x118/0x130
-> [<ffffffff80157734>] warn_slowpath_fmt+0x4c/0x70
-> [<ffffffff801b83c0>] irq_domain_associate+0x298/0x2e8
-> [<ffffffff80a43bb8>] octeon_irq_init_ciu+0x4c8/0x53c
-> [<ffffffff80a76cbc>] of_irq_init+0x1e0/0x388
-> [<ffffffff80a452cc>] init_IRQ+0x4c/0xf4
-> [<ffffffff80a3cc00>] start_kernel+0x404/0x698
+> That is fine, a driver only needs to allocate the active state if it uses
+> the active state.
 > 
-> Use irq_alloc_desc_at() to avoid the above problem.
+> > active_state is NULL and we run into an oops (NULL pointer dereference)
+> > when that state is accessed.
+> > 
+> > In particular, this happens subdev in IOCTLs as commit 3cc7a4bbc381
+> > ("media: subdev: pass also the active state to subdevs from ioctls")
+> > passes that state on to the subdev IOCTLs. An example scenario where
+> > this happens is running libcamera's qcam or cam on a device with IPU3,
+> > for example the Microsoft Surface Book 2. In this case, the oops is
+> > reproducibly in v4l2_subdev_get_try_crop(), called via
+> > imgu_subdev_set_selection().
+> > 
+> > To fix this, allocate the active_state member via
+> > v4l2_subdev_init_finalize().
 > 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> ---
->  arch/mips/cavium-octeon/octeon-irq.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> This is not a correct fix. Sakari has sent (and maybe pushed?) this:
+> 
+> https://lore.kernel.org/all/20220825190351.3241444-1-sakari.ailus@linux.intel.com/
 
-applied to mips-fixes.
+This being said, it would be nice to convert drivers to use the active
+state, but that's not related to fixing this issue.
 
-Thomas.
+> > Link: https://github.com/linux-surface/linux-surface/issues/907
+> > Fixes: 3cc7a4bbc381 ("media: subdev: pass also the active state to subdevs from ioctls")
+> > Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+> > ---
+> >   drivers/staging/media/ipu3/ipu3-v4l2.c | 12 +++++++++++-
+> >   1 file changed, 11 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+> > index d1c539cefba8..84ab98ba9a2e 100644
+> > --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
+> > +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+> > @@ -1093,10 +1093,18 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
+> >   			"failed to create subdev v4l2 ctrl with err %d", r);
+> >   		goto fail_subdev;
+> >   	}
+> > +
+> > +	r = v4l2_subdev_init_finalize(&imgu_sd->subdev);
+> > +	if (r) {
+> > +		dev_err(&imgu->pci_dev->dev,
+> > +			"failed to initialize subdev (%d)\n", r);
+> > +		goto fail_subdev;
+> > +	}
+> > +
+> >   	r = v4l2_device_register_subdev(&imgu->v4l2_dev, &imgu_sd->subdev);
+> >   	if (r) {
+> >   		dev_err(&imgu->pci_dev->dev,
+> > -			"failed initialize subdev (%d)\n", r);
+> > +			"failed to register subdev (%d)\n", r);
+> >   		goto fail_subdev;
+> >   	}
+> >   
+> > @@ -1104,6 +1112,7 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
+> >   	return 0;
+> >   
+> >   fail_subdev:
+> > +	v4l2_subdev_cleanup(&imgu_sd->subdev);
+> >   	v4l2_ctrl_handler_free(imgu_sd->subdev.ctrl_handler);
+> >   	media_entity_cleanup(&imgu_sd->subdev.entity);
+> >   
+> > @@ -1275,6 +1284,7 @@ static void imgu_v4l2_subdev_cleanup(struct imgu_device *imgu, unsigned int i)
+> >   	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[i];
+> >   
+> >   	v4l2_device_unregister_subdev(&imgu_pipe->imgu_sd.subdev);
+> > +	v4l2_subdev_cleanup(&imgu_pipe->imgu_sd.subdev);
+> >   	v4l2_ctrl_handler_free(imgu_pipe->imgu_sd.subdev.ctrl_handler);
+> >   	media_entity_cleanup(&imgu_pipe->imgu_sd.subdev.entity);
+> >   }
+> 
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Regards,
+
+Laurent Pinchart

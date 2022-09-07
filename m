@@ -2,105 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6DD5B0B17
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82CB5B0B1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiIGRJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S230097AbiIGRJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiIGRJH (ORCPT
+        with ESMTP id S229445AbiIGRJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:09:07 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67D9BCCEF;
-        Wed,  7 Sep 2022 10:09:05 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id t7so16452096wrm.10;
-        Wed, 07 Sep 2022 10:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=7jFPudVaz4OSN9szXdkTPFTFgzH+9Ixx1ps2IBTuQl0=;
-        b=NtkJVrOeIGJ/HMlhhvFJZW4iepJpTseqtM4kCZie+kh5rj7T1lUPiQPaysY7Uw0KB5
-         9VkBzinlRLMF9+laNSHrUjEd3RpkG5k+bjBLBAOWPp14Zw+q8KUTr45iZipmEA10Qw3M
-         POF5FHUUJjF7GoPrvw32CacbmavrGq8arYq/ojO3rg5BlfAxkX4Ur75y151brzmRPu4M
-         KYhnyAmJGHVKwBWBUT9DDKnyXVmzY5yHAAIoOgCV9ajcZiBAbPipmyDEBx+iEHcRtxUr
-         yXzIdMYk6ucupK9httrNrJBSPL4T/X1X4nZdhXubukKFzXafIs+VRMnkyibjuOn8e7KA
-         RYvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=7jFPudVaz4OSN9szXdkTPFTFgzH+9Ixx1ps2IBTuQl0=;
-        b=E/yrWydoFn+GuyaP5xQ3xKFPeldgYppquywu/CpD3q/HkOtzuzjnyi7lkE9oUEzubQ
-         kvZ4IvX4A2+h/96tq3bOEbYjoGQbeR35JWV6QRDCTt0U4HPRejklc5ttY8LlBW7tdIUV
-         W90CmE4+b2NW2RRDmlzwF2RgiZYpX7Op9RUtlL6nA31Eh8tS/mRx8gqPZOPjCoTMIaOG
-         B8Z/P9Y/wnyxbfPid5g0LSucrnVeNW/cgrw/LznpvWx8qcOUoO1qgmva/KveTDM1R6mB
-         I+jUX442RUCIElD5N8/VUBe+K99oUPsQmnWYtJZqJ8BFAkKI18adCmgEv7Hyg/mJYED7
-         BrKA==
-X-Gm-Message-State: ACgBeo2sBiOK+a1a8GzrbiBQ4QK1DYS2zLaM8SFTA27qxEojTsoBmyAU
-        cZ9aiCfe0QZsRW71HODKPlM=
-X-Google-Smtp-Source: AA6agR7tZxr2jYBm30jItjzzfnofiLHxpHNXoXirnKLa6HJ9SWLryoXydGyezxk8ahZ+KYdS+Msg7w==
-X-Received: by 2002:a5d:6d0b:0:b0:222:955a:8774 with SMTP id e11-20020a5d6d0b000000b00222955a8774mr2618258wrq.129.1662570544170;
-        Wed, 07 Sep 2022 10:09:04 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05600c358700b003a8418ee646sm29535520wmq.12.2022.09.07.10.09.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 10:09:03 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] kselftest/arm64: Fix spelling misakes of signal names
-Date:   Wed,  7 Sep 2022 18:09:02 +0100
-Message-Id: <20220907170902.687340-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 7 Sep 2022 13:09:50 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1723AB3E;
+        Wed,  7 Sep 2022 10:09:47 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id AF6883200805;
+        Wed,  7 Sep 2022 13:09:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 07 Sep 2022 13:09:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662570583; x=1662656983; bh=lEMgyuskMd
+        HHSxUE4iU5Q9az2x12J7mJ4G0YEW9bdmY=; b=6DdqzQcWCUDxwh08S9lzK0/F3/
+        2T4RE5qzIZGJmTYC/BMZRp4yprwzfDorrdR6aGj7WLZqZ309f0JVA9tvMYzNdSti
+        DGyMzqkzCehl1khYrIWhQuKquRyPMfSaVyIHq9VG0GUTp1w07Twmxp4RbdhdkcuX
+        rnyfdPu+6mYOkcCbeEaq5gXeTL44E5KgPv56xvOAOOJp4N7y9T0Nck6U7Vi3sKqB
+        7AhvaVN8Y0CE3J+Qj4g4zg2C8XOOorU0+Or4CYTrX+vhGgbvSBHhLvtiCKBVah1i
+        Q8TO+i/K4J/aLZMo96fD7AOgNibf6P1+4Q257fwpgvtkbMc6CkuWL3HVEhPA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1662570583; x=1662656983; bh=lEMgyuskMdHHSxUE4iU5Q9az2x12J7mJ4G0
+        YEW9bdmY=; b=1xyVMiCf/OS3T6kbat1VPmsNuBWqnWvuMY05PBBxzFePRrkIW+H
+        DPYJPyTVGWGfCHmzMfmC0eezzk1tdd8o5Jaw1+yTqampY0OiPAHJ+EygSgFyc4eT
+        vaiyOjUyaWZxSLqNzAZ2PCZz96WP2Vf42jpWnb/Y5lbg45Zk5OTUhcwNsjLWpuln
+        lNSwhxUtLqtjzVxOYZf+9Y054QQZXOvn+bGFKL1Dxe458X04RLHXdm3d/jTN87Ey
+        beiNT024ky8y3mXi9tDmov6+/Zwnh2B95oGGsAGKjMkKA0iICy2ABUxbpKePg8rC
+        CA5YdX/WQsZZRRptsUB7F+rABNTnNYd6v3g==
+X-ME-Sender: <xms:VtAYY0Dgw1jmikCM9R2W3EmOj3BcSIsQbOYQvuzDlvPyztERjaH_wg>
+    <xme:VtAYY2gX1knX2Do8O6baN2Ho4_2VOV8awORVpxvyjPo77tqDAztY3-EpMDFQZV_ab
+    oWJZCySPepuTulEDqA>
+X-ME-Received: <xmr:VtAYY3m_b4Su6M3qVwvoVB9mQdsc9Op5l2wS1tkFoPTnycpAsCSNcw-lL4mXDcbyeiHRL6EmAgrzixVZq4WY5Fx4NZmd57xP_OOoHbDF0tf4jdhhHtnu-uk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddguddutdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcu
+    rfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvg
+    hrnhepgfegudffudelfeeugedtjeeugeehueffudevveegveektdfhueehueeufeelheev
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:VtAYY6yoCoD1eaLJHNOVLnZ9Bv_wYUTeOujxDM7vBAZjG4HTjYiLuQ>
+    <xmx:VtAYY5Qd6PrPh_22--TkK7QQ1RtJVbKvoGLxXoLB3WlNjCWMWF5m3w>
+    <xmx:VtAYY1YsvnwDQYodwF7cNNzrzP5MYRgBsHHyDTwAVsQ7KnLy3Fp-Pg>
+    <xmx:V9AYY6BJTNJ6kioNeMu14tXHSdvm8MPK4kHpl0BoNRHahGHQ4Mb_NQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 13:09:39 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] Broadcom/Apple Bluetooth driver for Apple Silicon
+Date:   Wed,  7 Sep 2022 19:09:30 +0200
+Message-Id: <20220907170935.11757-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are a couple of spelling mistakes of signame names. Fix them.
+Hi,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/arm64/fp/fp-stress.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v1: https://lore.kernel.org/asahi/20220801103633.27772-1-sven@svenpeter.dev/
 
-diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
-index 01cef1962ab5..a5c0ebef2419 100644
---- a/tools/testing/selftests/arm64/fp/fp-stress.c
-+++ b/tools/testing/selftests/arm64/fp/fp-stress.c
-@@ -247,7 +247,7 @@ static void handle_child_signal(int sig, siginfo_t *info, void *context)
- 	}
- 
- 	if (!found)
--		ksft_print_msg("SIGCHILD for unknown PID %d with status %d\n",
-+		ksft_print_msg("SIGCHLD for unknown PID %d with status %d\n",
- 			       info->si_pid, info->si_status);
- }
- 
-@@ -457,7 +457,7 @@ int main(int argc, char **argv)
- 			       strerror(errno), errno);
- 	ret = sigaction(SIGTERM, &sa, NULL);
- 	if (ret < 0)
--		ksft_print_msg("Failed to install SIGTEM handler: %s (%d)\n",
-+		ksft_print_msg("Failed to install SIGTERM handler: %s (%d)\n",
- 			       strerror(errno), errno);
- 	sa.sa_sigaction = handle_child_signal;
- 	ret = sigaction(SIGCHLD, &sa, NULL);
+Here's v2 of the Apple/Broadcom Bluetooth series. Most changes from
+v1 are only related to the device tree bindings. Other than that I fixed
+a few minor bugs and adjusted some commit messages to make checkpatch
+happier.
+
+
+Best,
+
+
+Sven
+
+Sven Peter (5):
+  dt-bindings: net: Add generic Bluetooth controller
+  dt-bindings: net: Add Broadcom BCM4377 family PCIe Bluetooth
+  Bluetooth: hci_event: Add quirk to ignore byte in LE Extended Adv
+    Report
+  Bluetooth: Add quirk to disable extended scanning
+  Bluetooth: hci_bcm4377: Add new driver for BCM4377 PCI boards
+
+ .../bindings/net/bluetooth-controller.yaml    |   30 +
+ .../devicetree/bindings/net/bluetooth.txt     |    5 -
+ .../bindings/net/brcm,bcm4377-bluetooth.yaml  |   78 +
+ .../bindings/net/qualcomm-bluetooth.yaml      |    4 +-
+ .../bindings/soc/qcom/qcom,wcnss.yaml         |    8 +-
+ MAINTAINERS                                   |    2 +
+ drivers/bluetooth/Kconfig                     |   12 +
+ drivers/bluetooth/Makefile                    |    1 +
+ drivers/bluetooth/hci_bcm4377.c               | 2515 +++++++++++++++++
+ include/net/bluetooth/hci.h                   |   21 +
+ include/net/bluetooth/hci_core.h              |    4 +-
+ net/bluetooth/hci_event.c                     |    4 +
+ 12 files changed, 2671 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/bluetooth-controller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/bluetooth.txt
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+ create mode 100644 drivers/bluetooth/hci_bcm4377.c
+
 -- 
-2.37.1
+2.25.1
 

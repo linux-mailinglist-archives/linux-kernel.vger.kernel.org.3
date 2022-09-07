@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644E65AFC78
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319705AFC7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiIGGf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S229920AbiIGGfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIGGfZ (ORCPT
+        with ESMTP id S229918AbiIGGfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:35:25 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E71E4DB5A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:35:22 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220907063518epoutp03be432c65125ac4145d3b2451d4416a90~SgIRMX6JJ2016920169epoutp03D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:35:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220907063518epoutp03be432c65125ac4145d3b2451d4416a90~SgIRMX6JJ2016920169epoutp03D
+        Wed, 7 Sep 2022 02:35:36 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A73792E2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:35:32 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220907063530epoutp027d398d42791afbcae90c72b75b77b95e~SgIc_G6KA0568005680epoutp02h
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 06:35:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220907063530epoutp027d398d42791afbcae90c72b75b77b95e~SgIc_G6KA0568005680epoutp02h
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662532518;
-        bh=6tlsYqS4FLhOPvwqcoaVoNfhPy7sDrJGnZbGq7969rk=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=M2X4Y/aqyHJ46nKWdNoKNOasejhBmkfd+3SxWtB+USD/xEjx0wS5oPfM33Zy0Fi53
-         6Zu4QqClgK6KhF7uE5LbB1ewfyzTmhtCpy99aCp+gHsoMGyWOAzJQdHy8HkOJ2mZgG
-         Ew6n2vZPDNuPSmV2ZUm8o/YfrQjuxaHht3R8qp/I=
+        s=mail20170921; t=1662532530;
+        bh=iofHHmP/ShOvBt8CMTXPyRfeBkGPEWA7NbQY+OIdU5g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Dxh2ch3Da9CaOfa42frMeeC2sBJBNETyw/1If8ZOy/bhpZm9nN8/XA5+7Ej4wqmIN
+         TbGJBtZXflY9lNvIA4fqReOl0aR0WGBUf9eiITU4Fo+RAAHFNuFhBePAwPd+I15fwT
+         vXCBpCvxu8xcmyHOYZFjaygOC4jsIGswZFq84dfQ=
 Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220907063517epcas5p314b95ca7eb6d4257f3b5b8e319bacb58~SgIQgIX0y1809618096epcas5p3n;
-        Wed,  7 Sep 2022 06:35:17 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.182]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4MMsv571gJz4x9Pw; Wed,  7 Sep
-        2022 06:35:13 +0000 (GMT)
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220907063530epcas5p4a29bda1f5164f428bfe8a4a6ac215600~SgIcR65PF3093030930epcas5p4-;
+        Wed,  7 Sep 2022 06:35:30 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4MMsvM1L5sz4x9Q1; Wed,  7 Sep
+        2022 06:35:27 +0000 (GMT)
 Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
         epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        55.40.54060.0AB38136; Wed,  7 Sep 2022 15:35:12 +0900 (KST)
+        CB.50.54060.FAB38136; Wed,  7 Sep 2022 15:35:27 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220907063309epcas5p1793555c0747fd7a11997e97649924552~SgGZzZgk32639926399epcas5p1G;
-        Wed,  7 Sep 2022 06:33:09 +0000 (GMT)
+        20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7~SgGdJbWTf2222422224epcas5p1E;
+        Wed,  7 Sep 2022 06:33:13 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220907063309epsmtrp10cd486fdf01e1662194effac553ae508~SgGZx_n800506905069epsmtrp1p;
-        Wed,  7 Sep 2022 06:33:09 +0000 (GMT)
-X-AuditID: b6c32a4b-e33fb7000000d32c-be-63183ba060e2
+        20220907063313epsmtrp117b2d10631ece073bc8b7da0845695bc~SgGdIU1-L0507305073epsmtrp1m;
+        Wed,  7 Sep 2022 06:33:13 +0000 (GMT)
+X-AuditID: b6c32a4b-e33fb7000000d32c-08-63183baf3969
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C5.CC.14392.52B38136; Wed,  7 Sep 2022 15:33:09 +0900 (KST)
+        B7.CC.14392.92B38136; Wed,  7 Sep 2022 15:33:13 +0900 (KST)
 Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
         [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220907063306epsmtip12af350a2d66ed8d22dd308b9ae2de9e8~SgGWoAfxe2637926379epsmtip1t;
-        Wed,  7 Sep 2022 06:33:06 +0000 (GMT)
+        20220907063310epsmtip1f2ccff2a4d1df6e1e136b2f58e108160~SgGZ4Z_dU2638426384epsmtip1x;
+        Wed,  7 Sep 2022 06:33:09 +0000 (GMT)
 From:   Smitha T Murthy <smitha.t@samsung.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
@@ -64,131 +64,275 @@ Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
         andi@etezian.org, alim.akhtar@samsung.com,
         aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
         linux-fsd@tesla.com, smitha.t@samsung.com, aakarsh.jain@samsung.com
-Subject: [Patch v2 00/15] Add MFC v12 support.
-Date:   Wed,  7 Sep 2022 12:17:00 +0530
-Message-Id: <20220907064715.55778-1-smitha.t@samsung.com>
+Subject: [Patch v2 01/15] dt-bindings: media: s5p-mfc: Add new DT schema for
+ MFC
+Date:   Wed,  7 Sep 2022 12:17:01 +0530
+Message-Id: <20220907064715.55778-2-smitha.t@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA0VTbUxbVRj23Ht7W9DCtWN6JA7ZTYzCgLVQ6ukGIgLbTZiTZGYajWJXroUB
-        bW0Loxi0gmwKbjCVH4NRGF/Ojg0sFCuCIKtgkM0hDGZYXRkyPjIY40syiNjSTv897/s8z3ue
-        vOccHi74nfTnpSl1rEYpy6BJb6LtclBwaPVeKBc6avagSesZDnIY20hUuzaFoVu1SwTqabFw
-        UetwBY6+7uvmoCrbVQ767qfbBPp22skOnrETaKrqEkAz5X+SyDwxwkHjs6+jofazJPq82cJB
-        F212LqofHcRQg3kDQzWWZS4q7LRxkb2jDaBPjtuwlyDTaGwEjNVeB5jRukWc+b7czmVqO2Yw
-        xmz6jGRujnSQTEvdR0zhzw8I5lSrCTD/5FdymSLbKMksmQOY/pUlbpLPm+lRqawshdUEskq5
-        KiVNqYimEw8lxyVHSoSiUJEUvUAHKmWZbDQdfyApdF9ahnMNdGC2LCPL2UqSabX07hejNKos
-        HRuYqtLqomlWnZKhFqvDtLJMbZZSEaZkdXtEQmF4pFP4bnpq4fh5rvoPmGNZ7uUYQLFfEfDi
-        QUoMT7WcB0XAmyegfgAwv7mS4y4WAVwyVJPuYhXALlOxs+BtWa5cjnC5BVQngBvWfW5NAQZv
-        NC2SLoKkQuDqvV+3sB/1MYATn+pcIpwqIKB9YJ3rGrSNCoNFxq0YBPUsnO8wcV2YT0nhYn4L
-        5o73DLzQ3I27vJBa4MGelXqOm4iHjvUfgRtvg7N9rVw39oczJcc9WAFvLRV4NGpYaWj1DI2B
-        3cNnCVcGnAqCTe273e0dsKz/0pYEp3zgyfW/PHI+tBofYhrWDPziGQ/h9TmLJw4Dhw1Gwr2U
-        t+HAdD1RCnaU/39CNQAm8BSr1mYqWG2kOkLJHvvvnuSqTDPYetzBiVZw27EQ1gMwHugBkIfT
-        fvwUq59cwE+R6XNZjSpZk5XBantApHNnp3H/7XKV83codckisVQolkgkYmmEREQ/yf9qF5AL
-        KIVMx6azrJrVPPRhPC9/A5ZX803paVgVfWdz8oQ+pH8YVESMt0nGsqVjy2Ppew+eIFebDbbh
-        D0u8Eiavdz/3RFkFPpiX4Ng+e3FWmnc4L/vY/I3Bud7i2Gn788XFliHR4WXq6buJMaL3R76s
-        cszd3fmIj5gfn6Pfv/GBuiK0RHiIDPettXS3D6ptO9/pWshLK+1/tWi+K458MCt5zTe8NGkj
-        Fj+q+m2tdCOgc2Uzdk0vqLqWgB3ZZbIblNNXsH79hDhH3HTk7972oXtXFfpgRe6dc75f3DfG
-        nAug4paF81GVr1gv3FwoeflRuXdzdHjD0cnR93KCHqsreOvg42WN1xy5JwOCOTmb1SFvRCjv
-        TzWYsT6a0KbKRMG4Riv7F4VcCxZlBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWRfUzMcRzH+/7u9+S4+rnO+iZi1zKajmR8rbJs6FdsLDM7Zpz6iemuc1e4
-        zCRFzuNiNiTUka5S7lxdVJfrPOVZdLU6KpLzkPS0W0U6zX/v9+f1/uz9x5vmCUd5U+mdimRO
-        pZAlikk+Xl4n9g8ODINx800loajTfIFAbbnlJMp3dWHoQ34fjqxGE4XuvL3EQwWPagl0xfaC
-        QBX3O3B0+8sYfX3BgaOuK7cAcl58TyLDx0YCtX/dgBru5pDoRJmJQCU2B4Wu219j6IZhBEN5
-        pn4KZVbbKOSoKgco44gNi4RscW4xYM0OHWDtul4eW3nRQbH5VU6MNeiPkWxrYxXJGnUH2cwH
-        Qzh76o4esH/SL1Os1mYn2T6DP1s/0Eet9dzID4/nEnfu4VTzlm7l78hsv0kpm+E+U/9DIg0c
-        F2kBTUNmIXxeF6oFfFrI3AOw3plDaMGEsTuEhcPZYFx7w8I/XdR46BAGLZ2n/wGSmQsHfz4l
-        3UDEZAJoLzyGuQ2PuYRDV3Yt4a7wZiRQmytyP+BMIOyu0lNuLWCWwN50IzbeMAMWldXyzoBJ
-        V4GHHvhySrU8Qa4OUYYouL0StUyuTlEkSOKS5Abwb6OgOWZQoe+RWAFGAyuANE8sEsSbRXFC
-        QbxMk8qpkraoUhI5tRX40bjYR/BK+2SLkEmQJXO7OE7Jqf5TjJ4wNQ2bPTi0J4tZUTO8ftS7
-        6OmuFtcg9vjaioObaV/UstjRuOykZVFqVExBdnKE6PbQr4EY3+l1weZr6yzvQCwNl0sHLQ1y
-        L35ktU4Jk65zA9RMe15N6ZrIJL1X9YzVD84Rpez5/ft+r3kmrVxQnK452/2l/4e39tPKN6UV
-        AZ8zerYJm+/N6rcc9jK2+h1YpTvaTWXMfVgSFAleulZCcaz/iPS79Mhww+fVHjOLij7GZoWF
-        a5ZO+9YWLSnePrm+sbPAmjcvqikwZ0qMZ91j6fbos88ZEcw11awiUXlbwG6XT7BxYlCUOmKa
-        n8ecTTZnh8bnQ0DqxLa9n5o0lQanQNGeUtYkxtU7ZCFBPJVa9hfszN75EgMAAA==
-X-CMS-MailID: 20220907063309epcas5p1793555c0747fd7a11997e97649924552
+In-Reply-To: <20220907064715.55778-1-smitha.t@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf1CTdRzH7/s82/MMaNzToPrGFa2n6JL4scmGX1DCTrLnwoyT7rrrShjb
+        0+CAbW3DAjOXkx+igAVeiIAEKBci4IQ5flg0UfxB3A2Q6dmCEEHwvCEkBdNqbFj/vT4/3p/P
+        5/v5fr88XDBBBPEyVHpWq5Jl0YQvx3xhXWh420YoFz2wEuiO5SgXTdSaCdTw1wyGxhsWOch6
+        tpNEHaPHcNQ00MdFx/uHuOjcz5McdOauO2o76uCgmeOtAM1W/UYg0+0xLvp97kM00l1NoEPt
+        nVx0ut9BohN2G4ZOmh5hqL7zDxLln+8nkaPXDND+gn5sM2RaalsAY3E0AsbeuIAzXVUOkmno
+        ncUYU/MBgvl1rJdgzjbuZfIvrnCY0o5mwPy9r4ZkivvtBLNoCmauPlwkk/w/ytyUzsoUrFbI
+        quRqRYZKGUcnJqdsSZFGi8Th4hi0gRaqZNlsHJ2wLSl8a0aWew20cJcsK8ftSpLpdHTkm5u0
+        6hw9K0xX6/RxNKtRZGkkmgidLFuXo1JGqFh9rFgkWi91J6Zmpt+3Xic150RfzFQYcQO48mox
+        8OFBSgIP7LtEFANfnoDqAfCWsx54jQUApxrbuV5jCcD5O/OcYsDzSAptEq//PICHvx3HVksJ
+        KCMGbcu7VpmgwuCS8xqxyoHU1wDeLtKvCnDKyIGOQRe5GgigdsCRrg6PmEOFQEOT2SPgUzGw
+        p8+Je+d7CZ5q7/OwDxULbRWXPRNB6qAPnK2pJ71JCbC5w7rGAXBuoGONg+BsWcEaK+H4ohF4
+        WQNrDN7GkIqHfaPVnpPh1DrY1h3pdb8Ij1xt9aTglD8scU2tpfOhpfYJ07B+8PJaeQiv3+/k
+        epmBNyoHMe+GSgB8OFZIHAbBVf+3qAOgGTzPanTZSlYn1USp2M//uzW5OtsEPE89NNECJifm
+        I6wA4wErgDycDuQrLIFyAV8hy81jteoUbU4Wq7MCqXuB3+BBz8jV7r+i0qeIJTEiSXR0tCQm
+        KlpMP8eveAPIBZRSpmczWVbDap/oMJ5PkAHDRxddkHm5PD/AKXl2roJkC53x1bL3Mx64Hkck
+        d+7PPfHOjtmZti+n/CZbvseHDRF+1OnvLmwmseXXH5uUda/sTcirHjQX/fjDpXfpcnte8l3L
+        Ledg5VvE9uWdpY6yexNdL3A+eDtfGlLZW7b7yknfM0898g1JbOAtpWkxVUn3L4aeovjgsAD7
+        TLXkPW6ay3iqwN702obp9J1FI7Qqd+TPm866PX55yaN+US3yyYvBCuON8AH08T89n+jThksO
+        RvqXfhX5U3lBqnAoJGO93/CnvbvvdN/8TLptpSZ2xTD0tO9G/rGwgNYjFQPYteRRvfle31ah
+        a4FJ3TO9ZXt+Y1GMbVogpjm6dJk4FNfqZP8Cg8yE7HMEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGIsWRmVeSWpSXmKPExsWy7bCSnK6mtUSywbupkhZPd8xktXgwbxub
+        xeIfz5ks7i/+zGJxaPNWdostV2YzWyw/foDVYv6Rc6wW2w8+YrHY+AIoe3HmXRaL5/PXMVq8
+        nHWPzWLT42usFg9fhVtc3jWHzaJnw1ZWi7VH7rJbLL1+kcli2aY/TBaLtn5ht2jde4Td4u6e
+        bYwWLW1HmBwkPNbMW8PosePuEkaP60s+MXvsnHWX3WPxnpdMHptWdbJ53Lm2h81j85J6j9aj
+        v1g8+rasYvT41zSX3aPryHU2j8+b5DxOff3MHsAXxWWTkpqTWZZapG+XwJXx9tBV9oLtBhXP
+        pzQzNzCeVOli5OCQEDCRaL9o0sXIySEksJtRYvkcexBbQkBCYuXvSYwQtrDEyn/P2bsYuYBq
+        Gpkkfv/rA0uwCehIfHt/mg0kISLQyihxfWUnE4jDLDCbReLHpAOsIBuEBQIk1h0MA2lgEVCV
+        aFi+jQ3E5hWwlNh94D0zxAZ5idUbDoDZnAJWEhennGCFuMhS4vGMbewTGPkWMDKsYpRMLSjO
+        Tc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjjotzR2M21d90DvEyMTBeIhRgoNZSYQ3ZYdIshBv
+        SmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1M8V+956T8V1sp
+        2SqzJaBMdKr5230Rxcy+Jbtk+hsnqE/pfbwqeVe26HzPV50lx/fkL/OYvFil6gTjacmEF3yb
+        Zj8oDnbokz2lvtd0k7Ve9v1d540nL17D4/rugWOakZXOdzsPc/6sxaULRNZkFHixNLI+EdmV
+        tuRrzNd6va2lZzVEP1j2PWMRCr8W+5nHb+nhucwNYpplz2MYulYaGXm1CcmnubVdPB7w8qBB
+        YO7NV5oHAgUaJ35mWazAcMNWXV8zrH2a9anJn25Nk3suI6a4ZceON9ZpCtw+y+qfX3vc/XxX
+        wK+Mwq6407c17rA6SOw1Plk6+12DkEWTwv0nrP7hEft/BjyJuMybavmb56ASS3FGoqEWc1Fx
+        IgA6V7SVKQMAAA==
+X-CMS-MailID: 20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220907063309epcas5p1793555c0747fd7a11997e97649924552
-References: <CGME20220907063309epcas5p1793555c0747fd7a11997e97649924552@epcas5p1.samsung.com>
+X-CMS-RootMailID: 20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7
+References: <20220907064715.55778-1-smitha.t@samsung.com>
+        <CGME20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7@epcas5p1.samsung.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: aakarsh jain <aakarsh.jain@samsung.com>
+Adds DT schema for s5p-mfc in yaml format
 
-This patch series adds MFC v12 support. MFC v12 is used in
-Tesla FSD SoC.
-
-This adds support for following:
-
-* Add support for VP9 encoder
-* Add support for YV12 and I420 format (3-plane)
-* Add support for Rate Control, UHD and DMABUF for encoder
-* Add support for DPB buffers allocation based on MFC requirement
-* Update documentation for control id definitions
-
-Changes since v1:
- - Addressed review comments by Andrzej Hajda.
- - Addressed review comments by Rob Herring.
- - Addressed review comments by Krzysztof Kozlowski.
- - Addressed review comments by Hans Verkuil.
- - Addressed review comments by Nicolas Dufresne.
- - Rebased on latest krzk/for-next tree.
-
-v4l2-complaince:
-Total for s5p-mfc device /dev/video0: 45, Succeeded: 39, Failed: 6, Warnings: 0
-Total for s5p-mfc device /dev/video1: 45, Succeeded: 34, Failed: 11, Warnings: 3
-
-Smitha T Murthy (15):
-  dt-bindings: media: s5p-mfc: Add new DT schema for MFC
-  dt-bindings: media: s5p-mfc: Add mfcv12 variant
-  media: s5p-mfc: Rename IS_MFCV10 macro
-  media: s5p-mfc: Add initial support for MFCv12
-  Documention: v4l: Documentation for VP9 CIDs.
-  media: v4l2: Add v4l2 control IDs for VP9 encoder.
-  media: s5p-mfc: Add support for VP9 encoder.
-  media: s5p-mfc: Add YV12 and I420 multiplanar format support
-  media: s5p-mfc: Add support for rate controls in MFCv12
-  media: s5p-mfc: Add support for UHD encoding.
-  media: s5p-mfc: Add support for DMABUF for encoder
-  media: s5p-mfc: Set context for valid case before calling try_run
-  media: s5p-mfc: Load firmware for each run in MFCv12.
-  media: s5p-mfc: DPB Count Independent of VIDIOC_REQBUF
-  arm64: dts: fsd: Add MFC related DT enteries
-
- .../devicetree/bindings/media/s5p-mfc.txt     |  77 +---
- .../bindings/media/samsung,s5p-mfc.yaml       | 110 +++++
- .../media/v4l/ext-ctrls-codec.rst             | 167 +++++++
- arch/arm64/boot/dts/tesla/fsd-evb.dts         |   4 +
- arch/arm64/boot/dts/tesla/fsd.dtsi            |  22 +
- .../platform/samsung/s5p-mfc/regs-mfc-v12.h   |  60 +++
- .../platform/samsung/s5p-mfc/regs-mfc-v7.h    |   1 +
- .../platform/samsung/s5p-mfc/regs-mfc-v8.h    |   3 +
- .../media/platform/samsung/s5p-mfc/s5p_mfc.c  |  36 +-
- .../platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c |   3 +
- .../platform/samsung/s5p-mfc/s5p_mfc_common.h |  54 ++-
- .../platform/samsung/s5p-mfc/s5p_mfc_ctrl.c   |   9 +-
- .../platform/samsung/s5p-mfc/s5p_mfc_dec.c    |  51 ++-
- .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    | 410 +++++++++++++++--
- .../platform/samsung/s5p-mfc/s5p_mfc_opr.h    |  16 +-
- .../platform/samsung/s5p-mfc/s5p_mfc_opr_v5.c |  12 +-
- .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 433 ++++++++++++++++--
- .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h |   7 +-
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  44 ++
- include/uapi/linux/v4l2-controls.h            |  33 ++
- 20 files changed, 1349 insertions(+), 203 deletions(-)
+Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+---
+ .../devicetree/bindings/media/s5p-mfc.txt     |  77 +------------
+ .../bindings/media/samsung,s5p-mfc.yaml       | 109 ++++++++++++++++++
+ 2 files changed, 110 insertions(+), 76 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
- create mode 100644 drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
 
+diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+index aa54c8159d9f..0b7c4dd40095 100644
+--- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
++++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+@@ -1,76 +1 @@
+-* Samsung Multi Format Codec (MFC)
+-
+-Multi Format Codec (MFC) is the IP present in Samsung SoCs which
+-supports high resolution decoding and encoding functionalities.
+-The MFC device driver is a v4l2 driver which can encode/decode
+-video raw/elementary streams and has support for all popular
+-video codecs.
+-
+-Required properties:
+-  - compatible : value should be either one among the following
+-	(a) "samsung,mfc-v5" for MFC v5 present in Exynos4 SoCs
+-	(b) "samsung,mfc-v6" for MFC v6 present in Exynos5 SoCs
+-	(c) "samsung,mfc-v7" for MFC v7 present in Exynos5420 SoC
+-	(d) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
+-	(e) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
+-	(f) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
+-
+-  - reg : Physical base address of the IP registers and length of memory
+-	  mapped region.
+-
+-  - interrupts : MFC interrupt number to the CPU.
+-  - clocks : from common clock binding: handle to mfc clock.
+-  - clock-names : from common clock binding: must contain "mfc",
+-		  corresponding to entry in the clocks property.
+-
+-Optional properties:
+-  - power-domains : power-domain property defined with a phandle
+-			   to respective power domain.
+-  - memory-region : from reserved memory binding: phandles to two reserved
+-	memory regions, first is for "left" mfc memory bus interfaces,
+-	second if for the "right" mfc memory bus, used when no SYSMMU
+-	support is available; used only by MFC v5 present in Exynos4 SoCs
+-
+-Obsolete properties:
+-  - samsung,mfc-r, samsung,mfc-l : support removed, please use memory-region
+-	property instead
+-
+-
+-Example:
+-SoC specific DT entry:
+-
+-mfc: codec@13400000 {
+-	compatible = "samsung,mfc-v5";
+-	reg = <0x13400000 0x10000>;
+-	interrupts = <0 94 0>;
+-	power-domains = <&pd_mfc>;
+-	clocks = <&clock 273>;
+-	clock-names = "mfc";
+-};
+-
+-Reserved memory specific DT entry for given board (see reserved memory binding
+-for more information):
+-
+-reserved-memory {
+-	#address-cells = <1>;
+-	#size-cells = <1>;
+-	ranges;
+-
+-	mfc_left: region@51000000 {
+-		compatible = "shared-dma-pool";
+-		no-map;
+-		reg = <0x51000000 0x800000>;
+-	};
+-
+-	mfc_right: region@43000000 {
+-		compatible = "shared-dma-pool";
+-		no-map;
+-		reg = <0x43000000 0x800000>;
+-	};
+-};
+-
+-Board specific DT entry:
+-
+-codec@13400000 {
+-	memory-region = <&mfc_left>, <&mfc_right>;
+-};
++This file has moved to samsung,s5p-mfc.yaml
+diff --git a/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml b/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+new file mode 100644
+index 000000000000..7cd26d4acbe4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
+@@ -0,0 +1,109 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/samsung,s5p-mfc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Samsung Exynos Multi Format Codec (MFC)
++
++maintainers:
++  - Marek Szyprowski <m.szyprowski@samsung.com>
++  - Aakarsh Jain <aakarsh.jain@samsung.com>
++
++description:
++  Multi Format Codec (MFC) is the IP present in Samsung SoCs which
++  supports high resolution decoding and encoding functionalities.
++
++properties:
++  compatible:
++    enum:
++      - samsung,mfc-v5                  # Exynos4
++      - samsung,mfc-v6                  # Exynos5
++      - samsung,mfc-v7                  # Exynos5420
++      - samsung,mfc-v8                  # Exynos5800
++      - samsung,exynos5433-mfc          # Exynos5433
++      - samsung,mfc-v10                 # Exynos7880
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    maxItems: 3
++
++  clock-names:
++    minItems: 1
++    maxItems: 3
++
++  interrupts:
++    maxItems: 1
++
++  iommus:
++    maxItems: 2
++
++  iommu-names:
++    maxItems: 2
++
++  power-domains:
++    maxItems: 1
++
++  memory-region:
++    maxItems: 1
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - samsung,mfc-v5
++    then:
++      properties:
++        memory-region:
++          maxItems: 2
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    # SoC specific DT entry
++    mfc: mfc@12880000 {
++        compatible = "samsung,fsd-mfc";
++        reg = <0x0 0x12880000 0x0 0x10000>;
++        interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
++        clock-names = "mfc";
++        clocks = <&clock_mfc MFC_MFC_IPCLKPORT_ACLK>;
++        iommus = <&smmu_isp 0x1000 0x0>, <&smmu_isp 0x1400 0x0>;
++        iommu-names = "left", "right";
++        power-domains = <&pd_mfc>;
++        memory-region = <&mfc_left>, <&mfc_right>;
++    };
++
++  - |
++    # Reserved memory specific DT entry for given board
++    # (see reserved memory binding for more information)
++    reserved-memory {
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges;
++
++        mfc_left: region@84000000 {
++                compatible = "shared-dma-pool";
++                no-map;
++                reg = <0x84000000 0x800000>;
++        };
++
++        mfc_right: region@a9000000 {
++                compatible = "shared-dma-pool";
++                no-map;
++                reg = <0xa9000000 0x800000>;
++        };
++    };
++
 -- 
 2.17.1
 

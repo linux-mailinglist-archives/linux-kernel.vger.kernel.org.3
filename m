@@ -2,129 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C6B5AFBEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DABD5AFBF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiIGFrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S229785AbiIGFtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiIGFro (ORCPT
+        with ESMTP id S229482AbiIGFtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:47:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177D066111
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:47:36 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id r17so530720ejy.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 22:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date;
-        bh=YtQGFFP4vhfdUxZhJrZK2jqmDRC5K71pRjy06kzufEA=;
-        b=D4MSYe3HuhjfTCnhlWTUWIOL1gN6qSsC/IeXJ+WxDvobPcnhhWhthaLWp0Je7KM9C9
-         xxNzLsp/6fSpM6Eo3j+14h/npT0wAePR8BbgHcgnA0v9OHztxQZcZ2kh5hfdkdywI7gT
-         OoVvmsCvGYfkaVg+Um+yGHT49wN9zNqGX2DyA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=YtQGFFP4vhfdUxZhJrZK2jqmDRC5K71pRjy06kzufEA=;
-        b=VdzkRslBIW3mSH5QKVzDW6CMXROsi+N+ZHoV6aUup99qlfZZXQXj1Tvj6LliiJf2bn
-         T3/qPvJ5KG6LJBQBMmAjAfM9BiuVJWzpiMrz3F9dyTbPVy70LJqtP8bW30cXZSDPvIIF
-         3zoheCFLcYE7cYefAYfXpv96C1C16NL+rH333BwcXV0YP0WQFsHxSI3RmVCkbm5Nt7gI
-         RQEKh48b+b2QU3HqiPBKMQLABCZs71em4DaKkhbCMNjBNutRAG5962Y55kjZyugZzoGm
-         lskah+fcjMR8StcPNvoEjsaUZ/A7fCUH5EjnYiPh9uuDHAv1LtL+s9Iufxcat5YUDOm6
-         ZiRw==
-X-Gm-Message-State: ACgBeo1tzafXU7kmxKWln7VYwFPxn/fo9o+jtYFqnOMMNKgXhGbenzra
-        rpRSTdXy9uGYtTr6MUVgQSI/YQ==
-X-Google-Smtp-Source: AA6agR6l0Nv5Ojf99/mgkxk+bfFH+4lR+cupi/L8llhX+dNx0PezxjkLx3qkT51MqwmWQ0AJP9vECQ==
-X-Received: by 2002:a17:907:6d8a:b0:73b:d9e4:e628 with SMTP id sb10-20020a1709076d8a00b0073bd9e4e628mr1189348ejc.75.1662529654688;
-        Tue, 06 Sep 2022 22:47:34 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id e10-20020a1709062d4a00b0073dafb227c0sm7799536eji.161.2022.09.06.22.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 22:47:34 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 07:47:32 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>
-Subject: Re: build failure of next-20220906 due to 396369d67549 ("drm: vkms:
- Add support to the RGB565 format")
-Message-ID: <YxgwdGtNTnDdIqAv@phenom.ffwll.local>
-Mail-Followup-To: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>
-References: <YxducgSzR6/zyHD7@debian>
- <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
- <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
+        Wed, 7 Sep 2022 01:49:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7724215730;
+        Tue,  6 Sep 2022 22:49:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C3C661589;
+        Wed,  7 Sep 2022 05:49:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD13C433C1;
+        Wed,  7 Sep 2022 05:49:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662529773;
+        bh=RWRKXwOTcTy8VPewA7SDv2a/Y8GViYdktXr3TqkZAYY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YwAFdiM1Lckx7XzOXhvBcEjvcTClR6OXnXceNXEQ57Fnch0XBkWdjXoq9OCLjkKWt
+         9Tri4g2uWQ081iKJ2Gwa7e4PjapOYR4tktTXEiA+Iiw8PR1KQjjktVdb4y7XX9Cvsk
+         aP6OC8ZpP0KS/F51dL8X2uVrkOxB5LT/+gsqGvNE=
+Date:   Wed, 7 Sep 2022 07:49:29 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/107] 5.15.66-rc1 review
+Message-ID: <Yxgw6SrPaF43s/pw@kroah.com>
+References: <20220906132821.713989422@linuxfoundation.org>
+ <CADVatmMTbnOm1bHWdbxVZ26QfbjyhhB+_ZRBMM53GicJczE5=Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
-X-Operating-System: Linux phenom 5.18.0-4-amd64 
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CADVatmMTbnOm1bHWdbxVZ26QfbjyhhB+_ZRBMM53GicJczE5=Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:35:49PM -0300, Igor Matheus Andrade Torrente wrote:
-> On 9/6/22 18:26, Sudip Mukherjee wrote:
-> > On Tue, Sep 6, 2022 at 4:59 PM Sudip Mukherjee (Codethink)
-> > <sudipm.mukherjee@gmail.com> wrote:
-> > > 
-> > > Hi All,
-> > > 
-> > > The builds of next-20220906 fails for mips, xtensa and arm allmodconfig.
-> > > 
-> > > The errors in mips and xtensa are:
-> > > 
-> > > ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > 
-> > > The error in arm is:
-> > > 
-> > > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > 
-> > > 
-> > > Trying to do a git bisect to find out the offending commit.
-> > 
-> > git bisect points to 396369d67549 ("drm: vkms: Add support to the
-> > RGB565 format")
+On Tue, Sep 06, 2022 at 09:46:37PM +0100, Sudip Mukherjee wrote:
+> Hi Greg,
 > 
-> Are these architectures incapable of doing 64bits int division?
+> On Tue, Sep 6, 2022 at 2:37 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.15.66 release.
+> > There are 107 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
+> > Anything received after that time might be too late.
+> 
+> My test pipelines are still running, but x86_64 allmodconfig failed
+> with gcc-12 with the error:
+> 
+> drivers/net/wwan/iosm/iosm_ipc_protocol_ops.c: In function
+> 'ipc_protocol_dl_td_process':
+> drivers/net/wwan/iosm/iosm_ipc_protocol_ops.c:406:13: error: the
+> comparison will always evaluate as 'true' for the address of 'cb' will
+> never be NULL [-Werror=address]
+>   406 |         if (!IPC_CB(skb)) {
+>       |             ^
+> In file included from drivers/net/wwan/iosm/iosm_ipc_imem.h:9,
+>                  from drivers/net/wwan/iosm/iosm_ipc_protocol.h:9,
+>                  from drivers/net/wwan/iosm/iosm_ipc_protocol_ops.c:6:
+> ./include/linux/skbuff.h:794:33: note: 'cb' declared here
+>   794 |         char                    cb[48] __aligned(8);
+> 
+> It will need dbbc7d04c549 ("net: wwan: iosm: remove pointless null check").
 
-Yeah 32bit archs in general can't do that, and you have to use the right
-macros because otherwise gcc falls back to its own built-ins, and those
-don't exist in the kernel since the kernel isn't (cannot!) linked against
-any userspace library.
-
-For pretty much this reasons it's really good to build test against 32bit
-x86, or probably more relevant these days, 32bit arm.
-
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks, I have not been testing any branches with gcc12 just yet because
+of these issues :(

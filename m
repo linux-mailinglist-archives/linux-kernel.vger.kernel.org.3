@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC1F5B0B99
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1F15B0B9A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiIGRjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S229620AbiIGRjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiIGRjJ (ORCPT
+        with ESMTP id S229469AbiIGRjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:39:09 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1359AB438
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:39:08 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id r11-20020a05640251cb00b004484ec7e3a4so10047709edd.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:39:08 -0700 (PDT)
+        Wed, 7 Sep 2022 13:39:12 -0400
+Received: from mail-lf1-x149.google.com (mail-lf1-x149.google.com [IPv6:2a00:1450:4864:20::149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E16A9264
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:39:11 -0700 (PDT)
+Received: by mail-lf1-x149.google.com with SMTP id dt8-20020a0565122a8800b00492f7025810so3769147lfb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 10:39:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=sHsT3YDwhM+0jjwjlaGB8MngokRR5HRxbTTGftCU/LU=;
-        b=j8sE6fYTVOBfnvhd4sm/oSb2hwD47yzJVngf0DKpeOSTOLJyqSvXgsLamHaNOmIod2
-         bk4Cr20MDfwnQXpC21xZk16bIy4vhB5m9TzxVLfg8FLLtXWa0NMwUp55v6X8db/RBu4u
-         vdLp5YlCTYUbyYd+sFgPsUKaTCh255jBSJoq2cYirvI1sABKKWEaO/BN4DfG0qGZOxSG
-         8ecj5Rxospyu93oPYwQ4JpFIxBwVhAWti1sJvk+rEHfbLh2tyqMnpU9Ays9XoM6PLE9d
-         HE6IGUKcDaH7wUhycoA8SyjTCVNRAhN3LTXZZScw1D6hva+kRupryuIkReGA4Y2ALlou
-         Uclg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=BmEi8gIwQcUUQptKaHcLNwXSjRU/vHM6B2OOTGvVDXE=;
+        b=dko2SfaLeLucDtojaFxk9/p0aOv1qZKDkQKYFaggxikX8hhzEizTQ417LdYHh6nTox
+         KDsBAknOJ+6Eo/ArssQbhLT+hoJlNuokKbDReVVCeU5JfNFLZSWj2hEF93uJqVRs8qmp
+         lvDIZ16cH/V5ix87Ny61ePlKOnhFeqzEC5UpHbxUkB8zmnIBp7wYvj5lf+KySeFV7968
+         QDkJYZCZJRxhS/PFq3Sp8wTOns+YvZmZs4EybbydI/wuFSFXa3hnu1TVuEncjt6j2LBS
+         Vj/MxCuENHCle3qb5gvg0+znGmCJa5a5CTiKTD7LkwA6mid05caT6rvJtJO4hJBaPKir
+         kzwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=sHsT3YDwhM+0jjwjlaGB8MngokRR5HRxbTTGftCU/LU=;
-        b=uvbB4prs7PGqmPa2bxHMR8xuJRXuhQGl4H/PCPx6ZNcYGU8t7w/4lerdzFUGZ9zvWw
-         Wwy57PmlinEeDW9KQRtojac1y+ZA2xZkaAYKELTbq+YJGztYdGqXm2yCU6kSZH35CIln
-         YlKhiHUH7iZJuWWOyhtETZ4cS5CwDhErdP7p1y/D9N7YTyKXir9D1hteVkO50hOE8fH6
-         ZSCbxalfh8HCPZN7bcVan4KftB5/n4J1Ad2QfQUxFdsT1jnqnUDllpeSkQS2CBt47oLT
-         GsNArjRXJa5emEXT/lcUlxznwLmcoz5kekW1f9LV1cPsOUHrGTkWtf4Rqr9lpJiKAztm
-         tV4Q==
-X-Gm-Message-State: ACgBeo1Bq3j6L6bZZZuOqKRidMTLbdC+pL47G5iOfR2UKqi6RH2T+I0D
-        9pMzLY8yc5ypNrdS6KY9hRRDJFZreQ==
-X-Google-Smtp-Source: AA6agR5d9x9s9m+e7YC9j9xzF56Mb/hRV+gwOp4RgArCUr/r/3QBfUwnaKEKW086XZceJHRKAbUD+9w+eg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=BmEi8gIwQcUUQptKaHcLNwXSjRU/vHM6B2OOTGvVDXE=;
+        b=6mYeRlluut/1CA+RSxEzyiyz/GmqqTWX7rlYlAhrXwPOR1pFoDX055XujAZ3HoR8Su
+         NlbinU0+ttmJHxE5GtOCdgcXyqid5cj38ertVzznjyTpGuzy+ReXVbyD0bUddxBv8D6s
+         c20S30jdtXrcOttZrr88PfhDitutBPmEN55EWwll6x5QDFJm420CZViPyoiFjNEIlip+
+         UrStw6clXvDThllYsBPSf26RMyJ1WIuJng6G5nzCCWPX2/jOoTPhnPK8iLrES6UlWLFb
+         hr+LnEa15gplcNIbrqS3OvVsBnZVooHs8vYdmWtuW1/17/wmuldo3gRHnpEhty+jcPG5
+         UwnA==
+X-Gm-Message-State: ACgBeo1PuPGWGfHa0HV/RvGCgNcDp+EoaiCrKmQKq62SdZ5gXhWlRu7C
+        WWtvjwoEdSg/VRIx1raVl00LbT7NBA==
+X-Google-Smtp-Source: AA6agR5egxwtxjD+OnVXZYPoC3wFjV2aF+IAhyqkuqSkuJ//nrmP6TRx2UYFpIsZzh6M2wys1t9NiZGavQ==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:ba52:c371:837f:3864])
- (user=elver job=sendgmr) by 2002:a05:6402:d06:b0:440:3e9d:77d with SMTP id
- eb6-20020a0564020d0600b004403e9d077dmr3852449edb.286.1662572347297; Wed, 07
- Sep 2022 10:39:07 -0700 (PDT)
-Date:   Wed,  7 Sep 2022 19:39:02 +0200
+ (user=elver job=sendgmr) by 2002:ac2:5ece:0:b0:497:acb3:a6f5 with SMTP id
+ d14-20020ac25ece000000b00497acb3a6f5mr554128lfq.112.1662572349920; Wed, 07
+ Sep 2022 10:39:09 -0700 (PDT)
+Date:   Wed,  7 Sep 2022 19:39:03 +0200
+In-Reply-To: <20220907173903.2268161-1-elver@google.com>
 Mime-Version: 1.0
+References: <20220907173903.2268161-1-elver@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220907173903.2268161-1-elver@google.com>
-Subject: [PATCH 1/2] kcsan: Instrument memcpy/memset/memmove with newer Clang
+Message-ID: <20220907173903.2268161-2-elver@google.com>
+Subject: [PATCH 2/2] objtool, kcsan: Add volatile read/write instrumentation
+ to whitelist
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Mark Rutland <mark.rutland@arm.com>,
@@ -60,7 +63,7 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
         linux-kernel@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, stable@vger.kernel.org
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,62 +75,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With Clang version 16+, -fsanitize=thread will turn
-memcpy/memset/memmove calls in instrumented functions into
-__tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
+Adds KCSAN's volatile barrier instrumentation to objtool's uaccess
+whitelist.
 
-Add these functions to the core KCSAN runtime, so that we (a) catch data
-races with mem* functions, and (b) won't run into linker errors with
-such newer compilers.
+Recent kernel change have shown that this was missing from the uaccess
+whitelist (since the first upstreamed version of KCSAN):
 
-Cc: stable@vger.kernel.org # v5.10+
+  mm/gup.o: warning: objtool: fault_in_readable+0x101: call to __tsan_volatile_write1() with UACCESS enabled
+
+Fixes: 75d75b7a4d54 ("kcsan: Support distinguishing volatile accesses")
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- kernel/kcsan/core.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ tools/objtool/check.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-index fe12dfe254ec..66ef48aa86e0 100644
---- a/kernel/kcsan/core.c
-+++ b/kernel/kcsan/core.c
-@@ -18,6 +18,7 @@
- #include <linux/percpu.h>
- #include <linux/preempt.h>
- #include <linux/sched.h>
-+#include <linux/string.h>
- #include <linux/uaccess.h>
- 
- #include "encoding.h"
-@@ -1308,3 +1309,29 @@ noinline void __tsan_atomic_signal_fence(int memorder)
- 	}
- }
- EXPORT_SYMBOL(__tsan_atomic_signal_fence);
-+
-+void *__tsan_memset(void *s, int c, size_t count);
-+noinline void *__tsan_memset(void *s, int c, size_t count)
-+{
-+	check_access(s, count, KCSAN_ACCESS_WRITE, _RET_IP_);
-+	return __memset(s, c, count);
-+}
-+EXPORT_SYMBOL(__tsan_memset);
-+
-+void *__tsan_memmove(void *dst, const void *src, size_t len);
-+noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
-+{
-+	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-+	check_access(src, len, 0, _RET_IP_);
-+	return __memmove(dst, src, len);
-+}
-+EXPORT_SYMBOL(__tsan_memmove);
-+
-+void *__tsan_memcpy(void *dst, const void *src, size_t len);
-+noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
-+{
-+	check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-+	check_access(src, len, 0, _RET_IP_);
-+	return __memcpy(dst, src, len);
-+}
-+EXPORT_SYMBOL(__tsan_memcpy);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index e55fdf952a3a..67afdce3421f 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -999,6 +999,16 @@ static const char *uaccess_safe_builtin[] = {
+ 	"__tsan_read_write4",
+ 	"__tsan_read_write8",
+ 	"__tsan_read_write16",
++	"__tsan_volatile_read1",
++	"__tsan_volatile_read2",
++	"__tsan_volatile_read4",
++	"__tsan_volatile_read8",
++	"__tsan_volatile_read16",
++	"__tsan_volatile_write1",
++	"__tsan_volatile_write2",
++	"__tsan_volatile_write4",
++	"__tsan_volatile_write8",
++	"__tsan_volatile_write16",
+ 	"__tsan_atomic8_load",
+ 	"__tsan_atomic16_load",
+ 	"__tsan_atomic32_load",
 -- 
 2.37.2.789.g6183377224-goog
 

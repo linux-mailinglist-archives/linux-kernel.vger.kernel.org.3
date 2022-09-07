@@ -2,95 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20F35AFE6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D7F5AFE79
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiIGIDa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Sep 2022 04:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S230231AbiIGIEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiIGIDG (ORCPT
+        with ESMTP id S230242AbiIGIEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:03:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDE9AA3E5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:02:46 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-214-KBGl940hPP6SS3ocEhJz7A-1; Wed, 07 Sep 2022 09:02:44 +0100
-X-MC-Unique: KBGl940hPP6SS3ocEhJz7A-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 7 Sep
- 2022 09:02:42 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Wed, 7 Sep 2022 09:02:42 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        Yury Norov <yury.norov@gmail.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Valentin Schneider" <vschneid@redhat.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Eric Biggers <ebiggers@google.com>
-Subject: RE: [PATCH v2 1/5] smp: don't declare nr_cpu_ids if NR_CPUS == 1
-Thread-Topic: [PATCH v2 1/5] smp: don't declare nr_cpu_ids if NR_CPUS == 1
-Thread-Index: AQHYwgUQ3MtxNG+XS02hQI5PBTGTbq3TmwJA
-Date:   Wed, 7 Sep 2022 08:02:42 +0000
-Message-ID: <61fb5bada0be421abddc871908f8a3dd@AcuMS.aculab.com>
-References: <20220905230820.3295223-1-yury.norov@gmail.com>
- <20220905230820.3295223-2-yury.norov@gmail.com>
- <YxcKoaVGD+sTBjjG@hirez.programming.kicks-ass.net>
- <YxdT5w9Qd5SxK1wl@yury-laptop>
- <Yxda9/XP85D1sR39@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yxda9/XP85D1sR39@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 7 Sep 2022 04:04:23 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF02A895E;
+        Wed,  7 Sep 2022 01:04:11 -0700 (PDT)
+Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2507.6; Wed, 7 Sep 2022
+ 16:04:08 +0800
+From:   Liang Yang <liang.yang@amlogic.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v9 0/5] fix the meson NFC clock
+Date:   Wed, 7 Sep 2022 16:04:00 +0800
+Message-ID: <20220907080405.28240-1-liang.yang@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.21]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 06 September 2022 15:37
-...
-> It was suggested the other day we remove a whole bunch of SMP=n code and
-> unconditionally use SMP code, even if its pointless on UP just to make
-> the source simpler.
+EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK'
+which is defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is
+the divider and bit6~7 is the mux for fix pll and xtal. At the beginning,
+a common MMC and NAND sub-clock was discussed and planed to be implemented
+as NFC clock provider, but now this series of patches of a common MMC and
+NAND sub-clock are never being accepted and the current binding was never
+valid. the reasons are:
+1. EMMC and NAND, which are mutually exclusive anyway
+2. coupling the EMMC and NAND.
+3. it seems that a common MMC and NAND sub-clock is over engineered.
+and let us see the link for more information:
+https://lore.kernel.org/all/20220121074508.42168-5-liang.yang@amlogic.com
+so The meson nfc can't work now, let us rework the clock.
 
-All the world isn't x86.
+Changes since v8 [9]
+ - add reg-names on properties in yaml
+ - delete the uncessary quotes in yaml 
 
-There are some small embedded systems which are definitely UP
-and where you don't want any of the SMP 'bloat'.
-Architectures like NiosII will only ever be SMP.
+Changes since v7 [8]
+ - use COMMON_CLK && (ARCH_MESON || COMPILE_TEST) instead of
+   ARCH_MESON || COMPILE_TEST || COMMON_CLK.
+ - collect the review and ack
 
-There certainly have recently been (and probably still are)
-small ppc cpu for embedded systems that are UP.
+Changes since v6 [7]
+ - use COMMON_CLK instead of !HAVE_LEGACY_CLK
 
-	David
+Changes since v5 [6]
+ - add change log for patch 3/5
+ - add patch 5/5 to fix the reporting error of test robot
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Changes since v4 [5]
+ - split the dt binding patch into two patches, one for fixing, 
+   clock, the other for coverting to yaml
+ - split the nfc driver patch into two patches, one for fixing 
+   clock, the other for refining the get nfc resource.
+
+Changes since v3 [4]
+ - use devm_platform_ioremap_resource_byname
+ - dt_binding_check for mtd/amlogic,meson-nand.yaml
+
+Changes since v2 [3]
+ - use fw_name from dts, instead the wrong way using __clk_get_name
+ - reg resource size change to 0x800
+ - use reg-names
+
+Changes since v1 [2]
+ - use clk_parent_data instead of parent_names
+ - define a reg resource instead of sd_emmc_c_clkc 
+
+[1] https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+    https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+[2] https://lore.kernel.org/all/20220217063346.21691-1-liang.yang@amlogic.com
+[3] https://lore.kernel.org/all/20220318124121.26117-1-liang.yang@amlogic.com
+[4] https://lore.kernel.org/all/20220402074921.13316-1-liang.yang@amlogic.com/
+[5] https://lore.kernel.org/all/20220513123404.48513-1-liang.yang@amlogic.com/
+[6] https://lore.kernel.org/all/20220607064731.13367-1-liang.yang@amlogic.com/
+[7] https://lore.kernel.org/all/20220624131257.29906-1-liang.yang@amlogic.com/
+[8] https://lore.kernel.org/all/20220906060034.2528-1-liang.yang@amlogic.com/
+
+Liang Yang (5):
+  dt-bindings: nand: meson: fix meson nfc clock
+  mtd: rawnand: meson: fix the clock
+  mtd: rawnand: meson: refine resource getting in probe
+  dt-bindings: nand: meson: convert txt to yaml
+  mtd: rawnand: meson: not support legacy clock
+
+ .../bindings/mtd/amlogic,meson-nand.txt       | 60 ------------
+ .../bindings/mtd/amlogic,meson-nand.yaml      | 93 +++++++++++++++++++
+ drivers/mtd/nand/raw/Kconfig                  |  2 +-
+ drivers/mtd/nand/raw/meson_nand.c             | 86 +++++++++--------
+ 4 files changed, 136 insertions(+), 105 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+
+-- 
+2.37.1
 

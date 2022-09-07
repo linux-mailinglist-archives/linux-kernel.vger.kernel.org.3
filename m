@@ -2,130 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDD05B03A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EF55B03AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiIGMKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S229824AbiIGMLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiIGMKr (ORCPT
+        with ESMTP id S229765AbiIGMLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:10:47 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F327279EFA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:10:39 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id f24so14344918plr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=l+DHrdPvxTsZwy0vBKGsgNTwTQQreF7JrcfVtO8Ltl4=;
-        b=jsLNj/V068Z9IODGUBfiOvlacMevs0MPJPkHDxhq2TR+fMyPIwjBOGYssPhblblVCH
-         0ugRrGBz9AvcO9ghHLgUq5s6WptoByKGGAvdn3pdaiYkQZrq8XRVZ/eubNTj1mE9qqzH
-         xCaE78/jSWBSsud4szpIM9VyWlfWxs4GHRKQRkKsLPHhNZOe4a+P1Kw9Fqn/ZC15al9x
-         861EdnDwQbblmyeIGo4KM/R/wguXXI2pgUXufx0fb/EMmgUZfFUMa4HMkzBA3nVryM0J
-         knBsumaURTpAHdF6DBeYAn2BNF6qFa6jYigYhQz1oU4VZFgTDzrGdHzL+quoxEU386yf
-         igmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=l+DHrdPvxTsZwy0vBKGsgNTwTQQreF7JrcfVtO8Ltl4=;
-        b=0zDgdhOiPUhx1q32QHWiBMhvbPpZexvkibjZd+uvBe3/KP0im8ia0fTOPK5fzY0GGI
-         lbXIDx5fx/+4JSu0JutASXUiMf78O0NLddzV/XOXwbGPs+110DSy4HiqaD5QoGcwpl2+
-         OAwv/xNpAE35zs3ii6Yv8oAdLKx8gx+3jIv+tQIZS29ZiTdD2HXMIxI8Y6wRpn7TkiYu
-         aFcYikFvDH6B5R3f91k9YevGmzi5K3giWse9v/y/cQQBEQv5r1lH40LJmhhR4SB+Ak1P
-         0IoKIj/kcj9HT6Dqsm9EjBL1uWLx25Pzcy0eLU8ziRHcnNfxKXNrr9w29ylKJYT5CV61
-         tsQw==
-X-Gm-Message-State: ACgBeo3oA6XqTFNJz8k0m6HX+cowRFeHu9Dj5biunNubuqtUGj2LAyQh
-        sdXt7t9u6kx5lKa4P2Rfm9jUJzWyFKuYVGd77DTEqg==
-X-Google-Smtp-Source: AA6agR42FdVl6iDpbcGKEYG4eJFaR2Na+cW46NNYQ+kS1Y3Nw6pBbcHMF4BZDi+IXlDbMQ7ntOCUbcsOW12bDyrptHs=
-X-Received: by 2002:a17:90a:988:b0:1f2:3dff:f1dd with SMTP id
- 8-20020a17090a098800b001f23dfff1ddmr3832027pjo.150.1662552639386; Wed, 07 Sep
- 2022 05:10:39 -0700 (PDT)
+        Wed, 7 Sep 2022 08:11:35 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95DB89CEE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:11:27 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 11B2E5802B9;
+        Wed,  7 Sep 2022 08:11:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 07 Sep 2022 08:11:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662552687; x=1662559887; bh=zDA579AoIY
+        dDNR4aP7II6WOb5N9Vc2GJf+UG4mhMuI8=; b=xh83Sji/S5fGlHvvO0M89p4G7z
+        yG9qqosL/cAMPjQTYP5c1hRx1uW8yt0ygT6kAvWkZkOEW1VNLR4R3bqktiOB8J2X
+        8rntACPKJHtPlw6gpkg488CmWrvp4PVFIIy0fDtjy7BDQGLMcQeLF4CM1kBNsF3r
+        DvKvkwlEqhmyXyF7Njw/mV/MND8XaIeQojBIXmzhrdwNpFiS3MHAbsB1HjCw+luf
+        mOhaCose89yP0EzYqLBzlHb5rF68sqojmq7+wuCSuwSTNJLsXxAYzkPkStIyC7lw
+        gRSE9ILnQWIeS5E22BNrIKUAEo1pYsDVYfAUxhUvDJHsThVFjnA1ecDQW8wQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662552687; x=1662559887; bh=zDA579AoIYdDNR4aP7II6WOb5N9V
+        c2GJf+UG4mhMuI8=; b=XWKXdivSs5OwDPMC03jM59LWg7OoVGgkfw1rpP4G1+wj
+        CvJA+0a/K6XnT1+OfeuMnI17fkt9iogRzJo9+3bs3KsaAE1RqrdjzQ/VZll8Ndo2
+        ENsLeYX3OSQTgV/E9UzvY0BFyp8h0Qjw+slxi6pjCz1waqDhOO7cDt2IGQmFUfmY
+        rNz/9vsDDHVqxl7Uo6YhDKkqEu3qcNp4UZq2U5QJgYxaU2XDvVDMCsbhwz8JjGWm
+        oC6klcFem4SP63dlTJfTio9soptONAMrqJptc5VyKKwuOF025lJrUJ5l4MtLjnaG
+        bVl0r5BmThoza/j3xGHDlklJdyhZqQd6xFQ/Xr3qLQ==
+X-ME-Sender: <xms:booYY7dJ7yBzajhFMtzryKFMxL-OIGY_JF2pLc-8u8r--HnYDY8IGA>
+    <xme:booYYxPpxvCF8ayHSogxvXBBIH3zoIb98cDJBMSWTU7FuAK6YXDOcW7MyoaqFW4NC
+    qQ7N7O6OGxU9KXZycY>
+X-ME-Received: <xmr:booYY0in_Ih4XWleTLyHUyosOGDjEgIEV34Cp_mENm1sEnF-H7vYMEzVuw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:booYY89VIT0sfe1JmDAaiGrD-5W8xJMEW06_9y7sLRI55IOF2lY6Ow>
+    <xmx:booYY3tHYdMP2Ikq69ajiY1kRzD__mju6J0w8X_oB-FoJ4bE4XendQ>
+    <xmx:booYY7GN7nZ8v7joHwkVmpB0hxr0n1xZXUEnhUYjF5G9lIVhjbvCeA>
+    <xmx:b4oYY_dm5jryjGI9aYWnwWzUP3b5YHJM27gV33h2zOrTVnVQ9N-3Vg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 08:11:26 -0400 (EDT)
+Date:   Wed, 7 Sep 2022 14:11:24 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mateusz Kwiatkowski <kfyatek@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 09/41] drm/connector: Add TV standard property
+Message-ID: <20220907121124.kda7wi33b5cmwhcr@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-9-459522d653a7@cerno.tech>
+ <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
+ <CAMuHMdU_yfr1ybNM9Dyk6n34Cqv5WJv1wZxQ_ZGJ_T8JCOeB2g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220902124032.788488-1-sudeep.holla@arm.com> <20220902124032.788488-5-sudeep.holla@arm.com>
-In-Reply-To: <20220902124032.788488-5-sudeep.holla@arm.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Wed, 7 Sep 2022 14:10:28 +0200
-Message-ID: <CAHUa44GPKpezKvybSbNHNm+NcLk9JzC4mtheFL0n0niAhZmP2w@mail.gmail.com>
-Subject: Re: [PATCH v2 04/10] firmware: arm_ffa: Add support for querying FF-A features
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zkn4o5drgepunzyl"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdU_yfr1ybNM9Dyk6n34Cqv5WJv1wZxQ_ZGJ_T8JCOeB2g@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 2:40 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> Add support for FFA_FEATURES to discover properties supported at the
-> FF-A interface. This interface can be used to query:
->  - If an FF-A interface is implemented by the component at the higher EL,
->  - If an implemented FF-A interface also implements any optional features
->    described in its interface definition, and
->  - Any implementation details exported by an implemented FF-A interface
->    as described in its interface definition.
->
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/firmware/arm_ffa/driver.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+--zkn4o5drgepunzyl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index 04e7cbb1b9aa..81b8d578b6ea 100644
-> --- a/drivers/firmware/arm_ffa/driver.c
-> +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -571,6 +571,32 @@ static int ffa_memory_reclaim(u64 g_handle, u32 flags)
->         return 0;
->  }
->
-> +static int ffa_features(u32 func_feat_id, u32 input_props,
-> +                       u32 *if_props_1, u32 *if_props_2)
-> +{
-> +       ffa_value_t id;
-> +
-> +       if (!ARM_SMCCC_IS_FAST_CALL(func_feat_id) && input_props) {
-> +               pr_err("%s: Invalid Parameters: %x, %x", __func__,
-> +                      func_feat_id, input_props);
-> +               return ffa_to_linux_errno(FFA_RET_INVALID_PARAMETERS);
-> +       }
-> +
-> +       invoke_ffa_fn((ffa_value_t){
-> +               .a0 = FFA_FEATURES, .a1 = func_feat_id, .a2 = input_props,
-> +               }, &id);
-> +
-> +       if (id.a0 == FFA_ERROR)
-> +               return ffa_to_linux_errno((int)id.a2);
-> +
-> +       if (if_props_1)
-> +               *if_props_1 = id.a2;
-> +       if (if_props_2)
-> +               *if_props_2 = id.a3;
-> +
-> +       return 0;
-> +}
-> +
->  static u32 ffa_api_version_get(void)
->  {
->         return drv_info->version;
-> --
-> 2.37.3
->
+On Fri, Sep 02, 2022 at 09:35:20AM +0200, Geert Uytterhoeven wrote:
+> On Fri, Sep 2, 2022 at 12:00 AM Mateusz Kwiatkowski <kfyatek@gmail.com> w=
+rote:
+> > W dniu 29.08.2022 o 15:11, Maxime Ripard pisze:
+> > > The TV mode property has been around for a while now to select and ge=
+t the
+> > > current TV mode output on an analog TV connector.
+> > >
+> > > Despite that property name being generic, its content isn't and has b=
+een
+> > > driver-specific which makes it hard to build any generic behaviour on=
+ top
+> > > of it, both in kernel and user-space.
+> > >
+> > > Let's create a new bitmask tv norm property, that can contain any of =
+the
+> > > analog TV standards currently supported by kernel drivers. Each drive=
+r can
+> > > then pass in a bitmask of the modes it supports.
+> >
+> > This is not a bitmask property anymore, you've just changed it to an en=
+um.
+> > The commit message is now misleading.
+> >
+> > > +static const struct drm_prop_enum_list drm_tv_mode_enum_list[] =3D {
+> > > +    { DRM_MODE_TV_MODE_NTSC_443, "NTSC-443" },
+> > > +    { DRM_MODE_TV_MODE_NTSC_J, "NTSC-J" },
+> > > +    { DRM_MODE_TV_MODE_NTSC_M, "NTSC-M" },
+> > > +    { DRM_MODE_TV_MODE_PAL_60, "PAL-60" },
+> > > +    { DRM_MODE_TV_MODE_PAL_B, "PAL-B" },
+> > > +    { DRM_MODE_TV_MODE_PAL_D, "PAL-D" },
+> > > +    { DRM_MODE_TV_MODE_PAL_G, "PAL-G" },
+> > > +    { DRM_MODE_TV_MODE_PAL_H, "PAL-H" },
+> > > +    { DRM_MODE_TV_MODE_PAL_I, "PAL-I" },
+> > > +    { DRM_MODE_TV_MODE_PAL_M, "PAL-M" },
+> > > +    { DRM_MODE_TV_MODE_PAL_N, "PAL-N" },
+> > > +    { DRM_MODE_TV_MODE_PAL_NC, "PAL-Nc" },
+> > > +    { DRM_MODE_TV_MODE_SECAM_60, "SECAM-60" },
+> > > +    { DRM_MODE_TV_MODE_SECAM_B, "SECAM-B" },
+> > > +    { DRM_MODE_TV_MODE_SECAM_D, "SECAM-D" },
+> > > +    { DRM_MODE_TV_MODE_SECAM_G, "SECAM-G" },
+> > > +    { DRM_MODE_TV_MODE_SECAM_K, "SECAM-K" },
+> > > +    { DRM_MODE_TV_MODE_SECAM_K1, "SECAM-K1" },
+> > > +    { DRM_MODE_TV_MODE_SECAM_L, "SECAM-L" },
+> > > +};
+> >
+> > I did not comment on it the last time, but this list looks a little bit=
+ random.
+> >
+> > Compared to the standards defined by V4L2, you also define SECAM-60 (a =
+good
+> > thing to define, because why not), but don't define PAL-B1, PAL-D1, PAL=
+-K,
+> > SECAM-H, SECAM-LC (whatever that is - probably just another name for SE=
+CAM-L,
+> > see my comment about PAL-Nc below), or NTSC-M-KR (a Korean variant of N=
+TSC).
+> >
+> > Like I mentioned previously, I'm personally not a fan of including all =
+those
+> > CCIR/ITU system variants, as they don't mean any difference to the outp=
+ut unless
+> > there is an RF modulator involved. But I get it that they have already =
+been used
+> > and regressing probably wouldn't be a very good idea. But in that case =
+keeping
+> > it consistent with the set of values used by V4L2 would be wise, I thin=
+k.
+>=20
+> Exactly. Anything outputting RGB (e.g. through a SCART or VGA connector)
+> doesn't care about the color subcarrier or modulator parts.  Likewise,
+> anything outputting CVBS doesn't care about the modulator part.
+>=20
+> Perhaps "generic" variants of NSTC and PAL/SECAM should be added, which
+> would really just mean 525/60 resp. 625/50.
+>=20
+> Alternatively, the tv_mode field could be split in two parts (either
+> two separate fields, or bitwise), to maintain a clear separation between
+> lines/fields versus color encoding and RF modulation (with zero for the
+> latter meaning a generic version)? That would also keep the door open
+> for TV_MODE_405_50, TV_MODE_819_50, TV_MODE_750_50, TV_MODE_750_60, ...
+
+Again, that property is only about color encoding and RF modulation. The
+lines numbers and whether it's interlaced or not is encoded in the mode,
+not here. So what you suggest is totally doable today.
+
+Maxime
+
+--zkn4o5drgepunzyl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxiKbAAKCRDj7w1vZxhR
+xd9CAP475gMVc9bgPfZRsSpr9ZicWPbCcdtwwB+SIZjyjWZwrgEAipAda0DdLowI
+RCIVTz/4+0X5TsSdP1wzG4wph1ePCQY=
+=iVLu
+-----END PGP SIGNATURE-----
+
+--zkn4o5drgepunzyl--

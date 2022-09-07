@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE37C5AF8FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD2B5AF8FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiIGAdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
+        id S229496AbiIGAgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIGAdM (ORCPT
+        with ESMTP id S229446AbiIGAgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:33:12 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55A4832D8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:33:09 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-324ec5a9e97so112674467b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:33:09 -0700 (PDT)
+        Tue, 6 Sep 2022 20:36:37 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186D2857FD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:36:36 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id s15-20020a5b044f000000b00680c4eb89f1so9671524ybp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 17:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tW9omT2jWyaki+Zn5zNj0WrFLFwIH62DBqUOT2MmeeQ=;
-        b=YPeC0P9keieACzXAVU7HD9mVtPTJLx3fGCstNxsYRm1UhwweePm9oGrfi3V9pBbeml
-         FjIxJI+B4tn6IM8fAQFij3k0KHsMFz2YDmwFBv3jDb73XBZchQGUVJQcUB/Zlq7Vegrl
-         ucIW3C2sum/zpSnoTEeg7Lx7FBY6WGczGBATx/mfA1PX1oUbhnV4sjl7lptOc4Cne/8k
-         d+hwgqhxF+Iw23VFZzAcAVlhP6+TvrqxF8WIL38/pd/Cq3rj2Lf3RSxlJy4x7IKDY8rp
-         iaA7xXRDb3lfbPwVLUjhAt1jRGQZ44qaw7kvL4b6Dx5SYOVtAH09fYyfcqYRmBb5PR6p
-         TVMA==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=FGh1VhDcmGlg8+aYUWq0Y5ZRzQes3IbJ2Bvcwl332Vc=;
+        b=dYgkW/uq16TcmzVZj9BYnRBL55Cld40RkxDSBE6YP2Ngo2zFDq2ki8L0OSjy46LLzk
+         9dH+qF1qHF9muM/47QROimGvq4QAUYyZFG/yyqB+tvMsHjo84UuaBPNpOKNjELyPVbL7
+         y2Qi1KMfAWtwwzQWEreE/rP6OXQ+dZm+q4uxlCRSFvszF6zbOxHOer9H++EXfe81SkOS
+         60poMCkbjjHR70Z9KWEkk/QrdOY2MrOS3bppTpGFMlFBfPaBjFmmo1a2g3LzbLkd05F0
+         NzVGDVgru6WNkTWKnfeu7XRNApaAvWJ3Eiej7KHAgMCKfktPDolfVMtLtxklbmv/e2mv
+         gclw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tW9omT2jWyaki+Zn5zNj0WrFLFwIH62DBqUOT2MmeeQ=;
-        b=uMyAgfCxvDGA0INk2RvSLn/8sFjCpCAfN0J5hUDg0FsuLAtgIH0b9sItJN8nlG2dHX
-         TIWmBBKh7K2c+9cbd7mrsGbu5/QylNUWKhj7AlTEGsCKnSZmOqfpY36icLXjA3s3H3EV
-         bjPYLrqnQCtc3zvcnxoRVG4yisipCn5skP+EDV3/gCmw0kLiMrWV6r3ix1AbBlqDs6Pe
-         2j5gM/kDufm2v6gXobQF1yr91SUvPG52mHZAiv0TpnJ4V36nR9HDd7cOJkHcH7LNoigs
-         Wn83qyiygVhFhSnitpk7gn9nnRvTbB7xQTymYfvOKQnaBDI609dKyAZmTcEHw1TOBmT7
-         zntA==
-X-Gm-Message-State: ACgBeo0HtZjoJL96ju+PkUMzxxuEjT9sWjpeL3XPiEGJep5GNmkQTeBt
-        mGdVAh6A3xvc3lVISeBYCZv3zSl8Fb/EtppeMiDooA==
-X-Google-Smtp-Source: AA6agR7GJdBpB1rGJPNAiaxAxdSuoXa5hQKtoCN9suiMaA6BhBufOrGdi9A7GFcDT7PLB3FLcfvKMLFR4hn0dggYPzQ=
-X-Received: by 2002:a0d:fd05:0:b0:329:3836:53ac with SMTP id
- n5-20020a0dfd05000000b00329383653acmr1050007ywf.455.1662510788752; Tue, 06
- Sep 2022 17:33:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220803122655.100254-1-nipun.gupta@amd.com> <20220906134801.4079497-1-nipun.gupta@amd.com>
- <20220906134801.4079497-3-nipun.gupta@amd.com>
-In-Reply-To: <20220906134801.4079497-3-nipun.gupta@amd.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 6 Sep 2022 17:32:31 -0700
-Message-ID: <CAGETcx8d8ZpuEC2Uqrzw-We21goC8EZR=6J-6YZBjruw=QKdHg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/7] bus/cdx: add the cdx bus driver
-To:     Nipun Gupta <nipun.gupta@amd.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        eric.auger@redhat.com, alex.williamson@redhat.com,
-        cohuck@redhat.com, puneet.gupta@amd.com,
-        song.bao.hua@hisilicon.com, mchehab+huawei@kernel.org,
-        maz@kernel.org, f.fainelli@gmail.com, jeffrey.l.hugo@gmail.com,
-        Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com,
-        jgg@ziepe.ca, jgg@nvidia.com, robin.murphy@arm.com,
-        will@kernel.org, joro@8bytes.org, masahiroy@kernel.org,
-        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org,
-        harpreet.anand@amd.com, nikhil.agarwal@amd.com,
-        michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=FGh1VhDcmGlg8+aYUWq0Y5ZRzQes3IbJ2Bvcwl332Vc=;
+        b=TzHnZwmPbDeIzmimwN+/RMMtW2JQmUDS413d4ZgNAXEM4tZ2fZgalyIXJw3tYkRpTu
+         wEe978XlxXQMdijtvHTNxzNNnYZxq4oScEPSiQ6xtbRtKNHLCP7qrN5HUCiPti9AoVGb
+         TOeUasPWkvWPvreihrJFZf1kTeqIvaNCf91cQdVRpjCr4XLahhfHLqg+U30Q7Srz+HFY
+         5vruXqK4mdCx4egT12dOaxuj8N7XMNU9ocYaa2QlRq8hKrWNdKjudplvrN54sSFCbOBB
+         RzuPiwKKRYS6TeVGKAdjhwwGU1VuUpAsibNoA3UvEGg/rp6bl6dBm/PoUscyLdRjidlb
+         4RSw==
+X-Gm-Message-State: ACgBeo2RzheAIxJ7byAbKxuXeEltCqCMeEWvd8sRL8StT8ZJn8rw2ibb
+        g5JF/up+MUAxTBGygcaFqIB8yFsrbp5G
+X-Google-Smtp-Source: AA6agR657OQhcz8Sr8V2M1tB+dKCHET8C3VHblIbArzxwfHBowbgWsnL/QAJrNcWuptDFnCq3RAOTs492AtR
+X-Received: from eugenis.svl.corp.google.com ([2620:15c:2ce:200:e475:deee:e746:40d9])
+ (user=eugenis job=sendgmr) by 2002:a25:d607:0:b0:6a8:d9d8:7735 with SMTP id
+ n7-20020a25d607000000b006a8d9d87735mr983824ybg.348.1662510995337; Tue, 06 Sep
+ 2022 17:36:35 -0700 (PDT)
+Date:   Tue,  6 Sep 2022 17:36:30 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220907003630.1115439-1-eugenis@google.com>
+Subject: [PATCH v4] arm64: mte: move register initialization to C
+From:   Evgenii Stepanov <eugenis@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>
+Cc:     Kenny Root <kroot@google.com>, Marc Zyngier <maz@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,916 +74,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 6:48 AM Nipun Gupta <nipun.gupta@amd.com> wrote:
->
-> CDX bus supports the scanning and probing of FPGA based
-> devices. These devices are registers as CDX devices.
->
-> The bus driver sets up the basic infrastructure and fetches
-> the device related information from the firmware.
->
-> CDX bus is capable of scanning devices dynamically,
-> supporting rescanning of dynamically added, removed or
-> updated devices.
->
-> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> ---
->
-> Basic overview of CDX bus architecture is provided in [patch 0/7].
->
-> Please NOTE: This RFC change does not support the CDX bus firmware
-> interface as it is under development, and this series aims to get
-> an early feedback from the community. Firmware interaction are
-> stubbed as MCDI APIs which is a protocol used by AMD to interact
-> with Firmware.
->
->  MAINTAINERS                       |   2 +
->  drivers/bus/Kconfig               |   1 +
->  drivers/bus/Makefile              |   3 +
->  drivers/bus/cdx/Kconfig           |   7 +
->  drivers/bus/cdx/Makefile          |   3 +
->  drivers/bus/cdx/cdx.c             | 437 ++++++++++++++++++++++++++++++
->  drivers/bus/cdx/cdx.h             |  34 +++
->  drivers/bus/cdx/mcdi_stubs.c      |  54 ++++
->  drivers/bus/cdx/mcdi_stubs.h      |  76 ++++++
->  include/linux/cdx/cdx_bus.h       |  93 +++++++
->  include/linux/mod_devicetable.h   |  13 +
->  scripts/mod/devicetable-offsets.c |   4 +
->  scripts/mod/file2alias.c          |  12 +
->  13 files changed, 739 insertions(+)
->  create mode 100644 drivers/bus/cdx/Kconfig
->  create mode 100644 drivers/bus/cdx/Makefile
->  create mode 100644 drivers/bus/cdx/cdx.c
->  create mode 100644 drivers/bus/cdx/cdx.h
->  create mode 100644 drivers/bus/cdx/mcdi_stubs.c
->  create mode 100644 drivers/bus/cdx/mcdi_stubs.h
->  create mode 100644 include/linux/cdx/cdx_bus.h
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f0598b3d731c..61af11c9fe06 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -939,6 +939,8 @@ M:  Nipun Gupta <nipun.gupta@amd.com>
->  M:     Nikhil Agarwal <nikhil.agarwal@amd.com>
->  S:     Maintained
->  F:     Documentation/devicetree/bindings/bus/xlnx,cdx.yaml
-> +F:     drivers/bus/cdx/*
-> +F:     include/linux/cdx/*
->
->  AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - SEV SUPPORT
->  M:     Brijesh Singh <brijesh.singh@amd.com>
-> diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-> index 7bfe998f3514..b0324efb9a6a 100644
-> --- a/drivers/bus/Kconfig
-> +++ b/drivers/bus/Kconfig
-> @@ -251,5 +251,6 @@ config DA8XX_MSTPRI
->
->  source "drivers/bus/fsl-mc/Kconfig"
->  source "drivers/bus/mhi/Kconfig"
-> +source "drivers/bus/cdx/Kconfig"
->
->  endmenu
-> diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
-> index d90eed189a65..88649111c395 100644
-> --- a/drivers/bus/Makefile
-> +++ b/drivers/bus/Makefile
-> @@ -20,6 +20,9 @@ obj-$(CONFIG_INTEL_IXP4XX_EB) += intel-ixp4xx-eb.o
->  obj-$(CONFIG_MIPS_CDMM)                += mips_cdmm.o
->  obj-$(CONFIG_MVEBU_MBUS)       += mvebu-mbus.o
->
-> +#CDX bus
-> +obj-$(CONFIG_CDX_BUS)          += cdx/
-> +
->  # Interconnect bus driver for OMAP SoCs.
->  obj-$(CONFIG_OMAP_INTERCONNECT)        += omap_l3_smx.o omap_l3_noc.o
->
-> diff --git a/drivers/bus/cdx/Kconfig b/drivers/bus/cdx/Kconfig
-> new file mode 100644
-> index 000000000000..c1eed5225328
-> --- /dev/null
-> +++ b/drivers/bus/cdx/Kconfig
-> @@ -0,0 +1,7 @@
-> +config CDX_BUS
-> +       bool "CDX Bus driver"
-> +       help
-> +               Driver to enable CDX Bus infrastructure. CDX bus is
-> +               capable of scanning devices dynamically, supporting
-> +               rescanning of dynamically added, removed or updated
-> +               devices.
-> diff --git a/drivers/bus/cdx/Makefile b/drivers/bus/cdx/Makefile
-> new file mode 100644
-> index 000000000000..e91bfe706294
-> --- /dev/null
-> +++ b/drivers/bus/cdx/Makefile
-> @@ -0,0 +1,3 @@
-> +obj-$(CONFIG_CDX_BUS) += cdx-bus-driver.o
-> +
-> +cdx-bus-driver-objs := cdx.o cdx_msi.o mcdi_stubs.o
-> diff --git a/drivers/bus/cdx/cdx.c b/drivers/bus/cdx/cdx.c
-> new file mode 100644
-> index 000000000000..fc417c32c59b
-> --- /dev/null
-> +++ b/drivers/bus/cdx/cdx.c
-> @@ -0,0 +1,437 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Platform driver for CDX bus.
-> + *
-> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/of.h>
-> +#include <linux/property.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/dma-map-ops.h>
-> +#include <linux/property.h>
-> +#include <linux/iommu.h>
-> +#include <linux/cdx/cdx_bus.h>
-> +
-> +#include "cdx.h"
-> +#include "mcdi_stubs.h"
-> +
-> +/*
-> + * Default DMA mask for devices on a CDX bus
-> + */
-> +#define CDX_DEFAULT_DMA_MASK   (~0ULL)
-> +
-> +struct platform_device *cdx_controller_pdev;
-> +
-> +static int cdx_bus_device_discovery(struct platform_device *pdev);
-> +
-> +static int cdx_unregister_device(struct device *dev,
-> +                                void * __always_unused data)
-> +{
-> +       struct cdx_device *cdx_dev = to_cdx_device(dev);
-> +
-> +       kfree(cdx_dev->driver_override);
-> +       cdx_dev->driver_override = NULL;
-> +
-> +       /*
-> +        * Do not free cdx_dev here as it would be freed in
-> +        * cdx_device_release() called from within put_device().
-> +        */
-> +       device_del(&cdx_dev->dev);
-> +       put_device(&cdx_dev->dev);
-> +
-> +       return 0;
-> +}
-> +
-> +void cdx_unregister_devices(struct bus_type *bus)
-> +{
-> +       int ret;
-> +
-> +       /* Reset all the devices attached to cdx bus */
-> +       ret = bus_for_each_dev(bus, NULL, NULL, cdx_unregister_device);
-> +       if (ret)
-> +               pr_err("error in CDX unregister for all devices\n");
-> +}
-> +
-> +/**
-> + * cdx_match_one_device - Tell if a CDX device structure has a matching
-> + *                       CDX device id structure
-> + * @id: single CDX device id structure to match
-> + * @dev: the CDX device structure to match against
-> + *
-> + * Returns the matching cdx_device_id structure or %NULL if there is no match.
-> + */
-> +static inline const struct cdx_device_id *
-> +cdx_match_one_device(const struct cdx_device_id *id,
-> +                    const struct cdx_device *dev)
-> +{
-> +       if ((id->vendor == dev->vendor) && (id->device == dev->device))
-> +               return id;
-> +       return NULL;
-> +}
-> +
-> +/**
-> + * cdx_match_id - See if a CDX device matches a given cdx_id table
-> + * @ids: array of CDX device ID structures to search in
-> + * @dev: the CDX device structure to match against.
-> + *
-> + * Used by a driver to check whether a CDX device is in its list of
-> + * supported devices.  Returns the matching cdx_device_id structure or
-> + * %NULL if there is no match.
-> + */
-> +static inline const struct cdx_device_id *
-> +cdx_match_id(const struct cdx_device_id *ids, struct cdx_device *dev)
-> +{
-> +       if (ids) {
-> +               while (ids->vendor || ids->device) {
-> +                       if (cdx_match_one_device(ids, dev))
-> +                               return ids;
-> +                       ids++;
-> +               }
-> +       }
-> +       return NULL;
-> +}
-> +
-> +/**
-> + * cdx_bus_match - device to driver matching callback
-> + * @dev: the cdx device to match against
-> + * @drv: the device driver to search for matching cdx device
-> + * structures
-> + *
-> + * Returns 1 on success, 0 otherwise.
-> + */
-> +static int cdx_bus_match(struct device *dev, struct device_driver *drv)
-> +{
-> +       struct cdx_device *cdx_dev = to_cdx_device(dev);
-> +       struct cdx_driver *cdx_drv = to_cdx_driver(drv);
-> +       const struct cdx_device_id *found_id;
-> +
-> +       /* When driver_override is set, only bind to the matching driver */
-> +       if (cdx_dev->driver_override)
-> +               return !strcmp(cdx_dev->driver_override, cdx_drv->driver.name);
-> +
-> +       found_id = cdx_match_id(cdx_drv->match_id_table, cdx_dev);
-> +       if (found_id)
-> +               return true;
-> +
-> +       return false;
-> +}
-> +
-> +static int cdx_dma_configure(struct device *dev)
-> +{
-> +       struct cdx_device *cdx_dev = to_cdx_device(dev);
-> +       u32 input_id = cdx_dev->req_id;
-> +       int ret;
-> +
-> +       ret = of_dma_configure_id(dev, dev->parent->of_node, 0, &input_id);
-> +       if (ret) {
-> +               dev_err(dev, "of_dma_configure_id() failed\n");
-> +               return ret;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +struct bus_type cdx_bus_type = {
-> +       .name = "cdx",
-> +       .match = cdx_bus_match,
-> +       .dma_configure  = cdx_dma_configure,
-> +};
-> +EXPORT_SYMBOL_GPL(cdx_bus_type);
-> +
-> +static int cdx_driver_probe(struct device *dev)
-> +{
-> +       struct cdx_driver *cdx_drv = to_cdx_driver(dev->driver);
-> +       struct cdx_device *cdx_dev = to_cdx_device(dev);
-> +       int error;
-> +
-> +       error = cdx_drv->probe(cdx_dev);
-> +       if (error < 0) {
-> +               if (error != -EPROBE_DEFER)
-> +                       dev_err(dev, "%s failed: %d\n", __func__, error);
-> +               return error;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int cdx_driver_remove(struct device *dev)
-> +{
-> +       struct cdx_driver *cdx_drv = to_cdx_driver(dev->driver);
-> +       struct cdx_device *cdx_dev = to_cdx_device(dev);
-> +       int error;
-> +
-> +       error = cdx_drv->remove(cdx_dev);
-> +       if (error < 0) {
-> +               dev_err(dev, "%s failed: %d\n", __func__, error);
-> +               return error;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static void cdx_driver_shutdown(struct device *dev)
-> +{
-> +       struct cdx_driver *cdx_drv = to_cdx_driver(dev->driver);
-> +       struct cdx_device *cdx_dev = to_cdx_device(dev);
-> +
-> +       cdx_drv->shutdown(cdx_dev);
-> +}
-> +
-> +/*
-> + * __cdx_driver_register - registers a CDX device driver
-> + */
-> +int __cdx_driver_register(struct cdx_driver *cdx_driver,
-> +                         struct module *owner)
-> +{
-> +       int error;
-> +
-> +       cdx_driver->driver.owner = owner;
-> +       cdx_driver->driver.bus = &cdx_bus_type;
-> +
-> +       if (cdx_driver->probe)
-> +               cdx_driver->driver.probe = cdx_driver_probe;
-> +
-> +       if (cdx_driver->remove)
-> +               cdx_driver->driver.remove = cdx_driver_remove;
-> +
-> +       if (cdx_driver->shutdown)
-> +               cdx_driver->driver.shutdown = cdx_driver_shutdown;
-> +
-> +       error = driver_register(&cdx_driver->driver);
-> +       if (error < 0) {
-> +               pr_err("driver_register() failed for %s: %d\n",
-> +                      cdx_driver->driver.name, error);
-> +               return error;
-> +       }
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(__cdx_driver_register);
-> +
-> +/*
-> + * cdx_driver_unregister - unregisters a device driver from the
-> + * CDX bus
-> + */
-> +void cdx_driver_unregister(struct cdx_driver *cdx_driver)
-> +{
-> +       driver_unregister(&cdx_driver->driver);
-> +}
-> +EXPORT_SYMBOL_GPL(cdx_driver_unregister);
-> +
-> +static void cdx_device_release(struct device *dev)
-> +{
-> +       struct cdx_device *cdx_dev = to_cdx_device(dev);
-> +
-> +       kfree(cdx_dev);
-> +}
-> +
-> +static int cdx_device_add(struct device *parent,
-> +                         struct cdx_dev_params_t *dev_params)
-> +{
-> +       struct cdx_device *cdx_dev;
-> +       int ret;
-> +
-> +       cdx_dev = kzalloc(sizeof(*cdx_dev), GFP_KERNEL);
-> +       if (!cdx_dev) {
-> +               dev_err(parent,
-> +                       "memory allocation for cdx dev failed\n");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       /* Populate resource */
-> +       memcpy(cdx_dev->res, dev_params->res, sizeof(struct resource) *
-> +               dev_params->res_count);
-> +       cdx_dev->res_count = dev_params->res_count;
-> +
-> +       /* Populate CDX dev params */
-> +       cdx_dev->req_id = dev_params->req_id;
-> +       cdx_dev->vendor = dev_params->vendor;
-> +       cdx_dev->device = dev_params->device;
-> +       cdx_dev->bus_id = dev_params->bus_id;
-> +       cdx_dev->func_id = dev_params->func_id;
-> +       cdx_dev->dma_mask = CDX_DEFAULT_DMA_MASK;
-> +
-> +       /* Initiaize generic device */
-> +       device_initialize(&cdx_dev->dev);
-> +       cdx_dev->dev.parent = parent;
-> +       cdx_dev->dev.bus = &cdx_bus_type;
-> +       cdx_dev->dev.dma_mask = &cdx_dev->dma_mask;
-> +       cdx_dev->dev.release = cdx_device_release;
+If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
+CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
+in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
+in fact implement FEAT_MTE2, setting the system register like this may
+lead to UNSPECIFIED behavior. Fix it by arranging for MAIR to be set
+in the C function cpu_enable_mte which is called based on the sanitized
+version of the system register.
 
-How will these devices get resources like clocks, regulators, etc that
-might be provided by other DT based devices? Is that not possible?
+There is no need for the rest of the MTE-related system register
+initialization to happen from assembly, with the exception of TCR_EL1,
+which must be set to include at least TBI1 because the secondary CPUs
+access KASan-allocated data structures early. Therefore, make the TCR_EL1
+initialization unconditional and move the rest of the initialization to
+cpu_enable_mte so that we no longer have a dependency on the unsanitized
+ID register value.
 
-I also see that v2 of this series has a "swnode" implementation that
-was used to set the fwnode of these CDX devices. Why are these devices
-no longer getting the fwnode set? Also, swnode doesn't have support
-for the fwnode.add_links() ops. It also doesn't seem to support the
-parent of a swnode being another fwnode of a different type (DT). I'm
-not sure about the history behind that, but maybe swnode is not the
-right fit or you might need to add support for these to swnode. All of
-this is to say that if you set these things up correctly, fw_devlink
-can work for CDX devices and that might be helpful.
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Signed-off-by: Evgenii Stepanov <eugenis@google.com>
+Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+Changelong since v3:
+- Removed extra isb barrier.
+- Fixed build without CONFIG_ARM64_MTE.
 
--Saravana
-> +
-> +       /* Set Name */
-> +       dev_set_name(&cdx_dev->dev, "cdx-%02x:%02x", cdx_dev->bus_id,
-> +                       cdx_dev->func_id);
-> +
-> +       ret = device_add(&cdx_dev->dev);
-> +       if (ret != 0) {
-> +               dev_err(&cdx_dev->dev,
-> +                       "cdx device add failed: %d", ret);
-> +               goto fail;
-> +       }
-> +
-> +       return 0;
-> +
-> +fail:
-> +       /*
-> +        * Do not free cdx_dev here as it would be freed in
-> +        * cdx_device_release() called from within put_device().
-> +        */
-> +       put_device(&cdx_dev->dev);
-> +
-> +       return ret;
-> +}
-> +
-> +static int cdx_bus_device_discovery(struct platform_device *pdev)
-> +{
-> +       struct cdx_mcdi_t *cdx_mcdi = platform_get_drvdata(pdev);
-> +       int num_cdx_bus, num_cdx_func;
-> +       uint8_t bus_id, func_id;
-> +       int ret;
-> +
-> +       cdx_controller_pdev = pdev;
-> +
-> +       /* MCDI FW Read: Fetch the number of CDX buses present*/
-> +       num_cdx_bus = cdx_mcdi_get_num_buses(cdx_mcdi);
-> +
-> +       for (bus_id = 0; bus_id < num_cdx_bus; bus_id++) {
-> +               /* MCDI FW Read: Fetch the number of devices present */
-> +               num_cdx_func = cdx_mcdi_get_num_funcs(cdx_mcdi, bus_id);
-> +
-> +               for (func_id = 0; func_id < num_cdx_func; func_id++) {
-> +                       struct cdx_dev_params_t dev_params;
-> +
-> +                       /* MCDI FW: Get the device config */
-> +                       ret = cdx_mcdi_get_func_config(cdx_mcdi, bus_id,
-> +                                       func_id, &dev_params);
-> +                       if (ret) {
-> +                               dev_err(&pdev->dev,
-> +                                       "CDX device config get failed for bus: %d\n",
-> +                                       ret);
-> +                               goto fail;
-> +                       }
-> +
-> +                       /* Add the device to the cdx bus */
-> +                       ret = cdx_device_add(&pdev->dev, &dev_params);
-> +                       if (ret == -EPROBE_DEFER) {
-> +                               goto fail;
-> +                       } else if (ret) {
-> +                               dev_err(&pdev->dev,
-> +                                       "registering cdx dev: %d failed: %d\n",
-> +                                       func_id, ret);
-> +                               goto fail;
-> +                       } else {
-> +                               dev_dbg(&pdev->dev,
-> +                                       "CDX dev: %d on cdx bus: %d created\n",
-> +                                       func_id, bus_id);
-> +                       }
-> +               }
-> +       }
-> +
-> +       return 0;
-> +fail:
-> +       cdx_unregister_devices(&cdx_bus_type);
-> +       return ret;
-> +}
-> +
-> +static int cdx_bus_probe(struct platform_device *pdev)
-> +{
-> +       struct cdx_mcdi_t *cdx_mcdi;
-> +       int ret;
-> +
-> +       cdx_mcdi = kzalloc(sizeof(*cdx_mcdi), GFP_KERNEL);
-> +       if (!cdx_mcdi) {
-> +               dev_err(&pdev->dev, "Failed to allocate memory for cdx_mcdi\n");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       /* MCDI FW: Initialize the FW path */
-> +       ret = cdx_mcdi_init(cdx_mcdi);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "MCDI Initialization failed: %d\n", ret);
-> +               goto mcdi_init_fail;
-> +       }
-> +       platform_set_drvdata(pdev, cdx_mcdi);
-> +
-> +       /* Discover all the devices on the bus */
-> +       ret = cdx_bus_device_discovery(pdev);
-> +       if (ret) {
-> +               dev_err(&pdev->dev,
-> +                       "CDX bus device discovery failed: %d\n", ret);
-> +               goto device_discovery_fail;
-> +       }
-> +
-> +       return 0;
-> +
-> +mcdi_init_fail:
-> +       kfree(cdx_mcdi);
-> +device_discovery_fail:
-> +       cdx_mcdi_finish(cdx_mcdi);
-> +
-> +       return ret;
-> +}
-> +
-> +static int cdx_bus_remove(struct platform_device *pdev)
-> +{
-> +       struct cdx_mcdi_t *cdx_mcdi = platform_get_drvdata(pdev);
-> +
-> +       cdx_unregister_devices(&cdx_bus_type);
-> +
-> +       cdx_mcdi_finish(cdx_mcdi);
-> +       kfree(cdx_mcdi);
-> +
-> +       return 0;
-> +}
-> +
-> +static void cdx_bus_shutdown(struct platform_device *pdev)
-> +{
-> +       cdx_bus_remove(pdev);
-> +}
-> +
-> +static const struct of_device_id cdx_match_table[] = {
-> +       {.compatible = "xlnx,cdxbus-controller-1.0",},
-> +       { },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, cdx_match_table);
-> +
-> +static struct platform_driver cdx_bus_driver = {
-> +       .driver = {
-> +                  .name = "cdx-bus",
-> +                  .pm = NULL,
-> +                  .of_match_table = cdx_match_table,
-> +                  },
-> +       .probe = cdx_bus_probe,
-> +       .remove = cdx_bus_remove,
-> +       .shutdown = cdx_bus_shutdown,
-> +};
-> +
-> +static int __init cdx_bus_driver_init(void)
-> +{
-> +       int ret;
-> +
-> +       ret = bus_register(&cdx_bus_type);
-> +       if (ret < 0) {
-> +               pr_err("bus type registration failed for CDX: %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       ret = platform_driver_register(&cdx_bus_driver);
-> +       if (ret < 0) {
-> +               pr_err("platform_driver_register() failed: %d\n", ret);
-> +               goto fail;
-> +       }
-> +
-> +       return 0;
-> +
-> +fail:
-> +       bus_unregister(&cdx_bus_type);
-> +       return ret;
-> +}
-> +postcore_initcall(cdx_bus_driver_init);
-> diff --git a/drivers/bus/cdx/cdx.h b/drivers/bus/cdx/cdx.h
-> new file mode 100644
-> index 000000000000..db0569431c10
-> --- /dev/null
-> +++ b/drivers/bus/cdx/cdx.h
-> @@ -0,0 +1,34 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Header file for the CDX Bus
-> + *
-> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
-> + */
-> +
-> +#ifndef _CDX_H_
-> +#define _CDX_H_
-> +
-> +#include <linux/cdx/cdx_bus.h>
-> +#include <linux/irqdomain.h>
-> +
-> +/**
-> + * struct cdx_dev_params_t - CDX device parameters
-> + * @vendor: Vendor ID for CDX device
-> + * @device: Device ID for CDX device
-> + * @bus_id: Bus ID for this CDX device
-> + * @func_id: Function ID for this device
-> + * @res: array of MMIO region entries
-> + * @res_count: number of valid MMIO regions
-> + * @req_id: Requestor ID associated with CDX device
-> + */
-> +struct cdx_dev_params_t {
-> +       u16 vendor;
-> +       u16 device;
-> +       u8 bus_id;
-> +       u8 func_id;
-> +       struct resource res[MAX_CDX_DEV_RESOURCES];
-> +       u8 res_count;
-> +       u32 req_id;
-> +};
-> +
-> +#endif /* _CDX_H_ */
-> diff --git a/drivers/bus/cdx/mcdi_stubs.c b/drivers/bus/cdx/mcdi_stubs.c
-> new file mode 100644
-> index 000000000000..cc9d30fa02f8
-> --- /dev/null
-> +++ b/drivers/bus/cdx/mcdi_stubs.c
-> @@ -0,0 +1,54 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * MCDI Firmware interaction for CDX bus.
-> + *
-> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include <linux/ioport.h>
-> +
-> +#include "cdx.h"
-> +#include "mcdi_stubs.h"
-> +
-> +int cdx_mcdi_init(struct cdx_mcdi_t *cdx_mcdi)
-> +{
-> +       cdx_mcdi->id = 0;
-> +       cdx_mcdi->flags = 0;
-> +
-> +       return 0;
-> +}
-> +
-> +void cdx_mcdi_finish(struct cdx_mcdi_t *cdx_mcdi)
-> +{
-> +}
-> +
-> +int cdx_mcdi_get_num_buses(struct cdx_mcdi_t *cdx_mcdi)
-> +{
-> +       return 1;
-> +}
-> +
-> +int cdx_mcdi_get_num_funcs(struct cdx_mcdi_t *cdx_mcdi, int bus_num)
-> +{
-> +       return 1;
-> +}
-> +
-> +int cdx_mcdi_get_func_config(struct cdx_mcdi_t *cdx_mcdi,
-> +                            uint8_t bus_id, uint8_t func_id,
-> +                            struct cdx_dev_params_t *dev_params)
-> +{
-> +       dev_params->res[0].start = 0xe4020000;
-> +       dev_params->res[0].end = 0xe4020FFF;
-> +       dev_params->res[0].flags = IORESOURCE_MEM;
-> +       dev_params->res[1].start = 0xe4100000;
-> +       dev_params->res[1].end = 0xE411FFFF;
-> +       dev_params->res[1].flags = IORESOURCE_MEM;
-> +       dev_params->res_count = 2;
-> +
-> +       dev_params->req_id = 0x250;
-> +       dev_params->vendor = 0x10ee;
-> +       dev_params->device = 0x8084;
-> +       dev_params->bus_id = bus_id;
-> +       dev_params->func_id = func_id;
-> +
-> +       return 0;
-> +}
-> diff --git a/drivers/bus/cdx/mcdi_stubs.h b/drivers/bus/cdx/mcdi_stubs.h
-> new file mode 100644
-> index 000000000000..7b6f79d48ce9
-> --- /dev/null
-> +++ b/drivers/bus/cdx/mcdi_stubs.h
-> @@ -0,0 +1,76 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Header file for MCDI FW interaction for CDX bus.
-> + *
-> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
-> + */
-> +
-> +#ifndef _MCDI_STUBS_H_
-> +#define _MCDI_STUBS_H_
-> +
-> +#include "cdx.h"
-> +
-> +/**
-> + * struct cdx_mcdi_t - CDX MCDI Firmware interface, to interact
-> + *                    with CDX controller.
-> + * @id: ID for MCDI Firmware interface
-> + * @flags: Associated flags
-> + */
-> +struct cdx_mcdi_t {
-> +       u32 id;
-> +       u32 flags;
-> +       /* Have more MCDI interface related data */
-> +};
-> +
-> +/**
-> + * cdx_mcdi_init - Initialize the MCDI Firmware interface
-> + *     for the CDX controller.
-> + * @cdx_mcdi: pointer to MCDI interface
-> + *
-> + * Return 0 on success, <0 on failure
-> + */
-> +int cdx_mcdi_init(struct cdx_mcdi_t *cdx_mcdi);
-> +
-> +/**
-> + * cdx_mcdi_finish - Close the MCDI Firmware interface.
-> + * @cdx_mcdi: pointer to MCDI interface
-> + */
-> +void cdx_mcdi_finish(struct cdx_mcdi_t *cdx_mcdi);
-> +
-> +/**
-> + * cdx_mcdi_get_num_buses - Get the total number of busses on
-> + *     the controller.
-> + * @cdx_mcdi: pointer to MCDI interface.
-> + *
-> + * Return total number of busses available on the controller,
-> + *     <0 on failure
-> + */
-> +int cdx_mcdi_get_num_buses(struct cdx_mcdi_t *cdx_mcdi);
-> +
-> +/**
-> + * cdx_mcdi_get_num_funcs - Get the total number of functions on
-> + *     a particular bus of the controller.
-> + * @cdx_mcdi: pointer to MCDI interface.
-> + * @bus_num: Bus number.
-> + *
-> + * Return total number of functions available on the bus, <0 on failure
-> + */
-> +int cdx_mcdi_get_num_funcs(struct cdx_mcdi_t *cdx_mcdi, int bus_num);
-> +
-> +/**
-> + * cdx_mcdi_get_func_config - Get configuration for a particular
-> + *     bus_id:func_id
-> + * @cdx_mcdi: pointer to MCDI interface.
-> + * @bus_num: Bus number.
-> + * @func_id: Function number.
-> + * @dev_params: Pointer to cdx_dev_params_t, this is populated by this
-> + *     function with the configuration corresponding to the provided
-> + *     bus_id:func_id.
-> + *
-> + * Return 0 total number of functions available on the bus, <0 on failure
-> + */
-> +int cdx_mcdi_get_func_config(struct cdx_mcdi_t *cdx_mcdi,
-> +                            uint8_t bus_id, uint8_t func_id,
-> +                            struct cdx_dev_params_t *dev_params);
-> +
-> +#endif /* _MCDI_STUBS_H_ */
-> diff --git a/include/linux/cdx/cdx_bus.h b/include/linux/cdx/cdx_bus.h
-> new file mode 100644
-> index 000000000000..6e870b2c87d9
-> --- /dev/null
-> +++ b/include/linux/cdx/cdx_bus.h
-> @@ -0,0 +1,93 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * CDX bus public interface
-> + *
-> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
-> + *
-> + */
-> +#ifndef _CDX_BUS_H_
-> +#define _CDX_BUS_H_
-> +
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/device.h>
-> +
-> +#define MAX_CDX_DEV_RESOURCES  6
-> +
-> +/**
-> + * struct cdx_device - CDX device object
-> + * @dev: Linux driver model device object
-> + * @vendor: Vendor ID for CDX device
-> + * @device: Device ID for CDX device
-> + * @bus_id: Bus ID for this CDX device
-> + * @func_id: Function ID for this device
-> + * @res: array of MMIO region entries
-> + * @res_count: number of valid MMIO regions
-> + * @dma_mask: Default DMA mask
-> + * @flags: CDX device flags
-> + * @req_id: Requestor ID associated with CDX device
-> + * @driver_override: driver name to force a match; do not set directly,
-> + *                   because core frees it; use driver_set_override() to
-> + *                   set or clear it.
-> + */
-> +struct cdx_device {
-> +       struct device dev;
-> +       u16 vendor;
-> +       u16 device;
-> +       u8 bus_id;
-> +       u8 func_id;
-> +       struct resource res[MAX_CDX_DEV_RESOURCES];
-> +       u8 res_count;
-> +       u64 dma_mask;
-> +       u16 flags;
-> +       u32 req_id;
-> +       const char *driver_override;
-> +};
-> +
-> +#define to_cdx_device(_dev) \
-> +       container_of(_dev, struct cdx_device, dev)
-> +
-> +/**
-> + * struct cdx_driver - CDX device driver
-> + * @driver: Generic device driver
-> + * @match_id_table: table of supported device matching Ids
-> + * @probe: Function called when a device is added
-> + * @remove: Function called when a device is removed
-> + * @shutdown: Function called at shutdown time to quiesce the device
-> + * @suspend: Function called when a device is stopped
-> + * @resume: Function called when a device is resumed
-> + * @driver_managed_dma: Device driver doesn't use kernel DMA API for DMA.
-> + *             For most device drivers, no need to care about this flag
-> + *             as long as all DMAs are handled through the kernel DMA API.
-> + *             For some special ones, for example VFIO drivers, they know
-> + *             how to manage the DMA themselves and set this flag so that
-> + *             the IOMMU layer will allow them to setup and manage their
-> + *             own I/O address space.
-> + */
-> +struct cdx_driver {
-> +       struct device_driver driver;
-> +       const struct cdx_device_id *match_id_table;
-> +       int (*probe)(struct cdx_device *dev);
-> +       int (*remove)(struct cdx_device *dev);
-> +       void (*shutdown)(struct cdx_device *dev);
-> +       int (*suspend)(struct cdx_device *dev, pm_message_t state);
-> +       int (*resume)(struct cdx_device *dev);
-> +       bool driver_managed_dma;
-> +};
-> +
-> +#define to_cdx_driver(_drv) \
-> +       container_of(_drv, struct cdx_driver, driver)
-> +
-> +/*
-> + * Macro to avoid include chaining to get THIS_MODULE
-> + */
-> +#define cdx_driver_register(drv) \
-> +       __cdx_driver_register(drv, THIS_MODULE)
-> +
-> +int __must_check __cdx_driver_register(struct cdx_driver *cdx_driver,
-> +                                      struct module *owner);
-> +
-> +void cdx_driver_unregister(struct cdx_driver *driver);
-> +
-> +extern struct bus_type cdx_bus_type;
-> +
-> +#endif /* _CDX_BUS_H_ */
-> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-> index 549590e9c644..9b94be83d53e 100644
-> --- a/include/linux/mod_devicetable.h
-> +++ b/include/linux/mod_devicetable.h
-> @@ -911,4 +911,17 @@ struct ishtp_device_id {
->         kernel_ulong_t driver_data;
->  };
->
-> +/**
-> + * struct cdx_device_id - CDX device identifier
-> + * @vendor: vendor ID
-> + * @device: Device ID
-> + *
-> + * Type of entries in the "device Id" table for CDX devices supported by
-> + * a CDX device driver.
-> + */
-> +struct cdx_device_id {
-> +       __u16 vendor;
-> +       __u16 device;
-> +};
-> +
->  #endif /* LINUX_MOD_DEVICETABLE_H */
-> diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
-> index c0d3bcb99138..62dc988df84d 100644
-> --- a/scripts/mod/devicetable-offsets.c
-> +++ b/scripts/mod/devicetable-offsets.c
-> @@ -262,5 +262,9 @@ int main(void)
->         DEVID(ishtp_device_id);
->         DEVID_FIELD(ishtp_device_id, guid);
->
-> +       DEVID(cdx_device_id);
-> +       DEVID_FIELD(cdx_device_id, vendor);
-> +       DEVID_FIELD(cdx_device_id, device);
-> +
->         return 0;
->  }
-> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-> index 80d973144fde..c36e1f624e39 100644
-> --- a/scripts/mod/file2alias.c
-> +++ b/scripts/mod/file2alias.c
-> @@ -1452,6 +1452,17 @@ static int do_dfl_entry(const char *filename, void *symval, char *alias)
->         return 1;
->  }
->
-> +/* Looks like: cdx:vNdN */
-> +static int do_cdx_entry(const char *filename, void *symval,
-> +                          char *alias)
-> +{
-> +       DEF_FIELD(symval, cdx_device_id, vendor);
-> +       DEF_FIELD(symval, cdx_device_id, device);
-> +
-> +       sprintf(alias, "cdx:v%08Xd%08Xd", vendor, device);
-> +       return 1;
-> +}
-> +
->  /* Does namelen bytes of name exactly match the symbol? */
->  static bool sym_is(const char *name, unsigned namelen, const char *symbol)
->  {
-> @@ -1531,6 +1542,7 @@ static const struct devtable devtable[] = {
->         {"ssam", SIZE_ssam_device_id, do_ssam_entry},
->         {"dfl", SIZE_dfl_device_id, do_dfl_entry},
->         {"ishtp", SIZE_ishtp_device_id, do_ishtp_entry},
-> +       {"cdx", SIZE_cdx_device_id, do_cdx_entry},
->  };
->
->  /* Create MODULE_ALIAS() statements.
-> --
-> 2.25.1
->
+Changelog since v2:
+- Fixed register initialization on cpu_resume code path.
+
+Changelog since v1:
+- Keep TBI1 off unless CONFIG_ARM64_MTE
+- Fixed mask application in the RGSR_EL1 computation (bug found by Kenny
+  Root).
+- Changed code formatting
+
+ arch/arm64/include/asm/mte.h   |  5 ++++
+ arch/arm64/kernel/cpufeature.c |  3 +-
+ arch/arm64/kernel/mte.c        | 51 ++++++++++++++++++++++++++++++++++
+ arch/arm64/kernel/suspend.c    |  2 ++
+ arch/arm64/mm/proc.S           | 46 ++++--------------------------
+ 5 files changed, 65 insertions(+), 42 deletions(-)
+
+diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
+index aa523591a44e5..760c62f8e22f8 100644
+--- a/arch/arm64/include/asm/mte.h
++++ b/arch/arm64/include/asm/mte.h
+@@ -42,7 +42,9 @@ void mte_sync_tags(pte_t old_pte, pte_t pte);
+ void mte_copy_page_tags(void *kto, const void *kfrom);
+ void mte_thread_init_user(void);
+ void mte_thread_switch(struct task_struct *next);
++void mte_cpu_setup(void);
+ void mte_suspend_enter(void);
++void mte_suspend_exit(void);
+ long set_mte_ctrl(struct task_struct *task, unsigned long arg);
+ long get_mte_ctrl(struct task_struct *task);
+ int mte_ptrace_copy_tags(struct task_struct *child, long request,
+@@ -72,6 +74,9 @@ static inline void mte_thread_switch(struct task_struct *next)
+ static inline void mte_suspend_enter(void)
+ {
+ }
++static inline void mte_suspend_exit(void)
++{
++}
+ static inline long set_mte_ctrl(struct task_struct *task, unsigned long arg)
+ {
+ 	return 0;
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index af4de817d7123..d7a077b5ccd1c 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -2034,7 +2034,8 @@ static void bti_enable(const struct arm64_cpu_capabilities *__unused)
+ static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
+ {
+ 	sysreg_clear_set(sctlr_el1, 0, SCTLR_ELx_ATA | SCTLR_EL1_ATA0);
+-	isb();
++
++	mte_cpu_setup();
+ 
+ 	/*
+ 	 * Clear the tags in the zero page. This needs to be done via the
+diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+index b2b730233274b..aca88470fb69d 100644
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
+@@ -285,6 +285,49 @@ void mte_thread_switch(struct task_struct *next)
+ 	mte_check_tfsr_el1();
+ }
+ 
++void mte_cpu_setup(void)
++{
++	u64 rgsr;
++
++	/*
++	 * CnP must be enabled only after the MAIR_EL1 register has been set
++	 * up. Inconsistent MAIR_EL1 between CPUs sharing the same TLB may
++	 * lead to the wrong memory type being used for a brief window during
++	 * CPU power-up.
++	 *
++	 * CnP is not a boot feature so MTE gets enabled before CnP, but let's
++	 * make sure that is the case.
++	 */
++	BUG_ON(read_sysreg(ttbr0_el1) & TTBR_CNP_BIT);
++	BUG_ON(read_sysreg(ttbr1_el1) & TTBR_CNP_BIT);
++
++	/* Normal Tagged memory type at the corresponding MAIR index */
++	sysreg_clear_set(mair_el1,
++			 MAIR_ATTRIDX(MAIR_ATTR_MASK, MT_NORMAL_TAGGED),
++			 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_TAGGED,
++				      MT_NORMAL_TAGGED));
++
++	write_sysreg_s(KERNEL_GCR_EL1, SYS_GCR_EL1);
++
++	/*
++	 * If GCR_EL1.RRND=1 is implemented the same way as RRND=0, then
++	 * RGSR_EL1.SEED must be non-zero for IRG to produce
++	 * pseudorandom numbers. As RGSR_EL1 is UNKNOWN out of reset, we
++	 * must initialize it.
++	 */
++	rgsr = (read_sysreg(CNTVCT_EL0) & SYS_RGSR_EL1_SEED_MASK) <<
++	       SYS_RGSR_EL1_SEED_SHIFT;
++	if (rgsr == 0)
++		rgsr = 1 << SYS_RGSR_EL1_SEED_SHIFT;
++	write_sysreg_s(rgsr, SYS_RGSR_EL1);
++
++	/* clear any pending tag check faults in TFSR*_EL1 */
++	write_sysreg_s(0, SYS_TFSR_EL1);
++	write_sysreg_s(0, SYS_TFSRE0_EL1);
++
++	local_flush_tlb_all();
++}
++
+ void mte_suspend_enter(void)
+ {
+ 	if (!system_supports_mte())
+@@ -301,6 +344,14 @@ void mte_suspend_enter(void)
+ 	mte_check_tfsr_el1();
+ }
+ 
++void mte_suspend_exit(void)
++{
++	if (!system_supports_mte())
++		return;
++
++	mte_cpu_setup();
++}
++
+ long set_mte_ctrl(struct task_struct *task, unsigned long arg)
+ {
+ 	u64 mte_ctrl = (~((arg & PR_MTE_TAG_MASK) >> PR_MTE_TAG_SHIFT) &
+diff --git a/arch/arm64/kernel/suspend.c b/arch/arm64/kernel/suspend.c
+index 9135fe0f3df53..8b02d310838f9 100644
+--- a/arch/arm64/kernel/suspend.c
++++ b/arch/arm64/kernel/suspend.c
+@@ -43,6 +43,8 @@ void notrace __cpu_suspend_exit(void)
+ {
+ 	unsigned int cpu = smp_processor_id();
+ 
++	mte_suspend_exit();
++
+ 	/*
+ 	 * We are resuming from reset with the idmap active in TTBR0_EL1.
+ 	 * We must uninstall the idmap and restore the expected MMU
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index 7837a69524c53..f38bccdd374a5 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -48,17 +48,19 @@
+ 
+ #ifdef CONFIG_KASAN_HW_TAGS
+ #define TCR_MTE_FLAGS TCR_TCMA1 | TCR_TBI1 | TCR_TBID1
+-#else
++#elif defined(CONFIG_ARM64_MTE)
+ /*
+  * The mte_zero_clear_page_tags() implementation uses DC GZVA, which relies on
+  * TBI being enabled at EL1.
+  */
+ #define TCR_MTE_FLAGS TCR_TBI1 | TCR_TBID1
++#else
++#define TCR_MTE_FLAGS 0
+ #endif
+ 
+ /*
+  * Default MAIR_EL1. MT_NORMAL_TAGGED is initially mapped as Normal memory and
+- * changed during __cpu_setup to Normal Tagged if the system supports MTE.
++ * changed during mte_cpu_setup to Normal Tagged if the system supports MTE.
+  */
+ #define MAIR_EL1_SET							\
+ 	(MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRnE, MT_DEVICE_nGnRnE) |	\
+@@ -426,46 +428,8 @@ SYM_FUNC_START(__cpu_setup)
+ 	mov_q	mair, MAIR_EL1_SET
+ 	mov_q	tcr, TCR_TxSZ(VA_BITS) | TCR_CACHE_FLAGS | TCR_SMP_FLAGS | \
+ 			TCR_TG_FLAGS | TCR_KASLR_FLAGS | TCR_ASID16 | \
+-			TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS
+-
+-#ifdef CONFIG_ARM64_MTE
+-	/*
+-	 * Update MAIR_EL1, GCR_EL1 and TFSR*_EL1 if MTE is supported
+-	 * (ID_AA64PFR1_EL1[11:8] > 1).
+-	 */
+-	mrs	x10, ID_AA64PFR1_EL1
+-	ubfx	x10, x10, #ID_AA64PFR1_MTE_SHIFT, #4
+-	cmp	x10, #ID_AA64PFR1_MTE
+-	b.lt	1f
+-
+-	/* Normal Tagged memory type at the corresponding MAIR index */
+-	mov	x10, #MAIR_ATTR_NORMAL_TAGGED
+-	bfi	mair, x10, #(8 *  MT_NORMAL_TAGGED), #8
++			TCR_TBI0 | TCR_A1 | TCR_KASAN_SW_FLAGS | TCR_MTE_FLAGS
+ 
+-	mov	x10, #KERNEL_GCR_EL1
+-	msr_s	SYS_GCR_EL1, x10
+-
+-	/*
+-	 * If GCR_EL1.RRND=1 is implemented the same way as RRND=0, then
+-	 * RGSR_EL1.SEED must be non-zero for IRG to produce
+-	 * pseudorandom numbers. As RGSR_EL1 is UNKNOWN out of reset, we
+-	 * must initialize it.
+-	 */
+-	mrs	x10, CNTVCT_EL0
+-	ands	x10, x10, #SYS_RGSR_EL1_SEED_MASK
+-	csinc	x10, x10, xzr, ne
+-	lsl	x10, x10, #SYS_RGSR_EL1_SEED_SHIFT
+-	msr_s	SYS_RGSR_EL1, x10
+-
+-	/* clear any pending tag check faults in TFSR*_EL1 */
+-	msr_s	SYS_TFSR_EL1, xzr
+-	msr_s	SYS_TFSRE0_EL1, xzr
+-
+-	/* set the TCR_EL1 bits */
+-	mov_q	x10, TCR_MTE_FLAGS
+-	orr	tcr, tcr, x10
+-1:
+-#endif
+ 	tcr_clear_errata_bits tcr, x9, x5
+ 
+ #ifdef CONFIG_ARM64_VA_BITS_52
+-- 
+2.37.2.789.g6183377224-goog
+

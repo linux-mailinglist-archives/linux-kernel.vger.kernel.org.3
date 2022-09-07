@@ -2,57 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0435AFDD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C415AFDD7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiIGHqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S230031AbiIGHqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiIGHp6 (ORCPT
+        with ESMTP id S230028AbiIGHqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:45:58 -0400
-Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10B983BFA;
-        Wed,  7 Sep 2022 00:45:54 -0700 (PDT)
-Received: from [10.28.39.72] (10.28.39.72) by mail-sz.amlogic.com (10.28.11.5)
- with Microsoft SMTP Server id 15.1.2507.6; Wed, 7 Sep 2022 15:45:51 +0800
-Message-ID: <aa99e72c-41c8-02d5-c47b-05277b988eb0@amlogic.com>
-Date:   Wed, 7 Sep 2022 15:45:51 +0800
+        Wed, 7 Sep 2022 03:46:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD7482D22
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662536771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q3eQegbyNUNUZfQN4Vuu2Y+4sgIIke5mBIO94daHPAk=;
+        b=FH8JJ1jXsEyZ935BfXuOghYkFtoF/0Hm1Cn/TAae13pLxR4tRvEk9k+SIAkZTQf6wHPw33
+        mSDWZdIoRkaxbwCbSLC4NqxBVlBoMdtgGfRNdj6qggeMfN9XJuCe5VQhZM6EBsl7RKXKQy
+        vDy99W7oqeKE5g0rdntK8MDXyMBt5HY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-304-uPUkiUyQN0KpodrCABSWYA-1; Wed, 07 Sep 2022 03:46:10 -0400
+X-MC-Unique: uPUkiUyQN0KpodrCABSWYA-1
+Received: by mail-wr1-f72.google.com with SMTP id r17-20020adfbb11000000b00228663f217fso2651763wrg.20
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 00:46:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=q3eQegbyNUNUZfQN4Vuu2Y+4sgIIke5mBIO94daHPAk=;
+        b=ePnBqM44NvBfwrhhuOQ8H++X2F8K6DM0AyJvWLY6GKRXIso7/xwAhG2vDTKoADjFM4
+         EKgkLJWxB3b3T3whdc8IO67URLFU+pHudKTZj6B4/5jLhhhNWsQC0CqRrAuBrwaHPAc6
+         lTyUySNKevJuG/ib5idupcJ4tHs5x+b8/cpnKkMi9fEQxtxNSMVUL2uN4vxGhmrUXrnd
+         iLqxKk2nzY6Lm1Mi7QFATK9EP85end0ZZYfqqb3JJw1zf8FX18GZHe91B8tElfaUJ78l
+         weUxjEQn3RDMduguEswG1inuUSUvlD7O2VlJIcaN40EuTI7+fB7Mh9gI2RbfejKVMfni
+         nkyg==
+X-Gm-Message-State: ACgBeo1rldNkODmRahrgmsNsJPIOjmBxArz8V8rZYRYAnVv8+zVaKDl8
+        VON87D6lS4D/6e9A96CCzfm9z57KAmcLrkn8gpK0VR7OtmD17fF6SZqJWAu0F2mNHEBNT5wbywX
+        YcjaEzErz77Sf4fujYVlwMLm6
+X-Received: by 2002:adf:ed81:0:b0:226:a509:14b6 with SMTP id c1-20020adfed81000000b00226a50914b6mr1211069wro.150.1662536769192;
+        Wed, 07 Sep 2022 00:46:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR44JqlJBu3NM8POTUmZPOMnuC7An3N2YQMeTdJEE/AQ3Rtm8kSGa0vZZHfwxjXMROy9TOM4iQ==
+X-Received: by 2002:adf:ed81:0:b0:226:a509:14b6 with SMTP id c1-20020adfed81000000b00226a50914b6mr1211058wro.150.1662536768934;
+        Wed, 07 Sep 2022 00:46:08 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-69.retail.telecomitalia.it. [87.11.6.69])
+        by smtp.gmail.com with ESMTPSA id e3-20020a5d5303000000b0022584e771adsm16009397wrv.113.2022.09.07.00.46.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 00:46:08 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 09:45:58 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     vdasa@vmware.com
+Cc:     vbhakta@vmware.com, namit@vmware.com, bryantan@vmware.com,
+        zackr@vmware.com, linux-graphics-maintainer@vmware.com,
+        doshir@vmware.com, gregkh@linuxfoundation.org, davem@davemloft.net,
+        pv-drivers@vmware.com, joe@perches.com, netdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 3/3] MAINTAINERS: Add a new entry for VMWARE VSOCK VMCI
+ TRANSPORT DRIVER
+Message-ID: <20220907074558.75v3ucll6eo66zky@sgarzare-redhat>
+References: <20220906172722.19862-1-vdasa@vmware.com>
+ <20220906172722.19862-4-vdasa@vmware.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH RESEND v8 4/5] dt-bindings: nand: meson: convert txt to
- yaml
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-mtd@lists.infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20220906060034.2528-1-liang.yang@amlogic.com>
- <20220906060034.2528-5-liang.yang@amlogic.com>
- <20220906143021.GA439874-robh@kernel.org>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <20220906143021.GA439874-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.28.39.72]
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220906172722.19862-4-vdasa@vmware.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,188 +83,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Tue, Sep 06, 2022 at 10:27:22AM -0700, vdasa@vmware.com wrote:
+>From: Vishnu Dasa <vdasa@vmware.com>
+>
+>Add a new entry for VMWARE VSOCK VMCI TRANSPORT DRIVER in the
+>MAINTAINERS file.
+>
+>Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
+>---
+> MAINTAINERS | 8 ++++++++
+> 1 file changed, 8 insertions(+)
 
-On 2022/9/6 22:30, Rob Herring wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On Tue, Sep 06, 2022 at 02:00:32PM +0800, Liang Yang wrote:
->> convert the amlogic,meson-name.txt to amlogic,meson-nand.yaml
->>
->> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
->> ---
->>   .../bindings/mtd/amlogic,meson-nand.txt       | 55 ------------
->>   .../bindings/mtd/amlogic,meson-nand.yaml      | 88 +++++++++++++++++++
->>   2 files changed, 88 insertions(+), 55 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
->>   create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
->> deleted file mode 100644
->> index 5d5cdfef417f..000000000000
->> --- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
->> +++ /dev/null
->> @@ -1,55 +0,0 @@
->> -Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
->> -
->> -This file documents the properties in addition to those available in
->> -the MTD NAND bindings.
->> -
->> -Required properties:
->> -- compatible : contains one of:
->> -  - "amlogic,meson-gxl-nfc"
->> -  - "amlogic,meson-axg-nfc"
->> -
->> -- reg        : Offset and length of the register set
->> -
->> -- reg-names  : "nfc" is the register set for NFC controller and "emmc"
->> -		is the register set for MCI controller.
->> -
->> -- clocks     :
->> -	A list of phandle + clock-specifier pairs for the clocks listed
->> -	in clock-names.
->> -
->> -- clock-names: Should contain the following:
->> -	"core" - NFC module gate clock
->> -	"device" - parent clock for internal NFC
->> -
->> -Optional children nodes:
->> -Children nodes represent the available nand chips.
->> -
->> -Other properties:
->> -see Documentation/devicetree/bindings/mtd/nand-controller.yaml for generic bindings.
->> -
->> -Example demonstrate on AXG SoC:
->> -
->> -	nand-controller@7800 {
->> -		compatible = "amlogic,meson-axg-nfc";
->> -		reg = <0x0 0x7800 0x0 0x100>,
->> -		      <0x0 0x7000 0x0 0x800>;
->> -		reg-names = "nfc", "emmc";
->> -		#address-cells = <1>;
->> -		#size-cells = <0>;
->> -		interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
->> -
->> -		clocks = <&clkc CLKID_SD_EMMC_C>,
->> -			 <&clkc CLKID_FCLK_DIV2>;
->> -		clock-names = "core", "device";
->> -
->> -		pinctrl-names = "default";
->> -		pinctrl-0 = <&nand_pins>;
->> -
->> -		nand@0 {
->> -			reg = <0>;
->> -			#address-cells = <1>;
->> -			#size-cells = <1>;
->> -
->> -			nand-on-flash-bbt;
->> -		};
->> -	};
->> diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
->> new file mode 100644
->> index 000000000000..42634e9c0d3c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
->> @@ -0,0 +1,88 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mtd/amlogic,meson-nand.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
->> +
->> +allOf:
->> +  - $ref: "nand-controller.yaml"
-> 
-> Don't need quotes
-I will fix it
-> 
->> +
->> +maintainers:
->> +  - liang.yang@amlogic.com
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - "amlogic,meson-gxl-nfc"
->> +      - "amlogic,meson-axg-nfc"
-> 
-> Don't need quotes
-i will fix it
-> 
->> +
->> +  reg:
->> +    maxItems: 2
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    minItems: 2
->> +
->> +  clock-names:
->> +    items:
->> +      - const: core
->> +      - const: device
->> +
->> +patternProperties:
->> +  "^nand@[0-7]$":
->> +    type: object
->> +    properties:
->> +      reg:
->> +        minimum: 0
->> +        maximum: 1
->> +
->> +      nand-ecc-mode:
->> +        const: hw
->> +
->> +      nand-ecc-step-size:
->> +        const: 1024
->> +
->> +      nand-ecc-strength:
->> +        enum: [8, 16, 24, 30, 40, 50, 60]
->> +        description: |
->> +          The ECC configurations that can be supported are as follows.
->> +            meson-gxl-nfc 8, 16, 24, 30, 40, 50, 60
->> +            meson-axg-nfc 8
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - clocks
->> +  - clock-names
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/axg-clkc.h>
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    nand-controller@ffe07800 {
->> +      compatible = "amlogic,meson-axg-nfc";
->> +      reg = <0xffe07800 0x100>, <0xffe07000 0x800>;
->> +      reg-names = "nfc", "emmc";
->> +      interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
->> +      clocks = <&clkc CLKID_SD_EMMC_C>,  <&clkc CLKID_FCLK_DIV2>;
->> +      clock-names = "core", "device";
->> +
->> +      pinctrl-0 = <&nand_pins>;
->> +      pinctrl-names = "default";
->> +
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +
->> +      nand@0 {
->> +        reg = <0>;
->> +      };
->> +    };
->> +
->> +...
->> -- 
->> 2.34.1
->>
->>
-> 
-> .
+Thanks for adding this entry!
+Will be very useful to review vsock patches for vmci transport.
+
+Acked-by: Stefano Garzarella <sgarzare@redhat.com>
+

@@ -2,187 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF165B0A62
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0303C5B0A45
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiIGQlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S229902AbiIGQk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiIGQlR (ORCPT
+        with ESMTP id S229540AbiIGQk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:41:17 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3866F55D;
-        Wed,  7 Sep 2022 09:41:16 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id C06E65C0143;
-        Wed,  7 Sep 2022 12:41:15 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 07 Sep 2022 12:41:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1662568875; x=1662655275; bh=Yi
-        pKfE5H7K9Z8GqiZelawUT7boFvb7Vr7t0y/LekHjU=; b=NuK3uPYJVI4VwIsazO
-        MKYEM8cpzAXqUtbTu6FSAX4Ugx8QI2zubhFtYyvnspqgVE33BJzf6HLl3BIYzTag
-        waauXsxX54P3Z9eMX+LaHZzlsdp/j1RfuofpOXngviC7YPPNLyhAxEYexPICSmqx
-        +VVcdP/hoUGUc8ipXzVwLXOtU3e/5sAuyqzBjvPzEgzi9yPJpMuYr2N0uhaxA3sU
-        CTnIa4TOSB9bIxg/GbUVzeeDh29xqGfBVsSOryl0HEhg0fVPVGhYdJU9hDA5mbJS
-        bLnj6KoSv54Cfq1D9uHbXzkqkxx6IZRJTFLwcBs0JbH9TNCZDzpFE7F0Vgzcsahg
-        6uQQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1662568875; x=1662655275; bh=YipKfE5H7K9Z8
-        GqiZelawUT7boFvb7Vr7t0y/LekHjU=; b=ubAm8/hxHUIJDSTDNStqDEgXEUKNz
-        cdxLmOUdSwQavIQ0iTu28wYTdG1220vY16hif0UGjsQtprBBng31juPpetgK1c/W
-        Fsgi5+uc+bFfgnFMSAVtv7zq/YYlIqnuHeySeu7trNYYdec0mo5ZFanYPAexJLPO
-        UNqv0bzS9fyN8EYbmWjYhGD/P5RdMhGQNcxC7nXooFpRM3u4NjPvZcvzFbB3/qDO
-        cOsnLImFjtmNxOUhWBOfj/CNHPHhv/VDFiC0Sxvx2F1FXU6318tJ8Efj3+AdMofC
-        5LL5PhiUqgY6N2VqcyyXW2ybQ2K8uLDeXVRj3rc30lwkm1WC72mGnNHfA==
-X-ME-Sender: <xms:q8kYY7YCfB7E_WoD9nxkOoGa245k1bwzYqyS3zXR-CfQBMnETTEFOQ>
-    <xme:q8kYY6bH-gBgHErwcO-yhalfUCrgOG3MFQ3ng5mX_7h7xMNGMDDTwn1m2aUQj4q4Z
-    keStJ4lCXkKMZaxLw>
-X-ME-Received: <xmr:q8kYY999jrKx9eOrMnF8NH-dwepulzljkjQ_Hf9XxS22Wk3vPNmINOiVxRlvilQzrYQHS2ryfPo44dFZNNhS7AaFAbuF_SOgp2O-nAY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddguddtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
-    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:q8kYYxpeObwTzdTA7MyqirliUEXWvzpoMYtCHYJeoXcrppPQ91tqvg>
-    <xmx:q8kYY2oxNDeAPUloykw-Fx_-2NllS_CI8sID6lgSUx1k8D3vIhiyxg>
-    <xmx:q8kYY3TiPGC-U292WtMzUNkR-t95d7KCndPF_7wE-uJm-P4pymmGCA>
-    <xmx:q8kYYzR6YES2iOk9yxDFOpXOlrWmoYZC3fqujM_fDfDTNkKeWL6jQg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 12:41:14 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-        toke@kernel.org, martin.lau@linux.dev,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 6/6] selftests/bpf: Add tests for writing to nf_conn:mark
-Date:   Wed,  7 Sep 2022 10:40:41 -0600
-Message-Id: <f78966b81b9349d2b8ebb4cee2caf15cb6b38ee2.1662568410.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1662568410.git.dxu@dxuuu.xyz>
-References: <cover.1662568410.git.dxu@dxuuu.xyz>
+        Wed, 7 Sep 2022 12:40:56 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082E56EF36
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:40:55 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id q8so11101607qvr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=oOtsIfLgo+dpW6bJd1WimKnWJ8hG0+yd1C7QnZJgzys=;
+        b=NLEjy+firPpiQwLoDTWKF2YlJU06b7+MpQCjV9boLFcGlndFOsSeLn4xVITIO7j1VY
+         3oYDGu/QrFrJp0lH7j5JnP43Q0ozPiidOwZiERCRViBoXL+ySmscfO84ZNklVxkzSstF
+         3z1XYaEmSgAWcdrqm0P9e/9I87jTUM2Ktdxc8OihgL204wniUGX9uooTHatLhmYtFYp6
+         NdGaE88tHGNEt514DJNVD55o6v3qLlrVmnRGTkVhWmLW5LzRlZds9toqv82dmQh5FHDv
+         65GriHVlpGkKAWAWHDojF8N+ad5NPHupswjGtn0ujB3Ap3k3VVTv6S+XsBCh1TD43pdA
+         uq/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=oOtsIfLgo+dpW6bJd1WimKnWJ8hG0+yd1C7QnZJgzys=;
+        b=dN3KAlyR60JTL5azlrjsDeLWw+kV6YfNPgdooOySQjG7X5icf3rPoVUPKDQB2PbBSt
+         m1hx4hG5D0S1d6Fd1uUOj77qRQBVeR0r1wE7sPVI1ZIVFckjgpR6TAWaG2ND3RLNef+/
+         WTBeIxdnVaVumxskWRxvhE+hcqpC2qdNnimuC9xeApkwro3pWW8F9pJkJl+1OUeA4mpw
+         KNFhFn2rfocQMD8v5ffLLTV3SmhuvcELbwON6ohCw8N3HoKaScOKxnF0rvu/RERSG2zk
+         KvjU8AmX7OeVc27ahZNv8Moeofai9VAl6XtSR3lpmOrlAKnNkGixP7AYc61kJkFvEiuj
+         smug==
+X-Gm-Message-State: ACgBeo2cSd0QMbBI1p9rwoIOawDoVWhnFlsW30tVZRE6PHVMVmf6Csoo
+        4jiZsDusl9CYL1JmCDzxmUlnv27C1DInUQ==
+X-Google-Smtp-Source: AA6agR5aqyqDQj8p4rDj/DRP4aqjwXj4zv8D3N4lHGDYenpdWlbkDHCrOsWAlxztCdbeU0pA3oV2wQ==
+X-Received: by 2002:a05:6214:27e4:b0:476:be6a:91c1 with SMTP id jt4-20020a05621427e400b00476be6a91c1mr3810500qvb.39.1662568854158;
+        Wed, 07 Sep 2022 09:40:54 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id x11-20020ac87ecb000000b0031ee918e9f9sm12833581qtj.39.2022.09.07.09.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 09:40:53 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oVy6e-008gbP-Tw;
+        Wed, 07 Sep 2022 13:40:52 -0300
+Date:   Wed, 7 Sep 2022 13:40:52 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lpivarc@redhat.com" <lpivarc@redhat.com>,
+        "Liu, Jingqi" <jingqi.liu@intel.com>,
+        "Lu, Baolu" <baolu.lu@intel.com>
+Subject: Re: [PATCH] vfio/type1: Unpin zero pages
+Message-ID: <YxjJlM5A0OLhaA7K@ziepe.ca>
+References: <166182871735.3518559.8884121293045337358.stgit@omen>
+ <BN9PR11MB527655973E2603E73F280DF48C7A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <d71160d1-5a41-eae0-6405-898fe0a28696@redhat.com>
+ <YxfX+kpajVY4vWTL@ziepe.ca>
+ <b365f30b-da58-39c0-08e9-c622cc506afa@redhat.com>
+ <YxiTOyGqXHFkR/DY@ziepe.ca>
+ <20220907095552.336c8f34.alex.williamson@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907095552.336c8f34.alex.williamson@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple extension to the existing selftest to write to
-nf_conn:mark. Also add a failure test for writing to unsupported field.
+On Wed, Sep 07, 2022 at 09:55:52AM -0600, Alex Williamson wrote:
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/testing/selftests/bpf/prog_tests/bpf_nf.c    |  2 ++
- tools/testing/selftests/bpf/progs/test_bpf_nf.c    |  9 +++++++--
- .../testing/selftests/bpf/progs/test_bpf_nf_fail.c | 14 ++++++++++++++
- 3 files changed, 23 insertions(+), 2 deletions(-)
+> > So, if we go back far enough in the git history we will find a case
+> > where PUP is returning something for the zero page, and that something
+> > caused is_invalid_reserved_pfn() == false since VFIO did work at some
+> > point.
+> 
+> Can we assume that?  It takes a while for a refcount leak on the zero
+> page to cause an overflow.  My assumption is that it's never worked, we
+> pin zero pages, don't account them against the locked memory limits
+> because our is_invalid_reserved_pfn() test returns true, and therefore
+> we don't unpin them.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-index 544bf90ac2a7..ab9117ae7545 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -17,6 +17,7 @@ struct {
- 	{ "set_status_after_insert", "kernel function bpf_ct_set_status args#0 expected pointer to STRUCT nf_conn___init but" },
- 	{ "change_timeout_after_alloc", "kernel function bpf_ct_change_timeout args#0 expected pointer to STRUCT nf_conn but" },
- 	{ "change_status_after_alloc", "kernel function bpf_ct_change_status args#0 expected pointer to STRUCT nf_conn but" },
-+	{ "write_not_allowlisted_field", "no write support to nf_conn at off" },
- };
+Oh, you think it has been buggy forever? That is not great..
  
- enum {
-@@ -113,6 +114,7 @@ static void test_bpf_nf_ct(int mode)
- 	ASSERT_LE(skel->bss->test_delta_timeout, 10, "Test for max ct timeout update");
- 	/* expected status is IPS_SEEN_REPLY */
- 	ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
-+	ASSERT_EQ(skel->bss->test_insert_lookup_mark, 77, "Test for insert and lookup mark value");
- 	ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
- 	ASSERT_EQ(skel->bss->test_exist_lookup_mark, 43, "Test existing connection lookup ctmark");
- end:
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 2722441850cc..b5e7079701e8 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -23,6 +23,7 @@ int test_insert_entry = -EAFNOSUPPORT;
- int test_succ_lookup = -ENOENT;
- u32 test_delta_timeout = 0;
- u32 test_status = 0;
-+u32 test_insert_lookup_mark = 0;
- __be32 saddr = 0;
- __be16 sport = 0;
- __be32 daddr = 0;
-@@ -144,6 +145,7 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 
- 		bpf_ct_set_timeout(ct, 10000);
- 		bpf_ct_set_status(ct, IPS_CONFIRMED);
-+		ct->mark = 77;
- 
- 		ct_ins = bpf_ct_insert_entry(ct);
- 		if (ct_ins) {
-@@ -157,6 +159,7 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 				test_delta_timeout = ct_lk->timeout - bpf_jiffies64();
- 				test_delta_timeout /= CONFIG_HZ;
- 				test_status = IPS_SEEN_REPLY;
-+				test_insert_lookup_mark = ct_lk->mark;
- 				bpf_ct_change_status(ct_lk, IPS_SEEN_REPLY);
- 				bpf_ct_release(ct_lk);
- 				test_succ_lookup = 0;
-@@ -175,8 +178,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 		       sizeof(opts_def));
- 	if (ct) {
- 		test_exist_lookup = 0;
--		if (ct->mark == 42)
--			test_exist_lookup_mark = 43;
-+		if (ct->mark == 42) {
-+			ct->mark++;
-+			test_exist_lookup_mark = ct->mark;
-+		}
- 		bpf_ct_release(ct);
- 	} else {
- 		test_exist_lookup = opts_def.error;
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c b/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c
-index bf79af15c808..0e4759ab38ff 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c
-@@ -69,6 +69,20 @@ int lookup_insert(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+SEC("?tc")
-+int write_not_allowlisted_field(struct __sk_buff *ctx)
-+{
-+	struct bpf_ct_opts___local opts = {};
-+	struct bpf_sock_tuple tup = {};
-+	struct nf_conn *ct;
-+
-+	ct = bpf_skb_ct_lookup(ctx, &tup, sizeof(tup.ipv4), &opts, sizeof(opts));
-+	if (!ct)
-+		return 0;
-+	ct->status = 0xF00;
-+	return 0;
-+}
-+
- SEC("?tc")
- int set_timeout_after_insert(struct __sk_buff *ctx)
- {
--- 
-2.37.1
+> > IHMO we should simply go back to the historical behavior - make
+> > is_invalid_reserved_pfn() check for the zero_pfn and return
+> > false. Meaning that PUP returned it.
+> 
+> We've never explicitly tested for zero_pfn and as David notes,
+> accounting the zero page against the user's locked memory limits has
+> user visible consequences.  VMs that worked with a specific locked
+> memory limit may no longer work.  
 
+Yes, but the question is if that is a strict ABI we have to preserve,
+because if you take that view it also means because VFIO has this
+historical bug that David can't fix the FOLL_FORCE issue either.
+
+If the view holds for memlock then it should hold for cgroups
+also. This means the kernel can never change anything about
+GFP_KERNEL_ACCOUNT allocations because it might impact userspace
+having set a tight limit there.
+
+It means we can't fix the bug that VFIO is using the wrong storage for
+memlock.
+
+It means qemu can't change anything about how it sets up this memory,
+ie Kevin's idea to change the ordering.
+
+On the other hand the "abi break" we are talking about is that a user
+might have to increase a configured limit in a config file after a
+kernel upgrade.
+
+IDK what consensus exists here, I've never heard of anyone saying
+these limits are a strict ABI like this.. I think at least for cgroup
+that would be so invasive as to immediately be off the table.
+
+Jason

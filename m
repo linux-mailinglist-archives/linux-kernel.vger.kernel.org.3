@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFB35B0018
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0245B001F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiIGJM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S229849AbiIGJNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiIGJM1 (ORCPT
+        with ESMTP id S229461AbiIGJNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:12:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EF4A8953;
-        Wed,  7 Sep 2022 02:12:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B5BF61807;
-        Wed,  7 Sep 2022 09:12:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72C7FC433C1;
-        Wed,  7 Sep 2022 09:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662541942;
-        bh=F5BqGSUu4iqZd/yq78KxwFvfS+QZgSQ08ldKXJylc+I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VWSuESpwMyaMRpPsshNsmHWjpMjTVb0M5LaYZogMT3o6j32+KsFbGzUkPjwVahokX
-         GC4yyY4zhFyt6aG5EcVvMGfng7Mx2dsk/gUMmhV/1ueLnfC7B70D/OJfNsh25AJbi+
-         5xuj3C8VM6UxtrlvZupHMAmNhN74uVGn8RHZCu3nxJIeKiMIfXUtjbP1tFTuEgMfbQ
-         rRmQA1eUiFtbF5f9ocOBhAUjkT0L2ZrYpvSvlKRqorLAGPKBAr2Ia6Vo3DQEakonBK
-         evmWYq5yajecXaL5zpuNqK46BNrsWqlfXpTI2H+MhBbNUpO6g3YF57Pofqq60mCU46
-         w1jRJu2yR3jgQ==
-Date:   Wed, 7 Sep 2022 18:12:18 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Message-Id: <20220907181218.41facc0902789c77e42170ea@kernel.org>
-In-Reply-To: <YxhDBAhYrs0Sfqjt@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
-        <166251212072.632004.16078953024905883328.stgit@devnote2>
-        <YxhDBAhYrs0Sfqjt@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 05:13:38 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95A3AF0F5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:13:37 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oVr7o-0004DW-F1; Wed, 07 Sep 2022 11:13:36 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oVr7l-004PfW-Sp; Wed, 07 Sep 2022 11:13:35 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oVr7n-00GfdX-6x; Wed, 07 Sep 2022 11:13:35 +0200
+Date:   Wed, 7 Sep 2022 11:13:35 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v1 4/9] pwm: lpss: Include headers we are direct user of
+Message-ID: <20220907091335.zls4vnacbtyrj5t5@pengutronix.de>
+References: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
+ <20220906195735.87361-4-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qech4paygatkpfea"
+Content-Disposition: inline
+In-Reply-To: <20220906195735.87361-4-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 09:06:44 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
 
-> On Wed, Sep 07, 2022 at 09:55:21AM +0900, Masami Hiramatsu (Google) wrote:
-> 
-> > +/* Return the jump target address or 0 */
-> > +static inline unsigned long insn_get_branch_addr(struct insn *insn)
-> > +{
-> > +	switch (insn->opcode.bytes[0]) {
-> > +	case 0xe0:	/* loopne */
-> > +	case 0xe1:	/* loope */
-> > +	case 0xe2:	/* loop */
-> 
-> Oh cute, objtool doesn't know about those, let me go add them.
-> 
-> > +	case 0xe3:	/* jcxz */
-> > +	case 0xe9:	/* near relative jump */
-> 
->  /* JMP.d32 */
-> 
-> > +	case 0xeb:	/* short relative jump */
-> 
->  /* JMP.d8 */
-> 
-> > +		break;
-> > +	case 0x0f:
-> > +		if ((insn->opcode.bytes[1] & 0xf0) == 0x80) /* jcc near */
-> 
->  /* Jcc.d32 */
-> 
-> Are the GNU AS names for these things.
+--qech4paygatkpfea
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-OK, it should be updated. Where can I refer the names (especially '.dX' suffixes)?
+On Tue, Sep 06, 2022 at 10:57:30PM +0300, Andy Shevchenko wrote:
+> For the sake of integrity, include headers we are direct user of.
+>=20
+> While at it, replace device.h with a forward declaration.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/pwm/pwm-lpss.h | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
+> index 5995b6b750a8..832cb86996d7 100644
+> --- a/drivers/pwm/pwm-lpss.h
+> +++ b/drivers/pwm/pwm-lpss.h
+> @@ -10,11 +10,15 @@
+>  #ifndef __PWM_LPSS_H
+>  #define __PWM_LPSS_H
+> =20
+> -#include <linux/device.h>
+>  #include <linux/pwm.h>
+> +#include <linux/types.h>
+> =20
+>  #define MAX_PWMS			4
+> =20
+> +struct device;
+> +
+> +struct pwm_lpss_boardinfo;
 
-> 
-> > +			break;
-> > +		return 0;
-> 
-> > +	default:
-> > +		if ((insn->opcode.bytes[0] & 0xf0) == 0x70) /* jcc short */
-> > +			break;
-> > +		return 0;
-> 
-> You could write that as:
-> 
-> 	case 0x70 ... 0x7f: /* Jcc.d8 */
-> 		break;
-> 
-> 	default:
-> 		return 0;
+the commit log doesn't explain the pwm_lpss_boardinfo part?!
 
-Thanks! I'll update it.
+Best regards
+Uwe
 
-> 
-> > +	}
-> > +	return (unsigned long)insn->next_byte + insn->immediate.value;
-> > +}
-> 
-> 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--qech4paygatkpfea
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMYYLwACgkQwfwUeK3K
+7AlJtAf+Mj8VJBKBk0UlTh7Ncot6u/Md5hRPB7pOrLYk7Or2vFCeG3ts8EFVV/wb
+3uKyktxKruONUfHSxrgvRr2sjMACX6CSE+xclA/ud+/AWb1OLF9zKWI1COIQElo4
+8jYwubDXzwraYtfLjmKqK6fpRYSOdxCKevkU8Fz2N0qO17zlOMfBihJH3YWiGja4
+8MzO/rR53OyI0Jd7VPmnAlIZhwuxZCbroIOYFLr6DtloovQOtmg3VrCrgGN6ap9F
+BqNNV5d4ghAKPbe94vwsGCFe2LgqduLxuHCleIIOHPD6h5PSW1tHi+4no153jY/1
+s9MuQnf06iusOGz5aDaoy/G4exEo1w==
+=s4N/
+-----END PGP SIGNATURE-----
+
+--qech4paygatkpfea--

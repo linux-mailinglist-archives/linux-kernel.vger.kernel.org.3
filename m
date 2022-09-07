@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7785B01EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA795B01F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIGKaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S229740AbiIGKhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiIGKaK (ORCPT
+        with ESMTP id S229547AbiIGKhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:30:10 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A22D237FD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:30:09 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bt10so21747064lfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 03:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Yh7EP9E1bY57iyGLbA3U+rsfppFelPTsU7HrsvIKkms=;
-        b=S2I+xRADc9Pg/U+U8TdBBI1ZkPWcrte3gR+yOuHYUiDu71CVKzuiuvDhZm8SytmMYS
-         hR/2OzNyqcUkAi7ASqbWfk/3rtsnCgiMNfNAhQFMbC8b/c1VRv/1TXjAbpqU7vAdx1we
-         S69wh2KOCuAbUb/8L4u/HPsJZxO1TvU/XcxsIQH0uk3W0/oFjHF+PWdSeuY0Z0v7RaLM
-         ziLcYarw11N3zYKzUWCQ6CIS1Fx+TnC1EFo0GbeJEv4Xs03Ql4Hue31tLeSvS4SICcxC
-         N1NOwtcd/myxIDm1TsHMhKH6p0/5Y8MieWI74GqCCIGbIqDfU9u+tM0o2HbUbQwCrxXl
-         B86g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Yh7EP9E1bY57iyGLbA3U+rsfppFelPTsU7HrsvIKkms=;
-        b=w2JOF7NdZp+H9hPJ/RmG0U8oIeh+65VY+zIVZ8uaASWwW/HQIvE+va+R9s+8e/EpCE
-         b73xWgbrlWTYtoHlwPLcip0cyZbBhuaCXdswzCO5FGdGxk0NCtplfyuB+CjWtyNM5cvw
-         eHuLRjLWKRAMNliFkQpl9moz4zCqzO9XecvatMSf2YRX9A/j5D1cn+WkU/xHRIw0GRja
-         /X+mctRWN98Yc/wWhEmfu4JY2J39FQviGJtynRpCoQ/77ujk891+wK2TS7vo83ffuoXR
-         GS6ct2KuCLvG+00Nc2nNL0AwZsvJp+OVLBDokPuw+c408gqZdyG8bMji9wcZLaJVistq
-         bKZg==
-X-Gm-Message-State: ACgBeo0X7Fkt/jpiepGk+CXcAX9jdcfm3Yi3EGSLZKrU2Hap2Q1HRJqy
-        3M3QzWjLJ3CQHEYx9JUbteL+3S4Iot3WKqZuyWANCw==
-X-Google-Smtp-Source: AA6agR7e9UFEyOx7xlO9YPEcerymB//PN3t+H86LvxXaUPkJBx1JVWMFdhoYsKnQWjD+W97muc1Pbb+KITSjmaJ/zC8=
-X-Received: by 2002:a05:6512:1293:b0:494:96ee:80c1 with SMTP id
- u19-20020a056512129300b0049496ee80c1mr857731lfs.417.1662546607161; Wed, 07
- Sep 2022 03:30:07 -0700 (PDT)
+        Wed, 7 Sep 2022 06:37:01 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A768B75FCF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:36:57 -0700 (PDT)
+Received: from [192.168.1.138] ([37.4.248.23]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MBlgy-1odXvW2p1o-00CEBe; Wed, 07 Sep 2022 12:36:06 +0200
+Message-ID: <965de5c0-bc6a-7210-c946-b916ae2219fc@i2se.com>
+Date:   Wed, 7 Sep 2022 12:36:03 +0200
 MIME-Version: 1.0
-References: <20220907100533.1719128-1-vincent.whitchurch@axis.com>
-In-Reply-To: <20220907100533.1719128-1-vincent.whitchurch@axis.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 7 Sep 2022 12:29:55 +0200
-Message-ID: <CACT4Y+aBpkfgEvM6rE9Kg5U0MwcHnUA+Fm_2F4g9A4QQ3hav4g@mail.gmail.com>
-Subject: Re: [PATCH] um: Prevent KASAN splats in dump_stack()
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>, kernel@axis.com,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 00/41] drm: Analog TV Improvements
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
+ <020d44e6-884b-a817-8265-3461638cac71@tronnes.org>
+ <20220905145729.ln675jko3aw6sgzs@houat>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220905145729.ln675jko3aw6sgzs@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:raTGFr7ptnGZr2h9Jh6nKg1Z14xx0x8riNatR19Mgp3HoRXLPdX
+ FN+/gOxN9VXjXLIhXVkBpgujUpNMYSy+G4CQp211BQEbL4066eK8AZ57x7+Ryp53nqef83R
+ XG19WvSzjiVdclyB4a503Xj8phHhNIsA5aMzvA3iiMzzCLqNQD5cu7Y+WiuUERVXn8PvvlY
+ lI8tCye4pEPGe1CN/8vMQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:E39iEAiAV7Y=:B7mNG1qnV2phLThzbzU+Hn
+ NQxcGOSbNAanP4JFBiG/LtUzvemWljyfBLqG/pDWW9VEGnlD2Z6Byz8MlVpn2coz7SlBEBqWJ
+ vYLcC4JbBOShkgf2NTR6WBg3qXiJudSE3MMRePAsAyo3vR4RBUgT3V2jInNShmHq+6uqaK69s
+ m/gUWat40aKVNI+zKOvfA6c5LkkTTK1rfzGu5+fVN+lr92s89ql2BYpLtWJAFJPu0aREY3Jcl
+ o6Qv31yCfynAH8ybEjCwB+ZPkAoqDOhtPPyRvgC6QAeDVMxIHxmG71bvc90BM3FByUgYYO9d3
+ DwpaMfHXZLeFE+eKmnZQ6yl6jm6TdtmvqVxdoTAw5KXtyTzAec4gDPzb5VGSRvxg8OvfJ+TWQ
+ qxwy/Q3YLXNDsgCT587OiJRU5ufu4eZnh2hVnsYjSqTA2SyX+IlHS0+Xg7M1XCSFMY1G9Wvgv
+ ja1dUFtjah7IHTtojE9CJ6b2MLv6JN5bQmECuHgOxvcCl5dciehUuQyvYwu+pt7XAh/vTC1Ik
+ WqxG0IHgf8kahngmdt77rJa5MOJ4JkdZcoxCxFbPiRjzPwETizl93zOicz9U9+Cqj4hhjvn32
+ 8KvRyd0oJFVcoCdGvjL/FQdH6XKNhVYcZsmoimp7izfN4vkA7RPDiDpQ2bSnPPz2SdN0cQkRw
+ vNOR/WK2hni3ZtIl3NvfiyfjotquCr+LcNl5UyBLbOoRzo1vlsiH5NIPkUr+lEu1c/gMnSGeX
+ l/r/PCOvk6YRCsCJU026ilkZ7/hpuQ0eNBqGeCE6VHiykFWFxcjSIom+HMy3l++Meqq6kRIXg
+ HDI7jT8dag3sJoNTX9ctgnZDvvoww==
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 12:05, Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> Use READ_ONCE_NOCHECK() when reading the stack to prevent KASAN splats
-> when dump_stack() is used.
->
-> Fixes: 5b301409e8bc5d7fad ("UML: add support for KASAN under x86_64")
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Hi Maxime,
 
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
-
-> ---
->  arch/um/kernel/sysrq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Am 05.09.22 um 16:57 schrieb Maxime Ripard:
+> On Fri, Sep 02, 2022 at 01:28:16PM +0200, Noralf Trønnes wrote:
+>>
+>> Den 01.09.2022 21.35, skrev Noralf Trønnes:
+>>>
+>>> I have finally found a workaround for my kernel hangs.
+>>>
+>>> Dom had a look at my kernel and found that the VideoCore was fine, and
+>>> he said this:
+>>>
+>>>> That suggests cause of lockup was on arm side rather than VC side.
+>>>>
+>>>> But it's hard to diagnose further. Once you've had a peripheral not
+>>>> respond, the AXI bus locks up and no further operations are possible.
+>>>> Usual causes of this are required clocks being stopped or domains
+>>>> disabled and then trying to access the hardware.
+>>>>
+>>> So when I got this on my 64-bit build:
+>>>
+>>> [  166.702171] SError Interrupt on CPU1, code 0x00000000bf000002 -- SError
+>>> [  166.702187] CPU: 1 PID: 8 Comm: kworker/u8:0 Tainted: G        W
+>>>      5.19.0-rc6-00096-gba7973977976-dirty #1
+>>> [  166.702200] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
+>>> [  166.702206] Workqueue: events_freezable_power_ thermal_zone_device_check
+>>> [  166.702231] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS
+>>> BTYPE=--)
+>>> [  166.702242] pc : regmap_mmio_read32le+0x10/0x28
+>>> [  166.702261] lr : regmap_mmio_read+0x44/0x70
+>>> ...
+>>> [  166.702606]  bcm2711_get_temp+0x58/0xb0 [bcm2711_thermal]
+>>>
+>>> I wondered if that reg read was stalled due to a clock being stopped.
+>>>
+>>> Lo and behold, disabling runtime pm and keeping the vec clock running
+>>> all the time fixed it[1].
+>>>
+>>> I don't know what the problem is, but at least I can now test this patchset.
+>>>
+>>> [1] https://gist.github.com/notro/23b984e7fa05cfbda2db50a421cac065
+>>>
+>> It turns out I didn't have to disable runtime pm:
+>> https://gist.github.com/notro/0adcfcb12460b54e54458afe11dc8ea2
+> If the bcm2711_thermal IP needs that clock to be enabled, it should grab
+> a reference itself, but it looks like even the device tree binding
+> doesn't ask for one.
+The missing clock in the device tree binding is expected, because 
+despite of the code there is not much information about the BCM2711 
+clock tree. But i'm skeptical that the AVS IP actually needs the VEC 
+clock, i think it's more likely that the VEC clock parent is changed and 
+that cause this issue. I could take care of the bcm2711 binding & driver 
+if i know which clock is really necessary.
 >
-> diff --git a/arch/um/kernel/sysrq.c b/arch/um/kernel/sysrq.c
-> index 7452f70d50d0..746715379f12 100644
-> --- a/arch/um/kernel/sysrq.c
-> +++ b/arch/um/kernel/sysrq.c
-> @@ -48,7 +48,8 @@ void show_stack(struct task_struct *task, unsigned long *stack,
->                         break;
->                 if (i && ((i % STACKSLOTS_PER_LINE) == 0))
->                         pr_cont("\n");
-> -               pr_cont(" %08lx", *stack++);
-> +               pr_cont(" %08lx", READ_ONCE_NOCHECK(*stack));
-> +               stack++;
->         }
+> Maxime
 >
->         printk("%sCall Trace:\n", loglvl);
-> --
-> 2.34.1
->
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB335B04A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40115B04AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 15:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiIGNFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 09:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
+        id S230036AbiIGNFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 09:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiIGNF0 (ORCPT
+        with ESMTP id S230032AbiIGNFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:05:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A3424092;
-        Wed,  7 Sep 2022 06:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kpPb9FZKLL7QQXvoFpRetjYb96UzC24nWBfneFEYOiE=; b=XvVjPq1NB5NC/OZGSspv+CF+uC
-        E3NYs/YQKFioRcgzm39m4t13fATLdEpkgmjphWfxAdbxYPNFrG6FNxNGbflCBWuwIDE3Un/3r4v78
-        b8HkwwvlwzlVlC2QjUtrxRIAZYpeKam0IW0hLrc5+ny8/IBVKTtuy9YpPztXDbiQop609uLzDGoT5
-        uubw+HFFKiBO9qOqaQKSmEKsvsrXqvNRIkJ0VWmQ2zpeStDaZH25xM+orgfsvM/uvirbXfQnomVYo
-        wV4Es33QPpe2jWIsB76vn3tPxNrBiHNIhUfyGz9RkfVJK0+VjLufYd7JwMhwYbK7K7KOqbGYMNe0E
-        Ws+zTXGA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVujy-00ARjW-2K; Wed, 07 Sep 2022 13:05:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9CF6A3002A3;
-        Wed,  7 Sep 2022 15:05:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 82D20203C2334; Wed,  7 Sep 2022 15:05:13 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 15:05:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Message-ID: <YxiXCf1LcFqj5di6@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
- <166251212072.632004.16078953024905883328.stgit@devnote2>
- <YxhQIBKzi+L0KDhc@hirez.programming.kicks-ass.net>
+        Wed, 7 Sep 2022 09:05:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E837924092;
+        Wed,  7 Sep 2022 06:05:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95CC0B81CE1;
+        Wed,  7 Sep 2022 13:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B0FC433C1;
+        Wed,  7 Sep 2022 13:05:26 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="B/bcq3Ru"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1662555925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=49NOxJ822bPKwRKlaVTKItq7gIJSVwe11b7c5oiqKNY=;
+        b=B/bcq3RufPZVcOE3bYtM1Cu6Nu2eQ1DnxseeoOi0D8PnXH5Pbmw0pbJ9vI9+wS4gdsAXVB
+        7Cv9pk/18GyUVNqpaZ1fQsU4EOkeNBzIMqEwjMNOQ+EHo8En3zs3r9u/JxtEXjiTbR+9wh
+        oYojDbW1tvT0lU1Z0FgcKe11XhiPqEQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 35c9180b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 7 Sep 2022 13:05:24 +0000 (UTC)
+Date:   Wed, 7 Sep 2022 15:05:20 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH] random / hw_random: core: start hwrng kthread also for
+ untrusted sources
+Message-ID: <YxiXEJ6up6XEW8SM@zx2c4.com>
+References: <20220904080247.7890-1-linux@dominikbrodowski.net>
+ <Yxg7WQ1UuskDrBVj@gondor.apana.org.au>
+ <YxhAEmtVcdvIkX6Q@shine.dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YxhQIBKzi+L0KDhc@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YxhAEmtVcdvIkX6Q@shine.dominikbrodowski.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:02:41AM +0200, Peter Zijlstra wrote:
-
-> 	struct queue q;
+On Wed, Sep 07, 2022 at 08:54:10AM +0200, Dominik Brodowski wrote:
+> Am Wed, Sep 07, 2022 at 02:34:01PM +0800 schrieb Herbert Xu:
+> > Dominik Brodowski <linux@dominikbrodowski.net> wrote:
+> > >
+> > > diff --git a/drivers/char/random.c b/drivers/char/random.c
+> > > index 79d7d4e4e582..b360ed4ece03 100644
+> > > --- a/drivers/char/random.c
+> > > +++ b/drivers/char/random.c
+> > > @@ -867,9 +867,9 @@ void add_hwgenerator_randomness(const void *buf, size_t len, size_t entropy)
+> > > 
+> > >        /*
+> > >         * Throttle writing to once every CRNG_RESEED_INTERVAL, unless
+> > > -        * we're not yet initialized.
+> > > +        * we're not yet initialized or this source isn't trusted.
+> > >         */
+> > > -       if (!kthread_should_stop() && crng_ready())
+> > > +       if (!kthread_should_stop() && (crng_ready() || !entropy))
+> > >                schedule_timeout_interruptible(CRNG_RESEED_INTERVAL);
+> > > }
+> > > EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+> > 
+> > Couldn't you split this bit out?
 > 
-> 	start = paddr - offset;
-> 	end = start + size;
-> 	push(&q, paddr - offset);
-> 
-> 	while (start = pop(&q)) {
-> 		for_each_insn(&insn, start, end, buf) {
-> 			if (insn.kaddr == paddr)
-> 				return 1;
-> 
-> 			target = insn_get_branch_addr(&insn);
-> 			if (target)
-> 				push(&q, target);
-> 
-> 			if (dead_end_insn(&insn))
-> 				break;
-> 		}
-> 	}
+> I could, but this would need to get merged before the patch to the hwrng
+> core gets applied. What do you (and Jason) prefer?
 
-There is the very rare case of intra-function-calls; but I *think*
-they're all in noinstr/nokprobe code anyway.
+Just split this out and send it to me, and I'll push it early in 6.1 so
+that it makes rc1, and then Herbert can apply the hwrng part separately
+whenever he sees fit.
 
-For instance we have RSB stuffing code like:
-
-	.rept 16
-	call 1f;
-	int3
-	1:
-	.endr
-	add $(BITS_PER_LONG/8) * 16, %_ASM_SP
-
-And the proposed will be horribly confused by that. But like said; it
-should also never try and untangle it.
+Jason

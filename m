@@ -2,157 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFF25B0D5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF66B5B0D5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 21:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiIGThq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 15:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S229953AbiIGThz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 15:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIGThn (ORCPT
+        with ESMTP id S229822AbiIGThx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 15:37:43 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5A4BFEAD;
-        Wed,  7 Sep 2022 12:37:42 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id r17so5340530ejy.9;
-        Wed, 07 Sep 2022 12:37:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
-        b=QhvIfdWKdAUVOScOUIdGm3776l+VYODIO3d9/C/f8bXO+yDukvWV0FESgq/Wmgyf1o
-         u8V0sJbiU5FPvEPDNGnrCNVL+V1bQYE1bknKnEdJ5lhR4O2GoFiAPTB8lUagGGXCHzXY
-         ZQmbMCUyJGI8q8HxjIGRy+20U4iVzYu+09iX+r4lKAtlyarKrLj04z4EZMKrJo6SX9Db
-         gItCmnWM6t4r50i3pIMpdiiySP2nE/Kd/Mi3fwlLM54xzueNFrRcrDrGA1sAg+89V4iG
-         7CxYDg6Ynb7fpqlIrQvyyTq82yJT+S2oSzpK8qJEqBDvuNZQ0b9+w0BGbl08rAodhBOe
-         qzog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
-        b=oP4W1IS6ldO7UDAOf9Pir7bGooUIcjeBNalEwzv8gw10Q0JZAq2y8QClUzl9RretkG
-         ol6UdW64M3xgw39CyW7evS0isV4aR05CO1EjEB5zWmHsPuwCI/vQ2NkOD/NtLHd6HZ1n
-         ZUVVWed4FSt+4rVtGpHAYhzz8IqRm3iFh/KEY5EVqZ0i8gk1mvffzAyvOLZT4VOrMwb/
-         CAgMHrpF9PRIu8vmG72VwMVHdxXMnhgp2OI7IqueZgeyC/2KRJIfQs61QnIKv6VptRYt
-         ylfienFolWzQ5272gS8ajj8nr7yg1V8/5K+swNz6Ni2wf4p5jtDkW/cknO1Lt1mAG3ZR
-         u4og==
-X-Gm-Message-State: ACgBeo3l0vZ4CgGbwxbkFDvxqMtskHQKmPsnUtct2eW32dejUHfKtpYL
-        VsTT+MYwUG6g0K/1ngCQMvdhLzjougpPyszQ1ruDWmCpBFs=
-X-Google-Smtp-Source: AA6agR7DwydpRu6XtC/zVNl1McyHODlkL/bYGYJcGJ8lGN8qaCbuq46FsrbNOrc3r4eb/7G1FcBUDYMS83PPWfsBs60=
-X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id
- xf9-20020a17090731c900b00740ef932ffdmr3415828ejb.584.1662579461374; Wed, 07
- Sep 2022 12:37:41 -0700 (PDT)
+        Wed, 7 Sep 2022 15:37:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D593CC0BF9
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=G24caVRKcxlZ53o823B+wiQcoo6cPK7bb5rus+bgZPg=; b=qn5BCajSNgR4ta7ECI8kOB32f/
+        chuAzly+9tufQQ2jn9VQfg9MTm/MgPS1WjsqkOY2U4cNiKzqG5cbljVvtQJLNKh6EdWHCeBRbdq1B
+        eEoCiiPcJhah1hjvrcVAgHShrJA83LeVmn8kyOjnldP8hTqSAM9vhJKa3lKrp6s34wRFZzvWaCpzv
+        SrcD8M/vlHMICGZOJqzkJy/fYsFCOWzYZ+N/26cN7LzM4lzXE+imp2uERa67T+7omiAvb+W6JpHOp
+        s+K5nkDhIoAjy7tcfA868HfOJfEkVFy8/MONR3FRCm3tjztgsxTOmlSs8DZlFCpzbTmARG+d1gOtv
+        11DWiPDg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oW0rl-00BhNQ-Rd; Wed, 07 Sep 2022 19:37:42 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3DD12300070;
+        Wed,  7 Sep 2022 21:37:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EFD342B656AD0; Wed,  7 Sep 2022 21:37:38 +0200 (CEST)
+Date:   Wed, 7 Sep 2022 21:37:38 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        kernel test robot <lkp@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [peterz-queue:sched/psi 11/11]
+ include/linux/cgroup-defs.h:432:38: error: 'NR_PSI_RESOURCES' undeclared
+ here (not in a function)
+Message-ID: <YxjzAnztFtvrtr96@hirez.programming.kicks-ass.net>
+References: <202209070242.7EuRnstk-lkp@intel.com>
+ <e95c6e55-a023-b6f7-1dce-4195dc22114a@bytedance.com>
+ <Yxi4os4PUWSARTS/@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20220904044708.7062-1-jagathjog1996@gmail.com>
- <20220904044708.7062-3-jagathjog1996@gmail.com> <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
-In-Reply-To: <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-Date:   Thu, 8 Sep 2022 01:07:28 +0530
-Message-ID: <CAM+2Eu+xzAPEwCoGsjM5sqKjOiT5J_-dzpeB-r5XP=KoRkSXGg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] rtc: maxim: Add Maxim max31329 real time clock.
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yxi4os4PUWSARTS/@slm.duckdns.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof.
-Thank you for reviewing.
+On Wed, Sep 07, 2022 at 05:28:34AM -1000, Tejun Heo wrote:
+> On Wed, Sep 07, 2022 at 10:45:55AM +0800, Chengming Zhou wrote:
+> > 2. This patchset depends on Tejun's commit e2691f6b44ed ("cgroup: Implement cgroup_file_show()") in linux-next
+> > 
+> >    Maybe peterz-queue should include that first? I don't know what's the normal way to handle.
+> 
+> FYI, this patch is in the Greg's driver-core/driver-core-next branch. If
+> it'd be better to route these through the cgroup tree, let me know.
 
-On Mon, Sep 5, 2022 at 8:50 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 04/09/2022 06:47, Jagath Jog J wrote:
-> > Add real time clock support for Maxim max31329 real time clock.
-> >
-> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> > +     max31329->rtc->ops = &max31329_rtc_ops;
-> > +     max31329->irq = client->irq;
-> > +     max31329->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> > +     max31329->rtc->range_max = RTC_TIMESTAMP_END_2199;
-> > +     max31329->dev = &client->dev;
-> > +
-> > +     if (max31329->irq) {
-> > +             ret = devm_request_threaded_irq(&client->dev, max31329->irq,
-> > +                                             NULL, max31329_irq_handler,
-> > +                                             IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-> > +                                             "max31329", &client->dev);
-> > +             if (ret) {
-> > +                     dev_err(&client->dev, "unable to request IRQ\n");
-> > +                     max31329->irq = 0;
-> > +                     return ret;
-> > +             }
-> > +
-> > +             ret = regmap_write(max31329->regmap, MAX31329_RTC_CONFIG2_REG,
-> > +                                MAX31329_RTC_CONFIG2_ENCLKO);
-> > +             if (ret) {
-> > +                     dev_err(&client->dev, "unable to configure INT pin");
-> > +                     max31329->irq = 0;
-> > +                     return ret;
-> > +             }
-> > +
-> > +             device_set_wakeup_capable(&client->dev, true);
->
-> Probably you should rather respect wakeup-source DT property.
+I can base sched/psi off of sched/core and driver-core-next and do a
+separate late pull for it I suppose.
 
-Sure, I will configure wakeup based on the value of the wakeup-source
-property from DT.
+I'm guessing that is more or less what you'd end up doing too, right?
 
->
-> > +             set_bit(RTC_FEATURE_ALARM, max31329->rtc->features);
-> > +     }
-> > +
-> > +     ret = devm_rtc_register_device(max31329->rtc);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     max31329_trickle_config(&client->dev);
-> > +
-> > +     nvmem_cfg.priv = max31329->regmap;
-> > +     devm_rtc_nvmem_register(max31329->rtc, &nvmem_cfg);
-> > +
-> > +#ifdef CONFIG_COMMON_CLK
-> > +     max31329_clkout_register_clk(max31329, client);
-> > +#endif
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct of_device_id max31329_of_match[] = {
-> > +     { .compatible = "maxim,max31329", },
-> > +     { }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, max31329_of_match);
-> > +
-> > +static struct i2c_driver max31329_driver = {
-> > +     .driver = {
-> > +             .name = "rtc-max31329",
-> > +             .of_match_table = of_match_ptr(max31329_of_match),
->
-> of_match_ptr without maybe_unused on the table should cause compile test
-> warnings. You need both or none.
-
-I will correct this in the next patch series.
-
-Thank you
-Jagath
->
->
-> Best regards,
-> Krzysztof

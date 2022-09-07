@@ -2,275 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840745AFFDF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A575B0134
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiIGJGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
+        id S229791AbiIGKDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiIGJGQ (ORCPT
+        with ESMTP id S229543AbiIGKD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:06:16 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081457CB5F
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662541575; x=1694077575;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=J//TeRrrTjMF/epUCtQHHwk+9t0QqQ48g9qbTOtc0iA=;
-  b=i0Wz+M3TUMJrvWtYg9Vks/ArqE8WpwTZUJBejTpMhOqvu7uhuvkDOB4t
-   5TqPKtFxQ85yKVWcA/4Y0vs/USVAR0qdPZyzIBE0m+NpDp29dc2x4IZON
-   SUtC09l3+4OOqST/9DzthSzsVV0L+nKMwB3By+fGOJkLA4JEfAN+8AJ7q
-   HssisFQdSRTYsFeLg6lphGsHzzEREQtGCu7Q15rFuv6mV8a8UzzSZ90zu
-   yDNnvWcF0sxbXlNFY96EBaBF14hGB3MwNiyQqKcnCeiWA6j8aUqf5sSyK
-   sYKfHsKUJwO7OC+KZ2FRnOt2yRxDR0MuPJrkDhGyfc4hwM6GuGcswtL3J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283819644"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="283819644"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:06:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="740210230"
-Received: from linux-pnp-server-13.sh.intel.com ([10.239.176.176])
-  by orsmga004.jf.intel.com with ESMTP; 07 Sep 2022 02:06:10 -0700
-From:   Jiebin Sun <jiebin.sun@intel.com>
-To:     akpm@linux-foundation.org, vasily.averin@linux.dev,
-        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
-        manfred@colorfullife.com, alexander.mikhalitsyn@virtuozzo.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
-        tianyou.li@intel.com, wangyang.guo@intel.com, jiebin.sun@intel.com
-Subject: [PATCH v4] ipc/msg: mitigate the lock contention with percpu counter
-Date:   Thu,  8 Sep 2022 01:25:16 +0800
-Message-Id: <20220907172516.1210842-1-jiebin.sun@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
-References: <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
+        Wed, 7 Sep 2022 06:03:28 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C517B23179;
+        Wed,  7 Sep 2022 03:03:21 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6A3401C000B;
+        Wed,  7 Sep 2022 10:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662545000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LU+zY2Jwd4kGJSZPj1OwZLuTVU96ZZVbSnnFj4Wo8zI=;
+        b=nBsTT7pah7wiKx7rluTTL/vACsuRcN2Oy8lB7MWf/G+yJP4YtF2lB/JBufoan5TRslDugL
+        qQG9/Xd9a1i/Y4EfQnoHSB2piI9J9n5SCaacI9yp4f6kgQNoHU5JXZC10jd3IDrl2gCQSM
+        kTeRuLcUwFN/rFy8Dw6gnrYbGx3JfkX8rWNtNGWgIXZAdKUYQopp6m8b7vqtQK9MrBiSFm
+        CfWrW2nWlsNDVQwKfIDmgnOe8QdZGodk0mCCvZjfY/xaj0bf7iUEr2mWcAsDq8JbKce0BD
+        v+icHAowg2/qTusuSV/EIXvP/D4klSs/3EbnnBw7Moad127BDGkKLJKbjpY1kA==
+Date:   Wed, 7 Sep 2022 12:03:14 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v6 00/43] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / CSI
+ Rework
+Message-ID: <YxhsYu293t7h3655@aptenodytes>
+References: <20220826183240.604834-1-paul.kocialkowski@bootlin.com>
+ <9270d6c8-fc8d-3a15-5469-aca3faab098b@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="o/kNkGguw6K7pQKQ"
+Content-Disposition: inline
+In-Reply-To: <9270d6c8-fc8d-3a15-5469-aca3faab098b@xs4all.nl>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The msg_bytes and msg_hdrs atomic counters are frequently
-updated when IPC msg queue is in heavy use, causing heavy
-cache bounce and overhead. Change them to percpu_counter
-greatly improve the performance. Since there is one percpu
-struct per namespace, additional memory cost is minimal.
-Reading of the count done in msgctl call, which is infrequent.
-So the need to sum up the counts in each CPU is infrequent.
 
+--o/kNkGguw6K7pQKQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Apply the patch and test the pts/stress-ng-1.4.0
--- system v message passing (160 threads).
+Hi Hans,
 
-Score gain: 3.17x
+On Wed 07 Sep 22, 10:47, Hans Verkuil wrote:
+> Hi Paul,
+>=20
+> On 26/08/2022 20:31, Paul Kocialkowski wrote:
+> > This part only concerns the rework of the CSI driver to support the MIP=
+I CSI-2
+> > and ISP workflows.
+> >=20
+> > Very few patches have not received any review at this point and the who=
+le
+> > thing looks good to go. Since this multi-part series has been going on =
+for a
+> > while, it would be great to see it merged soon!
+>=20
+> Testing with just patches 1-15 gives me these kerneldoc results:
+>=20
+> kerneldoc: WARNINGS
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:79: warning: Function =
+parameter or member 'csi_dev' not described in 'sun6i_csi_is_format_support=
+ed'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:79: warning: Excess fu=
+nction parameter 'csi' description in 'sun6i_csi_is_format_supported'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:86: warning: Function =
+parameter or member 'csi_dev' not described in 'sun6i_csi_set_power'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:86: warning: Excess fu=
+nction parameter 'csi' description in 'sun6i_csi_set_power'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:94: warning: Function =
+parameter or member 'csi_dev' not described in 'sun6i_csi_update_config'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:94: warning: Excess fu=
+nction parameter 'csi' description in 'sun6i_csi_update_config'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:102: warning: Function=
+ parameter or member 'csi_dev' not described in 'sun6i_csi_update_buf_addr'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:102: warning: Excess f=
+unction parameter 'csi' description in 'sun6i_csi_update_buf_addr'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:109: warning: Function=
+ parameter or member 'csi_dev' not described in 'sun6i_csi_set_stream'
+> drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h:109: warning: Excess f=
+unction parameter 'csi' description in 'sun6i_csi_set_stream'
+>=20
+> If this is caused by just 1 or 2 patches, then please post a v6.1 version=
+ of just
+> those patches fixing this. Otherwise perhaps a v7 is needed.
 
-CPU: ICX 8380 x 2 sockets
-Core number: 40 x 2 physical cores
-Benchmark: pts/stress-ng-1.4.0
--- system v message passing (160 threads)
+Only a single patch was concerned by the change so I've sent it as v6.1.
 
-Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
----
- include/linux/ipc_namespace.h |  5 ++--
- ipc/msg.c                     | 47 ++++++++++++++++++++++++-----------
- ipc/namespace.c               |  5 +++-
- ipc/util.h                    |  4 +--
- 4 files changed, 42 insertions(+), 19 deletions(-)
+It looks like some return code descriptions were also missing so I've added
+them in as well and updated the commit log.
 
-diff --git a/include/linux/ipc_namespace.h b/include/linux/ipc_namespace.h
-index e3e8c8662b49..e8240cf2611a 100644
---- a/include/linux/ipc_namespace.h
-+++ b/include/linux/ipc_namespace.h
-@@ -11,6 +11,7 @@
- #include <linux/refcount.h>
- #include <linux/rhashtable-types.h>
- #include <linux/sysctl.h>
-+#include <linux/percpu_counter.h>
- 
- struct user_namespace;
- 
-@@ -36,8 +37,8 @@ struct ipc_namespace {
- 	unsigned int	msg_ctlmax;
- 	unsigned int	msg_ctlmnb;
- 	unsigned int	msg_ctlmni;
--	atomic_t	msg_bytes;
--	atomic_t	msg_hdrs;
-+	struct percpu_counter percpu_msg_bytes;
-+	struct percpu_counter percpu_msg_hdrs;
- 
- 	size_t		shm_ctlmax;
- 	size_t		shm_ctlall;
-diff --git a/ipc/msg.c b/ipc/msg.c
-index a0d05775af2c..040cfc93d7ef 100644
---- a/ipc/msg.c
-+++ b/ipc/msg.c
-@@ -39,11 +39,15 @@
- #include <linux/nsproxy.h>
- #include <linux/ipc_namespace.h>
- #include <linux/rhashtable.h>
-+#include <linux/percpu_counter.h>
- 
- #include <asm/current.h>
- #include <linux/uaccess.h>
- #include "util.h"
- 
-+/* large batch size could reduce the times to sum up percpu counter */
-+#define MSG_PERCPU_COUNTER_BATCH 1024
-+
- /* one msq_queue structure for each present queue on the system */
- struct msg_queue {
- 	struct kern_ipc_perm q_perm;
-@@ -285,10 +289,10 @@ static void freeque(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp)
- 	rcu_read_unlock();
- 
- 	list_for_each_entry_safe(msg, t, &msq->q_messages, m_list) {
--		atomic_dec(&ns->msg_hdrs);
-+		percpu_counter_add_batch(&ns->percpu_msg_hdrs, -1, MSG_PERCPU_COUNTER_BATCH);
- 		free_msg(msg);
- 	}
--	atomic_sub(msq->q_cbytes, &ns->msg_bytes);
-+	percpu_counter_add_batch(&ns->percpu_msg_bytes, -(msq->q_cbytes), MSG_PERCPU_COUNTER_BATCH);
- 	ipc_update_pid(&msq->q_lspid, NULL);
- 	ipc_update_pid(&msq->q_lrpid, NULL);
- 	ipc_rcu_putref(&msq->q_perm, msg_rcu_free);
-@@ -495,17 +499,18 @@ static int msgctl_info(struct ipc_namespace *ns, int msqid,
- 	msginfo->msgssz = MSGSSZ;
- 	msginfo->msgseg = MSGSEG;
- 	down_read(&msg_ids(ns).rwsem);
--	if (cmd == MSG_INFO) {
-+	if (cmd == MSG_INFO)
- 		msginfo->msgpool = msg_ids(ns).in_use;
--		msginfo->msgmap = atomic_read(&ns->msg_hdrs);
--		msginfo->msgtql = atomic_read(&ns->msg_bytes);
-+	max_idx = ipc_get_maxidx(&msg_ids(ns));
-+	up_read(&msg_ids(ns).rwsem);
-+	if (cmd == MSG_INFO) {
-+		msginfo->msgmap = percpu_counter_sum(&ns->percpu_msg_hdrs);
-+		msginfo->msgtql = percpu_counter_sum(&ns->percpu_msg_bytes);
- 	} else {
- 		msginfo->msgmap = MSGMAP;
- 		msginfo->msgpool = MSGPOOL;
- 		msginfo->msgtql = MSGTQL;
- 	}
--	max_idx = ipc_get_maxidx(&msg_ids(ns));
--	up_read(&msg_ids(ns).rwsem);
- 	return (max_idx < 0) ? 0 : max_idx;
- }
- 
-@@ -935,8 +940,8 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
- 		list_add_tail(&msg->m_list, &msq->q_messages);
- 		msq->q_cbytes += msgsz;
- 		msq->q_qnum++;
--		atomic_add(msgsz, &ns->msg_bytes);
--		atomic_inc(&ns->msg_hdrs);
-+		percpu_counter_add_batch(&ns->percpu_msg_bytes, msgsz, MSG_PERCPU_COUNTER_BATCH);
-+		percpu_counter_add_batch(&ns->percpu_msg_hdrs, 1, MSG_PERCPU_COUNTER_BATCH);
- 	}
- 
- 	err = 0;
-@@ -1159,8 +1164,8 @@ static long do_msgrcv(int msqid, void __user *buf, size_t bufsz, long msgtyp, in
- 			msq->q_rtime = ktime_get_real_seconds();
- 			ipc_update_pid(&msq->q_lrpid, task_tgid(current));
- 			msq->q_cbytes -= msg->m_ts;
--			atomic_sub(msg->m_ts, &ns->msg_bytes);
--			atomic_dec(&ns->msg_hdrs);
-+			percpu_counter_add_batch(&ns->percpu_msg_bytes, -(msg->m_ts), MSG_PERCPU_COUNTER_BATCH);
-+			percpu_counter_add_batch(&ns->percpu_msg_hdrs, -1, MSG_PERCPU_COUNTER_BATCH);
- 			ss_wakeup(msq, &wake_q, false);
- 
- 			goto out_unlock0;
-@@ -1297,20 +1302,34 @@ COMPAT_SYSCALL_DEFINE5(msgrcv, int, msqid, compat_uptr_t, msgp,
- }
- #endif
- 
--void msg_init_ns(struct ipc_namespace *ns)
-+int msg_init_ns(struct ipc_namespace *ns)
- {
-+	int ret;
-+
- 	ns->msg_ctlmax = MSGMAX;
- 	ns->msg_ctlmnb = MSGMNB;
- 	ns->msg_ctlmni = MSGMNI;
- 
--	atomic_set(&ns->msg_bytes, 0);
--	atomic_set(&ns->msg_hdrs, 0);
-+	ret = percpu_counter_init(&ns->percpu_msg_bytes, 0, GFP_KERNEL);
-+	if (ret)
-+		goto fail_msg_bytes;
-+	ret = percpu_counter_init(&ns->percpu_msg_hdrs, 0, GFP_KERNEL);
-+	if (ret)
-+		goto fail_msg_hdrs;
- 	ipc_init_ids(&ns->ids[IPC_MSG_IDS]);
-+	return 0;
-+
-+	fail_msg_hdrs:
-+		percpu_counter_destroy(&ns->percpu_msg_bytes);
-+	fail_msg_bytes:
-+		return ret;
- }
- 
- #ifdef CONFIG_IPC_NS
- void msg_exit_ns(struct ipc_namespace *ns)
- {
-+	percpu_counter_destroy(&ns->percpu_msg_bytes);
-+	percpu_counter_destroy(&ns->percpu_msg_hdrs);
- 	free_ipcs(ns, &msg_ids(ns), freeque);
- 	idr_destroy(&ns->ids[IPC_MSG_IDS].ipcs_idr);
- 	rhashtable_destroy(&ns->ids[IPC_MSG_IDS].key_ht);
-diff --git a/ipc/namespace.c b/ipc/namespace.c
-index e1fcaedba4fa..8316ea585733 100644
---- a/ipc/namespace.c
-+++ b/ipc/namespace.c
-@@ -66,8 +66,11 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
- 	if (!setup_ipc_sysctls(ns))
- 		goto fail_mq;
- 
-+	err = msg_init_ns(ns);
-+	if (err)
-+		goto fail_put;
-+
- 	sem_init_ns(ns);
--	msg_init_ns(ns);
- 	shm_init_ns(ns);
- 
- 	return ns;
-diff --git a/ipc/util.h b/ipc/util.h
-index 2dd7ce0416d8..1b0086c6346f 100644
---- a/ipc/util.h
-+++ b/ipc/util.h
-@@ -64,7 +64,7 @@ static inline void mq_put_mnt(struct ipc_namespace *ns) { }
- 
- #ifdef CONFIG_SYSVIPC
- void sem_init_ns(struct ipc_namespace *ns);
--void msg_init_ns(struct ipc_namespace *ns);
-+int msg_init_ns(struct ipc_namespace *ns);
- void shm_init_ns(struct ipc_namespace *ns);
- 
- void sem_exit_ns(struct ipc_namespace *ns);
-@@ -72,7 +72,7 @@ void msg_exit_ns(struct ipc_namespace *ns);
- void shm_exit_ns(struct ipc_namespace *ns);
- #else
- static inline void sem_init_ns(struct ipc_namespace *ns) { }
--static inline void msg_init_ns(struct ipc_namespace *ns) { }
-+static inline int msg_init_ns(struct ipc_namespace *ns) { return 0;}
- static inline void shm_init_ns(struct ipc_namespace *ns) { }
- 
- static inline void sem_exit_ns(struct ipc_namespace *ns) { }
--- 
-2.31.1
+Cheers,
 
+Paul
+
+> Regards,
+>=20
+> 	Hans
+>=20
+> >=20
+> > Changes since v5:
+> > - Rebased on latest media tree;
+> > - Switched to using media_pad_remote_pad_first;
+> > - Switched to using media_pad_remote_pad_unique.
+> >=20
+> > Changes since v4:
+> > - Removed the v4l2 controls handler from the driver;
+> > - Removed the info message about video device registration;
+> > - Fixed "literature" typos;
+> > - Moved patches dependent on the ISP driver to its dedicated series;
+> > - Rebased on the latest media tree;
+> > - Added collected tags;
+> >=20
+> > Changes since v3:
+> > - Updated Kconfig to follow the latest media-wide changes;
+> > - Rebased on latest changes to the driver (JPEG/sRGB colorspaces);
+> > - Added helper to get a single enabled link for an entity's pad, to rep=
+lace
+> >   source selection at link_validate time and select the remote source at
+> >   stream on time instead;
+> > - Kept clock-managed regmap mmio;
+> > - Added collected review tags;
+> > - Various cosmetic cleanups;
+> >=20
+> > Changes since all-in-one v2:
+> > - Reworked capture video device registration, which stays in the main p=
+ath.
+> > - Reworked async subdev handling with a dedicated structure holding the
+> >   corresponding source to avoid matching in the driver;
+> > - Added mutex for mbus format serialization;
+> > - Remove useless else in link_validate;
+> > - Reworked commit logs to include missing information;
+> > - Cleaned up Kconfig, added PM dependency;
+> > - Moved platform-specific clock rate to of match data;
+> > - Added collected Reviewed-by tags;
+> > - Updated copyright years;
+> >=20
+> > Paul Kocialkowski (43):
+> >   media: sun6i-csi: Define and use driver name and (reworked)
+> >     description
+> >   media: sun6i-csi: Refactor main driver data structures
+> >   media: sun6i-csi: Tidy up platform code
+> >   media: sun6i-csi: Always set exclusive module clock rate
+> >   media: sun6i-csi: Define and use variant to get module clock rate
+> >   media: sun6i-csi: Use runtime pm for clocks and reset
+> >   media: sun6i-csi: Tidy up Kconfig
+> >   media: sun6i-csi: Tidy up v4l2 code
+> >   media: sun6i-csi: Tidy up video code
+> >   media: sun6i-csi: Pass and store csi device directly in video code
+> >   media: sun6i-csi: Register the media device after creation
+> >   media: sun6i-csi: Remove controls handler from the driver
+> >   media: sun6i-csi: Add media ops with link notify callback
+> >   media: sun6i-csi: Introduce and use video helper functions
+> >   media: sun6i-csi: Move csi buffer definition to main header file
+> >   media: sun6i-csi: Add bridge v4l2 subdev with port management
+> >   media: sun6i-csi: Rename sun6i_video to sun6i_csi_capture
+> >   media: sun6i-csi: Add capture state using vsync for page flip
+> >   media: sun6i-csi: Rework register definitions, invert misleading
+> >     fields
+> >   media: sun6i-csi: Add dimensions and format helpers to capture
+> >   media: sun6i-csi: Implement address configuration without indirection
+> >   media: sun6i-csi: Split stream sequences and irq code in capture
+> >   media: sun6i-csi: Move power management to runtime pm in capture
+> >   media: sun6i-csi: Move register configuration to capture
+> >   media: sun6i-csi: Rework capture format management with helper
+> >   media: sun6i-csi: Remove custom format helper and rework configure
+> >   media: sun6i-csi: Add bridge dimensions and format helpers
+> >   media: sun6i-csi: Get mbus code from bridge instead of storing it
+> >   media: sun6i-csi: Tidy capture configure code
+> >   media: sun6i-csi: Introduce bridge format structure, list and helper
+> >   media: sun6i-csi: Introduce capture format structure, list and helper
+> >   media: sun6i-csi: Configure registers from format tables
+> >   media: sun6i-csi: Introduce format match structure, list and helper
+> >   media: sun6i-csi: Implement capture link validation with logic
+> >   media: sun6i-csi: Get bridge subdev directly in capture stream ops
+> >   media: sun6i-csi: Move hardware control to the bridge
+> >   media: sun6i-csi: Rename the capture video device to sun6i-csi-capture
+> >   media: sun6i-csi: Cleanup headers and includes, update copyright lines
+> >   media: sun6i-csi: Add support for MIPI CSI-2 to the bridge code
+> >   media: sun6i-csi: Only configure capture when streaming
+> >   media: sun6i-csi: Add extra checks to the interrupt routine
+> >   media: sun6i-csi: Request a shared interrupt
+> >   MAINTAINERS: Add myself as sun6i-csi maintainer and rename/move entry
+> >=20
+> >  MAINTAINERS                                   |   17 +-
+> >  .../media/platform/sunxi/sun6i-csi/Kconfig    |   12 +-
+> >  .../media/platform/sunxi/sun6i-csi/Makefile   |    2 +-
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 1027 ++++------------
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  149 +--
+> >  .../sunxi/sun6i-csi/sun6i_csi_bridge.c        |  844 +++++++++++++
+> >  .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |   69 ++
+> >  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 1089 +++++++++++++++++
+> >  .../sunxi/sun6i-csi/sun6i_csi_capture.h       |   88 ++
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi_reg.h  |  362 +++---
+> >  .../platform/sunxi/sun6i-csi/sun6i_video.c    |  685 -----------
+> >  .../platform/sunxi/sun6i-csi/sun6i_video.h    |   38 -
+> >  12 files changed, 2551 insertions(+), 1831 deletions(-)
+> >  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_br=
+idge.c
+> >  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_br=
+idge.h
+> >  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_ca=
+pture.c
+> >  create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_ca=
+pture.h
+> >  delete mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
+> >  delete mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_video.h
+> >=20
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--o/kNkGguw6K7pQKQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMYbGEACgkQ3cLmz3+f
+v9FJtwgAnkpeX7G3aSjaRipBe9p9k2eYVDvvBqgOZTj12TGcUi9OaHnEXCsacepX
+eLcRiFNtOGZ2mKaO9mkgGxEEvh6Uknxq0evBqAvKfFtIVe7sOk/nhTr0zZp2Vyht
+debjUt5wfpyt7O69f0Ez8opyG9wuh/RDNVFrRA7NLbZVCLETglIGzf9dMDnSJJhu
+D9RIOIQSmF+vglfbG/HqRmoPAQataJ8ShzRp+qOwE0m4cHF6xURd3PsK2+rGgrum
+k69Wqiv7ze4lDlDmvbxZOMCPej0IunwB889BIQBCTLiWniO7PyGb9jrXVR7E0Vjx
+HJK1sN78oZ2PKj8DQEcIiw/wCVjxvg==
+=sHhU
+-----END PGP SIGNATURE-----
+
+--o/kNkGguw6K7pQKQ--

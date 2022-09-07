@@ -2,202 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6C05AFA0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4155AFA1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 04:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiIGCmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 22:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S229938AbiIGCp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 22:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiIGCma (ORCPT
+        with ESMTP id S229891AbiIGCpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:42:30 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2055.outbound.protection.outlook.com [40.92.52.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D26A86061;
-        Tue,  6 Sep 2022 19:42:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gh9HSVyt/0YcOjwFGRe+LdswhiycciOafnJpOVCUP7QJPK9WwFMQZF7qZB8gAKy/OaM8RUrbRPoevCiyTUEKuPdyiPBuM6LIz6/8uYEuOJcNmF8SDm/OvdQAlN9HxbjGFhJoj0aBU3d8ckMPhyTKYqymwDmsoZ1BgbSTexkHlkAmJ6jVDtVSTp00qjD+QXFy0IxFSTEpV9WbHE+q59fOD4Th8kwxApZVvf9LfpJhXA3LZdIJsva9k3dwxmOYrklyOh25IilrGyhapo5U8mQ3H69usM2/AP5ocSffIl9elgA/fDwycvEYdrdK+AyPkcb1n3tbAzzj3+DwhgADM/1LRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/jKOSPp+XZBvAM6FoyF8CZkDR84bLqkHZrjiIlOwpig=;
- b=GPSliXBNlcsZGZ2/x82NjDViPYHEriLiLBKJ/GzslarAN4RZ5FKaPu542Yfyhrl3my/iQ/58EYgunbn1kw7VQ7Zllc5NayGJ02uZNoUqEHCMKqemgO0f/cSSyPGxIa8w/Lkmt6KlRi7DY/EUhY+TOWWHLISU+paHXYq9OaWlAMQ/kjij9TUnea9bVi1F21brIXjDWSBDailIwMOSHDxtz+xWMR5+TDXrC/miaYxAqtaBG96ift2K0kcPSAbQfTrdaJiiezLyKBANuUHpRIuFz1m7XPhYlZMw4PnpD2pxgwUoL3/LnVpEQnKvxjJey+OH3kvmpvRucZ66jt6mWCRyuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/jKOSPp+XZBvAM6FoyF8CZkDR84bLqkHZrjiIlOwpig=;
- b=Od5LgoGSPCLI8hahIqa53Jr+g2cwGZLX2YvsZ0zWNB6US5IS+dkZjUiFt3MI7DUKh4xdc8bV5n2ZvvkOON9YOKklyvfieyAJ5KOHTR1gUHU3+K8FV9zaCYuqqULDFt6vCqVDpco1UnI7TOg234OAfi75hFTuRm+5WmH6+Qix5IIyt3jAHlB5Im9YJ8y92QnNRXbyjcuq5fCKtNHY6fuKSELpVeaAV3bx0bDfbjAG7INRHFgfvFODUrA6TI3cbJvg2KcYHCf9qGOLB+3qD0LptsbRPuPqAxjCbVPRG/9myLVgdHgU3ns3ETLAI55iMZe09CbiSMhXy3HrQFR/MzAWeg==
-Received: from PSAPR04MB4167.apcprd04.prod.outlook.com (2603:1096:301:2a::9)
- by PSBPR04MB3910.apcprd04.prod.outlook.com (2603:1096:301:6::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 7 Sep
- 2022 02:42:19 +0000
-Received: from PSAPR04MB4167.apcprd04.prod.outlook.com
- ([fe80::9a5:16f2:9f1e:9bf2]) by PSAPR04MB4167.apcprd04.prod.outlook.com
- ([fe80::9a5:16f2:9f1e:9bf2%8]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
- 02:42:19 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Subject: Re: [PATCH V5 15/31] x86/sgx: Support restricting of enclave page
- permissions
-From:   zhubojun <bojun.zhu@outlook.com>
-In-Reply-To: <8f7c676e-952b-3409-312a-be4cadaf7194@intel.com>
-Date:   Wed, 7 Sep 2022 10:42:15 +0800
-Cc:     bp@alien8.de, cathy.zhang@intel.com, cedric.xing@intel.com,
-        dave.hansen@linux.intel.com, haitao.huang@intel.com, hpa@zytor.com,
-        jarkko@kernel.org, kai.huang@intel.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org, luto@kernel.org,
-        mark.shanahan@intel.com, mingo@redhat.com, seanjc@google.com,
-        shuah@kernel.org, tglx@linutronix.de, vijay.dhanraj@intel.com,
-        x86@kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-ID: <PSAPR04MB4167CAD68C500068F37B3B6FE9419@PSAPR04MB4167.apcprd04.prod.outlook.com>
-References: <PSAPR04MB416734EEED145D832A04B936E97B9@PSAPR04MB4167.apcprd04.prod.outlook.com>
- <8f7c676e-952b-3409-312a-be4cadaf7194@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-TMN:  [ox9HvD1XYm0D6QRGejwKEXdh6BgmY2uJ4PmBJ8WkF8Y36NGH+LM3mWqbwo6C2xlc]
-X-ClientProxiedBy: SG2PR02CA0083.apcprd02.prod.outlook.com
- (2603:1096:4:90::23) To PSAPR04MB4167.apcprd04.prod.outlook.com
- (2603:1096:301:2a::9)
-X-Microsoft-Original-Message-ID: <EDFC4D34-B397-4ED5-8F43-B90BDA52F9C0@outlook.com>
+        Tue, 6 Sep 2022 22:45:19 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Sep 2022 19:45:15 PDT
+Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721AF4F1B1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 19:45:14 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="75355808"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654527600"; 
+   d="scan'208";a="75355808"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP; 07 Sep 2022 11:44:07 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 82812D4326;
+        Wed,  7 Sep 2022 11:44:06 +0900 (JST)
+Received: from m3002.s.css.fujitsu.com (msm3.b.css.fujitsu.com [10.128.233.104])
+        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id B1B79A4E91;
+        Wed,  7 Sep 2022 11:44:05 +0900 (JST)
+Received: from localhost.localdomain (unknown [10.19.3.107])
+        by m3002.s.css.fujitsu.com (Postfix) with ESMTP id 6A386200B3AC;
+        Wed,  7 Sep 2022 11:44:05 +0900 (JST)
+From:   Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+To:     linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
+        zyjzyj2000@gmail.com
+Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        rpearsonhpe@gmail.com, yangx.jy@fujitsu.com, lizhijian@fujitsu.com,
+        y-goto@fujitsu.com, Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+Subject: [RFC PATCH 0/7] RDMA/rxe: On-Demand Paging on SoftRoCE
+Date:   Wed,  7 Sep 2022 11:42:58 +0900
+Message-Id: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c910ef10-6fbe-4cff-58db-08da907a95a0
-X-MS-TrafficTypeDiagnostic: PSBPR04MB3910:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m1HoK7hWuym44XNcK6TyuteAE65yxdgiwpc5ivPWAgbuOu5ny9KGRY9rid3ZCYDYKRSsvvzNc9OPV4pwVCtoHvTDRWnRPk31OZxwclqEHqAT+jgEUIVap3cPu8I5rxM3DkOqAjsx17O+RhsnihFHpbxFoj9pXcPf/ZJpTKckIc7Hya1LnYkyAd5ToqFYiFdfwExNxljFsUNaonolLX3YOx/WrtWl1Be9KM7TXPAax2hN9rLsWheV5RDipMnsBJXUzGiI3tY6s9MIqe+FVgVlT2RvyC0YQ6QEMTABrtY+O1VqFwIeUmjaZgr2WhhYLBs/A3I/tyCfodi9tVbKp3CNu+162P5LeqDu1FkMjmp2a7ErgFNWd9wBHdq1Euf5FzpHw/9246OMHV0spA00yqtn3sK5RF3ul4LYqedHBGOBI0wf/uoIV0y0V9s0h4Ctdr3XGBTLy+bOKMvDbEZbfaqW9HAsTGIHv2w0Z/VYoyz1BCvrWE4dEqEUUJTOSNGBygvAYDkOQ6Uy6tyuTawgF0Sjc9XWJ6IIjM0uNK09Xvk5kSGC6Mp6ArkPIDsIa2h2Cg4LzwZul96Tj+M2eaA29ed72t/qm0wCA51PP2HdBzicVy8JCXrnH+uZbbOd9LH2wr/T51m+F4ydQd3CfW8xOqFuFhIpj7ZvlX3QMwOwr9uU6Fd6mY9/n11dh1acUDrcaAWp
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZDMxMmZPcG4vUG5yTERlVGUzQkxEakdON21hNnVsU2hkOUF6azRmbzFyTUcw?=
- =?utf-8?B?a0pMQ3Y2WGI1aElXdEVpOWFlSTN0Nk5MSGc4V2lpako4QjJLTW9yc1M5Z04r?=
- =?utf-8?B?eERRUVVWcW5BOGxKbzRHV2tlWUEveHNGSTRNTGFOalVhNXgvWVZLK0s1MTFG?=
- =?utf-8?B?S01DeElHZzFWalU5TlczRkxxYlJaQ2czQ050eTMrZkV2SkF4K3lnLzQrT2VW?=
- =?utf-8?B?aUlxdjBsMDh0cUd0bCs0T25XbGQ1b2xFN3A1dTdrWVJXeXdWcWljTFVSdDR4?=
- =?utf-8?B?TmxPcGhBbHRyTGVvQ0R5Q2p5VXJxM290Y3Q2TlRVRi9TT3pySGQzekZMSFh4?=
- =?utf-8?B?Q0dqNEttbXJrZDlYSlV3RW04czZCOUVDMm5uaGJ5dlVHelFRdm52Z1ljQ0lm?=
- =?utf-8?B?N1VMek82dVV3dmpJTDUxTlhrblNodGIxa3Zrdjd2VyswaE9JQUFqdHFkdlhK?=
- =?utf-8?B?TnAyTUR0RXRaT2l2dU1JZVNrR3kzbTlTaHZ5RFMwaGJ4VGhpWWp5QnhtMFJI?=
- =?utf-8?B?K2JCVC83L095ZmtBdm16Y1hpODZKR1VDcDhPbUx6Ny8xYkFMR3NNUGtidFhh?=
- =?utf-8?B?TnVGTlBTQlJxb3MwQVl4S1pHL01SRitRcjhrTnErQXdVZTdBZnJWVzVPQ3Zy?=
- =?utf-8?B?QTZ4QnZpaW1EajBRdjFrZXBUTEIvRzBTRjZCMWpJUkczL21odTZNV21pZVg0?=
- =?utf-8?B?THBwZ0RWV1BWZDJHdDdGNWNZamdZcVNObmNuYUZYSVQyQkNqemFld2ZoQmFF?=
- =?utf-8?B?SEgvVEd1QUhEODJST01memFMbTRUVWxLeFp1akhBYng3VXBDUEV0UUJHS2lX?=
- =?utf-8?B?cFREbHF5Z2Nnb2g4dFBLUTVXQVh4U2syWE1xYzlNeThzbElLQmx2bHBzWHhC?=
- =?utf-8?B?YysyZWZhcldhREw2N1hzbkI5VCtjVEhobHlib1ZXRlpRaEE4S3dIa1oydlBk?=
- =?utf-8?B?dUZvcjRYSXhtS3AwbmFKblUxemNSMGZjMmdNcW82eFBjNXExNzE0a2E1RHh5?=
- =?utf-8?B?dzlLSnZiUmpzSG9rTGZCOXhHeGcrdGRMSHlkQTg3a0NlSjJzR0NhL1hjS1BD?=
- =?utf-8?B?dTFMMTRUaSsxYXh5RWRGdDgwYWE5TVpMMmozV05MZVVYSzZrVS9sTFd2UFBF?=
- =?utf-8?B?eWlJS2ppZzd4cHFZUEtJbTg5QTRrUjhkMDhhQ1d3NTRPTHBLTkJybFRDT0RF?=
- =?utf-8?B?a05JR1djcloxWEVFSHNwZHcvYVhKMlVLeHlOdWlWb2xBcTFQb09UODlpaXM4?=
- =?utf-8?B?OE5Wemgzd3ZWVURXZitlemRjWVNTVk02VTlUaUNsMnloQlFWUHIzRkp1Z0w2?=
- =?utf-8?B?eUtSQ2pId0NHTWJKa21CUXdHU1dVekc3TTR5dGI4WkN3T0ljNUM3Tlpzcmd0?=
- =?utf-8?B?VjI5eHh0ZTl6dnNsRFJJTUZJVVZSbkxyanNmVjF4VmdFQ0VkOVkzYWJFeHE2?=
- =?utf-8?B?OWxWYm5ZbjlNL3FFQytSTXJ2K2h0dGVxeVoza0cyNXZjWXlvMDE5UjFCZnkr?=
- =?utf-8?B?Z3hxeEkza0kyUTRXYlprdzYzUlNmV1RyU3pyNGJLc256emtLRG1DL0F2U25N?=
- =?utf-8?B?emwxdEFoS2o1UStteC8yVWhQWmxLenQvWk9QTUZtL2dFQTJ6VFJqbjVTaWZG?=
- =?utf-8?B?THVZSVJtdEFKQXdVckdsUWFHTzBOTnc5WVlqM0VDVnIwbTVNNFFadVVHQm9v?=
- =?utf-8?B?WFdsMzRsTytpcC84WEUxdFl0NTFkOTZ4TmtPNHhaRGRGTi92WUxkN0tlOFQw?=
- =?utf-8?B?NHVKRGc0VmRNZVdYeElaSVhuSlZ0Ukw2MHFKQlczOWtwWEtQR1JhMzl0bTFo?=
- =?utf-8?B?YXNGeXpFNEVsQnZ0algxQT09?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c910ef10-6fbe-4cff-58db-08da907a95a0
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR04MB4167.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 02:42:19.8476
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSBPR04MB3910
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Reinette. Sorry for late reply! Appreciate for you detailed explanation=
-!
+Hi everyone,
 
-> On Sep 2, 2022, at 23:22, Reinette Chatre <reinette.chatre@intel.com> wro=
-te:
->=20
-> How important is the performance of page permission restriction? How
-> about the performance of page type modification?
+This patch series implements the On-Demand Paging feature on SoftRoCE(rxe)
+driver, which has been available only in mlx5 driver[1] so far.
 
-Enclave applications may need to change its page permissions at runtime.
-If they change page permissions frequently, it may introduce substantial
-overhead, compared to applications running on native Linux.
-(`mprotect()` is more lightweight compared to restricting and extending
-page permissions inside enclave)=20
+[Overview]
+When applications register a memory region(MR), RDMA drivers normally pin
+pages in the MR so that physical addresses are never changed during RDMA
+communication. This requires the MR to fit in physical memory and
+inevitably leads to memory pressure. On the other hand, On-Demand Paging
+(ODP) allows applications to register MRs without pinning pages. They are
+paged-in when the driver requires and paged-out when the OS reclaims. As a
+result, it is possible to register a large MR that does not fit in physical
+memory without taking up so much physical memory.
 
-But I have not profiled the detailed of the page permission restriction=E2=
-=80=99s
-performance. So I=E2=80=99m not sure how much benefit we will gain for perf=
-ormance
-if we move the ETRACK flow outside the `for loop`.
+[Why to add this feature?]
+We, Fujitsu, have contributed to RDMA with a view to using it with
+persistent memory. Persistent memory can host a filesystem that allows
+applications to read/write files directly without involving page cache.
+This is called FS-DAX(filesystem direct access) mode. There is a problem
+that data on DAX-enabled filesystem cannot be duplicated with software RAID
+or other hardware methods. Data replication with RDMA, which features
+high-speed connections, is the best solution for the problem.
 
-> From the hardware perspective, a single ETRACK can be run after
-> EMODPR is run on a range of pages.
->=20
-> Some things to keep in mind when considering making this change:
->=20
-> Note that the enclave's mutex is obtained and released every time
-> an enclave page is modified. This is needed to (a) avoid softlockups
-> when modifying a large range of pages and (b) give the reclaimer
-> opportunity make space to load pages that will be modified.
->=20
-> Moving the ETRACK flow out of the for loop implies that the mutex would
-> be released between the time the page is modified and ETRACK flow is run
-> (with enclave mutex held). It is thus possible for other changes
-> to be made or attempted on a page between the time it is modified
-> and the ETRACK flow. The possible interactions between different
-> page modifications (both initiated from user space and the OS via
-> the reclaimer) need to be studied if it is considered to split
-> this flow in two parts.
->=20
-> With the ETRACK flow done while the enclave page being modified is
-> loaded there is a guarantee that the SECS page is loaded also. When
-> the ETRACK flow is isolated there needs to be changes to ensure
-> that the SECS page is loaded.
+However, there is a known issue that hinders using RDMA with FS-DAX. When
+RDMA operations to a file and update of the file metadata are processed
+concurrently on the same node, illegal memory accesses can be executed,
+disregarding the updated metadata. This is because RDMA operations do not
+go through page cache but access data directly. There was an effort[2] to
+solve this problem, but it was rejected in the end. Though there is no
+general solution available, it is possible to work around the problem using
+the ODP feature that has been available only in mlx5. ODP enables drivers
+to update metadata before processing RDMA operations.
 
-Thanks for pointing out such case which I have not considered yet!
+We have enhanced the rxe to expedite the usage of persistent memory. Our
+contribution to rxe includes RDMA Atomic write[3] and RDMA Flush[4]. With
+them being merged to rxe along with ODP, an environment will be ready for
+developers to create and test software for RDMA with FS-DAX. There is a
+library(librpma)[5] being developed for this purpose. This environment
+can be used by anybody without any special hardware but an ordinary
+computer with a normal NIC though it is inferior to hardware
+implementations in terms of performance.
 
-> It needs to be considered how errors will be communicated to user
-> space and how possible inconsistent state could affect user space. In
-> support of partial success the ioctl() returns a count indicating
-> how many pages were successfully modified. With the configuration
-> and ETRACK done per page and their failures handled, the meaning
-> of this count is clear. This needs to be considered because it is
-> not possible for the kernel to undo an EMODPR. So if all (or some of) the=
-=20
-> EMODPRs succeed but the final ETRACK fails for some reason then
-> the successful EMODPR cannot be undone yet all will be considered
-> failed? How should this be reported to user space? Variations may be ok
-> since EMODPR can be repeated from what I can tell but I envision scenario=
-s
-> where some pages in a range may have their permissions restricted
-> (and thus have EPCM.PR set) but which pages have this state is not
-> clear to user space. I don't know what would be acceptable here.
-> Looking at the EACCEPT flow in the SDM it does not seem as though
-> EPCM.PR is one of the EPC page settings that are verified.
->=20
-> Reinette
+[Design considerations]
+ODP has been available only in mlx5, but functions and data structures
+that can be used commonly are provided in ib_uverbs(infiniband/core). The
+interface is heavily dependent on HMM infrastructure[6], and this patchset
+use them as much as possible. While mlx5 has both Explicit and Implicit ODP
+features along with prefetch feature, this patchset implements the Explicit
+ODP feature only.
 
-I agree with you. It is hard to handle when there the final ETRACK fails
-but EMODPR succeeds.
+As an important change, it is necessary to convert triple tasklets
+(requester, responder and completer) to workqueues because they must be
+able to sleep in order to trigger page fault before accessing MRs. I did a
+test shown in the 2nd patch and found that the change makes the latency
+higher while improving the bandwidth. Though it may be possible to create a
+new independent workqueue for page fault execution, it is a not very
+sensible solution since the tasklets have to busy-wait its completion in
+that case.
 
-Thanks for showing the case I have not considered but
-needs thinking deeply!
+If responder and completer sleep, it becomes more likely that packet drop
+occurs because of overflow in receiver queue. There are multiple queues
+involved, but, as SoftRoCE uses UDP, the most important one would be the
+UDP buffers. The size can be configured in net.core.rmem_default and
+net.core.rmem_max sysconfig parameters. Users should change these values in
+case of packet drop, but page fault would be typically not so long as to
+cause the problem.
 
-BR,
-Bojun
+[How does ODP work?]
+"struct ib_umem_odp" is used to manage pages. It is created for each
+ODP-enabled MR on its registration. This struct holds a pair of arrays
+(dma_list/pfn_list) that serve as a driver page table. DMA addresses and
+PFNs are stored in the driver page table. They are updated on page-in and
+page-out, both of which use the common interface in ib_uverbs.
 
+Page-in can occur when requester, responder or completer access an MR in
+order to process RDMA operations. If they find that the pages being
+accessed are not present on physical memory or requisite permissions are
+not set on the pages, they provoke page fault to make pages present with
+proper permissions and at the same time update the driver page table. After
+confirming the presence of the pages, they execute memory access such as
+read, write or atomic operations.
+
+Page-out is triggered by page reclaim or filesystem events (e.g. metadata
+update of a file that is being used as an MR). When creating an ODP-enabled
+MR, the driver registers an MMU notifier callback. When the kernel issues a
+page invalidation notification, the callback is provoked to unmap DMA
+addresses and update the driver page table. After that, the kernel releases
+the pages.
+
+[Supported operations]
+All operations are supported on RC connection. Atomic write[3] and Flush[4]
+operations, which are still under discussion, are also going to be
+supported after their patches are merged. On UD connection, Send, Recv,
+SRQ-Recv are supported. Because other operations are not supported on mlx5,
+I take after the decision right now.
+
+[How to test ODP?]
+There are only a few resources available for testing. pyverbs testcases in
+rdma-core and perftest[7] are recommendable ones. Note that you may have to
+build perftest from upstream since older versions do not handle ODP
+capabilities correctly.
+
+[Future work]
+My next work will be the prefetch feature. It allows applications to
+trigger page fault using ibv_advise_mr(3) to optimize performance. Some
+existing software like librpma use this feature. Additionally, I think we
+can also add the implicit ODP feature in the future.
+
+[1] [RFC 00/20] On demand paging
+https://www.spinics.net/lists/linux-rdma/msg18906.html
+
+[2] [RFC PATCH v2 00/19] RDMA/FS DAX truncate proposal V1,000,002 ;-)
+https://lore.kernel.org/nvdimm/20190809225833.6657-1-ira.weiny@intel.com/
+
+[3] [RESEND PATCH v5 0/2] RDMA/rxe: Add RDMA Atomic Write operation
+https://www.spinics.net/lists/linux-rdma/msg111428.html
+
+[4] [PATCH v4 0/6] RDMA/rxe: Add RDMA FLUSH operation
+https://www.spinics.net/lists/kernel/msg4462045.html
+
+[5] librpma: Remote Persistent Memory Access Library
+https://github.com/pmem/rpma
+
+[6] Heterogeneous Memory Management (HMM)
+https://www.kernel.org/doc/html/latest/mm/hmm.html
+
+[7] linux-rdma/perftest: Infiniband Verbs Performance Tests
+https://github.com/linux-rdma/perftest
+
+Daisuke Matsuda (7):
+  IB/mlx5: Change ib_umem_odp_map_dma_single_page() to retain umem_mutex
+  RDMA/rxe: Convert the triple tasklets to workqueues
+  RDMA/rxe: Cleanup code for responder Atomic operations
+  RDMA/rxe: Add page invalidation support
+  RDMA/rxe: Allow registering MRs for On-Demand Paging
+  RDMA/rxe: Add support for Send/Recv/Write/Read operations with ODP
+  RDMA/rxe: Add support for the traditional Atomic operations with ODP
+
+ drivers/infiniband/core/umem_odp.c    |   6 +-
+ drivers/infiniband/hw/mlx5/odp.c      |   4 +-
+ drivers/infiniband/sw/rxe/Makefile    |   5 +-
+ drivers/infiniband/sw/rxe/rxe.c       |  18 ++
+ drivers/infiniband/sw/rxe/rxe_comp.c  |  42 +++-
+ drivers/infiniband/sw/rxe/rxe_loc.h   |  11 +-
+ drivers/infiniband/sw/rxe/rxe_mr.c    |   7 +-
+ drivers/infiniband/sw/rxe/rxe_net.c   |   4 +-
+ drivers/infiniband/sw/rxe/rxe_odp.c   | 329 ++++++++++++++++++++++++++
+ drivers/infiniband/sw/rxe/rxe_param.h |   2 +-
+ drivers/infiniband/sw/rxe/rxe_qp.c    |  68 +++---
+ drivers/infiniband/sw/rxe/rxe_recv.c  |   2 +-
+ drivers/infiniband/sw/rxe/rxe_req.c   |  14 +-
+ drivers/infiniband/sw/rxe/rxe_resp.c  | 175 +++++++-------
+ drivers/infiniband/sw/rxe/rxe_resp.h  |  44 ++++
+ drivers/infiniband/sw/rxe/rxe_task.c  | 152 ------------
+ drivers/infiniband/sw/rxe/rxe_task.h  |  69 ------
+ drivers/infiniband/sw/rxe/rxe_verbs.c |  16 +-
+ drivers/infiniband/sw/rxe/rxe_verbs.h |  10 +-
+ drivers/infiniband/sw/rxe/rxe_wq.c    | 161 +++++++++++++
+ drivers/infiniband/sw/rxe/rxe_wq.h    |  71 ++++++
+ 21 files changed, 824 insertions(+), 386 deletions(-)
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_odp.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_resp.h
+ delete mode 100644 drivers/infiniband/sw/rxe/rxe_task.c
+ delete mode 100644 drivers/infiniband/sw/rxe/rxe_task.h
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_wq.c
+ create mode 100644 drivers/infiniband/sw/rxe/rxe_wq.h
+
+-- 
+2.31.1
 

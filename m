@@ -2,149 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F98D5AFAFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECDC5AFAFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiIGEMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S229739AbiIGEMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIGEMH (ORCPT
+        with ESMTP id S229629AbiIGEMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Sep 2022 00:12:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DC18001D;
-        Tue,  6 Sep 2022 21:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662523925; x=1694059925;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hF9VFjE5o4x272E7lgnZ7qAL5DuPlyB3SKdoJPydg8I=;
-  b=cf/YUZIX4cLiUuQrv0R4CPAgIjNDexB08qLNeJRYS/2lcaxI+/WI5bFU
-   kYDyBg6wS0bX5vfj0LoOY/161QcX4awy9Ou6+wqHmukRcU3cnWgXjoQIq
-   ZI16owiV8wdgtJlkU2s2rRfkZXwpiD/k35mWsc2wx8v+mDYEQoFMfpBnd
-   9UDKahjb6yMFn9xhTqpsO7WWzCxEBOcaxb2E/avdHqXkAGjRGKUqqpOk3
-   cRrb2gDsNytKvn6xBNmYrN0BANG6P2po5ATzdQddaeqnrl4AZZg9IyBMa
-   ssqVT2RRhteAkeLd5FHejlRPNs6UNdX8K7mz7xkZ91TAZTtGkF4BxWfE5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="283771319"
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="283771319"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 21:12:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
-   d="scan'208";a="942729143"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Sep 2022 21:12:02 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVmPx-00065l-1e;
-        Wed, 07 Sep 2022 04:12:01 +0000
-Date:   Wed, 7 Sep 2022 12:11:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     kbuild-all@lists.01.org, Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
-Message-ID: <202209071255.xlxq6qnE-lkp@intel.com>
-References: <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC707FE62
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:12:03 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1225219ee46so33261767fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 21:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=BFj3mGZHr9XxUQGoHBeMyU6gWYy0BtRLXs5VJDlq6ME=;
+        b=AKBHTlrWuDM+vsfTYx+NFKyB1uAN3NBrNCbUvm0gP5zXeoaVuC4tPEXVhLeWtTRSnZ
+         28UFqDwSZHMf3bC6PD+TRWpUEWJDjth6stOsfNfeTwSH3jM/hVhtx2SkB24qZiphCazG
+         p9NPil0P1n+kxzMi+Mg9PPSHrrK4lS3+/8QAJVCGy7a3GjHaNgwO4PsqqN1KI3ht7h1p
+         6lsrdQO7UQChV2Pr26lnlatyCL4h7OclwUIK1Bz1ABt4TML2XtGWdmFfbAyNzzf5Zhti
+         Qdsjq3Uwe1XvCIzwgELILk+8t6o5m811brP1EhZ7Tif2KYWfxCoJJR+orXPuPH2YTWW4
+         cQSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=BFj3mGZHr9XxUQGoHBeMyU6gWYy0BtRLXs5VJDlq6ME=;
+        b=65JJB99VG+QeRlGiUoYb7O2p5O+Ppce0SlCQZi8lhyX8DzO045h7HqIwi+eQB7FqlX
+         rj8xIedaenuSCQqUmATQi2MIIdNDWZlTFvQDGb9aCBoReTTLAcrE42fyTHXmlq2o7Pgv
+         4BYd1gEIv5LASYF8ObzexvN5w5LYsRhzNThm+Y8Ew15Nx0J6hKsdnfKfcLIB9ccSchY2
+         ty7Wi/Ztz85gWRJIyEUvhgasCFlkcGAVRDBdPTK9qcYN1YORRiDXMODiGVaL4ZRscbKt
+         HyZtaz4LvsuaUX5jFtgkEq+Umrl/wVIopBAfsRGuy4OT8/8XCMRdBQW56IMttbn4ON+5
+         865w==
+X-Gm-Message-State: ACgBeo3UmtbCP2puYwZZhFr3N2KHcD+Wwnbexjqv/PXX9nz88WoSpZGn
+        Cc008gHV7PbaDjmYi+lhSINBHDLqEJEFe0D5Q1iM3w==
+X-Google-Smtp-Source: AA6agR4AuHpv2JvDK8XjYcOaeWAO/x49CJx1chwFnDGTHGVuPDZkW52fw6IOt3HL14grS9kper+4uhTB0NyzGfQ7JHo=
+X-Received: by 2002:a05:6870:41d0:b0:126:5d06:28a5 with SMTP id
+ z16-20020a05687041d000b001265d0628a5mr821542oac.181.1662523923026; Tue, 06
+ Sep 2022 21:12:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220906204301.3736813-2-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220905123946.95223-1-likexu@tencent.com> <20220905123946.95223-5-likexu@tencent.com>
+ <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com>
+ <0e0f773b-0dde-2282-c2d0-fad2311f59a7@gmail.com> <CALMp9eQQe-XDUZmNtg5Z+Vv8hMu_R_fuTv2+-ZfuRwzNUmW0fA@mail.gmail.com>
+ <d63e79d8-fcbc-9def-4a90-e7a4614493bb@gmail.com>
+In-Reply-To: <d63e79d8-fcbc-9def-4a90-e7a4614493bb@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 6 Sep 2022 21:11:51 -0700
+Message-ID: <CALMp9eSXTpkKpmqJiS=0NuQOjCFKDeOqjN3wWfyPCBhx-H=Vsw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf 0x80000022
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Tue, Sep 6, 2022 at 8:59 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>
+> On 7/9/2022 4:08 am, Jim Mattson wrote:
+> > On Tue, Sep 6, 2022 at 5:53 AM Like Xu <like.xu.linux@gmail.com> wrote:
+> >>
+> >> On 6/9/2022 1:36 am, Jim Mattson wrote:
+> >>> On Mon, Sep 5, 2022 at 5:45 AM Like Xu <like.xu.linux@gmail.com> wrote:
+> >>>>
+> >>>> From: Sandipan Das <sandipan.das@amd.com>
+> >>>>
+> >>>> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some
+> >>>> new performance monitoring features for AMD processors.
+> >>>>
+> >>>> Bit 0 of EAX indicates support for Performance Monitoring
+> >>>> Version 2 (PerfMonV2) features. If found to be set during
+> >>>> PMU initialization, the EBX bits of the same CPUID function
+> >>>> can be used to determine the number of available PMCs for
+> >>>> different PMU types.
+> >>>>
+> >>>> Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so
+> >>>> that guests can make use of the PerfMonV2 features.
+> >>>>
+> >>>> Co-developed-by: Like Xu <likexu@tencent.com>
+> >>>> Signed-off-by: Like Xu <likexu@tencent.com>
+> >>>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> >>>> ---
+> >>>>    arch/x86/include/asm/perf_event.h |  8 ++++++++
+> >>>>    arch/x86/kvm/cpuid.c              | 21 ++++++++++++++++++++-
+> >>>>    2 files changed, 28 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+> >>>> index f6fc8dd51ef4..c848f504e467 100644
+> >>>> --- a/arch/x86/include/asm/perf_event.h
+> >>>> +++ b/arch/x86/include/asm/perf_event.h
+> >>>> @@ -214,6 +214,14 @@ union cpuid_0x80000022_ebx {
+> >>>>           unsigned int            full;
+> >>>>    };
+> >>>>
+> >>>> +union cpuid_0x80000022_eax {
+> >>>> +       struct {
+> >>>> +               /* Performance Monitoring Version 2 Supported */
+> >>>> +               unsigned int    perfmon_v2:1;
+> >>>> +       } split;
+> >>>> +       unsigned int            full;
+> >>>> +};
+> >>>> +
+> >>>>    struct x86_pmu_capability {
+> >>>>           int             version;
+> >>>>           int             num_counters_gp;
+> >>>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> >>>> index 75dcf7a72605..08a29ab096d2 100644
+> >>>> --- a/arch/x86/kvm/cpuid.c
+> >>>> +++ b/arch/x86/kvm/cpuid.c
+> >>>> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+> >>>>                   entry->edx = 0;
+> >>>>                   break;
+> >>>>           case 0x80000000:
+> >>>> -               entry->eax = min(entry->eax, 0x80000021);
+> >>>> +               entry->eax = min(entry->eax, 0x80000022);
+> >>>>                   /*
+> >>>>                    * Serializing LFENCE is reported in a multitude of ways, and
+> >>>>                    * NullSegClearsBase is not reported in CPUID on Zen2; help
+> >>>> @@ -1203,6 +1203,25 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+> >>>>                   if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
+> >>>>                           entry->eax |= BIT(6);
+> >>>>                   break;
+> >>>> +       /* AMD Extended Performance Monitoring and Debug */
+> >>>> +       case 0x80000022: {
+> >>>> +               union cpuid_0x80000022_eax eax;
+> >>>> +               union cpuid_0x80000022_ebx ebx;
+> >>>> +
+> >>>> +               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+> >>>> +               if (!enable_pmu)
+> >>>> +                       break;
+> >>>> +
+> >>>> +               if (kvm_pmu_cap.version > 1) {
+> >>>> +                       /* AMD PerfMon is only supported up to V2 in the KVM. */
+> >>>> +                       eax.split.perfmon_v2 = 1;
+> >>>> +                       ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
+> >>>> +                                                    KVM_AMD_PMC_MAX_GENERIC);
+> >>>
+> >>> Note that the number of core PMCs has to be at least 6 if
+> >>> guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE). I suppose this leaf
+> >>> could claim fewer, but the first 6 PMCs must work, per the v1 PMU
+> >>> spec. That is, software that knows about PERFCTR_CORE, but not about
+> >>> PMU v2, can rightfully expect 6 PMCs.
+> >>
+> >> I thought the NumCorePmc number would only make sense if
+> >> CPUID.80000022.eax.perfmon_v2
+> >> bit was present, but considering that the user space is perfectly fine with just
+> >> configuring the
+> >> NumCorePmc number without setting perfmon_v2 bit at all, so how about:
+> >
+> > CPUID.80000022H might only make sense if X86_FEATURE_PERFCTR_CORE is
+> > present. It's hard to know in the absence of documentation.
+>
+> Whenever this happens, we may always leave the definition of behavior to the
+> hypervisor.
 
-I love your patch! Yet something to improve:
+I disagree. If CPUID.0H reports "AuthenticAMD," then AMD is the sole
+authority on behavior.
 
-[auto build test ERROR on helgaas-pci/next]
-[also build test ERROR on linus/master v6.0-rc4 next-20220906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> >>          /* AMD Extended Performance Monitoring and Debug */
+> >>          case 0x80000022: {
+> >>                  union cpuid_0x80000022_eax eax;
+> >>                  union cpuid_0x80000022_ebx ebx;
+> >>                  bool perfctr_core;
+> >>
+> >>                  entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+> >>                  if (!enable_pmu)
+> >>                          break;
+> >>
+> >>                  perfctr_core = kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE);
+> >>                  if (!perfctr_core)
+> >>                          ebx.split.num_core_pmc = AMD64_NUM_COUNTERS;
+> >>                  if (kvm_pmu_cap.version > 1) {
+> >>                          /* AMD PerfMon is only supported up to V2 in the KVM. */
+> >>                          eax.split.perfmon_v2 = 1;
+> >>                          ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
+> >>                                                       KVM_AMD_PMC_MAX_GENERIC);
+> >>                  }
+> >>                  if (perfctr_core) {
+> >>                          ebx.split.num_core_pmc = max(ebx.split.num_core_pmc,
+> >>                                                       AMD64_NUM_COUNTERS_CORE);
+> >>                  }
+> >
+> > This still isn't quite right. All AMD CPUs must support a minimum of 4 PMCs.
+>
+> K7 at least. I could not confirm that all antique AMD CPUs have 4 counters w/o
+> perfctr_core.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Torokhov/PCI-histb-switch-to-using-gpiod-API/20220907-044417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220907/202209071255.xlxq6qnE-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/90d5c7ec598d196395d3a5934099b56d1c8e071a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Torokhov/PCI-histb-switch-to-using-gpiod-API/20220907-044417
-        git checkout 90d5c7ec598d196395d3a5934099b56d1c8e071a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+The APM says, "All implementations support the base set of four
+performance counter / event-select pairs." That is unequivocal.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/pci/controller/pci-mvebu.c: In function 'mvebu_pcie_irq_handler':
->> drivers/pci/controller/pci-mvebu.c:1100:9: error: implicit declaration of function 'chained_irq_enter'; did you mean 'ct_irq_enter'? [-Werror=implicit-function-declaration]
-    1100 |         chained_irq_enter(chip, desc);
-         |         ^~~~~~~~~~~~~~~~~
-         |         ct_irq_enter
->> drivers/pci/controller/pci-mvebu.c:1115:9: error: implicit declaration of function 'chained_irq_exit'; did you mean 'ct_irq_exit'? [-Werror=implicit-function-declaration]
-    1115 |         chained_irq_exit(chip, desc);
-         |         ^~~~~~~~~~~~~~~~
-         |         ct_irq_exit
-   cc1: some warnings being treated as errors
-
-
-vim +1100 drivers/pci/controller/pci-mvebu.c
-
-ec075262648f39 Pali Rohár 2022-02-22  1091  
-ec075262648f39 Pali Rohár 2022-02-22  1092  static void mvebu_pcie_irq_handler(struct irq_desc *desc)
-ec075262648f39 Pali Rohár 2022-02-22  1093  {
-ec075262648f39 Pali Rohár 2022-02-22  1094  	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
-ec075262648f39 Pali Rohár 2022-02-22  1095  	struct irq_chip *chip = irq_desc_get_chip(desc);
-ec075262648f39 Pali Rohár 2022-02-22  1096  	struct device *dev = &port->pcie->pdev->dev;
-ec075262648f39 Pali Rohár 2022-02-22  1097  	u32 cause, unmask, status;
-ec075262648f39 Pali Rohár 2022-02-22  1098  	int i;
-ec075262648f39 Pali Rohár 2022-02-22  1099  
-ec075262648f39 Pali Rohár 2022-02-22 @1100  	chained_irq_enter(chip, desc);
-ec075262648f39 Pali Rohár 2022-02-22  1101  
-ec075262648f39 Pali Rohár 2022-02-22  1102  	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
-ec075262648f39 Pali Rohár 2022-02-22  1103  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
-ec075262648f39 Pali Rohár 2022-02-22  1104  	status = cause & unmask;
-ec075262648f39 Pali Rohár 2022-02-22  1105  
-ec075262648f39 Pali Rohár 2022-02-22  1106  	/* Process legacy INTx interrupts */
-ec075262648f39 Pali Rohár 2022-02-22  1107  	for (i = 0; i < PCI_NUM_INTX; i++) {
-ec075262648f39 Pali Rohár 2022-02-22  1108  		if (!(status & PCIE_INT_INTX(i)))
-ec075262648f39 Pali Rohár 2022-02-22  1109  			continue;
-ec075262648f39 Pali Rohár 2022-02-22  1110  
-ec075262648f39 Pali Rohár 2022-02-22  1111  		if (generic_handle_domain_irq(port->intx_irq_domain, i) == -EINVAL)
-ec075262648f39 Pali Rohár 2022-02-22  1112  			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
-ec075262648f39 Pali Rohár 2022-02-22  1113  	}
-ec075262648f39 Pali Rohár 2022-02-22  1114  
-ec075262648f39 Pali Rohár 2022-02-22 @1115  	chained_irq_exit(chip, desc);
-ec075262648f39 Pali Rohár 2022-02-22  1116  }
-ec075262648f39 Pali Rohár 2022-02-22  1117  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> >
+> >>
+> >>                  entry->eax = eax.full;
+> >>                  entry->ebx = ebx.full;
+> >>                  break;
+> >>          }
+> >>
+> >> ?
+> >>
+> >> Once 0x80000022 appears, ebx.split.num_core_pmc will report only
+> >> the real "Number of Core Performance Counters" regardless of perfmon_v2.
+> >>
+> >>>
+> >>>
+> >>>> +               }
+> >>>> +               entry->eax = eax.full;
+> >>>> +               entry->ebx = ebx.full;
+> >>>> +               break;
+> >>>> +       }
+> >>>>           /*Add support for Centaur's CPUID instruction*/
+> >>>>           case 0xC0000000:
+> >>>>                   /*Just support up to 0xC0000004 now*/
+> >>>> --
+> >>>> 2.37.3
+> >>>>

@@ -2,157 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199135B0B63
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775C25B0BB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiIGRWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S229924AbiIGRnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiIGRWC (ORCPT
+        with ESMTP id S229632AbiIGRnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:22:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FC5BD103;
-        Wed,  7 Sep 2022 10:22:00 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287CxmcB025725;
-        Wed, 7 Sep 2022 17:21:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=9ukwriFT3hEu5Om6UVyZI9cMcULqyyS/q2DbWeK2S0w=;
- b=Sm/kFin6xjmdLajEVlEqopfAl9S4f+H+1v0u71wdSbcUfI+ftxaz7i85GpKY4okr/KSe
- 0afDAslWqPRxKuRY64/BMVL8dfyPDj/fgjkXw9H/h3R+LNrGvama9R5LHgwaP63t+Ncy
- b4ZRrMfNnlJdiaFcvunOq9n9AlJ+kRCdOC1puCUwpBXKBGH0VeHP1+8sRM5u0KNNjI8I
- tyU8kuJDYAjWdab2v9uOyMbH7EG/cHZfAClVymdvTHxLIEM3vvLeAIGPM9Pnmq7x/cI6
- eSVSy4qBl8SfBqjHSmZjHP1aD3IKQFXfFK1c9WOiM0LEksmP1d4ccmpkBN6JhSVSrHsi ww== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jer1x2182-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 17:21:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 287HLoJe028339
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Sep 2022 17:21:50 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 7 Sep 2022 10:21:49 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/msm/dp: cleared DP_DOWNSPREAD_CTRL register before start link training
-Date:   Wed, 7 Sep 2022 10:21:40 -0700
-Message-ID: <1662571300-4898-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 7 Sep 2022 13:43:16 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0578BB14DA;
+        Wed,  7 Sep 2022 10:43:13 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id B51C8224BB;
+        Wed,  7 Sep 2022 17:43:12 +0000 (UTC)
+Received: from pdx1-sub0-mail-a211 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 8974C2222A;
+        Wed,  7 Sep 2022 17:43:11 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1662572592; a=rsa-sha256;
+        cv=none;
+        b=I+iIZ6ZpY/FLMWmO/0YhUwNX+WRTLi1cwr2jvdm00Qw7F2HCOBDvLaTu0AfPSA6FLY6KC/
+        0CYcZJ73VD8enIDhqevmtLIX4uI5W+2Khs9Vnx4NOxoUov21c+Wbk9kYKB2TMwcyZUK1Ul
+        B+AJNFpBHqqFTVsJ0cWRsl8cdheyVi8eo12r6v4a35GSPPvvBnIpw9zCXG7bw7AOzcy+at
+        l0RfCp9GXmsOrum69o2BsHOr+HZo8PGSxId8uYIuwJDZEVV/A+94vz6DNbcS6d3gmuRRrK
+        ifsJn+LnNe/R3iubYnvdeLP7JS7D6BOmkC323vLj4e0ppzBoI/815UAzPM8n1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1662572592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=fVAuUmQIdD5h7Yfh/vTIXCwzEOFCdi4pLkzBHSezQjs=;
+        b=liAp8W1OAa5wRTmflRs8X08AIZLRuURqVf3g9yJrFHq69wYLMfXc68nksjMM+8t3vAO2MJ
+        KoQnAMonBYw+o0NoCYyt1qed2axuTU+79QXdzNcGf2dWovVC/UKPSM16fRwsilttSOsAX5
+        kU1EGwj+aajvr8V1qcvHyW4PggrTR+ZA5vjEb8gplwfv6mqyvkWaEJ7/tTGs1sRJ2SSOIl
+        EzB3bmclrGWb36ECDirmkCYMzaKf/E/S6tK3VvXPQ5ahpD56Qmh3/Z339uyaapfbMU7RrE
+        FuTaNOmHOQMpyu4UwInfd+Y8yebqmmBSeJE50YKq+2i5qvu00JBx+QXLDqkLJg==
+ARC-Authentication-Results: i=1;
+        rspamd-686945db84-gn4mw;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Whispering-Arithmetic: 5e0a509a18e6db61_1662572592564_2644287583
+X-MC-Loop-Signature: 1662572592564:2158350637
+X-MC-Ingress-Time: 1662572592563
+Received: from pdx1-sub0-mail-a211 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.121.210.155 (trex/6.7.1);
+        Wed, 07 Sep 2022 17:43:12 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a211 (Postfix) with ESMTPSA id 4MN8jp1zm4z2h;
+        Wed,  7 Sep 2022 10:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1662572591;
+        bh=fVAuUmQIdD5h7Yfh/vTIXCwzEOFCdi4pLkzBHSezQjs=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=JtLQnms5e9XP7+PQATTL273KCVj8b9RO14Gcw9LpBQ+ddmnUEWNGlmj9H9UGO49M6
+         qhtENtbw/YP/44aC+YzW7GtMhIl/aGJc4s/O4gFHnWnWW+3V7ps7OEMYzk4xhnGNUa
+         +VHnIZY3O9FLCiOGPl4NfnCruXN9YRQqSFahLwuZ4BHhIwwydtHQmztws7obtYUM3W
+         YuYNnVWtoGv/gmlj1SPQNWxlH+441ppMkiTzk3IEodyh2eINWo+KhGsDdv4GW+uz9i
+         HnuPxmOZdxS5yozITGiBUUZidsHPvvuBlej4pm3+nGcB3tBnzr97HPZXABMDWNIy1X
+         RqrpMTFNkra/w==
+Date:   Wed, 7 Sep 2022 10:24:14 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
+        peterz@infradead.org, akpm@linux-foundation.org,
+        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+        vishal.l.verma@intel.com, ira.weiny@intel.com,
+        a.manzanares@samsung.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] memregion: Add arch_flush_memregion() interface
+Message-ID: <20220907172414.74mh75svoi6kkom3@offworld>
+References: <20220829212918.4039240-1-dave@stgolabs.net>
+ <YxjBSxtoav7PQVei@nazgul.tnic>
+ <20220907162245.5ddexpmibjbanrho@offworld>
+ <6318cc415161f_166f2941e@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8PEwNNaT_BV7xmCgo2B1xe0NjZANEolb
-X-Proofpoint-GUID: 8PEwNNaT_BV7xmCgo2B1xe0NjZANEolb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-07_08,2022-09-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- malwarescore=0 clxscore=1011 adultscore=0 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209070066
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <6318cc415161f_166f2941e@dwillia2-xfh.jf.intel.com.notmuch>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DOWNSPREAD_CTRL (0x107) shall be cleared to 0 upon power-on reset or an
-upstream device disconnect. This patch will enforce this rule by always
-cleared DOWNPREAD_CTRL register to 0 before start link training. At rare
-case that DP MSA timing parameters may be mis-interpreted by the sinker
-which causes audio sampling rate be calculated wrongly and cause audio
-did not work at sinker if DOWNSPREAD_CTRL register is not cleared to 0.
-This patch also make sure bring sinker out of D3 power-down mode into D0
-(normal operation mode) successfully by retrying 3 times.
+On Wed, 07 Sep 2022, Dan Williams wrote:
 
-Fixes: 154b5a7da0fd ("drm/msm/dp: add displayPort driver support")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c |  5 ++---
- drivers/gpu/drm/msm/dp/dp_link.c | 17 +++++++++++------
- 2 files changed, 13 insertions(+), 9 deletions(-)
+>Davidlohr Bueso wrote:
+>> On Wed, 07 Sep 2022, Borislav Petkov wrote:
+>>
+>> >On Mon, Aug 29, 2022 at 02:29:18PM -0700, Davidlohr Bueso wrote:
+>> >> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+>> >> index 1abd5438f126..18463cb704fb 100644
+>> >> --- a/arch/x86/mm/pat/set_memory.c
+>> >> +++ b/arch/x86/mm/pat/set_memory.c
+>> >> @@ -330,6 +330,20 @@ void arch_invalidate_pmem(void *addr, size_t size)
+>> >>  EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+>> >>  #endif
+>> >>
+>> >> +#ifdef CONFIG_ARCH_HAS_MEMREGION_INVALIDATE
+>> >> +bool arch_has_flush_memregion(void)
+>> >> +{
+>> >> +	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
+>> >
+>> >This looks really weird. Why does this need to care about HV at all?
+>>
+>> So the context here is:
+>>
+>> e2efb6359e62 ("ACPICA: Avoid cache flush inside virtual machines")
+>>
+>> >
+>> >Does that nfit stuff even run in guests?
+>>
+>> No, nor does cxl. This was mostly in general a precautionary check such
+>> that the api is unavailable in VMs.
+>
+>To be clear nfit stuff and CXL does run in guests, but they do not
+>support secure-erase in a guest.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index ab6aa13..e864a6e 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1245,7 +1245,7 @@ static int dp_ctrl_link_train(struct dp_ctrl_private *ctrl,
- {
- 	int ret = 0;
- 	const u8 *dpcd = ctrl->panel->dpcd;
--	u8 encoding = DP_SET_ANSI_8B10B;
-+	u8 encoding[2] = {0, DP_SET_ANSI_8B10B};
- 	u8 ssc;
- 	u8 assr;
- 	struct dp_link_info link_info = {0};
-@@ -1263,8 +1263,7 @@ static int dp_ctrl_link_train(struct dp_ctrl_private *ctrl,
- 		drm_dp_dpcd_write(ctrl->aux, DP_DOWNSPREAD_CTRL, &ssc, 1);
- 	}
- 
--	drm_dp_dpcd_write(ctrl->aux, DP_MAIN_LINK_CHANNEL_CODING_SET,
--				&encoding, 1);
-+	drm_dp_dpcd_write(ctrl->aux, DP_DOWNSPREAD_CTRL, encoding, 2);
- 
- 	if (drm_dp_alternate_scrambler_reset_cap(dpcd)) {
- 		assr = DP_ALTERNATE_SCRAMBLER_RESET_ENABLE;
-diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
-index 36f0af0..3ad3826 100644
---- a/drivers/gpu/drm/msm/dp/dp_link.c
-+++ b/drivers/gpu/drm/msm/dp/dp_link.c
-@@ -49,7 +49,7 @@ static int dp_aux_link_power_up(struct drm_dp_aux *aux,
- 					struct dp_link_info *link)
- {
- 	u8 value;
--	int err;
-+	int i, err;
- 
- 	if (link->revision < 0x11)
- 		return 0;
-@@ -61,11 +61,16 @@ static int dp_aux_link_power_up(struct drm_dp_aux *aux,
- 	value &= ~DP_SET_POWER_MASK;
- 	value |= DP_SET_POWER_D0;
- 
--	err = drm_dp_dpcd_writeb(aux, DP_SET_POWER, value);
--	if (err < 0)
--		return err;
--
--	usleep_range(1000, 2000);
-+	/*
-+	 * When turning on, we need to retry for 1ms to give the sink
-+	 * time to wake up.
-+	 */
-+	for (i = 0; i < 3; i++) {
-+	        err = drm_dp_dpcd_writeb(aux, DP_SET_POWER, value);
-+		usleep_range(1000, 2000);
-+		if (err == 1)
-+			break;
-+	}
- 
- 	return 0;
- }
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Yes, I meant the feats this api enables.
 
+>However, the QEMU CXL enabling is building the ability to do *guest
+>physical* address space management, but in that case the driver can be
+>paravirtualized to realize that it is not managing host-physical address
+>space and does not need to flush caches. That will need some indicator
+>to differentiate virtual CXL memory expanders from assigned devices. Is
+>there such a thing as a PCIe-virtio extended capability to differentiate
+>physical vs emulated devices?
+
+In any case such check would be specific to each user (cxl in this case),
+and outside the scope of _this_ particular api. Here we just really want to
+avoid the broken TDX guest bits.
+
+Thanks,
+Davidlohr

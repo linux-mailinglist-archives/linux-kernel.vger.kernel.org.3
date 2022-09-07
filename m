@@ -2,42 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8245AFEED
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA7E5AFEE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiIGI0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
+        id S229650AbiIGIW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiIGI0g (ORCPT
+        with ESMTP id S229480AbiIGIW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:26:36 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408B5A0626;
-        Wed,  7 Sep 2022 01:26:33 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oVqO6-00042j-Sn; Wed, 07 Sep 2022 10:26:22 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <kc@postmarketos.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: add BT/wifi nodes to Pinephone Pro
-Date:   Wed, 07 Sep 2022 10:26:21 +0200
-Message-ID: <46977559.XUcTiDjVJD@diego>
-In-Reply-To: <57395b20-6352-8414-3078-cdad6bbbe999@postmarketos.org>
-References: <Rk3c--Dksit7gaQSddtVEaF5_7FlNYE4KZKQKaLsRu2GXMXoBgp5C2DSPNublHMr6E135nPS2B9JkQyf6aSZjw==@protonmail.internalid> <20220906124713.1683587-1-tom@tom-fitzhenry.me.uk> <57395b20-6352-8414-3078-cdad6bbbe999@postmarketos.org>
+        Wed, 7 Sep 2022 04:22:26 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9866A83BD1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:22:24 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MMwDW1YlyzHnmF;
+        Wed,  7 Sep 2022 16:20:27 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 16:22:21 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 7 Sep 2022 16:22:21 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
+CC:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        <linux-kernel@vger.kernel.org>, "Vlastimil Babka" <vbabka@suse.cz>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH v2 4/3] memblock tests: add new pageblock related macro
+Date:   Wed, 7 Sep 2022 16:26:43 +0800
+Message-ID: <20220907082643.186979-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
+Reply-To: <20220907060844.126891-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,146 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 6. September 2022, 19:38:38 CEST schrieb Caleb Connolly:
-> 
-> On 06/09/2022 13:47, Tom Fitzhenry wrote:
-> > Pinephone Pro includes a AzureWave AW-CM256SM wifi (sdio0) and
-> > bt (uart0) combo module, which is based on Cypress
-> > CYP43455 (BCM43455).
-> > 
-> > Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-> > ---
-> >   .../dts/rockchip/rk3399-pinephone-pro.dts     | 69 +++++++++++++++++++
-> >   1 file changed, 69 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> > index 2e058c3150256..096238126e4c1 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
-> > @@ -43,6 +43,20 @@ key-power {
-> >   		};
-> >   	};
-> > 
-> > +	/* Power sequence for SDIO WiFi module */
-> 
-> This comment isn't needed, instead give the node a better name/label
-> > +	sdio_pwrseq: sdio-pwrseq {
-> 
-> 	wifi_pwrseq: sdio-pwrseq-wifi {
+Add new pageblock_start_pfn() and pageblock_align() macro
+which are needed by memblock tests.
 
-I guess, I'd move the components around a tiny bit and go with
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ tools/testing/memblock/linux/mmzone.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-	wifi_pwrseq: sdio-wifi-pwrseq {
-
-So far everywhere the "-pwrseq" is at the end and while I don't
-think that this is enforced (yet), keeping some sort of consistency
-might be nice :-) 
-
-
-Heiko
-
-
-> > +		compatible = "mmc-pwrseq-simple";
-> > +		clocks = <&rk818 1>;
-> > +		clock-names = "ext_clock";
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&wifi_enable_h_pin>;
-> > +		post-power-on-delay-ms = <100>;
-> > +		power-off-delay-us = <500000>;
-> > +
-> > +		/* WL_REG_ON on module */
-> > +		reset-gpios = <&gpio0 RK_PB2 GPIO_ACTIVE_LOW>;
-> > +	};
-> > +
-> >   	vcc_sys: vcc-sys-regulator {
-> >   		compatible = "regulator-fixed";
-> >   		regulator-name = "vcc_sys";
-> > @@ -360,11 +374,31 @@ vsel2_pin: vsel2-pin {
-> >   		};
-> >   	};
-> > 
-> > +	sdio-pwrseq {
-> > +		wifi_enable_h_pin: wifi-enable-h-pin {
-> > +			rockchip,pins = <0 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-> > +		};
-> > +	};
-> > +
-> >   	sound {
-> >   		vcc1v8_codec_en: vcc1v8-codec-en {
-> >   			rockchip,pins = <3 RK_PA4 RK_FUNC_GPIO &pcfg_pull_down>;
-> >   		};
-> >   	};
-> > +
-> > +	wireless-bluetooth {
-> > +		bt_wake_pin: bt-wake-pin {
-> > +			rockchip,pins = <2 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
-> > +		};
-> > +
-> > +		bt_host_wake_pin: bt-host-wake-pin {
-> > +			rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
-> > +		};
-> > +
-> > +		bt_reset_pin: bt-reset-pin {
-> > +			rockchip,pins = <0 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
-> > +		};
-> > +	};
-> >   };
-> > 
-> >   &sdmmc {
-> > @@ -380,6 +414,20 @@ &sdmmc {
-> >   	status = "okay";
-> >   };
-> > 
-> > +&sdio0 {
-> > +	bus-width = <4>;
-> > +	cap-sd-highspeed;
-> > +	cap-sdio-irq;
-> > +	disable-wp;
-> > +	keep-power-in-suspend;
-> > +	mmc-pwrseq = <&sdio_pwrseq>;
-> > +	non-removable;
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&sdio0_bus4 &sdio0_cmd &sdio0_clk>;
-> > +	sd-uhs-sdr104;
-> > +	status = "okay";
-> > +};
-> > +
-> >   &sdhci {
-> >   	bus-width = <8>;
-> >   	mmc-hs200-1_8v;
-> > @@ -393,6 +441,27 @@ &tsadc {
-> >   	status = "okay";
-> >   };
-> > 
-> > +&uart0 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&uart0_xfer &uart0_cts &uart0_rts>;
-> > +	uart-has-rtscts;
-> > +	status = "okay";
-> > +
-> > +	bluetooth {
-> > +		compatible = "brcm,bcm4345c5";
-> > +		clocks = <&rk818 1>;
-> > +		clock-names = "lpo";
-> > +		device-wakeup-gpios = <&gpio2 RK_PD2 GPIO_ACTIVE_HIGH>;
-> > +		host-wakeup-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_HIGH>;
-> > +		max-speed = <1500000>;
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&bt_host_wake_pin &bt_wake_pin &bt_reset_pin>;
-> > +		shutdown-gpios = <&gpio0 RK_PB1 GPIO_ACTIVE_HIGH>;
-> > +		vbat-supply = <&vcc3v3_sys>;
-> > +		vddio-supply = <&vcc_1v8>;
-> > +	};
-> > +};
-> > +
-> >   &uart2 {
-> >   	status = "okay";
-> >   };
-> > --
-> > 2.37.1
-> > 
-> 
-
-
-
+diff --git a/tools/testing/memblock/linux/mmzone.h b/tools/testing/memblock/linux/mmzone.h
+index 7c2eb5c9bb54..e65f89b12f1c 100644
+--- a/tools/testing/memblock/linux/mmzone.h
++++ b/tools/testing/memblock/linux/mmzone.h
+@@ -22,6 +22,8 @@ enum zone_type {
+ 
+ #define pageblock_order		(MAX_ORDER - 1)
+ #define pageblock_nr_pages	BIT(pageblock_order)
++#define pageblock_align(pfn)	ALIGN((pfn), pageblock_nr_pages)
++#define pageblock_start_pfn(pfn)	ALIGN_DOWN((pfn), pageblock_nr_pages)
+ 
+ struct zone {
+ 	atomic_long_t		managed_pages;
+-- 
+2.35.3
 

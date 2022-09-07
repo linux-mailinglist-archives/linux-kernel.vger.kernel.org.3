@@ -2,140 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DD05AFD9E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D055AFD9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiIGHfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        id S229715AbiIGHfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiIGHfU (ORCPT
+        with ESMTP id S229609AbiIGHfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:35:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEFC5F98D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:35:18 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2876NbP8026200;
-        Wed, 7 Sep 2022 07:35:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=WPWMtIvGpQnxPLV6mOT1LP/qsbfR3oGYV9JqlZPkNx4=;
- b=X9sMmUXbqNAOAk31d7JkgeVPafmELhngilZrcrH6ZI5EQN1gEsggXdoe+SJVeAisg3Ii
- h4rPuDcR+d9Lk51oujUHPp0l63W+DqJ3SM5FC+k0j/gmZo1JSv+cYqYlVK/Nbt5VeiHM
- /DWYmMdZPwPjfuXJ7kxigsax7C2hnMvzUT3adzbyLrl5TJjl4WlV9P/SmhuHd3udHDe9
- 5c0dLkP5JqyaQMgz2xQPNBvtgZEAfBXMViDxwBfbLDezeG6EN+73I211spaqu07vpvu/
- B6cUMX7xB3oejYux7WsWvV79CRj0rMnO0V04yWmq2Zw9yTmY+Cbwqazqs8Lm6OaMMEux LA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jep08a0wp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 07:35:07 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2877RRLt031889;
-        Wed, 7 Sep 2022 07:35:07 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jep08a0tj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 07:35:06 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2877KO7q002396;
-        Wed, 7 Sep 2022 07:35:04 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3jbxj8khj4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 07:35:04 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2877Z2EN35520938
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 7 Sep 2022 07:35:02 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 002BFAE045;
-        Wed,  7 Sep 2022 07:35:02 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E4ACAE055;
-        Wed,  7 Sep 2022 07:35:01 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  7 Sep 2022 07:35:01 +0000 (GMT)
-Received: from intelligence.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 03:35:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C1239B96
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:35:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id EB5CD600A6;
-        Wed,  7 Sep 2022 17:34:50 +1000 (AEST)
-Message-ID: <744e04b545ed8f9a87c9728041169bb9b55edfad.camel@linux.ibm.com>
-Subject: Re: [PATCH linux-next] ocxl: Remove the unneeded result variable
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     cgel.zte@gmail.com, fbarrat@linux.ibm.com
-Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Date:   Wed, 07 Sep 2022 17:34:43 +1000
-In-Reply-To: <20220906072006.337099-1-ye.xingchen@zte.com.cn>
-References: <20220906072006.337099-1-ye.xingchen@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mieZ9fv_Ehh8vtpj8Z4aaVLoScdr0XZm
-X-Proofpoint-ORIG-GUID: 5Yms27kvnICqZOSTtzg2GeVTPJ4Tb07s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-07_04,2022-09-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 phishscore=0 impostorscore=0 suspectscore=0
- clxscore=1011 bulkscore=0 malwarescore=0 priorityscore=1501 spamscore=0
- mlxlogscore=815 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209070031
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1A91933AF5;
+        Wed,  7 Sep 2022 07:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662536110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=37dfE1GaBFM9YPRfxf4bLjGrfUKhn0K6cN9Lp4z0Fdo=;
+        b=lUqvTen91LbbGDUg43CG2Zzj6BAU1Xpv9hoL7ju6bwn51EGloRhOa6VZjDhyHwxlSJQ1KD
+        i3RiU85P8rZlILNlZTF3voOqkO/lq8qy2xu3/jXLZ5xaXUYRhGHInO5koGTYvy9zLFcJdn
+        ahoi8SYDPJMzGFI/RWZl4Uy44VBsOrk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662536110;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=37dfE1GaBFM9YPRfxf4bLjGrfUKhn0K6cN9Lp4z0Fdo=;
+        b=t5p4GIePaPW98hM+6VjZztp9ZkXPbd3BgNaAu9kkbmvZBu8cpxo4xoF3Jl9g9xFDetMzPm
+        kLtgCgjZ4Lv4uVCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E8CEE13A66;
+        Wed,  7 Sep 2022 07:35:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kwwbOK1JGGNVfQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 07 Sep 2022 07:35:09 +0000
+Date:   Wed, 07 Sep 2022 09:35:08 +0200
+Message-ID: <87illzeixf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/ca0132: fix potential memory leak in dspxfr_image()
+In-Reply-To: <20220907065917.55810-1-niejianglei2021@163.com>
+References: <20220907065917.55810-1-niejianglei2021@163.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-06 at 07:20 +0000, cgel.zte@gmail.com wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On Wed, 07 Sep 2022 08:59:17 +0200,
+Jianglei Nie wrote:
 > 
-> Return the value opal_npu_spa_clear_cache() directly instead of
-> storing
-> it in another redundant variable.
+> dspxfr_image() allocates DSP ports for the download stream with
+> dsp_allocate_ports_format(). When gets some error, the allocated
+> DSP ports are not released, which will lead to a memory leak.
+
+Hmm, those allocate_* functions don't really allocate memories but
+rather allocate virtual ports on the hardware; i.e. it just flips some
+DSP registers.  There should be no "memory leaks".
+
+> We can fix it by releasing DSP ports with dsp_free_ports() when
+> getting some error.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-
-Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
-
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 > ---
->  arch/powerpc/platforms/powernv/ocxl.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  sound/pci/hda/patch_ca0132.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/powerpc/platforms/powernv/ocxl.c
-> b/arch/powerpc/platforms/powernv/ocxl.c
-> index 27c936075031..629067781cec 100644
-> --- a/arch/powerpc/platforms/powernv/ocxl.c
-> +++ b/arch/powerpc/platforms/powernv/ocxl.c
-> @@ -478,10 +478,8 @@ EXPORT_SYMBOL_GPL(pnv_ocxl_spa_release);
->  int pnv_ocxl_spa_remove_pe_from_cache(void *platform_data, int
-> pe_handle)
->  {
->         struct spa_data *data = (struct spa_data *) platform_data;
-> -       int rc;
->  
-> -       rc = opal_npu_spa_clear_cache(data->phb_opal_id, data->bdfn,
-> pe_handle);
-> -       return rc;
-> +       return opal_npu_spa_clear_cache(data->phb_opal_id, data-
-> >bdfn, pe_handle);
->  }
->  EXPORT_SYMBOL_GPL(pnv_ocxl_spa_remove_pe_from_cache);
->  
+> diff --git a/sound/pci/hda/patch_ca0132.c b/sound/pci/hda/patch_ca0132.c
+> index 208933792787..6b8f45e14075 100644
+> --- a/sound/pci/hda/patch_ca0132.c
+> +++ b/sound/pci/hda/patch_ca0132.c
+> @@ -3455,6 +3455,7 @@ static int dspxfr_image(struct hda_codec *codec,
+>  					&port_map_mask);
+>  	if (status < 0) {
+>  		codec_dbg(codec, "alloc ports fail\n");
+> +		dsp_free_ports(codec);
 
--- 
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+This is likely superfluous.  When an allocation fails, you don't free,
+in general.
 
+
+thanks,
+
+Takashi

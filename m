@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC90D5B030F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351ED5B02F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiIGLdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiIGLd1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230004AbiIGLd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 7 Sep 2022 07:33:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF3DBB69F0;
-        Wed,  7 Sep 2022 04:33:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8A4E1042;
-        Wed,  7 Sep 2022 04:33:31 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63EA73F7B4;
-        Wed,  7 Sep 2022 04:33:20 -0700 (PDT)
-Message-ID: <4ca6383e-bd21-59bf-cc4e-cf3313164957@arm.com>
-Date:   Wed, 7 Sep 2022 12:33:12 +0100
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229636AbiIGLdX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 7 Sep 2022 07:33:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55A5B655A;
+        Wed,  7 Sep 2022 04:33:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84DBE61877;
+        Wed,  7 Sep 2022 11:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE89EC433C1;
+        Wed,  7 Sep 2022 11:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662550401;
+        bh=eSN0n/IkID6iu50PBYm3RnaU+v/IM0jwWYB5a53uu8A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KSZwkZYZKBPuaxafmBZ5aO+76Tj8qkHBYFfpn0bweyu2Z1gJs8uKq8iYLK3XXH61K
+         F4tJdMCoRXbhHS2LmfmKO+SIKgCFb/Xmt6yblXQr/jsU6sCZC4aWcr+M1FL+hKJJ4o
+         YGHDZEQG6355vKfHOPUwfzyyTc+2N5fxTkOmYQRN77myZ8Qq0rI346dmZTA+4ugmFl
+         03Qv1l8A8nQs+Xu02m4ftOvN2ElhaKQR0PmmRoMWNAZ3M/h8u06TnQ6OsydXWEkEaZ
+         QdkFkcBb4NgoexVOR9chiCpEnk0qW6Mo+1eDSp48yejY4Sb7LWNdCbDMv9umt3llZZ
+         hGH83NZLnLOoQ==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com
+Cc:     linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: [PATCH v4 0/6] vfs: clean up i_version behavior and expose it via statx
+Date:   Wed,  7 Sep 2022 07:33:12 -0400
+Message-Id: <20220907113318.21810-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
- domain as parent
-Content-Language: en-GB
-To:     Marc Zyngier <maz@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Nipun Gupta <nipun.gupta@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, eric.auger@redhat.com,
-        alex.williamson@redhat.com, cohuck@redhat.com,
-        puneet.gupta@amd.com, song.bao.hua@hisilicon.com,
-        mchehab+huawei@kernel.org, f.fainelli@gmail.com,
-        jeffrey.l.hugo@gmail.com, saravanak@google.com,
-        Michael.Srba@seznam.cz, mani@kernel.org, yishaih@nvidia.com,
-        will@kernel.org, joro@8bytes.org, masahiroy@kernel.org,
-        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, kvm@vger.kernel.org, okaya@kernel.org,
-        harpreet.anand@amd.com, nikhil.agarwal@amd.com,
-        michal.simek@amd.com, aleksandar.radovanovic@amd.com, git@amd.com
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
- <20220906134801.4079497-1-nipun.gupta@amd.com>
- <20220906134801.4079497-5-nipun.gupta@amd.com> <YxeBCsA32jnwMjSj@nvidia.com>
- <87leqvv3g7.wl-maz@kernel.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <87leqvv3g7.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-07 12:17, Marc Zyngier wrote:
-> On Tue, 06 Sep 2022 18:19:06 +0100,
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
->>
->> On Tue, Sep 06, 2022 at 07:17:58PM +0530, Nipun Gupta wrote:
->>
->>> +static void cdx_msi_write_msg(struct irq_data *irq_data,
->>> +			      struct msi_msg *msg)
->>> +{
->>> +	/*
->>> +	 * Do nothing as CDX devices have these pre-populated
->>> +	 * in the hardware itself.
->>> +	 */
->>> +}
->>
->> Huh?
->>
->> There is no way it can be pre-populated, the addr/data pair,
->> especially on ARM, is completely under SW control.
-> 
-> There is nothing in the GIC spec that says that.
-> 
->> There is some commonly used IOVA base in Linux for the ITS page, but
->> no HW should hardwire that.
-> 
-> That's not strictly true. It really depends on how this block is
-> integrated, and there is a number of existing blocks that know *in HW*
-> how to signal an LPI.
-> 
-> See, as the canonical example, how the mbigen driver doesn't need to
-> know about the address of GITS_TRANSLATER.
-> 
-> Yes, this messes with translation (the access is downstream of the
-> SMMU) if you relied on it to have some isolation, and it has a "black
-> hole" effect as nobody can have an IOVA that overlaps with the
-> physical address of the GITS_TRANSLATER register.
-> 
-> But is it illegal as per the architecture? No. It's just stupid.
+v4: drop xfs patch
+    revise comment update patch with latest proposed semantics
 
-If that were the case, then we'd also need a platform quirk so the SMMU 
-driver knows about it. Yuck.
+This is a small revision to the patchset I sent a little over a week
+ago [1]. Since then, this has also garnered a LWN article [2], so I
+won't go into great detail on the basic premise and rationale.
 
-But even then, are you suggesting there is some way to convince the ITS 
-driver to allocate a specific predetermined EventID when a driver 
-requests an MSI? Asking for a friend...
+The biggest change here is that I've dropped the xfs patch. Dave Chinner
+stated that they'd need to add a new on-disk field instead of modifying
+the behavior of the existing di_changecount field [3]. I'll leave that
+to the xfs devs, but this does mean that xfs will have "buggy" behavior
+until that's done.
 
-Cheers,
-Robin.
+I've also sent a revised manpage patchset separately to make sure that
+the semantics are acceptable [4]. That hasn't gotten a lot of comments,
+so I'm operating under the assumption that the semantics proposed there
+are acceptable to most.
+
+[1]: https://lore.kernel.org/linux-nfs/20220826214703.134870-1-jlayton@kernel.org/
+[2]: https://lwn.net/Articles/905931/
+[3]: https://lore.kernel.org/linux-nfs/20220830000851.GV3600936@dread.disaster.area/
+[4]: https://lore.kernel.org/linux-nfs/20220907111606.18831-1-jlayton@kernel.org/T/#u
+
+Jeff Layton (6):
+  iversion: update comments with info about atime updates
+  ext4: fix i_version handling in ext4
+  ext4: unconditionally enable the i_version counter
+  vfs: report an inode version in statx for IS_I_VERSION inodes
+  nfs: report the inode version in statx if requested
+  ceph: fill in the change attribute in statx requests
+
+ fs/ceph/inode.c           | 14 +++++++++-----
+ fs/ext4/inode.c           | 15 +++++----------
+ fs/ext4/ioctl.c           |  4 ++++
+ fs/ext4/move_extent.c     |  6 ++++++
+ fs/ext4/super.c           | 13 ++++---------
+ fs/ext4/xattr.c           |  1 +
+ fs/nfs/inode.c            |  7 +++++--
+ fs/stat.c                 |  7 +++++++
+ include/linux/iversion.h  | 10 ++++++++--
+ include/linux/stat.h      |  1 +
+ include/uapi/linux/stat.h |  3 ++-
+ samples/vfs/test-statx.c  |  8 ++++++--
+ 12 files changed, 58 insertions(+), 31 deletions(-)
+
+-- 
+2.37.3
+

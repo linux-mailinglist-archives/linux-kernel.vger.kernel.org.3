@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC635B09DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C585B09E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiIGQPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S230013AbiIGQQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiIGQPa (ORCPT
+        with ESMTP id S229994AbiIGQPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:15:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135EE79630
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:15:30 -0700 (PDT)
+        Wed, 7 Sep 2022 12:15:34 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8E1796B1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:15:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AB6761931
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:15:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C4CC43470;
-        Wed,  7 Sep 2022 16:15:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D92F3CE1CD1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:15:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBB4C43143;
+        Wed,  7 Sep 2022 16:15:29 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oVxij-00CsUy-2I;
+        id 1oVxij-00CsVW-2t;
         Wed, 07 Sep 2022 12:16:09 -0400
-Message-ID: <20220907161609.539947679@goodmis.org>
+Message-ID: <20220907161609.728013341@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 07 Sep 2022 12:15:13 -0400
+Date:   Wed, 07 Sep 2022 12:15:14 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-linus][PATCH 2/7] MAINTAINERS: Add Runtime Verification (RV) entry
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [for-linus][PATCH 3/7] MAINTAINERS: add scripts/tracing/ to TRACING
 References: <20220907161511.694486342@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,41 +47,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Add a Runtime Verification (RV) entry in the MAINTAINERS file
-with Steven Rostedt and myself as maintainers.
+The files in scripts/tracing/ belong to the TRACING subsystem.
 
-Link: https://lkml.kernel.org/r/b24c13553b6947a8da16d884ca464e4233eb8fb7.1661268579.git.bristot@kernel.org
+Add a corresponding file entry for TRACING.
 
-Cc: Joe Perches <joe@perches.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Link: https://lkml.kernel.org/r/20220825115927.20598-1-lukas.bulwahn@gmail.com
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index d30f26e07cd3..b89b70af0b07 100644
+index b89b70af0b07..93ffebc3e6c0 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -17735,6 +17735,17 @@ L:	linux-rdma@vger.kernel.org
- S:	Maintained
- F:	drivers/infiniband/ulp/rtrs/
+@@ -20612,6 +20612,7 @@ F:	include/*/ftrace.h
+ F:	include/linux/trace*.h
+ F:	include/trace/
+ F:	kernel/trace/
++F:	scripts/tracing/
+ F:	tools/testing/selftests/ftrace/
  
-+RUNTIME VERIFICATION (RV)
-+M:	Daniel Bristot de Oliveira <bristot@kernel.org>
-+M:	Steven Rostedt <rostedt@goodmis.org>
-+L:	linux-trace-devel@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/trace/rv/
-+F:	include/linux/rv.h
-+F:	include/rv/
-+F:	kernel/trace/rv/
-+F:	tools/verification/
-+
- RXRPC SOCKETS (AF_RXRPC)
- M:	David Howells <dhowells@redhat.com>
- M:	Marc Dionne <marc.dionne@auristor.com>
+ TRACING MMIO ACCESSES (MMIOTRACE)
 -- 
 2.35.1

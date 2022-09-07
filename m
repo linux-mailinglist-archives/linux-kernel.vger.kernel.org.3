@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE58F5AFD41
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6965AFD43
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiIGHRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
+        id S229826AbiIGHRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiIGHRV (ORCPT
+        with ESMTP id S229799AbiIGHRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:17:21 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F65A2DB0;
-        Wed,  7 Sep 2022 00:17:20 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id u6so18265203eda.12;
-        Wed, 07 Sep 2022 00:17:19 -0700 (PDT)
+        Wed, 7 Sep 2022 03:17:39 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED3BA2AA1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:17:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id b19so14883080ljf.8
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 00:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=qhwXdLhrBXs286e4r1ztCl42k4NswLVRSkGgFG4DTWk=;
-        b=aOAtus9+3XemKZO9YquVZVVYGLyibQWiOTCQCKLmu8E6rC2NHM6OtQBfjlYTbNkJZL
-         FX6ivN6gLnjmKSaPe16zBMaOlTzoE33sHxeNfFGR2vLMGW2XbmyykstnR+hFO4I0b4mj
-         S7IAFo5JwUBd79NHwWGlNMJw8SCr0ISyyiU5UWDSXhSIKT65jytyzj+39/RhyV0ZjGe+
-         IRXc6TJ5zJ3zzqQ2KVuQCmE9l/1dEq7+E4psnRzm7jcm6QLRJJtLlI075SFkcnzL6Ayk
-         wkWXc4uBMb3dpitraYo34ZNCJSjkdEH+RLs+PgQc+9S/AvAzG62Sx20XOPTLDsQUqbkI
-         BLmg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
+        b=mWUos+G4meLEIpM5B5tSJgqfGT5qpSbpn+rdZVeadkZnBWLelim7TPaMEtKqFnCb5x
+         qaQW4+1W6y5PwSJsJP64h6SkRokfUsQdjuIXt2Bij29/dOMLg/gQeohNaCdr7nzHmfZV
+         Fdk75ophPXB+Bwugz3NNgr4gm51+NMBslWWEShVW08npuscO1IaDvOHL55rQrp71rEK4
+         3hldg8EwPFDOB05fqVcITdL8Zrx0NKe7zHfQdX0kNTFlbfwfrdu4CYqCM68eMo/vqwcO
+         jbzJJT5GRMI8YXbkiTJUHzQO/4gQU1XAXIRyGIq7HnR3D942NJCM+51TcEX/Mp1VNhF6
+         qH7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=qhwXdLhrBXs286e4r1ztCl42k4NswLVRSkGgFG4DTWk=;
-        b=eZxpVfXNlO21T9aoCdcIGwdcPDZDvDGZ0eJ/mPHsf3MWaUVH3PakoqiKGzQdzM7WjP
-         mxxpWIDnWDse7in+2TlRJ26PW8onZK91pmgIqvXbs+Uf8CrxnQSUeyTSE0UhRkMZ4n1a
-         IyxHVkbZ6/15+4cM0YmPRr4SB7esDhoAv9O3v57C048mzFvpND3GXvX6RMBmfq1B/3B3
-         vwD5WWMBHqCf9cdncy6wTPxH2JJfSpJ01EMnnPBbZRKSQ6Sn+Uc2uqYul1UAmNLMMjFf
-         xVcTcxyj5s82muNDusWhhX2OQQk5/9dxfSX/6BVekObFuPda+2x4zb4WDTdBjM7JYi+a
-         ZDqQ==
-X-Gm-Message-State: ACgBeo2/oxkqCEH7My0VvsiTVb2spQLLOd+FjIdyrrx1AZLt+8AvmXQ6
-        6zJJZ0PHrYCzwQC58ItKKuw=
-X-Google-Smtp-Source: AA6agR7cecyd4hrepTVhA3gpB5uAXT0Cz2JB1iGhZH3EfW9bDJ14ffnACzpoAxcEqzHEJi8a9IpZ4Q==
-X-Received: by 2002:a05:6402:4150:b0:44a:ec16:def4 with SMTP id x16-20020a056402415000b0044aec16def4mr1958930eda.21.1662535038111;
-        Wed, 07 Sep 2022 00:17:18 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id o14-20020a056402038e00b0044ef2ac2650sm1877167edv.90.2022.09.07.00.17.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 00:17:17 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 7 Sep 2022 09:17:15 +0200
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        syzbot <syzbot+2251879aa068ad9c960d@syzkaller.appspotmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>,
-        Song Liu <song@kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: Re: [syzbot] WARNING in bpf_bprintf_prepare (2)
-Message-ID: <YxhFe3EwqchC/fYf@krava>
-References: <0000000000008be47905e7e08b85@google.com>
- <YxXZT6NxSSLufivZ@krava>
- <CAADnVQKthoffNDuO8TsjyCx1JF8jvsyh_pvmT+Q3yB493OeQeA@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
+        b=Hq8HSaPqFtaXudnABPcA4f++GExCtOH2SAy9ygpOND4ail9BOkU1Suwj3vXS4Bckgi
+         o7JGEQ45xCoxyr8nxGVWiTXATOttf0dTeI3s36yg2srCO5kL5NMeM+8LFhR0rbDwGC21
+         G6rm4OcsQCr9exHRcg5FjTjrkSRKhyZ+DqJrkW3/KHYY98NihIi9MpUgkhWGjBCEur3S
+         3uUIQA0n5kURF4JfemF2afI+RqERxiTO59CpmgPVMjn2QB2RQlWUt21OM40IcuWYraGT
+         zl97UDyGtdkbvcUbdr+ySKwh1+HUukfm5otB7/s1rt7SX20VGhAyEI+SSjgmPYUKd+iR
+         vv1A==
+X-Gm-Message-State: ACgBeo0+csXdvzOF/pvzAv0maavwflCekOYlRIJJay2J+2PRuKCw1+UJ
+        v4CI4KRSYz9hJbJr8de+KDQPbPX/rys8Qjq5guQ+yQ==
+X-Google-Smtp-Source: AA6agR71di9AUXjm1EUAWrxZPkPvbGJ5UTGC0woWSGfCPIomzzbd6bY/6fvZKlDkb7mw8EwP1pyMQz6gziNPl5xaI/o=
+X-Received: by 2002:a2e:a589:0:b0:261:b223:488b with SMTP id
+ m9-20020a2ea589000000b00261b223488bmr592996ljp.33.1662535056337; Wed, 07 Sep
+ 2022 00:17:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQKthoffNDuO8TsjyCx1JF8jvsyh_pvmT+Q3yB493OeQeA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <000000000000974e2805e802137e@google.com> <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
+ <YxfpkzZhJ7GfRuKd@yury-laptop> <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
+In-Reply-To: <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 7 Sep 2022 09:17:24 +0200
+Message-ID: <CACT4Y+bXks8ohNAxdJ7gGOc=tg7bC7Pz+nBJi_J9zHa5Jhta9w@mail.gmail.com>
+Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read in _find_next_bit
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,60 +75,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:02:39PM -0700, Alexei Starovoitov wrote:
+On Wed, 7 Sept 2022 at 07:53, Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > The buggy address belongs to the object at ffff888017576600
+> > > >  which belongs to the cache kmalloc-192 of size 192
+> > > > The buggy address is located 184 bytes inside of
+> > > >  192-byte region [ffff888017576600, ffff8880175766c0)
+> > >
+> > > At offset 184 of a 192-byte region.
+> > >
+> > > So what's wrong with doing that?  Does KASAN have an off-by-one?
+> >
+> > Hi Andrew, all,
+> >
+> > This is a bug in FIND_NEXT_BIT(). It should be
+> >   if (idx >= sz / BITS_PER_LONG)                                   \
+> >           goto out;                                                \
+> >
+> > instead of
+> >   if (idx > sz / BITS_PER_LONG)                                    \
+> >           goto out;                                                \
+> >
+> > The fix is in bitmap-for-next, expected to be in -next by tomorrow.
+> > Sorry for the noise.
+>
+> OK... but why is KASAN reporting a bad access from an area
+> which appears to be OK?
 
-SNIP
+Hi Andrew,
 
-> > >  __mutex_lock_common kernel/locking/mutex.c:605 [inline]
-> > >  __mutex_lock+0x13c/0x1350 kernel/locking/mutex.c:747
-> > >  __pipe_lock fs/pipe.c:103 [inline]
-> > >  pipe_write+0x132/0x1be0 fs/pipe.c:431
-> > >  call_write_iter include/linux/fs.h:2188 [inline]
-> > >  new_sync_write fs/read_write.c:491 [inline]
-> > >  vfs_write+0x9e9/0xdd0 fs/read_write.c:578
-> > >  ksys_write+0x1e8/0x250 fs/read_write.c:631
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > looks like __bpf_trace_contention_begin needs bpf_prog_active check
-> > (like below untested), which would prevent the recursion and bail
-> > out after 2nd invocation
-> >
-> > should be easy to reproduce, will check
-> >
-> > jirka
-> >
-> >
-> > ---
-> > diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-> > index 6a13220d2d27..481b057cc8d9 100644
-> > --- a/include/trace/bpf_probe.h
-> > +++ b/include/trace/bpf_probe.h
-> > @@ -4,6 +4,8 @@
-> >
-> >  #ifdef CONFIG_BPF_EVENTS
-> >
-> > +DECLARE_PER_CPU(int, bpf_prog_active);
-> > +
-> >  #undef __entry
-> >  #define __entry entry
-> >
-> > @@ -82,7 +84,11 @@ static notrace void                                                  \
-> >  __bpf_trace_##call(void *__data, proto)                                        \
-> >  {                                                                      \
-> >         struct bpf_prog *prog = __data;                                 \
-> > +       if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1))      \
-> > +               goto out;                                               \
-> >         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));  \
-> > +out:                                                                   \
-> > +        __this_cpu_dec(bpf_prog_active);
-> 
-> I don't think we can use this big hammer here.
-> raw_tp progs attached to different hooks need to
-> run on the same cpu otherwise we will lose events.
+Good point. Filed https://bugzilla.kernel.org/show_bug.cgi?id=216457 for this.
+Copy-pasting description below:
 
-might be good place to use prog->active
-I managed to reproduce it localy, will try that
+KASAN says:
 
-jirka
+==================================================================
+BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
+Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
+...
+The buggy address belongs to the object at ffff888017576600
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 184 bytes inside of
+ 192-byte region [ffff888017576600, ffff8880175766c0)
+...
+Memory state around the buggy address:
+>ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+                                        ^
+==================================================================
+
+This "address is located 184 bytes inside of 192-byte region" is
+confusing b/c it does not look like an out-of-bounds access.
+
+What happens here is that the allocation request was for 184 bytes, so
+the last 8 bytes in the 192-byte slab are poisoned. But KASAN does not
+store the requested size in the object header, so it just prints the
+full slab size everywhere.
+
+User-space ASAN does store 48-bit requested size in the header. But
+KASAN uses additional bytes in the header for:
+
+struct kasan_alloc_meta {
+depot_stack_handle_t aux_stack[2];
+
+So we don't have space for requested size w/o increasing header size
+(currently should be 16 bytes).
+
+We could either try to infer requested size from the shadow (count
+poisoned bytes at the end); or improve wording of the message at least
+to make it clear that 192 is just full slab size.
+
+For context see:
+https://lore.kernel.org/all/20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org/

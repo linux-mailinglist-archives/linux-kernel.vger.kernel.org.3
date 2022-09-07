@@ -2,128 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807165B03BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83055B03BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiIGMQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S230092AbiIGMQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiIGMQO (ORCPT
+        with ESMTP id S229517AbiIGMQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:16:14 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799C3AFAF4;
-        Wed,  7 Sep 2022 05:16:13 -0700 (PDT)
-Received: from smtp102.mailbox.org (unknown [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4MN1SP2TzJz9sQ8;
-        Wed,  7 Sep 2022 14:16:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1662552965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Yu0YYVQDoYE6h44bljdx59LHutNAwWTa6raWx+wgdJY=;
-        b=kTqf0AbE7OoeDFyfj4tPj9eCngCfCk48PBitWUWKhtb5MbsvOQCDuUmSEKdwBhdHr6HB8N
-        FFnbWibYDy83/AT7Ot9iStqXx6MfzvAGXqW/II4iUf6AXLx9Fw9lbwnQ58uDRWCnPwRXdo
-        1B2cdwISNDzxZx6+Zd+OSJW93xLsQ4aq/NWAaio8E1VJnyJVxKUbDAJObHhrFUF4tagBW1
-        oFzc1buzxnF1zsoYN3lB8PbHMF7L7IHBtHM3ur045a6FJmVOWdkX31gc1O+AI5Pf2MDsuC
-        sFN6i8yAeWX3mebZifdZQZpo0i0qtgB7FvtSEemC1a1tVf604/UJALULCquNTg==
-Date:   Wed, 7 Sep 2022 14:16:04 +0200 (CEST)
-From:   torvic9@mailbox.org
-To:     "arequipeno@gmail.com" <arequipeno@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>
-Message-ID: <2047607620.67144.1662552964865@office.mailbox.org>
-Subject: Re: [PATCH v10 0/2] Introduce block device LED trigger
+        Wed, 7 Sep 2022 08:16:38 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2129.outbound.protection.outlook.com [40.107.104.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44EEB7753;
+        Wed,  7 Sep 2022 05:16:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gd1EDrhOYdleXZUVFkLaMrhMyPBuq+NR4qKo9wrMT9+K605yOdcMwfw5fG/a04Nc/+6DgmWCTLS/LL8uGyHMEAHGjXY2cFgAK9RTuZjwU3AGtWq9Uj1eVxlSyhtaw+n853dwlFnqU/0V0LMch/WyjhsrR7zAuZHKvDDkBSHcriSm55YfEVWVmysToG4bEGkjW//gjQlXXOVGe8e+4v8X5MroAF3DyhufsA4feCjY4Wu+MAcSjKg+jyvhm7/ZHNmYv87AngQqCxEsqCJyGhrtL9y2djUWve8iyOvC0t+J0en9Obh39CRR3lC3lClXPViEdQnOLPxlebe714RylwOjCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EeqoaIoW7Rso5zUg3CjePLQcE2rg4WtD8XMXcCpFNws=;
+ b=RgbjnEfmbC++nHo6GL6T/Jzmcp+Y7DpinmmAS2VRf+vknBjxjFGGjWoUyCqTWufmaViJEKac+erhksGkX8sn5Ocdw2xV49HCB8vY/dZhVFh/XlJW4ZrLrXxCE283Mg3GWgApiMUURloVrLcIibU1YFO9KBCXsUoF7YUCy45BzNPiEQWq+4+H1jsW3fOmjFXn+AOwM9x/Vj4+TKkc46kyVCJ81WaITpan2wc8UkA895xyGSq7sseNk1e0HxYKlE4r8e7ZsKUpzGKxfLh5vYrdQKcQV11aNUl6tIeBcYCWh1O6y9cD3I1Akm5LCuXxkNv6E7iEeaP0Rk2HiCdRQLYUvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.8) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nokia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nokia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EeqoaIoW7Rso5zUg3CjePLQcE2rg4WtD8XMXcCpFNws=;
+ b=Zq06+bh8BUbqNqdnb+CgxxIfZdvT7ctyj9M8TlWu+J2lqRXjf0xcwH1uo+CFN4F3zWDDdXeau44gU9un+Vg2y7xcJ5GIUt4kVhkesgE9+5z1XW4vFq5+z5BAGhplmi8+VROXQ/ft4/vVAf0ZgtvntKtPc5opU9NUNM8+XRXinvc=
+Received: from AM6P194CA0032.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:90::45)
+ by VI1PR07MB5488.eurprd07.prod.outlook.com (2603:10a6:803:bb::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 7 Sep
+ 2022 12:16:34 +0000
+Received: from AM7EUR03FT015.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:209:90:cafe::eb) by AM6P194CA0032.outlook.office365.com
+ (2603:10a6:209:90::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
+ Transport; Wed, 7 Sep 2022 12:16:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.8)
+ smtp.mailfrom=nokia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia.com designates
+ 131.228.2.8 as permitted sender) receiver=protection.outlook.com;
+ client-ip=131.228.2.8; helo=fihe3nok0734.emea.nsn-net.net; pr=C
+Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.8) by
+ AM7EUR03FT015.mail.protection.outlook.com (100.127.140.173) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.13 via Frontend Transport; Wed, 7 Sep 2022 12:16:34 +0000
+Received: from ulegcparamis.emea.nsn-net.net (ulegcparamis.emea.nsn-net.net [10.151.74.146])
+        by fihe3nok0734.emea.nsn-net.net (GMO) with ESMTP id 287CGWos026061;
+        Wed, 7 Sep 2022 12:16:33 GMT
+From:   Alexander A Sverdlin <alexander.sverdlin@nokia.com>
+To:     devicetree@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] of: irq: Report individual failures in of_irq_init()
+Date:   Wed,  7 Sep 2022 14:16:29 +0200
+Message-Id: <20220907121629.54330-1-alexander.sverdlin@nokia.com>
+X-Mailer: git-send-email 2.10.2
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7EUR03FT015:EE_|VI1PR07MB5488:EE_
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-MBO-RS-ID: c254649fcc8c57e5546
-X-MBO-RS-META: 3meupxmoo81x8pbr15p4aja9n8y1isna
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 0a66ca8c-0a13-49dc-4e58-08da90cace38
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ipMPPK72B70WrTT4EHDheBoGLcXe6P7mJYVB09aqbiJSz9QDsC3CzQsNkkz3IyLpkzzaPYfeXevE8uyvQCNHBlTWL4Bjwj2PlS3X6b8UdBObue87iFp5XO0z5xXy/oPltkUvrwTuBN7CE2RbE7wEwImK+NU5TWsg8PtiKe8dWd89zqQFuPV2ZQBrSwXC/aOUIgJt8NAQi+y8JBSepANw9Vlx3OLdRuEFz0MmGeHt+gBEAejI304M4YUKQyDVoyFCnxncyyakiReaRc1nHZIHcatzjT885Ayz6OnG0tbQcKhPxhiVt5PsR7LizE4w9rqGqMx6qE2d3rKwEW0bI86QpC6lEWIcpTeAfdo3K2o2HviA3SM2OkJuk58MwGpqnoKAdjzrXYOWmzZUTykV+tJEOr1NISymHKGKxwkbDSDBiyw1zXen7gGqvHekkEYQG4W9HoJYXOq5paUxMBbIRphW4jrG84zUE+fe5yEIDe3qK+g6WGPV0t6yZmuqiUP7kzAfDslg5l/GESuRLAqIQzfaQjaU5IVhUHi4hzUk7ZXW4TY1JSjb7DKXa7KH7HueQp86z6N3a497Kr4fviievxzPdXYvh2MpMil14CqKXl3W26l041l4LTXv0H//VzyzuNOeS4Azt7S/lWgM23U6aK0KGahTJoj2argJ9jksahfT/IvsgrhGwqJim/e+YHcYXnX2MgbBU0G/wmJUTHb+J8GwcghO5Jka9v198coKMDhU1yJtH1rKP5r30nA/TcfVvtWEXf8EyDMx1ACslxKa88VR/Ze/zI6ut2NDjg3iOgnURHAPNToOsy5jqu+85vD3h+C3HFHqkUJWIRl3rCl5RTJgfA==
+X-Forefront-Antispam-Report: CIP:131.228.2.8;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(136003)(346002)(36840700001)(46966006)(40470700004)(356005)(82960400001)(82740400003)(40460700003)(8676002)(4326008)(36860700001)(70206006)(70586007)(316002)(82310400005)(6916009)(81166007)(54906003)(2906002)(4744005)(5660300002)(40480700001)(1076003)(186003)(8936002)(2616005)(83380400001)(336012)(47076005)(478600001)(6666004)(26005)(41300700001)(36756003)(86362001)(557034005)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB5488
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
-with a heavily patched Linux 6.0-rc4 with kfence, kmemleak and slub_debug I get the
-following splat at boot:
+New pr_err(), a copy of preceeding pr_debug(), faciliates debugging.
 
-Sep 07 11:33:11 kernel: =============================================================================
-Sep 07 11:33:11 kernel: BUG kmalloc-16 (Not tainted): Object already free
-Sep 07 11:33:11 kernel: -----------------------------------------------------------------------------
-Sep 07 11:33:11 kernel: Allocated in kernfs_fop_write_iter+0x178/0x200 age=1 cpu=0 pid=453
-Sep 07 11:33:11 kernel:  __slab_alloc.constprop.0+0x42/0x80
-Sep 07 11:33:11 kernel:  __kmalloc+0x334/0x3a0
-Sep 07 11:33:11 kernel:  kernfs_fop_write_iter+0x178/0x200
-Sep 07 11:33:11 kernel:  vfs_write+0x268/0x430
-Sep 07 11:33:11 kernel:  ksys_write+0x6f/0xf0
-Sep 07 11:33:11 kernel:  do_syscall_64+0x5c/0x90
-Sep 07 11:33:11 kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-Sep 07 11:33:11 kernel: Freed in blkdev_trig_get_bdev+0x47/0x60 [ledtrig_blkdev] age=1 cpu=0 pid=453
-Sep 07 11:33:11 kernel:  kfree+0x374/0x3b0
-Sep 07 11:33:11 kernel:  blkdev_trig_get_bdev+0x47/0x60 [ledtrig_blkdev]
-Sep 07 11:33:11 kernel:  link_dev_by_path_store+0x5c/0x3f0 [ledtrig_blkdev]
-Sep 07 11:33:11 kernel:  kernfs_fop_write_iter+0x11f/0x200
-Sep 07 11:33:11 kernel:  vfs_write+0x268/0x430
-Sep 07 11:33:11 kernel:  ksys_write+0x6f/0xf0
-Sep 07 11:33:11 kernel:  do_syscall_64+0x5c/0x90
-Sep 07 11:33:11 kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-Sep 07 11:33:11 kernel: Slab 0xffffeb91446ad1c0 objects=32 used=31 fp=0xffff912c1ab47b10 flags=0x4000000000000201(locked|slab|zone=2)
-Sep 07 11:33:11 kernel: Object 0xffff912c1ab47b10 @offset=2832 fp=0x0000000000000000
-Sep 07 11:33:11 kernel: Redzone  ffff912c1ab47b00: bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
-Sep 07 11:33:11 kernel: Object   ffff912c1ab47b10: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
-Sep 07 11:33:11 kernel: Redzone  ffff912c1ab47b20: bb bb bb bb bb bb bb bb                          ........
-Sep 07 11:33:11 kernel: Padding  ffff912c1ab47b70: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a  ZZZZZZZZZZZZZZZZ
-[...]
-Sep 07 11:33:11 kernel: Call Trace:
-Sep 07 11:33:11 kernel:  <TASK>
-Sep 07 11:33:11 kernel:  dump_stack_lvl+0x37/0x4a
-Sep 07 11:33:11 kernel:  object_err+0x2f/0x42
-Sep 07 11:33:11 kernel:  free_debug_processing.cold+0x9c/0x126
-Sep 07 11:33:11 kernel:  ? kernfs_fop_write_iter+0xa0/0x200
-Sep 07 11:33:11 kernel:  __slab_free+0x265/0x450
-Sep 07 11:33:11 kernel:  ? _raw_spin_lock_irqsave+0x1b/0x50
-Sep 07 11:33:11 kernel:  ? _raw_spin_unlock_irqrestore+0x22/0x40
-Sep 07 11:33:11 kernel:  ? kernfs_fop_write_iter+0xa0/0x200
-Sep 07 11:33:11 kernel:  kfree+0x374/0x3b0
-Sep 07 11:33:11 kernel:  kernfs_fop_write_iter+0xa0/0x200
-Sep 07 11:33:11 kernel:  vfs_write+0x268/0x430
-Sep 07 11:33:11 kernel:  ksys_write+0x6f/0xf0
-Sep 07 11:33:11 kernel:  do_syscall_64+0x5c/0x90
-Sep 07 11:33:11 kernel:  ? do_syscall_64+0x6b/0x90
-Sep 07 11:33:11 kernel:  ? do_syscall_64+0x6b/0x90
-Sep 07 11:33:11 kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-Sep 07 11:33:11 kernel: RIP: 0033:0x74dc50050e94
-Sep 07 11:33:11 kernel: Code: 15 f9 0e 0e 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 80 3d 8d 96 0e 00 00 74 13 b8 01 00 00 00 0f 05 <48> 3>
-Sep 07 11:33:11 kernel: RSP: 002b:00007fff526d4058 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-Sep 07 11:33:11 kernel: RAX: ffffffffffffffda RBX: 000000000000000c RCX: 000074dc50050e94
-Sep 07 11:33:11 kernel: RDX: 000000000000000c RSI: 0000620ac0072430 RDI: 0000000000000005
-Sep 07 11:33:11 kernel: RBP: 0000620ac0072430 R08: 0000620ac00852a0 R09: 007265776f703a3a
-Sep 07 11:33:11 kernel: R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000005
-Sep 07 11:33:11 kernel: R13: 0000000000000000 R14: 0000000000000005 R15: 0000620ac00852a0
-Sep 07 11:33:11 kernel:  </TASK>
-Sep 07 11:33:11 kernel: Disabling lock debugging due to kernel taint
-Sep 07 11:33:11 kernel: FIX kmalloc-16: Object at 0xffff912c1ab47b10 not freed
+This change was inspired by a long lasting debugging of the
+octeon_irq_init_ciu() which fails completely silently and leaves the
+interrupt controller half-way configured which in turn had very non-obvious
+effects.
 
-I'm not 100% sure if this is an issue with ledtrig_blkdev or something else,
-but I thought I'll let you know about it.
-I have not been able to test this on a vanilla kernel yet.
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+---
 
-Other than that, I hope this patchset gets included in upstream.
-I have been using it for a long time now and found it very useful.
+Changelog:
+v2:
+* Kept existing pr_debug() on Rob's request
 
-Cheers,
-Tor
+ drivers/of/irq.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index d22f605..2bac44f 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -592,6 +592,9 @@ void __init of_irq_init(const struct of_device_id *matches)
+ 			ret = desc->irq_init_cb(desc->dev,
+ 						desc->interrupt_parent);
+ 			if (ret) {
++				pr_err("%s: Failed to init %pOF (%p), parent %p\n",
++				       __func__, desc->dev, desc->dev,
++				       desc->interrupt_parent);
+ 				of_node_clear_flag(desc->dev, OF_POPULATED);
+ 				kfree(desc);
+ 				continue;
+-- 
+2.10.2
+

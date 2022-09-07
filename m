@@ -2,178 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BBC5B064F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE175B0651
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiIGOVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S230105AbiIGOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiIGOVD (ORCPT
+        with ESMTP id S229837AbiIGOVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:21:03 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7337332AB4;
-        Wed,  7 Sep 2022 07:21:02 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y3so30793998ejc.1;
-        Wed, 07 Sep 2022 07:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=GmjHydQzDqYVY9OvbE5Eqn2I6DrHbPQiC0wDwCk2Kro=;
-        b=GoFA2Px6880+LWoG+/91mOILp7eQwkt9KwCEOA+XNj45hoBf9r8y2Bq6k3vwKVn7qB
-         xdX3RYDKCbehUWnKwcOMLlSS395nD8C5/qO48Xiwv4twvJrQmzRYjzBOfnPaT07o+wTn
-         /j4mVb0MTYRHo+I0ZU8YNlKMedcxmtUGYVBb6qOajmLT2fjmyOJdDv3KtwPLNbNzeFRb
-         bNMOCsc+gO9xmxP/HtC3CvKMSzRF6/k2YcvhsAOnokjR8qxxAsMQ/0NgZjnS2NGzEQye
-         IsuMm4DC+Qedl8dpRRCloaDziZQvVovnlO7+I1OwFjB8oeA515qC1tZLxBpwXozq7CgM
-         X7/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=GmjHydQzDqYVY9OvbE5Eqn2I6DrHbPQiC0wDwCk2Kro=;
-        b=dkzgDXv/CWBYDaTmZucl7rL2D8N0hbgwaSXUxv8omR6dgY27nKSnrdjXQZAL/BP8hT
-         mCLg34e1tbqsS+gieOGD3tQiOL6mFJyPxX7j38PsuIexLcWlw+EjWLvR+ir5Sm3ooUJo
-         lsPbSeBVdasO9o+aFKX0h1IzB8TpOPtd34lH0prSfL+CqJ1ahJKam5jCpjZxfRwiVIyn
-         p7h6cI5vsyyy7RRejqo0giU1NhPHsQSFw5rD609UCqVsK+/NxZFjG1rO91qEVPrqkXPp
-         wqPXX5YjZfi5o52uekiTnhsi5/gzgf75/1HDU2ItVbyqMTZX0rcmLr/oiuLs6hsTbD2P
-         oXkA==
-X-Gm-Message-State: ACgBeo0BE6V/tA6ezicZHtBObOSyMjWOV7ckRSYF6ZIoO/M6dEikWMzk
-        aY7F4kcTduVFHyBHqkqGGjY=
-X-Google-Smtp-Source: AA6agR4FZNDDktIK/bO660wPtAu3DNWXz8BT0H8es9LQxHCV0EzEdAMCRZ4QKRdFV4a+ZLHqwVIo+A==
-X-Received: by 2002:a17:907:1688:b0:730:b3ae:347 with SMTP id hc8-20020a170907168800b00730b3ae0347mr2446498ejc.756.1662560460959;
-        Wed, 07 Sep 2022 07:21:00 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id h6-20020a1709060f4600b0071cbc7487e1sm8460075ejj.69.2022.09.07.07.21.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 07:21:00 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 7 Sep 2022 16:20:59 +0200
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V2] libperf evlist: Fix per-thread mmaps for
- multi-threaded targets
-Message-ID: <Yxioy/TXc/KDLoDL@krava>
-References: <20220905114209.8389-1-adrian.hunter@intel.com>
+        Wed, 7 Sep 2022 10:21:40 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D7172FEB;
+        Wed,  7 Sep 2022 07:21:35 -0700 (PDT)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 20F56200002;
+        Wed,  7 Sep 2022 14:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662560494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7RATQ1JbATm9X+Wc/5gqBHh5cXHWLcY7/Zz0xbFDNbo=;
+        b=e71aa7ZeQb+9niVLutMjhbHbiGoOVQXyA8/LYnJf6HK/XgDE2v/9cdl/QMBMw0CBJA83wA
+        xQMwsyTWB1jngIHRUMyqlxrTakDtZsGdB2iEE3oFTOlOcONVb5V6RwXiV+Sz9uENIZBgb0
+        tkcriO403wd1xDp0mW+Ju7ShSvsJiJhVdIMkf5hCNe6c58QDR/sukT7fefkIofgjXft5UA
+        ZxnZ3K7/6l8ACrICnNUQOh0ZKVvt4vBja9CLE5I2G1tTPSWs9rs0Gr1xvyYsIzqc6m3ZHi
+        xiQdInb+cbNKXyPL0Vj/5Per31+MIKNsHcGRhKBOg8Z79DH3E2rFmDxYPYnclA==
+From:   luca.ceresoli@bootlin.com
+To:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH 0/8] Add support for the internal RK3308 audio codec
+Date:   Wed,  7 Sep 2022 16:21:16 +0200
+Message-Id: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905114209.8389-1-adrian.hunter@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 02:42:09PM +0300, Adrian Hunter wrote:
-> The offending commit removed mmap_per_thread(), which did not consider
-> the different set-output rules for per-thread mmaps i.e. in the per-thread
-> case set-output is used for file descriptors of the same thread not the
-> same cpu.
-> 
-> This was not immediately noticed because it only happens with
-> multi-threaded targets and we do not have a test for that yet.
-> 
-> Reinstate mmap_per_thread() expanding it to cover also system-wide per-cpu
-> events i.e. to continue to allow the mixing of per-thread and per-cpu
-> mmaps.
-> 
-> Debug messages (with -vv) show the file descriptors that are opened with
-> sys_perf_event_open. New debug messages are added (needs -vvv) that show
-> also which file descriptors are mmapped and which are redirected with
-> set-output.
-> 
-> In the per-cpu case (cpu != -1) file descriptors for the same CPU are
-> set-output to the first file descriptor for that CPU.
-> 
-> In the per-thread case (cpu == -1) file descriptors for the same thread are
-> set-output to the first file descriptor for that thread.
-> 
-> Example (process 17489 has 2 threads):
-> 
->  Before (but with new debug prints):
-> 
->    $ perf record --no-bpf-event -vvv --per-thread -p 17489
->    <SNIP>
->    sys_perf_event_open: pid 17489  cpu -1  group_fd -1  flags 0x8 = 5
->    sys_perf_event_open: pid 17490  cpu -1  group_fd -1  flags 0x8 = 6
->    <SNIP>
->    libperf: idx 0: mmapping fd 5
->    libperf: idx 0: set output fd 6 -> 5
->    failed to mmap with 22 (Invalid argument)
-> 
->  After:
-> 
->    $ perf record --no-bpf-event -vvv --per-thread -p 17489
->    <SNIP>
->    sys_perf_event_open: pid 17489  cpu -1  group_fd -1  flags 0x8 = 5
->    sys_perf_event_open: pid 17490  cpu -1  group_fd -1  flags 0x8 = 6
->    <SNIP>
->    libperf: mmap_per_thread: nr cpu values (may include -1) 1 nr threads 2
->    libperf: idx 0: mmapping fd 5
->    libperf: idx 1: mmapping fd 6
->    <SNIP>
->    [ perf record: Woken up 2 times to write data ]
->    [ perf record: Captured and wrote 0.018 MB perf.data (15 samples) ]
-> 
-> Per-cpu example (process 20341 has 2 threads, same as above):
-> 
->    $ perf record --no-bpf-event -vvv -p 20341
->    <SNIP>
->    sys_perf_event_open: pid 20341  cpu 0  group_fd -1  flags 0x8 = 5
->    sys_perf_event_open: pid 20342  cpu 0  group_fd -1  flags 0x8 = 6
->    sys_perf_event_open: pid 20341  cpu 1  group_fd -1  flags 0x8 = 7
->    sys_perf_event_open: pid 20342  cpu 1  group_fd -1  flags 0x8 = 8
->    sys_perf_event_open: pid 20341  cpu 2  group_fd -1  flags 0x8 = 9
->    sys_perf_event_open: pid 20342  cpu 2  group_fd -1  flags 0x8 = 10
->    sys_perf_event_open: pid 20341  cpu 3  group_fd -1  flags 0x8 = 11
->    sys_perf_event_open: pid 20342  cpu 3  group_fd -1  flags 0x8 = 12
->    sys_perf_event_open: pid 20341  cpu 4  group_fd -1  flags 0x8 = 13
->    sys_perf_event_open: pid 20342  cpu 4  group_fd -1  flags 0x8 = 14
->    sys_perf_event_open: pid 20341  cpu 5  group_fd -1  flags 0x8 = 15
->    sys_perf_event_open: pid 20342  cpu 5  group_fd -1  flags 0x8 = 16
->    sys_perf_event_open: pid 20341  cpu 6  group_fd -1  flags 0x8 = 17
->    sys_perf_event_open: pid 20342  cpu 6  group_fd -1  flags 0x8 = 18
->    sys_perf_event_open: pid 20341  cpu 7  group_fd -1  flags 0x8 = 19
->    sys_perf_event_open: pid 20342  cpu 7  group_fd -1  flags 0x8 = 20
->    <SNIP>
->    libperf: mmap_per_cpu: nr cpu values 8 nr threads 2
->    libperf: idx 0: mmapping fd 5
->    libperf: idx 0: set output fd 6 -> 5
->    libperf: idx 1: mmapping fd 7
->    libperf: idx 1: set output fd 8 -> 7
->    libperf: idx 2: mmapping fd 9
->    libperf: idx 2: set output fd 10 -> 9
->    libperf: idx 3: mmapping fd 11
->    libperf: idx 3: set output fd 12 -> 11
->    libperf: idx 4: mmapping fd 13
->    libperf: idx 4: set output fd 14 -> 13
->    libperf: idx 5: mmapping fd 15
->    libperf: idx 5: set output fd 16 -> 15
->    libperf: idx 6: mmapping fd 17
->    libperf: idx 6: set output fd 18 -> 17
->    libperf: idx 7: mmapping fd 19
->    libperf: idx 7: set output fd 20 -> 19
->    <SNIP>
->    [ perf record: Woken up 7 times to write data ]
->    [ perf record: Captured and wrote 0.020 MB perf.data (17 samples) ]
-> 
-> Fixes: ae4f8ae16a07 ("libperf evlist: Allow mixing per-thread and per-cpu mmaps")
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+This series of patches adds support to use the internal audio codec of the
+Rockchip RK3308 SoC. This codec is internally connected to the I2S
+peripherals on the same chip, and it has some peculiarities arising from
+that interconnection.
 
-thanks,
-jirka
+For proper bidirectional operation with the internal codec, the I2S
+peripheral needs two clock sources (tx and rx), while connection with an
+external codec commonly needs only one. Since v5.16 there is a driver for
+the I2S in sound/soc/rockchip/rockchip_i2s_tdm.c, but it does not correctly
+handle receiving those two clocks via the .set_sysclk op. Patch 5 fixes
+that.
+
+However the simple-audio-card and audio-graph-card sound card drivers do
+not support calling .set_sysclk twice, thus patch 6 makes the .init op of
+struct asoc_simple_priv overridable by a driver in order to be able to call
+.set_sysclk twice and thus configure both clocks.
+
+Patch 7 adds the codec driver and patch 8 builds on top of all the above by
+implementing a simple RK3308-specific audio card, based on
+audio-graph-card. This card sets all the I2S input clocks.
+
+Patches 1-2 add DT bindings for the codec and the card. Patches 3-4 add to
+the SoC DT file two I2S controllers (those which are internally connected
+to the internal codec) and the codec itself.
+
+Luca
+
+Luca Ceresoli (8):
+  ASoC: rockchip: rk3308: add internal audio codec bindings
+  ASoC: rockchip: rk3308: add audio card bindings
+  arm64: dts: rockchip: add i2s_8ch_2 and i2s_8ch_3
+  arm64: dts: rockchip: add the internal audio codec
+  ASoC: rockchip: i2s-tdm: Fix clk_id usage in .set_sysclk()
+  ASoC: audio-graph: let dai_link->init be overridable
+  ASoC: codecs: Add RK3308 internal audio codec driver
+  ASoC: rockchip: add new RK3308 sound card
+
+ .../rockchip,rk3308-audio-graph-card.yaml     |   50 +
+ .../bindings/sound/rockchip,rk3308-codec.yaml |  102 +
+ MAINTAINERS                                   |   14 +
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi      |   68 +
+ .../dt-bindings/sound/rockchip,rk3308-codec.h |   15 +
+ include/sound/simple_card_utils.h             |    1 +
+ sound/soc/codecs/Kconfig                      |   11 +
+ sound/soc/codecs/Makefile                     |    2 +
+ sound/soc/codecs/rk3308_codec.c               | 2122 +++++++++++++++++
+ sound/soc/codecs/rk3308_codec.h               |  648 +++++
+ sound/soc/generic/audio-graph-card.c          |    2 +
+ sound/soc/rockchip/Kconfig                    |   14 +
+ sound/soc/rockchip/Makefile                   |    1 +
+ sound/soc/rockchip/rockchip_i2s_tdm.c         |   18 +-
+ sound/soc/rockchip/rockchip_rk3308_card.c     |   97 +
+ 15 files changed, 3159 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/rockchip,rk3308-audio-graph-card.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/rockchip,rk3308-codec.yaml
+ create mode 100644 include/dt-bindings/sound/rockchip,rk3308-codec.h
+ create mode 100644 sound/soc/codecs/rk3308_codec.c
+ create mode 100644 sound/soc/codecs/rk3308_codec.h
+ create mode 100644 sound/soc/rockchip/rockchip_rk3308_card.c
+
+-- 
+2.34.1
+

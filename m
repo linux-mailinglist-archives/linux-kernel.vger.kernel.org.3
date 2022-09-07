@@ -2,164 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5355B0892
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52805B089A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiIGPai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S229744AbiIGPcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIGPag (ORCPT
+        with ESMTP id S229451AbiIGPcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:30:36 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5486EF12;
-        Wed,  7 Sep 2022 08:30:34 -0700 (PDT)
-Received: from g550jk.localnet (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id BEC95C7023;
-        Wed,  7 Sep 2022 15:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1662564630; bh=PBuavX/FI8zoNi4Yjs2NUwse88XH7Qen5TwuTvKTMFM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=uWv8uKGVTh/KDAzcw1siELCkpqZlURBcIALCy5h1bT5+OZOgnYR/yS5OzAKU/IT8W
-         DWrrGtwYeKh9WpiMUXWtH0F7EUaHUsp2namiCQUuC6x74PX7JfQwhj6ZIIRzXzzFhz
-         NZg+zJODwITdaZ9Hw9uzds8bYYNDEcRbNaSbX3MI=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: msm8953: add MDSS
-Date:   Wed, 07 Sep 2022 17:30:30 +0200
-Message-ID: <12049260.O9o76ZdvQC@g550jk>
-In-Reply-To: <CAA8EJpqjnafKyUrd1ntYFeGTDtRxgEUSu0Mg9wNGxObJ3wF0Kw@mail.gmail.com>
-References: <20220906183334.203787-1-luca@z3ntu.xyz> <20220906183334.203787-4-luca@z3ntu.xyz> <CAA8EJpqjnafKyUrd1ntYFeGTDtRxgEUSu0Mg9wNGxObJ3wF0Kw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 11:32:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2835A6F277;
+        Wed,  7 Sep 2022 08:32:05 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287BDfD0009129;
+        Wed, 7 Sep 2022 15:31:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=vb4Q9bKoRnQ1hrAVSSM3Lubd23SP5rGhgMFJBZZ6gu0=;
+ b=Qg1cZVm77Qv5iilhaXvDaHBbj/nK4KR4G7rAA7m91e8s4ec7LBWtYUoz7cfiGOFfJa2I
+ glLdjJybD5iBwZhjCxTd9FglBF0CjThwWMDN+HuQxXWGj0Wcaz5/FKBxBXQWwFVsgeCy
+ 2TMGLTkbQ/Wx4f0x4gf0xjNTlQEE03jfWvJXRJg+BOaX4Z9eMNkDZUTi67NFhalioKB1
+ LDxCYRgIZ0U5u5jsf6NYx+cFNaK2FymfybBFKumrb5ogvGCbNiQY+uj9i54vs7HsR19W
+ Ld9zr4m9YUUX8fItrVU2ldFXhnKtnfcEkM+rKt+AhqouMXRnM+bITioEJgLg0rMEuH2E Ew== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jefntaa1a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 15:31:52 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 287FVmdm004198;
+        Wed, 7 Sep 2022 15:31:48 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3jc00kynxs-1;
+        Wed, 07 Sep 2022 15:31:48 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 287FVlK1004193;
+        Wed, 7 Sep 2022 15:31:47 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 287FVlTi004191;
+        Wed, 07 Sep 2022 15:31:47 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id E1CF53F9A; Wed,  7 Sep 2022 21:01:46 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH] tty: serial: qcom-geni-serial: Replace hardcoded icc flags with macros.
+Date:   Wed,  7 Sep 2022 21:01:42 +0530
+Message-Id: <1662564702-7253-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zEhDfI2K3rCrAT9xfcFGvZWltVt_49oK
+X-Proofpoint-GUID: zEhDfI2K3rCrAT9xfcFGvZWltVt_49oK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_08,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ adultscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=760
+ lowpriorityscore=0 phishscore=0 mlxscore=0 bulkscore=0 clxscore=1011
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209070060
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+In suspend/resume routines, icc flags are hardcoded.
 
-On Dienstag, 6. September 2022 21:41:11 CEST Dmitry Baryshkov wrote:
-> On Tue, 6 Sept 2022 at 21:36, Luca Weiss <luca@z3ntu.xyz> wrote:
-> > From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > 
-> > Add the MDSS, MDP and DSI nodes that are found on msm8953 SoC.
-> > 
-> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > Changes since v2:
-> > - add "core" clock for mdss as suggested by Dmitry Baryshkov
-> > 
-> >  arch/arm64/boot/dts/qcom/msm8953.dtsi | 210 ++++++++++++++++++++++++++
-> >  1 file changed, 210 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> > b/arch/arm64/boot/dts/qcom/msm8953.dtsi index 3d11331e78d2..580333141a66
-> > 100644
-> > --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-> > @@ -726,6 +726,216 @@ tcsr_phy_clk_scheme_sel: syscon@193f044 {
-> > 
-> >                         reg = <0x193f044 0x4>;
-> >                 
-> >                 };
-> > 
-> > +               mdss: mdss@1a00000 {
-> > +                       compatible = "qcom,mdss";
-> > +
-> > +                       reg = <0x1a00000 0x1000>,
-> > +                             <0x1ab0000 0x1040>;
-> > +                       reg-names = "mdss_phys",
-> > +                                   "vbif_phys";
-> > +
-> > +                       power-domains = <&gcc MDSS_GDSC>;
-> > +                       interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> > +
-> > +                       interrupt-controller;
-> > +                       #interrupt-cells = <1>;
-> > +
-> > +                       clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> > +                                <&gcc GCC_MDSS_AXI_CLK>,
-> > +                                <&gcc GCC_MDSS_VSYNC_CLK>,
-> > +                                <&gcc GCC_MDSS_MDP_CLK>;
-> > +                       clock-names = "iface",
-> > +                                     "bus",
-> > +                                     "vsync",
-> > +                                     "core";
-> > +
-> > +                       #address-cells = <1>;
-> > +                       #size-cells = <1>;
-> > +                       ranges;
-> > +
-> > +                       status = "disabled";
-> > +
-> > +                       mdp: mdp@1a01000 {
-> > +                               compatible = "qcom,mdp5";
-> 
-> Could you please change this to "qcom,msm8953-mdp5", "qcom,mdp5".
+Replace the hardcodes with macros available from header.
 
-This would be the first dtsi using the two compatibles then, correct? Are there 
-any plans to adjust other SoCs?
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+ drivers/tty/serial/qcom_geni_serial.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> 
-> > +                               reg = <0x1a01000 0x89000>;
-> > +                               reg-names = "mdp_phys";
-> > +
-> 
-> [skipped]
-> 
-> > +
-> > +                       dsi0_phy: dsi-phy@1a94400 {
-> 
-> Let's probably use a generic name 'phy' here and for dsi1_phy.
-
-Here also, the bindings examples all use dsi-phy@, are there any plans to 
-change that and adjust other dtsi files?
-
-> 
-> The rest looks good to me.
-
-Thanks!
-
-Regards
-Luca
-
-> 
-> > +                               compatible = "qcom,dsi-phy-14nm-8953";
-> > +                               reg = <0x1a94400 0x100>,
-> > +                                     <0x1a94500 0x300>,
-> > +                                     <0x1a94800 0x188>;
-> > +                               reg-names = "dsi_phy",
-> > +                                           "dsi_phy_lane",
-> > +                                           "dsi_pll";
-> > +
-> > +                               #clock-cells = <1>;
-> > +                               #phy-cells = <0>;
-> > +
-> > +                               clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> > <&xo_board>; +                               clock-names = "iface",
-> > "ref";
-> > +
-> > +                               status = "disabled";
-> > +                       };
-
-
-
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 52182f6..83b66b7 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -22,6 +22,7 @@
+ #include <linux/slab.h>
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
++#include <dt-bindings/interconnect/qcom,icc.h>
+ 
+ /* UART specific GENI registers */
+ #define SE_UART_LOOPBACK_CFG		0x22c
+@@ -1525,7 +1526,7 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
+ 	 * even with no_console_suspend
+ 	 */
+ 	if (uart_console(uport)) {
+-		geni_icc_set_tag(&port->se, 0x3);
++		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ACTIVE_ONLY);
+ 		geni_icc_set_bw(&port->se);
+ 	}
+ 	return uart_suspend_port(private_data->drv, uport);
+@@ -1540,7 +1541,7 @@ static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
+ 
+ 	ret = uart_resume_port(private_data->drv, uport);
+ 	if (uart_console(uport)) {
+-		geni_icc_set_tag(&port->se, 0x7);
++		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ALWAYS);
+ 		geni_icc_set_bw(&port->se);
+ 	}
+ 	return ret;
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 

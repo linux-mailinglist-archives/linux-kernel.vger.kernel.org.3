@@ -2,92 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FA45B040A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D805B040E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiIGMgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S229769AbiIGMgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIGMgO (ORCPT
+        with ESMTP id S229488AbiIGMgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:36:14 -0400
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCDFB275A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:36:11 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MN1vY0cMMzMqC35;
-        Wed,  7 Sep 2022 14:36:09 +0200 (CEST)
-Received: from philippe-pc.toradex.int (unknown [31.10.206.125])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MN1vW6p3PzMppZ3;
-        Wed,  7 Sep 2022 14:36:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
-        s=20220412; t=1662554169;
-        bh=OfaoBsKpDFqckHovf40Gpkkxx6wVziWuBLb6theEUt8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=utss6XnT4z+9MgncvQF1+6lz1TxlJrihhFkYVlAH/AqGLtYM7f/grafmdYOwFgXkk
-         BoRBAF8p3iCUX4/iRqM+G8kCXoWG3xnF9+gFzILsUzTVwJmpb+QZVQNZwSJZWq8RTP
-         CtkqdsvZ/kab/m5H0pCPKseTFEricBwCzwT6lcdw=
-From:   Philippe Schenker <dev@pschenker.ch>
-To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+        Wed, 7 Sep 2022 08:36:42 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2D7B8F2E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:36:40 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id w8so22153653lft.12
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 05:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Ozxna7OXRQ1OVszMUY0d4yr30/luJFmuNl59JFfJkG8=;
+        b=QCukGyHBPM9jdduoCbZKDn+hzV/Qcsh4gYl+qhJDpzhYaTsmS83u1eLps741qFH6co
+         f4nW98pdQ7PoYlb1rFfRQVxLW0jz0ZudXoJNNfglGUTIacLM+lAesgbKCN68N38/NuhJ
+         k4rm4G/h9n8TXqEd9LFifaq4SQDi/beubCM0BYZQGCrQWqjbtkJEIY7qd6l6lik/tt14
+         Z3/xYJV3NQMjrTIOiX754fzZ2EhGWSXhgM1ZrCgv7MnOf9XmtBTWDNdgwNR/FjiYhqFq
+         EZ7AWpPN/R70PgPgWHvLPi4WJRBtX74IUR/nghjWARqnbrx4yrDrxdqYqeOsDWAROcpH
+         u2Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ozxna7OXRQ1OVszMUY0d4yr30/luJFmuNl59JFfJkG8=;
+        b=gNTUvJkkCei6gI7N5cXf10+gxfzQYpAeK7DHB2S1PIoIhpHy7SUyEvHChSU5MiUZdB
+         cFt6BaihQdbOPM5C6XtE5MNkdvfRwe5RlZN11LNuanXymVAC5iXZ+JBexjbDGO/tKi3N
+         VLLMXf/v+H/r3PrOm+YwyInV9sPZgYNSWM0bcyZId8GXM1ufOniseqoRvhwZmMPfva3H
+         96wLVKY14W3aPEmoxnkWyY4GoATcZEutIsNWIbX5Y9+LdJW7/qButev0E7s+A8WDRBzo
+         Agry8V/eGnKy5GujobhXOJxKZdQy5xu9R3DqndCcVNg7xKbwNcwmdsKTpF+w0MczjX3w
+         0hOA==
+X-Gm-Message-State: ACgBeo3IP/bzrFMraQ7L2szroilL1faBlwT9vuday6mQ3Raisyza9F3X
+        M3G5sz9TZ8yEmGg+AdAP6yQSOA==
+X-Google-Smtp-Source: AA6agR60oHI50O7D0hm2wWlJ1d8nquDuYmiJAAN55kaQZ5nyA9gJumDYI+sz1nutVOKJdWQcVpF8kQ==
+X-Received: by 2002:a05:6512:239e:b0:497:a36a:9ae with SMTP id c30-20020a056512239e00b00497a36a09aemr1084228lfv.378.1662554198185;
+        Wed, 07 Sep 2022 05:36:38 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b7-20020a2eb907000000b00261b4df9ec4sm2624062ljb.138.2022.09.07.05.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 05:36:37 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>
-Subject: [PATCH] checkpatch: add check for fixes: tag
-Date:   Wed,  7 Sep 2022 14:35:47 +0200
-Message-Id: <20220907123547.138646-1-dev@pschenker.ch>
-X-Mailer: git-send-email 2.37.2
+Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: power: reset: restart-handler: add common schema
+Date:   Wed,  7 Sep 2022 14:36:30 +0200
+Message-Id: <20220907123630.57383-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+Add common schema for restart and shutdown handlers, so they all use
+same meaning of "priority" field.  The Linux drivers already have this
+property and some systems want to customize it per-board in DTS.
 
-The page about submitting patches in
-Documentation/process/submitting-patches.rst is very specific on how that
-tag should be formatted: 'Fixes: <12+ chars of sha1> (\"<title line>\")'
-
-Add a rule that warns if this format does not match. This commit is
-introduced as in the past commits have been sent multiple times with
-having the word commit also in the Fixes: tag which had to be corrected
-by the maintainers. [1]
-
-[1] https://lore.kernel.org/all/20220906073746.1f2713f7@canb.auug.org.au/
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 ---
 
- scripts/checkpatch.pl | 7 +++++++
- 1 file changed, 7 insertions(+)
+See also:
+https://lore.kernel.org/all/8fe93da3-f768-16ae-7025-1cfa97a42b27@linaro.org/
+https://lore.kernel.org/all/20220831081715.14673-1-pali@kernel.org/
+---
+ .../bindings/power/reset/gpio-restart.yaml    | 13 ++------
+ .../bindings/power/reset/restart-handler.yaml | 30 +++++++++++++++++++
+ 2 files changed, 33 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/restart-handler.yaml
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 79e759aac543..0d7ce0c3801a 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3438,6 +3438,13 @@ sub process {
- 			}
- 		}
+diff --git a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
+index a72d5c721516..d3d18e0f5db3 100644
+--- a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
++++ b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
+@@ -25,6 +25,9 @@ description: >
+   inactive-delay, the GPIO is driven active again.  After a delay specified by wait-delay, the
+   restart handler completes allowing other restart handlers to be attempted.
  
-+# Check fixes tag format
-+		if ($in_commit_log && ($line =~ /^\s*Fixes:/i) &&
-+			!($line =~ /^\s*Fixes:\s[0-9a-f]{12,40}\s\(\".*\"\)/)) {
-+			WARN("FIXES_TAG_FORMAT",
-+			     "Possible wrong format on Fixes: tag, please use format Fixes: <12+ chars of sha1> (\"<title line>\")\n" . $herecurr);
-+		}
++allOf:
++  - $ref: restart-handler.yaml#
 +
- # ignore non-hunk lines and lines being removed
- 		next if (!$hunk_line || $line =~ /^-/);
+ properties:
+   compatible:
+     const: gpio-restart
+@@ -41,16 +44,6 @@ properties:
+       in its inactive state.
  
+   priority:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      A priority ranging from 0 to 255 (default 129) according to the following guidelines:
+-
+-        0:   Restart handler of last resort, with limited restart capabilities.
+-        128: Default restart handler; use if no other restart handler is expected to be available,
+-             and/or if restart functionality is sufficient to restart the entire system.
+-        255: Highest priority restart handler, will preempt all other restart handlers.
+-    minimum: 0
+-    maximum: 255
+     default: 129
+ 
+   active-delay:
+diff --git a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+new file mode 100644
+index 000000000000..f5d22ca0cd45
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Restart and shutdown handler generic binding
++
++maintainers:
++  - Sebastian Reichel <sre@kernel.org>
++
++description:
++  Restart and shutdown handler device is responsible for powering off the
++  system, e.g. my cutting off the power.  System might have several restart
++  handlers, which usually are tried from most precise to last resort.
++
++properties:
++  priority:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      A priority ranging from 0 to 255 according to the following guidelines::
++        0:   Restart handler of last resort, with limited restart capabilities.
++        128: Typical, default restart handler; use if no other restart handler
++             is expected to be available, and/or if restart functionality is
++             sufficient to restart the entire system.
++        255: Highest priority restart handler, will preempt all other restart handlers.
++    minimum: 0
++    maximum: 255
++
++additionalProperties: true
 -- 
-2.37.2
+2.34.1
 

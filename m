@@ -2,159 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E055B0AC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000ED5B09F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 18:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiIGQ4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 12:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        id S229487AbiIGQSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 12:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiIGQ4L (ORCPT
+        with ESMTP id S229682AbiIGQSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:56:11 -0400
-X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 09:56:06 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C1E3AB29;
-        Wed,  7 Sep 2022 09:56:06 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 865F22B05B86;
-        Wed,  7 Sep 2022 12:18:35 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 07 Sep 2022 12:18:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662567515; x=1662574715; bh=5D
-        ZtFrVdqR12nN7HSUlbgO9Phu3Lj4gHCeI3MI0eXEs=; b=gKjMSLcGKU47Bpx6uQ
-        gZ+Ahn/J6pmAu6Fk54tOUPmkt4ySG4YQ4tNtCsXNooyXqDQdnB0p/CITTV1m34mq
-        s+LAYPRNp7umaA0DS2tD6Bl9cL2UPuUH1NnFqt+Hujshubfu6tpdqxXryN7Jif7b
-        wFcbM6hQx1KAluzks24vm6vt401JXycrXk/U1TxhftI2k9a3Qr1m/7eQrpEGaUoY
-        dMxR1PpNXaxHCUiB+IzNfCTcZdKp74OQaJyZNKu9NNG2Kd9Cty0VZ7c37OqmpmGx
-        91qSQwwUWpUuKrGDcjIKulD3bI5YIyxjctZu6ma29GlM+OIwXDzKYX0fO8UNhgKu
-        Ok5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662567515; x=1662574715; bh=5DZtFrVdqR12nN7HSUlbgO9Phu3L
-        j4gHCeI3MI0eXEs=; b=OZJQAUW2is2zfDT/Ce2aXyZmrMSXobT3OZMp5q6fVpQ/
-        iVRiwH1zHSZcVtLQ2DkHlpUlqbEffGM1fAmWod1B2oWsgEDoe///wEj9f9lghrAo
-        QmF2m0YsiHOKiN8AKnZz/6f5uUQMq/9NAYeyhYKiSfFb9Dz+qoavKwdvW7oRiyhC
-        EATCi/71d3py5lcq99u7ST/c6PkyOa3KHXiwFRYH2JEiXVa1izqMZLW3QFlYIdsy
-        XqD1Q0zUyBwkxx7SuUl6U3WVue4FTTdJB8uWCgJhcTDbXLhEkyIR5uYLz6VpaFwh
-        96XgrgE3i0bQPirExWJbzFosbfLoZt7t6DTe9rF30A==
-X-ME-Sender: <xms:V8QYYw_o5DzFzVn-nsNBEVd-FS_D_oEsE0Ni1kSDm-EDmUqf7t5RYw>
-    <xme:V8QYY4tkvs0qarp3milgqkj-QnUfLwCvr9jPsDhMl_JVoMp1Uawemvudn2tTZjoFP
-    RKollyj_THPCycU494>
-X-ME-Received: <xmr:V8QYY2AJ6tnceeMtt6ze-9Y21GxOCHjfGO0Uaic1_Z0sgkplNSGu4E0Lv93m0HLV2ntwuQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
-    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
-    sehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:V8QYYweqdTZRL4Hql-Il9ILHjXYOl5I2TLxUmx4tUf2irEd7UWrODA>
-    <xmx:V8QYY1Nzk_PUNIp2LKA55MR0G9GVC8m4bLDpu3YSj4OFMB6ygSASzg>
-    <xmx:V8QYY6lIz_r5CyIgsFG97LMd1GcuCvwSFmdupTCv8XNGm0jAThrJpw>
-    <xmx:W8QYYyKr-0dAl_rNZ4o-w_sGm3XfXyNXiJWuDL3a0JOCCopTLRQCg_cdsds>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 12:18:31 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id CAD3C103799; Wed,  7 Sep 2022 19:18:27 +0300 (+03)
-Date:   Wed, 7 Sep 2022 19:18:27 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
-Message-ID: <20220907161827.klbscalq5lk66rco@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
- <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
+        Wed, 7 Sep 2022 12:18:47 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F72AA0334
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 09:18:45 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id r141so11895922iod.4
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 09:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=3zNN3wcgN+vd2wpUDCMnqQdDRuWeI+hRUZA1kdW/gBw=;
+        b=s0yX+1Tsw+LGKp/WuH2QNVA6JtpdWfgnp9Uv9TymdUg3eW6kR5/FzIEuoPu5nQqteo
+         w1kMgFQCG2O8ecgqQAEr7t1EsDpVGp2NzdD8btlZStwFyOSIDGMGy7tLEAGxnkenlWtR
+         iOryB9grGozUoWHC8y64+2QMmDxLcb85zFbjBN5bsFfo6+N7Tnwsol5N6TdWXm3MfTNk
+         X2roSYWVOvaBCQfT3bAWemt9UpSTzGFTAvxce+5EdHyzvJALBBOZ0PsFY50SfpISGrKw
+         FQxa+c0r9N5De2B994r220T/VGxDcdpux7x5pc6svCDXkMsoxZqm2ApGffdpT2SXse2U
+         +UQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=3zNN3wcgN+vd2wpUDCMnqQdDRuWeI+hRUZA1kdW/gBw=;
+        b=ZadmS086g6xDyE39IsNwc/sPnIkBIDl6kJ4zYpAm4q0hONRC7EiTf2ZrNhplnfu2J+
+         2vXhE9s6lwVuD42+eRd/8OhUEIUZtMjWnsV/GV4Pnxc0GaH6XnPmJwaKAbDDgbNAoItR
+         XNKhNkwrXNr/d6Czd3xkdQr6eNuWEglvoHBvyvOsHGaIFEcm8IexUN+06bEPQ2o0t7Ka
+         7+dKhYGAneZvY8gc33CgaewTfVslzFVq1QsvQHPQ3/QmhQrT2CYaCQFgbHRS0KTi0GpV
+         0lbuAdTbIji1E8l8ktcexI+hkbr9dzl6JEdSsi/6QGVdyBH4y7bly2926SsBSChGUbNw
+         ZGYA==
+X-Gm-Message-State: ACgBeo0t/ZTZTIXZoItrrFIjoCYHnr1hBxrR8Kp7uizOfG+HyREA+TZm
+        c2Od/eAfHSgtxJfzhTnDiMwhCtJt1qs2T0TmLLSJJ5b6d8t5ig==
+X-Google-Smtp-Source: AA6agR5Ped6k79ynll8L86xxWr9/kOoRwDvPtAc2Cm+IZifGBnCuZO+iMYna3+YXEkXm+lBYb6r8nh6o3dnRJIZO1cg=
+X-Received: by 2002:a05:6638:2042:b0:346:e51a:da4e with SMTP id
+ t2-20020a056638204200b00346e51ada4emr2539678jaj.164.1662567524331; Wed, 07
+ Sep 2022 09:18:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220907101204.255213-1-luwei32@huawei.com>
+In-Reply-To: <20220907101204.255213-1-luwei32@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Sep 2022 09:18:33 -0700
+Message-ID: <CANn89i+eMg-fg8VicJn5LqXx-EwJ3WQuswQEPwRNSadxP_w35Q@mail.gmail.com>
+Subject: Re: [PATCH net] ipvlan: Fix out-of-bound bugs caused by unset skb->mac_header
+To:     Lu Wei <luwei32@huawei.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, vulab@iscas.ac.cn,
+        Mahesh Bandewar <maheshb@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
-> On 06.07.22 10:20, Chao Peng wrote:
-> > Introduce a new memfd_create() flag indicating the content of the
-> > created memfd is inaccessible from userspace through ordinary MMU
-> > access (e.g., read/write/mmap). However, the file content can be
-> > accessed via a different mechanism (e.g. KVM MMU) indirectly.
-> > 
-> > It provides semantics required for KVM guest private memory support
-> > that a file descriptor with this flag set is going to be used as the
-> > source of guest memory in confidential computing environments such
-> > as Intel TDX/AMD SEV but may not be accessible from host userspace.
-> > 
-> > The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
-> > also impossible for a memfd created with this flag.
-> 
-> It's kind of weird to have it that way. Why should the user have to
-> care? It's the notifier requirement to have that, no?
-> 
-> Why can't we handle that when register a notifier? If anything is
-> already mapped, fail registering the notifier if the notifier has these
-> demands. If registering succeeds, block it internally.
-> 
-> Or what am I missing? We might not need the memfile set flag semantics
-> eventually and would not have to expose such a flag to user space.
+On Wed, Sep 7, 2022 at 3:09 AM Lu Wei <luwei32@huawei.com> wrote:
+>
+> If an AF_PACKET socket is used to send packets through ipvlan and the
+> default xmit function of the AF_PACKET socket is changed from
+> dev_queue_xmit() to packet_direct_xmit() via setsockopt() with the option
+> name of PACKET_QDISC_BYPASS, the skb->mac_header may not be reset and
+> remains as the initial value of 65535, this may trigger slab-out-of-bounds
+> bugs as following:
+>
+> =================================================================
+> UG: KASAN: slab-out-of-bounds in ipvlan_xmit_mode_l2+0xdb/0x330 [ipvlan]
 
-Well, with the new shim-based[1] implementation the approach without uAPI
-does not work.
+>
+> Fixes: 2ad7bf363841 ("ipvlan: Initial check-in of the IPVLAN driver.")
+> Signed-off-by: Lu Wei <luwei32@huawei.com>
+> ---
 
-We now have two struct file, one is a normal accessible memfd and the
-other one is wrapper around that hides the memfd from userspace and
-filters allowed operations. If we first create an accessible memfd that
-userspace see it would be hard to hide it as by the time userspace may
-have multiple fds in different processes that point to the same struct
-file.
+This was on my TODO list, I had a similar KASAN report, after my
+recent addition in skb_mac_header()
 
-[1] https://lore.kernel.org/all/20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name
+DEBUG_NET_WARN_ON_ONCE(!skb_mac_header_was_set(skb));
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+
+WARNING: CPU: 1 PID: 14752 at include/linux/skbuff.h:2821
+skb_mac_header include/linux/skbuff.h:2821 [inline]
+WARNING: CPU: 1 PID: 14752 at include/linux/skbuff.h:2821 eth_hdr
+include/linux/if_ether.h:24 [inline]
+WARNING: CPU: 1 PID: 14752 at include/linux/skbuff.h:2821
+ipvlan_xmit_mode_l2 drivers/net/ipvlan/ipvlan_core.c:592 [inline]
+WARNING: CPU: 1 PID: 14752 at include/linux/skbuff.h:2821
+ipvlan_queue_xmit+0xcba/0x19d0 drivers/net/ipvlan/ipvlan_core.c:644
+Modules linked in:
+CPU: 1 PID: 14752 Comm: syz-executor.4 Not tainted 6.0.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine,
+BIOS Google 07/22/2022
+RIP: 0010:skb_mac_header include/linux/skbuff.h:2821 [inline]
+RIP: 0010:eth_hdr include/linux/if_ether.h:24 [inline]
+RIP: 0010:ipvlan_xmit_mode_l2 drivers/net/ipvlan/ipvlan_core.c:592 [inline]
+RIP: 0010:ipvlan_queue_xmit+0xcba/0x19d0 drivers/net/ipvlan/ipvlan_core.c:644
+Code: 41 0f b7 d6 48 c7 c6 40 c7 75 8a 48 c7 c7 c0 c4 75 8a c6 05 7d
+52 d9 08 01 e8 df 0d 4a 04 0f 0b e9 e5 f7 ff ff e8 66 cb 8b fc <0f> 0b
+e9 ac f8 ff ff e8 6a 35 d8 fc e9 ed f4 ff ff e8 70 35 d8 fc
+RSP: 0018:ffffc900069b7808 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff8880456ea000 RCX: 0000000000000000
+RDX: ffff8880214c5880 RSI: ffffffff84f03eca RDI: 0000000000000003
+RBP: ffffc900069b79b8 R08: 0000000000000003 R09: 000000000000ffff
+R10: 000000000000ffff R11: 0000000000000000 R12: ffff888075d62140
+R13: 1ffff92000d36f06 R14: 000000000000ffff R15: ffff8880456eaca0
+FS: 00007f2302712700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f23005fe718 CR3: 000000001f461000 CR4: 00000000003506e0
+Call Trace:
+<TASK>
+ipvlan_start_xmit+0x45/0x150 drivers/net/ipvlan/ipvlan_main.c:220
+__netdev_start_xmit include/linux/netdevice.h:4819 [inline]
+netdev_start_xmit include/linux/netdevice.h:4833 [inline]
+__dev_direct_xmit+0x500/0x720 net/core/dev.c:4312
+dev_direct_xmit include/linux/netdevice.h:3021 [inline]
+packet_direct_xmit+0x1b3/0x2c0 net/packet/af_packet.c:282
+packet_snd net/packet/af_packet.c:3073 [inline]
+packet_sendmsg+0x3354/0x5500 net/packet/af_packet.c:3104
+sock_sendmsg_nosec net/socket.c:714 [inline]
+sock_sendmsg+0xcf/0x120 net/socket.c:734
+__sys_sendto+0x236/0x340 net/socket.c:2117
+__do_sys_sendto net/socket.c:2129 [inline]
+__se_sys_sendto net/socket.c:2125 [inline]
+__x64_sys_sendto+0xdd/0x1b0 net/socket.c:2125
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2301689279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2302712168 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f230179c120 RCX: 00007f2301689279
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 00007f23016e3189 R08: 00000000200000c0 R09: 0000000000000014
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f2301ccfb1f R14: 00007f2302712300 R15: 0000000000022000
+</TASK>

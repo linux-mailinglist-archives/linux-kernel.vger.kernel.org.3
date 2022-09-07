@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B595AFD06
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225AB5AFD08
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiIGHCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S230138AbiIGHCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiIGHB7 (ORCPT
+        with ESMTP id S230144AbiIGHCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:01:59 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583E986FF2;
-        Wed,  7 Sep 2022 00:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662534117; x=1694070117;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=x/ZWYJdUB33uoLU6Tx0MNGsD3ZMVNIWwxXsm0eirUa8=;
-  b=jTk7iWwM99zn+M6LdKU2iNBxi0Oe2ite2ibUs/D0lS0+Q0tYYll1iFwy
-   YZckQicQWDl9RE91g+8SXDzBBGUH2zYaj2mUwuDKrYqC37BJINx+zeN3S
-   PPIifT5wnx9PJxuHC7u+nZcdyYc2KTZEhg9ORNxA20lzjIt1/Er5cIiRw
-   LFA0ypsDJ9Gajh7ZnfHEtUhk8a1x54y/AljbxNKfE0UZt+tuDYNKGLePD
-   GhS97unpJyNDN/dpKZK+nFss+1pvzstaOYVx55GkwCyP0zrjJVfDk842S
-   T1SsUlWHUr5sRCH76EZiNich8REvntMMJwQkaGKMJm/Dk2KNcEdzsg+4S
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="358514498"
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="358514498"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 00:01:56 -0700
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="676050658"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.27])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 00:01:54 -0700
-Message-ID: <8a4ae419-c5f8-fe2d-7513-faa4e24656fd@intel.com>
-Date:   Wed, 7 Sep 2022 10:01:50 +0300
+        Wed, 7 Sep 2022 03:02:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F11AA1D30;
+        Wed,  7 Sep 2022 00:02:23 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u9so28257713ejy.5;
+        Wed, 07 Sep 2022 00:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date;
+        bh=T8KpmZhgTa61csuwYkLX3CwUr/M04U7//pbWLlukU+4=;
+        b=hGL+QvsGIw6dMyIzaH8CUOyJOXy4CL55iDwJgIMriwnwcrW0ouH5uYWSh/VwZkw+rS
+         U0FOk/avlEHXr4lcwnku21t9hvI601CCqkMc4RkG0pHHzdVbLfWnYBXy6/gTii6fTaW7
+         DKQ6DN57k2ocY3L7I1DCoSj0PJp6ROgUMiWXCrSueD5H3bw/9Z8EqoaprzyFroYjodrn
+         FCM8sCBO1t9CACJV3PtP41tz6wTRz91z5vSsYlLt/DHjeNy/Su1dZBlGFheqSP2hXsAQ
+         cQ3HxQ65b+3OF9DLZpa9WK0B5jIEQhOiCmayoiVAinIzjw1YM6jIa/uTbwCSiXHWTjSm
+         aRLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=T8KpmZhgTa61csuwYkLX3CwUr/M04U7//pbWLlukU+4=;
+        b=LzoRDKAfMD4lNQY4JoJxxUzNhOxbL4iluGmZiDKbPw1JJjrXaeblysbJH79rNbUE/k
+         O8Vpl4xZQP8vTZLhhR9awMMkxEDfcRYRsjh6/P1CSHL1zgnDGkn868zTU5gmIvb21Nxj
+         i2PJ7Fv6vpJBKCdxX4wD8y63NuzXGPKGJFGFQmG9zRGyst0shK5OPPAFCcjASDLfapUV
+         efgzevq1jGzByc15N2J7R9Sdp5VFUOhR+XU8ES+cqf29Nzml4V65foFn8GOGOrIDq+jl
+         l7RJq2deD9sNTPUOd89OMc4vdM+SSU3I3uwNq399jHlUZtbUFzCKiygHaRmhgd3iXNIk
+         q1dw==
+X-Gm-Message-State: ACgBeo2u21i3jQoH/0EEiR83hfensirSS1bhLcFS0CnEQlxOEQP73TVu
+        +kGG8gL8X9k0kI0KZmcMHn8=
+X-Google-Smtp-Source: AA6agR72IqW+IK5d0DEwIIiw/EZnnuumPFsECyR7SCyROaa3mbHVFDt7fODBPpf9kQ95GogpfH1Ing==
+X-Received: by 2002:a17:906:9c82:b0:6df:c5f0:d456 with SMTP id fj2-20020a1709069c8200b006dfc5f0d456mr1377738ejc.287.1662534141434;
+        Wed, 07 Sep 2022 00:02:21 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id f18-20020a17090631d200b007336c3f05bdsm7956191ejf.178.2022.09.07.00.02.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 00:02:21 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 7 Sep 2022 09:02:19 +0200
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 5.15 101/107] kbuild: Unify options for BTF generation
+ for vmlinux and modules
+Message-ID: <YxhB+3j6m6FHIanN@krava>
+References: <20220906132821.713989422@linuxfoundation.org>
+ <20220906132826.130642856@linuxfoundation.org>
+ <291d739c-752f-ead3-1974-a136b986afb7@gmail.com>
+ <YxguwCpBEKAJJDU6@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH Vx 5/5] mmc: sdhci: Fix host->cmd is null
-Content-Language: en-US
-To:     Wenchao Chen <wenchao.chen666@gmail.com>, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhang.lyra@gmail.com, lzx.stg@gmail.com
-References: <20220907035847.13783-1-wenchao.chen666@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220907035847.13783-1-wenchao.chen666@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxguwCpBEKAJJDU6@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,48 +76,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't know what is going on with the "Vx 5/5"?  Ignoring it.
-
-On 7/09/22 06:58, Wenchao Chen wrote:
-> From: Wenchao Chen <wenchao.chen@unisoc.com>
+On Wed, Sep 07, 2022 at 07:40:16AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Sep 06, 2022 at 11:45:00AM -0700, Florian Fainelli wrote:
+> > 
+> > 
+> > On 9/6/2022 6:31 AM, Greg Kroah-Hartman wrote:
+> > > From: Jiri Olsa <jolsa@redhat.com>
+> > > 
+> > > commit e27f05147bff21408c1b8410ad8e90cd286e7952 upstream.
+> > > 
+> > > Using new PAHOLE_FLAGS variable to pass extra arguments to
+> > > pahole for both vmlinux and modules BTF data generation.
+> > > 
+> > > Adding new scripts/pahole-flags.sh script that detect and
+> > > prints pahole options.
+> > > 
+> > > [ fixed issues found by kernel test robot ]
+> > > 
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> > > Link: https://lore.kernel.org/bpf/20211029125729.70002-1-jolsa@kernel.org
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >   Makefile                  |    3 +++
+> > >   scripts/Makefile.modfinal |    2 +-
+> > >   scripts/link-vmlinux.sh   |   11 +----------
+> > >   scripts/pahole-flags.sh   |   20 ++++++++++++++++++++
+> > >   4 files changed, 25 insertions(+), 11 deletions(-)
+> > >   create mode 100755 scripts/pahole-flags.sh
+> > 
+> > My linux-stable-rc/linux-5.15.y checkout shows that scripts/pahole-flags.sh
+> > does not have an executable permission and commit
+> > 128e3cc0beffc92154d9af6bd8c107f46e830000 ("kbuild: Unify options for BTF
+> > generation for vmlinux and modules") does have:
+> > 
+> > diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+> > new file mode 100644
+> > index 000000000000..e6093adf4c06
+> > 
+> > whereas your email does have the proper 100755 permission set on the file,
+> > any idea what happened here?
 > 
-> When data crc occurs, the kernel will panic because host->cmd is null.
+> Yeah, quilt does not like dealing with file permissions at all :(
 > 
+> We have over time, not required executable permissions on kernel files
+> because of this issue.  Is it required here?  If so, I'll try to
+> remember to fix it up "by hand".
 
-Fixes: efe8f5c9b5e1 ("mmc: sdhci: Capture eMMC and SD card errors")
+yes, pahole-flags.sh needs to have +x
 
-> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+thanks,
+jirka
 
-Cc: stable@vger.kernel.org
-
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-
-Thank you!
-
-> ---
->  drivers/mmc/host/sdhci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 7689ffe..2511728 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -3928,7 +3928,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->  
->  	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
->  		*cmd_error = -EILSEQ;
-> -		if (!mmc_op_tuning(host->cmd->opcode))
-> +		if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
->  			sdhci_err_stats_inc(host, CMD_CRC);
->  	} else if (intmask & SDHCI_INT_TIMEOUT) {
->  		*cmd_error = -ETIMEDOUT;
-> @@ -3938,7 +3938,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->  
->  	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
->  		*data_error = -EILSEQ;
-> -		if (!mmc_op_tuning(host->cmd->opcode))
-> +		if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
->  			sdhci_err_stats_inc(host, DAT_CRC);
->  	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  		*data_error = -ETIMEDOUT;
-
+> thanks,
+> 
+> greg k-h

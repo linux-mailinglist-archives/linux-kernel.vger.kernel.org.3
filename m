@@ -2,164 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850965AF949
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FB65AF94D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 03:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiIGA7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S229472AbiIGBAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 21:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIGA7j (ORCPT
+        with ESMTP id S229625AbiIGBAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:59:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810B1FD04;
-        Tue,  6 Sep 2022 17:59:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E3B0B81AD5;
-        Wed,  7 Sep 2022 00:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2BC4314A;
-        Wed,  7 Sep 2022 00:59:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662512373;
-        bh=rRDkYK9iWCXx4wEvEXjdFzrW7V+WU51QfVdxnQR/Up4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cnrRuv/BitCXdq86pumAdk9NrkLBO6C5804p7tNfD3ydvcRYjgKf/u2lJtuHyL4LB
-         7ZmMNoQHTqpsyhqKEYW03c8YLCXXnD408gR/u+93zLkCFVS8ptB5c9wrE+Smuzqcxn
-         yUKsb5//1YpnFQJSbjxvoUlVMMH6FxEvjZGoHiAOoMFh27tG1zbW51W+Ud7bfAtaOd
-         znSf1k98U8FiecoSJaScPrUnTi+LfmLWevi411VPc2nv6wENP8u3EUJvwG9FHagc6H
-         JOrgXafNtKL/Cq1hZE/GkSwVdvFODfDCH9ixAaQ07jV16V2Wt/Yh4Q3Tp5jSqEXJX4
-         8ipWS734KvUbA==
-Received: by mail-ot1-f43.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so9236644oth.8;
-        Tue, 06 Sep 2022 17:59:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3IQZ0kdGcpxUlM2BNQMrUX8/uGHd42VQn0CHwA4ZhQST0aggJR
-        qCJw1E0FB1Q2h/aNWEuazoOpRTyyR+Z1QUuWrew=
-X-Google-Smtp-Source: AA6agR4T+5pUb7afC0nbWNUE6t9rpyPvgc4usas9mXHv8gHcqGmB5W7iv8rmSa98jv8Ovc8tvPLbDXQ/sXx4rvotOG8=
-X-Received: by 2002:a05:6830:3482:b0:638:92b7:f09b with SMTP id
- c2-20020a056830348200b0063892b7f09bmr497235otu.140.1662512372833; Tue, 06 Sep
- 2022 17:59:32 -0700 (PDT)
+        Tue, 6 Sep 2022 21:00:42 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6953D79680;
+        Tue,  6 Sep 2022 18:00:41 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso16701957pjk.0;
+        Tue, 06 Sep 2022 18:00:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1nSTp4E3mi2wz0ql5vPCuvT6LWbk4nHn2IQwIl/fIHc=;
+        b=iUR/Ipryz8WFSNwOTrGIqS+AAl9Ll1Xdf1FsLkMFEL2f4fy3daI3hsS0Eb7WgEf/nE
+         Kn8TaK7I1q4kyto2nTxvAr4BffG1yhwDuPMkD915+qCANZgqZ+J13qfCe/AGg1eDsoMb
+         9qBV9fblrWN9tCEjou9J4guQq16Tlc7R0LsdVwyvn7iWHCvQE12T/m+G7togrvYvRLMY
+         Q4Po69KAh0QxaIfZRDLq9HfokVg4lnQdeiJ8c+4+YWeac70eCVIAQoCj080K0Gv0yn//
+         2EiYC7eRuhzs3q+uUoQe93X+AS9u0yZRaQQZxmAnVAeHFbiS0blaMtL06wUPUCCfDZnW
+         1j+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1nSTp4E3mi2wz0ql5vPCuvT6LWbk4nHn2IQwIl/fIHc=;
+        b=I/dlEE0Z3ybZccb79fL7q3QCbRfTJitHgeGaeV+khNMSnKUxkOy/2DPsjZKXadPqw/
+         sZEoUl9ipB61mexqqvfF1AAydE4eRN7n9FqrA2Qy9o7U4vg/UBSdlM2GjHnxyFxYjg16
+         eeeJQ6mG/gwT3c8SF9CbXZiibZTt9s+SOthr+W42nTr7EgoC+0MRN8XnnLl52aCiXnF5
+         wr9TYum9jpO3ChzO7LAmdO8zuJgJ0GGEUiMTriAyTYFptKX22IRb8VlwmCPcovihKFqe
+         717DpEjq1HTQdp/bMzD73xcKRP6lAgnjuNSytlI+d90s9gTmz1i7Iv2IIWgBR79jbj0l
+         Bnaw==
+X-Gm-Message-State: ACgBeo1LxI+l499lVefFEPQI3TprY7WfQQMR2/Uae+j5lGbpgdGON9jj
+        isoF3ZbDCBcTWtTD6gvMTk4=
+X-Google-Smtp-Source: AA6agR5bs5pkGR/0dZS08ULONZJi0XyeXnEthfPjvQKOdz1J5FtNixVd0SWODroRDPRdt0PNN94TJA==
+X-Received: by 2002:a17:902:f782:b0:173:1206:cee0 with SMTP id q2-20020a170902f78200b001731206cee0mr1020667pln.130.1662512440757;
+        Tue, 06 Sep 2022 18:00:40 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:abc4:5d24:5a73:a96b])
+        by smtp.gmail.com with ESMTPSA id q13-20020aa7982d000000b005251f4596f0sm10853002pfl.107.2022.09.06.18.00.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 18:00:40 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 18:00:37 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
+        hdegoede@redhat.com, mario.limonciello@amd.com, timvp@google.com,
+        rafael@kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] i2c: acpi: Use ACPI GPIO wake capability bit to set
+ wake_irq
+Message-ID: <YxftNQrRx3fwsobk@google.com>
+References: <20220830231541.1135813-1-rrangel@chromium.org>
+ <20220830171332.4.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
 MIME-Version: 1.0
-References: <20220906035423.634617-1-guoren@kernel.org> <20220906035423.634617-5-guoren@kernel.org>
- <YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net>
-In-Reply-To: <YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Sep 2022 08:59:20 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTqVc_CvxT+t4D2Z1Gy_r_nrbdgAGcELFm9tgjOaCyJYg@mail.gmail.com>
-Message-ID: <CAJF2gTTqVc_CvxT+t4D2Z1Gy_r_nrbdgAGcELFm9tgjOaCyJYg@mail.gmail.com>
-Subject: Re: [PATCH V3 4/7] riscv: convert to generic entry
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, bigeasy@linutronix.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830171332.4.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 5:20 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Sep 05, 2022 at 11:54:20PM -0400, guoren@kernel.org wrote:
->
-> > +asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
-> > +{
-> > +     struct pt_regs *old_regs;
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> > +     irq_enter_rcu();
-> > +     old_regs = set_irq_regs(regs);
-> > +     handle_arch_irq(regs);
-> > +     set_irq_regs(old_regs);
-> > +     irq_exit_rcu();
-> > +
-> > +     irqentry_exit(regs, state);
-> > +}
->
-> The above is right in that everything that calls irqentry_enter() should
-> be noinstr; however all the below instances get it wrong:
->
-> >  #define DO_ERROR_INFO(name, signo, code, str)                                \
-> >  asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
-> >  {                                                                    \
-> > +     irqentry_state_t state = irqentry_enter(regs);                  \
-> >       do_trap_error(regs, signo, code, regs->epc, "Oops - " str);     \
-> > +     irqentry_exit(regs, state);                                     \
-> >  }
-> >
-> >  DO_ERROR_INFO(do_trap_unknown,
-> > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
-> >
-> >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> >       if (!handle_misaligned_load(regs))
-> >               return;
-> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> >                     "Oops - load address misaligned");
-> > +     irqentry_exit(regs, state);
-> >  }
-> >
-> >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> >       if (!handle_misaligned_store(regs))
-> >               return;
-> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> >                     "Oops - store (or AMO) address misaligned");
-> > +     irqentry_exit(regs, state);
-> >  }
-> >  #endif
-> >  DO_ERROR_INFO(do_trap_store_fault,
-> > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
-> >
-> >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> >  #ifdef CONFIG_KPROBES
-> >       if (kprobe_single_step_handler(regs))
-> >               return;
-> > @@ -185,6 +194,8 @@ asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-> >               regs->epc += get_break_insn_length(regs->epc);
-> >       else
-> >               die(regs, "Kernel BUG");
-> > +
-> > +     irqentry_exit(regs, state);
-> >  }
-> >  NOKPROBE_SYMBOL(do_trap_break);
->
-> > +asmlinkage void do_page_fault(struct pt_regs *regs)
-> > +{
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> > +     __do_page_fault(regs);
-> > +
-> > +     irqentry_exit(regs, state);
-> > +}
-> >  NOKPROBE_SYMBOL(do_page_fault);
->
-> Without noinstr the compiler is free to insert instrumentation (think
-> all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> yet ready to run this early in the entry path, for instance it could
-> rely on RCU which isn't on yet, or expect lockdep state.
-I'll add a patch to fix it in the next version. Thx for pointing it out.
+On Tue, Aug 30, 2022 at 05:15:37PM -0600, Raul E Rangel wrote:
+> Device tree already has a mechanism to pass the wake_irq. It does this
+> by looking for the wakeup-source property and setting the
+> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses at the
+> ACPI GpioInt wake flag to determine if the interrupt can be used to wake
+> the system. Previously the i2c drivers had to make assumptions and
+> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
+> If there is a device with an Active Low interrupt and the device gets
+> powered off while suspending, the interrupt line will go low since it's
+> no longer powered and wake the system. For this reason we should respect
+> the board designers wishes and honor the wake bit defined on the
+> GpioInt.
+> 
+> This change does not cover the ACPI Interrupt or IRQ resources.
+> 
+> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> ---
+> 
+>  drivers/i2c/i2c-core-acpi.c |  8 ++++++--
+>  drivers/i2c/i2c-core-base.c | 17 +++++++++++------
+>  drivers/i2c/i2c-core.h      |  4 ++--
+>  3 files changed, 19 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index c762a879c4cc6b..cfe82a6ba3ef28 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -182,12 +182,13 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
+>  /**
+>   * i2c_acpi_get_irq - get device IRQ number from ACPI
+>   * @client: Pointer to the I2C client device
+> + * @wake_capable: Set to 1 if the IRQ is wake capable
+>   *
+>   * Find the IRQ number used by a specific client device.
+>   *
+>   * Return: The IRQ number or an error code.
+>   */
+> -int i2c_acpi_get_irq(struct i2c_client *client)
+> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
+>  {
+>  	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+>  	struct list_head resource_list;
+> @@ -196,6 +197,9 @@ int i2c_acpi_get_irq(struct i2c_client *client)
+>  
+>  	INIT_LIST_HEAD(&resource_list);
+>  
+> +	if (wake_capable)
+> +		*wake_capable = 0;
+> +
+>  	ret = acpi_dev_get_resources(adev, &resource_list,
+>  				     i2c_acpi_add_resource, &irq);
 
->
->
+You also need to handle "Interrupt(..., ...AndWake)" case here. I would
+look into maybe defining
 
+#define IORESOURCE_IRQ_WAKECAPABLE	(1<<6)
+
+in include/linux/ioport.h and plumbing it through from ACPI layer.
+
+Thanks.
 
 -- 
-Best Regards
- Guo Ren
+Dmitry

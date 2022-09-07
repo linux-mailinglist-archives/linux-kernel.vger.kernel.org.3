@@ -2,347 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFE25B0168
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AF55B0175
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiIGKOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S230399AbiIGKPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIGKOT (ORCPT
+        with ESMTP id S230132AbiIGKPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:14:19 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52558A3D30;
-        Wed,  7 Sep 2022 03:14:12 -0700 (PDT)
-X-UUID: ee3f0bf849424bac817c286aeb55a4f2-20220907
-X-UUID: ee3f0bf849424bac817c286aeb55a4f2-20220907
-X-User: oushixiong@kylinos.cn
-Received: from [172.20.20.1] [(116.128.244.169)] by mailgw
-        (envelope-from <oushixiong@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 971097487; Wed, 07 Sep 2022 18:14:35 +0800
-Subject: Re: [PATCH v3] drm/ast: add dmabuf/prime buffer sharing support
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org
-References: <20220901124451.2523077-1-oushixiong@kylinos.cn>
- <5bc77d8f-928c-1d41-9b3c-eaad1bf3cfff@suse.de>
- <ee27c832-a1fd-bc93-9f1b-33f828195e83@amd.com>
- <f078d10f-9613-d6b1-0ee8-50feaf7d5299@suse.de>
-From:   oushixiong <oushixiong@kylinos.cn>
-Message-ID: <d4efb102-2f09-3f95-7175-7177f57fcd25@kylinos.cn>
-Date:   Wed, 7 Sep 2022 18:14:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <f078d10f-9613-d6b1-0ee8-50feaf7d5299@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 06:15:08 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDEC25588;
+        Wed,  7 Sep 2022 03:15:02 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id CF3012B059F7;
+        Wed,  7 Sep 2022 06:14:59 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 06:15:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662545699; x=1662549299; bh=UmErXfxWmw
+        fotEsmsDPTW3AU+XHqokuOWaVIqSNnJFU=; b=e67eu/2Sau6rqKLtSjHFTtHnaQ
+        sYFIdetsex7+OyjkVCLZ9beeQM0Mj/IeHdY5qLHK5/qa9DCDvlLfEE0vXVsM++FW
+        DmI/pO1hL9RP2EFDsAEE3ZnAqtF6BaG2jIBVsYacgmki9ZiMgYsXxo4j1ZXSX9am
+        YWAAb2igRgEssKmR+azw8g+pGFpKueubV/O/pNMRsjRI65T0mBNq1diDNtzgyRRi
+        BgsjNAl0Lz/1ivUtK2a7FQjQi0ubIrbxh0shz6nEs/S2OgZa23RbnQvx6QX/6NnK
+        4qfC1NcLXSP+byXBtZ5fMkEPxzPtxh4drQDP4xaivqxX8mhLS+T3qZooLzIg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662545699; x=1662549299; bh=UmErXfxWmwfotEsmsDPTW3AU+XHq
+        okuOWaVIqSNnJFU=; b=gTKIwCiZt86E5s5vG5fI33tYaugRTJZhOxCAbdnOKqVO
+        koCeLg26AixgJHv7xcEnAVxt2f+uq1Qe9Ly/XZ9AZxNADVEoNEuSTGAaJ1MVz9Xv
+        vEs4uekKsxYNrk27iiUJQKpMO5V9w1ithQ8yq6Sl4fwmsTAW1q1KnTVjnJ8fY9iP
+        Pk1BQNuHauJpW3b8oe5l248mJVUiGc/KcaSWHIQV88MILHRtmTjY2juOAMF16fZw
+        9TFpjATLujFr5ARlnpjrbY4FALuKVkxhNB5Jt7IUi/vL1AUfPtj+Yah3oQmyM+jX
+        hEXnmkP2LMNTlZ6Qq+wjqmzBuITrYXXD+pOTprwL+g==
+X-ME-Sender: <xms:Im8YY4-zB8jizsFZUbdhZ7cQgbYb9bCeUnh0Z3zsNHcXxM9vVxqGqw>
+    <xme:Im8YYwsKZOjKJ7WWo353mzbZGW2tQzA0JuhJaglRtfijovoc5gsezEZ-yuGQrdEII
+    1Y3hM4PsLWPNmM17-8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Im8YY-CAIpeIMrSA33XANi56_-wSyqmDx83zlMGLBrCNm1JDzeKnaA>
+    <xmx:Im8YY4eL3awRkF6q0khiLQ5sSOmH-E4e4PH_DDBP1MlQ94HXlXLtZw>
+    <xmx:Im8YY9N2Z5S1YfDKXcAZptJ2D7xwO8QSkiH1M6PEbQFOARfWIzdRHQ>
+    <xmx:I28YY4GQNGTdhuWe697LLmw2mSLNz7DZ60kD9zrtOAKd-nrNQXqNz3_17_M>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3CDB4B60083; Wed,  7 Sep 2022 06:14:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <b348a306-3043-4ccc-9067-81759ab29143@www.fastmail.com>
+In-Reply-To: <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
+References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+ <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
+Date:   Wed, 07 Sep 2022 12:14:38 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>
+Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Davide Ciminaghi" <ciminaghi@gnudd.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-doc <linux-doc@vger.kernel.org>, x86@kernel.org
+Subject: Re: [PATCH v2 0/9] gpio: Get rid of ARCH_NR_GPIOS (v2)
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Firstly, the dirty() call back function is called by 
-drm_mode_dirtyfb_ioctl.
-
-     drm_mode_dirtyfb_ioctl
-         |__   fb->funcs->dirty(fb, file_priv, flags, r->color,clips, 
-num_clips);
-                         |__ ast_user_framebuffer_dirty
-                                     |__ ast_handle_damage
-
-Secondly, due to hardware limitations, the AST  display control modules 
-can not access the dmabuf that in GTT, so it had to copy the data to AST 
-VRAM, if we do not use the dmabuf , it need to copy data from discrete 
-card's VRAM to memory,and copy the data from memory to AST VRAM.
-
-Best regards
-oushixiong
-
-
-On 2022/9/7 下午5:40, Thomas Zimmermann wrote:
-> Hi ,
->
-> Am 07.09.22 um 10:10 schrieb Christian König:
->> Hi Thomas,
+On Wed, Sep 7, 2022, at 11:58 AM, Bartosz Golaszewski wrote:
+> On Fri, Sep 2, 2022 at 2:42 PM Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 >>
->> I was wondering pretty much the same thing, but then thought that 
->> this might be the first step to direct scanout from DMA-bufs.
->>
->> If this isn't the case then I to see this rather critically since 
->> that functionality belongs into userspace.
->
-> With GEM VRAM helpers, ast currently doesn't support dma-buf sharing. 
-> I do have patches that convert it to GEM SHMEM (for other reasons), 
-> which would also add this functionality.
->
-> I intent to post these patches in the coming days. My suggestion is to 
-> merge them first and then see how to go from there.
->
-> Best regards
-> Thomas
->
->>
->> Regards,
->> Christian.
->>
->> Am 07.09.22 um 09:50 schrieb Thomas Zimmermann:
->>> Hi,
->>>
->>> on a more general note, let me say that your patch doesn't seem to 
->>> fit the ideas of how buffer sharing is supposed to work. Your patch 
->>> does the BMC screen update 'behind the scenes.'
->>>
->>> Shouldn't userspace set up the DRM state for mirroring the output of 
->>> the discrete card to the BMC?
->>>
->>> Best regards
->>> Thomas
->>>
->>> Am 01.09.22 um 14:44 schrieb oushixiong:
->>>>
->>>> This patch adds ast specific codes for DRM prime feature, this is to
->>>> allow for offloading of rending in one direction and outputs in other.
->>>>
->>>> This patch is designed to solve the problem that the AST is not 
->>>> displayed
->>>> when the server plug in a discrete graphics card at the same time.
->>>> We call the dirty callback function to copy the rendering results 
->>>> of the
->>>> discrete graphics card to the ast side by dma-buf.
->>>>
->>>> v1->v2:
->>>>    - Fix the comment.
->>>> v2->v3:
->>>>    - we remove the gem_prime_import_sg_table callback and use the
->>>>      gem_prime_import callback, because it just map and access the 
->>>> buffer
->>>>      with the CPU. and do not to pin the buffer.
->>>>
->>>> Signed-off-by: oushixiong <oushixiong@kylinos.cn>
->>>> Acked-by: Christian König <christian.koenig@amd.com>
->>>> ---
->>>>   drivers/gpu/drm/ast/ast_drv.c  |  27 +++++++
->>>>   drivers/gpu/drm/ast/ast_mode.c | 125 
->>>> ++++++++++++++++++++++++++++++++-
->>>>   2 files changed, 151 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/ast/ast_drv.c 
->>>> b/drivers/gpu/drm/ast/ast_drv.c
->>>> index 7465c4f0156a..fd3c4bad2eb4 100644
->>>> --- a/drivers/gpu/drm/ast/ast_drv.c
->>>> +++ b/drivers/gpu/drm/ast/ast_drv.c
->>>> @@ -28,6 +28,7 @@
->>>>     #include <linux/module.h>
->>>>   #include <linux/pci.h>
->>>> +#include <linux/dma-buf.h>
->>>>     #include <drm/drm_aperture.h>
->>>>   #include <drm/drm_atomic_helper.h>
->>>> @@ -50,6 +51,29 @@ module_param_named(modeset, ast_modeset, int, 
->>>> 0400);
->>>>     DEFINE_DRM_GEM_FOPS(ast_fops);
->>>>   +static struct drm_gem_object *ast_gem_prime_import(struct 
->>>> drm_device *dev,
->>>> +                        struct dma_buf *dma_buf)
->>>> +{
->>>> +    struct drm_gem_vram_object *gbo;
->>>> +
->>>> +    gbo = drm_gem_vram_of_gem(dma_buf->priv);
->>>> +    if (gbo->bo.base.dev == dev) {
->>>> +        /*
->>>> +         * Importing dmabuf exported from out own gem increases
->>>> +         * refcount on gem itself instead of f_count of dmabuf.
->>>> +         */
->>>> +        drm_gem_object_get(&gbo->bo.base);
->>>> +        return &gbo->bo.base;
->>>> +    }
->>>> +
->>>> +    gbo = drm_gem_vram_create(dev, dma_buf->size, 0);
->>>> +    if (IS_ERR(gbo))
->>>> +        return NULL;
->>>> +
->>>> +    get_dma_buf(dma_buf);
->>>> +    return &gbo->bo.base;
->>>> +}
->>>> +
->>>>   static const struct drm_driver ast_driver = {
->>>>       .driver_features = DRIVER_ATOMIC |
->>>>                  DRIVER_GEM |
->>>> @@ -63,6 +87,9 @@ static const struct drm_driver ast_driver = {
->>>>       .minor = DRIVER_MINOR,
->>>>       .patchlevel = DRIVER_PATCHLEVEL,
->>>>   +    .prime_fd_to_handle = drm_gem_prime_fd_to_handle,
->>>> +    .gem_prime_import = ast_gem_prime_import,
->>>> +
->>>>       DRM_GEM_VRAM_DRIVER
->>>>   };
->>>>   diff --git a/drivers/gpu/drm/ast/ast_mode.c 
->>>> b/drivers/gpu/drm/ast/ast_mode.c
->>>> index 45b56b39ad47..65a4342c5622 100644
->>>> --- a/drivers/gpu/drm/ast/ast_mode.c
->>>> +++ b/drivers/gpu/drm/ast/ast_mode.c
->>>> @@ -48,6 +48,8 @@
->>>>   #include "ast_drv.h"
->>>>   #include "ast_tables.h"
->>>>   +MODULE_IMPORT_NS(DMA_BUF);
->>>> +
->>>>   static inline void ast_load_palette_index(struct ast_private *ast,
->>>>                        u8 index, u8 red, u8 green,
->>>>                        u8 blue)
->>>> @@ -1535,8 +1537,129 @@ static const struct 
->>>> drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
->>>>       .atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
->>>>   };
->>>>   +static int ast_handle_damage(struct drm_framebuffer *fb, int x, 
->>>> int y,
->>>> +                    int width, int height)
->>>> +{
->>>> +    struct drm_gem_vram_object *dst_bo = NULL;
->>>> +    void *dst = NULL;
->>>> +    int ret = 0, i;
->>>> +    unsigned long offset = 0;
->>>> +    bool unmap = false;
->>>> +    unsigned int bytesPerPixel;
->>>> +    struct iosys_map map;
->>>> +    struct iosys_map dmabuf_map;
->>>> +
->>>> +    bytesPerPixel = fb->format->cpp[0];
->>>> +
->>>> +    if (!fb->obj[0]->dma_buf)
->>>> +        return -EINVAL;
->>>> +
->>>> +    if (!fb->obj[0]->dma_buf->vmap_ptr.vaddr) {
->>>> +        ret = dma_buf_vmap(fb->obj[0]->dma_buf, &dmabuf_map);
->>>> +        if (ret)
->>>> +            return ret;
->>>> +    } else
->>>> +        dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
->>>> +
->>>> +    dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
->>>> +
->>>> +    ret = drm_gem_vram_pin(dst_bo, 0);
->>>> +    if (ret) {
->>>> +        DRM_ERROR("ast_bo_pin failed\n");
->>>> +        return ret;
->>>> +    }
->>>> +
->>>> +    if (!dst_bo->map.vaddr) {
->>>> +        ret = drm_gem_vram_vmap(dst_bo, &map);
->>>> +        if (ret) {
->>>> +            drm_gem_vram_unpin(dst_bo);
->>>> +            DRM_ERROR("failed to vmap fbcon\n");
->>>> +            return ret;
->>>> +        }
->>>> +        unmap = true;
->>>> +    }
->>>> +    dst = dst_bo->map.vaddr;
->>>> +
->>>> +    for (i = y; i < y + height; i++) {
->>>> +        offset = i * fb->pitches[0] + (x * bytesPerPixel);
->>>> +        memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
->>>> +            width * bytesPerPixel);
->>>> +    }
->>>> +
->>>> +    if (unmap)
->>>> +        drm_gem_vram_vunmap(dst_bo, &map);
->>>> +
->>>> +    drm_gem_vram_unpin(dst_bo);
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +
->>>> +static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
->>>> +                struct drm_file *file,
->>>> +                unsigned int flags,
->>>> +                unsigned int color,
->>>> +                struct drm_clip_rect *clips,
->>>> +                unsigned int num_clips)
->>>> +{
->>>> +    int i, ret = 0;
->>>> +
->>>> +    drm_modeset_lock_all(fb->dev);
->>>> +    if (fb->obj[0]->dma_buf) {
->>>> +        ret = dma_buf_begin_cpu_access(fb->obj[0]->dma_buf,
->>>> +                DMA_FROM_DEVICE);
->>>> +        if (ret)
->>>> +            goto unlock;
->>>> +    }
->>>> +
->>>> +    for (i = 0; i < num_clips; i++) {
->>>> +        ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
->>>> +                clips[i].x2 - clips[i].x1, clips[i].y2 - 
->>>> clips[i].y1);
->>>> +        if (ret)
->>>> +            break;
->>>> +    }
->>>> +
->>>> +    if (fb->obj[0]->dma_buf) {
->>>> +        dma_buf_end_cpu_access(fb->obj[0]->dma_buf,
->>>> +                DMA_FROM_DEVICE);
->>>> +    }
->>>> +
->>>> +unlock:
->>>> +    drm_modeset_unlock_all(fb->dev);
->>>> +
->>>> +    return ret;
->>>> +}
->>>> +
->>>> +static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
->>>> +{
->>>> +    struct iosys_map dmabuf_map;
->>>> +
->>>> +    if (fb->obj[0]->dma_buf) {
->>>> +        dmabuf_map.is_iomem = fb->obj[0]->dma_buf->vmap_ptr.is_iomem;
->>>> +        dmabuf_map.vaddr = fb->obj[0]->dma_buf->vmap_ptr.vaddr;
->>>> +        if (dmabuf_map.vaddr)
->>>> +            dma_buf_vunmap(fb->obj[0]->dma_buf, &dmabuf_map);
->>>> +    }
->>>> +
->>>> +    drm_gem_fb_destroy(fb);
->>>> +}
->>>> +
->>>> +static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb 
->>>> = {
->>>> +    .destroy    = ast_user_framebuffer_destroy,
->>>> +    .create_handle    = drm_gem_fb_create_handle,
->>>> +    .dirty        = ast_user_framebuffer_dirty,
->>>> +};
->>>> +
->>>> +static struct drm_framebuffer *
->>>> +ast_gem_fb_create_with_dirty(struct drm_device *dev, struct 
->>>> drm_file *file,
->>>> +                const struct drm_mode_fb_cmd2 *mode_cmd)
->>>> +{
->>>> +    return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
->>>> +                    &ast_gem_fb_funcs_dirtyfb);
->>>> +}
->>>> +
->>>>   static const struct drm_mode_config_funcs ast_mode_config_funcs = {
->>>> -    .fb_create = drm_gem_fb_create,
->>>> +    .fb_create = ast_gem_fb_create_with_dirty,
->>>>       .mode_valid = drm_vram_helper_mode_valid,
->>>>       .atomic_check = drm_atomic_helper_check,
->>>>       .atomic_commit = drm_atomic_helper_commit,
->>>>
->>>>
->>>> Content-type: Text/plain
->>>>
->>>> No virus found
->>>>         Checked by Hillstone Network AntiVirus
->>>
->>
->
+>>  Documentation/driver-api/gpio/legacy.rst |   5 -
+>>  arch/arm/Kconfig                         |  21 --
+>>  arch/arm/include/asm/gpio.h              |   1 -
+>>  arch/arm64/Kconfig                       |  12 -
+>>  arch/x86/Kconfig                         |   5 -
+>>  drivers/gpio/Kconfig                     |   8 -
+>>  drivers/gpio/Makefile                    |   1 -
+>>  drivers/gpio/gpio-aggregator.c           |   7 +-
+>>  drivers/gpio/gpio-davinci.c              |   3 -
+>>  drivers/gpio/gpio-sta2x11.c              | 411 -----------------------
+>>  drivers/gpio/gpiolib.c                   |  13 +-
+>>  include/asm-generic/gpio.h               |  55 ++-
+>>  12 files changed, 33 insertions(+), 509 deletions(-)
+>>  delete mode 100644 drivers/gpio/gpio-sta2x11.c
+
+For the arch/arm*/Kconfig and include/asm-generic changes:
+
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+sta2x11 is an x86 driver, so not my area, but I think it would be
+best to kill off the entire platform rather than just its gpio
+driver, since everything needs to work together and it's clearly
+not functional at the moment.
+
+$ git grep -l STA2X11
+Documentation/admin-guide/media/pci-cardlist.rst
+arch/x86/Kconfig
+arch/x86/include/asm/sta2x11.h
+arch/x86/pci/Makefile
+arch/x86/pci/sta2x11-fixup.c
+drivers/ata/ahci.c
+drivers/gpio/Kconfig
+drivers/gpio/Makefile
+drivers/gpio/gpio-sta2x11.c
+drivers/i2c/busses/Kconfig
+drivers/media/pci/Makefile
+drivers/media/pci/sta2x11/Kconfig
+drivers/media/pci/sta2x11/Makefile
+drivers/media/pci/sta2x11/sta2x11_vip.c
+drivers/media/pci/sta2x11/sta2x11_vip.h
+drivers/mfd/Kconfig
+drivers/mfd/Makefile
+drivers/mfd/sta2x11-mfd.c
+include/linux/mfd/sta2x11-mfd.h
+
+Removing the other sta2x11 bits (mfd, media, x86) should
+probably be done through the respective tree, but it would
+be good not to forget those.
+
+      Arnd

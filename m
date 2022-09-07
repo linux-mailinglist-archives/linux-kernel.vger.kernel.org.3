@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761A35B0124
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5565B00E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiIGKAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
+        id S229943AbiIGJwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiIGJ7g (ORCPT
+        with ESMTP id S229477AbiIGJwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:59:36 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CBBB6D7B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:59:07 -0700 (PDT)
-X-UUID: 2b3e77ac65814881ac522e7693da1f56-20220907
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 121
-        audit/email.address 1
-        dict/adv 1
-        dict/operate 1
-X-CPASD-INFO: d7bf69fc2f0b4186a654f66424c10b5b@rYechmNrlJNehnKug3SDcIFnZWSWYla
-        DdG6DYV6SYYKVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3s3mchmhnlg==
-X-CLOUD-ID: d7bf69fc2f0b4186a654f66424c10b5b
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:196.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:176.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:2.0,SPC:0,SIG:-
-        5,AUF:8,DUF:4281,ACD:73,DCD:73,SL:0,EISP:0,AG:0,CFC:0.786,CFSR:0.037,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
-        AF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 2b3e77ac65814881ac522e7693da1f56-20220907
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 2b3e77ac65814881ac522e7693da1f56-20220907
-X-User: chenzhang@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-        (envelope-from <chenzhang@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 619361442; Wed, 07 Sep 2022 17:52:04 +0800
-From:   chen zhang <chenzhang@kylinos.cn>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     chenzhang_0901@163.com, linux-kernel@vger.kernel.org,
-        chen zhang <chenzhang@kylinos.cn>
-Subject: [PATCH] sched/fair: fix a -Wmissing-prototypes warning
-Date:   Wed,  7 Sep 2022 17:51:13 +0800
-Message-Id: <20220907095113.68153-1-chenzhang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Sep 2022 05:52:19 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B0AC241;
+        Wed,  7 Sep 2022 02:52:15 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id x1so9617827plv.5;
+        Wed, 07 Sep 2022 02:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=hL8/0bQbvljbE9pavMAjl/JlKZsZvqQAigUYdJU1uNM=;
+        b=nn4GlzU6eneYHeNiRJYFF1ODlYXAcRj82i4PpS+yK0zhDEqxJwTAlsALlBDEkXyXyq
+         Ut8bkJ9Y0eHKoXjBXlGidIqP/vd5KLcAto0LzSvaI6pG1V+k+W8ATsx+ux6B3GMwetH0
+         TUa+Ag0MK/wMVnM4JJju00UevVpKerJHOp/eyWi5Kw5LCBOSZoEX762GqSLx9bmw9FVX
+         4COcooCEWMvm4/IJyYBNNFbR5GO/K4aLh+eSpSOXkYU/LTTG3zl+YZoHY57KEFfKGEIu
+         C3Qmdrv88jOEsp2XvArsTA4AxTYfPzuLkR2Grx7VUs0782eIm7pmDnSkhYnu16c1f7yb
+         drXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=hL8/0bQbvljbE9pavMAjl/JlKZsZvqQAigUYdJU1uNM=;
+        b=EQcb85Nm6CRiwG/XG7wnyYSVj95O1ng4vxvDNiurhwt/BdiVk9vw/Benbc+Ez+CWao
+         UrT1adrD+iO2dlh8+ejtqY+d029Sg/Kxfg9W3OsxMHV5FYhjVQ3KEWtISF5SforPUomZ
+         yc8LTwAScnTSBOdULre9hKrxHZZ5HYjCpIIDYva9HMGeHVWJzvc+Yfv7j0UmcPs6ejCO
+         qgilhyQY75jNUKqEyM28ws/o3l3hoBVYWvdN3/bchEFKBudfsJvomuIUoJDi0covO/I5
+         LWOspKkYmBiwWIKjUNabW9IOhnpj9KzNV4IeV/U3oCREkwlrAlJVHxYH1jOgu5Zbb+Bv
+         HUiw==
+X-Gm-Message-State: ACgBeo0BvGfoFm5QxPp/brp1uw9G0TMOQps7A2eQeLfJ20vD6FAn6n6X
+        sCBRwomH5lPU5nxnsNiOLKLNT6mhLuytXA==
+X-Google-Smtp-Source: AA6agR75M9T0PXWboUABs6dH9vDqBGzSP/US0yIYjWgFl5EDD3PXFx1q/YwxiO2oR7ml1/ZMDz8Lrw==
+X-Received: by 2002:a17:902:ec90:b0:16e:d8d8:c2db with SMTP id x16-20020a170902ec9000b0016ed8d8c2dbmr3065483plg.69.1662544334697;
+        Wed, 07 Sep 2022 02:52:14 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id u195-20020a6279cc000000b00537eb00850asm12130450pfc.130.2022.09.07.02.52.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 02:52:14 -0700 (PDT)
+Message-ID: <4a74d218-6266-cf6c-3ebb-4cbb49327440@gmail.com>
+Date:   Wed, 7 Sep 2022 17:52:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v3 0/7] x86/pmu: Corner cases fixes and optimization
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220831085328.45489-1-likexu@tencent.com>
+In-Reply-To: <20220831085328.45489-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We get a warning when building kernel with W=1:
+A review reminder for shepherds. Thanks!
 
-  kernel/sched/fair.c:11510:6: warning: no previous prototype for ‘task_vruntime_update’ [-Werror=missing-prototypes]
-
-Add the missing declaration in head file to fix this. And remove
-the unnecessary declaration in kernel/sched/core.c.
-
-Signed-off-by: chen zhang <chenzhang@kylinos.cn>
----
- kernel/sched/core.c  | 2 --
- kernel/sched/sched.h | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b60422300af6..5a354b4bcd0c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5874,8 +5874,6 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 	BUG(); /* The idle class should always have a runnable task. */
- }
- 
--extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
--
- static void queue_core_balance(struct rq *rq);
- 
- static struct task_struct *
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f616e0cec20c..ae8554356108 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2268,6 +2268,8 @@ static inline bool sched_fair_runnable(struct rq *rq)
- extern struct task_struct *pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf);
- extern struct task_struct *pick_next_task_idle(struct rq *rq);
- 
-+extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
-+
- #define SCA_CHECK		0x01
- #define SCA_MIGRATE_DISABLE	0x02
- #define SCA_MIGRATE_ENABLE	0x04
--- 
-2.25.1
-
+On 31/8/2022 4:53 pm, Like Xu wrote:
+> Good well-designed tests can help us find more bugs, especially when
+> the test steps differ from the Linux kernel behaviour in terms of the
+> timing of access to virtualized hw resources.
+> 
+> Please feel free to run tests, add more or share comments.
+> 
+> Previous:
+> https://lore.kernel.org/kvm/20220823093221.38075-1-likexu@tencent.com/
+> 
+> V2 RESEND -> V3 Changelog:
+> - Post perf change as a separate patch to the perf folks; (Sean)
+> - Rewrite the deferred logic using imperative mood; (Sean)
+> - Drop some useless comment; (Sean)
+> - Rename __reprogram_counter() to kvm_pmu_request_counter_reprogam(); (Sean)
+> - Replace a play-by-play of the code changes with a high level description; (); (Sean)
+> - Rename pmc->stale_counter to pmc->prev_counter; (Sean)
+> - Drop an unnecessary check about pmc->prev_counter; (Sean)
+> - Simply the code about "CTLn is even, CTRn is odd"; (Sean)
+> - Refine commit message to avoid pronouns; (Sean)
+> 
+> Like Xu (7):
+>    KVM: x86/pmu: Avoid setting BIT_ULL(-1) to pmu->host_cross_mapped_mask
+>    KVM: x86/pmu: Don't generate PEBS records for emulated instructions
+>    KVM: x86/pmu: Avoid using PEBS perf_events for normal counters
+>    KVM: x86/pmu: Defer reprogram_counter() to kvm_pmu_handle_event()
+>    KVM: x86/pmu: Defer counter emulated overflow via pmc->prev_counter
+>    KVM: x86/svm/pmu: Direct access pmu->gp_counter[] to implement
+>      amd_*_to_pmc()
+>    KVM: x86/svm/pmu: Rewrite get_gp_pmc_amd() for more counters
+>      scalability
+> 
+>   arch/x86/include/asm/kvm_host.h |   6 +-
+>   arch/x86/kvm/pmu.c              |  44 +++++++-----
+>   arch/x86/kvm/pmu.h              |   6 +-
+>   arch/x86/kvm/svm/pmu.c          | 121 ++++++--------------------------
+>   arch/x86/kvm/vmx/pmu_intel.c    |  36 +++++-----
+>   5 files changed, 75 insertions(+), 138 deletions(-)
+> 

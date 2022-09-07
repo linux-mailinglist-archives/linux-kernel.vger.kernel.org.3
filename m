@@ -2,203 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D255B0432
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03C95B0443
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 14:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiIGMrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 08:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S229631AbiIGMvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 08:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIGMr0 (ORCPT
+        with ESMTP id S229959AbiIGMvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 08:47:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF57B99EB;
-        Wed,  7 Sep 2022 05:47:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD91F618AC;
-        Wed,  7 Sep 2022 12:47:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337EEC433D6;
-        Wed,  7 Sep 2022 12:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662554844;
-        bh=KwuVTdSi4g/A+wQFC39m73YAhBoRhEhLLXwztluQVs4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=D1ZxLLGMhMF9KvxxQ2fWiZLBOm8D/KLxKm7+5K81ML9beEoreeQ+MPEKrRhEIyK2D
-         vXg2Hb9XhcS/DXIhIdAk6OD4VlBJiqQ3cfkjUevIjcfG5B4S96NQDopvhbQqKVbKKo
-         P7+BCrlVvJRZqR1j/xHcYs3IBijJFc8mMOx72Op0grUOInGYbEnxajJcsYH9jkih6f
-         pZe2c1R4GgABxcaW4J7NXjOUaNEqXeILriAhSWb0KlccrqoeSffkdiSZWzkASL6BPg
-         YNCfTbdg8L2OYuELzsrZBs/acUK+w49/NITRLlPo0eYfVS5z0bmqt4F9eoDepkqm5p
-         9ttkvPFxHUI0w==
-Message-ID: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Date:   Wed, 07 Sep 2022 08:47:20 -0400
-In-Reply-To: <166255065346.30452.6121947305075322036@noble.neil.brown.name>
-References: <20220907111606.18831-1-jlayton@kernel.org>
-         <166255065346.30452.6121947305075322036@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 7 Sep 2022 08:51:10 -0400
+Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601E075CD3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 05:51:10 -0700 (PDT)
+Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
+        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 7151A802C481
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:50:58 +0000 (UTC)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 2815D1004CA7A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 12:48:33 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id VuToovz96mB5LVuTpogyTv; Wed, 07 Sep 2022 12:48:33 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=MaSpB7zf c=1 sm=1 tr=0 ts=63189321
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=xOM3xZuef0cA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=wvHbUn0omq4WNjlXUEIA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Bhqeq95+jE/XnbVxjfY6WURzW4826rkj6VSMea3lmI8=; b=bO1Uj/pk1sjbIcqOiUSEz2vWMK
+        CWMUIF2rDipdDU5I+bqIXN8d1q4asDSwjdIjQEGaExEpkwj/LbvFu+cAOWlugPcZWJmkC95rUetQw
+        e4HfOpamEzn/kt9eD3ahG0QDPAERBDJ2x1W6ppcpJGWodEiHbLaZzJ+REPSExAjP4id46AFKloPN+
+        Nsnbzc1XqvUzrJ9sQ9N/7We4FEpAHvzp4T2TO9lVEYpj2ylipDR6370ZI16yt2EWVFxf9ZWU8Q25w
+        2TV50VOm/kfmrMeYkAYM6m2S73zataVNv6axe0jQKPlEyFnvq5qTLUFl2123o5rnylaH9RuXd3Scw
+        UtKwKQDQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43596 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oVuTn-001RsL-Eg;
+        Wed, 07 Sep 2022 06:48:31 -0600
+Subject: Re: [PATCH 5.15 000/107] 5.15.66-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220906132821.713989422@linuxfoundation.org>
+In-Reply-To: <20220906132821.713989422@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <488872ac-1acc-c507-b601-efa8ae7672ee@w6rz.net>
+Date:   Wed, 7 Sep 2022 05:48:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oVuTn-001RsL-Eg
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:43596
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
-> On Wed, 07 Sep 2022, Jeff Layton wrote:
-> > I'm proposing to expose the inode change attribute via statx [1]. Docum=
-ent
-> > what this value means and what an observer can infer from it changing.
-> >=20
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> >=20
-> > [1]: https://lore.kernel.org/linux-nfs/20220826214703.134870-1-jlayton@=
-kernel.org/T/#t
-> > ---
-> >  man2/statx.2 |  8 ++++++++
-> >  man7/inode.7 | 39 +++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 47 insertions(+)
-> >=20
-> > v4: add paragraph pointing out the lack of atomicity wrt other changes
-> >=20
-> > I think these patches are racing with another change to add DIO
-> > alignment info to statx. I imagine this will go in after that, so this
-> > will probably need to be respun to account for contextual differences.
-> >=20
-> > What I'm mostly interested in here is getting the sematics and
-> > description of the i_version counter nailed down.
-> >=20
-> > diff --git a/man2/statx.2 b/man2/statx.2
-> > index 0d1b4591f74c..d98d5148a442 100644
-> > --- a/man2/statx.2
-> > +++ b/man2/statx.2
-> > @@ -62,6 +62,7 @@ struct statx {
-> >      __u32 stx_dev_major;   /* Major ID */
-> >      __u32 stx_dev_minor;   /* Minor ID */
-> >      __u64 stx_mnt_id;      /* Mount ID */
-> > +    __u64 stx_ino_version; /* Inode change attribute */
-> >  };
-> >  .EE
-> >  .in
-> > @@ -247,6 +248,7 @@ STATX_BTIME	Want stx_btime
-> >  STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
-> >  	It is deprecated and should not be used.
-> >  STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
-> > +STATX_INO_VERSION	Want stx_ino_version (DRAFT)
-> >  .TE
-> >  .in
-> >  .PP
-> > @@ -407,10 +409,16 @@ This is the same number reported by
-> >  .BR name_to_handle_at (2)
-> >  and corresponds to the number in the first field in one of the records=
- in
-> >  .IR /proc/self/mountinfo .
-> > +.TP
-> > +.I stx_ino_version
-> > +The inode version, also known as the inode change attribute. See
-> > +.BR inode (7)
-> > +for details.
-> >  .PP
-> >  For further information on the above fields, see
-> >  .BR inode (7).
-> >  .\"
-> > +.TP
-> >  .SS File attributes
-> >  The
-> >  .I stx_attributes
-> > diff --git a/man7/inode.7 b/man7/inode.7
-> > index 9b255a890720..8e83836594d8 100644
-> > --- a/man7/inode.7
-> > +++ b/man7/inode.7
-> > @@ -184,6 +184,12 @@ Last status change timestamp (ctime)
-> >  This is the file's last status change timestamp.
-> >  It is changed by writing or by setting inode information
-> >  (i.e., owner, group, link count, mode, etc.).
-> > +.TP
-> > +Inode version (i_version)
-> > +(not returned in the \fIstat\fP structure); \fIstatx.stx_ino_version\f=
-P
-> > +.IP
-> > +This is the inode change counter. See the discussion of
-> > +\fBthe inode version counter\fP, below.
-> >  .PP
-> >  The timestamp fields report time measured with a zero point at the
-> >  .IR Epoch ,
-> > @@ -424,6 +430,39 @@ on a directory means that a file
-> >  in that directory can be renamed or deleted only by the owner
-> >  of the file, by the owner of the directory, and by a privileged
-> >  process.
-> > +.SS The inode version counter
-> > +.PP
-> > +The
-> > +.I statx.stx_ino_version
-> > +field is the inode change counter. Any operation that would result in =
-a
-> > +change to \fIstatx.stx_ctime\fP must result in an increase to this val=
-ue.
-> > +The value must increase even in the case where the ctime change is not
-> > +evident due to coarse timestamp granularity.
-> > +.PP
-> > +An observer cannot infer anything from amount of increase about the
-> > +nature or magnitude of the change. If the returned value is different
-> > +from the last time it was checked, then something has made an explicit
-> > +data and/or metadata change to the inode.
-> > +.PP
-> > +The change to \fIstatx.stx_ino_version\fP is not atomic with respect t=
-o the
-> > +other changes in the inode. On a write, for instance, the i_version it=
- usually
-> > +incremented before the data is copied into the pagecache. Therefore it=
- is
-> > +possible to see a new i_version value while a read still shows the old=
- data.
->=20
-> Doesn't that make the value useless?
->=20
+On 9/6/22 6:29 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.66 release.
+> There are 107 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 08 Sep 2022 13:27:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.66-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-No, I don't think so. It's only really useful for comparing to an older
-sample anyway. If you do "statx; read; statx" and the value hasn't
-changed, then you know that things are stable.=20
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> Surely the change number must
-> change no sooner than the change itself is visible, otherwise stale data
-> could be cached indefinitely.
->=20
-> If currently implementations behave this way, surely they are broken.
+Tested-by: Ron Economos <re@w6rz.net>
 
-It's certainly not ideal but we've never been able to offer truly atomic
-behavior here given that Linux is a general-purpose OS. The behavior is
-a little inconsistent too:
-
-The c/mtime update and i_version bump on directories (mostly) occur
-after the operation. c/mtime updates for files however are mostly driven
-by calls to file_update_time, which happens before data is copied to the
-pagecache.
-
-It's not clear to me why it's done this way. Maybe to ensure that the
-metadata is up to date in the event that a statx comes in? Improving
-this would be nice, but I don't see a way to do that without regressing
-performance.
---=20
-Jeff Layton <jlayton@kernel.org>

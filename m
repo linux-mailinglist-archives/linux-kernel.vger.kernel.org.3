@@ -2,107 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0A15B0123
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0090C5B0054
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiIGKAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S229713AbiIGJYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiIGJ7f (ORCPT
+        with ESMTP id S229488AbiIGJYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:59:35 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA018B7EF6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:59:04 -0700 (PDT)
-X-UUID: 9bdc8eb97ef345e3b24c13d13cebed45-20220907
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 121
-        audit/email.address 1
-        dict/adv 1
-        dict/operate 1
-X-CPASD-INFO: 044c42c310a74cff8dbd9cb65df565c8@eYRug2FkkWNdUKODg6axoFiVkpRpj4K
-        Fd56GZmRlj1iVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBhXoZgUZB3f3Zug2Vgkw==
-X-CLOUD-ID: 044c42c310a74cff8dbd9cb65df565c8
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:1.0,URL:-5,TVAL:196.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:176.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:1.0,CFOB:1.0,SPC:0,SIG:-
-        5,AUF:7,DUF:4278,ACD:73,DCD:73,SL:0,EISP:0,AG:0,CFC:0.786,CFSR:0.037,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
-        AF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 9bdc8eb97ef345e3b24c13d13cebed45-20220907
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 9bdc8eb97ef345e3b24c13d13cebed45-20220907
-X-User: chenzhang@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-        (envelope-from <chenzhang@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 2063516333; Wed, 07 Sep 2022 17:24:33 +0800
-From:   chen zhang <chenzhang@kylinos.cn>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     chenzhang_0901@163.com, linux-kernel@vger.kernel.org,
-        chen zhang <chenzhang@kylinos.cn>
-Subject: [PATCH] sched/fair: fix a -Wmissing-prototypes warning
-Date:   Wed,  7 Sep 2022 17:23:53 +0800
-Message-Id: <20220907092353.65757-1-chenzhang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Sep 2022 05:24:02 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F5492F6A;
+        Wed,  7 Sep 2022 02:24:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662542641; x=1694078641;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=JpKsKADH1rQTHje2jo2dXzK2ymAZXfmBxQpUVoLyhzo=;
+  b=XmZMsJ5RGLKt07bT1AGVnFfZ8iX1ZoRn+g6/WjLAa87V7bM+aZwoZn5V
+   K6R3tfrvS5MYptx7LtmR3+Gh5S749BmeDIW7fDC2nq+8UzxqdcWbSL114
+   nX1ppn5Iyi/Lv3OiaTqSCCYgMWwFSfLFqZYrXoOVXixop60wSDZeqMZst
+   iXLfX2O0a7kTyLIYc3s6F7iS+TqxRCcXXY6cHMqe0ee+WWMkbmFBGoxaP
+   uOStiEFpqk7+Zpzkd8LokT7bYdnJhq3mZm1bTWL6eDqQIZ5dmKyjkwDNk
+   QVfQCmn4Qr5Wpl3yf0FSE0H5w9PWbXTMH1kT3GcPehkV2zUZHhZ7H5p6q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="323009239"
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="323009239"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:24:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="676097152"
+Received: from dmatouse-mobl.ger.corp.intel.com ([10.251.223.53])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:23:56 -0700
+Date:   Wed, 7 Sep 2022 12:23:55 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+cc:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        broonie@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>, admin@hifiphile.com,
+        kavyasree.kotagiri@microchip.com, tudor.ambarus@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-spi@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 10/13] tty: serial: atmel: Only divide Clock Divisor
+ if the IP is USART
+In-Reply-To: <20220906135511.144725-11-sergiu.moga@microchip.com>
+Message-ID: <6f7b4eb6-678a-dd4d-4927-31ae309ca49f@linux.intel.com>
+References: <20220906135511.144725-1-sergiu.moga@microchip.com> <20220906135511.144725-11-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We get a warning when building kernel with W=1:
+On Tue, 6 Sep 2022, Sergiu Moga wrote:
 
-  kernel/sched/fair.c:11510:6: warning: no previous prototype for ‘task_vruntime_update’ [-Werror=missing-prototypes]
+> Make sure that the driver only divides the clock divisor if the
+> IP handled at that point is USART, since UART IP's do not support
+> implicit peripheral clock division. Instead, in the case of UART,
+> go with the highest possible clock divisor.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> ---
+> 
+> 
+> v1 -> v2:
+> - Nothing, this patch was not here before and is mainly meant as both cleanup
+> and as a way to introduce a new field into struct atmel_uart_port that will be
+> used by the last patch to diferentiate between USART and UART regarding the
+> location of the Baudrate Clock Source bitmask.
+> 
+> 
+> 
+> 
+>  drivers/tty/serial/atmel_serial.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+> index 7450d3853031..6aa01ca5489c 100644
+> --- a/drivers/tty/serial/atmel_serial.c
+> +++ b/drivers/tty/serial/atmel_serial.c
+> @@ -150,6 +150,7 @@ struct atmel_uart_port {
+>  	u32			rts_low;
+>  	bool			ms_irq_enabled;
+>  	u32			rtor;	/* address of receiver timeout register if it exists */
+> +	bool			is_usart;
+>  	bool			has_frac_baudrate;
+>  	bool			has_hw_timer;
+>  	struct timer_list	uart_timer;
+> @@ -1825,6 +1826,7 @@ static void atmel_get_ip_name(struct uart_port *port)
+>  	 */
+>  	atmel_port->has_frac_baudrate = false;
+>  	atmel_port->has_hw_timer = false;
+> +	atmel_port->is_usart = false;
+>  
+>  	if (name == new_uart) {
+>  		dev_dbg(port->dev, "Uart with hw timer");
+> @@ -1834,6 +1836,7 @@ static void atmel_get_ip_name(struct uart_port *port)
+>  		dev_dbg(port->dev, "Usart\n");
+>  		atmel_port->has_frac_baudrate = true;
+>  		atmel_port->has_hw_timer = true;
+> +		atmel_port->is_usart = true;
+>  		atmel_port->rtor = ATMEL_US_RTOR;
+>  		version = atmel_uart_readl(port, ATMEL_US_VERSION);
+>  		switch (version) {
+> @@ -1863,6 +1866,7 @@ static void atmel_get_ip_name(struct uart_port *port)
+>  			dev_dbg(port->dev, "This version is usart\n");
+>  			atmel_port->has_frac_baudrate = true;
+>  			atmel_port->has_hw_timer = true;
+> +			atmel_port->is_usart = true;
+>  			atmel_port->rtor = ATMEL_US_RTOR;
+>  			break;
+>  		case 0x203:
+> @@ -2282,10 +2286,17 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
+>  		cd = uart_get_divisor(port, baud);
+>  	}
+>  
+> -	if (cd > 65535) {	/* BRGR is 16-bit, so switch to slower clock */
+> +	/*
+> +	 * BRGR is 16-bit, so switch to slower clock.
+> +	 * Otherwise, keep the highest possible value for the clock divisor.
+> +	 */
+> +	if (atmel_port->is_usart && cd > 65535) {
 
-Add the missing declaration in head file to fix this. And remove
-the unnecessary declaration in kernel/sched/core.c.
+Should this be cd > ATMEL_US_CD ?
 
-Signed-off-by: chen zhang <chenzhang@kylinos.cn>
----
- kernel/sched/core.c  | 2 --
- kernel/sched/sched.h | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>  		cd /= 8;
+>  		mode |= ATMEL_US_USCLKS_MCK_DIV8;
+> +	} else {
+> +		cd &= 65535;
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b60422300af6..5a354b4bcd0c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5874,8 +5874,6 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 	BUG(); /* The idle class should always have a runnable task. */
- }
- 
--extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
--
- static void queue_core_balance(struct rq *rq);
- 
- static struct task_struct *
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f616e0cec20c..ae8554356108 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2268,6 +2268,8 @@ static inline bool sched_fair_runnable(struct rq *rq)
- extern struct task_struct *pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf);
- extern struct task_struct *pick_next_task_idle(struct rq *rq);
- 
-+extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
-+
- #define SCA_CHECK		0x01
- #define SCA_MIGRATE_DISABLE	0x02
- #define SCA_MIGRATE_ENABLE	0x04
+ATMEL_US_CD?
+
+>  	}
+> +
+>  	quot = cd | fp << ATMEL_US_FP_OFFSET;
+>  
+>  	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
+> 
+
 -- 
-2.25.1
+ i.
 

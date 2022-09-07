@@ -2,95 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0BC5AFCE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98915AFCE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiIGGwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S230031AbiIGGxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiIGGwn (ORCPT
+        with ESMTP id S229510AbiIGGxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:52:43 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945396CD39;
-        Tue,  6 Sep 2022 23:52:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RnlXlqAOM19R0kaFGigt83kvp+plQFMnYjHIbbb/6qI=; b=m7/1yFb0s50S7M292zPjscSOLY
-        yRPL0vsA8r53tcjqjRem66vn/8um3OIpTDf3y2LvnPJozNOtu/uKszlLESigNsUts9wzz28vbvIrr
-        nArbN+o7kKqi3C7yEOU+xgYU7luOnXvIXiCCUOPela9ro1q8IKuHwJEaPmA7ncLko1FTKmG6hdh7G
-        b/nxDyQS4+mKdUUDxeidihffRL8j0uiDJSoU/xhwfkT+6ywAZuVxGOBzSNA7t7E/yadGCZJxGesdy
-        OUOOR5+no7fooT/NCqSkNfWLxfE+q32iUQ8KzKYZBgSSENpDW5jVziu3GRgoz04h2UXlsVStNTH8X
-        2D8JowEA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVovI-00AOEi-C2; Wed, 07 Sep 2022 06:52:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 65FE33006A4;
-        Wed,  7 Sep 2022 08:52:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 120C3203C095B; Wed,  7 Sep 2022 08:52:30 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 08:52:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
-Subject: Re: [PATCH 0/2] x86/kprobes: Fixes for CONFIG_RETHUNK
-Message-ID: <Yxg/rZDPc1fKaS7H@hirez.programming.kicks-ass.net>
-References: <166251211081.632004.1842371136165709807.stgit@devnote2>
+        Wed, 7 Sep 2022 02:53:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3512FFF9
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 23:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662533612;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W5bAvksPKLrdgVN4e/5QNhWQHloHMa0JMC3CFrEBk7Q=;
+        b=RRkiIXbl5R1wRP392Iit3uEKxrMBA2UCmgyRuz12MCMKYHE2iZKCxVZl5sJQhpjaRxiSED
+        hfxw8qvbLAoBty1CTQst0tXZ4a8/7fkaZ4buBLBlWIBZshUVTFn1q2vZFhtfFDUY9c+JI9
+        h4rYDzEm8QsALGCrQqZOYIdpgyqsobs=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-648-gT9RyLA3OcyHzYgWeA4tUw-1; Wed, 07 Sep 2022 02:53:31 -0400
+X-MC-Unique: gT9RyLA3OcyHzYgWeA4tUw-1
+Received: by mail-ua1-f72.google.com with SMTP id b4-20020ab04804000000b0038498ad744bso2646002uad.20
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 23:53:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=W5bAvksPKLrdgVN4e/5QNhWQHloHMa0JMC3CFrEBk7Q=;
+        b=2ya6FPDw8yXKC24gflkQ3e47wNEdkIOr86B0OYA7VfmA2gYj7daIeSVuDv8efFYuT3
+         zrcN8TQ3GE//OYsQ2qEprdTDnE8nTGE5X1uyhjuDcpKRTQCd7NES63bRLVoYNEKKciI6
+         Lad12OpanrS1h/7SPfOPcOYPJwHO0tVPS5E2/59Wl+O8L+IIgDXCUokl3PG/Cd7+XRqs
+         qMcYgm5cbT1wxl+0SZtoiu5WUdPv7ls8Cu7u50QcZrpKIINHijHgjv8iQ9P8WpZ0XW2M
+         Unh9/OmoNkyD5G7KZ3ZFsZVJ3VJX6j/JYftuExG8cfr0wS393DKq1DyEtHABtdTPLXKL
+         9iuw==
+X-Gm-Message-State: ACgBeo1VVfvL5tPFDiL2Dv/FG9gOaB+P3TiZPieoD8h+R3smQMMg6quj
+        f1DHTh9gKtzZdITvNB+Y1/i+/UvcDpaJ3S/xo2fGss/amCdqnX3tGQXFZxPF6SXK3HsU56+1axl
+        t3gDsahHCzFd6U1XxmKEBuIexB0qW8RcQv8aOYi2U
+X-Received: by 2002:a05:6102:fa5:b0:390:d814:d6d7 with SMTP id e37-20020a0561020fa500b00390d814d6d7mr618675vsv.4.1662533611002;
+        Tue, 06 Sep 2022 23:53:31 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5FbL6e/AWOk14APVaDLNoldSpD/ONXWmJIFKefHXYftZCmw0UrSHde+x+r5ao9C04Kp4d7MHC7tPpo2ffYND4=
+X-Received: by 2002:a05:6102:fa5:b0:390:d814:d6d7 with SMTP id
+ e37-20020a0561020fa500b00390d814d6d7mr618670vsv.4.1662533610842; Tue, 06 Sep
+ 2022 23:53:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166251211081.632004.1842371136165709807.stgit@devnote2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220907060110.4511-1-jasowang@redhat.com> <DM8PR12MB540034620ADF0AE749C2D099AB419@DM8PR12MB5400.namprd12.prod.outlook.com>
+In-Reply-To: <DM8PR12MB540034620ADF0AE749C2D099AB419@DM8PR12MB5400.namprd12.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 7 Sep 2022 14:53:19 +0800
+Message-ID: <CACGkMEvjgyxs3HX_ZzUbMticntqnUxDQJMrr2MqTBwuRB7jCdw@mail.gmail.com>
+Subject: Re: [PATCH] vdpa: conditionally fill max max queue pair for stats
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     "mst@redhat.com" <mst@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 09:55:11AM +0900, Masami Hiramatsu (Google) wrote:
-> Hi,
-> 
-> Here is a couple of patches to fix kprobes and optprobe to work
-> on the kernel with CONFIG_RETHUNK and CONFIG_SLS.
-> 
-> With these configs, the kernel functions may includes padding INT3 in
-> the function code block (body) in addition to the gaps between functions.
-> 
-> Since kprobes on x86 has to ensure the probe address is a function
+On Wed, Sep 7, 2022 at 2:11 PM Eli Cohen <elic@nvidia.com> wrote:
+>
+> > From: Jason Wang <jasowang@redhat.com>
+> > Sent: Wednesday, 7 September 2022 9:01
+> > To: mst@redhat.com; jasowang@redhat.com; Eli Cohen <elic@nvidia.com>;
+> > virtualization@lists.linux-foundation.org; linux-kernel@vger.kernel.org
+> > Subject: [PATCH] vdpa: conditionally fill max max queue pair for stats
+> >
+> > For the device without multiqueue feature, we will read 0 as
+> > max_virtqueue_pairs from the config.
+> If this is the case for other vdpa vendor drivers, shouldn't we fix it there? After all,
+> config->max_virtqueue_pairs should always show valid values.
 
-s/function/instruction/
+Not for the case when the device doesn't offer MQ. According to the
+spec, the max_virtqueue_pairs doesn't exist in this case.
 
-> bondary, it decodes the instructions in the function until the address.
-> If it finds an INT3 which is not embedded by kprobe, it stops decoding
-> because usually the INT3 is used for debugging as a software breakpoint
-> and such INT3 will replace the first byte of an original instruction.
-> Without recovering it, kprobes can not continue to decode it. Thus the
-> kprobes returns -EILSEQ as below.
+>
+> > So if we fill
+> > VDPA_ATTR_DEV_NET_CFG_MAX_VQP with the value we read from the
+> > config
+> > we will confuse the user.
+> >
+> > Fixing this by only filling the value when multiqueue is offered by
+> > the device so userspace can assume 1 when the attr is not provided.
+> >
+> > Fixes: 13b00b135665c("vdpa: Add support for querying vendor statistics")
+> > Cc: Eli Cohen <elic@nvidia.com>
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> >  drivers/vdpa/vdpa.c | 9 ++++-----
+> >  1 file changed, 4 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> > index c06c02704461..bc328197263f 100644
+> > --- a/drivers/vdpa/vdpa.c
+> > +++ b/drivers/vdpa/vdpa.c
+> > @@ -894,7 +894,6 @@ static int vdpa_fill_stats_rec(struct vdpa_device
+> > *vdev, struct sk_buff *msg,
+> >  {
+> >       struct virtio_net_config config = {};
+> >       u64 features;
+> > -     u16 max_vqp;
+> >       u8 status;
+> >       int err;
+> >
+> > @@ -905,15 +904,15 @@ static int vdpa_fill_stats_rec(struct vdpa_device
+> > *vdev, struct sk_buff *msg,
+> >       }
+> >       vdpa_get_config_unlocked(vdev, 0, &config, sizeof(config));
+> >
+> > -     max_vqp = __virtio16_to_cpu(true, config.max_virtqueue_pairs);
+> > -     if (nla_put_u16(msg, VDPA_ATTR_DEV_NET_CFG_MAX_VQP,
+> > max_vqp))
+> > -             return -EMSGSIZE;
+> > -
+> >       features = vdev->config->get_driver_features(vdev);
+> >       if (nla_put_u64_64bit(msg,
+> > VDPA_ATTR_DEV_NEGOTIATED_FEATURES,
+> >                             features, VDPA_ATTR_PAD))
+> >               return -EMSGSIZE;
+> >
+> > +     err = vdpa_dev_net_mq_config_fill(vdev, msg, features, &config);
+> > +     if (err)
+> > +             return err;
+> > +
+>
+> So that means that you can't read statistics when MQ is not supported. Is this worth sacrificing?
 
-In the absence of kgdb nobody else except kprobes itself will do this.
+vdpa_dev_net_mq_config_fill() will return 0 in the case of !MQ, so it
+should still work.
 
->  # echo "p:probe/vfs_truncate_L19 vfs_truncate+98" >> kprobe_events 
->  sh: write error: Invalid or incomplete multibyte or wide character
-> 
-> 
-> Actually, those INT3s are just for padding and can be ignored.
-
-They are speculations stops, not mere padding.
+Thanks
 
 
-Anyway, let me get on with reading the actual patches :-)
+>
+> >       if (nla_put_u32(msg, VDPA_ATTR_DEV_QUEUE_INDEX, index))
+> >               return -EMSGSIZE;
+> >
+> > --
+> > 2.25.1
+>
+

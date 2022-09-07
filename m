@@ -2,99 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2545B0EE7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84125B0EEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiIGVJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S229688AbiIGVKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiIGVJJ (ORCPT
+        with ESMTP id S229514AbiIGVKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:09:09 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6536B07C4
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:09:08 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l14so9761581eja.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 14:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=qJ9O4nSXAP2HkXlzkSydlwpAdZ0/fzUik4a08qPR2dSl0RcUg1SxmMUwqV6fJ/UUfk
-         FE3ze+5QZt5/0W/i0NNXYKeSa35FXX76g55j5k23yQL5HwIT5vc4Bw1nfTPZTitBojsD
-         HO1ne3BaB1rISbA065OLuQH18H2qz9zakaFjabK7+vUp0kLUv37kdHsyp7Y9wvK2Gyyf
-         MByYcBOoGy0BP9B/Z+r7VkvrJFR7rthviQKiQT7YBNo0vMMETiRnemGmBiB6DiAFLN1a
-         TbYW5EuwqROJOuMHXwbIRfg3R0y7rieHt2yujju+rZEMaCaqQbleQUmmAH0MgjgT3KP7
-         ldVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=IpKtjXc9yaxHriLCNBVQAWMG18NCJ93aXm1XdRFDTF+pooPdzOb0acfjucy9OkEn12
-         vO+8rcdJ9sv8E+dM1y3zp4cAVtLtwQJ1O+tcZQrBMMoW41wIqqCJ3gh2Cq1oudFo+Rtu
-         EAkL4nag5QlvHpZ4Q75hfgCfE3oci7TfNYNIWaTvnGfH/J3rPqpFyD4YZCwKVH4g/JxN
-         pD5o3RhM9Bly34oSZvrSKMEl2OF3mMS75WnAL4Y2WsdNLEDvtK+iDraf6TIuKw5w6pEs
-         KpIXB+h/gQCtAKRgdDxnwOEBnwABIzcZvUxOWw6KSfrbyTRPU0Ott89EPgPEnJuZe4qR
-         Zi1g==
-X-Gm-Message-State: ACgBeo2Z0XvaX7hZa5PIEF6DA0tGMWHDqu9wEkoTH4v6ab5niyjAdael
-        TAjvK43TExJSSN3Iu4w2KwjUWzLULHX3uNTBTxI=
-X-Google-Smtp-Source: AA6agR6T+72dsn0FfxvAX2O9VRoLsccr1GMEYeLcL/jHMoM41EcjO09DtdYSTlI4yuJFRH3EJ2GGh1hx0TSqKqmPOAY=
-X-Received: by 2002:a17:906:8a65:b0:770:7e4b:89cf with SMTP id
- hy5-20020a1709068a6500b007707e4b89cfmr3608075ejc.489.1662584947379; Wed, 07
- Sep 2022 14:09:07 -0700 (PDT)
+        Wed, 7 Sep 2022 17:10:12 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50612EE30;
+        Wed,  7 Sep 2022 14:10:10 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E956A1884A6C;
+        Wed,  7 Sep 2022 21:10:07 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id CD0D525032B7;
+        Wed,  7 Sep 2022 21:10:07 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id BF8139EC0006; Wed,  7 Sep 2022 21:10:07 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Received: by 2002:a17:906:7051:b0:738:3d0c:8413 with HTTP; Wed, 7 Sep 2022
- 14:09:06 -0700 (PDT)
-Reply-To: maryalbert00045@gmail.com
-From:   Mary Albert <maryyalbert98@gmail.com>
-Date:   Wed, 7 Sep 2022 22:09:06 +0100
-Message-ID: <CAHCHywEzMso4EHDbLFmgdbirAxiJDX7dpEk8rmudKdPrB_z23Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4944]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [maryyalbert98[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [maryalbert00045[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [maryyalbert98[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Date:   Wed, 07 Sep 2022 23:10:07 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YxNo/0+/Sbg9svid@shredder>
+References: <YwpgvkojEdytzCAB@shredder>
+ <7654860e4d7d43c15d482c6caeb6a773@kapio-technology.com>
+ <YwxtVhlPjq+M9QMY@shredder>
+ <2967ccc234bb672f5440a4b175b73768@kapio-technology.com>
+ <Ywyj1VF1wlYqlHb6@shredder>
+ <9e1a9eb218bbaa0d36cb98ff5d4b97d7@kapio-technology.com>
+ <YwzPJ2oCYJQHOsXD@shredder>
+ <69db7606896c77924c11a6c175c4b1a6@kapio-technology.com>
+ <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+ <YxNo/0+/Sbg9svid@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-how are you?
+On 2022-09-03 16:47, Ido Schimmel wrote:
+> On Mon, Aug 29, 2022 at 06:13:14PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-08-29 18:03, Ido Schimmel wrote:
+>> > On Mon, Aug 29, 2022 at 05:08:23PM +0200, netdev@kapio-technology.com
+>> > wrote:
+>> > > On 2022-08-29 16:37, Ido Schimmel wrote:
+>> > > > On Mon, Aug 29, 2022 at 02:04:42PM +0200, netdev@kapio-technology.com
+>> > > > wrote:
+>> > > > > On 2022-08-29 13:32, Ido Schimmel wrote:
+>> > > > > Port association is needed for MAB to work at all on mv88e6xxx, but
+>> > > > > for
+>> > > > > 802.1X port association is only needed for dynamic ATU entries.
+>> > > >
+>> > > > Ageing of dynamic entries in the bridge requires learning to be on as
+>> > > > well, but in these test cases you are only using static entries and
+>> > > > there is no reason to enable learning in the bridge for that. I prefer
+>> > > > not to leak this mv88e6xxx implementation detail to user space and
+>> > > > instead have the driver enable port association based on whether
+>> > > > "learning" or "mab" is on.
+>> > > >
+>> > >
+>> > > Then it makes most sense to have the mv88e6xxx driver enable port
+>> > > association when then port is locked, as it does now.
+>> >
+>> > As you wish, but like you wrote "802.1X port association is only needed
+>> > for dynamic ATU entries" and in this case user space needs to enable
+>> > learning (for refresh only) so you can really key off learning on
+>> > "learning || mab". User space can decide to lock the port and work with
+>> > static entries and then learning is not required.
+>> 
+>> I will of course remove all "learning on" in the selftests, which is 
+>> what I
+>> think you are referring to. In the previous I am referring to the code 
+>> in
+>> the driver itself which I understand shall turn on port association 
+>> with
+>> locked ports, e.g. no need for "learning on" when using the feature in
+>> general outside selftests...
+> 
+> "learning on" is needed when dynamic FDB entries are used to authorize
+> hosts. Without learning being enabled, the bridge driver (or the
+> underlying hardware) will not refresh the entries during forwarding and
+> they will age out, resulting in packet loss until the hosts are
+> re-authorized.
+> 
+> Given the current test cases only use static entries, there is no need
+> to enable learning on locked ports. This will change when test cases 
+> are
+> added with dynamic entries.
+> 
+> Regarding mv88e6xxx, my understanding is that you also need learning
+> enabled for MAB (I assume for the violation interrupts). Therefore, for
+> mv88e6xxx, learning can be enabled if learning is on or MAB is on.
+> Enabling it based on whether the port is locked or not seems 
+> inaccurate.
+
+Given that 'learning on' is needed for hardware refreshing of ATU 
+entries (mv88e6xxx), and that will in the future be needed in general, I 
+think it is best to enable it when a port is locked. Also the matter is 
+that the locked feature needs to modify the register that contains the 
+PAV. So I see it as natural that it is done there, as it will eventually 
+have to be done there.
+That the selftests do not need it besides when activating MAB, I think, 
+is a special case.
+
+I am at the blackhole driver implementation now, as I suppose that the 
+iproute2 command should work with the mv88e6xxx driver when adding 
+blackhole entries (with a added selftest)?
+I decided to add the blackhole feature as new ops for drivers with 
+functions blackhole_fdb_add() and blackhole_fdb_del(). Do you agree with 
+that approach?

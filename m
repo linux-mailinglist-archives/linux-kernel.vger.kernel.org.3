@@ -2,129 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43B55AF942
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388D75AF944
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiIGA52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S229638AbiIGA6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiIGA50 (ORCPT
+        with ESMTP id S229625AbiIGA57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:57:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA0295E61;
-        Tue,  6 Sep 2022 17:57:24 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MMkLJ3vn6znWMk;
-        Wed,  7 Sep 2022 08:54:48 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 7 Sep 2022 08:57:22 +0800
-Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
- (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 7 Sep
- 2022 08:57:21 +0800
-Subject: Re: [PATCH net-next 2/5] net: hns3: support ndo_select_queue()
-To:     Paolo Abeni <pabeni@redhat.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <edumazet@google.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lipeng321@huawei.com>,
-        <lanhao@huawei.com>
-References: <20220905081539.62131-1-huangguangbin2@huawei.com>
- <20220905081539.62131-3-huangguangbin2@huawei.com>
- <8b2589bd6303133fd27cab1af27b096a5f848074.camel@redhat.com>
-From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
-Message-ID: <855274c8-fa07-8405-61d6-390b7cd9853e@huawei.com>
-Date:   Wed, 7 Sep 2022 08:57:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tue, 6 Sep 2022 20:57:59 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C214797D6B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 17:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662512276; x=1694048276;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=o/MCaxqHGLZgzRxhERKBKEPSeCsgBelZjOxaZKLu3vs=;
+  b=T0DU8id7TEmmjnvoOyI6g3y/OwFzCCQH/3HnjPqODRTAZ+L5RMvfHm5x
+   zfC+b7twCYp+svriqcynbggPswAUpvd4Ji3ba0dsvn0OsaTK8NM/A42G2
+   297Mkt8rF2lb+Dn1PsFQtjohCKs65PzL4VnXvlKYMDMjwt9uS7Z9jVMOo
+   3A2DYNc9fSwNTqymBtPSTOvCZ9RX/0pZt3h1Stp+TKr3FMvUDgrrw0BdV
+   8lut9cHhdtYQt+yMNiWup5lVEVlnSbmT7fr9nhXXPa6sWcNmA5RspTIpi
+   iVTjEEZVqomNP7Eqt7bPx1zLyOrJONhGMJl1BRjHce7vNezEfkWV2dkm/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="322928535"
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="322928535"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 17:57:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,295,1654585200"; 
+   d="scan'208";a="756573422"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Sep 2022 17:57:55 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oVjO6-0005sW-2M;
+        Wed, 07 Sep 2022 00:57:54 +0000
+Date:   Wed, 07 Sep 2022 08:57:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/core] BUILD SUCCESS
+ ee9db0e14b0575aa827579dc2471a29ec5fc6877
+Message-ID: <6317ec7f.5c4DZvUQakcyAZ5o%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <8b2589bd6303133fd27cab1af27b096a5f848074.camel@redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.67]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+branch HEAD: ee9db0e14b0575aa827579dc2471a29ec5fc6877  perf: Use sample_flags for txn
 
+elapsed time: 892m
 
-On 2022/9/6 21:15, Paolo Abeni wrote:
-> On Mon, 2022-09-05 at 16:15 +0800, Guangbin Huang wrote:
->> To support tx packets to select queue according to its dscp field after
->> setting dscp and tc map relationship, this patch implements
->> ndo_select_queue() to set skb->priority according to the user's setting
->> dscp and priority map relationship.
->>
->> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
->> ---
->>   .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 46 +++++++++++++++++++
->>   1 file changed, 46 insertions(+)
->>
->> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
->> index 481a300819ad..82f83e3f8162 100644
->> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
->> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
->> @@ -2963,6 +2963,51 @@ static int hns3_nic_set_vf_mac(struct net_device *netdev, int vf_id, u8 *mac)
->>   	return h->ae_algo->ops->set_vf_mac(h, vf_id, mac);
->>   }
->>   
->> +#define HNS3_INVALID_DSCP		0xff
->> +#define HNS3_DSCP_SHIFT			2
->> +
->> +static u8 hns3_get_skb_dscp(struct sk_buff *skb)
->> +{
->> +	__be16 protocol = skb->protocol;
->> +	u8 dscp = HNS3_INVALID_DSCP;
->> +
->> +	if (protocol == htons(ETH_P_8021Q))
->> +		protocol = vlan_get_protocol(skb);
->> +
->> +	if (protocol == htons(ETH_P_IP))
->> +		dscp = ipv4_get_dsfield(ip_hdr(skb)) >> HNS3_DSCP_SHIFT;
->> +	else if (protocol == htons(ETH_P_IPV6))
->> +		dscp = ipv6_get_dsfield(ipv6_hdr(skb)) >> HNS3_DSCP_SHIFT;
->> +
->> +	return dscp;
->> +}
->> +
->> +static u16 hns3_nic_select_queue(struct net_device *netdev,
->> +				 struct sk_buff *skb,
->> +				 struct net_device *sb_dev)
->> +{
->> +	struct hnae3_handle *h = hns3_get_handle(netdev);
->> +	u8 dscp, priority;
->> +	int ret;
->> +
->> +	if (h->kinfo.tc_map_mode != HNAE3_TC_MAP_MODE_DSCP ||
->> +	    !h->ae_algo->ops->get_dscp_prio)
->> +		goto out;
->> +
->> +	dscp = hns3_get_skb_dscp(skb);
->> +	if (unlikely(dscp == HNS3_INVALID_DSCP))
->> +		goto out;
->> +
->> +	ret = h->ae_algo->ops->get_dscp_prio(h, dscp, NULL, &priority);
-> 
-> This introduces an additional, unneeded indirect call in the fast path,
-> you could consider replacing the above with a direct call to
-> hclge_get_dscp_prio() - again taking care of the CONFIG_HNS3_DCB
-> dependency.
-> 
-> Cheers,
-> 
-> Paolo
-> 
-> .
-> 
-Ok.
+configs tested: 105
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+arc                  randconfig-r043-20220906
+m68k                             allyesconfig
+riscv                randconfig-r042-20220906
+m68k                             allmodconfig
+s390                 randconfig-r044-20220906
+powerpc                          allmodconfig
+x86_64                              defconfig
+x86_64                        randconfig-a013
+mips                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a011
+x86_64                               rhel-8.3
+powerpc                           allnoconfig
+sh                               allmodconfig
+x86_64                           allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a015
+i386                          randconfig-a005
+x86_64                        randconfig-a002
+arm                                 defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                             allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                          randconfig-a014
+i386                          randconfig-a012
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a016
+arm                              allyesconfig
+arm64                            allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+nios2                         10m50_defconfig
+arc                          axs103_defconfig
+xtensa                          iss_defconfig
+sh                          r7780mp_defconfig
+sparc                       sparc64_defconfig
+parisc64                            defconfig
+powerpc                 canyonlands_defconfig
+arm                           viper_defconfig
+powerpc                    adder875_defconfig
+sh                        dreamcast_defconfig
+sh                   sh7770_generic_defconfig
+sh                          lboxre2_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+powerpc                mpc7448_hpc2_defconfig
+alpha                               defconfig
+arm                           sama5_defconfig
+powerpc                     tqm8548_defconfig
+sh                            titan_defconfig
+sh                     sh7710voipgw_defconfig
+i386                          randconfig-c001
+csky                             alldefconfig
+m68k                                defconfig
+powerpc                     pq2fads_defconfig
+arm                          iop32x_defconfig
+mips                           ip32_defconfig
+sh                           se7750_defconfig
+sparc64                          alldefconfig
+arm                             ezx_defconfig
+sh                          rsk7264_defconfig
+m68k                        mvme16x_defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                    amigaone_defconfig
+arm                        cerfcube_defconfig
+sparc                            allyesconfig
+sh                           se7705_defconfig
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20220906
+hexagon              randconfig-r045-20220906
+x86_64                        randconfig-a012
+i386                          randconfig-a002
+x86_64                        randconfig-a016
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+i386                          randconfig-a004
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+powerpc                     akebono_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                     mpc512x_defconfig
+arm                           spitz_defconfig
+arm                       spear13xx_defconfig
+mips                      malta_kvm_defconfig
+arm                    vt8500_v6_v7_defconfig
+arm                     davinci_all_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

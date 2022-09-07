@@ -2,226 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C235AFB5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50105AFB5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiIGEgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S229800AbiIGEgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiIGEg0 (ORCPT
+        with ESMTP id S229549AbiIGEg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 00:36:26 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCC88A6E1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:36:25 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id 15-20020a62170f000000b0053e304ef6c0so1937793pfx.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 21:36:25 -0700 (PDT)
+        Wed, 7 Sep 2022 00:36:27 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BAE8671C
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:36:26 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id z187so13408729pfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 21:36:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=khSX7Y4iv18onStJMmBrPhwF58VNn8i03Anirden96Q=;
-        b=gemiZCbExV47bKx8wOek1aQ0u8hzbt+EnZzyGvpEX6V3hdl7+FzjhOMQFdg/BAePWs
-         g1Phtex5qyjXcE0CH8qo/myIMYCKBorj4O/lYfXNAuZQE1nIXh6Y/UorToCbyrfqTc08
-         w41m5Q1yfn7rEabS42x1kF04pr4Fz4DhfpdBQ7PAZvq2tOJI4kuvrPxvdDoYGIeFXtU7
-         73wZp+rS4GUGDo8QZ9/BnYm7kUNxwjCsKt+VQJT//oAjo2bR/bpBZ7YFQnfETArjdfst
-         yH5HuLvanOXbdhRwhVJR8If5nQVhIbTM14rXsNmexTs4BoP70k0Ts+2cN/b8E1sehylv
-         kQmg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
+        bh=4FLct00x9EVngCiNgBMX+7R8EGdypSh+ra2sd+aOfyM=;
+        b=gkDrDVZdH6aXz+d6SKgjK7/Q4/QTsUEdn8vF9gjtzlxP2KfbIQ+kJ3K8VzyZCykGZc
+         ZKhGoojve8uRVTcItuUVUi3o6GuMwyZ+nQNz0AEeF2k4KLulUe70InzBSvwlT0ebU3Kv
+         tWlHdnQWx+7AAdlOqwpEoIbNucbq30/1TxYIH4PE05iImqD6qdPx3prvBaRskVmq1rLh
+         vYDztG/c0O6zHHkfKjDi1aTV4dSUHKLoDRsjAnh3jHicXwW5bbKw4cq+ceyeJ5Hzicaf
+         P+HJxYgEgapri3rY3OvE7OpwqIvjmqEAQmzf4BxrFxSiWxa5AJIcybem6U57n/vAtzN+
+         zQJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=khSX7Y4iv18onStJMmBrPhwF58VNn8i03Anirden96Q=;
-        b=d17cBZ3w1FNkruUdgnkJbJyUuW2WSUdYOacLxuHYAUBtROie40e91PQe6m6StFPTSw
-         n/hADb3mM5MK9kfbOugmz5Vojq+YvrldevhbJ/nVri2oCn6CMil/OQVvycUoZDprxRjt
-         4fpemIZ4quwLiJZLgN89XqYtvji9fm5kYuyhYVeM3r3JobboOx7RORPHC62AraNlAr6s
-         XwSOFZ1M5eqDg5JQjo1OHZqFT0Je2cm6uzd2FK4Igxz1+uCDb+JaDaa1ii2xbYaAhgRU
-         +cAHKP9GbKmlSWvZLA83nTK9YVz4F8FSZq8yCPy3eHcSdLbuXmGjdPhCptBEw5OAlsM0
-         Vfsw==
-X-Gm-Message-State: ACgBeo3kIlTZ3WPb3Q0Al+DxhIQuan3kQgD4RgQQrtF6RXZXetdx0kPI
-        K0PZ6YGW9r+ZwrSB0zbisQHI4iJEqG8njw==
-X-Google-Smtp-Source: AA6agR5/ynpD4fcrcx0c8sHHlPJFfJQPloK/P5POaEbeKl2ov/6eY/SmFki7BrZyFFL0jRWVJtkjvAuQBWyeJQ==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a17:903:40c9:b0:176:e58c:f082 with SMTP
- id t9-20020a17090340c900b00176e58cf082mr1969898pld.60.1662525384705; Tue, 06
- Sep 2022 21:36:24 -0700 (PDT)
-Date:   Wed,  7 Sep 2022 04:35:37 +0000
-In-Reply-To: <20220907043537.3457014-1-shakeelb@google.com>
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=4FLct00x9EVngCiNgBMX+7R8EGdypSh+ra2sd+aOfyM=;
+        b=B9VbrsJRJjDbEAgwa8AEaftQwtZXCihH49imXsDqnwHysG7cL7Pe+auCQ9Pa/xxOI6
+         +ozjBtRHKRxWPsiZ0AP/gAK/lJJz1nYEwYjB+pf6Fr0HS/4DNdEfVSruM/UzfwIsP9OH
+         9oA9p2U7t3/AfDYzDTC0OzsSsWHdT07S88a9KAJ0gqssqxVwk/HW5IeUsgZP8l65ab+j
+         9B8mOnW1y+R0/tpg37Ozslee6nKsbzXenxjYYCsVT5m8Ffdvl+cwDcy2fNoDzmNty/eA
+         sUzEM3P0KNaOcFiF1s4AFzSCDiWRDnaVuhg42ISifuTQ5GPRfZyzFNkbTvMIn1IGGIik
+         dAxQ==
+X-Gm-Message-State: ACgBeo1k89RI3sDGSMVyrtygX0Zqyo3XrdzA60mLujic4ze17Vi72Ah8
+        e5jC+ZEajIYLFvQlHHUGDtrA9M+YGv4=
+X-Google-Smtp-Source: AA6agR6Jm0cQe2ABQUc01VWMmQwJjt/MdWuFI+yQjS5LCa6WrDV+OQgAwLmx0VFP/tT6C9HJ6vbxCg==
+X-Received: by 2002:a63:4c50:0:b0:429:983d:22f1 with SMTP id m16-20020a634c50000000b00429983d22f1mr1814861pgl.213.1662525386216;
+        Tue, 06 Sep 2022 21:36:26 -0700 (PDT)
+Received: from localhost ([124.170.18.239])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b00536fc93b8c8sm11220239pfq.20.2022.09.06.21.36.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 21:36:25 -0700 (PDT)
 Mime-Version: 1.0
-References: <20220907043537.3457014-1-shakeelb@google.com>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220907043537.3457014-4-shakeelb@google.com>
-Subject: [PATCH 3/3] memcg: reduce size of memcg vmstats structures
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 07 Sep 2022 14:36:21 +1000
+Message-Id: <CMPW28H38HE0.W6BB976O6ULP@bobo>
+Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2] powerpc/vdso: link with -z noexecstack
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+X-Mailer: aerc 0.11.0
+References: <b95f2e3216a574837dd61208444e9515c3423da4.1662132312.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <b95f2e3216a574837dd61208444e9515c3423da4.1662132312.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct memcg_vmstats and struct memcg_vmstats_percpu contains two
-arrays each for events of size NR_VM_EVENT_ITEMS which can be as large
-as 110. However the memcg v1 only uses 4 of those while memcg v2 uses
-15. The union of both is 17. On a 64 bit system, we are wasting
-approximately ((110 - 17) * 8 * 2) * (nr_cpus + 1) bytes which is
-significant on large machines.
+On Sat Sep 3, 2022 at 1:25 AM AEST, Christophe Leroy wrote:
+> With recent binutils, the following warning appears:
+>
+>   VDSO32L arch/powerpc/kernel/vdso/vdso32.so.dbg
+> /opt/gcc-12.2.0-nolibc/powerpc64-linux/bin/../lib/gcc/powerpc64-linux/12.=
+2.0/../../../../powerpc64-linux/bin/ld: warning: arch/powerpc/kernel/vdso/g=
+etcpu-32.o: missing .note.GNU-stack section implies executable stack
+> /opt/gcc-12.2.0-nolibc/powerpc64-linux/bin/../lib/gcc/powerpc64-linux/12.=
+2.0/../../../../powerpc64-linux/bin/ld: NOTE: This behaviour is deprecated =
+and will be removed in a future version of the linker
+>
+> To avoid that, explicitely tell the linker we don't
+> want executable stack.
+>
+> For more explanations, see commit ffcf9c5700e4 ("x86: link vdso
+> and boot with -z noexecstack --no-warn-rwx-segments")
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+> v2: Removed unrelated change in arch/powerpc/kernel/Makefile
 
-This patch reduces the size of the given structures by adding one
-indirection and only stores array of events which are actually used by
-the memcg code. With this patch, the size of memcg_vmstats has reduced
-from 2544 bytes to 1056 bytes while the size of memcg_vmstats_percpu has
-reduced from 2568 bytes to 1080 bytes.
+Seems okay. Here too, commit 0d362be5b1420 ("Makefile: link with -z
+noexecstack --no-warn-rwx-segments"). Core and x86 are using
+no-warn-rwx-segments as well, should we have that just to match
+too?
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
----
- mm/memcontrol.c | 52 ++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 43 insertions(+), 9 deletions(-)
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index d0ccc16ed416..a60012be6140 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -671,6 +671,8 @@ static void flush_memcg_stats_dwork(struct work_struct *w)
- 
- /* Subset of vm_event_item to report for memcg event stats */
- static const unsigned int memcg_vm_event_stat[] = {
-+	PGPGIN,
-+	PGPGOUT,
- 	PGSCAN_KSWAPD,
- 	PGSCAN_DIRECT,
- 	PGSTEAL_KSWAPD,
-@@ -692,14 +694,30 @@ static const unsigned int memcg_vm_event_stat[] = {
- #endif
- };
- 
-+#define NR_MEMCG_EVENTS ARRAY_SIZE(memcg_vm_event_stat)
-+static int mem_cgroup_events_index[NR_VM_EVENT_ITEMS] __read_mostly;
-+
-+static void init_memcg_events(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < NR_MEMCG_EVENTS; ++i)
-+		mem_cgroup_events_index[memcg_vm_event_stat[i]] = i + 1;
-+}
-+
-+static inline int memcg_events_index(enum vm_event_item idx)
-+{
-+	return mem_cgroup_events_index[idx] - 1;
-+}
-+
- struct memcg_vmstats_percpu {
- 	/* Local (CPU and cgroup) page state & events */
- 	long			state[MEMCG_NR_STAT];
--	unsigned long		events[NR_VM_EVENT_ITEMS];
-+	unsigned long		events[NR_MEMCG_EVENTS];
- 
- 	/* Delta calculation for lockless upward propagation */
- 	long			state_prev[MEMCG_NR_STAT];
--	unsigned long		events_prev[NR_VM_EVENT_ITEMS];
-+	unsigned long		events_prev[NR_MEMCG_EVENTS];
- 
- 	/* Cgroup1: threshold notifications & softlimit tree updates */
- 	unsigned long		nr_page_events;
-@@ -709,11 +727,11 @@ struct memcg_vmstats_percpu {
- struct memcg_vmstats {
- 	/* Aggregated (CPU and subtree) page state & events */
- 	long			state[MEMCG_NR_STAT];
--	unsigned long		events[NR_VM_EVENT_ITEMS];
-+	unsigned long		events[NR_MEMCG_EVENTS];
- 
- 	/* Pending child counts during tree propagation */
- 	long			state_pending[MEMCG_NR_STAT];
--	unsigned long		events_pending[NR_VM_EVENT_ITEMS];
-+	unsigned long		events_pending[NR_MEMCG_EVENTS];
- };
- 
- unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
-@@ -873,24 +891,34 @@ void __mod_lruvec_kmem_state(void *p, enum node_stat_item idx, int val)
- void __count_memcg_events(struct mem_cgroup *memcg, enum vm_event_item idx,
- 			  unsigned long count)
- {
--	if (mem_cgroup_disabled())
-+	int index = memcg_events_index(idx);
-+
-+	if (mem_cgroup_disabled() || index < 0)
- 		return;
- 
- 	memcg_stats_lock();
--	__this_cpu_add(memcg->vmstats_percpu->events[idx], count);
-+	__this_cpu_add(memcg->vmstats_percpu->events[index], count);
- 	memcg_rstat_updated(memcg, count);
- 	memcg_stats_unlock();
- }
- 
- static unsigned long memcg_events(struct mem_cgroup *memcg, int event)
- {
--	return READ_ONCE(memcg->vmstats->events[event]);
-+	int index = memcg_events_index(event);
-+
-+	if (index < 0)
-+		return 0;
-+	return READ_ONCE(memcg->vmstats->events[index]);
- }
- 
- static unsigned long memcg_events_local(struct mem_cgroup *memcg, int event)
- {
- 	long x = 0;
- 	int cpu;
-+	int index = memcg_events_index(event);
-+
-+	if (index < 0)
-+		return 0;
- 
- 	for_each_possible_cpu(cpu)
- 		x += per_cpu(memcg->vmstats_percpu->events[event], cpu);
-@@ -1564,10 +1592,15 @@ static void memory_stat_format(struct mem_cgroup *memcg, char *buf, int bufsize)
- 		       memcg_events(memcg, PGSTEAL_KSWAPD) +
- 		       memcg_events(memcg, PGSTEAL_DIRECT));
- 
--	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++)
-+	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++) {
-+		if (memcg_vm_event_stat[i] == PGPGIN ||
-+		    memcg_vm_event_stat[i] == PGPGOUT)
-+			continue;
-+
- 		seq_buf_printf(&s, "%s %lu\n",
- 			       vm_event_name(memcg_vm_event_stat[i]),
- 			       memcg_events(memcg, memcg_vm_event_stat[i]));
-+	}
- 
- 	/* The above should easily fit into one page */
- 	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
-@@ -5309,6 +5342,7 @@ mem_cgroup_css_alloc(struct cgroup_subsys_state *parent_css)
- 		page_counter_init(&memcg->kmem, &parent->kmem);
- 		page_counter_init(&memcg->tcpmem, &parent->tcpmem);
- 	} else {
-+		init_memcg_events();
- 		page_counter_init(&memcg->memory, NULL);
- 		page_counter_init(&memcg->swap, NULL);
- 		page_counter_init(&memcg->kmem, NULL);
-@@ -5477,7 +5511,7 @@ static void mem_cgroup_css_rstat_flush(struct cgroup_subsys_state *css, int cpu)
- 			parent->vmstats->state_pending[i] += delta;
- 	}
- 
--	for (i = 0; i < NR_VM_EVENT_ITEMS; i++) {
-+	for (i = 0; i < NR_MEMCG_EVENTS; i++) {
- 		delta = memcg->vmstats->events_pending[i];
- 		if (delta)
- 			memcg->vmstats->events_pending[i] = 0;
--- 
-2.37.2.789.g6183377224-goog
+> ---
+>  arch/powerpc/kernel/vdso/Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso=
+/Makefile
+> index 096b0bf1335f..a2e7b0ce5b19 100644
+> --- a/arch/powerpc/kernel/vdso/Makefile
+> +++ b/arch/powerpc/kernel/vdso/Makefile
+> @@ -92,13 +92,13 @@ include/generated/vdso64-offsets.h: $(obj)/vdso64.so.=
+dbg FORCE
+> =20
+>  # actual build commands
+>  quiet_cmd_vdso32ld_and_check =3D VDSO32L $@
+> -      cmd_vdso32ld_and_check =3D $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@=
+ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) ; $(cmd_vdso_check)
+> +      cmd_vdso32ld_and_check =3D $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@=
+ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_chec=
+k)
+>  quiet_cmd_vdso32as =3D VDSO32A $@
+>        cmd_vdso32as =3D $(VDSOCC) $(a_flags) $(CC32FLAGS) $(AS32FLAGS) -c=
+ -o $@ $<
+>  quiet_cmd_vdso32cc =3D VDSO32C $@
+>        cmd_vdso32cc =3D $(VDSOCC) $(c_flags) $(CC32FLAGS) -c -o $@ $<
+> =20
+>  quiet_cmd_vdso64ld_and_check =3D VDSO64L $@
+> -      cmd_vdso64ld_and_check =3D $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@=
+ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) ; $(cmd_vdso_check)
+> +      cmd_vdso64ld_and_check =3D $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@=
+ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_chec=
+k)
+>  quiet_cmd_vdso64as =3D VDSO64A $@
+>        cmd_vdso64as =3D $(VDSOCC) $(a_flags) $(CC64FLAGS) $(AS64FLAGS) -c=
+ -o $@ $<
+> --=20
+> 2.37.1
 

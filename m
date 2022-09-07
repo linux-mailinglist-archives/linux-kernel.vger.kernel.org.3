@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7BD5AF932
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3444D5AF936
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 02:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiIGAyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Sep 2022 20:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S229536AbiIGAzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Sep 2022 20:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiIGAyp (ORCPT
+        with ESMTP id S229446AbiIGAzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Sep 2022 20:54:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A561AF3B;
-        Tue,  6 Sep 2022 17:54:44 -0700 (PDT)
+        Tue, 6 Sep 2022 20:55:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC64D474FC;
+        Tue,  6 Sep 2022 17:55:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD8F46173D;
-        Wed,  7 Sep 2022 00:54:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4594EC43140;
-        Wed,  7 Sep 2022 00:54:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C38BB81AD5;
+        Wed,  7 Sep 2022 00:55:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6347EC433C1;
+        Wed,  7 Sep 2022 00:55:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662512083;
-        bh=SC+Hs3+8sgeFMw3h38n6zDv3JRNaTxvHlzp08pJv7mw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AfZvJftkz58+dYoPlKIQOYui2EE3NLEiNMsVUyVOPDcFLx1A1GJJELEc0j/IcxGlN
-         KKEeN6x3epysvSiXwdvBb1aKlQ6TuCvUXkZvc2sLdzJxgZW2wOMk/63fFsj1f0UfL2
-         14zHXHsyG7FDi6P/Zbgjm89CJSyLF/siXjw5MakqzgzYJGXithg7iZDldK8UtkmyT6
-         hTTgfB8BFJXycJByF4ZoT2sJX6Wco3Oz1b5YMUCi/XhLfWwjfB5OBeJnRYfAg70J8U
-         S4IqUF9JusZAWX8+12jwOc81IBLinPiqv8W6EyFe48OOjJiOGzKQg/u2O/0dyG3my5
-         R3fVakzz8MHZw==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-127ba06d03fso8835724fac.3;
-        Tue, 06 Sep 2022 17:54:43 -0700 (PDT)
-X-Gm-Message-State: ACgBeo05Z4r5NT+iK8wg8APvgjqI/KSCRq4XXL8gL+UlNpPo3pTCmm+n
-        9ouSsdls9BwfBDie8kllZRPoo9S7eMjrpw3bIUQ=
-X-Google-Smtp-Source: AA6agR4GBRHPDj2s0R+HEZdjbGd7h5e0le/7MDXnl/o9xnctQ79UtwCwp+ud8cbAQ+FdUTgmKxCCYwPP5FsrSQfTMmk=
-X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
- ba22-20020a056870c59600b001016409ae62mr12942331oab.112.1662512082262; Tue, 06
- Sep 2022 17:54:42 -0700 (PDT)
+        s=k20201202; t=1662512115;
+        bh=0yIJr9LmrqrD3h0kQYQFIbV0sKxYlBgsxC6nOdGrKMo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NkhSECC2Lkq7vieZGbhdthZz2zSqXwLTS8PH6s09izpLx2X4bPL62m37qoik67CVT
+         wyQTU329FW8eh8Fri50IUGllih79mosQntkfVqz1Aiwd+fmNokhShhSV/1brI5NTDl
+         Q6hu1YWfRnRycfPXUMsj5ZDCEiRjCG3v+GA81ayt5EbPjE01Qwgg08HOTu1YJ4OCxO
+         6j0ZzUVngAdOCuGWHLxq47Wbkrn72A5D+F1mT9Yw0eX7IQ1W1WsdtBmAz79DGTLiX+
+         Ssb2AhChZ2ZQqH9bi7ON+H9k1BzxM1j8SMcmbopfw0YZelEnOZPdJgJTak/orf8uEL
+         AL4PN33J+3Q2w==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
+Subject: [PATCH 0/2] x86/kprobes: Fixes for CONFIG_RETHUNK
+Date:   Wed,  7 Sep 2022 09:55:11 +0900
+Message-Id: <166251211081.632004.1842371136165709807.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <20220906035423.634617-1-guoren@kernel.org> <8db7caea-a1a0-25a3-ade0-2f1714d709c8@microchip.com>
-In-Reply-To: <8db7caea-a1a0-25a3-ade0-2f1714d709c8@microchip.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Sep 2022 08:54:30 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ29bn=hgubC+YU1qSw_L3W2kAt3Yi4_EknrNCkR-dRFg@mail.gmail.com>
-Message-ID: <CAJF2gTQ29bn=hgubC+YU1qSw_L3W2kAt3Yi4_EknrNCkR-dRFg@mail.gmail.com>
-Subject: Re: [PATCH V3 0/7] riscv: Add GENERIC_ENTRY, irq stack support
-To:     Conor.Dooley@microchip.com
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, bigeasy@linutronix.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,118 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 1:42 AM <Conor.Dooley@microchip.com> wrote:
->
-> On 06/09/2022 04:54, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > The patches convert riscv to use the generic entry infrastructure from
-> > kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
-> > prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
-> > feature for the IRQ_STACKS config. You can try it directly with [1].
->
-> Hey Guo Ren,
-> I applied this patchset to v6.0-rc4 & ran into a build error:
-> /stuff/linux/arch/riscv/kernel/entry.S:347:9: error: operand must be a ba=
-re symbol name
->  la a3, ((1 << (12)) << (2 + 0))
-Yes, please try:
--       la      a3, IRQ_STACK_SIZE
-+       li      a3, IRQ_STACK_SIZE
+Hi,
 
-la is for the symbol, not immediate. But why does my toolchain not
-report the error?
+Here is a couple of patches to fix kprobes and optprobe to work
+on the kernel with CONFIG_RETHUNK and CONFIG_SLS.
 
-=E2=9E=9C  linux git:(generic_entry_v3) make ARCH=3Driscv
-CROSS_COMPILE=3Driscv64-unknown-linux-gnu- EXTRA_CFLAGS+=3D-g
-O=3D../build-riscv/ -kj62 all -kj
-=E2=9E=9C  linux git:(generic_entry_v3) riscv64-unknown-linux-gnu-gcc -v
-Using built-in specs.
-COLLECT_GCC=3Driscv64-unknown-linux-gnu-gcc
-COLLECT_LTO_WRAPPER=3D/opt/riscv/libexec/gcc/riscv64-unknown-linux-gnu/11.1=
-.0/lto-wrapper
-Target: riscv64-unknown-linux-gnu
-Configured with:
-/home/guoren/source/riscv-gnu-toolchain/riscv-gcc/configure
---target=3Driscv64-unknown-linux-gnu --prefix=3D/opt/riscv
---with-sysroot=3D/opt/riscv/sysroot --with-pkgversion=3Dg5964b5cd7272
---with-system-zlib --enable-shared --enable-tls
---enable-languages=3Dc,c++,fortran --disable-libmudflap --disable-libssp
---disable-libquadmath --disable-libsanitizer --disable-nls
---disable-bootstrap --src=3D.././riscv-gcc --enable-multilib
---with-abi=3Dlp64d --with-arch=3Drv64imafdc --with-tune=3Drocket
---with-isa-spec=3D2.2 'CFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
-'CXXFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
-Thread model: posix
-Supported LTO compression algorithms: zlib
-gcc version 11.1.0 (g5964b5cd7272)
+With these configs, the kernel functions may includes padding INT3 in
+the function code block (body) in addition to the gaps between functions.
+
+Since kprobes on x86 has to ensure the probe address is a function
+bondary, it decodes the instructions in the function until the address.
+If it finds an INT3 which is not embedded by kprobe, it stops decoding
+because usually the INT3 is used for debugging as a software breakpoint
+and such INT3 will replace the first byte of an original instruction.
+Without recovering it, kprobes can not continue to decode it. Thus the
+kprobes returns -EILSEQ as below.
 
 
-
->         ^
->   CC      arch/riscv/kernel/process.o
-> make[5]: *** [/stuff/linux/scripts/Makefile.build:322: arch/riscv/kernel/=
-entry.o] Error 1
-> make[5]: *** Waiting for unfinished jobs....
->
-> Thanks,
-> Conor.
-> >
-> > [1] https://github.com/guoren83/linux/tree/generic_entry_v3
-> >
-> > V3:
-> >  - Fixup CONFIG_COMPAT=3Dn compile error
-> >  - Add THREAD_SIZE_ORDER config
-> >  - Optimize elf_kexec.c warning fixup
-> >  - Add static to irq_stack_ptr definition
-> >
-> > V2:
-> >  Link: https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren=
-@kernel.org/
-> >  - Fixup compile error by include "riscv: ptrace: Remove duplicate
-> >    operation"
-> >  - Fixup compile warning
-> >    Reported-by: kernel test robot <lkp@intel.com>
-> >  - Add test repo link in cover letter
-> >
-> > V1:
-> >  Link: https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guo=
-ren@kernel.org/
-> >
-> > Guo Ren (7):
-> >   riscv: elf_kexec: Fixup compile warning
-> >   riscv: compat_syscall_table: Fixup compile warning
-> >   riscv: ptrace: Remove duplicate operation
-> >   riscv: convert to generic entry
-> >   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-> >   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
-> >   riscv: Add config of thread stack size
-> >
-> >  arch/riscv/Kconfig                    |  19 ++
-> >  arch/riscv/include/asm/csr.h          |   1 -
-> >  arch/riscv/include/asm/entry-common.h |   8 +
-> >  arch/riscv/include/asm/irq.h          |   3 +
-> >  arch/riscv/include/asm/ptrace.h       |  10 +-
-> >  arch/riscv/include/asm/stacktrace.h   |   5 +
-> >  arch/riscv/include/asm/syscall.h      |   6 +
-> >  arch/riscv/include/asm/thread_info.h  |  19 +-
-> >  arch/riscv/include/asm/vmap_stack.h   |  28 +++
-> >  arch/riscv/kernel/Makefile            |   1 +
-> >  arch/riscv/kernel/elf_kexec.c         |   2 +-
-> >  arch/riscv/kernel/entry.S             | 255 +++++---------------------
-> >  arch/riscv/kernel/irq.c               |  75 ++++++++
-> >  arch/riscv/kernel/ptrace.c            |  41 -----
-> >  arch/riscv/kernel/signal.c            |  21 +--
-> >  arch/riscv/kernel/sys_riscv.c         |  27 +++
-> >  arch/riscv/kernel/traps.c             |  11 ++
-> >  arch/riscv/mm/fault.c                 |  12 +-
-> >  18 files changed, 259 insertions(+), 285 deletions(-)
-> >  create mode 100644 arch/riscv/include/asm/entry-common.h
-> >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
-> >
+ # echo "p:probe/vfs_truncate_L19 vfs_truncate+98" >> kprobe_events 
+ sh: write error: Invalid or incomplete multibyte or wide character
 
 
+Actually, those INT3s are just for padding and can be ignored.
 
---=20
-Best Regards
- Guo Ren
+To avoid this issue, if kprobe finds an INT3, it gets the address of
+next non-INT3 byte, and search a branch which jumps to the address.
+If there is the branch, these INT3 will be for padding, so it can be
+skipped. [1/2]
+
+Since the optprobe has similar issue, it also skips the padding INT3
+in the same way. [2/2]
+
+With thses fixes, kprobe and optprobe can probe the kernel again with
+CONFIG_RETHUNK=y.
+
+
+ # echo "p:probe/vfs_truncate_L19 vfs_truncate+98" >> kprobe_events 
+ # echo 1 > events/probe/vfs_truncate_L19/enable 
+ # cat /sys/kernel/debug/kprobes/list 
+ ffffffff81307b52  k  vfs_truncate+0x62    [OPTIMIZED]
+
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (2):
+      x86/kprobes: Fix kprobes instruction boudary check with CONFIG_RETHUNK
+      x86/kprobes: Fix optprobe optimization check with CONFIG_RETHUNK
+
+
+ arch/x86/kernel/kprobes/common.h |   67 +++++++++++++++++++++++++++
+ arch/x86/kernel/kprobes/core.c   |   57 +++++++++++++----------
+ arch/x86/kernel/kprobes/opt.c    |   93 ++++++++++++++------------------------
+ 3 files changed, 133 insertions(+), 84 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

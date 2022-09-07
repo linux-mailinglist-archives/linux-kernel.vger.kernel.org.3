@@ -2,418 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2556D5B0B42
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5712E5B0B47
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiIGROa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S229707AbiIGRPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiIGRO0 (ORCPT
+        with ESMTP id S229619AbiIGRPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:14:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F024333
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:14:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 876B560EDF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 17:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5740DC433C1;
-        Wed,  7 Sep 2022 17:14:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662570860;
-        bh=iEwK5fQHmOYayFxPW2JE5wBJI6KTNJ8Gd4fZUp6rsHM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OHlqkT9J9bBZS942Bwgwjz/ZkiCI58EkupUt7o942Qp6vYZ4msaqkIey5u8wvA5XP
-         d+6YdLJUqGylD0TwWO74ezMDmhCB542Vc5UNjL+vuD3KHt1SHvN/bu1cnUa/3uD1pc
-         /hFzxSX7A8jireMDnKOkvU0vusCehE6jxl56PuOiPMZal3v330Htr+SfX/tMxbKDfd
-         qHsiu0f2IPH4RuVxP4dOKkdxwN4bYmSbLcGW+ABoZMUfI/oJIHk6dIqPqXHrYfmOH6
-         BLkUUQ+qh7gIkeBfC+hE1J7itIOb/FEpiI55X75j/0CQw63VvodBSE0uxCQdIKS/l2
-         RW+xTw5FFac3Q==
-From:   SeongJae Park <sj@kernel.org>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon: add struct damos_region for damon_new_scheme()
-Date:   Wed,  7 Sep 2022 17:14:18 +0000
-Message-Id: <20220907171418.60846-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220907092626.3013765-1-yajun.deng@linux.dev>
-References: 
+        Wed, 7 Sep 2022 13:15:33 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0113915FA;
+        Wed,  7 Sep 2022 10:15:28 -0700 (PDT)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C0A7020003;
+        Wed,  7 Sep 2022 17:15:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662570925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tuNHhg0d7wCXZkWQB2aVNJEW/obWsRINPAZ/CInV8Ek=;
+        b=POTBoVtrj3ImsMtFfmWL/bMKfwwXr1NizxFJd5pb/vOiZR9jjG8ArBndIJb0IZ70lj0rf2
+        HTKO7fkRwXqfZCv9fzxTGmKVk7avMQNe/ErxQ5/OGneWSDmRd3YM2srqLx3fNJGFQxaFqc
+        pekgI6081tOP14+iM8qeMK0I4KvfXB2FiaJA9mMUpw31FfDLDJaKEMtsJmsasyYTFS9j3p
+        GPMjfTwmo8Q0sJ3jwWte3RhVBLaDr2c8onzgseLvYV71E8p/OuqiUHkY89JB09SVVFklcS
+        s0u5bVCkrLfRc4iqs470lrIUkbHzWFXpYjDsvg570T1yOuQqLajdG6D9ArzMoQ==
+Date:   Wed, 7 Sep 2022 19:15:21 +0200
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 0/8] Add support for the internal RK3308 audio codec
+Message-ID: <20220907191521.1ce081c8@booty>
+In-Reply-To: <Yxi7uD6RKeR3uHcF@sirena.org.uk>
+References: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
+        <Yxi7uD6RKeR3uHcF@sirena.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yajun,
+Hello Mark,
 
-On Wed, 7 Sep 2022 17:26:26 +0800 Yajun Deng <yajun.deng@linux.dev> wrote:
+thanks for the quick feedback!
 
-> The damon_new_scheme() has too many parameters, we can add struct
-> damos_region to simplify it.
+On Wed, 7 Sep 2022 16:41:44 +0100
+Mark Brown <broonie@kernel.org> wrote:
+
+> On Wed, Sep 07, 2022 at 04:21:16PM +0200, luca.ceresoli@bootlin.com wrote:
 > 
-> In additon, we can't use bpf trace more than 5 parameters.
-
-Good point.  I have a few comments below, though.
-
+> > Luca Ceresoli (8):
+> >   ASoC: rockchip: rk3308: add internal audio codec bindings
+> >   ASoC: rockchip: rk3308: add audio card bindings
+> >   arm64: dts: rockchip: add i2s_8ch_2 and i2s_8ch_3
+> >   arm64: dts: rockchip: add the internal audio codec
+> >   ASoC: rockchip: i2s-tdm: Fix clk_id usage in .set_sysclk()
+> >   ASoC: audio-graph: let dai_link->init be overridable
+> >   ASoC: codecs: Add RK3308 internal audio codec driver
+> >   ASoC: rockchip: add new RK3308 sound card  
 > 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> ---
->  include/linux/damon.h | 37 ++++++++++++++++++++-----------------
->  mm/damon/core.c       | 28 ++++++++++++----------------
->  mm/damon/dbgfs.c      | 22 ++++++++++++----------
->  mm/damon/lru_sort.c   | 41 ++++++++++++++++++++++++++---------------
->  mm/damon/reclaim.c    | 23 ++++++++++++++---------
->  mm/damon/sysfs.c      | 13 +++++++++----
->  6 files changed, 93 insertions(+), 71 deletions(-)
-> 
-> diff --git a/include/linux/damon.h b/include/linux/damon.h
-> index 7b1f4a488230..b9869be37af0 100644
-> --- a/include/linux/damon.h
-> +++ b/include/linux/damon.h
-> @@ -216,13 +216,27 @@ struct damos_stat {
->  };
->  
->  /**
-> - * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
-> + * struct damos_region - Region on a given target.
->   * @min_sz_region:	Minimum size of target regions.
->   * @max_sz_region:	Maximum size of target regions.
->   * @min_nr_accesses:	Minimum ``->nr_accesses`` of target regions.
->   * @max_nr_accesses:	Maximum ``->nr_accesses`` of target regions.
->   * @min_age_region:	Minimum age of target regions.
->   * @max_age_region:	Maximum age of target regions.
-> + */
-> +
-> +struct damos_region {
-> +	unsigned long min_sz_region;
-> +	unsigned long max_sz_region;
-> +	unsigned int min_nr_accesses;
-> +	unsigned int max_nr_accesses;
-> +	unsigned int min_age_region;
-> +	unsigned int max_age_region;
-> +};
+> Please pay attention to the ordering of your serieses when posting:
+> generally any bug fixes should come first so that they can be easily
+> sent as fixes, and normally DTS updates are at the very end of the
+> series rather than mixed in the middle since they go via the platform
+> maintainer tree normally rather than with everything else.
 
-IMHO, the name and the comment are not so clearly explaining what this
-structure is for.  This structure is for specifying the access pattern of
-monitoring regions that we have interest with the given scheme.  How about
-damos_access_pattern, instead, for example?
+Sorry about that. I've reordered the patches in my branch for the next
+iteration.
 
-> +
-> +/**
-> + * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
-> + * @region:		Region on a given target.
->   * @action:		&damo_action to be applied to the target regions.
->   * @quota:		Control the aggressiveness of this scheme.
->   * @wmarks:		Watermarks for automated (in)activation of this scheme.
-> @@ -230,10 +244,8 @@ struct damos_stat {
->   * @list:		List head for siblings.
->   *
->   * For each aggregation interval, DAMON finds regions which fit in the
-> - * condition (&min_sz_region, &max_sz_region, &min_nr_accesses,
-> - * &max_nr_accesses, &min_age_region, &max_age_region) and applies &action to
-> - * those.  To avoid consuming too much CPU time or IO resources for the
-> - * &action, &quota is used.
-> + * condition &region and applies &action to those. To avoid consuming
-
-I'd rather rename 'region' to 'pattern', and 's/condition &region/&pattern'.
-
-> + * too much CPU time or IO resources for the &action, &quota is used.
->   *
->   * To do the work only when needed, schemes can be activated for specific
->   * system situations using &wmarks.  If all schemes that registered to the
-> @@ -248,12 +260,7 @@ struct damos_stat {
->   * &action is applied.
->   */
->  struct damos {
-> -	unsigned long min_sz_region;
-> -	unsigned long max_sz_region;
-> -	unsigned int min_nr_accesses;
-> -	unsigned int max_nr_accesses;
-> -	unsigned int min_age_region;
-> -	unsigned int max_age_region;
-> +	struct damos_region region;
->  	enum damos_action action;
->  	struct damos_quota quota;
->  	struct damos_watermarks wmarks;
-> @@ -501,12 +508,8 @@ void damon_destroy_region(struct damon_region *r, struct damon_target *t);
->  int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
->  		unsigned int nr_ranges);
->  
-> -struct damos *damon_new_scheme(
-> -		unsigned long min_sz_region, unsigned long max_sz_region,
-> -		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
-> -		unsigned int min_age_region, unsigned int max_age_region,
-> -		enum damos_action action, struct damos_quota *quota,
-> -		struct damos_watermarks *wmarks);
-> +struct damos *damon_new_scheme(struct damos_region *region, enum damos_action action,
-> +			       struct damos_quota *quota, struct damos_watermarks *wmarks);
-
-I still prefer 80 columns limit:
-https://docs.kernel.org/process/coding-style.html#breaking-long-lines-and-strings
-
->  void damon_add_scheme(struct damon_ctx *ctx, struct damos *s);
->  void damon_destroy_scheme(struct damos *s);
->  
-> diff --git a/mm/damon/core.c b/mm/damon/core.c
-> index 9964b9d00768..ef130c0a71fb 100644
-> --- a/mm/damon/core.c
-> +++ b/mm/damon/core.c
-> @@ -230,24 +230,20 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
->  	return 0;
->  }
->  
-> -struct damos *damon_new_scheme(
-> -		unsigned long min_sz_region, unsigned long max_sz_region,
-> -		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
-> -		unsigned int min_age_region, unsigned int max_age_region,
-> -		enum damos_action action, struct damos_quota *quota,
-> -		struct damos_watermarks *wmarks)
-> +struct damos *damon_new_scheme(struct damos_region *region, enum damos_action action,
-> +			       struct damos_quota *quota, struct damos_watermarks *wmarks)
->  {
->  	struct damos *scheme;
->  
->  	scheme = kmalloc(sizeof(*scheme), GFP_KERNEL);
->  	if (!scheme)
->  		return NULL;
-> -	scheme->min_sz_region = min_sz_region;
-> -	scheme->max_sz_region = max_sz_region;
-> -	scheme->min_nr_accesses = min_nr_accesses;
-> -	scheme->max_nr_accesses = max_nr_accesses;
-> -	scheme->min_age_region = min_age_region;
-> -	scheme->max_age_region = max_age_region;
-> +	scheme->region.min_sz_region = region->min_sz_region;
-> +	scheme->region.max_sz_region = region->max_sz_region;
-> +	scheme->region.min_nr_accesses = region->min_nr_accesses;
-> +	scheme->region.max_nr_accesses = region->max_nr_accesses;
-> +	scheme->region.min_age_region = region->min_age_region;
-> +	scheme->region.max_age_region = region->max_age_region;
->  	scheme->action = action;
->  	scheme->stat = (struct damos_stat){};
->  	INIT_LIST_HEAD(&scheme->list);
-> @@ -666,10 +662,10 @@ static bool __damos_valid_target(struct damon_region *r, struct damos *s)
->  	unsigned long sz;
->  
->  	sz = r->ar.end - r->ar.start;
-> -	return s->min_sz_region <= sz && sz <= s->max_sz_region &&
-> -		s->min_nr_accesses <= r->nr_accesses &&
-> -		r->nr_accesses <= s->max_nr_accesses &&
-> -		s->min_age_region <= r->age && r->age <= s->max_age_region;
-> +	return s->region.min_sz_region <= sz && sz <= s->region.max_sz_region &&
-> +		s->region.min_nr_accesses <= r->nr_accesses &&
-> +		r->nr_accesses <= s->region.max_nr_accesses &&
-> +		s->region.min_age_region <= r->age && r->age <= s->region.max_age_region;
->  }
->  
->  static bool damos_valid_target(struct damon_ctx *c, struct damon_target *t,
-> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-> index 652a94deafe3..1887d315f6d5 100644
-> --- a/mm/damon/dbgfs.c
-> +++ b/mm/damon/dbgfs.c
-> @@ -131,9 +131,9 @@ static ssize_t sprint_schemes(struct damon_ctx *c, char *buf, ssize_t len)
->  	damon_for_each_scheme(s, c) {
->  		rc = scnprintf(&buf[written], len - written,
->  				"%lu %lu %u %u %u %u %d %lu %lu %lu %u %u %u %d %lu %lu %lu %lu %lu %lu %lu %lu %lu\n",
-> -				s->min_sz_region, s->max_sz_region,
-> -				s->min_nr_accesses, s->max_nr_accesses,
-> -				s->min_age_region, s->max_age_region,
-> +				s->region.min_sz_region, s->region.max_sz_region,
-> +				s->region.min_nr_accesses, s->region.max_nr_accesses,
-> +				s->region.min_age_region, s->region.max_age_region,
->  				damos_action_to_dbgfs_scheme_action(s->action),
->  				s->quota.ms, s->quota.sz,
->  				s->quota.reset_interval,
-> @@ -221,8 +221,6 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
->  	struct damos *scheme, **schemes;
->  	const int max_nr_schemes = 256;
->  	int pos = 0, parsed, ret;
-> -	unsigned long min_sz, max_sz;
-> -	unsigned int min_nr_a, max_nr_a, min_age, max_age;
->  	unsigned int action_input;
->  	enum damos_action action;
->  
-> @@ -235,11 +233,14 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
->  	while (pos < len && *nr_schemes < max_nr_schemes) {
->  		struct damos_quota quota = {};
->  		struct damos_watermarks wmarks;
-> +		struct damos_region region = {};
->  
->  		ret = sscanf(&str[pos],
->  				"%lu %lu %u %u %u %u %u %lu %lu %lu %u %u %u %u %lu %lu %lu %lu%n",
-> -				&min_sz, &max_sz, &min_nr_a, &max_nr_a,
-> -				&min_age, &max_age, &action_input, &quota.ms,
-> +				&region.min_sz_region, &region.max_sz_region,
-> +				&region.min_nr_accesses, &region.max_nr_accesses,
-> +				&region.min_age_region, &region.max_age_region,
-> +				&action_input, &quota.ms,
->  				&quota.sz, &quota.reset_interval,
->  				&quota.weight_sz, &quota.weight_nr_accesses,
->  				&quota.weight_age, &wmarks.metric,
-> @@ -251,7 +252,9 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
->  		if ((int)action < 0)
->  			goto fail;
->  
-> -		if (min_sz > max_sz || min_nr_a > max_nr_a || min_age > max_age)
-> +		if (region.min_sz_region > region.max_sz_region ||
-> +		    region.min_nr_accesses > region.max_nr_accesses ||
-> +		    region.min_age_region > region.max_age_region)
->  			goto fail;
->  
->  		if (wmarks.high < wmarks.mid || wmarks.high < wmarks.low ||
-> @@ -259,8 +262,7 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
->  			goto fail;
->  
->  		pos += parsed;
-> -		scheme = damon_new_scheme(min_sz, max_sz, min_nr_a, max_nr_a,
-> -				min_age, max_age, action, &quota, &wmarks);
-> +		scheme = damon_new_scheme(&region, action, &quota, &wmarks);
->  		if (!scheme)
->  			goto fail;
->  
-> diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-> index 9de6f00a71c5..2f798f66dc08 100644
-> --- a/mm/damon/lru_sort.c
-> +++ b/mm/damon/lru_sort.c
-> @@ -313,13 +313,19 @@ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
->  		.weight_nr_accesses = 1,
->  		.weight_age = 0,
->  	};
-> +	struct damos_region region = {
-> +		/* Find regions having PAGE_SIZE or larger size */
-> +		.min_sz_region = PAGE_SIZE,
-> +		.max_sz_region = ULONG_MAX,
-> +		/* and accessed for more than the threshold */
-> +		.min_nr_accesses = hot_thres,
-> +		.max_nr_accesses = UINT_MAX,
-> +		/* no matter its age*/
-> +		.min_age_region = 0,
-> +		.max_age_region = UINT_MAX,
-> +	};
->  	struct damos *scheme = damon_new_scheme(
-> -			/* Find regions having PAGE_SIZE or larger size */
-> -			PAGE_SIZE, ULONG_MAX,
-> -			/* and accessed for more than the threshold */
-> -			hot_thres, UINT_MAX,
-> -			/* no matter its age */
-> -			0, UINT_MAX,
-> +			&region,
->  			/* prioritize those on LRU lists, as soon as found */
->  			DAMOS_LRU_PRIO,
->  			/* under the quota. */
-> @@ -354,21 +360,26 @@ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
->  		.weight_nr_accesses = 0,
->  		.weight_age = 1,
->  	};
-> -	struct damos *scheme = damon_new_scheme(
-> -			/* Find regions having PAGE_SIZE or larger size */
-> -			PAGE_SIZE, ULONG_MAX,
-> -			/* and not accessed at all */
-> -			0, 0,
-> -			/* for cold_thres or more micro-seconds, and */
-> -			cold_thres, UINT_MAX,
-> +	struct damos_region region = {
-> +		/* Find regions having PAGE_SIZE or larger size */
-> +		.min_sz_region = PAGE_SIZE,
-> +		.max_sz_region = ULONG_MAX,
-> +		/* and not accessed at all */
-> +		.min_nr_accesses = 0,
-> +		.max_nr_accesses = 0,
-> +		/* for min_age or more micro-seconds*/
-> +		.min_age_region = cold_thres,
-> +		.max_age_region = UINT_MAX,
-> +	};
-> +
-> +	return damon_new_scheme(
-> +			&region,
->  			/* mark those as not accessed, as soon as found */
->  			DAMOS_LRU_DEPRIO,
->  			/* under the quota. */
->  			&quota,
->  			/* (De)activate this according to the watermarks. */
->  			&wmarks);
-> -
-> -	return scheme;
->  }
->  
->  static int damon_lru_sort_apply_parameters(void)
-> diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-> index a7faf51b4bd4..13e3cbcce812 100644
-> --- a/mm/damon/reclaim.c
-> +++ b/mm/damon/reclaim.c
-> @@ -284,21 +284,26 @@ static struct damos *damon_reclaim_new_scheme(void)
->  		.weight_nr_accesses = 0,
->  		.weight_age = 1
->  	};
-> -	struct damos *scheme = damon_new_scheme(
-> -			/* Find regions having PAGE_SIZE or larger size */
-> -			PAGE_SIZE, ULONG_MAX,
-> -			/* and not accessed at all */
-> -			0, 0,
-> -			/* for min_age or more micro-seconds, and */
-> -			min_age / aggr_interval, UINT_MAX,
-> +	struct damos_region region = {
-> +		/* Find regions having PAGE_SIZE or larger size */
-> +		.min_sz_region = PAGE_SIZE,
-> +		.max_sz_region = ULONG_MAX,
-> +		/* and not accessed at all */
-> +		.min_nr_accesses = 0,
-> +		.max_nr_accesses = 0,
-> +		/* for min_age or more micro-seconds*/
-> +		.min_age_region = min_age / aggr_interval,
-> +		.max_age_region = UINT_MAX,
-> +	};
-> +
-> +	return damon_new_scheme(
-> +			&region,
->  			/* page out those, as soon as found */
->  			DAMOS_PAGEOUT,
->  			/* under the quota. */
->  			&quota,
->  			/* (De)activate this according to the watermarks. */
->  			&wmarks);
-> -
-> -	return scheme;
->  }
->  
->  static int damon_reclaim_apply_parameters(void)
-> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> index fe6c6870cf86..9abb45f9127e 100644
-> --- a/mm/damon/sysfs.c
-> +++ b/mm/damon/sysfs.c
-> @@ -2279,11 +2279,16 @@ static struct damos *damon_sysfs_mk_scheme(
->  		.mid = sysfs_wmarks->mid,
->  		.low = sysfs_wmarks->low,
->  	};
-> +	struct damos_region region = {
-> +		.min_sz_region = pattern->sz->min,
-> +		.max_sz_region = pattern->sz->max,
-> +		.min_nr_accesses = pattern->nr_accesses->min,
-> +		.max_nr_accesses = pattern->nr_accesses->max,
-> +		.min_age_region = pattern->age->min,
-> +		.max_age_region = pattern->age->max,
-> +	};
->  
-> -	return damon_new_scheme(pattern->sz->min, pattern->sz->max,
-> -			pattern->nr_accesses->min, pattern->nr_accesses->max,
-> -			pattern->age->min, pattern->age->max,
-> -			sysfs_scheme->action, &quota, &wmarks);
-> +	return damon_new_scheme(&region, sysfs_scheme->action, &quota, &wmarks);
->  }
->  
->  static int damon_sysfs_set_schemes(struct damon_ctx *ctx,
-> -- 
-> 2.25.1
-
-
-Thanks,
-SJ
+Best regards,
+Luca
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

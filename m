@@ -2,193 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458125B0122
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCE65B0121
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiIGKA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S230411AbiIGKAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiIGJ7e (ORCPT
+        with ESMTP id S230405AbiIGJ72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:59:34 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83270B6038
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:58:59 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 5EA2F2B059D4;
-        Wed,  7 Sep 2022 05:58:53 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 07 Sep 2022 05:58:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1662544732; x=1662551932; bh=LDbKEsPtEf
-        o0fSrPBtti05cmeMd5jnUlKEOcotKaSo4=; b=EXe+ynfe6vqHN43swOtykOC2Ct
-        uBkougsWyb9Gz9Yz4t6xtOXI72Iy/O5yYrXo+DBTDGNXxul0ebfkTVZMiYl+Kt/C
-        RtpN5Lozu8dtEN4O8yx0EK4S4KNFAsjLumNAC2ObZ/IM6gHiaCKGMIb0sRaOh8de
-        MnRVw8qAcAY2oGvUQSZ4IMLVehnSaNQNGItvETIULd/aEK7fWFBQPms2DsbU0XQp
-        ErTC1E2CGjFAV0Fj4vwOnwwjw7Whw3zyd8lgoBcRK+x6tjCXEvMZ7Ng2+Oet3ALh
-        qzKOWW02KFjsDosfRoB/u2/Ux7V+Ho/gemKefjzU75NX7Fk8asA5RNOcVEUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662544732; x=1662551932; bh=LDbKEsPtEfo0fSrPBtti05cmeMd5
-        jnUlKEOcotKaSo4=; b=W7FoYKQ4vh4JAjO+VVj2d/KTm16IiJZNZdq9LXTgqgtQ
-        t9Rbizu4VEj/S4fOxiSbz6+Z2tpIQd8wC8qQq5TWtVj28LKmgl3ifAhYru/r6eci
-        z1M7ATIVb3UlgdYN8Kwmxq6QbLuzIHQrXBf+5yxpv33Yg4JEldWISKcPYKbgrDUQ
-        3WZuWBIT4XwBMJzeX0GnJd4QVcXPmJsMoxsr1NiQl2SyZORrtCJAIFAYjhomNmJ5
-        JkP8dSJs/6WFRM0y/aBAgzyCSKm/0F0fJYNGaMB4ie6rQ1PjPSLe0aFuITGBmcyD
-        1SCGLo3ZAqJ88e0nvhG0Sd2uczq8k08Dj/jrWCvoZg==
-X-ME-Sender: <xms:XGsYY6S6Unf05Ux7EeXWosbmBCQrWexsEhLyFWerP7--z65MfWhekg>
-    <xme:XGsYY_zrDrGlPY7_tG5XsdLoI5rl2Mph9Icxow7udrBgcSPA1LDHZNdApaoAW3e0r
-    dNZCBel3OfArF_XCXM>
-X-ME-Received: <xmr:XGsYY306D9dvzKGYL5VBDkFegfjmi41hvSTbO7IYVRbsRBLwk4ykAtH3xxg->
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevuddthffgfeeiffejgfeghfeludegkedtgefgffejtdegtddvleduvdfh
-    teehveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:XGsYY2ChJ9bThNgL4kEeg1WjPtnTGDuEfX0G6vrd4LNllKgcAaW6Hg>
-    <xmx:XGsYYzi6nwq4Mwx4T3SErnV9u--G-Z-E2nghFzehs8FPRRT4kkz1_Q>
-    <xmx:XGsYYyo218MlI5Wiu1MgPmnxLYxtVwMOe6ydE6LUHZTCYG3D1fCnIw>
-    <xmx:XGsYY_C_UZtCfR0nP5pwZsMq51PV4Gu8iNV88j3038cccoGHrGgJOdrQSJ0>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 05:58:51 -0400 (EDT)
-Date:   Wed, 7 Sep 2022 11:58:49 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2 00/41] drm: Analog TV Improvements
-Message-ID: <20220907095849.5v72atwuedl5iiva@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
- <020d44e6-884b-a817-8265-3461638cac71@tronnes.org>
- <20220905145729.ln675jko3aw6sgzs@houat>
- <74c10e51-4034-a284-1a26-b7ba7fe45fbe@tronnes.org>
+        Wed, 7 Sep 2022 05:59:28 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BB3B7ECB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662544738; x=1694080738;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AmXRtUcPhtGSJn82WbSwjJEaSVshhgm7nZCuj/pPR/k=;
+  b=Hbct1vhv6Cs8PWe2o4OOJox73CPXVnuGq1K/lxv7QAL4ob7xxiNlXEQC
+   j+u/fMmOA8MaPWLpHqNwSCV1DiGkyoIgOVSZZtdv5GLjlR4KXBjz//FbK
+   Bwniv3Wb3fylC4F4JUqbNIFmHuWqP24ea1xdY7BJbAQidhLDBkh9n2hqT
+   ORKYxxrvjDqYz3EwMffY9jGeWIgRvrP+dwzglgu6fFG+m3cr6Exd+PUfr
+   ayJccyTIziiOCp+DAMEqc/1CTmS+hZzE1yG+dZsl6AICaeX8UJf0EQ1l8
+   CtSejV2rIxPDBW38mTHBZ+bsCc7nzVAJo/CBpziXHGblEDOvYfAbhde24
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10462"; a="295566403"
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="295566403"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:58:57 -0700
+X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
+   d="scan'208";a="644553059"
+Received: from zhaohaif-mobl1.ccr.corp.intel.com (HELO [10.254.212.12]) ([10.254.212.12])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 02:58:55 -0700
+Message-ID: <a9f959ed-b528-681d-f941-d615360c0be3@linux.intel.com>
+Date:   Wed, 7 Sep 2022 17:58:53 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g7pwsshhuvzfcxhg"
-Content-Disposition: inline
-In-Reply-To: <74c10e51-4034-a284-1a26-b7ba7fe45fbe@tronnes.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/2] iova: Remove some magazine pointer NULL checks
+To:     John Garry <john.garry@huawei.com>,
+        Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1662369083-238529-1-git-send-email-john.garry@huawei.com>
+ <1662369083-238529-2-git-send-email-john.garry@huawei.com>
+ <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
+ <3fa23318-6fa7-eba0-30b8-1fb71e6c327e@huawei.com>
+ <555fa5aa-a575-d783-dc97-79f63dcf2f57@arm.com>
+ <cc950d77-2a97-ac75-4a1d-19aaf864a3be@huawei.com>
+ <ad67a859-dc57-e30f-e422-3f9a0cb5239b@arm.com>
+ <ef7622de-c1f3-c6cd-a50e-bbcbf8288b64@huawei.com>
+From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
+In-Reply-To: <ef7622de-c1f3-c6cd-a50e-bbcbf8288b64@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+John,
 
---g7pwsshhuvzfcxhg
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+在 2022/9/7 16:46, John Garry 写道:
+> On 06/09/2022 19:25, Robin Murphy wrote:
+>>>
+>>> Caveat: on the chance that the IOVA domain init fails due to the 
+>>> rcache init failing, then, if there were another device in the group 
+>>> which probes later, its probe would be ok as the start_pfn is set. 
+>>> Not Good.
+>>
+>> Yeah, there's a lot not to like about iommu_dma_init_domain() - I've 
+>> been banking on it all getting cleaned up when I get to refactoring 
+>> that area of probing (remember the issue you reported years ago with 
+>> PCI groups being built in the wrong order? All related...), but in 
+>> fact since the cookie management got pulled into core code, we can 
+>> probably tie the IOVA domain setup to that right now without much 
+>> other involvement. That could be a cheap win, so I'll give it a go soon.
+>
+> ok, great.
+>
+> On a related topic, another thing to consider is that errors in IOVA 
+> domain init are not handled gracefully in terms of how we deal with 
+> the device probe and setting dma mapping ops, ref 
+> iommu_setup_dma_ops(). I assume you know all this.
+>
+>>
+>>> - vdpa just fails to create the domain in vduse_domain_create()
+>>>
+>>>> That makes a fair amount of sense, but does mean that we're missing 
+>>>> the equivalent in iova_rcache_insert() for it to actually work. Or 
+>>>> we just remove it and tighten up the documentation to say that's 
+>>>> not valid 
+>>>
+>>> I'd be more inclined to remove it. I would rather remove fathpath 
+>>> checks as much as possible and have robust error handling in the 
+>>> domain init.
+>>>
+>>> Afterall I do have the "remove check" craze going.
+>>
+>> Sure, like I say I'm happy to be consistent either way. If I do end 
+>> up reinstating such a check I think I'd prefer to have it explicit in 
+>> {alloc,free}_iova_fast() anyway, rather than buried in internal 
+>> implementation details.
+>
+> I'm not sure what you would like to see now, if anything.
+>
+> I could just remove the iovad->rcache check in iova_rcache_get().  
+> It's pretty useless (on its own) since we don't have the same check on 
+> the "insert" path.
+>
+> Or also add this:
+>
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 0d6d8edf782d..e8f0b8f47f45 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -578,6 +578,12 @@ static int iommu_dma_init_domain(struct 
+> iommu_domain *domain, dma_addr_t base,
+>              goto done_unlock;
+>          }
+>
+> +        if (!iovad->rcaches) {
+> +            pr_warn("IOVA domain rcache not properly initialised\n");
+> +            ret = -EFAULT;
+> +            goto done_unlock;
+> +        }
+> +
+>          ret = 0;
+>          goto done_unlock;
+>
+If the iovad->rcaches allocation failed, will skip iommu domain dma ops, 
+so no need *any* iovad,->rcaches check, right ?
 
-On Mon, Sep 05, 2022 at 05:17:18PM +0200, Noralf Tr=F8nnes wrote:
-> Den 05.09.2022 16.57, skrev Maxime Ripard:
-> > On Fri, Sep 02, 2022 at 01:28:16PM +0200, Noralf Tr=F8nnes wrote:
-> >>
-> >>
-> >> Den 01.09.2022 21.35, skrev Noralf Tr=F8nnes:
-> >>>
-> >>>
-> >>> I have finally found a workaround for my kernel hangs.
-> >>>
-> >>> Dom had a look at my kernel and found that the VideoCore was fine, and
-> >>> he said this:
-> >>>
-> >>>> That suggests cause of lockup was on arm side rather than VC side.
-> >>>>
-> >>>> But it's hard to diagnose further. Once you've had a peripheral not
-> >>>> respond, the AXI bus locks up and no further operations are possible.
-> >>>> Usual causes of this are required clocks being stopped or domains
-> >>>> disabled and then trying to access the hardware.
-> >>>>
-> >>>
-> >>> So when I got this on my 64-bit build:
-> >>>
-> >>> [  166.702171] SError Interrupt on CPU1, code 0x00000000bf000002 -- S=
-Error
-> >>> [  166.702187] CPU: 1 PID: 8 Comm: kworker/u8:0 Tainted: G        W
-> >>>     5.19.0-rc6-00096-gba7973977976-dirty #1
-> >>> [  166.702200] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
-> >>> [  166.702206] Workqueue: events_freezable_power_ thermal_zone_device=
-_check
-> >>> [  166.702231] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS
-> >>> BTYPE=3D--)
-> >>> [  166.702242] pc : regmap_mmio_read32le+0x10/0x28
-> >>> [  166.702261] lr : regmap_mmio_read+0x44/0x70
-> >>> ...
-> >>> [  166.702606]  bcm2711_get_temp+0x58/0xb0 [bcm2711_thermal]
-> >>>
-> >>> I wondered if that reg read was stalled due to a clock being stopped.
-> >>>
-> >>> Lo and behold, disabling runtime pm and keeping the vec clock running
-> >>> all the time fixed it[1].
-> >>>
-> >>> I don't know what the problem is, but at least I can now test this pa=
-tchset.
-> >>>
-> >>> [1] https://gist.github.com/notro/23b984e7fa05cfbda2db50a421cac065
-> >>>
-> >>
-> >> It turns out I didn't have to disable runtime pm:
-> >> https://gist.github.com/notro/0adcfcb12460b54e54458afe11dc8ea2
-> >=20
-> > If the bcm2711_thermal IP needs that clock to be enabled, it should grab
-> > a reference itself, but it looks like even the device tree binding
-> > doesn't ask for one.
-> >=20
->=20
-> The first thing I tried was to unload the bcm2711_thermal module before
-> running modeset and it still hung, so I don't think that's the problem.
+and there is already warning about the fallback.
 
-Ack. Just to confirm, is this happening on mainline or on the downstream tr=
-ee?
+Thanks,
 
-Maxime
+Ethan
 
---g7pwsshhuvzfcxhg
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> But I figure that you don't want more crud there now, considering the 
+> work you mention above.
+>
+> Thanks,
+> John
+>
+>
+>
+-- 
+"firm, enduring, strong, and long-lived"
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxhrWQAKCRDj7w1vZxhR
-xWOGAQDamcTrLkeNib2/AJ9OVJ5kvT4+VK4EmtvGcxdtuZTUhQD/SHMi1WIJ+4PA
-xhpQO1fhUdfbEHo8tJ554frAHeuSGgA=
-=e7c7
------END PGP SIGNATURE-----
-
---g7pwsshhuvzfcxhg--

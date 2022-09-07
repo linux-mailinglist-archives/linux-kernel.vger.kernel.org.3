@@ -2,212 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDE55AFF78
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877A95AFF81
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiIGIpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S229731AbiIGIpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiIGIox (ORCPT
+        with ESMTP id S229572AbiIGIpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:44:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C40B5F226
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662540288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gRwNMNugMbeJ/J9QmYL3cKMM73+txKjGs7EQMZzIdQQ=;
-        b=AjQlxZROM0Uq/zFKjDrxzEWZ0xZaY8fa3MbhMx7VNhdZ00lIAagmlNmmsG7jqf/oC9k5Xg
-        HyOoDsdSSMIowIZ74HNkGAkH6JNGnZSLD9P7Y2KHK9ZLw9u2UmkK93bPO/N01UnhU03Ryo
-        Agr88ByPOu9w4zLixVITKWkFIAVnozI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-621-6MEH-EE8O2KKqB1JGvOF_w-1; Wed, 07 Sep 2022 04:44:47 -0400
-X-MC-Unique: 6MEH-EE8O2KKqB1JGvOF_w-1
-Received: by mail-wm1-f69.google.com with SMTP id ay21-20020a05600c1e1500b003a6271a9718so7140640wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 01:44:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=gRwNMNugMbeJ/J9QmYL3cKMM73+txKjGs7EQMZzIdQQ=;
-        b=ShNcgIipHF8CZDOQVez0+YpWv4xttZMlB4No4dNtGBekPKsusT+VUQcyUv+K426ozV
-         zG6EVNUU7DPYMxJ5IsVpSuRe8Wa6fib73fE3lhlCh3DzM7L4AObLf3p1qEaWaMQHhvmC
-         9W0bE+K8mD5zJYp6arJbO42o5MVfD00KmwaZwnKWPfhSoF1oBqTP/UulQXbYCE/6R1C7
-         9kiiV7wmoNe11x5nvkc/jTTAuItvLGgpYQfJmAn6xXSxBay+mb/Ifkva0WIEquYfIDex
-         vvZr9WJcZyXINRUuF1+xq0Nmc8CxGzF5h28prlVBbaws2U1dix7hYlfUYL1Ud972uqeF
-         SnbQ==
-X-Gm-Message-State: ACgBeo090zYrMa9Iea83raaLiC4TA0yE/pZoFBssHPrlUL6P9GAw8BwU
-        8OJfnCJxrxj55ZQfXiV32DgancpirUwUvAVVx/u+WKhBTSjjkiLPRVxOswIyUvgycHYLoBA4ubG
-        T0GoUITzM9NHJQUd0Fg+u3Y25
-X-Received: by 2002:a5d:448d:0:b0:228:6084:1f36 with SMTP id j13-20020a5d448d000000b0022860841f36mr1416681wrq.157.1662540286039;
-        Wed, 07 Sep 2022 01:44:46 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5PAhtZiU4Ib9kLPSRKT9y9QpO5R0BeKsXCl6caTOpdA1oVdgybiz7O3EG7EBIC3upAV0tR5Q==
-X-Received: by 2002:a5d:448d:0:b0:228:6084:1f36 with SMTP id j13-20020a5d448d000000b0022860841f36mr1416669wrq.157.1662540285705;
-        Wed, 07 Sep 2022 01:44:45 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0? (p200300d82f0dba00c95131d7b2b08ba0.dip0.t-ipconnect.de. [2003:d8:2f0d:ba00:c951:31d7:b2b0:8ba0])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05600c4fd000b003a5c999cd1asm23485819wmq.14.2022.09.07.01.44.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 01:44:45 -0700 (PDT)
-Message-ID: <26f5ff14-077f-4bb6-90d8-ea83509ff682@redhat.com>
-Date:   Wed, 7 Sep 2022 10:44:44 +0200
+        Wed, 7 Sep 2022 04:45:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E3C72EE1;
+        Wed,  7 Sep 2022 01:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EBn6+PekQ9HgWpOyL3HjDLpM5I9iK8a5/LWby5GXm9w=; b=oVetsvWLvH5eTqsi2zWONtOAC3
+        rpZ6+qvDKI37kr2ze2cMlVgkhAfvPg6uiUWsrUYR9ZcUyYQNl4xeK1t6c4whmVHD1E23Mhxgz01wR
+        vXF5bBSal2savl00zL3GewiEwtqdPIW0eH0UH4EbDt3Wi2PxSzFltT2mdaBrlbik3gmpqAjya3jSQ
+        NGIUR67sBaEfsENy+OvVHmXQ7qCuMwLTtqbOKQl1Wv+5Kl/t2anvwTp1DeYUFuU8DAs/eLpqyNY3y
+        FxW4UOxkCgD0Il8Z5AF1hAzQ0cfHvx1nSsH2xsI4w6iHAzjsFq53EgVIyPzPpxzmtV9iZ+vo4btdE
+        qjixFbYg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oVqgY-004SGZ-4V; Wed, 07 Sep 2022 08:45:26 +0000
+Date:   Wed, 7 Sep 2022 01:45:26 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <YxhaJktqtHw3QTSG@infradead.org>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <20220831041843.973026-5-jhubbard@nvidia.com>
+ <YxbtF1O8+kXhTNaj@infradead.org>
+ <103fe662-3dc8-35cb-1a68-dda8af95c518@nvidia.com>
+ <Yxb7YQWgjHkZet4u@infradead.org>
+ <20220906102106.q23ovgyjyrsnbhkp@quack3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1662264560.git.remckee0@gmail.com>
- <49b96ce88dece5b394d5dd4332c1572da917b30a.1662264560.git.remckee0@gmail.com>
- <d57009d3-fd40-5061-31ae-203dff1e0ef7@redhat.com>
- <20220906234306.GA4053@sophie>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v4 1/4] memblock tests: add simulation of physical memory
- with multiple NUMA nodes
-In-Reply-To: <20220906234306.GA4053@sophie>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906102106.q23ovgyjyrsnbhkp@quack3>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.09.22 01:43, Rebecca Mckeever wrote:
-> On Tue, Sep 06, 2022 at 03:17:46PM +0200, David Hildenbrand wrote:
->> On 04.09.22 06:21, Rebecca Mckeever wrote:
->>> Add function setup_numa_memblock() for setting up a memory layout with
->>> multiple NUMA nodes in a previously allocated dummy physical memory.
->>> This function can be used in place of setup_memblock() in tests that need
->>> to simulate a NUMA system.
->>>
->>> setup_numa_memblock():
->>> - allows for setting up a memory layout by specifying the fraction of
->>>     MEM_SIZE in each node
->>>
->>> Set CONFIG_NODES_SHIFT to 4 when building with NUMA=1 to allow for up to
->>> 16 NUMA nodes.
->>>
->>> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
->>> ---
->>>    .../testing/memblock/scripts/Makefile.include |  2 +-
->>>    tools/testing/memblock/tests/common.c         | 29 +++++++++++++++++++
->>>    tools/testing/memblock/tests/common.h         |  4 ++-
->>>    3 files changed, 33 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/tools/testing/memblock/scripts/Makefile.include b/tools/testing/memblock/scripts/Makefile.include
->>> index aa6d82d56a23..998281723590 100644
->>> --- a/tools/testing/memblock/scripts/Makefile.include
->>> +++ b/tools/testing/memblock/scripts/Makefile.include
->>> @@ -3,7 +3,7 @@
->>>    # Simulate CONFIG_NUMA=y
->>>    ifeq ($(NUMA), 1)
->>> -	CFLAGS += -D CONFIG_NUMA
->>> +	CFLAGS += -D CONFIG_NUMA -D CONFIG_NODES_SHIFT=4
->>>    endif
->>>    # Use 32 bit physical addresses.
->>> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
->>> index eec6901081af..b6110df21b2a 100644
->>> --- a/tools/testing/memblock/tests/common.c
->>> +++ b/tools/testing/memblock/tests/common.c
->>> @@ -72,6 +72,35 @@ void setup_memblock(void)
->>>    	fill_memblock();
->>>    }
->>> +/**
->>> + * setup_numa_memblock:
->>> + * Set up a memory layout with multiple NUMA nodes in a previously allocated
->>> + * dummy physical memory.
->>> + * @nodes: an array containing the denominators of the fractions of MEM_SIZE
->>> + *         contained in each node (e.g., if nodes[0] = SZ_8, node 0 will
->>> + *         contain 1/8th of MEM_SIZE)
->>> + *
->>> + * The nids will be set to 0 through NUMA_NODES - 1.
->>> + */
->>> +void setup_numa_memblock(const phys_addr_t nodes[])
->>> +{
->>> +	phys_addr_t base;
->>> +	int flags;
->>> +
->>> +	reset_memblock_regions();
->>> +	base = (phys_addr_t)memory_block.base;
->>> +	flags = (movable_node_is_enabled()) ? MEMBLOCK_NONE : MEMBLOCK_HOTPLUG;
->>> +
->>> +	for (int i = 0; i < NUMA_NODES; i++) {
->>> +		assert(nodes[i] <= MEM_SIZE && nodes[i] > 0);
->>
->> I think it would be even easier to get if this would just be a fraction.
->> E.g., instead of "1/8 * MEM_SIZE" just "1/8". All values have to add up to
->> 1.
->>
->> ... but then we'd have to mess with floats eventually, so I guess this makes
->> it easier to handle these fractions.
->>
->>
->> We could use "int" and simply specify the fraction in percent, like
->>
->> nodes[0] = 50;
->> nodes[1] = 25;
->> nodes[2] = 25;
->>
->> and everything has to add up to 100.
->>
-> This would still be a float for 1/8th (12.5) and 1/16th (6.25). What if
-> it was the "percent" of 256 (i.e., 0x100)?
-
-Right, or in something "smaller" like 1/32 th. I don't think we go below 
-that?
-
-If we don't need more digits, why not in "basis points" (per ten thousand)
--> https://en.wikipedia.org/wiki/Basis_point
-
-nodes[0] = 5000; /* 1/2  */
-nodes[1] = 2500; /* 1/4 */
-nodes[2] = 1250; /* 1/8 */
-nodes[4] = 0625; /* 1/32 */
-nodes[5] = 0625;
-
-
->>
->>> +		phys_addr_t size = MEM_SIZE / nodes[i];
->>
->>
->> Hmmm, assuming a single node with "MEM_SIZE", we would get size=1.
->>
-> For a single node of MEM_SIZE, nodes[0] would be 1.
+On Tue, Sep 06, 2022 at 12:21:06PM +0200, Jan Kara wrote:
+> > For FOLL_PIN callers, never pin bvec and kvec pages:  For file systems
+> > not acquiring a reference is obviously safe, and the other callers will
+> > need an audit, but I can't think of why it woul  ever be unsafe.
 > 
->> Shouldn't this be "size = nodes[i]"
->>
->> ?
-> No, not with the current implementation. The nodes array stores the
-> denominator of the fraction that will be multiplied by MEM_SIZE to
-> determine the size of that node (the numerator is always 1). So if the
-> size of the node should be 1/8 * MEM_SIZE, the nodes array just stores
-> the 8. I think the name of the array is misleading. Do you have any
-> suggestions for a better name?
+> Are you sure about "For file systems not acquiring a reference is obviously
+> safe"? I can see places e.g. in orangefs, afs, etc. which create bvec iters
+> from pagecache pages. And then we have iter_file_splice_write() which
+> creates bvec from pipe pages (which can also be pagecache pages if
+> vmsplice() is used). So perhaps there are no lifetime issues even without
+> acquiring a reference (but looking at the code I would not say it is
+> obvious) but I definitely don't see how it would be safe to not get a pin
+> to signal to filesystem backing the pagecache page that there is DMA
+> happening to/from the page.
 
-Then I am confused about the
-	assert(nodes[i] <= MEM_SIZE && nodes[i] > 0);
-
-assertion :)
-
-I think it would really be best to just store the actual fraction 
-somehow. But maybe just I am confused :)
-
--- 
-Thanks,
-
-David / dhildenb
-
+I mean in the context of iov_iter_get_pages callers, that is direct
+I/O.  Direct callers of iov_iter_bvec which then pass that iov to
+->read_iter / ->write_iter will need to hold references (those are
+the references that the callers of iov_iter_get_pages rely on!).

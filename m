@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C735B0635
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7EB5B0638
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiIGOON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
+        id S230093AbiIGOPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiIGOOK (ORCPT
+        with ESMTP id S230091AbiIGOPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:14:10 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB915FF4D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 07:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mj1OiWPjt52swNp0JTJUVkkngcL48BBzi0LfTDeNR/Y=; b=WEVmPDHwu9P16B32z1r+8MRiGb
-        wFGq2g9gEn0g31N3tix22w4pbc6CifWOtdOPI+VMa7lkOcVh05jmqgRIGdDFiM/npD6JGDq6ScIh+
-        siLsRDmWyrXtAGH3RmqFaXQRELDSMcF24DcgyjKpGwzpfQiMeKI0FI2i1oH3tugYDrxBX8eysg1xy
-        ZEw80+s7hU5W2t+AWxuOJhBb1holToHJHRRQLuT0vIPiGr3jdNrH2XOyfXN8CWANPsQuAoLoVUzRb
-        /lrdoRFSvUdXy0DaRzyLjtS+hPhsVQ4l09PI6MVqMa0SvkjBOU4J10ZUEnM+LjrdADSHnqVyBOPpp
-        P/1egXvA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34180)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oVvoW-0005U2-F2; Wed, 07 Sep 2022 15:14:00 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oVvoT-0001AP-B6; Wed, 07 Sep 2022 15:13:57 +0100
-Date:   Wed, 7 Sep 2022 15:13:57 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        patches@armlinux.org.uk
-Subject: Re: [PATCH v2 0/2] arm: Replace this_cpu_* with raw_cpu_* in
- panic_bad_stack()
-Message-ID: <YxinJcixamAEO2yr@shell.armlinux.org.uk>
-References: <20220826095112.289-1-thunder.leizhen@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826095112.289-1-thunder.leizhen@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 10:15:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C239B1DA60;
+        Wed,  7 Sep 2022 07:14:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F08D961912;
+        Wed,  7 Sep 2022 14:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27238C43470;
+        Wed,  7 Sep 2022 14:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662560094;
+        bh=6/deA7kOvkEtq21+4xjp3bBFJhJUeBVvgaGaR1aGFzM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ceJ+hhBh8mlEiM7c3TFf1yDhOtySGUuho88tgA6mwqr1ZiXTsLK/Mu4b/9YZs1rxg
+         rszCH8F/lMdyfcIPeusxFjOKEVZ2FDKRhP2DgxY8kEVVJlD0nn0Dcvb1vMbPqlx+Rf
+         RLDZsqPkqvD53JpHkO08nRW2Bxdp8codLrb5zYzNMAC/S9Unjj7IzHZhnNxcnzI3tA
+         BWLNAkYWlk9OvglgqtngQHOD95Zj6ZjFViuDFJ3/D2qKypVz2cf0k4oRytnFs3O3Tf
+         0ttc4EyrT6/N6H4ZHJcM2VjlhlqA9F1mDJ5U1IbXvaktz30loiKxe9q/5+hJQopXUT
+         Wavt6BXhrOsXQ==
+Date:   Wed, 7 Sep 2022 23:14:50 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
+Subject: Re: [PATCH 1/2] x86/kprobes: Fix kprobes instruction boudary check
+ with CONFIG_RETHUNK
+Message-Id: <20220907231450.0a5f085319251349a45465d8@kernel.org>
+In-Reply-To: <YxiXCf1LcFqj5di6@hirez.programming.kicks-ass.net>
+References: <166251211081.632004.1842371136165709807.stgit@devnote2>
+        <166251212072.632004.16078953024905883328.stgit@devnote2>
+        <YxhQIBKzi+L0KDhc@hirez.programming.kicks-ass.net>
+        <YxiXCf1LcFqj5di6@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please distinguish your patches/patch series between arch/arm and
-arch/arm64. The two are maintained separately, and it gets quite
-annoying to read messages nd then realise that they're not for 32-bit
-ARM, but are for arm64/aarch64.
+On Wed, 7 Sep 2022 15:05:13 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Thanks.
+> On Wed, Sep 07, 2022 at 10:02:41AM +0200, Peter Zijlstra wrote:
+> 
+> > 	struct queue q;
+> > 
+> > 	start = paddr - offset;
+> > 	end = start + size;
+> > 	push(&q, paddr - offset);
+> > 
+> > 	while (start = pop(&q)) {
+> > 		for_each_insn(&insn, start, end, buf) {
+> > 			if (insn.kaddr == paddr)
+> > 				return 1;
+> > 
+> > 			target = insn_get_branch_addr(&insn);
+> > 			if (target)
+> > 				push(&q, target);
+> > 
+> > 			if (dead_end_insn(&insn))
+> > 				break;
+> > 		}
+> > 	}
+> 
+> There is the very rare case of intra-function-calls; but I *think*
+> they're all in noinstr/nokprobe code anyway.
+> 
+> For instance we have RSB stuffing code like:
+> 
+> 	.rept 16
+> 	call 1f;
+> 	int3
+> 	1:
+> 	.endr
+> 	add $(BITS_PER_LONG/8) * 16, %_ASM_SP
+> 
+> And the proposed will be horribly confused by that. But like said; it
+> should also never try and untangle it.
 
-On Fri, Aug 26, 2022 at 05:51:10PM +0800, Zhen Lei wrote:
-> v1 --> v2:
-> Update commit message of two patches.
-> 
-> v1:
-> I'm analyzing a strange problem these days, and I find that there are some areas in
-> panic_bad_stack() that can be optimized. That is, replace this_cpu_* with raw_cpu_* .
-> 
-> Just optimization, it is unlikely to cause the following exception nesting, because of
-> "lr : __bad_stack+0x88/0x8c".
-> 
-> [20220819163739]Unable to handle kernel paging request at virtual address f7ffff94901b8048
-> [20220819163739]Mem abort info:
-> [20220819163739]  ESR = 0x96000004
-> [20220819163739]  EC = 0x25: DABT (current EL), IL = 32 bits
-> [20220819163739]  SET = 0, FnV = 0
-> [20220819163739]  EA = 0, S1PTW = 0
-> [20220819163739]Data abort info:
-> [20220819163739]  ISV = 0, ISS = 0x00000004
-> [20220819163739]  CM = 0, WnR = 0
-> [20220819163739][f7ffff94901b8048] address between user and kernel address ranges
-> [20220819163739]Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> [20220819163739]Modules linked in: ...
-> [20220819163740]CPU: 2 PID: 1272 Comm: 00002SWDLMain Tainted: G        W  O      5.10.0 #1
-> [20220819163740]Hardware name: hisilicon,hi1213-fpga (DT)
-> [20220819163740]pstate: 000003c5 (nzcv DAIF -PAN -UAO -TCO BTYPE=--)
-> [20220819163740]pc : __bad_stack+0x4c/0x8c
-> [20220819163740]lr : __bad_stack+0x88/0x8c
-> [20220819163740]sp : ffffff953ffa8160
-> [20220819163740]x29: f7ffff953ffa8120 x28: f7ffff94901b8040 
-> [20220819163740]x27: ffffffeb72ea6940 x26: ffffffebeee6cf10 
-> [20220819163740]x25: ffffffebef627000 x24: 0000000000000000 
-> [20220819163740]x23: 00000000600003c5 x22: f7ffffebeee11904 
-> [20220819163740]x21: ffffff953ffa82b0 x20: 0000007fffffffff 
-> [20220819163740]x19: f7ffffc0133ab898 x18: 0000000000000000 
-> [20220819163740]x17: 0000000000000000 x16: ffffffebef32f0a0 
-> [20220819163740]x15: 00000000624057a0 x14: 953325a7da350fb3 
-> [20220819163740]x13: 09bbbe32ce2b3c11 x12: c15a0e2d1991997b 
-> [20220819163740]x11: 0bc8be839e7850d0 x10: cafa1cb223203045 
-> [20220819163740]x9 : f36bed299e5840dc x8 : ffffffc0133aba48 
-> [20220819163740]x7 : ffffff953b1b0480 x6 : ffffffebef3e1000 
-> [20220819163740]x5 : 0000000000000000 x4 : 0000000000000001 
-> [20220819163740]x3 : f7ffffc0133ab750 x2 : 0000000000000025 
-> [20220819163740]x1 : 0000000096000004 x0 : ffffff953ffa8160 
-> [20220819163740]Call trace:
-> [20220819163740] __bad_stack+0x4c/0x8c
-> [20220819163740]Code: a90d6ffa a90e77fc 910543f5 d538411c (f9400794) 
-> [20220819163740]---[ end trace 07532bfa2c24851c ]---
-> [20220819163740]Kernel panic - not syncing: Oops: Fatal exception
-> 
-> Zhen Lei (2):
->   arm64/traps: Replace this_cpu_* with raw_cpu_* in panic_bad_stack()
->   ARM: replace this_cpu_* with raw_cpu_* in panic_bad_stack()
-> 
->  arch/arm/kernel/traps.c   | 4 ++--
->  arch/arm64/kernel/traps.c | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-> 
+Yeah, but I guess if we break the decoding (internal) loop when we
+hit an INT3, it maybe possible to be handled?
+
+Thank you,
+
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

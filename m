@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A672A5B08BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0120D5B08BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiIGPjy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Sep 2022 11:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S229624AbiIGPlO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Sep 2022 11:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiIGPju (ORCPT
+        with ESMTP id S229536AbiIGPlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:39:50 -0400
+        Wed, 7 Sep 2022 11:41:12 -0400
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258642124F;
-        Wed,  7 Sep 2022 08:39:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4139C21A;
+        Wed,  7 Sep 2022 08:41:10 -0700 (PDT)
 Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id CE4D740003;
-        Wed,  7 Sep 2022 15:39:43 +0000 (UTC)
-Message-ID: <e907c9240fb2cc0c1e60e3610cfae15ff8125c49.camel@hadess.net>
-Subject: Re: [v4 1/5] HID: core: Export hid_match_id()
+        by mail.gandi.net (Postfix) with ESMTPSA id 04C0D40004;
+        Wed,  7 Sep 2022 15:41:08 +0000 (UTC)
+Message-ID: <661ee8227c96aeba7aae9fff6ac9a73f1d81e765.camel@hadess.net>
+Subject: Re: [PATCH v5 2/4] Input: joystick: xpad: Add ABS_PROFILE axis
+ value to uapi
 From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Date:   Wed, 07 Sep 2022 17:39:43 +0200
-In-Reply-To: <20220830132549.7240-1-hadess@hadess.net>
-References: <20220830132549.7240-1-hadess@hadess.net>
+To:     Nate Yocom <nate@yocom.org>, dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benjamin.tissoires@redhat.com
+Date:   Wed, 07 Sep 2022 17:41:08 +0200
+In-Reply-To: <Yw0OjoVzKV3QOYah@ghaven-kernel>
+References: <20220825222420.6833-1-nate@yocom.org>
+         <20220825222420.6833-3-nate@yocom.org>
+         <3e48ef8d13337ce1c3ec68baffc612fde4740b0e.camel@hadess.net>
+         <Yw0OjoVzKV3QOYah@ghaven-kernel>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
@@ -43,34 +44,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jiri,
-
-If those patches look good to you, would be great to get merged.
-Benjamin doesn't have the bandwidth to test the patches on his own test
-hardware right now, but I've been using them daily for a week now.
-
-Cheers
-
-On Tue, 2022-08-30 at 15:25 +0200, Bastien Nocera wrote:
-> Export hid_match_id() so it can be used in device-specific drivers to
-> implement their own matching with open-coding a match function.
+On Mon, 2022-08-29 at 12:07 -0700, Nate Yocom wrote:
+> On Sat, Aug 27, 2022 at 12:40:46PM +0200, Bastien Nocera wrote:
+> > On Thu, 2022-08-25 at 15:24 -0700, Nate Yocom wrote:
+> > > Add an ABS_PROFILE axis for input devices which need it, e.g. X-
+> > > Box
+> > > Adaptive Controller and X-Box Elite 2.
+> > > ---
+> > >  include/uapi/linux/input-event-codes.h | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/include/uapi/linux/input-event-codes.h
+> > > b/include/uapi/linux/input-event-codes.h
+> > > index dff8e7f17074..7ad931a32970 100644
+> > > --- a/include/uapi/linux/input-event-codes.h
+> > > +++ b/include/uapi/linux/input-event-codes.h
+> > > @@ -862,6 +862,7 @@
+> > >  #define ABS_TOOL_WIDTH         0x1c
+> > >  
+> > >  #define ABS_VOLUME             0x20
+> > > +#define ABS_PROFILE            0x21
+> > >  
+> > >  #define ABS_MISC               0x28
+> > >  
+> > 
+> > 
+> > You probably also want to add it to the absolutes array in
+> > drivers/hid/hid-debug.c.
 > 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
->  drivers/hid/hid-core.c | 1 +
->  1 file changed, 1 insertion(+)
+> doh, roger.
 > 
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index b7f5566e338d..72f8d8835b34 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -2088,6 +2088,7 @@ const struct hid_device_id *hid_match_id(const
-> struct hid_device *hdev,
->  
->         return NULL;
->  }
-> +EXPORT_SYMBOL_GPL(hid_match_id);
->  
->  static const struct hid_device_id hid_hiddev_list[] = {
->         { HID_USB_DEVICE(USB_VENDOR_ID_MGE, USB_DEVICE_ID_MGE_UPS) },
+> > Again, you might want to wait for confirmation from Dmitry that
+> > this is
+> > the right way to do this for the profiles.
+> 
+> Makes sense.  Dmitry?
 
+Dmitry, could you please confirm whether ABS_PROFILE definition is
+correct?
+
+Then Nate can update his patch so we can land the support for that
+controller.
+
+Thanks!

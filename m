@@ -2,237 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D485AFFD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288545AFFD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiIGJET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S230268AbiIGJF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiIGJEQ (ORCPT
+        with ESMTP id S229800AbiIGJFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:04:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2549AF480
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:04:15 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oVqyk-0002uB-EQ; Wed, 07 Sep 2022 11:04:14 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oVqyh-004PGT-O8; Wed, 07 Sep 2022 11:04:13 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oVqyi-00GfDc-RP; Wed, 07 Sep 2022 11:04:12 +0200
-Date:   Wed, 7 Sep 2022 11:04:12 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v1 1/9] pwm: lpss: Deduplicate board info data structures
-Message-ID: <20220907090412.kqvbmgfgeb4toz5n@pengutronix.de>
-References: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
+        Wed, 7 Sep 2022 05:05:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1762AB7F5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:05:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19831D6E;
+        Wed,  7 Sep 2022 02:06:01 -0700 (PDT)
+Received: from [10.57.15.197] (unknown [10.57.15.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7C553F73D;
+        Wed,  7 Sep 2022 02:06:20 -0700 (PDT)
+Message-ID: <af4182e5-c162-3067-8461-0d31bf09aea2@arm.com>
+Date:   Wed, 7 Sep 2022 10:05:48 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="scqcxlngs5jspysc"
-Content-Disposition: inline
-In-Reply-To: <20220906195735.87361-1-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2 1/2] iova: Remove some magazine pointer NULL checks
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>,
+        Ethan Zhao <haifeng.zhao@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1662369083-238529-1-git-send-email-john.garry@huawei.com>
+ <1662369083-238529-2-git-send-email-john.garry@huawei.com>
+ <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
+ <3fa23318-6fa7-eba0-30b8-1fb71e6c327e@huawei.com>
+ <555fa5aa-a575-d783-dc97-79f63dcf2f57@arm.com>
+ <cc950d77-2a97-ac75-4a1d-19aaf864a3be@huawei.com>
+ <ad67a859-dc57-e30f-e422-3f9a0cb5239b@arm.com>
+ <ef7622de-c1f3-c6cd-a50e-bbcbf8288b64@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ef7622de-c1f3-c6cd-a50e-bbcbf8288b64@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-09-07 09:46, John Garry wrote:
+> On 06/09/2022 19:25, Robin Murphy wrote:
+>>>
+>>> Caveat: on the chance that the IOVA domain init fails due to the 
+>>> rcache init failing, then, if there were another device in the group 
+>>> which probes later, its probe would be ok as the start_pfn is set. 
+>>> Not Good.
+>>
+>> Yeah, there's a lot not to like about iommu_dma_init_domain() - I've 
+>> been banking on it all getting cleaned up when I get to refactoring 
+>> that area of probing (remember the issue you reported years ago with 
+>> PCI groups being built in the wrong order? All related...), but in 
+>> fact since the cookie management got pulled into core code, we can 
+>> probably tie the IOVA domain setup to that right now without much 
+>> other involvement. That could be a cheap win, so I'll give it a go soon.
+> 
+> ok, great.
+> 
+> On a related topic, another thing to consider is that errors in IOVA 
+> domain init are not handled gracefully in terms of how we deal with the 
+> device probe and setting dma mapping ops, ref iommu_setup_dma_ops(). I 
+> assume you know all this.
+> 
+>>
+>>> - vdpa just fails to create the domain in vduse_domain_create()
+>>>
+>>>> That makes a fair amount of sense, but does mean that we're missing 
+>>>> the equivalent in iova_rcache_insert() for it to actually work. Or 
+>>>> we just remove it and tighten up the documentation to say that's not 
+>>>> valid 
+>>>
+>>> I'd be more inclined to remove it. I would rather remove fathpath 
+>>> checks as much as possible and have robust error handling in the 
+>>> domain init.
+>>>
+>>> Afterall I do have the "remove check" craze going.
+>>
+>> Sure, like I say I'm happy to be consistent either way. If I do end up 
+>> reinstating such a check I think I'd prefer to have it explicit in 
+>> {alloc,free}_iova_fast() anyway, rather than buried in internal 
+>> implementation details.
+> 
+> I'm not sure what you would like to see now, if anything.
+> 
+> I could just remove the iovad->rcache check in iova_rcache_get().  It's 
+> pretty useless (on its own) since we don't have the same check on the 
+> "insert" path.
 
---scqcxlngs5jspysc
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yup, just remove it. Sorting iommu-dma is yet another issue, but let's 
+skip straight to fixing that properly by allocating the IOVA domain 
+up-front with the cookie (is this the last remnant of my 7-year-old 
+misunderstanding of dma_32bit_pfn? Let's hope so...)
 
-On Tue, Sep 06, 2022 at 10:57:27PM +0300, Andy Shevchenko wrote:
-> With help of __maybe_unused, that allows to avoid compilation warnings,
-> move the board info structures from the C files to the common header
-> and hence deduplicate configuration data.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/pwm/pwm-lpss-pci.c      | 29 -----------------------------
->  drivers/pwm/pwm-lpss-platform.c | 23 -----------------------
->  drivers/pwm/pwm-lpss.h          | 30 ++++++++++++++++++++++++++++++
-
-Given that both the pci driver and the platform driver alread depend on
-pwm-lpss.o, I'd prefer something like the patch below to really
-deduplicate the data.
-
-One thing to note is that the two pwm_lpss_bsw_info are not identical. I
-didn't check how that is relevant. Did you check that?
-
-Best regards
-Uwe
-
-diff --git a/drivers/pwm/pwm-lpss-pci.c b/drivers/pwm/pwm-lpss-pci.c
-index c893ec3d2fb4..75b778e839b3 100644
---- a/drivers/pwm/pwm-lpss-pci.c
-+++ b/drivers/pwm/pwm-lpss-pci.c
-@@ -14,35 +14,6 @@
-=20
- #include "pwm-lpss.h"
-=20
--/* BayTrail */
--static const struct pwm_lpss_boardinfo pwm_lpss_byt_info =3D {
--	.clk_rate =3D 25000000,
--	.npwm =3D 1,
--	.base_unit_bits =3D 16,
--};
--
--/* Braswell */
--static const struct pwm_lpss_boardinfo pwm_lpss_bsw_info =3D {
--	.clk_rate =3D 19200000,
--	.npwm =3D 1,
--	.base_unit_bits =3D 16,
--};
--
--/* Broxton */
--static const struct pwm_lpss_boardinfo pwm_lpss_bxt_info =3D {
--	.clk_rate =3D 19200000,
--	.npwm =3D 4,
--	.base_unit_bits =3D 22,
--	.bypass =3D true,
--};
--
--/* Tangier */
--static const struct pwm_lpss_boardinfo pwm_lpss_tng_info =3D {
--	.clk_rate =3D 19200000,
--	.npwm =3D 4,
--	.base_unit_bits =3D 22,
--};
--
- static int pwm_lpss_probe_pci(struct pci_dev *pdev,
- 			      const struct pci_device_id *id)
- {
-diff --git a/drivers/pwm/pwm-lpss-platform.c b/drivers/pwm/pwm-lpss-platfor=
-m.c
-index 928570430cef..834423c34f48 100644
---- a/drivers/pwm/pwm-lpss-platform.c
-+++ b/drivers/pwm/pwm-lpss-platform.c
-@@ -15,28 +15,6 @@
-=20
- #include "pwm-lpss.h"
-=20
--/* BayTrail */
--static const struct pwm_lpss_boardinfo pwm_lpss_byt_info =3D {
--	.clk_rate =3D 25000000,
--	.npwm =3D 1,
--	.base_unit_bits =3D 16,
--};
--
--/* Braswell */
--static const struct pwm_lpss_boardinfo pwm_lpss_bsw_info =3D {
--	.clk_rate =3D 19200000,
--	.npwm =3D 1,
--	.base_unit_bits =3D 16,
--	.other_devices_aml_touches_pwm_regs =3D true,
--};
--
--/* Broxton */
--static const struct pwm_lpss_boardinfo pwm_lpss_bxt_info =3D {
--	.clk_rate =3D 19200000,
--	.npwm =3D 4,
--	.base_unit_bits =3D 22,
--	.bypass =3D true,
--};
-=20
- static int pwm_lpss_probe_platform(struct platform_device *pdev)
- {
-diff --git a/drivers/pwm/pwm-lpss.c b/drivers/pwm/pwm-lpss.c
-index 36d4e83e6b79..e8b16b67bfd4 100644
---- a/drivers/pwm/pwm-lpss.c
-+++ b/drivers/pwm/pwm-lpss.c
-@@ -29,6 +29,39 @@
- /* Size of each PWM register space if multiple */
- #define PWM_SIZE			0x400
-=20
-+/* BayTrail */
-+const struct pwm_lpss_boardinfo pwm_lpss_byt_info =3D {
-+	.clk_rate =3D 25000000,
-+	.npwm =3D 1,
-+	.base_unit_bits =3D 16,
-+};
-+EXPORT_SYMBOL_GPL(pwm_lpss_byt_info);
-+
-+/* Braswell */
-+const struct pwm_lpss_boardinfo pwm_lpss_bsw_info =3D {
-+	.clk_rate =3D 19200000,
-+	.npwm =3D 1,
-+	.base_unit_bits =3D 16,
-+};
-+EXPORT_SYMBOL_GPL(pwm_lpss_bsw_info);
-+
-+/* Broxton */
-+const struct pwm_lpss_boardinfo pwm_lpss_bxt_info =3D {
-+	.clk_rate =3D 19200000,
-+	.npwm =3D 4,
-+	.base_unit_bits =3D 22,
-+	.bypass =3D true,
-+};
-+EXPORT_SYMBOL_GPL(pwm_lpss_bxt_info);
-+
-+/* Tangier */
-+const struct pwm_lpss_boardinfo pwm_lpss_tng_info =3D {
-+	.clk_rate =3D 19200000,
-+	.npwm =3D 4,
-+	.base_unit_bits =3D 22,
-+};
-+EXPORT_SYMBOL_GPL(pwm_lpss_tng_info);
-+
- static inline struct pwm_lpss_chip *to_lpwm(struct pwm_chip *chip)
- {
- 	return container_of(chip, struct pwm_lpss_chip, chip);
-diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
-index 8b3476f25e06..918d2f177109 100644
---- a/drivers/pwm/pwm-lpss.h
-+++ b/drivers/pwm/pwm-lpss.h
-@@ -33,6 +33,11 @@ struct pwm_lpss_boardinfo {
- 	bool other_devices_aml_touches_pwm_regs;
- };
-=20
-+extern const struct pwm_lpss_boardinfo pwm_lpss_tng_info;
-+extern const struct pwm_lpss_boardinfo pwm_lpss_bxt_info;
-+extern const struct pwm_lpss_boardinfo pwm_lpss_bsw_info;
-+extern const struct pwm_lpss_boardinfo pwm_lpss_byt_info;
-+
- struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, struct resource *=
-r,
- 				     const struct pwm_lpss_boardinfo *info);
-=20
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---scqcxlngs5jspysc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMYXokACgkQwfwUeK3K
-7AnUAggAgAeeWAWu/LmXJf/jBBobK0LmrjQtLRhHxMwo5TwkbqSLFSCBo0FRE5yW
-SsqRB+eDvqPleo+qjA5RlXVnlPyi/nMw0NYyIepbZVT9gLcTvM4vwcz8YPxverCs
-kZD41KdNh8t+CUgtGhfbXyyIkuFqbxe01D0nRIYyem/DdL12gKhQxqXypv09l53q
-++KpWaejfKb3r11q0aafg9f51e8JBHNEaxBCSdlRGvlmRHIQ5afCbLwaytbRxN3u
-GJOFZ4FXpKpSux8MRa+zwETxLKQn3YZ83MOvC3bBK7AyR8tqGkrAkmf5lAzvq9BE
-o4Obg1PL6gKZLWw9k1m8rtEzi9fW6Q==
-=KFjG
------END PGP SIGNATURE-----
-
---scqcxlngs5jspysc--
+Thanks,
+Robin.

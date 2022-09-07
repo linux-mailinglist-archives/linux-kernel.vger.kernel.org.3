@@ -2,146 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63A75AFFCD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEF35AFFD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 11:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiIGJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 05:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S230005AbiIGJD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 05:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiIGJBp (ORCPT
+        with ESMTP id S229863AbiIGJDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 05:01:45 -0400
+        Wed, 7 Sep 2022 05:03:54 -0400
 Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A633AF480
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:01:39 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y127so13978386pfy.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 02:01:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A345A8978
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 02:03:52 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id j12so1520593pfi.11
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 02:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ELHyy9g5JRbfhKbhnhJOnuhdaHcEpPG9qj9a/5f8Kwg=;
-        b=VOYtGdgtdkV8vp8Blh4Ol8K/8wn14f6F4+jLWUhWrYO0tb0bu7ZuQlUVq+aLyAS0rp
-         R34HmstexRj3/pL5NOhYihAFoKKtJ+z7S5pgkqwB54hm4ULsrdy4auxOB2cw/ecSQf08
-         hyRaoyx77iru9pL2CcOP4w+wtEK9ybUqcODsKmCsYD3PhOwTEAE0xzexFbhlSTqUd9/H
-         NesIrO53RHkfa9QVOaDWEr8srFZn1T+aG+k6l1b30kq0r7EhjMVj7lQqqbyIPe0hzL4j
-         ijC00cuDu6B/BDJPA5QvN2HV0QcOSUwbVgSxzloHG5PNv/pa6SNZBvlvISKOApRF66Il
-         7vBA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Z934rlNstfofpuyWEurIb+XEjfuq990ZSdiH3EvHyDc=;
+        b=d8iv/xnJfP5vvzSSAHeGHVaPpyoQSjFvtA9P6dbF3rOgTmFoI5A5RuUR0xOhO6zKD4
+         eeYrI4xm1/Sr8aYEfDhDvQLBHtaR6PB9wKh4gUjfR0/o1+KjCtjrwU7gl+7JHzw4jSdY
+         TFpX22xWQPT7rLibuT/DYhHuQCkOxK79FMOlxwqY0IIukkRFyVUL2E/pNpHEXLbN81oj
+         ySNBTEwbvIlNHNegEiBeoC1FH2uqGY4pixSJl+zFONb/qlmwMaKA+2u7DadUWzzAepo8
+         rLZ19vO70JGo1mdTaMTz5UcHWPb9UgXsvIL+QqoPleXUOcBKGACqLDTI+S8GjhPjFxjl
+         1tow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ELHyy9g5JRbfhKbhnhJOnuhdaHcEpPG9qj9a/5f8Kwg=;
-        b=Gfchee/Ldrc2u3H+QajZhf5yEwgXgFMG9+jDeBIKcxjdN5l4VWacvtwmuZgyKTlYgk
-         n941lYVxYGX7Z8IIJt04w3E0XkfGwbiVNjagPppf39D16JJUlc8SnHitkfYjSQPnoosk
-         nsyYPsERntuqn0sqFFMwGr9PsUTx5taNfuNCNp5EEVMjflsiw5A0i4g+a8BdFRtc6wFz
-         XkcWCzBQS0+L0NQb8MYRtDNmGYOd/D+KBPpSYIBJ4qhp/frrhQcwGG4g6LXOv0EXdmko
-         xylrmM1zg9Wtb0kvMGcgrsoW9YHOgDGf9mT5t0SPANFQT/sv7sFYa1w1UAcZw8ISbBRc
-         leVg==
-X-Gm-Message-State: ACgBeo08XChy43B/k5erYHzAjADF450dsNxs5K1j2WJV1ARLqOLusZNG
-        smfNUmnpg+1V1mcBREUiC/ScHlCp0XoLcDMBX+Z+GQ==
-X-Google-Smtp-Source: AA6agR7I+o8bSYOvyVGo/YjKwv8NK6ti1P4v5vZFfGP57JboHhl2jnqU0sIu8B+AddxliSXBsQrwncKnC++7Rwq8pWg=
-X-Received: by 2002:a05:6a00:1a04:b0:52a:d4dc:5653 with SMTP id
- g4-20020a056a001a0400b0052ad4dc5653mr2705863pfv.69.1662541297803; Wed, 07 Sep
- 2022 02:01:37 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Z934rlNstfofpuyWEurIb+XEjfuq990ZSdiH3EvHyDc=;
+        b=cl0kmi8iODdOHsbZVWRSMMkDIE8oaf9dImB/ACOYrhotcNCkTufZhQUIOMiQZxdlfe
+         qyGta+S9YHA9oRt85wB02RD2VPApwR3Q9Np8BtS2RS6mTp6lic2F6nITcc1LShtRPvRN
+         ybwfxaqhnFoOKQGawHjJfxBq9g7DGQ/cAn/X5zBkvNI5x1j/7XZoWLN98zlXe+CeZAbr
+         aJj9VFz29hyPtL6uXgL0x3S9Fk6RWPhDhfAJjQctzEs4tDUZ7UGRVjW4ZskwGhNW1lRM
+         85VFHKFcrexrTpGcQs9rr3GWumqMygjia1BkGbmZXAdHlD4lm2zSObuaEb/uTzDcQMlX
+         ixRQ==
+X-Gm-Message-State: ACgBeo1lrM90XY7uJRedOS8v2YpF+uE+f3XLf5jV0tqoXbrhcCoaF5CC
+        XLHaNKoLa8BGMMbyl+FwE0BFYg==
+X-Google-Smtp-Source: AA6agR7iN9BJBRAkt9ypzmep6EHv0C0pDSFCGX8r0vobkuIuHom8V/eFvhAf0l0hepgON++SOZHBSw==
+X-Received: by 2002:a63:8549:0:b0:434:3c39:4fe0 with SMTP id u70-20020a638549000000b004343c394fe0mr2498448pgd.221.1662541432330;
+        Wed, 07 Sep 2022 02:03:52 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.237])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170903110800b0016d6963cb12sm11679514plh.304.2022.09.07.02.03.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 02:03:51 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     peterz@infradead.org
+Cc:     hannes@cmpxchg.org, tj@kernel.org, surenb@google.com,
+        mkoutny@suse.com, mingo@redhat.com, gregkh@linuxfoundation.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH] sched/psi: Per-cgroup PSI accounting disable/re-enable interface
+Date:   Wed,  7 Sep 2022 17:03:32 +0800
+Message-Id: <20220907090332.2078-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220825164111.29534-11-zhouchengming@bytedance.com>
+References: <20220825164111.29534-11-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-References: <20220902124032.788488-1-sudeep.holla@arm.com> <20220902124032.788488-10-sudeep.holla@arm.com>
-In-Reply-To: <20220902124032.788488-10-sudeep.holla@arm.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Wed, 7 Sep 2022 11:01:27 +0200
-Message-ID: <CAHUa44Gq+7_XT2+ccAMxC=ZFh4vV=YuUGLGx0MMYrZ1wne83bw@mail.gmail.com>
-Subject: Re: [PATCH v2 09/10] firmware: arm_ffa: Set up 32bit execution mode
- flag using partiion property
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 2:40 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> FF-A v1.1 adds a flag in the partition properties to indicate if the
-> partition runs in the AArch32 or AArch64 execution state. Use the same
-> to set-up the 32-bit execution flag mode in the ffa_dev automatically
-> and ignore any requests to do the same from the ffa_driver.
->
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/firmware/arm_ffa/driver.c | 13 ++++++++++++-
->  include/linux/arm_ffa.h           |  2 ++
->  2 files changed, 14 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index dd6ab2f81580..dbbe15592173 100644
-> --- a/drivers/firmware/arm_ffa/driver.c
-> +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -647,11 +647,19 @@ static int ffa_partition_info_get(const char *uuid_str,
->         return 0;
->  }
->
-> -static void ffa_mode_32bit_set(struct ffa_device *dev)
-> +static void _ffa_mode_32bit_set(struct ffa_device *dev)
->  {
->         dev->mode_32bit = true;
->  }
->
-> +static void ffa_mode_32bit_set(struct ffa_device *dev)
-> +{
-> +       if (drv_info->version > FFA_VERSION_1_0)
-> +               return;
-> +
-> +       _ffa_mode_32bit_set(dev);
-> +}
-> +
->  static int ffa_sync_send_receive(struct ffa_device *dev,
->                                  struct ffa_send_direct_data *data)
->  {
-> @@ -743,6 +751,9 @@ static void ffa_setup_partitions(void)
->                                __func__, tpbuf->id);
->                         continue;
->                 }
-> +
-> +               if (tpbuf->properties & FFA_PARTITION_AARCH64_EXEC)
+PSI accounts stalls for each cgroup separately and aggregates it
+at each level of the hierarchy. This may cause non-negligible overhead
+for some workloads when under deep level of the hierarchy.
 
-Shouldn't this be !(tpbuf->properties & FFA_PARTITION_AARCH64_EXEC)?
+commit 3958e2d0c34e ("cgroup: make per-cgroup pressure stall tracking configurable")
+make PSI to skip per-cgroup stall accounting, only account system-wide
+to avoid this each level overhead.
 
-Before this, we used 64-bit calling convention by default for FF-A
-v1.0. I suppose we would like to keep that behaviour.
+But for our use case, we also want leaf cgroup PSI stats accounted for
+userspace adjustment on that cgroup, apart from only system-wide adjustment.
 
-Cheers,
-Jens
+So this patch introduce a per-cgroup PSI accounting disable/re-enable
+interface "cgroup.pressure", which is a read-write single value file that
+allowed values are "0" and "1", the defaults is "1" so per-cgroup
+PSI stats is enabled by default.
 
-> +                       _ffa_mode_32bit_set(ffa_dev);
->         }
->         kfree(pbuf);
->  }
-> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-> index 09567ffd1f49..5964b6104996 100644
-> --- a/include/linux/arm_ffa.h
-> +++ b/include/linux/arm_ffa.h
-> @@ -106,6 +106,8 @@ struct ffa_partition_info {
->  #define FFA_PARTITION_DIRECT_SEND      BIT(1)
->  /* partition can send and receive indirect messages. */
->  #define FFA_PARTITION_INDIRECT_MSG     BIT(2)
-> +/* partition runs in the AArch64 execution state. */
-> +#define FFA_PARTITION_AARCH64_EXEC     BIT(8)
->         u32 properties;
->         u32 uuid[4];
->  };
-> --
-> 2.37.3
->
+Implementation details:
+
+It should be relatively straight-forward to disable and re-enable
+state aggregation, time tracking, averaging on a per-cgroup level,
+if we can live with losing history from while it was disabled.
+I.e. the avgs will restart from 0, total= will have gaps.
+
+But it's hard or complex to stop/restart groupc->tasks[] updates,
+which is not implemented in this patch. So we always update
+groupc->tasks[] and PSI_ONCPU bit in psi_group_change() even when
+the cgroup PSI stats is disabled.
+
+Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+Updated version to fix build error when !CONFIG_PSI.
+---
+ Documentation/admin-guide/cgroup-v2.rst | 17 ++++++
+ include/linux/cgroup-defs.h             |  3 ++
+ include/linux/psi.h                     |  2 +
+ include/linux/psi_types.h               |  3 ++
+ kernel/cgroup/cgroup.c                  | 70 ++++++++++++++++++++++---
+ kernel/sched/psi.c                      | 70 ++++++++++++++++++++++---
+ 6 files changed, 152 insertions(+), 13 deletions(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 971c418bc778..4cad4e2b31ec 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -976,6 +976,23 @@ All cgroup core files are prefixed with "cgroup."
+ 	killing cgroups is a process directed operation, i.e. it affects
+ 	the whole thread-group.
+ 
++  cgroup.pressure
++	A read-write single value file that allowed values are "0" and "1".
++	The default is "1".
++
++	Writing "0" to the file will disable the cgroup PSI accounting.
++	Writing "1" to the file will re-enable the cgroup PSI accounting.
++
++	This control attribute is not hierarchical, so disable or enable PSI
++	accounting in a cgroup does not affect PSI accounting in descendants
++	and doesn't need pass enablement via ancestors from root.
++
++	The reason this control attribute exists is that PSI accounts stalls for
++	each cgroup separately and aggregates it at each level of the hierarchy.
++	This may cause non-negligible overhead for some workloads when under
++	deep level of the hierarchy, in which case this control attribute can
++	be used to disable PSI accounting in the non-leaf cgroups.
++
+   irq.pressure
+ 	A read-write nested-keyed file.
+ 
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 4bcf56b3491c..7df76b318245 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -428,6 +428,9 @@ struct cgroup {
+ 	struct cgroup_file procs_file;	/* handle for "cgroup.procs" */
+ 	struct cgroup_file events_file;	/* handle for "cgroup.events" */
+ 
++	/* handles for "{cpu,memory,io,irq}.pressure" */
++	struct cgroup_file psi_files[NR_PSI_RESOURCES];
++
+ 	/*
+ 	 * The bitmask of subsystems enabled on the child cgroups.
+ 	 * ->subtree_control is the one configured through
+diff --git a/include/linux/psi.h b/include/linux/psi.h
+index 362a74ca1d3b..b029a847def1 100644
+--- a/include/linux/psi.h
++++ b/include/linux/psi.h
+@@ -39,6 +39,7 @@ static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
+ int psi_cgroup_alloc(struct cgroup *cgrp);
+ void psi_cgroup_free(struct cgroup *cgrp);
+ void cgroup_move_task(struct task_struct *p, struct css_set *to);
++void psi_cgroup_restart(struct psi_group *group);
+ #endif
+ 
+ #else /* CONFIG_PSI */
+@@ -60,6 +61,7 @@ static inline void cgroup_move_task(struct task_struct *p, struct css_set *to)
+ {
+ 	rcu_assign_pointer(p->cgroups, to);
+ }
++static inline void psi_cgroup_restart(struct psi_group *group) {}
+ #endif
+ 
+ #endif /* CONFIG_PSI */
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index a0b746258c68..6e4372735068 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -152,6 +152,7 @@ struct psi_trigger {
+ 
+ struct psi_group {
+ 	struct psi_group *parent;
++	bool enabled;
+ 
+ 	/* Protects data used by the aggregator */
+ 	struct mutex avgs_lock;
+@@ -194,6 +195,8 @@ struct psi_group {
+ 
+ #else /* CONFIG_PSI */
+ 
++#define NR_PSI_RESOURCES	0
++
+ struct psi_group { };
+ 
+ #endif /* CONFIG_PSI */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 4f72a71820db..0bca8f29361d 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3708,8 +3708,8 @@ static int cgroup_cpu_pressure_show(struct seq_file *seq, void *v)
+ 	return psi_show(seq, psi, PSI_CPU);
+ }
+ 
+-static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
+-					  size_t nbytes, enum psi_res res)
++static ssize_t pressure_write(struct kernfs_open_file *of, char *buf,
++			      size_t nbytes, enum psi_res res)
+ {
+ 	struct cgroup_file_ctx *ctx = of->priv;
+ 	struct psi_trigger *new;
+@@ -3746,21 +3746,21 @@ static ssize_t cgroup_io_pressure_write(struct kernfs_open_file *of,
+ 					  char *buf, size_t nbytes,
+ 					  loff_t off)
+ {
+-	return cgroup_pressure_write(of, buf, nbytes, PSI_IO);
++	return pressure_write(of, buf, nbytes, PSI_IO);
+ }
+ 
+ static ssize_t cgroup_memory_pressure_write(struct kernfs_open_file *of,
+ 					  char *buf, size_t nbytes,
+ 					  loff_t off)
+ {
+-	return cgroup_pressure_write(of, buf, nbytes, PSI_MEM);
++	return pressure_write(of, buf, nbytes, PSI_MEM);
+ }
+ 
+ static ssize_t cgroup_cpu_pressure_write(struct kernfs_open_file *of,
+ 					  char *buf, size_t nbytes,
+ 					  loff_t off)
+ {
+-	return cgroup_pressure_write(of, buf, nbytes, PSI_CPU);
++	return pressure_write(of, buf, nbytes, PSI_CPU);
+ }
+ 
+ #ifdef CONFIG_IRQ_TIME_ACCOUNTING
+@@ -3776,10 +3776,58 @@ static ssize_t cgroup_irq_pressure_write(struct kernfs_open_file *of,
+ 					 char *buf, size_t nbytes,
+ 					 loff_t off)
+ {
+-	return cgroup_pressure_write(of, buf, nbytes, PSI_IRQ);
++	return pressure_write(of, buf, nbytes, PSI_IRQ);
+ }
+ #endif
+ 
++static int cgroup_pressure_show(struct seq_file *seq, void *v)
++{
++	struct cgroup *cgrp = seq_css(seq)->cgroup;
++	struct psi_group *psi = cgroup_psi(cgrp);
++
++	seq_printf(seq, "%d\n", psi->enabled);
++
++	return 0;
++}
++
++static ssize_t cgroup_pressure_write(struct kernfs_open_file *of,
++				     char *buf, size_t nbytes,
++				     loff_t off)
++{
++	ssize_t ret;
++	int enable;
++	struct cgroup *cgrp;
++	struct psi_group *psi;
++
++	ret = kstrtoint(strstrip(buf), 0, &enable);
++	if (ret)
++		return ret;
++
++	if (enable < 0 || enable > 1)
++		return -ERANGE;
++
++	cgrp = cgroup_kn_lock_live(of->kn, false);
++	if (!cgrp)
++		return -ENOENT;
++
++	psi = cgroup_psi(cgrp);
++	if (psi->enabled != enable) {
++		int i;
++
++		/* show or hide {cpu,memory,io,irq}.pressure files */
++		for (i = 0; i < NR_PSI_RESOURCES; i++)
++			cgroup_file_show(&cgrp->psi_files[i], enable);
++
++		psi->enabled = enable;
++		if (enable)
++			psi_cgroup_restart(psi);
++	}
++
++	cgroup_kn_unlock(of->kn);
++
++	return nbytes;
++}
++
+ static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
+ 					  poll_table *pt)
+ {
+@@ -5155,6 +5203,7 @@ static struct cftype cgroup_base_files[] = {
+ 	{
+ 		.name = "io.pressure",
+ 		.flags = CFTYPE_PRESSURE,
++		.file_offset = offsetof(struct cgroup, psi_files[PSI_IO]),
+ 		.seq_show = cgroup_io_pressure_show,
+ 		.write = cgroup_io_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+@@ -5163,6 +5212,7 @@ static struct cftype cgroup_base_files[] = {
+ 	{
+ 		.name = "memory.pressure",
+ 		.flags = CFTYPE_PRESSURE,
++		.file_offset = offsetof(struct cgroup, psi_files[PSI_MEM]),
+ 		.seq_show = cgroup_memory_pressure_show,
+ 		.write = cgroup_memory_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+@@ -5171,6 +5221,7 @@ static struct cftype cgroup_base_files[] = {
+ 	{
+ 		.name = "cpu.pressure",
+ 		.flags = CFTYPE_PRESSURE,
++		.file_offset = offsetof(struct cgroup, psi_files[PSI_CPU]),
+ 		.seq_show = cgroup_cpu_pressure_show,
+ 		.write = cgroup_cpu_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+@@ -5180,12 +5231,19 @@ static struct cftype cgroup_base_files[] = {
+ 	{
+ 		.name = "irq.pressure",
+ 		.flags = CFTYPE_PRESSURE,
++		.file_offset = offsetof(struct cgroup, psi_files[PSI_IRQ]),
+ 		.seq_show = cgroup_irq_pressure_show,
+ 		.write = cgroup_irq_pressure_write,
+ 		.poll = cgroup_pressure_poll,
+ 		.release = cgroup_pressure_release,
+ 	},
+ #endif
++	{
++		.name = "cgroup.pressure",
++		.flags = CFTYPE_PRESSURE,
++		.seq_show = cgroup_pressure_show,
++		.write = cgroup_pressure_write,
++	},
+ #endif /* CONFIG_PSI */
+ 	{ }	/* terminate */
+ };
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 9a8aee80a087..9711827e31e5 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -181,6 +181,7 @@ static void group_init(struct psi_group *group)
+ {
+ 	int cpu;
+ 
++	group->enabled = true;
+ 	for_each_possible_cpu(cpu)
+ 		seqcount_init(&per_cpu_ptr(group->pcpu, cpu)->seq);
+ 	group->avg_last_update = sched_clock();
+@@ -696,17 +697,16 @@ static void psi_group_change(struct psi_group *group, int cpu,
+ 	groupc = per_cpu_ptr(group->pcpu, cpu);
+ 
+ 	/*
+-	 * First we assess the aggregate resource states this CPU's
+-	 * tasks have been in since the last change, and account any
+-	 * SOME and FULL time these may have resulted in.
+-	 *
+-	 * Then we update the task counts according to the state
++	 * First we update the task counts according to the state
+ 	 * change requested through the @clear and @set bits.
++	 *
++	 * Then if the cgroup PSI stats accounting enabled, we
++	 * assess the aggregate resource states this CPU's tasks
++	 * have been in since the last change, and account any
++	 * SOME and FULL time these may have resulted in.
+ 	 */
+ 	write_seqcount_begin(&groupc->seq);
+ 
+-	record_times(groupc, now);
+-
+ 	/*
+ 	 * Start with TSK_ONCPU, which doesn't have a corresponding
+ 	 * task count - it's just a boolean flag directly encoded in
+@@ -745,6 +745,23 @@ static void psi_group_change(struct psi_group *group, int cpu,
+ 		if (set & (1 << t))
+ 			groupc->tasks[t]++;
+ 
++	if (!group->enabled) {
++		/*
++		 * On the first group change after disabling PSI, conclude
++		 * the current state and flush its time. This is unlikely
++		 * to matter to the user, but aggregation (get_recent_times)
++		 * may have already incorporated the live state into times_prev;
++		 * avoid a delta sample underflow when PSI is later re-enabled.
++		 */
++		if (unlikely(groupc->state_mask & (1 << PSI_NONIDLE)))
++			record_times(groupc, now);
++
++		groupc->state_mask = state_mask;
++
++		write_seqcount_end(&groupc->seq);
++		return;
++	}
++
+ 	for (s = 0; s < NR_PSI_STATES; s++) {
+ 		if (test_state(groupc->tasks, s, state_mask & PSI_ONCPU))
+ 			state_mask |= (1 << s);
+@@ -761,6 +778,8 @@ static void psi_group_change(struct psi_group *group, int cpu,
+ 	if (unlikely((state_mask & PSI_ONCPU) && cpu_curr(cpu)->in_memstall))
+ 		state_mask |= (1 << PSI_MEM_FULL);
+ 
++	record_times(groupc, now);
++
+ 	groupc->state_mask = state_mask;
+ 
+ 	write_seqcount_end(&groupc->seq);
+@@ -907,6 +926,9 @@ void psi_account_irqtime(struct task_struct *task, u32 delta)
+ 
+ 	group = task_psi_group(task);
+ 	do {
++		if (!group->enabled)
++			continue;
++
+ 		groupc = per_cpu_ptr(group->pcpu, cpu);
+ 
+ 		write_seqcount_begin(&groupc->seq);
+@@ -1080,6 +1102,40 @@ void cgroup_move_task(struct task_struct *task, struct css_set *to)
+ 
+ 	task_rq_unlock(rq, task, &rf);
+ }
++
++void psi_cgroup_restart(struct psi_group *group)
++{
++	int cpu;
++
++	/*
++	 * After we disable psi_group->enabled, we don't actually
++	 * stop percpu tasks accounting in each psi_group_cpu,
++	 * instead only stop test_state() loop, record_times()
++	 * and averaging worker, see psi_group_change() for details.
++	 *
++	 * When disable cgroup PSI, this function has nothing to sync
++	 * since cgroup pressure files are hidden and percpu psi_group_cpu
++	 * would see !psi_group->enabled and only do task accounting.
++	 *
++	 * When re-enable cgroup PSI, this function use psi_group_change()
++	 * to get correct state mask from test_state() loop on tasks[],
++	 * and restart groupc->state_start from now, use .clear = .set = 0
++	 * here since no task status really changed.
++	 */
++	if (!group->enabled)
++		return;
++
++	for_each_possible_cpu(cpu) {
++		struct rq *rq = cpu_rq(cpu);
++		struct rq_flags rf;
++		u64 now;
++
++		rq_lock_irq(rq, &rf);
++		now = cpu_clock(cpu);
++		psi_group_change(group, cpu, 0, 0, now, true);
++		rq_unlock_irq(rq, &rf);
++	}
++}
+ #endif /* CONFIG_CGROUPS */
+ 
+ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+-- 
+2.37.2
+

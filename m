@@ -2,219 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C774A5B0381
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9457D5B0384
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 13:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiIGL5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 07:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S229629AbiIGL7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 07:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIGL5N (ORCPT
+        with ESMTP id S229529AbiIGL7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 07:57:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBECE79;
-        Wed,  7 Sep 2022 04:57:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D32646189F;
-        Wed,  7 Sep 2022 11:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD70C433C1;
-        Wed,  7 Sep 2022 11:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662551830;
-        bh=LBURqqGm6uHN296hjpUzL5apDqPzW15rc2NLka5Q+GM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iwG0EOgf6p6wl8IrIbXNzXxgI1Iyo8SlmLWuyq+cu9HLnX8fszNZqZm/2bBYzPRVB
-         6moL5BBSPSeaPjItW9o9/ywtu6Qu+OlhsiB2U25ySXW/sXzAHoeu4DzJ+3g1LDC6KP
-         GkvymYRcBDNo+dR100YOOEfyPPX8HWvGXhxyep/U=
-Date:   Wed, 7 Sep 2022 13:57:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rondreis <linhaoguo86@gmail.com>
-Cc:     balbi@kernel.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: Assign a unique name for each configfs
- driver
-Message-ID: <YxiHE9s4NDZOILpe@kroah.com>
-References: <20220907112210.11949-1-linhaoguo86@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907112210.11949-1-linhaoguo86@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 07:59:32 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BCAE03D;
+        Wed,  7 Sep 2022 04:59:31 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id CF3F42B05B84;
+        Wed,  7 Sep 2022 07:59:27 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 07:59:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1662551967; x=
+        1662555567; bh=93TgYd152lsMJGukyVn+n+/KYrXdTp+yDhOzZKjQ6j4=; b=a
+        wpcaSjMpvQxH/r24XuOYbW7qzgwqAdiOOcxmaxHRSpFS2LCPs7/QaE7SECr3bjYK
+        2Z+jM3dw7YVeZ8RXWAD7G7FUfk+9OS3ywJEyDpRJAe7FpvG4kn8iLIETYUC2kkd4
+        eYqMwh/QjEC4DT3fuqot48hq6mCjuNZWUI8khrReQASrv67oy9hh2WdIRJHDANKT
+        ECnpC46+2xeAQE2iO1DLlrVGJx/+4bvljtivxPZkM2/eFoT2AVIwwXF0hNviWEpq
+        DOGp/Nfe3w+yxCXNN5cPZcEEVqwFDyA/E1K3DLpHistUEIn/z3bmlTVTr5ygN47z
+        Cvsrm/UjC2Fd3YRLfC83g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662551967; x=
+        1662555567; bh=93TgYd152lsMJGukyVn+n+/KYrXdTp+yDhOzZKjQ6j4=; b=a
+        vHCxVUc2IdvYCG0t9AqWn7NS7WrBBG4UCH6F/qqtXeczJkJrszU9X1x2ZwdoIX/o
+        9qLujK/2ikjuw90nv2kxe+NZrtQB37QxU8HR+t8ibz6DgkUrk93UJ6ieXq89vNsI
+        /A+BKCEclvpZh0zRJoTINAHLB86Rjx91Yyqwlr1Xd4mQIwzm1xoiF/vM1C+QzzEo
+        q0gx5JitIaESQZ/3OX9Racmy3WsUUfhIl/QdfHwXTkV4JpazE1QXscwrqpXcXrAT
+        B1gOuIa/T5SEAmbA6PasO47lvyTWMOvkWuZh+gtFAjCAFBTIte9R6hrOZG4OwVBY
+        fGNqnc2owYBFb3g/YRBkg==
+X-ME-Sender: <xms:nYcYY1oX_Y-wC5X1wR2qHcedMPqDeTl2ns1mCbB3eSVEVlX0S7vCRQ>
+    <xme:nYcYY3rpq4yC_ZlA8DKRZLFXe4CRkFFkZ69MaOfwy-hjPWdrhiqqxEV64gkUfkY3U
+    wP2LK3OVcLpOVO3kTM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddggeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:nocYYyNdzljoXCNjYeoa-shYLTaCax1-IzEHxZfwDo5DB0KdeyFC2Q>
+    <xmx:nocYYw6GsrKwte3Wldp8tl1SQ6nCpsO-Hhgts03HjI9va09UlTVk0g>
+    <xmx:nocYY05sn2_rs2Wz_CWm0LztL1KRLOObjYocAb11SdH-hhMiYV0sMQ>
+    <xmx:n4cYY6F0VJXmjySOdLPk-Wkcz93cHgkwuV-QLF1CUOJbLpr4VVDN7a0cUh4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DB8EBB60083; Wed,  7 Sep 2022 07:59:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
+In-Reply-To: <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com>
+References: <20220906104805.23211-1-jslaby@suse.cz>
+ <Yxcvbk281f/vy4vb@hovoldconsulting.com>
+ <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
+ <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com>
+Date:   Wed, 07 Sep 2022 13:59:05 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "Jiri Slaby" <jirislaby@kernel.org>,
+        "Johan Hovold" <johan@kernel.org>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Tobias Klauser" <tklauser@distanz.ch>,
+        "Richard Genoud" <richard.genoud@gmail.com>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
+        "Vladimir Zapolskiy" <vz@mleia.com>,
+        "Liviu Dudau" <liviu.dudau@arm.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        "Kevin Cernekee" <cernekee@gmail.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Orson Zhai" <orsonzhai@gmail.com>,
+        "Baolin Wang" <baolin.wang7@gmail.com>,
+        "Chunyan Zhang" <zhang.lyra@gmail.com>,
+        "Patrice Chotard" <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/4] tty: TX helpers
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 07:22:10PM +0800, Rondreis wrote:
-> When fuzzing the kernel, I couldn't use configfs to attach more than one
-> gadget. When attaching the second gadget with a different UDC it always
-> failed and the kernel message said:
-> 
-> Error: Driver 'configfs-gadget' is already registered, aborting...
-> UDC core: g1: driver registration failed: -16
-> 
-> The problem is that when creating multiple gadgets with configfs and
-> binding them to different UDCs, the UDC drivers have the same name
-> "configfs-gadget". Because of the addition of the "gadget" bus,
-> naming conflicts will occur when more than one UDC drivers
-> registered to the bus.
-> 
-> It's not an isolated case, this patch refers to the commit f2d8c2606825
-> ("usb: gadget: Fix non-unique driver names in raw-gadget driver").
-> Each configfs-gadget driver will be assigned a unique name
-> "configfs-gadget.N", with a different value of N for each driver instance.
+On Wed, Sep 7, 2022, at 12:16 PM, Ilpo J=C3=A4rvinen wrote:
+> On Wed, 7 Sep 2022, Jiri Slaby wrote:
+>> On 06. 09. 22, 13:30, Johan Hovold wrote:
+>> > On Tue, Sep 06, 2022 at 12:48:01PM +0200, Jiri Slaby wrote:
+>> > NAK
+>>=20
+>> I'd love to come up with something nicer. That would be a function in
+>> serial-core calling hooks like I had [1] for example. But provided al=
+l those
+>> CPU workarounds/thunks, it'd be quite expensive to call two functions=
+ per
+>> character.
+>>=20
+>> Or creating a static inline (having =C2=B1 the macro content) and the=
+ hooks as
+>> parameters and hope for optimizations to eliminate thunks (also sugge=
+sted in
+>> the past [1]).
+>>=20
+>> [1] https://lore.kernel.org/all/20220411105405.9519-1-jslaby@suse.cz/
+>
+> I second Jiri here.
+>
+> Saving lines in drivers is not that important compared with all removi=
+ng=20
+> all the variants of the same thing that have crept there over the year=
+s.
+>
+> I suspect the main reason for the variants is that everybody just used=20
+> other drivers as examples and therefore we've a few "main" variant=20
+> branches depending on which of the drivers was used as an example for =
+the=20
+> other. That is hardly a good enough reason to keep them different and =
+as=20
+> long as each driver keeps its own function for this, it will eventuall=
+y=20
+> lead to similar differentiation so e.g. a one-time band-aid similariza=
+tion=20
+> would not help in the long run.
+>
+> Also, I don't understand why you see it unreadable when the actual cod=
+e is=20
+> out in the open in that macro. It's formatted much better than e.g.=20
+> read_poll_timeout() if you want an example of something that is hardly=20
+> readable ;-). I agree though there's a learning-curve, albeit small, t=
+hat=20
+> it actually creates a function but that doesn't seem to me as big of a=
+n=20
+> obstacle you seem to think.
 
-Please wrap your changelog text at 72 columns like the documentation
-asks for.
+I think it would help to replace the macro that defines
+the function with a set of macros that can be used in
+function bodies. This would avoid the __VA_ARGS__ stuff
+and allow readers that are unfamiliar with tty drivers to
+treat it as a function call.
 
-> Reported-and-tested-by: Rondreis <linhaoguo86@gmail.com>
-> Signed-off-by: Rondreis <linhaoguo86@gmail.com>
+So e.g. instead of=20
 
-You can't reported and test your own patch :)
+static DEFINE_UART_PORT_TX_HELPER_LIMITED(altera_jtaguart_do_tx_chars,
+		true,
+		writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
+		({}));
 
-Also, I need a full name here, what you use to sign legal documents.
+the altera_jtaguart driver would contain a function like
 
-And, what commit does this "fix"?  This should have worked before the
-gadget bus happened, so it is a regression and needs a valid "Fixes:"
-tag, right?
+static int altera_jtaguart_do_tx_chars(struct uart_port *port,
+                                       unsigned int count)
+{
+       char ch;
 
-> ---
->  drivers/usb/gadget/configfs.c | 39 ++++++++++++++++++++++++++++++++---
->  1 file changed, 36 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 3a6b4926193e..7e7ff94dbaab 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -4,12 +4,18 @@
->  #include <linux/slab.h>
->  #include <linux/device.h>
->  #include <linux/nls.h>
-> +#include <linux/idr.h>
->  #include <linux/usb/composite.h>
->  #include <linux/usb/gadget_configfs.h>
->  #include "configfs.h"
->  #include "u_f.h"
->  #include "u_os_desc.h"
->  
-> +#define DRIVER_NAME "configfs-gadget"
-> +
-> +static DEFINE_IDA(driver_id_numbers);
-> +#define DRIVER_DRIVER_NAME_LENGTH_MAX 32
+       return uart_port_tx_helper_limited(port, ch, count, true,
+                writel(ch, port->membase + ALTERA_JTAGUART_DATA_REG),
+                ({}));
+}
 
-Why this number?
+or some variation of that. It's a few more lines, but those
+extra lines would help me understand what is actually going on
+while still avoiding the usual bugs and duplication.
 
-> +
->  int check_user_usb_string(const char *name,
->  		struct usb_gadget_strings *stringtab_dev)
->  {
-> @@ -46,6 +52,7 @@ struct gadget_info {
->  
->  	struct usb_composite_driver composite;
->  	struct usb_composite_dev cdev;
-> +	int driver_id_number;
->  	bool use_os_desc;
->  	char b_vendor_code;
->  	char qw_sign[OS_STRING_QW_SIGN_LEN];
-> @@ -252,6 +259,11 @@ static int unregister_gadget(struct gadget_info *gi)
->  		return ret;
->  	kfree(gi->composite.gadget_driver.udc_name);
->  	gi->composite.gadget_driver.udc_name = NULL;
-> +
-> +	kfree(gi->composite.gadget_driver.driver.name);
+If the caller of that function is itself trivial (like
+serial21285_tx_chars), then the intermediate function can
+be omitted in order to save some of the extra complexity.
 
-Are you sure the driver name is safe to free here?  You don't own the
-lifecycle of this structure, so this feels very risky.
-
-> +	if (gi->driver_id_number >= 0)
-
-How would that ever be negative?
-
-> +		ida_free(&driver_id_numbers, gi->driver_id_number);
-> +
->  	return 0;
->  }
->  
-> @@ -1571,7 +1583,6 @@ static const struct usb_gadget_driver configfs_driver_template = {
->  	.max_speed	= USB_SPEED_SUPER_PLUS,
->  	.driver = {
->  		.owner          = THIS_MODULE,
-> -		.name		= "configfs-gadget",
->  	},
->  	.match_existing_only = 1,
->  };
-> @@ -1580,6 +1591,8 @@ static struct config_group *gadgets_make(
->  		struct config_group *group,
->  		const char *name)
->  {
-> +	int ret = 0;
-> +	char *driver_driver_name;
-
-Why not just "driver_name"?
-
->  	struct gadget_info *gi;
->  
->  	gi = kzalloc(sizeof(*gi), GFP_KERNEL);
-> @@ -1609,6 +1622,7 @@ static struct config_group *gadgets_make(
->  	gi->composite.suspend = NULL;
->  	gi->composite.resume = NULL;
->  	gi->composite.max_speed = USB_SPEED_SUPER_PLUS;
-> +	gi->driver_id_number = -1;
-
-What is this magic "-1"?
-
->  
->  	spin_lock_init(&gi->spinlock);
->  	mutex_init(&gi->lock);
-> @@ -1622,16 +1636,35 @@ static struct config_group *gadgets_make(
->  
->  	gi->composite.gadget_driver = configfs_driver_template;
->  
-> +	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-> +	if (ret < 0)
-> +		goto err;
-> +	gi->driver_id_number = ret;
-> +
-> +	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-> +	if (!driver_driver_name) {
-> +		ret = -ENOMEM;
-> +		goto err_free_driver_id_number;
-> +	}
-> +	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
-> +			DRIVER_NAME ".%d", gi->driver_id_number);
-
-What happens if this fails?  And please use the recommended function for
-this string operation, which isn't snprintf().
-
-> +	gi->composite.gadget_driver.driver.name = driver_driver_name;
-> +
->  	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->  	gi->composite.name = gi->composite.gadget_driver.function;
->  
-> -	if (!gi->composite.gadget_driver.function)
-> +	if (!gi->composite.gadget_driver.function) {
-> +		ret = -ENOMEM;
->  		goto err;
-> +	}
->  
->  	return &gi->group;
-> +
-> +err_free_driver_id_number:
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->  err:
->  	kfree(gi);
-> -	return ERR_PTR(-ENOMEM);
-> +	return ERR_PTR(ret);
-
-You leaked the memory you allocated for "driver_driver_name" :(
-
-thanks,
-
-greg k-h
+       Arnd

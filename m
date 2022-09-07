@@ -2,118 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC095B0951
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE075B0954
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiIGP5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S229956AbiIGP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIGP5o (ORCPT
+        with ESMTP id S229964AbiIGP56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:57:44 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBB79083E;
-        Wed,  7 Sep 2022 08:57:43 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y127so15089369pfy.5;
-        Wed, 07 Sep 2022 08:57:43 -0700 (PDT)
+        Wed, 7 Sep 2022 11:57:58 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E2096759
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:57:56 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id k17so9014624wmr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=90Xvi+56Sm4mGXm2omfvc9YC5HDL8H5MTroWt/Dz1Q4=;
-        b=kRaQxDAlVRQJLv4uZSVrt050gH5Yh6HqW6UFtuPzFeB1j6tKplnQn1hRKm759uHCgD
-         tYvI+qxcD2DeI19BcJ+a9Cnp18AKCDUGScaa9daO1DhsunKxfVDD7d7AHwSC5m/9NSm+
-         JKpRW3SHoD9RNVnWS0gHi7zjxoC0X7Qm29/sr1yPjVRTyHUIpRNoT1KPtmMOAdpCIhVw
-         qJgFHu6KMsvh0WBRgvhGZWf5kNtMF/JStY0S0DxzjY1FHnK6R+KTSNvbiAseEwraEdtp
-         60Jr0dlVaMGCm2ttc9DUQ7/XrLWh51NwyNqy+235P8+fo5LuwEzWo2tIviUXmRywXrTJ
-         ak3g==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=YZgl4dnyb1fLqxxsB9m/gywD8hhxQB+iJpjv0XCZv3k=;
+        b=GHe3D3Fp1nzIGOlU+T0DPDqLoSiCtfNeLjow+OU3RCeYo0rrXU6AYGzmrteJzcfcNG
+         8IbMElUTZXc2/PPrkqNI1/3ET176TWgAMpXMBRwhofqF5wuxi44uSz4Pp8VacNyzE1Ab
+         jiznOSBzjdfth/+WCwRYbB8eoH4gd2fbkTVYzjo9gkeM5Pw9DgpmWaGb6eF1c47efhvk
+         Fs0lJRpZ6qpONA2aMe3Q9yxrkMoovTS3V8JKf7cIOubX1n674+iJiBajE/4HWG1lWSEM
+         UECU+4FjzxKyclniILVYmv6cIk4Ts7PJahJjj3Awc1h4PfAjCyJgoQKQGvpgb6tLvi5l
+         wl5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=90Xvi+56Sm4mGXm2omfvc9YC5HDL8H5MTroWt/Dz1Q4=;
-        b=fkRT8XVMChYt8dafpn5No6q48nRXSxwRYTQMYv6qV+MhQo+COck2rcIVeAVfxVlIfr
-         RLktBmb+4osp6oxfsVMtxrWsmKCa130NwzN6tnQhqz7k+eTqXCruKhSzvpDQ3Ti8cJHF
-         dj81KNb3QlPHC3G4MTyFNrjRaAus4sgId4zIu7x4/lIM26LiIJuBvYX1JOJRc1ygR2LZ
-         8cbIn5+4i7he/U5qITOffTzIAF3QHW7aRvV3cMb40yQ2dJtghaquKjpJ0lG1iQRWDZeS
-         sDT6ZUtiiHaXqcCU+6SR5xA3zNrF1PKHK4xaWR9yWAWzdZERx6TTOMAhtqmph1vn/OsA
-         6Q3Q==
-X-Gm-Message-State: ACgBeo03K4K/PXMT9IOxxHsx0iQCXmfdmCKaORmy9RUHE/UA+Z3P5aDN
-        UZUnwof3Nzg0d1AQjDdueIk=
-X-Google-Smtp-Source: AA6agR7w5Teen2BpgoN8X7BqcmGW7FR4uGbE9nE8EOLp9A3YU4AedbqZE6P7U3fToeDRBrzR9gDF1g==
-X-Received: by 2002:a63:b54:0:b0:430:87bb:d1c3 with SMTP id a20-20020a630b54000000b0043087bbd1c3mr4106069pgl.294.1662566262988;
-        Wed, 07 Sep 2022 08:57:42 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f7-20020a635547000000b0042b117e8bf8sm10799737pgm.23.2022.09.07.08.57.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 08:57:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4e2750a0-3ad5-f3d9-1d23-82d89f592476@roeck-us.net>
-Date:   Wed, 7 Sep 2022 08:57:40 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=YZgl4dnyb1fLqxxsB9m/gywD8hhxQB+iJpjv0XCZv3k=;
+        b=bb1V6Wo8HNfDdA2cEVxShIFsHpTNYBDofuilyRYILizWOrxOTs0zVpE4aXrJQ5zPzz
+         D8Ghlsxdb/dAJnOwlj7YyYVY8DLLfU/VUXdpZsrj4/IcsOnsPv/Dele6RoFYTQfdm1fY
+         dVadBbzq5uLCwFQPIZISB35P4898g1WNuFCHy0fRb6o20XmnXhVKKv61XEW+y61QM2yU
+         MAlFSm1SoT6ywTXTAZa+Wc7XmQnPgehDBT8lKLKSzKqGJ8znHRM9fSTBMSdSEvldBBfq
+         8oqGAAA1+Cbw7HvgcHLGNzAliLB1jUHTne7BnLEKsUikRjBB29MddfxxRWNYztCxh7Lb
+         VykQ==
+X-Gm-Message-State: ACgBeo0aAuaadK07AhfntdDZ9ee6ZQTIdMV7aolb7kX2r5HJpO+D0Wcc
+        JfotCa+g0r7w4m1n/D4KqzapNQ==
+X-Google-Smtp-Source: AA6agR4I8nNkgxUAOZJ4jnslbwda1RWWniDCV+FvB/sanLgip20cgQpB04iheQ4BPw6iEeYpLC2TZQ==
+X-Received: by 2002:a1c:7414:0:b0:3a5:fd9e:e629 with SMTP id p20-20020a1c7414000000b003a5fd9ee629mr17428341wmc.194.1662566274794;
+        Wed, 07 Sep 2022 08:57:54 -0700 (PDT)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id d11-20020adfe84b000000b0021f131de6aesm17867390wrn.34.2022.09.07.08.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:57:54 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     ast@kernel.org
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhoufeng.zf@bytedance.com,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, jolsa@kernel.org
+Subject: [PATCH v2] bpf: Simplify code by using for_each_cpu_wrap()
+Date:   Wed,  7 Sep 2022 16:57:46 +0100
+Message-Id: <20220907155746.1750329-1-punit.agrawal@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 01/21] hwmon: (mr75203) fix coding style space errors
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hhhawa@amazon.com, jonnyc@amazon.com
-References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-2-farbere@amazon.com>
- <20220906165229.GA594012@roeck-us.net>
- <9323b609-cb9d-8b3d-2894-65296487cdb1@amazon.com>
- <Yxit2fq1kwzIN9x0@smile.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Yxit2fq1kwzIN9x0@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/22 07:42, Andy Shevchenko wrote:
-> On Wed, Sep 07, 2022 at 09:50:00AM +0300, Farber, Eliav wrote:
->> On 9/6/2022 7:52 PM, Guenter Roeck wrote:
->>> On Tue, Sep 06, 2022 at 08:33:36AM +0000, Eliav Farber wrote:
->>>> Fix: "ERROR: space required before the open parenthesis '('"
->>>>
->>>> Fixes: 9d823351a337 ("hwmon: Add hardware monitoring driver for
->>>> Moortec MR75203 PVT controller")
->>>
->>> Coding style "fixes" do not fix the code. I consider using the Fixes: tag
->>> for those to close to an abuse of that tag (and it would be great if that
->>> was spelled out somewhere). As it is, I can not with good conscience
->>> apply
->>> this patch to the mainline kernel (especially not for -rc5), meaning the
->>> entire series will have to wait for the next release window unless there
->>> are no conflicts.
->> Because as you mentioned  it is not a functional fix in the code I’ll
->> remove the Fixes tag in v5.
->> I checked older kernel versions and patch applies without conflicts.
->> That’s also why I moved it to be first in the series, so it will be
->> before any of my other changes that night cause merge problems for
->> other branches.
-> 
-> If it's not a fix, it should go _after_ real fixes.
-> And by nature this kind of patch is usually at the end of the series.
-> 
+In the percpu freelist code, it is a common pattern to iterate over
+the possible CPUs mask starting with the current CPU. The pattern is
+implemented using a hand rolled while loop with the loop variable
+increment being open-coded.
 
-I don't care where it is, really, as long as it is after the real fixes.
-And obviously I would not want to see a patch fixing something introduced
-in a previous patch of the same series.
+Simplify the code by using for_each_cpu_wrap() helper to iterate over
+the possible cpus starting with the current CPU. As a result, some of
+the special-casing in the loop also gets simplified.
 
-Thanks,
-Guenter
+No functional change intended.
+
+Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
+---
+v1 -> v2:
+* Fixed the incorrect transformation changing semantics of __pcpu_freelist_push_nmi()
+
+Previous version -
+v1: https://lore.kernel.org/all/20220817130807.68279-1-punit.agrawal@bytedance.com/
+
+ kernel/bpf/percpu_freelist.c | 48 ++++++++++++------------------------
+ 1 file changed, 16 insertions(+), 32 deletions(-)
+
+diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
+index 00b874c8e889..b6e7f5c5b9ab 100644
+--- a/kernel/bpf/percpu_freelist.c
++++ b/kernel/bpf/percpu_freelist.c
+@@ -58,23 +58,21 @@ static inline void ___pcpu_freelist_push_nmi(struct pcpu_freelist *s,
+ {
+ 	int cpu, orig_cpu;
+ 
+-	orig_cpu = cpu = raw_smp_processor_id();
++	orig_cpu = raw_smp_processor_id();
+ 	while (1) {
+-		struct pcpu_freelist_head *head;
++		for_each_cpu_wrap(cpu, cpu_possible_mask, orig_cpu) {
++			struct pcpu_freelist_head *head;
+ 
+-		head = per_cpu_ptr(s->freelist, cpu);
+-		if (raw_spin_trylock(&head->lock)) {
+-			pcpu_freelist_push_node(head, node);
+-			raw_spin_unlock(&head->lock);
+-			return;
++			head = per_cpu_ptr(s->freelist, cpu);
++			if (raw_spin_trylock(&head->lock)) {
++				pcpu_freelist_push_node(head, node);
++				raw_spin_unlock(&head->lock);
++				return;
++			}
+ 		}
+-		cpu = cpumask_next(cpu, cpu_possible_mask);
+-		if (cpu >= nr_cpu_ids)
+-			cpu = 0;
+ 
+ 		/* cannot lock any per cpu lock, try extralist */
+-		if (cpu == orig_cpu &&
+-		    pcpu_freelist_try_push_extra(s, node))
++		if (pcpu_freelist_try_push_extra(s, node))
+ 			return;
+ 	}
+ }
+@@ -125,13 +123,12 @@ static struct pcpu_freelist_node *___pcpu_freelist_pop(struct pcpu_freelist *s)
+ {
+ 	struct pcpu_freelist_head *head;
+ 	struct pcpu_freelist_node *node;
+-	int orig_cpu, cpu;
++	int cpu;
+ 
+-	orig_cpu = cpu = raw_smp_processor_id();
+-	while (1) {
++	for_each_cpu_wrap(cpu, cpu_possible_mask, raw_smp_processor_id()) {
+ 		head = per_cpu_ptr(s->freelist, cpu);
+ 		if (!READ_ONCE(head->first))
+-			goto next_cpu;
++			continue;
+ 		raw_spin_lock(&head->lock);
+ 		node = head->first;
+ 		if (node) {
+@@ -140,12 +137,6 @@ static struct pcpu_freelist_node *___pcpu_freelist_pop(struct pcpu_freelist *s)
+ 			return node;
+ 		}
+ 		raw_spin_unlock(&head->lock);
+-next_cpu:
+-		cpu = cpumask_next(cpu, cpu_possible_mask);
+-		if (cpu >= nr_cpu_ids)
+-			cpu = 0;
+-		if (cpu == orig_cpu)
+-			break;
+ 	}
+ 
+ 	/* per cpu lists are all empty, try extralist */
+@@ -164,13 +155,12 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
+ {
+ 	struct pcpu_freelist_head *head;
+ 	struct pcpu_freelist_node *node;
+-	int orig_cpu, cpu;
++	int cpu;
+ 
+-	orig_cpu = cpu = raw_smp_processor_id();
+-	while (1) {
++	for_each_cpu_wrap(cpu, cpu_possible_mask, raw_smp_processor_id()) {
+ 		head = per_cpu_ptr(s->freelist, cpu);
+ 		if (!READ_ONCE(head->first))
+-			goto next_cpu;
++			continue;
+ 		if (raw_spin_trylock(&head->lock)) {
+ 			node = head->first;
+ 			if (node) {
+@@ -180,12 +170,6 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
+ 			}
+ 			raw_spin_unlock(&head->lock);
+ 		}
+-next_cpu:
+-		cpu = cpumask_next(cpu, cpu_possible_mask);
+-		if (cpu >= nr_cpu_ids)
+-			cpu = 0;
+-		if (cpu == orig_cpu)
+-			break;
+ 	}
+ 
+ 	/* cannot pop from per cpu lists, try extralist */
+-- 
+2.35.1
+

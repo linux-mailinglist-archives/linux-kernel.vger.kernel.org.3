@@ -2,66 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BCE5B0F3A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D205B0F3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiIGVhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S229984AbiIGVh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiIGVhW (ORCPT
+        with ESMTP id S229925AbiIGVhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:37:22 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F0A1F61D;
-        Wed,  7 Sep 2022 14:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662586641; x=1694122641;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=B4/ksnDW8Xem29FiMzcN7TgkM2msIVMY3Ax00LuxAqE=;
-  b=Ox3n59/YSBehX+KG6Dk+Ok6xbVuLn/uMMOleJYXsReqbuGau147U/P1P
-   1cvSLYGd7l1mTZMe0shbRIn/pyUXVSheYxu5FvVGqZdGwqhq2BXDD5HAF
-   TjCzjTKXKWyMm6ButWb0KKJfgXD4pnqt6H6CJrncpyD4sCfoMdlfbagmj
-   i+NqUjCY4LkQJ5Ows+iV8PMJrwl4kMM0g8HsHInDL5FzJkkVIPBBbNrPw
-   A+UzzRXVPb4WuhUHi2Z5t/diabR99D4SS5mzdUJexcwrqcL24VV4Aloe3
-   CoSZWTuicZ55+9waVx9grOxZJSSSuxwC+248gAGkp8hKF+TjD9R2RkpgA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="323191480"
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="323191480"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:37:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="591886845"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 14:37:20 -0700
-Date:   Wed, 7 Sep 2022 14:37:32 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX
- interrupts
-In-Reply-To: <YxeqTdny7Nu7LzZo@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-5-matthew.gerlach@linux.intel.com> <YxeqTdny7Nu7LzZo@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 7 Sep 2022 17:37:51 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115C1B7EFB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=11nEAHckupy5h8iY1Ot6l21GKf+e
+        C5dMXo7dHfpTQVU=; b=Vu0XbYIQRql5aYKTNArSA5RltZjAiJ2B/nhqI3pwte/V
+        zsBOwDX1yd421bsBlabeuhjnpZCgmVVXepa3aqmOCjbVnuPlNRqFGXMv6fB0sdox
+        qd5YIJNo5sbtOPyu3bZrODHSQXLOc+Y/KhCyg9F/wPXtw85Q09jRhUDXnxhFZJ0=
+Received: (qmail 3895811 invoked from network); 7 Sep 2022 23:37:47 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Sep 2022 23:37:47 +0200
+X-UD-Smtp-Session: l3s3148p1@yWmsHx3o0O8ucrBp
+Date:   Wed, 7 Sep 2022 23:37:46 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     "robh@kernel.org" <robh@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/9] i2c-mlxbf.c: bug fixes and new feature support
+Message-ID: <YxkPKpPNXg8wEIDf@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220822195725.12656-1-asmaa@nvidia.com>
+ <Yw0fNuOWtJbe/OT1@shikoro>
+ <CH2PR12MB38951B9B8F189E1B991A7950D7769@CH2PR12MB3895.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="frkXDeiDSCuV5bXm"
+Content-Disposition: inline
+In-Reply-To: <CH2PR12MB38951B9B8F189E1B991A7950D7769@CH2PR12MB3895.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,97 +56,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--frkXDeiDSCuV5bXm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 6 Sep 2022, Andy Shevchenko wrote:
 
-> On Tue, Sep 06, 2022 at 12:04:25PM -0700, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Define and use a DFHv1 parameter to add generic support for MSIX
->> interrupts for DFL devices.
->
-> ...
->
->> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
->> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
->> +		v = readq(base);
->> +		v = FIELD_GET(DFH_VERSION, v);
->> +
->> +		if (v == 1) {
->> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
->
-> I am already lost what v keeps...
->
-> Perhaps
->
-> 		v = readq(base);
-> 		switch (FIELD_GET(DFH_VERSION, v)) {
-> 		case 1:
-> 			...
-> 			break;
-> 		}
+> What did change since v1 and where did Khalil's Rev-by tags go?
+>=20
+> Khalil told me to remove the rev-by : ) since it is supposed to be reserv=
+ed for the reviewers.
 
-How about?
- 		if (FIELD_GET(DFH_VERSION, readq(base)) == 1) {
- 			...
- 		}
->
->> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
->
-> 				void __iomem *v1hdr = base + DFHv1_PARAM_HDR;
->
->> +				off = dfl_find_param(base + DFHv1_PARAM_HDR, ofst,
->> +						     DFHv1_PARAM_ID_MSIX);
->
-> 				off = dfl_find_param(v1hdr, ofst, DFHv1_PARAM_ID_MSIX);
->
->> +				if (off >= 0) {
->> +					ibase = readl(base + DFHv1_PARAM_HDR +
->> +						      off + DFHv1_PARAM_MSIX_STARTV);
->> +					inr = readl(base + DFHv1_PARAM_HDR +
->> +						    off + DFHv1_PARAM_MSIX_NUMV);
->
-> 					ibase = readl(v1hdr + off + DFHv1_PARAM_MSIX_STARTV);
-> 					inr = readl(v1hdr + off + DFHv1_PARAM_MSIX_NUMV);
->
->> +					dev_dbg(binfo->dev, "%s start %d num %d fid 0x%x\n",
->> +						__func__, ibase, inr, fid);
->
-> No __func__ for dev_dbg(). Dynamic debug has this feature at runtime!
->
->> +				}
->> +			}
->> +		}
->> +	}
->
-> ...
->
->> +/*
->
-> If it's a kernel doc, make it to be parsable as a such.
+But he reviewed the patches, or? Which makes him a reviewer? I mean he
+is the maintainer of the driver, so I basically a Rev-by from him.
 
-Yes, the intention is kernel doc. Thanks for the feedback. I
-will fix this and add the newline as suggested below.
+> I will add it back and describe what has changed in my next set of patche=
+s.
 
-Matthew Gerlach
+So, you are planning a v3 already?
 
->
->> + * dfl_find_param() - find the offset of the given parameter
->> + * @base: base pointer to start of dfl parameters in DFH
->> + * @max: maximum offset to search
->> + * @param: id of dfl parameter
->> + *
->> + * Return: positive offset on success, negative error code otherwise.
->> + */
->> +int dfl_find_param(void __iomem *base, resource_size_t max, int param);
->
-> + blank line.
->
->>  #endif /* __LINUX_DFL_H */
->
-> -- 
-> With Best Regards,
-> Andy Shevchenko
->
->
->
+> As a note , this is what changed from v1->v2:
+
+Cool, thank you for doing that.
+
+> I think this is a bug fix because we have an i2c driver also in UEFI
+> so we need this lock mechanism to avoid race conditions over acquiring
+> the i2c bus. Not using this lock resulted in unexpected behavior.
+
+OK, thank you!
+
+
+--frkXDeiDSCuV5bXm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMZDyoACgkQFA3kzBSg
+KbaTZg/0DA+GNflERNi84KEPRQ6HpnO6CBkmRAGpigMHS3zbIm0FtSIVmZ5XNr50
+SXqK7IBm9r+aDjPv8x8M+GIWlUpLIvCHc7uuI4qq/pznpbibEjY1I1QuBZEzz/z4
+6V3D99kFxJZjxJKJ7w48sQNaqJiF10Ll6n8nU9+ZfWKaQWcGOE15/xo9f72kF8wf
+JrMSWkELgycljoRr/mfevjN5kFk4veXj5YbTkroocBvhryZBylcANba0+zFc0Q8P
+0fVIeCl0y1M9kHoZGKe5eKhjhNzxgbalXqG10x3PBM5SQIW8sgl/IldsluZ04WEd
+dtvVhqcx+6xX0hrrAmCtyuviZxxtPrHtJ7ogsw57YVh5s178WKqB4gTkJ6I0WZtm
+dWSu7E6kbyvDNIcTp6TdHmji1WTCc1SWadRNhdDQn+Wz0AvvBAIgt8A0Bph+90AD
+06xQ3j4SM2cmlVhCuWLN5l5C46n0YVzpKzXl68iE6EiJKIrhGqSCdGkOG4Dg23Zr
+3RFg6rpYHmlAvLMdYoShMJF7dVq408q93765mWX9dpa6dzQW5Nmi50dPceTk9irQ
+8/pokz94gsd/imYnNlxJx/P2XKfOGcKsjR132E+c1vvRgnOh6n1Ns6NY1OYHR3GU
+hVwb7hc9fOMl0XpszT8F1crzeUwDIEx7btm9/ZeldpXckFVTjw==
+=Ksm5
+-----END PGP SIGNATURE-----
+
+--frkXDeiDSCuV5bXm--

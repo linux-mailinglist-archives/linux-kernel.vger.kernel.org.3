@@ -2,190 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61CA5AFBC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C165AFBC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiIGFdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S229730AbiIGFda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIGFdF (ORCPT
+        with ESMTP id S229546AbiIGFd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:33:05 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90047.outbound.protection.outlook.com [40.107.9.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D884804A9
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:33:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=THpbXgeJek2Vzi1q7gWFP4Ke7wTKlrtPpies88Hba1NDuheZSYQgIArMZ/98AoD3g7KS7RFSVFeyQuFkmvtqritWYXr96UbEQbH1WHlZCeCSNF1Dq0vmb+lp4Hku0ls7osNYTf/32uQmkfU5z9kfeAQvgWWLMD9PxUsqqu5aFFmFjhvz2uTRpWGVuWAc9onfHxjMUY0Vlq1xW45Gs8o7COxk5DF4XFgLRnJFTaFp/SINkjhZ/J/PuyvUQpMbNgw/QwuM2i64HYMO80Fj7XAcLyWoyAbf8uIfPO1lSOQmISPuH1fhsSgEpByHsSQPITt8548ZK2bF7f9dJS6RaBgjFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hK32BsJrF381XfgkEvurDdP0rAf1UBdmy1x8q7SeRB4=;
- b=Ha4jpvlr4og/XLDJCaNHWtcWyIw75MAf0VLPqntJfTnUClvNzIslPxtG/9Hcdk9v1rYqg2TLQ51iwgfkbPxDZFlZwjyb65LrzLLpN43B9VzCABb1f0JGb43UIBzVpmBV1ArZaQRclIQUi00BF2g8AmR1KbFjLywL1Zks4j7AfWV2KyEOKqB8vA0KkK0pSzXXX7YMB0OWV8MC9AiTS+4BDA+4iI+0GCHK+LLAiWyXigPbm+3o3B0yVxbLX/ArS8wQiLqICfwZqh0ZVCMF62ZUVYexQA8LPu6pTwOthNbBdjQgEOv2vhijk0vLc+BQjW4Fw73PW37Lavo6mU0xU9VjYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hK32BsJrF381XfgkEvurDdP0rAf1UBdmy1x8q7SeRB4=;
- b=fgZDLspwSiHcO67vzDhRD768Ty4tjH3/BvDSsLMgsB0giibWwkqjrx+KV9UsYfQNJ9Nlioh5he4JxfJ8o1wuvbK+txhLfi4Zjjz6EI/LPXlcR++X/cTWu5DuuuE2hyTEgPx0a05vK9hBwG+qPSdNMl2OmNxauva3kqm10jQiERFfKr/bCpxlmKw+jMAqmMMF0e5emh0jqr6DELIWRh8V9SJzDUaju6GaFUEMWNy7C2MHoaEnTFVqOT5DIFnIeHiRpcd8sOQx41PbmRjWreyZI0O0M3JjzqGPVbX+yk8HQGVW7v/1JZRkVRQ7RcauS8Z5kJUAFqBzwEzaR9UeXxAi0A==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB3032.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d7::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Wed, 7 Sep
- 2022 05:33:00 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
- 05:33:00 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v2] powerpc/vdso: link with -z noexecstack
-Thread-Topic: [PATCH v2] powerpc/vdso: link with -z noexecstack
-Thread-Index: AQHYvuBFITegECW2Q0Op93BLfBI7R63TaQGAgAAP1AA=
-Date:   Wed, 7 Sep 2022 05:33:00 +0000
-Message-ID: <73866ab0-a5d8-7afb-2e57-a12789617b64@csgroup.eu>
-References: <b95f2e3216a574837dd61208444e9515c3423da4.1662132312.git.christophe.leroy@csgroup.eu>
- <CMPW28H38HE0.W6BB976O6ULP@bobo>
-In-Reply-To: <CMPW28H38HE0.W6BB976O6ULP@bobo>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e6a4d0c0-d839-41ea-9693-08da90926dcb
-x-ms-traffictypediagnostic: PR0P264MB3032:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6hFURMrg4sIFXi08SrImwCwthA0Hfhcxu7xGy48q5YcOrgjlKxSHPEP97+vFKsmZuMdijPCdquI5AV1dOO+y4aS/oXkN8lFXfyx4wJoH4Q4uVgM3R9SH4c0QH3rxTkPsgN8baDE88RDkW3c69/UNL49hPgfnu1o8t02wwTaVRW3RwNffRMGM1Kxdx+KaCJq9bqKhaLaa0O9GKthKgO4EjsuAwTNifku4vHNthx7Tqx4v9p6hyJEKhhp/xWp58DmKon1nCgPqRSS+jY/2S4/Yu3cKloiaiRYxps4Nm7ZSmZsXdqF53TbLJLWcdFa/du8MvDJIyDLrDo7Or1cH+lorUKgDs4v1L/1biBATDtarPm+/HBQXplrFfPgG41w+4FxgyEKOSkDjYyrwWYsc8Bv7plPkEA91czIrdligWJeNEUqTb0lnk3bwN/3hVpuqqH0xBQbg0VWKHie9JedgFyKA0eisP33CiaSgmoLmP8SljXi4d/eGLTb4ipA/brQsUtd/iu0GYkiVdOSUrjPMUmspTdHFiGZbWAZetO8rGaC1uxVRyGxbu0vIzFq/p/yqY7zoqeeQkWzmWNJc/Kv0Oh88jQDs1lltgjpKk8cNQK96V0JQ6KqwZjamD9+50qhO0J6Sw4Uua/02GwoHgDciFBeXfhX5Bh9L0/tF3GspDKwOyeVMB+AzRoEBjrPB1UQQp4psCu81cztTI+NEYL6Y0LQcUg1QrW89ovzQ6orE46i2fIx0N2H7FbK64DEczK1mQSwH+Dx4CsDIUbJ8EwHY0s3bTEsrFkT9XPdGFGIkFYfYlPF3L8upq3GcNMoTLfbBJRTUP7fxODz1zAH6D9j98rM79w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(366004)(346002)(136003)(39860400002)(38070700005)(2906002)(66946007)(38100700002)(83380400001)(122000001)(8676002)(66476007)(316002)(76116006)(66556008)(64756008)(66446008)(91956017)(54906003)(4326008)(110136005)(44832011)(66574015)(26005)(186003)(2616005)(5660300002)(6512007)(6506007)(41300700001)(71200400001)(6486002)(478600001)(8936002)(86362001)(31696002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RkwySVFZN1htTkNrYUd2KzI1TS9LdW1UU21abmJleFJ3QWpJMzNLdlFPUk5P?=
- =?utf-8?B?cDhoT29teURDTFFZRGUwQ0QrTFN2OWlINUREeWdvTVBONlZiN0VwMndvS1Vu?=
- =?utf-8?B?QXFFdWxWcEF1ZTFIMVpYUmk0NTlDcUUyTmdmZXpPQnR6Q2k3V281eWNqaDZw?=
- =?utf-8?B?ZzYxeTJ2NFpWVmZuU1Aybnc4TU5oOVMrT2pHbjJDZW1rbEszbDlua1hpZ3U3?=
- =?utf-8?B?RDgxNGxoYmIxV0hpSUJUNHpoblB0blpGeHNiZkdZZHZwNXlYZHZYaVd0MFdm?=
- =?utf-8?B?S1o4R3oza3JMSExDZ21kbWt6RWRYQnhoTnRWS2NxVGdrQjV3bkFESWRKZUk1?=
- =?utf-8?B?ektWUXVQU1hodEZGZndINnY1UGlDSlRBSnFtZEpaZEN2emJEL2ZoNWtIOHk4?=
- =?utf-8?B?NjBMaGtGcnk3bzBpa0s5emljZG9Xeng5RnYzNzhnUHA5WldRa2VLby9sQ3pG?=
- =?utf-8?B?UlAzT011SVVxd2VTOTMxanRFbzFyMjNFWURoSGNDVkFXQnkwZ1JHVjZ1UWNx?=
- =?utf-8?B?TDZIZnNJbmphZ3Izblhvc3pjWVYwUEJ2Vkp0TVpIcjFrMFJFdlNzZlBLMjJa?=
- =?utf-8?B?V0FVS3NsdDBqaHVzZHhsdGM3QUF4dW1Id2hPelVXNldtU3dLWmc3Uk1LYlRI?=
- =?utf-8?B?a1J4eWgydWR4Vmx6U0tUQmd2N1JRYUcrQXR2cGh3Z2o2RGxhN2xCUGxiK3R3?=
- =?utf-8?B?UlR0dU9NOFBzbzFHVUp3L1Fic0E1cEJUZ0RXTDA3NERoOFhXaHRiVm5BWG9V?=
- =?utf-8?B?Uk5qa2wyNCtlbGhCTnhuRUkvbWJJR0U1ZUpOdE1NQkVHZVlFUEpZaVZXeHFj?=
- =?utf-8?B?Q0NDcS9ZZTJrem9vZjFPV2s0SFV1MjFKbkJCZnI5eVJNUWVTL1EzMTFLN0ZT?=
- =?utf-8?B?NzhDc2xBcnVoQ0RUa2paNzJBcGxzRXRVbFVqVTg4bWwxVmk5UlVqd3ZrNlkz?=
- =?utf-8?B?NklvUzZNR1Y5bWN2NVpaZDdGSHFaRTZsMFFuN2paaDN5MVhmYVZLRGpvcXRZ?=
- =?utf-8?B?Mmx4K2hmV21CUExtcHplWHEzSlhZMWhiNXMzaENYRUFDbWl5NWJmTTFpSGQ1?=
- =?utf-8?B?YWtyRHJzRkJvM08xYlpkcFhnWWhKbWxIUWpPTWpHN0IvamNPeGZrZWR1Q1ZQ?=
- =?utf-8?B?RjZWdkNqYjNIK3FnNVludmNzbERGSVNORjlHcG9VOFd5U0tzYmFhQmFFRGtR?=
- =?utf-8?B?WjhqTDdZRTdVTTIrVlF1V2VaZklQOExQV1g2cUVjMFZnUFRwWjBVZUNyTURy?=
- =?utf-8?B?TVQ3UGxUVElaWDcxeW0ybCswY3g3WWF3WDJFenZaOUpQUUttQUhPcXluVXk1?=
- =?utf-8?B?Y2taRCtCajZWTFR1NmJ5OEVSR2wvRWxiMVU0UXp2c1oxSWFEQWVUNGJnQjFq?=
- =?utf-8?B?M0hlOUFtVVRUaklRWEF4N3pqcWNUTXkwMjY5dWFRRUZWcnZQNXZZY1Y3dUEv?=
- =?utf-8?B?REx0Y2NzY0t1a0dTUGNud1p5aVVvNXBCRTVXNndZYlRIRnhvc1BRaHlDUnA1?=
- =?utf-8?B?dkxXaE5NZHVzc1NqVFBrTDdaOFFkK3cvWlFJaUNqNFdnNk5ZRERuWW5OUmZl?=
- =?utf-8?B?M2tpc0VLeHRra29DbnRiQTdyYUlsRVdPNlkwMU1yeHF5eWpucFpFbHRSaFl3?=
- =?utf-8?B?eUhCWWRHV0hJZ2wvMnFiRGFvUGlXQUIrbkE0OE9rYUFsVjZLZHdNUm5WUEF5?=
- =?utf-8?B?UGlpRmYrVVJ1a0k2RUZqb1ZQTkZtaDVCUE1rUHMwVEg5cW5RaENxQ1dCNUhp?=
- =?utf-8?B?di9odnovYnNpU2FFdTNXdkxCZHVvenBoOVNyT0tDN1FVaTIrd0RXcDJyRitt?=
- =?utf-8?B?dTVmUzZ5SS9mZXlKRGpETWxpNk90TmUwMVdidk9jSURTRnFCOW5TL3B0K1A4?=
- =?utf-8?B?VkxVNWNDVlBXa0JDakVjOEhlT0VTT0ZyT3hCY1hTNHJ1OElFQ2FQc2tyM3VF?=
- =?utf-8?B?bWhVbE9HL0d2U0JxNWN2dzFlQk1RMFVoYkpMRG1nZnViYXpld2cveGZCZ1N1?=
- =?utf-8?B?d0I3c29SSHdHRW1nbHUyVGE1akN3R1BjcHNBYm9GanhyY1JxOVBTb1JWNDFU?=
- =?utf-8?B?Uld3MDRpSjVnRGUwZUlpMFBIOW9hRXFKYnZKUnErNUszdVd5N3AyS1hPYjE3?=
- =?utf-8?B?UTIwQmhYZDEwM2RlY2xhbWYwa0dqTFlubzdmRGI0bThTMDBndS9TUmVVUmxv?=
- =?utf-8?Q?oqj7OSnkgBGdh8dhtSoxVuk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B1DC837D7E02B346BB046DF801B046B0@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 7 Sep 2022 01:33:27 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A219DFB0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:33:24 -0700 (PDT)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 3B18D40D403D;
+        Wed,  7 Sep 2022 05:33:20 +0000 (UTC)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6a4d0c0-d839-41ea-9693-08da90926dcb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Sep 2022 05:33:00.7562
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Bk+KjPpLMZNugl9KPsdpsV5/9KDIyscDQ18oZ1zZqaEm2UO8zmI4SxEnOKjfR3y2DEQ9O4ams0FxOoKXP8C0Q9bCsMAOMdskZS5OZWa0p3Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3032
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 07 Sep 2022 08:33:20 +0300
+From:   Alexey Izbyshev <izbyshev@ispras.ru>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: Potentially undesirable interactions between vfork() and time
+ namespaces
+In-Reply-To: <874jxkcfoa.fsf@email.froward.int.ebiederm.org>
+References: <YxAq2jYvGG8QOypu@gmail.com>
+ <87czcfhsme.fsf@email.froward.int.ebiederm.org>
+ <bdff6cf478fc29c80997a623a57dae5f@ispras.ru>
+ <874jxkcfoa.fsf@email.froward.int.ebiederm.org>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <da95e333b4c508ddf8130f8f2d2cbb92@ispras.ru>
+X-Sender: izbyshev@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA3LzA5LzIwMjIgw6AgMDY6MzYsIE5pY2hvbGFzIFBpZ2dpbiBhIMOpY3JpdMKgOg0K
-PiBPbiBTYXQgU2VwIDMsIDIwMjIgYXQgMToyNSBBTSBBRVNULCBDaHJpc3RvcGhlIExlcm95IHdy
-b3RlOg0KPj4gV2l0aCByZWNlbnQgYmludXRpbHMsIHRoZSBmb2xsb3dpbmcgd2FybmluZyBhcHBl
-YXJzOg0KPj4NCj4+ICAgIFZEU08zMkwgYXJjaC9wb3dlcnBjL2tlcm5lbC92ZHNvL3Zkc28zMi5z
-by5kYmcNCj4+IC9vcHQvZ2NjLTEyLjIuMC1ub2xpYmMvcG93ZXJwYzY0LWxpbnV4L2Jpbi8uLi9s
-aWIvZ2NjL3Bvd2VycGM2NC1saW51eC8xMi4yLjAvLi4vLi4vLi4vLi4vcG93ZXJwYzY0LWxpbnV4
-L2Jpbi9sZDogd2FybmluZzogYXJjaC9wb3dlcnBjL2tlcm5lbC92ZHNvL2dldGNwdS0zMi5vOiBt
-aXNzaW5nIC5ub3RlLkdOVS1zdGFjayBzZWN0aW9uIGltcGxpZXMgZXhlY3V0YWJsZSBzdGFjaw0K
-Pj4gL29wdC9nY2MtMTIuMi4wLW5vbGliYy9wb3dlcnBjNjQtbGludXgvYmluLy4uL2xpYi9nY2Mv
-cG93ZXJwYzY0LWxpbnV4LzEyLjIuMC8uLi8uLi8uLi8uLi9wb3dlcnBjNjQtbGludXgvYmluL2xk
-OiBOT1RFOiBUaGlzIGJlaGF2aW91ciBpcyBkZXByZWNhdGVkIGFuZCB3aWxsIGJlIHJlbW92ZWQg
-aW4gYSBmdXR1cmUgdmVyc2lvbiBvZiB0aGUgbGlua2VyDQo+Pg0KPj4gVG8gYXZvaWQgdGhhdCwg
-ZXhwbGljaXRlbHkgdGVsbCB0aGUgbGlua2VyIHdlIGRvbid0DQo+PiB3YW50IGV4ZWN1dGFibGUg
-c3RhY2suDQo+Pg0KPj4gRm9yIG1vcmUgZXhwbGFuYXRpb25zLCBzZWUgY29tbWl0IGZmY2Y5YzU3
-MDBlNCAoIng4NjogbGluayB2ZHNvDQo+PiBhbmQgYm9vdCB3aXRoIC16IG5vZXhlY3N0YWNrIC0t
-bm8td2Fybi1yd3gtc2VnbWVudHMiKQ0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlzdG9waGUg
-TGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCj4+IC0tLQ0KPj4gdjI6IFJlbW92
-ZWQgdW5yZWxhdGVkIGNoYW5nZSBpbiBhcmNoL3Bvd2VycGMva2VybmVsL01ha2VmaWxlDQo+IA0K
-PiBTZWVtcyBva2F5LiBIZXJlIHRvbywgY29tbWl0IDBkMzYyYmU1YjE0MjAgKCJNYWtlZmlsZTog
-bGluayB3aXRoIC16DQo+IG5vZXhlY3N0YWNrIC0tbm8td2Fybi1yd3gtc2VnbWVudHMiKS4gQ29y
-ZSBhbmQgeDg2IGFyZSB1c2luZw0KPiBuby13YXJuLXJ3eC1zZWdtZW50cyBhcyB3ZWxsLCBzaG91
-bGQgd2UgaGF2ZSB0aGF0IGp1c3QgdG8gbWF0Y2gNCj4gdG9vPw0KDQpJIHRoaW5rIHRoZSBSV1gg
-c2VnbWVudCBzdHVmZiBpbiB1bnJlbGF0ZWQgdG8gVkRTTy4gRm9yIFZEU08geDg2IG9ubHkgDQpk
-b2VzIG5vZXhlY3N0YWNrLCByZWZlciBjb21taXQgZmZjZjljNTcwMGU0ICgieDg2OiBsaW5rIHZk
-c28gYW5kIGJvb3QgDQp3aXRoIC16IG5vZXhlY3N0YWNrIC0tbm8td2Fybi1yd3gtc2VnbWVudHMi
-KQ0KDQpBbmQgYXMgbm8td2Fybi1yd3gtc2VnbWVudHMgaXMgaW4gdGhlIHRvcCBsZXZlbCBNYWtl
-ZmlsZSwgSSBkb24ndCB0aGluayANCmFyY2hpdGVjdHVyZXMgbmVlZCBpdCwgZG8gdGhleSA/DQp4
-ODYgaGF2ZSBpdCBvbmx5IGluIGFyY2gveDg2L2Jvb3QvY29tcHJlc3NlZC9NYWtlZmlsZSwgbWF5
-YmUgcG93ZXJwYyANCm5lZWRzIGl0IGluIGFyY2gvcG93ZXJwYy9ib290LyA/IEFueXdheSB0aGF0
-IHdvdWxkIGJlIGFub3RoZXIgcGF0Y2guDQoNCkNocmlzdG9waGUNCg0KPiANCj4gUmV2aWV3ZWQt
-Ynk6IE5pY2hvbGFzIFBpZ2dpbiA8bnBpZ2dpbkBnbWFpbC5jb20+DQo+IA0KPj4gLS0tDQo+PiAg
-IGFyY2gvcG93ZXJwYy9rZXJuZWwvdmRzby9NYWtlZmlsZSB8IDQgKystLQ0KPj4gICAxIGZpbGUg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1n
-aXQgYS9hcmNoL3Bvd2VycGMva2VybmVsL3Zkc28vTWFrZWZpbGUgYi9hcmNoL3Bvd2VycGMva2Vy
-bmVsL3Zkc28vTWFrZWZpbGUNCj4+IGluZGV4IDA5NmIwYmYxMzM1Zi4uYTJlN2IwY2U1YjE5IDEw
-MDY0NA0KPj4gLS0tIGEvYXJjaC9wb3dlcnBjL2tlcm5lbC92ZHNvL01ha2VmaWxlDQo+PiArKysg
-Yi9hcmNoL3Bvd2VycGMva2VybmVsL3Zkc28vTWFrZWZpbGUNCj4+IEBAIC05MiwxMyArOTIsMTMg
-QEAgaW5jbHVkZS9nZW5lcmF0ZWQvdmRzbzY0LW9mZnNldHMuaDogJChvYmopL3Zkc282NC5zby5k
-YmcgRk9SQ0UNCj4+ICAgDQo+PiAgICMgYWN0dWFsIGJ1aWxkIGNvbW1hbmRzDQo+PiAgIHF1aWV0
-X2NtZF92ZHNvMzJsZF9hbmRfY2hlY2sgPSBWRFNPMzJMICRADQo+PiAtICAgICAgY21kX3Zkc28z
-MmxkX2FuZF9jaGVjayA9ICQoVkRTT0NDKSAkKGNfZmxhZ3MpICQoQ0MzMkZMQUdTKSAtbyAkQCAt
-V2wsLVQkKGZpbHRlciAlLmxkcywkXikgJChmaWx0ZXIgJS5vLCReKSA7ICQoY21kX3Zkc29fY2hl
-Y2spDQo+PiArICAgICAgY21kX3Zkc28zMmxkX2FuZF9jaGVjayA9ICQoVkRTT0NDKSAkKGNfZmxh
-Z3MpICQoQ0MzMkZMQUdTKSAtbyAkQCAtV2wsLVQkKGZpbHRlciAlLmxkcywkXikgJChmaWx0ZXIg
-JS5vLCReKSAteiBub2V4ZWNzdGFjayA7ICQoY21kX3Zkc29fY2hlY2spDQo+PiAgIHF1aWV0X2Nt
-ZF92ZHNvMzJhcyA9IFZEU08zMkEgJEANCj4+ICAgICAgICAgY21kX3Zkc28zMmFzID0gJChWRFNP
-Q0MpICQoYV9mbGFncykgJChDQzMyRkxBR1MpICQoQVMzMkZMQUdTKSAtYyAtbyAkQCAkPA0KPj4g
-ICBxdWlldF9jbWRfdmRzbzMyY2MgPSBWRFNPMzJDICRADQo+PiAgICAgICAgIGNtZF92ZHNvMzJj
-YyA9ICQoVkRTT0NDKSAkKGNfZmxhZ3MpICQoQ0MzMkZMQUdTKSAtYyAtbyAkQCAkPA0KPj4gICAN
-Cj4+ICAgcXVpZXRfY21kX3Zkc282NGxkX2FuZF9jaGVjayA9IFZEU082NEwgJEANCj4+IC0gICAg
-ICBjbWRfdmRzbzY0bGRfYW5kX2NoZWNrID0gJChWRFNPQ0MpICQoY19mbGFncykgJChDQzY0RkxB
-R1MpIC1vICRAIC1XbCwtVCQoZmlsdGVyICUubGRzLCReKSAkKGZpbHRlciAlLm8sJF4pIDsgJChj
-bWRfdmRzb19jaGVjaykNCj4+ICsgICAgICBjbWRfdmRzbzY0bGRfYW5kX2NoZWNrID0gJChWRFNP
-Q0MpICQoY19mbGFncykgJChDQzY0RkxBR1MpIC1vICRAIC1XbCwtVCQoZmlsdGVyICUubGRzLCRe
-KSAkKGZpbHRlciAlLm8sJF4pIC16IG5vZXhlY3N0YWNrIDsgJChjbWRfdmRzb19jaGVjaykNCj4+
-ICAgcXVpZXRfY21kX3Zkc282NGFzID0gVkRTTzY0QSAkQA0KPj4gICAgICAgICBjbWRfdmRzbzY0
-YXMgPSAkKFZEU09DQykgJChhX2ZsYWdzKSAkKENDNjRGTEFHUykgJChBUzY0RkxBR1MpIC1jIC1v
-ICRAICQ8DQo+PiAtLSANCj4+IDIuMzcuMQ0KPiA=
+On 2022-09-07 01:16, Eric W. Biederman wrote:
+> Alexey Izbyshev <izbyshev@ispras.ru> writes:
+> 
+>> On 2022-09-01 21:11, Eric W. Biederman wrote:
+>>> Andrei Vagin <avagin@gmail.com> writes:
+>>> 
+>>>> On Tue, Aug 30, 2022 at 6:18 PM Andrei Vagin <avagin@gmail.com> 
+>>>> wrote:
+>>>>> On Tue, Aug 30, 2022 at 10:49:43PM +0300, Alexey Izbyshev wrote:
+>>>> <snip>
+>>>>>> @@ -1030,6 +1033,10 @@ static int exec_mmap(struct mm_struct *mm)
+>>>>>>         tsk->mm->vmacache_seqnum = 0;
+>>>>>>         vmacache_flush(tsk);
+>>>>>>         task_unlock(tsk);
+>>>>>> +
+>>>>>> +       if (vfork)
+>>>>>> +               timens_on_fork(tsk->nsproxy, tsk);
+>>>>>> +
+>>>>>> Similarly, even after a normal vfork(), time namespace switch 
+>>>>>> could
+>>>>>> be
+>>>>>> silently skipped if the parent dies before "tsk->vfork_done" is
+>>>>>> read. Again,
+>>>>>> I don't know whether anybody cares, but this behavior seems 
+>>>>>> non-obvious and
+>>>>>> probably unintended to me.
+>>>>> This is the more interesting case. I will try to find out how we 
+>>>>> can
+>>>>> handle it properly.
+>>>> It might not be a good idea to use vfork_done in this case. Let's
+>>>> think about what we have and what we want to change. We don't want 
+>>>> to
+>>>> allow switching timens if a process mm is used by someone else. But 
+>>>> we
+>>>> forgot to handle execve that creates a new mm, and we can't change 
+>>>> this
+>>>> behavior right now because it can affect current users. Right?
+>>> What we can't changes are things that will break existing programs.  
+>>> If
+>>> existing programs don't care we can change the behavior of the 
+>>> kernel.
+>>> 
+>>>> So maybe the best choice, in this case, is to change behavior by 
+>>>> adding
+>>>> a new control that enables it. The first interface that comes to my 
+>>>> mind
+>>>> is to introduce a new ioctl for a namespace file descriptor. Here is 
+>>>> a
+>>>> draft patch below that should help to understand what I mean.
+>>> I don't think adding a new control works, because programs that are
+>>> calling vfork or posix_spawn today will stop working.
+>>> We should recognize that basing things off of CLONE_VFORK was a bad
+>>> idea
+>>> as CLONE_VFORK is all about waiting for the created task to exec or
+>>> exit, and really has nothing to do with creating a new mm.
+>>> Instead I think the rule should be that a new time namespaces is
+>>> installed as soon as we have a new mm.
+>>> That will be a behavioral change if the time ns is unshared and then
+>>> the
+>>> program exec's instead of forking children, but I suspect it is the
+>>> proper behavior all the same, and that existing userspace won't care.
+>>> Especially since all of the vfork_done work is new behavior as
+>>> of v6.0-rc1.
+>>> 
+>> While vfork_done work is indeed new, preservation of 
+>> time_ns_for_children on
+>> execve() instead of switching to it is how time namespaces were 
+>> originally
+>> implemented in 5.6. If this can be changed even now, thereby fixing 
+>> the original
+>> design, that's great, I just want to point out that it's not the 
+>> recent 6.0 work
+>> that is being fixed. Fixes/clarifications for man pages[1][2], which 
+>> talk about
+>> "subsequently created children", will also be needed.
+>> 
+>> [1] https://man7.org/linux/man-pages/man7/time_namespaces.7.html
+>> [2] https://man7.org/linux/man-pages/man2/unshare.2.html
+> 
+> Sorry, yes.
+> 
+> That is something to be double checked.
+> 
+> I can't see where it would make sense to unshare a time namespace and
+> then call exec, instead of calling exit.  So I suspect we can just
+> change this behavior and no one will notice.
+> 
+One can imagine a helper binary that calls unshare, forks some children 
+in new namespaces, and then calls exec to hand off actual work to 
+another binary (which might not expect being in the new time namespace). 
+I'm purely theorizing here, however. Keeping a special case for vfork() 
+based only on FUD is likely a net negative, so it'd be nice to hear 
+actual time namespace users speak up, and switch to the solution you 
+suggested if they don't care.
+
+The "unshare" tool from util-linux will also change behavior if called 
+without "--fork" (e.g. "unshare --user --time"), but that would be 
+unusual usage (just as for "--pid"), so most people probably don't do 
+that (or don't care about the time namespace of the exec'ed process, but 
+care only about its children).
+
+>>> Ugh.  I just spotted another bug.  The function timens_on_fork as
+>>> written is not safe to call without first creating a fresh copy
+>>> of the nsproxy, and we don't do that during exec.  Because nsproxy
+>>> is shared between tasks and processes updating the values needs to
+>>> create a new nsproxy or other tasks/processes can be affected.
+>>> Not hard to handle just something that needs to be addressed.
+>>> Say something like this:
+>>> diff --git a/fs/exec.c b/fs/exec.c
+>>> index 9a5ca7b82bfc..8a6947e631dd 100644
+>>> --- a/fs/exec.c
+>>> +++ b/fs/exec.c
+>>> @@ -979,12 +979,10 @@ static int exec_mmap(struct mm_struct *mm)
+>>>  {
+>>>  	struct task_struct *tsk;
+>>>  	struct mm_struct *old_mm, *active_mm;
+>>> -	bool vfork;
+>>>  	int ret;
+>>>  	/* Notify parent that we're no longer interested in the old VM */
+>>>  	tsk = current;
+>>> -	vfork = !!tsk->vfork_done;
+>>>  	old_mm = current->mm;
+>>>  	exec_mm_release(tsk, old_mm);
+>>>  	if (old_mm)
+>>> @@ -1030,9 +1028,6 @@ static int exec_mmap(struct mm_struct *mm)
+>>>  	vmacache_flush(tsk);
+>>>  	task_unlock(tsk);
+>>> -	if (vfork)
+>>> -		timens_on_fork(tsk->nsproxy, tsk);
+>>> -
+>>>  	if (old_mm) {
+>>>  		mmap_read_unlock(old_mm);
+>>>  		BUG_ON(active_mm != old_mm);
+>>> @@ -1303,6 +1298,10 @@ int begin_new_exec(struct linux_binprm * bprm)
+>>>  	bprm->mm = NULL;
+>>> +	retval = exec_task_namespaces();
+>>> +	if (retval)
+>>> +		goto out_unlock;
+>>> +
+>>>  #ifdef CONFIG_POSIX_TIMERS
+>>>  	spin_lock_irq(&me->sighand->siglock);
+>>>  	posix_cpu_timers_exit(me);
+>>> diff --git a/include/linux/nsproxy.h b/include/linux/nsproxy.h
+>>> index cdb171efc7cb..fee881cded01 100644
+>>> --- a/include/linux/nsproxy.h
+>>> +++ b/include/linux/nsproxy.h
+>>> @@ -94,6 +94,7 @@ static inline struct cred *nsset_cred(struct nsset 
+>>> *set)
+>>>  int copy_namespaces(unsigned long flags, struct task_struct *tsk);
+>>>  void exit_task_namespaces(struct task_struct *tsk);
+>>>  void switch_task_namespaces(struct task_struct *tsk, struct nsproxy 
+>>> *new);
+>>> +int exec_task_namespaces(void);
+>>>  void free_nsproxy(struct nsproxy *ns);
+>>>  int unshare_nsproxy_namespaces(unsigned long, struct nsproxy **,
+>>>  	struct cred *, struct fs_struct *);
+>>> diff --git a/kernel/fork.c b/kernel/fork.c
+>>> index 90c85b17bf69..b4a799d9c50f 100644
+>>> --- a/kernel/fork.c
+>>> +++ b/kernel/fork.c
+>>> @@ -2043,18 +2043,6 @@ static __latent_entropy struct task_struct
+>>> *copy_process(
+>>>  			return ERR_PTR(-EINVAL);
+>>>  	}
+>>> -	/*
+>>> -	 * If the new process will be in a different time namespace
+>>> -	 * do not allow it to share VM or a thread group with the forking 
+>>> task.
+>>> -	 *
+>>> -	 * On vfork, the child process enters the target time namespace 
+>>> only
+>>> -	 * after exec.
+>>> -	 */
+>>> -	if ((clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM) {
+>>> -		if (nsp->time_ns != nsp->time_ns_for_children)
+>>> -			return ERR_PTR(-EINVAL);
+>>> -	}
+>>> -
+>>>  	if (clone_flags & CLONE_PIDFD) {
+>>>  		/*
+>>>  		 * - CLONE_DETACHED is blocked so that we can potentially
+>>> diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
+>>> index b4cbb406bc28..b6647846fe42 100644
+>>> --- a/kernel/nsproxy.c
+>>> +++ b/kernel/nsproxy.c
+>>> @@ -255,6 +255,24 @@ void exit_task_namespaces(struct task_struct *p)
+>>>  	switch_task_namespaces(p, NULL);
+>>>  }
+>>> +int exec_task_namespaces(void)
+>>> +{
+>>> +	struct task_struct *tsk = current;
+>>> +	struct nsproxy *new;
+>>> +
+>>> +	if (tsk->nsproxy->time_ns_for_children == tsk->nsproxy->time_ns)
+>>> +		return 0;
+>>> +
+>>> +	new = create_new_namespaces(0, tsk, current_user_ns(), tsk->fs);
+>>> +	if (IS_ERR(new))
+>>> +		return PTR_ERR(new);
+>>> +
+>>> +	timens_on_fork(new, tsk);
+>>> +	switch_task_namespaces(tsk, new);
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +
+>>>  static int check_setns_flags(unsigned long flags)
+>>>  {
+>>>  	if (!flags || (flags & ~(CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC 
+>>> |
+>>> 
+>>> To keep things from being too confusing it probably makes sense to
+>>> rename the nsproxy variable from time_ns_for_children to
+>>> time_ns_for_new_mm.  Likewise timens_on_fork can be renamed
+>>> timens_on_new_mm.
+>>> 
+>> Do you imply renaming "/proc/[pid]/ns/time_for_children" as well, or 
+>> will it be
+>> preserved for compatibility?
+> 
+> Unfortunately I don't think we can change that one.  We could add
+> another better named one, update the tools to use it.  Then wait a
+> couple of millenia and remove the current name.  Depending it might be
+> worth it, but only if you have a lot of patience.
+> 
+I agree with you and Andrei that the name in /proc shouldn't be changed. 
+I was asking only to understand the scope of changes that you suggested.
+
+> We should get the implementation details sorted out first, and the
+> in-kernel name before touching the proc files.
+> 
+FWIW, your patch looks good to me. I've also run some simple manual 
+tests with it applied on top of 6.0.0-rc4, and it works as expected.
+
+I've also noticed one missed optimization in copy_namespaces().
+
+    if (likely(!(flags & (CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC |
+                  CLONE_NEWPID | CLONE_NEWNET |
+                  CLONE_NEWCGROUP | CLONE_NEWTIME)))) {
+        if (likely(old_ns->time_ns_for_children == old_ns->time_ns)) {
+            get_nsproxy(old_ns);
+            return 0;
+        }
+    } else if (!ns_capable(user_ns, CAP_SYS_ADMIN))
+        return -EPERM;
+
+The time ns comparison on the fast path was originally added together 
+with time namespace support, and back then clone(CLONE_VM) wasn't 
+allowed with non-matching time_ns and time_ns_for_children. Then 
+Andrei's patch 133e2d3e81 allowed clone(CLONE_VM|CLONE_VFORK) in this 
+case, and your patch removes CLONE_VM restriction altogether, so 
+non-matching time_ns/time_ns_for_children are simply inherited if 
+CLONE_VM is set. However, the fast path didn't learn about that, so 
+copy_namespaces() will uselessly create a new nsproxy even though 
+timens_on_fork() won't be called. Probably the fast path check should be 
+fixed.
+
+Thanks,
+Alexey

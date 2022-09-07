@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52805B089A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2965B089D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiIGPcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        id S229830AbiIGPcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiIGPcJ (ORCPT
+        with ESMTP id S229451AbiIGPcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:32:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2835A6F277;
-        Wed,  7 Sep 2022 08:32:05 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287BDfD0009129;
-        Wed, 7 Sep 2022 15:31:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=vb4Q9bKoRnQ1hrAVSSM3Lubd23SP5rGhgMFJBZZ6gu0=;
- b=Qg1cZVm77Qv5iilhaXvDaHBbj/nK4KR4G7rAA7m91e8s4ec7LBWtYUoz7cfiGOFfJa2I
- glLdjJybD5iBwZhjCxTd9FglBF0CjThwWMDN+HuQxXWGj0Wcaz5/FKBxBXQWwFVsgeCy
- 2TMGLTkbQ/Wx4f0x4gf0xjNTlQEE03jfWvJXRJg+BOaX4Z9eMNkDZUTi67NFhalioKB1
- LDxCYRgIZ0U5u5jsf6NYx+cFNaK2FymfybBFKumrb5ogvGCbNiQY+uj9i54vs7HsR19W
- Ld9zr4m9YUUX8fItrVU2ldFXhnKtnfcEkM+rKt+AhqouMXRnM+bITioEJgLg0rMEuH2E Ew== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jefntaa1a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 15:31:52 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 287FVmdm004198;
-        Wed, 7 Sep 2022 15:31:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3jc00kynxs-1;
-        Wed, 07 Sep 2022 15:31:48 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 287FVlK1004193;
-        Wed, 7 Sep 2022 15:31:47 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 287FVlTi004191;
-        Wed, 07 Sep 2022 15:31:47 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id E1CF53F9A; Wed,  7 Sep 2022 21:01:46 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [PATCH] tty: serial: qcom-geni-serial: Replace hardcoded icc flags with macros.
-Date:   Wed,  7 Sep 2022 21:01:42 +0530
-Message-Id: <1662564702-7253-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zEhDfI2K3rCrAT9xfcFGvZWltVt_49oK
-X-Proofpoint-GUID: zEhDfI2K3rCrAT9xfcFGvZWltVt_49oK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-07_08,2022-09-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- adultscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=760
- lowpriorityscore=0 phishscore=0 mlxscore=0 bulkscore=0 clxscore=1011
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209070060
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 11:32:20 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6765A7696B;
+        Wed,  7 Sep 2022 08:32:19 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id pj10so4491204pjb.2;
+        Wed, 07 Sep 2022 08:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=2y84KoxHvAca0x2HYNXqxqJj776eiDbPEKIjReMrg0U=;
+        b=RCPz9p+Nm7+WOSNmOPN1+QvBYB8EhdBwxeXR6gnhlbAts2QrkYbmNTYTpJZ98fgPPF
+         PBl/6LoKGUlg+AcfZkjDU6xf7r8RtInGmJHbDUCjURuh+T2Vll6Praux5Orn4iaeDqwm
+         jxV4YJvo9RbSCftdHfGjhMCV8QNHdXBUzVJ9lt9ijth/jwtdLgnIZtyD2tBora/s4YKV
+         ChT9rFNyrRAFZc546muYP38fxNj7VYw4s7kDHXMvjcBWNOcDwGcVs0Y6TZP/A0ESSHFp
+         B8cRLWxPlzfh0r+Vhc50oXUgfnsdNkI1V8eO1TF0YKSIopG3NCUBnN6VSmRDkQpeM3Ly
+         hiTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=2y84KoxHvAca0x2HYNXqxqJj776eiDbPEKIjReMrg0U=;
+        b=Sm3W1WwJnj4AKM0QUUTaOEYYUH+1Lkx5NjB0WO17XLfgRQ6GwZBq9NgQXRJeVPeH5/
+         xx094+uANThRUpb1gVQknr708oy0WVgWw2uHg1yb7egMAdirSWoPiAGLr+HLZCLEFpP2
+         gMMqQX4xoH4w/kZRhD2u2JViW8Z2MA4g+TCpKrRwGiI/eUZl2Yb3nnHdjUX+ilwNr+nY
+         VdnbNVCZhvFkJK3B6xABT8b13HsaxJD9EB34JbokKNdgsvP0I1v91XdeGaohWSoLbN1B
+         WW3GVHH2V5cTvIbXVL+u6Rxs03a7C1MDZ73MMuqk8sN1+aECbRJU7YCX5fCNWyQjQXo7
+         Q/qA==
+X-Gm-Message-State: ACgBeo3helQZ1q6cuEj8uH3pw0q4NWSgup/l5W2nMKooXht0dUQgOryM
+        d+a9gCyf39J9qboozE3WdnE=
+X-Google-Smtp-Source: AA6agR6CoHdWVQeSggz2rj+Be9WXzcSrS5L0JFdC4/ip2osl35mQ0JDhjPAcVxs+NdHQowGNYh7Wiw==
+X-Received: by 2002:a17:902:7796:b0:172:c716:d3ac with SMTP id o22-20020a170902779600b00172c716d3acmr4489711pll.137.1662564738413;
+        Wed, 07 Sep 2022 08:32:18 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c20c00b00176cde52192sm4456191pll.251.2022.09.07.08.32.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:32:18 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 7 Sep 2022 05:32:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH] cgroup/cpuset: remove unreachable code
+Message-ID: <Yxi5gI1f2MxdC0c9@slm.duckdns.org>
+References: <20220907040112.82030-1-jiapeng.chong@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907040112.82030-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In suspend/resume routines, icc flags are hardcoded.
+(cc'ing Waiman and quoting the whole message)
 
-Replace the hardcodes with macros available from header.
+On Wed, Sep 07, 2022 at 12:01:12PM +0800, Jiapeng Chong wrote:
+> The function sched_partition_show cannot execute seq_puts, delete the
+> invalid code.
+> 
+> kernel/cgroup/cpuset.c:2849 sched_partition_show() warn: ignoring unreachable code.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2087
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
- drivers/tty/serial/qcom_geni_serial.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Applied to cgroup/for-6.1.
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 52182f6..83b66b7 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -22,6 +22,7 @@
- #include <linux/slab.h>
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
-+#include <dt-bindings/interconnect/qcom,icc.h>
- 
- /* UART specific GENI registers */
- #define SE_UART_LOOPBACK_CFG		0x22c
-@@ -1525,7 +1526,7 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
- 	 * even with no_console_suspend
- 	 */
- 	if (uart_console(uport)) {
--		geni_icc_set_tag(&port->se, 0x3);
-+		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ACTIVE_ONLY);
- 		geni_icc_set_bw(&port->se);
- 	}
- 	return uart_suspend_port(private_data->drv, uport);
-@@ -1540,7 +1541,7 @@ static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
- 
- 	ret = uart_resume_port(private_data->drv, uport);
- 	if (uart_console(uport)) {
--		geni_icc_set_tag(&port->se, 0x7);
-+		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ALWAYS);
- 		geni_icc_set_bw(&port->se);
- 	}
- 	return ret;
+Thanks.
+
+>  kernel/cgroup/cpuset.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 6baa977a71ba..b474289c15b8 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2846,8 +2846,6 @@ static int sched_partition_show(struct seq_file *seq, void *v)
+>  		else
+>  			seq_printf(seq, "%s invalid\n", type);
+>  		break;
+> -		seq_puts(seq, "isolated invalid\n");
+> -		break;
+>  	}
+>  	return 0;
+>  }
+> -- 
+> 2.20.1.7.g153144c
+> 
+
 -- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
-
+tejun

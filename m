@@ -2,122 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689515AFCBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6575AFCC2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 08:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiIGGoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 02:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
+        id S229997AbiIGGqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 02:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiIGGoI (ORCPT
+        with ESMTP id S229902AbiIGGqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 02:44:08 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31B4395;
-        Tue,  6 Sep 2022 23:44:07 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 616BA5C0111;
-        Wed,  7 Sep 2022 02:44:05 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 07 Sep 2022 02:44:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662533045; x=1662619445; bh=uxiqkYILFEE10SEls//zfdxclfvI
-        YtJHN4wQcFOIvkg=; b=Uxb4gwtROIdhEyw7mFwSLtR5WDWlTWdH87vIJXNkjoR6
-        DNeSkJ2GHkwqRH9I/tfQvc5eUKcCRoz/O3glVtC5WBg4rBB8XlXCDlAkW041TJWE
-        SfvjS30mYnyJHQvT1eb7wH2XdFRbOiJ2KyllVZ02dFHz3kbKJk61v8afrRECdB3X
-        hZSH4p304O12shHlvyVmqFTblSiXttpkbyz/thDFlJ71z5+5/BItWk8w5Na0FKBL
-        FHlIiiATN6MFsoYjsjHHPIkEPTz4eOOuFVaJJWQ/SSvRnxXBSZoVt+PE6Rw5gMe3
-        fYSBy+gPHR6ordnGP9nv1EKMRsJODpixR7WH9qBlrA==
-X-ME-Sender: <xms:tD0YY5ZtClD4VEzqLuDM4MlZ3sX88YW8VT22RUHKOvg6BInRBuddPQ>
-    <xme:tD0YYwaJI9VdokU2gZdWQNn-YG6vXbgEQpwrYF01Vp6ueGCucYG0QLjbQKfl7L47a
-    ucHVVzO-OODIgM>
-X-ME-Received: <xmr:tD0YY78TJSpLB2aNVE7qIBwyQi80KAkhDdiJ_EobdAq_w0MuSOTVzS8yAnyew5dCORWaqj9FYUqM04-nJnfANb6tpom94Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelledguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
-    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeefheffgeegffeuffehiedthfektdefleffffejgeettdffgeeijeejueet
-    jeetveenucffohhmrghinhepohhffhhlohgrugdrphihnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhr
-    gh
-X-ME-Proxy: <xmx:tD0YY3puflwJsg40JZj-QAg6b7bB874oYekJBVIy93Cq1Ppsp7lRAA>
-    <xmx:tD0YY0pq0tlB7goeK1uQdPQzGE_4h43v5kAXUHvEzvfOWxxx4Jv3lg>
-    <xmx:tD0YY9RZNHPLRMuvPsXMxeCYY1ibrBUmGHEgiHYI1KGIUmml7Mn-aw>
-    <xmx:tT0YY6gP5K1_23jqnL-vxdaCqNgP8gZNs-M9zrl_-3Vg78M904tT9A>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 02:44:04 -0400 (EDT)
-Date:   Wed, 7 Sep 2022 09:43:59 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Jie2x Zhou <jie2x.zhou@intel.com>
-Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>,
-        petrm@nvidia.com
-Subject: Re: test ./tools/testing/selftests/bpf/test_offload.py failed
-Message-ID: <Yxg9r37w1Wg3mvxy@shredder>
-References: <20220907051657.55597-1-jie2x.zhou@intel.com>
+        Wed, 7 Sep 2022 02:46:49 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB7884EE9;
+        Tue,  6 Sep 2022 23:46:48 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 145so13684256pfw.4;
+        Tue, 06 Sep 2022 23:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=JiVPHTiTIaV4jbYQT/3jXTPG0Eo6ESZv0pSGYJq5hmM=;
+        b=XzeuYD0WSv7y8BB86oFRFOzgh7/G6HVkyMdQapT67l5mMzYcluHCeR5OUMy7NoPmRu
+         rLuy46HjLgm8OdCIFflMamvdjOjhUtCKM0p6ZkYriIL15vUTRHmctZAyI1MTq3oFaqkJ
+         qiuvCIG9VE88/mOPianchRdvUs07qUk64LxwqITW04m8bM6B+rz5Y6MErFw97JEpjSkA
+         b7yKR27GG6c423o4Y4WODDg2L+7C0qJxwjOc79s3V87GgntMthGwky8xQ8qyhq+yxCKY
+         58BJ/tyJRaJD7mzExNBZ/ae2nNYmO5bZdAxYhLOXx3WKC+M+gr8S3R8nFYzM2dnM3hTS
+         vdWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=JiVPHTiTIaV4jbYQT/3jXTPG0Eo6ESZv0pSGYJq5hmM=;
+        b=Dwg6iIsxD8ma0fbmXRhherDOwShdaDeFCzw0W5KtkVXCASzzwbpHjAwU8P3dFySWzb
+         odkUqE0aO1nvpMY8s/JOfqzrgTdOCz+3ULG9zsN0q6P9S+ZCGB6oEJsFQspCO46h8kvP
+         w7vLtP05Ka9uxfh++WllUMHwf+AkgWiNdIx7CvwmxPiAt8toIBFsxA4KzIe/BVlDHXrQ
+         qSBrRTzxfjz0JNMXgtqy+8MOggTZA7HJkILIpTrlDi7Z9A3dPxQBMDEbbIA2MgH67mGg
+         pwjlUAm6noQGWz9zVET3+pc1ArpdBECBD3rDc06aNifu9+DCcpBkV2EEekwRGK/DGZQQ
+         ZdqA==
+X-Gm-Message-State: ACgBeo2AKt2bS39T1TZ42FtBIX4hX0/8KkEKKCIrShzk1hjYNaHtJJf0
+        2ulzQTG3ElXBaducvj/r2dU=
+X-Google-Smtp-Source: AA6agR5XlquuA3p6kawjor0rnGgc0btvwEbZzaPXQggRsR/PG42wmhRF3DT7Kr7XwmZj0I+dKhdy7w==
+X-Received: by 2002:a63:e306:0:b0:42c:414a:95e9 with SMTP id f6-20020a63e306000000b0042c414a95e9mr2207730pgh.139.1662533207789;
+        Tue, 06 Sep 2022 23:46:47 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:f249:9066:7da7:4a37])
+        by smtp.gmail.com with ESMTPSA id z4-20020a170902ccc400b00172c7a2c662sm11192192ple.48.2022.09.06.23.46.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 23:46:47 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: [PATCHSET 0/6] perf test: Improve perf record tests (v1)
+Date:   Tue,  6 Sep 2022 23:46:39 -0700
+Message-Id: <20220907064645.1197894-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907051657.55597-1-jie2x.zhou@intel.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 01:16:57PM +0800, Jie2x Zhou wrote:
-> I found that "disable_ifindex" file do not set read function, so return -EINVAL when do read.
-> Is it a bug in test_offload.py?
+Hello,
 
-Most likely a bug in netdevsim itself as it sets the mode of this file
-as "rw" instead of "w". The test actually knows to skip such files:
+This patchset improves the perf record tests to check more cases so
+that it can find problems early.  The motivation is a failure in
+per-thread mmap with multi-threaded targets which Adrian is working on
+the fix.
 
-            p = os.path.join(path, f)
-            if not os.stat(p).st_mode & stat.S_IRUSR:
-                continue
+I added a custom test program and more combinations like system-wide
+and command line workload (in per-process mode) testing with
+multi-threaded recording mode.
 
-Can you test the following patch?
+Currently it fails on per-thread and register capture tests.  The
+system-wide test was skipped since I ran it as a normal user.  We can
+use this to verify Adirian's fix and future works.
 
-diff --git a/drivers/net/netdevsim/hwstats.c b/drivers/net/netdevsim/hwstats.c
-index 605a38e16db0..0e58aa7f0374 100644
---- a/drivers/net/netdevsim/hwstats.c
-+++ b/drivers/net/netdevsim/hwstats.c
-@@ -433,11 +433,11 @@ int nsim_dev_hwstats_init(struct nsim_dev *nsim_dev)
-                goto err_remove_hwstats_recursive;
-        }
- 
--       debugfs_create_file("enable_ifindex", 0600, hwstats->l3_ddir, hwstats,
-+       debugfs_create_file("enable_ifindex", 0200, hwstats->l3_ddir, hwstats,
-                            &nsim_dev_hwstats_l3_enable_fops.fops);
--       debugfs_create_file("disable_ifindex", 0600, hwstats->l3_ddir, hwstats,
-+       debugfs_create_file("disable_ifindex", 0200, hwstats->l3_ddir, hwstats,
-                            &nsim_dev_hwstats_l3_disable_fops.fops);
--       debugfs_create_file("fail_next_enable", 0600, hwstats->l3_ddir, hwstats,
-+       debugfs_create_file("fail_next_enable", 0200, hwstats->l3_ddir, hwstats,
-                            &nsim_dev_hwstats_l3_fail_fops.fops);
- 
-        INIT_DELAYED_WORK(&hwstats->traffic_dw,
+  $ ./perf test -v 86
+   86: perf record tests                                               :
+  --- start ---
+  test child forked, pid 1190747
+  Build a test program
+  Basic --per-thread mode test
+  Per-thread record [Failed record]
+  Register capture test
+  Register capture test [Failed missing output]
+  Basic --system-wide mode test
+  System-wide record [Skipped not supported]
+  Basic target workload test
+  Basic target workload test [Success]
+  test child finished with -1
+  ---- end ----
+  perf record tests: FAILED!
 
-> 
-> test output:
->  selftests: bpf: test_offload.py
->  Test destruction of generic XDP...
-> ......
->      raise Exception("Command failed: %s\n%s" % (proc.args, stderr))
->  Exception: Command failed: cat /sys/kernel/debug/netdevsim/netdevsim0//ports/0/dev/hwstats/l3/disable_ifindex
->  
->  cat: /sys/kernel/debug/netdevsim/netdevsim0//ports/0/dev/hwstats/l3/disable_ifindex: Invalid argument
->  not ok 20 selftests: bpf: test_offload.py # exit=1
+
+You can find it in 'perf/record-test-v1' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (6):
+  perf test: Do not use instructions:u explicitly
+  perf test: Use a test program in perf record tests
+  perf test: Test record with --threads option
+  perf test: Add system-wide mode in perf record tests
+  perf test: Add target workload test in perf record tests
+  perf test: Do not set TEST_SKIP for record subtests
+
+ tools/perf/tests/shell/record.sh | 150 +++++++++++++++++++++++++++----
+ 1 file changed, 133 insertions(+), 17 deletions(-)
+
+
+base-commit: 6c3bd8d3e01d9014312caa52e4ef1c29d5249648
+-- 
+2.37.2.789.g6183377224-goog
+

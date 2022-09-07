@@ -2,258 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3DD5AFBD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C4A5AFBD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 07:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiIGFiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 01:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S229751AbiIGFk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 01:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiIGFiR (ORCPT
+        with ESMTP id S229576AbiIGFkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 01:38:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0914F82D1E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 22:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662529095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z/ijoziX1JqP00j9yW5u7IZw3l7uhHHBn3IFfumff2g=;
-        b=Ky12rQYFCUBhadLWUWvshBiLc814c+XDmP2PfWcSDlQ1N80ehxB+IEOQOvDDuBVKKkO8HV
-        fCJP4v3nEGYi4zs6ubBafSlya1gN0bM4Xvi9Q95S41Vr/3v3WFLDf2eR1ADmtx2l06yz2d
-        OY+g1p4/zXKgp5S+BAdRXWGSEv3U98s=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-472-7zX4AHHnNjSR3HMQkAGuMQ-1; Wed, 07 Sep 2022 01:38:14 -0400
-X-MC-Unique: 7zX4AHHnNjSR3HMQkAGuMQ-1
-Received: by mail-pg1-f197.google.com with SMTP id q10-20020a635c0a000000b00434b19ecf6fso1929401pgb.16
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 22:38:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=z/ijoziX1JqP00j9yW5u7IZw3l7uhHHBn3IFfumff2g=;
-        b=PDotXVxuuk1z8dWDrRPpnJGggHviDeEPmI0e4hplIX6456WAdBZTX/zc2AcCKXJllq
-         GfKwfMh23UYefx9HRcYFr7Ga7i9wlbSLL7PxtynGr9e0horl64IKWwDgvlMMcDvn8+V5
-         cbSzoaBYwP8NMtsBoYt7fJRR4lgsZxS4mAXwfNhUaV+zXCtk5eOfCfdokc643U3kCZla
-         jDk6w6MQiqzxO6w4JDba2Js4WF6TQCihndN+Wd5Tm0RUDYmGb5NsssLcIrwlxlp/9Y14
-         lLSSb2zRQaK6e5QmAKkWcnlSwp+AD0oQei57Z2N5gh5MHmIX2YxDGm3tOjZDugoZ6ioG
-         OJXg==
-X-Gm-Message-State: ACgBeo0Gl0DRJGI4Q+fGFIhxSdH4xekLx5PZF9J8PThX5vdELD8bYJb6
-        cfXLdtvG2Y4+8rIZxm1/fya6ZvdWFD0FyI3advciPqHzzkNSVRaMR9q0n3glKGsx1lq3lGydAby
-        btytU++bO/4I9pJW4txrU8MrM
-X-Received: by 2002:a17:902:ef50:b0:171:516d:d2ce with SMTP id e16-20020a170902ef5000b00171516dd2cemr2150673plx.171.1662529092676;
-        Tue, 06 Sep 2022 22:38:12 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5xHIuO0ckPVo1IAdDm+QtW6wb3fUCt/3CAknqurpy5/WVdwoP6vH+j2dzlabcwVg6m63ayGA==
-X-Received: by 2002:a17:902:ef50:b0:171:516d:d2ce with SMTP id e16-20020a170902ef5000b00171516dd2cemr2150649plx.171.1662529092367;
-        Tue, 06 Sep 2022 22:38:12 -0700 (PDT)
-Received: from [10.72.13.171] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9-20020a170902654900b00172ba718ed4sm6142087pln.138.2022.09.06.22.38.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 22:38:11 -0700 (PDT)
-Message-ID: <b1a7c454-860d-6a40-9da1-2a06f30ff1be@redhat.com>
-Date:   Wed, 7 Sep 2022 13:38:03 +0800
+        Wed, 7 Sep 2022 01:40:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3411172EDE;
+        Tue,  6 Sep 2022 22:40:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD2A7B81A3A;
+        Wed,  7 Sep 2022 05:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E172C433C1;
+        Wed,  7 Sep 2022 05:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662529220;
+        bh=UqXCQrAW++a67zSQmPX5bfVF+csV35Hce2WmFZzNGrw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PPbba7SQh/HbpZc2pTcde0XInlM5HbbjFU3jWpyOG2IL5T1mOwECyP8nrKEUmZ40S
+         dlHVd0Sc9ee9fgpJomI9TsGb2ec2PkkxW2TNKaIuT7pGcV8UoAfRYiwQepcIF/B+jR
+         fd1JyWtXUcxxhbxD5vZ8DUF/dv2OuPH7ohjF+t1M=
+Date:   Wed, 7 Sep 2022 07:40:16 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 5.15 101/107] kbuild: Unify options for BTF generation
+ for vmlinux and modules
+Message-ID: <YxguwCpBEKAJJDU6@kroah.com>
+References: <20220906132821.713989422@linuxfoundation.org>
+ <20220906132826.130642856@linuxfoundation.org>
+ <291d739c-752f-ead3-1974-a136b986afb7@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [RFC v3 6/7] virtio: in order support for virtio_ring
-Content-Language: en-US
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>, eperezma@redhat.com,
-        sgarzare@redhat.com, mst@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-References: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn>
- <20220901055434.824-7-qtxuning1999@sjtu.edu.cn>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220901055434.824-7-qtxuning1999@sjtu.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <291d739c-752f-ead3-1974-a136b986afb7@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 06, 2022 at 11:45:00AM -0700, Florian Fainelli wrote:
+> 
+> 
+> On 9/6/2022 6:31 AM, Greg Kroah-Hartman wrote:
+> > From: Jiri Olsa <jolsa@redhat.com>
+> > 
+> > commit e27f05147bff21408c1b8410ad8e90cd286e7952 upstream.
+> > 
+> > Using new PAHOLE_FLAGS variable to pass extra arguments to
+> > pahole for both vmlinux and modules BTF data generation.
+> > 
+> > Adding new scripts/pahole-flags.sh script that detect and
+> > prints pahole options.
+> > 
+> > [ fixed issues found by kernel test robot ]
+> > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> > Link: https://lore.kernel.org/bpf/20211029125729.70002-1-jolsa@kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >   Makefile                  |    3 +++
+> >   scripts/Makefile.modfinal |    2 +-
+> >   scripts/link-vmlinux.sh   |   11 +----------
+> >   scripts/pahole-flags.sh   |   20 ++++++++++++++++++++
+> >   4 files changed, 25 insertions(+), 11 deletions(-)
+> >   create mode 100755 scripts/pahole-flags.sh
+> 
+> My linux-stable-rc/linux-5.15.y checkout shows that scripts/pahole-flags.sh
+> does not have an executable permission and commit
+> 128e3cc0beffc92154d9af6bd8c107f46e830000 ("kbuild: Unify options for BTF
+> generation for vmlinux and modules") does have:
+> 
+> diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+> new file mode 100644
+> index 000000000000..e6093adf4c06
+> 
+> whereas your email does have the proper 100755 permission set on the file,
+> any idea what happened here?
 
-在 2022/9/1 13:54, Guo Zhi 写道:
-> If in order feature negotiated, we can skip the used ring to get
-> buffer's desc id sequentially.  For skipped buffers in the batch, the
-> used ring doesn't contain the buffer length, actually there is not need
-> to get skipped buffers' length as they are tx buffer.
->
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
->   drivers/virtio/virtio_ring.c | 74 +++++++++++++++++++++++++++++++-----
->   1 file changed, 64 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 00aa4b7a49c2..d52624179b43 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -103,6 +103,9 @@ struct vring_virtqueue {
->   	/* Host supports indirect buffers */
->   	bool indirect;
->   
-> +	/* Host supports in order feature */
-> +	bool in_order;
-> +
->   	/* Host publishes avail event idx */
->   	bool event;
->   
-> @@ -144,6 +147,19 @@ struct vring_virtqueue {
->   			/* DMA address and size information */
->   			dma_addr_t queue_dma_addr;
->   			size_t queue_size_in_bytes;
-> +
-> +			/* If in_order feature is negotiated, here is the next head to consume */
-> +			u16 next_desc_begin;
-> +			/*
-> +			 * If in_order feature is negotiated,
-> +			 * here is the last descriptor's id in the batch
-> +			 */
-> +			u16 last_desc_in_batch;
-> +			/*
-> +			 * If in_order feature is negotiated,
-> +			 * buffers except last buffer in the batch are skipped buffer
-> +			 */
-> +			bool is_skipped_buffer;
->   		} split;
->   
->   		/* Available for packed ring */
-> @@ -584,8 +600,6 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
->   					 total_sg * sizeof(struct vring_desc),
->   					 VRING_DESC_F_INDIRECT,
->   					 false);
-> -		vq->split.desc_extra[head & (vq->split.vring.num - 1)].flags &=
-> -			~VRING_DESC_F_NEXT;
+Yeah, quilt does not like dealing with file permissions at all :(
 
+We have over time, not required executable permissions on kernel files
+because of this issue.  Is it required here?  If so, I'll try to
+remember to fix it up "by hand".
 
-This seems irrelevant.
+thanks,
 
-
->   	}
->   
->   	/* We're using some buffers from the free list. */
-> @@ -701,8 +715,16 @@ static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
->   	}
->   
->   	vring_unmap_one_split(vq, i);
-> -	vq->split.desc_extra[i].next = vq->free_head;
-> -	vq->free_head = head;
-> +	/*
-> +	 * If in_order feature is negotiated,
-> +	 * the descriptors are made available in order.
-> +	 * Since the free_head is already a circular list,
-> +	 * it must consume it sequentially.
-> +	 */
-> +	if (!vq->in_order) {
-> +		vq->split.desc_extra[i].next = vq->free_head;
-> +		vq->free_head = head;
-> +	}
->   
->   	/* Plus final descriptor */
->   	vq->vq.num_free++;
-> @@ -744,7 +766,7 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
->   {
->   	struct vring_virtqueue *vq = to_vvq(_vq);
->   	void *ret;
-> -	unsigned int i;
-> +	unsigned int i, j;
->   	u16 last_used;
->   
->   	START_USE(vq);
-> @@ -763,11 +785,38 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
->   	/* Only get used array entries after they have been exposed by host. */
->   	virtio_rmb(vq->weak_barriers);
->   
-> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
-> -	i = virtio32_to_cpu(_vq->vdev,
-> -			vq->split.vring.used->ring[last_used].id);
-> -	*len = virtio32_to_cpu(_vq->vdev,
-> -			vq->split.vring.used->ring[last_used].len);
-> +	if (vq->in_order) {
-> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
-
-
-Let's move this beyond the in_order check.
-
-
-> +		if (!vq->split.is_skipped_buffer) {
-> +			vq->split.last_desc_in_batch =
-> +				virtio32_to_cpu(_vq->vdev,
-> +						vq->split.vring.used->ring[last_used].id);
-> +			vq->split.is_skipped_buffer = true;
-> +		}
-> +		/* For skipped buffers in batch, we can ignore the len info, simply set len as 0 */
-
-
-This seems to break the caller that depends on a correct len.
-
-
-> +		if (vq->split.next_desc_begin != vq->split.last_desc_in_batch) {
-> +			*len = 0;
-> +		} else {
-> +			*len = virtio32_to_cpu(_vq->vdev,
-> +					       vq->split.vring.used->ring[last_used].len);
-> +			vq->split.is_skipped_buffer = false;
-> +		}
-> +		i = vq->split.next_desc_begin;
-> +		j = i;
-> +		/* Indirect only takes one descriptor in descriptor table */
-> +		while (!vq->indirect && (vq->split.desc_extra[j].flags & VRING_DESC_F_NEXT))
-> +			j = (j + 1) & (vq->split.vring.num - 1);
-
-
-Any reason indirect descriptors can't be chained?
-
-
-> +		/* move to next */
-> +		j = (j + 1) % vq->split.vring.num;
-> +		/* Next buffer will use this descriptor in order */
-> +		vq->split.next_desc_begin = j;
-
-
-Is it more efficient to poke the available ring?
-
-Thanks
-
-
-> +	} else {
-> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
-> +		i = virtio32_to_cpu(_vq->vdev,
-> +				    vq->split.vring.used->ring[last_used].id);
-> +		*len = virtio32_to_cpu(_vq->vdev,
-> +				       vq->split.vring.used->ring[last_used].len);
-> +	}
->   
->   	if (unlikely(i >= vq->split.vring.num)) {
->   		BAD_RING(vq, "id %u out of range\n", i);
-> @@ -2223,6 +2272,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
->   
->   	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
->   		!context;
-> +	vq->in_order = virtio_has_feature(vdev, VIRTIO_F_IN_ORDER);
->   	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
->   
->   	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
-> @@ -2235,6 +2285,10 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
->   	vq->split.avail_flags_shadow = 0;
->   	vq->split.avail_idx_shadow = 0;
->   
-> +	vq->split.next_desc_begin = 0;
-> +	vq->split.last_desc_in_batch = 0;
-> +	vq->split.is_skipped_buffer = false;
-> +
->   	/* No callback?  Tell other side not to bother us. */
->   	if (!callback) {
->   		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
-
+greg k-h

@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0155B076A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668325B076B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiIGOqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S229846AbiIGOq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiIGOqi (ORCPT
+        with ESMTP id S229708AbiIGOqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:46:38 -0400
+        Wed, 7 Sep 2022 10:46:39 -0400
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1BD8048A;
-        Wed,  7 Sep 2022 07:46:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2466C816A1;
+        Wed,  7 Sep 2022 07:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1662561997; x=1694097997;
+  t=1662561998; x=1694097998;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mcbrCYTDMmAmjpK0PSlD7QA+1uZkZ5/KbbIAh3KJVI8=;
-  b=inHvx/ePUXtQsrwbt9L4WyyY57FNzqdRsFo7ztz/Z5zQXfV8Nb9VGcS1
-   qi4hHu7l+bR0+AE54eUHAN5OgVC2ZxSzRjaJNdgBgvr+Wj2DMzgbkkTWg
-   7vQU04GZPzcllMVfNYUMHsSis4ZfIxhetJJg+G09WU1EkaR5gtcShSTbz
-   1GHGlh1tbPtkmVgMP8CHd04C4UhnV/ALA3vNoSnb7JijVbCaPU5MBlmin
-   MEnDzOKEtgPhAvvzaDv8Tuv75Po3LInE9CQJ+095n18r2j7q0H3XIwhrF
-   5kujz9LfRC4utDD0e9yNQyrk0bOPTeAElZo+M+V/AMQjluR/MHKgbWqGY
-   A==;
+  bh=nyTN5S1v23pl4QdaIwaYRFWiOie50KxUbC25YQEF+qE=;
+  b=Dd0r10oWAaSjIQPsDbWRvnMe/aPeDOavQN0uD26PnVljwWT/fwPYPWZh
+   /x7BSsciL9n3grlPviDDWfbIKXgNGyD0hrrxT+nLrfgiLR4UczgQlQkZb
+   QYglTewG6NlZ2kxMXhasEbQFGbwJqeS6V5oTQMx/V/91sODRsp0QbT0mu
+   BzZlj3Ds3genUkOHPttlvRT+A2/b8LTK8cUe2vNAaM3OXJgzkFe42Vv6j
+   6rgdtzGe5QtgsHJTudRpXkhOasmiCllXAb4Fz+4LOVhug1oVE9nVXWJ6P
+   RjkJxGerrewkBZ3tCTSJlw4kA3PDBJMxnMR0AI/X1C5MV/jBK0nyYz0lb
+   w==;
 X-IronPort-AV: E=Sophos;i="5.93,297,1654552800"; 
-   d="scan'208";a="26047488"
+   d="scan'208";a="26047490"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 07 Sep 2022 16:46:31 +0200
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -42,23 +42,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1662561991; x=1694097991;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mcbrCYTDMmAmjpK0PSlD7QA+1uZkZ5/KbbIAh3KJVI8=;
-  b=F7c+na8qmc4sqAIzRxUFrElUKEA4J6+yjfjzvjmDjJaE4u27z4i6ucvc
-   8BlHTfdFrocoBcZHmBs4Braox+KyolLt3w0zYetK1SCydLagPLabd/xcL
-   l/Mpzx3nRzCCKHtWL2J1587J7DvmMJyVE6ETwG/Y4iQ/CJH3eIlqmHT68
-   jh2DODUPxU+rWdMzHTkFrZY7OYwcjKOt4VndXiOuUWQ82a6TvcnjLuBOM
-   CtjnUxyiu8JA4GNuFf+cih26yeYdXh5ozGXvyoCJs3qP9j5XbiGRdnjNg
-   YFdSDx9t3IrSgXhIYTlKMyXCFSy4OfR5L9XICVz53eM9Uf5n+kxxxNwq9
-   g==;
+  bh=nyTN5S1v23pl4QdaIwaYRFWiOie50KxUbC25YQEF+qE=;
+  b=H/+ss8aiTVjn6nEFkYtz8MJ555sVCCVi3URoeZtWObVZIva0so/g0ax/
+   xs71b9Zahss8j0Z8Yf0FzpIJ8fhrTiCW/RsTriQJn/sO13oNSVwQKB3NH
+   iKmIvxUv2PU1nQFwDXjE2ljIjoaPotDJCq5G4iOLtG8SNVnmdAlYE/tSJ
+   mxypT+/P/C3rBA7pLvMJcOB4ITd8Z5BYfPV4+NThIkxdafQz6OEGgZZDf
+   IjvLyH7aKHb4d4kpDV0Ktv+tPtkyqV4U6ju9Hr8YyFsQDEMQLICOi60Ma
+   VbNASU7e5AtLbzSH3Wn96nURc6rzSKhaMrcJk1xFfXvX4PEdaqa4YGse7
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,297,1654552800"; 
-   d="scan'208";a="26047487"
+   d="scan'208";a="26047489"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 07 Sep 2022 16:46:31 +0200
 Received: from steina-w.tq-net.de (unknown [10.123.49.11])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id EF8A3280072;
-        Wed,  7 Sep 2022 16:46:30 +0200 (CEST)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 33601280056;
+        Wed,  7 Sep 2022 16:46:31 +0200 (CEST)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,9 +71,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel quirk to USB nodes
-Date:   Wed,  7 Sep 2022 16:46:23 +0200
-Message-Id: <20220907144624.2810117-4-alexander.stein@ew.tq-group.com>
+Subject: [PATCH 4/4] arm64: dts: tqma8mpql: add support for 2nd USB (host) interface
+Date:   Wed,  7 Sep 2022 16:46:24 +0200
+Message-Id: <20220907144624.2810117-5-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
 References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
@@ -88,34 +88,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With this set the SOF/ITP counter is based on ref_clk when 2.0 ports are
-suspended.
+The on-board USB hub has a single reset line which needs to be enabled.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ .../freescale/imx8mp-tqma8mpql-mba8mpxl.dts   | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 53493dc7d976..0e7f5842a3e4 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -1300,6 +1300,7 @@ usb_dwc3_0: usb@38100000 {
- 				phys = <&usb3_phy0>, <&usb3_phy0>;
- 				phy-names = "usb2-phy", "usb3-phy";
- 				snps,dis-u2-freeclk-exists-quirk;
-+				snps,gfladj-refclk-lpm-sel-quirk;
- 			};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts b/arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts
+index 0091430f6154..09c80ffae4b6 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts
+@@ -459,11 +459,23 @@ &usb3_0 {
+ 	status = "okay";
+ };
  
- 		};
-@@ -1342,6 +1343,7 @@ usb_dwc3_1: usb@38200000 {
- 				phys = <&usb3_phy1>, <&usb3_phy1>;
- 				phy-names = "usb2-phy", "usb3-phy";
- 				snps,dis-u2-freeclk-exists-quirk;
-+				snps,gfladj-refclk-lpm-sel-quirk;
- 			};
- 		};
++&usb3_1 {
++	fsl,disable-port-power-control;
++	fsl,permanently-attached;
++	dr_mode = "host";
++	status = "okay";
++};
++
+ &usb3_phy0 {
+ 	vbus-supply = <&reg_vcc_5v0>;
+ 	status = "okay";
+ };
  
++&usb3_phy1 {
++	vbus-supply = <&reg_vcc_5v0>;
++	status = "okay";
++};
++
+ &usb_dwc3_0 {
+ 	/* dual role is implemented, but not a full featured OTG */
+ 	hnp-disable;
+@@ -484,6 +496,32 @@ connector {
+ 	};
+ };
+ 
++&usb_dwc3_1 {
++	dr_mode = "host";
++	#address-cells = <1>;
++	#size-cells = <0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usbhub>;
++	snps,dis_u3_susphy_quirk;
++	status = "okay";
++
++	hub_2_0: hub@1 {
++		compatible = "usb451,8142";
++		reg = <1>;
++		peer-hub = <&hub_3_0>;
++		reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++		vdd-supply = <&reg_vcc_3v3>;
++	};
++
++	hub_3_0: hub@2 {
++		compatible = "usb451,8140";
++		reg = <2>;
++		peer-hub = <&hub_2_0>;
++		reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++		vdd-supply = <&reg_vcc_3v3>;
++	};
++};
++
+ &usdhc2 {
+ 	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+ 	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
+@@ -714,6 +752,10 @@ pinctrl_usbcon0: usb0congrp {
+ 		fsl,pins = <MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10		0x1c0>;
+ 	};
+ 
++	pinctrl_usbhub: usbhubgrp {
++		fsl,pins = <MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11		0x10>;
++	};
++
+ 	pinctrl_usdhc2: usdhc2grp {
+ 		fsl,pins = <MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK		0x192>,
+ 			   <MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD		0x1d2>,
 -- 
 2.25.1
 

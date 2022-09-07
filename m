@@ -2,135 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D469C5AFB02
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005825AFB04
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 06:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiIGENs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 00:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S229601AbiIGEPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 00:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiIGENp (ORCPT
+        with ESMTP id S229446AbiIGEPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 00:13:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0450880EAB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Sep 2022 21:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662524023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QAjDz4sR+CkkuN65TaxyzVYEg4bR36wJx58FYQ4lykw=;
-        b=VPhVXT1i2843BdHopm5pbxzFyuHlZ7JA5/Z4WjhypaKbbWmL5luVlufY19gpHj0NiKSAq4
-        PfCF/PSv2spAvweabpii3d2NOJoqFv8/vvvoUVcsHEVDOinDvTIN3cXvxptQMjWKq2L+XR
-        JcmMyoJiVHeQKkj0OQou0fYo9eIySMo=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-306-KKCGdbyWN-Cpgn1EXM_GMw-1; Wed, 07 Sep 2022 00:13:42 -0400
-X-MC-Unique: KKCGdbyWN-Cpgn1EXM_GMw-1
-Received: by mail-pj1-f70.google.com with SMTP id s3-20020a17090a5d0300b001fb3ac54a03so5386173pji.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Sep 2022 21:13:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=QAjDz4sR+CkkuN65TaxyzVYEg4bR36wJx58FYQ4lykw=;
-        b=VBE551cH00JAHtuZxCxb5VFnVjk9NKkTYFyU/b+vOXF+29uwUoBBLudRsvBqW0jyOz
-         R1r34dLh/HTQkaPnbTOXdicVNpW47RXwq+7xMIlT1Gje+K6ofr/WNTJGDn5bWV45hMc6
-         s/vazjOb9EMuNnjRX219O6byIh/2/YlaoAIPore2Ax57hwEE5V2K5QK3V1Jsv/kkr6dM
-         1pIz9CQhkcj6MW7toJj/HgoCi1VQaueQzZQ+Clypb5hufZHaPODMmys281uVJrnFH1gd
-         auBQ8mppmMhJutNPnA1vLWFEtyGbeJ0DhpZ0O+bbiPOTvmwuhGiqEOw9besDdh4SvxQL
-         sBhA==
-X-Gm-Message-State: ACgBeo3pq42vT49JabG2ExIJeCjo1b+reB7pXuzSiGjMcZhlvpuUl+F5
-        504MrHPph86ofKWY/zjQ+fRgNxMoR0MysE/0zcqjfP5lPn89fZJtfcLJ56p+tnDfCOwAwRN0bvS
-        KySFpYyK/kaxiqAw1dcL3H+OX
-X-Received: by 2002:a17:90b:164f:b0:1f5:4ced:ed81 with SMTP id il15-20020a17090b164f00b001f54ceded81mr27894926pjb.122.1662524020661;
-        Tue, 06 Sep 2022 21:13:40 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6tb2znMua0rzcLRn+uEQoCxTA59Ra17knzBtFeDBJjJ2A8wstPFAsHDWkW6ISWVk/3jYZOcA==
-X-Received: by 2002:a17:90b:164f:b0:1f5:4ced:ed81 with SMTP id il15-20020a17090b164f00b001f54ceded81mr27894912pjb.122.1662524020456;
-        Tue, 06 Sep 2022 21:13:40 -0700 (PDT)
-Received: from [10.72.13.171] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id w13-20020a1709027b8d00b0016c0eb202a5sm10856284pll.225.2022.09.06.21.13.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 21:13:40 -0700 (PDT)
-Message-ID: <f02e4c7a-3cbe-20dd-fdea-77dfcae7b67e@redhat.com>
-Date:   Wed, 7 Sep 2022 12:13:32 +0800
+        Wed, 7 Sep 2022 00:15:13 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133FB8274A;
+        Tue,  6 Sep 2022 21:15:11 -0700 (PDT)
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2874Em80017335;
+        Wed, 7 Sep 2022 13:14:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2874Em80017335
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662524089;
+        bh=0hTBLT8N18H/BI5SDUzZKCK5eLhcJNLu+ZRFya2Xhg8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jcefueL0JvqinQJe5NOVxG01SEwbq3bwWY/zq0BoaN7T6h+bC3QJoxNANDud3/YTC
+         IvLjMt14vtpAhyrU9Ub/nmdn0VjYgg4MTpJxpxY4cXIfo5Uceyrryejza+bl/uyY/Q
+         vX7qCduKcLcDA6kG3rh9L2+r3z4eqwneZNnP/9sWu6mfP9H29W2GywFC+VlPkxFb/d
+         8P3Z+6MPXaxviL0KpGT7cwCvRGAEBnlJmYvUyFRIohXcygTo7JiTzeSIAGBkRwIgZi
+         5xnPoxYk3L9WYXEqzE7yTlU4eIjC+NLEkjJb4SbTNS+0VP+FVzOPfPr6dcFN7+2jCe
+         ywMd18PANee6A==
+X-Nifty-SrcIP: [209.85.160.52]
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1225219ee46so33271572fac.2;
+        Tue, 06 Sep 2022 21:14:49 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1QRjjTYSn1ZONMa1GOPs832aqKPhIJ7OpOOs7DepofoFThBayG
+        gGLOyUzIHy71z+Y0AqxfjXJgKoJ0zpGw8pMU0fc=
+X-Google-Smtp-Source: AA6agR4dMRG833gu29zjUBYVXOLf9kiGqLu3V7VD2BEjRI3GOvYDJ2evaD1DM7vJ7ecszrkPYMrJQcXRuxhD4RzH+sU=
+X-Received: by 2002:a05:6808:90a:b0:34b:826c:6116 with SMTP id
+ w10-20020a056808090a00b0034b826c6116mr5927986oih.194.1662524087917; Tue, 06
+ Sep 2022 21:14:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [RFC v3 0/7] In order support for virtio_ring, vhost and vsock.
-Content-Language: en-US
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>, eperezma@redhat.com,
-        sgarzare@redhat.com, mst@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-References: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220831184408.2778264-1-ndesaulniers@google.com>
+ <20220831184408.2778264-3-ndesaulniers@google.com> <Yw+8QgtSbB2/3Eiq@dev-arch.thelio-3990X>
+ <CAK7LNASQJ-B2kRGXea-dQt+1BgEsp_aLEPS_uJb1R6FSOj1Khg@mail.gmail.com> <YxdwbKA5ThYJcPBP@dev-arch.thelio-3990X>
+In-Reply-To: <YxdwbKA5ThYJcPBP@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 7 Sep 2022 13:14:10 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASBAMRwGPH1gyt5JeBTVX3UkmC4DGkbjSxrwWFO+4+yEg@mail.gmail.com>
+Message-ID: <CAK7LNASBAMRwGPH1gyt5JeBTVX3UkmC4DGkbjSxrwWFO+4+yEg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] Makefile.compiler: Use KBUILD_AFLAGS for as-option
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Tom Rix <trix@redhat.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        X86 ML <x86@kernel.org>,
+        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/9/1 13:54, Guo Zhi 写道:
-> In virtio-spec 1.1, new feature bit VIRTIO_F_IN_ORDER was introduced.
-> When this feature has been negotiated, virtio driver will use
-> descriptors in ring order: starting from offset 0 in the table, and
-> wrapping around at the end of the table. Vhost devices will always use
-> descriptors in the same order in which they have been made available.
-> This can reduce virtio accesses to used ring.
+On Wed, Sep 7, 2022 at 1:08 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Based on updated virtio-spec, this series realized IN_ORDER prototype in virtio
-> driver and vhost. Currently IN_ORDER feature supported devices are *vhost_test*
-> and *vsock* in vhost and virtio-net in QEMU. IN_ORDER feature works well
-> combined with INDIRECT feature in this patch series.
-
-
-As stated in the previous versions, I'd like to see performance numbers. 
-We need to prove that the feature actually help for the performance.
-
-And it would be even better if we do the in-order in this order (vhost 
-side):
-
-1) enable in-order but without batching used
-2) enable in-order with batching used
-
-Then we can see how:
-
-1) in-order helps
-2) batching helps
-
-Thanks
-
-
+> On Mon, Sep 05, 2022 at 06:09:28PM +0900, Masahiro Yamada wrote:
+> > On Thu, Sep 1, 2022 at 4:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Wed, Aug 31, 2022 at 11:44:05AM -0700, Nick Desaulniers wrote:
+> > > > as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS.  This can
+> > > > cause as-option to fail unexpectedly because clang will emit
+> > > > -Werror,-Wunused-command-line-argument for various -m and -f flags for
+> > > > assembler sources.
+> > >
+> > > Now that I am looking closer at it, where does that '-Werror' come from?
+> >
+> > The related commit is
+> > c3f0d0bc5b01ad90c45276952802455750444b4f
+> >
+> > The previous discussion with Arnd is
+> > https://lore.kernel.org/linux-kbuild/20170314213724.3836900-1-arnd@arndb.de/
 >
-> Virtio driver in_order support for packed vq hasn't been done in this patch
-> series now.
->
-> Guo Zhi (7):
->    vhost: expose used buffers
->    vhost_test: batch used buffer
->    vsock: batch buffers in tx
->    vsock: announce VIRTIO_F_IN_ORDER in vsock
->    virtio: unmask F_NEXT flag in desc_extra
->    virtio: in order support for virtio_ring
->    virtio: announce VIRTIO_F_IN_ORDER support
->
->   drivers/vhost/test.c         | 16 ++++++--
->   drivers/vhost/vhost.c        | 16 ++++++--
->   drivers/vhost/vsock.c        | 13 +++++-
->   drivers/virtio/virtio_ring.c | 79 +++++++++++++++++++++++++++++++-----
->   4 files changed, 104 insertions(+), 20 deletions(-)
->
+> Right, although this is for cc-option, not as-option, no?
 
+
+
+Sorry, I misunderstood your comments.
+My reference is about -Werror in cc-option. It is unrelated to as-option.
+
+
+
+You are right.
+Currently, as-option takes KBUILD_CFLAGS instead of KBUILD_AFLAGS.
+
+The '-Werror,' of -Werror,-Wunused-command-line-argument
+presumably came from CONFIG_WERROR.
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

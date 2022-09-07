@@ -2,169 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D820B5B090F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05565B0923
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiIGPqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S229786AbiIGPsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiIGPqM (ORCPT
+        with ESMTP id S229586AbiIGPsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:46:12 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9DB86FFB
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:46:11 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id u22so14948939plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:46:11 -0700 (PDT)
+        Wed, 7 Sep 2022 11:48:15 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10809B9F9B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:48:11 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d2so3985256wrn.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=o4ouWFzrxI306Mkvi1g00iFUOC1Xlx6br+pck/+37ak=;
-        b=bQjsydOBwSpAY7GCFbmwkmz20KF84ENWHERlpNxAfBYZ7FGRTHIX45ObOZNpcvPfPq
-         WtebGvv117RbX8FoXmqUjbanzwFJA3BbGbQeW8knzSeBolzxdgrijwlFahBY6yE/cdeB
-         SPSXmE39pQbfdfoS4ISYszBIYoSxFpx2tgt4Q=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=JTKHE/mFfLQpKZtovEaQfx9ypT3LHElNlUe4JnUW+14=;
+        b=WAsZiFgX+fq4TgLbLKr1C2FPzy0zzLEBiLGhl7S10aI8B0ejD7vbYjtqDhvYDJa+pq
+         PwrI9N/oSp4hcM4LN9fCMzDwBq1+dkcniJuvhnsFiZarDf7DC8bcF7vuSWsy39sjh90O
+         Dfn8uE41jAcGdO3HapuR782JId+uUmYm+6U2vbqg2YK8/9G2QCzVS1kV8HQfswKKfUlw
+         1wG4my2b8huUlHI/VocGop8xusQkcOI1r9jhAqLUCsEcFWRv/sXpPknUrY0ckyNsdK9M
+         9e9+/nkcCXAa69f4f4O0HmDmNaUGk0IeyrWptGlPZkzGxun3nJ9/gaQEbMI0xqfh4qfV
+         2ZwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=o4ouWFzrxI306Mkvi1g00iFUOC1Xlx6br+pck/+37ak=;
-        b=VeXw5NoNAY118KbF4mJ+s18sJDjOBfaAjwnhsh8uc8vNnt0/2+in+yoGGsZECKs7x3
-         GKz+EIoUKnUI0AWX/VEAqqYUUdwm69bcz4wWNvOgQFlutG+lmErr5Fbp2l8yfKfsyN9H
-         7OzUGKhh/S0IKYeY3DOduRML02Yez/zHvuEJDOSsVMNMZO+OT+nG4/vhlHAYhcTkLsog
-         wCnlxQS7oGTF5a3vLPsCJ/ABDyemgf5VahQaP783sRb4U5go6IgIbPNfPAXi5yQO8gBa
-         DkhB6Z2PszrNjmK5q3HpfXzA42AkrKS6dyrw1S/T4xzF4kICAQzNdAuxUDyVuYk94Jiz
-         iMdw==
-X-Gm-Message-State: ACgBeo1z6ZbmSP++6ir1180ILLAVVyAPwEFguHjhCyziRA0Z17VkZEGI
-        zvmS7upyL1M+Ec4dBa99g1UUP/HI1szcMw==
-X-Google-Smtp-Source: AA6agR4AMLfYmQ/6XnBmEodJgHE0lJ47tpNnT7FEi3eCWWn3qhk3bqkquCUtVFw17urR6r8Qm/afPg==
-X-Received: by 2002:a17:903:204b:b0:176:a6c5:4277 with SMTP id q11-20020a170903204b00b00176a6c54277mr4415234pla.24.1662565571171;
-        Wed, 07 Sep 2022 08:46:11 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:7731:4d19:a7d1:20d])
-        by smtp.gmail.com with UTF8SMTPSA id be7-20020a656e47000000b0041a716cec9esm10595529pgb.62.2022.09.07.08.46.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 08:46:09 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 08:46:06 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Judy Hsiao <judyhsiao@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
-        Judy Hsiao <judyhsiao@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Fix Dmic no sound on
- villager-r1
-Message-ID: <Yxi8vnmtowA83WLm@google.com>
-References: <20220826065621.2255795-1-judyhsiao@chromium.org>
- <CAD=FV=VrgrvJb_sJ8AO6pN8dRNXzzOJ9WvngeJrtVYw_wD1Akg@mail.gmail.com>
- <Yw07xSlVpQcXDqe7@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=JTKHE/mFfLQpKZtovEaQfx9ypT3LHElNlUe4JnUW+14=;
+        b=Ul4Oa+sI5KfafIxgwz/mCpZ7M9JvEQQKX3I4U9nQLUqqPo5XhzwqZlfmuiMrEC577w
+         bI1Czm3PeNskof82J+T2UOn2cnxBkaXpsip2hiL3TUF0SEup9OZdud0xnl3mknOakOeJ
+         eOKp8lSnIf9AJOKP8neOEr06MqfHMXWR6Jt8tyuBTVfIYRkwODnSC5oO9gr0DstibOUO
+         +DuzgkpnjRot7Nb0W7b3ZYWc0QdU2PXX5keI5xI2xPlJ7/JObXOr0FHYTTDuMREwC5QS
+         rReW+fma0ZsWma9vv2Yx06y0+9/2T6sLZ7kOpnZOFv/W44NkM8IEEmwVIrTP1VNq7ilI
+         cM5g==
+X-Gm-Message-State: ACgBeo3RnIKV1h+EqDUT2L6WHkl++3e8HCU2tDZyImRXH8JMlQ25hhLs
+        KkjifYHKKkN7OgpRm3E2gn1EtTwcHNu/PYHwaGlnrQ==
+X-Google-Smtp-Source: AA6agR6svjr5kCW9JMi5qqKrWFsmgmj9cfash5uryDYATh7wRkTgMyGmvfsaiACCUup2oI4IwUoDACFRH5ioOWAE1r0=
+X-Received: by 2002:a5d:64a8:0:b0:226:f3f3:9914 with SMTP id
+ m8-20020a5d64a8000000b00226f3f39914mr2416185wrp.343.1662565689640; Wed, 07
+ Sep 2022 08:48:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yw07xSlVpQcXDqe7@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220907071203.2729746-1-namhyung@kernel.org>
+In-Reply-To: <20220907071203.2729746-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 7 Sep 2022 08:47:57 -0700
+Message-ID: <CAP-5=fXyY_aGYW4R-PZvzG3FiTtHvLfS+s9bp_oCQUaRCGrcwg@mail.gmail.com>
+Subject: Re: [PATCH v3] perf test: Skip sigtrap test on old kernels
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Marco Elver <elver@google.com>,
+        Song Liu <song@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 03:20:53PM -0700, Matthias Kaehlcke wrote:
-> On Fri, Aug 26, 2022 at 10:14:58AM -0700, Doug Anderson wrote:
-> > Hi,
-> > 
-> > On Thu, Aug 25, 2022 at 11:56 PM Judy Hsiao <judyhsiao@chromium.org> wrote:
-> > >
-> > > Fix the DMIC no sound issue of villager-r1 by using "PP1800_L2C" as the
-> > > DMIC power source to match the hardware schematic.
-> > >
-> > > This patch:
-> > >    1. set vdd-micb-supply to PP1800_L2C as the MIC Bias voltage regulator.
-> > >    2. In audio-routing, set VA DMIC01~VA DMIC03 to use the vdd-micb-supply
-> > >       setting.
-> > >
-> > > Co-developed-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> > > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> > > Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
-> > > ---
-> > > Changes since V3:
-> > >   -- Update the commit message and fix extra blank line.
-> > > Changes since V2:
-> > >   -- Update the commit message.
-> > > Changes since V1:
-> > >   -- Update the commit message.
-> > >
-> > > This patch depends on:
-> > > arm64: dts: qcom: sc7280: Add herobrine-villager-r1. [1]
-> > >
-> > > [1] https://patchwork.kernel.org/patch/12929106
-> > 
-> > After applying your [1] then your patch applies without merge
-> > conflicts. However, it still doesn't compile. You also depend on
-> > whatever patch adds the nodes "lpass_va_macro" and "sound" since
-> > you're referencing them in your patch. I haven't been keeping track of
-> > the latest status of all the audio patches, so I myself can't point to
-> > exactly what patches you depend on and whether those patches are ready
-> > to land.
-> > 
-> > In any case, the contents of this patch seem OK assuming the dependent
-> > patches cause something that looks like the current (downstream)
-> > chromeos-5.15 tree.
-> > 
-> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> To my best knowledge the dependencies of the audio mess are (roughly in
-> order):
-> 
-> Add support for audio clock gating resets for SC7280 (v8)
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=671887
->   ready to land? (patch 2 has a minor comment about SoB tag)
+On Wed, Sep 7, 2022 at 12:12 AM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> If it runs on an old kernel, perf_event_open would fail because of the
+> new fields sigtrap and sig_data.  Just skipping the test could miss an
+> actual bug in the kernel.
+>
+> Let's check BTF if it has the perf_event_attr.sigtrap field.
+>
+> Cc: Marco Elver <elver@google.com>
+> Acked-by: Song Liu <song@kernel.org>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> * move #include under #ifdef
+> * return true when BPF is not supported
+> * update comment
+>
+>  tools/perf/tests/sigtrap.c | 50 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 49 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> index e32ece90e164..cdf75eab6a8a 100644
+> --- a/tools/perf/tests/sigtrap.c
+> +++ b/tools/perf/tests/sigtrap.c
+> @@ -54,6 +54,48 @@ static struct perf_event_attr make_event_attr(void)
+>         return attr;
+>  }
+>
+> +#ifdef HAVE_BPF_SKEL
+> +#include <bpf/btf.h>
+> +
+> +static bool attr_has_sigtrap(void)
+> +{
+> +       bool ret = false;
+> +       struct btf *btf;
+> +       const struct btf_type *t;
+> +       const struct btf_member *m;
+> +       const char *name;
+> +       int i, id;
+> +
+> +       btf = btf__load_vmlinux_btf();
+> +       if (btf == NULL) {
+> +               /* should be an old kernel */
+> +               return false;
+> +       }
+> +
+> +       id = btf__find_by_name_kind(btf, "perf_event_attr", BTF_KIND_STRUCT);
+> +       if (id < 0)
+> +               goto out;
+> +
+> +       t = btf__type_by_id(btf, id);
+> +       for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
+> +               name = btf__name_by_offset(btf, m->name_off);
+> +               if (!strcmp(name, "sigtrap")) {
+> +                       ret = true;
+> +                       break;
+> +               }
+> +       }
+> +out:
+> +       btf__free(btf);
+> +       return ret;
+> +}
+> +#else  /* !HAVE_BPF_SKEL */
+> +static bool attr_has_sigtrap(void)
+> +{
+> +       /* to maintain current behavior */
 
-The comment has been addressed in v9:
+nit: I don't think this comment will age well and the behavior of the
+function is a bit counterintuitive. Perhaps:
 
-https://patchwork.kernel.org/project/linux-arm-msm/list/?series=673055
+/* If we don't have libbpf then guess we're on a newer kernel with
+sigtrap support. This will mean the test will fail on older kernels.
+*/
 
-So it seems all the audio bits should be ready to land.
-
-Satya: please make sure to include change logs in all future patches to
-help reviewers understand what changed in each version.
-
-> Add DT support for audio clock gating resets for SC7280 (v4)
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=666480
->   ready to land after dependencies land
-> 
-> Add soundcard support for sc7280 based platforms (v14)
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=657417
->   ready to land after dependencies land
-> 
-> Add dtsi for sc7280 herobrine boards that using rt5682 codec (v3)
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=644812
->   ready to land after dependencies land
-> 
-> Add new board revision and LTE SKUs for sc7280-villager family (v8)
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=663014
->   ready to land after dependencies land
-> 
-> arm64: dts: qcom: sc7280: Fix Dmic no sound on villager-r1 (v4)
-> https://patchwork.kernel.org/project/linux-arm-msm/patch/20220826065621.2255795-1-judyhsiao@chromium.org/
->   ready to land after dependencies land
-> 
-> So it looks like things are generally ready to land, unless [1] needs a
-> re-spin to fix the SoB tag.
-> 
-> m.
-> 
-> [1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1661754153-14813-3-git-send-email-quic_c_skakit@quicinc.com/
+> +       return true;
+> +}
+> +#endif  /* HAVE_BPF_SKEL */
+> +
+>  static void
+>  sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
+>  {
+> @@ -139,7 +181,13 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+>
+>         fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+>         if (fd < 0) {
+> -               pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
+> +               if (attr_has_sigtrap()) {
+> +                       pr_debug("FAILED sys_perf_event_open(): %s\n",
+> +                                str_error_r(errno, sbuf, sizeof(sbuf)));
+> +               } else {
+> +                       pr_debug("perf_event_attr doesn't have sigtrap\n");
+> +                       ret = TEST_SKIP;
+> +               }
+>                 goto out_restore_sigaction;
+>         }
+>
+> --
+> 2.37.2.789.g6183377224-goog
+>

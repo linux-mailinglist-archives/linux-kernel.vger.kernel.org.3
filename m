@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AFA5B0159
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D995B0161
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 12:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiIGKK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 06:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        id S230078AbiIGKLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 06:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiIGKKz (ORCPT
+        with ESMTP id S229962AbiIGKLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 06:10:55 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DA04DB32
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 03:10:54 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MMyg42hXcz67vlM;
-        Wed,  7 Sep 2022 18:10:08 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Wed, 7 Sep 2022 12:10:51 +0200
-Received: from [10.202.227.197] (10.202.227.197) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Sep 2022 11:10:51 +0100
-Message-ID: <ba82816c-3d43-4256-17d7-bd3d358e942b@huawei.com>
-Date:   Wed, 7 Sep 2022 11:10:50 +0100
+        Wed, 7 Sep 2022 06:11:08 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C094C9D648;
+        Wed,  7 Sep 2022 03:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=JzTlhZoQdTgX29JObm/3zifLoY6nLpvd+jv0OT7bzL4=; b=1Sj6h/MjqhU9ZV5YQpYpYz1rRL
+        gghVXCoasUgdI4s9yI2MYjF6HqYu7ALRxdNG9f2BoG8CdX/VVJoViChosaF4WGuh34Gnbg+zD/4qw
+        rWA0tbkSaW8VKmDq/zfEfnRybv18Fl6hcz3KUtqc6Xu5d0REY+YsJiY2Rby6IENOUsuecIPvtRy4e
+        akpwkAnqG5qAdFot3Z5KJwOfB47ypDqEcjPfXNQJDffei3C3J7KaoKvLD24ER8L56gDX/LPuVzTDE
+        q3QhgUesgddcWWBPfyer/AuTyruMZNLDhldJ/mU5IOutTyXxyes1SwTb4fsxtDkk+TFSpToAABjc+
+        uVmJUq7g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34172)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oVs1M-0005Ei-5y; Wed, 07 Sep 2022 11:11:00 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oVs1K-0000ti-7K; Wed, 07 Sep 2022 11:10:58 +0100
+Date:   Wed, 7 Sep 2022 11:10:58 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next v5 5/8] net: phylink: Adjust link settings based
+ on rate adaptation
+Message-ID: <YxhuMjZsBb7wCBFy@shell.armlinux.org.uk>
+References: <20220906161852.1538270-1-sean.anderson@seco.com>
+ <20220906161852.1538270-6-sean.anderson@seco.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 1/2] iova: Remove some magazine pointer NULL checks
-To:     Ethan Zhao <haifeng.zhao@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
-        <will@kernel.org>
-CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>
-References: <1662369083-238529-1-git-send-email-john.garry@huawei.com>
- <1662369083-238529-2-git-send-email-john.garry@huawei.com>
- <1d80f56c-bef7-6e5f-0bca-dad35f5e5a8e@linux.intel.com>
- <3fa23318-6fa7-eba0-30b8-1fb71e6c327e@huawei.com>
- <555fa5aa-a575-d783-dc97-79f63dcf2f57@arm.com>
- <cc950d77-2a97-ac75-4a1d-19aaf864a3be@huawei.com>
- <ad67a859-dc57-e30f-e422-3f9a0cb5239b@arm.com>
- <ef7622de-c1f3-c6cd-a50e-bbcbf8288b64@huawei.com>
- <a9f959ed-b528-681d-f941-d615360c0be3@linux.intel.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <a9f959ed-b528-681d-f941-d615360c0be3@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.227.197]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906161852.1538270-6-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +66,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 10:58, Ethan Zhao wrote:
+On Tue, Sep 06, 2022 at 12:18:49PM -0400, Sean Anderson wrote:
+> @@ -1015,19 +1086,45 @@ static void phylink_link_up(struct phylink *pl,
+>  			    struct phylink_link_state link_state)
+>  {
+>  	struct net_device *ndev = pl->netdev;
+> +	int speed, duplex;
+> +	bool rx_pause;
+> +
+> +	speed = link_state.speed;
+> +	duplex = link_state.duplex;
+> +	rx_pause = !!(link_state.pause & MLO_PAUSE_RX);
+> +
+> +	switch (link_state.rate_adaptation) {
+> +	case RATE_ADAPT_PAUSE:
+> +		/* The PHY is doing rate adaption from the media rate (in
+> +		 * the link_state) to the interface speed, and will send
+> +		 * pause frames to the MAC to limit its transmission speed.
+> +		 */
+> +		speed = phylink_interface_max_speed(link_state.interface);
+> +		duplex = DUPLEX_FULL;
+> +		rx_pause = true;
+> +		break;
+> +
+> +	case RATE_ADAPT_CRS:
+> +		/* The PHY is doing rate adaption from the media rate (in
+> +		 * the link_state) to the interface speed, and will cause
+> +		 * collisions to the MAC to limit its transmission speed.
+> +		 */
+> +		speed = phylink_interface_max_speed(link_state.interface);
+> +		duplex = DUPLEX_HALF;
+> +		break;
+> +	}
+>  
+>  	pl->cur_interface = link_state.interface;
+> +	if (link_state.rate_adaptation == RATE_ADAPT_PAUSE)
+> +		link_state.pause |= MLO_PAUSE_RX;
 
-Hi Ethan,
+I specifically omitted this from my patch because I don't think we
+should tell the user that "Link is Up - ... - flow control rx" if
+we have rate adaption, but the media link is not using flow control.
 
->> Or also add this:
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index 0d6d8edf782d..e8f0b8f47f45 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -578,6 +578,12 @@ static int iommu_dma_init_domain(struct 
->> iommu_domain *domain, dma_addr_t base,
->>              goto done_unlock;
->>          }
->>
->> +        if (!iovad->rcaches) {
->> +            pr_warn("IOVA domain rcache not properly initialised\n");
->> +            ret = -EFAULT;
->> +            goto done_unlock;
->> +        }
->> +
->>          ret = 0;
->>          goto done_unlock;
->>
-> If the iovad->rcaches allocation failed, will skip iommu domain dma ops, 
-> so no need *any* iovad,->rcaches check, right ?
-> 
-> and there is already warning about the fallback.
+The "Link is Up" message tells the user what was negotiated on the
+media, not what is going on inside their network device, so the
+fact we're using rate adaption which has turned on RX pause on the
+MAC is neither here nor there.
 
-It's not as simple as that. We use the iovad->start_pfn member as a flag 
-for the IOVA domain being initialized. However that does not mean always 
-properly initialized. As above, the rcache init may fail, but in this 
-case we still set start_pfn.
+>  
+>  	if (pl->pcs && pl->pcs->ops->pcs_link_up)
+>  		pl->pcs->ops->pcs_link_up(pl->pcs, pl->cur_link_an_mode,
+> -					 pl->cur_interface,
+> -					 link_state.speed, link_state.duplex);
+> +					  pl->cur_interface, speed, duplex);
 
-This comes into play when we have multiple devices in the same IOMMU 
-group, for example, as I mentioned yesterday.
+It seems you have one extra unnecessary space here - not sure how
+that occurred as it isn't in my original patch.
 
-Thanks,
-John
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

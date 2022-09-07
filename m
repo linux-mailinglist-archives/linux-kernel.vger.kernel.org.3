@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD735AFFAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355DD5AFFA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 10:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiIGIx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 04:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
+        id S230238AbiIGIxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 04:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiIGIxf (ORCPT
+        with ESMTP id S230237AbiIGIxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:53:35 -0400
+        Wed, 7 Sep 2022 04:53:32 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCA2B08A6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:53:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6D7B07D7
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 01:53:20 -0700 (PDT)
 Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2876sQ68005118;
-        Wed, 7 Sep 2022 03:53:06 -0500
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2876sQ69005118;
+        Wed, 7 Sep 2022 03:53:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=PfmUESLoYKijI4XQrGK3nArMP4Gz6y3F+JkaqLCDJWE=;
- b=oGqNS83JXUjOBuJqf5qkW2p/oJARAReQDGBKgwOX+8B7ecwNKV6L06s3vaps46+EGHMW
- APr5BBOagmMFjUKH5i/jHV7ufS1cFFH+6117FmqF780RGoSxFhtlXYfA8h8nfF0XIAv4
- UkxI6z+B8+xDIFnJ/Eoun8GVYhvV3YvBClmx5lu5FkbMAYmSrE2Ae7uU6tIVZeoFEpI9
- z5ibicYZ+NZ4qpKjfUpu2IKIoF9fuhvvV3lxBfRYd+LG1tJduekx+33jzn1Cj1uJJjiP
- rTAsYR4j0Yz3ZcEHS95uL/csknneEaZX4KPEsnrlSX9ts6NSUvSTv1GX99C5kfWjEJZH oQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jc4b2dcun-1
+ bh=t+rkmWKhbw2VsiGIx98OXne4OR4T75WeNsHgfR4luRs=;
+ b=fWIjgIIS2SlZ0v+x8Y9cZQlhmav8waPc+7EQ11zbQHcv2jxTRt0yoASp0oln4bJt9d/y
+ HBoEeMxv2VmZNPuN+bo+V9dJ1YaSxt1WMBnHm3gXad8ENN+HWtuGSK1rH/HPOm1Lzz0E
+ ZzsGds005Y0dT+5ovsh5X8HcO/2nS+TdOZG5cxkMkgX0i4QmDSo3hdxgiuHoOkWXWr7s
+ 4zQME3PTVjooKB6fPGExHVlIFoEKinI2S+WfOo3Kr3AgEtCXAiUwdmSpl5T6I+Q4Dals
+ 4l5WC72330CDZKWmZCseAaI7QAetQ/5gY78blj4yvM6KQa1FQ7XGVDoluYljAry9wGhZ NQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jc4b2dcum-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Sep 2022 03:53:06 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 07 Sep 2022 03:53:07 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Wed, 7 Sep
- 2022 03:53:04 -0500
+ 2022 03:53:05 -0500
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.12 via Frontend
- Transport; Wed, 7 Sep 2022 03:53:04 -0500
+ Transport; Wed, 7 Sep 2022 03:53:05 -0500
 Received: from debianA11184.ad.cirrus.com (unknown [198.61.65.149])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 4CE86B06;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AC3937C;
         Wed,  7 Sep 2022 08:53:04 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
@@ -47,17 +47,17 @@ To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
 CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v2 3/5] soundwire: bus: Don't re-enumerate before status is UNATTACHED
-Date:   Wed, 7 Sep 2022 09:52:57 +0100
-Message-ID: <20220907085259.3602-4-rf@opensource.cirrus.com>
+Subject: [PATCH v2 4/5] soundwire: cadence: Fix lost ATTACHED interrupts when enumerating
+Date:   Wed, 7 Sep 2022 09:52:58 +0100
+Message-ID: <20220907085259.3602-5-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220907085259.3602-1-rf@opensource.cirrus.com>
 References: <20220907085259.3602-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: JZPYbelKH_jA9kRsykD8Pw5b5eZK0BSe
-X-Proofpoint-ORIG-GUID: JZPYbelKH_jA9kRsykD8Pw5b5eZK0BSe
+X-Proofpoint-GUID: 7da_1ldsMNPl-OTEaDdYfpFUHjAgr7Ee
+X-Proofpoint-ORIG-GUID: 7da_1ldsMNPl-OTEaDdYfpFUHjAgr7Ee
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -68,55 +68,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't re-enumerate a peripheral on #0 until we have seen and
-handled an UNATTACHED notification for that peripheral.
+The correct way to handle interrupts is to clear the bits we
+are about to handle _before_ handling them. Thus if the condition
+then re-asserts during the handling we won't lose it.
 
-Without this, it is possible for the UNATTACHED status to be missed
-and so the slave->status remains at ATTACHED. If slave->status never
-changes to UNATTACHED the child driver will never be notified of the
-UNATTACH, and the code in sdw_handle_slave_status() will skip the
-second part of enumeration because the slave->status has not changed.
+This patch changes cdns_update_slave_status_work() to do this.
 
-This scenario can happen because PINGs are handled in a workqueue
-function which is working from a snapshot of an old PING, and there
-is no guarantee when this function will run.
+The previous code cleared the interrupts after handling them.
+The problem with this is that when handling enumeration of devices
+the ATTACH statuses can be accidentally cleared and so some or all
+of the devices never complete their enumeration.
 
-A peripheral could report attached in the PING being handled by
-sdw_handle_slave_status(), but has since reverted to device #0 and is
-then found in the loop in sdw_program_device_num(). Previously the
-code would not have updated slave->status to UNATTACHED because it had
-not yet handled a PING where that peripheral had UNATTACHED.
+Thus we can have a situation like this:
+- one or more devices are reverting to ID #0
 
-This situation happens fairly frequently with multiple peripherals on
-a bus that are intentionally reset (for example after downloading
-firmware).
+- accumulated status bits indicate some devices attached and some
+  on ID #0. (Remember: status bits are sticky until they are handled)
+
+- Because of device on #0 sdw_handle_slave_status() programs the
+  device ID and exits without handling the other status, expecting
+  to get an ATTACHED from this reprogrammed device.
+
+- The device immediately starts reporting ATTACHED in PINGs, which
+  will assert its CDNS_MCP_SLAVE_INTSTAT_ATTACHED bit.
+
+- cdns_update_slave_status_work() clears INTSTAT0/1. If the initial
+  status had CDNS_MCP_SLAVE_INTSTAT_ATTACHED bit set it will be
+  cleared.
+
+- The ATTACHED change for the device has now been lost.
+
+- cdns_update_slave_status_work() clears CDNS_MCP_INT_SLAVE_MASK so
+  if the new ATTACHED state had set it, it will be cleared without
+  ever having been handled.
+
+Unless there is some other state change from another device to cause
+a new interrupt, the ATTACHED state of the reprogrammed device will
+never cause an interrupt so its enumeration will not be completed.
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
- drivers/soundwire/bus.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/soundwire/cadence_master.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 1cc858b4107d..6e569a875a9b 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -773,6 +773,16 @@ static int sdw_program_device_num(struct sdw_bus *bus)
- 			if (sdw_compare_devid(slave, id) == 0) {
- 				found = true;
+diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
+index 245191d22ccd..3acd7b89c940 100644
+--- a/drivers/soundwire/cadence_master.c
++++ b/drivers/soundwire/cadence_master.c
+@@ -954,9 +954,22 @@ static void cdns_update_slave_status_work(struct work_struct *work)
+ 	u32 device0_status;
+ 	int retry_count = 0;
  
-+				/*
-+				 * To prevent skipping state-machine stages don't
-+				 * program a device until we've seen it UNATTACH.
-+				 * Must return here because no other device on #0
-+				 * can be detected until this one has been
-+				 * assigned a device ID.
-+				 */
-+				if (slave->status != SDW_SLAVE_UNATTACHED)
-+					return 0;
++	/*
++	 * Clear main interrupt first so we don't lose any assertions
++	 * the happen during this function.
++	 */
++	cdns_writel(cdns, CDNS_MCP_INTSTAT, CDNS_MCP_INT_SLAVE_MASK);
 +
- 				/*
- 				 * Assign a new dev_num to this Slave and
- 				 * not mark it present. It will be marked
+ 	slave0 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT0);
+ 	slave1 = cdns_readl(cdns, CDNS_MCP_SLAVE_INTSTAT1);
+ 
++	/*
++	 * Clear the bits before handling so we don't lose any
++	 * bits that re-assert.
++	 */
++	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT0, slave0);
++	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT1, slave1);
++
+ 	/* combine the two status */
+ 	slave_intstat = ((u64)slave1 << 32) | slave0;
+ 
+@@ -964,8 +977,6 @@ static void cdns_update_slave_status_work(struct work_struct *work)
+ 
+ update_status:
+ 	cdns_update_slave_status(cdns, slave_intstat);
+-	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT0, slave0);
+-	cdns_writel(cdns, CDNS_MCP_SLAVE_INTSTAT1, slave1);
+ 
+ 	/*
+ 	 * When there is more than one peripheral per link, it's
+@@ -1001,8 +1012,7 @@ static void cdns_update_slave_status_work(struct work_struct *work)
+ 		}
+ 	}
+ 
+-	/* clear and unmask Slave interrupt now */
+-	cdns_writel(cdns, CDNS_MCP_INTSTAT, CDNS_MCP_INT_SLAVE_MASK);
++	/* unmask Slave interrupt now */
+ 	cdns_updatel(cdns, CDNS_MCP_INTMASK,
+ 		     CDNS_MCP_INT_SLAVE_MASK, CDNS_MCP_INT_SLAVE_MASK);
+ 
 -- 
 2.30.2
 

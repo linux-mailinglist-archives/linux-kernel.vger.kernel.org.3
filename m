@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094DA5B0B09
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5494D5B0B0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiIGRGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
+        id S229929AbiIGRHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiIGRGS (ORCPT
+        with ESMTP id S229914AbiIGRHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:06:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA0C816A5;
-        Wed,  7 Sep 2022 10:06:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFFD561983;
-        Wed,  7 Sep 2022 17:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54917C433D7;
-        Wed,  7 Sep 2022 17:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662570376;
-        bh=F1wAayePl19lX2NW3Il3ocArXwd0RnPJMXZ8uZajO1k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=awLJ3NNm2Rrsu06vfyEeS6g54TPofZkCIv4iyLyM469FCHpdzipzIIsxvzR3bqTx2
-         XeaAlsJO+Q7Gm7Aibxx4FnUJPTLjUvmbSnxUas0vLkPUqkVjsHmxRIEJ/0P9BK4ZsH
-         SwfOXzI9V09ykXih0bYSLdc4O1PctaSvh0TT2kvVzR/FNhOuSI6HjIyI168wjDUCb5
-         2Q4Jjv95V3IsM6zD4j1QgldP42dHu8Yg+EnRQe0B0evcrNtlfiMv4bLHKsb0s8oiBD
-         Hg/Lj+19VBbKraYE7oLCZKp5Wq7+PG9sFZdAjwbSfTNnQCw0gEAOgYG/gbnp+D+XxN
-         /ev2gwsF2+kKA==
-Date:   Wed, 7 Sep 2022 18:06:06 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devel@acpica.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v1 7/8] spi: pxa2xx: Refactor _UID handling to use
- acpi_dev_uid_to_integer()
-Message-ID: <YxjPfrUvWgcmcyYM@sirena.org.uk>
-References: <20220907164606.65742-1-andriy.shevchenko@linux.intel.com>
- <20220907164606.65742-8-andriy.shevchenko@linux.intel.com>
+        Wed, 7 Sep 2022 13:07:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A815DBCC11
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:07:34 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 287Cg1gj004775;
+        Wed, 7 Sep 2022 17:07:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0/KlPU3QXt39cBh1I0TvE7ncz/Tx0KYVcjqAURUksTw=;
+ b=CyIdTAqjbokgyycHhKUX4qKsKnU1m0Z2OWlfYRpA0dMG6tsWFOR8LF47vf9z0R5rcWUX
+ 6FPAi+ZijsCnYpDWiq5E3VuBZXnqlz/A1yZvPBr9BAy62wJh8HzbTs9jru2PrdMM+wTn
+ AFyUA6LG/Wq21c7s4jBVs6k05sdPVq6TrgQeQgasHKgA/I95pENPQ8Fybm5ozU50m+o2
+ D8Wtvh8UsPuy8BtXLH7iU23c3ZHqIHN2Hk98qpQc71n38CX+quZqLS4lQwfNKVj9YiEK
+ OvRj0Imd8XOxw8W/QzcGRGadq7S0dZFeucbvikDAHpjAPfuRx1YU/UP3ljJoUwHxdneA yQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jenmjt9a5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Sep 2022 17:07:19 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 287H7IUx024100
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Sep 2022 17:07:18 GMT
+Received: from [10.110.17.89] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 7 Sep 2022
+ 10:07:18 -0700
+Message-ID: <d1950d7d-fc23-6195-4e07-fa2ae2893d45@quicinc.com>
+Date:   Wed, 7 Sep 2022 10:07:17 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rIhaezhX0J6qlQbz"
-Content-Disposition: inline
-In-Reply-To: <20220907164606.65742-8-andriy.shevchenko@linux.intel.com>
-X-Cookie: You have a truly strong individuality.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [mani-mhi:mhi-next 2/3]
+ drivers/bus/mhi/host/pci_generic.c:734:60: error: assignment of member 'irq'
+ in read-only object
+Content-Language: en-US
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        kernel test robot <lkp@intel.com>
+CC:     <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>
+References: <202209072144.lWoBySRH-lkp@intel.com>
+ <20220907164506.GA499781@thinkpad>
+ <f5d17990-ec36-e930-be33-e2566b9c0593@quicinc.com>
+In-Reply-To: <f5d17990-ec36-e930-be33-e2566b9c0593@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: T60Cmgz9Ac5HhlxKQYevOFN3L4FCpstI
+X-Proofpoint-ORIG-GUID: T60Cmgz9Ac5HhlxKQYevOFN3L4FCpstI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-07_08,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 impostorscore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0 adultscore=0
+ phishscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2209070066
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,30 +83,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/7/2022 9:56 AM, Jeff Johnson wrote:
+> On 9/7/2022 9:45 AM, Manivannan Sadhasivam wrote:
+>> On Wed, Sep 07, 2022 at 09:47:42PM +0800, kernel test robot wrote:
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git 
+>>> mhi-next
+>>> head:   0a3b31f6259f4849e4e93731d4c8d7910be072a7
+>>> commit: 4a98958ca237a4b7974ea1ec2092b3666bdd26ab [2/3] bus: mhi: 
+>>> host: make mhi_controller_config::event_cfg const
+>>> config: i386-randconfig-a001 
+>>> (https://download.01.org/0day-ci/archive/20220907/202209072144.lWoBySRH-lkp@intel.com/config)
+>>> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+>>> reproduce (this is a W=1 build):
+>>>          # 
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git/commit/?id=4a98958ca237a4b7974ea1ec2092b3666bdd26ab
+>>>          git remote add mani-mhi 
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi.git
+>>>          git fetch --no-tags mani-mhi mhi-next
+>>>          git checkout 4a98958ca237a4b7974ea1ec2092b3666bdd26ab
+>>>          # save the config file
+>>>          mkdir build_dir && cp config build_dir/.config
+>>>          make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+>>>
+>>> If you fix the issue, kindly add following tag where applicable
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> All errors (new ones prefixed by >>):
+>>>
+>>>     drivers/bus/mhi/host/pci_generic.c: In function 'mhi_pci_get_irqs':
+>>>>> drivers/bus/mhi/host/pci_generic.c:734:60: error: assignment of 
+>>>>> member 'irq' in read-only object
+>>>       734 |                         
+>>> mhi_cntrl_config->event_cfg[i].irq = 0;
+>>
+>> Ah, so this is why I didn't make it constant in the first place...
+>> Dropped the patch now.
+>>
+>> Thanks,
+>> Mani
+> 
+> I believe it should be const in the MHI config, but in this case the 
+> declaration in drivers/bus/mhi/host/pci_generic.c can't be const.
+> 
+> Let me respin the patch with this in mind.
+> 
 
---rIhaezhX0J6qlQbz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+NM, just drop it. Too much pain for the little gain I was hoping for in 
+the ath drivers :)
 
-On Wed, Sep 07, 2022 at 07:46:05PM +0300, Andy Shevchenko wrote:
-> ACPI utils provide acpi_dev_uid_to_integer() helper to extract _UID as
-> an integer. Use it instead of custom approach.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---rIhaezhX0J6qlQbz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMYz30ACgkQJNaLcl1U
-h9C4hwf+I1R22kTr87UlgwkXp1bqqvfIyM2oREtcbqJndf12eBGzk88I/GnXWLSb
-fg1DfB0VQ1bcw6N+8RCbNofKm/wt19D604DGOgLExTdvrgY9dYay6EZc4TzIoW81
-LXJTrROsePKWY5T0nozzJwgOnMzWoSjUSAiVl+vdsI6nbonhzsGGfEpbwgQoypfH
-Q36k3K9RT94nyRU9SuuWUNyBsGr2bfzgH+Y3JC1QgjvCHA75w8gUzJqsQMFxHGkn
-A8dfZ6ztJxyvDlqpPUGXDhvcdGyVpcSzmLUEp5l8DVOSxvroS46Sn9mHTZlD0Qwq
-VmF6MdSM9OUZPGVH2vhXMO2YBtw6dA==
-=wys+
------END PGP SIGNATURE-----
-
---rIhaezhX0J6qlQbz--

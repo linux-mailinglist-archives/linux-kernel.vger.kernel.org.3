@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23D15B0F33
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D24C5B0F35
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 23:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiIGVdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 17:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S230195AbiIGVed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 17:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiIGVdj (ORCPT
+        with ESMTP id S229982AbiIGVea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 17:33:39 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D283C1219
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:33:38 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id d18-20020a9d72d2000000b0063934f06268so11160644otk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 14:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date;
-        bh=QscqM0nV84svG7WCGc8n2xoost3b0ICJjoMuYYPkgIg=;
-        b=l97wHQLTtkoC2yyIythJfrgytAdirbzW+UXcePOcQqT8dD1nyb2Orof9p/7oMQ9ElD
-         tGJZ8qoD+j4jh3drrCMeXTNRJZggeV2RWHeaZ0hG0dFTTMuK9JY6Tk3/+LD16B+21Pye
-         TxaXPNmWr68NJFbOPfTIhJATk5usDAC2SYpEE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=QscqM0nV84svG7WCGc8n2xoost3b0ICJjoMuYYPkgIg=;
-        b=tBrLngEUAaYuxkaXGvx0jrX+9Fwqvn4q3LXwsOeppbg3AftCY3u8hpxtWlk+BJcSyh
-         mfVAjcutKjhvoTEXaQvwTFzhS2WaoVjbxgEi6kGeO4M5TogS6cahrhKwSiS6oBwSi9Bv
-         CEZDZMJD5iEzlLEme61fkA6jnCWEuEv0QuU/viXOMKN17KkvHSXSErNJakO3LrD0zWLr
-         lMzdhY0pT/YNwabB/Um/m/iJPSiRX2k6ye8UBwA4AZwV8A4vzwcAyz5SvcFoS0qv8YCv
-         ROyYKT+ia/yHChscSK+38Xw7Q2DahxstvY9jmQFmoxIze09Rt7q81nwEEmV0WHEMcr0r
-         u3kQ==
-X-Gm-Message-State: ACgBeo2hVfJfVPr5cPEcSiLko5eUqVCtapkUtC2o2z+S1iFhx/s5r0WY
-        5E6uwQQAurKrpSTUPpjv9TY9OXkQG4CTMDwMfue3ow==
-X-Google-Smtp-Source: AA6agR6xMl6s69LJEe9/ANEpj86tS5Mf5dVXH93JXMx7uTBSPGstJb9qa0FXVFjAjOE1JVl+mNneubqBOO5h7W4c6Lw=
-X-Received: by 2002:a9d:53cb:0:b0:637:1ddc:615c with SMTP id
- i11-20020a9d53cb000000b006371ddc615cmr2302282oth.3.1662586417672; Wed, 07 Sep
- 2022 14:33:37 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 7 Sep 2022 16:33:36 -0500
-MIME-Version: 1.0
-In-Reply-To: <20220902043511.17130-5-quic_rjendra@quicinc.com>
-References: <20220902043511.17130-1-quic_rjendra@quicinc.com> <20220902043511.17130-5-quic_rjendra@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 7 Sep 2022 16:33:36 -0500
-Message-ID: <CAE-0n50x=h_rBaWAcTk_BBCMLpD=XQ6=BKLGp5+m8i4Lvn4fyg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sc7280: Add cpu and llcc BWMON
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Wed, 7 Sep 2022 17:34:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56238E0BB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 14:34:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E29396194E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 21:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E25C433D6;
+        Wed,  7 Sep 2022 21:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662586468;
+        bh=UgoD/NLQ0MqihZ87VFspXN0wI9uOU/Esj7gHe+uAoqo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lWhoM2fwKkQ0+S3jLkEBCouMBZXU7I4Tg04RzM5+IrYRYOobXKSOVdFVr4tcHdWjO
+         EVP9+WRSEW+9l1GV5Qoh9gWaWoXbY3LYcfo1RxrZrWB2jqQx06huNTu0MnL/0ynzEG
+         zKHib011BQJcyBAO1tyDumbf/8nTVs+l35cI4WvM=
+Date:   Wed, 7 Sep 2022 14:34:27 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Jiebin Sun <jiebin.sun@intel.com>, vasily.averin@linux.dev,
+        shakeelb@google.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, ebiederm@xmission.com, legion@kernel.org,
+        manfred@colorfullife.com, alexander.mikhalitsyn@virtuozzo.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        tim.c.chen@intel.com, feng.tang@intel.com, ying.huang@intel.com,
+        tianyou.li@intel.com, wangyang.guo@intel.com
+Subject: Re: [PATCH v4] ipc/msg: mitigate the lock contention with percpu
+ counter
+Message-Id: <20220907143427.0ce54bbf096943ffca197fee@linux-foundation.org>
+In-Reply-To: <eb13cb3e5e1625afe1bb783810f4d6b52a66a2f6.camel@linux.intel.com>
+References: <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
+        <20220907172516.1210842-1-jiebin.sun@intel.com>
+        <eb13cb3e5e1625afe1bb783810f4d6b52a66a2f6.camel@linux.intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,28 +60,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rajendra Nayak (2022-09-01 21:35:11)
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 13d7f267b289..a839ba968d13 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -3275,6 +3275,82 @@
->                         };
->                 };
->
-> +               pmu@9091000 {
-> +                       compatible = "qcom,sc7280-llcc-bwmon";
-> +                       reg = <0 0x9091000 0 0x1000>;
-> +
-[...]
-> +                       };
-> +               };
-> +
-> +               pmu@90b6000 {
+On Wed, 07 Sep 2022 09:01:53 -0700 Tim Chen <tim.c.chen@linux.intel.com> wrote:
 
-This unit address
+> On Thu, 2022-09-08 at 01:25 +0800, Jiebin Sun wrote:
+> > The msg_bytes and msg_hdrs atomic counters are frequently
+> > updated when IPC msg queue is in heavy use, causing heavy
+> > cache bounce and overhead. Change them to percpu_counter
+> > greatly improve the performance. Since there is one percpu
+> > struct per namespace, additional memory cost is minimal.
+> > Reading of the count done in msgctl call, which is infrequent.
+> > So the need to sum up the counts in each CPU is infrequent.
+> > 
+> > 
+> > Apply the patch and test the pts/stress-ng-1.4.0
+> > -- system v message passing (160 threads).
+> > 
+> > Score gain: 3.17x
+> > 
+> > 
+> ...
+> >  
+> > +/* large batch size could reduce the times to sum up percpu counter */
+> > +#define MSG_PERCPU_COUNTER_BATCH 1024
+> > +
+> 
+> Jiebin, 
+> 
+> 1024 is a small size (1/4 page). 
+> The local per cpu counter could overflow to the gloabal count quickly
+> if it is limited to this size, since our count tracks msg size.
+>   
+> I'll suggest something larger, say 8*1024*1024, about
+> 8MB to accommodate about 2 large page worth of data.  Maybe that
+> will further improve throughput on stress-ng by reducing contention
+> on adding to the global count.
+> 
 
-> +                       compatible = "qcom,sc7280-cpu-bwmon", "qcom,msm8998-bwmon";
-> +                       reg = <0 0x090b6400 0 0x600>;
+I think this concept of a percpu_counter_add() which is massively
+biased to the write side and with very rare reading is a legitimate
+use-case.  Perhaps it should become an addition to the formal interface.
+Something like
 
-doesn't match this one. Please fix.
+/* 
+ * comment goes here
+ */
+static inline void percpu_counter_add_local(struct percpu_counter *fbc,
+					    s64 amount)
+{
+	percpu_counter_add_batch(fbc, amount, INT_MAX);
+}
+
+and percpu_counter_sub_local(), I guess.
+
+The only instance I can see is
+block/blk-cgroup-rwstat.h:blkg_rwstat_add() which is using INT_MAX/2
+because it always uses percpu_counter_sum_positive() on the read side.
+
+But that makes two!

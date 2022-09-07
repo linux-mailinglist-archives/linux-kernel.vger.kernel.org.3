@@ -2,103 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCC55B0B93
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148675B0B94
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 19:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiIGRfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 13:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S229593AbiIGRit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 13:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIGRe5 (ORCPT
+        with ESMTP id S229492AbiIGRiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:34:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62FC286D6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 10:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662572094;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/WSF+VN2XS8wigr1Pv23cqcOJp3LkqpRzWMbXnSC+Ks=;
-        b=JPqn94w2BJ+9CJ5TOeg1EYOABgv3KQeacne8KWbsk9idpLySiVEFwXr0gQD6bomhlXeQmQ
-        SUUJb18PnHtn65YlWEldbnuO1j6t0KMLuU3rAaDuEs99lurvOH2z5mPxTCMQfq8GB+ko0X
-        RgbW1RULcChfTZQCIZJJOmzgjPhzJWM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-159-yf-Xh7BAMdGuIeY70rsvDA-1; Wed, 07 Sep 2022 13:34:48 -0400
-X-MC-Unique: yf-Xh7BAMdGuIeY70rsvDA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A26F3806701;
-        Wed,  7 Sep 2022 17:34:47 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.54])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 04716403167;
-        Wed,  7 Sep 2022 17:34:42 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed,  7 Sep 2022 19:34:46 +0200 (CEST)
-Date:   Wed, 7 Sep 2022 19:34:40 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Oleksandr Natalenko <oleksandr@redhat.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Will Deacon <will@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Stephen Kitt <steve@sk2.org>, Rob Herring <robh@kernel.org>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Renaud =?iso-8859-1?Q?M=E9trich?= <rmetrich@redhat.com>,
-        Grzegorz Halat <ghalat@redhat.com>, Qi Guo <qguo@redhat.com>
-Subject: Re: [PATCH] core_pattern: add CPU specifier
-Message-ID: <20220907173438.GA15992@redhat.com>
-References: <20220903064330.20772-1-oleksandr@redhat.com>
- <87r10ob0st.fsf@email.froward.int.ebiederm.org>
- <5599808.DvuYhMxLoT@redhat.com>
+        Wed, 7 Sep 2022 13:38:46 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC7A80F7E;
+        Wed,  7 Sep 2022 10:38:46 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1278a61bd57so19289306fac.7;
+        Wed, 07 Sep 2022 10:38:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=jrbDME+3IknpwK7T80xrbsU1d+5VCb9CXfVWDJjbDgQ=;
+        b=j8xsYkhLvBrDxwqQ0n2Canlahf+hWyYkkqRxOVqC2mXM4y/eRAmA/qI3KqajTqrXCF
+         HXqWm0zqpLu0rxPD3ID0c9VurAYAAZmM8N5H2GAt0R1iP9Ed8UUViPW81+m1vUHO6gPP
+         KjMwHi5Bdq3HJRRJTcSRZ0jSYdLrNH9Iiw5CTsrI/javlJXEaP0HMlsTuUYB/9KJrbhz
+         IWRsM34AJ6hGV2ssblTRAnMmiIJnx1mNolJHXpUEK1cLzJoU/6437+KD+lfm3c1OC6uX
+         XnBqZTHh4PZytK90T4JvJo4l5CftBLUj/B2LM92IpSJy/eCyQME/biig/Z4LSLQZU/N+
+         Ojwg==
+X-Gm-Message-State: ACgBeo0ZMGIRFIYDV9yheD9xQ1QOYrPugkVm7ka4Q7ssB6DETS0snDsS
+        2uUolOr0IlBMMMy2LqpwBnRtEcIBhDmy48DC3dMqqROy
+X-Google-Smtp-Source: AA6agR7H9RtmXrxAWSU01huuRXY46j6q/NAqpkmfxgS1t91X3ic8OCvPFAuqLMdNvHhPew0USxOyyQfgMCptjfIQd1s=
+X-Received: by 2002:a05:6808:d46:b0:345:7b42:f987 with SMTP id
+ w6-20020a0568080d4600b003457b42f987mr2016690oik.92.1662572325466; Wed, 07 Sep
+ 2022 10:38:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5599808.DvuYhMxLoT@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220907064645.1197894-1-namhyung@kernel.org> <20220907064645.1197894-3-namhyung@kernel.org>
+ <eea20a5c-df2a-979b-ff85-a7e2b978a4b8@intel.com>
+In-Reply-To: <eea20a5c-df2a-979b-ff85-a7e2b978a4b8@intel.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 7 Sep 2022 10:38:34 -0700
+Message-ID: <CAM9d7cgKwidyjWOH5uf-Y2BHF0VACOrR=fdXLz5szuzbHdVaaQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] perf test: Use a test program in perf record tests
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/07, Oleksandr Natalenko wrote:
+Hi Adrian,
+
+On Wed, Sep 7, 2022 at 3:45 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> The advantage of having CPU recorded in the file name is that
-> in case of multiple cores one can summarise them with a simple
-> ls+grep without invoking a fully-featured debugger to find out
-> whether the segfaults happened on the same CPU.
+> On 7/09/22 09:46, Namhyung Kim wrote:
+> > If the system has cc it could build a test program with two threads
+> > and then use it for more detailed testing.  Also it adds initial delay
+> > of 3ms to profile a multi-threaded target.  This change make the test
+> > failing but that's what we want to check for now.
+>
+> So the delay is just to get a separate dummy event?
 
-Besides, if you only need to gather the statistics about the faulting
-CPU(s), you do not even need to actually dump the the core. For example,
-something like
+No, it's actually to wait for the new thread.
 
-	#!/usr/bin/sh
+>
+> I hit the issue from this patch:
+>
+> https://lore.kernel.org/lkml/20220711180706.3418612-1-kan.liang@linux.intel.com/
+>
+> That is, if I apply the patch above then the test passes, otherwise it fails always.
 
-	echo $* >> path/to/coredump-stat.txt
+It's good to find/verify the bug with this :)
 
-and
-	echo '| path-to-script-above %C' >/proc/sys/kernel/core_pattern
-
-can help.
-
-Oleg.
-
+Thanks,
+Namhyung

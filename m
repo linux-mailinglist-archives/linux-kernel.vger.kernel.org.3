@@ -2,128 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333175B0631
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16445B0636
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 16:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiIGONs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 10:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S230021AbiIGOOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 10:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiIGONq (ORCPT
+        with ESMTP id S229977AbiIGOON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:13:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3D65AC68;
-        Wed,  7 Sep 2022 07:13:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E892618CE;
-        Wed,  7 Sep 2022 14:13:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577B8C433D6;
-        Wed,  7 Sep 2022 14:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662560024;
-        bh=G7sNlAT/9ttqzV5G1/k/jJxd38B3paO9wVIuwV47joc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B1voks6onfsrR2ymkLhm3z1ZMMx6y/VVYD1Z+26FYPnYrxTMgy3dx2U7DGRMlrP0Y
-         dttz8jmcLU5E0vdntpfBC4bMZdMDl2h2NsNsHQ5+PKCv6t+LjpvyjqIBvCiUsx4cNd
-         WK5BH+gLctO4zPXor876Wtqog4a061RKOf612JKdVdFDLNfbsBFM5F/Pwa1miRyS5L
-         4c2tlkFP87gO5Hys4nxD8FP/SIChW9Y+1cmEe3kkWXcX5hv8/QTn5ivVGL1ihxrmCX
-         DhuykyBHUZ/uC1j+LUONzz7B/IfEffY3Y6BqVyToEL0qklFpfvSMD2EsV97Eb/ojlA
-         3Hny+Uj/F944A==
-Date:   Wed, 7 Sep 2022 08:13:40 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk, osandov@fb.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: Re: [PATCH] sbitmap: fix possible io hung due to lost wakeup
-Message-ID: <YxinFEYRCU/QuQ5w@kbusch-mbp.dhcp.thefacebook.com>
-References: <20220803121504.212071-1-yukuai1@huaweicloud.com>
- <Yxe7V3yfBcADoYLE@kbusch-mbp.dhcp.thefacebook.com>
- <20220907102318.pdpzpmhah2m3ptbn@quack3>
+        Wed, 7 Sep 2022 10:14:13 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAA365644;
+        Wed,  7 Sep 2022 07:14:11 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MN44f2t8Pz9sk7;
+        Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id QizXyr0QWWIB; Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MN44f1kt3z9sk5;
+        Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2CC5D8B78B;
+        Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id pAVmOfMFge_0; Wed,  7 Sep 2022 16:14:10 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.234])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E0EC38B763;
+        Wed,  7 Sep 2022 16:14:09 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 287EDuVA3203820
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 7 Sep 2022 16:13:56 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 287EDtKE3203817;
+        Wed, 7 Sep 2022 16:13:55 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH v3 REBASED] spi: Add capability to perform some transfer with chipselect off
+Date:   Wed,  7 Sep 2022 16:13:44 +0200
+Message-Id: <434165c46f06d802690208a11e7ea2500e8da4c7.1662558898.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907102318.pdpzpmhah2m3ptbn@quack3>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662560022; l=3320; s=20211009; h=from:subject:message-id; bh=nhEy38PTRF9ranS0NmdK0DMBPj0AbmzHk2k5M/5fx/Y=; b=c4eyahKivpthECdpPNVAd307Quru5kBXew3d5nU0poRbIqQeC3YMw6g4ziyJX2HuT47CGyosUPjm hZTtBw+4Bk2dRDguVQvk/sJHTI0TgyMr+HdL4bYvFdSuZzEyXbQ1
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 12:23:18PM +0200, Jan Kara wrote:
-> On Tue 06-09-22 15:27:51, Keith Busch wrote:
-> > On Wed, Aug 03, 2022 at 08:15:04PM +0800, Yu Kuai wrote:
-> > >  	wait_cnt = atomic_dec_return(&ws->wait_cnt);
-> > > -	if (wait_cnt <= 0) {
-> > > -		int ret;
-> > > +	/*
-> > > +	 * For concurrent callers of this, callers should call this function
-> > > +	 * again to wakeup a new batch on a different 'ws'.
-> > > +	 */
-> > > +	if (wait_cnt < 0 || !waitqueue_active(&ws->wait))
-> > > +		return true;
-> > 
-> > If wait_cnt is '0', but the waitqueue_active happens to be false due to racing
-> > with add_wait_queue(), this returns true so the caller will retry.
-> 
-> Well, note that sbq_wake_ptr() called to obtain 'ws' did waitqueue_active()
-> check. So !waitqueue_active() should really happen only if waiter was woken
-> up by someone else or so. Not that it would matter much but I wanted to
-> point it out.
-> 
-> > The next atomic_dec will set the current waitstate wait_cnt < 0, which
-> > also forces an early return true. When does the wake up happen, or
-> > wait_cnt and wait_index get updated in that case?
-> 
-> I guess your concern could be rephrased as: Who's going to ever set
-> ws->wait_cnt to value > 0 if we ever exit with wait_cnt == 0 due to
-> !waitqueue_active() condition?
-> 
-> And that is a good question and I think that's a bug in this patch. I think
-> we need something like:
-> 
-> 	...
-> 	/*
-> 	 * For concurrent callers of this, callers should call this function
-> 	 * again to wakeup a new batch on a different 'ws'.
-> 	 */
-> 	if (wait_cnt < 0)
-> 		return true;
-> 	/*
-> 	 * If we decremented queue without waiters, retry to avoid lost
-> 	 * wakeups.
-> 	 */
-> 	if (wait_cnt > 0)
-> 		return !waitqueue_active(&ws->wait);
+Some components require a few clock cycles with chipselect off before
+or/and after the data transfer done with CS on.
 
-I'm not sure about this part. We've already decremented, so the freed bit is
-accounted for against the batch. Returning true here may double-count the freed
-bit, right?
+Typically IDT 801034 QUAD PCM CODEC datasheet states "Note *: CCLK
+should have one cycle before CS goes low, and two cycles after
+CS goes high".
+
+The cycles "before" are implicitely provided by all previous activity
+on the SPI bus. But the cycles "after" must be provided in order to
+terminate the SPI transfer.
+
+In order to use that kind of component, add a cs_off flag to
+spi_transfer struct. When this flag is set, the transfer is performed
+with chipselect off. This allows consummer to add a dummy transfer
+at the end of the transfer list which is performed with chipselect
+OFF, providing the required additional clock cycles.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+Rebased on today's linus' master
+
+ drivers/spi/spi.c       | 12 +++++++++---
+ include/linux/spi/spi.h |  2 ++
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 83da8862b8f2..cc5cb948978e 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1435,7 +1435,8 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 	struct spi_statistics __percpu *statm = ctlr->pcpu_statistics;
+ 	struct spi_statistics __percpu *stats = msg->spi->pcpu_statistics;
  
-> 	/*
-> 	 * When wait_cnt == 0, we have to be particularly careful as we are
-> 	 * responsible to reset wait_cnt regardless whether we've actually
-> 	 * woken up anybody. But in case we didn't wakeup anybody, we still
-> 	 * need to retry.
-> 	 */
-> 	ret = !waitqueue_active(&ws->wait);
-> 	wake_batch = READ_ONCE(sbq->wake_batch);
-> 	/*
-> 	 * Wake up first in case that concurrent callers decrease wait_cnt
-> 	 * while waitqueue is empty.
-> 	 */
-> 	wake_up_nr(&ws->wait, wake_batch);
-> 	...
-> 
-> 	return ret;
-> 
-> Does this fix your concern Keith?
+-	spi_set_cs(msg->spi, true, false);
++	xfer = list_first_entry(&msg->transfers, struct spi_transfer, transfer_list);
++	spi_set_cs(msg->spi, !xfer->cs_off, false);
+ 
+ 	SPI_STATISTICS_INCREMENT_FIELD(statm, messages);
+ 	SPI_STATISTICS_INCREMENT_FIELD(stats, messages);
+@@ -1503,10 +1504,15 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 					 &msg->transfers)) {
+ 				keep_cs = true;
+ 			} else {
+-				spi_set_cs(msg->spi, false, false);
++				if (!xfer->cs_off)
++					spi_set_cs(msg->spi, false, false);
+ 				_spi_transfer_cs_change_delay(msg, xfer);
+-				spi_set_cs(msg->spi, true, false);
++				if (!list_next_entry(xfer, transfer_list)->cs_off)
++					spi_set_cs(msg->spi, true, false);
+ 			}
++		} else if (!list_is_last(&xfer->transfer_list, &msg->transfers) &&
++			   xfer->cs_off != list_next_entry(xfer, transfer_list)->cs_off) {
++			spi_set_cs(msg->spi, xfer->cs_off, false);
+ 		}
+ 
+ 		msg->actual_length += xfer->len;
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index e6c73d5ff1a8..6e6c62c59957 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -847,6 +847,7 @@ struct spi_res {
+  *      for this transfer. If 0 the default (from @spi_device) is used.
+  * @dummy_data: indicates transfer is dummy bytes transfer.
+  * @cs_change: affects chipselect after this transfer completes
++ * @cs_off: performs the transfer with chipselect off.
+  * @cs_change_delay: delay between cs deassert and assert when
+  *      @cs_change is set and @spi_transfer is not the last in @spi_message
+  * @delay: delay to be introduced after this transfer before
+@@ -959,6 +960,7 @@ struct spi_transfer {
+ 	unsigned	cs_change:1;
+ 	unsigned	tx_nbits:3;
+ 	unsigned	rx_nbits:3;
++	unsigned	cs_off:1;
+ #define	SPI_NBITS_SINGLE	0x01 /* 1bit transfer */
+ #define	SPI_NBITS_DUAL		0x02 /* 2bits transfer */
+ #define	SPI_NBITS_QUAD		0x04 /* 4bits transfer */
+-- 
+2.37.1
 
-Other than the above comment, this does appear to address the concern. Thanks!

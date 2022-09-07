@@ -2,130 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4C15B0810
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB7C5B081A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 17:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiIGPJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 11:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S230380AbiIGPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 11:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiIGPJL (ORCPT
+        with ESMTP id S229770AbiIGPKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 11:09:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58D4B5E46
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 08:09:08 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id nc14so31054623ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 08:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=q+70v53buIxQaWBchIFk8shCKU1WJV1DdLwWTP+ddeI=;
-        b=PsSk7c5ChVk3DJTul0PslXYL3Ii3rxu7S+9k3ZdWO7J5+Rg3SJKW/GHR+l1IdCcqbD
-         QzOSg+X20xKhDWwzVNp1EVZBeuM2og/eiCkM9VRatVBVuKtFUtC1IFd6TnphWbjqABrV
-         lPI8ekc2MCGq7SaNBqXRHV/YntEXs/I2px8KM7Uiih87ZHZU+6OWWEzoS4qPY0Dysev9
-         Kf1PW1ximX/Nir+q+GFzRH9fkY+Yz9NccxBJ97dIkXFYKX6Fbwdx2rSEm5fgP9TwN8TP
-         Yn0/K6m8BPkKDGCZQYLjYFkzq7AqD2/EwCvermdk+S+d7m7gCF9XDJd4z+oxXRFK59CM
-         CsMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=q+70v53buIxQaWBchIFk8shCKU1WJV1DdLwWTP+ddeI=;
-        b=fZ0lxTmUIW64ibDkzlcOBIZAqv3m9PFbAbinoYetZ7867sb2Jl8ZrfhVByfql3kRp1
-         0OfCO3h/2mMnnCO42Ggn3JH5Z83IOv0dZ2Lk0UPLGJd4rRwJO1pRyfBHJbVTylB2MR1X
-         hIEHNl+pLvz60NPdXZEkuisqwYT0aIDZ9f7xo8YfJAg6O/D8vmA1+i54zSdkifkNYI3x
-         wuTo5BYU7xvXgWePbcwsX1ZuvcKhl2S/nuHapbKV0gidKhaiD5jgn7KYsXFq343x0zzI
-         5prUYJZHsiUcPFSn1UdAWmMs7xY4iZrvm0Jq1zDP0TgAPmenRo6pnXZxn/hizh+79z7a
-         +3BA==
-X-Gm-Message-State: ACgBeo2P7PAd5exQ7v51mAoG/MZ1FY/3va5M6WydAq4O77xROR+UJDv8
-        hxyI+00csRJ3vMWmvVP3Tf0=
-X-Google-Smtp-Source: AA6agR7+yo4NVJ1b3xBSrgRyiVKs02kmJQtjtA3mve9GOkmdtQU6KrWKBuLTC8Uj3eslmjookwi2Eg==
-X-Received: by 2002:a17:907:7d8e:b0:742:8ea0:686c with SMTP id oz14-20020a1709077d8e00b007428ea0686cmr2603244ejc.591.1662563347199;
-        Wed, 07 Sep 2022 08:09:07 -0700 (PDT)
-Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
-        by smtp.gmail.com with ESMTPSA id p23-20020a056402501700b0043ba7df7a42sm10858179eda.26.2022.09.07.08.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 08:09:06 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: Re: [PATCH v2 36/41] drm/sun4i: tv: Merge mode_set into atomic_enable
-Date:   Wed, 07 Sep 2022 17:09:04 +0200
-Message-ID: <4210281.ejJDZkT8p0@kista>
-In-Reply-To: <20220907074134.36yysxrnnpty4ngw@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech> <10138422.nUPlyArG6x@kista> <20220907074134.36yysxrnnpty4ngw@houat>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Sep 2022 11:10:19 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF67B30F7D;
+        Wed,  7 Sep 2022 08:10:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MN5Bs5Dljz9xHvx;
+        Wed,  7 Sep 2022 23:04:37 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBHw10qtBhjIYssAA--.26582S2;
+        Wed, 07 Sep 2022 16:09:42 +0100 (CET)
+Message-ID: <d447540b5adce25efaa29ef1bce001f2bc0a2d12.camel@huaweicloud.com>
+Subject: Re: [PATCH v16 00/12] bpf: Add kfuncs for PKCS#7 signature
+ verification
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 07 Sep 2022 17:09:29 +0200
+In-Reply-To: <CAP01T764z59qczE37=jf-zPkS2zPuzDyCjdngBDnG-GOovG-rQ@mail.gmail.com>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+         <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
+         <b846cedb14235db6950a55e7eec2eff9e9ab56ec.camel@huaweicloud.com>
+         <57cedc7a3008248b5147d03e2f4bd0b33ad9a146.camel@huaweicloud.com>
+         <CAP01T764z59qczE37=jf-zPkS2zPuzDyCjdngBDnG-GOovG-rQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBHw10qtBhjIYssAA--.26582S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw1fGryUJrWxGF1kuw1xZrb_yoW5Xr1UpF
+        W8AFy5KF4ktryUCw4xKry5uFy8t3y7JF12qrn8t34UZas0vr1FkFWIyr43uFWq9r1kCw1a
+        v39IqFy7Xr1DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj365RQAAs9
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sreda, 07. september 2022 ob 09:41:34 CEST je Maxime Ripard napisal(a):
-> On Tue, Sep 06, 2022 at 10:04:32PM +0200, Jernej =C5=A0krabec wrote:
-> > Dne ponedeljek, 29. avgust 2022 ob 15:11:50 CEST je Maxime Ripard=20
-napisal(a):
-> > > Our mode_set implementation can be merged into our atomic_enable
-> > > implementation to simplify things, so let's do this.
-> >=20
-> > Are you sure this is a good thing in long term? What if user wants to
-> > change mode? Unlikely, but why not.
->=20
-> It doesn't change anything feature-wise: whenever the mode is changed on
-> the CRTC, the encoder is going to be disabled and enabled.
->=20
-> It's disabled here:
-> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_atomic=
-_he
-> lper.c#L1064
->=20
-> And enabled here:
-> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_atomic=
-_he
-> lper.c#L1403
->=20
-> With drm_atomic_crtc_needs_modeset() being defined here:
-> https://elixir.bootlin.com/linux/latest/source/include/drm/drm_atomic.h#L=
-104
-> 9
+On Wed, 2022-09-07 at 16:57 +0200, Kumar Kartikeya Dwivedi wrote:
+> On Wed, 7 Sept 2022 at 16:49, Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Tue, 2022-09-06 at 09:35 +0200, Roberto Sassu wrote:
+> > > On Mon, 2022-09-05 at 21:26 +0200, Kumar Kartikeya Dwivedi wrote:
+> > > > On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > 
+> > > > > One of the desirable features in security is the ability to
+> > > > > restrict import
+> > > > > of data to a given system based on data authenticity. If data
+> > > > > import can be
+> > > > > restricted, it would be possible to enforce a system-wide
+> > > > > policy
+> > > > > based on
+> > > > > the signing keys the system owner trusts.
+> > > > > 
+> > > > > This feature is widely used in the kernel. For example, if
+> > > > > the
+> > > > > restriction
+> > > > > is enabled, kernel modules can be plugged in only if they are
+> > > > > signed with a
+> > > > > key whose public part is in the primary or secondary keyring.
+> > > > > 
+> > > > > For eBPF, it can be useful as well. For example, it might be
+> > > > > useful
+> > > > > to
+> > > > > authenticate data an eBPF program makes security decisions
+> > > > > on.
+> > > > > 
+> > > > > [...]
+> > > > 
+> > > > CI is crashing with NULL deref for test_progs-no_alu32 with
+> > > > llvm-
+> > > > 16,
+> > > > but I don't think the problem is in this series. This is most
+> > > > likely
+> > > > unrelated to BPF, as the crash happens inside
+> > > > kernel/time/tick-sched.c:tick_nohz_restart_sched_tick.
+> > > > 
+> > > > This was the same case in
+> > > > https://lore.kernel.org/bpf/CAP01T74steDfP6O8QOshoto3e3RnHhKtAeTbnrPBZS3YJXjvbA@mail.gmail.com.
+> > > > 
+> > > > So,
+> > > > https://github.com/kernel-patches/bpf/runs/8194263557?check_suite_focus=true
+> > > > and
+> > > > https://github.com/kernel-patches/bpf/runs/7982907380?check_suite_focus=true
+> > > > 
+> > > > look similar to me, and may not be related to BPF. They only
+> > > > trigger
+> > > > during runs compiled using LLVM 16, so maybe some compiler
+> > > > transformation is surfacing the problem?
+> > > 
+> > > Yes, I saw that too. Not sure what the cause could be.
+> > > 
+> > 
+> > Another occurrence, this time with gcc:
+> > 
+> > https://github.com/robertosassu/vmtest/runs/8230071814?check_suite_focus=true
+> > 
+> 
+> ... and it seems like this run does not even have your patches,
+> right?
+> 
 
-Right.
+Uhm, the kernel patches are there. The tests except the verifier ones
+weren't successfuly applied, probably due to the deny list.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+One thing in common with the failures seems when the panic happens,
+when test_progs reaches verif_twfw. I will try to execute this and
+earlier tests to reproduce the panic locally.
 
-Best regards,
-Jernej
-
+Roberto
 

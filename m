@@ -2,126 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78785AFE34
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676D75AFE38
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Sep 2022 09:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiIGH5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 03:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S229964AbiIGH5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 03:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiIGH47 (ORCPT
+        with ESMTP id S229829AbiIGH5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 03:56:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7188F977
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 00:56:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E2C7620114;
-        Wed,  7 Sep 2022 07:56:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662537416; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GpUp6OvQ8i7Mr4bNR7ArwU7puV1iks8tSDio6W89hzQ=;
-        b=z+DrRMxS2yUAdV29d2dJyk+TRFJjQkOGmIySRKN8Xrb9Bnc5Ulo/wMkE88vhmug3dlj9dz
-        /yprAILyLOa1eIPZ5w5oD/SIdTKH84n6pDwnjvY9+WjgJ3Sz/TdnNX1NVsAwXriPBMDBhc
-        /hcFBlZnhsDMmgRMnX/60jWji971IUs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662537416;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GpUp6OvQ8i7Mr4bNR7ArwU7puV1iks8tSDio6W89hzQ=;
-        b=WpubPanU4Wqy7dLBVQp1HpmhkdroiWwLSVDMZzonPwgg7/aO5CIYBvmHHDeTKMF9f6NfJp
-        Zng1TZAhyyvxs+Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B7F5213A66;
-        Wed,  7 Sep 2022 07:56:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8sUGKshOGGMFCAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 07 Sep 2022 07:56:56 +0000
-Date:   Wed, 7 Sep 2022 09:56:54 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [GIT PULL] dmi update for v5.19
-Message-ID: <20220907095654.4b1ea5b0@endymion.delvare>
-In-Reply-To: <CAHk-=wiFRok=hU_BNEsqodjyGm=XV9LVZ1w=cm4ooEtWVpYLPg@mail.gmail.com>
-References: <20220822141930.5f43b5e7@endymion.delvare>
-        <CAHk-=wiFRok=hU_BNEsqodjyGm=XV9LVZ1w=cm4ooEtWVpYLPg@mail.gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Wed, 7 Sep 2022 03:57:18 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D4AA720A;
+        Wed,  7 Sep 2022 00:57:12 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-127f5411b9cso2759221fac.4;
+        Wed, 07 Sep 2022 00:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date;
+        bh=Qw2l2dKSKd2YLbeWRoh7YxUvU5Nv0dLKebPZixHGBN8=;
+        b=IgTxk9zikOhalSYTqbVYGUcK6g/rLqv265xBJi+b9t/2g1iFXamPYXLIO1ET0SPzB5
+         XLf1kX/NtN0YtZVsV4evHRL0MA4kAQiik1SusgZZaQlpOf3N97KXhpAvH4BYRlGycHrp
+         G2CJiSDsWyQIoXSqWJz7oddQ5fCMkx7vWBIrYuKWu3y73SiixUFtj3FMq8VvOGc5TVtW
+         QHU8cJHUQi8gZW5oDbwG4lriR9IfMygv6KrrkfjCKGFyBuSPLZNY8njDWfkRrGO9W5hY
+         Rclh11dqwLcJB3gj5AtZn3YfSQwEJH3hmPimy/seXDQssQvZT9uUnOUrU2c2FKvImtHL
+         gBOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Qw2l2dKSKd2YLbeWRoh7YxUvU5Nv0dLKebPZixHGBN8=;
+        b=EDjJVuOjoYBb80T/fQYJrIEUh4J10Ko5Flgz4CSL8aT7QElEZ+rChctig1ijeu9Bqp
+         VsKVU4ZD1wj53CZD6JZtRfq91ZeuYDdqZYansITS1OPcTr6mKQ2VjlekShFylByoc4ef
+         1R26XbEMUlGJ8G6GVDdm/elQ7cl2svQ1k/ho0SMMU2cgd6bNBGYQ1NzZTrULs1/CfMLU
+         7OmWDLp4nvOtYN4w9DLL6Mw9XiD8n9Tsp+xg45I2WM1ifvGBH0LM2KAmIoTk/pyEK6Jw
+         KAxIW/eVSB3IEvKdkfuigP9VhmqaCz4gDy0t+IJexKOmTkiKKN4s1/BTkA3bg5pqW8+e
+         1F3g==
+X-Gm-Message-State: ACgBeo3G5jRztQfayMH5OM5z7/NefroDKsWmnKOzjr36OWlDiRn0nQgl
+        1TZ1StNJjXM3O16ckNP5IWmXYlI2evSG8562hCg=
+X-Google-Smtp-Source: AA6agR6bZ94mEIf2yGD/4l5J+phi9NkSnE3taatkvaNY+Zk6k6NpZm+UAPCeuA80bnssa5SuuEeRDLVGrb3OYq7S2J8=
+X-Received: by 2002:a05:6870:b692:b0:11d:482f:3642 with SMTP id
+ cy18-20020a056870b69200b0011d482f3642mr1120605oab.38.1662537431569; Wed, 07
+ Sep 2022 00:57:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220801170459.1593706-1-robdclark@gmail.com> <20220801170459.1593706-2-robdclark@gmail.com>
+ <YxejqOuHTjoO/iXg@phenom.ffwll.local>
+In-Reply-To: <YxejqOuHTjoO/iXg@phenom.ffwll.local>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 7 Sep 2022 00:57:00 -0700
+Message-ID: <CAF6AEGvUqoCegMZY-h9O6_vc1i=gD-TPHnFyvCjDA558Xn_5dw@mail.gmail.com>
+Subject: Re: [Linaro-mm-sig] [PATCH v2 1/3] dma-buf: Add ioctl to query mmap info
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-On Wed, 24 Aug 2022 10:31:35 -0700, Linus Torvalds wrote:
-> On Mon, Aug 22, 2022 at 5:19 AM Jean Delvare <jdelvare@suse.de> wrote:
+On Tue, Sep 6, 2022 at 12:46 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Mon, Aug 01, 2022 at 10:04:55AM -0700, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
 > >
-> > Andy Shevchenko (1):
-> >       firmware: dmi: Use the proper accessor for the version field  
-> 
-> I pulled this, but I kind of question it.
-> 
-> This replaces a single 32-bit memory access (and an optimized byte
-> swap) and a mask operation with three load-byte-and-shift operations.
-> 
-> It's not clear that the new code is better.
+> > This is a fairly narrowly focused interface, providing a way for a VMM
+> > in userspace to tell the guest kernel what pgprot settings to use when
+> > mapping a buffer to guest userspace.
+> >
+> > For buffers that get mapped into guest userspace, virglrenderer returns
+> > a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
+> > pages into the guest VM, it needs to report to drm/virtio in the guest
+> > the cache settings to use for guest userspace.  In particular, on some
+> > architectures, creating aliased mappings with different cache attributes
+> > is frowned upon, so it is important that the guest mappings have the
+> > same cache attributes as any potential host mappings.
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> > v2. fix compiler warning
+>
+> I think I bikeshedded this on irc already, here for the record too.
 
-For reference, I had the same objection originally, but Andy convinced
-me that code clarity was more important than a minor one-time
-optimization. The whole discussion can be read here:
+You should look at v3 (which I confusingly titled as v2, sry):
 
-https://lore.kernel.org/all/YuVUdOUl7zwE0QsV@smile.fi.intel.com/T/#mf41d04beeb1d4fddadf77248eec8be397f77cdb5
+https://patchwork.freedesktop.org/patch/497799/?series=106847&rev=3
 
-> That said, I can't imagine it matters - but because I looked at it, I
-> note that the length check seems to be kind of iffy.
-> 
-> The code checks that the length of the block is < 32 before doing the
-> checksum on it, but shouldn't it also check for some minimum size?
-> Otherwise the dmi checksum is kind of pointless, isn't it?
-> 
-> It will access a minimum of 24 bytes for that dmi_base thing, so that
-> would be the most obvious minimum value. But maybe there is some
-> spec-defined size for that that only covers the header?
+> - this wont work for buffers which do change the mapping when they move
+>   (ttm can do that). And cros does make noises about discrete gpus I've
+>   heard, this matters even for you :-)
 
-Thanks for taking the time to look into this. You have a point.
+Correct, in v3 you could use DMA_BUF_MAP_INCOHERENT for this case (or
+we could add additional enum values.. DMA_BUF_MAP_IDK or whatever)
 
-It doesn't utterly matter in practice because it's hard to imagine that
-the checksum would be correct if the size is not. The check for
-size < 32 is to avoid a walking past the end of the buffer if the entry
-point is incorrect or corrupted. Every other case of incorrectness or
-corruption is assumed to be caught by the checksum itself.
+re: dgpu, I guess those will be pass-thru so not so relevant for this issue
 
-I suppose that the lack of a check for a minimum size comes from the
-fact that the legacy DMI entry point did not even have a size field. As
-a matter of fact, dmidecode does not have a minimum entry point size
-check either.
+> - I'm pretty sure this will put is even more onto the nasty people list
+>   that dma-api folks maintain, especially with passing this all to
+>   userspace
+> - follow_pte() can figure this out internally in the kernel and kvm is
+>   already using this, and I think doing this all internally with mmu
+>   notifier and what not to make sure it all stays in sync is the right
+>   approach. So your kvm/whatever combo should be able to figure out wth
+>   it's supposed to be doing.
 
-I can add a minimum entry size check if you want. Some extra robustness
-can't hurt.
+This doesn't help, because the VMM is in userspace.. it is the VMM
+which needs this information.
 
-Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+> I think if you make this a virtio special case like we've done with the
+> magic uuid stuff, then that would make sense. Making it a full dma-buf
+> interface doesn't imo.
+
+IMHO we can consider this (at least in case of v3) as a virtio
+special, at least in the sense that it is opt-in for the exporting
+driver, and exporting drivers are free to not play along
+
+BR,
+-R
+
+>
+> Cheers, Daniel
+>
+> >
+> >  drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
+> >  include/linux/dma-buf.h      |  7 +++++++
+> >  include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
+> >  3 files changed, 61 insertions(+)
+> >
+> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > index 32f55640890c..87c52f080274 100644
+> > --- a/drivers/dma-buf/dma-buf.c
+> > +++ b/drivers/dma-buf/dma-buf.c
+> > @@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+> >       return 0;
+> >  }
+> >
+> > +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
+> > +{
+> > +     struct dma_buf_info arg;
+> > +
+> > +     if (copy_from_user(&arg, uarg, sizeof(arg)))
+> > +             return -EFAULT;
+> > +
+> > +     switch (arg.param) {
+> > +     case DMA_BUF_INFO_VM_PROT:
+> > +             if (!dmabuf->ops->mmap_info)
+> > +                     return -ENOSYS;
+> > +             arg.value = dmabuf->ops->mmap_info(dmabuf);
+> > +             break;
+> > +     default:
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     if (copy_to_user(uarg, &arg, sizeof(arg)))
+> > +             return -EFAULT;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static long dma_buf_ioctl(struct file *file,
+> >                         unsigned int cmd, unsigned long arg)
+> >  {
+> > @@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
+> >       case DMA_BUF_SET_NAME_B:
+> >               return dma_buf_set_name(dmabuf, (const char __user *)arg);
+> >
+> > +     case DMA_BUF_IOCTL_INFO:
+> > +             return dma_buf_info(dmabuf, (void __user *)arg);
+> > +
+> >       default:
+> >               return -ENOTTY;
+> >       }
+> > diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> > index 71731796c8c3..6f4de64a5937 100644
+> > --- a/include/linux/dma-buf.h
+> > +++ b/include/linux/dma-buf.h
+> > @@ -283,6 +283,13 @@ struct dma_buf_ops {
+> >        */
+> >       int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+> >
+> > +     /**
+> > +      * @mmap_info:
+> > +      *
+> > +      * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
+> > +      */
+> > +     int (*mmap_info)(struct dma_buf *);
+> > +
+> >       int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+> >       void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+> >  };
+> > diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+> > index b1523cb8ab30..a41adac0f46a 100644
+> > --- a/include/uapi/linux/dma-buf.h
+> > +++ b/include/uapi/linux/dma-buf.h
+> > @@ -85,6 +85,32 @@ struct dma_buf_sync {
+> >
+> >  #define DMA_BUF_NAME_LEN     32
+> >
+> > +
+> > +/**
+> > + * struct dma_buf_info - Query info about the buffer.
+> > + */
+> > +struct dma_buf_info {
+> > +
+> > +#define DMA_BUF_INFO_VM_PROT      1
+> > +#  define DMA_BUF_VM_PROT_WC      0
+> > +#  define DMA_BUF_VM_PROT_CACHED  1
+> > +
+> > +     /**
+> > +      * @param: Which param to query
+> > +      *
+> > +      * DMA_BUF_INFO_BM_PROT:
+> > +      *     Query the access permissions of userspace mmap's of this buffer.
+> > +      *     Returns one of DMA_BUF_VM_PROT_x
+> > +      */
+> > +     __u32 param;
+> > +     __u32 pad;
+> > +
+> > +     /**
+> > +      * @value: Return value of the query.
+> > +      */
+> > +     __u64 value;
+> > +};
+> > +
+> >  #define DMA_BUF_BASE         'b'
+> >  #define DMA_BUF_IOCTL_SYNC   _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+> >
+> > @@ -95,4 +121,6 @@ struct dma_buf_sync {
+> >  #define DMA_BUF_SET_NAME_A   _IOW(DMA_BUF_BASE, 1, __u32)
+> >  #define DMA_BUF_SET_NAME_B   _IOW(DMA_BUF_BASE, 1, __u64)
+> >
+> > +#define DMA_BUF_IOCTL_INFO   _IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
+> > +
+> >  #endif
+> > --
+> > 2.36.1
+> >
+> > _______________________________________________
+> > Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
+> > To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch

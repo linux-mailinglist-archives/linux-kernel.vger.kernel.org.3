@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0465B198C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48745B1996
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiIHKDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 06:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S230430AbiIHKGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 06:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiIHKDc (ORCPT
+        with ESMTP id S230362AbiIHKF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 06:03:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7407CBAD83;
-        Thu,  8 Sep 2022 03:03:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58C9114BF;
-        Thu,  8 Sep 2022 03:03:36 -0700 (PDT)
-Received: from [10.1.39.19] (e122027.cambridge.arm.com [10.1.39.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 936833F73D;
-        Thu,  8 Sep 2022 03:03:23 -0700 (PDT)
-Message-ID: <65948185-b017-3da5-fdce-e28887b01ff4@arm.com>
-Date:   Thu, 8 Sep 2022 11:03:21 +0100
+        Thu, 8 Sep 2022 06:05:59 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6D2C6B6A;
+        Thu,  8 Sep 2022 03:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MtA3UPFL7D0ttdi+gviDjq9jbPzocVoEXi27tj0FcoE=; b=q8h06ivg6hvrVMPohYumY7i+jO
+        W3ZgGp0MnwMlqFvUM5lBSgrdW9gg4h0X9ai6TwFgZdDsXVYTvo0XycNwri4jjQ74PWASqmv39ehPg
+        lbeJAJKo0Vt9rMx5I5vqWSk4nGkigSTn5/crFXUyUebp4jfWHWXruyMRMALX4RbwcLPZnt6qQhUjW
+        pdLS/AMLpu0+f32Krr1H7sW1Z/UXRWZNo5/TixUpgsWWob+YXTulnUGGyeUsNCYXs6jiWlRS1Us7U
+        Ws8CS23LXM9xpU+7b7VLge3rt/7luOzoghupF0KOKGUCWUgMUNdVuPDijPYhP5YSvy4urL38oj3vn
+        khSzVS2w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWEOy-00AhEY-9H; Thu, 08 Sep 2022 10:05:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C2F3130008D;
+        Thu,  8 Sep 2022 12:04:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 74889207ABF68; Thu,  8 Sep 2022 12:04:50 +0200 (CEST)
+Date:   Thu, 8 Sep 2022 12:04:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org
+Subject: [PATCH] x86,retpoline: Be sure to emit INT3 after JMP *%\reg
+Message-ID: <Yxm+QkFPOhrVSH6q@hirez.programming.kicks-ass.net>
+References: <166260087224.759381.4170102827490658262.stgit@devnote2>
+ <166260088298.759381.11727280480035568118.stgit@devnote2>
+ <20220908050855.w77mimzznrlp6pwe@treble>
+ <Yxm2QU1NJIkIyrrU@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 4/5] drm/panfrost: devfreq: set opp to the recommended
- one to configure regulator
-Content-Language: en-GB
-To:     =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Qiang Yu <yuq825@gmail.com>
-References: <20220906153034.153321-1-peron.clem@gmail.com>
- <20220906153034.153321-5-peron.clem@gmail.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20220906153034.153321-5-peron.clem@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yxm2QU1NJIkIyrrU@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 16:30, Clément Péron wrote:
-> Enabling panfrost GPU OPP with dynamic regulator will make OPP
-> responsible to enable and configure it.
-> 
-> Unfortunatly OPP configure and enable the regulator when an OPP
+On Thu, Sep 08, 2022 at 11:30:41AM +0200, Peter Zijlstra wrote:
+> Let me go do a patch.
 
-NIT: Unfortunately
+---
+Subject: x86,retpoline: Be sure to emit INT3 after JMP *%\reg
 
-> is asked to be set, which is not the case during
-> panfrost_devfreq_init().
-> 
-> This leave the regulator unconfigured and if no GPU load is
-> triggered, no OPP is asked to be set which make the regulator framework
-> switching it off during regulator_late_cleanup() without
-> noticing and therefore make the board hang as any access to GPU
-> memory space make bus locks up.
-> 
-> Call dev_pm_opp_set_opp() with the recommend OPP in
-> panfrost_devfreq_init() to enable the regulator, this will properly
-> configure and enable the regulator and will avoid any switch off
-> by regulator_late_cleanup().
-> 
-> Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Clément Péron <peron.clem@gmail.com>
+Both AMD and Intel recommend using INT3 after an indirect JMP. Make sure
+to emit one when rewriting the retpoline JMP irrespective of compiler
+SLS options or even CONFIG_SLS.
 
-Reviewed-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/kernel/alternative.c | 9 +++++++++
+ arch/x86/net/bpf_jit_comp.c   | 3 ++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-Note this same sequence is used in the Lima driver, so it would be good
-to submit the fix there too as it presumably is affected by the same
-issue. I've CC'd Qiang for visibility.
-
-I'll push this patch to drm-misc-fixes (with the typo above fixed), the
-device tree patches can go through a different tree.
-
-Steve
-
-> ---
->  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index 5110cd9b2425..fe5f12f16a63 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -131,6 +131,17 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->  		return PTR_ERR(opp);
->  
->  	panfrost_devfreq_profile.initial_freq = cur_freq;
-> +
-> +	/*
-> +	 * Set the recommend OPP this will enable and configure the regulator
-> +	 * if any and will avoid a switch off by regulator_late_cleanup()
-> +	 */
-> +	ret = dev_pm_opp_set_opp(dev, opp);
-> +	if (ret) {
-> +		DRM_DEV_ERROR(dev, "Couldn't set recommended OPP\n");
-> +		return ret;
-> +	}
-> +
->  	dev_pm_opp_put(opp);
->  
->  	/*
-
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 62f6b8b7c4a5..68d84cf8e001 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -453,6 +453,15 @@ static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
+ 		return ret;
+ 	i += ret;
+ 
++	/*
++	 * The compiler is supposed to EMIT an INT3 after every unconditional
++	 * JMP instruction due to AMD BTC. However, if the compiler is too old
++	 * or SLS isn't enabled, we still need an INT3 after indirect JMPs
++	 * even on Intel.
++	 */
++	if (op == JMP32_INSN_OPCODE && i < insn->length)
++		bytes[i++] = INT3_INSN_OPCODE;
++
+ 	for (; i < insn->length;)
+ 		bytes[i++] = BYTES_NOP1;
+ 
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index c1f6c1c51d99..37f821dee68f 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -419,7 +419,8 @@ static void emit_indirect_jump(u8 **pprog, int reg, u8 *ip)
+ 		OPTIMIZER_HIDE_VAR(reg);
+ 		emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
+ 	} else {
+-		EMIT2(0xFF, 0xE0 + reg);
++		EMIT2(0xFF, 0xE0 + reg);	/* jmp *%\reg */
++		EMIT1(0xCC);			/* int3 */
+ 	}
+ 
+ 	*pprog = prog;

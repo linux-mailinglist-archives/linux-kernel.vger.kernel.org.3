@@ -2,104 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C392B5B15F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB2B5B15F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiIHHsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S231205AbiIHHsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiIHHr6 (ORCPT
+        with ESMTP id S231136AbiIHHse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:47:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760B3C6FEC;
-        Thu,  8 Sep 2022 00:47:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 11A6F1F921;
-        Thu,  8 Sep 2022 07:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662623276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4+jY/L5+xe35wjNUaKjbU+iCet/hLbz6TyCvxP2dmm0=;
-        b=q2uaKkC1rcu77DvPauruHEVNp78d3UcgHYo6roqYS04TbzQga+wo3gUgYM7xc8RTAbag0b
-        Siee5YfUMtfmfxPxqkOhtZP8FU1vyGEbeWhPo02Tz2AY0PEdGFeJwOjRT85XiTIOJmldhN
-        n8cvx7UnpYatYAeIOdBLBa+REawwQmI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFAA713A6D;
-        Thu,  8 Sep 2022 07:47:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id v6YhNiueGWPJGgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 08 Sep 2022 07:47:55 +0000
-Date:   Thu, 8 Sep 2022 09:47:55 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxmeK2/HHS4AkXh0@dhcp22.suse.cz>
-References: <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
- <20220905234649.525vorzx27ybypsn@kmo-framework>
- <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
- <20220906182058.iijmpzu4rtxowy37@kmo-framework>
- <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
- <20220907130323.rwycrntnckc6h43n@kmo-framework>
- <20220907094306.3383dac2@gandalf.local.home>
- <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
- <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
- <20220908072950.yapakb5scocxezhy@kmo-framework>
+        Thu, 8 Sep 2022 03:48:34 -0400
+Received: from vsp02-out.oderland.com (vsp02-out.oderland.com [IPv6:2a02:28f0::27:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4958C6FF8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 00:48:31 -0700 (PDT)
+X-Scanned-Cookie: f500bda16b244583931b552d2d35209f2e653c44
+Received: from office.oderland.com (office.oderland.com [91.201.60.5])
+        by vsp-out.oderland.com (Halon) with ESMTPSA
+        id a130089a-2f4a-11ed-896b-b78c77300f9c;
+        Thu, 08 Sep 2022 09:48:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=oderland.se
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hNz1qgfISMLu+mZojW5slCUKdRQvys6MovQtucHRneA=; b=Rvt7rs58p+D0bLml+dDZCxupzR
+        CWxyy+L/2ywaIf6qkpb74tbQ0ievLmuyevzLIbff/3lyFfyrxuiHcYik0j5ad4emUjAtBqEnQIvmk
+        MKPd74JJvI72Vu6HBycSagAxsVNm6QIsyil4kwnqs5656hRmUCMkx0uhU7Ftsjn9j1w8R6tKtyHc0
+        TD9rXoFTLpvMIc0DqHX5bcEl8iStfe/0Ko2p+pHHwr4PS/2FxZ1unw3rxiI3xIoQjk4LSJF9Zgycf
+        Q9zplvXt5NuzUspj57kYDZyygTFeVrSb+mm+6xSX1EQ3Jx4ccCLbYpzHCjbNzehOvcZMfvrc5nkGb
+        DKRsutHw==;
+Received: from 160.193-180-18.r.oderland.com ([193.180.18.160]:36942 helo=[10.137.0.14])
+        by office.oderland.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <josef@oderland.se>)
+        id 1oWCH1-00G9zd-F0;
+        Thu, 08 Sep 2022 09:48:29 +0200
+Message-ID: <b8eff79f-0be0-e6a5-64ba-e085b0ea52b2@oderland.se>
+Date:   Thu, 8 Sep 2022 09:48:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908072950.yapakb5scocxezhy@kmo-framework>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
+ Thunderbird/104.0
+Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
+From:   Josef Johansson <josef@oderland.se>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+ <Yxj1ZQjBfdG1u93d@shikoro> <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
+Content-Language: en-US
+In-Reply-To: <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+x-oderland-domain-valid: yes
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -108,33 +65,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 08-09-22 03:29:50, Kent Overstreet wrote:
-> On Thu, Sep 08, 2022 at 09:12:45AM +0200, Michal Hocko wrote:
-> > Then you have probably missed a huge part of my emails. Please
-> > re-read. If those arguments are not clear, feel free to ask for
-> > clarification. Reducing the whole my reasoning and objections to the
-> > sentence above and calling that vapid and lazy is not only unfair but
-> > also disrespectful.
-> 
-> What, where you complained about slab's page allocations showing up in the
-> profile instead of slab, and I pointed out to you that actually each and every
-> slab call is instrumented, and you're just seeing some double counting (that we
-> will no doubt fix?)
-> 
-> Or when you complained about allocation sites where it should actually be the
-> caller that should be instrumented, and I pointed out that it'd be quite easy to
-> simply change that code to use _kmalloc() and slab_tag_add() directly, if it
-> becomes an issue.
-> 
-> Of course, if we got that far, we'd have this code to thank for telling us where
-> to look!
-> 
-> Did I miss anything?
+On 9/8/22 08:07, Josef Johansson wrote:
+> On 9/7/22 21:47, Wolfram Sang wrote:
+>> On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
+>>> ACPI core in conjunction with platform driver core provides
+>>> an infrastructure to enumerate ACPI devices. Use it in order
+>>> to remove a lot of boilerplate code.
+>>>
+>>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Josef, do you have resources to test this patch before I apply it?
+>>
+> Yes, I'll make that happen today.
+Hi,
 
-Feel free to reponse to specific arguments as I wrote them. I won't
-repeat them again. Sure we can discuss how important/relevant those
-are. And that _can_ be a productive discussion.
+I compiled with linux-6.0.0-rc4 with your patch on top.
 
--- 
-Michal Hocko
-SUSE Labs
+Have been running flawless so far. Boot showed no problems.
+
+Thanks!
+
+Regards
+- Josef

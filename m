@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99705B29F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE505B29FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiIHXMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S229993AbiIHXMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiIHXMl (ORCPT
+        with ESMTP id S229777AbiIHXMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:12:41 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C02B109D35;
-        Thu,  8 Sep 2022 16:12:38 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id j1so14418053qvv.8;
-        Thu, 08 Sep 2022 16:12:37 -0700 (PDT)
+        Thu, 8 Sep 2022 19:12:42 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B5A109D3F;
+        Thu,  8 Sep 2022 16:12:39 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id c11so124443qtw.8;
+        Thu, 08 Sep 2022 16:12:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=LekhyfyLEGrL/Y4ELhup3OR30c1ArC1GLd91TT7wsJM=;
-        b=GDDdHvfaPa928ajEpfAPttUEV8FG+WOP9cOClsshONomluO48RSAKoDjxdIL5uorDH
-         wDct4pSyIbYKLhOq2o+/F5E5JgJwIM7Oez39pUDlquD3xA2l4JUraSWV48hkFCRWOGbo
-         2eA3abM9RLqUzB9QtMnNFvNcTRXpP8xbW2c3Kh2hmNkkPZve03YY10xnG8Zvp9d3ZGgY
-         JVeZ9xYgYjRGgm0N/rm5BdoLCtXq/g0WMk7ScwY8gE+QA9OmmaBmV2AjhHBuKXV021CQ
-         aPRvqgTXvUVyylzpHPFRZAqK4cRZh3JCA9WZpxNdtVJaWQIxCJ6BGh3M3ZCpFXnsN5tp
-         I2Xw==
+        bh=7GbYCslF48I7fDwOVdzpc0jOBmHVLbyPOHBU4jxAGaA=;
+        b=MNqblqXRv41x2WfZt9b7a2HBWyu40d86SzgQtgsU/Anvj2J1m2bd4UtWh+SSz+qO/4
+         5I4/eB45HO7/in/fg02zNRFGVhvyScECnPJo7p4k2fvJTVj0Iv+cuegpxYNtSCUAmZh6
+         O3AIjyrB/Tf6L5y3JKeluPozI3/HgR4gfRXWA+D/VaWnLMW5J/V7wamei+hUvYv8QTvQ
+         M9VvEag02pIW1sUoqc2s9AbKyIF4jDJzbsw7I9SqB2kWLr5owyWx/ZWzwP5V0glCqS/0
+         mFtmUkM/h8zV0kJAFoGwMoyBm9iy5/tlSJYXRPWm6uSqIqFJzny9bhIexPhR4WG+Rx4R
+         pbaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=LekhyfyLEGrL/Y4ELhup3OR30c1ArC1GLd91TT7wsJM=;
-        b=tLsAU0nUCpgh/R0xnpXeRGPye5NzIt5Bge2o0JqGQgIbxI/HGcQsuVxAzDeSeUTK7L
-         RfKAvFC/9CqlZA8s6P627wwgeO/T6VDGTe3R4ihio+GZWWiFn8qWvXhH0KYcON4SaeCV
-         TmYOJUWxf64xDg2H05LLkuunFCA36eeyeBoCujvmuG+4YHsht4vgPuQtxZJkasqNgELj
-         jBdL+HeIPcH87zQrHgxO53cA6w0Du4WLsjeOwb1/km1/SBsEG0dVh6FemLsKl/gSsCKR
-         LlRT83fLY0r6dfgFbJ1ceKIuOCvThp3oHzr0TdIW9nz5JG+Rj8otUiPAAwd0dkp1ckB6
-         w1fQ==
-X-Gm-Message-State: ACgBeo2fcDr5V7neFvxbvO2PlcvT/0L8dI1kNf+es3tBxDBWiTdHgweI
-        SLgdh/QO9FFv97jPnyB37s4H3PZmij8=
-X-Google-Smtp-Source: AA6agR5Xlxpt4VG9p2JKsfgy75lK21+aOI3vSt6zCd/lQEygSYMb/HYXVmKaWp+NrHQynu/ZOisS8A==
-X-Received: by 2002:a05:6214:224a:b0:4aa:a7c3:f6c3 with SMTP id c10-20020a056214224a00b004aaa7c3f6c3mr9694581qvc.129.1662678756345;
-        Thu, 08 Sep 2022 16:12:36 -0700 (PDT)
+        bh=7GbYCslF48I7fDwOVdzpc0jOBmHVLbyPOHBU4jxAGaA=;
+        b=ls2yqX2fAHizO3mkCEzJOjGEUqn5qY3AJFo/P9dvPfEAeTRtDGwRYSNgEIYZePWwgV
+         7b/SkuWDVisr8PcAQ1Jy7tMU/O/NgKo18Du+U4HjlDGDZa2QYlMLOMpTX9kojEu/OrGf
+         gx1vdAq+L9At/K5b3lGf2pXQ2DruptYjWoEfdENUX8QyFsZNOZtydtGcnqh+OWOd/qUj
+         7BNMVeVwVsV8qwGivXpKIth/5zU+ZYqFrxd6rX7qY4YjGzKdrm1Pvy33TGkyaYUKFKm9
+         10BN96cq6Z18dXprgKp/a/P2pucoIYHUYlY8qqcyqoSb2Dcn6iiJ5yoLqQTFvAjCvBEF
+         I8rQ==
+X-Gm-Message-State: ACgBeo0m9KjCxVD0wqwhXWRcs5uXQNiWEY2e2xzIGLqf/diOhkMqh2vR
+        7KTioPax2kpQAKI2JmwDMlkp74N4z7k=
+X-Google-Smtp-Source: AA6agR5OCtKJm7UxbDCgIiwuDUHGulzSLE9lv2MYOz31rzNNAlMdgP9wuSlRSrFEF0vzP1ucPflCgw==
+X-Received: by 2002:a05:622a:15c7:b0:344:5321:5874 with SMTP id d7-20020a05622a15c700b0034453215874mr10130388qty.506.1662678758680;
+        Thu, 08 Sep 2022 16:12:38 -0700 (PDT)
 Received: from localhost ([2607:fea8:a2e2:2d00::6f2a])
-        by smtp.gmail.com with UTF8SMTPSA id t11-20020a05620a034b00b006a5d2eb58b2sm86597qkm.33.2022.09.08.16.12.34
+        by smtp.gmail.com with UTF8SMTPSA id s5-20020a05620a29c500b006b93ff541dasm117466qkp.8.2022.09.08.16.12.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 16:12:35 -0700 (PDT)
+        Thu, 08 Sep 2022 16:12:38 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     Andy Gross <agross@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         Joel Selvaraj <jo@jsfamily.in>,
         Richard Acayan <mailingradian@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 1/3] dt-bindings: clock: gcc-sdm845: add sdm670 global clocks
-Date:   Thu,  8 Sep 2022 19:12:22 -0400
-Message-Id: <20220908231224.209020-2-mailingradian@gmail.com>
+Subject: [PATCH v3 2/3] clk: qcom: gcc-sdm845: use device tree match data
+Date:   Thu,  8 Sep 2022 19:12:23 -0400
+Message-Id: <20220908231224.209020-3-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220908231224.209020-1-mailingradian@gmail.com>
 References: <20220908231224.209020-1-mailingradian@gmail.com>
@@ -83,113 +83,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Snapdragon 670 clocks will be added into the sdm845 gcc driver. Most
-of the new clocks, GDSCs, and resets already have reserved IDs but there
-are some resources that don't. Add the new clock from Snapdragon 670 and
-document the differences between the SoC parent clocks.
+This driver will support more than one SoC's set of clocks, and set of
+GDSCs. This behavior would be unclean with hard-coded static variables.
+Support it by grabbing clocks, GDSCs, and BCRs in the match data.
 
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/clock/qcom,gcc-sdm845.yaml       | 61 +++++++++++++++----
- include/dt-bindings/clock/qcom,gcc-sdm845.h   |  1 +
- 2 files changed, 49 insertions(+), 13 deletions(-)
+ drivers/clk/qcom/gcc-sdm845.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-index daf7906ebc40..06693c492d02 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
-@@ -19,23 +19,17 @@ description: |
+diff --git a/drivers/clk/qcom/gcc-sdm845.c b/drivers/clk/qcom/gcc-sdm845.c
+index 58aa3ec9a7fc..cd6e4e41dc9b 100644
+--- a/drivers/clk/qcom/gcc-sdm845.c
++++ b/drivers/clk/qcom/gcc-sdm845.c
+@@ -3574,7 +3574,7 @@ static const struct qcom_cc_desc gcc_sdm845_desc = {
+ };
  
- properties:
-   compatible:
--    const: qcom,gcc-sdm845
-+    enum:
-+      - qcom,gcc-sdm670
-+      - qcom,gcc-sdm845
+ static const struct of_device_id gcc_sdm845_match_table[] = {
+-	{ .compatible = "qcom,gcc-sdm845" },
++	{ .compatible = "qcom,gcc-sdm845", .data = &gcc_sdm845_desc },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, gcc_sdm845_match_table);
+@@ -3600,6 +3600,7 @@ static const struct clk_rcg_dfs_data gcc_dfs_clocks[] = {
  
-   clocks:
--    items:
--      - description: Board XO source
--      - description: Board active XO source
--      - description: Sleep clock source
--      - description: PCIE 0 Pipe clock source
--      - description: PCIE 1 Pipe clock source
-+    minItems: 3
-+    maxItems: 5
+ static int gcc_sdm845_probe(struct platform_device *pdev)
+ {
++	const struct qcom_cc_desc *gcc_desc;
+ 	struct regmap *regmap;
+ 	int ret;
  
-   clock-names:
--    items:
--      - const: bi_tcxo
--      - const: bi_tcxo_ao
--      - const: sleep_clk
--      - const: pcie_0_pipe_clk
--      - const: pcie_1_pipe_clk
-+    minItems: 3
-+    maxItems: 5
+@@ -3616,7 +3617,8 @@ static int gcc_sdm845_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
-   '#clock-cells':
-     const: 1
-@@ -63,6 +57,47 @@ required:
-   - '#reset-cells'
-   - '#power-domain-cells'
+-	return qcom_cc_really_probe(pdev, &gcc_sdm845_desc, regmap);
++	gcc_desc = of_device_get_match_data(&pdev->dev);
++	return qcom_cc_really_probe(pdev, gcc_desc, regmap);
+ }
  
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,gcc-sdm670
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Board XO source
-+            - description: Board active XO source
-+            - description: Sleep clock source
-+        clock-names:
-+          items:
-+            - const: bi_tcxo
-+            - const: bi_tcxo_ao
-+            - const: sleep_clk
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,gcc-sdm845
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Board XO source
-+            - description: Board active XO source
-+            - description: Sleep clock source
-+            - description: PCIE 0 Pipe clock source
-+            - description: PCIE 1 Pipe clock source
-+        clock-names:
-+          items:
-+            - const: bi_tcxo
-+            - const: bi_tcxo_ao
-+            - const: sleep_clk
-+            - const: pcie_0_pipe_clk
-+            - const: pcie_1_pipe_clk
-+
- additionalProperties: false
- 
- examples:
-diff --git a/include/dt-bindings/clock/qcom,gcc-sdm845.h b/include/dt-bindings/clock/qcom,gcc-sdm845.h
-index 968fa65b9c42..d78b899263a2 100644
---- a/include/dt-bindings/clock/qcom,gcc-sdm845.h
-+++ b/include/dt-bindings/clock/qcom,gcc-sdm845.h
-@@ -199,6 +199,7 @@
- #define GCC_QSPI_CNOC_PERIPH_AHB_CLK				189
- #define GCC_LPASS_Q6_AXI_CLK					190
- #define GCC_LPASS_SWAY_CLK					191
-+#define GPLL6							192
- 
- /* GCC Resets */
- #define GCC_MMSS_BCR						0
+ static struct platform_driver gcc_sdm845_driver = {
 -- 
 2.37.3
 

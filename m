@@ -2,103 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881EE5B124D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B395B1226
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 03:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiIHCBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 22:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S229845AbiIHBhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 21:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIHCBu (ORCPT
+        with ESMTP id S229508AbiIHBhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 22:01:50 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D147B2BF;
-        Wed,  7 Sep 2022 19:01:49 -0700 (PDT)
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 28821XjL012230;
-        Thu, 8 Sep 2022 11:01:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28821XjL012230
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662602494;
-        bh=6Y1Bya3aPZIeSCr6IhdukpsTZDl2mHIQOZnpZe9hjBU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hC6w73/jbQba9O4cZKC0LRYCxDjbEM7J4YwUZ+TXWkQ6p+n1ytM22WZ+1NNPqOUrq
-         ZtDzyIpKPB2UGdcOFYc3TIZ/3OIZCA519hrGV/3vCt/ef+hGI50ch/xJyGYvW5M4mO
-         l1g6cqI4BkcKuoWzvynpDu3v9hv1KFHUce5+W/A5ACyvxPdfHuZnnEiHzfG3Y+vasj
-         kLski423IKrQiQh0RGx9esWdiyt0axCXTcxFs9G0NGhdkMh2SxmmtLB1UJSsdoeMOi
-         XttpO2B3Na0Pm8PuS/F84vEvl3+NKW3SE0NWYBBnYzHeOik6pkGyY2EXmGhwQtxstP
-         SGapoNPOx+Q7g==
-X-Nifty-SrcIP: [209.85.161.45]
-Received: by mail-oo1-f45.google.com with SMTP id c9-20020a4a4f09000000b0044e1294a737so2744625oob.3;
-        Wed, 07 Sep 2022 19:01:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2xwQWhlJyGe8tgJDwOsixTqNKCVQ5ZezKH+7rvTUXM6/ObnRGK
-        abimIXtgkrH8LqJ6n/DK1hsSrMtWZEcIYb2ZUDs=
-X-Google-Smtp-Source: AA6agR5LEebdg5DlSdHbvjogjPHbIZgd4TjczzfDaGtjQ3D+KX3gf7+iYfPULy+rgzHwPdEJkWdG1FpOt2ozkzowVUw=
-X-Received: by 2002:a4a:9789:0:b0:451:437b:cc58 with SMTP id
- w9-20020a4a9789000000b00451437bcc58mr2283450ooi.96.1662602492951; Wed, 07 Sep
- 2022 19:01:32 -0700 (PDT)
+        Wed, 7 Sep 2022 21:37:04 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3B4C6CF5;
+        Wed,  7 Sep 2022 18:37:02 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MNM870B20zkWvl;
+        Thu,  8 Sep 2022 09:33:11 +0800 (CST)
+Received: from kwepemm600008.china.huawei.com (7.193.23.88) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 09:37:00 +0800
+Received: from huawei.com (10.175.100.227) by kwepemm600008.china.huawei.com
+ (7.193.23.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 8 Sep
+ 2022 09:36:59 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH 0/4] perf: Clean up by adding helpers
+Date:   Thu, 8 Sep 2022 10:11:37 +0800
+Message-ID: <20220908021141.27134-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220906061313.1445810-1-masahiroy@kernel.org>
- <Yxj7/WxCcdIuEHG6@bergen.fjasle.eu> <Yxj8lTPByGnahpWq@bergen.fjasle.eu>
-In-Reply-To: <Yxj8lTPByGnahpWq@bergen.fjasle.eu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 8 Sep 2022 11:00:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQuJibnWaseXVwc9eLAeQkj6AhyxVk-YHeRgEi7vjNBjg@mail.gmail.com>
-Message-ID: <CAK7LNAQuJibnWaseXVwc9eLAeQkj6AhyxVk-YHeRgEi7vjNBjg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] kbuild: various cleanups
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600008.china.huawei.com (7.193.23.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 5:18 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Wed, 7 Sep 2022 22:15:57 +0200 Nicolas Schier wrote:
-> > On Tue,  6 Sep 2022 15:13:05 +0900 Masahiro Yamada wrote:
-> > >
-> > >  - Refactor single target build to make it work more correctly
-> > >  - Link vmlinux and modules in parallel
-> > >  - Remove head-y syntax
-> > >
-> > >
-> > > Masahiro Yamada (8):
-> > >   kbuild: fix and refactor single target build
-> > >   kbuild: rename modules.order in sub-directories to .modules.order
-> > >   kbuild: move core-y and drivers-y to ./Kbuild
-> > >   kbuild: move .vmlinux.objs rule to Makefile.modpost
-> > >   kbuild: move vmlinux.o rule to the top Makefile
-> > >   kbuild: unify two modpost invocations
-> > >   kbuild: use obj-y instead extra-y for objects placed at the head
-> > >   kbuild: remove head-y syntax
-> >
-> > I'm not able to apply the patchset, neither on your current kbuild
-> > branch nor on for-next.  What am I missing here?  Could you give me a
-> > hint for a patchset base?
-> >
-> > Thanks and kind regards,
-> > Nicolas
->
->
-> ooops.  It _is_ already on kbuild, sorry for the noise.
+Some clean up in builtin-lock.c, builtin-timechart.c, and
+builtin-trace.c.
 
+Shang XiaoJing (4):
+  perf trace: Use zalloc to save initialization of syscall_stats
+  perf lock: Add get_key_by_aggr_mode helper
+  perf timechart: Add create_pidcomm helper
+  perf timechart: Add p_state_end helper
 
-Yes.
-If you are happy to review and/or test the branch,
-I will add Reviewed-by/Tested-by when I rebase it.
-
-
-
+ tools/perf/builtin-lock.c      | 129 ++++++++++++++-------------------
+ tools/perf/builtin-timechart.c |  65 +++++++++--------
+ tools/perf/builtin-trace.c     |   5 +-
+ 3 files changed, 88 insertions(+), 111 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.17.1
+

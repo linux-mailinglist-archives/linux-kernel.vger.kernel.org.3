@@ -2,45 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34575B1CAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0909E5B1CAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiIHMVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S231663AbiIHMVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiIHMVV (ORCPT
+        with ESMTP id S231642AbiIHMV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:21:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A441511C14D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:21:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82CBF61CD7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 12:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93570C433C1;
-        Thu,  8 Sep 2022 12:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662639678;
-        bh=ta0R/1zAhxfsBz0h0xvErcAQgXEKY1W5B/bPXLt1pgk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MBJQ7XnRfxeevd8jB60VScgtpTJyweRjGYdhAGm8NWNd6CXfsmn4KT/DbsbPRBFtd
-         t5tf3cgWAd7Etcf/vuBHxpF6SZuDRYM2HbtRY9almo5bf/ALh/sDH/TwlSnfcinWII
-         HJW/INropBuYP3GXq0fwYvDWJm/h2TaVKGLsSLL2yx/KBIxVqvwTMhrJKkQ2lMDYdv
-         F3ht8jmm+WK6AJs56jJZjuKJVi1bJZ6xyPmehcz2r2I43QxOALQYXGlUOjZX+hqLrm
-         JKRU9BsC3fVi7ed9IN2y6LciuxinYgHsd6wRFCiSu0nSagkmzXVEg0dXd1rZcIz6IC
-         MTWuO1BlG3bUg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator fixes for v6.0-rc4
-Date:   Thu, 08 Sep 2022 13:21:06 +0100
-Message-Id: <20220908122117.93570C433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Thu, 8 Sep 2022 08:21:28 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C6A11C15E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:21:27 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id f11so13409359lfa.6
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 05:21:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=VgEQBzw8CkYfD0tP7q7CxKLDwxdimyf08wYdm+SsNM4=;
+        b=JE1lwkLdwJjyylYh6CyMucqBmO10IDxKkLskdbPjbV+hFAmyhcGhrysugJC6gpLh3u
+         UTjlfGQAm7CSZn2UzNfKJVwXpJvcGAvEUY37GR+a6TUpZZkwgJT9mBWjD6xrnW4+DnET
+         G6Afz4SSXRiSPgRR4TEe6LPng8N/rCbJ1ApYoKI+YhEMlgOctkYIxY4V5n//tIhS5z6U
+         DDVnctzdgoGGro8KojCs+YWeobRoImK/yNmoCr3m5H22ikFRXBgtpXlLlT+Pvz2W3ZCn
+         dP7saY7lfj0IreSJ/AWm1thwoiLK027MbbAAyg1nk083yGLgzomJOF783aGxsl8Yval/
+         pUHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VgEQBzw8CkYfD0tP7q7CxKLDwxdimyf08wYdm+SsNM4=;
+        b=2xkhVWZZXE4um7iuYqxzakOrlWInaLXhOqXzkdlb5GdIUWA77/h9k130Hj/z0qa5qF
+         mqxd9yCI1s1QgGxVMESXJKdr0kr6e5Rqb0EkBTKqgdLcZLNjTmY35xWV1Lrx33m8M0ql
+         z1Vw/NsDRWSe6p6E6U+mrx0jArb1stAQsWr/HVH2MPOMEUkv47xkoNR9GQzYTyM6Xbog
+         IlLjx1Irhycr2Ydr6z4EGYRVLbnuNYwIt7OoHItbh9RtjNS3JLue/s8FHIX0xl8qq7EN
+         VfKjgTWN4QpqtJF1qEACDHcsb2MEcwbo7WLCwAu1rEsESm85CzG2xCPftMsfbZaHLitV
+         zaaQ==
+X-Gm-Message-State: ACgBeo3wleAZ5VjDAAfqrRaN1ZnrXZhhSbxilJMojo4Ptt3hNt5Xr1NL
+        4rVEvU47WD32e5iQFSf5cz7aDZg6on9Zlg==
+X-Google-Smtp-Source: AA6agR4tuDhl0ADnXwL3Hle5HBL36tuaPl5fK8SbbKt05XtYQZiLpAzFF+LyOp31cFAZNVH2s6NpaA==
+X-Received: by 2002:a05:6512:2391:b0:494:7f90:ac04 with SMTP id c17-20020a056512239100b004947f90ac04mr2624366lfv.521.1662639685495;
+        Thu, 08 Sep 2022 05:21:25 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id bg37-20020a05651c0ba500b0026acc9edecdsm1060276ljb.47.2022.09.08.05.21.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 05:21:24 -0700 (PDT)
+Message-ID: <f89cede6-f312-3500-c900-0468200a4464@linaro.org>
+Date:   Thu, 8 Sep 2022 14:21:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 14/20] dt-bindings: mtd: relax the nvmem compatible
+ string
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220901221857.2600340-1-michael@walle.cc>
+ <20220901221857.2600340-15-michael@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220901221857.2600340-15-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,35 +88,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+On 02/09/2022 00:18, Michael Walle wrote:
+> The "user-otp" and "factory-otp" compatible string just depicts a
+> generic NVMEM device. But an actual device tree node might as well
+> contain a more specific compatible string. Make it possible to add
+> more specific binding elsewhere and just match part of the compatibles
+> here.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> changes since v1:
+>  - fix typo in commit message
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-are available in the Git repository at:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v6.0-rc4
 
-for you to fetch changes up to 475043fabe8c58fb18c32c7942d8754897bd11fa:
-
-  regulator: Fix qcom,spmi-regulator schema (2022-08-31 12:13:17 +0100)
-
-----------------------------------------------------------------
-regulator: Fixes for v6.0
-
-One core fix here improving the error handling on enable failure, plus
-smaller fixes for the pfuze100 drive and the SPMI DT bindings.
-
-----------------------------------------------------------------
-Andrew Halaney (1):
-      regulator: core: Clean up on enable failure
-
-Jean-Philippe Brucker (1):
-      regulator: Fix qcom,spmi-regulator schema
-
-Xiaolei Wang (1):
-      regulator: pfuze100: Fix the global-out-of-bounds access in pfuze100_regulator_probe()
-
- .../devicetree/bindings/regulator/qcom,spmi-regulator.yaml       | 3 +--
- drivers/regulator/core.c                                         | 9 +++++++--
- drivers/regulator/pfuze100-regulator.c                           | 2 +-
- 3 files changed, 9 insertions(+), 5 deletions(-)
+Best regards,
+Krzysztof

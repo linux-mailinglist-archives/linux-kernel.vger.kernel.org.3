@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856EB5B24B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68F25B24C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbiIHRf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S230379AbiIHRg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiIHRfZ (ORCPT
+        with ESMTP id S231847AbiIHRgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:35:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07485FE3
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:35:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662658524; x=1694194524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YNFerqpJPpOJPGDi6l26UsPT7NdSVmzfo2zjn07INMQ=;
-  b=c5XvHLuA2+oBqOcwrIGc1zTrBBp0YPmoHkhpB8X1S2wWDM8Z/CHNjUB+
-   5MaB6mX34MCL8gGQNVOHiJj269h3ZZGyE8h7/osnu9BHpH8fJd+LwYS9F
-   FWzNy25gy1QmKMy1gm1MCNaBpdoVyvjC0FoirclTaXf4v+xpETr0gOGk9
-   1RPUUVt7Vdzy7KEtIKFAyWJsb6UwQVoHwnAh+m7jzQpQsPTwa9Q+f7y/m
-   USEGkLwwmNolGRplF/NNxeW0e/kuwoRbuXnNZtJm6emw08saTYLTFQpeX
-   Se1xDdR2IjCcv6Oy/6xthGK9A8Ui9vR4/CKh0ojieZha5sPJ6Pt/Nn6gv
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="323472306"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="323472306"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 10:35:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="704094746"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Sep 2022 10:35:22 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWLQw-0000Bh-0o;
-        Thu, 08 Sep 2022 17:35:22 +0000
-Date:   Fri, 9 Sep 2022 01:34:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matteo Croce <mcroce@microsoft.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 1/42] arch/riscv/lib/string.c:90:7: error:
- redefinition of '__memcpy'
-Message-ID: <202209090127.x1z9vvlp-lkp@intel.com>
+        Thu, 8 Sep 2022 13:36:02 -0400
+Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83888C57AF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:35:56 -0700 (PDT)
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
+        with SMTP; 8 Sep 2022 20:35:54 +0300
+Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 288HZlaY026057;
+        Thu, 8 Sep 2022 13:35:48 -0400
+Received: (from asmaa@localhost)
+        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 288HZkWs032687;
+        Thu, 8 Sep 2022 13:35:46 -0400
+From:   Asmaa Mnebhi <asmaa@nvidia.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>, robh@kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: [PATCH v3 0/9] i2c-mlxbf.c: bug fixes and new feature support
+Date:   Thu,  8 Sep 2022 13:35:35 -0400
+Message-Id: <20220908173544.32615-1-asmaa@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   044c1f5e968de7d30940431fbb90da599074ea1c
-commit: c247f6e6c7ba6abb92177ba2a742f60a3244d6d2 [1/42] riscv: optimized memcpy
-config: riscv-randconfig-r021-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090127.x1z9vvlp-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/c247f6e6c7ba6abb92177ba2a742f60a3244d6d2
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout c247f6e6c7ba6abb92177ba2a742f60a3244d6d2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+This is a series of patches fixing several bugs and implementing
+new features.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Bug fixes:
+1) Fix the frequency calculation
+2) Fix incorrect base address passed during io write
+3) prevent stack overflow in mlxbf_i2c_smbus_start_transaction()
+4) Support lock mechanism to avoid race condition between entities
+   using the i2c bus
 
-All error/warnings (new ones prefixed by >>):
+Cleanup:
+5) remove IRQF_ONESHOT flag as it is no longer needed.
 
->> arch/riscv/lib/string.c:90:57: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-                                                           ^
-   include/linux/compiler_attributes.h:372:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   arch/riscv/lib/string.c:31:7: note: previous definition is here
-   void *__memcpy(void *dest, const void *src, size_t count)
-         ^
->> arch/riscv/lib/string.c:90:7: error: redefinition of '__memcpy'
-   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-         ^
-   arch/riscv/include/asm/string.h:25:31: note: expanded from macro 'memcpy'
-   #define memcpy(dst, src, len) __memcpy(dst, src, len)
-                                 ^
-   arch/riscv/lib/string.c:31:7: note: previous definition is here
-   void *__memcpy(void *dest, const void *src, size_t count)
-         ^
-   1 warning and 1 error generated.
+Features:
+6) Update SPDX license
+7) Support multi slave functionality
+8) Support BlueField-3 SoC
+9) Update binding devicetree
 
+What has changed from v1->v2:
+- moved all the bug fixes to the top commits and left the features for last
+- split the BlueField-3 SoC patch into 2: one for the driver code and another
+  patch for the device tree binding yaml documentation file
+- keep the device tree/acpi tables backward compatible. So add the new resources at the
+  end of the enum.
+- update the license in a separate patch
 
-vim +/__memcpy +90 arch/riscv/lib/string.c
+In v3, updated the cover letter to reflect changes made from v1->v2 and add Rev-by
 
-    89	
-  > 90	void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+Asmaa Mnebhi (9):
+  i2c-mlxbf.c: Fix frequency calculation
+  i2c-mlxbf.c: remove IRQF_ONESHOT
+  i2c-mlxbf.c: incorrect base address passed during io write
+  i2c-mlxbf: prevent stack overflow in
+    mlxbf_i2c_smbus_start_transaction()
+  i2c-mlxbf.c: support lock mechanism
+  i2c-mlxbf.c: Update SPDX license
+  i2c-mlxbf: add multi slave functionality
+  i2c-mlxbf.c: support BlueField-3 SoC
+  i2c-mlxbf.c: Update binding devicetree
+
+ .../bindings/i2c/mellanox,i2c-mlxbf.yaml      |  49 +-
+ MAINTAINERS                                   |   1 +
+ drivers/i2c/busses/i2c-mlxbf.c                | 872 ++++++++++--------
+ 3 files changed, 525 insertions(+), 397 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.1
+

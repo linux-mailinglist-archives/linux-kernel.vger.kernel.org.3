@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DB15B290D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675145B2911
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiIHWKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S229764AbiIHWKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiIHWK2 (ORCPT
+        with ESMTP id S229897AbiIHWKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:10:28 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F0EB9FA8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:10:26 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3378303138bso181531577b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 15:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=/WcHqdHM8dnvu0KhL8XnDPtvYcltW68n+l5+9CRl2js=;
-        b=SkIfqdYOLK8R9nL8tGEdusHKauZ2yGxXEslcHgQHtVciNUS/jVWDcjmB3+hBBisgPv
-         4jvuzOhivKBk3kAn0wjyfdxZSzCHSZeRzRhXhofW31wAiQSccBgCDeVSqueT1dPMcvLm
-         /lcAaPhRKLufjVrLKefaGBQgHfVB5wVT4O1F6jDr2iQGdsC/or9SuLb9CRCPEaM0mIc4
-         rQTYfUi+Rg84zYOLbnUVLBzrUH9JhzhVCnVbwJVv05IhTOYk3i5o7aEc0HhyIYLQXcMZ
-         /RVQzgqwRNHvX13ec/twUcuqr5rlf6g0JwndelKboKm7502axGrsALyVS/71C1ZObF9a
-         uBIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=/WcHqdHM8dnvu0KhL8XnDPtvYcltW68n+l5+9CRl2js=;
-        b=SU8yFWqV2jHSxtXfVtfDDn0dYrgNK7FLcbOm2pbG1Bb/hroLj3IO+fNOO6ZSb6Yqza
-         WBxP99SQBjfQ42CBMiWcF4qeO3N/KVvX3Pa8BIlMqtQ3/bC6iZavG7CYzVx2fJTzp2AG
-         HVWzv312+zSb9yQ4e+9/K6EFQ5nKy/hi8YiX0LEgFamCxxlOvMC1qGD2ka/0zFOpM/lj
-         TzhLLL+fMusXj1K0o83OChiFHjIR2Vko6KpcmzGLQnQ53xf1v2jgChe2B4iU8UyBBOAl
-         mhXdU4oeU6sbbzvSLLta2f/zP6HAwh17xkk9IdBttHKoYRKUOk3OD7DXbW+tNly9bED9
-         E/nA==
-X-Gm-Message-State: ACgBeo1d//PH717E3N5DbdK1nX5wH1V29FsRfnkkPZreqD+1QdaSvM/3
-        DgDXb/pMtCMjeoaj7niWRcbwoXlWHJx9Hm6BlR6B2g==
-X-Google-Smtp-Source: AA6agR5+rTf9bfwfCt1fLupQFbPAbT6x+K2axID1pNI1aeS85ZPgfrTrkdqMwZuK2rOYbirjnMN4yqPTxMJw3wGhabM=
-X-Received: by 2002:a0d:ffc5:0:b0:341:6cc1:c589 with SMTP id
- p188-20020a0dffc5000000b003416cc1c589mr9842018ywf.418.1662675025716; Thu, 08
- Sep 2022 15:10:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <1662671917-17194-1-git-send-email-quic_khsieh@quicinc.com> <1662671917-17194-3-git-send-email-quic_khsieh@quicinc.com>
-In-Reply-To: <1662671917-17194-3-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 9 Sep 2022 01:10:14 +0300
-Message-ID: <CAA8EJpoEPD7pvLcCOnH-r-J=zVxm5C=ZOvMYLBqfwv4ufSWmDA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] drm/msm/dp: retry 3 times if set sink to D0 poweer
- state failed
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Thu, 8 Sep 2022 18:10:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32B0D7428
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:10:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3469761E43
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 22:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E72DC433C1;
+        Thu,  8 Sep 2022 22:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662675043;
+        bh=XCIEEKRk/9WvUsGT3ciNFy1vp9nzMZ5TXc8Ty7hjscY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=w3vl4Md4FHGe0tnYeeCYkS5h5JMouvTrbMEHCgTuEJxAyd0WvjHEUVdC26QvLciGm
+         Q5wf0618dav32gRdyqyKw2UQ5JLNldT0FNoNuSqQ4j66Fdxjh6Eiy+6PyzyuCbZhWK
+         9a/Dju5mptLZw4vwp/HA3Z1+woZeG4meSvOxTEhU=
+Date:   Thu, 8 Sep 2022 15:10:42 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Xin Hao <xhao@linux.alibaba.com>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon/sysfs: change few functions execute order
+Message-Id: <20220908151042.239189ddb1635c0f598c6fd2@linux-foundation.org>
+In-Reply-To: <20220908184947.103206-1-sj@kernel.org>
+References: <20220908081932.77370-1-xhao@linux.alibaba.com>
+        <20220908184947.103206-1-sj@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,69 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Sept 2022 at 00:18, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
-> Bring sink out of D3 (power down) mode into D0 (normal operation) mode
-> by setting DP_SET_POWER_D0 bit to DP_SET_POWER dpcd register. This
-> patch will retry 3 times if written to DP_SET_POWER register failed.
->
-> Changes in v4:
-> -- split into two patches
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_link.c | 21 ++++++++++++---------
->  1 file changed, 12 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
-> index 36f0af0..7b5ecf5 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_link.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_link.c
-> @@ -49,23 +49,26 @@ static int dp_aux_link_power_up(struct drm_dp_aux *aux,
->                                         struct dp_link_info *link)
->  {
->         u8 value;
-> -       int err;
-> +       ssize_t len;
-> +       int i;
->
->         if (link->revision < 0x11)
->                 return 0;
->
-> -       err = drm_dp_dpcd_readb(aux, DP_SET_POWER, &value);
-> -       if (err < 0)
-> -               return err;
-> +       len = drm_dp_dpcd_readb(aux, DP_SET_POWER, &value);
-> +       if (len < 0)
-> +               return len;
+On Thu,  8 Sep 2022 18:49:47 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-This is a separate patch.
+> Hi Xin,
+> 
+> On Thu, 8 Sep 2022 16:19:32 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+> 
+> > These nr_{schemes,regions,contexts,kdamonds}_store() functions are both call
+> 
+> checkpatch complains as below:
+> 
+>     WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+>     #10:
+>     These nr_{schemes,regions,contexts,kdamonds}_store() functions are both call
 
->
->         value &= ~DP_SET_POWER_MASK;
->         value |= DP_SET_POWER_D0;
->
-> -       err = drm_dp_dpcd_writeb(aux, DP_SET_POWER, value);
-> -       if (err < 0)
-> -               return err;
-> -
-> -       usleep_range(1000, 2000);
-> +       /* retry for 1ms to give the sink time to wake up */
-> +       for (i = 0; i < 3; i++) {
-> +               len = drm_dp_dpcd_writeb(aux, DP_SET_POWER, value);
-> +               usleep_range(1000, 2000);
-> +               if (len == 1)
-> +                       break;
-> +       }
->
->         return 0;
->  }
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+I fix that sort of thing.  A lot ;)
 
+> > kstrtoint() to get relative values from sysfs interface, if it return an
+> > error, there get kobject instance would be meaningless through 'container_of'.
+> 
+> I was thinking the compiler could do that kind of optimization on its own, so I
+> preferred to make the code shorter.
 
--- 
-With best wishes
-Dmitry
+Yes, the compiler will do this.
+
+> This change makes the code slightly longer, while the benefit of the change is
+> unclear.  I'd like to keep it as is unless we get some clear benefit of this?
+
+I find it a readability improvement.  Puts the initialization in a more
+appropriate place and avoids those nasty tricks to prevent unreasonable
+line lengths.
+

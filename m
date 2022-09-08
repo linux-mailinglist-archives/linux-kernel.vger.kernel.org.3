@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6235B1EEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20B05B1EF0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiIHN2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S232524AbiIHN3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiIHN2E (ORCPT
+        with ESMTP id S232629AbiIHN2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:28:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3DF5F7D2;
-        Thu,  8 Sep 2022 06:28:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 8 Sep 2022 09:28:36 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FFD512754D;
+        Thu,  8 Sep 2022 06:28:25 -0700 (PDT)
+Received: from 8bytes.org (p4ff2bb62.dip0.t-ipconnect.de [79.242.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6298D336C8;
-        Thu,  8 Sep 2022 13:28:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662643682; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=RT1Gz4wymCZ1ojdUPXrz4U4ocZ5NWI6wjKo7CZqGIrs=;
-        b=QKUuRXljHkhnThKconKWnu3w89IVetA1k2oIs8aEZNSkSrE47Qt+G40lJI/ROZGIuztw0G
-        BsuiQaOKwP46XCQq7HZzidmXeKu6UNHJGRzxGxnQN0Wn2nAO6e5FV92+hr3aByTxbNs/f3
-        58gB4cpqaDHx6G7Cdjp6kE+IPoOEsf0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662643682;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=RT1Gz4wymCZ1ojdUPXrz4U4ocZ5NWI6wjKo7CZqGIrs=;
-        b=HWfoRL2qVTqZOlpai0zE2nEuChRMg5C97vQGZBO585Vk4z7n92dXDj6tNHDmkO7YL5jskU
-        qbNBYfEZMx7+gXAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3E36A1322C;
-        Thu,  8 Sep 2022 13:28:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OkmNDuLtGWMxPQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Thu, 08 Sep 2022 13:28:02 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] media: dvb-core: Fix UAF due to refcount races at releasing
-Date:   Thu,  8 Sep 2022 15:27:54 +0200
-Message-Id: <20220908132754.30532-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
+        by mail.8bytes.org (Postfix) with ESMTPSA id 6ACB624069C;
+        Thu,  8 Sep 2022 15:28:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1662643704;
+        bh=tDuhKm9wQfdx7sUd4hZrnBHJRGruWciJVuKdXgXOhg8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nbzo8AaKCmLcJF6ywBTO/rjFGCww8jqPWoQ6WcBpBVILlVrrzm/ywTVSN6gtAJpvI
+         A4WA5AxpHDg5Sd62NU3n5V/Vi1+huBSshzEAQAZS7xn++DhH0oznzPGAGwNcfBbTfq
+         Twt1k1zJR6eHTY8BdmbO1Ww2bxQuZSP3YVyPip5R53rnIHglAbsB0bCYX0JzWlq5Om
+         M3nAYqpIKCggsduzZcJAnKN/jYWRx4aw2vg7FWSxO/QqqKt7N7pAfFXxtOG8goJGLV
+         xuiUyCTz0ghn5xX8vuVnC49wxhLLFEBrREVNPwdgKbdzr/ZwBoayTRYmgPniXvM4Pl
+         wZdcX65MXNFqw==
+Date:   Thu, 8 Sep 2022 15:28:22 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
+        robin.murphy@arm.com, alex.williamson@redhat.com,
+        suravee.suthikulpanit@amd.com, marcan@marcan.st,
+        sven@svenpeter.dev, alyssa@rosenzweig.io, robdclark@gmail.com,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
+        jonathanh@nvidia.com, jean-philippe@linaro.org, cohuck@redhat.com,
+        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
+        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
+        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        kevin.tian@intel.com
+Subject: Re: [PATCH v6 1/5] iommu: Return -EMEDIUMTYPE for incompatible
+ domain and device/group
+Message-ID: <Yxnt9uQTmbqul5lf@8bytes.org>
+References: <20220815181437.28127-1-nicolinc@nvidia.com>
+ <20220815181437.28127-2-nicolinc@nvidia.com>
+ <YxiRkm7qgQ4k+PIG@8bytes.org>
+ <Yxig+zfA2Pr4vk6K@nvidia.com>
+ <YxilZbRL0WBR97oi@8bytes.org>
+ <YxjQiVnpU0dr7SHC@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxjQiVnpU0dr7SHC@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -64,63 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dvb-core tries to sync the releases of opened files at
-dvb_dmxdev_release() with two refcounts: dvbdev->users and
-dvr_dvbdev->users.  A problem is present in those two syncs: when yet
-another dvb_demux_open() is called during those sync waits,
-dvb_demux_open() continues to process even if the device is being
-closed.  This includes the increment of the former refcount, resulting
-in the leftover refcount after the sync of the latter refcount at
-dvb_dmxdev_release().  It ends up with use-after-free, since the
-function believes that all usages were gone and releases the
-resources.
+On Wed, Sep 07, 2022 at 02:10:33PM -0300, Jason Gunthorpe wrote:
+> Sure, rust has all sorts of nice things. But the kernel doesn't follow
+> rust idioms, and I don't think this is a great place to start
+> experimenting with them.
 
-This patch addresses the problem by adding the check of dmxdev->exit
-flag at dvb_demux_open(), just like dvb_dvr_open() already does.  With
-the exit flag check, the second call of dvb_demux_open() fails, hence
-the further corruption can be avoided.
+It is actually a great place to start experimenting. The IOMMU
+interfaces are rather domain specific and if we get something wrong the
+damage is limited to a few callers. There are APIs much more exposed in
+the kernel which would be worse for that.
 
-Also for avoiding the races of the dmxdev->exit flag reference, this
-patch serializes the dmxdev->exit set up and the sync waits with the
-dmxdev->mutex lock at dvb_dmxdev_release().  Without the mutex lock,
-dvb_demux_open() (or dvb_dvr_open()) may run concurrently with
-dvb_dmxdev_release(), which allows to skip the exit flag check and
-continue the open process that is being closed.
+But anyway, I am not insisting on it.
 
-Reported-by: Hyunwoo Kim <imv4bel@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- drivers/media/dvb-core/dmxdev.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> It has been 3 months since EMEDIUMTYPE was first proposed and 6
+> iterations of the series, don't you think it is a bit late in the game
+> to try to experiment with rust error handling idioms?
 
-diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
-index f6ee678107d3..9ce5f010de3f 100644
---- a/drivers/media/dvb-core/dmxdev.c
-+++ b/drivers/media/dvb-core/dmxdev.c
-@@ -790,6 +790,11 @@ static int dvb_demux_open(struct inode *inode, struct file *file)
- 	if (mutex_lock_interruptible(&dmxdev->mutex))
- 		return -ERESTARTSYS;
- 
-+	if (dmxdev->exit) {
-+		mutex_unlock(&dmxdev->mutex);
-+		return -ENODEV;
-+	}
-+
- 	for (i = 0; i < dmxdev->filternum; i++)
- 		if (dmxdev->filter[i].state == DMXDEV_STATE_FREE)
- 			break;
-@@ -1448,7 +1453,10 @@ EXPORT_SYMBOL(dvb_dmxdev_init);
- 
- void dvb_dmxdev_release(struct dmxdev *dmxdev)
- {
-+	mutex_lock(&dmxdev->mutex);
- 	dmxdev->exit = 1;
-+	mutex_unlock(&dmxdev->mutex);
-+
- 	if (dmxdev->dvbdev->users > 1) {
- 		wait_event(dmxdev->dvbdev->wait_queue,
- 				dmxdev->dvbdev->users == 1);
--- 
-2.35.3
+If I am not mistaken, I am the person who gets blamed when crappy IOMMU
+code is sent upstream. So it is also up to me to decide in which state
+and how close to merging a given patch series is an whether it is
+already 'late in the game'.
 
+> So, again, would you be happy with a simple 
+> 
+>  #define IOMMU_EINCOMPATIBLE_DEVICE xx
+> 
+> to make it less "re-using random error codes"?
+
+I am wondering if this can be solved by better defining what the return
+codes mean and adjust the call-back functions to match the definition.
+Something like:
+
+	-ENODEV : Device not mapped my an IOMMU
+	-EBUSY  : Device attached and domain can not be changed
+	-EINVAL : Device and domain are incompatible
+	...
+
+That would be much more intuitive than using something obscure like
+EMEDIUMTYPE.
+
+Regards,
+
+	Joerg

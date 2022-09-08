@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE065B1DE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D435B1DD9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiIHNGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S230349AbiIHNEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiIHNG3 (ORCPT
+        with ESMTP id S232091AbiIHNEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:06:29 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD1D7435E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662642388; x=1694178388;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ceNr1+sPPwrh5Fh+T4eFSEZzh9oMtgKuBzPKarFhCLk=;
-  b=IV/MXvIx2dZQZc/KIqrnTRWI8GD/oNHkPvT9FaBNeqSLB35R0Rk75N5t
-   KK8xTj2qPHyqrgJ9mHcgFITRNAFd2QFN4Xo/GReIPC7KO55V4XxxLzS+b
-   BH8CbwF8KSE7Khb1/r8M/+s3QwQt3Y1PRj6macGY5+XRe1aZ3JhQAPZV/
-   IsEzYB4tM7fok60nIQj2nMbYBc7DeN4IpE16jtrBF5zC9eJL3x3IapV74
-   8/1Qtj1t6KWJVSOTPthr9Wta7Dep/o82phB0U7y8eY6yvZkdVNBYhw1TC
-   zFukrPfvxRgHto0mPgUQyU7mTuIFJhQ/Klis4tW04i71M0f+4xRqWpVdh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="361120677"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="361120677"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:04:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="648033113"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 08 Sep 2022 06:04:09 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWHCT-0007m9-0l;
-        Thu, 08 Sep 2022 13:04:09 +0000
-Date:   Thu, 8 Sep 2022 21:03:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:files2POTT 66/93] undefined reference to
- `slim_stream_prepare'
-Message-ID: <202209082046.AZVfl0da-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 09:04:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FA3D742E;
+        Thu,  8 Sep 2022 06:04:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBDD061CEF;
+        Thu,  8 Sep 2022 13:03:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AD2C433C1;
+        Thu,  8 Sep 2022 13:03:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662642239;
+        bh=RNPjRQkS198xJIWi4rthy4+btO4cb14a8DHt8yLQeOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HkIQkhRp+uXeTKAVt9NNLs5t9OV4esVfbKzJNlULRmMDLGxyLqSbZNwWkJlLEZKcA
+         eUix5rXrct29WRPNkT2wUqQc5degImAuLGEj/N/FkfSF/mhI2cDsopSHsaArdl7LAj
+         pzJ/Pd7iWhHytZT0sQC8DBs9PX+m7HZANlZKyZ3xKOZKq4S9jujXYbnS4LPkvlnhob
+         2l++v803TJf30cBhkTBVnOMMA6ILnE3TfjkNv84y9+hheWN9GZJsVSYNptFSpiLLwx
+         bQIOHEVun+SOCKQ4NPYbnNXzyt60by1rPGNI+a7Hq+X48aEowfprAniVoRm4lSZhXM
+         RMnZsUfscoE+w==
+Date:   Thu, 8 Sep 2022 22:03:54 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org
+Subject: Re: [PATCH v2 1/2] x86/kprobes: Fix kprobes instruction boudary
+ check with CONFIG_RETHUNK
+Message-Id: <20220908220354.28c196c8bbe4e83c83afcb59@kernel.org>
+In-Reply-To: <20220908050855.w77mimzznrlp6pwe@treble>
+References: <166260087224.759381.4170102827490658262.stgit@devnote2>
+        <166260088298.759381.11727280480035568118.stgit@devnote2>
+        <20220908050855.w77mimzznrlp6pwe@treble>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, 7 Sep 2022 22:08:55 -0700
+Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+> On Thu, Sep 08, 2022 at 10:34:43AM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
+> > speculative execution after RET instruction, kprobes always failes to
+> > check the probed instruction boundary by decoding the function body if
+> > the probed address is after such sequence. (Note that some conditional
+> > code blocks will be placed after function return, if compiler decides
+> > it is not on the hot path.)
+> > 
+> > This is because kprobes expects someone (e.g. kgdb) puts the INT3 as
+> > a software breakpoint and it will replace the original instruction.
+> > But these INT3 are not such purpose, it doesn't need to recover the
+> > original instruction.
+> > 
+> > To avoid this issue, memorize the branch target address during decoding
+> > and if there is INT3, restart decoding from unchecked target address.
+> 
+> Hm, is kprobes conflicting with kgdb actually a realistic concern?
+> Seems like a dangerous combination
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git files2POTT
-head:   e9e7df88996d64544178f48b0299dfe736c6aa22
-commit: 5b7f4e5de61ba8c44317718936864da29eeba62a [66/93] ASoC: codecs: allow compile testing without MFD drivers
-config: microblaze-buildonly-randconfig-r004-20220907 (https://download.01.org/0day-ci/archive/20220908/202209082046.AZVfl0da-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=5b7f4e5de61ba8c44317718936864da29eeba62a
-        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
-        git fetch --no-tags broonie-ci files2POTT
-        git checkout 5b7f4e5de61ba8c44317718936864da29eeba62a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
+I'm actually not sure, I don't recommend it. But it is safe just having
+fail-safe.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Either way, this feels overengineered.  Sort of like implementing
+> objtool in the kernel.
+> 
+> And it's incomplete: for a switch statement jump table (or C goto jump
+> table like in BPF), you can't detect the potential targets of the
+> indirect branch.
 
-Note: the broonie-ci/files2POTT HEAD e9e7df88996d64544178f48b0299dfe736c6aa22 builds fine.
-      It only hurts bisectability.
+In that case, it just fails to detect instruction boundary (and anyway
+optprobe just stops optimization if it finds the indirect jump). So it
+is still fail safe.
 
-All errors (new ones prefixed by >>):
+> 
+> Wouldn't it be much simpler to just encode the knowledge that
+> 
+>   	if (CONFIG_RETHUNK && !X86_FEATURE_RETHUNK)
+> 		// all rets are followed by four INT3s
+> 	else if (CONFIG_SLS)
+> 		// all rets are followed by one INT3
 
-   microblaze-linux-ld: sound/soc/codecs/wcd934x.o: in function `wcd934x_trigger':
->> (.text+0x3f8): undefined reference to `slim_stream_prepare'
->> microblaze-linux-ld: (.text+0x404): undefined reference to `slim_stream_enable'
->> microblaze-linux-ld: (.text+0x434): undefined reference to `slim_stream_unprepare'
->> microblaze-linux-ld: (.text+0x440): undefined reference to `slim_stream_disable'
-   microblaze-linux-ld: sound/soc/codecs/wcd934x.o: in function `wcd934x_slim_set_hw_params':
->> (.text+0x3854): undefined reference to `slim_stream_allocate'
-   microblaze-linux-ld: sound/soc/codecs/wcd934x.o: in function `wcd934x_codec_probe':
->> (.text+0x44c4): undefined reference to `of_slim_get_device'
->> microblaze-linux-ld: (.text+0x44dc): undefined reference to `slim_get_logical_addr'
->> microblaze-linux-ld: (.text+0x4500): undefined reference to `__regmap_init_slimbus'
+Maybe we should just ask kgdb if it is using breakpoint on that
+function, and if so, just reject kprobe on it. Then, all INT3
+can be just skipped. That may be more realistic solution.
+
+Thank you, 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

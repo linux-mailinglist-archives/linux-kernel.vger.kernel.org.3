@@ -2,94 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E77C5B2311
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D565B231B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiIHQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+        id S231843AbiIHQGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiIHQFD (ORCPT
+        with ESMTP id S231495AbiIHQGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:05:03 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F69320BC9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:05:01 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b17so13563519wrq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:05:00 -0700 (PDT)
+        Thu, 8 Sep 2022 12:06:20 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14447C275C;
+        Thu,  8 Sep 2022 09:06:19 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id w8so28463331lft.12;
+        Thu, 08 Sep 2022 09:06:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=W8Bb70RnM7+M3BfzJDsvaPNXFgt0KDaRDT2dCnghNLY=;
-        b=u9VZnK2sLRA3fAzJLvEGoYCyXEJz0ktGn67gxCsidBxbRnlDvl0tAqlUr9V2Lc9oUL
-         sH49RJg3ivKn8Sya4z6kS78qW+TrI4GGBYmeuEOGPwBVoGemt7276gRkWyPZz71xN3S2
-         egkdq7tGhPKiNhjgKFbFBKDqbJBfL4F8FTTUMLzleyEK0nZ6u3yGkCiBeUrzzMs6fus2
-         /+lYsY+anOy2DwvV96q1vEUEKmF2TAmgab6KyUk5lrjnjHh+l1tD8Bn9QIEXDCtE+VYo
-         9IVFhJZlSKwhVKnfG0YLJAGnJC8NXNi5nj81KXy7wwyLTgkVavcJyfWK0USat3d3l2N/
-         nT0A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=nz1fp5lwnD1Y399f3hQjrZY99PTaG/8NW7V7/WFUT8w=;
+        b=ieP5BxYKM9UDB4jtymp7DzdBc5lrk4wxFoK2f3w6l28S3pAD6Fd3+hXiECAuQBjYtC
+         Bjtgvyi+xGM7NWY7q/GUqtIjQX+uuD2GZfdLPPIsxV9M6Uku0WQZPfAckHmHwtWVV5Q9
+         4M2BaOesH6tyOKpzTvWSrThnDyvCMLP8Uv1FSdfnEgWfihM/cULfthZluGJIjmMyHcTR
+         f4LEXeJfvkyzQzUcI5PS74X+lWzIbNy0ePSW/3+ioScjs1S/axLi2iUwUkLNP9xMznCU
+         KN1PxFeyGZyKdl77ouYhf5RfQIpNE9ffzebjRvHn/aFuTMV5I3ugeINdGV1fwlJ8eDvC
+         rMmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=W8Bb70RnM7+M3BfzJDsvaPNXFgt0KDaRDT2dCnghNLY=;
-        b=nI6R90sMfcyalbTt0J/3nD3r7zhlHhZ3SOzXlrjjKeJFagIsQ6ap25s4QhqKAsNI9a
-         +T2uqSvsDdfO1BKHZiS4tHPSyzcLiZF+3IvUi06McHZqrJZ4ohWfL1Hm2K8Xk8Ez1Dly
-         wq879zU49edwj9a6QNl2qv4HQzbBsf+zf6OIHKm5oxjjXdyt+lx8WWPWlwalKHUX1GAz
-         PkTvuqZjniffZ8mtQXzz85h/ZUyPHytWymTiQUGwwGKYo02ozsJut5xl8XfCJs0z0cH9
-         FroaGwXw3lP87TJ4/QW6FmxVJJlrd9Xbr+t43LHleFHM00g+vgNTXjobYwxyFzn+hyhR
-         3icg==
-X-Gm-Message-State: ACgBeo3tLFhLTu5eVdMfPv0ZlmLslO7/nDFt91oYmPsWBV0RdPNZT5ew
-        PoWbuOd1Gh1uZcHqq7XVffWwQA==
-X-Google-Smtp-Source: AA6agR5Rq/TrOYVS5sCsQ0Pk0Owlkd3Mi7wHEnFOUO1Xv0O4Z2VskjC8W4FofL7jR0QXRXovg/ryDA==
-X-Received: by 2002:a5d:65ce:0:b0:228:d8b6:d1 with SMTP id e14-20020a5d65ce000000b00228d8b600d1mr5509935wrw.486.1662653099589;
-        Thu, 08 Sep 2022 09:04:59 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id m2-20020a05600c3b0200b003a5ee64cc98sm3346012wms.33.2022.09.08.09.04.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 09:04:57 -0700 (PDT)
-Message-ID: <0334cda1-61c8-84af-eba4-6f2f68a7cb3f@nexus-software.ie>
-Date:   Thu, 8 Sep 2022 17:04:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: msm8953: add MDSS
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=nz1fp5lwnD1Y399f3hQjrZY99PTaG/8NW7V7/WFUT8w=;
+        b=DoGJ7lbfd4jX3SldRqRBHRW9LcI72ZkjBRtB4e3La9zamkxkq/lfR+oQ6jhUiNjOdH
+         P/sEdUuezaGbluisy7xwB+2QbUZlzh7+HtLXnpjQLXLoAEIIme9KI3cOpy1on8tGzaBF
+         0TmUSH6Wmv+JS9ZoleHMGeO1Cd8s1aRE0zREcfxw2Yf9YlVE1fynrgMsqtbqj9LgGN/t
+         S/aPOPoB43Kw8mFpwACaJz5syQ6Qwlh74dpmZhDi9ITkFgcJprdQJg/sOpREHSr4wtTD
+         fQjTP2dJVWqGsdXMmaebUV48XQhXq/cysB4OBpCrYqHsKvWLcVoi1V7u+1DfCyuFQeev
+         MzBQ==
+X-Gm-Message-State: ACgBeo0w8w9acvLQ+kI0nTPn/6N8c/+S4a2lMMzYe/U12B8diqfeKdpa
+        SG4lEgGukf0JP+Ig1e/NvPA=
+X-Google-Smtp-Source: AA6agR5vQCfiSofF9T6A+rUaSGtgoDWsUQf44jQ2EyEOom0Jm9ZTpCA0G0Y4DvtUa8xEmm5ZPiR5fg==
+X-Received: by 2002:ac2:4144:0:b0:492:eb38:d8e9 with SMTP id c4-20020ac24144000000b00492eb38d8e9mr3236281lfi.215.1662653177289;
+        Thu, 08 Sep 2022 09:06:17 -0700 (PDT)
+Received: from localhost.localdomain ([89.46.86.70])
+        by smtp.gmail.com with ESMTPSA id u4-20020ac258c4000000b0048b03ec561fsm3086727lfo.150.2022.09.08.09.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 09:06:16 -0700 (PDT)
+From:   Marek Bykowski <marek.bykowski@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Marek Bykowski <marek.bykowski@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220906183334.203787-1-luca@z3ntu.xyz>
- <20220906183334.203787-4-luca@z3ntu.xyz>
-From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <20220906183334.203787-4-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2] =?UTF-8?q?of/fdt:=20Don't=20calculate=20phys=5Finitrd=5Fs?= =?UTF-8?q?ize=20from=20DT=20if=C2=A0start=20<=20end?=
+Date:   Thu,  8 Sep 2022 16:05:19 +0000
+Message-Id: <20220908160519.58041-1-marek.bykowski@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 19:33, Luca Weiss wrote:
-> +				phy-names = "dsi";
+If the properties 'linux,initrd-start' and 'linux,initrd-end' of
+the chosen node populated from the bootloader, eg. U-Boot, are so that
+start < end, then the phys_initrd_size calculated as subtraction of end
+from start is negative that subsequently gets converted to a high positive
+value for being unsigned long long.
 
-Hi Luca.
+For example, on FVP ARM64 system I'm running, the U-Boot populates
+the 'linux,initrd-start' with 0x8800_0000 and 'linux,initrd-end' with 0.
+The phys_initrd_size calculated is then ffff_ffff_7800_0000
+(= 0 - 8800_0000 = -8800_0000 + ULLONG_MAX + 1). Then, the memory region
+with the (invalid) size is added to the bootmem and attempted paging in
+paging_init() that results in the kernel oops as shown below.
 
-It looks like the phy-names property drop will go through.
-Suggest dropping the above for your V2.
+It should be stressed, it is generally a fault of the bootloader's with
+the kernel relying on it, however we should not allow the bootloader's
+misconfiguration to lead to the kernel oops. Not only the kernel should be
+bullet proof against it but also finding the root cause of the paging
+fault spanning over the bootloader, DT, and kernel may happen is not so
+easy.
 
-https://lore.kernel.org/all/20220907000105.786265-6-bryan.odonoghue@linaro.org/T/
+  Unable to handle kernel paging request at virtual address fffffffefe43c000
+  Mem abort info:
+    ESR = 0x96000007
+    EC = 0x25: DABT (current EL), IL = 32 bits
+    SET = 0, FnV = 0
+    EA = 0, S1PTW = 0
+  Data abort info:
+    ISV = 0, ISS = 0x00000007
+    CM = 0, WnR = 0
+  swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000080e3d000
+  [fffffffefe43c000] pgd=0000000080de9003, pud=0000000080de9003
+  Unable to handle kernel paging request at virtual address ffffff8000de9f90
+  Mem abort info:
+    ESR = 0x96000005
+    EC = 0x25: DABT (current EL), IL = 32 bits
+    SET = 0, FnV = 0
+    EA = 0, S1PTW = 0
+  Data abort info:
+    ISV = 0, ISS = 0x00000005
+    CM = 0, WnR = 0
+  swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000080e3d000
+  [ffffff8000de9f90] pgd=0000000000000000, pud=0000000000000000
+  Internal error: Oops: 96000005 [#1] PREEMPT SMP
+  Modules linked in:
+  CPU: 0 PID: 0 Comm: swapper Not tainted 5.4.51-yocto-standard #1
+  Hardware name: FVP Base (DT)
+  pstate: 60000085 (nZCv daIf -PAN -UAO)
+  pc : show_pte+0x12c/0x1b4
+  lr : show_pte+0x100/0x1b4
+  sp : ffffffc010ce3b30
+  x29: ffffffc010ce3b30 x28: ffffffc010ceed80
+  x27: fffffffefe43c000 x26: fffffffefe43a028
+  x25: 0000000080bf0000 x24: 0000000000000025
+  x23: ffffffc010b8d000 x22: ffffffc010e3d000
+  x23: ffffffc010b8d000 x22: ffffffc010e3d000
+  x21: 0000000080de9000 x20: ffffff7f80000f90
+  x19: fffffffefe43c000 x18: 0000000000000030
+  x17: 0000000000001400 x16: 0000000000001c00
+  x15: ffffffc010cef1b8 x14: ffffffffffffffff
+  x13: ffffffc010df1f40 x12: ffffffc010df1b70
+  x11: ffffffc010ce3b30 x10: ffffffc010ce3b30
+  x9 : 00000000ffffffc8 x8 : 0000000000000000
+  x7 : 000000000000000f x6 : ffffffc010df16e8
+  x5 : 0000000000000000 x4 : 0000000000000000
+  x3 : 00000000ffffffff x2 : 0000000000000000
+  x1 : 0000008080000000 x0 : ffffffc010af1d68
+  Call trace:
+   show_pte+0x12c/0x1b4
+   die_kernel_fault+0x54/0x78
+   __do_kernel_fault+0x11c/0x128
+   do_translation_fault+0x58/0xac
+   do_mem_abort+0x50/0xb0
+   el1_da+0x1c/0x90
+   __create_pgd_mapping+0x348/0x598
+   paging_init+0x3f0/0x70d0
+   setup_arch+0x2c0/0x5d4
+   start_kernel+0x94/0x49c
+  Code: 92748eb5 900052a0 9135a000 cb010294 (f8756a96) 
 
+Signed-off-by: Marek Bykowski <marek.bykowski@gmail.com>
 ---
-bod
+v1 -> v2:
+- changed from just checking on end being 0 to start < end as suggested
+  from Rob
+- also amended the message description a bit
+---
+ drivers/of/fdt.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 223d617ecfe1..e8abec8dcea3 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -889,6 +889,8 @@ static void __init early_init_dt_check_for_initrd(unsigned long node)
+ 	if (!prop)
+ 		return;
+ 	end = of_read_number(prop, len/4);
++	if (start >= end)
++		return;
+
+ 	__early_init_dt_declare_initrd(start, end);
+ 	phys_initrd_start = start;
+--
+2.25.1
+

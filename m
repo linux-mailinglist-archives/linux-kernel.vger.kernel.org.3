@@ -2,280 +2,578 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997E25B15CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8155B15D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiIHHjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S230141AbiIHHk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiIHHjd (ORCPT
+        with ESMTP id S229624AbiIHHkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:39:33 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B5AF3E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 00:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662622771; x=1694158771;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=pMdMISeh1ClFihkpM9HmiSbIqTl75stP9m8TQ9Gj+g0=;
-  b=E+e8sjSD4MTqYMtyKqTLrnMs1QKMEOW8se4h7cTP/rWdco2ce5syVAY9
-   AEwPAiLYl65y5Q8htL+bLmdPJP9cPE1qhtbNbcIhj5oi0mQBP/rZiHOFM
-   alkCHL+SWgt7vOJ7TaaH0nwNiuXn9064QBmxMj1mwfjnNYBh7xLepfN9I
-   f3h467peeL2QYIfpDgqZkdNso117tzOWsGkJ2Sl53lsBREoM07Yz3uldR
-   SztyidD05vpUau3HF4BxziCvN6llf+dusswo9vl5LpoAKqF/Ks3p5RXuz
-   Pfis/ThLPl6nAM65RhB0HBO3eiEoAYgwyF6HMALjvqZ6/Rq2rfVpWWkdL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297902671"
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="297902671"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 00:39:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="740579675"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga004.jf.intel.com with ESMTP; 08 Sep 2022 00:39:22 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Sep 2022 00:39:21 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 8 Sep 2022 00:39:21 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.49) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 8 Sep 2022 00:39:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VTKNy+l5QjnKW5Is3e58YsyY7dsKO75qupu2+dAtZgtfcbKCvvyPlJkvAZ/5p6uUrEJPrK9CwAIqCw/S/LW3ujPnq0seMP8gEL1kPcBSLHvVhlhxaAf8dtv7rmDYvg1vSf+eFxXSi1ShLVzoJFLCQkIIVMMeY/eNf09EuEvqX5/3XohJkwbWkXr7oOfrWQG6QUJu2qjox2J0nM7w/FCJHwIUtAtqvwb+zhSUr9yYHDPRQEoZQ/7/5DfRYf7qROYxLN2WFgyGFBBDxjfuxtx/bAJbLbMdDpzIqa/EudJzH7Ipy5iqgPQ3zSPL0igfiXul4F9G4V29tZe3qHOa0sHrGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HrKU3z79hQUKlS0FTmf5Co9tZwaYE8vTfPGCWHhAAhk=;
- b=Abs68qsQwVh5/98HaHtZP7hnW9eMOK9qnCNjeOkVsh+t2hVPPPr3y6GOiLbKjNvzH2bMoxga1fQNFA7EQE5jknb+/zvbs89ydTYztp9PDTVnEzUZOZkM6Tyz6VlqZ7FJSVzRVxg5dZTBElAq8Emo3wDRAoOxWV1CUU9Vk4lpnIvZB0PAfqnbCzpCPqobEW3U+N5UAcl16+FeJAuBBR3hhhdG3IKUH+bWi3FRR+xmhiX3WKUAVcUV3Yvb8fNfSB4FL804J8UjTX0h1MCF/4FzRn6e8J7NVQSAC6wv7MyU0VzN66/w7ki9wuBouUtWH3lneTYN+HzUMAWLvojeXkqT9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
- by MW4PR11MB6863.namprd11.prod.outlook.com (2603:10b6:303:222::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Thu, 8 Sep
- 2022 07:39:12 +0000
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::4c8f:1e3c:5288:d77e]) by MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::4c8f:1e3c:5288:d77e%7]) with mapi id 15.20.5588.015; Thu, 8 Sep 2022
- 07:39:12 +0000
-Date:   Thu, 8 Sep 2022 15:38:37 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>
-Subject: Re: [PATCH v5 2/4] mm/slub: only zero the requested size of buffer
- for kzalloc
-Message-ID: <Yxmb/W4wmJnwA0Qt@feng-clx>
-References: <20220907071023.3838692-1-feng.tang@intel.com>
- <20220907071023.3838692-3-feng.tang@intel.com>
- <YxixXhscutM0nw66@hyeyoo>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YxixXhscutM0nw66@hyeyoo>
-X-ClientProxiedBy: SG2PR02CA0126.apcprd02.prod.outlook.com
- (2603:1096:4:188::11) To MN0PR11MB6304.namprd11.prod.outlook.com
- (2603:10b6:208:3c0::7)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3538e9a4-07ed-4fb0-056e-08da916d3945
-X-MS-TrafficTypeDiagnostic: MW4PR11MB6863:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tqb3x8dzPV5WFzjc0IMQgdmsoct5A6ooP5Pg2nn9IXT1BhTi88/lkXpI8+1G+ltm2ZtDXyov2TqOpFYY6PpVv+3iBAvgG2bwDV58vbvrXm/qwETsvE8dRIt/+2rAV6HJx3aE1LDPkqfxzPFQIc2HqROIriB/P82rdlM6gMBSDE2Q3+jyVcvw5TQPOlB/M/CjjKlVayhN7EwzBmGXoUMY2jSNjLunLZD/qt/Ta93sTWR7ixShX0hJXFDQ/vmbZAakjxgKcKIRNpVoRNK1t+yhjKiu8qrVbKMgb+i12XyTrYEjxJJ0bybhwlLZckQWqwUFJzatdePju2WKhgZdxe2Lx/cQFjhdM/04jEeHKZHjdE0yzFhAWMy8wYwkTi5YRA478qwWVerQalu62cd69Une4KZ6Sv1qiaYNpPVNZL4Wnp9sdT2FTuZFPIBQEW92tiAeI19Ak+B/T7okbqVQPsDEs4xzsfvCSpsLKtkT30FXFhTFyHn5rFPWzcUspH64TNYv/+/Op2HRgspYRjx9qlskgLHumhPHOUpETmfZE9HoJS8axbm/m/yey8FPsA8BMGIuvXbTsS5Qb8j6eUbpALBsMlNebdQ5XL3Sd6J2BO8XanKY3SaL7zzN/SvyulHOS2JPgmbwwGK2F+w2EfMJ0K3x1DRx4Sxd1vjxd6oCrmVZE0K2hEj/VrKxgICEfEUrwSgu0/Ru+B8VLgPjZXX8eKwRUg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(366004)(396003)(39860400002)(136003)(376002)(41300700001)(478600001)(6666004)(26005)(7416002)(6506007)(44832011)(33716001)(9686003)(6512007)(8936002)(2906002)(82960400001)(5660300002)(38100700002)(186003)(66556008)(54906003)(6916009)(316002)(86362001)(66946007)(83380400001)(66476007)(8676002)(4326008)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I8Sq/pwGYWcE8jz0mDzvo2MVcwz/C17M/6FzFaUuv5pI+8NEk4r2PCvLkpNv?=
- =?us-ascii?Q?gwLrhBRAxsAbfvGzdegSITvM6T+MluhUwo8M6ERP5skWPk4vRPNS3OIs8sey?=
- =?us-ascii?Q?/8JliCY6toC0v+7R6sFGopzyJscbkqBkms/VEfueXzf95dCWeF9CUG/iXOWs?=
- =?us-ascii?Q?rJCjSNymkbAg8AzaZb2V5/d2VJWEC1rn0gpr2+toOLqKfAwgtIVyqkzQ9AOs?=
- =?us-ascii?Q?URmFMKmgTPOBWKFroLKAJJh4FAg4tTVM2aCEQNSRs8HL5yna2kFnOKR7zfL8?=
- =?us-ascii?Q?90YUIe2bcmX7WY6S5pbmQ8jqY3UMyS6U32AcaOe+i1/tFIe5R7rUkU8qbYFj?=
- =?us-ascii?Q?4Z9DkbtbHW8O/jvoi0rlwkbhtHOztS62YWIXttJz34l4INWIu9FvSDlanc9T?=
- =?us-ascii?Q?9egCt14qtmS9UQ+5sB/ZxAPMGUHmmbMQnnHCgAQz2UVnYXr9X0l3bp6PRC/A?=
- =?us-ascii?Q?iyIqdcLE3gmcbKecoJ4885u91CxekAM2SmBKz8/KEjZNTkGxJ5zrNwn11YCm?=
- =?us-ascii?Q?TIpedQaYlD783uKc3Lwefu1y0PZ6vBKF0EyE/yQdu3wsaRC7BUcT2bB+tA98?=
- =?us-ascii?Q?YwA5bwK5oMra7F+z/Dq+r0nq3JSyxjikNiVfDUHWcNusfXYAPY2XyWxFx2EB?=
- =?us-ascii?Q?Hgiz84IpYodQAKEngs6/4YYSi8FnWsdjVqQl4w53TNJa5/LJJxeP9BctBXK8?=
- =?us-ascii?Q?AUhVzUm1HEgshdjtVw3wxfV6p9lnrO20NjZkt/k4/wA0NYYOYbJcLU/yd8t2?=
- =?us-ascii?Q?HU5wyKwmCdkoyeNC8YmJrVRJJyWrzsQvHvF6QrjLvJSjLfdB0CY5TEQ5R4fT?=
- =?us-ascii?Q?WkVq0D6D+rYBMUqz/f378UcyYCOF4rH24QztdFAI/XzK/PsGx5WYIcORzcWM?=
- =?us-ascii?Q?ZgUwU9rqXjqOg+6dGz+Mb5E7jInTT5+60+IOxr9H5lXqp4rRaSFhNN0OlrtL?=
- =?us-ascii?Q?cLGTh+MZ57w3LP/VyUnv4ubcGtIGYVUY/ePo2CYVi8bX7XvMIWEkycegR9iM?=
- =?us-ascii?Q?HAtcLy9Hnsxs5bHioN6rHexIpbkyx5pEcmpYbBomweGamNtZ8yE7oNkuZgoe?=
- =?us-ascii?Q?QXrOIcICPWHP4QIvG3uYdjWFlmKkVfydqmxaQBxj5MxUs68PGAqPB5lnzuT8?=
- =?us-ascii?Q?2COoBTsB6hmdQYnSg1PpFx8Z4pQrvAUKi8R9cXNkOVjhr3L1z9pRpdKlDD3g?=
- =?us-ascii?Q?xMrF9V2ZrfgFrQe6Mi71IS4wCrZroOYRCqHcN0yz0kYwuSra5ZtLk6YmQzYd?=
- =?us-ascii?Q?6uFyEjA7+S7vPoxc+tUeyf2Uc6QsNrega6p7Uomq5zo8p65pdnxH1LuYxDxj?=
- =?us-ascii?Q?XruRmZhqlsIpB8vLQOhmoIw4CxrhXXEeut4PtS/OW9ELN+UFtWO1M33j2jS6?=
- =?us-ascii?Q?Y3ayaSlXoeikWwyYXdSt0g41lyt6eICz+z03EjcCUPQlAJTu1QsT2t0jtuY/?=
- =?us-ascii?Q?YO4InW80leo2hVYR5q33OjyaUHW0elu6eS6J2b9oX6Wr37sxb4lTU7H2zudT?=
- =?us-ascii?Q?qq2Z+AyuHqJ48Y5KDxl0LCbCsX1i3ejFP/u5925iHX7ZuLvFMvjo0u3xMx72?=
- =?us-ascii?Q?3co4z4AjZyOk9/PSTmKsHusG6cazBUwdCVS1EhLS?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3538e9a4-07ed-4fb0-056e-08da916d3945
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 07:39:12.5727
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3Br2P7REQv8q5/k28guH0OiAA8HxU3VpajMsKkACUTKDOcx3Jn5Mf9iFuMqAjOFWCczaDZXd4XmOJE5aYplqhg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6863
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 03:40:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5604F5A2C3;
+        Thu,  8 Sep 2022 00:40:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6A1DB81F78;
+        Thu,  8 Sep 2022 07:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BB7C433D6;
+        Thu,  8 Sep 2022 07:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662622819;
+        bh=/yqgJJ5uMK1h6c2CgnSMPpgINloP07AxiagPnKlv0B8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T8zzCfRAivY4zDIql8rWhtAybmQCHOH2GdXmCoGk/xs4ezqHhHKrMbFUWKsf8WX54
+         5giQu2ipQOkSiyRRcp4iJBrj4FKbd1zLu59a9d1Cf4e1CgCAJUMcVbYmKDQQqKUxED
+         89dpeKD7W36Ry//02PH1veGR8/dihQZmsTIFrc50RzCNuga8OiJoiPLpXzjNIXJxxn
+         0sK+pNzk7Hgcf+wTPv0mxLTUaGu1Ah51UAfg2PVWDCKWA0ziaVDbZDsixEWF1IRnCT
+         pj6MYqGiartRvogorFXdiuKy7eFvKvL59Nlo72a2BlPJB0S3ARXzr4XGGWmNj7iKty
+         AX9lNVV9r7WNA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oWC8z-008q9F-Pv;
+        Thu, 08 Sep 2022 08:40:17 +0100
+Date:   Thu, 08 Sep 2022 08:39:47 +0100
+Message-ID: <87fsh2qpq4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
+        lznuaa@gmail.com, imx@lists.linux.dev,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller driver
+In-Reply-To: <20220907034856.3101570-3-Frank.Li@nxp.com>
+References: <20220907034856.3101570-1-Frank.Li@nxp.com>
+        <20220907034856.3101570-3-Frank.Li@nxp.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: Frank.Li@nxp.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev, lznuaa@gmail.com, imx@lists.linux.dev, manivannan.sadhasivam@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:57:34PM +0800, Hyeonggon Yoo wrote:
-> On Wed, Sep 07, 2022 at 03:10:21PM +0800, Feng Tang wrote:
-> > kzalloc/kmalloc will round up the request size to a fixed size
-> > (mostly power of 2), so the allocated memory could be more than
-> > requested. Currently kzalloc family APIs will zero all the
-> > allocated memory.
-> > 
-> > To detect out-of-bound usage of the extra allocated memory, only
-> > zero the requested part, so that sanity check could be added to
-> > the extra space later.
-> > 
-> > For kzalloc users who will call ksize() later and utilize this
-> > extra space, please be aware that the space is not zeroed any
-> > more.
+On Wed, 07 Sep 2022 04:48:54 +0100,
+Frank Li <Frank.Li@nxp.com> wrote:
 > 
-> Can this break existing users?
-> or should we initialize extra bytes to zero when someone called ksize()?
-
-Good point!
-
-As kmalloc caches' size are not strictly power of 2, the logical
-usage for users is to call ksize() first to know the actual size.
-
-I did a grep of both "xxzalloc" + "ksize" with cmd 
-
-#git-grep " ksize(" | cut -f 1 -d':' | xargs grep zalloc | cut -f 1 -d':' | sort  -u
-
-and got:
-
-	arch/x86/kernel/cpu/microcode/amd.c
-	drivers/base/devres.c
-	drivers/net/ethernet/intel/igb/igb_main.c
-	drivers/net/wireless/intel/iwlwifi/mvm/scan.c
-	fs/btrfs/send.c
-	include/linux/slab.h
-	lib/test_kasan.c
-	mm/mempool.c
-	mm/nommu.c
-	mm/slab_common.c
-	security/tomoyo/memory.c
-
-I roughly went through these files, and haven't found obvious breakage
-regarding with data zeroing (I could miss something)
-
-Also these patches has been in a tree monitored by 0Day, and some basic
-sanity tests should have been run with 0Day's help, no problem with
-this patch so far (one KASAN related problem was found though, see
-patch 3/4).
-
-And in worst case there is problem, we can fix it quickly.
-
-
-> If it is not going to break something - I think we can add a comment of this.
-> something like "... kzalloc() will initialize to zero only for @size bytes ..."
- 
-Agree, this is necessary. 
-
-> > Signed-off-by: Feng Tang <feng.tang@intel.com>
-> > ---
-> >  mm/slab.c | 6 +++---
-> >  mm/slab.h | 9 +++++++--
-> >  mm/slub.c | 6 +++---
-> >  3 files changed, 13 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/mm/slab.c b/mm/slab.c
-> > index a5486ff8362a..73ecaa7066e1 100644
-> > --- a/mm/slab.c
-> > +++ b/mm/slab.c
-> > @@ -3253,7 +3253,7 @@ slab_alloc_node(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
-> >  	init = slab_want_init_on_alloc(flags, cachep);
-> >  
-> >  out:
-> > -	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init);
-> > +	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init, 0);
-> >  	return objp;
-> >  }
-> >  
-> > @@ -3506,13 +3506,13 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
-> >  	 * Done outside of the IRQ disabled section.
-> >  	 */
-> >  	slab_post_alloc_hook(s, objcg, flags, size, p,
-> > -				slab_want_init_on_alloc(flags, s));
-> > +				slab_want_init_on_alloc(flags, s), 0);
-> >  	/* FIXME: Trace call missing. Christoph would like a bulk variant */
-> >  	return size;
-> >  error:
-> >  	local_irq_enable();
-> >  	cache_alloc_debugcheck_after_bulk(s, flags, i, p, _RET_IP_);
-> > -	slab_post_alloc_hook(s, objcg, flags, i, p, false);
-> > +	slab_post_alloc_hook(s, objcg, flags, i, p, false, 0);
-> >  	kmem_cache_free_bulk(s, i, p);
-> >  	return 0;
-> >  }
-> > diff --git a/mm/slab.h b/mm/slab.h
-> > index d0ef9dd44b71..20f9e2a9814f 100644
-> > --- a/mm/slab.h
-> > +++ b/mm/slab.h
-> > @@ -730,12 +730,17 @@ static inline struct kmem_cache *slab_pre_alloc_hook(struct kmem_cache *s,
-> >  
-> >  static inline void slab_post_alloc_hook(struct kmem_cache *s,
-> >  					struct obj_cgroup *objcg, gfp_t flags,
-> > -					size_t size, void **p, bool init)
-> > +					size_t size, void **p, bool init,
-> > +					unsigned int orig_size)
-> >  {
-> >  	size_t i;
-> >  
-> >  	flags &= gfp_allowed_mask;
-> >  
-> > +	/* If original request size(kmalloc) is not set, use object_size */
-> > +	if (!orig_size)
-> > +		orig_size = s->object_size;
+> The MU block found in a number of Freescale/NXP SoCs supports generating
+> IRQs by writing data to a register
 > 
-> I think it is more readable to pass s->object_size than zero
+> This enables the MU block to be used as a MSI controller, by leveraging
+> the platform-MSI API
 
-OK, will change. 
+Missing full stop after each sentence.
 
-Thanks,
-Feng
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/irqchip/Kconfig          |   9 +
+>  drivers/irqchip/Makefile         |   1 +
+>  drivers/irqchip/irq-imx-mu-msi.c | 451 +++++++++++++++++++++++++++++++
+>  3 files changed, 461 insertions(+)
+>  create mode 100644 drivers/irqchip/irq-imx-mu-msi.c
+> 
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 5e4e50122777d..e04c6521dce55 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -470,6 +470,15 @@ config IMX_INTMUX
+>  	help
+>  	  Support for the i.MX INTMUX interrupt multiplexer.
+>  
+> +config IMX_MU_MSI
+> +	bool "i.MX MU work as MSI controller"
 
+Why bool? Doesn't it also work as a module?
 
+> +	default y if ARCH_MXC
+
+Why would this be selected by default?
+
+> +	select IRQ_DOMAIN
+> +	select IRQ_DOMAIN_HIERARCHY
+> +	select GENERIC_MSI_IRQ_DOMAIN
+> +	help
+> +	  MU work as MSI controller to do general doorbell
+
+I'm not sure this is that generic. It really is limited to CPU-to-CPU
+interrupts.
+
+> +
+>  config LS1X_IRQ
+>  	bool "Loongson-1 Interrupt Controller"
+>  	depends on MACH_LOONGSON32
+> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+> index 5d8e21d3dc6d8..870423746c783 100644
+> --- a/drivers/irqchip/Makefile
+> +++ b/drivers/irqchip/Makefile
+> @@ -98,6 +98,7 @@ obj-$(CONFIG_RISCV_INTC)		+= irq-riscv-intc.o
+>  obj-$(CONFIG_SIFIVE_PLIC)		+= irq-sifive-plic.o
+>  obj-$(CONFIG_IMX_IRQSTEER)		+= irq-imx-irqsteer.o
+>  obj-$(CONFIG_IMX_INTMUX)		+= irq-imx-intmux.o
+> +obj-$(CONFIG_IMX_MU_MSI)		+= irq-imx-mu-msi.o
+>  obj-$(CONFIG_MADERA_IRQ)		+= irq-madera.o
+>  obj-$(CONFIG_LS1X_IRQ)			+= irq-ls1x.o
+>  obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)	+= irq-ti-sci-intr.o
+> diff --git a/drivers/irqchip/irq-imx-mu-msi.c b/drivers/irqchip/irq-imx-mu-msi.c
+> new file mode 100644
+> index 0000000000000..82b55f6d87266
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-imx-mu-msi.c
+> @@ -0,0 +1,451 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Freescale MU worked as MSI controller
+
+s/worked/used/
+
+> + *
+> + * Copyright (c) 2018 Pengutronix, Oleksij Rempel <o.rempel@pengutronix.de>
+> + * Copyright 2022 NXP
+> + *	Frank Li <Frank.Li@nxp.com>
+> + *	Peng Fan <peng.fan@nxp.com>
+> + *
+> + * Based on drivers/mailbox/imx-mailbox.c
+> + */
+> +#include <linux/clk.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/msi.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_pci.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/dma-iommu.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/pm_domain.h>
+
+Keep this list in alphabetical order.
+
+> +
+> +
+> +#define IMX_MU_CHANS            4
+> +
+> +enum imx_mu_xcr {
+> +	IMX_MU_GIER,
+> +	IMX_MU_GCR,
+> +	IMX_MU_TCR,
+> +	IMX_MU_RCR,
+> +	IMX_MU_xCR_MAX,
+
+What is this last enum used for?
+
+> +};
+> +
+> +enum imx_mu_xsr {
+> +	IMX_MU_SR,
+> +	IMX_MU_GSR,
+> +	IMX_MU_TSR,
+> +	IMX_MU_RSR,
+> +};
+> +
+> +enum imx_mu_type {
+> +	IMX_MU_V1 = BIT(0),
+
+This is never used. Why?
+
+> +	IMX_MU_V2 = BIT(1),
+> +	IMX_MU_V2_S4 = BIT(15),
+
+Same thing.
+
+> +};
+> +
+> +/* Receive Interrupt Enable */
+> +#define IMX_MU_xCR_RIEn(data, x) ((data->cfg->type) & IMX_MU_V2 ? BIT(x) : BIT(24 + (3 - (x))))
+> +#define IMX_MU_xSR_RFn(data, x) ((data->cfg->type) & IMX_MU_V2 ? BIT(x) : BIT(24 + (3 - (x))))
+> +
+> +struct imx_mu_dcfg {
+> +	enum imx_mu_type type;
+> +	u32     xTR;            /* Transmit Register0 */
+> +	u32     xRR;            /* Receive Register0 */
+> +	u32     xSR[4];         /* Status Registers */
+> +	u32     xCR[4];         /* Control Registers */
+> +};
+> +
+> +struct imx_mu_msi {
+> +	spinlock_t			lock;
+> +	raw_spinlock_t			reglock;
+
+Why two locks? Isn't one enough to protect both MSI allocation (which
+happens once in a blue moon) and register access?
+
+Also, where are these locks initialised?
+
+> +	struct irq_domain		*msi_domain;
+> +	void __iomem			*regs;
+> +	phys_addr_t			msiir_addr;
+> +	const struct imx_mu_dcfg	*cfg;
+> +	unsigned long			used;
+> +	struct clk			*clk;
+> +};
+> +
+> +static void imx_mu_write(struct imx_mu_msi *msi_data, u32 val, u32 offs)
+> +{
+> +	iowrite32(val, msi_data->regs + offs);
+> +}
+> +
+> +static u32 imx_mu_read(struct imx_mu_msi *msi_data, u32 offs)
+> +{
+> +	return ioread32(msi_data->regs + offs);
+> +}
+> +
+> +static u32 imx_mu_xcr_rmw(struct imx_mu_msi *msi_data, enum imx_mu_xcr type, u32 set, u32 clr)
+> +{
+> +	unsigned long flags;
+> +	u32 val;
+> +
+> +	raw_spin_lock_irqsave(&msi_data->reglock, flags);
+> +	val = imx_mu_read(msi_data, msi_data->cfg->xCR[type]);
+> +	val &= ~clr;
+> +	val |= set;
+> +	imx_mu_write(msi_data, val, msi_data->cfg->xCR[type]);
+> +	raw_spin_unlock_irqrestore(&msi_data->reglock, flags);
+> +
+> +	return val;
+> +}
+> +
+> +static void imx_mu_msi_parent_mask_irq(struct irq_data *data)
+> +{
+> +	struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(data);
+> +
+> +	imx_mu_xcr_rmw(msi_data, IMX_MU_RCR, 0, IMX_MU_xCR_RIEn(msi_data, data->hwirq));
+> +}
+> +
+> +static void imx_mu_msi_parent_unmask_irq(struct irq_data *data)
+> +{
+> +	struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(data);
+> +
+> +	imx_mu_xcr_rmw(msi_data, IMX_MU_RCR, IMX_MU_xCR_RIEn(msi_data, data->hwirq), 0);
+> +}
+> +
+> +static void imx_mu_msi_parent_ack_irq(struct irq_data *data)
+> +{
+> +	struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(data);
+> +
+> +	imx_mu_read(msi_data, msi_data->cfg->xRR + data->hwirq * 4);
+> +}
+> +
+> +static struct irq_chip imx_mu_msi_irq_chip = {
+> +	.name = "MU-MSI",
+> +	.irq_ack = irq_chip_ack_parent,
+> +};
+> +
+> +static struct msi_domain_ops imx_mu_msi_irq_ops = {
+> +};
+> +
+> +static struct msi_domain_info imx_mu_msi_domain_info = {
+> +	.flags	= (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS),
+> +	.ops	= &imx_mu_msi_irq_ops,
+> +	.chip	= &imx_mu_msi_irq_chip,
+> +};
+> +
+> +static void imx_mu_msi_parent_compose_msg(struct irq_data *data,
+> +					  struct msi_msg *msg)
+> +{
+> +	struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(data);
+> +	u64 addr = msi_data->msiir_addr + 4 * data->hwirq;
+> +
+> +	msg->address_hi = upper_32_bits(addr);
+> +	msg->address_lo = lower_32_bits(addr);
+> +	msg->data = data->hwirq;
+> +}
+> +
+> +static int imx_mu_msi_parent_set_affinity(struct irq_data *irq_data,
+> +				   const struct cpumask *mask, bool force)
+> +{
+> +	return -EINVAL;
+> +}
+> +
+> +static struct irq_chip imx_mu_msi_parent_chip = {
+> +	.name		= "MU",
+> +	.irq_mask	= imx_mu_msi_parent_mask_irq,
+> +	.irq_unmask	= imx_mu_msi_parent_unmask_irq,
+> +	.irq_ack	= imx_mu_msi_parent_ack_irq,
+> +	.irq_compose_msi_msg	= imx_mu_msi_parent_compose_msg,
+> +	.irq_set_affinity = imx_mu_msi_parent_set_affinity,
+> +};
+> +
+> +static int imx_mu_msi_domain_irq_alloc(struct irq_domain *domain,
+> +					unsigned int virq,
+> +					unsigned int nr_irqs,
+> +					void *args)
+> +{
+> +	struct imx_mu_msi *msi_data = domain->host_data;
+> +	unsigned long flags;
+> +	int pos, err = 0;
+> +
+> +	WARN_ON(nr_irqs != 1);
+> +
+> +	spin_lock_irqsave(&msi_data->lock, flags);
+> +	pos = find_first_zero_bit(&msi_data->used, IMX_MU_CHANS);
+> +	if (pos < IMX_MU_CHANS)
+> +		__set_bit(pos, &msi_data->used);
+> +	else
+> +		err = -ENOSPC;
+> +	spin_unlock_irqrestore(&msi_data->lock, flags);
+> +
+> +	if (err)
+> +		return err;
+> +
+> +	irq_domain_set_info(domain, virq, pos,
+> +			    &imx_mu_msi_parent_chip, msi_data,
+> +			    handle_edge_irq, NULL, NULL);
+> +	return 0;
+> +}
+> +
+> +static void imx_mu_msi_domain_irq_free(struct irq_domain *domain,
+> +				       unsigned int virq, unsigned int nr_irqs)
+> +{
+> +	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
+> +	struct imx_mu_msi *msi_data = irq_data_get_irq_chip_data(d);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&msi_data->lock, flags);
+> +	__clear_bit(d->hwirq, &msi_data->used);
+> +	spin_unlock_irqrestore(&msi_data->lock, flags);
+> +}
+> +
+> +static const struct irq_domain_ops imx_mu_msi_domain_ops = {
+> +	.alloc	= imx_mu_msi_domain_irq_alloc,
+> +	.free	= imx_mu_msi_domain_irq_free,
+> +};
+> +
+> +static void imx_mu_msi_irq_handler(struct irq_desc *desc)
+> +{
+> +	struct imx_mu_msi *msi_data = irq_desc_get_handler_data(desc);
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	u32 status;
+> +	int i;
+> +
+> +	status = imx_mu_read(msi_data, msi_data->cfg->xSR[IMX_MU_RSR]);
+> +
+> +	chained_irq_enter(chip, desc);
+> +	for (i = 0; i < IMX_MU_CHANS; i++) {
+> +		if (status & IMX_MU_xSR_RFn(msi_data, i))
+> +			generic_handle_domain_irq(msi_data->msi_domain, i);
+> +	}
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +static int imx_mu_msi_domains_init(struct imx_mu_msi *msi_data, struct device *dev)
+> +{
+> +	struct fwnode_handle *fwnodes = dev_fwnode(dev);
+> +	struct irq_domain *parent;
+> +
+> +	/* Initialize MSI domain parent */
+> +	parent = irq_domain_create_linear(fwnodes,
+> +					    IMX_MU_CHANS,
+> +					    &imx_mu_msi_domain_ops,
+> +					    msi_data);
+> +	if (!parent) {
+> +		dev_err(dev, "failed to create IRQ domain\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	irq_domain_update_bus_token(parent, DOMAIN_BUS_NEXUS);
+> +
+> +	msi_data->msi_domain = platform_msi_create_irq_domain(
+> +				fwnodes,
+> +				&imx_mu_msi_domain_info,
+> +				parent);
+
+nit: move the first argument after the opening bracket (longer lines
+are fine).
+
+> +
+> +	if (!msi_data->msi_domain) {
+> +		dev_err(dev, "failed to create MSI domain\n");
+> +		irq_domain_remove(parent);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	irq_domain_set_pm_device(msi_data->msi_domain, dev);
+> +
+> +	return 0;
+> +}
+> +
+> +/* Register offset of different version MU IP */
+> +static const struct imx_mu_dcfg imx_mu_cfg_imx6sx = {
+
+Why doesn't this have a type?
+
+> +	.xTR    = 0x0,
+> +	.xRR    = 0x10,
+> +	.xSR    = {0x20, 0x20, 0x20, 0x20},
+
+Since you defined enums for all the register offsets, please be
+consistent and use them everywhere:
+
+	.xSR = {
+		[IMX_MU_SR]	= 0x20,
+		[IMX_MU_GSR]	= 0x20,
+		[...]
+	},
+
+> +	.xCR    = {0x24, 0x24, 0x24, 0x24},
+> +};
+> +
+> +static const struct imx_mu_dcfg imx_mu_cfg_imx7ulp = {
+> +	.xTR    = 0x20,
+> +	.xRR    = 0x40,
+> +	.xSR    = {0x60, 0x60, 0x60, 0x60},
+> +	.xCR    = {0x64, 0x64, 0x64, 0x64},
+> +};
+> +
+> +static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp = {
+> +	.type   = IMX_MU_V2,
+> +	.xTR    = 0x200,
+> +	.xRR    = 0x280,
+> +	.xSR    = {0xC, 0x118, 0x124, 0x12C},
+> +	.xCR    = {0x110, 0x114, 0x120, 0x128},
+> +};
+> +
+> +static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp_s4 = {
+> +
+> +	.type   = IMX_MU_V2 | IMX_MU_V2_S4,
+> +	.xTR    = 0x200,
+> +	.xRR    = 0x280,
+> +	.xSR    = {0xC, 0x118, 0x124, 0x12C},
+> +	.xCR    = {0x110, 0x114, 0x120, 0x128},
+> +};
+> +
+> +static int __init imx_mu_of_init(struct device_node *dn,
+> +				 struct device_node *parent,
+> +				 const struct imx_mu_dcfg *cfg
+> +				)
+
+Move closing bracket after 'cfg'.
+
+> +{
+> +	struct platform_device *pdev = of_find_device_by_node(dn);
+> +	struct device_link *pd_link_a;
+> +	struct device_link *pd_link_b;
+> +	struct imx_mu_msi *msi_data;
+> +	struct resource *res;
+> +	struct device *pd_a;
+> +	struct device *pd_b;
+> +	struct device *dev;
+> +	int ret;
+> +	int irq;
+> +
+> +	if (!pdev)
+> +		return -ENODEV;
+
+How can that happen?
+
+> +
+> +	dev = &pdev->dev;
+> +
+> +	msi_data = devm_kzalloc(&pdev->dev, sizeof(*msi_data), GFP_KERNEL);
+> +	if (!msi_data)
+> +		return -ENOMEM;
+> +
+> +	msi_data->cfg = cfg;
+> +
+> +	msi_data->regs = devm_platform_ioremap_resource_byname(pdev, "processor-a-side");
+> +	if (IS_ERR(msi_data->regs)) {
+> +		dev_err(&pdev->dev, "failed to initialize 'regs'\n");
+> +		return PTR_ERR(msi_data->regs);
+> +	}
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "processor-b-side");
+> +	if (!res)
+> +		return -EIO;
+> +
+> +	msi_data->msiir_addr = res->start + msi_data->cfg->xTR;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq <= 0)
+> +		return -ENODEV;
+> +
+> +	platform_set_drvdata(pdev, msi_data);
+> +
+> +	msi_data->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(msi_data->clk)) {
+> +		if (PTR_ERR(msi_data->clk) != -ENOENT)
+> +			return PTR_ERR(msi_data->clk);
+> +
+> +		msi_data->clk = NULL;
+
+Why is it acceptable to continue with no clock?
+
+> +	}
+> +
+> +	pd_a = dev_pm_domain_attach_by_name(dev, "processor-a-side");
+> +	if (IS_ERR(pd_a))
+> +		return PTR_ERR(pd_a);
+> +
+> +	pd_b = dev_pm_domain_attach_by_name(dev, "processor-b-side");
+> +	if (IS_ERR(pd_b))
+> +		return PTR_ERR(pd_b);
+> +
+> +	pd_link_a = device_link_add(dev, pd_a,
+> +			DL_FLAG_STATELESS |
+> +			DL_FLAG_PM_RUNTIME |
+> +			DL_FLAG_RPM_ACTIVE);
+> +
+> +	if (!pd_link_a) {
+> +		dev_err(dev, "Failed to add device_link to mu a.\n");
+> +		goto err_pd_a;
+> +	}
+> +
+> +	pd_link_b = device_link_add(dev, pd_b,
+> +			DL_FLAG_STATELESS |
+> +			DL_FLAG_PM_RUNTIME |
+> +			DL_FLAG_RPM_ACTIVE);
+> +
+> +
+> +	if (!pd_link_b) {
+> +		dev_err(dev, "Failed to add device_link to mu a.\n");
+> +		goto err_pd_b;
+> +	}
+> +
+> +	ret = imx_mu_msi_domains_init(msi_data, dev);
+> +	if (ret)
+> +		goto err_dm_init;
+> +
+> +	irq_set_chained_handler_and_data(irq,
+> +					 imx_mu_msi_irq_handler,
+> +					 msi_data);
+> +
+> +	pm_runtime_enable(dev);
+
+Shouldn't you enable the device PM before registering the chained
+handler?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

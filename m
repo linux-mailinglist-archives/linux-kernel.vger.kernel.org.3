@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724D35B167E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369265B1683
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiIHILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S231518AbiIHILv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiIHIK7 (ORCPT
+        with ESMTP id S231452AbiIHIL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:10:59 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2086D9E9F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:10:42 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id nc14so36197324ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:10:42 -0700 (PDT)
+        Thu, 8 Sep 2022 04:11:29 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E82BD99F7
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:10:56 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id q7so26463498lfu.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=j4bs3PwCf8LAGt65QBrJwkN23+x5pcdlnIufUSNJIIQ=;
-        b=XlFrs6f1Ru6mfmrDHSloR2yePiVJ+BuOhZJkeSnSJ/SOiEPgkH7fc5Qh53N1oKwQvH
-         +OoAiOMDe47PpbvHsnBhm6aYdjqjrlxYnSo7yiZbqsAzABr7z6IbsSFiYRJdU8C2FmM8
-         5DH3vl93eI862Lj3YGNPcem5IKwqOFLfYUBV/2qlp66cAcJz+GK/kSoE2Nn6RNzXIdZ9
-         oJUIG5tDSXTW/MSaMC7qK7mdrhaTxlGrLwOPowZ4WpaBUKmm7LiCFjVvj0ZXOF9c8KIJ
-         SNp39mJEoQxBFUzec2wJzhGoK5rRNZ4WQVIZ8FGwGa0dLMi1y1WJKYonoLdQWd7mN1KK
-         y6wg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=2nFGr7k9DwUv67DCXwyHIh7iOrFysefykil+1Bjeu4Q=;
+        b=QI00Ut4LNoGRP2si81Gt7ZrmZ0y3PMzWlkBGW8eLfinFPRGYcqg93wIXUuHqAyHcYF
+         WgHxr4f3ynQQgbwnUhJ0L881yWxacwW/maGqhtsrDzwjt+uWyIPUVbAT+4tmMjnL7s4u
+         zrk1gNoxF/MgA76ey8VbqWp9cIpd/i43/9Jsuf0TFzzCIX7ip8mTResbLDghCBciG1+s
+         sI+2CoiI9vw66Cz52Ip49R3X/3MffkonjSx1lYBXVAHlsD+wrrXT1KiNuwpLH0Kw8k2V
+         3GX1+swaIt8wPfhEMiF6HJxVAzSciqLAWDSg247gLjvGWGduLYOVHKg09BQoS4+rws4n
+         uM/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=j4bs3PwCf8LAGt65QBrJwkN23+x5pcdlnIufUSNJIIQ=;
-        b=O6YeX/9tU9bvebBbygWDU4Gd/rzaKnEs783C2zdV9vGM04OUA7dt0rh2C9+ilNq5Eh
-         xb4CLfxY+sFh8L3cYpTcL0MhVjWO5hAY2LA+0/T7ZKU4N9yO2shERlcFZ/2714K1TieJ
-         mQHgEHLSOsb6FUhmOirtAvMkTaiqe98n5La3qA9AtyA1MPDiNTYNviWbsEDXg/2F9Uej
-         VUzK1tpGE8yU+DTKS6D5zWzyYI/zZNfT7AM+4BwtVajyizQKdznHVIYO8kC+v7yIGDD+
-         HtgY2DmY+gz3Q3LmaUcql6xGYO6rJEIesj/EGoNdrBHLqIIGzCtcchtygTfY7EEQYlC3
-         KPPQ==
-X-Gm-Message-State: ACgBeo3Sw7F+IgRKcMtwyQvnmhOuzoBqhU66eagSmASlWBm1F/rxgDCW
-        +kqcub3wohYm+8iZOaDIPa0rVRXJ4/neuOFYhMYGmA==
-X-Google-Smtp-Source: AA6agR5SiTp1RzXd7QfGvIaagW9XneozTUfgGg71dHg/7zkzwgHHmEoyMH3isqJfBMUwPz7K/i/VjO5b2+tszIQ2lUg=
-X-Received: by 2002:a17:907:1c89:b0:741:4453:75be with SMTP id
- nb9-20020a1709071c8900b00741445375bemr5269882ejc.208.1662624640469; Thu, 08
- Sep 2022 01:10:40 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=2nFGr7k9DwUv67DCXwyHIh7iOrFysefykil+1Bjeu4Q=;
+        b=z4oo/ne753HFqtf7FzdZn8lN6FUcE0b2pk3x4ZJGRfBQs250NX6qMVTKb2ZLsY35S6
+         cYPg/pNtqo9z3CwHTt55GZbRaqG83yRI535bs8bQ837ff/Z9kC4NM/GUjzhv7ksZ493Q
+         JN36hzsETADbUSaHHicHf0sVSsf/Y8pKB4uUGyqp7zxuqPCIE4l8jCQaGg/yWnEIwv0/
+         BCET8MEMLhEh2HZxUtW9Y9Rsz3/MNWM3DU/ifGOjX91+AwCVSTHqQYtpkVzjNzAdoTND
+         /0crZ5eyfCSgElrRChdgx8OyNeONQxPeVDNV7soUeN1gHU0whX3IwEJ9E9eqPiO8ttlA
+         ZSiQ==
+X-Gm-Message-State: ACgBeo0v+4nLivigPwX0EVMg947G8f6TbaDF24j6N+tzzoIL4S6tj8MO
+        xFCFChlxR/TVQlUFW1g6LxAuaHqr0BVzTw==
+X-Google-Smtp-Source: AA6agR68K7dmUGNxIEWv3RFYEt5/3kxurlRNx9y2sEnt8wkQMSUuZy+PKbQsP/XYLWMKO/P8N24nnQ==
+X-Received: by 2002:a05:6512:b1c:b0:492:8835:1e4c with SMTP id w28-20020a0565120b1c00b0049288351e4cmr2169794lfu.442.1662624654049;
+        Thu, 08 Sep 2022 01:10:54 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05651c131200b00261e7e7b698sm3075777lja.123.2022.09.08.01.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 01:10:53 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/5] arm64: dts: qcom: pmi8994: add missing MPP compatible fallback
+Date:   Thu,  8 Sep 2022 10:10:46 +0200
+Message-Id: <20220908081050.29751-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-8-b29adfb27a6c@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-8-b29adfb27a6c@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 8 Sep 2022 10:10:29 +0200
-Message-ID: <CACRpkdakswdcFTgEGX-+2fgOHZ+VsDsRe+yj8hnExKuugnO9xQ@mail.gmail.com>
-Subject: Re: [PATCH v1 08/11] regulator: bd71815: switch to using devm_fwnode_gpiod_get()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,16 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 8:31 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+Bindings require usage of generic MPP fallback in compatible:
 
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
->
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+  qcom/apq8094-sony-xperia-kitakami-karin_windy.dtb: pmic@2: mpps@a000:compatible: ['qcom,pmi8994-mpp'] is too short
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/pmi8994.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yours,
-Linus Walleij
+diff --git a/arch/arm64/boot/dts/qcom/pmi8994.dtsi b/arch/arm64/boot/dts/qcom/pmi8994.dtsi
+index 92a139ca4482..a0af91698d49 100644
+--- a/arch/arm64/boot/dts/qcom/pmi8994.dtsi
++++ b/arch/arm64/boot/dts/qcom/pmi8994.dtsi
+@@ -21,7 +21,7 @@ pmi8994_gpios: gpio@c000 {
+ 		};
+ 
+ 		pmi8994_mpps: mpps@a000 {
+-			compatible = "qcom,pmi8994-mpp";
++			compatible = "qcom,pmi8994-mpp", "qcom,spmi-mpp";
+ 			reg = <0xa000>;
+ 			gpio-controller;
+ 			gpio-ranges = <&pmi8994_mpps 0 0 4>;
+-- 
+2.34.1
+

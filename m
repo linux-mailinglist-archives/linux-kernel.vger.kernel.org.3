@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCB15B1FD5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7C25B1FD4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbiIHN5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S232603AbiIHN5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiIHN4y (ORCPT
+        with ESMTP id S232250AbiIHN5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:56:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68749FD20C;
-        Thu,  8 Sep 2022 06:56:51 -0700 (PDT)
+        Thu, 8 Sep 2022 09:57:03 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC96FCA07;
+        Thu,  8 Sep 2022 06:57:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662645411; x=1694181411;
+  t=1662645421; x=1694181421;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8zfu+zvno5BcAKYp0i5ifmD3cU2wynvKRO8gGgRKGw8=;
-  b=NoRIrVD59Nd1xwXx1VXkgkKzRdnBM/lXmMxrMLHPOUhZbCoGfl+OmCmT
-   2BiPh1YFwcaDsgE1Tqc73f5YSmVX+xbeCnFQ50byl6yDIZiVJAnEMdKGo
-   KQR1Dx7fFkZMBgPZGaOsn40VtHy2em2GfSnbJJnhqCJJ4Swd9l8IVFgFY
-   ybGP2vcpJ1Lvo5yWlli6cPdK9sOWIkl8SSshZkRUapN4gd3F61EtuqnrC
-   N5hVsDCOjW2RWZbjpg3aa7Lzpttpg7pjs9n6W+nuEeGdBFDfy5Aafm143
-   bfpHt3CtEllDqWe0KUJ+biNjsMGcy0SUXeIbXIyhyMvt5hvZysI14R4hR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="361137305"
+  bh=kIBmOg7nAw3e6GJ9GuSaAoJE5QHCnDlDc9NHWzv4Oac=;
+  b=m93FZR1Mb7gITs9O9dgcO0X00H6iiZ/8KiiSV4VTgqfq0CtfUPX78S0S
+   Z1Gt868Ojnj5Z5wLwh+JgdWLJMTgLmU/7R+GjjscRKkfMjynzcODIAjVf
+   o3BS4f0IBBhaq6q+tIUkPMt1VCLrpMrbAbx7btGKkkwk2EI3Rh/ULYWTK
+   iMjjJP8JmlYTu+/ykjVrX5yIYFAkohFl2HTiIOmun+VKRhoQxKm2PUHOy
+   vFzsS3yJezeaayuZzqHamDbjyNfCTn3bsZmoE5BtBY1s36CupFM/xe8Rj
+   ZXgBL/8/6NLonGFn7yljGuQcf4FsNNaUyzX7QaGb/Kq1dE+K9koZB2sHd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="297174068"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="361137305"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:56:50 -0700
+   d="scan'208";a="297174068"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:56:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="648049645"
+   d="scan'208";a="704012690"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 08 Sep 2022 06:56:48 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Sep 2022 06:56:48 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A505D57F; Thu,  8 Sep 2022 16:57:02 +0300 (EEST)
+        id B3AE26D1; Thu,  8 Sep 2022 16:57:02 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
         linux-pwm@vger.kernel.org
 Cc:     Thierry Reding <thierry.reding@gmail.com>
-Subject: [PATCH v2 7/9] pwm: lpss: Make use of bits.h macros for all masks
-Date:   Thu,  8 Sep 2022 16:56:56 +0300
-Message-Id: <20220908135658.64463-8-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 8/9] pwm: lpss: Add a comment to the bypass field
+Date:   Thu,  8 Sep 2022 16:56:57 +0300
+Message-Id: <20220908135658.64463-9-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
 References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,34 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the GENMASK() (far less error-prone, far more concise).
+Add a comment to the bypass field based on the commit b997e3edca4f
+("pwm: lpss: Set enable-bit before waiting for update-bit
+to go low").
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pwm/pwm-lpss.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/pwm/pwm-lpss.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/pwm/pwm-lpss.c b/drivers/pwm/pwm-lpss.c
-index a20915459809..accdef5dd58e 100644
---- a/drivers/pwm/pwm-lpss.c
-+++ b/drivers/pwm/pwm-lpss.c
-@@ -10,6 +10,7 @@
-  * Author: Alan Cox <alan@linux.intel.com>
-  */
- 
-+#include <linux/bits.h>
- #include <linux/delay.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
-@@ -26,7 +27,7 @@
- #define PWM_ENABLE			BIT(31)
- #define PWM_SW_UPDATE			BIT(30)
- #define PWM_BASE_UNIT_SHIFT		8
--#define PWM_ON_TIME_DIV_MASK		0x000000ff
-+#define PWM_ON_TIME_DIV_MASK		GENMASK(7, 0)
- 
- /* Size of each PWM register space if multiple */
- #define PWM_SIZE			0x400
+diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
+index 839622964b2a..0249c01befd5 100644
+--- a/drivers/pwm/pwm-lpss.h
++++ b/drivers/pwm/pwm-lpss.h
+@@ -29,6 +29,11 @@ struct pwm_lpss_boardinfo {
+ 	unsigned long clk_rate;
+ 	unsigned int npwm;
+ 	unsigned long base_unit_bits;
++	/*
++	 * Some versions of the IP may stuck in the state machine if enable
++	 * bit is not set, and hence update bit will show busy status till
++	 * the reset. For the rest it may be otherwise.
++	 */
+ 	bool bypass;
+ 	/*
+ 	 * On some devices the _PS0/_PS3 AML code of the GPU (GFX0) device
 -- 
 2.35.1
 

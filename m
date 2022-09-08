@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF8F5B1E5D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9166F5B1E5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbiIHNQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S232265AbiIHNQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiIHNQ1 (ORCPT
+        with ESMTP id S232224AbiIHNQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:16:27 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E849736DD9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:16:25 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id d15so350105qka.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:16:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=EN6OrD+swNcWW/wUukKGtS71vNoj6oAVRqW0V6ZuKEk=;
-        b=CqwpNi69rThlo0cS3WTkGCN55zgJSSsauKK6O7cxA6Rk6Pmrc2LFmjV01HTW9SWfSF
-         JATZmwjV8Vl911BKbTUnTq7ElUe4UAjKzWpex5RvJlEohLKlVU/GoKjvoiNzpLAfnNJN
-         8OCZwK1hcQdNpu/7s9GvihTRW1FePL2ltzuMZ/YDRQZdJNs1dF4zhormnAduqQb4Vvyr
-         UVGlhtpQD1jUW/8zrRUFclMk5b4FniicyOCQhZlWH01+s1PlqkcadVsZJovfCH3mQfzx
-         +s8Xt665oQKlnROLalm5AbxrOKcyX4oHnlnI7QsSNPBMb6sx0jC/X15Tgc4zNFIuhM/3
-         XLiQ==
-X-Gm-Message-State: ACgBeo1dXm64GgpIfxJkZmbCITH3YPemPXqTZcv/QEovsk/griuyVhk3
-        M5YC465ojT+G+mkT/5S/pF9UT6Mcc9KBHw==
-X-Google-Smtp-Source: AA6agR5IYjoyvGDZfio/QyCBFa5badB0e51l75vte3Z1Vp9d+HPSJ2MGbIVyOyG8nHqfJGdbkkEHWg==
-X-Received: by 2002:a05:620a:bc5:b0:6b6:64e9:2617 with SMTP id s5-20020a05620a0bc500b006b664e92617mr6098771qki.378.1662642984774;
-        Thu, 08 Sep 2022 06:16:24 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id h26-20020ac846da000000b003450358fe82sm14080414qto.76.2022.09.08.06.16.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 06:16:24 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-324ec5a9e97so164135747b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:16:24 -0700 (PDT)
-X-Received: by 2002:a81:758a:0:b0:345:450b:6668 with SMTP id
- q132-20020a81758a000000b00345450b6668mr7265892ywc.316.1662642984197; Thu, 08
- Sep 2022 06:16:24 -0700 (PDT)
+        Thu, 8 Sep 2022 09:16:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22C6BC0E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:16:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CB85B82073
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF2BC433D6;
+        Thu,  8 Sep 2022 13:16:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662642979;
+        bh=1MwV8RWI0jf3epFZ4UP5pNpxsGscp0wqmaQjUfjn1/Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nTSVKDFg3heO0PqzgeFWFfXS9szNhLrmlvLNRiw4IayygvT8A1jED1FaUo/iSX8Uc
+         kkMfhwgvhleXTCU/vZ/dncupXrG3vNXfhGxHHxkLsrKePBfKts8Eu2GmrA+D+95H++
+         bhabcKvZmcsIlZw0k8yVXjQa7MeFy1m4Q/BFyLP7+YnUxwxHlGzzogEN3+I1DeMpKl
+         tucu2j8JdxLHvWXY+uw8EX298Mo7iRHXgTAfRWoVO2g9zSD/cRShnkaDXHtSP7mUQa
+         5AXm+XZn+vUAMP1VQJlBNQuPcLj6rUDmZyXB2eZOUw4DA2yXo3jez2sHpD1b06ZN4K
+         krlPOmspadogw==
+Message-ID: <78da0d21-cec2-6fd7-18f7-78989cfb4693@kernel.org>
+Date:   Thu, 8 Sep 2022 15:16:15 +0200
 MIME-Version: 1.0
-References: <20220908125735.30134-1-wangjianli@cdjrlc.com>
-In-Reply-To: <20220908125735.30134-1-wangjianli@cdjrlc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 8 Sep 2022 15:16:12 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUwL-hWeMyrJUVCmpimputMwxpBaQKB1705HfZ_drGGAw@mail.gmail.com>
-Message-ID: <CAMuHMdUwL-hWeMyrJUVCmpimputMwxpBaQKB1705HfZ_drGGAw@mail.gmail.com>
-Subject: Re: [PATCH] m68k/mac: fix repeated words in comments
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     Joshua Thompson <funaho@jurai.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [broonie-ci:files2POTT 66/93] undefined reference to
+ `slim_stream_prepare'
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+References: <202209082046.AZVfl0da-lkp@intel.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <202209082046.AZVfl0da-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wangjianli,
+On 08/09/2022 15:03, kernel test robot wrote:
+> Hi Krzysztof,
+> 
+> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git files2POTT
+> head:   e9e7df88996d64544178f48b0299dfe736c6aa22
+> commit: 5b7f4e5de61ba8c44317718936864da29eeba62a [66/93] ASoC: codecs: allow compile testing without MFD drivers
+> config: microblaze-buildonly-randconfig-r004-20220907 (https://download.01.org/0day-ci/archive/20220908/202209082046.AZVfl0da-lkp@intel.com/config)
+> compiler: microblaze-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=5b7f4e5de61ba8c44317718936864da29eeba62a
+>         git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
+>         git fetch --no-tags broonie-ci files2POTT
+>         git checkout 5b7f4e5de61ba8c44317718936864da29eeba62a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Note: the broonie-ci/files2POTT HEAD e9e7df88996d64544178f48b0299dfe736c6aa22 builds fine.
+>       It only hurts bisectability.
 
-On Thu, Sep 8, 2022 at 2:57 PM wangjianli <wangjianli@cdjrlc.com> wrote:
-> Delete the redundant word 'in'.
->
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+Yep, fixed with a follow up commit.
 
-Thanks for your patch!
-
-> --- a/arch/m68k/mac/misc.c
-> +++ b/arch/m68k/mac/misc.c
-> @@ -126,7 +126,7 @@ static void via_rtc_send(__u8 data)
->
->         reg = via1[vBufB] & ~(VIA1B_vRTCClk | VIA1B_vRTCData);
->
-> -       /* The bits of the byte go in in MSB order */
-> +       /* The bits of the byte go in MSB order */
->
->         for (i = 0 ; i < 8 ; i++) {
->                 bit = data & 0x80? 1 : 0;
-
-The original is correct, cfr.
-https://lore.kernel.org/linux-m68k/CAMuHMdVf7EOrXkUpa1E1Qx1w0Tvrt1nwRHM6B8rsGPOh=WsnyA@mail.gmail.com
-https://lore.kernel.org/linux-m68k/CAMuHMdWwqKyvtxkvdng0EVFfKjz9iOjK3Dhfd+iru-j731azTw@mail.gmail.com
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof

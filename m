@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1D15B2763
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAE45B2757
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiIHUB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S229662AbiIHUBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiIHUBn (ORCPT
+        with ESMTP id S229449AbiIHUBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:01:43 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACEFFE4B6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:01:14 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id s11so26012413edd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 13:01:14 -0700 (PDT)
+        Thu, 8 Sep 2022 16:01:06 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D262FDBAF;
+        Thu,  8 Sep 2022 13:01:04 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id c2-20020a1c3502000000b003b2973dafb7so2599306wma.2;
+        Thu, 08 Sep 2022 13:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=9Po1p0rTvG7YGCHnTloMal9wCRi9fHpBptpbCbwsONI=;
-        b=uq/1F+Jn3KbvrIbwUC2FgQsMGBcoqJcPk14nCHeuSDtIvGx0FY/HErATB7IZ7X/0Be
-         0x44zT1EiYD9LjBFOY2kB3tCyd2Zz/dY7Wv7qF4PZPpU7Ox8h+oq0REI93GPX1TB4RBP
-         aqq6GROLpsYHNtuc5LG0LEMWchpTXs+e+Fmp8=
+        bh=0ab0C3Pt3y+AUtGAmk+cGrgQVzgDrXyFcmGY9LIPg7I=;
+        b=DE7ZxcwuTdu0khBFNHcr5Sc7L4fS7iVOBLTIvKCsgzyQlbNBXmHD9fZKJ/LXb7717t
+         BoSkWRPMB8qtpvAyffGQYSKkcy8s9NphwB69i05tQNPEKvLiorY2ycNhuZBJ6dT+kERO
+         O3Qjr/1sl+5MdNXrHu4qdApNHrU1GzImPv4lRGm4xkxXjhpDb8Eaz0qVqDsTXfJnsJbe
+         9BHIknG9QpqZnmv7CvFxAacbOyhUwRH+6dqkk57ZS5itz8tETJi2gBDc2zpSEhYthSWw
+         aMKTMYwh5jAloWEF1IhCrETkdTayr3vNqd88JyTv3bZL7f4G3Byq+ZGYnYrxK+xmg3Q0
+         K+Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=9Po1p0rTvG7YGCHnTloMal9wCRi9fHpBptpbCbwsONI=;
-        b=YDZO5uoZg1ex4fYc0vxrlsp5M35ZKdiof5vtsAthcxAbu7/FA+hpZSoO0YoahhhOnO
-         RjdVggt7hv6PQqypyDuldYQ+SGAATa+aKEOrv+8VeFfuSCqsX3SJg0SjjQyuAK1Gja1p
-         EQQyEyA/Z02eQbO49Kdn1ezD/Fz1i72OxSgQTXLSn87xNAREXo3KEtknNaPglZYca/Ak
-         QqUHipXuxCA3ROzltBwPtnO/N7LSUrZxqu3mROExDmCk7fUl4o68+ni8KFE2b1aitkw6
-         gMzvKmc+7esidE780OAyuFdGWRFsXrJWdnaXuNxq83zN/4mhRZR6IW+8kwJ9bsf4JwFd
-         k5+A==
-X-Gm-Message-State: ACgBeo2TaCAxHvF7FuguAmhPcdrh76/8cdLbsAl4/2xyipSHRreYz41t
-        lAYwRWkjSBxXwVrXiuyMM9tPXA==
-X-Google-Smtp-Source: AA6agR4npFZGDVBKRyr5tobS4dLlprhevP2ZMxeJFfZyZE6JGoNKnvhUohU2xcPhJez/GiGB2UK7Rg==
-X-Received: by 2002:a05:6402:e94:b0:443:e3fe:7c87 with SMTP id h20-20020a0564020e9400b00443e3fe7c87mr8865411eda.144.1662667272600;
-        Thu, 08 Sep 2022 13:01:12 -0700 (PDT)
-Received: from localhost.localdomain ([104.28.243.158])
-        by smtp.gmail.com with ESMTPSA id kx11-20020a170907774b00b00778e3e2830esm521202ejc.9.2022.09.08.13.01.11
+        bh=0ab0C3Pt3y+AUtGAmk+cGrgQVzgDrXyFcmGY9LIPg7I=;
+        b=j6fAT0qnuhqZPo9rtWiZwJ8Yrhcy7+5WDxSInaSv0CdgZUYrhW215/UdIFmMqzq61r
+         c68qqJwfI/nhj+Znj199DyvG/a8kVNJAXRWKC804CChLcbRhM/mU9DCQTCjpFCpryZGP
+         Mr3Pntga3hR34AnVzQF6+o1H9Ax+B+6FAbVMtuApykQf5+eKG+soz68EQq5XMjnhICeV
+         loPfTCwPnDa2a8NgsNxMKvJ11nkzokaMDA4yphx6VJvWD7N0r2DTLn00HKuXfEA5YUI7
+         CQtt0R+HZMP+EBqsd0XchnUp/XDNhFbDA+glrBo95V9xvvequHZKY3E+D16oS4Z2njWO
+         dbcw==
+X-Gm-Message-State: ACgBeo0JeqNolWQoIHRbwKBBk+mEd0PuNYuVsK1bu8N/RgpAJKq4PoRw
+        0GdEii91YGRXdYawgkczIIg=
+X-Google-Smtp-Source: AA6agR4UVng5AUyO+Lb+M/d2q9vC91aXyrkT8ydz2RnziObmJg3cal0aghkmKspPlBplLPOjwPHi/w==
+X-Received: by 2002:a05:600c:89a:b0:3a5:4ea9:d5ee with SMTP id l26-20020a05600c089a00b003a54ea9d5eemr3350715wmp.8.1662667262590;
+        Thu, 08 Sep 2022 13:01:02 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05600c4fcc00b003a5b6086381sm4314038wmq.48.2022.09.08.13.01.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 13:01:12 -0700 (PDT)
-From:   Ignat Korchagin <ignat@cloudflare.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lei he <helei.sig11@bytedance.com>, kernel-team@cloudflare.com
-Subject: [PATCH 4/4] crypto: remove unused field in pkcs8_parse_context
-Date:   Thu,  8 Sep 2022 21:00:36 +0100
-Message-Id: <20220908200036.2034-5-ignat@cloudflare.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220908200036.2034-1-ignat@cloudflare.com>
-References: <20220908200036.2034-1-ignat@cloudflare.com>
+        Thu, 08 Sep 2022 13:01:02 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: Re: [PATCH 3/3] arm64: dts: allwinner: a100: Add I2C DMA requests
+Date:   Thu, 08 Sep 2022 22:01:01 +0200
+Message-ID: <2079594.OBFZWjSADL@kista>
+In-Reply-To: <22775214.6Emhk5qWAg@kista>
+References: <20220830020824.62288-1-samuel@sholland.org> <20220830020824.62288-4-samuel@sholland.org> <22775214.6Emhk5qWAg@kista>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lei he <helei.sig11@bytedance.com>
+Dne torek, 06. september 2022 ob 23:11:02 CEST je Jernej =C5=A0krabec napis=
+al(a):
+> Dne torek, 30. avgust 2022 ob 04:08:24 CEST je Samuel Holland napisal(a):
+> > The I2C controllers in the A100 SoC are all connected to the DMA engine.
+> >=20
+> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+>=20
+> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-remove unused field 'algo_oid' in pkcs8_parse_context
+Applied, thanks!
 
-Signed-off-by: lei he <helei.sig11@bytedance.com>
----
- crypto/asymmetric_keys/pkcs8_parser.c | 1 -
- 1 file changed, 1 deletion(-)
+Best regards,
+Jernej
 
-diff --git a/crypto/asymmetric_keys/pkcs8_parser.c b/crypto/asymmetric_keys/pkcs8_parser.c
-index e507c635ead5..f81317234331 100644
---- a/crypto/asymmetric_keys/pkcs8_parser.c
-+++ b/crypto/asymmetric_keys/pkcs8_parser.c
-@@ -21,7 +21,6 @@ struct pkcs8_parse_context {
- 	struct public_key *pub;
- 	unsigned long	data;			/* Start of data */
- 	enum OID	last_oid;		/* Last OID encountered */
--	enum OID	algo_oid;		/* Algorithm OID */
- 	u32		key_size;
- 	const void	*key;
- 	const void	*algo_param;
---
-2.36.1
 

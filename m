@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1495B2651
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBF85B2653
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbiIHS4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
+        id S232413AbiIHS4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiIHS4G (ORCPT
+        with ESMTP id S231447AbiIHS4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Sep 2022 14:56:06 -0400
-Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08DA6B4E98
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=E5i1k
-        9AyNs13L3TPS31aEC3J502Y6x/1RyxN8qE8qu8=; b=VAmxsHyHnTU9VrTD2sFRw
-        THzU5ljfRaPZPq2X8eHjqJocidUhfxj+Za1ieoYTiLbBWN22NTjLTmp5+r76GuSh
-        nRckeeknR4nRhz2kKRmBQBujwuOnOVew++FePyMZcIC1g6DcsWQD4fl8ycDhwJkd
-        W1zw4g8T0+UTDp9VujiRQQ=
-Received: from f00160-VMware-Virtual-Platform.localdomain (unknown [1.203.67.201])
-        by smtp8 (Coremail) with SMTP id DMCowAA3Zy9+OhpjR7WkZw--.64992S4;
-        Fri, 09 Sep 2022 02:55:06 +0800 (CST)
-From:   Jingyu Wang <jingyuwang_vip@163.com>
-To:     akpm@linux-foundation.org, ebiederm@xmission.com,
-        roman.gushchin@linux.dev, hbh25y@gmail.com, legion@kernel.org,
-        longman@redhat.com, songmuchun@bytedance.com
-Cc:     linux-kernel@vger.kernel.org, Jingyu Wang <jingyuwang_vip@163.com>
-Subject: [PATCH] ipc: mqueue: remove unnecessary conditionals
-Date:   Fri,  9 Sep 2022 02:54:52 +0800
-Message-Id: <20220908185452.76590-1-jingyuwang_vip@163.com>
-X-Mailer: git-send-email 2.34.1
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2C6D6B98
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:55:52 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id go34so5171616ejc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 11:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=M4098SyJRltzpG7MyAZxLPDr5I5WzKWKipfDdEc1IBg=;
+        b=qY9xVnlLM/l4t54GLlyE8W0HR7sO/sIi2riue9ZM+uirfZflztdQktnoZERgL5s8NZ
+         ACsjc99R5X55LMf1d5LFheKe08uI/qFk60W91n5LfieX2WiyrsbaBZcItJGMur3lb48J
+         MWzsWGZT1LDgq/jjygMFbCSAaAyvvoHGIoSnNV4m6wwGq6fVLsDEGTdD+indpPpH0GQT
+         hoxGr8x72WkxjB0S4ZCJe5gUfwXcDS61ipTF004Nu+4xmM/a+YbBoxabQ4hVmo2VbjLW
+         der2wWyhiVkFz0wonM+hfr8SYueQPl2Em/A5dOVxak43IntCNBpowrKv1tMCGMbscbY6
+         UzGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=M4098SyJRltzpG7MyAZxLPDr5I5WzKWKipfDdEc1IBg=;
+        b=UJzuBqecvffYkhitnzGA44cikBwu2PSe0lvxhy8tAPAl7adghGAAgLQYVdZt9z+Jb4
+         /lAa2FYb/Y9aEz/bHJ3WrlSBpcvxYG6ZUjMty3MQWCe5wfPi9N86UtBDCaS1uT5ksh2E
+         I75MzI4TVi7VGvnShGrDF6Pc2JkEifbmUAWkZzFE3v55BlpYcA2FHXaYlczRmftPXqZ2
+         wQaL3Mr6jGEj7CthcW/PRli8kxlrW5YWtiLEbQ/ygj4SRwxrPhNgNsZqJ+tsdIWKTi1O
+         OHHg9gcyD7YrqozZQw+yVqco9a5EWhcCrkbvXvnLeH5mlekn6Q/H1Fx6UTFwcIk4G5z1
+         rgJg==
+X-Gm-Message-State: ACgBeo0DfbschRtahj0xO7Oobm/Q1yhmjzXzY0KidQkBuhiNGrnbztXY
+        3gDsLpy5zRJkLAB8dosKBTkabNcaMamUqvtbbfVAxA==
+X-Google-Smtp-Source: AA6agR6k5/pgiNgK4VKq2XiLPLalc0PBHjQ/Co4GgNh/K5+cVUaPM73Le7bYBJcBnyp3LtykYdayarpSKiUIwSksaVU=
+X-Received: by 2002:a17:907:b04:b0:758:2d05:7aaf with SMTP id
+ h4-20020a1709070b0400b007582d057aafmr7119692ejl.33.1662663350763; Thu, 08 Sep
+ 2022 11:55:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMCowAA3Zy9+OhpjR7WkZw--.64992S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrWF4UAF1DJr43uF47KF43trb_yoWxWwcEq3
-        W8Ga1kta1kWwnF9rs8uFWfZF9Fyw1ku3sYqan7AwnxWryYywnxurs7Jrn2krWUt3W3CF93
-        uw4kAa1xArsagjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRib11tUUUUU==
-X-Originating-IP: [1.203.67.201]
-X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/1tbisgR2F1UMWUSwAgABsg
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220906172933.410698-1-isaacmanjarres@google.com> <YxnX9TsxuSi9L9GD@kroah.com>
+In-Reply-To: <YxnX9TsxuSi9L9GD@kroah.com>
+From:   Isaac Manjarres <isaacmanjarres@google.com>
+Date:   Thu, 8 Sep 2022 11:55:39 -0700
+Message-ID: <CABfwK102o1ycjHnGtR_bt3SZpuHtT=ynLJuWQwBUDqR2Ysg-eg@mail.gmail.com>
+Subject: Re: [PATCH stable-4.19/4.14/4.9] driver core: Don't probe devices
+ after bus_type.match() probe deferral
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Ulf Hansson <ulf.hansson@linaro.org>, stable@vger.kernel.org,
+        Saravana Kannan <saravanak@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iput() has already handled null and non-null parameter, so it is no
-need to use if().
+> Applied to 4.19.y, but did not apply to 4.14.y or 4.9.y :(
 
-Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
----
- ipc/mqueue.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks for following up on this. I'll make backports for 4.9 and 4.14
+separately.
 
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 9cf314b3f079..467a194b8a2e 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -986,8 +986,7 @@ SYSCALL_DEFINE1(mq_unlink, const char __user *, u_name)
- 
- out_unlock:
- 	inode_unlock(d_inode(mnt->mnt_root));
--	if (inode)
--		iput(inode);
-+	iput(inode);
- 	mnt_drop_write(mnt);
- out_name:
- 	putname(name);
-
-base-commit: 5957ac6635a1a12d4aa2661bbf04d3085a73372a
--- 
-2.34.1
-
+--Isaac

@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945895B2387
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F425B2388
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiIHQX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S230416AbiIHQXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiIHQXX (ORCPT
+        with ESMTP id S231894AbiIHQXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:23:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F010FF8274
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:23:20 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id nc14so39249815ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:23:20 -0700 (PDT)
+        Thu, 8 Sep 2022 12:23:31 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03380F824A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:23:31 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id s206so17252848pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:23:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:from:to:cc:subject:date;
-        bh=bdMeN6FnqK1npcK6VCQhFv3779r/x2/CSa4ry5MamXU=;
-        b=jM4kqEGLo0x4c9SugkK2RZKbi8J75NwCzwL+WzDAvgOr3Awyy2M5reAUlyKUIwSmVQ
-         J9BI623JbDsn4hxWXBzGM83644hklSb/eJHFal/qOnvs0cA5VWs+JZrHroKPGVlfzABE
-         QM900Eal8QIX1v9trvzd3GY/4kUfcnb02cpp+9UP+vtuyX7zS4gRkhFcNNcpX4EOp1t5
-         KVrLCi1YIyLUM44gXELwOOnu8pLYGYFBJo7roHRlNiMDIxL9Nd9BiMUzAjSEqOPoCp7r
-         BJxtczTXopJ0WpmOUI5eQgMgYSP427DqVjx3c6Ov43PItJTNHC8ZNQdB7GqzQYkfhnxz
-         qxNA==
+        bh=9ZFpt/foVGQHDYdWFxLDfNkzYkIk3H2JJygdZbdIkYI=;
+        b=MN0TCfIJUXfXRuQOYsUslH2iwTVvtVL3wo6jKyK9TLQfoyVkXvEO/guAM+iQ78cg0I
+         KhhJMNk7AD0+eYNAgovjyFq8Au2XxH4VoVpi/HtR7HyjAH/Uz/lERx7n17naKxuXFO4y
+         yzu6zbVlzNjkXrZ+NZoxlPfufMadD7EShuhlJewBy3ZgZIR48T45p3do42bp03MQGwan
+         0KVMwVusci5vMe90Y/5qi7NdqnR2YKUvM9dVTJFFh5lFMcXy+V6xgYduNSsUfRTttrZR
+         coUCEsqeQtz0yYsiW8lEw+zB5mWpOMtgrwDLLvIlFUlR8m2fyCDj6ZA9iNvSsl8MP172
+         ewaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=bdMeN6FnqK1npcK6VCQhFv3779r/x2/CSa4ry5MamXU=;
-        b=KXOoDOUoJi0AXhCCHF6L4Yuks+bV2ny7KGRiAfvfmdbWXrgDeubTdQ35MiyA7Rmj7T
-         Pc+67InK5MlzyFaydk2kXmFiVmdsd//mDWY2A9PqjKe3x2DBZKWhb2eo7y3ELFLxi+7h
-         Hgfl62XMz1gqJPyTgJtW+ImJRY6CrAAzcX3oSuEBCOyA2a+/Yd1JZou6tvwtz9qWHe3T
-         NkI/mhBZrtVC4IQ1IclVvY5dyYaDHe9u4yMw58OlOaKmKWvXDI23B/Ie1RaRHCn7tr18
-         7UX5pV8rEyxlI+mgreh1Jas1b2QokDZG5fpTOfq4uq8f11CXdK+Azpys54gvkxdSt9zF
-         m4Qg==
-X-Gm-Message-State: ACgBeo0XMXRrSO+KkvhVRzKOU4UEVZj7o23UEyPE6glQfTF1vnCbzI6W
-        FFYIeobCw6ENtRglnlnVedS6Ej4HEQ5yT8t3gadRCA==
-X-Google-Smtp-Source: AA6agR5TviwaWPrrPIjyGF6zpvI4oDr1TURdLxrCAE9HpPDgDYml5qDeUiGF2d+s09eD9ex7BL2ntp4DzywuHlwtCbg=
-X-Received: by 2002:a17:907:948f:b0:770:639:fbd1 with SMTP id
- dm15-20020a170907948f00b007700639fbd1mr6304073ejc.255.1662654198886; Thu, 08
- Sep 2022 09:23:18 -0700 (PDT)
+        bh=9ZFpt/foVGQHDYdWFxLDfNkzYkIk3H2JJygdZbdIkYI=;
+        b=QbbvhXQ3pXx9H9lOJvt1zIy8PCkbbg0PxedklubiNsWrMSwmylNefg9yYSiqPjGDYi
+         FnyVuhUkP6xWHT7fcB249qIB83Y/+AcuUUc1Gxan1WL4fSQRrenbkU7gWZQp9SbX59bQ
+         ZtozWSn2kSi5F/aaoYM4KOW0HolaP2XQtWB3oZra4Q0uBIy3nX6aRpahUs/F4d/fS72d
+         g7lYBZt+XzhJGR3BpXDINULTV6P9G3o38dCZz3qkzt6un1zoqmMCC0WcfmdjfclGoh/Y
+         HcD5ilFi/4VnIQKWlM1lz6UNKtHrfA/WWpYWf7HoydJihWqpfyexmoi2fXu0aZMmo+U/
+         98Hg==
+X-Gm-Message-State: ACgBeo2T4LhoYNaODu1Mzqu49yShhFprS8UiV97qC6+mWvbIV1DYgL/e
+        4D4LYnZ7QJeCQcQI2FmWfuwhoyBTvI+8JuJ7jeU=
+X-Google-Smtp-Source: AA6agR6ts1imAnI3/nNkx+JJ7dw1QZuQKDUcxTMwEzIHQfxbKFJfgszENJVlmWpYgAwVyBtbBsi1K7r0+iEi5hl1LnA=
+X-Received: by 2002:a63:6541:0:b0:435:cb2:ae4d with SMTP id
+ z62-20020a636541000000b004350cb2ae4dmr5852446pgb.252.1662654210570; Thu, 08
+ Sep 2022 09:23:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com> <8cf143e7-2b62-1a1e-de84-e3dcc6c027a4@suse.cz>
- <20220810141959.ictqchz7josyd7pt@techsingularity.net> <CAAH4kHa6s3sBRySNu-TZG_6vOaN4KheVy4kvxG5s=wOTDGy2=Q@mail.gmail.com>
- <2981e25e-9cda-518a-9750-b8694f2356b5@amd.com> <CAAH4kHbcfnVWNQHf6Mrg__bSFT6196Sx4kno6o0Zo7hsgOgnNw@mail.gmail.com>
- <984e07ed-914f-93ca-a141-3fc8677878e0@intel.com> <CAAH4kHawguTEuDVyz1ysSbH0X_mT=SvxLi=UhwEzXM0abbWefg@mail.gmail.com>
- <YxncAElGrPEGRYg1@linux.ibm.com>
-In-Reply-To: <YxncAElGrPEGRYg1@linux.ibm.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Thu, 8 Sep 2022 09:23:07 -0700
-Message-ID: <CAAH4kHaP8JUh0Z4rF83=2RZTGMATT5MHot6rAnAwt79PL64mVQ@mail.gmail.com>
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:6a20:12d4:b0:8e:e10d:7a77 with HTTP; Thu, 8 Sep 2022
+ 09:23:29 -0700 (PDT)
+Reply-To: cfc.ubagroup09@gmail.com
+From:   Kristalina Georgieva <unitedbankafrica962@gmail.com>
+Date:   Thu, 8 Sep 2022 09:23:29 -0700
+Message-ID: <CAPbXNa3A92rFSUigwot7ULOLPGS7Lqk4WSKSvN1sF7S04s9wEg@mail.gmail.com>
+Subject: XUSH HABAR
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Looks like the first access to the memory map fails, although I think
-> it's not in INIT_LIST_HEAD() but rather in init_page_count().
->
-> I'd start with making sure that page_alloc::memmap_alloc() actually returns
-> accepted memory. If you build kernel with CONFIG_DEBUG_VM=y the memory map
-> will poisoned in this function, so my guess is it'd crash there.
->
+Hurmatli Benefisiar,
+Men sizga bir oy oldin bu xatni yuborgan edim, lekin sizdan xabar yo'q, yo'=
+q
+Ishonchim komilki, siz uni oldingiz va shuning uchun uni yana sizga yubordi=
+m,
+Avvalo, men Kristalina Georgieva xonim, boshqaruvchi direktor va
+Xalqaro valyuta jamg'armasi prezidenti.
 
-That's a wonderful hint, thank you! I did not run this test
-CONFIG_DEBUG_VM set, but you think it's possible it could still be
-here?
+Aslida, biz atrofdagi barcha to'siqlar va muammolarni ko'rib chiqdik
+sizning to'liq bo'lmagan tranzaksiyangiz va to'lovlarni to'lay olmasligingi=
+z
+o'tkazish to'lovlari olinadi, sizga qarshi, imkoniyatlari uchun
+oldingi transferlar, tasdiqlash uchun bizning saytimizga tashrif buyuring 3=
+8
+=C2=B0 53'56 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 Vt
 
-> --
-> Sincerely yours,
-> Mike.
+Biz Direktorlar kengashi, Jahon banki va Valyuta jamg'armasimiz
+Vashingtondagi Xalqaro (XVF) Departamenti bilan birgalikda
+Amerika Qo'shma Shtatlari G'aznachiligi va boshqa ba'zi tergov idoralari
+Amerika Qo'shma Shtatlarida bu erda tegishli. buyurdi
+Bizning Chet eldagi to'lov pul o'tkazmalari bo'limi, Birlashgan Bank
+Afrika Lome Togo, sizga VISA kartasini chiqarish uchun, bu erda $
+Sizning fondingizdan ko'proq pul olish uchun 1,5 million.
 
+Tekshiruvimiz davomida biz aniqladik
+Sizning to'lovingiz korruptsionerlar tomonidan kechiktirilganidan xafa bo'l=
+ing
+Sizning mablag'laringizni hisoblaringizga yo'naltirishga harakat qilayotgan=
+ bank
+xususiy.
 
+Va bugun biz sizning mablag'ingiz Kartaga o'tkazilganligi haqida xabar bera=
+miz
+UBA Bank tomonidan VISA va u ham yetkazib berishga tayyor. Hozir
+UBA Bank direktori bilan bog'laning, uning ismi janob Toni
+Elumelu, elektron pochta: (cfc.ubagroup09@gmail.com)
+ATM VISA kartangizni qanday qabul qilishni aytib berish.
 
--- 
--Dionna Glaze, PhD (she/her)
+Hurmat bilan,
+
+Kristalina Georgieva xonim

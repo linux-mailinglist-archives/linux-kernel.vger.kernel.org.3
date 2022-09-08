@@ -2,220 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD15F5B10D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712645B10D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiIHAPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 20:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S230177AbiIHAPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiIHAPE (ORCPT
+        with ESMTP id S230150AbiIHAPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:15:04 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024CE5850C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 17:14:58 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id y82so15784708yby.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 17:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=GUHy3tTXYEVlHWPOZt/B5s9dwh1oEap8QDDRaqRD42s=;
-        b=EkFoA2DUckJoc39LOiNtYCaU9cFbXVmazyNV12a3KStazGUhhJR1U6XnXODK0TIRz4
-         +N76WdVdDqe2MYv/D4T4eFF42LX7csfZYrgd36cDl4ZF2OYpoYcAFEEFgAyx8F58tbal
-         P0WKobLZgcRhq24wI/kQMtsCJmAgIaCYCjQo4lYSmesUuH6LFbT1w/aGaw0ARdAlSFXd
-         J2GIhzFoViVMPvlNGlBbz2nzmN6QV9n01RRBkPte6KTFKKFHwsasefqsYFjEHKOZjYhz
-         aBKTtDKp2Rsg+pzX3OQRfEjjk6SnI7xmv7hIDzZp8hxzLZ5KYlmECPeru8AFaesdazSU
-         faJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GUHy3tTXYEVlHWPOZt/B5s9dwh1oEap8QDDRaqRD42s=;
-        b=F33mHNry7yiV1cg+AWjNs0vsmRsrO5OeO/kJm+23l1gNWO53j8GDfAOm84azCorOvl
-         B2ZCG4/RLZMLzDjbrRTOb/yEJjgKQwJqZ930JJU6ElJJiA2zFotQfXo9IcPaNc5vUQvT
-         9aZXryi1dkEokdJSE+MxP11R5+K87Wnm8vq4GlCRZTLGuKjMSO+V94xrZ4siFqh8shQG
-         IyHmyJl4uoOQ9/kx3GID19zi7Le2uxT94N0sqauJFN3pGReIC+THJHSnK9a3+9zoKx83
-         34Wp7+WevyMBEv3rlVta/O0/JNDuo0qi+cS4xFkYG0aRZEwGWKjRK5+j67axvTiR60Vs
-         c3mg==
-X-Gm-Message-State: ACgBeo2NbMUS1sr42C9J020FNqrKupJFHRz3muHsk6JWTWRrjtfOgCjw
-        W0muNLJzxXe7rS4GfKU6DvVCcu/0iaqYWlmfALl7Sg==
-X-Google-Smtp-Source: AA6agR7IHk6cdCdDMOwQoLbNgYeM+zGxAHtlj9Ps+Z38Lyz7NBVqyyguZjbICAsIreBFAhf/MXWHt+Mk9Zkk8gYuoS4=
-X-Received: by 2002:a25:1486:0:b0:6a8:f3e1:58ba with SMTP id
- 128-20020a251486000000b006a8f3e158bamr4883435ybu.80.1662596096986; Wed, 07
- Sep 2022 17:14:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220803122655.100254-1-nipun.gupta@amd.com> <20220906134801.4079497-1-nipun.gupta@amd.com>
- <20220906134801.4079497-4-nipun.gupta@amd.com> <CAGETcx_W8QVe+CdpocN2rHjp08TwsW22FaJgrYW=0JNge_N6KQ@mail.gmail.com>
- <DM6PR12MB30829DDDC62B36B17F87B204E8419@DM6PR12MB3082.namprd12.prod.outlook.com>
- <f5cf7bd7-4cd9-ef9c-7f25-f814b2f1e41f@arm.com> <CAGETcx9LE=E2focmbEsdQV3s2NR4-9H35ODkgSxZY5_7SEJ1Qw@mail.gmail.com>
- <9e537066-525f-4a8c-ffc1-926ac130c6e6@arm.com>
-In-Reply-To: <9e537066-525f-4a8c-ffc1-926ac130c6e6@arm.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 7 Sep 2022 17:14:20 -0700
-Message-ID: <CAGETcx8geH_DP4yHKxH=kXW=iJ3tchb5oRmqQ-Ugs6gmw1MwYg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 3/7] iommu/arm-smmu-v3: support ops registration
- for CDX bus
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "jgg@nvidia.com" <jgg@nvidia.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Wed, 7 Sep 2022 20:15:48 -0400
+Received: from spamfilter.jmicron.com (spamfilter.jmicron.com [220.130.51.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C18EBB937;
+        Wed,  7 Sep 2022 17:15:42 -0700 (PDT)
+Received: from JMEH602.jmicron.com (jmeh602.jmicron.com [10.88.10.18])
+        by spamfilter.jmicron.com with ESMTP id 2880FpRC086034;
+        Thu, 8 Sep 2022 08:15:51 +0800 (+08)
+        (envelope-from mdlin@jmicron.com)
+Received: from JMEH601.jmicron.com (10.88.10.17) by JMEH602.jmicron.com
+ (10.88.10.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.28; Thu, 8
+ Sep 2022 08:15:33 +0800
+Received: from JMEH601.jmicron.com ([fe80::a077:1ab:68b0:7ed0]) by
+ JMEH601.jmicron.com ([fe80::a077:1ab:68b0:7ed0%22]) with mapi id
+ 15.01.2375.028; Thu, 8 Sep 2022 08:15:34 +0800
+From:   Md Lin <mdlin@jmicron.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>
+CC:     "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Kevin Liu <kevinliu@jmicron.com>,
+        Charon Chen <charonchen@jmicron.com>,
+        Cora Huang <corahuang@jmicron.com>,
+        Ming Chen <mhchen@jmicron.com>,
+        George Chao <georgechao@jmicron.com>,
+        Banks <banks@jmicron.com>, Tzuwei Hung <tzuwei@jmicron.com>
+Subject: RE: [PATCH] libata/ahci: quirk for JMB585/JMB582
+Thread-Topic: [PATCH] libata/ahci: quirk for JMB585/JMB582
+Thread-Index: AQHYwqfp9p1cp+Rv5EyIP4UKdiaqu63UApWAgACmn4A=
+Date:   Thu, 8 Sep 2022 00:15:33 +0000
+Message-ID: <3b89cbd696394a21adb96432d3d3ba02@jmicron.com>
+References: <20220907105130.13797-1-mdlin@jmicron.com>
+ <04372579-4c43-efa1-6042-270f6ae919c2@opensource.wdc.com>
+In-Reply-To: <04372579-4c43-efa1-6042-270f6ae919c2@opensource.wdc.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.88.10.240]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-DNSRBL: 
+X-MAIL: spamfilter.jmicron.com 2880FpRC086034
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 1:40 PM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-09-07 19:24, Saravana Kannan wrote:
-> > On Wed, Sep 7, 2022 at 1:27 AM Robin Murphy <robin.murphy@arm.com> wrote:
-> >>
-> >> On 2022-09-07 04:17, Gupta, Nipun wrote:
-> >>> [AMD Official Use Only - General]
-> >>>
-> >>>
-> >>>
-> >>>> -----Original Message-----
-> >>>> From: Saravana Kannan <saravanak@google.com>
-> >>>> Sent: Wednesday, September 7, 2022 5:41 AM
-> >>>> To: Gupta, Nipun <Nipun.Gupta@amd.com>
-> >>>> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> >>>> gregkh@linuxfoundation.org; rafael@kernel.org; eric.auger@redhat.com;
-> >>>> alex.williamson@redhat.com; cohuck@redhat.com; Gupta, Puneet (DCG-ENG)
-> >>>> <puneet.gupta@amd.com>; song.bao.hua@hisilicon.com;
-> >>>> mchehab+huawei@kernel.org; maz@kernel.org; f.fainelli@gmail.com;
-> >>>> jeffrey.l.hugo@gmail.com; Michael.Srba@seznam.cz; mani@kernel.org;
-> >>>> yishaih@nvidia.com; jgg@ziepe.ca; jgg@nvidia.com; robin.murphy@arm.com;
-> >>>> will@kernel.org; joro@8bytes.org; masahiroy@kernel.org;
-> >>>> ndesaulniers@google.com; linux-arm-kernel@lists.infradead.org; linux-
-> >>>> kbuild@vger.kernel.org; linux-kernel@vger.kernel.org;
-> >>>> devicetree@vger.kernel.org; kvm@vger.kernel.org; okaya@kernel.org; Anand,
-> >>>> Harpreet <harpreet.anand@amd.com>; Agarwal, Nikhil
-> >>>> <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
-> >>>> Radovanovic, Aleksandar <aleksandar.radovanovic@amd.com>; git (AMD-Xilinx)
-> >>>> <git@amd.com>
-> >>>> Subject: Re: [RFC PATCH v3 3/7] iommu/arm-smmu-v3: support ops registration
-> >>>> for CDX bus
-> >>>>
-> >>>> [CAUTION: External Email]
-> >>>>
-> >>>> On Tue, Sep 6, 2022 at 6:48 AM Nipun Gupta <nipun.gupta@amd.com> wrote:
-> >>>>>
-> >>>>> With new CDX bus supported for AMD FPGA devices on ARM
-> >>>>> platform, the bus requires registration for the SMMU v3
-> >>>>> driver.
-> >>>>>
-> >>>>> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> >>>>> ---
-> >>>>>    drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 16 ++++++++++++++--
-> >>>>>    1 file changed, 14 insertions(+), 2 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> >>>> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> >>>>> index d32b02336411..8ec9f2baf12d 100644
-> >>>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> >>>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> >>>>> @@ -29,6 +29,7 @@
-> >>>>>    #include <linux/platform_device.h>
-> >>>>>
-> >>>>>    #include <linux/amba/bus.h>
-> >>>>> +#include <linux/cdx/cdx_bus.h>
-> >>>>>
-> >>>>>    #include "arm-smmu-v3.h"
-> >>>>>    #include "../../iommu-sva-lib.h"
-> >>>>> @@ -3690,16 +3691,27 @@ static int arm_smmu_set_bus_ops(struct
-> >>>> iommu_ops *ops)
-> >>>>>                   if (err)
-> >>>>>                           goto err_reset_pci_ops;
-> >>>>>           }
-> >>>>> +#endif
-> >>>>> +#ifdef CONFIG_CDX_BUS
-> >>>>> +       if (cdx_bus_type.iommu_ops != ops) {
-> >>>>> +               err = bus_set_iommu(&cdx_bus_type, ops);
-> >>>>> +               if (err)
-> >>>>> +                       goto err_reset_amba_ops;
-> >>>>> +       }
-> >>>>
-> >>>> I'm not an expert on IOMMUs, so apologies if the question is stupid.
-> >>>>
-> >>>> Why does the CDX bus need special treatment here (like PCI) when there
-> >>>> are so many other busses (eg: I2C, SPI, etc) that don't need any
-> >>>> changes here?
-> >>>
-> >>> AFAIU, the devices on I2C/SPI does not use SMMU. Apart from PCI/AMBA,
-> >>> FSL-MC is another similar bus (on SMMUv2) which uses SMMU ops.
-> >>>
-> >>> The devices here are behind SMMU. Robin can kindly correct or add
-> >>> more here from SMMU perspective.
-> >>
-> >> Indeed, there is no need to describe and handle how DMA may or may not
-> >> be translated for I2C/SPI/USB/etc. because they are not DMA-capable
-> >> buses (in those cases the relevant bus *controller* often does DMA, but
-> >> it does that for itself as the platform/PCI/etc. device it is).
-> >
-> > Ok this is what I was guessing was the reason, but didn't want to make
-> > that assumption.
-> >
-> > So if there are other cases like AMBA, FSL-MC where the devices can do
-> > direct DMA, why do those buses not need a #ifdef section in this
-> > function like CDX? Or put another way, why does CDX need special treatment?
->
-> Er, it doesn't? The only non-optional bus here is platform, since the
-> others *can* be configured out and *are* #ifdefed accordingly.
-
-Ah ok. Also I somehow missed the #ifdef AMBA there and thought there
-was only #ifdef PCI and the rest of the buses somehow got it working
-without having to muck around arm-smmu-v3.c.
-
-Thanks for the explanation. I'm done here :)
-
--Saravana
-
-> This
-> patch is fine for the kernel it was based on, it'll just want rewriting
-> now that I've cleaned all this horrible driver boilerplate up. And
-> according to the thread on patch #4 there might need to be additional
-> changes for CDX to express a reserved MSI region for SMMU support to
-> actually work properly.
->
-> Robin.
+SGkgRGFtaWVuLA0KVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgdGhlIGRldGFpbGVkIHN1Z2dlc3Rp
+b24uIEkgd2lsbCBtb2RpZnkgdGhlIHBhdGNoLCBjb21taXQgbWVzc2FnZSBhbmQgc2VuZCB0byB5
+b3UgYWdhaW4uDQoNCkJlc3QgcmVnYXJkcywNCk1EIExpbiAo5p6X5piO5b63KQ0KDQpKTWljcm9u
+IFRlY2hub2xvZ3kNClRlbCA6IDAzLTU3OTczODnCoCBFeHQuIDg3MjcNCkZheCA6IDAzLTU3OTk1
+NjYNCkUtbWFpbCA6IG1kbGluQGptaWNyb24uY29tDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0t
+LS0tDQpGcm9tOiBEYW1pZW4gTGUgTW9hbCA8ZGFtaWVuLmxlbW9hbEBvcGVuc291cmNlLndkYy5j
+b20+IA0KU2VudDogVGh1cnNkYXksIFNlcHRlbWJlciAwOCwgMjAyMiA2OjEzIEFNDQpUbzogTWQg
+TGluIDxtZGxpbkBqbWljcm9uLmNvbT47IGF4Ym9lQGtlcm5lbC5kaw0KQ2M6IGxpbnV4LWlkZUB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IEtldmluIExpdSA8
+a2V2aW5saXVAam1pY3Jvbi5jb20+OyBDaGFyb24gQ2hlbiA8Y2hhcm9uY2hlbkBqbWljcm9uLmNv
+bT47IENvcmEgSHVhbmcgPGNvcmFodWFuZ0BqbWljcm9uLmNvbT47IE1pbmcgQ2hlbiA8bWhjaGVu
+QGptaWNyb24uY29tPjsgR2VvcmdlIENoYW8gPGdlb3JnZWNoYW9Aam1pY3Jvbi5jb20+OyBCYW5r
+cyA8YmFua3NAam1pY3Jvbi5jb20+OyBUenV3ZWkgSHVuZyA8dHp1d2VpQGptaWNyb24uY29tPg0K
+U3ViamVjdDogUmU6IFtQQVRDSF0gbGliYXRhL2FoY2k6IHF1aXJrIGZvciBKTUI1ODUvSk1CNTgy
+DQoNCk9uIDkvNy8yMiAxOTo1MSwgTUQgTGluIHdyb3RlOg0KPiBUaGlzIHBhdGNoIGFkZHMgYSBx
+dWlyaywgd2hpY2ggZW5hYmxlIGVycm9yIGJpdCBoYW5kbGluZyBmdW5jdGlvbnMgYW5kIA0KPiBT
+QVRBIGNvbmZpZ3VyYXRpb24gZm9yIEpNaWNyb24gSk1CNTg1L0pNQjU4Mi4NCj4gDQo+IFNpZ25l
+ZC1vZmYtYnk6IE1EIExpbiA8bWRsaW5Aam1pY3Jvbi5jb20+DQoNClBsZWFzZSB1c2Ugc2NyaXB0
+cy9nZXRfbWFpbnRhaW5lci5wbCB0byBjaGVjayB0byB3aG9tIGF0YSBwYXRjaGVzIHNob3VsZCBi
+ZSBhZGRyZXNzZWQuIElmIHlvdSBkbyBub3Qgc2VuZCBwYXRjaGVzIHRvIG1lLCB0aGVyZSBpcyBh
+IGhpZ2ggY2hhbmNlIHRoYXQgSSB3aWxsIG1pc3MgdGhlbS4NCg0KVGhlIHBhdGNoIHRpdGxlIHNo
+b3VsZCBiZToNCg0KYXRhOiBhaGNpOiBBZGQgaW5pdGlhbGl6YXRpb24gcXVpcmsgZm9yIEptaWNy
+byA1ODUvNTgyIGNvbnRyb2xsZXJzDQoNCk9yIGVxdWl2YWxlbnQsIHRoYXQgaXMsIGEgbGl0dGxl
+IG1vcmUgZGVzY3JpcHRpdmUuDQoNClRoZSBjb21taXQgbWVzc2FnZSBhbHNvIGRvZXMgbm90IGV4
+cGxhaW4gV0hZIHRoaXMgcXVpcmsgaXMgbmVjZXNzYXJ5ICh0aGUgcHJvYmxlbSBpcyBub3QgZGVz
+Y3JpYmVkKSBhbmQgdGhlcmUgaXMgYWxzbyBubyBkZXNjcmlwdGlvbiBvZiBIT1cgeW91ciBwYXRj
+aCBhZGRyZXNzIHRoZSBpc3N1ZS4gUGxlYXNlIGJlIGEgbGl0dGxlIG1vcmUgdmVyYm9zZSB3aXRo
+IHRoZSBjb21taXQgbWVzc2FnZSB0byBiZXR0ZXIgZGVzY3JpYmUgdGhlIHBhdGNoLg0KDQo+IC0t
+LQ0KPiAgZHJpdmVycy9hdGEvYWhjaS5jIHwgNjUgDQo+ICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCA2NSBpbnNlcnRpb25z
+KCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9hdGEvYWhjaS5jIGIvZHJpdmVycy9hdGEv
+YWhjaS5jIGluZGV4IA0KPiA1MDU5MjBkNDUuLmIwNzY4ZmFlMyAxMDA3NTUNCj4gLS0tIGEvZHJp
+dmVycy9hdGEvYWhjaS5jDQo+ICsrKyBiL2RyaXZlcnMvYXRhL2FoY2kuYw0KPiBAQCAtMTY1Nyw2
+ICsxNjU3LDY4IEBAIHN0YXRpYyB2b2lkIGFoY2lfaW50ZWxfcGNzX3F1aXJrKHN0cnVjdCBwY2lf
+ZGV2ICpwZGV2LCBzdHJ1Y3QgYWhjaV9ob3N0X3ByaXYgKmhwDQo+ICAJfQ0KPiAgfQ0KPiAgDQo+
+ICtzdGF0aWMgdm9pZCBhaGNpX2ptYjU4NV93cml0ZV9zYXRhX3BoeSh2b2lkIF9faW9tZW0gKm1t
+aW8sIHUzMiBhZGRyLCANCj4gK3UzMiBkYXRhKQ0KDQpUaGUgcGF0Y2ggdGl0bGUgc2FpZCBqbWI1
+ODUgYW5kIGptYjU4Mi4gU28gc2hvdWxkIHRoaXMgYmUgY2FsbGVkDQphaGNpX2ptYjU4eF93cml0
+ZV9zYXRhX3BoeSgpID8NCg0KPiArew0KPiArCXdyaXRlbCgoYWRkciAmIDB4MDFGRkZVTCkgKyAo
+MVVMIDw8IDE4VUwpLCBtbWlvICsgMHhDMCk7DQo+ICsJd3JpdGVsKGRhdGEsIG1taW8gKyAweEM4
+KTsNCj4gK30NCj4gKw0KPiArc3RhdGljIHZvaWQgYWhjaV9qbWljcm9uXzU4NV9xdWlyayh2b2lk
+IF9faW9tZW0gKm1taW8pDQoNClNhbWUgaGVyZS4gQWxzbywgcGxlYXNlIGJlIGNvbnNpc3RlbnQg
+d2l0aCB0aGUgbmFtZXM6IHNwZWxsIG91dCBqbWljcm9uIG9yIHVzZSBqbWIsIGVpdGhlciBpcyBm
+aW5lIHdpdGggbWUsIGJ1dCBvbmNlIHlvdSBjaG9vc2Ugb25lLCBzdGljayB3aXRoIGl0Lg0KU286
+DQoNCmFoY2lfam1iNTh4X3dyaXRlX3NhdGFfcGh5KCkNCmFoY2lfam1iNTh4X3F1aXJrKCkNCg0K
+b3INCg0KYWhjaV9qbWljcm9uXzU4eF93cml0ZV9zYXRhX3BoeSgpDQphaGNpX2ptaWNyb25fNTh4
+X3F1aXJrKCkNCg0KPiArew0KPiArCXUzMiBwaSA9IHJlYWRsKG1taW8gKyBIT1NUX1BPUlRTX0lN
+UEwpOw0KPiArCXUzMiBiOF9kYXRhOw0KPiArDQo+ICsJLyoNCj4gKwkgKiBlbmFibGUgZXJyb3Ig
+Yml0IGhhbmRsaW5nIGZ1bmN0aW9ucywgdGhlc2UgbWlnaHQgb3ZlcndyaXRlDQo+ICsJICogdGhl
+IHNldHRpbmcgd2hpY2ggbG9hZHMgZnJvbSBleHRlcm5hbCBTUEkgZmxhc2gNCj4gKwkgKi8NCj4g
+KwliOF9kYXRhID0gKHBpID4gMykgPyAweDEzIDogMHg5MjsNCj4gKwl3cml0ZWwoMHgwMzA2MDAw
+NCtiOF9kYXRhLCBtbWlvICsgMHhCOCk7DQoNClNwYWNlcyBtaXNzaW5nIGFyb3VuZCB0aGUgIisi
+IGluIHRoZSBmaXJzdCBhcmd1bWVudC4NCg0KPiArCXdyaXRlbCgweDAwRkYwQjAxLCAgICAgICAg
+IG1taW8gKyAweDMwKTsNCj4gKwl3cml0ZWwoMHgwMDAwMDAzRiwgICAgICAgICBtbWlvICsgMHgz
+NCk7DQo+ICsJd3JpdGVsKDB4MDAwMDAwMUYsICAgICAgICAgbW1pbyArIDB4MzgpOw0KPiArCXdy
+aXRlbCgweDAzMDYwMDAwK2I4X2RhdGEsIG1taW8gKyAweEI4KTsNCg0KU2FtZSBoZXJlLg0KDQo+
+ICsJd3JpdGVsKDB4RjlFNEVGQkYsICAgICAgICAgbW1pbyArIDB4QjApOw0KDQpBbmQgd2hhdCBh
+cmUgYWxsIHRoZXNlIG1hZ2ljIHZhbHVlcyA/IFdoZXJlIGRvIHRoZXkgY29tZSBmcm9tID8NCkl0
+IHdvdWxkIGJlIG5pY2UgdG8gaGF2ZSB0aGVzZSBkZWZpbmVkIGFzIG1hY3JvcyB3aXRoIGRlc2Ny
+aXB0aXZlIG5hbWVzIGluIGRyaXZlcnMvYXRhL2FoY2kuaC4NCg0KPiArDQo+ICsJLyoNCj4gKwkg
+KiBzZXQgU0FUQSBjb25maWd1cmF0aW9uLCB0aGVzZSBtaWdodCBvdmVyd3JpdGUNCj4gKwkgKiB0
+aGUgc2V0dGluZyB3aGljaCBsb2FkcyBmcm9tIGV4dGVybmFsIFNQSSBmbGFzaA0KPiArCSAqLw0K
+PiArCWFoY2lfam1iNTg1X3dyaXRlX3NhdGFfcGh5KG1taW8sIDB4MDYsIDB4NzAwMDVCRTMpOyAv
+KiBwb3J0MCAqLw0KPiArCWFoY2lfam1iNTg1X3dyaXRlX3NhdGFfcGh5KG1taW8sIDB4MTMsIDB4
+NzAwMDVCRTMpOyAvKiBwb3J0MSAqLw0KPiArCWFoY2lfam1iNTg1X3dyaXRlX3NhdGFfcGh5KG1t
+aW8sIDB4NzMsIDB4MDAwMDAxRTUpOyAvKiBwb3J0MCAqLw0KPiArCWFoY2lfam1iNTg1X3dyaXRl
+X3NhdGFfcGh5KG1taW8sIDB4NzUsIDB4MDAwMDAxRTUpOyAvKiBwb3J0MSAqLw0KPiArCWFoY2lf
+am1iNTg1X3dyaXRlX3NhdGFfcGh5KG1taW8sIDB4NzQsIDB4MDAwMDAwMjQpOyAvKiBwb3J0MCAq
+Lw0KPiArCWFoY2lfam1iNTg1X3dyaXRlX3NhdGFfcGh5KG1taW8sIDB4ODAsIDB4MjUwQjAwMDMp
+OyAvKiBwb3J0MSAqLw0KPiArCWlmIChwaSA+IDMpIHsNCj4gKwkJYWhjaV9qbWI1ODVfd3JpdGVf
+c2F0YV9waHkobW1pbywgMHgyMCwgMHg3MDAwNUJFMyk7IC8qIHBvcnQyICovDQo+ICsJCWFoY2lf
+am1iNTg1X3dyaXRlX3NhdGFfcGh5KG1taW8sIDB4MkQsIDB4NzAwMDVCRTMpOyAvKiBwb3J0MyAq
+Lw0KPiArCQlhaGNpX2ptYjU4NV93cml0ZV9zYXRhX3BoeShtbWlvLCAweDNBLCAweDcwMDA1QkUz
+KTsgLyogcG9ydDQgKi8NCj4gKwkJYWhjaV9qbWI1ODVfd3JpdGVfc2F0YV9waHkobW1pbywgMHg3
+OSwgMHgwMDAwMDFFNSk7IC8qIHBvcnQzICovDQo+ICsJCWFoY2lfam1iNTg1X3dyaXRlX3NhdGFf
+cGh5KG1taW8sIDB4ODMsIDB4MjUwQjAwMDMpOyAvKiBwb3J0MyAqLw0KPiArCQlhaGNpX2ptYjU4
+NV93cml0ZV9zYXRhX3BoeShtbWlvLCAweDdBLCAweDAwMDAwMDI0KTsgLyogcG9ydDMgKi8NCj4g
+KwkJYWhjaV9qbWI1ODVfd3JpdGVfc2F0YV9waHkobW1pbywgMHg4NCwgMHgyNTBCMDAwMyk7IC8q
+IHBvcnQzICovDQo+ICsJfQ0KDQpTYW1lIGhlcmUsIGxvdHMgb2YgIm1hZ2ljIiB2YWx1ZXMgdGhh
+dCBjYW5ub3QgYmUgY2hlY2tlZC4gUGxlYXNlIHVzZSBtYWNyb3MgYW5kIGFkZCBjb21tZW50cyBk
+ZXNjcmliaW5nIHdoZXJlIHRoZXNlIGNvbWUgZnJvbSAoYWRhcHRlciBzcGVjcyA/KS4NCg0KPiAr
+fQ0KPiArDQo+ICtzdGF0aWMgdm9pZCBhaGNpX2ptaWNyb25fcXVpcmsoc3RydWN0IHBjaV9kZXYg
+KnBkZXYsDQo+ICsJCQlzdHJ1Y3QgYWhjaV9ob3N0X3ByaXYgKmhwcml2KQ0KPiArew0KPiArCXZv
+aWQgX19pb21lbSAqbW1pbyA9IGhwcml2LT5tbWlvOw0KPiArCXU4IHRtcDg7DQo+ICsNCj4gKwlp
+ZiAocGRldi0+dmVuZG9yICE9IFBDSV9WRU5ET1JfSURfSk1JQ1JPTikNCj4gKwkJcmV0dXJuOw0K
+PiArDQo+ICsJc3dpdGNoIChwZGV2LT5kZXZpY2UpIHsNCj4gKwljYXNlIDB4NTg1OiAvKiBjaGVj
+ayBpZiB0aGUgY2hpcCBpcyBKTUI1ODUgKi8NCg0KVGhlIGNvbW1lbnQgY2FuIGJlIHJlbW92ZWQu
+IFRoaXMgaXMgb2J2aW91cy4NCg0KQWxzbywgdGhlcmUgaXMgbm8gY2FzZSBmb3Igam1iNTgyIG1v
+ZGVsIHdoaWNoIHRoZSBwYXRjaCB0aXRsZSBtZW50aW9ucy4gSXMgaXQgdGhlIHNhbWUgbnVtYmVy
+IGZvciBib3RoIG1vZGVscyA/IElmIHRoYXQgaXMgdGhlIGNhc2UsIHRoZW4gcGxlYXNlIGFkZCBh
+IGNvbW1lbnQgYWJvdmUgdGhlIHN3aXRjaCgpIGRlc2NyaWJpbmcgdGhhdC4NCg0KPiArCQl0bXA4
+ID0gcmVhZGIobW1pbyArIDB4NDQpOw0KPiArCQlpZiAodG1wOCkNCj4gKwkJCWFoY2lfam1pY3Jv
+bl81ODVfcXVpcmsobW1pbyk7DQoNClRoZSB0bXA4IHZhcmlhYmxlIGlzIG5vdCBuZWNlc3Nhcnku
+DQoNCj4gKwkJYnJlYWs7DQo+ICsJfQ0KPiArfQ0KPiArDQo+ICBzdGF0aWMgaW50IGFoY2lfaW5p
+dF9vbmUoc3RydWN0IHBjaV9kZXYgKnBkZXYsIGNvbnN0IHN0cnVjdCANCj4gcGNpX2RldmljZV9p
+ZCAqZW50KSAgew0KPiAgCXVuc2lnbmVkIGludCBib2FyZF9pZCA9IGVudC0+ZHJpdmVyX2RhdGE7
+IEBAIC0xNzc1LDYgKzE4MzcsOSBAQCANCj4gc3RhdGljIGludCBhaGNpX2luaXRfb25lKHN0cnVj
+dCBwY2lfZGV2ICpwZGV2LCBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCAqZW50KQ0KPiAgCSAq
+Lw0KPiAgCWFoY2lfaW50ZWxfcGNzX3F1aXJrKHBkZXYsIGhwcml2KTsNCj4gIA0KPiArCS8qIHNl
+dCBKTWljcm9uIGNvbmZpZ3VyYXRpb24gKi8NCg0KVGhpcyBpcyBvYnZpb3VzIGZyb20gdGhlIGZ1
+bmN0aW9uIG5hbWUuIFNvIHlvdSBjYW4gZHJvcCB0aGlzIGNvbW1lbnQuDQoNCj4gKwlhaGNpX2pt
+aWNyb25fcXVpcmsocGRldiwgaHByaXYpOw0KPiArDQo+ICAJLyogcHJlcGFyZSBob3N0ICovDQo+
+ICAJaWYgKGhwcml2LT5jYXAgJiBIT1NUX0NBUF9OQ1EpIHsNCj4gIAkJcGkuZmxhZ3MgfD0gQVRB
+X0ZMQUdfTkNROw0KDQotLQ0KRGFtaWVuIExlIE1vYWwNCldlc3Rlcm4gRGlnaXRhbCBSZXNlYXJj
+aA0KDQo=

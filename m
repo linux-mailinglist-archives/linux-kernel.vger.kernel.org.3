@@ -2,110 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69D65B2A9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7CC5B2AA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiIHXxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S229911AbiIHXyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiIHXxU (ORCPT
+        with ESMTP id S229566AbiIHXyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:53:20 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D04AB1AB;
-        Thu,  8 Sep 2022 16:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662681199; x=1694217199;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=T283FVBX95jJVUVJfhotCzb7jPZ3g0V6CxJ2ND8P1Xo=;
-  b=aqFvPstsjpwf/OsJeCQs8kht7C6+5zNKuF6HNb5dPDhdKegl2Weis97K
-   MZ2oEmqF11JlcKyCHBTgQVg8X7S022SgpWavsp3p8WOq2zcVbqBL4vzsB
-   zTU82WiSD5PQCPwC4M9cSejUCcowqI9UR66Ew4JxZabJvHrV8tlmvlZHZ
-   J2NyJJm2mXHa5QKx+fghmZznwFyG13HXKEBnWe9FZV7dbKTz3QIqXL7QS
-   WHkwhahANlpYQwMPjTtd9B7DkU4gD3guvMyg3bQ8FY83jJfx4rKrytxuJ
-   PjeiaXlM8t3+9gQ+LkwyLt0baqATTTnLC+3Pgzqk7EnUMzt9xIqdTyH/X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284372755"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="284372755"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:53:18 -0700
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="740864197"
-Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:53:18 -0700
-Message-ID: <49f7bb67-2f4f-8e06-5420-5b279fdf3199@linux.intel.com>
-Date:   Thu, 8 Sep 2022 16:53:18 -0700
+        Thu, 8 Sep 2022 19:54:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240A9A6AE2;
+        Thu,  8 Sep 2022 16:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kukmqgp2SSkl+E6zj8L6ZjulyQQ13O7eDJQDQHr8gkU=; b=ueaRdOsKvzyTTLGgzoO1zkNaMy
+        7ms0DDQjq2u1tNvcep0fGiHxSa65Ng2/D61URjOCjkGXfewUeVeMQgZDnHeVAKrrkom34F18Pnjed
+        ZDZb1fLCG+dQVRalQHIpXqf0ItC2FJ/wzmaxfYRecVt4aCigCopFfdC0k/bmqja3Tl4Jd4xSALLc+
+        0Ru5tmX1/9VntHH9mGCkSFQMj791Bw1tucChceVUqmPf/sdZKSeFwTTczXLe6Mzc+WMwJn8GMexdR
+        Pj6FGF0ZxLsV3znBP4CZdE1NKaJN37df0VKb1TDPPbXYqJV/V4Xvb5TDO0Xj3pSXXuGVETuK+Gbbp
+        wCF/L8cg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWRLN-009zff-0Z; Thu, 08 Sep 2022 23:54:01 +0000
+Date:   Thu, 8 Sep 2022 16:54:00 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Li zeming <zeming@nfschina.com>
+Cc:     keescook@chromium.org, yzaikin@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] proc/proc_sysctl: Remove unnecessary 'NULL' values from
+ Pointer
+Message-ID: <YxqAmIqBugwS74bS@bombadil.infradead.org>
+References: <20220905012110.2946-1-zeming@nfschina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v12 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yxl+PE4A+WUfQ7bl@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Yxl+PE4A+WUfQ7bl@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905012110.2946-1-zeming@nfschina.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave/Greg,
-
-On 9/7/22 10:31 PM, Greg Kroah-Hartman wrote:
-> On Wed, Sep 07, 2022 at 05:27:20PM -0700, Kuppuswamy Sathyanarayanan wrote:
->> +	/*
->> +	 * Per TDX Module 1.0 specification, section titled
->> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
->> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
->> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
->> +	 * 0. Also check for valid user pointers.
->> +	 */
->> +	if (!req.reportdata || !req.tdreport || req.subtype ||
->> +		req.rpd_len != TDX_REPORTDATA_LEN ||
->> +		req.tdr_len != TDX_REPORT_LEN)
->> +		return -EINVAL;
+On Mon, Sep 05, 2022 at 09:21:10AM +0800, Li zeming wrote:
+> Pointer variables allocate memory first, and then judge. There is no
+> need to initialize the assignment.
 > 
-> You never verify that your reserved[7] fields are actually set to 0,
-> which means you can never use them in the future :(
-> 
-> Please fix that up, thanks.
+> Signed-off-by: Li zeming <zeming@nfschina.com>
 
-Would you prefer a new posting (v12.1 or v13) with this change, or do you
-want to continue the review in the same version?
+you sent the same patch before, and with a different subject...
+Anyway the first one was queued up already, in the future please
+use a bit better subject.
 
-> 
-> greg k-h
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+  Luis

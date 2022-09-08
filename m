@@ -2,90 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506F75B29DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202F85B29E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiIHXDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        id S229604AbiIHXJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiIHXDA (ORCPT
+        with ESMTP id S229550AbiIHXJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:03:00 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A229A993;
-        Thu,  8 Sep 2022 16:02:56 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id 10so150991iou.2;
-        Thu, 08 Sep 2022 16:02:56 -0700 (PDT)
+        Thu, 8 Sep 2022 19:09:27 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24FEC12DD
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:09:18 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id z187so19402087pfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Lh1d7xwAI6FSaEeuyG+QlzDPrQOD/TqkSwQQ7Nk24C8=;
-        b=bssK1Y/5WmM0UQ657sCKy21zJ6QaSYOqqlQlG8mMV/5FM/sQk1kSugMdO4G6DNyY+5
-         lx2Dak2YDuGpduOdV+uu/BBWWTfQBNXLsXeDDCIcDRl3GV6GACpFidQQ7N9Wm2H8nS7x
-         7Vdi3DPC+FRqGWE5mIDX1drdc7nB8JvrzRfcoR2DooFuFYZQAY22Fhf5MpbQK9cXj7AG
-         mP04RtyiDrpAuDycv9r6pikpBVVkrOvcwX0lOQL9NvLZPmcbz3zBFLQJYRaRtMoxbBjL
-         6gpm1dkmdicNuLF6Cm/HOX71Nhe3PQ2fh7gi0qPfBVp3hcwE6wWLZmh0sZCs2bPYx9PA
-         AgmA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=f98sLP35JmRNa3ghGz3efCT4en0KZ7a760/UmAkHCjI=;
+        b=UnU2+Jt4Afybiz3e8PilNSxgg/DcystvKZWmU7BhBOyYghZl5EEbQPkFDT90H8rt+6
+         Mr4XpK0A8NRIkhNsUj0C4P55T4oTyDrynyWJ2yEkuskV2rVi5mTDS+HF2DKgqCRSS8Wi
+         /3ZYYNELbIBPrAo5L8iz08edvtdL4ecpAEIm4yN+gdTgxEqNzd53/8emNQfe8qmRczwf
+         FR7qi6fEV9gFkNqkzkadOzqOXn4nnDs1yt0dZVgPbhnksjrMTfxYX+zUkq0MAh08woAr
+         GMSoKhMYae5yTxe7eJvhaWJrChHLuLOBQ6EFzkSzD7+zCXm+nBvg95UmXJRyEqupkfVD
+         CrHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Lh1d7xwAI6FSaEeuyG+QlzDPrQOD/TqkSwQQ7Nk24C8=;
-        b=UJBZhfQJzMlIkat4L4uXRl/q8j8BoGLg9SIATUv9TdMo5khxgkfhKfHiduqs+1P4wx
-         sXnsiGo4aC4EzavwrD1ry9JBxG+srHayPK/oxzM/nxAaEudAfJTR8GKenQ+LvRjTNW3D
-         +fnrej2ZNEnggV7mpcF48CgiGGC+xdS8DWIKSIPMZm86T30kwGB17fFFViYEI6Zgh/Cp
-         HGkO9ji3EsK7p9CGDcQGwu0gwICCrAPieco4OyjE9wDQ8fFPP8cRh5eV2aW7l61g9xZ2
-         XZgVmul3RzLGoW1idV/mWr0Wm0c3LZBCort0cH9ekPe56QafdTs3cdwr5Jtg4NBwjzTg
-         XniQ==
-X-Gm-Message-State: ACgBeo1NYqL7WfA9t0jEl35Ciid2oKaglHG5yLrVrCsJ9wzU3kRW6sU9
-        X4Y1XBb5BLH32D9dV3hBMOw=
-X-Google-Smtp-Source: AA6agR52uNIsGsiNN3adCvfvBerjXs3GEPH9NruULNz1WsuQMF1qtz/Q2G17FSQDXjSx+uazAQSXGQ==
-X-Received: by 2002:a6b:3e8a:0:b0:69b:2933:882b with SMTP id l132-20020a6b3e8a000000b0069b2933882bmr5360400ioa.11.1662678175890;
-        Thu, 08 Sep 2022 16:02:55 -0700 (PDT)
-Received: from localhost ([2607:fea8:a2e2:2d00::6f2a])
-        by smtp.gmail.com with UTF8SMTPSA id q28-20020a05663810dc00b0034c0f2229aasm114608jad.68.2022.09.08.16.02.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 16:02:55 -0700 (PDT)
-From:   Richard Acayan <mailingradian@gmail.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tdas@codeaurora.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, caleb@connolly.tech,
-        jo@jsfamily.in, Richard Acayan <mailingradian@gmail.com>
-Subject: Re: [PATCH v2 3/3] clk: qcom: gcc-sdm845: add sdm670 global clock data
-Date:   Thu,  8 Sep 2022 19:02:43 -0400
-Message-Id: <20220908230243.207783-1-mailingradian@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <8233a19a-9b0b-6962-6f36-381c8f380ad3@linaro.org>
-References: <8233a19a-9b0b-6962-6f36-381c8f380ad3@linaro.org>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=f98sLP35JmRNa3ghGz3efCT4en0KZ7a760/UmAkHCjI=;
+        b=59uHlQNSLy1FG4yIaDY4X2629rNpGbmDhaj8GS93aUZKX7bWfj1WNHKe4jh2Giae35
+         bqBIteLdgB0K8RLEDoxM62CrgZqpRmNJ2wvUyfUHeabXo79Yxy18wLts5xVh4vIFD+kg
+         A2X/UaVaKFV3ikfmiNimbPMczj+cVCC5u0ZEuLlOFuuON5kvD4kR+iCx/cFxeeQOZ/0L
+         LTUHrpKVCNCoF1157e5CakI17QYX5eOMNodlIEGPbGOdqrNxMW2axc5pWHZmJZTUYocs
+         BfpxnDcvrrYxNDuI3kt2X4hyBkUkSPLgZTEuzb+cHjXBtoLMPjeSkgtQZO1td1gTYh/B
+         LPrQ==
+X-Gm-Message-State: ACgBeo2vW6HoR7zTsRRqDG6Tc9hecLAvV5buaICVktXOIqKQouIaxpLM
+        jQ0Hi9j5Or3AkclTeWNUG78cpg==
+X-Google-Smtp-Source: AA6agR6hWmrLOA/Yfr9DsTqVQzlc/p7LFycuMzeasMzvyqc7LN3bL3gj6HgrGQamOk9wfVRbNdtTbA==
+X-Received: by 2002:a05:6a00:23c1:b0:52e:28f5:4e13 with SMTP id g1-20020a056a0023c100b0052e28f54e13mr11182736pfc.20.1662678558019;
+        Thu, 08 Sep 2022 16:09:18 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id d3-20020a170903230300b0016cf3f124e1sm43719plh.234.2022.09.08.16.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 16:09:17 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 17:09:14 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     gregkh@linuxfoundation.org, alexander.shishkin@linux.intel.com,
+        leo.yan@linaro.org, james.clark@arm.com, will@kernel.org,
+        robin.murphy@arm.com, acme@kernel.org, peterz@infradead.org,
+        corbet@lwn.net, mark.rutland@arm.com, jonathan.cameron@huawei.com,
+        john.garry@huawei.com, helgaas@kernel.org,
+        lorenzo.pieralisi@arm.com, suzuki.poulose@arm.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-doc@vger.kernel.org, prime.zeng@huawei.com,
+        liuqi115@huawei.com, zhangshaokun@hisilicon.com,
+        linuxarm@huawei.com, yangyicong@hisilicon.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v12 0/5] Add driver support for HiSilicon PCIe Tune and
+ Trace device
+Message-ID: <20220908230914.GA246683@p14s>
+References: <20220816114414.4092-1-yangyicong@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816114414.4092-1-yangyicong@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > @@ -3515,6 +3881,7 @@ static const struct qcom_reset_map gcc_sdm845_resets[] = {
-> >  	[GCC_QUPV3_WRAPPER_1_BCR] = { 0x18000 },
-> >  	[GCC_QUSB2PHY_PRIM_BCR] = { 0x12000 },
-> >  	[GCC_QUSB2PHY_SEC_BCR] = { 0x12004 },
-> > +	[GCC_SDCC1_BCR] = { 0x26000 },
+On Tue, Aug 16, 2022 at 07:44:09PM +0800, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
 > 
-> You are changing existing SDM845, so this should be separate patch with
-> its own explanation.
+> HiSilicon PCIe tune and trace device (PTT) is a PCIe Root Complex integrated
+> Endpoint (RCiEP) device, providing the capability to dynamically monitor and
+> tune the PCIe traffic (tune), and trace the TLP headers (trace).
+> 
+> PTT tune is designed for monitoring and adjusting PCIe link parameters. We provide
+> several parameters of the PCIe link. Through the driver, user can adjust the value
+> of certain parameter to affect the PCIe link for the purpose of enhancing the
+> performance in certian situation.
+> 
+> PTT trace is designed for dumping the TLP headers to the memory, which can be
+> used to analyze the transactions and usage condition of the PCIe Link. Users
+> can choose filters to trace headers, by either requester ID, or those downstream
+> of a set of Root Ports on the same core of the PTT device. It's also supported
+> to trace the headers of certain type and of certain direction.
+> 
+> The driver registers a PMU device for each PTT device. The trace can be used
+> through `perf record` and the traced headers can be decoded by `perf report`.
+> The tune can be used through the sysfs attributes of related PMU device. See
+> the documentation for the detailed usage.
+> 
+> This patchset adds an initial driver support for the PTT device. The userspace
+> perf tool support will be sent in a separate patchset.
+> 
+> Change since v11:
+> - Drop WARN_ON() for irq_set_affinity() failure per Greg
+> - Split out userspace perf support patches according to the comments
+> Link: https://lore.kernel.org/lkml/20220721130116.43366-1-yangyicong@huawei.com/
+> 
+> Change since v10:
+> - Use title case in the documentation
+> - Add RB from Bagas, thanks.
+> Link: https://lore.kernel.org/lkml/20220714092710.53486-1-yangyicong@hisilicon.com/
+> 
+> Change since v9:
+> - Add sysfs ABI description documentation
+> - Remove the controversial available_{root_port, requester}_filters sysfs file
+> - Shorten 2 tune sysfs attributes name and add some comments
+> - Move hisi_ptt_process_auxtrace_info() to Patch 6.
+> - Add RB from Leo and Ack-by from Mathieu, thanks!
+> Link: https://lore.kernel.org/lkml/20220606115555.41103-1-yangyicong@hisilicon.com/
+> 
+> Change since v8:
+> - Cleanups and one minor fix from Jonathan and John, thanks
+> Link: https://lore.kernel.org/lkml/20220516125223.32012-1-yangyicong@hisilicon.com/
+> 
+> Change since v7:
+> - Configure the DMA in probe rather than in runtime. Also use devres to manage
+>   PMU device as we have no order problem now
+> - Refactor the config validation function per John and Leo
+> - Use a spinlock hisi_ptt::pmu_lock instead of mutex to serialize the perf process
+>   in pmu::start as it's in atomic context
+> - Only commit the traced data when stop, per Leo and James
+> - Drop the filter dynamically updating patch from this series to simply the review
+>   of the driver. That patch will be send separately.
+> - add a cpumask sysfs attribute and handle the cpu hotplug events, follow the
+>   uncore PMU convention
+> - Other cleanups and fixes, both in driver and perf tool
+> Link: https://lore.kernel.org/lkml/20220407125841.3678-1-yangyicong@hisilicon.com/
+> 
+> Change since v6:
+> - Fix W=1 errors reported by lkp test, thanks
+> 
+> Change since v5:
+> - Squash the PMU patch into PATCH 2 suggested by John
+> - refine the commit message of PATCH 1 and some comments
+> Link: https://lore.kernel.org/lkml/20220308084930.5142-1-yangyicong@hisilicon.com/
+> 
+> Change since v4:
+> Address the comments from Jonathan, John and Ma Ca, thanks.
+> - Use devm* also for allocating the DMA buffers
+> - Remove the IRQ handler stub in Patch 2
+> - Make functions waiting for hardware state return boolean
+> - Manual remove the PMU device as it should be removed first
+> - Modifier the orders in probe and removal to make them matched well
+> - Make available {directions,type,format} array const and non-global
+> - Using the right filter list in filters show and well protect the
+>   list with mutex
+> - Record the trace status with a boolean @started rather than enum
+> - Optimize the process of finding the PTT devices of the perf-tool
+> Link: https://lore.kernel.org/linux-pci/20220221084307.33712-1-yangyicong@hisilicon.com/
+> 
+> Change since v3:
+> Address the comments from Jonathan and John, thanks.
+> - drop members in the common struct which can be get on the fly
+> - reduce buffer struct and organize the buffers with array instead of list
+> - reduce the DMA reset wait time to avoid long time busy loop
+> - split the available_filters sysfs attribute into two files, for root port
+>   and requester respectively. Update the documentation accordingly
+> - make IOMMU mapping check earlier in probe to avoid race condition. Also
+>   make IOMMU quirk patch prior to driver in the series
+> - Cleanups and typos fixes from John and Jonathan
+> Link: https://lore.kernel.org/linux-pci/20220124131118.17887-1-yangyicong@hisilicon.com/
+> 
+> Change since v2:
+> - address the comments from Mathieu, thanks.
+>   - rename the directory to ptt to match the function of the device
+>   - spinoff the declarations to a separate header
+>   - split the trace function to several patches
+>   - some other comments.
+> - make default smmu domain type of PTT device to identity
+>   Drop the RMR as it's not recommended and use an iommu_def_domain_type
+>   quirk to passthrough the device DMA as suggested by Robin. 
+> Link: https://lore.kernel.org/linux-pci/20211116090625.53702-1-yangyicong@hisilicon.com/
+> 
+> Change since v1:
+> - switch the user interface of trace to perf from debugfs
+> - switch the user interface of tune to sysfs from debugfs
+> - add perf tool support to start trace and decode the trace data
+> - address the comments of documentation from Bjorn
+> - add RMR[1] support of the device as trace works in RMR mode or
+>   direct DMA mode. RMR support is achieved by common APIs rather
+>   than the APIs implemented in [1].
+> Link: https://lore.kernel.org/lkml/1618654631-42454-1-git-send-email-yangyicong@hisilicon.com/
+> [1] https://lore.kernel.org/linux-acpi/20210805080724.480-1-shameerali.kolothum.thodi@huawei.com/
+> 
+> Yicong Yang (5):
+>   iommu/arm-smmu-v3: Make default domain type of HiSilicon PTT device to
+>     identity
+>   hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe
+>     Tune and Trace device
+>   hwtracing: hisi_ptt: Add tune function support for HiSilicon PCIe Tune
+>     and Trace device
+>   docs: trace: Add HiSilicon PTT device driver documentation
+>   MAINTAINERS: Add maintainer for HiSilicon PTT driver
+> 
+>  .../ABI/testing/sysfs-devices-hisi_ptt        |   61 +
+>  Documentation/trace/hisi-ptt.rst              |  298 +++++
+>  Documentation/trace/index.rst                 |    1 +
+>  MAINTAINERS                                   |    8 +
+>  drivers/Makefile                              |    1 +
+>  drivers/hwtracing/Kconfig                     |    2 +
+>  drivers/hwtracing/ptt/Kconfig                 |   12 +
+>  drivers/hwtracing/ptt/Makefile                |    2 +
+>  drivers/hwtracing/ptt/hisi_ptt.c              | 1047 +++++++++++++++++
+>  drivers/hwtracing/ptt/hisi_ptt.h              |  200 ++++
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   21 +
 
-I only added this reset for the sake of completeness. It is not used in my
-initial dtsi so I will drop it from this series. It can be added later if
-it is needed for a specific device.
+I fixed the month and kernel revision in sysfs-devices-hisi_ptt before applying
+this set.  You can double check that everything is to your liking in the
+coresight next tree[1].
+
+Thanks,
+Mathieu
+
+[1]. https://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git/log/?h=next
+
+
+>  11 files changed, 1653 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-devices-hisi_ptt
+>  create mode 100644 Documentation/trace/hisi-ptt.rst
+>  create mode 100644 drivers/hwtracing/ptt/Kconfig
+>  create mode 100644 drivers/hwtracing/ptt/Makefile
+>  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
+>  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
+> 
+> -- 
+> 2.24.0
+> 

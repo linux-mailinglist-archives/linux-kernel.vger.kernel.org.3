@@ -2,108 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3025B2178
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD0C5B2176
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbiIHPCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S232775AbiIHPBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbiIHPCi (ORCPT
+        with ESMTP id S232767AbiIHPBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:02:38 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C043CED9A5;
-        Thu,  8 Sep 2022 08:02:35 -0700 (PDT)
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 288F26HX020965;
-        Fri, 9 Sep 2022 00:02:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 288F26HX020965
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662649327;
-        bh=8hQteixhTRn0IXFAmCEqnMliHvXuSMH7IbIKeVN8/rQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WyohYophnaNZeLJr8jkYQ8cIE01qdIWlIuOr1CCUXAZDh1wPUuW3dcrlNWenG1EZD
-         4nesU49MQMbrTya6ETvsACljXAWwdnVphffel7Nq4jH5P5pSAdV02S7nsJ7VguuluS
-         kK7WP7+pGSpMRm9vDQVC22FiVzsFfTCQiSpIQLaKqvUaBZsfErF/k2v6mZHDLSga3t
-         GLO59188ubtP5O19aj4D16tqufBF7odnVFq9zoi++rWgF70FDKfA9Yuwb8saz456Cq
-         VU4nQ+4EKRGMc8wrdYQrMkZ8cCO15K55xxw7lcvYoDKyRpa5wX+LonNVWnt+t3ZXhj
-         1zxCcH6o26ATw==
-X-Nifty-SrcIP: [209.85.210.48]
-Received: by mail-ot1-f48.google.com with SMTP id t11-20020a05683014cb00b0063734a2a786so12510577otq.11;
-        Thu, 08 Sep 2022 08:02:07 -0700 (PDT)
-X-Gm-Message-State: ACgBeo12REupkMkTEj71Vv0MzH4gZtcp8iuDUlP9HhKz3m3/FB33f55C
-        GDgGy4jm4LkinVeE/llKwe5Bu4AGrUcggTNMo1w=
-X-Google-Smtp-Source: AA6agR5EIgPiVg+b9R2y17Oh6bb4VRfCwISrVT+nftqwkQ3XwlwJlQzx0MbpWzAc8RpiE3LyivfufYGI7/vyN8EjMDU=
-X-Received: by 2002:a9d:4806:0:b0:637:cdca:f8d3 with SMTP id
- c6-20020a9d4806000000b00637cdcaf8d3mr3689470otf.225.1662649326153; Thu, 08
- Sep 2022 08:02:06 -0700 (PDT)
+        Thu, 8 Sep 2022 11:01:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F8EED9B1;
+        Thu,  8 Sep 2022 08:01:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13B29B82124;
+        Thu,  8 Sep 2022 15:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56845C433C1;
+        Thu,  8 Sep 2022 15:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662649297;
+        bh=EnQDCn6+DxnGRVKzzZhsuaX7OEoKlrHh00hQOt+anfY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P9X9G4T/J2ADevyxRvIJG1T96e7j6dgfn8qxN2GB1PYwDKwtN84K7hCup+P58Bevp
+         FSHBLBpnc9NYt1Yxer9GMApEhxsIo4/YGvTmZRTYcatFt0sivsI3Nx+aUUjTQ/6Kyw
+         L2z94AKYSwoUAxTCimgVdPfyUeRY5GcMv2ggaNaizbFFPbEo9L/ELezbW6JZFOpMIT
+         hPTCtpvZMkhgu96qiFLGpCprJbrrr8v+vmE95WUyHuOJuBN0QbNXd0pUnFFLfdMHTA
+         Nxuoomze5klrf0CoBaafjk53BO4rEnVsXrU+1PNirDJg6HgGmeyuJs5i+dR3n5J0aH
+         a3y/40uqZdwsg==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org
+Subject: [PATCH v3 2/2] x86/kprobes: Fix optprobe optimization check with CONFIG_RETHUNK
+Date:   Fri,  9 Sep 2022 00:01:32 +0900
+Message-Id: <166264929259.775585.14768855667710290362.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <166264927154.775585.16570756675363838701.stgit@devnote2>
+References: <166264927154.775585.16570756675363838701.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <20220907230339.271633-1-danielwa@cisco.com> <CAK7LNAQSUkWz9hvEmB1wSCMJ0Do209QZOgAxO=oSK6HQa7XgTg@mail.gmail.com>
- <20220908143859.GF4320@zorba>
-In-Reply-To: <20220908143859.GF4320@zorba>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 9 Sep 2022 00:01:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQEEVF7x1_gX-Y2fFf6Cp3RtRLr41YLkv+s8YHzo1ikKA@mail.gmail.com>
-Message-ID: <CAK7LNAQEEVF7x1_gX-Y2fFf6Cp3RtRLr41YLkv+s8YHzo1ikKA@mail.gmail.com>
-Subject: Re: [RFC-PATCH] Makefile: dts: include directory makefile for DTC_FLAGS
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        xe-linux-external@cisco.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 11:39 PM Daniel Walker <danielwa@cisco.com> wrote:
->
-> On Thu, Sep 08, 2022 at 04:08:06PM +0900, Masahiro Yamada wrote:
-> > On Thu, Sep 8, 2022 at 8:03 AM Daniel Walker <danielwa@cisco.com> wrote:
-> > >
-> > > The current Makefile will drop the DTC_FLAGS depending on how you
-> > > build. For example,
-> > >
-> > > make dtbs
-> > >
-> > > includes correct DTC_FLAGS. However if you run,
-> > >
-> > > make nvidia/tegra210-p2371-2180.dtb
-> > >
-> > > The DTC_FLAGS are dropped. This appears to be caused by the top level
-> > > Makefile not including the Makefile from the directory where the dts lives.
-> > >
-> > > This normally doesn't matter because most dts files have nothing added
-> > > from the Makefile. This changes when you have overlays, and the
-> > > DTC_FLAGS modifier is mandatory for the dtb to work correctly.
-> >
-> >
-> > I recently fixed another issue of single target builds.
-> > https://patchwork.kernel.org/project/linux-kbuild/patch/20220906061313.1445810-2-masahiroy@kernel.org/
-> >
-> >
-> > It fixed your issue as well.
-> >
-> >
->
-> Yeah, it fixes the issue I was seeing. Are you planning to resubmit this or is
-> the v2 the final version ?
->
-> Daniel
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
+Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
+speculative execution after function return, kprobe jump optimization
+always fails on the functions with such INT3 inside the function body.
+(It already checks the INT3 padding between functions, but not inside
+ the function)
 
-I do not have a plan to submit v3
-(unless a new issue comes up)
+To avoid this issue, as same as kprobes, check whether the INT3 comes
+from kgdb or not, and if so, stop decoding and make it fail. The other
+INT3 will come from CONFIG_RETHUNK/CONFIG_SLS and those can be
+treated as a one-byte instruction.
 
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
+Cc: stable@vger.kernel.org
+---
+ arch/x86/kernel/kprobes/opt.c |   28 ++++++++--------------------
+ 1 file changed, 8 insertions(+), 20 deletions(-)
 
+diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
+index e6b8c5362b94..e57e07b0edb6 100644
+--- a/arch/x86/kernel/kprobes/opt.c
++++ b/arch/x86/kernel/kprobes/opt.c
+@@ -15,6 +15,7 @@
+ #include <linux/extable.h>
+ #include <linux/kdebug.h>
+ #include <linux/kallsyms.h>
++#include <linux/kgdb.h>
+ #include <linux/ftrace.h>
+ #include <linux/objtool.h>
+ #include <linux/pgtable.h>
+@@ -279,19 +280,6 @@ static int insn_is_indirect_jump(struct insn *insn)
+ 	return ret;
+ }
+ 
+-static bool is_padding_int3(unsigned long addr, unsigned long eaddr)
+-{
+-	unsigned char ops;
+-
+-	for (; addr < eaddr; addr++) {
+-		if (get_kernel_nofault(ops, (void *)addr) < 0 ||
+-		    ops != INT3_INSN_OPCODE)
+-			return false;
+-	}
+-
+-	return true;
+-}
+-
+ /* Decode whole function to ensure any instructions don't jump into target */
+ static int can_optimize(unsigned long paddr)
+ {
+@@ -334,15 +322,15 @@ static int can_optimize(unsigned long paddr)
+ 		ret = insn_decode_kernel(&insn, (void *)recovered_insn);
+ 		if (ret < 0)
+ 			return 0;
+-
++#ifdef CONFIG_KGDB
+ 		/*
+-		 * In the case of detecting unknown breakpoint, this could be
+-		 * a padding INT3 between functions. Let's check that all the
+-		 * rest of the bytes are also INT3.
++		 * If there is a dynamically installed kgdb sw breakpoint,
++		 * this function should not be probed.
+ 		 */
+-		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE)
+-			return is_padding_int3(addr, paddr - offset + size) ? 1 : 0;
+-
++		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE &&
++		    kgdb_has_hit_break(addr))
++			return 0;
++#endif
+ 		/* Recover address */
+ 		insn.kaddr = (void *)addr;
+ 		insn.next_byte = (void *)(addr + insn.length);
 
--- 
-Best Regards
-Masahiro Yamada

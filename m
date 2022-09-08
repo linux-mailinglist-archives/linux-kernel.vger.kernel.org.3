@@ -2,160 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC785B18AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7385B18B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiIHJ3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S229925AbiIHJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiIHJ3a (ORCPT
+        with ESMTP id S229505AbiIHJax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:29:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7BF2BCA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662629367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=casXnlyfem/cMcq/zKr8AiPcnoA42iZlvAPreQZv3fs=;
-        b=bpdFaZ8S4+uUF7ycFdr5UgGj967cK9Kk2C4ITqGcMRP7OdsT6iNHa6fn4XbIK7fmV7E7Bh
-        sQ/UkWo/tZ1yt1un+fO39QOJtfC+0xWUfzoIM+XzCGN9A9lWAHSSk8Av72JgyyrWDjxL58
-        X9w/WBtdKc3MpLwdRj+zzMRW8lHdNfs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-561-pxDbEA7TNoyNu6U23WkJTA-1; Thu, 08 Sep 2022 05:29:25 -0400
-X-MC-Unique: pxDbEA7TNoyNu6U23WkJTA-1
-Received: by mail-ed1-f71.google.com with SMTP id m18-20020a056402511200b0044862412596so11002525edd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 02:29:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=casXnlyfem/cMcq/zKr8AiPcnoA42iZlvAPreQZv3fs=;
-        b=cObIkDmf74ThXSW22gdxf6hNmLPE8N6P/r9VC+UExjmvbyhzJlZbg02Dazx5bVVmNe
-         OcU3Upkrh9g1yBPE+5padPsaD3ks+RG4SFy6bH8Y4+srvb2c6IC23KjimU+M8gZGraKS
-         4NGl4PMQDVShsRQSFmhwup4PKAv0+FRDmg3AGQq8HBedpr5sLK+BpBj2qDwkUnGZ5Q3B
-         E2qF54QXNSe62dIxEH3C0ashuhDUb6lLcFxiuYQBYzVac8yxeXHX1fDySygJRf9B/IbQ
-         twoeJe7sXQOMC4P5D7/TRjkdujVshIonyxRBIdkzPR9l5a8kwIyyX1ms7pjjFaqiRjP3
-         vf3A==
-X-Gm-Message-State: ACgBeo2kDTV9XyLT1JJuZU/BVniGjCS0YQcLSS5xGwyE/27MfKCBwfa2
-        MLl5XIOM3xzdD3wU+QxGQcRkQ9KwLsQTX5G0WYBW8gON6Eaw24UhPHNAKmPWo+osbFam3p6toRN
-        hMWHk6ssSYwnP2Tv+2uKmaYZw
-X-Received: by 2002:a05:6402:e96:b0:443:a086:e3e8 with SMTP id h22-20020a0564020e9600b00443a086e3e8mr6634983eda.330.1662629364653;
-        Thu, 08 Sep 2022 02:29:24 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7dC5R82XPS91l4CxPlXPGCcS/hi02/tOGJdVWXrPtNkFqqjr46QX0/6Sg6lODyX2MG2aj1BQ==
-X-Received: by 2002:a05:6402:e96:b0:443:a086:e3e8 with SMTP id h22-20020a0564020e9600b00443a086e3e8mr6634970eda.330.1662629364485;
-        Thu, 08 Sep 2022 02:29:24 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id w6-20020a50c446000000b004476c19d126sm12139269edf.38.2022.09.08.02.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 02:29:23 -0700 (PDT)
-Message-ID: <72acff59-81f0-f466-6197-d3e993f051ac@redhat.com>
-Date:   Thu, 8 Sep 2022 11:29:22 +0200
+        Thu, 8 Sep 2022 05:30:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271D4FBF0D;
+        Thu,  8 Sep 2022 02:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4MQ/3HGThheOE676Gtz/fWCeZc9RZXa0nz2XTU+rVR0=; b=qW9cM24gcEoPTV0wVO9iHF0J/E
+        iUioIaP55admIXelPy7HNav1bFCfmLWpCEFE3553+CnIhvQEfGSMjmJnSBlXdDcXE8C2sdO/w+M+V
+        tvJbGZCyzCkloalKnBrMZFQlhnlA4mE/TSUvjb0KUyLeGqCDVJ+gU0yFMOycUB/ojbq3MlDk4gClH
+        xDfzs9C4kCpFEWA73CnxQyzz2DqcnNydsb2TXUGa6rJswDhZSqtrsaBycW+N2sA2YrRtHIkfqr+ox
+        AuFMvJAJejxm0Q48bPpKyPkj/HPWQydEeZMyi2VifTsDeGzPZh/jral6V//YOtphy7s+SYn3GkXeH
+        xUj6pKhw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWDru-00AfeU-JD; Thu, 08 Sep 2022 09:30:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 89F51300074;
+        Thu,  8 Sep 2022 11:30:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3235F2B9A6CCA; Thu,  8 Sep 2022 11:30:41 +0200 (CEST)
+Date:   Thu, 8 Sep 2022 11:30:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org
+Subject: Re: [PATCH v2 1/2] x86/kprobes: Fix kprobes instruction boudary
+ check with CONFIG_RETHUNK
+Message-ID: <Yxm2QU1NJIkIyrrU@hirez.programming.kicks-ass.net>
+References: <166260087224.759381.4170102827490658262.stgit@devnote2>
+ <166260088298.759381.11727280480035568118.stgit@devnote2>
+ <20220908050855.w77mimzznrlp6pwe@treble>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 8/8] efi/dev-path-parser: Refactor _UID handling to use
- acpi_dev_uid_to_integer()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devel@acpica.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Elie Morisse <syniurge@gmail.com>,
-        Nehal Shah <nehal-bakulchandra.shah@amd.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-References: <20220907164606.65742-1-andriy.shevchenko@linux.intel.com>
- <20220907164606.65742-9-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220907164606.65742-9-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908050855.w77mimzznrlp6pwe@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/7/22 18:46, Andy Shevchenko wrote:
-> ACPI utils provide acpi_dev_uid_to_integer() helper to extract _UID as
-> an integer. Use it instead of custom approach.
+On Wed, Sep 07, 2022 at 10:08:55PM -0700, Josh Poimboeuf wrote:
+> On Thu, Sep 08, 2022 at 10:34:43AM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
+> > speculative execution after RET instruction, kprobes always failes to
+> > check the probed instruction boundary by decoding the function body if
+> > the probed address is after such sequence. (Note that some conditional
+> > code blocks will be placed after function return, if compiler decides
+> > it is not on the hot path.)
+> > 
+> > This is because kprobes expects someone (e.g. kgdb) puts the INT3 as
+> > a software breakpoint and it will replace the original instruction.
+> > But these INT3 are not such purpose, it doesn't need to recover the
+> > original instruction.
+> > 
+> > To avoid this issue, memorize the branch target address during decoding
+> > and if there is INT3, restart decoding from unchecked target address.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/firmware/efi/dev-path-parser.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+> Hm, is kprobes conflicting with kgdb actually a realistic concern?
+> Seems like a dangerous combination
+
+Yeah, not in my book. If you use kgdb you'd better be ready to hold
+pieces anyway, that thing is terrible.
+
+> Wouldn't it be much simpler to just encode the knowledge that
 > 
-> diff --git a/drivers/firmware/efi/dev-path-parser.c b/drivers/firmware/efi/dev-path-parser.c
-> index eb9c65f97841..113b3ca1bd76 100644
-> --- a/drivers/firmware/efi/dev-path-parser.c
-> +++ b/drivers/firmware/efi/dev-path-parser.c
-> @@ -15,9 +15,11 @@
->  static long __init parse_acpi_path(const struct efi_dev_path *node,
->  				   struct device *parent, struct device **child)
->  {
-> -	char hid[ACPI_ID_LEN], uid[11]; /* UINT_MAX + null byte */
->  	struct acpi_device *adev;
->  	struct device *phys_dev;
-> +	char hid[ACPI_ID_LEN];
-> +	long ret;
+>   	if (CONFIG_RETHUNK && !X86_FEATURE_RETHUNK)
+> 		// all rets are followed by four INT3s
+> 	else if (CONFIG_SLS)
+> 		// all rets are followed by one INT3
 
-"long ret" should be "int ret" here since that is what acpi_dev_uid_to_integer()
-returns.
+At the very least that doesn't deal with the INT3 after JMP thing the
+compilers should do once they catch up. This issue seems to keep getting
+lost, but is now part of the AMD Branch Type Confusion (it was disclosed
+in an earlier thing, but I keep forgetting what that was called).
 
-Regards,
+Once that lands the rules are:
 
-Hans
+ 0-5 INT3 after RET, !CONFIG_RETHUNK && !CONFIG_SLS: 0
+                     CONFIG_SLS: 1
+		     CONFIG_RETHUNK: 4-5 depending on compiler version
 
+ 0-1 INT3 after RET: !CONFIG_SLS: 0
+		     CONFIG_SLS: 0-1 depending on compiler version
 
-> +	u64 uid;
->  
->  	if (node->header.length != 12)
->  		return -EINVAL;
-> @@ -27,12 +29,12 @@ static long __init parse_acpi_path(const struct efi_dev_path *node,
->  		'A' + ((node->acpi.hid >>  5) & 0x1f) - 1,
->  		'A' + ((node->acpi.hid >>  0) & 0x1f) - 1,
->  			node->acpi.hid >> 16);
-> -	sprintf(uid, "%u", node->acpi.uid);
->  
->  	for_each_acpi_dev_match(adev, hid, NULL, -1) {
-> -		if (adev->pnp.unique_id && !strcmp(adev->pnp.unique_id, uid))
-> +		ret = acpi_dev_uid_to_integer(adev, &uid);
-> +		if (ret == -ENODATA && node->acpi.uid == 0)
->  			break;
-> -		if (!adev->pnp.unique_id && node->acpi.uid == 0)
-> +		if (ret == 0 && node->acpi.uid == uid)
->  			break;
->  	}
->  	if (!adev)
+Now, given we know the compiler version at build time, this could be
+determined and used in kprobes, but meh.
 
+We also *should* put an INT3 after indirect jumps when patching the
+retpolines. We don't appear to do so, but that's recommended even for
+Intel I think.
+
+Let me go do a patch.

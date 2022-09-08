@@ -2,244 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202F85B29E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B535B29EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIHXJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S229689AbiIHXM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiIHXJ1 (ORCPT
+        with ESMTP id S229547AbiIHXM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:09:27 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24FEC12DD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:09:18 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id z187so19402087pfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:09:18 -0700 (PDT)
+        Thu, 8 Sep 2022 19:12:26 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B61A109D22;
+        Thu,  8 Sep 2022 16:12:22 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id o4so19213208pjp.4;
+        Thu, 08 Sep 2022 16:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=f98sLP35JmRNa3ghGz3efCT4en0KZ7a760/UmAkHCjI=;
-        b=UnU2+Jt4Afybiz3e8PilNSxgg/DcystvKZWmU7BhBOyYghZl5EEbQPkFDT90H8rt+6
-         Mr4XpK0A8NRIkhNsUj0C4P55T4oTyDrynyWJ2yEkuskV2rVi5mTDS+HF2DKgqCRSS8Wi
-         /3ZYYNELbIBPrAo5L8iz08edvtdL4ecpAEIm4yN+gdTgxEqNzd53/8emNQfe8qmRczwf
-         FR7qi6fEV9gFkNqkzkadOzqOXn4nnDs1yt0dZVgPbhnksjrMTfxYX+zUkq0MAh08woAr
-         GMSoKhMYae5yTxe7eJvhaWJrChHLuLOBQ6EFzkSzD7+zCXm+nBvg95UmXJRyEqupkfVD
-         CrHA==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=5s4UNt4PONIR/SOOlBa2vyZhROb/D/zuzP0k9TznZGU=;
+        b=qZBLd3GFTPng6oySVtNG9MHGbpvNg+SBXrABObMcHQRm8GcpXmPJticaBFkqqVtoAW
+         +Guea9lyA8hWL4XHhK2uu4xPAEB9ooZMKZ+zOWp4YuVzntYtkIJ38C9s7shanxlZXjaF
+         Jmt48j6tEey19DDjy09uafxpZ9bM+n1LT6LCTENr+Cadl5GMlrT/gXHjxJVVd2ppAyOj
+         05b3WODtNX2auNdKVlOXKJ5zQGZB3MIu3U3B+s/YNqEbKYomu4V3fqCVivJYzXTfiEmm
+         7V7r6S04Kk0od4jFwrNZJfADtQWrj1+QlVMP5Vc/+alvTp8uYoEIGUkp7hM0tlhnEjCN
+         JiSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=f98sLP35JmRNa3ghGz3efCT4en0KZ7a760/UmAkHCjI=;
-        b=59uHlQNSLy1FG4yIaDY4X2629rNpGbmDhaj8GS93aUZKX7bWfj1WNHKe4jh2Giae35
-         bqBIteLdgB0K8RLEDoxM62CrgZqpRmNJ2wvUyfUHeabXo79Yxy18wLts5xVh4vIFD+kg
-         A2X/UaVaKFV3ikfmiNimbPMczj+cVCC5u0ZEuLlOFuuON5kvD4kR+iCx/cFxeeQOZ/0L
-         LTUHrpKVCNCoF1157e5CakI17QYX5eOMNodlIEGPbGOdqrNxMW2axc5pWHZmJZTUYocs
-         BfpxnDcvrrYxNDuI3kt2X4hyBkUkSPLgZTEuzb+cHjXBtoLMPjeSkgtQZO1td1gTYh/B
-         LPrQ==
-X-Gm-Message-State: ACgBeo2vW6HoR7zTsRRqDG6Tc9hecLAvV5buaICVktXOIqKQouIaxpLM
-        jQ0Hi9j5Or3AkclTeWNUG78cpg==
-X-Google-Smtp-Source: AA6agR6hWmrLOA/Yfr9DsTqVQzlc/p7LFycuMzeasMzvyqc7LN3bL3gj6HgrGQamOk9wfVRbNdtTbA==
-X-Received: by 2002:a05:6a00:23c1:b0:52e:28f5:4e13 with SMTP id g1-20020a056a0023c100b0052e28f54e13mr11182736pfc.20.1662678558019;
-        Thu, 08 Sep 2022 16:09:18 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id d3-20020a170903230300b0016cf3f124e1sm43719plh.234.2022.09.08.16.09.15
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=5s4UNt4PONIR/SOOlBa2vyZhROb/D/zuzP0k9TznZGU=;
+        b=HWnUxfkhYooGg6QFxNrrv1w9QYbLtvAUvSeS7A2EqNgvdbGGWwIFi250qCO6yoYNX3
+         1x9UVjKti8yOzDppn3zuYP3eU/EuNiSWfR1PAS3zX/gr7d8UgffyG2bENRdED9VTL2A3
+         wOFYh1TvqXKBjJ1S5m4+cIQcAvZN6A7kAtuLmZQDXjhjHm+Jf+NpnyDsR/r5L71/GN5C
+         5F5AKS/xi1aVgiofSRI0uYVobqTHiW8DWm4BvDxOp3X88oTyhwVtcDxjy2fdNkSZbZS5
+         OxaXKOBpkTw/YmV8A+8PzGFXIHWuiaOEnirGI8SEDn3wqgjzzeRWkWQ1RMLaSabvgQSz
+         40XQ==
+X-Gm-Message-State: ACgBeo0JIq5H/2rf1HPGlJ1t0kntIhU/A/XiGtDSsajn0axDXxNg0COD
+        rfCHfqYBNz3nWvZ2h09NrJqf6vjQdg97bQ==
+X-Google-Smtp-Source: AA6agR52Df6biRjya1V1sJ7BG22wP8BJqgxr9iZsf3AVtKQu+Nh/EfRpZENNGfHHIEBK1yMNp9Z0Nw==
+X-Received: by 2002:a17:903:41ca:b0:177:eb43:71a5 with SMTP id u10-20020a17090341ca00b00177eb4371a5mr7473792ple.131.1662678741304;
+        Thu, 08 Sep 2022 16:12:21 -0700 (PDT)
+Received: from Negi ([207.151.52.163])
+        by smtp.gmail.com with ESMTPSA id z21-20020a630a55000000b0042254fce5e7sm7276pgk.50.2022.09.08.16.12.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 16:09:17 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 17:09:14 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     gregkh@linuxfoundation.org, alexander.shishkin@linux.intel.com,
-        leo.yan@linaro.org, james.clark@arm.com, will@kernel.org,
-        robin.murphy@arm.com, acme@kernel.org, peterz@infradead.org,
-        corbet@lwn.net, mark.rutland@arm.com, jonathan.cameron@huawei.com,
-        john.garry@huawei.com, helgaas@kernel.org,
-        lorenzo.pieralisi@arm.com, suzuki.poulose@arm.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-doc@vger.kernel.org, prime.zeng@huawei.com,
-        liuqi115@huawei.com, zhangshaokun@hisilicon.com,
-        linuxarm@huawei.com, yangyicong@hisilicon.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v12 0/5] Add driver support for HiSilicon PCIe Tune and
- Trace device
-Message-ID: <20220908230914.GA246683@p14s>
-References: <20220816114414.4092-1-yangyicong@huawei.com>
+        Thu, 08 Sep 2022 16:12:20 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 16:12:19 -0700
+From:   Soumya Negi <soumya.negi97@gmail.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFT PATCH] media: em28xx: Enable v4l2 file ops at the end of
+ em28xx_v4l2_init()
+Message-ID: <20220908231219.GA13068@Negi>
+References: <20220829132548.23520-1-soumya.negi97@gmail.com>
+ <082ba39a-aa00-ac49-ac2a-eceac0bca5ff@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816114414.4092-1-yangyicong@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <082ba39a-aa00-ac49-ac2a-eceac0bca5ff@xs4all.nl>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 07:44:09PM +0800, Yicong Yang wrote:
-> From: Yicong Yang <yangyicong@hisilicon.com>
+On Tue, Sep 06, 2022 at 03:25:58PM +0200, Hans Verkuil wrote:
+> Hi Soumya,
 > 
-> HiSilicon PCIe tune and trace device (PTT) is a PCIe Root Complex integrated
-> Endpoint (RCiEP) device, providing the capability to dynamically monitor and
-> tune the PCIe traffic (tune), and trace the TLP headers (trace).
+> On 29/08/2022 15:25, Soumya Negi wrote:
+> > Fix syzbot bug KASAN: use-after-free Read in v4l2_fh_open
+> > Syzbot link:
+> > https://syzkaller.appspot.com/bug?id=0e3c97f1c4112e102c9988afd5eff079350eab7f
+> > Repro: https://syzkaller.appspot.com/text?tag=ReproC&x=12663ebdd00000
+> > 
+> > The bug arises because the em28xx driver registers a v4l2 video
+> > device(struct video_device) with the V4L2 interface in
+> > em28xx_v4l2_init() but the v4l2 extension initialization eventually
+> > fails and the video device is unregistered. v4l2_open() in the V4L2
+> > interface views the device as registered and allows calls to
+> > em28xx_v4l2_open(). Due to race between video_unregister_device() and
+> > v4l2_open(), em28xx_v4l2_open() is accessing video device after it has
+> > been freed(by the release callback) and is passing it on to
+> > v4l2_fh_open().
+> > 
+> > In em28xx_v4l2_init(), temporarily disable v4l2 file operations on
+> > struct video_device devices(video, vbi, radio) before registering them
+> > and enable the file ops at the end when v4l2 extension initialization
+> > succeeds.
 > 
-> PTT tune is designed for monitoring and adjusting PCIe link parameters. We provide
-> several parameters of the PCIe link. Through the driver, user can adjust the value
-> of certain parameter to affect the PCIe link for the purpose of enhancing the
-> performance in certian situation.
+> That's not the right approach. The problem is the roll-your-own v4l2->ref
+> refcount. Instead this should use the refcount that is built into struct
+> v4l2_device.
 > 
-> PTT trace is designed for dumping the TLP headers to the memory, which can be
-> used to analyze the transactions and usage condition of the PCIe Link. Users
-> can choose filters to trace headers, by either requester ID, or those downstream
-> of a set of Root Ports on the same core of the PTT device. It's also supported
-> to trace the headers of certain type and of certain direction.
+> Specifically v4l2_dev->release should be set to the release function, and
+> v4l2_device_put(&v4l2->v4l2_dev); should be called in remove() or in the
+> error path of em28xx_v4l2_init().
 > 
-> The driver registers a PMU device for each PTT device. The trace can be used
-> through `perf record` and the traced headers can be decoded by `perf report`.
-> The tune can be used through the sysfs attributes of related PMU device. See
-> the documentation for the detailed usage.
+> Using this the release callback of v4l2_device will be called when the last
+> open file handle is closed, i.e. it keeps track of the open()s.
 > 
-> This patchset adds an initial driver support for the PTT device. The userspace
-> perf tool support will be sent in a separate patchset.
+> The roll-your-own approach in the em28xx driver (written before this v4l2_device
+> refcounting existed), is not taking that into account, so that causes these
+> problems.
 > 
-> Change since v11:
-> - Drop WARN_ON() for irq_set_affinity() failure per Greg
-> - Split out userspace perf support patches according to the comments
-> Link: https://lore.kernel.org/lkml/20220721130116.43366-1-yangyicong@huawei.com/
+> What is also bad is that em28xx_vb2_setup() is called after the video devices
+> are registered. That should happen before.
 > 
-> Change since v10:
-> - Use title case in the documentation
-> - Add RB from Bagas, thanks.
-> Link: https://lore.kernel.org/lkml/20220714092710.53486-1-yangyicong@hisilicon.com/
+> Regards,
 > 
-> Change since v9:
-> - Add sysfs ABI description documentation
-> - Remove the controversial available_{root_port, requester}_filters sysfs file
-> - Shorten 2 tune sysfs attributes name and add some comments
-> - Move hisi_ptt_process_auxtrace_info() to Patch 6.
-> - Add RB from Leo and Ack-by from Mathieu, thanks!
-> Link: https://lore.kernel.org/lkml/20220606115555.41103-1-yangyicong@hisilicon.com/
-> 
-> Change since v8:
-> - Cleanups and one minor fix from Jonathan and John, thanks
-> Link: https://lore.kernel.org/lkml/20220516125223.32012-1-yangyicong@hisilicon.com/
-> 
-> Change since v7:
-> - Configure the DMA in probe rather than in runtime. Also use devres to manage
->   PMU device as we have no order problem now
-> - Refactor the config validation function per John and Leo
-> - Use a spinlock hisi_ptt::pmu_lock instead of mutex to serialize the perf process
->   in pmu::start as it's in atomic context
-> - Only commit the traced data when stop, per Leo and James
-> - Drop the filter dynamically updating patch from this series to simply the review
->   of the driver. That patch will be send separately.
-> - add a cpumask sysfs attribute and handle the cpu hotplug events, follow the
->   uncore PMU convention
-> - Other cleanups and fixes, both in driver and perf tool
-> Link: https://lore.kernel.org/lkml/20220407125841.3678-1-yangyicong@hisilicon.com/
-> 
-> Change since v6:
-> - Fix W=1 errors reported by lkp test, thanks
-> 
-> Change since v5:
-> - Squash the PMU patch into PATCH 2 suggested by John
-> - refine the commit message of PATCH 1 and some comments
-> Link: https://lore.kernel.org/lkml/20220308084930.5142-1-yangyicong@hisilicon.com/
-> 
-> Change since v4:
-> Address the comments from Jonathan, John and Ma Ca, thanks.
-> - Use devm* also for allocating the DMA buffers
-> - Remove the IRQ handler stub in Patch 2
-> - Make functions waiting for hardware state return boolean
-> - Manual remove the PMU device as it should be removed first
-> - Modifier the orders in probe and removal to make them matched well
-> - Make available {directions,type,format} array const and non-global
-> - Using the right filter list in filters show and well protect the
->   list with mutex
-> - Record the trace status with a boolean @started rather than enum
-> - Optimize the process of finding the PTT devices of the perf-tool
-> Link: https://lore.kernel.org/linux-pci/20220221084307.33712-1-yangyicong@hisilicon.com/
-> 
-> Change since v3:
-> Address the comments from Jonathan and John, thanks.
-> - drop members in the common struct which can be get on the fly
-> - reduce buffer struct and organize the buffers with array instead of list
-> - reduce the DMA reset wait time to avoid long time busy loop
-> - split the available_filters sysfs attribute into two files, for root port
->   and requester respectively. Update the documentation accordingly
-> - make IOMMU mapping check earlier in probe to avoid race condition. Also
->   make IOMMU quirk patch prior to driver in the series
-> - Cleanups and typos fixes from John and Jonathan
-> Link: https://lore.kernel.org/linux-pci/20220124131118.17887-1-yangyicong@hisilicon.com/
-> 
-> Change since v2:
-> - address the comments from Mathieu, thanks.
->   - rename the directory to ptt to match the function of the device
->   - spinoff the declarations to a separate header
->   - split the trace function to several patches
->   - some other comments.
-> - make default smmu domain type of PTT device to identity
->   Drop the RMR as it's not recommended and use an iommu_def_domain_type
->   quirk to passthrough the device DMA as suggested by Robin. 
-> Link: https://lore.kernel.org/linux-pci/20211116090625.53702-1-yangyicong@hisilicon.com/
-> 
-> Change since v1:
-> - switch the user interface of trace to perf from debugfs
-> - switch the user interface of tune to sysfs from debugfs
-> - add perf tool support to start trace and decode the trace data
-> - address the comments of documentation from Bjorn
-> - add RMR[1] support of the device as trace works in RMR mode or
->   direct DMA mode. RMR support is achieved by common APIs rather
->   than the APIs implemented in [1].
-> Link: https://lore.kernel.org/lkml/1618654631-42454-1-git-send-email-yangyicong@hisilicon.com/
-> [1] https://lore.kernel.org/linux-acpi/20210805080724.480-1-shameerali.kolothum.thodi@huawei.com/
-> 
-> Yicong Yang (5):
->   iommu/arm-smmu-v3: Make default domain type of HiSilicon PTT device to
->     identity
->   hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe
->     Tune and Trace device
->   hwtracing: hisi_ptt: Add tune function support for HiSilicon PCIe Tune
->     and Trace device
->   docs: trace: Add HiSilicon PTT device driver documentation
->   MAINTAINERS: Add maintainer for HiSilicon PTT driver
-> 
->  .../ABI/testing/sysfs-devices-hisi_ptt        |   61 +
->  Documentation/trace/hisi-ptt.rst              |  298 +++++
->  Documentation/trace/index.rst                 |    1 +
->  MAINTAINERS                                   |    8 +
->  drivers/Makefile                              |    1 +
->  drivers/hwtracing/Kconfig                     |    2 +
->  drivers/hwtracing/ptt/Kconfig                 |   12 +
->  drivers/hwtracing/ptt/Makefile                |    2 +
->  drivers/hwtracing/ptt/hisi_ptt.c              | 1047 +++++++++++++++++
->  drivers/hwtracing/ptt/hisi_ptt.h              |  200 ++++
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   21 +
+> 	Hans
 
-I fixed the month and kernel revision in sysfs-devices-hisi_ptt before applying
-this set.  You can double check that everything is to your liking in the
-coresight next tree[1].
+Hi Hans,
+Thank you for explaining both the issues in detail. I will get working
+on both and get back to you. 
 
-Thanks,
-Mathieu
+Regards,
+Soumya
 
-[1]. https://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git/log/?h=next
-
-
->  11 files changed, 1653 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-devices-hisi_ptt
->  create mode 100644 Documentation/trace/hisi-ptt.rst
->  create mode 100644 drivers/hwtracing/ptt/Kconfig
->  create mode 100644 drivers/hwtracing/ptt/Makefile
->  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
->  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
-> 
-> -- 
-> 2.24.0
+> > 
+> > Reported-by: syzbot+b2391895514ed9ef4a8e@syzkaller.appspotmail.com
+> > Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+> > ---
+> >  drivers/media/usb/em28xx/em28xx-video.c | 45 +++++++++++++++++++++----
+> >  1 file changed, 39 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/media/usb/em28xx/em28xx-video.c b/drivers/media/usb/em28xx/em28xx-video.c
+> > index 8181c0e6a25b..900a1eacb1c7 100644
+> > --- a/drivers/media/usb/em28xx/em28xx-video.c
+> > +++ b/drivers/media/usb/em28xx/em28xx-video.c
+> > @@ -2320,6 +2320,19 @@ static int em28xx_v4l2_close(struct file *filp)
+> >  	return 0;
+> >  }
+> >  
+> > +/* Used to temporarily disable file operations on video_device until successful
+> > + * initialization in em28xx_v4l2_init().
+> > + */
+> > +static const struct v4l2_file_operations em28xx_v4l_fops_empty = {
+> > +	.owner         = THIS_MODULE,
+> > +	.open          = NULL,
+> > +	.release       = NULL,
+> > +	.read          = NULL,
+> > +	.poll          = NULL,
+> > +	.mmap          = NULL,
+> > +	.unlocked_ioctl = NULL,
+> > +};
+> > +
+> >  static const struct v4l2_file_operations em28xx_v4l_fops = {
+> >  	.owner         = THIS_MODULE,
+> >  	.open          = em28xx_v4l2_open,
+> > @@ -2375,12 +2388,22 @@ static const struct v4l2_ioctl_ops video_ioctl_ops = {
+> >  };
+> >  
+> >  static const struct video_device em28xx_video_template = {
+> > -	.fops		= &em28xx_v4l_fops,
+> > +	.fops		= &em28xx_v4l_fops_empty,
+> >  	.ioctl_ops	= &video_ioctl_ops,
+> >  	.release	= video_device_release_empty,
+> >  	.tvnorms	= V4L2_STD_ALL,
+> >  };
+> >  
+> > +/* Used to temporarily disable file operations on video_device until successful
+> > + * initialization in em28xx_v4l2_init().
+> > + */
+> > +static const struct v4l2_file_operations radio_fops_empty = {
+> > +	.owner         = THIS_MODULE,
+> > +	.open          = NULL,
+> > +	.release       = NULL,
+> > +	.unlocked_ioctl = NULL,
+> > +};
+> > +
+> >  static const struct v4l2_file_operations radio_fops = {
+> >  	.owner         = THIS_MODULE,
+> >  	.open          = em28xx_v4l2_open,
+> > @@ -2404,7 +2427,7 @@ static const struct v4l2_ioctl_ops radio_ioctl_ops = {
+> >  };
+> >  
+> >  static struct video_device em28xx_radio_template = {
+> > -	.fops		= &radio_fops,
+> > +	.fops		= &radio_fops_empty,
+> >  	.ioctl_ops	= &radio_ioctl_ops,
+> >  	.release	= video_device_release_empty,
+> >  };
+> > @@ -2833,9 +2856,6 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+> >  				"can't register radio device\n");
+> >  			goto unregister_dev;
+> >  		}
+> > -		dev_info(&dev->intf->dev,
+> > -			 "Registered radio device as %s\n",
+> > -			 video_device_node_name(&v4l2->radio_dev));
+> >  	}
+> >  
+> >  	/* Init entities at the Media Controller */
+> > @@ -2851,14 +2871,27 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+> >  	}
+> >  #endif
+> >  
+> > +	/* Enable v4l2 file operations for v4l2 video video_device */
+> > +	v4l2->vdev.fops = &em28xx_v4l_fops;
+> >  	dev_info(&dev->intf->dev,
+> >  		 "V4L2 video device registered as %s\n",
+> >  		 video_device_node_name(&v4l2->vdev));
+> >  
+> > -	if (video_is_registered(&v4l2->vbi_dev))
+> > +	if (video_is_registered(&v4l2->vbi_dev)) {
+> > +		/* Enable v4l2 file operations for v4l2 vbi video_device */
+> > +		v4l2->vbi_dev.fops = &em28xx_v4l_fops;
+> >  		dev_info(&dev->intf->dev,
+> >  			 "V4L2 VBI device registered as %s\n",
+> >  			 video_device_node_name(&v4l2->vbi_dev));
+> > +	}
+> > +
+> > +	if (video_is_registered(&v4l2->radio_dev)) {
+> > +		/* Enable v4l2 file operations for v4l2 radio video_device */
+> > +		v4l2->radio_dev.fops = &radio_fops;
+> > +		dev_info(&dev->intf->dev,
+> > +			 "Registered radio device as %s\n",
+> > +			 video_device_node_name(&v4l2->radio_dev));
+> > +	}
+> >  
+> >  	/* Save some power by putting tuner to sleep */
+> >  	v4l2_device_call_all(&v4l2->v4l2_dev, 0, tuner, standby);
 > 

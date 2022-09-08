@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7354D5B1893
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4B05B1897
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiIHJYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S229644AbiIHJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiIHJYY (ORCPT
+        with ESMTP id S229534AbiIHJYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:24:24 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D6DF5C63
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:22:52 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id z25so26740286lfr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 02:22:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=dH3CbhVOQrBIzFdsMYEQAzEoE3B2m4SSznn5rAk+rYM=;
-        b=FHf5Ic/nwRoqqtgsFHSSGFDXZc98X2hpVH5Ttn0/VY/T+Rl1xxX8eAP+p5gs+pa44G
-         dqojHG/7TfSA3gOeWxAIl+UZh8PDFCPoea9kdGdQqDETSUMlihGsJQtxcvAzwkVOy9sT
-         3fDJ01OAxnONes0Gle2gdPEa0FKu6zFZ/j+W9iF0qpfbRbL6px2LC8vg21uN+B1a+F6d
-         U7OQShHt5p86KP5e2r9IZo+K/7ynXnUdLMF1xVA5svaLjFkS8ALinaYJ0yT0hTOm1z5y
-         5k/Ar9Kn+1s6rjhMYGbHk8a9pG3X93HkuWGNY4axTv/+yed/0Q6jeQnF9lV+pUJTF328
-         eDOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dH3CbhVOQrBIzFdsMYEQAzEoE3B2m4SSznn5rAk+rYM=;
-        b=V6f9lOrrcrhW1EVug3RnkEmgjvpw7EkMgVc04+U0gWbDTZw/m4hdiiSEXpGfa6JrRx
-         TgIYpIlg4iUUAtaOyF6MrdbasJPfox1xdxINWx+yhImFc6ftrtFQGrl6E/AQF7C8yUGv
-         8wrJn6yvKz1ur1/4vQGTgKZpAk3TpJ8uquTlXSm/EeY93kTZqPqgQzqTlItP+3PUhqN7
-         MYxv0Vne4/QP5pR4FZJWaZGYeoNU+UVXtXOLk86qy5obbdUxXJuK6WcWARR7fxHjq85t
-         MDQrL5HGmon598uXY7JLh9N1xGeA00DGeEOuoKHg8wUeidrgdnrdFZNB4I4AsFY6qXPc
-         tWVA==
-X-Gm-Message-State: ACgBeo3CUf0qKJjG/VPe1wcmgrHkLpjeSVD/E1c58SMyMEIh0EW2eBMW
-        +mfN5lLuDrd0Sw8wtT4rNVfc8w==
-X-Google-Smtp-Source: AA6agR4x1bQbWHYoUICIygFzuOYuWPgfmCbP5o72xJn3+fJ+P+x9kq1cdfCrhlbhILkhk07z1Y2DaA==
-X-Received: by 2002:a05:6512:1193:b0:492:7e33:870 with SMTP id g19-20020a056512119300b004927e330870mr2475777lfr.37.1662628970810;
-        Thu, 08 Sep 2022 02:22:50 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id bu13-20020a056512168d00b004947f8b6266sm175119lfb.203.2022.09.08.02.22.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 02:22:50 -0700 (PDT)
-Message-ID: <0b8b2e01-5209-6437-c79e-3cff9b29bfcb@linaro.org>
-Date:   Thu, 8 Sep 2022 11:22:48 +0200
+        Thu, 8 Sep 2022 05:24:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA1D796B0;
+        Thu,  8 Sep 2022 02:24:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662629055; x=1694165055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NMMdOivcSzeIEVychxnk3SDpIBJqhUWIwpaRsOdPn7c=;
+  b=RN47XvmPnEkju8y+xW8dBERMgRsthYJtg3mEk08W0+Od1R8F3JVLDd2I
+   cUI+LvBEzVebgBs5NOGHztTaPj1SOzLte5T4DwU4CwrLqI0SWbEI9Yszo
+   FjphqNMiNUHpwHHH8EmIfkfqAgeM04AxlaoM4zqauH8KECO0+BZ4F2QLL
+   uZqEyFJWlflxx2lB0btTm+uv7yXYR5peByoTczOY1SN81Gu9wXDdVxhTs
+   r5CD/Qq6ALOpVuxxn26pybIYYNv90EF3GwWtd5G6outI0StUEnK4pZyBv
+   qkl9ByH4E3m6K8MWUcPw0m9Z6JMaAC5ijGs1tZ3g7kacoRzHfs05dCQhf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="383414849"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="383414849"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 02:24:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="647976047"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 08 Sep 2022 02:23:59 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWDlP-0007a9-0c;
+        Thu, 08 Sep 2022 09:23:59 +0000
+Date:   Thu, 8 Sep 2022 17:23:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+Cc:     kbuild-all@lists.01.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH V2 6/7] arm64/perf: Add BRBE driver
+Message-ID: <202209081717.00OiPpzm-lkp@intel.com>
+References: <20220908051046.465307-7-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v9 2/2] ASoC: sun50i-dmic: dt-bindings: add DT bindings
- for DMIC controller
-Content-Language: en-US
-To:     =?UTF-8?B?54+t5rab?= <fengzheng923@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <1661872039-40174-1-git-send-email-fengzheng923@gmail.com>
- <25072fba-64e2-df11-c8f0-a274037141f0@linaro.org>
- <CAE=m619qeaDYkWiB5kh50gY1Kndyrvo4oZuZjFKRCKK=j99K2w@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAE=m619qeaDYkWiB5kh50gY1Kndyrvo4oZuZjFKRCKK=j99K2w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908051046.465307-7-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,27 +71,284 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 15:03, 班涛 wrote:
->>> +++
->> b/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
->>> @@ -0,0 +1,79 @@
->>> +# SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/sound/allwinner,sun50i-h6-dmic.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Allwinner H6 DMIC Device Tree Bindings
->>
->> s/Device Tree Bindings//
->>
-> 
-> So, modify it to 'Allwinner H6 DMIC Devices Tree Bindings', sure?
+Hi Anshuman,
 
-You pasted the same message, so what is the modification? I wrote you a
- search&replace pattern.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on acme/perf/core]
+[also build test ERROR on tip/perf/core arm64/for-next/core linus/master v6.0-rc4 next-20220907]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220908-131425
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
+config: arm64-buildonly-randconfig-r002-20220907 (https://download.01.org/0day-ci/archive/20220908/202209081717.00OiPpzm-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5b70e42a715860504646cb5bd1788ddb823dd50b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220908-131425
+        git checkout 5b70e42a715860504646cb5bd1788ddb823dd50b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/perf/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/perf/arm_pmu_brbe.c: In function 'brbe_fetch_perf_type':
+>> drivers/perf/arm_pmu_brbe.c:251:24: error: 'PERF_BR_ARM64_DEBUG_HALT' undeclared (first use in this function)
+     251 |                 return PERF_BR_ARM64_DEBUG_HALT;
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/arm_pmu_brbe.c:251:24: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/perf/arm_pmu_brbe.c:253:24: error: 'PERF_BR_SERROR' undeclared (first use in this function); did you mean 'PERF_BR_ERET'?
+     253 |                 return PERF_BR_SERROR;
+         |                        ^~~~~~~~~~~~~~
+         |                        PERF_BR_ERET
+>> drivers/perf/arm_pmu_brbe.c:256:24: error: 'PERF_BR_ARM64_DEBUG_INST' undeclared (first use in this function)
+     256 |                 return PERF_BR_ARM64_DEBUG_INST;
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:259:24: error: 'PERF_BR_ARM64_DEBUG_DATA' undeclared (first use in this function)
+     259 |                 return PERF_BR_ARM64_DEBUG_DATA;
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:262:24: error: 'PERF_BR_NEW_FAULT_ALGN' undeclared (first use in this function)
+     262 |                 return PERF_BR_NEW_FAULT_ALGN;
+         |                        ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:265:24: error: 'PERF_BR_NEW_FAULT_INST' undeclared (first use in this function)
+     265 |                 return PERF_BR_NEW_FAULT_INST;
+         |                        ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:268:24: error: 'PERF_BR_NEW_FAULT_DATA' undeclared (first use in this function)
+     268 |                 return PERF_BR_NEW_FAULT_DATA;
+         |                        ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:271:24: error: 'PERF_BR_ARM64_FIQ' undeclared (first use in this function); did you mean 'PERF_REG_ARM64_MAX'?
+     271 |                 return PERF_BR_ARM64_FIQ;
+         |                        ^~~~~~~~~~~~~~~~~
+         |                        PERF_REG_ARM64_MAX
+>> drivers/perf/arm_pmu_brbe.c:274:24: error: 'PERF_BR_ARM64_DEBUG_EXIT' undeclared (first use in this function)
+     274 |                 return PERF_BR_ARM64_DEBUG_EXIT;
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/arm_pmu_brbe.c: In function 'brbe_fetch_perf_priv':
+>> drivers/perf/arm_pmu_brbe.c:287:23: error: 'PERF_BR_PRIV_USER' undeclared (first use in this function)
+     287 |                return PERF_BR_PRIV_USER;
+         |                       ^~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:289:23: error: 'PERF_BR_PRIV_KERNEL' undeclared (first use in this function); did you mean 'PERF_SECURITY_KERNEL'?
+     289 |                return PERF_BR_PRIV_KERNEL;
+         |                       ^~~~~~~~~~~~~~~~~~~
+         |                       PERF_SECURITY_KERNEL
+>> drivers/perf/arm_pmu_brbe.c:293:23: error: 'PERF_BR_PRIV_HV' undeclared (first use in this function)
+     293 |                return PERF_BR_PRIV_HV;
+         |                       ^~~~~~~~~~~~~~~
+   drivers/perf/arm_pmu_brbe.c: In function 'capture_brbe_flags':
+>> drivers/perf/arm_pmu_brbe.c:306:14: error: implicit declaration of function 'branch_sample_no_cycles' [-Werror=implicit-function-declaration]
+     306 |         if (!branch_sample_no_cycles(event))
+         |              ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:309:13: error: implicit declaration of function 'branch_sample_type' [-Werror=implicit-function-declaration]
+     309 |         if (branch_sample_type(event)) {
+         |             ^~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:312:56: error: 'PERF_BR_EXTEND_ABI' undeclared (first use in this function)
+     312 |                         cpuc->brbe_entries[idx].type = PERF_BR_EXTEND_ABI;
+         |                                                        ^~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:313:48: error: 'struct perf_branch_entry' has no member named 'new_type'
+     313 |                         cpuc->brbe_entries[idx].new_type = branch_type;
+         |                                                ^
+>> drivers/perf/arm_pmu_brbe.c:319:14: error: implicit declaration of function 'branch_sample_no_flags' [-Werror=implicit-function-declaration]
+     319 |         if (!branch_sample_no_flags(event)) {
+         |              ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:341:13: error: implicit declaration of function 'branch_sample_priv' [-Werror=implicit-function-declaration]
+     341 |         if (branch_sample_priv(event)) {
+         |             ^~~~~~~~~~~~~~~~~~
+>> drivers/perf/arm_pmu_brbe.c:347:48: error: 'struct perf_branch_entry' has no member named 'priv'
+     347 |                         cpuc->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
+         |                                                ^
+   drivers/perf/arm_pmu_brbe.c: In function 'brbe_fetch_perf_type':
+>> drivers/perf/arm_pmu_brbe.c:250:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     250 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:252:9: note: here
+     252 |         case BRBINF_TYPE_SERROR:
+         |         ^~~~
+   drivers/perf/arm_pmu_brbe.c:255:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     255 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:257:9: note: here
+     257 |         case BRBINF_TYPE_DATA_DEBUG:
+         |         ^~~~
+   drivers/perf/arm_pmu_brbe.c:258:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     258 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:260:9: note: here
+     260 |         case BRBINF_TYPE_ALGN_FAULT:
+         |         ^~~~
+   drivers/perf/arm_pmu_brbe.c:261:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     261 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:263:9: note: here
+     263 |         case BRBINF_TYPE_INST_FAULT:
+         |         ^~~~
+   drivers/perf/arm_pmu_brbe.c:264:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     264 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:266:9: note: here
+     266 |         case BRBINF_TYPE_DATA_FAULT:
+         |         ^~~~
+   drivers/perf/arm_pmu_brbe.c:267:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     267 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:269:9: note: here
+     269 |         case BRBINF_TYPE_FIQ:
+         |         ^~~~
+   drivers/perf/arm_pmu_brbe.c:270:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     270 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:272:9: note: here
+     272 |         case BRBINF_TYPE_DEBUG_EXIT:
+         |         ^~~~
+   drivers/perf/arm_pmu_brbe.c:273:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
+     273 |                 *new_branch_type = true;
+         |                 ~~~~~~~~~~~~~~~~~^~~~~~
+   drivers/perf/arm_pmu_brbe.c:275:9: note: here
+     275 |         default:
+         |         ^~~~~~~
+   cc1: some warnings being treated as errors
 
 
+vim +/PERF_BR_ARM64_DEBUG_HALT +251 drivers/perf/arm_pmu_brbe.c
 
-Best regards,
-Krzysztof
+   222	
+   223	static int brbe_fetch_perf_type(u64 brbinf, bool *new_branch_type)
+   224	{
+   225		int brbe_type = brbe_fetch_type(brbinf);
+   226		*new_branch_type = false;
+   227	
+   228		switch (brbe_type) {
+   229		case BRBINF_TYPE_UNCOND_DIR:
+   230			return PERF_BR_UNCOND;
+   231		case BRBINF_TYPE_INDIR:
+   232			return PERF_BR_IND;
+   233		case BRBINF_TYPE_DIR_LINK:
+   234			return PERF_BR_CALL;
+   235		case BRBINF_TYPE_INDIR_LINK:
+   236			return PERF_BR_IND_CALL;
+   237		case BRBINF_TYPE_RET_SUB:
+   238			return PERF_BR_RET;
+   239		case BRBINF_TYPE_COND_DIR:
+   240			return PERF_BR_COND;
+   241		case BRBINF_TYPE_CALL:
+   242			return PERF_BR_CALL;
+   243		case BRBINF_TYPE_TRAP:
+   244			return PERF_BR_SYSCALL;
+   245		case BRBINF_TYPE_RET_EXCPT:
+   246			return PERF_BR_ERET;
+   247		case BRBINF_TYPE_IRQ:
+   248			return PERF_BR_IRQ;
+   249		case BRBINF_TYPE_DEBUG_HALT:
+ > 250			*new_branch_type = true;
+ > 251			return PERF_BR_ARM64_DEBUG_HALT;
+   252		case BRBINF_TYPE_SERROR:
+ > 253			return PERF_BR_SERROR;
+   254		case BRBINF_TYPE_INST_DEBUG:
+   255			*new_branch_type = true;
+ > 256			return PERF_BR_ARM64_DEBUG_INST;
+   257		case BRBINF_TYPE_DATA_DEBUG:
+   258			*new_branch_type = true;
+ > 259			return PERF_BR_ARM64_DEBUG_DATA;
+   260		case BRBINF_TYPE_ALGN_FAULT:
+   261			*new_branch_type = true;
+ > 262			return PERF_BR_NEW_FAULT_ALGN;
+   263		case BRBINF_TYPE_INST_FAULT:
+   264			*new_branch_type = true;
+ > 265			return PERF_BR_NEW_FAULT_INST;
+   266		case BRBINF_TYPE_DATA_FAULT:
+   267			*new_branch_type = true;
+ > 268			return PERF_BR_NEW_FAULT_DATA;
+   269		case BRBINF_TYPE_FIQ:
+   270			*new_branch_type = true;
+ > 271			return PERF_BR_ARM64_FIQ;
+   272		case BRBINF_TYPE_DEBUG_EXIT:
+   273			*new_branch_type = true;
+ > 274			return PERF_BR_ARM64_DEBUG_EXIT;
+   275		default:
+   276			pr_warn("unknown branch type captured\n");
+   277			return PERF_BR_UNKNOWN;
+   278		}
+   279	}
+   280	
+   281	static int brbe_fetch_perf_priv(u64 brbinf)
+   282	{
+   283	       int brbe_el = brbe_fetch_el(brbinf);
+   284	
+   285	       switch (brbe_el) {
+   286	       case BRBINF_EL_EL0:
+ > 287	               return PERF_BR_PRIV_USER;
+   288	       case BRBINF_EL_EL1:
+ > 289	               return PERF_BR_PRIV_KERNEL;
+   290	       case BRBINF_EL_EL2:
+   291	               if (is_kernel_in_hyp_mode())
+   292	                       return PERF_BR_PRIV_KERNEL;
+ > 293	               return PERF_BR_PRIV_HV;
+   294	       default:
+   295	               pr_warn("unknown branch privilege captured\n");
+   296	               return -1;
+   297	       }
+   298	}
+   299	
+   300	static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
+   301				       u64 brbinf, int idx)
+   302	{
+   303		int branch_type, type = brbe_record_valid(brbinf);
+   304		bool new_branch_type;
+   305	
+ > 306		if (!branch_sample_no_cycles(event))
+   307			cpuc->brbe_entries[idx].cycles = brbe_fetch_cycles(brbinf);
+   308	
+ > 309		if (branch_sample_type(event)) {
+   310			branch_type = brbe_fetch_perf_type(brbinf, &new_branch_type);
+   311			if (new_branch_type) {
+ > 312				cpuc->brbe_entries[idx].type = PERF_BR_EXTEND_ABI;
+ > 313				cpuc->brbe_entries[idx].new_type = branch_type;
+   314			} else {
+   315				cpuc->brbe_entries[idx].type = branch_type;
+   316			}
+   317		}
+   318	
+ > 319		if (!branch_sample_no_flags(event)) {
+   320			/*
+   321			 * BRBINF_LASTFAILED does not indicate that the last transaction
+   322			 * got failed or aborted during the current branch record itself.
+   323			 * Rather, this indicates that all the branch records which were
+   324			 * in transaction until the curret branch record have failed. So
+   325			 * the entire BRBE buffer needs to be processed later on to find
+   326			 * all branch records which might have failed.
+   327			 */
+   328			cpuc->brbe_entries[idx].abort = brbinf & BRBINF_LASTFAILED;
+   329	
+   330			/*
+   331			 * All these information (i.e transaction state and mispredicts)
+   332			 * are not available for target only branch records.
+   333			 */
+   334			if (type != BRBINF_VALID_TARGET) {
+   335				cpuc->brbe_entries[idx].mispred = brbinf & BRBINF_MPRED;
+   336				cpuc->brbe_entries[idx].predicted = !(brbinf & BRBINF_MPRED);
+   337				cpuc->brbe_entries[idx].in_tx = brbinf & BRBINF_TX;
+   338			}
+   339		}
+   340	
+ > 341		if (branch_sample_priv(event)) {
+   342			/*
+   343			 * All these information (i.e branch privilege level) are not
+   344			 * available for source only branch records.
+   345			 */
+   346			if (type != BRBINF_VALID_SOURCE)
+ > 347				cpuc->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
+   348		}
+   349	}
+   350	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

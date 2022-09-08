@@ -2,153 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576E85B2A88
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5E15B2A91
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiIHXpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
+        id S230204AbiIHXpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiIHXpF (ORCPT
+        with ESMTP id S229919AbiIHXpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:45:05 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF4E5C979;
-        Thu,  8 Sep 2022 16:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662680704; x=1694216704;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uiG/vE4cpWuT3MewnkVW7e+A3u9o70Dk3fzCkQBC5F4=;
-  b=Jcj4LIDjgDUbrK9Td7ZB5Z2btcuThIFthrMAEXz9FevMleqgKfKRAYms
-   zTkKbPKHHHdIr4yrfp1PJ3s0zgwz1+RBkqcVUv3uEsoGaJSGt2gMcn4ws
-   U9Cs7d7X9JMyu6fWpV7CNq3U/hsIFS6J3ApJbvm2lGVT9BFkBvjgJ09ON
-   Q+MLjCGQgss5luuszTBlGsUI7ab9PnlZX1T9HBuQc7GbGeS/A/kX3qcAP
-   85fICgRSXrab9E44Z7cyGqJ5Idw35IupwmOzjPWRE5Jm/GNQbAW1ne6bn
-   6oHbDLF4k0mNAVHMM3y3l40maGi9wNOxjVJ5wVv3+baydPb6gGEIOQkbg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="323552699"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="323552699"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:45:03 -0700
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="740861110"
-Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:45:02 -0700
-Message-ID: <23a76ce3-d568-3c73-eecc-fa499aeecfcd@linux.intel.com>
-Date:   Thu, 8 Sep 2022 16:45:02 -0700
+        Thu, 8 Sep 2022 19:45:25 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9C8A2607;
+        Thu,  8 Sep 2022 16:45:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F2FDB336AE;
+        Thu,  8 Sep 2022 23:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662680723; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x71AWVjMQBSYFLOAJJTAszIVLpOBTb+pkZdb7Q/uDY4=;
+        b=yFmHsA2rRxVQg6WEGxwoVfPC0V5zZkZDY4cx1KPO/TmJhR/ffEo/wSjt67etkyuC8Q8XCN
+        j2sb2WtBnwcC2Fza6vmBQmFoou8DP1uK0yAu8uIki87ZTitT7S+Ahb8aG21hdcWcH/EQay
+        p4elSw0vOTGCeXaU4Okdl7R+VOvMxY4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662680723;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x71AWVjMQBSYFLOAJJTAszIVLpOBTb+pkZdb7Q/uDY4=;
+        b=HjT5yEfaqGECKpGJ+uLMTy96VmaZa3x6X6Nsrlljor4fRUr4fgAcW1Lcg9WfVmJDQvq2Yv
+        3QPoT1gLKqeetTDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CCEF413A6D;
+        Thu,  8 Sep 2022 23:45:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id naC6H4p+GmNHHgAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 08 Sep 2022 23:45:14 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport
- support
-Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yxn5VDzJMUxSKz0Z@fedora>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Yxn5VDzJMUxSKz0Z@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, "Jan Kara" <jack@suse.cz>,
+        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-reply-to: <53298467f5fce443c70ef6821e055d10caf9331e.camel@kernel.org>
+References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>,
+ <20220907125211.GB17729@fieldses.org>,
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>,
+ <20220907135153.qvgibskeuz427abw@quack3>,
+ <166259786233.30452.5417306132987966849@noble.neil.brown.name>,
+ <20220908083326.3xsanzk7hy3ff4qs@quack3>, <YxoIjV50xXKiLdL9@mit.edu>,
+ <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>,
+ <20220908155605.GD8951@fieldses.org>,
+ <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>,
+ <20220908182252.GA18939@fieldses.org>,
+ <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>,
+ <166267807678.30452.18035749642786839300@noble.neil.brown.name>,
+ <53298467f5fce443c70ef6821e055d10caf9331e.camel@kernel.org>
+Date:   Fri, 09 Sep 2022 09:45:09 +1000
+Message-id: <166268070965.30452.8884091101479997991@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 09 Sep 2022, Jeff Layton wrote:
+> On Fri, 2022-09-09 at 09:01 +1000, NeilBrown wrote:
+> > On Fri, 09 Sep 2022, Jeff Layton wrote:
+> > > On Thu, 2022-09-08 at 14:22 -0400, J. Bruce Fields wrote:
+> > > > On Thu, Sep 08, 2022 at 01:40:11PM -0400, Jeff Layton wrote:
+> > > > > Yeah, ok. That does make some sense. So we would mix this into the
+> > > > > i_version instead of the ctime when it was available. Preferably, w=
+e'd
+> > > > > mix that in when we store the i_version rather than adding it after=
+ward.
+> > > > >=20
+> > > > > Ted, how would we access this? Maybe we could just add a new (gener=
+ic)
+> > > > > super_block field for this that ext4 (and other filesystems) could
+> > > > > populate at mount time?
+> > > >=20
+> > > > Couldn't the filesystem just return an ino_version that already inclu=
+des
+> > > > it?
+> > > >=20
+> > >=20
+> > > Yes. That's simple if we want to just fold it in during getattr. If we
+> > > want to fold that into the values stored on disk, then I'm a little less
+> > > clear on how that will work.
+> > >=20
+> > > Maybe I need a concrete example of how that will work:
+> > >=20
+> > > Suppose we have an i_version value X with the previous crash counter
+> > > already factored in that makes it to disk. We hand out a newer version
+> > > X+1 to a client, but that value never makes it to disk.
+> >=20
+> > As I understand it, the crash counter would NEVER appear in the on-disk
+> > i_version.
+> > The crash counter is stable while a filesystem is mounted so is the same
+> > when loading an inode from disk and when writing it back.
+> >=20
+> > When loading, add crash counter to on-disk i_version to provide
+> > in-memory i_version.
+> > when storing, subtract crash counter from in-memory i_version to provide
+> > on-disk i_version.
+> >=20
+> > "add" and "subtract" could be any reversible hash, and its inverse.  I
+> > would probably shift the crash counter up 16 and add/subtract.
+> >=20
+> >=20
+>=20
+> If you store the value with the crash counter already factored-in, then
+> not every inode would end up being invalidated after a crash. If we try
+> to mix it in later, the client will end up invalidating the cache even
+> for inodes that had no changes.
+
+How do we know which inodes need the crash counter merged in?  I thought
+the whole point of the crash counter was that it affected every file
+(easy, safe, expensive, but hopefully rare enough that the expense could
+be justified).
+
+NeilBrown
 
 
-On 9/8/22 7:16 AM, Wander Lairson Costa wrote:
->> +#ifdef DEBUG
->> +static void print_array_hex(const char *title, const char *prefix_str,
->> +		const void *buf, int len)
->> +{
->> +	const __u8 *ptr = buf;
->> +	int i, rowsize = HEX_DUMP_SIZE;
->> +
->> +	if (!len || !buf)
->> +		return;
->> +
->> +	printf("\t\t%s", title);
->> +
->> +	for (i = 0; i < len; i++) {
->> +		if (!(i % rowsize))
->> +			printf("\n%s%.8x:", prefix_str, i);
->> +		printf(" %.2x", ptr[i]);
->> +	}
->> +
->> +	printf("\n");
->> +}
->> +#endif
->> +
->> +TEST(verify_report)
->> +{
->> +	__u8 reportdata[TDX_REPORTDATA_LEN];
->> +	struct tdreport tdreport;
->> +	struct tdx_report_req req;
->> +	int devfd, i;
->> +
->> +	devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
->> +
->> +	ASSERT_LT(0, devfd);
->> +
->> +	/* Generate sample report data */
->> +	for (i = 0; i < TDX_REPORTDATA_LEN; i++)
->> +		reportdata[i] = i;
->> +
->> +	/* Initialize IOCTL request */
->> +	req.subtype     = 0;
->> +	req.reportdata  = (__u64)reportdata;
->> +	req.rpd_len     = TDX_REPORTDATA_LEN;
->> +	req.tdreport    = (__u64)&tdreport;
->> +	req.tdr_len     = sizeof(tdreport);
->> +
->> +	/* Get TDREPORT */
->> +	ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
->> +
->> +#ifdef DEBUG
->> +	print_array_hex("\n\t\tTDX report data\n", "",
->> +			reportdata, sizeof(reportdata));
->> +
->> +	print_array_hex("\n\t\tTDX tdreport data\n", "",
->> +			&tdreport, sizeof(tdreport));
->> +#endif
-> You can unconditionally define print_array_hex, and
-> use `if (DEBUG)` instead of #ifdef `DEBUG here`. The compiler
-> will get rid of the unused code when DEBUG is not defined
-> as expected, but you get the parser to validate it
-> independent of the definition of DEBUG.
-
-Currently, DEBUG is a macro, so we cannot use if (DEBUG) directly.
-You are suggesting to change DEBUG to a variable? Any reason to
-make this change? I think both changes are functionally similar.
-So I am wondering why to make this change?
-
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+>=20
+> > >=20
+> > > The machine crashes and comes back up, and we get a query for i_version
+> > > and it comes back as X. Fine, it's an old version. Now there is a write.
+> > > What do we do to ensure that the new value doesn't collide with X+1?=20
+> > > --=20
+> > > Jeff Layton <jlayton@kernel.org>
+> > >=20
+>=20
+> --=20
+> Jeff Layton <jlayton@kernel.org>
+>=20

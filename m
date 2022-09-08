@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401825B155D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2E65B1568
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiIHHHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S231284AbiIHHJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiIHHHf (ORCPT
+        with ESMTP id S229884AbiIHHJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:07:35 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F219FAB8;
-        Thu,  8 Sep 2022 00:07:33 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 03:07:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662620851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wTEYgGZ5tSon77wS7vl2ROsEnkkCO0gsMgQptW+CPqI=;
-        b=iJA14xapCDtkxxFZ191Tkejngxj1CUcv4kW7CKzkjsz7ATcaQDWEu0NFSqx3I6BQdf18/S
-        WTbuPmJUiio1UduO89kjDWGE8I/TqqMPK7/HJWAK+mBPhtt24ufrZC9OZJmb5VRtm8xK61
-        6ZzGjTRW6DZ8SglZivSmm0qDFb8PFdY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220908070719.ootyzzbd47dd5rkv@kmo-framework>
-References: <20220901201502.sn6223bayzwferxv@moria.home.lan>
- <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
- <20220905234649.525vorzx27ybypsn@kmo-framework>
- <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
- <20220906182058.iijmpzu4rtxowy37@kmo-framework>
- <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
- <20220907130323.rwycrntnckc6h43n@kmo-framework>
- <20220907094306.3383dac2@gandalf.local.home>
- <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
- <CAJuCfpEQG3+d-45PXhS=pD6ktrmqNQQnpf_-3+c2CG7rzuz+2g@mail.gmail.com>
+        Thu, 8 Sep 2022 03:09:01 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D918FD5B;
+        Thu,  8 Sep 2022 00:09:00 -0700 (PDT)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 28878hgN022035;
+        Thu, 8 Sep 2022 16:08:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28878hgN022035
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662620924;
+        bh=PVKlmhmwpV0pLgSi1ek3+0DUiw2m6Eg7M0VOWvovdBc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u+9uVVlzjc67QvrIeS4fdznX24JcMq6U12l6W0QXg0TGNza7drsjsaNVJ8WERBk3N
+         OeEZDB0pnKquBVp2CR+xPPL7sxf02x3PxTANOZj9pt8eochK2H94ol6wNb/9tdn+fu
+         Tbb8OjzKg9RjtXS4vrcttPwnfIu9cidT6dUhDTKmuaCM0Me3zv8FHv7oi2YPugeZH4
+         RG25KmLY5fHQtQeq7nP8ILsca831gLSjfTGPxkOX6Ad0jdq1qI1KsZyLyxiPjlUd6c
+         tGxaMrPjbyI6ZjEzom5A2FIrn/Fzr4zdBAxrUKeAnbrdkBx09doGWvBzRyeTn6XBe0
+         drZSVWKLwCS1g==
+X-Nifty-SrcIP: [209.85.210.51]
+Received: by mail-ot1-f51.google.com with SMTP id z22-20020a056830129600b0063711f456ceso11795904otp.7;
+        Thu, 08 Sep 2022 00:08:43 -0700 (PDT)
+X-Gm-Message-State: ACgBeo34w2uAOZHM8pC9L0XhrM7QcakaFiMyTV6hq8B3/MQ9Gm4n65FX
+        wh7fnYVbXFt/WvRG1a/x8RdUdExQS/1UZnqepdQ=
+X-Google-Smtp-Source: AA6agR74fU7kTwBXWyksY2XmkALd8hye53EFmB770dfrBQd9tfEOHH7g+N6eDGv2TAlx/g/i4VqXrHA2Ycq/xFHFxBs=
+X-Received: by 2002:a9d:4806:0:b0:637:cdca:f8d3 with SMTP id
+ c6-20020a9d4806000000b00637cdcaf8d3mr2968943otf.225.1662620923019; Thu, 08
+ Sep 2022 00:08:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpEQG3+d-45PXhS=pD6ktrmqNQQnpf_-3+c2CG7rzuz+2g@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220907230339.271633-1-danielwa@cisco.com>
+In-Reply-To: <20220907230339.271633-1-danielwa@cisco.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 8 Sep 2022 16:08:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQSUkWz9hvEmB1wSCMJ0Do209QZOgAxO=oSK6HQa7XgTg@mail.gmail.com>
+Message-ID: <CAK7LNAQSUkWz9hvEmB1wSCMJ0Do209QZOgAxO=oSK6HQa7XgTg@mail.gmail.com>
+Subject: Re: [RFC-PATCH] Makefile: dts: include directory makefile for DTC_FLAGS
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        xe-linux-external@cisco.com,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 11:49:37PM -0700, Suren Baghdasaryan wrote:
-> I would really appreciate if everyone could please stick to the
-> technical side of the conversation. That way we can get some
-> constructive feedback. Everything else is not helpful and at best is a
-> distraction.
-> Maintenance burden is a price we pay and I think it's the prerogative
-> of the maintainers to take that into account. Our job is to prove that
-> the price is worth paying.
+On Thu, Sep 8, 2022 at 8:03 AM Daniel Walker <danielwa@cisco.com> wrote:
+>
+> The current Makefile will drop the DTC_FLAGS depending on how you
+> build. For example,
+>
+> make dtbs
+>
+> includes correct DTC_FLAGS. However if you run,
+>
+> make nvidia/tegra210-p2371-2180.dtb
+>
+> The DTC_FLAGS are dropped. This appears to be caused by the top level
+> Makefile not including the Makefile from the directory where the dts lives.
+>
+> This normally doesn't matter because most dts files have nothing added
+> from the Makefile. This changes when you have overlays, and the
+> DTC_FLAGS modifier is mandatory for the dtb to work correctly.
 
-Well said.
 
-I'd also like to add - slab.h does look pretty overgrown and messy. We've grown
-a _lot_ of special purpose memory allocation interfaces, and I think it probably
-is time to try and wrangle that back.
+I recently fixed another issue of single target builds.
+https://patchwork.kernel.org/project/linux-kbuild/patch/20220906061313.1445810-2-masahiroy@kernel.org/
 
-The API complexity isn't just an issue for this patch - it's an issue for
-anything that has to wrap and plumb through memory allocation interfaces. It's a
-pain point for the Rust people, and also comes in e.g. the mempool API.
 
-I think we should keep going with the memalloc_no*_save()/restore() approach,
-and extend it to other things:
+It fixed your issue as well.
 
- - memalloc_nowait_save()
- - memalloc_highpri_save()
 
-(these two get you GFP_ATOMIC).
 
-Also, I don't think these all need to be separate functions, we could have
 
-memalloc_gfp_apply()
-memalloc_gfp_restore()
 
-which simply takes a gfp flags argument and applies it to the current
-PF_MEMALLOC flags.
 
-We've had long standing bugs where vmalloc() can't correctly take gfp flags
-because some of the allocations it does for page tables don't have it correctly
-plumbed through; switching to the memalloc_*_(save|restore) is something people
-have been wanting in order to fix this - for years. Actually following through
-and completing this would let us kill the gfp flags arguments to our various
-memory allocators entirely.
+>
+> This change adds a -f argument which includes the Makefile from the
+> directory where the dts file reside. This change is also required for
+> dtbo files.
+>
+> Cc: xe-linux-external@cisco.com
+> Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> ---
+>  Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index ac16bd92b156..bc245e2dc8d1 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1460,10 +1460,10 @@ endif
+>  ifneq ($(dtstree),)
+>
+>  %.dtb: dtbs_prepare
+> -       $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+> +       $(Q)$(MAKE) -f $(srctree)/$(dtstree)/$(dir $@)Makefile $(build)=$(dtstree) $(dtstree)/$@
+>
+>  %.dtbo: dtbs_prepare
+> -       $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+> +       $(Q)$(MAKE) -f $(srctree)/$(dtstree)/$(dir $@)Makefile $(build)=$(dtstree) $(dtstree)/$@
+>
+>  PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
+>  dtbs: dtbs_prepare
+> --
+> 2.25.1
+>
 
-I think we can do the same thing with the numa node parameter - kill
-kmalloc_node() et. all, move it to task_struct with a set of save/restore
-functions.
 
-There's probably other things we can do to simplify slab.h if we look more. I've
-been hoping to start pushing patches for some of this stuff - it's going to be
-some time before I can get to it though, can only handle so many projects in
-flight at a time :)
+-- 
+Best Regards
+Masahiro Yamada

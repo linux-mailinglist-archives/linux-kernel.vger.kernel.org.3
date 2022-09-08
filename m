@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AA25B14DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031D05B14DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiIHGmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S230457AbiIHGms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIHGmO (ORCPT
+        with ESMTP id S229563AbiIHGmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:42:14 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82157CD511;
-        Wed,  7 Sep 2022 23:42:13 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-12ab0eaa366so2505624fac.13;
-        Wed, 07 Sep 2022 23:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=gUbpbbKfF7KQ6Lsb7wztDuENXE7eYaOMwk9vpfh3W34=;
-        b=D43d3wSldH8HgBUSqmOf8ObLusP+opNToR5dIAzJAX85rqh5wr9vUpFn0s2PAm+761
-         dMIabrMKoag9GinKWZpuG+v3RSNJaiEcYE2Auo9/02LQCRjJUDBc2q9p1I54pPDdwiXD
-         y/oD19zu4qLdtkxRgEAeKV1p6mchLeSaDB7rCKrPn4EbRMwVDiK8VATAO02F9nA8EBCc
-         iLPvKqKDBnls/D5NOBHox4t6cclDtR1oC0CeN9OiJG1XlKofl2HkUpVVg8MuC+gxneCy
-         3ltiZO3XMP5PSIlMRPmYIG8D07AyqB4ln55utAKRp1HdxcoJmHlLfAC7m8C3BCODnspX
-         nRyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gUbpbbKfF7KQ6Lsb7wztDuENXE7eYaOMwk9vpfh3W34=;
-        b=KMioVP+BNxdzJ1SCZ+aKWEE4HSU3iqD7FCsTM4GajqOwndS4M3VWAxyE0pwmgGoaLT
-         vVwGzbYhuHFcrsAx32X0otsVUJ4qacTWqgys350G3iLlX96Sqo8W8lMJV3f/JtLpGImZ
-         2ar/il6573KXuXKiXPWiiQICyL4B/G5W3qK/X8OjAAtIC3NY+BvmWE2psnnB9Tgq2i/G
-         OzH6n+p6DbQtpZM8cp/1eRwssBcI7DpVAU+tpaKwKF2+Y1LiCvcFGAFUHepjMOcIveMg
-         eGAEvnuIGgwB2dPppvblufjWyIUKleqe0midBgvVFI8EYZv9Jevqi9JP/tqmR8ZKv7c8
-         kW6g==
-X-Gm-Message-State: ACgBeo0ISP883clCQXVw8KrLFeF2/oTinoWjSdecH5mrvxcp3MTIjoIu
-        SPwKc942FqxFtgZ3kOs+IP3lpnnNSQKjyjcrkvw=
-X-Google-Smtp-Source: AA6agR4WiJTkvL9tQYbGtA1RI8fLs0aeQZJ1uqSfrywT4eVH9lQCc8C+Yvea4ev6KORx1Z2lm0Q9TbEtUJcdx9xcZPU=
-X-Received: by 2002:a05:6870:c1d4:b0:127:9423:22b8 with SMTP id
- i20-20020a056870c1d400b00127942322b8mr1062860oad.123.1662619332893; Wed, 07
- Sep 2022 23:42:12 -0700 (PDT)
+        Thu, 8 Sep 2022 02:42:43 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D25A61F4
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:42:42 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MNV1F3G4Zz9shS;
+        Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GZRoIOsfxZ4l; Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MNV1F2Fwbz9sfJ;
+        Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 36F248B78B;
+        Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 7M4xRQDFRu1Q; Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
+Received: from [192.168.232.247] (unknown [192.168.232.247])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D4E0E8B763;
+        Thu,  8 Sep 2022 08:42:40 +0200 (CEST)
+Message-ID: <65b3c3f4-78ba-8051-b5d9-12fe7081a6ed@csgroup.eu>
+Date:   Thu, 8 Sep 2022 08:42:41 +0200
 MIME-Version: 1.0
-References: <20220907132205.28021-1-andrea.merello@iit.it> <20220907132205.28021-14-andrea.merello@iit.it>
- <CAHp75Vdc8bAiqiUhEmgjNmcpY5s0fArTy26g2i0wH7srwY6RQA@mail.gmail.com>
-In-Reply-To: <CAHp75Vdc8bAiqiUhEmgjNmcpY5s0fArTy26g2i0wH7srwY6RQA@mail.gmail.com>
-Reply-To: andrea.merello@gmail.com
-From:   Andrea Merello <andrea.merello@gmail.com>
-Date:   Thu, 8 Sep 2022 08:42:01 +0200
-Message-ID: <CAN8YU5MbGWbE6nRBCs3gYwyN2yYk7OsmaQsTrZvJctQOhgLBng@mail.gmail.com>
-Subject: Re: [v7 13/14] iio: imu: add BNO055 I2C driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andrea Merello <andrea.merello@iit.it>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        jmondi <jacopo@jmondi.org>, Bagas Sanjaya <bagasdotme@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/1] arch/powerpc: Don't assume start_text & head_end
+ align
+Content-Language: fr-FR
+To:     Alastair D'Silva <alastair@au1.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>
+Cc:     Alastair D'Silva <alastair@d-silva.org>,
+        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+References: <20190313033852.13028-1-alastair@au1.ibm.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20190313033852.13028-1-alastair@au1.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hmm... It has my tag but I have noticed something to improve.
 
-One comment below, OK for the rest.
 
-> ...
->
-> > +#define BNO055_I2C_XFER_BURST_BREAK_THRESHOLD 3 /* FIXME */
->
-> Can we elaborate what to fix and why it can't be fixed right now?
+Le 13/03/2019 à 04:38, Alastair D'Silva a écrit :
+> From: Alastair D'Silva <alastair@d-silva.org>
+> 
+> When building LTO kernels, the start_text symbol is not guaranteed to mark
+> the end of the head section.
+> 
+> Instead, look explicitly for __head_end.
 
-Ah, this is a stale comment; I'll drop it..
+Could you please give more details ?
+
+Have you encountered a problem ?
+
+ From commit c494adefef9f ("powerpc/64: Tool to check head sections 
+location sanity"), I understand that we want to make sure text_start is 
+where it is, not that __head_end is.
+
+Thanks
+Christophe
+
+
+> 
+> Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
+> ---
+>   arch/powerpc/tools/head_check.sh | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/powerpc/tools/head_check.sh b/arch/powerpc/tools/head_check.sh
+> index ad9e57209aa4..1b0f634038c3 100644
+> --- a/arch/powerpc/tools/head_check.sh
+> +++ b/arch/powerpc/tools/head_check.sh
+> @@ -44,7 +44,7 @@ nm="$1"
+>   vmlinux="$2"
+>   
+>   # gcc-4.6-era toolchain make _stext an A (absolute) symbol rather than T
+> -$nm "$vmlinux" | grep -e " [TA] _stext$" -e " t start_first_256B$" -e " a text_start$" -e " t start_text$" -m4 > .tmp_symbols.txt
+> +$nm "$vmlinux" | grep -e " [TA] _stext$" -e " t start_first_256B$" -e " a text_start$" -e " T __head_end$" -m4 > .tmp_symbols.txt
+>   
+>   
+>   vma=$(cat .tmp_symbols.txt | grep -e " [TA] _stext$" | cut -d' ' -f1)
+> @@ -63,12 +63,12 @@ fi
+>   
+>   top_vma=$(echo $vma | cut -d'0' -f1)
+>   
+> -expected_start_text_addr=$(cat .tmp_symbols.txt | grep " a text_start$" | cut -d' ' -f1 | sed "s/^0/$top_vma/")
+> +expected_head_end_addr=$(cat .tmp_symbols.txt | grep " a text_start$" | cut -d' ' -f1 | sed "s/^0/$top_vma/")
+>   
+> -start_text_addr=$(cat .tmp_symbols.txt | grep " t start_text$" | cut -d' ' -f1)
+> +head_end_addr=$(cat .tmp_symbols.txt | grep " T __head_end$" | cut -d' ' -f1)
+>   
+> -if [ "$start_text_addr" != "$expected_start_text_addr" ]; then
+> -	echo "ERROR: start_text address is $start_text_addr, should be $expected_start_text_addr"
+> +if [ "$head_end_addr" != "$expected_head_end_addr" ]; then
+> +	echo "ERROR: __head_end address is $head_end_addr, should be $expected_head_end_addr"
+>   	echo "ERROR: try to enable LD_HEAD_STUB_CATCH config option"
+>   	echo "ERROR: see comments in arch/powerpc/tools/head_check.sh"
+>   

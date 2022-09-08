@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92A95B2A70
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1285E5B2A6B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiIHXeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S229994AbiIHXea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiIHXeD (ORCPT
+        with ESMTP id S231356AbiIHXeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Sep 2022 19:34:03 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B34310F8DF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:31:47 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id s13-20020a056a00194d00b005385093da2dso10056250pfk.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:31:47 -0700 (PDT)
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3844010D73C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:31:51 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id w14-20020a170902e88e00b00177ab7a12f6so125869plg.16
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:31:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
@@ -70,7 +70,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk

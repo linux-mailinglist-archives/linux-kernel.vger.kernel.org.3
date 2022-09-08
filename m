@@ -2,111 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823CE5B2367
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E71A5B2371
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbiIHQQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S231320AbiIHQRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiIHQPq (ORCPT
+        with ESMTP id S231933AbiIHQRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:15:46 -0400
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE25B1BA7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:15:42 -0700 (PDT)
-Received: by mail-pl1-f172.google.com with SMTP id v1so5039284plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:15:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=WRizZ/elGsKzYrgR6wHhu5mQCbmwoq7lJMsQ4A5WuXk=;
-        b=vwfy5U6ErUToEm2JuxFc9hLjVPxVoke67KGDmgkoQSDqpmc7aXYryqFBgwxYEpoBV/
-         vrbiC7yWnICk9GDxa8nmmAv6tyaaaSdp6D/6nTaXnza/Lux5kDMh5gsAKT7nOLkWmOTu
-         RCDmr/97dYtOQpmzslpQEXxAYNyvBgR8yISWQHujMtt15md3Ep1/278NUd+rFsMwqUUd
-         AmFH9Moqda6R+S9SYOxso5PtaBjnQLi1xNbIGx+gg4nB0TYfmbPnwg3WY5E7hFRadSuc
-         DfVL8Te1nKoc2vGLfrMO4ifmgeAD1sQD2NsO5G0wDd2MlVH8nclGFchBJCJEm2xUn2wn
-         4I1A==
-X-Gm-Message-State: ACgBeo1IJIgiOSqm0bKs3YkHgJ9GSp8oV9f2EB15pfvmDLFL3Kb+lFpR
-        V9f5CLov0E6Pkxwuq0gvwL4=
-X-Google-Smtp-Source: AA6agR6KpN7x7XlsPo6Q7kge66cDmDp3fSYTyoziPQRe/m8ELeYmKS1qH7kGqoQP3k0HhEr/Ng0tpQ==
-X-Received: by 2002:a17:90b:1a91:b0:1ff:f703:ccad with SMTP id ng17-20020a17090b1a9100b001fff703ccadmr5061311pjb.154.1662653741656;
-        Thu, 08 Sep 2022 09:15:41 -0700 (PDT)
-Received: from fedora (136-24-99-118.cab.webpass.net. [136.24.99.118])
-        by smtp.gmail.com with ESMTPSA id r20-20020a634414000000b00421841943dfsm12633501pga.12.2022.09.08.09.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 09:15:41 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 09:15:37 -0700
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Sun, Jiebin" <jiebin.sun@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, vasily.averin@linux.dev,
-        shakeelb@google.com, tj@kernel.org, cl@linux.com,
-        ebiederm@xmission.com, legion@kernel.org, manfred@colorfullife.com,
-        alexander.mikhalitsyn@virtuozzo.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, tim.c.chen@intel.com,
-        feng.tang@intel.com, ying.huang@intel.com, tianyou.li@intel.com,
-        wangyang.guo@intel.com
-Subject: Re: [PATCH v4] ipc/msg: mitigate the lock contention with percpu
- counter
-Message-ID: <YxoVKVVfnrq3js9O@fedora>
-References: <CALvZod44uUFnwfF4StC24t+d1s_XE10hkmSCgb04FjtTATo6xQ@mail.gmail.com>
- <20220907172516.1210842-1-jiebin.sun@intel.com>
- <eb13cb3e5e1625afe1bb783810f4d6b52a66a2f6.camel@linux.intel.com>
- <20220907143427.0ce54bbf096943ffca197fee@linux-foundation.org>
- <c8e771c8-4b01-f2b4-5b54-e9931f556270@intel.com>
- <20220908083859.24c989f08d62ddbd031005de@linux-foundation.org>
+        Thu, 8 Sep 2022 12:17:17 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53CB76747
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1662653826; bh=ahOA21ACEb2cg2T2lerUldLTXTolLkoN5mANWRtuYI8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XJQuLPQ5RIPqOtFsqdS+VFEqB1aM2vt5shRNOEiipz1q3VwxpSV6kMAu/3wS6Ab88
+         MTz/QSJHGkFX5+5m4rJe9Uyw8qvkO57J6L82ADoOQ+K9tGjutpiWLcNDZUV+5ueJdy
+         Emi9dqhOZ6Fj2WWKSDqcqK6kcBEqpz77ryVJn+hE=
+Received: from [192.168.9.172] (unknown [101.88.26.24])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id EAD11600BD;
+        Fri,  9 Sep 2022 00:17:05 +0800 (CST)
+Message-ID: <d70a92e6-95db-469b-841c-56f4f3564843@xen0n.name>
+Date:   Fri, 9 Sep 2022 00:17:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908083859.24c989f08d62ddbd031005de@linux-foundation.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:106.0) Gecko/20100101
+ Thunderbird/106.0a1
+Subject: Re: [PATCH v3] LoongArch: Add safer signal handler for TLS access
+Content-Language: en-US
+To:     Mao Bibo <maobibo@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220902095958.3875126-1-maobibo@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20220902095958.3875126-1-maobibo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-On Thu, Sep 08, 2022 at 08:38:59AM -0700, Andrew Morton wrote:
-> On Thu, 8 Sep 2022 16:25:47 +0800 "Sun, Jiebin" <jiebin.sun@intel.com> wrote:
-> 
-> > In our case, if the local 
-> > percpu counter is near to INT_MAX and there comes a big msgsz, the 
-> > overflow issue could happen.
-> 
-> percpu_counter_add_batch() handles this - your big message
-> won't overflow an s64.
-> 
-> 
-> Lookng at percpu_counter_add_batch(), is this tweak right?
-> 
-> - don't need to update *fbc->counters inside the lock
-> - that __this_cpu_sub() is an obscure way of zeroing the thing
-> 
-> --- a/lib/percpu_counter.c~a
-> +++ a/lib/percpu_counter.c
-> @@ -89,8 +89,8 @@ void percpu_counter_add_batch(struct per
->  		unsigned long flags;
->  		raw_spin_lock_irqsave(&fbc->lock, flags);
->  		fbc->count += count;
-> -		__this_cpu_sub(*fbc->counters, count - amount);
->  		raw_spin_unlock_irqrestore(&fbc->lock, flags);
-> +		__this_cpu_write(*fbc->counters, 0);
+On 9/2/22 17:59, Mao Bibo wrote:
+> LoongArch uses general purpose register R2 as thread pointer(TP)
+> register, signal hanlder also uses TP register to access variables
+> in TLS area, such as errno and variable in TLS.
+>
+> If GPR R2 is modified with wrong value, signal handler still uses
+> the wrong TP register, so signal hanlder is insafe to access TLS
+> variable.
+>
+> This patch adds one arch specific syscall set_thread_area, and
+> restore previoud TP value before signal handler, so that signal
+> handler is safe to access TLS variable.
+>
+> It passes to run with the following test case.
+> =======8<======
+>   #define _GNU_SOURCE
+>   #include <stdio.h>
+>   #include <stdlib.h>
+>   #include <unistd.h>
+>   #include <string.h>
+>   #include <sys/syscall.h>
+>   #include <sys/types.h>
+>   #include <signal.h>
+>   #include <pthread.h>
+>   #include <asm/ucontext.h>
+>   #include <asm/sigcontext.h>
+>
+>   #define ILL_INSN ".word 0x000001f0"
+> static inline long test_sigill(unsigned long fid)
+> {
+>          register long ret __asm__("$r4");
+>          register unsigned long fun __asm__("$r4") = fid;
+>
+>          __asm__ __volatile__("move $r2, $r0 \r\n");
+>          __asm__ __volatile__(
+>                          ILL_INSN
+>                          : "=r" (ret)
+>                          : "r" (fun)
+>                          : "memory"
+>                          );
+>
+>          return ret;
+> }
+>
+> static void set_sigill_handler(void (*fn) (int, siginfo_t *, void *))
+> {
+>          struct sigaction sa;
+>          memset(&sa, 0, sizeof(struct sigaction));
+>
+>          sa.sa_sigaction = fn;
+>          sa.sa_flags = SA_SIGINFO;
+>          sigemptyset(&sa.sa_mask);
+>          if (sigaction(SIGILL, &sa, 0) != 0) {
+>                  perror("sigaction");
+>          }
+> }
+>
+> void catch_sig(int sig, siginfo_t *si, void *vuc)
+> {
+>          struct ucontext *uc = vuc;
+>          register unsigned long tls  __asm__("$r2");
+>
+>          uc->uc_mcontext.sc_pc +=4;
+>          uc->uc_mcontext.sc_regs[2] = tls;
+>          printf("catched signal %d\n", sig);
+> }
+>
+> void *print_message_function( void *ptr )
+> {
+>          char *message;
+>          message = (char *) ptr;
+>          printf("%s \n", message);
+>          test_sigill(1);
+> }
+>
+> void pthread_test(void)
+> {
+>          pthread_t thread1, thread2;
+>          char *message1 = "Thread 1";
+>          char *message2 = "Thread 2";
+>          int  iret1, iret2;
+>
+>          iret1 = pthread_create( &thread1, NULL, print_message_function,
+> 				(void*) message1);
+>          iret2 = pthread_create( &thread2, NULL, print_message_function,
+> 				(void*) message2);
+>          pthread_join( thread1, NULL);
+>          pthread_join( thread2, NULL);
+>          printf("Thread 1 returns: %d\n",iret1);
+>          printf("Thread 2 returns: %d\n",iret2);
+>          exit(0);
+> }
+>
+> void exec_test(void) {
+>          test_sigill(1);
+> }
+>
+> void main() {
+>          register unsigned long tls  __asm__("$r2");
+>          int val;
+>
+>          val = syscall(244, tls);
+>          set_sigill_handler(&catch_sig);
+>          pthread_test();
+>          //exec_test();
+>          return;
+> }
+> =======8<======
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+> v2->v3:
+>   - Use current_thread_info rather than task_thread_info(current)
+> v1->v2:
+>   - Clear TP value in clone function if CLONE_SETTLS is not set
+> ---
+>   arch/loongarch/include/asm/unistd.h      |  1 +
+>   arch/loongarch/include/uapi/asm/unistd.h |  2 ++
+>   arch/loongarch/kernel/process.c          | 10 +++++++++-
+>   arch/loongarch/kernel/signal.c           |  5 +++++
+>   arch/loongarch/kernel/syscall.c          |  9 +++++++++
+>   5 files changed, 26 insertions(+), 1 deletion(-)
 
-I don't think this is irq safe. It'd be best to leave it inside the
-spinlock as then we can use __this_cpu_write() to 0 in there.
+So here we're trying to accommodate for ABI violations from user-mode 
+programs, no matter whether they come from fuzzing, or any other black 
+magic; but being user-space, theoretically set_thread_area could also be 
+fuzzed, and this "additional" layer of defense then breaks down. And if 
+this theoretical case is deemed uninteresting, remember the case you're 
+demonstrating is also found by fuzzing and not found in normal working 
+user programs, then the whole scenario should be theoretical and 
+uninteresting as well...
 
->  	} else {
->  		this_cpu_add(*fbc->counters, amount);
->  	}
-> _
-> 
+BTW I've also thrown this problem into a riscv discussion group, and 
+they pointed out that e.g. sigaltstack is already available for 
+guaranteeing at least some working state when a signal comes. And riscv 
+also doesn't have set_thread_area which is most likely why loongarch 
+isn't getting one; further, looking at manpages of 
+{get,set}_thread_area, it may be the case that both riscv and loongarch 
+have the TP in user-visible ISA state, so a syscall is not needed for 
+manipulating it anyway. Again it's equally easy to mess the hidden state 
+of set_thread_area as $tp itself. Or put it differently, if 
+set_thread_area is necessary/good for loongarch, you should probably add 
+it to riscv as well -- both will benefit.
 
-Thanks,
-Dennis
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+

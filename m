@@ -2,177 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062CA5B250C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218535B251D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbiIHRmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S231523AbiIHRrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbiIHRmI (ORCPT
+        with ESMTP id S231950AbiIHRqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:42:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDC6F22E3;
-        Thu,  8 Sep 2022 10:40:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 315E8B8219F;
-        Thu,  8 Sep 2022 17:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF787C433D6;
-        Thu,  8 Sep 2022 17:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662658815;
-        bh=lOOhDMJqAJ4IWViD/vMxAvwDHCCQ4KSk3LDLvJPm2b8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=jOjgqtB8wXqzhfDI4J+C/903aXH0rQaTb7qR5v89q/oUZzCQQO6ekfmeefPsnCQk4
-         RnO7TCnkT3eE/qMb7GnFEjmQHCCy70T2gWRHLb1+qsgKWLOB1zNiI9LqA0O9M/LHTb
-         TotEhE768MXAJqYpU5jYDz1lCKtOnuKq+tzKSlzlW0gouCHWcrpLCC4I7vZNM26k6y
-         5IZqUpWB6q2nfS6ZoK31qn8JMnEqiXBC+Bk7AgzcifSL4lr2QlltiMcQxWifvj7Iaw
-         LZx96/KNZs18aoGi3MMb8wSgWM5WtSggbiLe1/rkhJb4Qioq6nCWk9qjCYRVfrmxqG
-         okXyb82PbMNyQ==
-Message-ID: <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
-        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
-        fweimer@redhat.com, linux-man@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Date:   Thu, 08 Sep 2022 13:40:11 -0400
-In-Reply-To: <20220908155605.GD8951@fieldses.org>
-References: <20220907111606.18831-1-jlayton@kernel.org>
-         <166255065346.30452.6121947305075322036@noble.neil.brown.name>
-         <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
-         <20220907125211.GB17729@fieldses.org>
-         <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
-         <20220907135153.qvgibskeuz427abw@quack3>
-         <166259786233.30452.5417306132987966849@noble.neil.brown.name>
-         <20220908083326.3xsanzk7hy3ff4qs@quack3> <YxoIjV50xXKiLdL9@mit.edu>
-         <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
-         <20220908155605.GD8951@fieldses.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 8 Sep 2022 13:46:38 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59483EB2FC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:46:13 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id x3so1155761qkn.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:46:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=EMErwM6jy216ZWxEVAGeIf0QWKItxFlC4co4l/8Yna4=;
+        b=uOrU3gpDY5vRQn8URLN+aN1Lxs8MOGftfB6BfIzx5RhM8yUH1bArziM7df1dc0zWWX
+         iod1NgnoU2cDaWtUh+77PGn7Urja7IizhggTLU0TQVUAJsn2l+JlZ3TFcDefaEuvACrK
+         D0pnl1NsXQOVNw4vzhrGmCddDq3O5Ugw9+QbI0EpressHNtLSDAzZjGhh18oDAKEXUGe
+         QOzOPng/aApcWDB8wmO20wQB+onBiXjvUkvOoG9k0Whw6s3y5z3NdJMre4LD8USEf3+F
+         Mgg5ssvBEFKBHhoJhf/Vp9RTyvuVCXh9PJDRCBBW2M46T+qcnK40pMsFAETROy7jmr3W
+         RSgg==
+X-Gm-Message-State: ACgBeo0KdXLiq/OooF8Q4jEaeaZxdRLPy71Y6DroJKWefYov0U9swFfz
+        uK0DStrSXT6isMAlqskQPOD+xN6PR0LMGw==
+X-Google-Smtp-Source: AA6agR71Quoop2CoUCxzjPLcDuhnLhaoVbrz3nVJm838z4yMAK1AdElZWqeyiXmCjv9g41laL0Ethw==
+X-Received: by 2002:a05:620a:1904:b0:6b8:9cfd:2b24 with SMTP id bj4-20020a05620a190400b006b89cfd2b24mr7459189qkb.489.1662659171786;
+        Thu, 08 Sep 2022 10:46:11 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id r9-20020a05620a298900b006b919c6749esm18744091qkp.91.2022.09.08.10.46.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 10:46:11 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id g5so27522020ybg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:46:10 -0700 (PDT)
+X-Received: by 2002:a25:8247:0:b0:6a9:443a:cc0b with SMTP id
+ d7-20020a258247000000b006a9443acc0bmr8638582ybn.89.1662659170630; Thu, 08 Sep
+ 2022 10:46:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220908125401.28130-1-wangjianli@cdjrlc.com> <514c7366cc8e78face3094a66bb2c4bf030f9432.camel@sipsolutions.net>
+In-Reply-To: <514c7366cc8e78face3094a66bb2c4bf030f9432.camel@sipsolutions.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 8 Sep 2022 19:45:58 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXtPREdgoXK4wyBJiZmubDtsT5Cjjn44MzGVnpu_Ph=YQ@mail.gmail.com>
+Message-ID: <CAMuHMdXtPREdgoXK4wyBJiZmubDtsT5Cjjn44MzGVnpu_Ph=YQ@mail.gmail.com>
+Subject: Re: [PATCH] um/kernel: fix repeated words in comments
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     wangjianli <wangjianli@cdjrlc.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-08 at 11:56 -0400, J. Bruce Fields wrote:
-> On Thu, Sep 08, 2022 at 11:44:33AM -0400, Jeff Layton wrote:
-> > On Thu, 2022-09-08 at 11:21 -0400, Theodore Ts'o wrote:
-> > > On Thu, Sep 08, 2022 at 10:33:26AM +0200, Jan Kara wrote:
-> > > > It boils down to the fact that we don't want to call mark_inode_dir=
-ty()
-> > > > from IOCB_NOWAIT path because for lots of filesystems that means jo=
-urnal
-> > > > operation and there are high chances that may block.
-> > > >=20
-> > > > Presumably we could treat inode dirtying after i_version change sim=
-ilarly
-> > > > to how we handle timestamp updates with lazytime mount option (i.e.=
-, not
-> > > > dirty the inode immediately but only with a delay) but then the tim=
-e window
-> > > > for i_version inconsistencies due to a crash would be much larger.
-> > >=20
-> > > Perhaps this is a radical suggestion, but there seems to be a lot of
-> > > the problems which are due to the concern "what if the file system
-> > > crashes" (and so we need to worry about making sure that any
-> > > increments to i_version MUST be persisted after it is incremented).
-> > >=20
-> > > Well, if we assume that unclean shutdowns are rare, then perhaps we
-> > > shouldn't be optimizing for that case.  So.... what if a file system
-> > > had a counter which got incremented each time its journal is replayed
-> > > representing an unclean shutdown.  That shouldn't happen often, but i=
-f
-> > > it does, there might be any number of i_version updates that may have
-> > > gotten lost.  So in that case, the NFS client should invalidate all o=
-f
-> > > its caches.
-> > >=20
-> > > If the i_version field was large enough, we could just prefix the
-> > > "unclean shutdown counter" with the existing i_version number when it
-> > > is sent over the NFS protocol to the client.  But if that field is to=
-o
-> > > small, and if (as I understand things) NFS just needs to know when
-> > > i_version is different, we could just simply hash the "unclean
-> > > shtudown counter" with the inode's "i_version counter", and let that
-> > > be the version which is sent from the NFS client to the server.
-> > >=20
-> > > If we could do that, then it doesn't become critical that every singl=
-e
-> > > i_version bump has to be persisted to disk, and we could treat it lik=
-e
-> > > a lazytime update; it's guaranteed to updated when we do an clean
-> > > unmount of the file system (and when the file system is frozen), but
-> > > on a crash, there is no guaranteee that all i_version bumps will be
-> > > persisted, but we do have this "unclean shutdown" counter to deal wit=
-h
-> > > that case.
-> > >=20
-> > > Would this make life easier for folks?
-> > >=20
-> > > 						- Ted
-> >=20
-> > Thanks for chiming in, Ted. That's part of the problem, but we're
-> > actually not too worried about that case:
-> >=20
-> > nfsd mixes the ctime in with i_version, so you'd have to crash+clock
-> > jump backward by juuuust enough to allow you to get the i_version and
-> > ctime into a state it was before the crash, but with different data.
-> > We're assuming that that is difficult to achieve in practice.
->=20
-> But a change in the clock could still cause our returned change
-> attribute to go backwards (even without a crash).  Not sure how to
-> evaluate the risk, but it was enough that Trond hasn't been comfortable
-> with nfsd advertising NFS4_CHANGE_TYPE_IS_MONOTONIC.
->=20
-> Ted's idea would be sufficient to allow us to turn that flag on, which I
-> think allows some client-side optimizations.
->=20
+On Thu, Sep 8, 2022 at 2:56 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+> On Thu, 2022-09-08 at 20:54 +0800, wangjianli wrote:
+> > Delete the redundant word 'in'.
+> >
+> > Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> > ---
+> >  arch/um/kernel/physmem.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/um/kernel/physmem.c b/arch/um/kernel/physmem.c
+> > index e7c7b53a1435..91485119ae67 100644
+> > --- a/arch/um/kernel/physmem.c
+> > +++ b/arch/um/kernel/physmem.c
+> > @@ -169,7 +169,7 @@ __uml_setup("iomem=", parse_iomem,
+> >  );
+> >
+> >  /*
+> > - * This list is constructed in parse_iomem and addresses filled in in
+> > + * This list is constructed in parse_iomem and addresses filled in
+> >   * setup_iomem, both of which run during early boot.  Afterwards, it's
+> >
+> Fine, I guess, but honestly - that sentence doesn't parse well either
 
-Good point.
+Not fine, the repeated "in" is correct.
+Q: "Where are addresses filled in?"
+A: "In setup_iomem".
 
-> > The issue with a reboot counter (or similar) is that on an unclean cras=
-h
-> > the NFS client would end up invalidating every inode in the cache, as
-> > all of the i_versions would change. That's probably excessive.
->=20
-> But if we use the crash counter on write instead of read, we don't
-> invalidate caches unnecessarily.  And I think the monotonicity would
-> still be close enough for our purposes?
->=20
-> > The bigger issue (at the moment) is atomicity: when we fetch an
-> > i_version, the natural inclination is to associate that with the state
-> > of the inode at some point in time, so we need this to be updated
-> > atomically with certain other attributes of the inode. That's the part
-> > I'm trying to sort through at the moment.
->=20
-> That may be, but I still suspect the crash counter would help.
->=20
+> way. Might be worth addressing that at the same time...
 
-Yeah, ok. That does make some sense. So we would mix this into the
-i_version instead of the ctime when it was available. Preferably, we'd
-mix that in when we store the i_version rather than adding it afterward.
+addresses are filled in?
 
-Ted, how would we access this? Maybe we could just add a new (generic)
-super_block field for this that ext4 (and other filesystems) could
-populate at mount time?
---=20
-Jeff Layton <jlayton@kernel.org>
+General note: please stop submitting these patches for auto-detected
+repeated words.  There are too many false positives.
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAAF5B231D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39AF5B2321
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiIHQHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S231849AbiIHQHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiIHQHe (ORCPT
+        with ESMTP id S231848AbiIHQHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:07:34 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85536F9108
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:07:33 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3378303138bso170430057b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:07:33 -0700 (PDT)
+        Thu, 8 Sep 2022 12:07:51 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C92F9119;
+        Thu,  8 Sep 2022 09:07:50 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id m1so25105085edb.7;
+        Thu, 08 Sep 2022 09:07:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=JJv51cMEwPKHeGHtyDWtDlnrabxmd1GuWDEXM9pG4rU=;
-        b=TcrxrJCtL6pyn3nnmMSCsZMPhcs5m3fyi2iV7TKoaOShZwoPJQYgjIx1KBYqXESOP0
-         bNBni7sHtK8MyEgvjgrpp9gur+gQLZj+Q80cmIREIB/RY5abPTO5tOnxFz9MXRG2zAar
-         117pLJeiY50esGdC1pApVgf1nKk0IeyoJawvZDOf+oLvJ5A3IdPLmHWZdai1sW8jlrMb
-         xwzeasSr/jc0rmPNyLp5Ak2o/AWa7XoT5FdGPt4i8iaKYZyk2vwijRjgAAhGmtRjhhJg
-         Ga9S67aUzkZzbjdoTAAvgPD6bPdvsVs0DJbIvQEU9UZrrTy4JUidRk74VH05GppL80F+
-         SGHA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date;
+        bh=CZsiNn0kUvXidgR28Tb23ZwUipa8jt5qVfdFHVjhu/s=;
+        b=ASbQ8dKxyeese/GlOcIMzqpl5DffglgmZSDTGMdl0X6xiJddy/x+GWQXYP0gnwNyC9
+         u7DMAG0BaH5bzm4JE2/9kfzrmzKw+V2ghmWRXHUZEADQ41ylyZQEk9K+JUa8grNkef9y
+         mWdPBnLCO+p5DCyVNKjC7Wj9bspDlTnyv5p4PMX59KGbiltY18T/hPRC4a7Cga0OE7Pg
+         PRD4XOZ5NuSfHTFP7CxuFpHjaKsjdq2JuVZq+lKKottHP/vLpbSx7YA5FAqdpgPKDSau
+         p6lmsMvNdaN9F9ak5dEqk0IA5K46787sKVagYfQlgsDIuk5fmJglt4Htz+GliOC7d8m1
+         QpQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=JJv51cMEwPKHeGHtyDWtDlnrabxmd1GuWDEXM9pG4rU=;
-        b=SzAG7cUq05iF3Nrk9n6w9fC9Cjs1Hk6iJEQCCZ6FgOsQWmqA9m4cIq+/UaMVl07sB1
-         YjqwMs3Pb7jbqqJq4IQIzQ/yGO1it6fKdrggb0kn3Pvi9n2VdAxyKrdlXZgtED8wxvt9
-         MtEw35p7CvAhxveSEv2jVRXKoXNjT+2fvlFxNg5gmrXn4tc82jppUBl5SMumO+ccJ3ZG
-         JYvv3UPGuZf6lmJ1rM6kbylxepGRi3u2zst0EQg5P9gurLNGndDMJ9sWeq7NTcInKGvf
-         VrGJluB7oYJS1duYqIaVU3XvFAFJ1FehOwF4wj0Is7DBfUuwuSYhRe8iobxwInuwv1xW
-         y/qg==
-X-Gm-Message-State: ACgBeo1na3RBF6RAHe+ERkhgxueTQ6FdbU+0X72wQ+bg8F8ELSaXa5Ln
-        MzTze2c2BLMCtxwRhn0OeMTHTHJqmCOTxxB12arYaOiJJ0s=
-X-Google-Smtp-Source: AA6agR4zjZ5M4DR5iRReMpuVoqJUCuQUa9QEuRg73CcLPLa7gZkhLwEqcDY/mIHWG91nOJscsrrtch3EhKjLReFSL5I=
-X-Received: by 2002:a0d:ffc5:0:b0:341:6cc1:c589 with SMTP id
- p188-20020a0dffc5000000b003416cc1c589mr8431078ywf.418.1662653252731; Thu, 08
- Sep 2022 09:07:32 -0700 (PDT)
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=CZsiNn0kUvXidgR28Tb23ZwUipa8jt5qVfdFHVjhu/s=;
+        b=iM0e9lsx/s+0am4Nruoit6WQRIpPC1d6Bfod+GpOcAzswURaN4fW4+xGBJ0Vlr5D+6
+         rRokJfmSu/kYkFBM3U30P7GYL1EZbxUQyLBcXvVo+5ZfEXChIpdgyVEDVIq8y1avhSsk
+         lFdgnWFsuJyILsMA9EjRQCK1vw6IE9sWeXT4w+BoTqSGjmBboVFuIVM6NDgG54e5R9KG
+         Dk4s7ENSuQ6zZC1aAO9s+Z/zuD+A1Se5jojkyDCU2zngy1qdNdveyQ3ZL3MXcZ4/osGc
+         4z6iRY3ZsVScdTp1pg6SUMp4W72eUsFKDFNpa1aO+ZUIMOvUyuO0F0DUYFhgeo3LwYAt
+         x5QA==
+X-Gm-Message-State: ACgBeo2wxM5wwueyzam03/Q1ZySNFBnM/vLtHp2LWEhtAst6C0CLZfzW
+        26AYwdGV6FowquLMo6ytnUPckAv+EK4=
+X-Google-Smtp-Source: AA6agR4BbXFHtNp2qJgs/L4HM2U83qojhXmPOPVaJwW93Z9yrWJFFGMV2RuJGL5+Wz0m2fnvGCKBSQ==
+X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id ef11-20020a05640228cb00b0043bc6d7ef92mr7945512edb.333.1662653268922;
+        Thu, 08 Sep 2022 09:07:48 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id p25-20020aa7d319000000b0044ee2869ef7sm5001143edq.4.2022.09.08.09.07.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 09:07:48 -0700 (PDT)
+Subject: Re: [PATCH] ethernet/sfc: fix repeated words in comments
+To:     wangjianli <wangjianli@cdjrlc.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220908124630.24314-1-wangjianli@cdjrlc.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <30f2488d-9af3-fe8d-6e6f-713a7d38800b@gmail.com>
+Date:   Thu, 8 Sep 2022 17:07:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <1662651516-30283-1-git-send-email-quic_khsieh@quicinc.com>
-In-Reply-To: <1662651516-30283-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 8 Sep 2022 19:07:21 +0300
-Message-ID: <CAA8EJpr_cBTyugJx1qZCEEgsdNvxHmZ7TPZiqRu_kb=NNNVLKw@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/msm/dp: cleared DP_DOWNSPREAD_CTRL register before
- start link training
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        dianders@chromium.org, vkoul@kernel.org, daniel@ffwll.ch,
-        airlied@linux.ie, agross@kernel.org, bjorn.andersson@linaro.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220908124630.24314-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sept 2022 at 18:38, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
-> DOWNSPREAD_CTRL (0x107) shall be cleared to 0 upon power-on reset or an
-> upstream device disconnect. This patch will enforce this rule by always
-> cleared DOWNSPREAD_CTRL register to 0 before start link training. At rare
-> case that DP MSA timing parameters may be mis-interpreted by the sink
-> which causes audio sampling rate be calculated wrongly and cause audio
-> did not work at sink if DOWNSPREAD_CTRL register is not cleared to 0.
-> This patch also make sure bring sink out of D3 power-down mode into D0
-> (normal operation mode) successfully by retrying 3 times.
+On 08/09/2022 13:46, wangjianli wrote:
+> Delete the redundant word 'in'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/net/ethernet/sfc/bitfield.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/sfc/bitfield.h b/drivers/net/ethernet/sfc/bitfield.h
+> index 1f981dfe4bdc..0b502d1c3c9e 100644
+> --- a/drivers/net/ethernet/sfc/bitfield.h
+> +++ b/drivers/net/ethernet/sfc/bitfield.h
+> @@ -117,7 +117,7 @@ typedef union efx_oword {
+>   *
+>   *   ( element ) << 4
+>   *
+> - * The result will contain the relevant bits filled in in the range
+> + * The result will contain the relevant bits filled in the range
+>   * [0,high-low), with garbage in bits [high-low+1,...).
+>   */
+>  #define EFX_EXTRACT_NATIVE(native_element, min, max, low, high)		\
+> 
 
-Split into three separate patches please.
+Nack.
+"filled in" is a phrasal verb, so the existing text is correct.  Stet.
 
+#ifdef RANT
+NGL, getting kinda sick of these bogus comment text 'fixes' from people
+ who clearly don't have enough mastery of English to copyedit it.
+(Previous one from this author was actually wrong too but I didn't catch
+ it at the time.)
+English is a tricksy language, why would someone with a limited
+ understanding of it think that grammar fixes are the best use of their
+ time and energy?
+I can't help suspecting that this is a box-ticking exercise, where a
+ certain corporate culture has a standard requirement that engineers
+ must get X number of Linux / opensource commits in order to get
+ promoted, and this kind of mindless patch is the easiest way for them
+ to achieve that.
+#endif
 
--- 
-With best wishes
-Dmitry
+-ed

@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351FA5B1B98
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019B55B1BA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiIHLf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S230420AbiIHLhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiIHLfF (ORCPT
+        with ESMTP id S229480AbiIHLhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:35:05 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F1F3AE4A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:35:02 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id y29so6926367ljq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=rGbehmmbFjGdP39Tva2lX3JsZ3RKZXRTihQXkTFVj0Y=;
-        b=u6D+fKJ2Lhfyp6EpZaftp621lBz6Wd859kwOBiqFQ3lUxvV9CWJbk8wOUpHBKAnWOJ
-         Ay19wrgdZbZWV7IS7+EwTdDnyzs1gQo+vI4ToLdDyGdhHkq1VlOwt7MAYkg9PE1lU6qo
-         F16V9/sqUWF0TWbcg/8py5MBiAGP+i7UlE06Zvuba3U2XsCSkq0BGs6XNK1XPEcmncx3
-         j5w4fQ2F/4zInUlUf2dTKh4Myma9gGm+JZNaFR8GdOtrtDQwJ1WGRKxb5AUbN+YFwZap
-         w16k9HfAxB5IseMpsnbuKf1KdTr3ZczXUc4GMFHag3eMo9Kbo/zinntSpaM1kmLh/0h9
-         UmPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rGbehmmbFjGdP39Tva2lX3JsZ3RKZXRTihQXkTFVj0Y=;
-        b=Ll5nm/cxjHRg8R4xNI+TF411pBgTw3miFkvElRFg2O+nt10V2jFEf24ES9/ILju7lO
-         6SJtPfJUlNC0ospSwIuE4U8II+lgeulMqh0928yVDy61yTzxiKBcZfnwPnjyymUJGjdU
-         m/oP/3oHuLRK3jXWop915Mxes4wRIsgL1nGdaD6tztaG3qn5vNA2xrVYWhQvSHvsB4Kz
-         G40iffzm+Hbe7QnqoNQovGkB1izbvP0IkrpVLJwSif6RTtAFqJ2h/Fo2FoiqgTFaoiJp
-         gxZ58Qhe81GSapyOEYd/KXhnBqP3mF+LekGIFOQlQjSNcTIIY1nyb8t+Q214E6PVM8JT
-         XlHg==
-X-Gm-Message-State: ACgBeo1dNaiiPdjmU+lQW+diBW1kcujK1jrhKQkQ9GmBQRxKt6oQ8r1X
-        ydqHGGFEmlsAU+JrRo4FDnFuTw==
-X-Google-Smtp-Source: AA6agR4ui+DsaI/rx9G71gnDc6YAJvWKPoB3zCyZaJ1nLjK+vVvOPNBMn6vOY0NTUCUZDxAiUFpecw==
-X-Received: by 2002:a05:651c:1a26:b0:269:15ee:809a with SMTP id by38-20020a05651c1a2600b0026915ee809amr2203010ljb.307.1662636900510;
-        Thu, 08 Sep 2022 04:35:00 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v25-20020a05651203b900b00497aae401f8sm770409lfp.184.2022.09.08.04.34.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 04:34:59 -0700 (PDT)
-Message-ID: <d0dacbf4-3768-7bbf-77a5-957bb37cd2b7@linaro.org>
-Date:   Thu, 8 Sep 2022 13:34:58 +0200
+        Thu, 8 Sep 2022 07:37:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505807D7A9;
+        Thu,  8 Sep 2022 04:37:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07D9BB820BD;
+        Thu,  8 Sep 2022 11:37:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74312C433D6;
+        Thu,  8 Sep 2022 11:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662637028;
+        bh=nFaIloh72XswjqLypFm7qEwZe0n6G6z7SXTNzBgCMjg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=T8fy2B8GzUAkzTIPSAwnHwIr6BrIEln2MeWmJAxpt9MOd925gW1B2lQhZYSO4COYu
+         B2O8n2i73wr8nQ+Xl9fXqr5P9fydyAptj/hEQAIeJ51Xa/wC8HJ39zNDiXvXlWzeAH
+         Yda5slhtPSR7aZt2pwMzXhhFhRe5nrfP+UOan5Gou2I7n4cg45cMkkZXhJqXnq7/W9
+         aIDWYDkMNc0c9V1oMyr0Ojcp8Tb3pXVFnJPg/eIRJfpXyzU5wP48Yb60jYJPaVcfwS
+         jtr/wUtGXPernRKRBPdv9HqXzzQo9VLCkAV2iNdNCznGAQGrXT/r2lX5iXbMgopjjo
+         jBbL/T/kwrleQ==
+Message-ID: <c15f58c78e560bb9a597db6d22c317f98f020435.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "neilb@suse.de" <neilb@suse.de>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+Date:   Thu, 08 Sep 2022 07:37:05 -0400
+In-Reply-To: <9f8b9ee28dcc479ab6fb1105fc12ff190a9b5c48.camel@hammerspace.com>
+References: <20220907111606.18831-1-jlayton@kernel.org>
+                , <166255065346.30452.6121947305075322036@noble.neil.brown.name>
+                , <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+                , <20220907125211.GB17729@fieldses.org>
+                , <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+                , <8a71986b4fb61cd9b4adc8b4250118cbb19eec58.camel@hammerspace.com>
+         <166259706887.30452.6749778447732126953@noble.neil.brown.name>
+         <9f8b9ee28dcc479ab6fb1105fc12ff190a9b5c48.camel@hammerspace.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 2/5] dt-bindings: net: Add Broadcom BCM4377 family PCIe
- Bluetooth
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik@cutebit.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220907170935.11757-1-sven@svenpeter.dev>
- <20220907170935.11757-3-sven@svenpeter.dev>
- <bcb799ea-d58e-70dc-c5c2-daaff1b19bf5@linaro.org>
- <E53D41D9-1675-42EB-BC76-3453043FCB6E@cutebit.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <E53D41D9-1675-42EB-BC76-3453043FCB6E@cutebit.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,24 +84,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 13:29, Martin Povišer wrote:
->>> + brcm,taurus-cal-blob:
->>> + $ref: /schemas/types.yaml#/definitions/uint8-array
->>> + description: A per-device calibration blob for the Bluetooth radio. This
->>> + should be filled in by the bootloader from platform configuration
->>> + data, if necessary, and will be uploaded to the device.
->>> + This blob is used if the chip stepping of the Bluetooth module does not
->>> + support beamforming.
->>
->> Isn't it:
->> s/beamforming/beam forming/
->> ?
-> 
-> Doesn’t seem like it:
-> https://www.google.com/search?hl=en&q=beam%20forming
+On Thu, 2022-09-08 at 00:41 +0000, Trond Myklebust wrote:
+> On Thu, 2022-09-08 at 10:31 +1000, NeilBrown wrote:
+> > On Wed, 07 Sep 2022, Trond Myklebust wrote:
+> > > On Wed, 2022-09-07 at 09:12 -0400, Jeff Layton wrote:
+> > > > On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
+> > > > > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
+> > > > > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
+> > > > > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
+> > > > > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic
+> > > > > > > > with
+> > > > > > > > respect to the
+> > > > > > > > +other changes in the inode. On a write, for instance,
+> > > > > > > > the
+> > > > > > > > i_version it usually
+> > > > > > > > +incremented before the data is copied into the
+> > > > > > > > pagecache.
+> > > > > > > > Therefore it is
+> > > > > > > > +possible to see a new i_version value while a read still
+> > > > > > > > shows the old data.
+> > > > > > >=20
+> > > > > > > Doesn't that make the value useless?
+> > > > > > >=20
+> > > > > >=20
+> > > > > > No, I don't think so. It's only really useful for comparing
+> > > > > > to an
+> > > > > > older
+> > > > > > sample anyway. If you do "statx; read; statx" and the value
+> > > > > > hasn't
+> > > > > > changed, then you know that things are stable.=20
+> > > > >=20
+> > > > > I don't see how that helps.=A0 It's still possible to get:
+> > > > >=20
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0reader=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0writer
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0------=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0------
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0i_version++
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0read
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
+> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0update page cache
+> > > > >=20
+> > > > > right?
+> > > > >=20
+> > > >=20
+> > > > Yeah, I suppose so -- the statx wouldn't necessitate any locking.
+> > > > In
+> > > > that case, maybe this is useless then other than for testing
+> > > > purposes
+> > > > and userland NFS servers.
+> > > >=20
+> > > > Would it be better to not consume a statx field with this if so?
+> > > > What
+> > > > could we use as an alternate interface? ioctl? Some sort of
+> > > > global
+> > > > virtual xattr? It does need to be something per-inode.
+> > >=20
+> > > I don't see how a non-atomic change attribute is remotely useful
+> > > even
+> > > for NFS.
+> > >=20
+> > > The main problem is not so much the above (although NFS clients are
+> > > vulnerable to that too) but the behaviour w.r.t. directory changes.
+> > >=20
+> > > If the server can't guarantee that file/directory/... creation and
+> > > unlink are atomically recorded with change attribute updates, then
+> > > the
+> > > client has to always assume that the server is lying, and that it
+> > > has
+> > > to revalidate all its caches anyway. Cue endless
+> > > readdir/lookup/getattr
+> > > requests after each and every directory modification in order to
+> > > check
+> > > that some other client didn't also sneak in a change of their own.
+> >=20
+> > NFS re-export doesn't support atomic change attributes on
+> > directories.
+> > Do we see the endless revalidate requests after directory
+> > modification
+> > in that situation?=A0 Just curious.
+>=20
+> Why wouldn't NFS re-export be capable of supporting atomic change
+> attributes in those cases, provided that the server does? It seems to
+> me that is just a question of providing the correct information w.r.t.
+> atomicity to knfsd.
+>=20
+> ...but yes, a quick glance at nfs4_update_changeattr_locked(), and what
+> happens when !cinfo->atomic should tell you all you need to know.
 
-OK, thanks :)
-
-
-Best regards,
-Krzysztof
+The main reason we disabled atomic change attribute updates was that
+getattr calls on NFS can be pretty expensive. By setting the NOWCC flag,
+we can avoid those for WCC info, but at the expense of the client having
+to do more revalidation on its own.
+--=20
+Jeff Layton <jlayton@kernel.org>

@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA025B1F4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DCD5B1F4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbiIHNeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S232469AbiIHNea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbiIHNd6 (ORCPT
+        with ESMTP id S232549AbiIHNeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:33:58 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E04B4AA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:33:49 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id q21so13522566lfo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=e8wSZ6/ARvfoxWmxi51W3Fwm24Kdxtc42HcCeMYjHNo=;
-        b=eovUKAtpE41UQW7qGW3eBcEEErnGOyTG65Qhl07fuirqov42GeV/tS7+eyubIuQ41D
-         9C8X5jIjRhUlA8dLUNTnUJRdm+Ww98oWWUrwe4WjSbF1BjqlPT2AsxQRhgSvYMYlVWFG
-         /iz6/heE0L2L3W7hVpOUGZLVcSopQHgXR71p9BCE8HlAaYMK8P2Dn2hl347pMQIBs0GM
-         k4hydZJaSqyzxwu5971dlm3YTqqSFpzhkCfC0d+y13Xv+OSjSp0046zhYQCXZ3ouEozI
-         1MCl4ABoP8vsvhb7OSY2AYjkRvg7DOttzZAye35pRA48tjCOb4nRNrxeWSCtucEAHT4z
-         Dilg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=e8wSZ6/ARvfoxWmxi51W3Fwm24Kdxtc42HcCeMYjHNo=;
-        b=T241GK2P4QJjHUl8ZqMCqmHs9cz2ZKDQjpD7qEJWWQqcsOEPGWWTph7OSVJ9v4VQVp
-         nmHGh4v5FcC9XCctZKVL5U4f0il0/GIAQc5L6pXhWQ/LAK3OR6X8VwIexzDNp4byTM1n
-         l5t9r4Bz16OM/r4uRBfIgTW+cg0mNloU3xxx6eeVWPvGsmEiFA4//yoMbHh1M3Ud7Syn
-         8PcpjBhpYdt2obRlcTCyvlvOG4yT2DWLby+yp5ORlJIPfIdsKDIV/Wi5oq3yrLN6gfjC
-         Ony0wlKEWlgoGtp2BZ4tDRV2hpyJTQL0RWnImLNwHu2qCboB9T2dMzbNTV99Zj9+8x7D
-         tiGw==
-X-Gm-Message-State: ACgBeo15gmvmeH01mWtYU7RYMKvmRpOSJdCuNMuKX10e0bNmuGxhVG02
-        HwdFbCE4QQmF48vJvR7qYLImwA==
-X-Google-Smtp-Source: AA6agR6/6BS21FEgKD1GoLv4nnZaenZ5VuuECe+4AmpJvmNHsdtsf2joiv/84fftEPb3wab40df7/w==
-X-Received: by 2002:a05:6512:2605:b0:492:dbb3:9b85 with SMTP id bt5-20020a056512260500b00492dbb39b85mr2544346lfb.669.1662644027956;
-        Thu, 08 Sep 2022 06:33:47 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id i22-20020a056512341600b00497a123d8b7sm1451870lfr.172.2022.09.08.06.33.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 06:33:47 -0700 (PDT)
-Message-ID: <b70236b8-acae-05b8-1344-47db082f60ba@linaro.org>
-Date:   Thu, 8 Sep 2022 15:33:46 +0200
+        Thu, 8 Sep 2022 09:34:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599080EB4
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662644040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O9ip73Qx6fI5v+xW3rG6yA0ch1PUUa46LdixT8CDecw=;
+        b=P/YNkzyAIO8ZYwbu/MUGOZu5c8rpLEOF3X3f59/NhjU2ZiAQdsiqJwJkdw6iUb3yZhObJY
+        ieV/xGjmviA/v/bHRGtvLVFWkeJtqSlzhgPnPQZEnRlpJaqSJlQsXpAJNpyQdJm0iEHmny
+        K7NspmQ+KkmYpJTjkKisZPBxSlQmSpg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-163-5ecYr9iaNguGo_DcNpwlVQ-1; Thu, 08 Sep 2022 09:33:55 -0400
+X-MC-Unique: 5ecYr9iaNguGo_DcNpwlVQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9139811E76;
+        Thu,  8 Sep 2022 13:33:54 +0000 (UTC)
+Received: from localhost (ovpn-12-219.pek2.redhat.com [10.72.12.219])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F13841410F38;
+        Thu,  8 Sep 2022 13:33:53 +0000 (UTC)
+Date:   Thu, 8 Sep 2022 21:33:50 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, will@kernel.org,
+        catalin.marinas@arm.com
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        guanghuifeng@linux.alibaba.com, mark.rutland@arm.com,
+        linux-mm@kvack.org, thunder.leizhen@huawei.com,
+        wangkefeng.wang@huawei.com, kexec@lists.infradead.org
+Subject: Re: [PATCH 1/2] arm64, kdump: enforce to take 4G as the crashkernel
+ low memory end
+Message-ID: <YxnvPu/tNvlBeJ/c@MiWiFi-R3L-srv>
+References: <20220828005545.94389-1-bhe@redhat.com>
+ <20220828005545.94389-2-bhe@redhat.com>
+ <Yw8PvF5d2uuWy6Cl@kernel.org>
+ <Yw9wU/S8cP0ntR3g@MiWiFi-R3L-srv>
+ <YxBeS0G+F+fsBgod@kernel.org>
+ <YxCk0mX5IzhvK9Pv@MiWiFi-R3L-srv>
+ <YxXPannyTqBZInAt@kernel.org>
+ <YxXmsKYGTd1+/U12@MiWiFi-R3L-srv>
+ <CAMj1kXFDhbMPNcFnogyi7RXATqyHpqJLK9wiz=djRM3g65J8Zg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 3/4] ASoC: qcom: sm8250: move some code to common
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        broonie@kernel.org
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bgoswami@quicinc.com,
-        perex@perex.cz, tiwai@suse.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220908063448.27102-1-srinivas.kandagatla@linaro.org>
- <20220908063448.27102-4-srinivas.kandagatla@linaro.org>
- <6e6b12aa-f516-6ea1-58e5-f46033b84985@linaro.org>
-In-Reply-To: <6e6b12aa-f516-6ea1-58e5-f46033b84985@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFDhbMPNcFnogyi7RXATqyHpqJLK9wiz=djRM3g65J8Zg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,30 +74,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 15:31, Krzysztof Kozlowski wrote:
-> On 08/09/2022 08:34, Srinivas Kandagatla wrote:
->> SM8450 machine driver code can be reused across multiple Qualcomm SoCs,
->> Atleast another 2 of them for now (SM8450 and SM8250XP).
+On 09/06/22 at 03:05pm, Ard Biesheuvel wrote:
+> On Mon, 5 Sept 2022 at 14:08, Baoquan He <bhe@redhat.com> wrote:
+> >
+> > On 09/05/22 at 01:28pm, Mike Rapoport wrote:
+> > > On Thu, Sep 01, 2022 at 08:25:54PM +0800, Baoquan He wrote:
+> > > > On 09/01/22 at 10:24am, Mike Rapoport wrote:
+> > > >
+> > > > max_zone_phys() only handles cases when CONFIG_ZONE_DMA/DMA32 enabled,
+> > > > the disabledCONFIG_ZONE_DMA/DMA32 case is not included. I can change
+> > > > it like:
+> > > >
+> > > > static phys_addr_t __init crash_addr_low_max(void)
+> > > > {
+> > > >         phys_addr_t low_mem_mask = U32_MAX;
+> > > >         phys_addr_t phys_start = memblock_start_of_DRAM();
+> > > >
+> > > >         if ((!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) ||
+> > > >              (phys_start > U32_MAX))
+> > > >                 low_mem_mask = PHYS_ADDR_MAX;
+> > > >
+> > > >         return low_mem_mast + 1;
+> > > > }
+> > > >
+> > > > or add the disabled CONFIG_ZONE_DMA/DMA32 case into crash_addr_low_max()
+> > > > as you suggested. Which one do you like better?
+> > > >
+> > > > static phys_addr_t __init crash_addr_low_max(void)
+> > > > {
+> > > >         if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+> > > >             return PHYS_ADDR_MAX + 1;
+> > > >
+> > > >         return max_zone_phys(32);
+> > > > }
+> > >
+> > > I like the second variant better.
+> >
+> > Sure, will change to use the 2nd one . Thanks.
+> >
 > 
-> s/Atleast/At least/
-> 
->>
->> Move some of the common SoundWire stream specific code to common file
->> so that other drivers can use it instead of duplicating.
->>
->> This patch is to prepare the common driver to be able to add new SoCs support
->> with less dupication.
-> 
-> s/dupication/duplication/
-> 
-> 
->>
-> 
-> Assuming there were no changes against v2:
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> While I appreciate the effort that has gone into solving this problem,
+> I don't think there is any consensus that an elaborate fix is required
+> to ensure that the crash kernel can be unmapped from the linear map at
+> all cost. In fact, I personally think we shouldn't bother, and IIRC,
+> Will made a remark along the same lines back when the Huawei engineers
+> were still driving this effort.
+>
+> So perhaps we could align on that before doing yet another version of this?
 
-I see now ifdefs. Seems ok, so only the typos above.
+Yes, certainly. That can save everybody's effort if there's different
+opinion. Thanks for looking into this and the suggestion. 
 
-Best regards,
-Krzysztof
+About Will's remark, I checked those discussing threads, guess you are
+mentioning the words in link [1]. I copy them at bottom for better
+reference. Pleasae correct me if I am wrong.
+
+With my understanding, Will said so because the patch is too complex,
+and there's risk that page table kernel data itself is using could share
+the same block/section mapping as crashkernel region. With these
+two cons, I agree with Will that we would rather take off the protection
+on crashkernel region which is done by mapping or unmapping the region,
+even though the protection enhances kdump's ronusness.
+
+Crashkernel reservation needs to know the low meory end so that DMA
+buffer can be addressed by the dumping target, e.g storage disk. On the
+current arm64, we have facts:
+1)Currently, except of Raspberry Pi 4, all arm64 systems can support
+  32bit DMA addressing. So, except of RPi4, the low memory end can be
+  decided after memblock init is done, namely at the end of
+  arm64_memblock_init(). We don't need to defer the crashkernel
+  reservation until zone_sizes_init() is done. Those cases can be checked
+  in patch code.
+2)For RPi4, if its storage disk is 30bit DMA addressing, then we can
+  use crashkernel=xM@yM to specify reservation location under 1G to
+  work around this.
+
+***
+Based on above facts, with my patch applied:
+pros:
+1) Performance issue is resolved;
+2) As you can see, the code with this patch applied will much 
+  simpler, more straightforward and clearer;
+3) The protection can be kept;
+4) Crashkernel reservation can be easier to succeed on small memory
+   system, e.g virt guest system. The earlier the reservation is done,
+   it's more likely to get the whole chunk of meomry.
+cons:
+1) Only RPi4 is put in inconvenience for crashkernel reservation. It
+   needs to use crashkernel=xM@yM to work around.
+
+***
+Take off the protection which is done by mapping or unmapping
+crashkernel region as you and Will suggested:
+pros:
+1) Performance issue is resolved;
+2) RPi4 will have the same convenience to set crashkernel;
+
+cons:
+1) No protection is taken on crashkernel region;
+2) Code logic is twisting. There are two places to separately reserve
+   crashkernel, one is at the end of arm64_memblock_init(), one is at
+   the end of bootmem_init(). 
+3) Except of both CONFIG_ZONE_DMA|DMA32 disabled case, crashkernel
+   reservation is deferred. On small memory system, e.g virt guest system,
+   it increases risk that the resrevation could fail very possibly caused
+   by memory fragmentation.
+
+Besides, comparing the above two solutions, I also want to say kdump
+is developed for enterprise level of system. We need combine with
+reality when considering reasonable solution. E.g on x86_64, it has DMA
+zone of 16M and DMA32 zone from 16M to 4G always in normal kernel. For
+kdump, we ignore DMA zone directly because it's for ISA style devices. 
+Kdump doesn't support ISA style device with only 24bit DMA addressing
+capability at the beginning, because it doesn't make sense, we never
+hear that an enterprise level of x86_64 system needs to arm with kdump.
+
+Hi Ard, Will, Catalin and other reviewers,
+
+Above is my understaning and thinking about the encountered issue,
+plesae help check and point out what's missing or incorrect.
+
+Hi Nicolas,
+
+If it's convenient to you, please help make clear if the storage disk or
+network card can only address 32bit DMA buffer on RPi4. Really
+appreciate that.
+
+***
+[1]Will's remark on Huawei's patch
+https://lore.kernel.org/all/20220718131005.GA12406@willie-the-truck/T/#u
+
+====quote Will's remark here
+I do not think that this complexity is justified. As I have stated on
+numerous occasions already, I would prefer that we leave the crashkernel
+mapped when rodata is not "full". That fixes your performance issue and
+matches what we do for module code, so I do not see a security argument
+against it.
+
+I do not plan to merge this patch as-is.
+===
+

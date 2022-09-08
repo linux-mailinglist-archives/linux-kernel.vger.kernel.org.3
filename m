@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE825B1A7C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EB95B1A81
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiIHKvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 06:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S229561AbiIHKwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 06:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiIHKv2 (ORCPT
+        with ESMTP id S229502AbiIHKwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 06:51:28 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657E9F5C4A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 03:51:27 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id z23so19431578ljk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 03:51:27 -0700 (PDT)
+        Thu, 8 Sep 2022 06:52:42 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA16DF5C75
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 03:52:40 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id s15so19414284ljp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 03:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=Ps3lqStzHySPsxXJuGxo0vZdDPyhFg6keE7WeVb52JA=;
-        b=o/ruHuZsbRb3J4aRBZSNXOgC0gbQJiJQr5k8dC92i0jMhf4DWYiRJfo+94HIhCkSv3
-         /HokU7euLiM46BwzGLn18PdHnMEmhjQ22T2l9e2PEYMIp/Dzv3ee4+Z8khE0tVYKjjC5
-         RRyvFN0+9G5E+N0fKvZ0CbSsELx+4GZqMSNdA3KOvpN0NdTMazePQa8e4JY+draSONWD
-         NKONpCiI8VbPQ4ftetNBDNKgF4G2obYeIhDAKZZ1kPWF5KxflbrX+wfDLp5PJsdicUJz
-         tG3xAxGZn5FUM+Fevz9VzBu7oLiD4/7J7FrK0i0tlOKmsMbEnOo5L5LJpu/5RCBbrrWk
-         raHg==
+        bh=vVTBzK9B05XGZ/xpSwgV5tjebiNQ+EY1RJ0k0CE1o6c=;
+        b=DzWFPekGUBniXrt3Ux6czjGmubm1EMzTGihec6QlyHO6VhNBHiJd9hXiiwGNC0aeki
+         9hEIeHr6P+C0KHmMnSJGh+L7xW0rX4xbEwSW1D3dAu09XUM+AQUR/TuM2sX+HN0Xui1r
+         BPcq7wDRrhpOkcW0Jj8RSoshsUYNo7cCCVyFkArctfxMod0iRChZ9443r/10V74RlPd1
+         Uf95UXyK7FuCr5eX/S5l+coQtGvO4NJveb/0VZ1mLC+1oCDIsDXSNcx2LASsY6UPvcib
+         +ZQWL/raksilwWS/GxYaXJ02KtcUcCke/iDjFhGQFqrKBIpLdM1F11JcPt5Hq510pKxc
+         pUGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ps3lqStzHySPsxXJuGxo0vZdDPyhFg6keE7WeVb52JA=;
-        b=MZjqp3bNAYASmXpsXW0kjkeueyUdA4mTnlfk46xCLq5lOA1G4NLIubjPalBhxV7wwd
-         9iEkD+nknxMfJDTED49o4ybCXNdGrkHW/Is3hWDkB3w8PX3hOCRuDrSbHqGXCtUAfU15
-         U5gIYqJa3dOxQQ0/girGxKqIqjgyp51aTnYZLjo+J/fP0yFAQn0xqYYpuDNe57QtAX/l
-         0/7WbAO5IadEQinQWQwBt3ZjYVqiGeXrPJhT30nZGm+vNGhUauF+yI/obvDeyiJmezYP
-         s86Rm/bZBirUm5/VcACPug5Ce0+TQhTOcmy9s8/BhdRWA73sU/SkXVFt8SeTP2zg2kp0
-         VlFw==
-X-Gm-Message-State: ACgBeo2HtKboUrxe13x/3bNbyQM54vrjDm3N3RFW/zgdURo+DlDQj8qc
-        qSL+zE2e1w5vSlvnA1M/5TUAiw==
-X-Google-Smtp-Source: AA6agR7L+QQqZcc4iA8yVL5wfSIRSeMTKBKrT1SGqVSWUuzNvpwI8LZVG/KWcNq8Zx8VBagz06spwA==
-X-Received: by 2002:a2e:bc21:0:b0:25e:c921:f7d7 with SMTP id b33-20020a2ebc21000000b0025ec921f7d7mr2224729ljf.91.1662634285764;
-        Thu, 08 Sep 2022 03:51:25 -0700 (PDT)
+        bh=vVTBzK9B05XGZ/xpSwgV5tjebiNQ+EY1RJ0k0CE1o6c=;
+        b=h9n0heRQRjF2lNm+X1TlYbPei2ZV86SsVxSgQTJW0Y6qXCtv1jA1e8Qp9tObXikQCP
+         YPayQqp3gc7peErouGEp4E2yJ5hw+inMqt1jogz53qA423dmBGJ5+LgQOZjw6po/OAOI
+         2YMV0djOWWqMfmwPelpG8DNt0B4PcJcbKMXqu3CwS9Zch2G3EdNDmuQjEXzfcCYtwy6O
+         ZkjW56fTZFV4XTJYXJYsJ0Rm0sU0HLLEhs+KlnuOzxVAOQd/13oADGVWXPXCrVCVNsMM
+         VJwyQMO8sfr2nFmOHXehDDchdf12IWc4ZaIo6GtFKgyy/cp/GZ/cld50VlAvFGnUXTDG
+         bosA==
+X-Gm-Message-State: ACgBeo1uc8Yg3d9jawGIjlpYO9Oo9Pd7nYXKm329x/QzI0JCUTu+f9EV
+        oK4cM2ZuMIyWoLZF3dqkbbzV1w==
+X-Google-Smtp-Source: AA6agR4BKBhBADZe3TEbKzB0AHQ2b0+NvKfM32FRZkMwBfcJNEw/5gAzkz+kAcf2cJHwI7syEEl7UA==
+X-Received: by 2002:a2e:98ca:0:b0:26a:9856:6c92 with SMTP id s10-20020a2e98ca000000b0026a98566c92mr2189184ljj.146.1662634359206;
+        Thu, 08 Sep 2022 03:52:39 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x19-20020a056512079300b00492d270db5esm2986308lfr.242.2022.09.08.03.51.23
+        by smtp.gmail.com with ESMTPSA id j10-20020ac2454a000000b0048b23c609c9sm2995196lfm.102.2022.09.08.03.52.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 03:51:25 -0700 (PDT)
-Message-ID: <4b648759-1e0d-db2c-5fc6-bf586bff775e@linaro.org>
-Date:   Thu, 8 Sep 2022 12:51:23 +0200
+        Thu, 08 Sep 2022 03:52:38 -0700 (PDT)
+Message-ID: <01b4d522-ffd8-5a25-10f3-11bf6e0d08dd@linaro.org>
+Date:   Thu, 8 Sep 2022 12:52:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [RFC PATCH v3 1/7] dt-bindings: bus: add CDX bus device tree
- bindings
+Subject: Re: [PATCH v4 2/2] dt-bindings: pci: QCOM Add missing sc7280 aggre0,
+ aggre1 clocks
 Content-Language: en-US
-To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>, Rob Herring <robh@kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
- <20220906134801.4079497-1-nipun.gupta@amd.com>
- <20220906134801.4079497-2-nipun.gupta@amd.com>
- <1662486402.681939.780022.nullmailer@robh.at.kernel.org>
- <DM6PR12MB3082B9C670B5F58215259A76E8419@DM6PR12MB3082.namprd12.prod.outlook.com>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <1662626776-19636-1-git-send-email-quic_krichai@quicinc.com>
+ <1662626776-19636-3-git-send-email-quic_krichai@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DM6PR12MB3082B9C670B5F58215259A76E8419@DM6PR12MB3082.namprd12.prod.outlook.com>
+In-Reply-To: <1662626776-19636-3-git-send-email-quic_krichai@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,21 +91,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 05:13, Gupta, Nipun wrote:
->>
->> If you already ran 'make dt_binding_check' and didn't see the above
->> error(s), then make sure 'yamllint' is installed and dt-schema is up to
->> date:
->>
->> pip3 install dtschema --upgrade
->>
->> Please check and re-submit.
+On 08/09/2022 10:46, Krishna chaitanya chundru wrote:
+> Add missing aggre0 and aggre1 clocks.
 > 
-> I did run make dt_binding_check, but did not see the issue.
-> Will update the dtschema and fix this.
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+> changes since v3:
+> 	- Changed the order of the clocks.
 
-Regardless whether you saw it or not, the example DTS is incorrect...
-Even if there are no errors, please do not add incorrect DTS.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof

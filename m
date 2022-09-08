@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3895B23CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2B55B23D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiIHQnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S230374AbiIHQo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiIHQnn (ORCPT
+        with ESMTP id S229984AbiIHQow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:43:43 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F42122391
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:43:37 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id d15so900031qka.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:43:37 -0700 (PDT)
+        Thu, 8 Sep 2022 12:44:52 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693DA31DCA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:44:47 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id gb36so39359842ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=0XsbLIO6zVoDWhejmU39Vgqhd4Id8+NIThNM5fDQGJ8=;
-        b=dkIclgXFiQcPf63niixCbV1YB5e+2rmvMam+EBVqIO1AxOXeaqrbCjSRsEk/6+vQTP
-         3WOA1TsjypG9xgqrSg08UZM6fEE1Eh2eoFk9sd1p96MSvp0LkmnVuHrolbBlVFMhb6DI
-         DmQST4dXAkhHDP/giELuIVyhMbCi1MWhYQRAWjeCN3nTsho87oOibbV9wEik2LnXjN3j
-         8aNWwVhxEZXDPXi1xOaRZQnL57f5znNfqEZPEd/SXbKlvHt5I7cRyWlPYYvfu1k9nLVH
-         guF5vd0UjRGSCorXoN9t1eZCWrnK16HBbLCWpZ4tdVtt4i+u6I/h7NuwEC5xKM6jRdxO
-         pHjw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=I55acvKkYz3DOyOmmK+2+SP9JvKG4Jm+wWUWvY/NBUo=;
+        b=EstMal6xg8rfG+Oj8gHgvLHf7wMAJlp+hZEAIMPt0PcV0t921QIrL/XuzStVWe8DCx
+         qjI2Wo9A8F/ftwfsWbzW3H1v2NfnqcCXb3isEWCsoxl7X+T7t2iVbsmhnbr7B7WIuVei
+         WV1jJtpooiNmIOlouAt8gxORvEd9Es5o0Co5ytfBhumDc660lsGxADudGsMdryXwyyJc
+         wY/wg0wCpBZmUZfzldMXQXmL1AHrvojE1AuCzjPRpIGrul8p77wVaciZ+cMBypwfrpLn
+         u9mgOI4fBBVc8Hp+2l4k7GBhg/5uf+7fAtVBQ4vNCYt4K5wBEaqFLPDI12KjP13vRo4M
+         IauA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=0XsbLIO6zVoDWhejmU39Vgqhd4Id8+NIThNM5fDQGJ8=;
-        b=44116l3ugf9v7sgeWgIrURMfM4oS26tc1BUGe4yX6FUliDoWpwS+Tb01Ie4JpnIv1L
-         pfhWCgMFBexi4QhhWNDrcYU8rX/mJ6On+ZIGqordcIWdek2sfj98jR7CoGqgo4u8avBg
-         qW4HUB8SmyqX+mBQjXcKXVSzK55ksl5ZYwOETZV/XE13dtfDMpzm9odLjhdG/OTLUaeX
-         lW5oYt0YTtIlmJzromfRF2DI/+HWCaLWOgHpukXYvtj+0NlfABgA9Nb5Nd7UT8FRxHxT
-         lFOnwM+CYhJqEcUHWisegildb54ZfuogUmfeBu0mppmhTsiaUdf/w/QW8Y9TbRG23ye3
-         gHUg==
-X-Gm-Message-State: ACgBeo1DpeyscOLtmzOow+UxNURg8GIzUMmYysPKS4DkPCCYcDKgrwJo
-        q+N3Tf+GpMmZJxZ9a+j2Byo=
-X-Google-Smtp-Source: AA6agR7g3zVAk7I9S7IVnTFx/3++VjeSP7TWm1Mv2UB0P/n9uSMqp0mScOrZ9lRAtC/kZJW9Jz1X3g==
-X-Received: by 2002:a05:620a:248f:b0:6bb:89d1:3e85 with SMTP id i15-20020a05620a248f00b006bb89d13e85mr7084450qkn.408.1662655416764;
-        Thu, 08 Sep 2022 09:43:36 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id hf9-20020a05622a608900b00342fb07944fsm13911957qtb.82.2022.09.08.09.43.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 09:43:36 -0700 (PDT)
-Message-ID: <588be35f-9293-0d26-1e89-5ba3a0f9bbc5@gmail.com>
-Date:   Thu, 8 Sep 2022 09:43:33 -0700
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=I55acvKkYz3DOyOmmK+2+SP9JvKG4Jm+wWUWvY/NBUo=;
+        b=wgpCrTdfIIndZ4tle9ZWdWugBKMQ1URnqWVfHyGsRuCH38WBwKJFPIhD0uA5nIGTjz
+         aVJObjjiGUItKC/Yzuw4ARgjIYLiBfnVDJzrlZn4li3TghRuOwSnI6DEvmMr6lcdmdVG
+         +ewID/iRODP33+mfS1tyhrq+kd2pD1bAVHGouXRcwWb+YIrVgPRYv1d9qyI3t/23a15u
+         NYP5QJofjIWwV4ahJyNNufCvh7qlK6dOtUmioEAwgQrcMelMTVdTLwBevoPCAsTFou1o
+         sezaZtHyjs9VJxEKA2byMT/EJ81w8cZP/9vzEbtjP4j1sJwWmraZY/T/cWCjE+/Sn9LF
+         i6/A==
+X-Gm-Message-State: ACgBeo1XS4gjrAbZkGp9ubyQKhgD1HcjSlZnxOg6NWOYXfJt3L+MpPUz
+        8D8vNuShldvHI7wlMePlLAT4fUEyYV1woYdSp4UkmQ==
+X-Google-Smtp-Source: AA6agR5Mdh099Ytk4i1jONnr3q+bKGnzi87e7tJZcX8i7LMnmdcHRZvxABmpB0KInX5wXNGgF8IgvM3g81g7xSmKMHg=
+X-Received: by 2002:a17:906:845b:b0:770:86da:9702 with SMTP id
+ e27-20020a170906845b00b0077086da9702mr5612971ejy.244.1662655485519; Thu, 08
+ Sep 2022 09:44:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: arm64: Kconfig.platforms: Re-organized Broadcom menu
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     anand.gore@broadcom.com, arnd@arndb.de,
-        bcm-kernel-feedback-list@broadcom.com, catalin.marinas@arm.com,
-        krzysztof.kozlowski@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        olof@lixom.net, soc@kernel.org, will@kernel.org,
-        william.zhang@broadcom.com, anders.roxell@linaro.org,
-        lkft@linaro.org
-References: <20220712164235.40293-1-f.fainelli@gmail.com>
- <20220908110451.66564-1-naresh.kamboju@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220908110451.66564-1-naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <7e047ee0-0243-d9d4-f0bc-7ed19ed33c19@quicinc.com>
+In-Reply-To: <7e047ee0-0243-d9d4-f0bc-7ed19ed33c19@quicinc.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Thu, 8 Sep 2022 09:44:34 -0700
+Message-ID: <CABdmKX2sGw-TwRYnHWuyaWYrxX7wgcK4gFSb5hGAwk0ztZxbcA@mail.gmail.com>
+Subject: Re: GPU device resource reservations with cgroups?
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        dri-devel@lists.freedesktop.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Carl Vanderlip <quic_carlv@quicinc.com>,
+        quic_ajitpals@quicinc.com, quic_pkanojiy@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,24 +73,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 16, 2022 at 1:39 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote=
+:
+>
+> Hello cgroup experts,
+>
+> I have a GPU device [1] that supports organizing its resources for the
+> purposes of supporting containers.  I am attempting to determine how to
+> represent this in the upstream kernel, and I wonder if it fits in cgroups=
+.
+>
+> The device itself has a number of resource types =E2=80=93 compute cores,
+> memory, bus replicators, semaphores, and dma channels.  Any particular
+> workload may consume some set of these resources.  For example, a
+> workload may consume two compute cores, 1GB of memory, one dma channel,
+> but no semaphores and no bus replicators.
+>
+> By default all of the resources are in a global pool.  This global pool
+> is managed by the device firmware.  Linux makes a request to the
+> firmware to load a workload.  The firmware reads the resource
+> requirements from the workload itself, and then checks the global pool.
+> If the global pool contains sufficient resources to satisfy the needs of
+> the workload, the firmware assigns the required resources from the
+> global pool to the workload.  If there are insufficient resources, the
+> workload request from Linux is rejected.
+>
+> Some users may want to share the device between multiple containers, but
+> provide device level isolation between those containers.  For example, a
+> user may have 4 workloads to run, one per container, and each workload
+> takes 1/4th of the set of compute cores.  The user would like to reserve
+> sets of compute cores for each container so that container X always has
+> the expected set of resources available, and if container Y
+> malfunctions, it cannot =E2=80=9Csteal=E2=80=9D resources from container =
+X.
+>
+> To support this, the firmware supports a concept of partitioning.  A
+> partition is a pool of resources which are removed from the global pool,
+> and pre-assigned to the partition=E2=80=99s pool.  A workload can then be=
+ run
+> from within a partition, and it consumes resources from that partition=E2=
+=80=99s
+> pool instead of from the global pool.  The firmware manages creating
+> partitions and assigning resources to them.
+>
+> Partitions do not nest.
+>
+Do partitions have any significance in hardware, or are they just a
+logical concept? Does it matter which compute core / bus replicator /
+dma channel a user gets, or are they interchangeable between uses?
+
+> In the above user example, the user can create 4 partitions, and divide
+> up the compute cores among them.  Then the user can assign each
+> individual container their own individual partition.  Each container
+> would be limited to the resources within it=E2=80=99s assigned partition,=
+ but
+> also that container would have exclusive access to those resources.
+> This essentially provides isolation, and some Quality of Service (QoS).
+>
+> How this is currently implemented (in downstream), is perhaps not ideal.
+>   A privileged daemon process reads a configuration file which defines
+> the number of partitions, and the set of resources assigned to each.
+> That daemon makes requests to the firmware to create the partitions, and
+> gets a unique ID for each.  Then the daemon makes a request to the
+> driver to create a =E2=80=9Cshadow device=E2=80=9D, which is a child dev =
+node.  The
+> driver verifies with the firmware that the partition ID is valid, and
+> then creates the dev node.  Internally the driver associates this shadow
+> device with the partition ID so that each request to the firmware is
+> tagged with the partition ID by the driver.  This tagging allows the
+> firmware to determine that a request is targeted for a specific
+> partition.  Finally, the shadow device is passed into the container,
+> instead of the normal dev node.  The userspace within the container
+> operates the shadow device normally.
+>
+> One concern with the current implementation is that it is possible to
+> create a large number of partitions.  Since each partition is
+> represented by a shadow device dev node, this can create a large number
+> of dev nodes and exhaust the minor number space.
+>
+> I wonder if this functionality is better represented by a cgroup.
+> Instead of creating a dev node for the partition, we can just run the
+> container process within the cgroup.  However it doesn=E2=80=99t look lik=
+e
+> cgroups have a concept of resource reservation.  It is just a limit.  If
+> that impression is accurate, then I struggle to see how to provide the
+> desired isolation as some entity not under the cgroup could consume all
+> of the device resources, leaving the containers unable to perform their
+> tasks.
+
+Given the top-down resource distribution policy for cgroups, I think
+you'd have to have a cgroup subtree where limits for these resources
+are exclusively passed to, and maintain the placement of processes in
+the appropriate cgroup under this subtree (one per partition +
+global). The limit for these resources in all other subtrees under the
+root would need to be 0. The only trick would be to maintain the
+limit(s) on the global pool based on the sum of the limits for the
+partitions to ensure that the global pool cannot exhaust resources
+"reserved" for the partitions. If partitions don't come and go at
+runtime then that seems pretty straightforward, otherwise I could see
+the maintenance/adjustment of those limits as a source of frustration.
 
 
-On 9/8/2022 4:04 AM, Naresh Kamboju wrote:
-> From: lkft@linaro.org
-> 
-> LKFT test farm found that Linux next-20220906 onwards the Broadcom DTB
-> builds are not happening. And after bisecting we found this patch is
-> the reason [1].
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> FYI, We have not changed any kernel configs.
-> [1] http://ix.io/49Wq
 
-Fixed with:
-
-https://lore.kernel.org/all/20220906033957.4377-1-f.fainelli@gmail.com/
-
-sorry about the breakage and thanks for reporting!
--- 
-Florian
+>
+> So, cgroup experts, does this sound like something that should be
+> represented by a cgroup, or is cgroup the wrong mechanism for this usecas=
+e?
+>
+> [1] -
+> https://lore.kernel.org/all/1660588956-24027-1-git-send-email-quic_jhugo@=
+quicinc.com/

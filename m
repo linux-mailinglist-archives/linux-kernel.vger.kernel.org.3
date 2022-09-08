@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99A95B1B29
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1435B1B2B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiIHLSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S230379AbiIHLSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiIHLSG (ORCPT
+        with ESMTP id S230433AbiIHLSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:18:06 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8FEFCA13;
-        Thu,  8 Sep 2022 04:18:05 -0700 (PDT)
+        Thu, 8 Sep 2022 07:18:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF73112B03;
+        Thu,  8 Sep 2022 04:18:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662635885; x=1694171885;
+  t=1662635893; x=1694171893;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gHwrhdKNh2gRti7y/1xovElw2DRB4M7uCFirk9to6l4=;
-  b=cuwOcCGj12/rnQILGyOlmXN3QfsPhzKjwCEbEhdnapCfYqutoeaWQ7DA
-   Gx75jPOTE+bGTbLw8m+UqMLNoSMgoS23nLnVljseoSWo8F4KixDCsQ0m/
-   /L5p6SkGpnS5bmjCz+KjCGMiYHRA18H7+jWSS4SsEEGCiOWlb6AhFYj1g
-   9M13NWGk5itE/d1UB71TSXxc356DLuvEVtD7iNVjRpob51XqUxuFo26Kr
-   8RvdGPWdjiRT2dmzA5cbfuJxnaAS0Nqgbw6WAaB7HUhzZARESRm/olT1q
-   Wdki2yjqdnJeraXFXPlGW5n+xGbr3UZbXdUm9ZikvsCLzIspXu2qsk2pv
-   w==;
+  bh=VqcEjdujxakv3noDHpoHtBuaB79FIa784j+2h1ikqjc=;
+  b=LhDzApK4Y1JgAd4YLd3D9RMUFNFVeg3yvs99oO82ndDtV7a5tExiLEvh
+   53XTYVhZtk+ILNpsvEZojO0NcchtObgqJe6nURNGniOZZAls+2LBzavB3
+   4cNI+s3fmSF4jZYce5U9+CmzQqlWzgT/dfzP6LHx+35UbzYGFKed+8mxN
+   IIlXpob4RvBwVGYsrjyfMTekv17PO8puzEgcwLVDbwmcdyvh8UItc/GYr
+   sRbxr3bEFhYxeykbn8ctsMgDy4pp9JhVuHj3iNBOuCUGZ6lXLx4SLxNAf
+   letEnAgZcbS4/Gf1G3VbIJAw8Y0dMEUyzIR3DusTUdTy5lwEA64ycMe3l
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="179549600"
+   d="scan'208";a="172932944"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 04:18:05 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 04:18:11 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 8 Sep 2022 04:18:04 -0700
+ 15.1.2507.12; Thu, 8 Sep 2022 04:18:07 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 8 Sep 2022 04:18:01 -0700
+ Transport; Thu, 8 Sep 2022 04:18:04 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -54,10 +54,11 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Wolfgang Grandegger <wg@aries-embedded.de>,
         Hugh Breslin <hugh.breslin@microchip.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 02/10] dt-bindings: riscv: microchip: document the aries m100pfsevp
-Date:   Thu, 8 Sep 2022 12:17:05 +0100
-Message-ID: <20220908111712.665287-3-conor.dooley@microchip.com>
+        <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 03/10] dt-bindings: riscv: microchip: document the sev kit
+Date:   Thu, 8 Sep 2022 12:17:06 +0100
+Message-ID: <20220908111712.665287-4-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220908111712.665287-1-conor.dooley@microchip.com>
 References: <20220908111712.665287-1-conor.dooley@microchip.com>
@@ -74,24 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible for the Aries Embedded M100PFSEVP SOM + EVK platform.
+From: Shravan Chippa <shravan.chippa@microchip.com>
 
-Link: https://www.aries-embedded.com/polarfire-soc-fpga-microsemi-m100pfs-som-mpfs025t-pcie-serdes
+Update devicetree bindings document with PolarFire SoC Video Kit, known
+by its "sev-kit" product code.
+
+Link: https://onlinedocs.microchip.com/pr/GUID-404D3738-DC76-46BA-8683-6A77E837C2DD-en-US-1/index.html?GUID-065AEBEE-7B2C-4895-8579-B1D73D797F06
+Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
  Documentation/devicetree/bindings/riscv/microchip.yaml | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
-index 485981fbfb4b..630f82c85a0c 100644
+index 630f82c85a0c..ab0a64cd5386 100644
 --- a/Documentation/devicetree/bindings/riscv/microchip.yaml
 +++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
-@@ -27,6 +27,7 @@ properties:
- 
+@@ -28,6 +28,7 @@ properties:
        - items:
            - enum:
-+              - aries,m100pfsevp
+               - aries,m100pfsevp
++              - microchip,mpfs-sev-kit
                - sundance,polarberry
            - const: microchip,mpfs
  

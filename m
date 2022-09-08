@@ -2,108 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F5C5B1DF8
+	by mail.lfdr.de (Postfix) with ESMTP id DCCC75B1DF9
 	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbiIHNHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S232137AbiIHNHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiIHNHO (ORCPT
+        with ESMTP id S232122AbiIHNHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:07:14 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35BAC00E1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:07:07 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id w8so27559169lft.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=5u6/MtXpxn1tTwAaduJUsG0IZt/fBpU15ZKPc1fiE2o=;
-        b=ehPfB6s0nVoR+tfYmVzHTZew8S0nkhf/njyDNfgALVDMbGOdgHuGGmQui0Pd7WnIsF
-         I3JDjrelF0pvS8dBTeBTtCZc8FneI1LHcuAFJCg8RicNTf6nRpUjcfWcM0AR0EpgScdJ
-         yvtWWmj6+anIcTY/ll1vMJZV+kHOAn+Bso7lm/mzGAZKtTDAdHRmZzAglSa9AOo/5Lgv
-         ftsdKfEsM8lFNMy8ljTbmhzHftdY9nEWVi0dkpR1/FoN2XMM3756dODbS4srP5aCoeko
-         JN0omm9q5QGOZhll2wwXkOHiCqv66gb6+/Ad+QJz5I62NEGPizwF0b+PJmcqGwlIHj4I
-         JExA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5u6/MtXpxn1tTwAaduJUsG0IZt/fBpU15ZKPc1fiE2o=;
-        b=Au2XoW3Z0TkcvD7Y6tJIcoE5uPZR16nGYnMtDbYrDQOnAmA0RKb4Kcoghwt00FTik5
-         rjwbuHHiGA9s4cyHLmosEorm61xpLbXJDMd5+gYyelAqltVCNLQL88I65eyd/VaM6jJx
-         bbLsuuEScj7KYBzi4odvXcr0B8ECJ8wY6mst2f9MTagZOvFIibQJ8Mr0mp1D5y+96bfE
-         usw+wtoaKNmlArJ99JbdAuYZKoaC8UKZlJIvBt+mXi5R8dz2OiTr+wjYSSQy4VycAaqL
-         iSPcsBX27mptgufhP470Id3d/SKh/n7QsONpmBlrB5/ioemDUYvoYpHTG4Vr6LGGbmX9
-         L/qA==
-X-Gm-Message-State: ACgBeo3zedByMEil1Wcze5DDNFBQfZQY6qGUJt9MD3kaZ1MrIwVe8eJ1
-        8+O7i6DtZ8n6nz1E3ReBI0tE545tZK4qBg==
-X-Google-Smtp-Source: AA6agR6wXnCQ6Vkqjjc03U6QxWxuJlZ7Fdfx0r4tDx4eRfk3Kfg7iqmZkdEZRBaoTN09hgyUFzPdFQ==
-X-Received: by 2002:a05:6512:10d0:b0:494:7811:e673 with SMTP id k16-20020a05651210d000b004947811e673mr2559502lfg.400.1662642426042;
-        Thu, 08 Sep 2022 06:07:06 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a25-20020a196619000000b00497cb9f95a0sm319728lfc.51.2022.09.08.06.07.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 06:07:05 -0700 (PDT)
-Message-ID: <603072dc-3595-ed54-53de-e88a0579d78f@linaro.org>
-Date:   Thu, 8 Sep 2022 15:07:04 +0200
+        Thu, 8 Sep 2022 09:07:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D50AAE21C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:07:10 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNfSc5wJCzjXbL;
+        Thu,  8 Sep 2022 21:03:28 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 21:07:05 +0800
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 21:07:04 +0800
+Subject: Re: [PATCH v2] mm/huge_memory: prevent THP_ZERO_PAGE_ALLOC increased
+ twice
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+References: <20220908035533.2186159-1-liushixin2@huawei.com>
+ <20220908123102.rpihrmisv55j3b2o@box.shutemov.name>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <84a82033-ceb5-d8a2-3bae-a31574a5ff28@huawei.com>
+Date:   Thu, 8 Sep 2022 21:07:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 2/6] dt-bindings: mediatek: modify VDOSYS0 mmsys device
- tree Documentations for MT8188
-Content-Language: en-US
-To:     "nathan.lu" <nathan.lu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Moudy Ho <moudy.ho@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, wsd_upstream@mediatek.com,
-        lancelot.wu@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220906084449.20124-1-nathan.lu@mediatek.com>
- <20220906084449.20124-3-nathan.lu@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220906084449.20124-3-nathan.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220908123102.rpihrmisv55j3b2o@box.shutemov.name>
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 10:44, nathan.lu wrote:
-> From: Nathan Lu <nathan.lu@mediatek.com>
-> 
-> modify VDOSYS0 mmsys device tree Documentations for MT8188.
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 2022/9/8 20:31, Kirill A. Shutemov wrote:
+> On Thu, Sep 08, 2022 at 11:55:33AM +0800, Liu Shixin wrote:
+>> If two or more threads call get_huge_zero_page concurrently,
+>> THP_ZERO_PAGE_ALLOC may increased two or more times. But actually,
+>> this should only count as once since the extra zero pages has been
+>> freed. Redefine its meaning to indicate the times a huge zero page
+>> used for thp is successfully allocated.
+> I don't particularly care, but it is not obvoius why the new behaviour is
+> better.
+The user who read the value may be more concerned about the huge zero pages that are
+really allocated using for thp and can indicated the times of calling huge_zero_page_shrinker.
+I misunderstood when I first saw it.
+>
+> All huge zero pages are freed apart from possibly the last one allocated.
+>
 
-
-Best regards,
-Krzysztof

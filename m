@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AED5B1AD0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956035B1AD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiIHLEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
+        id S229674AbiIHLEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiIHLER (ORCPT
+        with ESMTP id S230053AbiIHLEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:04:17 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9317B80346
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:04:16 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id q9so16380656pgq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=8klfUEhKxuahKM34ft6Xk1j8LdCMioEPyO0tU5Xwf4w=;
-        b=L62uGedyyDHZFn9ZDdvHYjqOyQFu/sa1s3JsuW8QQYkforLV0LD7/CkAhX8py54ZH0
-         eQLOIKyg9l6KZx5B8LhihYjHzjj7w/Zb4Yg6OCP5qq/1xwJkBv6xs3ekoyL4Z1OL84/9
-         B7O7/rv3zqafFgTSuVzQrvmkQD3IPkwitjIkPVawgVgsIDwglna2kiPv8Jfz0BiUOiHq
-         Q5h2IpeZiDNy8ZjsAEk2Gvx4lk+uSt9SCzdvRMtZnDSh0k2OEsgYgKLkLwx/z0ous1SF
-         v7To0RkhKUzdW5yOj4hUuPv9YCQun777LnFrR/69/+PWKptfnY1TXBoOCqIQZq1CO30X
-         R/uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=8klfUEhKxuahKM34ft6Xk1j8LdCMioEPyO0tU5Xwf4w=;
-        b=royPDqOKXDAWxwxUX69labjfV5PAcu60lmTR0ECHA4zBnaWUVdOnEK+TGuiKCfFA8p
-         FBXQwkwTM4FdVgwAh91TtU118QpaGcxSqgsAR51hj1GpEi26WLEkncVzBr7kd+NmgE6q
-         IAJjlc3YiEoV9qamSTawK8fnhpGhzlDNUoDby+YVxR0allUTvN+sUhInKQbg2nDPNbho
-         Kkrixv3okMQTg4ZKKervyw8mtL6IV+OdXvi92lYOjmU0ppRDSEQDf4MzJLbcTDlFtyh+
-         B7M+Wt/qyvsi4mJui/NuKowP7O2/LntLXeJImjQzSOSm9an40fvFyHk4eHuO6fkUevaA
-         waBg==
-X-Gm-Message-State: ACgBeo26rvZ1kqwU+Rh1FgvcE2KfePMQw7f9VdhHJxhtzah4QP1rCKX7
-        8UN3mamb2GZVGKBkvXYEQVxOjQ==
-X-Google-Smtp-Source: AA6agR7GL343ySe4mtV74WQtqa6mVHGs3p/qeL1HRumHIMOQmDe1zHdI/6Buj2oiQb7CN5bnjikIEQ==
-X-Received: by 2002:a05:6a00:b43:b0:52f:59dc:93 with SMTP id p3-20020a056a000b4300b0052f59dc0093mr8749680pfo.26.1662635056033;
-        Thu, 08 Sep 2022 04:04:16 -0700 (PDT)
-Received: from anup-ubuntu64-vm.. ([171.76.86.251])
-        by smtp.gmail.com with ESMTPSA id m12-20020a170902f64c00b001749e8eee4fsm14175191plg.226.2022.09.08.04.04.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 04:04:15 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH] RISC-V: KVM: Change the SBI specification version to v1.0
-Date:   Thu,  8 Sep 2022 16:34:04 +0530
-Message-Id: <20220908110404.186725-1-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 8 Sep 2022 07:04:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C6E138;
+        Thu,  8 Sep 2022 04:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662635061; x=1694171061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fqkHwC0iOprBEufOeKlcg21ZbXtIUhGHzIz0tLHzfq8=;
+  b=P5A11Smug85abEfoYrdeSWYKEViuicI7UnU0Cr0Wq2tBs/4DdY7cyXcu
+   djZjon6WvvkWf8BDIe20s3BNBs9X8tV50IGLyEG9XwNu++pF68TLcEryk
+   pH6Q/+HITs3PjIpnJ5dXB+3I28GBwHE5q3/w+CIDRl2AMwiiHsoo+ndwU
+   pqeIdHtFVYbDuvLMaYDv7AfL6aqnGFEWoTlWCPwWISWW+8MnCwzFkGJcg
+   Thlef21zmZ+5+aLOXYzRydArQD9OOdUb4woPPr9kuQ6mWzz3zhDeMyO6g
+   G3kn/t4U+w7SZTZDUFecmsSXG9E+Fni1RCIV9hZRF2B+Znr3RTE4HqSRB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="361098738"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="361098738"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 04:04:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="740634993"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 04:04:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oWFKO-00A5Z7-2n;
+        Thu, 08 Sep 2022 14:04:12 +0300
+Date:   Thu, 8 Sep 2022 14:04:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX interrupts
+Message-ID: <YxnMLI17XvjN74DW@smile.fi.intel.com>
+References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
+ <20220906190426.3139760-5-matthew.gerlach@linux.intel.com>
+ <YxeqTdny7Nu7LzZo@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SBI v1.0 specificaiton is functionally same as SBI v0.3
-specification except that SBI v1.0 specification went through
-the full RISC-V International ratification process.
+On Wed, Sep 07, 2022 at 02:37:32PM -0700, matthew.gerlach@linux.intel.com wrote:
+> On Tue, 6 Sep 2022, Andy Shevchenko wrote:
+> > On Tue, Sep 06, 2022 at 12:04:25PM -0700, matthew.gerlach@linux.intel.com wrote:
 
-Let us change the SBI specification version to v1.0.
+...
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/include/asm/kvm_vcpu_sbi.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> > > +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+> > > +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+> > > +		v = readq(base);
+> > > +		v = FIELD_GET(DFH_VERSION, v);
+> > > +
+> > > +		if (v == 1) {
+> > > +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
+> > 
+> > I am already lost what v keeps...
+> > 
+> > Perhaps
+> > 
+> > 		v = readq(base);
+> > 		switch (FIELD_GET(DFH_VERSION, v)) {
+> > 		case 1:
+> > 			...
+> > 			break;
+> > 		}
+> 
+> How about?
+> 		if (FIELD_GET(DFH_VERSION, readq(base)) == 1) {
+> 			...
+> 		}
 
-diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-index 26a446a34057..d4e3e600beef 100644
---- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-@@ -11,8 +11,8 @@
- 
- #define KVM_SBI_IMPID 3
- 
--#define KVM_SBI_VERSION_MAJOR 0
--#define KVM_SBI_VERSION_MINOR 3
-+#define KVM_SBI_VERSION_MAJOR 1
-+#define KVM_SBI_VERSION_MINOR 0
- 
- struct kvm_vcpu_sbi_extension {
- 	unsigned long extid_start;
+This one tends to be expanded in the future, so I would keep it switch case.
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 

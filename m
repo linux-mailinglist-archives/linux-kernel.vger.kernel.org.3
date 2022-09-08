@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719B55B2A61
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8895E5B2A67
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiIHXcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S230262AbiIHXeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiIHXb7 (ORCPT
+        with ESMTP id S231321AbiIHXeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:31:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE77D1402C;
-        Thu,  8 Sep 2022 16:29:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D86E661E6B;
-        Thu,  8 Sep 2022 23:28:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDDFC433D6;
-        Thu,  8 Sep 2022 23:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662679705;
-        bh=Eo93VCMrgvKOMrm1ftkl2pC8sCfd6qOMdIaidBm6YlQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=attQb81Uoww89Ha9CLEDtpSNRdfmtwWQWGtN35eNo1MneyQZGUwbuD4CIi7WvoL0B
-         eVhzP3RMDshfKAmslGCe6m9pFRkYAL9YOzeQC2Yl37k8sWpmsaHuFMwX32gB6u4as1
-         AAOopsHyXyg/A5NmE456sAqQMDJPf4W75+nPOrEJcSZR1o82HYS9BY5oSocbVFnusb
-         IqFQkoXcJ2yfjj7mrJoFJamv/9m+n+Gk7qEdcYXAhDF5lG6lN5A24E42TztURIiUHe
-         nXnEygMWqwBw3qwKURRbS5rqhvPeRTxIun5Hzf5ZY/DE8sa0W2gw8fkEKsD+fFhD3K
-         HVJhoDA8HfGCA==
-Date:   Fri, 9 Sep 2022 02:28:18 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/5] selftests/sgx: Add SGX selftest
- augment_via_eaccept_long
-Message-ID: <Yxp6kqvB5wzJCEYQ@kernel.org>
-References: <20220905020411.17290-1-jarkko@kernel.org>
- <20220905020411.17290-6-jarkko@kernel.org>
- <ecd03fbb-8019-07ae-e27d-44b1dd20bfb1@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ecd03fbb-8019-07ae-e27d-44b1dd20bfb1@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 19:34:00 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9ED310D702
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:31:40 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id k16-20020a635a50000000b0042986056df6so8604pgm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date;
+        bh=JKmSonQmRzAcZ2JyL8gtNHIBqDCeLYTwlzg2gSIdvM0=;
+        b=GUJlgXLHsr6D8omv7M3cD1H16BPrGusKkNgNtDezDYjBMZPmiFdjj+ZItVy3yoOCMO
+         ajWuHPMCJqfchqiRHIC79a7ISuzd2WF7/9OCDsigF1DV2NiZFDjmbfrexbMOwJ+XqT0r
+         J1rMrJZDU/r9fZQ1iICWEaZoP3zrAqfB72v2vMbiA7rPyeVfbrfdnJF+hB58Mf61IXQI
+         KF+tLXBaKRtqy2fbeFMcyXL0ai/T8gtPQxxxuv7jYGGaN8uMXlSxGlpBlnqh1QcoQrOa
+         IwwOg4eaEYso0GIZSFZz0JKd7frbq0hXwp29EYXByg20nGKKa6He/7u2dZoyMw9G1Ra3
+         lr1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=JKmSonQmRzAcZ2JyL8gtNHIBqDCeLYTwlzg2gSIdvM0=;
+        b=W0Y5GcCM4BD/nPfqc0LKj47PikViYQT0rykoBMl+7dyzorlG6iVGqKYacpUqG1NjUE
+         Jp2Fc1no0Q/Y+kB8jLJVIZq6tqAMvyk8HubqJ1DZkRoME9GHh+cxcS0zs3jTe0eSLnoQ
+         cU429Sn2DENtBX6t7AyjibnyKg/weeJPIoXLBEqaqFSNdLlvMhR7pnT08aJuVKT4cRQb
+         kaGD3yslWCcsrf7ldPXZDmLGb8RP1buLRRoKICyUUMOXqNbit1Acp8I9wxtYSBmCG/OA
+         fcSUEvGebEgoydz/Wv7sUfiywz7SE2kIxpj6MHztB5KQx2XrrW3nEPMMWTd1blaIHG3h
+         JIGA==
+X-Gm-Message-State: ACgBeo14O5gsbu+6OTHVVcXk2QGbsn9Z7rFMNXk2AEg8T/07Y4+h18jG
+        yTX1fIzHDt5APStIjZCcG3EO9lmwm3w=
+X-Google-Smtp-Source: AA6agR595BqUn7XSJx8WoBTd5F0VJTT47Upv3fJDl++hnlnXKL88yujnE3ju9NbIO+chawyTNugQJ/vBy1Q=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:22c7:b0:539:efbb:a9f2 with SMTP id
+ f7-20020a056a0022c700b00539efbba9f2mr11388082pfj.54.1662679899238; Thu, 08
+ Sep 2022 16:31:39 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu,  8 Sep 2022 23:31:29 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220908233134.3523339-1-seanjc@google.com>
+Subject: [PATCH 0/5] KVM: selftests: Fix "fix hypercall test" build errors
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:44:29PM -0700, Reinette Chatre wrote:
-> Hi Jarkko and Vijay,
-> 
-> On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
-> > From: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > 
-> > Add a new test case which is same as augment_via_eaccept but adds a
-> > larger number of EPC pages to stress test EAUG via EACCEPT.
-> > 
-> > Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> 
-> ...
-> 
-> > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> > index 78c3b913ce10..e596b45bc5f8 100644
-> > --- a/tools/testing/selftests/sgx/main.c
-> > +++ b/tools/testing/selftests/sgx/main.c
-> > @@ -22,8 +22,10 @@
-> >  #include "main.h"
-> >  
-> >  static const size_t ENCL_HEAP_SIZE_DEFAULT = PAGE_SIZE;
-> > +static const unsigned long TIMEOUT_DEFAULT = 900;
-> 
-> I am not sure about the naming here ... it is _very_ close to
-> (and thus appears to be in the same namespace as)
-> TEST_TIMEOUT_DEFAULT from the included kselftest_harness.h.
-> 
-> This is surely a nitpick but how about SGX_TEST_TIMEOUT_DEFAULT?
+After a toolchain upgrade (I think), the x86 fix_hypercall_test started
+throwing warnings due to -Werror=array-bounds rightly complaining that
+the test is generating an out-of-bounds array access.
 
-Agreed, I would use ENCL_TEST_TIMEOUT_DEFAULT (better match
-with existing names).
+The "obvious" fix is to replace the memcpy() with a memcmp() and compare
+only the exact size of the hypercall instruction.  That worked, until I
+fiddled with the code a bit more and suddenly the test started jumping into
+the weeds due to gcc generating a call to the external memcmp() through the
+PLT, which isn't supported in the selftests.
 
-> 
-> >  static const uint64_t MAGIC = 0x1122334455667788ULL;
-> >  static const uint64_t MAGIC2 = 0x8877665544332211ULL;
-> > +
-> 
-> There is an extra empty line here ... but it looks like intended code
-> organization?
+To fix that mess, which has been a pitfall for quite some time, provide
+implementations of memcmp(), memcpy(), and memset() to effectively override
+the compiler built-ins.  My thought is to start with the helpers that are
+most likely to be used in guest code, and then add more as needed.
 
-Yeah, I think it'd make sense to have it there and would
-not be productive to make it a separate patch.
+Tested on x86 and ARM, compile tested on RISC-V and s390.  Full testing on
+RISC-V and s390 would be welcome, the seemingly benign addition of memxxx()
+helpers managed to break ARM due to gcc generating an infinite loop for
+memset() (see patch 1 for details).
 
-> 
-> >  vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
-> >  
-> >  /*
-> 
-> 
-> Apart from the naming comment this addition looks good. 
-> 
-> This is a valuable addition to the SGX tests.
-> 
-> Reinette
+Sean Christopherson (5):
+  KVM: selftests: Implement memcmp(), memcpy(), and memset() for guest
+    use
+  KVM: selftests: Compare insn opcodes directly in fix_hypercall_test
+  KVM: selftests: Remove unnecessary register shuffling in
+    fix_hypercall_test
+  KVM: selftests: Explicitly verify KVM doesn't patch hypercall if
+    quirk==off
+  KVM: selftests: Dedup subtests of fix_hypercall_test
 
-Thank you.
+ tools/testing/selftests/kvm/Makefile          |   8 +-
+ .../selftests/kvm/include/kvm_util_base.h     |  10 ++
+ tools/testing/selftests/kvm/lib/kvm_string.c  |  33 +++++
+ .../selftests/kvm/x86_64/fix_hypercall_test.c | 124 ++++++++----------
+ 4 files changed, 107 insertions(+), 68 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/kvm_string.c
 
-BR, Jarkko
+
+base-commit: 29250ba51bc1cbe8a87e923f76978b87c3247a8c
+-- 
+2.37.2.789.g6183377224-goog
+

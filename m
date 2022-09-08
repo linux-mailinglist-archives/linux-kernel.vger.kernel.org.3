@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180445B273B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478925B26BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiIHT5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 15:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S232217AbiIHTbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 15:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiIHT5W (ORCPT
+        with ESMTP id S232011AbiIHTbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 15:57:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288E4FDBA4
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 12:57:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662667040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=K3kPDvRnZ5sJSBggdbe1FgXRWBmDeuCU2G3Z/g5bs1o=;
-        b=Ls0xReApBHVSoTHb4yJhCxtj7UitCuWbho/V5XksyuOXKwBW83Zq6DTTzT4BNoWp7WtXt3
-        iylqggFYfLo3vmN04hBBVilBsBXTRFFLA3vGRq13JEU2EcHFuAPbgCYLfN0kaClkvO72GW
-        8wKX8AlrqMhfXNhei1I6Zzr2aPIdj8M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-207-L21TuuGmPeWsliL34oBB_g-1; Thu, 08 Sep 2022 15:57:19 -0400
-X-MC-Unique: L21TuuGmPeWsliL34oBB_g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 8 Sep 2022 15:31:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D90BB932;
+        Thu,  8 Sep 2022 12:31:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E9A218A6522;
-        Thu,  8 Sep 2022 19:57:18 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3E4201121315;
-        Thu,  8 Sep 2022 19:57:18 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 292F84148B8E; Thu,  8 Sep 2022 16:54:07 -0300 (-03)
-Message-ID: <20220908195111.966739489@redhat.com>
-User-Agent: quilt/0.66
-Date:   Thu, 08 Sep 2022 16:29:06 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Prasad Pandit <ppandit@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [RFC PATCH 7/7] mtrr_add_page/mtrr_del_page: check for block interference CPUs
-References: <20220908192859.546633738@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5453B82235;
+        Thu,  8 Sep 2022 19:31:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088B0C433C1;
+        Thu,  8 Sep 2022 19:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662665509;
+        bh=NmE619tRw480q6SlrwPDQuo+MM2YUSnioxegTXmhEHg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KvlRWEJ32TDBz38Gt6UPyhmuOvwv0H6sA6MmoAaBpuZY5csfvvSiCIvigsAZcO44+
+         jrgMuk0DnvyV0bATZ+zKus3DjHznzN1PeD0qA9lt3O0bkkGyKBf6MOL74LaTHezGvN
+         2BLPdJKvyGadn40FA5gf0pM9uD+XcjI1FFv9XXgwnTF8LyOm60EMpL9QmPmftLl30Z
+         GFxD/LOTYhqj7CvVpttkpD7Yy9NRJWcqnhq/WPr4QwWDd8SVMYLhGAlPLeip1GzC9j
+         x5hRVGUDpLIe3563UcHSj+4ZriObyVnyLiIhXpAnZC6wD5mrslcMv9G/2lmPsgeeiq
+         6BddUzRLayJtQ==
+Date:   Thu, 8 Sep 2022 12:31:47 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org
+Subject: Re: [PATCH v3 0/2] x86/kprobes: Fixes for CONFIG_RETHUNK
+Message-ID: <20220908193147.mtfwh33q2cfbw52b@treble>
+References: <20220908220354.28c196c8bbe4e83c83afcb59@kernel.org>
+ <166264927154.775585.16570756675363838701.stgit@devnote2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <166264927154.775585.16570756675363838701.stgit@devnote2>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,69 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check if any online CPU in the system is tagged as
-a block interference CPU, and if so return an error
-to mtrr_add_page/mtrr_del_page. 
+On Fri, Sep 09, 2022 at 12:01:11AM +0900, Masami Hiramatsu (Google) wrote:
+> Hi Peter and Josh,
+> 
+> So here is 3rd version of the patches to fix kprobes and optprobe with
+> CONFIG_RETHUNK and CONFIG_SLS.
+> Previous version is here;
+> 
+> https://lore.kernel.org/all/166260087224.759381.4170102827490658262.stgit@devnote2/
+> 
+> In this version, I simplified all code and just checks the INT3 comes
+> from kgdb or not. Other INT3 are treated as one-byte instruction.
 
-This can avoid interference to such CPUs (while allowing
-userspace to handle the failures).
+Looks good to me.
 
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+I was confused by the naming of kgdb_has_hit_break(), because in this
+case, with the function being called from outside the stopped kgdb
+context, the breakpoint hasn't actually been hit.  But it still seems to
+do the right thing: it checks for BP_ACTIVE which means the breakpoint
+has been written.
 
+Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Index: linux-2.6/arch/x86/kernel/cpu/mtrr/mtrr.c
-===================================================================
---- linux-2.6.orig/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ linux-2.6/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -45,6 +45,7 @@
- #include <linux/smp.h>
- #include <linux/syscore_ops.h>
- #include <linux/rcupdate.h>
-+#include <linux/sched/isolation.h>
- 
- #include <asm/cpufeature.h>
- #include <asm/e820/api.h>
-@@ -335,6 +336,13 @@ int mtrr_add_page(unsigned long base, un
- 	error = -EINVAL;
- 	replace = -1;
- 
-+	block_interf_read_lock();
-+
-+	if (cpumask_intersects(block_interf_cpumask, cpu_online_mask)) {
-+		block_interf_read_unlock();
-+		return -EPERM;
-+	}
-+
- 	/* No CPU hotplug when we change MTRR entries */
- 	cpus_read_lock();
- 
-@@ -399,6 +407,7 @@ int mtrr_add_page(unsigned long base, un
-  out:
- 	mutex_unlock(&mtrr_mutex);
- 	cpus_read_unlock();
-+	block_interf_read_unlock();
- 	return error;
- }
- 
-@@ -484,6 +493,11 @@ int mtrr_del_page(int reg, unsigned long
- 		return -ENODEV;
- 
- 	max = num_var_ranges;
-+	block_interf_read_lock();
-+	if (cpumask_intersects(block_interf_cpumask, cpu_online_mask)) {
-+		block_interf_read_unlock();
-+		return -EPERM;
-+	}
- 	/* No CPU hotplug when we change MTRR entries */
- 	cpus_read_lock();
- 	mutex_lock(&mtrr_mutex);
-@@ -521,6 +535,7 @@ int mtrr_del_page(int reg, unsigned long
-  out:
- 	mutex_unlock(&mtrr_mutex);
- 	cpus_read_unlock();
-+	block_interf_read_unlock();
- 	return error;
- }
- 
-
-
+-- 
+Josh

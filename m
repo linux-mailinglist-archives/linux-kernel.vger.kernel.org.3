@@ -2,66 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C1D5B25F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38B55B25FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbiIHSiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S232130AbiIHSkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbiIHSh7 (ORCPT
+        with ESMTP id S229898AbiIHSkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:37:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F6FFDBAC;
-        Thu,  8 Sep 2022 11:37:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA71861DE1;
-        Thu,  8 Sep 2022 18:37:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E1DC433D6;
-        Thu,  8 Sep 2022 18:37:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662662248;
-        bh=uTrUjhxwjDWFeY8mG65HFCM0DCORYiIoN2jhPxDaGEs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Owx3EGg0zYPZtR4fvkfUKRpIp650i79hs3Kq7KYClI4wAnSCf4uli6qMY7ATM7qwy
-         vrifck9Mtgn2iTx4IsAbPwID6WVPu9XDjshUsIKPjjvp+K060J+ndkiscvs54RUNqe
-         /kln/MEI11sFAF/B85+Hzh9BZg6W3w7iWuZrrBuymy+hTqFH19nsvTnlMF70rOy2Sy
-         riUn4RFHq3o2f6AGPedNBYSgzGrXfM44HfHXgW/I+HM6UU7eZFNA8wLa/WbmxL+fIb
-         qD18TQ9YUYwZ6Qy9NXTM14GvqSSfZULnsF98ABufIjMpz6jeJIW/WwuWlVfOA+ppdp
-         FJ0dplWMZbtXg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 813A9404A1; Thu,  8 Sep 2022 15:37:25 -0300 (-03)
-Date:   Thu, 8 Sep 2022 15:37:25 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Nick Forrington <nick.forrington@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] perf vendor events: Update events for Neoverse E1
-Message-ID: <Yxo2ZSKtne7E/2Sn@kernel.org>
-References: <20220905153020.1792-1-nick.forrington@arm.com>
- <YxdGFAYHeO/j5uJF@kernel.org>
- <496f98ce-a0c4-9587-853c-9ba05323523a@huawei.com>
+        Thu, 8 Sep 2022 14:40:16 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5B98285E;
+        Thu,  8 Sep 2022 11:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662662415; x=1694198415;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version;
+  bh=8ONF0ZrYAcUu9jRfiFDeKnfbkf5M+VxFN1q1cvPnxE4=;
+  b=gx4nSrNAAszNI4J1A9w5IY/3VvU/pI6ZiEBKO9tXarhYx4ZDzdLfMBQY
+   gydyYl+LQbrUHLn03s0akRVHTLawsEAOqKnCH7UBmsc32aO4JOiyA/RGZ
+   +jMos7QypDYlmDkvHAnUde/rFgpxXRgE5ZGFYEg0WAwKXUv45hKSm/XP0
+   Kb+FCocxON4oljBPcB6AZwNn363BXAOStm/wY1h9j2Ac1GHq1/qCS6Oqm
+   vlx+Fmz1+jKIaBKvC5Ehl3Aok38gXtSqGM4GU61PnYchuggoHTxY0H7Q7
+   YexU/pdBQfQOP5s+jhcTQlDqhc1of6mNMkgAUpYvxnhtdb7tt4Xyk2/O5
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="179622077"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 11:40:15 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 8 Sep 2022 11:40:13 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Thu, 8 Sep 2022 11:40:13 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JL2+maKZaOUN7Ol7H4IQyc8qFkQYmjI7Tpn8w/kpqdU/WVOga0x7zS76dUkRsgPvJnkD0v9k7LYmQ3Odk7kOvm2w4j3oWuHnKYY8SxzHPGY8ho9HOHK9mSh74ZKKT35/GugYXlhkBjp60RARy9p1XYbge+NZZ0+0ojaScP4Di551C/c24pJpJCxdnVvxbNF0NJ3SbLxAdxoVKCHRd5bCbXJ/Tpr63uZyZ9yPad3jTSiED6D3uMFc5XodvX24WkflSsbOViOk8EVBkD+ce23capTI1IYjz85wcAe4LNoKs6zcEjdY3eEHKfQtPCyPuv6jIDgvjbMBvVzaZx+zpmVcaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8ONF0ZrYAcUu9jRfiFDeKnfbkf5M+VxFN1q1cvPnxE4=;
+ b=IP3CSZ5zKPeZREIU0RgTYCK4Hl01Q9BxLXDVouObm5ZboXMTzBNuXkH2bMG8SmffCF2M7XFh7ePzaS4r0WIAqbEyeP6vlQGNXaxBB6oK6qEeRz3hwR44wpBAvEJDnFIWu7Y3U14937eGWId8prpgn6Q4XVOGdqA63tRSoyd3EhgK/5RkVuoYpDEhiLoqk6DKLuTemREaZyidSgrqypNN5UgSPcfzr5onkUlBxhdM2UjI/9gGqU7ewhEIXcKR2Jd2NOjQjbBIPfCUqoNUUDhwp3yowpMzlFuaH2CgrZA9hndNEabZvi2TaUVI/+tDNgO5ht6lDODZC7ZxFYBcOhMlbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8ONF0ZrYAcUu9jRfiFDeKnfbkf5M+VxFN1q1cvPnxE4=;
+ b=NlVcYiIH39Xu2l0zr4Lw20gYhSJcGmKC+g0sLLaUYdbhO2uBSmrZaWIWTORZ6EK53eCIUclcKGQHp8GGezMtCaxlEz0OtybNgHCEvbORzpBjGKminc/qunWq0hJkDPMgkIxCzGhkfPV3hEGMjlkyzH64goia7VH0lo+OGDEsW3E=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by CH0PR11MB5364.namprd11.prod.outlook.com (2603:10b6:610:bb::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Thu, 8 Sep
+ 2022 18:40:09 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009%3]) with mapi id 15.20.5612.014; Thu, 8 Sep 2022
+ 18:40:08 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <zong.li@sifive.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
+        <greentime.hu@sifive.com>, <ben.dooks@sifive.com>, <bp@alien8.de>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 5/6] soc: sifive: ccache: use pr_fmt() to remove
+ CCACHE: prefixes
+Thread-Topic: [PATCH v3 5/6] soc: sifive: ccache: use pr_fmt() to remove
+ CCACHE: prefixes
+Thread-Index: AQHYw5GhawiXHMEYgUiKfN64A8yNka3V3bMA
+Date:   Thu, 8 Sep 2022 18:40:08 +0000
+Message-ID: <36fe0073-7fa2-9733-7041-d9f70da1a5ea@microchip.com>
+References: <20220908144424.4232-1-zong.li@sifive.com>
+ <20220908144424.4232-6-zong.li@sifive.com>
+In-Reply-To: <20220908144424.4232-6-zong.li@sifive.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO1PR11MB5154:EE_|CH0PR11MB5364:EE_
+x-ms-office365-filtering-correlation-id: 65866ad1-f8bf-4e6c-15a1-08da91c98e5c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J794hwrT35OWwnYoki3GA3TDf6yklX+JcW+9Wg7EZZOkNNihwSKFo4us0owovnsn3amWDHcrYurk3iPowVX7j9vMajoJ6hXFeogMV9l3EZS5Oa7Tz3Jrj/tIf58kNKjpL24J6yUwHsUowkgj7pXRRrkG03i/K82F+/c31ddTrADP/PPscL6jJb+2sRwL2x5QlHAqcVsYrbrZiHnDR0VxmcK5/0JaBQbxRlwFJ7VP4L6hXwRaldJd1AYRKlHIwWCUf+VlcqnbUxLRjGt8EbJVYFeg3C5q9uIkwXxRP3RCU8ATxJRl9m/Xfm8srM1LUJmXjMSOYduXTArr+TbH/0/l0SXu/mmh6C7506UhDX3OMAPcQu4ktMV9NlQsquFHt1A+HXPe3zQvVeRbPn7qnEwgq3Ty1aqbhqmuHhNYBIYVwsjv03nwvQA7YB8VR5mPYbw30FQcuTB7CiBEfjBIZXKe1b3zAtbsKKpom9tDQWhYVY7fquGWNpL2k0l12eR3UJ9Q3TEQcpfZ1fmdUrp8BsuN+nr5jx1jg4F9PTE04wbHgm0RqG78ZuF2rIpnu/2YOEWgghDCV/8HCrn4qpJNlf1A9arxZaR1E79Fn2eZeG/IZLkz4mbX1CEiqQZG61hgj15azPYexjRXCR19XCFEDoRkZi2iRo/I4RWxPgDTOLQZ1wQTZMJFlBC/M36ABhl8DfJTdiUpV7sWfmErNSpLX31lP9mgZ4TsglJzl+VFZoS57NPOLBqd28iG1bPgGAZxFPuN+P9c0rN1pYxqyJGPVahODQFRK8Ua0PpahjduApMnw0/qngUGWdX+CxF283o0h/LRLUEsz1JND+duI5ptrIAneaPSAilSyXQbPMUqjgG46ow=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(376002)(136003)(346002)(366004)(2906002)(83380400001)(38100700002)(2616005)(186003)(110136005)(36756003)(8676002)(66946007)(76116006)(7416002)(91956017)(316002)(66446008)(64756008)(5660300002)(8936002)(66556008)(31686004)(38070700005)(26005)(71200400001)(86362001)(921005)(31696002)(66476007)(53546011)(122000001)(478600001)(41300700001)(6512007)(6506007)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NWFka1dBVlVDMm9CclNlZnVQbTlzbTFkbTFQRldZYkxqYmdHN0NZc1dqNEVF?=
+ =?utf-8?B?UWJlTWkxcUZCbllUbUt4blhLdzBpWUhhbEExTWRqaUplbk50aEdzL1IvQmRz?=
+ =?utf-8?B?TlNSMDJ1aE8zbWpzRVhnbkxpRjA5R1NEamJmcGQ3WWZSeGVOek16VFVRSW0y?=
+ =?utf-8?B?N0RKbmlwZTVMOU9PUExnLzFxM2wwQUMxVFdJYzdSV2dpdVBPcHZHSm04Y0N5?=
+ =?utf-8?B?a0MvREQ2eXJuRTF6SjgzNjdSN3FqU0Zjejl3b1ZlUnFvRUtlR0owMlpWS043?=
+ =?utf-8?B?ZE9DMk1sWlNrTWs4OGpIVUpPYW43Y1FLblRFcjJpc25MRG1Jc2N2cXZKNVFr?=
+ =?utf-8?B?d2pSRmRtY1RBZHI4R2I1Q2VraVJESXRnVWhkdDZVaDJrMzVwb3pBSnVrUjZz?=
+ =?utf-8?B?Y2dWV3hZQVRvb2E0aFp5d0lsOXRjN3VseUVLRHQ0SllhUk50ZHU1bGEvbFV2?=
+ =?utf-8?B?OEFQRUk2eDdzRFRXcmlZUlVPempIczNiS29yWC9UYkc0cDVBK3NzNlZBa2tW?=
+ =?utf-8?B?ZFAvdFQwR1FyVzVxVTNoeEZqd1pxL2F5M0RjRGYvL29RNi9TUXdDbDVaRGwr?=
+ =?utf-8?B?RkQ3T1VrOCtvYWhMaHpDTVBtd0RxbFRxYmdsUUtBcTNnZlFQTmg4R1ZvTWNF?=
+ =?utf-8?B?NHVPdDdCLzJnbjl1NHpoQTJ3Mk9uSnlYSG1TalVhc2xHRyttRDgrV21ZN0hE?=
+ =?utf-8?B?SDh6RXNoUlQzbHR5VzF6RVZoZDQzYzh2dnp5cGhHWklGN1F6TGdxMmpTSzlZ?=
+ =?utf-8?B?OUQrd0ZCL2hSZS9KMXk5Rnd5QS9hcXVURm1GZ1pYUlJRRC9PMDhSYlIyc2JQ?=
+ =?utf-8?B?Q2dMeUNWZEQ2MVdUMGZ2anFBSG1neTBBU3RrQzRXWjc2SWQyUjVJSndKRTUx?=
+ =?utf-8?B?MkdvTmNSbXRCa3Jvck9NRW5aVWRiVk1HQjFqU1JSbzFuY2ZXR1FwOHZ3c1BE?=
+ =?utf-8?B?Tk56QW01SER2WGtkU2VsRm15eG1ia0x0a2xkVXhGdDloVWlvMGdxNFhLazdD?=
+ =?utf-8?B?VERXM3F6NkFnWXZvbFlmb2dLS3ZWTDN1a2ZyTk9QaTFsQlF2NkVDbTd5NjNE?=
+ =?utf-8?B?WFdIY1QycGtidTQ3aWh1clVQN2prQ2QzbHhPUHUvSU5EYm02amZqSGtoZVlx?=
+ =?utf-8?B?cS9pZ25PME4zT2c4OWNwM24xUURZNjY4TEV4U0Fpd1lkV2JRYXlHcW9xTjJk?=
+ =?utf-8?B?dVlyamw1Rko4M1JaQjlwY0VLdUMwR0hIcXRTY1BnSUc5eTRFTUZlOHZiM2Ru?=
+ =?utf-8?B?NGpiRGdHMTFRb0FxY2htYWJESkZzTHJCMVVyVzhGdVJQVmxpcUhrRmEzYnJ2?=
+ =?utf-8?B?L0xEUWJrUmt4TzI2TjU2ZWdNWk5OZk50Nlk3UUdQc2RZb3FBWW5EQ3RhNnhY?=
+ =?utf-8?B?bW9yZlVkOFkxODVpR0VDMmpGWE9mQmw1cFdxdmE1YUVMekhMUmNnK2R1R0xv?=
+ =?utf-8?B?alpRRERsVFVLY2Z5UE4wZU9sRzJGeFhob0pUaG4wSzVKbEkrYlJqNWppbWFV?=
+ =?utf-8?B?U2I3L2x4TmcxRDdnbExBNXJRS05rMGRHb0YxSzlwUnVQUnF5WHJ0ZzAvbVph?=
+ =?utf-8?B?Vms4VTZFT0o1SytYM255OXVPUXMvUVd0R3l0WXc4N1JMeUJRbUZ0dEs1ZnRX?=
+ =?utf-8?B?NkJFeGJBOEFnRi9jdWZaaG9hdjVnU3dYYXFVTjd2WlFTM3Y3ZW5LZ3ZleUlm?=
+ =?utf-8?B?VEgxOUVHM0xsbFJwMzN3WWZRTkEvcXlhb3c3SHNQNnRCYjdNb1V0QTNXQ29m?=
+ =?utf-8?B?WWdxWUtYbHhkMGFXSTd2eE5yc2RiNkxoK2U0dXYvRk1TNlpac3JySGE5WGdU?=
+ =?utf-8?B?VmN6QXdrZ2N3NnpldytjbVA1M3gwV3RJdlg3NjM1QllHcVlBWEtSOTcrYWNL?=
+ =?utf-8?B?Y0ZMNUNSb1AyejNxQ2t0c0dWYy9lRStIa3FsYjhMeVBlZE92WFRsR1RGTUI1?=
+ =?utf-8?B?VHFrcjV6bWxkZ2VyZGpBWUYxeUlZbU94MkdKd3dpSE9GUFUzd3VGaFVUVHMx?=
+ =?utf-8?B?Vk51VlVkeFBpR0xKSHlhMzBselh4cEtFOUtnQ2YrMFJqMm9MZG5xSzg1L3F3?=
+ =?utf-8?B?SU05c244MUZudG5aVlVPdTdiVzdVQlZLVVRRb1B5QnU1dTdQZzNPNTh2eXdn?=
+ =?utf-8?B?K0ZaWDBxWnZyeGFuS29xUGpkdldCYUoxUVhWN3VVKzRUQWN3ZTcwdGZ1SzRn?=
+ =?utf-8?B?UlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <803CFA9C7A7D0E49A060B2AF4270149D@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <496f98ce-a0c4-9587-853c-9ba05323523a@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65866ad1-f8bf-4e6c-15a1-08da91c98e5c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 18:40:08.9044
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: heatiuvS6LPDnflXqfRiefzTEXklQ6NLd5qquEhL9jnWY5ywLiV1deabtMNfFnCNqBMezzp+r7mXDsW1cMvMuSv5f0AaM1ziPoZOuhxxV20=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5364
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,462 +160,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Sep 06, 2022 at 02:22:54PM +0100, John Garry escreveu:
-> On 06/09/2022 14:07, Arnaldo Carvalho de Melo wrote:
-> > Em Mon, Sep 05, 2022 at 04:30:19PM +0100, Nick Forrington escreveu:
-> > > Based on updated data from:
-> > > https://github.com/ARM-software/data/blob/master/pmu/neoverse-e1.json
-> > > 
-> > > which is based on PMU event descriptions from the Arm Neoverse E1
-> > > Technical Reference Manual.
-> > > 
-> > > This includes additional implementation defined fields not previously
-> > > included, and removes unimplemented events related to Arm's Statistical
-> > > Profiling Extension (SPE).
-> > 
-> > Applied locally, would be good to have an Acked-by or Reviewed-by, John?
-> 
-> Regardless of comment, below:
-> Reviewed-by: John Garry <john.garry@huawei.com>
-
-So, I removed this one, applied v2, now trying to apply the other patch
-from Nick, the one moving some events to a different file, but not being
-able to:
-
-⬢[acme@toolbox perf]$ b4 am -ctsl --cc-trailers 39abfee9-4a9b-ec44-9b02-a6cd34cfe64d@huawei.com
-Grabbing thread from lore.kernel.org/all/39abfee9-4a9b-ec44-9b02-a6cd34cfe64d%40huawei.com/t.mbox.gz
-Checking for newer revisions on https://lore.kernel.org/all/
-Analyzing 3 messages in the thread
-Checking attestation on all messages, may take a moment...
----
-  [PATCH] perf vendor events arm64: Move REMOTE_ACCESS to "memory" category
-    + Reviewed-by: John Garry <john.garry@huawei.com>
----
-Total patches: 1
----
- Link: https://lore.kernel.org/r/20220908112519.64614-1-nick.forrington@arm.com
- Base: not specified
-       git am ./20220908_nick_forrington_perf_vendor_events_arm64_move_remote_access_to_memory_category.mbx
-⬢[acme@toolbox perf]$        git am ./20220908_nick_forrington_perf_vendor_events_arm64_move_remote_access_to_memory_category.mbx
-Applying: perf vendor events arm64: Move REMOTE_ACCESS to "memory" category
-error: patch failed: tools/perf/pmu-events/arch/arm64/arm/cortex-a76-n1/memory.json:3
-error: tools/perf/pmu-events/arch/arm64/arm/cortex-a76-n1/memory.json: patch does not apply
-error: tools/perf/pmu-events/arch/arm64/arm/cortex-a76-n1/other.json: does not exist in index
-error: patch failed: tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/memory.json:2
-error: tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/memory.json: patch does not apply
-error: tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/other.json: does not exist in index
-error: patch failed: tools/perf/pmu-events/arch/arm64/arm/neoverse-v1/memory.json:2
-error: tools/perf/pmu-events/arch/arm64/arm/neoverse-v1/memory.json: patch does not apply
-error: tools/perf/pmu-events/arch/arm64/arm/neoverse-v1/other.json: does not exist in index
-Patch failed at 0001 perf vendor events arm64: Move REMOTE_ACCESS to "memory" category
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-⬢[acme@toolbox perf]$
- 
-> > 
-> > - Arnaldo
-> > > Signed-off-by: Nick Forrington <nick.forrington@arm.com>
-> > > ---
-> > >   .../arch/arm64/arm/neoverse-e1/cache.json     | 132 ++++++++++++++++++
-> > >   .../arch/arm64/arm/neoverse-e1/dpu.json       |  32 +++++
-> > >   .../arch/arm64/arm/neoverse-e1/ifu.json       | 122 ++++++++++++++++
-> > >   .../arm64/arm/neoverse-e1/instruction.json    |   6 +
-> > >   .../arch/arm64/arm/neoverse-e1/memory.json    |  12 ++
-> > >   .../arch/arm64/arm/neoverse-e1/spe.json       |  14 --
-> > >   6 files changed, 304 insertions(+), 14 deletions(-)
-> > >   create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json
-> > >   create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json
-> > >   delete mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
-> > > 
-> > > diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
-> > > index 3ad15e3a93a9..92406bc7b945 100644
-> > > --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
-> > > +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/cache.json
-> > > @@ -103,5 +103,137 @@
-> > >       },
-> > >       {
-> > >           "ArchStdEvent": "L3D_CACHE_REFILL_RD"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Merge in the store buffer",
-> > > +        "EventCode": "0xC0",
-> > > +        "EventName": "STB_STALL",
-> > > +        "BriefDescription": "Merge in the store buffer"
-> 
-> 
-> This looks the same as an a65 event. And more similar cases below, at a
-> glance.
-> 
-> Even though this is not a std or recommended event from the arch reference
-> manual, I don't see a reason why we can't put this as a
-> "armltd_common_impdef_events.json" and make a ArchStdEvent but maybe a
-> distinct name, like "STB_STALL_ARMLTD".
-> 
-> Nick, Can you please consider at factoring these out also?
-> 
-> Cheers,
-> John
-> 
-> EOM
-> 
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 1 data cache refill started due to prefetch. Counts any linefills from the prefetcher which cause an allocation into the L1 D-cache",
-> > > +        "EventCode": "0xC3",
-> > > +        "EventName": "L1D_PREF_LINE_FILL",
-> > > +        "BriefDescription": "Level 1 data cache refill started due to prefetch. Counts any linefills from the prefetcher which cause an allocation into the L1 D-cache"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 cache refill due to prefetch. +ICI If the core is configured with a per-core L2 cache: This event does not count. +ICI If the core is configured without a per-core L2 cache: This event counts the cluster cache event, as defined by L3_PREF_LINE_FILL. +ICI If there is neither a per-core cache nor a cluster cache configured, this event is not implemented",
-> > > +        "EventCode": "0xC4",
-> > > +        "EventName": "L2D_PREF_LINE_FILL",
-> > > +        "BriefDescription": "Level 2 cache refill due to prefetch. +ICI If the core is configured with a per-core L2 cache: This event does not count. +ICI If the core is configured without a per-core L2 cache: This event counts the cluster cache event, as defined by L3_PREF_LINE_FILL. +ICI If there is neither a per-core cache nor a cluster cache configured, this event is not implemented"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 3 cache refill due to prefetch. This event counts any linefills from the hardware prefetcher which cause an allocation into the L3 cache. Note It might not be possible to distinguish between both hardware and software prefetches and also which prefetches cause an allocation. If so, only hardware prefetches should be counted, regardless of whether they allocate. If either the core is configured without a per-core L2 or the cluster is configured without an L3 cache, this event is not implemented",
-> > > +        "EventCode": "0xC5",
-> > > +        "EventName": "L3_PREF_LINE_FILL",
-> > > +        "BriefDescription": "Level 3 cache refill due to prefetch. This event counts any linefills from the hardware prefetcher which cause an allocation into the L3 cache. Note It might not be possible to distinguish between both hardware and software prefetches and also which prefetches cause an allocation. If so, only hardware prefetches should be counted, regardless of whether they allocate. If either the core is configured without a per-core L2 or the cluster is configured without an L3 cache, this event is not implemented"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "L1D entering write stream mode",
-> > > +        "EventCode": "0xC6",
-> > > +        "EventName": "L1D_WS_MODE_ENTER",
-> > > +        "BriefDescription": "L1D entering write stream mode"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "L1D is in write stream mode",
-> > > +        "EventCode": "0xC7",
-> > > +        "EventName": "L1D_WS_MODE",
-> > > +        "BriefDescription": "L1D is in write stream mode"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 cache write streaming mode. This event counts for each cycle where the core is in write-streaming mode and not allocating writes into the L2 cache",
-> > > +        "EventCode": "0xC8",
-> > > +        "EventName": "L2D_WS_MODE",
-> > > +        "BriefDescription": "Level 2 cache write streaming mode. This event counts for each cycle where the core is in write-streaming mode and not allocating writes into the L2 cache"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 3 cache write streaming mode. This event counts for each cycle where the core is in write-streaming mode and not allocating writes into the L3 cache",
-> > > +        "EventCode": "0xC9",
-> > > +        "EventName": "L3D_WS_MODE",
-> > > +        "BriefDescription": "Level 3 cache write streaming mode. This event counts for each cycle where the core is in write-streaming mode and not allocating writes into the L3 cache"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 TLB last-level walk cache access. This event does not count if the MMU is disabled",
-> > > +        "EventCode": "0xCA",
-> > > +        "EventName": "TLB_L2TLB_LLWALK_ACCESS",
-> > > +        "BriefDescription": "Level 2 TLB last-level walk cache access. This event does not count if the MMU is disabled"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 TLB last-level walk cache refill. This event does not count if the MMU is disabled",
-> > > +        "EventCode": "0xCB",
-> > > +        "EventName": "TLB_L2TLB_LLWALK_REFILL",
-> > > +        "BriefDescription": "Level 2 TLB last-level walk cache refill. This event does not count if the MMU is disabled"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 TLB level-2 walk cache access. This event counts accesses to the level-2 walk cache where the last-level walk cache has missed. The event only counts when the translation regime of the pagewalk uses level 2 descriptors. This event does not count if the MMU is disabled",
-> > > +        "EventCode": "0xCC",
-> > > +        "EventName": "TLB_L2TLB_L2WALK_ACCESS",
-> > > +        "BriefDescription": "Level 2 TLB level-2 walk cache access. This event counts accesses to the level-2 walk cache where the last-level walk cache has missed. The event only counts when the translation regime of the pagewalk uses level 2 descriptors. This event does not count if the MMU is disabled"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 TLB level-2 walk cache refill. This event does not count if the MMU is disabled",
-> > > +        "EventCode": "0xCD",
-> > > +        "EventName": "TLB_L2TLB_L2WALK_REFILL",
-> > > +        "BriefDescription": "Level 2 TLB level-2 walk cache refill. This event does not count if the MMU is disabled"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 TLB IPA cache access. This event counts on each access to the IPA cache. +ICI If a single pagewalk needs to make multiple accesses to the IPA cache, each access is counted. +ICI If stage 2 translation is disabled, this event does not count",
-> > > +        "EventCode": "0xCE",
-> > > +        "EventName": "TLB_L2TLB_S2_ACCESS",
-> > > +        "BriefDescription": "Level 2 TLB IPA cache access. This event counts on each access to the IPA cache. +ICI If a single pagewalk needs to make multiple accesses to the IPA cache, each access is counted. +ICI If stage 2 translation is disabled, this event does not count"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 TLB IPA cache refill. This event counts on each refill of the IPA cache. +ICI If a single pagewalk needs to make multiple accesses to the IPA cache, each access which causes a refill is counted. +ICI If stage 2 translation is disabled, this event does not count",
-> > > +        "EventCode": "0xCF",
-> > > +        "EventName": "TLB_L2TLB_S2_REFILL",
-> > > +        "BriefDescription": "Level 2 TLB IPA cache refill. This event counts on each refill of the IPA cache. +ICI If a single pagewalk needs to make multiple accesses to the IPA cache, each access which causes a refill is counted. +ICI If stage 2 translation is disabled, this event does not count"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Unattributable Level 1 data cache write-back. This event occurs when a requestor outside the PE makes a coherency request that results in writeback",
-> > > +        "EventCode": "0xF0",
-> > > +        "EventName": "L2_L1D_CACHE_WB_UNATT",
-> > > +        "BriefDescription": "Unattributable Level 1 data cache write-back. This event occurs when a requestor outside the PE makes a coherency request that results in writeback"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Unattributable Level 2 unified cache access. This event occurs when a requestor outside the PE makes a coherency request that results in level 2 unified cache access",
-> > > +        "EventCode": "0xF1",
-> > > +        "EventName": "L2_L2D_CACHE_UNATT",
-> > > +        "BriefDescription": "Unattributable Level 2 unified cache access. This event occurs when a requestor outside the PE makes a coherency request that results in level 2 unified cache access"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Unattributable Level 2 unified cache access, read. This event occurs when a requestor outside the PE makes a coherency request that results in level 2 unified cache read access",
-> > > +        "EventCode": "0xF2",
-> > > +        "EventName": "L2_L2D_CACHE_RD_UNATT",
-> > > +        "BriefDescription": "Unattributable Level 2 unified cache access, read. This event occurs when a requestor outside the PE makes a coherency request that results in level 2 unified cache read access"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Unattributable Level 3 unified cache access. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 unified cache read access",
-> > > +        "EventCode": "0xF3",
-> > > +        "EventName": "L2_L3D_CACHE_UNATT",
-> > > +        "BriefDescription": "Unattributable Level 3 unified cache access. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 unified cache read access"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Unattributable Level 3 unified cache access, read. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 unified cache read access",
-> > > +        "EventCode": "0xF4",
-> > > +        "EventName": "L2_L3D_CACHE_RD_UNATT",
-> > > +        "BriefDescription": "Unattributable Level 3 unified cache access, read. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 unified cache read access"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Unattributable Level 3 unified cache allocation without refill. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 cache allocate without refill",
-> > > +        "EventCode": "0xF5",
-> > > +        "EventName": "L2_L3D_CACHE_ALLOC_UNATT",
-> > > +        "BriefDescription": "Unattributable Level 3 unified cache allocation without refill. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 cache allocate without refill"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Unattributable Level 3 unified cache refill. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 cache refill",
-> > > +        "EventCode": "0xF6",
-> > > +        "EventName": "L2_L3D_CACHE_REFILL_UNATT",
-> > > +        "BriefDescription": "Unattributable Level 3 unified cache refill. This event occurs when a requestor outside the PE makes a coherency request that results in level 3 cache refill"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Level 2 cache stash dropped. This event counts on each stash request received from the interconnect or ACP, that is targeting L2 and gets dropped due to lack of buffer space to hold the request",
-> > > +        "EventCode": "0xF7",
-> > > +        "EventName": "L2D_CACHE_STASH_DROPPED",
-> > > +        "BriefDescription": "Level 2 cache stash dropped. This event counts on each stash request received from the interconnect or ACP, that is targeting L2 and gets dropped due to lack of buffer space to hold the request"
-> > >       }
-> > >   ]
-> > > diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json
-> > > new file mode 100644
-> > > index 000000000000..b8e402a91bdd
-> > > --- /dev/null
-> > > +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/dpu.json
-> > > @@ -0,0 +1,32 @@
-> > > +[
-> > > +    {
-> > > +        "PublicDescription": "Instruction retired, indirect branch, mispredicted",
-> > > +        "EventCode": "0xE9",
-> > > +        "EventName": "DPU_BR_IND_MIS",
-> > > +        "BriefDescription": "Instruction retired, indirect branch, mispredicted"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Instruction retired, conditional branch, mispredicted",
-> > > +        "EventCode": "0xEA",
-> > > +        "EventName": "DPU_BR_COND_MIS",
-> > > +        "BriefDescription": "Instruction retired, conditional branch, mispredicted"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Memory error (any type) from IFU",
-> > > +        "EventCode": "0xEB",
-> > > +        "EventName": "DPU_MEM_ERR_IFU",
-> > > +        "BriefDescription": "Memory error (any type) from IFU"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Memory error (any type) from DCU",
-> > > +        "EventCode": "0xEC",
-> > > +        "EventName": "DPU_MEM_ERR_DCU",
-> > > +        "BriefDescription": "Memory error (any type) from DCU"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Memory error (any type) from TLB",
-> > > +        "EventCode": "0xED",
-> > > +        "EventName": "DPU_MEM_ERR_TLB",
-> > > +        "BriefDescription": "Memory error (any type) from TLB"
-> > > +    }
-> > > +]
-> > > diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json
-> > > new file mode 100644
-> > > index 000000000000..13178c5dca14
-> > > --- /dev/null
-> > > +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/ifu.json
-> > > @@ -0,0 +1,122 @@
-> > > +[
-> > > +    {
-> > > +        "PublicDescription": "I-Cache miss on an access from the prefetch block",
-> > > +        "EventCode": "0xD0",
-> > > +        "EventName": "IFU_IC_MISS_WAIT",
-> > > +        "BriefDescription": "I-Cache miss on an access from the prefetch block"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Counts the cycles spent on a request for Level 2 TLB lookup after a Level 1l ITLB miss",
-> > > +        "EventCode": "0xD1",
-> > > +        "EventName": "IFU_IUTLB_MISS_WAIT",
-> > > +        "BriefDescription": "Counts the cycles spent on a request for Level 2 TLB lookup after a Level 1l ITLB miss"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Micro-predictor conditional/direction mispredict, with respect to. if3/if4 predictor",
-> > > +        "EventCode": "0xD2",
-> > > +        "EventName": "IFU_MICRO_COND_MISPRED",
-> > > +        "BriefDescription": "Micro-predictor conditional/direction mispredict, with respect to. if3/if4 predictor"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Micro-predictor address mispredict, with respect to if3/if4 predictor",
-> > > +        "EventCode": "0xD3",
-> > > +        "EventName": "IFU_MICRO_CADDR_MISPRED",
-> > > +        "BriefDescription": "Micro-predictor address mispredict, with respect to if3/if4 predictor"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Micro-predictor hit with immediate redirect",
-> > > +        "EventCode": "0xD4",
-> > > +        "EventName": "IFU_MICRO_HIT",
-> > > +        "BriefDescription": "Micro-predictor hit with immediate redirect"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Micro-predictor negative cache hit",
-> > > +        "EventCode": "0xD6",
-> > > +        "EventName": "IFU_MICRO_NEG_HIT",
-> > > +        "BriefDescription": "Micro-predictor negative cache hit"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Micro-predictor correction",
-> > > +        "EventCode": "0xD7",
-> > > +        "EventName": "IFU_MICRO_CORRECTION",
-> > > +        "BriefDescription": "Micro-predictor correction"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "A 2nd instruction could have been pushed but was not because it was nonsequential",
-> > > +        "EventCode": "0xD8",
-> > > +        "EventName": "IFU_MICRO_NO_INSTR1",
-> > > +        "BriefDescription": "A 2nd instruction could have been pushed but was not because it was nonsequential"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Micro-predictor miss",
-> > > +        "EventCode": "0xD9",
-> > > +        "EventName": "IFU_MICRO_NO_PRED",
-> > > +        "BriefDescription": "Micro-predictor miss"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Thread flushed due to TLB miss",
-> > > +        "EventCode": "0xDA",
-> > > +        "EventName": "IFU_FLUSHED_TLB_MISS",
-> > > +        "BriefDescription": "Thread flushed due to TLB miss"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Thread flushed due to reasons other than TLB miss",
-> > > +        "EventCode": "0xDB",
-> > > +        "EventName": "IFU_FLUSHED_EXCL_TLB_MISS",
-> > > +        "BriefDescription": "Thread flushed due to reasons other than TLB miss"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "This thread and the other thread both ready for scheduling in if0",
-> > > +        "EventCode": "0xDC",
-> > > +        "EventName": "IFU_ALL_THRDS_RDY",
-> > > +        "BriefDescription": "This thread and the other thread both ready for scheduling in if0"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "This thread was arbitrated when the other thread was also ready for scheduling",
-> > > +        "EventCode": "0xDD",
-> > > +        "EventName": "IFU_WIN_ARB_OTHER_RDY",
-> > > +        "BriefDescription": "This thread was arbitrated when the other thread was also ready for scheduling"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "This thread was arbitrated when the other thread was also active, but not necessarily ready. For example, waiting for I-Cache or TLB",
-> > > +        "EventCode": "0xDE",
-> > > +        "EventName": "IFU_WIN_ARB_OTHER_ACT",
-> > > +        "BriefDescription": "This thread was arbitrated when the other thread was also active, but not necessarily ready. For example, waiting for I-Cache or TLB"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "This thread was not arbitrated because it was not ready for scheduling. For example, due to a cache miss or TLB miss",
-> > > +        "EventCode": "0xDF",
-> > > +        "EventName": "IFU_NOT_RDY_FOR_ARB",
-> > > +        "BriefDescription": "This thread was not arbitrated because it was not ready for scheduling. For example, due to a cache miss or TLB miss"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "The thread moved from an active state to an inactive state (long-term sleep state, causing deallocation of some resources)",
-> > > +        "EventCode": "0xE0",
-> > > +        "EventName": "IFU_GOTO_IDLE",
-> > > +        "BriefDescription": "The thread moved from an active state to an inactive state (long-term sleep state, causing deallocation of some resources)"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "I-Cache lookup under miss from other thread",
-> > > +        "EventCode": "0xE1",
-> > > +        "EventName": "IFU_IC_LOOKUP_UNDER_MISS",
-> > > +        "BriefDescription": "I-Cache lookup under miss from other thread"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "I-Cache miss under miss from other thread",
-> > > +        "EventCode": "0xE2",
-> > > +        "EventName": "IFU_IC_MISS_UNDER_MISS",
-> > > +        "BriefDescription": "I-Cache miss under miss from other thread"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "This thread pushed an instruction into the IQ",
-> > > +        "EventCode": "0xE3",
-> > > +        "EventName": "IFU_INSTR_PUSHED",
-> > > +        "BriefDescription": "This thread pushed an instruction into the IQ"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "I-Cache Speculative line fill",
-> > > +        "EventCode": "0xE4",
-> > > +        "EventName": "IFU_IC_LF_SP",
-> > > +        "BriefDescription": "I-Cache Speculative line fill"
-> > > +    }
-> > > +]
-> > > diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
-> > > index 6c3b8f772e7f..2e0d60779dce 100644
-> > > --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
-> > > +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/instruction.json
-> > > @@ -61,5 +61,11 @@
-> > >       },
-> > >       {
-> > >           "ArchStdEvent": "ISB_SPEC"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "Instruction retired, conditional branch",
-> > > +        "EventCode": "0xE8",
-> > > +        "EventName": "DPU_BR_COND_RETIRED",
-> > > +        "BriefDescription": "Instruction retired, conditional branch"
-> > >       }
-> > >   ]
-> > > diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
-> > > index 78ed6dfcedc1..18d527f7fad4 100644
-> > > --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
-> > > +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/memory.json
-> > > @@ -19,5 +19,17 @@
-> > >       },
-> > >       {
-> > >           "ArchStdEvent": "UNALIGNED_LDST_SPEC"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "External memory request",
-> > > +        "EventCode": "0xC1",
-> > > +        "EventName": "BIU_EXT_MEM_REQ",
-> > > +        "BriefDescription": "External memory request"
-> > > +    },
-> > > +    {
-> > > +        "PublicDescription": "External memory request to non-cacheable memory",
-> > > +        "EventCode": "0xC2",
-> > > +        "EventName": "BIU_EXT_MEM_REQ_NC",
-> > > +        "BriefDescription": "External memory request to non-cacheable memory"
-> > >       }
-> > >   ]
-> > > diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
-> > > deleted file mode 100644
-> > > index 20f2165c85fe..000000000000
-> > > --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-e1/spe.json
-> > > +++ /dev/null
-> > > @@ -1,14 +0,0 @@
-> > > -[
-> > > -    {
-> > > -        "ArchStdEvent": "SAMPLE_POP"
-> > > -    },
-> > > -    {
-> > > -        "ArchStdEvent": "SAMPLE_FEED"
-> > > -    },
-> > > -    {
-> > > -        "ArchStdEvent": "SAMPLE_FILTRATE"
-> > > -    },
-> > > -    {
-> > > -        "ArchStdEvent": "SAMPLE_COLLISION"
-> > > -    }
-> > > -]
-> > > -- 
-> > > 2.25.1
-> > 
-
--- 
-
-- Arnaldo
+T24gMDgvMDkvMjAyMiAxNTo0NCwgWm9uZyBMaSB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6IERv
+IG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0aGUg
+Y29udGVudCBpcyBzYWZlDQo+IA0KPiBGcm9tOiBCZW4gRG9va3MgPGJlbi5kb29rc0BzaWZpdmUu
+Y29tPg0KPiANCj4gVXNlIHRoZSBwcl9mbXQoKSBtYWNybyB0byBwcmVmaXggYWxsIHRoZSBvdXRw
+dXQgd2l0aCAiQ0NBQ0hFOiINCj4gdG8gYXZvaWQgaGF2aW5nIHRvIHdyaXRlIGl0IG91dCBlYWNo
+IHRpbWUsIG9yIG1ha2UgYSBsYXJnZSBkaWZmDQo+IHdoZW4gdGhlIG5leHQgY2hhbmdlIGNvbWVz
+IGFsb25nLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQmVuIERvb2tzIDxiZW4uZG9va3NAc2lmaXZl
+LmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogWm9uZyBMaSA8em9uZy5saUBzaWZpdmUuY29tPg0KPiBS
+ZXZpZXdlZC1ieTogQ29ub3IgRG9vbGV5IDxjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbT4NCg0K
+YnR3LCBJIHRoaW5rIEJlbiBtaXNzZWQgYSBwcmludCAtIGEgcHJfZXJyKCkgaW4gaW5pdCgpLg0K
+DQo+IC0tLQ0KPiAgZHJpdmVycy9zb2Mvc2lmaXZlL3NpZml2ZV9jY2FjaGUuYyB8IDE1ICsrKysr
+KysrKy0tLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlv
+bnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NvYy9zaWZpdmUvc2lmaXZlX2NjYWNo
+ZS5jIGIvZHJpdmVycy9zb2Mvc2lmaXZlL3NpZml2ZV9jY2FjaGUuYw0KPiBpbmRleCA1OGQxNGYx
+MWE2M2EuLmIzOTI5YzRkNmQ1YiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zb2Mvc2lmaXZlL3Np
+Zml2ZV9jY2FjaGUuYw0KPiArKysgYi9kcml2ZXJzL3NvYy9zaWZpdmUvc2lmaXZlX2NjYWNoZS5j
+DQo+IEBAIC01LDYgKzUsOSBAQA0KPiAgICogQ29weXJpZ2h0IChDKSAyMDE4LTIwMjIgU2lGaXZl
+LCBJbmMuDQo+ICAgKg0KPiAgICovDQo+ICsNCj4gKyNkZWZpbmUgcHJfZm10KGZtdCkgIkNDQUNI
+RTogIiBmbXQNCj4gKw0KPiAgI2luY2x1ZGUgPGxpbnV4L2RlYnVnZnMuaD4NCj4gICNpbmNsdWRl
+IDxsaW51eC9pbnRlcnJ1cHQuaD4NCj4gICNpbmNsdWRlIDxsaW51eC9vZl9pcnEuaD4NCj4gQEAg
+LTg1LDEzICs4OCwxMyBAQCBzdGF0aWMgdm9pZCBjY2FjaGVfY29uZmlnX3JlYWQodm9pZCkNCj4g
+DQo+ICAgICAgICAgY2ZnID0gcmVhZGwoY2NhY2hlX2Jhc2UgKyBTSUZJVkVfQ0NBQ0hFX0NPTkZJ
+Ryk7DQo+IA0KPiAtICAgICAgIHByX2luZm8oIkNDQUNIRTogJXUgYmFua3MsICV1IHdheXMsIHNl
+dHMvYmFuaz0lbGx1LCBieXRlcy9ibG9jaz0lbGx1XG4iLA0KPiArICAgICAgIHByX2luZm8oIiV1
+IGJhbmtzLCAldSB3YXlzLCBzZXRzL2Jhbms9JWxsdSwgYnl0ZXMvYmxvY2s9JWxsdVxuIiwNCj4g
+ICAgICAgICAgICAgICAgIChjZmcgJiAweGZmKSwgKGNmZyA+PiA4KSAmIDB4ZmYsDQo+ICAgICAg
+ICAgICAgICAgICBCSVRfVUxMKChjZmcgPj4gMTYpICYgMHhmZiksDQo+ICAgICAgICAgICAgICAg
+ICBCSVRfVUxMKChjZmcgPj4gMjQpICYgMHhmZikpOw0KPiANCj4gICAgICAgICBjZmcgPSByZWFk
+bChjY2FjaGVfYmFzZSArIFNJRklWRV9DQ0FDSEVfV0FZRU5BQkxFKTsNCj4gLSAgICAgICBwcl9p
+bmZvKCJDQ0FDSEU6IEluZGV4IG9mIHRoZSBsYXJnZXN0IHdheSBlbmFibGVkOiAldVxuIiwgY2Zn
+KTsNCj4gKyAgICAgICBwcl9pbmZvKCJJbmRleCBvZiB0aGUgbGFyZ2VzdCB3YXkgZW5hYmxlZDog
+JXVcbiIsIGNmZyk7DQo+ICB9DQo+IA0KPiAgc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9kZXZpY2Vf
+aWQgc2lmaXZlX2NjYWNoZV9pZHNbXSA9IHsNCj4gQEAgLTE1NSw3ICsxNTgsNyBAQCBzdGF0aWMg
+aXJxcmV0dXJuX3QgY2NhY2hlX2ludF9oYW5kbGVyKGludCBpcnEsIHZvaWQgKmRldmljZSkNCj4g
+ICAgICAgICBpZiAoaXJxID09IGdfaXJxW0RJUl9DT1JSXSkgew0KPiAgICAgICAgICAgICAgICAg
+YWRkX2ggPSByZWFkbChjY2FjaGVfYmFzZSArIFNJRklWRV9DQ0FDSEVfRElSRUNDRklYX0hJR0gp
+Ow0KPiAgICAgICAgICAgICAgICAgYWRkX2wgPSByZWFkbChjY2FjaGVfYmFzZSArIFNJRklWRV9D
+Q0FDSEVfRElSRUNDRklYX0xPVyk7DQo+IC0gICAgICAgICAgICAgICBwcl9lcnIoIkNDQUNIRTog
+RGlyRXJyb3IgQCAweCUwOFguJTA4WFxuIiwgYWRkX2gsIGFkZF9sKTsNCj4gKyAgICAgICAgICAg
+ICAgIHByX2VycigiRGlyRXJyb3IgQCAweCUwOFguJTA4WFxuIiwgYWRkX2gsIGFkZF9sKTsNCj4g
+ICAgICAgICAgICAgICAgIC8qIFJlYWRpbmcgdGhpcyByZWdpc3RlciBjbGVhcnMgdGhlIERpckVy
+cm9yIGludGVycnVwdCBzaWcgKi8NCj4gICAgICAgICAgICAgICAgIHJlYWRsKGNjYWNoZV9iYXNl
+ICsgU0lGSVZFX0NDQUNIRV9ESVJFQ0NGSVhfQ09VTlQpOw0KPiAgICAgICAgICAgICAgICAgYXRv
+bWljX25vdGlmaWVyX2NhbGxfY2hhaW4oJmNjYWNoZV9lcnJfY2hhaW4sDQo+IEBAIC0xNzUsNyAr
+MTc4LDcgQEAgc3RhdGljIGlycXJldHVybl90IGNjYWNoZV9pbnRfaGFuZGxlcihpbnQgaXJxLCB2
+b2lkICpkZXZpY2UpDQo+ICAgICAgICAgaWYgKGlycSA9PSBnX2lycVtEQVRBX0NPUlJdKSB7DQo+
+ICAgICAgICAgICAgICAgICBhZGRfaCA9IHJlYWRsKGNjYWNoZV9iYXNlICsgU0lGSVZFX0NDQUNI
+RV9EQVRFQ0NGSVhfSElHSCk7DQo+ICAgICAgICAgICAgICAgICBhZGRfbCA9IHJlYWRsKGNjYWNo
+ZV9iYXNlICsgU0lGSVZFX0NDQUNIRV9EQVRFQ0NGSVhfTE9XKTsNCj4gLSAgICAgICAgICAgICAg
+IHByX2VycigiQ0NBQ0hFOiBEYXRhRXJyb3IgQCAweCUwOFguJTA4WFxuIiwgYWRkX2gsIGFkZF9s
+KTsNCj4gKyAgICAgICAgICAgICAgIHByX2VycigiRGF0YUVycm9yIEAgMHglMDhYLiUwOFhcbiIs
+IGFkZF9oLCBhZGRfbCk7DQo+ICAgICAgICAgICAgICAgICAvKiBSZWFkaW5nIHRoaXMgcmVnaXN0
+ZXIgY2xlYXJzIHRoZSBEYXRhRXJyb3IgaW50ZXJydXB0IHNpZyAqLw0KPiAgICAgICAgICAgICAg
+ICAgcmVhZGwoY2NhY2hlX2Jhc2UgKyBTSUZJVkVfQ0NBQ0hFX0RBVEVDQ0ZJWF9DT1VOVCk7DQo+
+ICAgICAgICAgICAgICAgICBhdG9taWNfbm90aWZpZXJfY2FsbF9jaGFpbigmY2NhY2hlX2Vycl9j
+aGFpbiwNCj4gQEAgLTE4NSw3ICsxODgsNyBAQCBzdGF0aWMgaXJxcmV0dXJuX3QgY2NhY2hlX2lu
+dF9oYW5kbGVyKGludCBpcnEsIHZvaWQgKmRldmljZSkNCj4gICAgICAgICBpZiAoaXJxID09IGdf
+aXJxW0RBVEFfVU5DT1JSXSkgew0KPiAgICAgICAgICAgICAgICAgYWRkX2ggPSByZWFkbChjY2Fj
+aGVfYmFzZSArIFNJRklWRV9DQ0FDSEVfREFURUNDRkFJTF9ISUdIKTsNCj4gICAgICAgICAgICAg
+ICAgIGFkZF9sID0gcmVhZGwoY2NhY2hlX2Jhc2UgKyBTSUZJVkVfQ0NBQ0hFX0RBVEVDQ0ZBSUxf
+TE9XKTsNCj4gLSAgICAgICAgICAgICAgIHByX2VycigiQ0NBQ0hFOiBEYXRhRmFpbCBAIDB4JTA4
+WC4lMDhYXG4iLCBhZGRfaCwgYWRkX2wpOw0KPiArICAgICAgICAgICAgICAgcHJfZXJyKCJEYXRh
+RmFpbCBAIDB4JTA4WC4lMDhYXG4iLCBhZGRfaCwgYWRkX2wpOw0KPiAgICAgICAgICAgICAgICAg
+LyogUmVhZGluZyB0aGlzIHJlZ2lzdGVyIGNsZWFycyB0aGUgRGF0YUZhaWwgaW50ZXJydXB0IHNp
+ZyAqLw0KPiAgICAgICAgICAgICAgICAgcmVhZGwoY2NhY2hlX2Jhc2UgKyBTSUZJVkVfQ0NBQ0hF
+X0RBVEVDQ0ZBSUxfQ09VTlQpOw0KPiAgICAgICAgICAgICAgICAgYXRvbWljX25vdGlmaWVyX2Nh
+bGxfY2hhaW4oJmNjYWNoZV9lcnJfY2hhaW4sDQo+IEBAIC0yMjcsNyArMjMwLDcgQEAgc3RhdGlj
+IGludCBfX2luaXQgc2lmaXZlX2NjYWNoZV9pbml0KHZvaWQpDQo+ICAgICAgICAgICAgICAgICBy
+YyA9IHJlcXVlc3RfaXJxKGdfaXJxW2ldLCBjY2FjaGVfaW50X2hhbmRsZXIsIDAsICJjY2FjaGVf
+ZWNjIiwNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTlVMTCk7DQo+ICAgICAg
+ICAgICAgICAgICBpZiAocmMpIHsNCj4gLSAgICAgICAgICAgICAgICAgICAgICAgcHJfZXJyKCJD
+Q0FDSEU6IENvdWxkIG5vdCByZXF1ZXN0IElSUSAlZFxuIiwgZ19pcnFbaV0pOw0KPiArICAgICAg
+ICAgICAgICAgICAgICAgICBwcl9lcnIoIkNvdWxkIG5vdCByZXF1ZXN0IElSUSAlZFxuIiwgZ19p
+cnFbaV0pOw0KPiAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gcmM7DQo+ICAgICAgICAg
+ICAgICAgICB9DQo+ICAgICAgICAgfQ0KPiAtLQ0KPiAyLjE3LjENCj4gDQoNCg==

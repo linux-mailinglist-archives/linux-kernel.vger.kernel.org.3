@@ -2,57 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1125B1CB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6000F5B1CC3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiIHMWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S231709AbiIHMW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231638AbiIHMWZ (ORCPT
+        with ESMTP id S231735AbiIHMWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:22:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D1C64D9;
-        Thu,  8 Sep 2022 05:22:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A53D061C99;
-        Thu,  8 Sep 2022 12:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A976C433D6;
-        Thu,  8 Sep 2022 12:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662639743;
-        bh=c865XJLe4Z2ZkQVpfIUa6NvVVbhj/DHk8R5Iswb7/6M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X/B3/7aQ1H23MpMbYOEAHsluM/ebsaOP4LrfJ7XKXwjf1NzoAKOPAndPh/In2tlkt
-         ebeFZS7zjnMeFSz/5+4qcQhXuGe4zRMUpVS73l+JkhyphP/ep0SoFwhiyhXhAJ9gOx
-         W7RVone1Ma83uzslTrBWwAXX9IKRDFOtJvwGPVj4jEebb02TTUZShuPIXDn8Vouka9
-         a4vLscqy9qtW1Xw6GnXMNCai8U7QAv1FVnGw2Z8JgxgmXfjjZ0yEv9KkvfOE8RTRDA
-         axW/PvmWAHYAOdJOOcd9IqT5h+lCaV2DPl7ptgyVHsElEUhXCsd2l1yXf0z14TfJ/p
-         VO5vmUyqDJVEg==
-Date:   Thu, 8 Sep 2022 13:22:16 +0100
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Message-ID: <YxneeP/9zOHNnt1E@work>
-References: <20220907230556.73536-1-keescook@chromium.org>
+        Thu, 8 Sep 2022 08:22:50 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466C41316DA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:22:42 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1662639758tjqlery3
+Received: from localhost.localdomain ( [182.148.14.0])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Sep 2022 20:22:37 +0800 (CST)
+X-QQ-SSF: 0100000000200090C000B00A0000000
+X-QQ-FEAT: hWIfutFPnzhdGfaSjJO/9RLXml8RanHD0cG/91rhA6FE+aTrN1nr5yLnQrv33
+        qdJfCYVe/XNC5x2+JjeM3WanLyMhBd0QAtWj5v4l15vem8ea9iG8TqQbDFIrvynzMKWWQVr
+        DoJkgajU7wpGEgxrf7tLpchCUSug2mNQKnGn1s//dKaT8A1oJp4eOKSxT6ogyxGimB8UJt/
+        wTrkbOwZQB6DWxPG3ayid6IMTEnEZz6PehCDXdlr0xJq26tDtUrlF+XWEkPikqPNBNnibaD
+        lYsCw9dv0XHhvJ3RI1JoSmFXF+bD3t3TPJUlNaQjX7CiWZ2Iqan4ICXp5aGPdvXKcds8Uye
+        +JgVkuHe5hZOqJhu/B3EWCzXkdmotA+irNR4L7A5dy6JNGRAc8=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] drivers/mtd: fix repeated words in comments
+Date:   Thu,  8 Sep 2022 20:22:29 +0800
+Message-Id: <20220908122229.10814-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220907230556.73536-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,55 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 04:05:56PM -0700, Kees Cook wrote:
-> Clang is especially sensitive about argument type matching when using
-> __overloaded functions (like memcmp(), etc). Help it see that function
-> pointers are just "void *". Avoids this error:
-> 
-> arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
->                    if (!memcmp(prom_init, prom_init + mem, 32))
->                         ^~~~~~
-> include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
-> 
+Delete the redundant word 'in'.
 
-Don't we have the same problem at line 162?
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/mtd/mtdconcat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-(next-20220908)arch/mips/bcm47xx/prom.c:
-161         for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
-162                 if (!memcmp(prom_init, (void *)(off + extmem), 16))
-163                         break;
-164         }
+diff --git a/drivers/mtd/mtdconcat.c b/drivers/mtd/mtdconcat.c
+index f685a581df48..193428de6a4b 100644
+--- a/drivers/mtd/mtdconcat.c
++++ b/drivers/mtd/mtdconcat.c
+@@ -836,7 +836,7 @@ struct mtd_info *mtd_concat_create(struct mtd_info *subdev[],	/* subdevices to c
+ 
+ 		/*
+ 		 * walk the map of the new device once more and fill in
+-		 * in erase region info:
++		 * erase region info:
+ 		 */
+ 		curr_erasesize = subdev[0]->erasesize;
+ 		begin = position = 0;
+-- 
+2.36.1
 
---
-Gustavo
-
-> Cc: Hauke Mehrtens <hauke@hauke-m.de>
-> Cc: "Rafał Miłecki" <zajec5@gmail.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: llvm@lists.linux.dev
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/mips/bcm47xx/prom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-> index ab203e66ba0d..eb5c04a24531 100644
-> --- a/arch/mips/bcm47xx/prom.c
-> +++ b/arch/mips/bcm47xx/prom.c
-> @@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
->  			pr_debug("Assume 128MB RAM\n");
->  			break;
->  		}
-> -		if (!memcmp(prom_init, prom_init + mem, 32))
-> +		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
->  			break;
->  	}
->  	lowmem = mem;
-> -- 
-> 2.34.1
-> 

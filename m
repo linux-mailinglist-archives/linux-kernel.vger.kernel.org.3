@@ -2,169 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8B55B18E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266345B18EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiIHJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        id S230391AbiIHJjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiIHJjP (ORCPT
+        with ESMTP id S230269AbiIHJj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:39:15 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABAAFBF21;
-        Thu,  8 Sep 2022 02:39:13 -0700 (PDT)
+        Thu, 8 Sep 2022 05:39:29 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044FBBC;
+        Thu,  8 Sep 2022 02:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1662629954; x=1694165954;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Alxpd1HY785/O28PkM/JBtWCPSW1SE57zwuThatvaiY=;
-  b=myNgrW/A7lW0BfSZClNbnMelFH42lZ7//UJoxVgX6KPYiJeVj+ug6KbM
-   tR+4kRhU5CAZ/ZOL3D7XRDD9ky95HkCIU/PNr4ePvnO+LTgoFFZs2pTGW
-   9EsR2xobxgCpW8dCSpAQ2oB9ZLR5OJCBKQpFec4PclUpGvG/dZGDBpxcz
-   cDLZEKEJ3KXJ7PPQRDs6EA1fkzUgoNBZhQ6xylbuS0yA++CuBFOFadNR8
-   2kQPsYCwUnOHzkzz3HZwim/ZqcQniom5Hy0i+aYQyCbMAF/piGhMldF5r
-   DKed0l8FMImYzbR5fsO8oR1rIvkj8cBieMa1Qx9f435ZRx1oUHsZgN8iF
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,299,1654552800"; 
-   d="scan'208";a="26065096"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 08 Sep 2022 11:39:11 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 08 Sep 2022 11:39:11 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 08 Sep 2022 11:39:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1662629951; x=1694165951;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Alxpd1HY785/O28PkM/JBtWCPSW1SE57zwuThatvaiY=;
-  b=J/nESCRd/wOz5y11btNFoD5/XkdrSS8iERoUm+zejHODoIinjOTjT23L
-   qh23lDHriLra6fx1/hYH3SCUNrlPBwHQm2K1W06xCvFmLd+D9PXMjdCPK
-   d+fNXeSEP8P1WC2l7L8EQ75FItZy7Q9MCPYUR4e+x60Iqw9SVpuJ1ZFb4
-   p9neLWp3tfYqL3xT+/tPpWh5CPG6Tj9QJ9hBXDXs4/2Kp1+I0LxzSbPWw
-   iS0fCZR7FuoCj+HJ2plLzN3W8QRptPFif5pM5xofLq2xNfhLhTUdsxtls
-   xXhXSPbvCyv3EZHfaOViCbLI6Dfi1Whl8r/pdLWwrI6bbxri5rvU7mxw+
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,299,1654552800"; 
-   d="scan'208";a="26065094"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 08 Sep 2022 11:39:11 +0200
-Received: from steina-w.localnet (unknown [10.123.49.11])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 6FCB3280056;
-        Thu,  8 Sep 2022 11:39:11 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 3/4] arm64: dts: imx8mp: Add snps, gfladj-refclk-lpm-sel quirk to USB nodes
-Date:   Thu, 08 Sep 2022 11:39:09 +0200
-Message-ID: <1836686.CQOukoFCf9@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <PA4PR04MB9640C21A8F2DC44DB58C5C9089409@PA4PR04MB9640.eurprd04.prod.outlook.com>
-References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com> <20220907144624.2810117-4-alexander.stein@ew.tq-group.com> <PA4PR04MB9640C21A8F2DC44DB58C5C9089409@PA4PR04MB9640.eurprd04.prod.outlook.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1662629965;
+  x=1694165965;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GYN6K1XEtbZIYFOF497nm3dEoRDRacw5iqjWmI9bicw=;
+  b=bTnXta5bUEvS3Uf/3Rbdyta8/G8B3RbCDNnLKAkRsfh3+2ZCTy0bC4TX
+   XJ/PcxzcWcQ+4qIkuWKu8EPvw1u2L49a5RUOewa+b5BiREY/lBFV4pZix
+   7kz/43IH313mImItz0FfV0kuf/HW9A11nnBMHa+F80DX+MYfLh/J1Atwj
+   zLQQYk14zKQ3pKcAfHqTopxSdDUjnROo1i+NS58M8QKnaeI0olQZWqudW
+   39GbeW3uMeVXJWy71aqDf1YkqrgPVrMbvm1ZjWT8Z42Hj8zKg8Wk+2Dwc
+   iRgXN8e50fiWD6VYhvLMwPmpM+bNoE6XFg04yyrMgmi/7i1w4aLlk6byb
+   g==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <akpm@linux-foundation.org>
+CC:     <kernel@axis.com>, <adobriyan@gmail.com>, <vbabka@suse.cz>,
+        <dancol@google.com>, <linux-mm@kvack.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+Subject: [PATCH] proc: Enable smaps_rollup without ptrace rights
+Date:   Thu, 8 Sep 2022 11:39:19 +0200
+Message-ID: <20220908093919.843346-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 8. September 2022, 11:12:23 CEST schrieb Jun Li:
-> > -----Original Message-----
-> > From: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > Sent: Wednesday, September 7, 2022 10:46 PM
-> > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
-> > <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo <shawnguo@kernel.org>;
-> > Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
-> > <linux-imx@nxp.com>; Jun Li <jun.li@nxp.com>
-> > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>;
-> > linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: [PATCH 3/4] arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel
-> > quirk to USB nodes
-> > 
-> > With this set the SOF/ITP counter is based on ref_clk when 2.0 ports are
-> > suspended.
-> > 
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> > 
-> >  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > index 53493dc7d976..0e7f5842a3e4 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> > @@ -1300,6 +1300,7 @@ usb_dwc3_0: usb@38100000 {
-> > 
-> >  				phys = <&usb3_phy0>, <&usb3_phy0>;
-> >  				phy-names = "usb2-phy", "usb3-
-phy";
-> >  				snps,dis-u2-freeclk-exists-quirk;
-> 
-> So this property can be removed?
+smaps_rollup is currently only allowed on processes which the user has
+ptrace permissions for, since it uses a common proc open function used
+by other files like mem and smaps.
 
-I'm not so sure about this one, as the description is talking about USB2 PHY 
-providing a free-running PHY clock. I don't know the details if this is true 
-or not.
-But removing snps,dis-u2-freeclk-exists-quirk from both USB device nodes, USB 
-devices attachments are still detected when the USB hub is suspended, both 
-super-speed and high-speed ports.
+However, while smaps provides detailed, individual information about
+each memory map in the process (justifying its ptrace rights
+requirement), smaps_rollup only provides a summary of the memory usage,
+which is not unlike the information available from other places like the
+status and statm files, which do not need ptrace permissions.
 
-Best regards,
-Alexander
+The first line of smaps_rollup could however be sensitive, since it
+exposes the randomized start and end of the process' address space.
+This information however does not seem essential to smap_rollup's
+purpose and could be replaced with placeholder values to preserve the
+format without leaking information.  (I could not find any user space in
+Debian or Android which uses the information in the first line.)
 
-> > +				snps,gfladj-refclk-lpm-sel-quirk;
-> > 
-> >  			};
-> >  		
-> >  		};
-> > 
-> > @@ -1342,6 +1343,7 @@ usb_dwc3_1: usb@38200000 {
-> > 
-> >  				phys = <&usb3_phy1>, <&usb3_phy1>;
-> >  				phy-names = "usb2-phy", "usb3-
-phy";
-> >  				snps,dis-u2-freeclk-exists-quirk;
-> 
-> Ditto.
-> 
-> Li Jun
-> 
-> > +				snps,gfladj-refclk-lpm-sel-quirk;
-> > 
-> >  			};
-> >  		
-> >  		};
-> > 
-> > --
-> > 2.25.1
+Replace the start with 0 and end with ~0 and allow smaps_rollup to be
+opened and read regardless of ptrace permissions.
 
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ fs/proc/base.c     | 18 +++++++++++++++---
+ fs/proc/internal.h |  1 +
+ fs/proc/task_mmu.c |  5 ++---
+ 3 files changed, 18 insertions(+), 6 deletions(-)
 
-
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 93f7e3d971e4..9482eb3954de 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -792,14 +792,16 @@ static const struct file_operations proc_single_file_operations = {
+ 	.release	= single_release,
+ };
+ 
+-
+-struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode)
++static struct mm_struct *__proc_mem_open(struct inode *inode, unsigned int mode, bool creds)
+ {
+ 	struct task_struct *task = get_proc_task(inode);
+ 	struct mm_struct *mm = ERR_PTR(-ESRCH);
+ 
+ 	if (task) {
+-		mm = mm_access(task, mode | PTRACE_MODE_FSCREDS);
++		if (creds)
++			mm = mm_access(task, mode | PTRACE_MODE_FSCREDS);
++		else
++			mm = get_task_mm(task);
+ 		put_task_struct(task);
+ 
+ 		if (!IS_ERR_OR_NULL(mm)) {
+@@ -813,6 +815,16 @@ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode)
+ 	return mm;
+ }
+ 
++struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode)
++{
++	return __proc_mem_open(inode, mode, true);
++}
++
++struct mm_struct *proc_mem_open_nocreds(struct inode *inode)
++{
++	return __proc_mem_open(inode, 0, false);
++}
++
+ static int __mem_open(struct inode *inode, struct file *file, unsigned int mode)
+ {
+ 	struct mm_struct *mm = proc_mem_open(inode, mode);
+diff --git a/fs/proc/internal.h b/fs/proc/internal.h
+index 06a80f78433d..5c906661b018 100644
+--- a/fs/proc/internal.h
++++ b/fs/proc/internal.h
+@@ -293,6 +293,7 @@ struct proc_maps_private {
+ } __randomize_layout;
+ 
+ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
++struct mm_struct *proc_mem_open_nocreds(struct inode *inode);
+ 
+ extern const struct file_operations proc_pid_maps_operations;
+ extern const struct file_operations proc_pid_numa_maps_operations;
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 4e0023643f8b..13f910b51dce 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -969,8 +969,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
+ 		vma = vma->vm_next;
+ 	}
+ 
+-	show_vma_header_prefix(m, priv->mm->mmap->vm_start,
+-			       last_vma_end, 0, 0, 0, 0);
++	show_vma_header_prefix(m, 0, ~0lu, 0, 0, 0, 0);
+ 	seq_pad(m, ' ');
+ 	seq_puts(m, "[rollup]\n");
+ 
+@@ -1015,7 +1014,7 @@ static int smaps_rollup_open(struct inode *inode, struct file *file)
+ 		goto out_free;
+ 
+ 	priv->inode = inode;
+-	priv->mm = proc_mem_open(inode, PTRACE_MODE_READ);
++	priv->mm = proc_mem_open_nocreds(inode);
+ 	if (IS_ERR(priv->mm)) {
+ 		ret = PTR_ERR(priv->mm);
+ 
+-- 
+2.34.1
 

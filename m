@@ -2,223 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB72B5B17FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C31C5B1805
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbiIHJHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S231263AbiIHJIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiIHJHK (ORCPT
+        with ESMTP id S231564AbiIHJH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:07:10 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150089.outbound.protection.outlook.com [40.107.15.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB024A896D;
-        Thu,  8 Sep 2022 02:07:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HojzLlJOV/OxLdmG45l4tRC3IMfuHHGRSZInP1cg44dGb2w9h4M5Auh4MUOSVBRzkCGt6DfjnEe46Qd05Vj7KbAyfbDpqoQVOIP0MLoMayDE54KeI6LuaHqjSsJMHJb1iXrR/eb63cUYZFJZNOII71sZNQMKGH2Ro91Nvdec2cf0mXjrzO84WkgyGdHkMcfvx7vWEZJeCx4sYNOi9uUC5/5+zwsk/wyPeQvAvyZ0zPUuPfLN+JKiPkXBJz+BGLNntxa+FcvTIMIN7tRdAaXw58keOdqhc5Qp9NjhLj2eydHPUxRIjibUNO/ujzYyjNRv4/iSgLqojDzWv0Xz/Xdpng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L/RgyHIxaxdWcHYiaTlYIHwkgtiXs+TrEDv68GNSQ9M=;
- b=W/PqWaBJ750GS/lSF5od3eI9MDNLhSIeAKlRYLzobJeAtMw0QzLsJJbiQmIljpATjQw86ZNe9P1TrZucQNztBO0MpvYYnHL1R3ONTSw+UxUV7bWEEqVy/W02CzVhEW9/74NOcRAce0hcmaxeLj9cGQuKHi+W1rRQ7yvibj2uGDwBPU77dtQlRNroeMqfeZG8UmdOnU7e/7OOwf7UW8bkrGgIo4Afi9yAVncafG+J8Jjl6NvOLp+YfHvg4t12AYkQnxf+tC9i9ddYJH9zljKB8UpTlcZ6Ct/jESsvWju08f43YMQ6M9EPi/PabKPP4DlyqZfpuAdYKzmGnlfdt+3KTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L/RgyHIxaxdWcHYiaTlYIHwkgtiXs+TrEDv68GNSQ9M=;
- b=PNn4gRh5UgvNQ866BZQyzDCb1I0dxe79ZvjGED+5+TsI9isDr0ohNE449YUJjRlh/vnXGvt1/JvnD5OyrNME6iVCB3jKwIZD5jUn2fA4oC9ETnRNbWXtYIsT0josLolXVRX1sZpVCbMdUYudS2f6rGXiOExNbkX5vc33d8Gr9wA=
-Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
- by DB8PR04MB7020.eurprd04.prod.outlook.com (2603:10a6:10:126::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Thu, 8 Sep
- 2022 09:07:06 +0000
-Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
- ([fe80::25b6:d7f1:c25e:24d2]) by PA4PR04MB9640.eurprd04.prod.outlook.com
- ([fe80::25b6:d7f1:c25e:24d2%9]) with mapi id 15.20.5588.012; Thu, 8 Sep 2022
- 09:07:06 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
-Thread-Topic: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
-Thread-Index: AQHYwsihZnSWdyGvYEiiheIFncU2x63UHe0wgADqGoCAAC6nAA==
-Date:   Thu, 8 Sep 2022 09:07:06 +0000
-Message-ID: <PA4PR04MB9640E5CB572980CB087BE9E389409@PA4PR04MB9640.eurprd04.prod.outlook.com>
-References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
- <PA4PR04MB9640CB3CA93301CA1571D85789419@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <3126965.5fSG56mABF@steina-w>
-In-Reply-To: <3126965.5fSG56mABF@steina-w>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a383a6c7-97a2-47e8-1a56-08da9179810b
-x-ms-traffictypediagnostic: DB8PR04MB7020:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LUcrnDtxg7JO8gt6a81hEwVfjK/vbLQPuKmepNcFtT+HNT/r10UqwKuwLSetiVjDWoCimz2zD1azmNhHVMnSMyS5u8HT7+P9SjgeM3bzsuA29cjPzOcGf+7po/ODuD0KbtOlxzbiFTa8BbS1ReZBl7o6jVRWj9dDA8d+NQgEaUFj+cZkDEqQ3oA1dWacMkwwpWeOtKaVoc+TUVu4gQBUIGdGtwHpu8KxKxWaXVXW+lxfs1Z/a0T0VqgGbvux0mOEal8qk/wqu+7VuGhk/qliWuEJVHw/OvRuC6dUFi3BizSzAq5hRCpjYilgSr8fCpRcPnzfnLdtVD7Otf/uPNAbGjPeyoJ6Ex8EwPBrV8GLt4wDjb/2pF/auXfm9Or4A17RxmduXvIQZVzBqKvbinwAQJM/Jzs5u48rA+Sj2JmoRQD9q3QwZ0/SExO0mF/sB5dMJU6TqfqrmmeIsdiq/R0ZBtmx8ouWSKBag9zuDQLEm/5ohI0r085DfP+d11V+HuGO1xev0gAX5CCNZz5Xbv0JAz/ra6mWxTLC8W4W8qKHSYwQMnxEBssJjE7M44wnCp72Czo81GlJAQIobIkI9nB9OKjqmuhbFA3FDMqldNVtWZ+OygyU14tZ7WXEfB5O2Z6H7Yy8/HUb4twYIO/mxGVSump0wtJ29cxM/SVsoHMfBLVbEVDTpQc1cvIjrviyBQmT9GEWli8pghba/kLSJvBdy9sRZzDfu6DmD9GA7o32eg38D8Tp1JjBoE9ZsCH8NZGilZt+AGxrKulKgULUgb8v8EqWOGd6G5HFAEJWvok/CRg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(346002)(39860400002)(136003)(376002)(38070700005)(38100700002)(122000001)(76116006)(66476007)(66446008)(4326008)(64756008)(8676002)(66946007)(316002)(6636002)(66556008)(54906003)(110136005)(44832011)(2906002)(5660300002)(55016003)(8936002)(186003)(83380400001)(9686003)(52536014)(7696005)(478600001)(71200400001)(6506007)(7416002)(53546011)(26005)(41300700001)(86362001)(33656002)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lPoMNt+4MpqtddIioU9Mi+cti1Lnl8vEQ2vkh16tQBeESUIU8424mc1/re8t?=
- =?us-ascii?Q?0fOEMU39IPiH0oz49bQOG9fMnOrPZ8M3cMdJDgRyBfQ24RlRzWusFinZ+fYy?=
- =?us-ascii?Q?UBfUwcM6w0VY/C1jSs+i/w2Y0WivNWBI3NiIgETZOTkjXuhVN+e+QD60kvtl?=
- =?us-ascii?Q?KcYC6ANg96eWZ9QD8DcEGv14uKzkaSN44UkddKxTeS5dKIgM/P/ue1ErDy/2?=
- =?us-ascii?Q?EHEwXSWQMxRlHU14GnCzfxeULB6p8G62SmJf6P0LfETsbGRFQwppFZlforau?=
- =?us-ascii?Q?RIVy67/2iasDQsCcAozRwieMi9+hWBy5pcTkKi1YkrEP2e7IzRwlZp7FgrT3?=
- =?us-ascii?Q?31kS0a832Lmuib3ERwJEr3iLAIXgHoehI2pEZVnp8OgixJroMUhUr7nwMx+I?=
- =?us-ascii?Q?KJkk0GlSXeniAiRsxJ0G3OEkRNrkIPNp2d4If0BywNS8YhVzGy4sh26I5kvI?=
- =?us-ascii?Q?CttHwOdK2zOWhBzk+JzEVqGo00rtMu057OJk1DGlATiFAvPETHL3UnL76Msi?=
- =?us-ascii?Q?Jox3mfiTNbkYLTrMfED4TQ5JWRa3UBkHFUyveuuQ/buKTgZ0C64wWcRqzxRk?=
- =?us-ascii?Q?UOL2QYBHyWn+Q6PJ4xkYuehFj2gK+WzHUfachGgwf6ufN2mcCGO9zgDO9n3w?=
- =?us-ascii?Q?yQoDnAsjjac+bl1kXYhvv15CBGyEqimoI7Z0bCYl3Eq4GfoFXe+A6bFP27j1?=
- =?us-ascii?Q?qVarINr1l0PwRczs1PJoUTNv29+EODh4XB4NlguYgyYuN4Ond2Ub37Gg1Gu2?=
- =?us-ascii?Q?GImxr3+ScjaG3WThjAOh8O3x6YRtXodENR/Ellg+qJL6R/8QbwAFBqFaBc9W?=
- =?us-ascii?Q?gHOAsE+8Rayd0IHdAf9kQtU9ZLdhuDTUrmh7yV2/GtJLKtM5vwPlA3H1XH6O?=
- =?us-ascii?Q?7RQ28lH8oCpcZfPDzAPKAT3SSl2YyPDMiL7iku18370ZUpBF5wOkNYUH6di4?=
- =?us-ascii?Q?Smwk/TYyR18vX/5/dPca+u8kUVHoiruk1yRfXfXdJry/B+4G1MLVEE2msiBs?=
- =?us-ascii?Q?SdoFEwyV3Y/r8vwQoqiTmhM7yWA7OIT+5K3+JyP+63vwl6EmDKQ29xct+5g2?=
- =?us-ascii?Q?NH5CEQ3c/wAWLQeRc3neLGCtJlvRtlwLcIOR3WIAZPAokqHWB6xj7qp0aW/2?=
- =?us-ascii?Q?dPcfu6klprL/Pyko/LvYGwOqP4tQQoXeOlrpIe9nyX14zA3Z0/yaVcwcKd9O?=
- =?us-ascii?Q?DSl9eTelS9PPlv2UXKQwG6Q/xHr8HI4nlv842/d68FNy70LRmQG9NyJxyYai?=
- =?us-ascii?Q?ESh2tSoWRzrmVpDMddMNPWyKR6jV5FGCj+eExT5+W/SwDbu9aupE63oAYzBo?=
- =?us-ascii?Q?tTxuhf37mTp6HGmXk2i3bldc2tghgTBJHJWFCboFk90i+4iqtRY7RjDcCktV?=
- =?us-ascii?Q?CLVg66HghoFgWUw9+DgMTPRgDfmxpjQZaPnwYatnmrOdLKgopFiXuXCG28ud?=
- =?us-ascii?Q?0fYHYGSiYHPztkuPOApMB0wOE02aSGRLIj4gHZjf79kdT0JIGoB7ursrX2Cu?=
- =?us-ascii?Q?Re3hvSKrrWG7ct/yGJN6SyOFIa6adhtv61zx9BPWSRJQQIiF7O7fLgk/OHpD?=
- =?us-ascii?Q?BwnvVBpyTybFVFwZuHg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 8 Sep 2022 05:07:28 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4DAF7551
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:07:26 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id n17-20020a05600c3b9100b003b3235574dbso830459wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 02:07:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=T2/9xebxzNWMrR2+6F0PLx9EMI9J8CEGmCncRuSsyL8=;
+        b=eO7It27k7B/0FNHemvQD+MMLVEn3cKOZgQC9kmQyiqoHCf6+wwQlVXpKES5hVLwTI5
+         s4i8Gwlmh6k1epjJ5OnNXpsvMPvbjcTyZZnooQcis2wC/kvWtpCOIn9qGCkCQYFn73mz
+         DA0ox9F/MgiiYRUnWyOVxLv4OwAVBdreWrj4RtdwYYadmAFfCcPElUKDmm5bf157mxwL
+         dOSXO7KknF7upphS4/Lgm7NDjUBfEKnWYuSiul7c1/Ke0xnOdA5y8xQlEg/wUQDyKJbB
+         0P4Dfy2KjKql4iUcjcwT6zL/m3YWhMhhgMl7Yy1t5B3WIeE2SKnGAL7vf7PL1PiyWZjo
+         yu4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=T2/9xebxzNWMrR2+6F0PLx9EMI9J8CEGmCncRuSsyL8=;
+        b=pBKiHE8OSqPR9HBiIRUrWd3XWF4A8tr8Wgsr3ZDUtdO4LL0oY05WPfjpLAk2nVFB3C
+         +3A5dEThdnMmyUwIrTNUUgo/B2bYl9J6C7Qa0f4ep8T2j42hc3TF0xRv2SQrc6ji0MaT
+         5sNKAML7TAlnEHaycRU8ftQvy+ileTgMG+L+2/1RkhFswfqOUwdOpwm6w6iVih9TPfcC
+         NcEIu/louEUHw3xWBOXpn3kcX6rfYs8k/CDwXgcUFNUHehP3+FX1BNo18qywT2wfvS45
+         nVKHTH+oc9NWko+DU+bnieZdBEkeifIVUZxE7iwmNwLL5/rnkv6yaSEfpTQUrdl7qQ0s
+         urDA==
+X-Gm-Message-State: ACgBeo2tT6YBKAFBiAwELsoF0+Y8RSgxIed2EMXxe42w3UW+dDZKGikL
+        6VYwIo1JIDkJpOBxpOCDJccUgQ==
+X-Google-Smtp-Source: AA6agR5gqEKVSm7XgipK5ek0XMItcGd6Kv+VsWlDrzmuKyixgBo9ogpjC0Vx0PWoSmd1owvmCI7cBQ==
+X-Received: by 2002:a7b:cd91:0:b0:3a8:5262:6aa9 with SMTP id y17-20020a7bcd91000000b003a852626aa9mr1466610wmj.143.1662628044375;
+        Thu, 08 Sep 2022 02:07:24 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bz9-20020a056000090900b0022584c82c80sm21014654wrb.19.2022.09.08.02.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 02:07:23 -0700 (PDT)
+Message-ID: <a5fd6f3e-4795-5953-5fdf-8857051b5e87@linaro.org>
+Date:   Thu, 8 Sep 2022 11:07:22 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a383a6c7-97a2-47e8-1a56-08da9179810b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 09:07:06.8249
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: W12fPpVcs3H8xE7vuAxkvb03xf+aSbzpsHfnKzyJ+Y7QVx0iGF6hW1xl+4QlyeYT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7020
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        matthias.bgg@gmail.com
+Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com,
+        Michael Kao <michael.kao@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20220901133950.115122-1-aouledameur@baylibre.com>
+ <20220901133950.115122-5-aouledameur@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220901133950.115122-5-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-> -----Original Message-----
-> From: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Sent: Thursday, September 8, 2022 1:50 PM
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
-> <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo <shawnguo@kernel.org>;
-> Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
-> <linux-imx@nxp.com>; Jun Li <jun.li@nxp.com>
-> Cc: linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: RE: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
->=20
-> Hi,
->=20
-> Am Mittwoch, 7. September 2022, 18:08:25 CEST schrieb Jun Li:
-> > Hi
-> >
-> > > -----Original Message-----
-> > > From: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > Sent: Wednesday, September 7, 2022 10:46 PM
-> > > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
-> > > <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > > <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo
-> > > <shawnguo@kernel.org>; Sascha Hauer <s.hauer@pengutronix.de>;
-> > > Pengutronix Kernel Team <kernel@pengutronix.de>; Fabio Estevam
-> > > <festevam@gmail.com>; dl-linux-imx <linux-imx@nxp.com>; Jun Li
-> > > <jun.li@nxp.com>
-> > > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>;
-> > > linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
-> > > linux-kernel@vger.kernel.org
-> > > Subject: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
-> > >
-> > > Hi everybody,
-> > >
-> > > this is a series based on the RFC at [1] for USB host support on
-> > > TQMa8MPxL
-> > > + MBa8MPxL. The main difference is that USB DR support has already
-> > > + been
-> > > added and has been removed from this series.
-> > >
-> > > The DT configuration itself (patch 4) is rather straight forward,
-> > > but leads
-> > >
-> > > to the following dmesg errors regarding superspeed ports:
-> > > > [    8.549243] hub 2-1:1.0: hub_ext_port_status failed (err =3D -11=
-0)
-> > > > [   22.885263] usb 2-1: Failed to suspend device, error -110
-> > >
-> > > This hardware works fine using the downstream kernel, because for
-> > > imx8mp this ITP sync feature is enabled conditionally [2] & [3].
-> > > Hacking this into mainline resulted in a working superspeed setup as
-> well.
-> > > I also noticed that on some android kernel [4] depending in IP core
-> > > version either GCTL.SOFTITPSYNC or GFLADJ.GFLADJ_REFCLK_LPM_SEL is
-> > > enabled unconditionally.
-> > > So I opted for the latter one using some quirk (patch 1-3).
-> > >
-> > > I have to admit I do not know what this is actually about, nor why
-> > > my setup does not work without this change or why this fixed my
-> > > problem. So maybe someone with more knowledge can say if this is the
-> > > way to go or what this is about.
-> >
-> > This can be updated:)
-> >
-> > > I also added snps,dis_u3_susphy_quirk to the board level as for some
-> > > reason USB Superspeed U3 does not work. Detecting the onboard hub
-> > > takes much longer and once all devices are diconnected from the hub
-> > > it is put into runtime suspend (U3) and new attached devices are not
-> > > detected at all.
-> > > Until the cause is known and fixed runtime suspend has to be disabled=
-.
-> >
-> > For this issue you are reporting, I am not sure if this is caused by a
-> > USB clock change merged on v5.19, if you use latest kernel, can you
-> > try with below patches applied to see if U3 can work for you?
->=20
-> Awesome, This does the trick!
-> I was already running with patches [1] & [2], but was missing patch [3].
-> With all of them applied, USB detects a newly attached superspeed device
-> when the HUB is in runtime suspend (U3).
+Hi Amjad,
 
-Yes, patch[3] needs to apply with patches [1]&[2], I am applying the
-same tag to make sure the 3 patches land on the same target release
-as they will go through diff maintainer's trees.
+On 01/09/2022 15:39, Amjad Ouled-Ameur wrote:
+> Provide thermal zone to read thermal sensor in the SoC. We can read all the
+> thermal sensors value in the SoC by the node /sys/class/thermal/
+> 
+> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+> on the first read of sensor that often are bogus values.
+> This can avoid following warning on boot:
+> 
+>    thermal thermal_zone6: failed to read out thermal zone (-13)
+> 
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> ---
+> Changes in V3:
+> - Use proper types.
+> - Use devm_kmalloc() instead of kmalloc().
+> - Fix tabs and spaces.
+> 
+>   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
+>   1 file changed, 76 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 088c388da241..5901787c57f5 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
+>   
+>   struct mtk_thermal;
+>   
+> +struct mtk_thermal_zone {
+> +	struct mtk_thermal *mt;
+> +	int id;
+> +};
+> +
+>   struct thermal_bank_cfg {
+>   	unsigned int num_sensors;
+>   	const int *sensors;
+> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+>   		mutex_unlock(&mt->lock);
+>   }
+>   
+> +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
+> +{
+> +	u32 raw;
+> +	int temp;
+> +
+> +	const struct mtk_thermal_data *conf = mt->conf;
+> +
+> +	raw = readl(mt->thermal_base + conf->msr[id]);
+> +
+> +	if (mt->conf->version == MTK_THERMAL_V1)
+> +		temp = raw_to_mcelsius_v1(mt, id, raw);
+> +	else
+> +		temp = raw_to_mcelsius_v2(mt, id, raw);
 
->=20
-> I forgot: thanks for checking with synopsis regarding soft ITP sync featu=
-re.
->=20
+Can you set a callback at init time instead of checking the version at 
+each get_sensor_temp() ?
 
-Welcome.
+> +	/*
+> +	 * The first read of a sensor often contains very high bogus
+> +	 * temperature value. Filter these out so that the system does
+> +	 * not immediately shut down.
+> +	 */
+> +
+> +	if (temp > 200000)
+> +		return -EAGAIN;
+> +	else
+> +		return temp;
+> +}
+> +
+>   /**
+>    * mtk_thermal_bank_temperature - get the temperature of a bank
+>    * @bank:	The bank
+> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   	struct mtk_thermal *mt = bank->mt;
+>   	const struct mtk_thermal_data *conf = mt->conf;
+>   	int i, temp = INT_MIN, max = INT_MIN;
+> -	u32 raw;
+>   
+>   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+> -		raw = readl(mt->thermal_base + conf->msr[i]);
+> -
+> -		if (mt->conf->version == MTK_THERMAL_V1) {
+> -			temp = raw_to_mcelsius_v1(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		} else {
+> -			temp = raw_to_mcelsius_v2(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		}
+> -
+> -		/*
+> -		 * The first read of a sensor often contains very high bogus
+> -		 * temperature value. Filter these out so that the system does
+> -		 * not immediately shut down.
+> -		 */
+> -		if (temp > 200000)
+> -			temp = 0;
+> +		temp = _get_sensor_temp(mt, i);
+>   
+>   		if (temp > max)
+>   			max = temp;
+> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   
+>   static int mtk_read_temp(void *data, int *temperature)
+>   {
+> -	struct mtk_thermal *mt = data;
+> +	struct mtk_thermal_zone *tz = data;
+> +	struct mtk_thermal *mt = tz->mt;
+>   	int i;
+>   	int tempmax = INT_MIN;
+>   
+> @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int *temperature)
+>   	return 0;
+>   }
+>   
+> +static int mtk_read_sensor_temp(void *data, int *temperature)
+> +{
+> +	struct mtk_thermal_zone *tz = data;
+> +	struct mtk_thermal *mt = tz->mt;
+> +	int id = tz->id - 1;
+> +
+> +	if (id < 0)
+> +		return -EACCES;
+> +
+> +	*temperature = _get_sensor_temp(mt, id);
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>   	.get_temp = mtk_read_temp,
+>   };
+> 
+> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
+> +	.get_temp = mtk_read_sensor_temp,
+> +};
 
-Li Jun
+Please respin against linux-next, the thermal_zone_of_device_ops 
+structure does no longer exist. The conversion is trivial, here is a 
+example:
+
+https://lore.kernel.org/all/20220804224349.1926752-21-daniel.lezcano@linexp.org/
+
+
+>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
+>   				  int ctrl_id)
+> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   	u64 auxadc_phys_base, apmixed_phys_base;
+>   	struct thermal_zone_device *tzdev;
+>   	void __iomem *apmixed_base, *auxadc_base;
+> +	struct mtk_thermal_zone *tz;
+>   
+>   	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>   	if (!mt)
+> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, mt);
+>   
+> -	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+> -						     &mtk_thermal_ops);
+> -	if (IS_ERR(tzdev)) {
+> -		ret = PTR_ERR(tzdev);
+> -		goto err_disable_clk_peri_therm;
+> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
+> +		if (!tz)
+> +			return -ENOMEM;
+> +
+> +		tz->mt = mt;
+> +		tz->id = i;
+> +
+> +		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
+> +							     &mtk_thermal_ops :
+> +							     &mtk_thermal_sensor_ops);
+> +
+> +		if (IS_ERR(tzdev)) {
+> +			if (PTR_ERR(tzdev) == -ENODEV) {
+> +				dev_warn(&pdev->dev,
+> +					 "sensor %d not registered in thermal zone in dt\n", i);
+> +				continue;
+> +			}
+> +			if (PTR_ERR(tzdev) == -EACCES) {
+> +				ret = PTR_ERR(tzdev);
+> +				goto err_disable_clk_peri_therm;
+> +			}
+> +		}
+>   	}
+>   
+>   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

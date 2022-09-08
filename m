@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9CD5B2424
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33E45B2425
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiIHRB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S231555AbiIHRCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiIHRBv (ORCPT
+        with ESMTP id S231627AbiIHRBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:01:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46B8DEA437
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:01:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50346153B;
-        Thu,  8 Sep 2022 10:01:50 -0700 (PDT)
-Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6072E3F71A;
-        Thu,  8 Sep 2022 10:01:41 -0700 (PDT)
-Message-ID: <751efaec-e997-370a-4ac0-85626c05cf5a@arm.com>
-Date:   Thu, 8 Sep 2022 18:01:32 +0100
+        Thu, 8 Sep 2022 13:01:52 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16509E125E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:01:47 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id cr9so13358937qtb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=kCW6OcN0pl+wFvB/FVB267qWfLr3bPZPC77P/PSoNKI=;
+        b=qAlOqbpJ7NWTsm9b6eVY+EChiOgfKnMcaIcW07s0VZHLwopF0OLSVYjXmSNsVd31ey
+         emvhwfkQHdEQEE1Ys9Xzblma3jKDHFudXhbWPqeGTwb+nWJziyc41YCXOFxd1tlG4Y2+
+         cC1J9Pwe8bVUOGW4QaHqePRBP85g3daBVo0vLqmU6+TvdhdHb4k7zUcGviGDc4+CZP2y
+         huBB+HbYAkOxyiyYbn9btAMZVx4p2/x1LUuMCmjuBovv3MNNoxSEljXay1UQHORvcRFV
+         a2mYWIZVmQIycIOxvzX1HlBEqhBwduYVqzvDkhxE74NDo7FSQyJfBSX2MtQFftqeRs8q
+         suQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=kCW6OcN0pl+wFvB/FVB267qWfLr3bPZPC77P/PSoNKI=;
+        b=0wOolFLiTk41MIG8tdE+5lbNzXTwMA2nE1L/uaV3Ti71MPNHkHeuWoFE0kIlJWwdoU
+         cWTxIXQ66pCUWZFnjkofipHSp42dZj//ojP3AVlRHhCr4s/pUim6+IISzjYlxYnt9oOv
+         ZiWfF3kGpVzbgvQY8/CDihRpKhLJtwhz/yJp1QcDGpkeWfelRGvZ0AhPvpNkv6lVHLfc
+         GYB2jj5X22YF5hs89K6B+heUAwz8QGBfZLprnYnVNY5xF0XL3XJU8OdnHuz+2DcDAWE1
+         UyZDGOj8tqwbfo5bx+10hRK+deHB9b26MLroUgcnhff1ct621C4LXrQ9CsL83XCP2JAZ
+         Bnsw==
+X-Gm-Message-State: ACgBeo2XxIw8/NJ5UVhZqQeZf67RONAzdl9cpuf/MBQ8JbdJs8g1w1up
+        x926iSgxG7st3+a32MyCUj3SaA==
+X-Google-Smtp-Source: AA6agR72zd1h4G/5DJUMkfaYL57NMZfCX1GCn2mR7eqXWKf0L2XnPoEMFqd7uWJprchY3j4mWP6/2Q==
+X-Received: by 2002:ac8:5dcf:0:b0:343:7ded:7b with SMTP id e15-20020ac85dcf000000b003437ded007bmr8601868qtx.492.1662656506059;
+        Thu, 08 Sep 2022 10:01:46 -0700 (PDT)
+Received: from abrestic-xps.ba.rivosinc.com (pool-71-105-112-35.nycmny.fios.verizon.net. [71.105.112.35])
+        by smtp.gmail.com with ESMTPSA id w17-20020a05620a445100b006b8fb2a1145sm17714452qkp.124.2022.09.08.10.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 10:01:45 -0700 (PDT)
+From:   Andrew Bresticker <abrestic@rivosinc.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        dram <dramforever@live.com>, Ruizhe Pan <c141028@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Bresticker <abrestic@rivosinc.com>
+Subject: [PATCH] riscv: Allow PROT_WRITE-only mmap()
+Date:   Thu,  8 Sep 2022 13:01:33 -0400
+Message-Id: <20220908170133.1159747-1-abrestic@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 20/21] x86/resctrl: Add resctrl_rmid_realloc_limit to
- abstract x86's boot_cpu_data
-Content-Language: en-GB
-To:     haoxin <xhao@linux.alibaba.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com
-References: <20220902154829.30399-1-james.morse@arm.com>
- <20220902154829.30399-21-james.morse@arm.com>
- <539cd9b3-9a2b-47c2-7436-89aedef33d1c@linux.alibaba.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <539cd9b3-9a2b-47c2-7436-89aedef33d1c@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hao Xin,
+Commit 2139619bcad7 ("riscv: mmap with PROT_WRITE but no PROT_READ is
+invalid") made mmap() return EINVAL if PROT_WRITE was set wihtout
+PROT_READ with the justification that a write-only PTE is considered a
+reserved PTE permission bit pattern in the privileged spec. This check
+is unnecessary since RISC-V defines its protection_map such that PROT_WRITE
+maps to the same PTE permissions as PROT_WRITE|PROT_READ, and it is
+inconsistent with other architectures that don't support write-only PTEs,
+creating a potential software portability issue. Just remove the check
+altogether and let PROT_WRITE imply PROT_READ as is the case on other
+architectures.
 
-On 07/09/2022 07:26, haoxin wrote:
-> 在 2022/9/2 下午11:48, James Morse 写道:
->> resctrl_rmid_realloc_threshold can be set by user-space. The maximum
->> value is specified by the architecture.
->>
->> Currently max_threshold_occ_write() reads the maximum value from
->> boot_cpu_data.x86_cache_size, which is not portable to another
->> architecture.
->>
->> Add resctrl_rmid_realloc_limit to describe the maximum size in bytes
->> that user-space can set the threshold to.
+Fixes: 2139619bcad7 ("riscv: mmap with PROT_WRITE but no PROT_READ is invalid")
+Signed-off-by: Andrew Bresticker <abrestic@rivosinc.com>
+---
+ arch/riscv/kernel/sys_riscv.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
->> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
->> index e91afe99b763..8d15568d7121 100644
->> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
->> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
->> @@ -747,10 +752,10 @@ int rdt_get_mon_l3_config(struct rdt_resource *r)
->>   {
->>       unsigned int mbm_offset = boot_cpu_data.x86_cache_mbm_width_offset;
->>       struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
->> -    unsigned int cl_size = boot_cpu_data.x86_cache_size;
->>       unsigned int threshold;
->>       int ret;
->>   +    resctrl_rmid_realloc_limit = boot_cpu_data.x86_cache_size * 1024;
+diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
+index 571556bb9261..5d3f2fbeb33c 100644
+--- a/arch/riscv/kernel/sys_riscv.c
++++ b/arch/riscv/kernel/sys_riscv.c
+@@ -18,9 +18,6 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
+ 	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
+ 		return -EINVAL;
+ 
+-	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
+-		return -EINVAL;
+-
+ 	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
+ 			       offset >> (PAGE_SHIFT - page_shift_offset));
+ }
+-- 
+2.25.1
 
-> Use SZ_1K instead ?
-
-Sure, that's usually more readable. I didn't because the existing code doesn't, and I
-wanted it to be obvious where this had come from.
-
-If I re-post the series I'll change this.
-
-
-Thanks for taking a look!
-
-James
-
->>       hw_res->mon_scale = boot_cpu_data.x86_cache_occ_scale;
->>       r->num_rmid = boot_cpu_data.x86_cache_max_rmid + 1;
->>       hw_res->mbm_width = MBM_CNTR_WIDTH_BASE;
->> @@ -767,7 +772,7 @@ int rdt_get_mon_l3_config(struct rdt_resource *r)
->>        *
->>        * For a 35MB LLC and 56 RMIDs, this is ~1.8% of the LLC.
->>        */
->> -    threshold = cl_size * 1024 / r->num_rmid;
->> +    threshold = resctrl_rmid_realloc_limit / r->num_rmid;
->>         /*
->>        * Because num_rmid may not be a power of two, round the value

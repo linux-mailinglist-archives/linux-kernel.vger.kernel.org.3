@@ -2,86 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E815B27C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080565B27C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiIHUeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
+        id S229847AbiIHUfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIHUeR (ORCPT
+        with ESMTP id S229826AbiIHUe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:34:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121F1F02BB;
-        Thu,  8 Sep 2022 13:34:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C784CB8227C;
-        Thu,  8 Sep 2022 20:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED387C433D7;
-        Thu,  8 Sep 2022 20:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662669253;
-        bh=xznb1RKBZH/nj2qdZlu+dotoTsJWwyQbwBXQt70aXfQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aV+WCP9SeYQN9/uvhmG0jzovy09Muqg0xuGb1GoH0fy5inl2zw+gC/19rPaudjVTv
-         Qo4D2iAs145mScERTpLbx1ipWCp42F1k/TmKYdEy0zVX8N2TouAtODomu711xjWyyD
-         r9zQKKZ27c8aU4m3/zaqB9d16l6a5SYVEuT/4IV/FCkJUxcUY0YgLo8BJCuW6f9VQX
-         SB8uDzPG7QdXAZeSI7QoeSMtFbkxk8pQEpN/3ZBzrva2lAA61x0+Ohiq6EBiMBLKOe
-         nujTj0rT4LvIcE38NM7aHZJ+TkhKsXHyavZoABrPJK+f/GAXRulwXDrepG26zyYclo
-         zR1K6o6wyldXw==
-Date:   Thu, 8 Sep 2022 23:34:07 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Harald Hoyer <harald@profian.com>, ashish.kalra@amd.com,
-        ak@linux.intel.com, alpergun@google.com, ardb@kernel.org,
-        bp@alien8.de, dave.hansen@linux.intel.com, dgilbert@redhat.com,
-        dovmurik@linux.ibm.com, hpa@zytor.com, jmattson@google.com,
-        jroedel@suse.de, kirill@shutemov.name, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
-        marcorr@google.com, michael.roth@amd.com, mingo@redhat.com,
-        pbonzini@redhat.com, peterz@infradead.org, pgonda@google.com,
-        rientjes@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        slp@redhat.com, srinivas.pandruvada@linux.intel.com,
-        tglx@linutronix.de, thomas.lendacky@amd.com, tobin@ibm.com,
-        tony.luck@intel.com, vbabka@suse.cz, vkuznets@redhat.com,
-        x86@kernel.org
-Subject: Re: [[PATCH for v6]] KVM: SEV: fix snp_launch_finish
-Message-ID: <YxpRv14+glaFpGsF@kernel.org>
-References: <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
- <20220908145557.1912158-1-harald@profian.com>
- <YxoGItJDTEjfctaS@google.com>
+        Thu, 8 Sep 2022 16:34:59 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52819303E0;
+        Thu,  8 Sep 2022 13:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=GXvDw1qTIcUMkHFnBOs5wTnQfEyjTmnArBTCDylyWbE=; b=sdea+9TfXrcbQqz1JVt2ens1JX
+        qZ4LqRZDxgCZxi7ImH2fN2sGFyJqhqKgRMke3Pbvxgr04f8iQ2T5D7XzCFmoC+nEi1Agml/GUkf3l
+        mJ80D55FZuLuIIoJBEHU3WNLn86VtPveCYaAy/Qr1nsJlWoSK9XJZA/qYf/LnFOflSmU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oWOET-00G0cF-Ed; Thu, 08 Sep 2022 22:34:41 +0200
+Date:   Thu, 8 Sep 2022 22:34:41 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jingyu Wang <jingyuwang_vip@163.com>
+Cc:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: ipv4: Fix some coding style in ah4.c file
+Message-ID: <YxpR4f4kFxsPOkZb@lunn.ch>
+References: <20220908111251.70994-1-jingyuwang_vip@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxoGItJDTEjfctaS@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220908111251.70994-1-jingyuwang_vip@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:11:30PM +0000, Sean Christopherson wrote:
-> On Thu, Sep 08, 2022, Harald Hoyer wrote:
-> > The `params.auth_key_en` indicator does _not_ specify, whether an
-> > ID_AUTH struct should be sent or not, but, wheter the ID_AUTH struct
-> > contains an author key or not. The firmware always expects an ID_AUTH block.
-> > 
-> > Link: https://lore.kernel.org/all/cover.1655761627.git.ashish.kalra@amd.com/
-> 
-> Please provide feedback by directly responding to whatever patch/email is buggy.
-> Or if that's too complicated for some reason (unlikely in this case), provide the
-> fixup patch to the author *off-list*.
+On Thu, Sep 08, 2022 at 07:12:51PM +0800, Jingyu Wang wrote:
+> Fix some checkpatch.pl complained about in ah4.c
 
-I'd guess that'd be:
+Please take a look at
 
-https://lore.kernel.org/all/6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com/
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 
-BR, Jarkko
+You should of put v2 in the subject, and under the --- make a comment
+about what changed relative to v1.
+
+Please also read:
+
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+
+	Andrew

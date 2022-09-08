@@ -2,96 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576DA5B174B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8CE5B1749
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiIHIix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S231345AbiIHIiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbiIHIiq (ORCPT
+        with ESMTP id S231497AbiIHIik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:38:46 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3737314944B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:38:44 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id nc14so36351077ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:38:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=SqPML+unsouuIp4FVHK4Uf7DFvDcdAzoCu01LQ5xtJU=;
-        b=SAoPOQWnZqu89mgLfBmiK5MrA8YCX5o9aGmYu4qqPNVoBkVnERkpNhCjHVCDQ9Zla1
-         dwqjtxWA+cJ6EDML6KOuvVZ4R6NIPdCxT8QAEB80mIcXpDf2Zf9m7S4FsFoMJ51USitH
-         Qd1pfZ4aI8HWIB9O1qt8jwZQ6YhUw0CUeBplhf899+yVwxpGxiGqmmXQn83Kl/G4s1eI
-         C+ZSChYFtQHAmgSz+vgZPMqj3wcCWnPZrWj/U9r/3gRuxpP0SGbraorsJPs29Q973tKF
-         kAzOfKhkV3IcUs1n2dwba5aeil8pWoUhDW7HjrjRLDXn9ByPmVyCvnNoBZTuKajNSFhw
-         VwcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SqPML+unsouuIp4FVHK4Uf7DFvDcdAzoCu01LQ5xtJU=;
-        b=vEZYKWOaCpIwEMQpv321JnkeieEkSZ0Tod6bjyBxdWNq3gZZVYzqz+X1HI/SY/5vuN
-         qLzMAo5VQR+98w2jjJHWxsJ2C8stnoebteAU2A434TtVl0xxVkCm+VATzhpmzlxz6jL9
-         0vPF7pS1L1+PUO+K6UYeaQNDtNEChsabj0AaFj4XB+WP4BNY79rZgh3Pi7uRE9dJZerQ
-         2nkDBA2wiiT1POQFRy4968tts3n7q75KF5QVt/YksDod/XgEgJ1Og8ZCSI8ycMAJXW3z
-         1vxT1phqMxwWXm9HH493O62LY+AzE4Wrcqy7ixt5TRAANsUeziYQy4QWHKgoY3lBULMg
-         6+LA==
-X-Gm-Message-State: ACgBeo0H1SEY0g/QBMTG30yw0m8NC4ZgKXiF5Fy2MfcqKKQjL4kXrPsM
-        Q3PO9cEIdw3lPRH8AJkQY/ekXlVb0gSZ133l2b8YLQ==
-X-Google-Smtp-Source: AA6agR5Qlu6bHigQRlsF7FnyAifGVWu07Yimovaj6W3A7lzSYgEVwFSZi08eyLAuAWp+B7C3eLgpufDg+xQ7EBPkK+Y=
-X-Received: by 2002:a17:907:a420:b0:765:70a4:c101 with SMTP id
- sg32-20020a170907a42000b0076570a4c101mr5281501ejc.526.1662626322796; Thu, 08
- Sep 2022 01:38:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 8 Sep 2022 10:38:31 +0200
-Message-ID: <CACRpkdaeQFP+H786D=SG4s+sQmxScUzve-uWkm-Sg7xFDK_Syw@mail.gmail.com>
-Subject: Re: [PATCH v1 10/11] watchdog: bd9576_wdt: switch to using devm_fwnode_gpiod_get()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 8 Sep 2022 04:38:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFA7E1ABB
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:38:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8379061BBD
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:38:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF448C433D6;
+        Thu,  8 Sep 2022 08:38:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662626318;
+        bh=7/+/Q28WsetQxkcMxruLY3ElubDT89XUfj2VYbo4/Bw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=o2TWfZxfRwChwIciVNqQ8Cii9kyXjlRbrHzpaAMzFX21ApBVz/jWIYTP+hxPCFvmB
+         EFPJUH5ERd9fQXCkkX9sK2ahCeivchkQYTKYfEISZttcu2iZdYcI/AO3rb2iJkA7bT
+         LIY7ewG48Vl3hhKd6ePuJ4iXrlz2ooiZDHla55ri0swVsIXTiW0yiTPEIr5YqF9zQ+
+         szny0RaV9O3wlUAGoTZ/eoxw993L0BAA9fQQl4WjoFtbFAxWQk1GHYByXMss+PZHlo
+         ym7mFpMYJ+mIsagDyV0r1I6pivl/N+JRDVkNhSzqIOSsOOmOR71wIlg7I4FGuSIjDX
+         h7HWi6TZlNObQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oWD3U-008r0K-It;
+        Thu, 08 Sep 2022 09:38:36 +0100
+Date:   Thu, 08 Sep 2022 09:38:36 +0100
+Message-ID: <87czc6uupf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bin Meng <bmeng.cn@gmail.com>
+Subject: Re: [PATCH v9 1/7] RISC-V: Clear SIP bit only when using SBI IPI operations
+In-Reply-To: <20220903161309.32848-2-apatel@ventanamicro.com>
+References: <20220903161309.32848-1-apatel@ventanamicro.com>
+        <20220903161309.32848-2-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, bmeng.cn@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,19 +74,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 8:31 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On Sat, 03 Sep 2022 17:13:03 +0100,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> The software interrupt pending (i.e. [M|S]SIP) bit is writeable for
+> S-mode but read-only for M-mode so we clear this bit only when using
+> SBI IPI operations.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+> ---
+>  arch/riscv/kernel/sbi.c | 8 +++++++-
+>  arch/riscv/kernel/smp.c | 2 --
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+> index 775d3322b422..fc614650a2e3 100644
+> --- a/arch/riscv/kernel/sbi.c
+> +++ b/arch/riscv/kernel/sbi.c
+> @@ -643,8 +643,14 @@ static void sbi_send_cpumask_ipi(const struct cpumask *target)
+>  	sbi_send_ipi(target);
+>  }
+>  
+> +static void sbi_ipi_clear(void)
+> +{
+> +	csr_clear(CSR_IP, IE_SIE);
+> +}
+> +
+>  static const struct riscv_ipi_ops sbi_ipi_ops = {
+> -	.ipi_inject = sbi_send_cpumask_ipi
+> +	.ipi_inject = sbi_send_cpumask_ipi,
+> +	.ipi_clear = sbi_ipi_clear
+>  };
+>  
+>  void __init sbi_init(void)
+> diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
+> index 760a64518c58..c56d67f53ea9 100644
+> --- a/arch/riscv/kernel/smp.c
+> +++ b/arch/riscv/kernel/smp.c
+> @@ -83,8 +83,6 @@ void riscv_clear_ipi(void)
+>  {
+>  	if (ipi_ops && ipi_ops->ipi_clear)
+>  		ipi_ops->ipi_clear();
+> -
+> -	csr_clear(CSR_IP, IE_SIE);
+>  }
+>  EXPORT_SYMBOL_GPL(riscv_clear_ipi);
 
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
->
-> While at it switch the rest of the calls to read properties in
-> bd9576_wdt_probe() to the generic device property API as well.
->
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+This really begs the question: why on Earth are these things exported
+to *modules*? I cannot see a good reason why they should be...
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+	M>
 
-Yours,
-Linus Walleij
+-- 
+Without deviation from the norm, progress is not possible.

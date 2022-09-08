@@ -2,68 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4B05B1897
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D25D5B189D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiIHJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S231340AbiIHJZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiIHJYh (ORCPT
+        with ESMTP id S231573AbiIHJYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:24:37 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA1D796B0;
-        Thu,  8 Sep 2022 02:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662629055; x=1694165055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NMMdOivcSzeIEVychxnk3SDpIBJqhUWIwpaRsOdPn7c=;
-  b=RN47XvmPnEkju8y+xW8dBERMgRsthYJtg3mEk08W0+Od1R8F3JVLDd2I
-   cUI+LvBEzVebgBs5NOGHztTaPj1SOzLte5T4DwU4CwrLqI0SWbEI9Yszo
-   FjphqNMiNUHpwHHH8EmIfkfqAgeM04AxlaoM4zqauH8KECO0+BZ4F2QLL
-   uZqEyFJWlflxx2lB0btTm+uv7yXYR5peByoTczOY1SN81Gu9wXDdVxhTs
-   r5CD/Qq6ALOpVuxxn26pybIYYNv90EF3GwWtd5G6outI0StUEnK4pZyBv
-   qkl9ByH4E3m6K8MWUcPw0m9Z6JMaAC5ijGs1tZ3g7kacoRzHfs05dCQhf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="383414849"
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="383414849"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 02:24:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="647976047"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 08 Sep 2022 02:23:59 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWDlP-0007a9-0c;
-        Thu, 08 Sep 2022 09:23:59 +0000
-Date:   Thu, 8 Sep 2022 17:23:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-Cc:     kbuild-all@lists.01.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH V2 6/7] arm64/perf: Add BRBE driver
-Message-ID: <202209081717.00OiPpzm-lkp@intel.com>
-References: <20220908051046.465307-7-anshuman.khandual@arm.com>
+        Thu, 8 Sep 2022 05:24:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE8027B24;
+        Thu,  8 Sep 2022 02:24:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16E6461C12;
+        Thu,  8 Sep 2022 09:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3BD0C433D6;
+        Thu,  8 Sep 2022 09:24:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662629084;
+        bh=xf8i8jVCJk0sbvuXJdCxq36EMZoZejyif5UbP8Vp5SA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TRaqUpwIsO8wvVUeYeRekM39Iso37MBrCAyRxczX5FxRDA5HBd2Aitcwj2IZC1hr/
+         obcDQ5ebZA4aH29mJjqbx7094WdM8exYX4pIIpKSDoGQZFM9S0NuX5Z+vDYuOSuG4u
+         81DRmz/FRocYkoGqispwVagsi3PwmXNgJbxBYi3s=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.10.142
+Date:   Thu,  8 Sep 2022 11:25:05 +0200
+Message-Id: <1662629105129205@kroah.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908051046.465307-7-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,284 +51,310 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+I'm announcing the release of the 5.10.142 kernel.
 
-Thank you for the patch! Yet something to improve:
+All users of the 5.10 kernel series must upgrade.
 
-[auto build test ERROR on acme/perf/core]
-[also build test ERROR on tip/perf/core arm64/for-next/core linus/master v6.0-rc4 next-20220907]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The updated 5.10.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220908-131425
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
-config: arm64-buildonly-randconfig-r002-20220907 (https://download.01.org/0day-ci/archive/20220908/202209081717.00OiPpzm-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5b70e42a715860504646cb5bd1788ddb823dd50b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220908-131425
-        git checkout 5b70e42a715860504646cb5bd1788ddb823dd50b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/perf/
+thanks,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+greg k-h
 
-All error/warnings (new ones prefixed by >>):
+------------
 
-   drivers/perf/arm_pmu_brbe.c: In function 'brbe_fetch_perf_type':
->> drivers/perf/arm_pmu_brbe.c:251:24: error: 'PERF_BR_ARM64_DEBUG_HALT' undeclared (first use in this function)
-     251 |                 return PERF_BR_ARM64_DEBUG_HALT;
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/arm_pmu_brbe.c:251:24: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/perf/arm_pmu_brbe.c:253:24: error: 'PERF_BR_SERROR' undeclared (first use in this function); did you mean 'PERF_BR_ERET'?
-     253 |                 return PERF_BR_SERROR;
-         |                        ^~~~~~~~~~~~~~
-         |                        PERF_BR_ERET
->> drivers/perf/arm_pmu_brbe.c:256:24: error: 'PERF_BR_ARM64_DEBUG_INST' undeclared (first use in this function)
-     256 |                 return PERF_BR_ARM64_DEBUG_INST;
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:259:24: error: 'PERF_BR_ARM64_DEBUG_DATA' undeclared (first use in this function)
-     259 |                 return PERF_BR_ARM64_DEBUG_DATA;
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:262:24: error: 'PERF_BR_NEW_FAULT_ALGN' undeclared (first use in this function)
-     262 |                 return PERF_BR_NEW_FAULT_ALGN;
-         |                        ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:265:24: error: 'PERF_BR_NEW_FAULT_INST' undeclared (first use in this function)
-     265 |                 return PERF_BR_NEW_FAULT_INST;
-         |                        ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:268:24: error: 'PERF_BR_NEW_FAULT_DATA' undeclared (first use in this function)
-     268 |                 return PERF_BR_NEW_FAULT_DATA;
-         |                        ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:271:24: error: 'PERF_BR_ARM64_FIQ' undeclared (first use in this function); did you mean 'PERF_REG_ARM64_MAX'?
-     271 |                 return PERF_BR_ARM64_FIQ;
-         |                        ^~~~~~~~~~~~~~~~~
-         |                        PERF_REG_ARM64_MAX
->> drivers/perf/arm_pmu_brbe.c:274:24: error: 'PERF_BR_ARM64_DEBUG_EXIT' undeclared (first use in this function)
-     274 |                 return PERF_BR_ARM64_DEBUG_EXIT;
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/arm_pmu_brbe.c: In function 'brbe_fetch_perf_priv':
->> drivers/perf/arm_pmu_brbe.c:287:23: error: 'PERF_BR_PRIV_USER' undeclared (first use in this function)
-     287 |                return PERF_BR_PRIV_USER;
-         |                       ^~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:289:23: error: 'PERF_BR_PRIV_KERNEL' undeclared (first use in this function); did you mean 'PERF_SECURITY_KERNEL'?
-     289 |                return PERF_BR_PRIV_KERNEL;
-         |                       ^~~~~~~~~~~~~~~~~~~
-         |                       PERF_SECURITY_KERNEL
->> drivers/perf/arm_pmu_brbe.c:293:23: error: 'PERF_BR_PRIV_HV' undeclared (first use in this function)
-     293 |                return PERF_BR_PRIV_HV;
-         |                       ^~~~~~~~~~~~~~~
-   drivers/perf/arm_pmu_brbe.c: In function 'capture_brbe_flags':
->> drivers/perf/arm_pmu_brbe.c:306:14: error: implicit declaration of function 'branch_sample_no_cycles' [-Werror=implicit-function-declaration]
-     306 |         if (!branch_sample_no_cycles(event))
-         |              ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:309:13: error: implicit declaration of function 'branch_sample_type' [-Werror=implicit-function-declaration]
-     309 |         if (branch_sample_type(event)) {
-         |             ^~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:312:56: error: 'PERF_BR_EXTEND_ABI' undeclared (first use in this function)
-     312 |                         cpuc->brbe_entries[idx].type = PERF_BR_EXTEND_ABI;
-         |                                                        ^~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:313:48: error: 'struct perf_branch_entry' has no member named 'new_type'
-     313 |                         cpuc->brbe_entries[idx].new_type = branch_type;
-         |                                                ^
->> drivers/perf/arm_pmu_brbe.c:319:14: error: implicit declaration of function 'branch_sample_no_flags' [-Werror=implicit-function-declaration]
-     319 |         if (!branch_sample_no_flags(event)) {
-         |              ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:341:13: error: implicit declaration of function 'branch_sample_priv' [-Werror=implicit-function-declaration]
-     341 |         if (branch_sample_priv(event)) {
-         |             ^~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_pmu_brbe.c:347:48: error: 'struct perf_branch_entry' has no member named 'priv'
-     347 |                         cpuc->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
-         |                                                ^
-   drivers/perf/arm_pmu_brbe.c: In function 'brbe_fetch_perf_type':
->> drivers/perf/arm_pmu_brbe.c:250:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     250 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:252:9: note: here
-     252 |         case BRBINF_TYPE_SERROR:
-         |         ^~~~
-   drivers/perf/arm_pmu_brbe.c:255:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     255 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:257:9: note: here
-     257 |         case BRBINF_TYPE_DATA_DEBUG:
-         |         ^~~~
-   drivers/perf/arm_pmu_brbe.c:258:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     258 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:260:9: note: here
-     260 |         case BRBINF_TYPE_ALGN_FAULT:
-         |         ^~~~
-   drivers/perf/arm_pmu_brbe.c:261:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     261 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:263:9: note: here
-     263 |         case BRBINF_TYPE_INST_FAULT:
-         |         ^~~~
-   drivers/perf/arm_pmu_brbe.c:264:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     264 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:266:9: note: here
-     266 |         case BRBINF_TYPE_DATA_FAULT:
-         |         ^~~~
-   drivers/perf/arm_pmu_brbe.c:267:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     267 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:269:9: note: here
-     269 |         case BRBINF_TYPE_FIQ:
-         |         ^~~~
-   drivers/perf/arm_pmu_brbe.c:270:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     270 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:272:9: note: here
-     272 |         case BRBINF_TYPE_DEBUG_EXIT:
-         |         ^~~~
-   drivers/perf/arm_pmu_brbe.c:273:34: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     273 |                 *new_branch_type = true;
-         |                 ~~~~~~~~~~~~~~~~~^~~~~~
-   drivers/perf/arm_pmu_brbe.c:275:9: note: here
-     275 |         default:
-         |         ^~~~~~~
-   cc1: some warnings being treated as errors
+ Makefile                                             |    2 
+ arch/powerpc/kernel/systbl.S                         |    1 
+ arch/riscv/mm/pageattr.c                             |    4 -
+ arch/s390/include/asm/hugetlb.h                      |    6 +
+ arch/s390/kernel/vmlinux.lds.S                       |    1 
+ arch/x86/kvm/x86.c                                   |   25 ++++++-
+ drivers/android/binder.c                             |   12 +++
+ drivers/base/dd.c                                    |   10 +++
+ drivers/block/xen-blkback/common.h                   |    3 
+ drivers/block/xen-blkback/xenbus.c                   |    6 +
+ drivers/block/xen-blkfront.c                         |    8 +-
+ drivers/clk/bcm/clk-raspberrypi.c                    |   13 ++-
+ drivers/clk/clk.c                                    |    3 
+ drivers/gpio/gpio-pca953x.c                          |    8 ++
+ drivers/gpu/drm/i915/display/intel_quirks.c          |    3 
+ drivers/gpu/drm/i915/gvt/handlers.c                  |    2 
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                     |    2 
+ drivers/gpu/drm/msm/dsi/dsi_cfg.c                    |    4 -
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c                |    2 
+ drivers/hwmon/gpio-fan.c                             |    3 
+ drivers/iio/adc/ad7292.c                             |    4 -
+ drivers/iio/adc/mcp3911.c                            |   19 ++++-
+ drivers/input/joystick/iforce/iforce-serio.c         |    6 -
+ drivers/input/joystick/iforce/iforce-usb.c           |    8 +-
+ drivers/input/joystick/iforce/iforce.h               |    6 +
+ drivers/input/misc/rk805-pwrkey.c                    |    1 
+ drivers/media/rc/mceusb.c                            |   35 ++++------
+ drivers/misc/fastrpc.c                               |   12 ++-
+ drivers/mmc/core/sd.c                                |    6 -
+ drivers/net/ethernet/cortina/gemini.c                |   24 +++----
+ drivers/net/ethernet/google/gve/gve_ethtool.c        |   16 ++--
+ drivers/net/ethernet/google/gve/gve_main.c           |   12 +--
+ drivers/net/ethernet/huawei/hinic/hinic_rx.c         |    4 -
+ drivers/net/ethernet/huawei/hinic/hinic_tx.c         |    4 -
+ drivers/net/ethernet/netronome/nfp/nfp_net_common.c  |    8 +-
+ drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c |    8 +-
+ drivers/net/ethernet/rocker/rocker_ofdpa.c           |    2 
+ drivers/net/ieee802154/adf7242.c                     |    3 
+ drivers/net/netdevsim/netdev.c                       |    4 -
+ drivers/platform/x86/pmc_atom.c                      |    2 
+ drivers/staging/rtl8712/rtl8712_cmd.c                |   36 ----------
+ drivers/thunderbolt/ctl.c                            |    2 
+ drivers/tty/serial/fsl_lpuart.c                      |    5 -
+ drivers/tty/vt/vt.c                                  |   12 ++-
+ drivers/usb/class/cdc-acm.c                          |    3 
+ drivers/usb/core/hub.c                               |   10 +++
+ drivers/usb/dwc2/platform.c                          |    8 +-
+ drivers/usb/dwc3/core.c                              |   19 +++--
+ drivers/usb/dwc3/dwc3-qcom.c                         |   14 +++-
+ drivers/usb/dwc3/host.c                              |   11 +++
+ drivers/usb/gadget/function/storage_common.c         |    6 +
+ drivers/usb/host/xhci-hub.c                          |   13 +++
+ drivers/usb/host/xhci.c                              |   19 +----
+ drivers/usb/host/xhci.h                              |    4 -
+ drivers/usb/serial/ch341.c                           |   16 ++++
+ drivers/usb/serial/cp210x.c                          |    1 
+ drivers/usb/serial/ftdi_sio.c                        |    2 
+ drivers/usb/serial/ftdi_sio_ids.h                    |    6 +
+ drivers/usb/serial/option.c                          |   15 ++++
+ drivers/usb/storage/unusual_devs.h                   |    7 ++
+ drivers/usb/typec/altmodes/displayport.c             |    4 -
+ drivers/xen/grant-table.c                            |    3 
+ fs/btrfs/volumes.c                                   |   44 +++++++++++--
+ include/linux/platform_data/x86/pmc_atom.h           |    6 +
+ include/linux/usb.h                                  |    2 
+ include/linux/usb/typec_dp.h                         |    5 +
+ kernel/bpf/cgroup.c                                  |    4 -
+ mm/pagewalk.c                                        |   21 +++---
+ mm/ptdump.c                                          |    4 -
+ net/ipv4/fib_frontend.c                              |    4 -
+ net/ipv4/tcp_input.c                                 |    4 -
+ net/kcm/kcmsock.c                                    |   15 ++--
+ net/mac80211/ibss.c                                  |    4 +
+ net/mac80211/scan.c                                  |   11 ++-
+ net/mac80211/sta_info.c                              |    8 +-
+ net/mac802154/rx.c                                   |    2 
+ net/mpls/af_mpls.c                                   |    4 -
+ net/sched/sch_generic.c                              |   31 ++++-----
+ net/sched/sch_tbf.c                                  |    4 -
+ net/smc/af_smc.c                                     |    1 
+ net/wireless/debugfs.c                               |    3 
+ sound/core/seq/oss/seq_oss_midi.c                    |    2 
+ sound/core/seq/seq_clientmgr.c                       |   12 +--
+ sound/hda/intel-nhlt.c                               |   25 ++++---
+ sound/pci/hda/patch_realtek.c                        |   63 ++++++++++++++++---
+ 85 files changed, 519 insertions(+), 278 deletions(-)
 
+Adrian Hunter (1):
+      mmc: core: Fix UHS-I SD 1.8V workaround branch
 
-vim +/PERF_BR_ARM64_DEBUG_HALT +251 drivers/perf/arm_pmu_brbe.c
+Alan Stern (2):
+      media: mceusb: Use new usb_control_msg_*() routines
+      USB: core: Prevent nested device-reset calls
 
-   222	
-   223	static int brbe_fetch_perf_type(u64 brbinf, bool *new_branch_type)
-   224	{
-   225		int brbe_type = brbe_fetch_type(brbinf);
-   226		*new_branch_type = false;
-   227	
-   228		switch (brbe_type) {
-   229		case BRBINF_TYPE_UNCOND_DIR:
-   230			return PERF_BR_UNCOND;
-   231		case BRBINF_TYPE_INDIR:
-   232			return PERF_BR_IND;
-   233		case BRBINF_TYPE_DIR_LINK:
-   234			return PERF_BR_CALL;
-   235		case BRBINF_TYPE_INDIR_LINK:
-   236			return PERF_BR_IND_CALL;
-   237		case BRBINF_TYPE_RET_SUB:
-   238			return PERF_BR_RET;
-   239		case BRBINF_TYPE_COND_DIR:
-   240			return PERF_BR_COND;
-   241		case BRBINF_TYPE_CALL:
-   242			return PERF_BR_CALL;
-   243		case BRBINF_TYPE_TRAP:
-   244			return PERF_BR_SYSCALL;
-   245		case BRBINF_TYPE_RET_EXCPT:
-   246			return PERF_BR_ERET;
-   247		case BRBINF_TYPE_IRQ:
-   248			return PERF_BR_IRQ;
-   249		case BRBINF_TYPE_DEBUG_HALT:
- > 250			*new_branch_type = true;
- > 251			return PERF_BR_ARM64_DEBUG_HALT;
-   252		case BRBINF_TYPE_SERROR:
- > 253			return PERF_BR_SERROR;
-   254		case BRBINF_TYPE_INST_DEBUG:
-   255			*new_branch_type = true;
- > 256			return PERF_BR_ARM64_DEBUG_INST;
-   257		case BRBINF_TYPE_DATA_DEBUG:
-   258			*new_branch_type = true;
- > 259			return PERF_BR_ARM64_DEBUG_DATA;
-   260		case BRBINF_TYPE_ALGN_FAULT:
-   261			*new_branch_type = true;
- > 262			return PERF_BR_NEW_FAULT_ALGN;
-   263		case BRBINF_TYPE_INST_FAULT:
-   264			*new_branch_type = true;
- > 265			return PERF_BR_NEW_FAULT_INST;
-   266		case BRBINF_TYPE_DATA_FAULT:
-   267			*new_branch_type = true;
- > 268			return PERF_BR_NEW_FAULT_DATA;
-   269		case BRBINF_TYPE_FIQ:
-   270			*new_branch_type = true;
- > 271			return PERF_BR_ARM64_FIQ;
-   272		case BRBINF_TYPE_DEBUG_EXIT:
-   273			*new_branch_type = true;
- > 274			return PERF_BR_ARM64_DEBUG_EXIT;
-   275		default:
-   276			pr_warn("unknown branch type captured\n");
-   277			return PERF_BR_UNKNOWN;
-   278		}
-   279	}
-   280	
-   281	static int brbe_fetch_perf_priv(u64 brbinf)
-   282	{
-   283	       int brbe_el = brbe_fetch_el(brbinf);
-   284	
-   285	       switch (brbe_el) {
-   286	       case BRBINF_EL_EL0:
- > 287	               return PERF_BR_PRIV_USER;
-   288	       case BRBINF_EL_EL1:
- > 289	               return PERF_BR_PRIV_KERNEL;
-   290	       case BRBINF_EL_EL2:
-   291	               if (is_kernel_in_hyp_mode())
-   292	                       return PERF_BR_PRIV_KERNEL;
- > 293	               return PERF_BR_PRIV_HV;
-   294	       default:
-   295	               pr_warn("unknown branch privilege captured\n");
-   296	               return -1;
-   297	       }
-   298	}
-   299	
-   300	static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
-   301				       u64 brbinf, int idx)
-   302	{
-   303		int branch_type, type = brbe_record_valid(brbinf);
-   304		bool new_branch_type;
-   305	
- > 306		if (!branch_sample_no_cycles(event))
-   307			cpuc->brbe_entries[idx].cycles = brbe_fetch_cycles(brbinf);
-   308	
- > 309		if (branch_sample_type(event)) {
-   310			branch_type = brbe_fetch_perf_type(brbinf, &new_branch_type);
-   311			if (new_branch_type) {
- > 312				cpuc->brbe_entries[idx].type = PERF_BR_EXTEND_ABI;
- > 313				cpuc->brbe_entries[idx].new_type = branch_type;
-   314			} else {
-   315				cpuc->brbe_entries[idx].type = branch_type;
-   316			}
-   317		}
-   318	
- > 319		if (!branch_sample_no_flags(event)) {
-   320			/*
-   321			 * BRBINF_LASTFAILED does not indicate that the last transaction
-   322			 * got failed or aborted during the current branch record itself.
-   323			 * Rather, this indicates that all the branch records which were
-   324			 * in transaction until the curret branch record have failed. So
-   325			 * the entire BRBE buffer needs to be processed later on to find
-   326			 * all branch records which might have failed.
-   327			 */
-   328			cpuc->brbe_entries[idx].abort = brbinf & BRBINF_LASTFAILED;
-   329	
-   330			/*
-   331			 * All these information (i.e transaction state and mispredicts)
-   332			 * are not available for target only branch records.
-   333			 */
-   334			if (type != BRBINF_VALID_TARGET) {
-   335				cpuc->brbe_entries[idx].mispred = brbinf & BRBINF_MPRED;
-   336				cpuc->brbe_entries[idx].predicted = !(brbinf & BRBINF_MPRED);
-   337				cpuc->brbe_entries[idx].in_tx = brbinf & BRBINF_TX;
-   338			}
-   339		}
-   340	
- > 341		if (branch_sample_priv(event)) {
-   342			/*
-   343			 * All these information (i.e branch privilege level) are not
-   344			 * available for source only branch records.
-   345			 */
-   346			if (type != BRBINF_VALID_SOURCE)
- > 347				cpuc->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
-   348		}
-   349	}
-   350	
+Anand Jain (1):
+      btrfs: harden identification of a stale device
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Andy Shevchenko (1):
+      platform/x86: pmc_atom: Fix SLP_TYPx bitfield mask
+
+Armin Wolf (1):
+      hwmon: (gpio-fan) Fix array out of bounds access
+
+Carlos Llamas (1):
+      binder: fix UAF of ref->proc caused by race condition
+
+Chen-Yu Tsai (2):
+      clk: core: Honor CLK_OPS_PARENT_ENABLE for clk gate ops
+      clk: core: Fix runtime PM sequence in clk_core_unprepare()
+
+Christophe JAILLET (1):
+      clk: bcm: rpi: Use correct order for the parameters of devm_kcalloc()
+
+Colin Ian King (1):
+      drm/i915/reg: Fix spelling mistake "Unsupport" -> "Unsupported"
+
+Cong Wang (1):
+      kcm: fix strp_init() order and cleanup
+
+Dan Carpenter (3):
+      wifi: cfg80211: debugfs: fix return type in ht40allow_map_read()
+      staging: rtl8712: fix use after free bugs
+      xen/grants: prevent integer overflow in gnttab_dma_alloc_pages()
+
+Diego Santa Cruz (1):
+      drm/i915/glk: ECS Liva Q2 needs GLK HDMI port timing quirk
+
+Douglas Anderson (2):
+      drm/msm/dsi: Fix number of regulators for msm8996_dsi_cfg
+      drm/msm/dsi: Fix number of regulators for SDM660
+
+Duoming Zhou (1):
+      ethernet: rocker: fix sleep in atomic context bug in neigh_timer_handler
+
+Eric Dumazet (1):
+      tcp: annotate data-race around challenge_timestamp
+
+Gerald Schaefer (1):
+      s390/hugetlb: fix prepare_hugepage_range() check for 2 GB hugepages
+
+Greg Kroah-Hartman (1):
+      Linux 5.10.142
+
+Haibo Chen (1):
+      gpio: pca953x: Add mutex_lock for regcache sync in PM
+
+Heiner Kallweit (1):
+      usb: dwc2: fix wrong order of phy_power_on and phy_init
+
+Helge Deller (1):
+      vt: Clear selection before changing the font
+
+Isaac J. Manjarres (1):
+      driver core: Don't probe devices after bus_type.match() probe deferral
+
+Jakub Kicinski (1):
+      Revert "sch_cake: Return __NET_XMIT_STOLEN when consuming enqueued skb"
+
+Jim Mattson (1):
+      KVM: x86: Mask off unsupported and unknown bits of IA32_ARCH_CAPABILITIES
+
+Johan Hovold (8):
+      misc: fastrpc: fix memory corruption on probe
+      misc: fastrpc: fix memory corruption on open
+      USB: serial: cp210x: add Decagon UCA device id
+      usb: dwc3: fix PHY disable sequence
+      usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup
+      usb: dwc3: disable USB core PHY management
+      USB: serial: ch341: fix lost character on LCR updates
+      USB: serial: ch341: fix disabled rx timer on older devices
+
+Josh Poimboeuf (1):
+      s390: fix nospec table alignments
+
+Kacper Michajłow (1):
+      ALSA: hda/realtek: Add speaker AMP init for Samsung laptops with ALC298
+
+Krishna Kurapati (1):
+      usb: gadget: mass_storage: Fix cdrom data transfers on MAC-OS
+
+Kuogee Hsieh (1):
+      drm/msm/dp: delete DP_RECOVERED_CLOCK_OUT_EN to fix tps4
+
+Lin Ma (1):
+      ieee802154/adf7242: defer destroy_workqueue call
+
+Marcus Folkesson (2):
+      iio: adc: mcp3911: make use of the sign bit
+      iio: adc: mcp3911: use correct formula for AD conversion
+
+Masahiro Yamada (1):
+      powerpc: align syscall table for ppc32
+
+Mathias Nyman (2):
+      Revert "xhci: turn off port power in shutdown"
+      xhci: Add grace period after xHC start to prevent premature runtime suspend.
+
+Matti Vaittinen (1):
+      iio: ad7292: Prevent regulator double disable
+
+Mika Westerberg (1):
+      thunderbolt: Use the actual buffer in tb_async_error()
+
+Miquel Raynal (1):
+      net: mac802154: Fix a condition in the receive path
+
+Nicolas Dichtel (1):
+      ip: fix triggering of 'icmp redirect'
+
+Niek Nooijens (1):
+      USB: serial: ftdi_sio: add Omron CS1W-CIF31 device id
+
+Pablo Sun (1):
+      usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles
+
+Peter Robinson (1):
+      Input: rk805-pwrkey - fix module autoloading
+
+Peter Ujfalusi (1):
+      ALSA: hda: intel-nhlt: Correct the handling of fmt_config flexible array
+
+Pierre-Louis Bossart (1):
+      ALSA: hda: intel-nhlt: remove use of __func__ in dev_dbg
+
+Pu Lehui (1):
+      bpf, cgroup: Fix kernel BUG in purge_effective_progs
+
+Sebastian Andrzej Siewior (1):
+      net: Use u64_stats_fetch_begin_irq() for stats fetch.
+
+SeongJae Park (2):
+      xen-blkback: Advertise feature-persistent as user requested
+      xen-blkfront: Advertise feature-persistent as user requested
+
+Shenwei Wang (1):
+      serial: fsl_lpuart: RS485 RTS polariy is inverse
+
+Sherry Sun (1):
+      tty: serial: lpuart: disable flow control while waiting for the transmit engine to complete
+
+Siddh Raman Pant (2):
+      wifi: mac80211: Don't finalize CSA in IBSS mode if state is disconnected
+      wifi: mac80211: Fix UAF in ieee80211_scan_rx()
+
+Slark Xiao (1):
+      USB: serial: option: add support for Cinterion MV32-WA/WB RmNet mode
+
+Stefan Wahren (3):
+      clk: bcm: rpi: Fix error handling of raspberrypi_fw_get_rate
+      clk: bcm: rpi: Prevent out-of-bounds access
+      clk: bcm: rpi: Add missing newline
+
+Stephen Boyd (1):
+      Revert "clk: core: Honor CLK_OPS_PARENT_ENABLE for clk gate ops"
+
+Steven Price (1):
+      mm: pagewalk: Fix race between unmap and page walker
+
+Takashi Iwai (2):
+      ALSA: seq: oss: Fix data-race for max_midi_devs access
+      ALSA: seq: Fix data-race at module auto-loading
+
+Tetsuo Handa (1):
+      Input: iforce - wake up after clearing IFORCE_XMIT_RUNNING flag
+
+Thierry GUIBERT (1):
+      USB: cdc-acm: Add Icom PMR F3400 support (0c26:0020)
+
+Toke Høiland-Jørgensen (1):
+      sch_cake: Return __NET_XMIT_STOLEN when consuming enqueued skb
+
+Wang Hai (1):
+      net/sched: fix netdevice reference leaks in attach_default_qdiscs()
+
+Witold Lipieta (1):
+      usb-storage: Add ignore-residue quirk for NXP PN7462AU
+
+Yacan Liu (1):
+      net/smc: Remove redundant refcount increase
+
+Yan Xinyu (1):
+      USB: serial: option: add support for OPPO R11 diag port
+
+Yonglin Tan (1):
+      USB: serial: option: add Quectel EM060K modem
+
+Zhengchao Shao (1):
+      net: sched: tbf: don't call qdisc_put() while holding tree lock
+
+sunliming (1):
+      drm/msm/dsi: fix the inconsistent indenting
+

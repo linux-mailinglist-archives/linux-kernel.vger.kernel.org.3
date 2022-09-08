@@ -2,143 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776D25B143B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370105B1440
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiIHF7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 01:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
+        id S229614AbiIHGAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiIHF7T (ORCPT
+        with ESMTP id S229773AbiIHGAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 01:59:19 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2F8ADCC2;
-        Wed,  7 Sep 2022 22:59:18 -0700 (PDT)
+        Thu, 8 Sep 2022 02:00:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F387375FC4;
+        Wed,  7 Sep 2022 23:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662616758; x=1694152758;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZGowQNTYMHVTn+7v/zjG2zM7l7P9JFeySR/aPP6cIUI=;
-  b=p0m8zhIzxnNzq/WenVl3JRS0Dm9ealAALfCmk3uYkdvSMm8ui2A7lXDF
-   BjIbC1lRjsP3PwAF/cAfgUfMsCwnx5HEXuFohs7kAb9BUO15b6ttkpiXL
-   +j9c3PfKdJFEV0NzZ3EM5G00D8+BVIf1MZasUcPh6ze9neFvY89WK5Tz/
-   IJ4mkGqzRf+fSBVUmO1IEcVtcfq14yZEFq9aelEChrgrJmvZ3jKafmmJu
-   83IriC7ICMRxxJzhwWQCoPga77JIcVCGt1SBtWx0Wy7S/D08XL84HxUgM
-   bZ42EEaBDGoMLSTee1uOaF0mH14s2TDkwhJaCa9sAjcviAVBqIUQGGlLS
-   Q==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662616831; x=1694152831;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=gPw8oRyHsg0GPKcLgHDSL2cvKC7yXJ8EUpAcJpFLCVI=;
+  b=Yf4L6VIM8uiH47wXuYi0b7sUMnZyJsPo2INWelgS8mrFDtZdt9jVNSYc
+   XhqlLhMsv0bjd8PFVBa4ZfO3euHY02dtvUePKouFson8IFuYoIp62utXD
+   vtDwkxuGbrcQVlAsFmYjflJMX7YVqvJTlNYQVrDNoE+TUeDTpzLxYcGoB
+   gyfVZAAdoanTXq/T7S1oMFuXrhr8qG8mMs8BNzmgpTrTt89GGsD/+6nQ6
+   IZXhYVwuFPbbmkxM2dDNtuIUjZrnI0xLnyX/D0GDrLaHE76a30hHCdF2G
+   nRUWTaaL9Wrwc44nRrTu7nDgBdLU7CE2jC0sZD6zgKbnyKXaMbkuAOma5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="280105109"
 X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="172894568"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Sep 2022 22:59:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+   d="scan'208";a="280105109"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 23:00:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="757066725"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2022 23:00:29 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 7 Sep 2022 22:59:17 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ 15.1.2375.31; Wed, 7 Sep 2022 23:00:28 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Wed, 7 Sep 2022 22:59:17 -0700
+ 15.1.2375.31 via Frontend Transport; Wed, 7 Sep 2022 23:00:28 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 7 Sep 2022 23:00:27 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AbDinRz6XzJXMVcMzdTxQqBiV+TleqveVNd/30D7tm0LgwL1ZTmX7pYW318QyVrZD9EqEmPM534oev46Q/QVIUNdGfubUAocOfS2zrpEO9LObkpUYjozm00brfn5SEzn4NT4hGvVG7HQJbNmtSC9ZUFRSw3BWiyxXep2ZKgYQzz8VftyCja4eu39x0vlOa2hhsWBGNjE0BrBxHe3Rlx12t6zcLruz3CYUDnbzgTq0h1rbxS/M32nltjnLBmeKG7QswIlgAV+U7sN6D5OCsZhzpiv8LfovkDZg4XcxwvQohAT/F6WzKKhXZruY1arIDr6m1Wha9O3qA2Ku17FK4CJDg==
+ b=S0koEK16CxCaorxKOoWdx9dJ4CSAPmqGmz2dgzvHbN9jqg+l6XHbs5wVTxh6uYbs0xzS8VU2OJnubVintt6QJ0V3vGuQrpx8mQNy4YX+WzmGPIh3Y8NO6idDkIULhiuWMlq0vwr8oXT2MqiNnrC104VMtXSDsVtjQIFBvGBijhSWlT5B14FTm5dwKwZaSSkioB89dbTdq/y+SnInK11jHuG8BA2poQzEkhN5ggpeNWQX4RAmSK/cy7VNKwS/51FPJIevXYe7fhSJYrYRp2CB+XIjmLRn0tEhQPayk9KtXBRkQVcbNKsL+IlQHzIyKvRX5snjEFO7a7fA86gxWtEsuA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gTuFQUL/oCCF5rwtpc62uDaDOZmxavwe8InoRZOsIpg=;
- b=TTTfJNY0cJ4mrzuBGzGL1oacq5kQl4+5U8I+5G6mwOX7Fnddh7GfMzp/t9+j4qfuly9KzCVZSsUH2FF3b6vXXn92KXBHWXhqwhLUwyLXrhZfq30te03HRjt4xxShZliwRBs3LEgIdBlK0aqCmBaksIcLIAL4cdcU02foT1RuFVxG4LDBAELS98TZLRUfyXkf1mryBAczU+hIKB2wPLmcbh+zMQaetgNqg9Ys67bqvjulnjsOalDaBUooDg5SaVhIcsO2maF2Yg8JgPHsELX4ar39k7hx8tN/TzsWwbrfwUHLZpStowuqYjnsBA5LVs27+iGFugEofFgmdcj5FNymfA==
+ bh=Na6HzgAzEsFX/Vz4SxuiiyFWrgJo6Ijk/XFtMAlFmN8=;
+ b=hZ3cIkC+u6lJNONC8yA415JW/ujj0L9KuoO/akxa9/X7U6ofve+2VvDXQ4U/bZLcPleZ36ZgLleLZUqSNOVBIUDW4D9AVhy2+gfQPjHo+AFU0g+RZhbY7cs5t1q2NxVdyDwuyz2HzujBONjrxCPH/aSTzxtmYNtKnI5JmTMYOEJobDYkDdzj6dgFn01xNuhKG03dtQBncUlTqiXw9Z7j4iyxzv0jfoNAwQQrvEzuiBKHWaW6/QTKvH5zbVwjtSG2OML+amgJWYiV+EsRHc+jn8+h6fGOOplqoERCxuub+Vtxk/VkTgiGVvqL0cf5gxfS1Lvo7xDvo6C8DF5AoHXrCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gTuFQUL/oCCF5rwtpc62uDaDOZmxavwe8InoRZOsIpg=;
- b=m0etLAEAmIRUDjq1CDE+k44MNI/y8SzBzwT7O56H1kj7ubFEgNOEbnzO9OOfvksmipxBuA6kebmlEsJVs7wVVQ2i8DYf/9J3EI0kMjQjGDoiJUoDPtcxntOhrnDT8tKzs/h2tWR5mNIBEx7EXd6AsH96SDq2X7uiPMKKk6deumY=
-Received: from BN8PR11MB3668.namprd11.prod.outlook.com (2603:10b6:408:81::24)
- by BY5PR11MB4119.namprd11.prod.outlook.com (2603:10b6:a03:190::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Thu, 8 Sep
- 2022 05:59:11 +0000
-Received: from BN8PR11MB3668.namprd11.prod.outlook.com
- ([fe80::3198:2077:56c7:1780]) by BN8PR11MB3668.namprd11.prod.outlook.com
- ([fe80::3198:2077:56c7:1780%4]) with mapi id 15.20.5612.014; Thu, 8 Sep 2022
- 05:59:11 +0000
-From:   <Kumaravel.Thiagarajan@microchip.com>
-To:     <weiyongjun@huaweicloud.com>, <arnd@arndb.de>,
-        <gregkh@linuxfoundation.org>
-CC:     <weiyongjun1@huawei.com>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH -next v2 2/5] misc: microchip: pci1xxxx: Fix missing
- spin_lock_init()
-Thread-Topic: [PATCH -next v2 2/5] misc: microchip: pci1xxxx: Fix missing
- spin_lock_init()
-Thread-Index: AQHYwsfa7PMhHkHaRUuCegivBl1ESK3VCitA
-Date:   Thu, 8 Sep 2022 05:59:11 +0000
-Message-ID: <BN8PR11MB36687E0E06862C7C89E26DD0E9409@BN8PR11MB3668.namprd11.prod.outlook.com>
-References: <20220907145808.1789249-1-weiyongjun@huaweicloud.com>
- <20220907145808.1789249-2-weiyongjun@huaweicloud.com>
-In-Reply-To: <20220907145808.1789249-2-weiyongjun@huaweicloud.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN8PR11MB3668:EE_|BY5PR11MB4119:EE_
-x-ms-office365-filtering-correlation-id: 4efddea2-ca28-4ae7-ff67-08da915f4093
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ujQJ+np8o4pC9Qh301fIE1M6w9YGXPGpgig4Hq0N7WUDJdsIVzjE2TqLQZp5n+QZssYyypjgxi7d9YUSIKA6a3wPSmMI/AYm/orFmc9w0YYvwZ8lVX3l2wB1dms7ZJal7miqxX7GljJeUSOSP5kIctUeyvG0X36s32afavVCoLqvhANjOY5iNzGVjRnSFygijjviTzy2KF9f3fP2XuY66MLS6LHpilTIiT8KK8FLM3w3F/cwiyikcIct+TuCVGlEvzaNrxY+LjsKIpee99vapWCDpKP7LQs12IHgH5DQhoHnbEDEJ3xOxMPO1H5XnlJcVybrl8M8hI1f9XXI3L6IjRXxUp+o1UCKN5cBWM6Sge6vhJ+uRwaGUe88cHjqcvmxBXI2ftmbccN0NMIM6CLizqmERnuIWMGAh9wy+5sT07b3eOw3wGzBcibDgSqL2n8KffssYtCbIN4icsdHBykKCQOaUcZurdZmbWRhmo5KiQMQbQZK5Oy6RzylP+MQtiObk8idi39oLAwwV+rcy+U/4HvZ4hRVmY3oAp4Md+AqOah88D+Z5DihMsy5Hvyl5XsDAHXsavRjhoV7aFFdoDFprbmpN24vncAoHvQcjFVGHqNE0lqkHveG2azMcSdzpedCWRpu2Tw5FqmDXbFfwlp2lpWXBiRG07CajS6zqft/8C3pbEuIO0DXsOWd/lV56Kw79b3MEr3sM6NYT4ciljuD3bLZ+etg/j1wH0OuzG9FrATsTcle2xgFl62k7yk8fUU3v3jVh/e3Qw0+G13puHuafp9cMEFo6XKNOK97kuCrdvxoputmTEic54F7ms4GAQVvze0xts7UINC+5H1F2tF4mfvr/oldJFSF3stIA6ESgaY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR11MB3668.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(39860400002)(136003)(366004)(376002)(478600001)(41300700001)(71200400001)(38100700002)(54906003)(316002)(110136005)(186003)(122000001)(83380400001)(38070700005)(6506007)(9686003)(53546011)(26005)(7696005)(2906002)(33656002)(55016003)(64756008)(8936002)(5660300002)(52536014)(66556008)(8676002)(86362001)(4326008)(66946007)(66446008)(76116006)(66476007)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qjpFRr1vXvm+4qYiXLoqGGmAioWB77oZpmZ10kUWeofEH5NJTPc2XxqfWkpc?=
- =?us-ascii?Q?InevehMbGunuA8DjbmgVh82RlRbNK/MDu/VD00bCdJa3uk9wmlnYOAPL5t7H?=
- =?us-ascii?Q?TAbbDQlvNsbsZAc2189MXwLDQIU62tuGcNpbQef6vZPH1KjOMLPcOhrBm7u7?=
- =?us-ascii?Q?pBRpKALGrPVaweL01uMmsNoYSMOz5GLkDfLPdgvyzax9lC9JxtpshHnBFZZm?=
- =?us-ascii?Q?s7E2SKIDW+cJqDU3QlqCIMVLqFc3d597GaHjh1FPE+hqbFyPt8oebF33L2a6?=
- =?us-ascii?Q?LK4SH4/aujaeI7ykZhwIuMv6ag8XOb40p0BhEkXkrJ0l9w5yEQDAqt8rWL+3?=
- =?us-ascii?Q?+C0vbjavfy+F4vfzTR9LjkKouiHOqW1XvN6JUJCSTZI4QqYd1CxaIuqBaWkg?=
- =?us-ascii?Q?SIJD5nOIB/38ePymdx4uhq1nAefb7nsxe8A7MH3QxHfFnF7R1jqGy6zrYhA2?=
- =?us-ascii?Q?nK2nq4NuqI7dR/bq6N5PC45tl7+STqb7/ZbG/Ku7/ZZKCEr5ZO720kc7T2Lm?=
- =?us-ascii?Q?zSfS5+8PcS3r7pYSqzhNxRXzT/29GA76c10KB6xXFUlYIAnwQeww+X8Ssc1r?=
- =?us-ascii?Q?ISzywu8RHDUSbIDt4GUCSHzLHTlAhgZy90tUgZAc1CgZiDR0dErDy4cclOA9?=
- =?us-ascii?Q?vH4/QlXUi26i36MTFF7dq+GNTiODJYt2OftAplkDZuQ6TJpHHOVmtgp8Cf9T?=
- =?us-ascii?Q?mNTpd3LHaxtsJXxpXN5L7QKsXAefmTP1pRBR9G0TJr/Sp3lJfRvmr3jw+dt/?=
- =?us-ascii?Q?DDYhms1pJQB114fI8FsV8awg2JC1ni2FrHKDHp1noY6Arhu3b1XyvKTafg2E?=
- =?us-ascii?Q?vathMe0LIyVWY40y3IvxzLxKySKT9/he33ljrbfklLHrOj70K9snIwFYSeGd?=
- =?us-ascii?Q?zIvUTZMeOoSv3UqW4XlhXiQ5b3VIzaLTMr2uy2+4GIflyNKSvpB6eKGsT5Rk?=
- =?us-ascii?Q?8Vys1NudT9YgrVCcvYmezVywwL4bw14k3MXa94ukfDKlMUihv9MzeIQ4q9Tz?=
- =?us-ascii?Q?gSSOp0T+CDsAPPDB4mcWzm07e4+iLZ626I/3U3Z5s6jcNdFPVoyEumRFZzva?=
- =?us-ascii?Q?3KjTFR30IraXBfMSQx9Dwu3E+S+i2ceE2/sTnW+WQgJ3ul4g2sE1H+w4ZcCo?=
- =?us-ascii?Q?0pFgazC80VWDBgcVdmZSeDb77BMNSSpJgUm22P0WuSEIJju6o5Hr12rj+V3m?=
- =?us-ascii?Q?yEjWLulC72Voy7/sWlp6aP6cVX/JGRq5ofIzkud30hJk5zPat+2mkE8Aposr?=
- =?us-ascii?Q?OIvFr9UJX/2CcX/TUdqaHmXW/58FtQelQRv19wjGiXoclE7RfG3d5i2B8QaW?=
- =?us-ascii?Q?x0CinpjyIxU6gZF3NtzSD/NyX8p2x34nvT0P6GJr43oGUI8q5/LQMons3fUZ?=
- =?us-ascii?Q?DQaL4ID5VzLdYundmmg5WvBKibdyHDM6Ac7EkRZtSp9Q626Ssdei6wPFyxm/?=
- =?us-ascii?Q?CdEiDO2bsRRbxWPxJGGKqMwDGN0MOswDjmoHyLT/7N5GXnoF0A7h9t/CYCPX?=
- =?us-ascii?Q?g1ZXHXT1soG8bnrSCazthFRfQCg8bdjBzHzvF5rMxb/3MxJDvmBtmEeBRuNM?=
- =?us-ascii?Q?bAgzig4PDLxLTqXRMiDvdu/wWuqxOqiE+oSZG3ISWcYQVnzj+LW64QLDAlRH?=
- =?us-ascii?Q?huH/4h9/81dU/Uc0t6IKNUY=3D?=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by DM6PR11MB4426.namprd11.prod.outlook.com
+ (2603:10b6:5:1d8::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Thu, 8 Sep
+ 2022 06:00:25 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::9847:345e:4c5b:ca12]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::9847:345e:4c5b:ca12%6]) with mapi id 15.20.5588.017; Thu, 8 Sep 2022
+ 06:00:25 +0000
+Date:   Wed, 7 Sep 2022 23:00:22 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Robert Richter <rrichter@amd.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ira Weiny" <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Robert Richter <rrichter@amd.com>
+Subject: RE: [PATCH 05/15] cxl/acpi: Add probe function to detect restricted
+ CXL hosts in RCD mode
+Message-ID: <631984f6d7c92_58016294e6@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20220831081603.3415-1-rrichter@amd.com>
+ <20220831081603.3415-6-rrichter@amd.com>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <20220831081603.3415-6-rrichter@amd.com>
+X-ClientProxiedBy: BYAPR06CA0009.namprd06.prod.outlook.com
+ (2603:10b6:a03:d4::22) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d27ad818-dcd4-4f0f-9a4f-08da915f6c7a
+X-MS-TrafficTypeDiagnostic: DM6PR11MB4426:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O6tI9mpTydUCr2lxEEFxTYQtRH8a9oGD357D/deEVvuZmDtWnMtlGyRozdlMsjluusdnh+nyacgOcHs3p6nqin28pGhyEq+2DljXiixWGsjpaXWNAi+S5LmXRu7Nn4JoYdbZdV6MhrP+4rk4G2RK+NRgheheecX/D14mWsNBYp/kytySptlbi/TlbN2EV7HjyKWHHB5BcvBnzZjeXBd/btknAOB/u7OF9W0E1SpzPjMpkjldzAfvabQXna1e/PZOkeplDIhy2ATc//IU3MER6yjyGPLIHQqLEWG1e+Iy06Ty/7IAGft/Bbhj1Ure9J3DHttiBIey0oJGZ3CCFo9TetWJT7TNGkOUTxRV3XKuibfjbw7WMk8cBVvRK/RwQWFMyfkkbyQtWrvwyUO4F3m4TuCXYYPu5XHmnTr+MIzdJcvm6seKm1DD/itSB8O1cVQSfcouO9jp3vSjTWDymNbhI1WKNG2sdKPkOkyQYeS9ziDFw6Dhq8oadi0Mjk4rzlMhOrxJjxn0FrJLUf0EhJ4RwwcT2a6wxizBMNHFv2FASsabivqfXZbkGkkUZdXIKhl5A5a6rGGsDEvviCKfA2C79mU0OuE2jAsqJUdhEiJahwqRp5ZLM6Tqo+4UnHGZ4d1Fi+ZuNomiXQh8f8ofwmsJgT9Pp9A6c1AQvCX1LqxYvcz4piXFgUu1hwa0zcu+hX22uUVmVdExjptDXOFOSpeQqQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(346002)(136003)(366004)(396003)(376002)(6506007)(41300700001)(26005)(478600001)(6666004)(6486002)(83380400001)(186003)(8936002)(9686003)(2906002)(5660300002)(6512007)(110136005)(54906003)(66946007)(316002)(4326008)(66556008)(8676002)(66476007)(82960400001)(38100700002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HDFNWexxM5QGEpRJmtZQ7xKVW809VOaWC/24cIFOZE5cYL8rk398Ar4xJa+s?=
+ =?us-ascii?Q?ANsjRveSkTif7KaKqS3mks4E5KhayNgG4EdHIPrkjhPeiFasMBlgyMQkZx17?=
+ =?us-ascii?Q?r8qQ6r9blGZv0yR7lw2KceWuBpfuUgV1yeDd4FzTvSjlKqweWboIfhXGcEMo?=
+ =?us-ascii?Q?bkUdPcwscjOyrJsIuNK+g5ALnmptmCP5ke5H/n6eHSQQf2O3CLBhuyzSIG/C?=
+ =?us-ascii?Q?pgprrxcvq/zzcpGXHKximodLq56XWqVe+noxauP8w5ddkUzk5HhfhiSZ7c/5?=
+ =?us-ascii?Q?W55Zy3udcHkmVybx0urmgNQHRw9ZR5Pp/9TkCMzRPMIz8ggrg7+jJE2TIc87?=
+ =?us-ascii?Q?znWLTv1JzqqStmiHQwJPwHm+P3qTqV6wM4un3IC8n6OqpCOSay3Hai2qbahD?=
+ =?us-ascii?Q?wIjL3o1dfh3M6sXD6TO7dhXbv9s8gXNWp5G+0mxIyJl+sAcFnqeezlHd7X/H?=
+ =?us-ascii?Q?eOEDkPspCnLXCxMpoOsvJxVLIorFbbpqLakXGFi1nqVcOQc0O8YM+XcuhKxF?=
+ =?us-ascii?Q?d6r6wXyhBHPHIZdjUxGENtuIKeF4GMD1jjvLJ/MX2xJOfqKkMmHhnkYg/g3i?=
+ =?us-ascii?Q?c3DjnN9P2CXXuQSsGg04sdOwZTxBtA7lXVhR+LCdhx0/h9S/TjXjHB6T5PoJ?=
+ =?us-ascii?Q?hcuowE/adPLBfp05qAEQy6OlkFtY8D3ybQkE1bzE94svL4z4kpP7yDp+e1tG?=
+ =?us-ascii?Q?KZDBzL1Ei4H52OPuRq0uM9dspooGzjudS3sN9qcMfD1chHML/FgmPQzBSubq?=
+ =?us-ascii?Q?hGVhUI3gITDVkQ2HUb/b7uLmplK7O9j30/NgeeJqepSHuPtBFQMDnh+E9xsG?=
+ =?us-ascii?Q?G8/QuRwPIT8T0jY6D7ppki0a7JgGdQpdggBUDDYf1NpE67n1lK+Was26dO0c?=
+ =?us-ascii?Q?VTlQzZxfPShFoEFbYXOXyXiE4UuUlJYv9muZk4bTBPUBwxDFfg8gItY3g0FE?=
+ =?us-ascii?Q?9IKnaCoq/lm6DpkQ7UrqC4ky3XnxAvEwo83znsrz3E2PCAXUnhed8dGmfOru?=
+ =?us-ascii?Q?hLxSAtbEI44ZWZ2XBySuszBTkA5d/OBL+dWNhoRytolfRwO7IsD+/xxyPaTO?=
+ =?us-ascii?Q?hG1c3i9RWzcm0mbUmpB3IkbfaaNx/Qxy3AgBtBS5fMyoSvU1Mr0rZ3qm6iiD?=
+ =?us-ascii?Q?RacHJWbCUzWC7RRWPX7ct09NFs9I5sFYXs9nuzfPcqZAyAIPYrIDljHcdwWt?=
+ =?us-ascii?Q?D1hfp2T9+vkE+PyBlxo//KciwZ3n+6jghto5Kiv6BboXgMl54ZDTOMAYmPm0?=
+ =?us-ascii?Q?dnw3R2Y1qx05cQGXsSXKXHokHUHg9dJ5zfiXiC1msNQp0foBJ4Z0Horph90a?=
+ =?us-ascii?Q?SimxtRAfv1R9645wRfcHGLbi81X7baVA5QnvPC4pKkcOZVJF+KgKcxJnzixR?=
+ =?us-ascii?Q?1WDKQPLcxWGUcJhG9FxIudJH3Ysh3LwK+MFLKvJXcu6Ketk1NNTGhyy8cy4x?=
+ =?us-ascii?Q?UuHZHo20HS7sUKutCSIv/HYTifBSnPVp2l1jhx/9xgKRXQJTlmkgvOQRUAUm?=
+ =?us-ascii?Q?fxGGnFiKEIzH7g6Xc510XxffL4EPgotb1OMSa56fIjeJnWJZU07Y+8u9Wxmx?=
+ =?us-ascii?Q?LXqDm0KFdgDo/nvzGNP1lQJV6HJOMXRDNLHegp3bg4p3gQ1E9zgKNNmLXhqq?=
+ =?us-ascii?Q?Ng=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d27ad818-dcd4-4f0f-9a4f-08da915f6c7a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR11MB3668.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4efddea2-ca28-4ae7-ff67-08da915f4093
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 05:59:11.7395
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 06:00:25.5178
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NHsc4v4QuXQmREfoAAh5dyVNTC6kzxISJ83szDfHqU9otqWIn2N8b9ziUxr/+dgdGxAeTzmn++okl08cBZz385qT+6uvJglzOeMNZ3a9+CdT56d3azgd7LSejTtpQid/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4119
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wQ/jObE8M2QyhEA4HWoZ1mSYck9G2ZGmaxQEEv/42pTYnuwMcjOw5fPMTDzYV5/MeTIxDbninp9RZV4SJkuTw7uxX+3we8Vn0At14niHHms=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4426
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,50 +154,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Wei Yongjun <weiyongjun@huaweicloud.com>
-> Sent: Wednesday, September 7, 2022 8:28 PM
-> To: Kumaravel Thiagarajan - I21417
-> <Kumaravel.Thiagarajan@microchip.com>; Arnd Bergmann
-> <arnd@arndb.de>; Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Wei Yongjun <weiyongjun1@huawei.com>; linux-gpio@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: [PATCH -next v2 2/5] misc: microchip: pci1xxxx: Fix missing
-> spin_lock_init()
->=20
-> From: Wei Yongjun <weiyongjun1@huawei.com>
->=20
-> The driver allocates the spinlock but not initialize it.
-> Use spin_lock_init() on it to initialize it correctly.
->=20
-> Fixes: 7d3e4d807df2 ("misc: microchip: pci1xxxx: load gpio driver for the=
- gpio controller auxiliary device enumerated by the auxiliary bus driver.")
+Robert Richter wrote:
+> Restricted CXL device (RCD) mode (formerly CXL 1.1) uses a different
+> enumeration scheme other than CXL VH (formerly CXL 2.0). In RCD mode a
+> host/device (RCH-RCD) pair shows up as a legal PCIe hierarchy with an
+> ACPI host bridge ("PNP0A08" or "ACPI0016" HID) and RCiEP connected to
+> it with a description of the CXL device.
+> 
+> Add function cxl_restricted_host_probe() to probe RCD enumerated
+> devices. The function implements a loop that detects all CXL capable
+> ACPI PCI root bridges in the system (RCD mode only). The iterator
+> function cxl_find_next_rch() is introduced to walk through all of the
+> CXL hosts. The loop will then enable all CXL devices connected to the
+> host. For now, only implement an empty loop with an iterator that
+> returns all pci host bridges in the system.
+> 
+> The probe function is triggered by adding an own root device for RCHs.
+> This is different to CXL VH where an ACPI "ACPI0017" root device
+> exists. Its detection starts the CXL host detection. In RCD mode such
+> a device does not necessarily exists, so solve this by creating a
+> plain platform device that is not an ACPI device and is root only for
+> RCHs.
 
-Reviewed-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+As I mentioned in the cover letter a BIOS that does not provide an
+ACPI0017 device is opting out of the possibility OS first error handling
+and other OS CXL services. ACPI0017 is mandatory.
 
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Otherwise, its odd to have a module create the device that its driver is
+going to drive. That's a backwards driver model and why we proposed
+ACPI0017 in the first instance.
+
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 > ---
-> v1 -> v2: add fixes tag
-> ---
->  drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-> b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-> index 230503cca2ff..47e6e87938ae 100644
-> --- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-> +++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-> @@ -383,6 +383,7 @@ static int pci1xxxx_gpio_probe(struct auxiliary_devic=
-e
-> *aux_dev,
->         if (!priv)
->                 return -ENOMEM;
->=20
-> +       spin_lock_init(&priv->lock);
->         priv->aux_dev =3D aux_dev;
->=20
->         if (!devm_request_mem_region(&aux_dev->dev, pdata->region_start,
-> 0x800, aux_dev->name))
-> --
-> 2.34.1
+>  drivers/cxl/acpi.c | 71 +++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 70 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index 31e104f0210f..a19e3154dd44 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -312,6 +312,33 @@ static int add_root_nvdimm_bridge(struct device *match, void *data)
+>  	return 1;
+>  }
+>  
+> +struct pci_host_bridge *cxl_find_next_rch(struct pci_host_bridge *host)
+> +{
+> +	struct pci_bus *bus = host ? host->bus : NULL;
+> +
+> +	while ((bus = pci_find_next_bus(bus)) != NULL) {
+> +		host = bus ? to_pci_host_bridge(bus->bridge) : NULL;
+> +		if (!host)
+> +			continue;
+> +
+> +		dev_dbg(&host->dev, "PCI bridge found\n");
+> +
+> +		return host;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static int __init cxl_restricted_host_probe(struct platform_device *pdev)
+> +{
+> +	struct pci_host_bridge *host = NULL;
+> +
+> +	while ((host = cxl_find_next_rch(host)) != NULL) {
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static struct lock_class_key cxl_root_key;
+>  
+>  static void cxl_acpi_lock_reset_class(void *dev)
+> @@ -445,6 +472,13 @@ static int cxl_acpi_probe(struct platform_device *pdev)
+>  	struct acpi_device *adev = ACPI_COMPANION(host);
+>  	struct cxl_cfmws_context ctx;
+>  
+> +	/*
+> +	 * For RCH (CXL 1.1 hosts) the probe is triggered by a plain
+> +	 * platform dev which does not have an acpi companion.
+> +	 */
+> +	if (!adev)
+> +		return cxl_restricted_host_probe(pdev);
+> +
+>  	device_lock_set_class(&pdev->dev, &cxl_root_key);
+>  	rc = devm_add_action_or_reset(&pdev->dev, cxl_acpi_lock_reset_class,
+>  				      &pdev->dev);
+> @@ -518,6 +552,7 @@ MODULE_DEVICE_TABLE(acpi, cxl_acpi_ids);
+>  
+>  static const struct platform_device_id cxl_test_ids[] = {
+>  	{ "cxl_acpi" },
+> +	{ "cxl_root" },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(platform, cxl_test_ids);
+> @@ -531,7 +566,41 @@ static struct platform_driver cxl_acpi_driver = {
+>  	.id_table = cxl_test_ids,
+>  };
+>  
+> -module_platform_driver(cxl_acpi_driver);
+> +static void cxl_acpi_device_release(struct device *dev) { }
+> +
+> +static struct platform_device cxl_acpi_device = {
+> +	.name = "cxl_root",
+> +	.id = PLATFORM_DEVID_NONE,
+> +	.dev = {
+> +		.release = cxl_acpi_device_release,
+> +	}
+> +};
+> +
+> +static int __init cxl_host_init(void)
+> +{
+> +	int rc;
+> +
+> +	/* Kick off restricted host (CXL 1.1) detection */
+> +	rc = platform_device_register(&cxl_acpi_device);
+> +	if (rc) {
+> +		platform_device_put(&cxl_acpi_device);
+> +		return rc;
+> +	}
+> +	rc = platform_driver_register(&cxl_acpi_driver);
+> +	if (rc)
+> +		platform_device_unregister(&cxl_acpi_device);
+> +	return rc;
+> +}
+> +
+> +static void __exit cxl_host_exit(void)
+> +{
+> +	platform_driver_unregister(&cxl_acpi_driver);
+> +	platform_device_unregister(&cxl_acpi_device);
+> +}
+> +
+> +module_init(cxl_host_init);
+> +module_exit(cxl_host_exit);
+> +
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_IMPORT_NS(CXL);
+>  MODULE_IMPORT_NS(ACPI);
+> -- 
+> 2.30.2
+> 
+
+
 

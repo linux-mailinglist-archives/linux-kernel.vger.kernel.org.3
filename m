@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC995B27BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF85B5B27BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiIHUct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S229831AbiIHUcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiIHUcr (ORCPT
+        with ESMTP id S229816AbiIHUcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:32:47 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0C1F02AD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:32:45 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id t14so20869277wrx.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 13:32:45 -0700 (PDT)
+        Thu, 8 Sep 2022 16:32:48 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6D5F7D9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:32:47 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id u9so40822554ejy.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 13:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vaR+PRR/c8VGDxG3pWSaeOmzf/CHklELeimE/+fWPMY=;
-        b=lCAHHHtGrq9cNEZkhFfMbtPxHscDK7s0S4yHqSiFF3nde/Kclq1HENHQQhVHeUt9Yj
-         D/9+fdKfsyfKL3ZSZntsRfDnls3ySehyrEFIyUYVB5xt7JACTP/dkpVza+mmKUvv2FKq
-         oPDBxtsu1GQFlk0Rt+PqICrAQ1shTZq0nXN24wPlw6Aum6LGRiGShk3pLvhytTx2Y1fz
-         UXLNaDng7ZEiYEUBVwbARxTMEvShiKmkHJ0DjHqynta2OncqVGAGUomZZYvL2B4KxOS0
-         5JC1hJkVwLq/cwbHpzgru3X55StUYRb9OEezfeaoevF5Ba8NAaF7CiEn9cppS4+T/Na/
-         KuBw==
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date;
+        bh=qfAt/hjdgJmut/nxKh8LKAbLz+hFQ0D93ZGVPZeDHCE=;
+        b=aAIE4m7F9Tr38MxixsV+aCa56FNNfunP8LyZ6eaxqWLkEYCIAuRZZ9a7xKuNpZH9JR
+         TvcK6AEx475kJbWAnLMPjwwIDDchCLPnpp3zl4ikPn6JdGAAnitymy3w+lCiQ1C2wBHx
+         vONvovyCv1lER0INez4U7O+AptQcjPYlhloRdo41iNjL1OjWAZ8FwCnUDuSpFvimg2bT
+         LAqf8UplcHfcPkzShALjjzE89yZ2JINpO9nQ5kS/V4keWZ6M/KCyc9peErinsjhoH0+d
+         zckM97GKxUU31qcfrQKB0bSDs6G1jYEkViYFDff5KkiifLw6sEyrM8knt+dabRxt2+m4
+         JfuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vaR+PRR/c8VGDxG3pWSaeOmzf/CHklELeimE/+fWPMY=;
-        b=63ZSCyRSHxx1h6dPXHjWeRmLShGjYNAzFwxRIcPhe8n7FBSecq/3Ddlz1OXrRgD7iG
-         8mdwqoEUuTtjDqCIdoLI5niS8D3/u7raLWGsF8VcFFi38GwDf6oWBIuv4kO80HgWjEKy
-         Qiz4To6CuvZX4XOZoEMk7tHkpk6PiVg1yvR4PDLCfee/Z28mmxs6KQNUIzGzmLpFswGM
-         0XrpiwTjuOZzPNslceCVmXl3MJdm25FmdSTEHcoFkejbI1vPxQQPLgl/7uebc1n9GxwW
-         WesUn8vLjrmoXeZusKSLIVZdNfH6rl8USgLVdsYYA+eNYGmn2zYL0PTBB9kYCw+HQObO
-         UZOg==
-X-Gm-Message-State: ACgBeo1ypZhU4sktJ98fM+dEWp8ZusiLbcow9x5Su9R/CAWkWtJMwwSl
-        TC8XShaE2gGZ2kL4JQQ+Ot2cb5P44m39fE3DowTi3e5Ccrs=
-X-Google-Smtp-Source: AA6agR7lafh5iFDYSngDCJLO1yWQBBaEIcCgTmgJJZt1Q4q1I7mTv9rD219dWAKV0aSj6u6/8XmjvrSPmjTKI+DJsZU=
-X-Received: by 2002:a05:6000:168e:b0:220:87da:c3e4 with SMTP id
- y14-20020a056000168e00b0022087dac3e4mr6000203wrd.559.1662669163591; Thu, 08
- Sep 2022 13:32:43 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qfAt/hjdgJmut/nxKh8LKAbLz+hFQ0D93ZGVPZeDHCE=;
+        b=RGbNCTRY/Zlm+83GBywHgSm/5PxdGOIN0kiZV5FVw8uISDHLT5r3VCsHnBqulCB7i8
+         sbQ/2kyuty340ZetILVtYlUBDUrlBqUlXdmGyVvYe41mnFUxSusBtK5JLzI0648rHz2e
+         yS9nYGhCyaNYJy5V6G9IMX6tLbQwvJDNSD4igPD/clDmuBKvlksWMfr+QWIjsZKI6Heg
+         slwAmkIB1fkNahPJg8RpEnbkHUOaiHcLAr703B6utqLxn4tydE4pJAgUuW0aWk/l2DGu
+         fQCXZzP5S8TzW07RjDjZ6u0u70Ic1EVSpNJJIoLhMTB5ajPPvfJ2bguQT9nEebBKNxpn
+         N1Yg==
+X-Gm-Message-State: ACgBeo0tdBIgjgHeZs3kFNVo7yxs0B89OgzHNv+b2I+T/0YCpfZWdVlI
+        7hRuJvtyg6jj3nhm0LfL0Lk=
+X-Google-Smtp-Source: AA6agR44ZBiMS9NG4ag9pmG5ERjX8gI6Q9WP+Nvm09J3cDY9v9fxOke2Ltb9DBX0l6rEcVzwSrnEDA==
+X-Received: by 2002:a17:906:cc5d:b0:741:38a8:a50a with SMTP id mm29-20020a170906cc5d00b0074138a8a50amr7165129ejb.650.1662669166030;
+        Thu, 08 Sep 2022 13:32:46 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id el3-20020a056402360300b0045081dc93dfsm1609355edb.78.2022.09.08.13.32.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 13:32:45 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 22:32:43 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH] staging: rtl8192e: Fix return type for implementation of
+ ndo_start_xmit
+Message-ID: <20220908203243.GA23048@matrix-ESPRIMO-P710>
 MIME-Version: 1.0
-References: <1662519715-21891-1-git-send-email-shengjiu.wang@nxp.com>
-In-Reply-To: <1662519715-21891-1-git-send-email-shengjiu.wang@nxp.com>
-From:   Nicolin Chen <nicoleotsuka@gmail.com>
-Date:   Thu, 8 Sep 2022 13:32:32 -0700
-Message-ID: <CAGoOwPSCQF9WC=jhV79wnqDQ-puL+=yuF1u1oEpomZU9FRzBbA@mail.gmail.com>
-Subject: Re: [PATCH v2] ASoC: fsl_asrc: Add initialization finishing check in
- runtime resume
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     Xiubo.Lee@gmail.com, festevam@gmail.com, shengjiu.wang@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,68 +69,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 8:20 PM Shengjiu Wang <shengjiu.wang@nxp.com> wrote:
->
-> If the initialization is not finished, then filling input data to
-> the FIFO may fail. So it is better to add initialization finishing
-> check in the runtime resume for suspend & resume case.
->
-> And consider the case of three instances working in parallel,
-> increase the retry times to 50 for more initialization time.
->
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+CFI (Control Flow Integrity) is a safety feature allowing the system to
+detect and react should a potential control flow hijacking occurs. In
+particular, the Forward-Edge CFI protects indirect function calls by
+ensuring the prototype of function that is actually called matches the
+definition of the function hook.
 
-Some nitpicks inline.
+Since Linux now supports CFI, it will be a good idea to fix mismatched
+return type for implementation of hooks. Otherwise this would get
+cought out by CFI and cause a panic.
 
-Otherwise,
-Reviewed-by: Nicolin Chen <nicolinc@gmail.com>
+Use enums from netdev_tx_t as return value instead, then change return
+type to netdev_tx_t.
 
-> @@ -20,6 +20,7 @@
->
->  #define IDEAL_RATIO_DECIMAL_DEPTH 26
->  #define DIVIDER_NUM  64
-> +#define INIT_TRY_NUM 50
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
+---
+ drivers/staging/rtl8192e/rtllib.h    |  2 +-
+ drivers/staging/rtl8192e/rtllib_tx.c | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-s/TRY/RETRY
+diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+index 0ecd81a81866..b4b606f552fb 100644
+--- a/drivers/staging/rtl8192e/rtllib.h
++++ b/drivers/staging/rtl8192e/rtllib.h
+@@ -1938,7 +1938,7 @@ int rtllib_encrypt_fragment(
+ 	struct sk_buff *frag,
+ 	int hdr_len);
+ 
+-int rtllib_xmit(struct sk_buff *skb,  struct net_device *dev);
++netdev_tx_t rtllib_xmit(struct sk_buff *skb,  struct net_device *dev);
+ void rtllib_txb_free(struct rtllib_txb *txb);
+ 
+ /* rtllib_rx.c */
+diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
+index 42f81b23a144..ebcaf3bf22d6 100644
+--- a/drivers/staging/rtl8192e/rtllib_tx.c
++++ b/drivers/staging/rtl8192e/rtllib_tx.c
+@@ -543,7 +543,7 @@ static u8 rtllib_current_rate(struct rtllib_device *ieee)
+ 		return ieee->rate & 0x7F;
+ }
+ 
+-static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct rtllib_device *ieee = (struct rtllib_device *)
+ 				     netdev_priv_rsl(dev);
+@@ -946,23 +946,23 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
+ 			if ((*ieee->hard_start_xmit)(txb, dev) == 0) {
+ 				stats->tx_packets++;
+ 				stats->tx_bytes += le16_to_cpu(txb->payload_size);
+-				return 0;
++				return NETDEV_TX_OK;
+ 			}
+ 			rtllib_txb_free(txb);
+ 		}
+ 	}
+ 
+-	return 0;
++	return NETDEV_TX_OK;
+ 
+  failed:
+ 	spin_unlock_irqrestore(&ieee->lock, flags);
+ 	netif_stop_queue(dev);
+ 	stats->tx_errors++;
+-	return 1;
++	return NETDEV_TX_BUSY;
+ 
+ }
+ 
+-int rtllib_xmit(struct sk_buff *skb, struct net_device *dev)
++netdev_tx_t rtllib_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	memset(skb->cb, 0, sizeof(skb->cb));
+ 	return rtllib_xmit_inter(skb, dev);
+-- 
+2.37.2
 
-> @@ -592,6 +593,10 @@ static void fsl_asrc_start_pair(struct fsl_asrc_pair *pair)
->                 reg &= ASRCFG_INIRQi_MASK(index);
->         } while (!reg && --retry);
->
-> +       /* NOTE: Doesn't treat initialization timeout as error */
-
-s/as error/as an error
-
-> +       if (!retry)
-> +               dev_warn(&asrc->pdev->dev, "initialization isn't finished\n");
-
-Could print which pair; or perhaps pair_warn?
-
-> @@ -1295,6 +1301,20 @@ static int fsl_asrc_runtime_resume(struct device *dev)
->         regmap_update_bits(asrc->regmap, REG_ASRCTR,
->                            ASRCTR_ASRCEi_ALL_MASK, asrctr);
->
-> +       /* Wait for status of initialization for every enabled pairs */
-
-s/every/all
-
-> +       do {
-> +               udelay(5);
-> +               regmap_read(asrc->regmap, REG_ASRCFG, &reg);
-> +               reg = (reg >> ASRCFG_INIRQi_SHIFT(0)) & 0x7;
-> +       } while ((reg != ((asrctr >> ASRCTR_ASRCEi_SHIFT(0)) & 0x7)) && --retry);
-> +
-> +       /*
-> +        * NOTE: Doesn't treat initialization timeout as error
-
-s/as error/as an error/
-
-> +        * Some of pair maybe success, then still can continue.
-
-+        * Some of the pairs may succeed, then still can continue.
-
-> +        */
-> +       if (!retry)
-> +               dev_warn(dev, "initialization isn't finished\n");
-
-Could print which pair.

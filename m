@@ -2,310 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B4E5B2585
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A51A95B2586
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbiIHSUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S231771AbiIHSVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbiIHSUa (ORCPT
+        with ESMTP id S231538AbiIHSU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:20:30 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D7EA2633;
-        Thu,  8 Sep 2022 11:20:26 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o4so18595448pjp.4;
-        Thu, 08 Sep 2022 11:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=jFr962b3Vh092XG5kMgf/jyI9HdgFMZcVYWjVRDIAFA=;
-        b=Yycnx16+R/JT+3ksrXPh5iKV6ddwNQDUB5dMGNXVUIEYFlxNQL4ihImqW696AOjbh1
-         WlciYtczqdrwafHjtBUfqMw+pUfGLuiBRoGUuI6BCDMdjWh75nf/XMGCnO+OQ/vehoMA
-         YYJX9atjYQs8Brz7xImLuFZJTrXQ3jvRaFmeBAseotQejrTSopt1D+OKir6gkviUHZof
-         3csmRXeKDKpInRSY8iI8x+e3yKzqW8fPCzPn884/kaDLrXdk4G4BcqSJ9ej9tQfDvFz8
-         zIhciy8AdmNr5tgbk+6md1aAbqWVSaL/0jgWAYiSssftw+kqpRk/YtRzlXfUS4cO9+aE
-         7tyQ==
+        Thu, 8 Sep 2022 14:20:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78394E558D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:20:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662661256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fq82aHZbVB5eLHvyHBC7VyGWz1mPN6C6p69Q0sIwiJE=;
+        b=Jdg7hteE2GW1jzLMg3bGE6unosjCddE05UsNLD2ikl8z5T/wgOM1NlTkLEnbfDb1hWDebS
+        wfH89vbCQeR4TNCBaITq6UXOkCWcvL7eDwKgfDBaS/SaWoOHnx6TrmP5dEYcsx5Hx31TVf
+        /6SN6uln+KMcmPYgRy0Lw559mSsid10=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-63-rN3g7_9fOwKQuBfFP3j5NQ-1; Thu, 08 Sep 2022 14:20:54 -0400
+X-MC-Unique: rN3g7_9fOwKQuBfFP3j5NQ-1
+Received: by mail-qt1-f199.google.com with SMTP id bq11-20020a05622a1c0b00b003434f125b77so15348891qtb.20
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 11:20:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=jFr962b3Vh092XG5kMgf/jyI9HdgFMZcVYWjVRDIAFA=;
-        b=Msngvn2QwVnjmQzBOfIQnUmq3ag/5HYN57QeEry5n02u65cFHNpB+v7ESIF8RKDMRe
-         Wx96RI2mnSuvuXGJreCqztVnLUWhaGSXJUh57tiG3WakTj1KqsHSTc5WbPiLQEZmkMDc
-         4+tl8aB9guWQPMkVRs4JZaNo5Kw6GoEqrbf8TxJQheoGRarSUDOPFokdMx5s+vX0hjvB
-         +zodZNlKRXg1dsLynkLBC83Y3iTdWSLTL2Vw0VR1tzNNxcHAedrH99HfcHlkrGhOJn52
-         kr/u4qQrC5/OWGWLFrMvg3HRPIi+0A4qk6SsJ9lh5JxtRVa/TCxIXAtHTxDS4URWqOWs
-         0FKQ==
-X-Gm-Message-State: ACgBeo32HrMsj4jqXRSMMbGMzCm4HdhLX75iSha6gUZtt3pUHK1B6PsN
-        sYOrLciaJ20vHcRo1Z5jT8Z0rEzm0NCZfQ==
-X-Google-Smtp-Source: AA6agR4b6grczwtnHbzSxyd/upMJi/YT932fDwvPVLXPok1jVjj0XQ/xF7i343jUAw9piwbANagOJg==
-X-Received: by 2002:a17:90b:4a82:b0:200:a89e:6f1f with SMTP id lp2-20020a17090b4a8200b00200a89e6f1fmr5331337pjb.13.1662661225552;
-        Thu, 08 Sep 2022 11:20:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l10-20020a170903120a00b0016ef87334aesm15050594plh.162.2022.09.08.11.20.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 11:20:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <41c67246-114d-f458-4ff1-164995639ca0@roeck-us.net>
-Date:   Thu, 8 Sep 2022 11:20:22 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Fq82aHZbVB5eLHvyHBC7VyGWz1mPN6C6p69Q0sIwiJE=;
+        b=R9ngYB2T+fXii98SOd8/vevSBHcyWsOjdzvrq8p8IuTvAfEAeQGDR9MqxRVc2D2J0u
+         UffHH8p7F99n6uMaKNx/1N4Qb0EYDCILwZ+Y4phRl6QH5C2xqZ4bl0YLrLjRXrIGwsfV
+         cWnuSm+XfIWVZHDVP3lPGG/a4E4GSERt9LhSxclJncaIbl5vVGKiMFIsKDEDgojWZ0pH
+         SZphbwXr7uLEqT20T/0uM2AVuBjTy05LPPJrag5ovZkKWJcHr4zCMw+Z+pW4sqqJ8s74
+         yO2+Sl3W7QdWz4lnun/VvBm0pMKSYvM0Cny7kS07dSNz3aZVAnEYKQf0314Ume076HVf
+         34dA==
+X-Gm-Message-State: ACgBeo0HYIk/NaVArE9efscnR74Mq7V3q9vMH6XDt+G7DfsL7+1zXjI1
+        uinzs3kzLBvux4RhUEairIrTPj2JjN7zrpk8Ya4FgLfuNmhFIdUQt8gYDX5B1gV1Bs+4amADQfn
+        DRYf5fwOeliefUhMKK20XaWKO
+X-Received: by 2002:a05:620a:2451:b0:6cb:b4db:a3ad with SMTP id h17-20020a05620a245100b006cbb4dba3admr5570207qkn.216.1662661254449;
+        Thu, 08 Sep 2022 11:20:54 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4UyQ8BldktqUXf3NND++hWgTsT32ASuiVTrEFM97vuCDpMTfuI2lGAwnelYvjmwScRjX2i7Q==
+X-Received: by 2002:a05:620a:2451:b0:6cb:b4db:a3ad with SMTP id h17-20020a05620a245100b006cbb4dba3admr5570182qkn.216.1662661254188;
+        Thu, 08 Sep 2022 11:20:54 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id e5-20020ac80105000000b00342b7e4241fsm15385553qtg.77.2022.09.08.11.20.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 11:20:53 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 14:20:52 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 11/26] hugetlb: add hugetlb_walk_to to do PT walks
+Message-ID: <YxoyhDiNDqmJQfFi@xz-m1.local>
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-12-jthoughton@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] hwmon: Add driver for the TEXAS TPS546D24 Buck
- Converter.
-Content-Language: en-US
-To:     Duke Du <dukedu83@gmail.com>, jdelvare@suse.com, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     fran.hsu@quantatw.com, george.hung@quantatw.com,
-        charles.hsu@quantatw.com, duke.du@quantatw.com
-References: <1662617599-15270-1-git-send-email-Duke.Du@quantatw.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <1662617599-15270-1-git-send-email-Duke.Du@quantatw.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220624173656.2033256-12-jthoughton@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/22 23:13, Duke Du wrote:
-> From: Duke Du <dukedu83@gmail.com>
+On Fri, Jun 24, 2022 at 05:36:41PM +0000, James Houghton wrote:
+> This adds it for architectures that use GENERAL_HUGETLB, including x86.
 > 
-> Add the pmbus driver for TEXAS tps546d24 Buck Converter.
-> The vout mode of tps546d24 supported relative data format,
-> which is not meet for the original driver (pmbus.c).
-
-"which is not supported by the PMBus core"
-
+> Signed-off-by: James Houghton <jthoughton@google.com>
+> ---
+>  include/linux/hugetlb.h |  2 ++
+>  mm/hugetlb.c            | 45 +++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 47 insertions(+)
 > 
-> Signed-off-by: Duke Du <dukedu83@gmail.com>
-> ---
-> Change in v1:
->      Initial patchset.
-> Change in v2:
->      Correct the tps546d24.rst format.
-> Change in v3:
->      1. Modify the patch description.
->      2. Put the change log between the dashes and diffstat.
-> Change in v4:
->      1. Modify the patch description.
->      2. Clear the bit 7 of PMBUS_VOUT_MODE to change the mode from relative
->         to absolute.
->      3. Add the vendor prefix.
-> ---
-> ---
->   Documentation/hwmon/index.rst     |  1 +
->   Documentation/hwmon/tps546d24.rst | 35 ++++++++++++++++++++++
->   MAINTAINERS                       |  7 +++++
->   drivers/hwmon/pmbus/Kconfig       |  9 ++++++
->   drivers/hwmon/pmbus/Makefile      |  1 +
->   drivers/hwmon/pmbus/tps546d24.c   | 63 +++++++++++++++++++++++++++++++++++++++
->   6 files changed, 116 insertions(+)
->   create mode 100644 Documentation/hwmon/tps546d24.rst
->   create mode 100644 drivers/hwmon/pmbus/tps546d24.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index f7113b0..d3eede4 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
->      tps23861
->      tps40422
->      tps53679
-> +   tps546d24
->      twl4030-madc-hwmon
->      ucd9000
->      ucd9200
-> diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
-> new file mode 100644
-> index 0000000..3061fd8
-> --- /dev/null
-> +++ b/Documentation/hwmon/tps546d24.rst
-> @@ -0,0 +1,35 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Kernel driver tps546d24
-> +======================
-> +
-> +Supported chips:
-> +
-> +  * TI TPS546D24
-> +
-> +    Prefix: 'tps546d24'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.ti.com/lit/gpn/tps546d24
-> +
-> +Author: Duke Du <dukedu83@gmail.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
-> +of high frequency operation and 40-A current output from a 7-mm x 5-mm
-> +package.
-> +
-> +Two, three, and four TPS546D24A devices can be interconnected
-> +to provide up to 160 A on a single output. The device has an option to
-> +overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
-> +pin to improve efficiency and reduce power dissipation of the converter.
-> +
-> +
-> +Platform data support
-> +---------------------
-> +
-> +The driver supports standard PMBus driver platform data.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8a5012b..fa2d4fb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20583,6 +20583,13 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
->   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
->   F:	drivers/char/tpm/
->   
-> +TPS546D24 DRIVER
-> +M:	Duke Du <dukedu83@gmail.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/tps546d24.rst
-> +F:	drivers/hwmon/pmbus/tps546d24.c
-> +
->   TRACING
->   M:	Steven Rostedt <rostedt@goodmis.org>
->   M:	Ingo Molnar <mingo@redhat.com>
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 951e4a9..89668af 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -397,6 +397,15 @@ config SENSORS_TPS53679
->   	  This driver can also be built as a module. If so, the module will
->   	  be called tps53679.
->   
-> +config SENSORS_TPS546D24
-> +	tristate "TPS546D24"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for TEXAS
-> +	  TPS546D24.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called tps546d24
-> +
->   config SENSORS_UCD9000
->   	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index e2fe86f..0002dbe 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
->   obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
->   obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->   obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
-> +obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
->   obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->   obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
->   obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
-> diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
-> new file mode 100644
-> index 0000000..84f3dc9
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/tps546d24.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for TEXAS TPS546D24 buck converter
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +static struct pmbus_driver_info tps546d24_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN
-> +			| PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT
-> +			| PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT
-> +			| PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> +};
-> +
-> +static int tps546d24_probe(struct i2c_client *client)
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index e7a6b944d0cc..605aa19d8572 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -258,6 +258,8 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
+>  			unsigned long addr, unsigned long sz);
+>  pte_t *huge_pte_offset(struct mm_struct *mm,
+>  		       unsigned long addr, unsigned long sz);
+> +int hugetlb_walk_to(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> +		    unsigned long addr, unsigned long sz, bool stop_at_none);
+>  int huge_pmd_unshare(struct mm_struct *mm, struct vm_area_struct *vma,
+>  				unsigned long *addr, pte_t *ptep);
+>  void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 557b0afdb503..3ec2a921ee6f 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6981,6 +6981,51 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+>  	return (pte_t *)pmd;
+>  }
+>  
+> +int hugetlb_walk_to(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> +		    unsigned long addr, unsigned long sz, bool stop_at_none)
 > +{
-> +	int reg;
+> +	pte_t *ptep;
 > +
-> +	reg = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
-> +	if (reg > 0x80)
+> +	if (!hpte->ptep) {
+> +		pgd_t *pgd = pgd_offset(mm, addr);
+> +
+> +		if (!pgd)
+> +			return -ENOMEM;
+> +		ptep = (pte_t *)p4d_alloc(mm, pgd, addr);
+> +		if (!ptep)
+> +			return -ENOMEM;
+> +		hugetlb_pte_populate(hpte, ptep, P4D_SHIFT);
+> +	}
+> +
+> +	while (hugetlb_pte_size(hpte) > sz &&
+> +			!hugetlb_pte_present_leaf(hpte) &&
+> +			!(stop_at_none && hugetlb_pte_none(hpte))) {
+> +		if (hpte->shift == PMD_SHIFT) {
+> +			ptep = pte_alloc_map(mm, (pmd_t *)hpte->ptep, addr);
 
-This does not cover reg == 0x80, and does not handle errors.
+I had a feeling that the pairing pte_unmap() was lost.
 
-I would suggest something like
+I think most distros are not with CONFIG_HIGHPTE at all, but still..
 
-	if (reg < 0)
-		return reg;
-
-	if (reg & 0x80) {
-		int err;
-
-		err = i2c_smbus_write_byte_data(client, PMBUS_VOUT_MODE, reg & 0x7f);
-		if (err < 0)
-			return err;
-	}
-	return pmbus_do_probe(client, &tps546d24_info);
-
-Thanks,
-Guenter
-
-> +		i2c_smbus_write_byte_data(client, PMBUS_VOUT_MODE, reg & 0x7f);
-> +	return pmbus_do_probe(client, &tps546d24_info);
+> +			if (!ptep)
+> +				return -ENOMEM;
+> +			hpte->shift = PAGE_SHIFT;
+> +			hpte->ptep = ptep;
+> +		} else if (hpte->shift == PUD_SHIFT) {
+> +			ptep = (pte_t *)pmd_alloc(mm, (pud_t *)hpte->ptep,
+> +						  addr);
+> +			if (!ptep)
+> +				return -ENOMEM;
+> +			hpte->shift = PMD_SHIFT;
+> +			hpte->ptep = ptep;
+> +		} else if (hpte->shift == P4D_SHIFT) {
+> +			ptep = (pte_t *)pud_alloc(mm, (p4d_t *)hpte->ptep,
+> +						  addr);
+> +			if (!ptep)
+> +				return -ENOMEM;
+> +			hpte->shift = PUD_SHIFT;
+> +			hpte->ptep = ptep;
+> +		} else
+> +			BUG();
+> +	}
+> +	return 0;
 > +}
 > +
-> +static const struct i2c_device_id tps546d24_id[] = {
-> +	{"tps546d24", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, tps546d24_id);
-> +
-> +static const struct of_device_id tps546d24_of_match[] = {
-> +	{.compatible = "ti,tps546d24"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, tps546d24_of_match);
-> +
-> +/* This is the driver that will be inserted */
-> +static struct i2c_driver tps546d24_driver = {
-> +	.driver = {
-> +		   .name = "tps546d24",
-> +		   .of_match_table = of_match_ptr(tps546d24_of_match),
-> +	   },
-> +	.probe_new = tps546d24_probe,
-> +	.id_table = tps546d24_id,
-> +};
-> +
-> +module_i2c_driver(tps546d24_driver);
-> +
-> +MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
-> +MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
+>  #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
+>  
+>  #ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog
+> 
+
+-- 
+Peter Xu
 

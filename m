@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48CC5B1FD6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278D25B1FD9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiIHN5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
+        id S232560AbiIHN5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiIHN5D (ORCPT
+        with ESMTP id S232206AbiIHN5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:57:03 -0400
+        Thu, 8 Sep 2022 09:57:01 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9118F8268;
-        Thu,  8 Sep 2022 06:57:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69666F8242;
+        Thu,  8 Sep 2022 06:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662645420; x=1694181420;
+  t=1662645419; x=1694181419;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=uCRdi2DaTdmSASZqdRQlPRT8IpkU0kzoXNk1axIiyWg=;
-  b=O3TFkUrUM2q7X7QD8nQarIUsvU/Ow+89Hlm23DtRL7PMNlatQrcbzieZ
-   6dvNj7cl3x6KSZn7qOH5WKwpFCAK0dqFJxvHhPmp467ef9plB6WlOJBh1
-   a7oKsxzqE7DD4EHEQVui1+4qHn3T5KLZj1+mhI9UxIXOQtPeNh4hcEIyI
-   aXumS7sOKxdQ/6s4MuxfVLWkRMR/8DWMojvPZWxXLC4qG3rw2b+ybMiz6
-   ydwqrfiSDWX7sg2rMqs7fSjX+4DlhgIIV7l7yn7YlnGRbl6z+Lna5yADe
-   iQeQhAtXbxjQsnzJ+3PPXR4XzK+YeUSF2aneIzYgdYaGxAC7DhQokTqU2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="297174057"
+  bh=uBscJFQbw18Si2rbAy+SrsNOerjt4LJIPX+P611o7xg=;
+  b=jhzUtDKD0CiiOaqI5BTuQVaY/jVq4sROeEzGyQuMEoULBtqc8s2a7KCQ
+   UT70E/08ewC4X6oS4Y1CipaUcLutUmLkEoOjXfr98SzPcUVBBRYrbanHu
+   3Tk3zn4XKAhEIvvklHJo7FI9VNphx9vFxFuux0IT4L7P+7//C0vskZtCF
+   9AVl6+Aj0/pjos77nghNDz7WBeTvR1CYjSR41KulM2lBMOH2e4RJomnMY
+   8SLno6MH6acZI4p4EP6goEJZ/gK52f4z5J87M0/MH873LOsRyqULdpcFG
+   gr8XDl6E4vXxIQhTzORfwNLu3rnuUSAsI21KbtojLZ91LYA8WvbnAQAIT
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="297174067"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="297174057"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:56:48 -0700
+   d="scan'208";a="297174067"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:56:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="614895494"
+   d="scan'208";a="704012689"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 08 Sep 2022 06:56:46 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Sep 2022 06:56:48 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 86C6D363; Thu,  8 Sep 2022 16:57:02 +0300 (EEST)
+        id 90AE350D; Thu,  8 Sep 2022 16:57:02 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
         linux-pwm@vger.kernel.org
 Cc:     Thierry Reding <thierry.reding@gmail.com>
-Subject: [PATCH v2 4/9] pwm: lpss: Include headers we are direct user of
-Date:   Thu,  8 Sep 2022 16:56:53 +0300
-Message-Id: <20220908135658.64463-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 5/9] pwm: lpss: Use device_get_match_data to get device data
+Date:   Thu,  8 Sep 2022 16:56:54 +0300
+Message-Id: <20220908135658.64463-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
 References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
@@ -64,37 +64,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the sake of integrity, include headers we are direct user of.
-
-While at it, replace device.h with a forward declaration and add
-missed struct pwm_lpss_boardinfo one.
+device_get_match_data() in ACPI case calls similar to the
+acpi_match_device(). We may simplify the code and make it
+generic by replacing the latter with the former.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pwm/pwm-lpss.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/pwm/pwm-lpss-platform.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
-index c344921b2cab..839622964b2a 100644
---- a/drivers/pwm/pwm-lpss.h
-+++ b/drivers/pwm/pwm-lpss.h
-@@ -10,11 +10,15 @@
- #ifndef __PWM_LPSS_H
- #define __PWM_LPSS_H
+diff --git a/drivers/pwm/pwm-lpss-platform.c b/drivers/pwm/pwm-lpss-platform.c
+index 7bbbb7a9b578..c48c6f2b2cd8 100644
+--- a/drivers/pwm/pwm-lpss-platform.c
++++ b/drivers/pwm/pwm-lpss-platform.c
+@@ -7,11 +7,12 @@
+  * Derived from the original pwm-lpss.c
+  */
  
--#include <linux/device.h>
- #include <linux/pwm.h>
-+#include <linux/types.h>
+-#include <linux/acpi.h>
+ #include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
  
- #define MAX_PWMS			4
+ #include "pwm-lpss.h"
  
-+struct device;
-+
-+struct pwm_lpss_boardinfo;
-+
- struct pwm_lpss_chip {
- 	struct pwm_chip chip;
- 	void __iomem *regs;
+@@ -19,16 +20,13 @@
+ static int pwm_lpss_probe_platform(struct platform_device *pdev)
+ {
+ 	const struct pwm_lpss_boardinfo *info;
+-	const struct acpi_device_id *id;
+ 	struct pwm_lpss_chip *lpwm;
+ 	void __iomem *base;
+ 
+-	id = acpi_match_device(pdev->dev.driver->acpi_match_table, &pdev->dev);
+-	if (!id)
++	info = device_get_match_data(&pdev->dev);
++	if (!info)
+ 		return -ENODEV;
+ 
+-	info = (const struct pwm_lpss_boardinfo *)id->driver_data;
+-
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base))
+ 		return PTR_ERR(base);
 -- 
 2.35.1
 

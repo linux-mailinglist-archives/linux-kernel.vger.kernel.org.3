@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141635B265D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622645B2662
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiIHS76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S230433AbiIHTBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 15:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIHS74 (ORCPT
+        with ESMTP id S229610AbiIHTBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:59:56 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA57303EE;
-        Thu,  8 Sep 2022 11:59:54 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id bh13so17632852pgb.4;
-        Thu, 08 Sep 2022 11:59:54 -0700 (PDT)
+        Thu, 8 Sep 2022 15:01:49 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791E358B66
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 12:01:48 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 66-20020a251145000000b006a7b4a27d04so12140451ybr.20
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 12:01:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=QPWYV7SgKdoLBiozZZHmaqbwNoXqKRlSRLPxFGfyYfk=;
-        b=j5rNX4T33UID7ItncZ3QoK9LvkbSzkOAxd9ibsBSpQcMBe4jAZaKLB0/5tv5c3p0i9
-         SxtBaj3m+Jsyv/iwxmqJCFtfuPr+8pZTsj0NkzQljsqoQgBLfD7RmzoDJCzGFoBih7dI
-         9vDzTBfJdWVceC+c6DEOABkYSiNSycMPrhH7NI0cKyPnB129+3e7mSJ9ckOB6Z9DfS5f
-         GTD52aaLqxbxw6UD9jGe6ELTE7SlwflQH1cJxyrCGgVOBuLRl7eqL4cAQT49TLhcRcOz
-         xJxweH6oDMcNbiWsagxOeRpQspW+/OuA3gnhmLvSXFRRoInpva4SQWPhA6dovzEX5UwS
-         Hp7A==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=O4urUyfiGdJyv28nhxclK5Fziywl5uchRNtfEllatqY=;
+        b=nSFkuydpP6YjOzhEIc52xjkDtVbdI4kmXCtAq7yCXZcp2do/KumEGdDZoKPE05z/2v
+         u2JGZXLhy9MP6gJaMfq37X/cpicPVL108yZsw/2OQimSjod/5s90g6SGxsQXNzaMpDsM
+         XZXQwTZGSZ9ap2lVOT9shKtEm9K3z+roK/T7gS3mgdV+tUkx7vHn3u2UQK7LD58dcasi
+         fQmNob4SRoltwHmggg/TYlGLnGLYyQJIZv40AoY1E1qcmQlEvvfyWt0OJcLWQlA7jyvn
+         XuDA2zH5naXk9ff1EqXLin3O5w0WOEB9KW2kAvefe+5yKU9ilBRYWzQdpZ0h/R1/zI8G
+         F7pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=QPWYV7SgKdoLBiozZZHmaqbwNoXqKRlSRLPxFGfyYfk=;
-        b=zmks+E0ytD0Xhmm0Y3NSoZ8MpQKDFbeS76HD54NGdytYSK2D1+j3S5BNwZvtD1xhLp
-         i+wBlUU5TGkWok4W7q7uIn3l2IHZ/80nxFfMDoYBr8oNehw/VlAttkC3SIpkEM8EJgN5
-         MtAwO+DXrzaFrHlP2McN8y1ZmyrGtkdrGWIteaajf756rgeIoH2WfTqW5+1bCNlSaQI7
-         tY5JW+XblXipeTsSE8Kf/xPTdzRa5+2AqW5HunAfRFKWWWfPo6l/ByELt/HzTskSIlYL
-         pbo3+UmM7IkZzex5rQD+pF1pm66Evl7Ul9+PcPgOl53zdISh6HYL6rVNJ0HWAEFYDted
-         x7GQ==
-X-Gm-Message-State: ACgBeo3JLA7gXmrzKqF0C0tEeDbTWk5gaem77ffIpB3NGOKW0AzCYOnR
-        8wKSEN1fk7qVFvC6XiIQfxc=
-X-Google-Smtp-Source: AA6agR419aI0sYHUJo0vwr+hxoYBPCgNE/bzx/5o5dSli8P+DAPpDjqmI16wJ0jsAe5sNPJGjMKTAA==
-X-Received: by 2002:a05:6a00:230d:b0:53d:c198:6ad7 with SMTP id h13-20020a056a00230d00b0053dc1986ad7mr10566201pfh.67.1662663594057;
-        Thu, 08 Sep 2022 11:59:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x63-20020a626342000000b0052c849d0886sm15207373pfb.86.2022.09.08.11.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 11:59:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 8 Sep 2022 11:59:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, andriy.shevchenko@intel.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hhhawa@amazon.com, jonnyc@amazon.com,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v5 01/21] dt-bindings: hwmon: (mr75203) fix
- "intel,vm-map" property to be optional
-Message-ID: <20220908185952.GA3343467@roeck-us.net>
-References: <20220908152449.35457-1-farbere@amazon.com>
- <20220908152449.35457-2-farbere@amazon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908152449.35457-2-farbere@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=O4urUyfiGdJyv28nhxclK5Fziywl5uchRNtfEllatqY=;
+        b=oCLlDrWMODgSxnYRiDeb0dpEK1gsbirXh2DX0giDtHHrIvnorEv9GlP0RCbuD/iYNM
+         yUTZyViipE8DBoML+TgfGhuD17RCBxt7un26ZcE4mtKBngKZ3QNY/KK2OxXTYMq2i2Mh
+         ijyqOed//M9EcW2NZSaTkqxzNb3dqSPe0k1DKsEc62BzA5G31vTmp+lmFMyl8EgOwN5S
+         5UgjNMnhxA/Zmgaqjgni0VQtLVjJVCZKi4Z/SjDiFSn6A3Xx7JvE18YwaRb/8nGpN8N/
+         4rwLa0HP+LbTtqm+t0hrcBvLLZ5iaTzPqkK2FFhgHfabNqTlpowXIXmSlRQdMp2WbSkp
+         v3xg==
+X-Gm-Message-State: ACgBeo2lCHm5Ad/8EamRLC2rN67UCKUqvYprQtzoWQ/V7FQQ4mvb1XZd
+        PTLfoj1Vv6EbkRQuoxkQ1Mxg11CVscsFgM6cFmHDDQ==
+X-Google-Smtp-Source: AA6agR6JH4K8ooFy1jWJhKaWW5HBwtz+s+XUeEzFymUz9jxqV82W2wLacKVesqwgLDXnGzEUy2gwHQpImnz/GH8Uz/KkUQ==
+X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:66bd:4175:b3a6:1479])
+ (user=isaacmanjarres job=sendgmr) by 2002:a5b:9c4:0:b0:691:7745:afb5 with
+ SMTP id y4-20020a5b09c4000000b006917745afb5mr8412716ybq.57.1662663707790;
+ Thu, 08 Sep 2022 12:01:47 -0700 (PDT)
+Date:   Thu,  8 Sep 2022 12:01:43 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220908190144.3731136-1-isaacmanjarres@google.com>
+Subject: [PATCH stable-4.14] driver core: Don't probe devices after
+ bus_type.match() probe deferral
+From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
+        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 03:24:29PM +0000, Eliav Farber wrote:
-> Change "intel,vm-map" property to be optional instead of required.
-> 
-> The driver implementation indicates it is not mandatory to have
-> "intel,vm-map" in the device tree:
->  - probe doesn't fail in case it is absent.
->  - explicit comment in code - "Incase intel,vm-map property is not
->    defined, we assume incremental channel numbers".
-> 
-> Fixes: 748022ef093f ("hwmon: Add DT bindings schema for PVT controller")
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+commit 25e9fbf0fd38868a429feabc38abebfc6dbf6542 upstream.
 
-Applied, together with patches 2..6 of the series (all fixes).
+Both __device_attach_driver() and __driver_attach() check the return
+code of the bus_type.match() function to see if the device needs to be
+added to the deferred probe list. After adding the device to the list,
+the logic attempts to bind the device to the driver anyway, as if the
+device had matched with the driver, which is not correct.
 
-Thanks,
-Guenter
+If __device_attach_driver() detects that the device in question is not
+ready to match with a driver on the bus, then it doesn't make sense for
+the device to attempt to bind with the current driver or continue
+attempting to match with any of the other drivers on the bus. So, update
+the logic in __device_attach_driver() to reflect this.
 
-> ---
-> V3 -> V2:
-> - Change this patch to be first in the series.
-> - Add explanation why "intel,vm-map" is not required.
-> 
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index b79f069a04c2..8ea97e774364 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -48,7 +48,6 @@ required:
->    - compatible
->    - reg
->    - reg-names
-> -  - intel,vm-map
->    - clocks
->    - resets
->    - "#thermal-sensor-cells"
+If __driver_attach() detects that a driver tried to match with a device
+that is not ready to match yet, then the driver should not attempt to bind
+with the device. However, the driver can still attempt to match and bind
+with other devices on the bus, as drivers can be bound to multiple
+devices. So, update the logic in __driver_attach() to reflect this.
+
+Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
+Cc: stable@vger.kernel.org
+Cc: Saravana Kannan <saravanak@google.com>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+---
+ drivers/base/dd.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index fc27fab62f50..a7bcbb99e820 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -632,6 +632,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
+ 	} else if (ret == -EPROBE_DEFER) {
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Device can't match with a driver right now, so don't attempt
++		 * to match or bind with other drivers on the bus.
++		 */
++		return ret;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d", ret);
+ 		return ret;
+@@ -774,6 +779,11 @@ static int __driver_attach(struct device *dev, void *data)
+ 	} else if (ret == -EPROBE_DEFER) {
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Driver could not match with device, but may match with
++		 * another device on the bus.
++		 */
++		return 0;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d", ret);
+ 		return ret;
+-- 
+2.37.2.789.g6183377224-goog
+

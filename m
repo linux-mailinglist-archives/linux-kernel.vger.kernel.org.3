@@ -2,118 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D435B1DD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5FC5B1DDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiIHNEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
+        id S230407AbiIHNFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbiIHNEB (ORCPT
+        with ESMTP id S231357AbiIHNFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:04:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FA3D742E;
-        Thu,  8 Sep 2022 06:04:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBDD061CEF;
-        Thu,  8 Sep 2022 13:03:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AD2C433C1;
-        Thu,  8 Sep 2022 13:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662642239;
-        bh=RNPjRQkS198xJIWi4rthy4+btO4cb14a8DHt8yLQeOk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HkIQkhRp+uXeTKAVt9NNLs5t9OV4esVfbKzJNlULRmMDLGxyLqSbZNwWkJlLEZKcA
-         eUix5rXrct29WRPNkT2wUqQc5degImAuLGEj/N/FkfSF/mhI2cDsopSHsaArdl7LAj
-         pzJ/Pd7iWhHytZT0sQC8DBs9PX+m7HZANlZKyZ3xKOZKq4S9jujXYbnS4LPkvlnhob
-         2l++v803TJf30cBhkTBVnOMMA6ILnE3TfjkNv84y9+hheWN9GZJsVSYNptFSpiLLwx
-         bQIOHEVun+SOCKQ4NPYbnNXzyt60by1rPGNI+a7Hq+X48aEowfprAniVoRm4lSZhXM
-         RMnZsUfscoE+w==
-Date:   Thu, 8 Sep 2022 22:03:54 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org
-Subject: Re: [PATCH v2 1/2] x86/kprobes: Fix kprobes instruction boudary
- check with CONFIG_RETHUNK
-Message-Id: <20220908220354.28c196c8bbe4e83c83afcb59@kernel.org>
-In-Reply-To: <20220908050855.w77mimzznrlp6pwe@treble>
-References: <166260087224.759381.4170102827490658262.stgit@devnote2>
-        <166260088298.759381.11727280480035568118.stgit@devnote2>
-        <20220908050855.w77mimzznrlp6pwe@treble>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 09:05:00 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF12E40E29;
+        Thu,  8 Sep 2022 06:04:55 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1662642285t338icw9
+Received: from localhost.localdomain ( [182.148.14.0])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Sep 2022 21:04:43 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000B00A0000000
+X-QQ-FEAT: xqT8U4SkSpheaBwLeHRIsZ+CJLd0+Sq1Wvs/GKi5K/1WUroXMoJfyLrEgZYyq
+        FLcnkfkIJLtDIhbdSqiv36IQ/B0Kqfo/r8AyBK7JQ0mnyT+7hvsRqeW/jJ3fAdAQR18jRJB
+        sL7nDdIn/6S75zQC2+8+V8bozaVfo9CMZBfui0LSItdJYVI1SZfb8OURvnCF6DTRP3MAAuS
+        FKQXdXRPvR2YoIOW7OMuX0jvkn8vnnRP5em8ho8G3sPhUiuYi4UGPsjIr9kGTVdaXrDf5P8
+        sMHs1cH2pwLXQvATrn7DUPncnQiL2KPZ/WCcvFeNx2vfPPAodwhEFVVQYWaanNes+3j4rl9
+        GpEfPQ94FNoEDYgXiZwhQSEo3HWnavoPKelV+Rbc2G/RiLhgsk=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] scsi/mpt3sas: fix repeated words in comments
+Date:   Thu,  8 Sep 2022 21:04:20 +0800
+Message-Id: <20220908130420.33130-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 22:08:55 -0700
-Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+Delete the redundant word 'to'.
 
-> On Thu, Sep 08, 2022 at 10:34:43AM +0900, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
-> > speculative execution after RET instruction, kprobes always failes to
-> > check the probed instruction boundary by decoding the function body if
-> > the probed address is after such sequence. (Note that some conditional
-> > code blocks will be placed after function return, if compiler decides
-> > it is not on the hot path.)
-> > 
-> > This is because kprobes expects someone (e.g. kgdb) puts the INT3 as
-> > a software breakpoint and it will replace the original instruction.
-> > But these INT3 are not such purpose, it doesn't need to recover the
-> > original instruction.
-> > 
-> > To avoid this issue, memorize the branch target address during decoding
-> > and if there is INT3, restart decoding from unchecked target address.
-> 
-> Hm, is kprobes conflicting with kgdb actually a realistic concern?
-> Seems like a dangerous combination
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm actually not sure, I don't recommend it. But it is safe just having
-fail-safe.
-
-> 
-> Either way, this feels overengineered.  Sort of like implementing
-> objtool in the kernel.
-> 
-> And it's incomplete: for a switch statement jump table (or C goto jump
-> table like in BPF), you can't detect the potential targets of the
-> indirect branch.
-
-In that case, it just fails to detect instruction boundary (and anyway
-optprobe just stops optimization if it finds the indirect jump). So it
-is still fail safe.
-
-> 
-> Wouldn't it be much simpler to just encode the knowledge that
-> 
->   	if (CONFIG_RETHUNK && !X86_FEATURE_RETHUNK)
-> 		// all rets are followed by four INT3s
-> 	else if (CONFIG_SLS)
-> 		// all rets are followed by one INT3
-
-Maybe we should just ask kgdb if it is using breakpoint on that
-function, and if so, just reject kprobe on it. Then, all INT3
-can be just skipped. That may be more realistic solution.
-
-Thank you, 
-
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index 05364aa15ecd..c8443f69d15d 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -836,7 +836,7 @@ struct _enclosure_node {
+ /**
+  * enum reset_type - reset state
+  * @FORCE_BIG_HAMMER: issue diagnostic reset
+- * @SOFT_RESET: issue message_unit_reset, if fails to to big hammer
++ * @SOFT_RESET: issue message_unit_reset, if fails to big hammer
+  */
+ enum reset_type {
+ 	FORCE_BIG_HAMMER,
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.36.1
+

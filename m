@@ -2,106 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321295B1188
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DBE5B1191
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiIHAoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 20:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S230240AbiIHAoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIHAoT (ORCPT
+        with ESMTP id S230056AbiIHAoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:44:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE77CBFC57;
-        Wed,  7 Sep 2022 17:44:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Sep 2022 20:44:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6071EE3F;
+        Wed,  7 Sep 2022 17:44:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D7261B18;
-        Thu,  8 Sep 2022 00:44:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D131C433D6;
-        Thu,  8 Sep 2022 00:44:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662597857;
-        bh=g5nR0cX0QPYzLJn1sJLMWOJPxVQFmzSG3JCsEpMQcqA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=S5OUTbCwVAhMJxMa7IGDJMDUmzz8roBfoBf3nVOAiw210yURvlh3PIKH6NhXlRpo4
-         7xhR1uY9gn8axS/y26G9VJKiaRaHhmNvkZF4jm/vTkxSvu8gqXH/n+Yy8lOvXjGpPQ
-         60c6Svd0wV9asXyFsVrQnkkUTS7fsvxvyXIR6NeUmcmVif0KXfQNYxsKGzpqKUaTor
-         Zmpiy2Z6lD/S6DtExbJrBj8Zgl6nyQWY9LwLOIVRvbHDeKKKcXCnimMWtWHCZ4LZbj
-         HT5lEWVtdVf82PWm5gGg/ReODFsX3x2SAfFK2cHxBAkvSF3OfghCMVZKdX/b2J/Gaz
-         QyZnOz599W87A==
-Message-ID: <e1e6519f-2e77-05c1-697c-56b174addc6e@kernel.org>
-Date:   Wed, 7 Sep 2022 18:44:16 -0600
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8257620A26;
+        Thu,  8 Sep 2022 00:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662597873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vd0IdToeuUhRReKl6MOxK3dVsUzX7GC8yI72U+Yuyyg=;
+        b=0KaLBy+0bjMkKcidZXtSXkpNimV7ISQ+XlWwMNBE6gcZM5nmitzoRdN0v3/bJJHyEG5PT9
+        TiGmRzrcLK7qWPEu+uK/WGXJFqP/pp0gVY6PlF2wKmN0xJqlm3mMLDMSuW2nOb08ynPn/K
+        h4C0Sz8gOZzfPI9hVhlXTdODJkmdaeQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662597873;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vd0IdToeuUhRReKl6MOxK3dVsUzX7GC8yI72U+Yuyyg=;
+        b=yD/+9aK7KGPC6XXdWQ70geS3V0xmDA1X2y1FJPqRLaqKTpS89v4Lc6eXf+WU+e1Xa06kxl
+        DFsNH7TEUuTyxsDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3A261339E;
+        Thu,  8 Sep 2022 00:44:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iGonHuk6GWMzCgAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 08 Sep 2022 00:44:25 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH v3 0/6] TUN/VirtioNet USO features support.
-Content-Language: en-US
-To:     Andrew Melnychenko <andrew@daynix.com>, edumazet@google.com,
-        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jasowang@redhat.com, mst@redhat.com, pabeni@redhat.com,
-        yoshfuji@linux-ipv6.org
-Cc:     yan@daynix.com, yuri.benditovich@daynix.com
-References: <20220907125048.396126-1-andrew@daynix.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220907125048.396126-1-andrew@daynix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jan Kara" <jack@suse.cz>
+Cc:     "Jeff Layton" <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-reply-to: <20220907135153.qvgibskeuz427abw@quack3>
+References: <20220907111606.18831-1-jlayton@kernel.org>,
+ <166255065346.30452.6121947305075322036@noble.neil.brown.name>,
+ <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>,
+ <20220907125211.GB17729@fieldses.org>,
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>,
+ <20220907135153.qvgibskeuz427abw@quack3>
+Date:   Thu, 08 Sep 2022 10:44:22 +1000
+Message-id: <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/22 6:50 AM, Andrew Melnychenko wrote:
-> Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
-> Technically they enable NETIF_F_GSO_UDP_L4
-> (and only if USO4 & USO6 are set simultaneously).
-> It allows the transmission of large UDP packets. 
+On Wed, 07 Sep 2022, Jan Kara wrote:
+> On Wed 07-09-22 09:12:34, Jeff Layton wrote:
+> > On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
+> > > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
+> > > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
+> > > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
+> > > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic with res=
+pect to the
+> > > > > > +other changes in the inode. On a write, for instance, the i_vers=
+ion it usually
+> > > > > > +incremented before the data is copied into the pagecache. Theref=
+ore it is
+> > > > > > +possible to see a new i_version value while a read still shows t=
+he old data.
+> > > > >=20
+> > > > > Doesn't that make the value useless?
+> > > > >=20
+> > > >=20
+> > > > No, I don't think so. It's only really useful for comparing to an old=
+er
+> > > > sample anyway. If you do "statx; read; statx" and the value hasn't
+> > > > changed, then you know that things are stable.=20
+> > >=20
+> > > I don't see how that helps.  It's still possible to get:
+> > >=20
+> > > 		reader		writer
+> > > 		------		------
+> > > 				i_version++
+> > > 		statx
+> > > 		read
+> > > 		statx
+> > > 				update page cache
+> > >=20
+> > > right?
+> > >=20
+> >=20
+> > Yeah, I suppose so -- the statx wouldn't necessitate any locking. In
+> > that case, maybe this is useless then other than for testing purposes
+> > and userland NFS servers.
+> >=20
+> > Would it be better to not consume a statx field with this if so? What
+> > could we use as an alternate interface? ioctl? Some sort of global
+> > virtual xattr? It does need to be something per-inode.
+>=20
+> I was thinking how hard would it be to increment i_version after updating
+> data but it will be rather hairy. In particular because of stuff like
+> IOCB_NOWAIT support which needs to bail if i_version update is needed. So
+> yeah, I don't think there's an easy way how to provide useful i_version for
+> general purpose use.
+>=20
 
-Please spell out USO at least once in the cover letter to make sure the
-acronym is clear.
+Why cannot IOCB_NOWAIT update i_version?  Do we not want to wait on the
+cmp_xchg loop in inode_maybe_inc_iversion(), or do we not want to
+trigger an inode update?
 
-> 
-> Different features USO4 and USO6 are required for qemu where Windows guests can
-> enable disable USO receives for IPv4 and IPv6 separately.
-> On the other side, Linux can't really differentiate USO4 and USO6, for now.
+The first seems unlikely, but the second seems unreasonable.  We already
+acknowledge that after a crash iversion might go backwards and/or miss
+changes.
 
-Why is that and what is needed for Linux to differentiate between the 2
-protocols?
-
-> For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
-> In the future, there would be a mechanism to control UDP_L4 GSO separately.
-> 
-> New types for virtio-net already in virtio-net specification:
-> https://github.com/oasis-tcs/virtio-spec/issues/120
-> 
-> Test it WIP Qemu https://github.com/daynix/qemu/tree/USOv3
-> 
-> Andrew (5):
->   uapi/linux/if_tun.h: Added new offload types for USO4/6.
->   driver/net/tun: Added features for USO.
->   uapi/linux/virtio_net.h: Added USO types.
->   linux/virtio_net.h: Support USO offload in vnet header.
->   drivers/net/virtio_net.c: Added USO support.
-> 
-> Andrew Melnychenko (1):
->   udp: allow header check for dodgy GSO_UDP_L4 packets.
-> 
->  drivers/net/tap.c               | 10 ++++++++--
->  drivers/net/tun.c               |  8 +++++++-
->  drivers/net/virtio_net.c        | 19 +++++++++++++++----
->  include/linux/virtio_net.h      |  9 +++++++++
->  include/uapi/linux/if_tun.h     |  2 ++
->  include/uapi/linux/virtio_net.h |  5 +++++
->  net/ipv4/udp_offload.c          |  2 +-
->  7 files changed, 47 insertions(+), 8 deletions(-)
-> 
-
+Thanks,
+NeilBrown

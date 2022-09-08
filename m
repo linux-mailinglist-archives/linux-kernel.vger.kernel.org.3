@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE505B29FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5B25B29FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiIHXMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        id S230124AbiIHXNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiIHXMm (ORCPT
+        with ESMTP id S229979AbiIHXMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:12:42 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B5A109D3F;
-        Thu,  8 Sep 2022 16:12:39 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id c11so124443qtw.8;
-        Thu, 08 Sep 2022 16:12:39 -0700 (PDT)
+        Thu, 8 Sep 2022 19:12:50 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B81109D20;
+        Thu,  8 Sep 2022 16:12:43 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id cb8so165707qtb.0;
+        Thu, 08 Sep 2022 16:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=7GbYCslF48I7fDwOVdzpc0jOBmHVLbyPOHBU4jxAGaA=;
-        b=MNqblqXRv41x2WfZt9b7a2HBWyu40d86SzgQtgsU/Anvj2J1m2bd4UtWh+SSz+qO/4
-         5I4/eB45HO7/in/fg02zNRFGVhvyScECnPJo7p4k2fvJTVj0Iv+cuegpxYNtSCUAmZh6
-         O3AIjyrB/Tf6L5y3JKeluPozI3/HgR4gfRXWA+D/VaWnLMW5J/V7wamei+hUvYv8QTvQ
-         M9VvEag02pIW1sUoqc2s9AbKyIF4jDJzbsw7I9SqB2kWLr5owyWx/ZWzwP5V0glCqS/0
-         mFtmUkM/h8zV0kJAFoGwMoyBm9iy5/tlSJYXRPWm6uSqIqFJzny9bhIexPhR4WG+Rx4R
-         pbaQ==
+        bh=VgrsYXOjSgETMbO7C39JsWi0i4j2onPpweJQPqKgzDk=;
+        b=JWHpjCHv9HNEg+OETiYttbM+BeT8NJ2CexJDT8HpxvDuOV53I3eGuAt2EAAw9pE+5i
+         YrU99YtebHnjxce0A1yQFTJUchajw7NR5lr+EaouggppLwD4IU3uYpiwxOE0MIC+TtYY
+         acNltbCOl7rDGAodk87XL3Q9D7LnZMnNVQP/6I4HqoMUMOpD3c4/ZBbupXVScc74UKBH
+         9ildQMCsWOsklIiv3I2c6No1b05KIBQgQj8/jhx8qaU+/6yPsALu9Z/V7kHsZUnAQbEx
+         CvcfahnYdB9wY4s+7CIKKvxhAkK0cHI2ZiY8KRHNgyVrE5ExKzOQJERWKK4BFpj1JkV/
+         IeHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=7GbYCslF48I7fDwOVdzpc0jOBmHVLbyPOHBU4jxAGaA=;
-        b=ls2yqX2fAHizO3mkCEzJOjGEUqn5qY3AJFo/P9dvPfEAeTRtDGwRYSNgEIYZePWwgV
-         7b/SkuWDVisr8PcAQ1Jy7tMU/O/NgKo18Du+U4HjlDGDZa2QYlMLOMpTX9kojEu/OrGf
-         gx1vdAq+L9At/K5b3lGf2pXQ2DruptYjWoEfdENUX8QyFsZNOZtydtGcnqh+OWOd/qUj
-         7BNMVeVwVsV8qwGivXpKIth/5zU+ZYqFrxd6rX7qY4YjGzKdrm1Pvy33TGkyaYUKFKm9
-         10BN96cq6Z18dXprgKp/a/P2pucoIYHUYlY8qqcyqoSb2Dcn6iiJ5yoLqQTFvAjCvBEF
-         I8rQ==
-X-Gm-Message-State: ACgBeo0m9KjCxVD0wqwhXWRcs5uXQNiWEY2e2xzIGLqf/diOhkMqh2vR
-        7KTioPax2kpQAKI2JmwDMlkp74N4z7k=
-X-Google-Smtp-Source: AA6agR5OCtKJm7UxbDCgIiwuDUHGulzSLE9lv2MYOz31rzNNAlMdgP9wuSlRSrFEF0vzP1ucPflCgw==
-X-Received: by 2002:a05:622a:15c7:b0:344:5321:5874 with SMTP id d7-20020a05622a15c700b0034453215874mr10130388qty.506.1662678758680;
-        Thu, 08 Sep 2022 16:12:38 -0700 (PDT)
+        bh=VgrsYXOjSgETMbO7C39JsWi0i4j2onPpweJQPqKgzDk=;
+        b=3sGhKr7yvk6lQQ0aBW56UjCaKDoOmT95RePwM9zIFRdsvkxUwoF9iaXhYrEC4qmeMz
+         p6IqrJai8ofTLaroTCjlrfNE+xEnL3ujufFE1l5g1pDkl2ZQDiWSG4ovE+vIuISNrc5F
+         a8HbenQ0dgDk/XzhPhyUOTydlnpwF5me5Kb4aHvv3yq9SU4VrQn0O4j7hj0gC/eaFBmi
+         YvB5PMK4up1CLjxfriC57JNmR2G9K9FoQRCrNPffrT+54ZkFv2ZXN/JtEZ5kCTLy9GS/
+         F++UWVN95uKH7wZNpCGe0SuGbgErqkS+b1MwuSkEsP8zkX5VdaZu0243MPDFHTVA18Cc
+         y1HA==
+X-Gm-Message-State: ACgBeo0NLptTxMjSm+Q9uBEXE4LMJgb9Klyoj7BlVMhkK3vZKfZNHhlF
+        lAnJtRXAcBXxcEpeHCN6Gn41LRwfvog=
+X-Google-Smtp-Source: AA6agR4HGzUiWhbiPFrgA2sej9el+farwYERitVsTsPd4ZS97sZYpow6/51qJ350UmOgNxIC1jvGIg==
+X-Received: by 2002:a05:622a:4c6:b0:343:71e9:d661 with SMTP id q6-20020a05622a04c600b0034371e9d661mr10214492qtx.626.1662678761569;
+        Thu, 08 Sep 2022 16:12:41 -0700 (PDT)
 Received: from localhost ([2607:fea8:a2e2:2d00::6f2a])
-        by smtp.gmail.com with UTF8SMTPSA id s5-20020a05620a29c500b006b93ff541dasm117466qkp.8.2022.09.08.16.12.37
+        by smtp.gmail.com with UTF8SMTPSA id j7-20020a05620a288700b006b5d9a1d326sm55173qkp.83.2022.09.08.16.12.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 16:12:38 -0700 (PDT)
+        Thu, 08 Sep 2022 16:12:40 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     Andy Gross <agross@kernel.org>,
@@ -63,11 +63,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         ~postmarketos/upstreaming@lists.sr.ht,
         Caleb Connolly <caleb@connolly.tech>,
         Joel Selvaraj <jo@jsfamily.in>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/3] clk: qcom: gcc-sdm845: use device tree match data
-Date:   Thu,  8 Sep 2022 19:12:23 -0400
-Message-Id: <20220908231224.209020-3-mailingradian@gmail.com>
+        Richard Acayan <mailingradian@gmail.com>
+Subject: [PATCH v3 3/3] clk: qcom: gcc-sdm845: add sdm670 global clock data
+Date:   Thu,  8 Sep 2022 19:12:24 -0400
+Message-Id: <20220908231224.209020-4-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220908231224.209020-1-mailingradian@gmail.com>
 References: <20220908231224.209020-1-mailingradian@gmail.com>
@@ -83,47 +82,533 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver will support more than one SoC's set of clocks, and set of
-GDSCs. This behavior would be unclean with hard-coded static variables.
-Support it by grabbing clocks, GDSCs, and BCRs in the match data.
+The Snapdragon 670 adds and removes some clocks, adds new frequencies, and
+adds a new GPLL (Global Phase-Locked Loop) in reference to SDM845, while
+also removing some GDSCs. Despite these differences, there are many
+similarities with SDM670. Add data for SDM670 in the driver for SDM845 to
+reuse the most of the clock data.
 
+Advantages and disadvantages of this approach:
+ + maintenance applies to both sdm670 and sdm845 by default
+ + less duplicate code (clocks) means smaller distro/pre-built kernels
+   with all drivers enabled
+ - clocks for both SoC's must be compiled if the user wants clocks for one
+   specific SoC (both or none)
+ - additional testing needed for sdm845 devices
+
+Link: https://android.googlesource.com/kernel/msm/+/443bd8d6e2cf54698234c752e6de97b4b8a528bd%5E%21/#F10
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/clk/qcom/gcc-sdm845.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/Kconfig      |   4 +-
+ drivers/clk/qcom/gcc-sdm845.c | 394 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 396 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index 1cf1ef70e347..17951088b1db 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -545,10 +545,10 @@ config QCS_Q6SSTOP_404
+ 	  controller to reset the Q6SSTOP subsystem.
+ 
+ config SDM_GCC_845
+-	tristate "SDM845 Global Clock Controller"
++	tristate "SDM845/SDM670 Global Clock Controller"
+ 	select QCOM_GDSC
+ 	help
+-	  Support for the global clock controller on SDM845 devices.
++	  Support for the global clock controller on SDM845 and SDM670 devices.
+ 	  Say Y if you want to use peripheral devices such as UART, SPI,
+ 	  i2C, USB, UFS, SDDC, PCIe, etc.
+ 
 diff --git a/drivers/clk/qcom/gcc-sdm845.c b/drivers/clk/qcom/gcc-sdm845.c
-index 58aa3ec9a7fc..cd6e4e41dc9b 100644
+index cd6e4e41dc9b..6af08e0ca847 100644
 --- a/drivers/clk/qcom/gcc-sdm845.c
 +++ b/drivers/clk/qcom/gcc-sdm845.c
-@@ -3574,7 +3574,7 @@ static const struct qcom_cc_desc gcc_sdm845_desc = {
+@@ -31,6 +31,7 @@ enum {
+ 	P_GPLL0_OUT_EVEN,
+ 	P_GPLL0_OUT_MAIN,
+ 	P_GPLL4_OUT_MAIN,
++	P_GPLL6_OUT_MAIN,
+ 	P_SLEEP_CLK,
+ };
+ 
+@@ -68,6 +69,23 @@ static struct clk_alpha_pll gpll4 = {
+ 	},
+ };
+ 
++static struct clk_alpha_pll gpll6 = {
++	.offset = 0x13000,
++	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_FABIA],
++	.clkr = {
++		.enable_reg = 0x52000,
++		.enable_mask = BIT(6),
++		.hw.init = &(struct clk_init_data){
++			.name = "gpll6",
++			.parent_data = &(const struct clk_parent_data){
++				.fw_name = "bi_tcxo", .name = "bi_tcxo",
++			},
++			.num_parents = 1,
++			.ops = &clk_alpha_pll_fixed_fabia_ops,
++		},
++	},
++};
++
+ static const struct clk_div_table post_div_table_fabia_even[] = {
+ 	{ 0x0, 1 },
+ 	{ 0x1, 2 },
+@@ -194,6 +212,19 @@ static const struct clk_parent_data gcc_parent_data_10[] = {
+ 	{ .hw = &gpll0_out_even.clkr.hw },
+ };
+ 
++static const struct parent_map gcc_parent_map_11[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_GPLL0_OUT_MAIN, 1 },
++	{ P_GPLL6_OUT_MAIN, 2 },
++	{ P_GPLL0_OUT_EVEN, 6 },
++};
++
++static const struct clk_parent_data gcc_parent_data_11[] = {
++	{ .fw_name = "bi_tcxo", .name = "bi_tcxo" },
++	{ .hw = &gpll0.clkr.hw },
++	{ .hw = &gpll6.clkr.hw },
++	{ .hw = &gpll0_out_even.clkr.hw },
++};
+ 
+ static const struct freq_tbl ftbl_gcc_cpuss_ahb_clk_src[] = {
+ 	F(19200000, P_BI_TCXO, 1, 0, 0),
+@@ -233,6 +264,26 @@ static struct clk_rcg2 gcc_cpuss_rbcpr_clk_src = {
+ 	},
+ };
+ 
++static const struct freq_tbl ftbl_gcc_sdm670_cpuss_rbcpr_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	F(50000000, P_GPLL0_OUT_MAIN, 12, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 gcc_sdm670_cpuss_rbcpr_clk_src = {
++	.cmd_rcgr = 0x4815c,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = gcc_parent_map_3,
++	.freq_tbl = ftbl_gcc_sdm670_cpuss_rbcpr_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "gcc_cpuss_rbcpr_clk_src",
++		.parent_data = gcc_parent_data_8_ao,
++		.num_parents = ARRAY_SIZE(gcc_parent_data_8_ao),
++		.ops = &clk_rcg2_ops,
++	},
++};
++
+ static const struct freq_tbl ftbl_gcc_gp1_clk_src[] = {
+ 	F(19200000, P_BI_TCXO, 1, 0, 0),
+ 	F(25000000, P_GPLL0_OUT_EVEN, 12, 0, 0),
+@@ -656,6 +707,54 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s7_clk_src = {
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s7_clk_src_init,
+ };
+ 
++static const struct freq_tbl ftbl_gcc_sdcc1_apps_clk_src[] = {
++	F(144000, P_BI_TCXO, 16, 3, 25),
++	F(400000, P_BI_TCXO, 12, 1, 4),
++	F(20000000, P_GPLL0_OUT_EVEN, 5, 1, 3),
++	F(25000000, P_GPLL0_OUT_EVEN, 6, 1, 2),
++	F(50000000, P_GPLL0_OUT_EVEN, 6, 0, 0),
++	F(100000000, P_GPLL0_OUT_MAIN, 6, 0, 0),
++	F(192000000, P_GPLL6_OUT_MAIN, 2, 0, 0),
++	F(384000000, P_GPLL6_OUT_MAIN, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 gcc_sdcc1_apps_clk_src = {
++	.cmd_rcgr = 0x26028,
++	.mnd_width = 8,
++	.hid_width = 5,
++	.parent_map = gcc_parent_map_11,
++	.freq_tbl = ftbl_gcc_sdcc1_apps_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "gcc_sdcc1_apps_clk_src",
++		.parent_data = gcc_parent_data_11,
++		.num_parents = ARRAY_SIZE(gcc_parent_data_11),
++		.ops = &clk_rcg2_floor_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_gcc_sdcc1_ice_core_clk_src[] = {
++	F(75000000, P_GPLL0_OUT_EVEN, 4, 0, 0),
++	F(150000000, P_GPLL0_OUT_MAIN, 4, 0, 0),
++	F(200000000, P_GPLL0_OUT_MAIN, 3, 0, 0),
++	F(300000000, P_GPLL0_OUT_MAIN, 2, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 gcc_sdcc1_ice_core_clk_src = {
++	.cmd_rcgr = 0x26010,
++	.mnd_width = 8,
++	.hid_width = 5,
++	.parent_map = gcc_parent_map_0,
++	.freq_tbl = ftbl_gcc_sdcc1_ice_core_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "gcc_sdcc1_ice_core_clk_src",
++		.parent_data = gcc_parent_data_0,
++		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
++		.ops = &clk_rcg2_ops,
++	},
++};
++
+ static const struct freq_tbl ftbl_gcc_sdcc2_apps_clk_src[] = {
+ 	F(400000, P_BI_TCXO, 12, 1, 4),
+ 	F(9600000, P_BI_TCXO, 2, 0, 0),
+@@ -705,6 +804,31 @@ static struct clk_rcg2 gcc_sdcc4_apps_clk_src = {
+ 	},
+ };
+ 
++static const struct freq_tbl ftbl_gcc_sdm670_sdcc4_apps_clk_src[] = {
++	F(400000, P_BI_TCXO, 12, 1, 4),
++	F(9600000, P_BI_TCXO, 2, 0, 0),
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	F(25000000, P_GPLL0_OUT_EVEN, 12, 0, 0),
++	F(33333333, P_GPLL0_OUT_EVEN, 9, 0, 0),
++	F(50000000, P_GPLL0_OUT_MAIN, 12, 0, 0),
++	F(100000000, P_GPLL0_OUT_MAIN, 6, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 gcc_sdm670_sdcc4_apps_clk_src = {
++	.cmd_rcgr = 0x1600c,
++	.mnd_width = 8,
++	.hid_width = 5,
++	.parent_map = gcc_parent_map_0,
++	.freq_tbl = ftbl_gcc_sdm670_sdcc4_apps_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "gcc_sdcc4_apps_clk_src",
++		.parent_data = gcc_parent_data_0,
++		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
++		.ops = &clk_rcg2_floor_ops,
++	},
++};
++
+ static const struct freq_tbl ftbl_gcc_tsif_ref_clk_src[] = {
+ 	F(105495, P_BI_TCXO, 2, 1, 91),
+ 	{ }
+@@ -1283,6 +1407,28 @@ static struct clk_branch gcc_cpuss_rbcpr_clk = {
+ 	},
+ };
+ 
++/*
++ * The source clock frequencies are different for SDM670; define a child clock
++ * pointing to the source clock that uses SDM670 frequencies.
++ */
++static struct clk_branch gcc_sdm670_cpuss_rbcpr_clk = {
++	.halt_reg = 0x48008,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x48008,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_cpuss_rbcpr_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&gcc_sdm670_cpuss_rbcpr_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
+ static struct clk_branch gcc_ddrss_gpu_axi_clk = {
+ 	.halt_reg = 0x44038,
+ 	.halt_check = BRANCH_VOTED,
+@@ -2353,6 +2499,55 @@ static struct clk_branch gcc_qupv3_wrap_1_s_ahb_clk = {
+ 	},
+ };
+ 
++static struct clk_branch gcc_sdcc1_ahb_clk = {
++	.halt_reg = 0x26008,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x26008,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_sdcc1_ahb_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch gcc_sdcc1_apps_clk = {
++	.halt_reg = 0x26004,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x26004,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_sdcc1_apps_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&gcc_sdcc1_apps_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch gcc_sdcc1_ice_core_clk = {
++	.halt_reg = 0x2600c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2600c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_sdcc1_ice_core_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&gcc_sdcc1_ice_core_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
+ static struct clk_branch gcc_sdcc2_ahb_clk = {
+ 	.halt_reg = 0x14008,
+ 	.halt_check = BRANCH_HALT,
+@@ -2415,6 +2610,28 @@ static struct clk_branch gcc_sdcc4_apps_clk = {
+ 	},
+ };
+ 
++/*
++ * The source clock frequencies are different for SDM670; define a child clock
++ * pointing to the source clock that uses SDM670 frequencies.
++ */
++static struct clk_branch gcc_sdm670_sdcc4_apps_clk = {
++	.halt_reg = 0x16004,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x16004,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_sdcc4_apps_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&gcc_sdm670_sdcc4_apps_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
+ static struct clk_branch gcc_sys_noc_cpuss_ahb_clk = {
+ 	.halt_reg = 0x414c,
+ 	.halt_check = BRANCH_HALT_VOTED,
+@@ -3308,6 +3525,155 @@ static struct gdsc hlos1_vote_mmnoc_mmu_tbu_sf_gdsc = {
+ 	.flags = VOTABLE,
+ };
+ 
++static struct clk_regmap *gcc_sdm670_clocks[] = {
++	[GCC_AGGRE_UFS_PHY_AXI_CLK] = &gcc_aggre_ufs_phy_axi_clk.clkr,
++	[GCC_AGGRE_USB3_PRIM_AXI_CLK] = &gcc_aggre_usb3_prim_axi_clk.clkr,
++	[GCC_APC_VS_CLK] = &gcc_apc_vs_clk.clkr,
++	[GCC_BOOT_ROM_AHB_CLK] = &gcc_boot_rom_ahb_clk.clkr,
++	[GCC_CAMERA_AHB_CLK] = &gcc_camera_ahb_clk.clkr,
++	[GCC_CAMERA_AXI_CLK] = &gcc_camera_axi_clk.clkr,
++	[GCC_CAMERA_XO_CLK] = &gcc_camera_xo_clk.clkr,
++	[GCC_CE1_AHB_CLK] = &gcc_ce1_ahb_clk.clkr,
++	[GCC_CE1_AXI_CLK] = &gcc_ce1_axi_clk.clkr,
++	[GCC_CE1_CLK] = &gcc_ce1_clk.clkr,
++	[GCC_CFG_NOC_USB3_PRIM_AXI_CLK] = &gcc_cfg_noc_usb3_prim_axi_clk.clkr,
++	[GCC_CPUSS_AHB_CLK] = &gcc_cpuss_ahb_clk.clkr,
++	[GCC_CPUSS_AHB_CLK_SRC] = &gcc_cpuss_ahb_clk_src.clkr,
++	[GCC_CPUSS_RBCPR_CLK] = &gcc_sdm670_cpuss_rbcpr_clk.clkr,
++	[GCC_CPUSS_RBCPR_CLK_SRC] = &gcc_sdm670_cpuss_rbcpr_clk_src.clkr,
++	[GCC_DDRSS_GPU_AXI_CLK] = &gcc_ddrss_gpu_axi_clk.clkr,
++	[GCC_DISP_AHB_CLK] = &gcc_disp_ahb_clk.clkr,
++	[GCC_DISP_AXI_CLK] = &gcc_disp_axi_clk.clkr,
++	[GCC_DISP_GPLL0_CLK_SRC] = &gcc_disp_gpll0_clk_src.clkr,
++	[GCC_DISP_GPLL0_DIV_CLK_SRC] = &gcc_disp_gpll0_div_clk_src.clkr,
++	[GCC_DISP_XO_CLK] = &gcc_disp_xo_clk.clkr,
++	[GCC_GP1_CLK] = &gcc_gp1_clk.clkr,
++	[GCC_GP1_CLK_SRC] = &gcc_gp1_clk_src.clkr,
++	[GCC_GP2_CLK] = &gcc_gp2_clk.clkr,
++	[GCC_GP2_CLK_SRC] = &gcc_gp2_clk_src.clkr,
++	[GCC_GP3_CLK] = &gcc_gp3_clk.clkr,
++	[GCC_GP3_CLK_SRC] = &gcc_gp3_clk_src.clkr,
++	[GCC_GPU_CFG_AHB_CLK] = &gcc_gpu_cfg_ahb_clk.clkr,
++	[GCC_GPU_GPLL0_CLK_SRC] = &gcc_gpu_gpll0_clk_src.clkr,
++	[GCC_GPU_GPLL0_DIV_CLK_SRC] = &gcc_gpu_gpll0_div_clk_src.clkr,
++	[GCC_GPU_IREF_CLK] = &gcc_gpu_iref_clk.clkr,
++	[GCC_GPU_MEMNOC_GFX_CLK] = &gcc_gpu_memnoc_gfx_clk.clkr,
++	[GCC_GPU_SNOC_DVM_GFX_CLK] = &gcc_gpu_snoc_dvm_gfx_clk.clkr,
++	[GCC_GPU_VS_CLK] = &gcc_gpu_vs_clk.clkr,
++	[GCC_MSS_AXIS2_CLK] = &gcc_mss_axis2_clk.clkr,
++	[GCC_MSS_CFG_AHB_CLK] = &gcc_mss_cfg_ahb_clk.clkr,
++	[GCC_MSS_GPLL0_DIV_CLK_SRC] = &gcc_mss_gpll0_div_clk_src.clkr,
++	[GCC_MSS_MFAB_AXIS_CLK] = &gcc_mss_mfab_axis_clk.clkr,
++	[GCC_MSS_Q6_MEMNOC_AXI_CLK] = &gcc_mss_q6_memnoc_axi_clk.clkr,
++	[GCC_MSS_SNOC_AXI_CLK] = &gcc_mss_snoc_axi_clk.clkr,
++	[GCC_MSS_VS_CLK] = &gcc_mss_vs_clk.clkr,
++	[GCC_PDM2_CLK] = &gcc_pdm2_clk.clkr,
++	[GCC_PDM2_CLK_SRC] = &gcc_pdm2_clk_src.clkr,
++	[GCC_PDM_AHB_CLK] = &gcc_pdm_ahb_clk.clkr,
++	[GCC_PDM_XO4_CLK] = &gcc_pdm_xo4_clk.clkr,
++	[GCC_PRNG_AHB_CLK] = &gcc_prng_ahb_clk.clkr,
++	[GCC_QMIP_CAMERA_AHB_CLK] = &gcc_qmip_camera_ahb_clk.clkr,
++	[GCC_QMIP_DISP_AHB_CLK] = &gcc_qmip_disp_ahb_clk.clkr,
++	[GCC_QMIP_VIDEO_AHB_CLK] = &gcc_qmip_video_ahb_clk.clkr,
++	[GCC_QUPV3_WRAP0_S0_CLK] = &gcc_qupv3_wrap0_s0_clk.clkr,
++	[GCC_QUPV3_WRAP0_S0_CLK_SRC] = &gcc_qupv3_wrap0_s0_clk_src.clkr,
++	[GCC_QUPV3_WRAP0_S1_CLK] = &gcc_qupv3_wrap0_s1_clk.clkr,
++	[GCC_QUPV3_WRAP0_S1_CLK_SRC] = &gcc_qupv3_wrap0_s1_clk_src.clkr,
++	[GCC_QUPV3_WRAP0_S2_CLK] = &gcc_qupv3_wrap0_s2_clk.clkr,
++	[GCC_QUPV3_WRAP0_S2_CLK_SRC] = &gcc_qupv3_wrap0_s2_clk_src.clkr,
++	[GCC_QUPV3_WRAP0_S3_CLK] = &gcc_qupv3_wrap0_s3_clk.clkr,
++	[GCC_QUPV3_WRAP0_S3_CLK_SRC] = &gcc_qupv3_wrap0_s3_clk_src.clkr,
++	[GCC_QUPV3_WRAP0_S4_CLK] = &gcc_qupv3_wrap0_s4_clk.clkr,
++	[GCC_QUPV3_WRAP0_S4_CLK_SRC] = &gcc_qupv3_wrap0_s4_clk_src.clkr,
++	[GCC_QUPV3_WRAP0_S5_CLK] = &gcc_qupv3_wrap0_s5_clk.clkr,
++	[GCC_QUPV3_WRAP0_S5_CLK_SRC] = &gcc_qupv3_wrap0_s5_clk_src.clkr,
++	[GCC_QUPV3_WRAP0_S6_CLK] = &gcc_qupv3_wrap0_s6_clk.clkr,
++	[GCC_QUPV3_WRAP0_S6_CLK_SRC] = &gcc_qupv3_wrap0_s6_clk_src.clkr,
++	[GCC_QUPV3_WRAP0_S7_CLK] = &gcc_qupv3_wrap0_s7_clk.clkr,
++	[GCC_QUPV3_WRAP0_S7_CLK_SRC] = &gcc_qupv3_wrap0_s7_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S0_CLK] = &gcc_qupv3_wrap1_s0_clk.clkr,
++	[GCC_QUPV3_WRAP1_S0_CLK_SRC] = &gcc_qupv3_wrap1_s0_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S1_CLK] = &gcc_qupv3_wrap1_s1_clk.clkr,
++	[GCC_QUPV3_WRAP1_S1_CLK_SRC] = &gcc_qupv3_wrap1_s1_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S2_CLK] = &gcc_qupv3_wrap1_s2_clk.clkr,
++	[GCC_QUPV3_WRAP1_S2_CLK_SRC] = &gcc_qupv3_wrap1_s2_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S3_CLK] = &gcc_qupv3_wrap1_s3_clk.clkr,
++	[GCC_QUPV3_WRAP1_S3_CLK_SRC] = &gcc_qupv3_wrap1_s3_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S4_CLK] = &gcc_qupv3_wrap1_s4_clk.clkr,
++	[GCC_QUPV3_WRAP1_S4_CLK_SRC] = &gcc_qupv3_wrap1_s4_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S5_CLK] = &gcc_qupv3_wrap1_s5_clk.clkr,
++	[GCC_QUPV3_WRAP1_S5_CLK_SRC] = &gcc_qupv3_wrap1_s5_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S6_CLK] = &gcc_qupv3_wrap1_s6_clk.clkr,
++	[GCC_QUPV3_WRAP1_S6_CLK_SRC] = &gcc_qupv3_wrap1_s6_clk_src.clkr,
++	[GCC_QUPV3_WRAP1_S7_CLK] = &gcc_qupv3_wrap1_s7_clk.clkr,
++	[GCC_QUPV3_WRAP1_S7_CLK_SRC] = &gcc_qupv3_wrap1_s7_clk_src.clkr,
++	[GCC_QUPV3_WRAP_0_M_AHB_CLK] = &gcc_qupv3_wrap_0_m_ahb_clk.clkr,
++	[GCC_QUPV3_WRAP_0_S_AHB_CLK] = &gcc_qupv3_wrap_0_s_ahb_clk.clkr,
++	[GCC_QUPV3_WRAP_1_M_AHB_CLK] = &gcc_qupv3_wrap_1_m_ahb_clk.clkr,
++	[GCC_QUPV3_WRAP_1_S_AHB_CLK] = &gcc_qupv3_wrap_1_s_ahb_clk.clkr,
++	[GCC_SDCC1_AHB_CLK] = &gcc_sdcc1_ahb_clk.clkr,
++	[GCC_SDCC1_APPS_CLK] = &gcc_sdcc1_apps_clk.clkr,
++	[GCC_SDCC1_APPS_CLK_SRC] = &gcc_sdcc1_apps_clk_src.clkr,
++	[GCC_SDCC1_ICE_CORE_CLK_SRC] = &gcc_sdcc1_ice_core_clk_src.clkr,
++	[GCC_SDCC1_ICE_CORE_CLK] = &gcc_sdcc1_ice_core_clk.clkr,
++	[GCC_SDCC2_AHB_CLK] = &gcc_sdcc2_ahb_clk.clkr,
++	[GCC_SDCC2_APPS_CLK] = &gcc_sdcc2_apps_clk.clkr,
++	[GCC_SDCC2_APPS_CLK_SRC] = &gcc_sdcc2_apps_clk_src.clkr,
++	[GCC_SDCC4_AHB_CLK] = &gcc_sdcc4_ahb_clk.clkr,
++	[GCC_SDCC4_APPS_CLK] = &gcc_sdm670_sdcc4_apps_clk.clkr,
++	[GCC_SDCC4_APPS_CLK_SRC] = &gcc_sdm670_sdcc4_apps_clk_src.clkr,
++	[GCC_SYS_NOC_CPUSS_AHB_CLK] = &gcc_sys_noc_cpuss_ahb_clk.clkr,
++	[GCC_TSIF_AHB_CLK] = &gcc_tsif_ahb_clk.clkr,
++	[GCC_TSIF_INACTIVITY_TIMERS_CLK] =
++					&gcc_tsif_inactivity_timers_clk.clkr,
++	[GCC_TSIF_REF_CLK] = &gcc_tsif_ref_clk.clkr,
++	[GCC_TSIF_REF_CLK_SRC] = &gcc_tsif_ref_clk_src.clkr,
++	[GCC_UFS_MEM_CLKREF_CLK] = &gcc_ufs_mem_clkref_clk.clkr,
++	[GCC_UFS_PHY_AHB_CLK] = &gcc_ufs_phy_ahb_clk.clkr,
++	[GCC_UFS_PHY_AXI_CLK] = &gcc_ufs_phy_axi_clk.clkr,
++	[GCC_UFS_PHY_AXI_CLK_SRC] = &gcc_ufs_phy_axi_clk_src.clkr,
++	[GCC_UFS_PHY_ICE_CORE_CLK] = &gcc_ufs_phy_ice_core_clk.clkr,
++	[GCC_UFS_PHY_ICE_CORE_CLK_SRC] = &gcc_ufs_phy_ice_core_clk_src.clkr,
++	[GCC_UFS_PHY_PHY_AUX_CLK] = &gcc_ufs_phy_phy_aux_clk.clkr,
++	[GCC_UFS_PHY_PHY_AUX_CLK_SRC] = &gcc_ufs_phy_phy_aux_clk_src.clkr,
++	[GCC_UFS_PHY_RX_SYMBOL_0_CLK] = &gcc_ufs_phy_rx_symbol_0_clk.clkr,
++	[GCC_UFS_PHY_TX_SYMBOL_0_CLK] = &gcc_ufs_phy_tx_symbol_0_clk.clkr,
++	[GCC_UFS_PHY_UNIPRO_CORE_CLK] = &gcc_ufs_phy_unipro_core_clk.clkr,
++	[GCC_UFS_PHY_UNIPRO_CORE_CLK_SRC] =
++					&gcc_ufs_phy_unipro_core_clk_src.clkr,
++	[GCC_USB30_PRIM_MASTER_CLK] = &gcc_usb30_prim_master_clk.clkr,
++	[GCC_USB30_PRIM_MASTER_CLK_SRC] = &gcc_usb30_prim_master_clk_src.clkr,
++	[GCC_USB30_PRIM_MOCK_UTMI_CLK] = &gcc_usb30_prim_mock_utmi_clk.clkr,
++	[GCC_USB30_PRIM_MOCK_UTMI_CLK_SRC] =
++					&gcc_usb30_prim_mock_utmi_clk_src.clkr,
++	[GCC_USB30_PRIM_SLEEP_CLK] = &gcc_usb30_prim_sleep_clk.clkr,
++	[GCC_USB3_PRIM_CLKREF_CLK] = &gcc_usb3_prim_clkref_clk.clkr,
++	[GCC_USB3_PRIM_PHY_AUX_CLK] = &gcc_usb3_prim_phy_aux_clk.clkr,
++	[GCC_USB3_PRIM_PHY_AUX_CLK_SRC] = &gcc_usb3_prim_phy_aux_clk_src.clkr,
++	[GCC_USB3_PRIM_PHY_COM_AUX_CLK] = &gcc_usb3_prim_phy_com_aux_clk.clkr,
++	[GCC_USB3_PRIM_PHY_PIPE_CLK] = &gcc_usb3_prim_phy_pipe_clk.clkr,
++	[GCC_USB_PHY_CFG_AHB2PHY_CLK] = &gcc_usb_phy_cfg_ahb2phy_clk.clkr,
++	[GCC_VDDA_VS_CLK] = &gcc_vdda_vs_clk.clkr,
++	[GCC_VDDCX_VS_CLK] = &gcc_vddcx_vs_clk.clkr,
++	[GCC_VDDMX_VS_CLK] = &gcc_vddmx_vs_clk.clkr,
++	[GCC_VIDEO_AHB_CLK] = &gcc_video_ahb_clk.clkr,
++	[GCC_VIDEO_AXI_CLK] = &gcc_video_axi_clk.clkr,
++	[GCC_VIDEO_XO_CLK] = &gcc_video_xo_clk.clkr,
++	[GCC_VS_CTRL_AHB_CLK] = &gcc_vs_ctrl_ahb_clk.clkr,
++	[GCC_VS_CTRL_CLK] = &gcc_vs_ctrl_clk.clkr,
++	[GCC_VS_CTRL_CLK_SRC] = &gcc_vs_ctrl_clk_src.clkr,
++	[GCC_VSENSOR_CLK_SRC] = &gcc_vsensor_clk_src.clkr,
++	[GPLL0] = &gpll0.clkr,
++	[GPLL0_OUT_EVEN] = &gpll0_out_even.clkr,
++	[GPLL4] = &gpll4.clkr,
++	[GPLL6] = &gpll6.clkr,
++	[GCC_CPUSS_DVM_BUS_CLK] = &gcc_cpuss_dvm_bus_clk.clkr,
++	[GCC_CPUSS_GNOC_CLK] = &gcc_cpuss_gnoc_clk.clkr,
++	[GCC_QSPI_CORE_CLK_SRC] = &gcc_qspi_core_clk_src.clkr,
++	[GCC_QSPI_CORE_CLK] = &gcc_qspi_core_clk.clkr,
++	[GCC_QSPI_CNOC_PERIPH_AHB_CLK] = &gcc_qspi_cnoc_periph_ahb_clk.clkr,
++};
++
+ static struct clk_regmap *gcc_sdm845_clocks[] = {
+ 	[GCC_AGGRE_NOC_PCIE_TBU_CLK] = &gcc_aggre_noc_pcie_tbu_clk.clkr,
+ 	[GCC_AGGRE_UFS_CARD_AXI_CLK] = &gcc_aggre_ufs_card_axi_clk.clkr,
+@@ -3533,6 +3899,22 @@ static const struct qcom_reset_map gcc_sdm845_resets[] = {
+ 	[GCC_PCIE_1_PHY_BCR] = { 0x8e01c },
+ };
+ 
++static struct gdsc *gcc_sdm670_gdscs[] = {
++	[UFS_PHY_GDSC] = &ufs_phy_gdsc,
++	[USB30_PRIM_GDSC] = &usb30_prim_gdsc,
++	[HLOS1_VOTE_AGGRE_NOC_MMU_AUDIO_TBU_GDSC] =
++			&hlos1_vote_aggre_noc_mmu_audio_tbu_gdsc,
++	[HLOS1_VOTE_AGGRE_NOC_MMU_TBU1_GDSC] =
++			&hlos1_vote_aggre_noc_mmu_tbu1_gdsc,
++	[HLOS1_VOTE_AGGRE_NOC_MMU_TBU2_GDSC] =
++			&hlos1_vote_aggre_noc_mmu_tbu2_gdsc,
++	[HLOS1_VOTE_MMNOC_MMU_TBU_HF0_GDSC] =
++			&hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc,
++	[HLOS1_VOTE_MMNOC_MMU_TBU_HF1_GDSC] =
++			&hlos1_vote_mmnoc_mmu_tbu_hf1_gdsc,
++	[HLOS1_VOTE_MMNOC_MMU_TBU_SF_GDSC] = &hlos1_vote_mmnoc_mmu_tbu_sf_gdsc,
++};
++
+ static struct gdsc *gcc_sdm845_gdscs[] = {
+ 	[PCIE_0_GDSC] = &pcie_0_gdsc,
+ 	[PCIE_1_GDSC] = &pcie_1_gdsc,
+@@ -3563,6 +3945,17 @@ static const struct regmap_config gcc_sdm845_regmap_config = {
+ 	.fast_io	= true,
+ };
+ 
++static const struct qcom_cc_desc gcc_sdm670_desc = {
++	.config = &gcc_sdm845_regmap_config,
++	.clks = gcc_sdm670_clocks,
++	.num_clks = ARRAY_SIZE(gcc_sdm670_clocks),
++	/* Snapdragon 670 can function without its own exclusive resets. */
++	.resets = gcc_sdm845_resets,
++	.num_resets = ARRAY_SIZE(gcc_sdm845_resets),
++	.gdscs = gcc_sdm670_gdscs,
++	.num_gdscs = ARRAY_SIZE(gcc_sdm670_gdscs),
++};
++
+ static const struct qcom_cc_desc gcc_sdm845_desc = {
+ 	.config = &gcc_sdm845_regmap_config,
+ 	.clks = gcc_sdm845_clocks,
+@@ -3574,6 +3967,7 @@ static const struct qcom_cc_desc gcc_sdm845_desc = {
  };
  
  static const struct of_device_id gcc_sdm845_match_table[] = {
--	{ .compatible = "qcom,gcc-sdm845" },
-+	{ .compatible = "qcom,gcc-sdm845", .data = &gcc_sdm845_desc },
++	{ .compatible = "qcom,gcc-sdm670", .data = &gcc_sdm670_desc },
+ 	{ .compatible = "qcom,gcc-sdm845", .data = &gcc_sdm845_desc },
  	{ }
  };
- MODULE_DEVICE_TABLE(of, gcc_sdm845_match_table);
-@@ -3600,6 +3600,7 @@ static const struct clk_rcg_dfs_data gcc_dfs_clocks[] = {
- 
- static int gcc_sdm845_probe(struct platform_device *pdev)
- {
-+	const struct qcom_cc_desc *gcc_desc;
- 	struct regmap *regmap;
- 	int ret;
- 
-@@ -3616,7 +3617,8 @@ static int gcc_sdm845_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	return qcom_cc_really_probe(pdev, &gcc_sdm845_desc, regmap);
-+	gcc_desc = of_device_get_match_data(&pdev->dev);
-+	return qcom_cc_really_probe(pdev, gcc_desc, regmap);
- }
- 
- static struct platform_driver gcc_sdm845_driver = {
 -- 
 2.37.3
 

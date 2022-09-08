@@ -2,139 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0F15B1D3F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C4B5B1D48
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiIHMhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
+        id S231499AbiIHMkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiIHMhf (ORCPT
+        with ESMTP id S229989AbiIHMkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:37:35 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745C379A6E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:37:32 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id z23so19755367ljk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 05:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=o5O/OUn4ND6Nkl8BKpExq+lYQmh2k3ZSbRAegZyWLfE=;
-        b=U0ea1MgmbtJg7EPMaAeokRg8E1yUEKF09EyIPjzHOpIwSmlc2QYXJIkjNknB2N8JR7
-         7LKVhCmJ/riLU03xoWDcBxzH80HF/DQpUYBfcV5hPNRjX2cP3e/CL+A23/LnIS+jS8Jp
-         cKSrj4NxS6tnNRQGq3Y+ubf4pleeCOUeU8W+qPcZilTWirlGUbQr1gL0R3h8S9AeBOLc
-         ajntXlubMYfVHRAsDp4wkJNlgmp+W3t8HoPc0ukhJNadp6LEIippdkv/pqNknu7vZoAZ
-         OPuZ2jW9DcJHQUJKHPVd7Yto6XPKCIBMSyFuV9XTjkWhBt6hmYVvVQHUBYpIGy3CxZJ4
-         xvBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=o5O/OUn4ND6Nkl8BKpExq+lYQmh2k3ZSbRAegZyWLfE=;
-        b=EuHAVdoWxeiXyzZozny0d+/luQX9wKr93TGqdxJJVXTDcMzy2fDhPzs5c1IIaPSS+f
-         Kl0bTJqQb0U0KQ/K3tYqDGKHGeOcmsQgb2ftPvxm929NeYtxAPhuYudhlAEioZanTvxx
-         STYCIFAE/4E0j44scQrQLMI6Zwh3Cxts+7QXcmmh+H6ieimRvPo/zcLWexLfDEj0cu1Q
-         K3wcbAbeyCpVgjGHjOUnTHaV0QGUAxQXsk7ReCDMFzv2e7UluNpU26Y8UTO0v5CD7Dcb
-         cdCuQ+QaZkmSVfoPmDhS5uFPw6gRlw7VgUhDwIYo47zRZDkczTERl0wjO8drmDg3PQ2u
-         +9ow==
-X-Gm-Message-State: ACgBeo26Pge4IK/pzzJgDkuchvefERnlBQttMVT5ykslfcdLX9RxtSZC
-        yYusc1OJ8argp7Uhf7/9U8DgJCBrPmzgUanu7KKe5w==
-X-Google-Smtp-Source: AA6agR6BUDP+a7mQbQzTOVRDYC9UhafLHjiWSikXczQSEEdRl0tk3qrNLsIRRtmqmO1R3AGXhBe+GAwGRoGoEk9RgZ8=
-X-Received: by 2002:a05:651c:b2c:b0:261:d82f:75b8 with SMTP id
- b44-20020a05651c0b2c00b00261d82f75b8mr2307820ljr.266.1662640650496; Thu, 08
- Sep 2022 05:37:30 -0700 (PDT)
+        Thu, 8 Sep 2022 08:40:39 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C9BC59D3;
+        Thu,  8 Sep 2022 05:40:38 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MNdsT3ZPFz67n8d;
+        Thu,  8 Sep 2022 20:36:29 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Sep 2022 14:40:36 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 8 Sep
+ 2022 13:40:36 +0100
+Date:   Thu, 8 Sep 2022 13:40:35 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+CC:     <andrea.merello@gmail.com>, <andrea.merello@iit.it>,
+        <jic23@kernel.org>, <mchehab+huawei@kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <lars@metafoo.de>,
+        <robh+dt@kernel.org>, <andy.shevchenko@gmail.com>,
+        <matt.ranostay@konsulko.com>, <ardeleanalex@gmail.com>,
+        <jacopo@jmondi.org>
+Subject: Re: [v7 00/14] Add support for Bosch BNO055 IMU
+Message-ID: <20220908134035.000027ca@huawei.com>
+In-Reply-To: <dda8346f-2cfb-4d85-607c-553625cc98d4@gmail.com>
+References: <20220907132205.28021-1-andrea.merello@iit.it>
+        <1b30d814-3570-1cb7-573b-9bca90d5d3fd@gmail.com>
+        <CAN8YU5P1qjKtmSskA_+vLMnC6wHFmhk4ZvP+a-9KLr0OsY0FdA@mail.gmail.com>
+        <dda8346f-2cfb-4d85-607c-553625cc98d4@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <20220903161309.32848-1-apatel@ventanamicro.com>
- <20220903161309.32848-2-apatel@ventanamicro.com> <87czc6uupf.wl-maz@kernel.org>
-In-Reply-To: <87czc6uupf.wl-maz@kernel.org>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 8 Sep 2022 18:07:18 +0530
-Message-ID: <CAK9=C2XMgRAwu4ALhcRkJJnsCdms6rR7DqG3Nz7ZJa9cX+RP8Q@mail.gmail.com>
-Subject: Re: [PATCH v9 1/7] RISC-V: Clear SIP bit only when using SBI IPI operations
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bin Meng <bmeng.cn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 2:08 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Sat, 03 Sep 2022 17:13:03 +0100,
-> Anup Patel <apatel@ventanamicro.com> wrote:
-> >
-> > The software interrupt pending (i.e. [M|S]SIP) bit is writeable for
-> > S-mode but read-only for M-mode so we clear this bit only when using
-> > SBI IPI operations.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-> > ---
-> >  arch/riscv/kernel/sbi.c | 8 +++++++-
-> >  arch/riscv/kernel/smp.c | 2 --
-> >  2 files changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> > index 775d3322b422..fc614650a2e3 100644
-> > --- a/arch/riscv/kernel/sbi.c
-> > +++ b/arch/riscv/kernel/sbi.c
-> > @@ -643,8 +643,14 @@ static void sbi_send_cpumask_ipi(const struct cpumask *target)
-> >       sbi_send_ipi(target);
-> >  }
-> >
-> > +static void sbi_ipi_clear(void)
-> > +{
-> > +     csr_clear(CSR_IP, IE_SIE);
-> > +}
-> > +
-> >  static const struct riscv_ipi_ops sbi_ipi_ops = {
-> > -     .ipi_inject = sbi_send_cpumask_ipi
-> > +     .ipi_inject = sbi_send_cpumask_ipi,
-> > +     .ipi_clear = sbi_ipi_clear
-> >  };
-> >
-> >  void __init sbi_init(void)
-> > diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-> > index 760a64518c58..c56d67f53ea9 100644
-> > --- a/arch/riscv/kernel/smp.c
-> > +++ b/arch/riscv/kernel/smp.c
-> > @@ -83,8 +83,6 @@ void riscv_clear_ipi(void)
-> >  {
-> >       if (ipi_ops && ipi_ops->ipi_clear)
-> >               ipi_ops->ipi_clear();
-> > -
-> > -     csr_clear(CSR_IP, IE_SIE);
-> >  }
-> >  EXPORT_SYMBOL_GPL(riscv_clear_ipi);
->
-> This really begs the question: why on Earth are these things exported
-> to *modules*? I cannot see a good reason why they should be...
+On Thu, 8 Sep 2022 14:32:49 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-I agree, the riscv_clear_ipi() should not be exported but the PATCH4
-("RISC-V: Treat IPIs as normal Linux IRQs") of this series removes
-this function.
+> On 9/8/22 13:51, Andrea Merello wrote:
+> >> Rebased on what tree (and what commit)? I can't cleanly apply patch
+> >> [05/14].  
+> > 
+> > Sorry, it looks like I've raced against recent updates on iio-togreg
+> > branch (i.e. I've rebased, then I've got preemped by something else,
+> > then I've tested and sent the series some days later - I should have
+> > rebased again).
+> > 
+> > BTW patches can be applied on the top of this
+> > https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?h=togreg&id=2bc9cd66eb25d0fefbb081421d6586495e25840e
+> > 
+> > I'll prepare a v8 anyway.
+For minor stuff like Doc updates, don't about rebase if everything else
+is fine. I can fix little merge conflicts whilst applying.
 
-Regards,
-Anup
+Thanks,
 
->
->         M>
->
-> --
-> Without deviation from the norm, progress is not possible.
+Jonathan
+
+> >   
+> 
+> OK.
+> 
+> Don't forget to pass --base to git-format-patch(1) when preparing v8.
+> 
+

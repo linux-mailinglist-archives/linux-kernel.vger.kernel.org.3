@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FEA5B278C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460B05B2791
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiIHURs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S229699AbiIHUSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiIHURn (ORCPT
+        with ESMTP id S229659AbiIHUSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:17:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ABC1023F5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662668261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GikWZTxGj/63HCy54SuFQr3ZFtzXKVCYYeh8Zi7wQj0=;
-        b=KZjQQ+aPVxF0gSUYNbV+G3r4L1YRs4ObnIbvtJQcCtki03PRXXfyddnnBlCP5wHudL+4TK
-        euK+i1IeEPpes/HEaQPjgUfbgF/U+et/MOxg8Aa/jEE0SSccZIkb6ZLfRARA5VAHL1cigG
-        ZVVjBXeldobzvt8v9cXS3FfFrZBrfEg=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-601-clzppcO7PbKy9byA6UJOaA-1; Thu, 08 Sep 2022 16:17:40 -0400
-X-MC-Unique: clzppcO7PbKy9byA6UJOaA-1
-Received: by mail-io1-f71.google.com with SMTP id g12-20020a5d8c8c000000b006894fb842e3so12258411ion.21
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 13:17:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=GikWZTxGj/63HCy54SuFQr3ZFtzXKVCYYeh8Zi7wQj0=;
-        b=O+aLzj79ZoVO0OxeqIbzmlYpAN9Faw2VNPDGNck2ThnHk2baR6hiF1eYvp5NgzrT5i
-         xRenhlDVSR225wkzEiIatdDCqjuUpzjFVfeq+Lmy8BgowzlK8gohAbJU+n2Vhelu6rPs
-         EAXjHdRHbTLmQLvF2UuPRySxGmqDZZ8hMx0RTYnzi0cPAtPE3OT5nwz6gttmR1jNA/pU
-         ODaACAxR+R187OhmFV43CZlVlFWIcv66abJvEAKP/7tr0OY71hhh0Wis0nv/iZ5Wir8k
-         qnXxKNeEhdECw3rG3K497qS6ygvDCSdnm+bWIC0gxdBzD+H7IjB0lBYqh7aiRq+HmYPU
-         RDEA==
-X-Gm-Message-State: ACgBeo0f4D8f3MSsphyjq6cGVMFlTYOaZBiCtl6fjRbfRyg0s1+jPQ6b
-        couYOqV87CU0x/r1QWt7seSebLA7dgjJZERJlTQbNv2FQ0obrmpPPjerpQvo5WmdnOnWNKDlsiU
-        3tTfTJGeSXgYYUlLjkNlOW8Uz
-X-Received: by 2002:a05:6638:1450:b0:346:8a18:737c with SMTP id l16-20020a056638145000b003468a18737cmr5866073jad.149.1662668260203;
-        Thu, 08 Sep 2022 13:17:40 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4bf3RGZy+4hv8eZB5owi2SQBjkJww84tNK4SaY69049bB9OXpEkDKFHS1lXlnWgZWIpF29XQ==
-X-Received: by 2002:a05:6638:1450:b0:346:8a18:737c with SMTP id l16-20020a056638145000b003468a18737cmr5866067jad.149.1662668260023;
-        Thu, 08 Sep 2022 13:17:40 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id p5-20020a02b005000000b003583d27d258sm1125812jah.105.2022.09.08.13.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 13:17:39 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 14:17:33 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v3] vfio/fsl-mc: Fix a typo in a message
-Message-ID: <20220908141733.1af63ac3.alex.williamson@redhat.com>
-In-Reply-To: <a7c1394346725b7435792628c8d4c06a0a745e0b.1662134821.git.christophe.jaillet@wanadoo.fr>
-References: <a7c1394346725b7435792628c8d4c06a0a745e0b.1662134821.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 8 Sep 2022 16:18:24 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C4D103013;
+        Thu,  8 Sep 2022 13:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662668303; x=1694204303;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5mvv7AfRVzao2S2qwFNLndbkSYY1jqXMk8GzJurm9Kw=;
+  b=OiUblsdpXxyJ3zGg1xzWU1jcZ/Eap++6pXu0YjjbkmcNQ+r0L81UnFKh
+   CujzDSCwdDa117m94GMfMewBkmDXPwSNO5Jw+YKOmU+e2ckF1yhLHtMAU
+   76oQDq0s5kJl0Oa0RXvgwSl+WCHwSKrxgPBXpz/uQ+8Wer2fYFUzQ7aiK
+   BpXws14hdYhHk8WnZwuWOqiIGkvD0INC68nJ4JSYJTB2BLDawFW2VhlV1
+   uAAYJFM0w1nsl2skicFs2QU9rOJauYHcuynhjq6QBIqXILJAjOEI4Rp6k
+   pi6m6QLkGH4nhUH+7U1iUwubEQM+NtblnxyTqu2coRk0Nw5fyULxbo55a
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="359044519"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="359044519"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 13:18:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="740808691"
+Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 13:18:23 -0700
+Message-ID: <9a15eb73-0f80-1081-dce2-8357628252f0@linux.intel.com>
+Date:   Thu, 8 Sep 2022 13:18:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3 06/10] PCI/PTM: Add pci_enable_ptm() wrapper
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20220906222351.64760-1-helgaas@kernel.org>
+ <20220906222351.64760-7-helgaas@kernel.org>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220906222351.64760-7-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,20 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  2 Sep 2022 18:07:54 +0200
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 
-> L and S are swapped in the message.
-> s/VFIO_FLS_MC/VFIO_FSL_MC/
+
+On 9/6/22 3:23 PM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Also use 'ret' instead of 'WARN_ON(ret)' to avoid a duplicated message.
+> Implement pci_enable_ptm() as a wrapper around an internal
+> __pci_enable_ptm() that we can use during resume to enable PTM without
+> emitting log messages.
+
+Also add a note about not updating ptm_enabled in __pci_enable_ptm()
+
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 > ---
-> Changes in v3:
->   * Remove WARN_ON() and WARN() and only keep dev_warn()   [Diana Madalina Craciun <diana.craciun@oss.nxp.com>]
+>  drivers/pci/pcie/ptm.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index 762299984469..4a9f045126ca 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -152,7 +152,7 @@ void pci_ptm_init(struct pci_dev *dev)
+>  		pci_enable_ptm(dev, NULL);
+>  }
+>  
+> -int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+> +static int __pci_enable_ptm(struct pci_dev *dev)
+>  {
+>  	int ptm = dev->ptm_cap;
+>  	struct pci_dev *ups;
+> @@ -177,6 +177,17 @@ int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+>  		ctrl |= PCI_PTM_CTRL_ROOT;
+>  
+>  	pci_write_config_dword(dev, ptm + PCI_PTM_CTRL, ctrl);
+> +	return 0;
+> +}
+> +
+> +int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+> +{
+> +	int rc;
+> +
+> +	rc = __pci_enable_ptm(dev);
+> +	if (rc)
+> +		return rc;
+> +
+>  	dev->ptm_enabled = 1;
+>  
+>  	pci_ptm_info(dev);
 
-Applied to vfio next branch for v6.1.  Thanks,
-
-Alex
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

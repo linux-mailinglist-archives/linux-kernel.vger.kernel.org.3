@@ -2,171 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB8F5B1A68
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1645B1A6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiIHKqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 06:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        id S230351AbiIHKrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 06:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiIHKpn (ORCPT
+        with ESMTP id S229534AbiIHKra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 06:45:43 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9417B299
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 03:45:41 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id c2-20020a1c3502000000b003b2973dafb7so1371433wma.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 03:45:41 -0700 (PDT)
+        Thu, 8 Sep 2022 06:47:30 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182C0E1266;
+        Thu,  8 Sep 2022 03:47:28 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b16so23728916edd.4;
+        Thu, 08 Sep 2022 03:47:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date;
-        bh=SxXiDCpv5ePqARD9ofSsBk9oYeXNDztMJRIdlqicQ3s=;
-        b=Ic5bgE3qmdoInb3nyWjrnLqplQa6JS/sUvuCBa8GbFL4dYzZq/OL04Aco7SKYxso76
-         5MmQi/s9waL9MULGvdwKV/9mkAltXgmwf3QwESiwpGxDBWgplt6rwEqNNgJBf1bEYnK7
-         kqTpS+chO4JvrQnZcnjVfdZ0IVc6z6J/EuCIrpSDauTP6cB4XKOMOi5DbHgQ9hBnhv7t
-         dCJvfhxdddGvqpMm/65MJjSPkEDLDXr2i97AJXMihpPdgxiMRITtCRZ6JFvVP8O7BE8P
-         /epaRbWs6elt9fziAUc0+WtVGdhCIkTObXTHnblHWDxWr4g7aWjzGfExywezz3expnmC
-         2Sbw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=ISvvLkSqOKbyvExALYhZ+2yg+DlHE71/BrfNnMgsDQ0=;
+        b=obrVgx6IGfSDAIbq0CmdOu4JsL8KwGLpOi1wDs3YKoBajKDlAsmfQSph4Gl6OCea7u
+         XL0GGblNdYWjdLhJ/XgqUtH/kcw2eqs9k3bbRMhwrmMO4fEH+e1/lZCqZkRc55fKE2RL
+         g45SPmQGZm/8cax+3jPhF/pKKeLx/T3J283YLfoa1WLmv3J9zV579nCLa4TU4WTf3nsB
+         156y3H+K7FMcU7X/6hY+QpdxYg/YOk0f6wpuZfSPwHsn3+YfPEazv6dhc7JfsltLVj9S
+         woC9SsTUl8v4DH0rOdxZP9TnmDeFyq+V5iNIRLAEH6W5jIdRtumKvbdkirr1eFzH7Q0J
+         haJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=SxXiDCpv5ePqARD9ofSsBk9oYeXNDztMJRIdlqicQ3s=;
-        b=FulfrGQGjQgHZkO6JLelhyEhZJZP2B92xGDQ5g7rXIkb+RQkTRCTOdw4EPd6mn1ZPo
-         u6ceuUw712vxoiYf08WqC92r29egLvjEE2cEJFRMfUg8IfwtPWLV2BAZ2DzAB4cStQAD
-         ym9nZHnaRTfcbs04ahhWSYfjIIYUFZUCc28il1mE7forn4Ccr5SqsrchmkVzbuIPXsAi
-         7NG0WnApkOJkmMl+3CLaeb29FexAzzynk8ZimFFGk507jItri1H1bO+cmxIZq0/H5sco
-         RQ8MjLPovoBOPLeTpqy2qMov9Cx0FiswN/Ec2QrFir0u1j9XYKsBMEBmUqnMlnM4k4kh
-         usXg==
-X-Gm-Message-State: ACgBeo35SkTssuzcoFJ8X1moQi2mM+h8cWTp7lLXHL4jB63XO6o6SSYX
-        6NfPXTRhhOc5WXca8i7YUA2Y5A==
-X-Google-Smtp-Source: AA6agR7PHj3999h/guCh5epJRzTGtcyBBxFZmcyyWtX9b7PNdQCFkLkPn89R+suWBlEtQDuigYYdgg==
-X-Received: by 2002:a05:600c:4e52:b0:3a6:d89:4d1b with SMTP id e18-20020a05600c4e5200b003a60d894d1bmr1891759wmq.150.1662633939770;
-        Thu, 08 Sep 2022 03:45:39 -0700 (PDT)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id k39-20020a05600c1ca700b003a5f3de6fddsm2611839wms.25.2022.09.08.03.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 03:45:38 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Song Liu <song@kernel.org>
-Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhoufeng.zf@bytedance.com, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: Re: [PATCH v2] bpf: Simplify code by using for_each_cpu_wrap()
-References: <20220907155746.1750329-1-punit.agrawal@bytedance.com>
-        <CAPhsuW6+D0bfoPZdQ0j-NtCvgMED4YF-LyqXTQQHo+x7tw3yug@mail.gmail.com>
-Date:   Thu, 08 Sep 2022 11:45:37 +0100
-In-Reply-To: <CAPhsuW6+D0bfoPZdQ0j-NtCvgMED4YF-LyqXTQQHo+x7tw3yug@mail.gmail.com>
-        (Song Liu's message of "Wed, 7 Sep 2022 17:55:23 -0700")
-Message-ID: <877d2ecffy.fsf_-_@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ISvvLkSqOKbyvExALYhZ+2yg+DlHE71/BrfNnMgsDQ0=;
+        b=XniiFUj+MDMH2mKnv8dGBui0rYq/96+Y+9S4l9/6hjSybd8i7SA0OFVnPtEHfx1nqC
+         yISyRhVdJi+y5W2Plo/RWFcmpwLL9UwFB0N7eHwtClUv2J0cwD6ZJ2sdLdrkqZENOfkk
+         IByi77Y/qNKbvwS93EfEdZecYm0mbimiRZundo24S7MRZf34f8baO1funHlGkL+1MI3g
+         +CnONtX68y1pZJhIYqDsd0UgjWNurgXc+0JK0kGistX2hSowxrhZ8EaVXliKa+3K/hck
+         LvvfSvTtb4YlD6n2dMzFue6MNGf5VTAjtegE32gXc+0Df7zi70rqG/1tJuy2+Ggr//mw
+         Yniw==
+X-Gm-Message-State: ACgBeo1s6kGPC5NYwLbQar0MMmKLFLK6ooX4//aOQgQ1EgnqNdmt3tol
+        GWstLmOko05/+2AOr0YU6m8=
+X-Google-Smtp-Source: AA6agR5Wl9jn+6GV9pqJrgyy4CAGDj0l8bcPPVwd8mSl8Z2PUTTq6gA8DkBjmPIUjuLboB36ibviwQ==
+X-Received: by 2002:a05:6402:43c4:b0:43b:c5eb:c9dd with SMTP id p4-20020a05640243c400b0043bc5ebc9ddmr6558864edc.402.1662634046526;
+        Thu, 08 Sep 2022 03:47:26 -0700 (PDT)
+Received: from ?IPV6:2a04:241e:502:a09c:356c:c343:d4c9:ada? ([2a04:241e:502:a09c:356c:c343:d4c9:ada])
+        by smtp.gmail.com with ESMTPSA id f8-20020a17090631c800b0073923a68974sm1058602ejf.206.2022.09.08.03.47.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 03:47:25 -0700 (PDT)
+Message-ID: <589e17df-e321-c8ad-5360-e286c10cb1a3@gmail.com>
+Date:   Thu, 8 Sep 2022 13:47:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 01/26] tcp: authopt: Initial support and key management
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     Francesco Ruggeri <fruggeri@arista.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Philip Paeps <philip@trouble.is>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>
+References: <cover.1662361354.git.cdleonard@gmail.com>
+ <0e4c0a98509b907e33c2f80b95cc6cfe713ac2b2.1662361354.git.cdleonard@gmail.com>
+ <9bb98d13313d2ebeb5804d67285e8e6320ce4e74.camel@redhat.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+In-Reply-To: <9bb98d13313d2ebeb5804d67285e8e6320ce4e74.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+On 9/8/22 09:35, Paolo Abeni wrote:
+> On Mon, 2022-09-05 at 10:05 +0300, Leonard Crestez wrote:
+> [...]
+>> diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
+>> new file mode 100644
+>> index 000000000000..d38e9c89c89d
+>> --- /dev/null
+>> +++ b/net/ipv4/tcp_authopt.c
+>> @@ -0,0 +1,317 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +
+>> +#include <net/tcp_authopt.h>
+>> +#include <net/ipv6.h>
+>> +#include <net/tcp.h>
+>> +#include <linux/kref.h>
+>> +
+>> +/* This is enabled when first struct tcp_authopt_info is allocated and never released */
+>> +DEFINE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
+>> +EXPORT_SYMBOL(tcp_authopt_needed_key);
+>> +
+>> +static inline struct netns_tcp_authopt *sock_net_tcp_authopt(const struct sock *sk)
+>> +{
+>> +	return &sock_net(sk)->tcp_authopt;
+>> +}
+> 
+> Please have a look at PW report for this series, there are a bunch of
+> issues to be addressed, e.g. above 'static inline' should be just
+> 'static'
 
-Thanks for taking a look.
+What is a "PW report"? I can't find any info about this.
 
-Song Liu <song@kernel.org> writes:
+>> +static void tcp_authopt_key_release_kref(struct kref *ref)
+>> +{
+>> +	struct tcp_authopt_key_info *key = container_of(ref, struct tcp_authopt_key_info, ref);
+>> +
+>> +	kfree_rcu(key, rcu);
+>> +}
+>> +
+>> +static void tcp_authopt_key_put(struct tcp_authopt_key_info *key)
+>> +{
+>> +	if (key)
+>> +		kref_put(&key->ref, tcp_authopt_key_release_kref);
+>> +}
+>> +
+>> +static void tcp_authopt_key_del(struct netns_tcp_authopt *net,
+>> +				struct tcp_authopt_key_info *key)
+>> +{
+>> +	lockdep_assert_held(&net->mutex);
+>> +	hlist_del_rcu(&key->node);
+>> +	key->flags |= TCP_AUTHOPT_KEY_DEL;
+>> +	kref_put(&key->ref, tcp_authopt_key_release_kref);
+>> +}
+>> +
+>> +/* Free info and keys.
+>> + * Don't touch tp->authopt_info, it might not even be assigned yes.
+>> + */
+>> +void tcp_authopt_free(struct sock *sk, struct tcp_authopt_info *info)
+> 
+> this need to be 'static'.
 
-> On Wed, Sep 7, 2022 at 8:58 AM Punit Agrawal
-> <punit.agrawal@bytedance.com> wrote:
->>
->> In the percpu freelist code, it is a common pattern to iterate over
->> the possible CPUs mask starting with the current CPU. The pattern is
->> implemented using a hand rolled while loop with the loop variable
->> increment being open-coded.
->>
->> Simplify the code by using for_each_cpu_wrap() helper to iterate over
->> the possible cpus starting with the current CPU. As a result, some of
->> the special-casing in the loop also gets simplified.
->>
->> No functional change intended.
->>
->> Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
->> ---
->> v1 -> v2:
->> * Fixed the incorrect transformation changing semantics of __pcpu_freelist_push_nmi()
->>
->> Previous version -
->> v1: https://lore.kernel.org/all/20220817130807.68279-1-punit.agrawal@bytedance.com/
->>
->>  kernel/bpf/percpu_freelist.c | 48 ++++++++++++------------------------
->>  1 file changed, 16 insertions(+), 32 deletions(-)
->>
->> diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
->> index 00b874c8e889..b6e7f5c5b9ab 100644
->> --- a/kernel/bpf/percpu_freelist.c
->> +++ b/kernel/bpf/percpu_freelist.c
->> @@ -58,23 +58,21 @@ static inline void ___pcpu_freelist_push_nmi(struct pcpu_freelist *s,
->>  {
->>         int cpu, orig_cpu;
->>
->> -       orig_cpu = cpu = raw_smp_processor_id();
->> +       orig_cpu = raw_smp_processor_id();
->>         while (1) {
->> -               struct pcpu_freelist_head *head;
->> +               for_each_cpu_wrap(cpu, cpu_possible_mask, orig_cpu) {
->> +                       struct pcpu_freelist_head *head;
->>
->> -               head = per_cpu_ptr(s->freelist, cpu);
->> -               if (raw_spin_trylock(&head->lock)) {
->> -                       pcpu_freelist_push_node(head, node);
->> -                       raw_spin_unlock(&head->lock);
->> -                       return;
->> +                       head = per_cpu_ptr(s->freelist, cpu);
->> +                       if (raw_spin_trylock(&head->lock)) {
->> +                               pcpu_freelist_push_node(head, node);
->> +                               raw_spin_unlock(&head->lock);
->> +                               return;
->> +                       }
->>                 }
->> -               cpu = cpumask_next(cpu, cpu_possible_mask);
->> -               if (cpu >= nr_cpu_ids)
->> -                       cpu = 0;
->
-> I personally don't like nested loops here. Maybe we can keep
-> the original while loop and use cpumask_next_wrap()?
+Tried this and it's later called from tcp_twsk_destructor.
 
-Out of curiosity, is there a reason to avoid nesting here? The nested
-loop avoids the "cpu == orig_cpu" unnecessary check every iteration.
+> I'm sorry to bring the next topic this late (If already discussed, I
+> missed that point), is possible to split this series in smaller chunks?
 
-As suggested, it's possible to use cpumask_next_wrap() like below -
+It's already 26 patches and 3675 added lines, less that 150 lines per 
+patch seems reasonable?
 
-diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
-index 00b874c8e889..19e8eab70c40 100644
---- a/kernel/bpf/percpu_freelist.c
-+++ b/kernel/bpf/percpu_freelist.c
-@@ -68,9 +68,7 @@ static inline void ___pcpu_freelist_push_nmi(struct pcpu_freelist *s,
-                        raw_spin_unlock(&head->lock);
-                        return;
-                }
--               cpu = cpumask_next(cpu, cpu_possible_mask);
--               if (cpu >= nr_cpu_ids)
--                       cpu = 0;
-+               cpu = cpumask_next_wrap(cpu, cpu_possible_mask, orig_cpu, false);
+The split is already somewhat artificial, for example there are patches 
+that "add crypto" without actually using it because then it would be too 
+large.
 
-                /* cannot lock any per cpu lock, try extralist */
-                if (cpu == orig_cpu &&
+Some features could be dropped for later in order to make this smaller, 
+for example TCP_REPAIR doesn't have many usecases. Features like 
+prefixlen, vrf binding and ipv4-mapped-ipv6 were explicitly requested by 
+maintainers so I included them as separate patches in the main series.
 
-
-I can send an updated patch if this is preferred.
-
-Thanks,
-Punit
+--
+Regards,
+Leonard

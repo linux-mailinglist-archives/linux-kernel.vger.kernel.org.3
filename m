@@ -2,136 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC8B5B1B4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B925B1B55
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiIHLXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S231177AbiIHLZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiIHLX2 (ORCPT
+        with ESMTP id S230346AbiIHLZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:23:28 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB834CEE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:23:19 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id E85232B05D9F;
-        Thu,  8 Sep 2022 07:23:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 07:23:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1662636196; x=
-        1662643396; bh=LRXHHYqivNqoVLbWqJK32thupyw+X6RFeaqN+1YtJGU=; b=d
-        sC+SqVQmxl2y5Nk0Wo2cxN30d9BbikQWddcTN8RCpYICpF8LlCzKr/kBw19ppyX4
-        o5/Uu5DKj0x+wBViDK44z4s5rYsczPE5rRPizWZPx2W/S/EF4mgUgfHju2nQCV6M
-        XDUg2pHR79vZl8sHJsWDbAhhDy/3lmdVlYqf84KZ3VCU/gFaGv9ee4EZ3ZbeSVfu
-        gCULjFlhER8GApHWb8tOv6e4TXbHQeUvXbj1gie6NLufr9c/UdVBNemHUAYptAH0
-        yy611N/bBISEJ9I39w1Wsi+/AbHEVXH6ZXf7MHgK9zjiEHacfhdveCkxqv1ZjX2D
-        dWfxwdLMnrkJN8rQXtSMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662636196; x=
-        1662643396; bh=LRXHHYqivNqoVLbWqJK32thupyw+X6RFeaqN+1YtJGU=; b=Y
-        oMzWULxQE204GYN9jXkFiDp/SoaiWo8KEv/4aMIhp2VFvErCXC8WuotjstL+KeKZ
-        yFnkPjVloE/igCxgmN+K/18lbV8maVuyl2HwNDcTC3o70GOWpL+rmv3erG9UKIA4
-        ihQ05wbBTBbpk/0SdRh6TxGMDqqxQKfJZdo/0ajVrpKQyIy8ONaYi7WUSbx6zZL5
-        MiEU4ZM7BALznq/KKN/TvqvL/fJUVCWCFNFWr8HUsVeFMZuzRHuCt9z6uqdiyIqR
-        NytajlftLikd2QSuJ+2TYREmhFVuSNeKLojERFsy/VQFhWrz9vKx4U3caGn/2Mz2
-        IVSocSEk13MrU+xJRvBJw==
-X-ME-Sender: <xms:o9AZY6AbUi_7GQjeOkhCGnRYVgsoNbvNm_0WAbYlh9qtRsDM-R2IRQ>
-    <xme:o9AZY0ifPWrh6dba4HNwntIYw7gT_rfcI9QS7dB0v7UWlSfqlStY5k5F8o1rFEN_E
-    cfXzqw7T_U0XA2B4Yw>
-X-ME-Received: <xmr:o9AZY9nZF9ejuwKTvotqXwpWb4P9AAPWaJGA8GOEo6NHvVPExn9Wg5jVCQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtvddggedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddunecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepteejiedvkeelhedtlefgkefgkefhheefteevleekgfejgeekfffhveff
-    tdegiedvnecuffhomhgrihhnpehmohguvgdrihhmnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:o9AZY4wj0Em0p9wdifA1dOoRtWl4K3h5H3piyQJ28cO5-mrSsTLtEA>
-    <xmx:o9AZY_Su4tYf9Zjqdx-PntTwrcOdJQFCp8Hq5iCim6nyfT3CbHH0PQ>
-    <xmx:o9AZYzZSiolL2P5NuabaWmahY6CGSAdKWzeBR8P23J9g-ILVnC2Urg>
-    <xmx:pNAZY_zR36dG-f0hFKJ3mCUS5uoKF2GMiVvKl18RO68d8Co3ppVWHNpYewU>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Sep 2022 07:23:15 -0400 (EDT)
-Date:   Thu, 8 Sep 2022 13:23:12 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        Thu, 8 Sep 2022 07:25:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20B333A10;
+        Thu,  8 Sep 2022 04:24:58 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2889lXvI001698;
+        Thu, 8 Sep 2022 11:24:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=AlvwoiXcWmTt4XPcR/9fgVZLjS0MEKff4YeJmUQI89o=;
+ b=l0B1FT+tPd3eq0awvMDZowmZ0/6WaQ+a/my7wgS9FYfsTc6W4BmuYTLaww9M2WsNOyut
+ 3c+41syPeeL9eXRCViUkDZ8s5YRGP94y3aZamk/f8K3FDrbL5cyU+wV8LBedR3pKE3+6
+ n+IKqWLIKBRVC/3ARZTFRZN4kcwoK1dJSaIEin1VGZABVzTQ9OKbvt8vNJz6mTevuUBP
+ owb4WYddLj0bXE1+QFzdhaEaxYGtYU4j9fe7hmQ6Uhye2p7i+G8PwzYQOW4W55IXtjPi
+ Ar55Xz+i1HyFtT/380gXsDmMa3zToIfOjzko7/qtQJ/3zflmVGeEAZlRfICZunZO2Vot RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jfe2vudpc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 11:24:25 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 288AsKj0007600;
+        Thu, 8 Sep 2022 11:24:24 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jfe2vudnm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 11:24:24 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 288BMVQr024019;
+        Thu, 8 Sep 2022 11:24:22 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jbx6hpgwn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 11:24:21 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 288BOJPo35258858
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Sep 2022 11:24:19 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A30E24C044;
+        Thu,  8 Sep 2022 11:24:19 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF9BC4C040;
+        Thu,  8 Sep 2022 11:24:17 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.44.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  8 Sep 2022 11:24:17 +0000 (GMT)
+Date:   Thu, 8 Sep 2022 14:24:15 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2 32/41] drm/vc4: vec: Convert to the new TV mode
- property
-Message-ID: <20220908112312.hlb7mzneuxnethhr@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-32-459522d653a7@cerno.tech>
- <199cf4b3-8ace-e047-3050-b810cf0c6b63@tronnes.org>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] mm: Kconfig: make config SECRETMEM visible with
+ EXPERT
+Message-ID: <YxnQ3+0BfbmUbBnH@linux.ibm.com>
+References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
+ <20220908104337.11940-6-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <199cf4b3-8ace-e047-3050-b810cf0c6b63@tronnes.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220908104337.11940-6-lukas.bulwahn@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uIjwroCFkW0oicsSGIESTem3oxG1McVV
+X-Proofpoint-ORIG-GUID: pk9wGSrUqEXg-ItWBg8TagzjQ1laFaY7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_06,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1011 mlxscore=0 impostorscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209080040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Noralf,
+On Thu, Sep 08, 2022 at 12:43:36PM +0200, Lukas Bulwahn wrote:
+> Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
+> introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
+> and just gives that intent a much better name. That has been clearly a good
+> and long overdue renaming, and it is clearly an improvement to the kernel
+> build configuration that has shown to help managing the kernel build
+> configuration in the last decade.
+> 
+> However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
+> this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
+> open for future contributors to implement that intended semantics:
+> 
+>     A new CONFIG_EMBEDDED option is added that automatically selects
+>     CONFIG_EXPERT when enabled and can be used in the future to isolate
+>     options that should only be considered for embedded systems (RISC
+>     architectures, SLOB, etc).
+> 
+> Since then, this CONFIG_EMBEDDED implicitly had two purposes:
+> 
+>   - It can make even more options visible beyond what CONFIG_EXPERT makes
+>     visible. In other words, it may introduce another level of enabling the
+>     visibility of configuration options: always visible, visible with
+>     CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
+> 
+>   - Set certain default values of some configurations differently,
+>     following the assumption that configuring a kernel build for an
+>     embedded system generally starts with a different set of default values
+>     compared to kernel builds for all other kind of systems.
+> 
+> Considering the second purpose, note that already probably arguing that a
+> kernel build for an embedded system would choose some values differently is
+> already tricky: the set of embedded systems with Linux kernels is already
+> quite diverse. Many embedded system have powerful CPUs and it would not be
+> clear that all embedded systems just optimize towards one specific aspect,
+> e.g., a smaller kernel image size. So, it is unclear if starting with "one
+> set of default configuration" that is induced by CONFIG_EMBEDDED is a good
+> offer for developers configuring their kernels.
+> 
+> Also, the differences of needed user-space features in an embedded system
+> compared to a non-embedded system are probably difficult or even impossible
+> to name in some generic way.
+> 
+> So it is not surprising that in the last decade hardly anyone has
+> contributed changes to make something default differently in case of
+> CONFIG_EMBEDDED=y.
+> 
+> Currently, in v6.0-rc4, SECRETMEM is the only config switched off if
+> CONFIG_EMBEDDED=y.
+> 
+> As long as that is actually the only option that currently is selected or
+> deselected, it is better to just make SECRETMEM configurable at build time
+> by experts using menuconfig instead.
+> 
+> Make SECRETMEM configurable when EXPERT is set and otherwise default to
+> yes. Further, SECRETMEM needs ARCH_HAS_SET_DIRECT_MAP.
+> 
+> This allows us to remove CONFIG_EMBEDDED in the close future.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-On Tue, Aug 30, 2022 at 09:01:08PM +0200, Noralf Tr=F8nnes wrote:
-> > +static const struct drm_prop_enum_list tv_mode_names[] =3D {
->=20
-> Maybe call it legacy_tv_mode_enums?
->=20
-> >=20
-> > +	{ VC4_VEC_TV_MODE_NTSC, "NTSC", },
-> >=20
-> > +	{ VC4_VEC_TV_MODE_NTSC_J, "NTSC-J", },
-> >=20
-> > +	{ VC4_VEC_TV_MODE_PAL, "PAL", },
-> >=20
-> > +	{ VC4_VEC_TV_MODE_PAL_M, "PAL-M", },
->=20
-> If you use DRM_MODE_TV_MODE_* here you don't need to translate the value
-> using the switch statement in get/set property, you can use the value
-> directly to get/set tv.mode.
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 
-I'm sorry, I'm not quite sure what you mean by that. If we expose the
-DRM_MODE_TV_MODE_* properties there, won't that change the values the
-userspace will need to use to set that property?
+> ---
+>  mm/Kconfig | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index ceec438c0741..aa154c20b129 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1068,7 +1068,13 @@ config IO_MAPPING
+>  	bool
+>  
+>  config SECRETMEM
+> -	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+> +	default y
+> +	bool "Enable memfd_secret() system call" if EXPERT
+> +	depends on ARCH_HAS_SET_DIRECT_MAP
+> +	help
+> +	  Enable the memfd_secret() system call with the ability to create
+> +	  memory areas visible only in the context of the owning process and
+> +	  not mapped to other processes and other kernel page tables.
+>  
+>  config ANON_VMA_NAME
+>  	bool "Anonymous VMA name support"
+> -- 
+> 2.17.1
+> 
 
-Maxime
+-- 
+Sincerely yours,
+Mike.

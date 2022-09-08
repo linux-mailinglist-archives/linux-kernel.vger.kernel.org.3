@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8336B5B21DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E385B21E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiIHPTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S231862AbiIHPUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiIHPTG (ORCPT
+        with ESMTP id S230102AbiIHPUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:19:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E89AB4E9;
-        Thu,  8 Sep 2022 08:19:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 772B7B8211C;
-        Thu,  8 Sep 2022 15:19:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7C1C433D7;
-        Thu,  8 Sep 2022 15:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662650343;
-        bh=z8j68nxyK0f6QczSNdTQYDCsqrT713RdRpnt06vCzug=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=C7CldveaUicjNiCGVSAWOOzfRvDLu1MZIPZ6U9c6yYZGEmj4qMDndTTNEs69Ck390
-         SAgwsXvTqd446k+kVReOqCPBipIW1asdXKuJOIFYSYP341vLcBaYwABd0otULIjRfp
-         UfjLIht3Lx/ccu9pueLBiGZOIaVppBi4zXW8CmMkFcuhQhXgwLBwEMmhyHUx8rPI4k
-         a3o3HcxH+3aj4j+pBKQfVxdwSr3H2wr53g+tBaP6mB9fsylyeJG0YN9VoQVTIAlIkf
-         M69jPauM57SJJLLa0GlqhpJgw52c1ptOlvD3mG4TvaNMTg2Z5SyEO3jveO6WuGJg/f
-         gsSO/6HA5vCWw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220908130518.32186-1-andriy.shevchenko@linux.intel.com>
-References: <20220908130518.32186-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 1/1] spi: Group cs_change and cs_off flags together in struct spi_transfer
-Message-Id: <166265034217.279752.9696540140354935094.b4-ty@kernel.org>
-Date:   Thu, 08 Sep 2022 16:19:02 +0100
+        Thu, 8 Sep 2022 11:20:11 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F3E33A0F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:20:09 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q63so17065878pga.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:20:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=rOPP6Uu5swigMSQksbn2hbHol8fqfH4qx3zUzGuou0s=;
+        b=SKw6t8rRS2GQn2M3D3NgOKrXQm8g6fMc6V31zBcuAt+NDWOtQgspdYheDwHP8gP7uc
+         nRxip98S3briinM+V1vqUJXMJK+gk45KiZLtG/+aI3i2z1MHqAqbPHypbpczSXd+Y+fn
+         amaEH6OX7wYBlUQ0Te6IqV22hhCG3x5PcZHVdNTfakbn+nxFHMossCoN1E+zqM8HPBLX
+         a+CvW8keM4LjPisGpEfgomsc74y0AufuDco72laoiazzGJuNJd5aG4l/j1ClmZD2dInr
+         LavX9mOoNeQFC7Ph2QvoGjtdIscd3zF83kU4eEZi2Tgzsu+Six5FZAOo8nrerlSeNgu7
+         DN9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=rOPP6Uu5swigMSQksbn2hbHol8fqfH4qx3zUzGuou0s=;
+        b=jnaYIpQsS2Awwwi01FBW/vuhFI1HNzKDAs1CbJIahfnKV5pJnY8WbbDJviWLBMLzK4
+         b37zj1wBxVv+eYtc2luwI63eYjgWWoJQhtExb/Em/sN19A03by7yqULe8mBNn2RUxi2k
+         hFKAIPPX/4Ss1xuk649xmutSE/8OQROCCWzDe2YCUSql0X+FEMzwIXE21SgJw/B3Zq71
+         ML3yS7jihzMX7HF4nf99lfHjE5uLuyMQz2YqrSRqs2HWek++6Dt73uM8zaU2sJUEWJwe
+         i0uSGRshiNlo4SgmemKLH1xMFzSqXmzUBvvzfkpj9yuPQXRwZmyWVOjuvRrEcx4gHk9P
+         KiVw==
+X-Gm-Message-State: ACgBeo3XBKYdPRgcZYur9oCXYc6x/71SlW/Tff0fFu97LGmbAgqt0chD
+        BzGwXDH+K7d2vrC2lDc7/RCEpGifQSya9g==
+X-Google-Smtp-Source: AA6agR4uHgeZKOXawKaDnTBpniqg5EdDE/6lD8B729vKktfYTbo+w4REsRSc00v1h3FYfQa3nqKCZw==
+X-Received: by 2002:a05:6a00:1408:b0:53a:97e2:d725 with SMTP id l8-20020a056a00140800b0053a97e2d725mr9496127pfu.39.1662650408726;
+        Thu, 08 Sep 2022 08:20:08 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b30-20020aa78ede000000b00540d03f522fsm205433pfr.66.2022.09.08.08.20.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 08:20:08 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 15:20:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: Fix mce_banks memory leak on mci_ctl2_banks
+ allocation failure
+Message-ID: <YxoIJLlgEfNa/pDY@google.com>
+References: <20220819182258.588335-1-vipinsh@google.com>
+ <Yw6FD867fK2Blf1G@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw6FD867fK2Blf1G@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sep 2022 16:05:18 +0300, Andy Shevchenko wrote:
-> The commit 5e0531f6b90a ("spi: Add capability to perform some transfer
-> with chipselect off") added a new flag but squeezed it into a wrong
-> group of struct spi_transfer members (note that SPI_NBITS_* are macros
-> for easier interpretation of the tx_nbits and rx_nbits bitfields).
+On Tue, Aug 30, 2022, Sean Christopherson wrote:
+> On Fri, Aug 19, 2022, Vipin Sharma wrote:
+> > If mci_ctl2_banks allocation fails, kvm goes to fail_free_pio_data and
+> > forgets about freeing mce_banks memory causing memory leak.
+> > 
+> > Individually check memory allocation status and free memory in the correct
+> > order.
+> > 
+> > Fixes: 281b52780b57 ("KVM: x86: Add emulation for MSR_IA32_MCx_CTL2 MSRs.")
+> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > ---
 > 
-> Group cs_change and cs_off flags together and their doc strings.
+> Pushed to branch `for_paolo/6.1` at:
 > 
-> [...]
+>     https://github.com/sean-jc/linux.git
+> 
+> Unless you hear otherwise, it will make its way to kvm/queue "soon".
 
-Applied to
+Doh.  Dropping this as Paolo already sent a different fix[*] to Linus, commit
+3c0ba05ce9c9 ("KVM: x86: fix memoryleak in kvm_arch_vcpu_create()").
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Sorry :-(
 
-Thanks!
-
-[1/1] spi: Group cs_change and cs_off flags together in struct spi_transfer
-      commit: 86432b7f8f92b784c2e4af5b02766fb44052abf7
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+[*] https://lore.kernel.org/all/20220901122300.22298-1-linmiaohe@huawei.com

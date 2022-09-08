@@ -2,85 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC315B1BD7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60F65B1BDB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiIHLsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S231486AbiIHLt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiIHLsK (ORCPT
+        with ESMTP id S229644AbiIHLtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:48:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E38F11450;
-        Thu,  8 Sep 2022 04:48:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07CC4B820CE;
-        Thu,  8 Sep 2022 11:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D43C433C1;
-        Thu,  8 Sep 2022 11:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662637686;
-        bh=RGUYsIyKiM5K9baF1Oe7PxKZyAlFt5TcXpEH7waYx3Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y8TstqL8IsDrA90x/bzJq7GHJfS68qcVdWXr92wQ02Vhc0xCEUY7xxEzc99XYZ559
-         Xghn6EDCQOwTj2mgwzJUdusdft9zIkVUEnkfypIhi1x5Ir4z1HG3X/AwUJBCqISgzQ
-         +mpmzb5iq2sc27TSNi47RdKFQKddXjJGnqTetJrM=
-Date:   Thu, 8 Sep 2022 13:48:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Varsha Teratipally <teratipally@google.com>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: Re: [PATCH] xfs: fix up non-directory creation in SGID directories
-Message-ID: <YxnWi5YcuY6Rbodt@kroah.com>
-References: <20220906183600.1926315-1-teratipally@google.com>
- <20220906183600.1926315-2-teratipally@google.com>
+        Thu, 8 Sep 2022 07:49:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5733AB5;
+        Thu,  8 Sep 2022 04:49:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E47B14BF;
+        Thu,  8 Sep 2022 04:49:28 -0700 (PDT)
+Received: from [10.57.15.197] (unknown [10.57.15.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DC473F71A;
+        Thu,  8 Sep 2022 04:49:12 -0700 (PDT)
+Message-ID: <919bfaae-0a1d-de88-8211-f9fa476e6ebf@arm.com>
+Date:   Thu, 8 Sep 2022 12:49:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906183600.1926315-2-teratipally@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
+ domain as parent
+Content-Language: en-GB
+To:     "Radovanovic, Aleksandar" <aleksandar.radovanovic@amd.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+References: <20220803122655.100254-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-1-nipun.gupta@amd.com>
+ <20220906134801.4079497-5-nipun.gupta@amd.com> <YxeBCsA32jnwMjSj@nvidia.com>
+ <87leqvv3g7.wl-maz@kernel.org>
+ <MN2PR12MB4358E3CFD2E3ECECC14471F489419@MN2PR12MB4358.namprd12.prod.outlook.com>
+ <87illzuzyw.wl-maz@kernel.org>
+ <MN2PR12MB43581495197F603E901BBACA89419@MN2PR12MB4358.namprd12.prod.outlook.com>
+ <87edwmuw4f.wl-maz@kernel.org>
+ <SA0PR12MB4365D5D2C05EAB412567D42B89409@SA0PR12MB4365.namprd12.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <SA0PR12MB4365D5D2C05EAB412567D42B89409@SA0PR12MB4365.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 06:36:00PM +0000, Varsha Teratipally wrote:
-> From: Christoph Hellwig <hch@lst.de>
+On 2022-09-08 10:51, Radovanovic, Aleksandar wrote:
+> [AMD Official Use Only - General]
 > 
-> XFS always inherits the SGID bit if it is set on the parent inode, while
-> the generic inode_init_owner does not do this in a few cases where it can
-> create a possible security problem, see commit 0fa3ecd87848
-> ("Fix up non-directory creation in SGID directories") for details.
 > 
-> Switch XFS to use the generic helper for the normal path to fix this,
-> just keeping the simple field inheritance open coded for the case of the
-> non-sgid case with the bsdgrpid mount option.
 > 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-> Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+>> -----Original Message-----
+>> From: Marc Zyngier <maz@kernel.org>
+>> Sent: 08 September 2022 09:08
+>> To: Radovanovic, Aleksandar <aleksandar.radovanovic@amd.com>
+>> Cc: Jason Gunthorpe <jgg@nvidia.com>; Gupta, Nipun
+>> <Nipun.Gupta@amd.com>; robh+dt@kernel.org;
+>> krzysztof.kozlowski+dt@linaro.org; gregkh@linuxfoundation.org;
+>> rafael@kernel.org; eric.auger@redhat.com; alex.williamson@redhat.com;
+>> cohuck@redhat.com; Gupta, Puneet (DCG-ENG)
+>> <puneet.gupta@amd.com>; song.bao.hua@hisilicon.com;
+>> mchehab+huawei@kernel.org; f.fainelli@gmail.com;
+>> jeffrey.l.hugo@gmail.com; saravanak@google.com;
+>> Michael.Srba@seznam.cz; mani@kernel.org; yishaih@nvidia.com;
+>> robin.murphy@arm.com; will@kernel.org; joro@8bytes.org;
+>> masahiroy@kernel.org; ndesaulniers@google.com; linux-arm-
+>> kernel@lists.infradead.org; linux-kbuild@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; devicetree@vger.kernel.org; kvm@vger.kernel.org;
+>> okaya@kernel.org; Anand, Harpreet <harpreet.anand@amd.com>; Agarwal,
+>> Nikhil <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
+>> git (AMD-Xilinx) <git@amd.com>
+>> Subject: Re: [RFC PATCH v3 4/7] bus/cdx: add cdx-MSI domain with gic-its
+>> domain as parent
+>>
+>> [CAUTION: External Email]
+>>   
+>> OK, so you definitely need a mapping, but it cannot be a translation, and it
+>> needs to be in all the possible address spaces. OMG.
+> 
+> Could you elaborate why it needs to be in all the possible address spaces? I'm in no way familiar with kernel IOVA allocation, so not sure I understand this requirement. Note that each CDX device will have its own unique StreamID (in general case, equal to DeviceID sent to the GIC), so, from a SMMU perspective, the mapping can be specific to that device. As long as that IOVA is not allocated to any DMA region for _that_ device, things should be OK? But, I appreciate it might not be that simple from a kernel perspective.
 
-Why did you not sign off on this if you are forwarding it on?
+That's the point - any device could could have its own mapping, 
+therefore that hole has to be punched in *every* mapping that any of 
+those devices could use, so that MSI writes don't unexpectedly fault, or 
+corrupt memory if that address is free to be used to map a DMA buffer. 
+At least the HiSilicon PCI quirk is functionally similar (for slightly 
+different underlying reasons) so there's already precedent and an 
+example that you can follow to a reasonable degree.
 
-Also, what is the git id of this commit in Linus's tree (we need that
-hint...)
-
-Please fix both up and resend and get the ack of the stable xfs
-developers on it as well.
-
-thanks,
-
-greg k-h
+Robin.

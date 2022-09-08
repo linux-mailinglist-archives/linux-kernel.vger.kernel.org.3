@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E895B2A6F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F485B2A6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiIHXeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S229572AbiIHXeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiIHXd7 (ORCPT
+        with ESMTP id S231351AbiIHXeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:33:59 -0400
+        Thu, 8 Sep 2022 19:34:03 -0400
 Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCA51223AE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:31:44 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d7-20020a170903230700b00177f6dd8472so146728plh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:31:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B6C108721
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:31:46 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id q6-20020a17090311c600b0017266460b8fso150805plh.4
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:reply-to:from:to:cc:subject:date;
-        bh=Z/wAO7o0uv9mRFKbOQwdugyUqT7UTMkhxbmUHk+l8EY=;
-        b=IkB3irGFigCl/eI2GfiWUAdk+jp1yryLOuRxeiDAHbAnpTZTZebSNjsIX0WwigGctR
-         xldX0JihO0wwuN/pFeGk488tFXqpca88t4ssuW0VWRZVnaIGaRUk78D+BKHFAJP7ZpkT
-         2ToShsCdxyy4AfUaD3Dhmitw8eInd7mORNOJqpEr4LKvW6qIr6h8fDq/qxMmzz8M2peu
-         BCyVguInJOHXMuHPy7o2Nnt2tSV0rgnKFhiRTjDvB9r2HNSHpEyiPJhSSjbHGkS0Xu2m
-         kK1ASu8iJKY60hRESnnyZfvFx4AMd+Q4TP8NOzzIMouKQmTbqZXqoPC/GnotaHJ1pRP8
-         wZrw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date;
+        bh=xeFgTKLEFiHOB/M2DDI+MkAiIXTDAhcWUCQwueHFFYo=;
+        b=fHJCkeC4xm2CCMxwGvZeMN4WIrs+Rz2fN6+vaYnp/UJ6pc1sAQQxxB/ouafFLTNMa6
+         MXdzZ23sWrlw3ZuFX7HcAqF3t16sutl3QssHRs5L2LQpy12bj7jTCU437CctdcJ3fn0r
+         /9k3/R5oCr9E0VQhnkD6WWrq206x+JtlVfHib8u9W3zuE98hMB0fiA+CKg5KGeGrz3Oi
+         V6fogMfEyvwtVfm4gEIOl008Vswek6Elst5RLuWsn4LenjRCUp0PSkqOwEWyt/PBHnVH
+         eHK98WSnISjOpeBHV+iHAK/vvyiKnLd5UF/UmByhMVoi/BBcD0hg8srk1A9Waqbz2yXx
+         +DUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:reply-to:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=Z/wAO7o0uv9mRFKbOQwdugyUqT7UTMkhxbmUHk+l8EY=;
-        b=Lxp0IiZnwGCNdSxoarehwwL+IJ+G/qT+kesK3vGuY/HakV7nA3rxiYkwmT8Ib4U5J8
-         BkEHtnRRqAVOPHFpRaeXebFtDR3RX2LSUqWGhsFCX/vfRe1BDTABHiQDFjkiH+Fb6In0
-         LwM2zb4Sjf4gCZOkYrQtgJt4AqiW5L5HeqFlrGF1WL7xWUMOtpONb6XU3HzKZm0q0pyw
-         0JWevFp1hXzYynEcclYqZ2g5bYXtszKXSDTzxK12ZFAUL27PmeBRGITIcy9uPMuHlxc8
-         iNyE7skEzM6qx6616j9cqqhrNsiyI9H5pg3s21dr97zIAU3AZBgHM0XpkpfPrQLX5J3K
-         FZpg==
-X-Gm-Message-State: ACgBeo2/31vFUgc1FbJ0fJVLvguUe873X+HNBXr0zKwfGe7ATYFYQwO0
-        pjp90uHZ+v/NSz663FXlMlP0oeuslFM=
-X-Google-Smtp-Source: AA6agR5Df/HcRg0Wq4FafCs9EFBud8rofBtdiX6Xq8TU7TScl/0Guln8a4baCGugW2ag8dwsd/7nQjN7jTs=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
+        bh=xeFgTKLEFiHOB/M2DDI+MkAiIXTDAhcWUCQwueHFFYo=;
+        b=reN1RKZfWOsaF4TJ27xCxvjTPG9zfhGPTLPWUoluoFBztX0L/Qf30MXer6jzMTa5LY
+         JDYszsUe086EDR74n8UWvni4BXiVz9IhpKGH+VExkkGz+2ngp/lcrnbXIDBALbQy9d4R
+         tJ1h2dUwpiqIl5o2WdUbMUKDmhbIufvekgyZ/O3Lfr6sPdhYZto8wHSuAbOAgGiaLtPn
+         6FM2U3BD0vZ2pohS5X1aWpYIGLiwtWapHmRt5NR/5rSM5SpKQuc4wHGjciM+vioMVf+R
+         PmQqwd6Uh9YycP2xH1tlpoEjvqi3LQwLp43H0oo/rFjL3JxRVuwnpwi3tsoDP9xOYRKY
+         ky2w==
+X-Gm-Message-State: ACgBeo1ulJSfjyASZhTMbryzxgcLjni6PQUt1vfdcONH9TdGR2ugFE2N
+        PT0nY7xl+sBnuketYvXyv8N3V1G8Zz0=
+X-Google-Smtp-Source: AA6agR5+KvZYz7gdURCU07mIkYGoV0EpUavYTtuEpBeF40snucz+v+X1NUyfoJ3tC7ZKV8JLUy5EoDi1KEU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:b4d:b0:540:cee1:657e with SMTP id
- p13-20020a056a000b4d00b00540cee1657emr2385360pfo.22.1662679903483; Thu, 08
- Sep 2022 16:31:43 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:e7c2:b0:1f5:85ab:938c with SMTP id
+ kb2-20020a17090ae7c200b001f585ab938cmr6706565pjb.133.1662679905144; Thu, 08
+ Sep 2022 16:31:45 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  8 Sep 2022 23:31:31 +0000
+Date:   Thu,  8 Sep 2022 23:31:32 +0000
 In-Reply-To: <20220908233134.3523339-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220908233134.3523339-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220908233134.3523339-3-seanjc@google.com>
-Subject: [PATCH 2/5] KVM: selftests: Compare insn opcodes directly in fix_hypercall_test
+Message-ID: <20220908233134.3523339-4-seanjc@google.com>
+Subject: [PATCH 3/5] KVM: selftests: Remove unnecessary register shuffling in fix_hypercall_test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -67,157 +66,68 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sean Christopherson <seanjc@google.com>,
         Oliver Upton <oliver.upton@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Directly compare the expected versus observed hypercall instructions when
-verifying that KVM patched in the native hypercall (FIX_HYPERCALL_INSN
-quirk enabled).  gcc rightly complains that doing a 4-byte memcpy() with
-an "unsigned char" as the source generates an out-of-bounds accesses.
+Use input constraints to load RAX and RBX when testing that KVM correctly
+does/doesn't patch the "wrong" hypercall.  There's no need to manually
+load RAX and RBX, and no reason to clobber them either (KVM is not
+supposed to modify anything other than RAX).
 
-Alternatively, "exp" and "obs" could be declared as 3-byte arrays, but
-there's no known reason to copy locally instead of comparing directly.
-
-In function =E2=80=98assert_hypercall_insn=E2=80=99,
-    inlined from =E2=80=98guest_main=E2=80=99 at x86_64/fix_hypercall_test.=
-c:91:2:
-x86_64/fix_hypercall_test.c:63:9: error: array subscript =E2=80=98unsigned =
-int[0]=E2=80=99
- is partly outside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Wer=
-ror=3Darray-bounds]
-   63 |         memcpy(&exp, exp_insn, sizeof(exp));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-x86_64/fix_hypercall_test.c: In function =E2=80=98guest_main=E2=80=99:
-x86_64/fix_hypercall_test.c:42:22: note: object =E2=80=98vmx_hypercall_insn=
-=E2=80=99 of size 1
-   42 | extern unsigned char vmx_hypercall_insn;
-      |                      ^~~~~~~~~~~~~~~~~~
-x86_64/fix_hypercall_test.c:25:22: note: object =E2=80=98svm_hypercall_insn=
-=E2=80=99 of size 1
-   25 | extern unsigned char svm_hypercall_insn;
-      |                      ^~~~~~~~~~~~~~~~~~
-In function =E2=80=98assert_hypercall_insn=E2=80=99,
-    inlined from =E2=80=98guest_main=E2=80=99 at x86_64/fix_hypercall_test.=
-c:91:2:
-x86_64/fix_hypercall_test.c:64:9: error: array subscript =E2=80=98unsigned =
-int[0]=E2=80=99
- is partly outside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Wer=
-ror=3Darray-bounds]
-   64 |         memcpy(&obs, obs_insn, sizeof(obs));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-x86_64/fix_hypercall_test.c: In function =E2=80=98guest_main=E2=80=99:
-x86_64/fix_hypercall_test.c:25:22: note: object =E2=80=98svm_hypercall_insn=
-=E2=80=99 of size 1
-   25 | extern unsigned char svm_hypercall_insn;
-      |                      ^~~~~~~~~~~~~~~~~~
-x86_64/fix_hypercall_test.c:42:22: note: object =E2=80=98vmx_hypercall_insn=
-=E2=80=99 of size 1
-   42 | extern unsigned char vmx_hypercall_insn;
-      |                      ^~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-make: *** [../lib.mk:135: tools/testing/selftests/kvm/x86_64/fix_hypercall_=
-test] Error 1
-
-Fixes: 6c2fa8b20d0c ("selftests: KVM: Test KVM_X86_QUIRK_FIX_HYPERCALL_INSN=
-")
-Cc: Oliver Upton <oliver.upton@linux.dev>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/fix_hypercall_test.c | 32 +++++++++----------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+ .../selftests/kvm/x86_64/fix_hypercall_test.c | 22 +++++++------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tool=
-s/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-index b1905d280ef5..2512df357ab3 100644
+diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+index 2512df357ab3..dde97be3e719 100644
 --- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-@@ -14,6 +14,9 @@
- #include "kvm_util.h"
- #include "processor.h"
-=20
-+/* VMCALL and VMMCALL are both 3-byte opcodes. */
-+#define HYPERCALL_INSN_SIZE	3
-+
- static bool ud_expected;
-=20
- static void guest_ud_handler(struct ex_regs *regs)
-@@ -22,7 +25,7 @@ static void guest_ud_handler(struct ex_regs *regs)
- 	GUEST_DONE();
- }
-=20
--extern unsigned char svm_hypercall_insn;
-+extern unsigned char svm_hypercall_insn[HYPERCALL_INSN_SIZE];
- static uint64_t svm_do_sched_yield(uint8_t apic_id)
+@@ -30,14 +30,11 @@ static uint64_t svm_do_sched_yield(uint8_t apic_id)
  {
  	uint64_t ret;
-@@ -39,7 +42,7 @@ static uint64_t svm_do_sched_yield(uint8_t apic_id)
+ 
+-	asm volatile("mov %1, %%rax\n\t"
+-		     "mov %2, %%rbx\n\t"
+-		     "svm_hypercall_insn:\n\t"
++	asm volatile("svm_hypercall_insn:\n\t"
+ 		     "vmmcall\n\t"
+-		     "mov %%rax, %0\n\t"
+-		     : "=r"(ret)
+-		     : "r"((uint64_t)KVM_HC_SCHED_YIELD), "r"((uint64_t)apic_id)
+-		     : "rax", "rbx", "memory");
++		     : "=a"(ret)
++		     : "a"((uint64_t)KVM_HC_SCHED_YIELD), "b"((uint64_t)apic_id)
++		     : "memory");
+ 
  	return ret;
  }
-=20
--extern unsigned char vmx_hypercall_insn;
-+extern unsigned char vmx_hypercall_insn[HYPERCALL_INSN_SIZE];
- static uint64_t vmx_do_sched_yield(uint8_t apic_id)
+@@ -47,14 +44,11 @@ static uint64_t vmx_do_sched_yield(uint8_t apic_id)
  {
  	uint64_t ret;
-@@ -56,16 +59,6 @@ static uint64_t vmx_do_sched_yield(uint8_t apic_id)
+ 
+-	asm volatile("mov %1, %%rax\n\t"
+-		     "mov %2, %%rbx\n\t"
+-		     "vmx_hypercall_insn:\n\t"
++	asm volatile("vmx_hypercall_insn:\n\t"
+ 		     "vmcall\n\t"
+-		     "mov %%rax, %0\n\t"
+-		     : "=r"(ret)
+-		     : "r"((uint64_t)KVM_HC_SCHED_YIELD), "r"((uint64_t)apic_id)
+-		     : "rax", "rbx", "memory");
++		     : "=a"(ret)
++		     : "a"((uint64_t)KVM_HC_SCHED_YIELD), "b"((uint64_t)apic_id)
++		     : "memory");
+ 
  	return ret;
  }
-=20
--static void assert_hypercall_insn(unsigned char *exp_insn, unsigned char *=
-obs_insn)
--{
--	uint32_t exp =3D 0, obs =3D 0;
--
--	memcpy(&exp, exp_insn, sizeof(exp));
--	memcpy(&obs, obs_insn, sizeof(obs));
--
--	GUEST_ASSERT_EQ(exp, obs);
--}
--
- static void guest_main(void)
- {
- 	unsigned char *native_hypercall_insn, *hypercall_insn;
-@@ -74,12 +67,12 @@ static void guest_main(void)
- 	apic_id =3D GET_APIC_ID_FIELD(xapic_read_reg(APIC_ID));
-=20
- 	if (is_intel_cpu()) {
--		native_hypercall_insn =3D &vmx_hypercall_insn;
--		hypercall_insn =3D &svm_hypercall_insn;
-+		native_hypercall_insn =3D vmx_hypercall_insn;
-+		hypercall_insn =3D svm_hypercall_insn;
- 		svm_do_sched_yield(apic_id);
- 	} else if (is_amd_cpu()) {
--		native_hypercall_insn =3D &svm_hypercall_insn;
--		hypercall_insn =3D &vmx_hypercall_insn;
-+		native_hypercall_insn =3D svm_hypercall_insn;
-+		hypercall_insn =3D vmx_hypercall_insn;
- 		vmx_do_sched_yield(apic_id);
- 	} else {
- 		GUEST_ASSERT(0);
-@@ -87,8 +80,13 @@ static void guest_main(void)
- 		return;
- 	}
-=20
-+	/*
-+	 * The hypercall didn't #UD (guest_ud_handler() signals "done" if a #UD
-+	 * occurs).  Verify that a #UD is NOT expected and that KVM patched in
-+	 * the native hypercall.
-+	 */
- 	GUEST_ASSERT(!ud_expected);
--	assert_hypercall_insn(native_hypercall_insn, hypercall_insn);
-+	GUEST_ASSERT(!memcmp(native_hypercall_insn, hypercall_insn, HYPERCALL_INS=
-N_SIZE));
- 	GUEST_DONE();
- }
-=20
---=20
+-- 
 2.37.2.789.g6183377224-goog
 

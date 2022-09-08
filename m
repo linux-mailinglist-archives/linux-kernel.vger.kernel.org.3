@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5F55B22CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92B15B22D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiIHPvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S231738AbiIHPv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiIHPu7 (ORCPT
+        with ESMTP id S231694AbiIHPvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:50:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7C0F1F37;
-        Thu,  8 Sep 2022 08:50:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0542AB8211C;
-        Thu,  8 Sep 2022 15:50:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B5AC433C1;
-        Thu,  8 Sep 2022 15:50:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662652255;
-        bh=5/+ZIXNie4VnekxYHQs89+aKR6HkS+PDbD6+ARuWepU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=t5wYePL63GetzwQFLIZa2kHBN+Rp6d6l9Lg8s3SQ8lfpGptLzdYeXmfocUnSq7Hzh
-         7EQLwKm2W7LySJQh4Qk4J2tfF00bEjv08opKP6oRz9dZgoRWyX4/cN9tdYbABdc4Eh
-         1xqPRJVm/moL4kWXSy8SjKfQfkiviwNysuJjBJc6grnJOd3SpEjc3shWh+kQskjdE0
-         D+U544D4FlqwUymi0UT+Zea9mGXOcTd6o8hOzVTeqSxF7VN0qXJBK0cKzeCOZ2nRde
-         hOInzGSdglm3wqO9S59xrhpgd26MkP254Fqjz6KcC5ZMOBO0QfyNIhF9iKtFUc4jEV
-         EUypIR/XMYnVw==
-From:   Mark Brown <broonie@kernel.org>
-To:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        robh+dt@kernel.org, lgirdwood@gmail.com,
-        konrad.dybcio@somainline.org
-Cc:     linux-arm-msm@vger.kernel.org, dianders@chromium.org,
-        johan@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+kernel@kernel.org>
-In-Reply-To: <20220907204924.173030-1-ahalaney@redhat.com>
-References: <20220907204924.173030-1-ahalaney@redhat.com>
-Subject: Re: [PATCH v3] regulator: dt-bindings: qcom,rpmh: Indicate regulator-allow-set-load dependencies
-Message-Id: <166265225292.288960.8055654025711906863.b4-ty@kernel.org>
-Date:   Thu, 08 Sep 2022 16:50:52 +0100
+        Thu, 8 Sep 2022 11:51:25 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578F7F5C6F;
+        Thu,  8 Sep 2022 08:51:20 -0700 (PDT)
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MNk5T4s1cz689Q8;
+        Thu,  8 Sep 2022 23:47:09 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Thu, 8 Sep 2022 17:51:17 +0200
+Received: from [10.48.159.66] (10.48.159.66) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 8 Sep
+ 2022 16:51:16 +0100
+Message-ID: <7847a14b-3c02-a3bf-2bfc-99f09c0c2ca0@huawei.com>
+Date:   Thu, 8 Sep 2022 16:51:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH] scsi/mpt3sas: fix repeated words in comments
+To:     wangjianli <wangjianli@cdjrlc.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <MPT-FusionLinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220908130420.33130-1-wangjianli@cdjrlc.com>
+In-Reply-To: <20220908130420.33130-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.159.66]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sep 2022 15:49:24 -0500, Andrew Halaney wrote:
-> For RPMH regulators it doesn't make sense to indicate
-> regulator-allow-set-load without saying what modes you can switch to,
-> so be sure to indicate a dependency on regulator-allowed-modes.
+On 08/09/2022 14:04, wangjianli wrote:
+> Delete the redundant word 'to'.
 > 
-> In general this is true for any regulators that are setting modes
-> instead of setting a load directly, for example RPMH regulators. A
-> counter example would be RPM based regulators, which set a load
-> change directly instead of a mode change. In the RPM case
-> regulator-allow-set-load alone is sufficient to describe the regulator
-> (the regulator can change its output current, here's the new load),
-> but in the RPMH case what valid operating modes exist must also be
-> stated to properly describe the regulator (the new load is this, what
-> is the optimum mode for this regulator with that load, let's change to
-> that mode now).
+> Signed-off-by: wangjianli<wangjianli@cdjrlc.com>
+> ---
+>   drivers/scsi/mpt3sas/mpt3sas_base.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+> index 05364aa15ecd..c8443f69d15d 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_base.h
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+> @@ -836,7 +836,7 @@ struct _enclosure_node {
+>   /**
+>    * enum reset_type - reset state
+>    * @FORCE_BIG_HAMMER: issue diagnostic reset
+> - * @SOFT_RESET: issue message_unit_reset, if fails to to big hammer
 
-Applied to
+I guess that the original intention was "if fails go to big hammer"
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+> + * @SOFT_RESET: issue message_unit_reset, if fails to big hammer
 
-Thanks!
+This still makes no sense
 
-[1/1] regulator: dt-bindings: qcom,rpmh: Indicate regulator-allow-set-load dependencies
-      commit: 08865c2150392f67769a9d6e0b02800be226a990
+>    */
+>   enum reset_type {
+>   	FORCE_BIG_HAMMER,
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

@@ -2,60 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2CE5B1B86
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29895B1B8C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiIHLdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
+        id S230337AbiIHLey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiIHLdg (ORCPT
+        with ESMTP id S231225AbiIHLeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:33:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984E2CEB2C;
-        Thu,  8 Sep 2022 04:33:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33DCE619F2;
-        Thu,  8 Sep 2022 11:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04909C433D6;
-        Thu,  8 Sep 2022 11:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662636814;
-        bh=fAv0H5mhmBOeV+oGdvgzNzv3ieu8oKLrIj4T6iX1Njg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HqsT+crZcE1Xz1oKUhzrLrQvGV+aUsn4Q5WOMlSKuT1swBFdAs/RBfAEaurpJnDXJ
-         pyZLwcVsz037q4SEMwGULQ61oM8fM0Sr3jZ6khWW3FIpcRVAiMzA82QGA9DHw55J8w
-         hC3HRB9p3Cz5r2KFZpiJStQWL/crzRbbPhQExtG8=
-Date:   Thu, 8 Sep 2022 13:33:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] usb: chipidea: make configs for glue drivers visible
- with EXPERT
-Message-ID: <YxnTI927V0hGs+kz@kroah.com>
-References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
- <20220908104337.11940-5-lukas.bulwahn@gmail.com>
+        Thu, 8 Sep 2022 07:34:50 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C57E2AE31
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KYa/QVI6flq5lHnbp60VYWrYz3i2rBG7tpmdjbr7GZo=; b=GrcJ6yChNMl/rreZ16fGX+KLwn
+        GFVb0Zw06qxRhOiTb+mf/0H71iJoRWlPa46/6OVe5vWf2kdgll6709VqoX+K1R8YB7/gyrYPobz3V
+        JzCdNscyqgCXvumP4sFMyqb0pZqvlsNP5nYRXe5s14TPZ4tvRtavYU3jbWhEAQ6rYRdYGmQy7oGie
+        HExkAsdTKp3hnJM0Ao/DTsVcygRVWsLVuBD9sBT5/Q9ggX6/Rdd8mB9lH7AiB+JgUcU6lgcT+jdiR
+        I1SbdI754aUsyUV4yjCBOISLC9wcu4A1N8dVTW+n73EpmvEUNoG/HAwACaFUJgeOIrisfQO3bTsGt
+        yh6BCRIw==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=62929)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oWFnx-0005DR-KV; Thu, 08 Sep 2022 13:34:45 +0200
+Message-ID: <c6ef022d-1714-b0dd-472c-938614aefc06@tronnes.org>
+Date:   Thu, 8 Sep 2022 13:34:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908104337.11940-5-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 32/41] drm/vc4: vec: Convert to the new TV mode
+ property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-32-459522d653a7@cerno.tech>
+ <199cf4b3-8ace-e047-3050-b810cf0c6b63@tronnes.org>
+ <20220908112312.hlb7mzneuxnethhr@houat>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220908112312.hlb7mzneuxnethhr@houat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,72 +83,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 12:43:35PM +0200, Lukas Bulwahn wrote:
-> Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
-> introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
-> and just gives that intent a much better name. That has been clearly a good
-> and long overdue renaming, and it is clearly an improvement to the kernel
-> build configuration that has shown to help managing the kernel build
-> configuration in the last decade.
-> 
-> However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
-> this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
-> open for future contributors to implement that intended semantics:
-> 
->     A new CONFIG_EMBEDDED option is added that automatically selects
->     CONFIG_EXPERT when enabled and can be used in the future to isolate
->     options that should only be considered for embedded systems (RISC
->     architectures, SLOB, etc).
-> 
-> Since then, this CONFIG_EMBEDDED implicitly had two purposes:
-> 
->   - It can make even more options visible beyond what CONFIG_EXPERT makes
->     visible. In other words, it may introduce another level of enabling the
->     visibility of configuration options: always visible, visible with
->     CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
-> 
->   - Set certain default values of some configurations differently,
->     following the assumption that configuring a kernel build for an
->     embedded system generally starts with a different set of default values
->     compared to kernel builds for all other kind of systems.
-> 
-> Considering the first purpose, at the point in time where CONFIG_EMBEDDED
-> was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more options
-> become visible throughout all different menus for the kernel configuration.
-> Over the last decade, this has gradually increased, so that currently, with
-> CONFIG_EXPERT, roughly 170 more options become visible throughout all
-> different menus for the kernel configuration. In comparison, currently with
-> CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86,
-> one in arm, and five for the ChipIdea Highspeed Dual Role Controller.
-> 
-> As the numbers suggest, these two levels of enabling the visibility of even
-> more configuration options---beyond what CONFIG_EXPERT enables---never
-> evolved to a good solution in the last decade. In other words, this
-> additional level of visibility of configuration option with CONFIG_EMBEDDED
-> compared to CONFIG_EXPERT has since its introduction never become really
-> valuable. It requires quite some investigation to actually understand what
-> is additionally visible and it does not differ significantly in complexity
-> compared to just enabling CONFIG_EXPERT. This CONFIG_EMBEDDED---or any
-> other config to show more detailed options beyond CONFIG_EXPERT---is
-> unlikely to be valuable unless somebody puts significant effort in
-> identifying how such visibility options can be properly split and creating
-> clear criteria, when some config option is visible with CONFIG_EXPERT and
-> when some config option is visible only with some further option enabled
-> beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do. For now, it
-> is much more reasonable to simply make those additional seven options that
-> visible with CONFIG_EMBEDDED, visible with CONFIG_EXPERT, and then remove
-> CONFIG_EMBEDDED. If anyone spends significant effort in structuring the
-> visibility of config options, they may re-introduce suitable new config
-> options simply as they see fit.
-> 
-> Make the configs for usb chipidea glue drivers visible when CONFIG_EXPERT
-> is enabled.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/usb/chipidea/Kconfig | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Now queued up in my USB tree, thanks.
 
-greg k-h
+Den 08.09.2022 13.23, skrev Maxime Ripard:
+> Hi Noralf,
+> 
+> On Tue, Aug 30, 2022 at 09:01:08PM +0200, Noralf Trønnes wrote:
+>>> +static const struct drm_prop_enum_list tv_mode_names[] = {
+>>
+>> Maybe call it legacy_tv_mode_enums?
+>>
+>>>
+>>> +	{ VC4_VEC_TV_MODE_NTSC, "NTSC", },
+>>>
+>>> +	{ VC4_VEC_TV_MODE_NTSC_J, "NTSC-J", },
+>>>
+>>> +	{ VC4_VEC_TV_MODE_PAL, "PAL", },
+>>>
+>>> +	{ VC4_VEC_TV_MODE_PAL_M, "PAL-M", },
+>>
+>> If you use DRM_MODE_TV_MODE_* here you don't need to translate the value
+>> using the switch statement in get/set property, you can use the value
+>> directly to get/set tv.mode.
+> 
+> I'm sorry, I'm not quite sure what you mean by that. If we expose the
+> DRM_MODE_TV_MODE_* properties there, won't that change the values the
+> userspace will need to use to set that property?
+> 
+
+You're right ofc, I forgot that the enum values are also UABI.
+
+Noralf.

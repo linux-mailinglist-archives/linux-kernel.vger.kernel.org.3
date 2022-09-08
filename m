@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCADA5B120B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 03:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F245B120D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 03:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiIHBVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 21:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S230092AbiIHBVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 21:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiIHBU6 (ORCPT
+        with ESMTP id S230061AbiIHBVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 21:20:58 -0400
+        Wed, 7 Sep 2022 21:21:07 -0400
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D406A9E129;
-        Wed,  7 Sep 2022 18:20:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611651BE93;
+        Wed,  7 Sep 2022 18:21:05 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2881KtUW077450;
-        Wed, 7 Sep 2022 20:20:55 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2881L2MT077480;
+        Wed, 7 Sep 2022 20:21:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1662600055;
-        bh=T4feafZAUpj/PUJEHz5WBPmbqLg0bASVubN4FV6seXM=;
+        s=ti-com-17Q1; t=1662600062;
+        bh=62OK8Dd4YH/7ZhSRsqTkoXZBSV79+iiRosyVCNLWSss=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=TyDJS/RhkKqvd0L6QcmvMlVMPesoZSR1G0UrL1XV0lnNjGxKuDGeCKQux1nN/RP8G
-         SJxCtWn61swIh4J3HPJ0qt5UVsb6z+T4Tio+ZJJDAeXUOUxjCksPejHxCt2r6AyoDU
-         gNEjYiZEPk5fXVwLwqOtRuMAHQ+71TcPC8aRNZSI=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2881Kt25093324
+        b=Yv9Ex9G6aaOFExmvWY8mfdyjvPd0m/3P8li9GOfvtAyCpP6anyIqQ6deq8cJTPxmT
+         0l9Y5O+neC82Y/T0cunVMkqCSR8gJGZZHkByCHMwTX/dgjfqPFOtVMGXF/sKHlZ60c
+         1QIaVetm+CWG7DAg8wS+xSxVmWhCvPEfaXijECu4=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2881L2x2093426
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Sep 2022 20:20:55 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 7 Sep 2022 20:21:02 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 7 Sep
- 2022 20:20:55 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 20:21:02 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 7 Sep 2022 20:20:55 -0500
+ Frontend Transport; Wed, 7 Sep 2022 20:21:02 -0500
 Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2881KXFe009016;
-        Wed, 7 Sep 2022 20:20:49 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2881KXFf009016;
+        Wed, 7 Sep 2022 20:20:56 -0500
 From:   Matt Ranostay <mranostay@ti.com>
 To:     <vigneshr@ti.com>, <nm@ti.com>
 CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, Matt Ranostay <mranostay@ti.com>
-Subject: [PATCH v2 3/6] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
-Date:   Wed, 7 Sep 2022 18:20:28 -0700
-Message-ID: <20220908012031.3354-3-mranostay@ti.com>
+Subject: [PATCH v2 4/6] arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
+Date:   Wed, 7 Sep 2022 18:20:29 -0700
+Message-ID: <20220908012031.3354-4-mranostay@ti.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220908012031.3354-1-mranostay@ti.com>
 References: <20220908012031.3354-1-mranostay@ti.com>
@@ -67,65 +67,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Aswath Govindraju <a-govindraju@ti.com>
 
-Add support for two instance of OSPI in J721S2 SoC.
+Configure first lane to PCIe, the second lane to USB and the last two lanes
+to eDP. Also, add sub-nodes to SERDES0 DT node to represent SERDES0 is
+connected to PCIe.
 
 Cc: Vignesh Raghavendra <vigneshr@ti.com>
 Cc: Nishanth Menon <nm@ti.com>
 Acked-by: Matt Ranostay <mranostay@ti.com>
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 ---
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ .../dts/ti/k3-j721s2-common-proc-board.dts    | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index 4d1bfabd1313..7bc268f27030 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -299,4 +299,44 @@ cpts@3d000 {
- 			ti,cpts-periodic-outputs = <2>;
- 		};
- 	};
-+
-+	fss: syscon@47000000 {
-+		compatible = "syscon", "simple-mfd";
-+		reg = <0x0 0x47000000 0x0 0x100>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		ospi0: spi@47040000 {
-+			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-+			reg = <0x00 0x47040000 0x00 0x100>,
-+			      <0x5 0x0000000 0x1 0x0000000>;
-+			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
-+			cdns,fifo-depth = <256>;
-+			cdns,fifo-width = <4>;
-+			cdns,trigger-address = <0x0>;
-+			clocks = <&k3_clks 109 5>;
-+			assigned-clocks = <&k3_clks 109 5>;
-+			assigned-clock-parents = <&k3_clks 109 7>;
-+			assigned-clock-rates = <166666666>;
-+			power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+		ospi1: spi@47050000 {
-+			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-+			reg = <0x00 0x47050000 0x00 0x100>,
-+			      <0x7 0x0000000 0x1 0x0000000>;
-+			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
-+			cdns,fifo-depth = <256>;
-+			cdns,fifo-width = <4>;
-+			cdns,trigger-address = <0x0>;
-+			clocks = <&k3_clks 110 5>;
-+			power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+	};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+index b210cc07c539..791f235bd95f 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+@@ -9,6 +9,9 @@
+ 
+ #include "k3-j721s2-som-p0.dtsi"
+ #include <dt-bindings/net/ti-dp83867.h>
++#include <dt-bindings/phy/phy-cadence.h>
++#include <dt-bindings/phy/phy.h>
++#include <dt-bindings/mux/ti-serdes.h>
+ 
+ / {
+ 	compatible = "ti,j721s2-evm", "ti,j721s2";
+@@ -350,6 +353,25 @@ &cpsw_port1 {
+ 	phy-handle = <&phy0>;
  };
+ 
++&serdes_ln_ctrl {
++	idle-states = <J721S2_SERDES0_LANE0_PCIE1_LANE0>, <J721S2_SERDES0_LANE1_USB>,
++		      <J721S2_SERDES0_LANE2_EDP_LANE2>, <J721S2_SERDES0_LANE3_EDP_LANE3>;
++};
++
++&serdes_refclk {
++	clock-frequency = <100000000>;
++};
++
++&serdes0 {
++	serdes0_pcie_link: phy@0 {
++		reg = <0>;
++		cdns,num-lanes = <1>;
++		#phy-cells = <0>;
++		cdns,phy-type = <PHY_TYPE_PCIE>;
++		resets = <&serdes_wiz0 1>;
++	};
++};
++
+ &mcu_mcan0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mcu_mcan0_pins_default>;
 -- 
 2.30.2
 

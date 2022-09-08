@@ -2,97 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6595B20E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1EF5B20E9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231772AbiIHOlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
+        id S231751AbiIHOlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiIHOk7 (ORCPT
+        with ESMTP id S232250AbiIHOlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:40:59 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282C96AA02
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:40:56 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id l6so9341281ilk.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:40:56 -0700 (PDT)
+        Thu, 8 Sep 2022 10:41:25 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A3AF9138
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:41:22 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id x14so12723105lfu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:41:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=pZDBeWxSoDaW9so+HKgnIStCCw0Inuk1PaP9mjbSPow=;
-        b=dN8iGrQe1i0lBn6Y/EIQeR0beICKZxdPQWHi42MzhW+7/ssMDVDQtIOep6pl0p4qeQ
-         qtgUs8lbdMrSTREUL0HMXP+7THi9YfX52Uofgfnvu1eqAQ/7yPh3Sfi2zfBF6JBhbyWv
-         4FNafl8cGUipoIJvwyowSaJmsiWMmfB5YVSV0MvBL80VEDkcsF7XehPvoHtaM/9xFsNO
-         qlti61PQtsC9J8zZ80yyrDsDqSshoZ8Lu42oB2i45Sc2YYmRFxtIW7sdM/FhpaNABUGh
-         mfsBTPc0ciffdjRhqgqiMDTtxXhY8e5IesWDyNEtfpLpPIrWuvGzB5SkudT/INEzeuHF
-         2H0g==
+        bh=Xy9pb3RiM0xLWbx8fAyLLiqpkCXXyc0gWIl/bOQpt+c=;
+        b=Nf6doMw2TpIAOg9qwOtXBF4OkTdbF+PFn+/kNIpJXujcMTegwsMkbrz5hOABKwEyTB
+         WfvQpgmCNvyBfHVvhnstmh3pmqYYInUlw+gI0zKYOcuERwgf64N2UM8YRB6O6eRmnw7b
+         ikmVYPE0Lm4mbKR++H/xHg22wd7xiUJMXdzlGD4x0Ysj35YVT87DFZGUcmJ2hRkhb5Xm
+         q7BuRNJUhBkKgGRX2Li09DLISa3jNP8QrZ8CDaeuacZGUvjMqR3SvwshcEwc6Ma8nsCw
+         QjbmRSjUGTfLw6GSy00bOgaM7cZCNMcguKhYgvwhOgNRdEeo+1+HEyEf5BlTofpxJBAF
+         RjlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=pZDBeWxSoDaW9so+HKgnIStCCw0Inuk1PaP9mjbSPow=;
-        b=sBC8v9cs4w/TnRvQFgV49OhN40zVJ/XFvnunAGaFcA6/X/8BSEhgsVvVE9No+p41vP
-         cN4Fa2EDztquunkVHd1XozWVs0+ADPt+czYFvuvPHEtkIEu9LGBc1u6AEimdTL/dit8w
-         L66mU7wEBhLOoMANd9Sit5hPaf2exeYFWS1h9tvCD0h5VTYOG9RTuXhMiHfcAh0qW8jN
-         eSpaMcXaaZnCm4jvd/UWwKywORWwKvbv8pGX/Wk+HwxiZOQ0hWu198TYsAtMEIzzf9VZ
-         3MpVE3rGqZufa/nXi822+faMY8iVsJY7ZfwgOErLCgqMn8L+F3SA4drKlSY+XJwW4t6a
-         VwRw==
-X-Gm-Message-State: ACgBeo3bUPoQ+Vd9VbK14hIODOG7VVZH9w8DEOJZnJKTpxSEw7sXqjJk
-        OIXFwGhZSSeO0g/drzQkODHtIA==
-X-Google-Smtp-Source: AA6agR5W3eYq5Eak6estuvfuupN5ysbc8kQnmprzj2KXFpS8oupPo7ADaJCYelLa0ygWHxzZWm+jWA==
-X-Received: by 2002:a05:6e02:1a8f:b0:2f1:dc7a:c514 with SMTP id k15-20020a056e021a8f00b002f1dc7ac514mr2041198ilv.242.1662648055502;
-        Thu, 08 Sep 2022 07:40:55 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id p63-20020a022942000000b0034a59bc9b87sm8268143jap.76.2022.09.08.07.40.54
+        bh=Xy9pb3RiM0xLWbx8fAyLLiqpkCXXyc0gWIl/bOQpt+c=;
+        b=27BJXBcAmf+s5jrzNW5dvnc7fSNQynoVvIQGtHOcdP/tYOrORFtOOUo3pM9R0GpVxZ
+         xCIB6WXFE2ZPGFX8ftl4v0OSRfVjqgTSY6/kcfihbvA1cf0ykFPlgQcKT9IVwy6Sap+/
+         8OxmVtQgQ6QiWgbT1h3GyGRChMcdTy0abybKa84BJiM9oLI+/dSTBFoEcv9PCUIah2Xc
+         kYIpBk7WMXMZ8xp/Skl+Zi7MBE2QbjDaAUy8/zGsL6rUIl7GgP2SIlFtT0aQfvHtRMd9
+         xQ1scScv3tciyfYOQLGAEcROm+G4G2pJXaYtcqEv8hFVcqvxE2HXDkyy0ueokOcmTtl2
+         l91Q==
+X-Gm-Message-State: ACgBeo1DDejhf1h/KZ1FG9UhnW/BdHen8ugReELzLVsekwWku6XIrSfJ
+        HKMn4L3dyUMgKd+e6jl8HzR99w==
+X-Google-Smtp-Source: AA6agR4Naxulk0AE+BJy9l397YzzatWz5GlQhCpsnL30L2VVmgEoBDtCkTcFVURBWa8Uo2eT7Pd+8Q==
+X-Received: by 2002:a05:6512:e84:b0:497:71e0:3793 with SMTP id bi4-20020a0565120e8400b0049771e03793mr2777791lfb.171.1662648080630;
+        Thu, 08 Sep 2022 07:41:20 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id r7-20020a2e94c7000000b0026548b59479sm3084598ljh.64.2022.09.08.07.41.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 07:40:54 -0700 (PDT)
-Message-ID: <9cce17dc-2fba-d339-e88b-b76eb9a382b4@kernel.dk>
-Date:   Thu, 8 Sep 2022 08:40:53 -0600
+        Thu, 08 Sep 2022 07:41:20 -0700 (PDT)
+Message-ID: <da383499-fe9f-816e-8180-a9661a9c0496@linaro.org>
+Date:   Thu, 8 Sep 2022 16:41:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH RESEND] sbitmap: Use atomic_{,long}_try_cmpxchg in
- sbitmap.c
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 3/4] dt-bindings: net: snps,dwmac: Update reg maxitems
 Content-Language: en-US
-To:     Uros Bizjak <ubizjak@gmail.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220907182144.3245-1-ubizjak@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220907182144.3245-1-ubizjak@gmail.com>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, netdev@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>
+References: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
+ <20220907204924.2040384-4-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220907204924.2040384-4-bhupesh.sharma@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/22 12:21 PM, Uros Bizjak wrote:
-> Use atomic_long_try_cmpxchg instead of
-> atomic_long_cmpxchg (*ptr, old, new) == old in __sbitmap_queue_get_batch
-> and atomic_try_cmpxchg instead of atomic_cmpxchg (*ptr, old, new) == old
-> in __sbq_wake_up. x86 CMPXCHG instruction returns success in ZF flag, so
-> this change saves a compare after cmpxchg (and related move instruction
-> in front of cmpxchg).
+On 07/09/2022 22:49, Bhupesh Sharma wrote:
+> Since the Qualcomm dwmac based ETHQOS ethernet block
+> supports 64-bit register addresses, update the
+> reg maxitems inside snps,dwmac YAML bindings.
+
+Please wrap commit message according to Linux coding style / submission
+process:
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+
 > 
-> Also, atomic_long_cmpxchg implicitly assigns old *ptr value to "old"
-> when cmpxchg fails, enabling further code simplifications, e.g.
-> an extra memory read can be avoided in the loop.
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: David Miller <davem@davemloft.net>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> No functional change intended.
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index 2b6023ce3ac1..f89ca308d55f 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -94,7 +94,7 @@ properties:
+>  
+>    reg:
+>      minItems: 1
+> -    maxItems: 2
+> +    maxItems: 4
 
-It doesn't apply to the current tree, can you please resend one against
-for-6.1/block?
+Qualcomm ETHQOS schema allows only 2 in reg-names, so this does not make
+sense for Qualcomm and there are no users of 4 items.
 
--- 
-Jens Axboe
-
-
+Best regards,
+Krzysztof

@@ -2,96 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08115B2284
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D695B228D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiIHPhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S230407AbiIHPi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiIHPgt (ORCPT
+        with ESMTP id S229902AbiIHPiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:36:49 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282D6D275D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:36:48 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id bh13so17137565pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2K9yM4gO41snBVkzSq5EbskGviVZmCwT6wLF/ufhIYw=;
-        b=eOY85B940AXHYy+oPrDkHL0fYBRXMXzR15PBj3Yo+s1i8shl+Ap7Yx1fbAQY55wWCK
-         xt6521ImSs8s5Whia4oKKRh2eZhW4fbH7uIAMpisA0QvAajdsBvfufs5fxhwkoQnuJEz
-         SZm6vxWvXuIGr8b7rQjuqeIM6lAE9qd9GUYK1CRgEhlHhD9mQx+eKmmgm3iqWS11WJ7f
-         6qOza+GGGYuo1OaBMEH+liqrLBEDlGZ+cVTwv8VORq2Ju/rPzj5qukNtVzolQForclVx
-         NIt+vIQ+wwVUUWFifY1yUmEKL4OTC5YJuwpu7058wqN0ZXzLJOosRprkeyHjdqZ+BN4y
-         KKYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2K9yM4gO41snBVkzSq5EbskGviVZmCwT6wLF/ufhIYw=;
-        b=t/dj0llIHBbARrYZjWCz6tq8qiu45Wb5srH/XnFx+fp3XtgIPeg/9BAc+cP52C+xY7
-         AlEL2TOpu3iTrkeikKHqjRMwkQWc1RKdeTpl4u9nEHxpMG0aVyIVMOt2HRIyhxiYjU2I
-         O8xHN1KmpsZYHSlRdYA8tY8vPns/DSMdvt1l83XK9MfP0LftLxigVpFAPDcpQ0BiZcw9
-         CDjijd4gAcG0rwr15X0AOZqnATlPV/e3yj41TffL3k+AEc6bRxgNiQaRFwIXhVwRuvl2
-         ZF6q0kFOfCyEW8zgRItcBvJC6O2n8AoO3FzvSjyg2dwJ3nkyFGTed8UAYq2EDabGBGSx
-         /GNw==
-X-Gm-Message-State: ACgBeo23GM9WVQjZUW48wyp2puehbrZroP2D2v/FIysuh9TuAWaTVOIR
-        nAnRCR3Cc3gzhaIK1o0DjrYhhg==
-X-Google-Smtp-Source: AA6agR45NKB24H1MECWu4RCNOiCuz2m4d7TqOiG98PFWhMBlSe3Zk3mpex9v2oADnT8mPlJXDGuskA==
-X-Received: by 2002:a63:4719:0:b0:42c:5586:de2 with SMTP id u25-20020a634719000000b0042c55860de2mr8612184pga.158.1662651406849;
-        Thu, 08 Sep 2022 08:36:46 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id ms9-20020a17090b234900b002006428f01esm1914152pjb.55.2022.09.08.08.36.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 08:36:46 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 15:36:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com
-Subject: Re: [PATCH v3 0/7] KVM: x86: never write to memory from
- kvm_vcpu_check_block
-Message-ID: <YxoMCp+rMV1ZmRlU@google.com>
-References: <20220822170659.2527086-1-pbonzini@redhat.com>
+        Thu, 8 Sep 2022 11:38:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376DB9752F;
+        Thu,  8 Sep 2022 08:38:53 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288DZ9hU030911;
+        Thu, 8 Sep 2022 15:38:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Yv0FuTQbVv84IVdZh7TlEzUrjVusKhcsqSV7puFnrF4=;
+ b=Tp2BAGNs954+gUTqEQW8SFkVM0McXDgBV4SorWvCW1GSJz3BIK20yBj6iR6h0vz9xPbc
+ fZ84FOe3PIPnPAmNxVvfeY8kFnNyQlYqYyioWv0Ip4v+ZU5Vv/LtAgsYHuHleHZ2jK5z
+ IMFvaM2m02NIfBdtRyUpoCwGepIPkTL0af0NhBLYCw1EDJkLn4lG8brhIe862nJnRBeM
+ CAvU9S7o+mW0Qq4ieQ7XDyr88ebFsioTAP7l1P0Kuvj3RTDOCAKvjWhpb574nPiXAZt+
+ XjNMp18tfTcmlW9aEqVfnG4vP+rDVZuREtCm0LppviudpdP4wBDe1ocljuxmCUTu0U44 4A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfeuurvr9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 15:38:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 288FciVQ020803
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Sep 2022 15:38:44 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 8 Sep 2022 08:38:43 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] drm/msm/dp: cleared DP_DOWNSPREAD_CTRL register before start link training
+Date:   Thu, 8 Sep 2022 08:38:36 -0700
+Message-ID: <1662651516-30283-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822170659.2527086-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: O0BQrB8OKZgfOMgkhGtdW3SswoLNLfVF
+X-Proofpoint-GUID: O0BQrB8OKZgfOMgkhGtdW3SswoLNLfVF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 spamscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=999 clxscore=1015 phishscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209080057
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022, Paolo Bonzini wrote:
-> The following backtrace:
-> Paolo Bonzini (6):
->   KVM: x86: check validity of argument to KVM_SET_MP_STATE
+DOWNSPREAD_CTRL (0x107) shall be cleared to 0 upon power-on reset or an
+upstream device disconnect. This patch will enforce this rule by always
+cleared DOWNSPREAD_CTRL register to 0 before start link training. At rare
+case that DP MSA timing parameters may be mis-interpreted by the sink
+which causes audio sampling rate be calculated wrongly and cause audio
+did not work at sink if DOWNSPREAD_CTRL register is not cleared to 0.
+This patch also make sure bring sink out of D3 power-down mode into D0
+(normal operation mode) successfully by retrying 3 times.
 
-Skipping this one since it's already in 6.0 and AFAICT isn't strictly necessary
-for the rest of the series (shouldn't matter anyways?).
+Changes in v2:
+1) fix spelling at commit text
+2) merge ssc variable into encoding[0]
 
->   KVM: x86: make vendor code check for all nested events
->   KVM: x86: lapic does not have to process INIT if it is blocked
->   KVM: x86: never write to memory from kvm_vcpu_check_block
->   KVM: mips, x86: do not rely on KVM_REQ_UNHALT
->   KVM: remove KVM_REQ_UNHALT
-> 
-> Sean Christopherson (1):
->   KVM: nVMX: Make an event request when pending an MTF nested VM-Exit
+Changes in v3:
+-- correct spelling of DOWNSPREAD_CTRL
+-- replace err with len of ssize_t
 
-Pushed to branch `for_paolo/6.1` at:
+Fixes: 154b5a7da0fd ("drm/msm/dp: add displayPort driver support")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 13 +++++--------
+ drivers/gpu/drm/msm/dp/dp_link.c | 21 ++++++++++++---------
+ 2 files changed, 17 insertions(+), 17 deletions(-)
 
-    https://github.com/sean-jc/linux.git
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index ab6aa13..2c74c59 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1245,8 +1245,7 @@ static int dp_ctrl_link_train(struct dp_ctrl_private *ctrl,
+ {
+ 	int ret = 0;
+ 	const u8 *dpcd = ctrl->panel->dpcd;
+-	u8 encoding = DP_SET_ANSI_8B10B;
+-	u8 ssc;
++	u8 encoding[] = { 0, DP_SET_ANSI_8B10B };
+ 	u8 assr;
+ 	struct dp_link_info link_info = {0};
+ 
+@@ -1258,13 +1257,11 @@ static int dp_ctrl_link_train(struct dp_ctrl_private *ctrl,
+ 
+ 	dp_aux_link_configure(ctrl->aux, &link_info);
+ 
+-	if (drm_dp_max_downspread(dpcd)) {
+-		ssc = DP_SPREAD_AMP_0_5;
+-		drm_dp_dpcd_write(ctrl->aux, DP_DOWNSPREAD_CTRL, &ssc, 1);
+-	}
++	if (drm_dp_max_downspread(dpcd))
++		encoding[0] |= DP_SPREAD_AMP_0_5;
+ 
+-	drm_dp_dpcd_write(ctrl->aux, DP_MAIN_LINK_CHANNEL_CODING_SET,
+-				&encoding, 1);
++	/* config DOWNSPREAD_CTRL and MAIN_LINK_CHANNEL_CODING_SET */
++	drm_dp_dpcd_write(ctrl->aux, DP_DOWNSPREAD_CTRL, encoding, 2);
+ 
+ 	if (drm_dp_alternate_scrambler_reset_cap(dpcd)) {
+ 		assr = DP_ALTERNATE_SCRAMBLER_RESET_ENABLE;
+diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
+index 36f0af0..7b5ecf5 100644
+--- a/drivers/gpu/drm/msm/dp/dp_link.c
++++ b/drivers/gpu/drm/msm/dp/dp_link.c
+@@ -49,23 +49,26 @@ static int dp_aux_link_power_up(struct drm_dp_aux *aux,
+ 					struct dp_link_info *link)
+ {
+ 	u8 value;
+-	int err;
++	ssize_t len;
++	int i;
+ 
+ 	if (link->revision < 0x11)
+ 		return 0;
+ 
+-	err = drm_dp_dpcd_readb(aux, DP_SET_POWER, &value);
+-	if (err < 0)
+-		return err;
++	len = drm_dp_dpcd_readb(aux, DP_SET_POWER, &value);
++	if (len < 0)
++		return len;
+ 
+ 	value &= ~DP_SET_POWER_MASK;
+ 	value |= DP_SET_POWER_D0;
+ 
+-	err = drm_dp_dpcd_writeb(aux, DP_SET_POWER, value);
+-	if (err < 0)
+-		return err;
+-
+-	usleep_range(1000, 2000);
++	/* retry for 1ms to give the sink time to wake up */
++	for (i = 0; i < 3; i++) {
++	        len = drm_dp_dpcd_writeb(aux, DP_SET_POWER, value);
++		usleep_range(1000, 2000);
++		if (len == 1)
++			break;
++	}
+ 
+ 	return 0;
+ }
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-with a cosmetic cleanup to kvm_apic_has_events() and the MTF migration fix squashed
-in.

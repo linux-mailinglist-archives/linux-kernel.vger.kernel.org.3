@@ -2,131 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFBA5B1F94
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB29A5B1F98
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiIHNsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
+        id S231841AbiIHNtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiIHNsv (ORCPT
+        with ESMTP id S231775AbiIHNtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:48:51 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B95BED99E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:48:50 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3321c2a8d4cso165430307b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:48:50 -0700 (PDT)
+        Thu, 8 Sep 2022 09:49:35 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FBC6381
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:49:27 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id t65so5877305pgt.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=PrAW4wlGAMpC6dhne2p4JlSpdkZ+T0pQJSO4IRDJw/M=;
-        b=a5V303Grb1g6aa5PgMU+1/uY4uV2n3uOGiPp76bKJ9bWe3LdiMpqRBpPZo+c/uNnWq
-         K7ZfRZJS2lZWvmNNV0kI5GFGc5h/b/xvkqoVKy+t9ViefUqkXJxdmrSwwbRyS02bdg+r
-         tU5wRW4XERHfPrif6/firZHorfdjp3DEyYBhp/KZj4Hi1Lvsfdt90h5sM6qgSP6ht6Xu
-         4fN7L8vDAiYFG1+fTKKbogWRmCTkzMHKbK6j0Yj9Hut7K2y4L+YQxwT/E1WEN+habGT/
-         i1rM5BbJl+DCQsKghDS3VegCGhKf8NCy/zYzyEeu0k2MYI66YkJwXyI4rQp1Z3NwwDYN
-         fs3A==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=AoTWfXAoa8AgG4nMDe/SF1cuNtQoz1t7eSVMtl59jjI=;
+        b=qSZgZmR5MYqagzRko2k6fI48nqZ5yq742perWJmDRL9lVEpxlCrpoRMqaDcglYVhAa
+         7bkYNZMpSU+VZRs17YWB7wZB/T4rRSzMokR3thljE4oOEp9ARLYWSG/s4cNWF+Jp3epS
+         8gTDdAQv37qrH628QaSYQFzWWx5QGyw/X+lLy117J2odAqeiPF2bR+kdmor4cxrJWPPS
+         NSo8l3bnRjZ8M1lhGbJkpu230Xe6l0Up5IGBbxw5QcDXcVc45skHRRuD+n5V2GTJgCMk
+         fzZp5smYhVE3kEXni3GtuEqaLndX9CfYOwTvrHakz4Qoha6Jdbzc/S6rAX3U7+ULD5nR
+         sj5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PrAW4wlGAMpC6dhne2p4JlSpdkZ+T0pQJSO4IRDJw/M=;
-        b=cPZq5n7Qp57MKcbE6YuQon53xpuvCyitEjNP7zUo9X5okbymOX0fHE1Pm/KSOibY6e
-         QePdwrjSEc0yeL4Qg2xWpf/BQlabap+sk4Rze98e56LymxkIk0E6KYGbe/Qb4rfTvjO7
-         uc77lCUkdSEFNfJiLOsQpr9xQ3LGLu/l2Yf1OEH7z18u1fYLndE2wAaGcskMFrxB5rnL
-         NAW0q8suPGidyDqJ5D70ddlJ47PICLyPH9GCBfCU4pubtFnbivGbBpkPHhgVBzL/LPI7
-         GrO6RLrmjkpjYgFxqE6yio1m4xMU2GLs4W3XtHKMWOF5TEHrkyXzMBf8y7FbDZBm/yIx
-         o5hA==
-X-Gm-Message-State: ACgBeo3plDHF2ZN2zMaboSSvDhQtna1x6faXZscqidNLomWE+e15XxmW
-        EeQZI5K6DEcrqSvM60hUzta5/UMw0jTa5xpsaPw9Qw==
-X-Google-Smtp-Source: AA6agR5xKhbQw6oS6dDgQ+QgiFx+Piom7aCOd/755e8364yFiN8jf83N80N4aalNlJ+GmPBIfkCIg2Fx3l/i9T6y0Vw=
-X-Received: by 2002:a0d:d607:0:b0:348:a519:fbb7 with SMTP id
- y7-20020a0dd607000000b00348a519fbb7mr1674379ywd.255.1662644929486; Thu, 08
- Sep 2022 06:48:49 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=AoTWfXAoa8AgG4nMDe/SF1cuNtQoz1t7eSVMtl59jjI=;
+        b=yGVXPAoDgjXk6o7AsHyu+Xc8YfzqYSepK7xwvO8vh/PyQUwturEWDFXQ1TAHrQtmt/
+         BNJ0xYFpkObt2PuzpdA5eSw3v6lIUPvHiFUWmf/1xP4idjyfw/YZD2j316GXJQ4/Cqqc
+         Sf6xZ81+LHZntv4iMdBryQldImLkChDyvt5A40D933SKxsZf2UetVLgXmjaWMtry+5nF
+         ZybdW12DIcMHzF2nhBwMgvXzgbvONsQldmIKupEU8raqOWyOVY2gflL79yb6fZh5NhEE
+         ygTA19gXzbO0z+2QtCbmOFZfE4QszqSrgFGHZXSLfIOqpFo0qwTosoOK4MmG+Rclnk1x
+         mPHg==
+X-Gm-Message-State: ACgBeo3+HsqLjpBUZgE5kUosBEcYgd82lOj8JI0gu/odAWXNkVICcgCY
+        bh8Z1uyWGs+hhD8FnMOsdJv576TEciT5/Q==
+X-Google-Smtp-Source: AA6agR6caGBnqC86j+5h6qiwf0CrcOUbZjwmryaQEj93QMk6IV66kjO/Okiv9jnT9S1Xe29UzG3ofQ==
+X-Received: by 2002:a05:6a00:842:b0:52e:2515:d657 with SMTP id q2-20020a056a00084200b0052e2515d657mr9029865pfk.31.1662644966925;
+        Thu, 08 Sep 2022 06:49:26 -0700 (PDT)
+Received: from [10.4.233.238] ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id m16-20020a170902f65000b0017682b90532sm12418215plg.194.2022.09.08.06.49.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 06:49:26 -0700 (PDT)
+Message-ID: <b3d2c694-e2a2-63ea-817f-113b5445dfda@bytedance.com>
+Date:   Thu, 8 Sep 2022 21:49:21 +0800
 MIME-Version: 1.0
-References: <202209082025.QtFc63hS-lkp@intel.com>
-In-Reply-To: <202209082025.QtFc63hS-lkp@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 8 Sep 2022 15:48:13 +0200
-Message-ID: <CANpmjNN=Q_Ccr6Z9_1H2pz-yzFSiAD9ncx7efP=WkroBMtSedw@mail.gmail.com>
-Subject: Re: ld.lld: error: undefined symbol: __tsan_memcpy
-To:     kernel test robot <lkp@intel.com>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.1
+Subject: Re: [PATCH] sched/fair: Fix misuse of available_idle_cpu()
+To:     Peter Zijlstra <peterz@infradead.org>, Mel Gorman <mgorman@suse.de>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Rohit Jain <rohit.k.jain@oracle.com>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220908080702.58938-1-wuyun.abel@bytedance.com>
+ <20220908103632.yzm5boxrr3nmvhpm@suse.de>
+ <YxnrTdwA493gIHS8@hirez.programming.kicks-ass.net>
+Content-Language: en-US
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <YxnrTdwA493gIHS8@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is being fixed:
-https://lore.kernel.org/all/20220907173903.2268161-1-elver@google.com/T/#u
+On 9/8/22 9:17 PM, Peter Zijlstra wrote:
+> On Thu, Sep 08, 2022 at 11:36:32AM +0100, Mel Gorman wrote:
+>> On Thu, Sep 08, 2022 at 04:07:02PM +0800, Abel Wu wrote:
+>>> The function available_idle_cpu() was introduced to distinguish
+>>> between the code paths that cares if the vCPU is preempted and
+>>> the ones don't care. In general, available_idle_cpu() is used in
+>>> selecting cpus for immediate use, e.g. ttwu. While idle_cpu() is
+>>> used in the paths that only cares about the cpu is idle or not,
+>>> and __update_idle_core() is one of them.
+>>>
+>>> Use idle_cpu() instead in the idle path to make has_idle_core
+>>> a better hint.
+>>>
+>>> Fixes: 943d355d7fee (sched/core: Distinguish between idle_cpu() calls based on desired effect, introduce available_idle_cpu())
+>>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+>>
+>> Seems fair. As vCPU preemption is specific to virtualisation, it is very
+>> unlikely that SMT is exposed to the guest so the impact of the patch is
+> 
+> Right; only pinned guests typically expose such topology information
+> (anything else would be quite broken).
+> 
+>> minimal but I still think it's right so;
+> 
+> I'm not convinced; all of select_idle_sibling() seems to use
+> available_idle_cpu(), and that's the only consumer of
+> __update_idle_core(), so in that respect the current state makes sense.
 
-This is an extremely fresh version of Clang, which has no release yet.
-So the report is not urgent.
+Hi Peter, Mel, thanks for your reviewing!
 
-On Thu, 8 Sept 2022 at 14:33, kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   0066f1b0e27556381402db3ff31f85d2a2265858
-> commit: dd03762ab608e058c8f390ad9cf667e490089796 arm64: Enable KCSAN
-> date:   9 months ago
-> config: arm64-randconfig-r031-20220908
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd03762ab608e058c8f390ad9cf667e490089796
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout dd03762ab608e058c8f390ad9cf667e490089796
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: undefined symbol: __tsan_memcpy
->    >>> referenced by main.c
->    >>>               main.o:(do_one_initcall) in archive init/built-in.a
->    >>> referenced by main.c
->    >>>               main.o:(setup_command_line) in archive init/built-in.a
->    >>> referenced by initramfs.c
->    >>>               initramfs.o:(panic_show_mem) in archive init/built-in.a
->    >>> referenced 4283 more times
-> --
-> >> ld.lld: error: undefined symbol: __tsan_memset
->    >>> referenced by main.c
->    >>>               main.o:(init_setup) in archive init/built-in.a
->    >>> referenced by main.c
->    >>>               main.o:(rdinit_setup) in archive init/built-in.a
->    >>> referenced by do_mounts_rd.c
->    >>>               do_mounts_rd.o:(identify_ramdisk_image) in archive init/built-in.a
->    >>> referenced 6155 more times
-> --
-> >> ld.lld: error: undefined symbol: __tsan_memmove
->    >>> referenced by main.c
->    >>>               main.o:(repair_env_string) in archive init/built-in.a
->    >>> referenced by range.c
->    >>>               range.o:(add_range_with_merge) in archive kernel/built-in.a
->    >>> referenced by printk.c
->    >>>               printk/printk.o:(vprintk_store) in archive kernel/built-in.a
->    >>> referenced 252 more times
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+My thought was that the preempted core can become active again before
+select_idle_sibling() is called, so using available_idle_cpu() in
+__update_idle_core() can potentially lose the opportunity to kick an
+idle core running. While the downside of using idle_cpu() is that a
+full scan can be triggered irrespective of non-preempted cores exist,
+but even available_idle_cpu() can not make sure of that either.
+
+BTW, I am also confused with select_idle_core() in which all the cpus
+of a core need to be non-preempted before the core can be taken as an
+idle core. IMHO, it might be enough that at least one cpu of an idle
+core is non-preempted and allowed by task's taskset.
+
+Thanks & BR,
+Abel

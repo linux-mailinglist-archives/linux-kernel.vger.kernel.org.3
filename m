@@ -2,77 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C805B1489
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B306B5B146F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiIHGRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S230201AbiIHGLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiIHGRs (ORCPT
+        with ESMTP id S229896AbiIHGLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:17:48 -0400
-X-Greylist: delayed 605 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 23:17:46 PDT
-Received: from vsp02-out.oderland.com (vsp02-out.oderland.com [IPv6:2a02:28f0::27:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633D9F8E9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:17:45 -0700 (PDT)
-X-Scanned-Cookie: f500bda16b244583931b552d2d35209f2e653c44
-Received: from office.oderland.com (office.oderland.com [91.201.60.5])
-        by vsp-out.oderland.com (Halon) with ESMTPSA
-        id 8aa1c8a6-2f3c-11ed-896b-b78c77300f9c;
-        Thu, 08 Sep 2022 08:07:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=oderland.se
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:Cc:
-        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=7JqDpecRODlTuakjMauVpsCN7cmSweX5A+Tuq3G622o=; b=KU0yVNqMlg0plNl8/TAr/32za8
-        Byl78iUSpA/VCl3dwojDCv5b/YvLlpbOmd0GPvPtQDU0r9WREaVzJYfKm14t7i1grFe3OnEVpkTIh
-        iwhUrgQdupU7XwtKMM0WgLbSL0ypi5pgPrIG9s14KXBFAJZRJA4r3rnKjq9sMYAaBWTpV/8cxRO5K
-        OIBy/uo0X3VE9jJF0G6WiuGW3erOYxxU8bi4UNkZa+U1Z5s18neWIdyaqZ+MaPIAgiw4fKmLxHu3r
-        QlayX26IxftDFJbFd3ER33OBtRtZox/eJtYGq2ZcZy1saq1jQtfHtTIXT/lC954NX+sGDm3AdJJyd
-        7xeKSGOQ==;
-Received: from 160.193-180-18.r.oderland.com ([193.180.18.160]:47584 helo=[10.137.0.14])
-        by office.oderland.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <josef@oderland.se>)
-        id 1oWAhQ-00FjFi-LF;
-        Thu, 08 Sep 2022 08:07:38 +0200
-Message-ID: <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
-Date:   Thu, 8 Sep 2022 08:07:37 +0200
+        Thu, 8 Sep 2022 02:11:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FC7AC24F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662617475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4sZiKf7Pb+Ro+0hy7kuWa+zv8cmGXs8YS6IIyb9ffg=;
+        b=Du9sKF9PWQ2ggf4koMJcbojFLDbaZl3U+C4Nfu1NtGhidQspJCVrEnD53PqEoFYS9FcvfS
+        UdQHbIHobLlD7LGMHVRniIesHNe/mJsAfgO3x9zNB8M9XHFdytjA4X3+CkT5eOl03KWCiA
+        UBCXRvSxrJKWHYRXSbpgCIp/wVOcCkA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-552-Ww0xld40Pz-8TyeFJln2vA-1; Thu, 08 Sep 2022 02:11:12 -0400
+X-MC-Unique: Ww0xld40Pz-8TyeFJln2vA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82919811E80;
+        Thu,  8 Sep 2022 06:11:11 +0000 (UTC)
+Received: from butterfly.localnet (dhcp-10-40-5-89.brq.redhat.com [10.40.5.89])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EDD03492C3B;
+        Thu,  8 Sep 2022 06:11:07 +0000 (UTC)
+From:   Oleksandr Natalenko <oleksandr@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Will Deacon <will@kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Stephen Kitt <steve@sk2.org>, Rob Herring <robh@kernel.org>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Renaud =?ISO-8859-1?Q?M=E9trich?= <rmetrich@redhat.com>,
+        Grzegorz Halat <ghalat@redhat.com>, Qi Guo <qguo@redhat.com>
+Subject: Re: [PATCH] core_pattern: add CPU specifier
+Date:   Thu, 08 Sep 2022 08:11:07 +0200
+Message-ID: <12050461.O9o76ZdvQC@redhat.com>
+Organization: Red Hat
+In-Reply-To: <877d2ec0ac.fsf@email.froward.int.ebiederm.org>
+References: <20220903064330.20772-1-oleksandr@redhat.com> <20220907173438.GA15992@redhat.com> <877d2ec0ac.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
- Thunderbird/104.0
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
- <Yxj1ZQjBfdG1u93d@shikoro>
-Content-Language: en-US
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Josef Johansson <josef@oderland.se>
-In-Reply-To: <Yxj1ZQjBfdG1u93d@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-x-oderland-domain-valid: yes
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/22 21:47, Wolfram Sang wrote:
-> On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
->> ACPI core in conjunction with platform driver core provides
->> an infrastructure to enumerate ACPI devices. Use it in order
->> to remove a lot of boilerplate code.
->>
->> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Josef, do you have resources to test this patch before I apply it?
->
-Yes, I'll make that happen today.
+Hello.
+
+On =C4=8Dtvrtek 8. z=C3=A1=C5=99=C3=AD 2022 0:00:43 CEST Eric W. Biederman =
+wrote:
+> Oleg Nesterov <oleg@redhat.com> writes:
+>=20
+> > On 09/07, Oleksandr Natalenko wrote:
+> >>
+> >> The advantage of having CPU recorded in the file name is that
+> >> in case of multiple cores one can summarise them with a simple
+> >> ls+grep without invoking a fully-featured debugger to find out
+> >> whether the segfaults happened on the same CPU.
+> >
+> > Besides, if you only need to gather the statistics about the faulting
+> > CPU(s), you do not even need to actually dump the the core. For example,
+> > something like
+> >
+> > 	#!/usr/bin/sh
+> >
+> > 	echo $* >> path/to/coredump-stat.txt
+> >
+> > and
+> > 	echo '| path-to-script-above %C' >/proc/sys/kernel/core_pattern
+> >
+> > can help.
+>=20
+> So I am confused.  I thought someone had modified print_fatal_signal
+> to print this information.  Looking at the code now I don't see it,
+> but perhaps that is in linux-next somewhere.
+
+That's a different story that gets solved here: [1] [2].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=
+=3Dx86/cpu&id=3Dc926087eb38520b268515ae1a842db6db62554cc
+[2] https://lore.kernel.org/lkml/20220811024903.178925-1-ira.weiny@intel.co=
+m/
+
+> That would seem to be the really obvious place to put this and much
+> closer to the original fault so we ware more likely to record the
+> cpu on which things actually happened on.
+>=20
+> If we don't care about the core dump just getting the information in
+> syslog where it can be analyzed seems like the thing to do.
+>=20
+> For a developers box putting it in core pattern makes sense, isn't a
+> hinderance to use.  For anyone else's box the information needs to come
+> out in a way that allows automated tools to look for a pattern.
+> Requiring someone to take an extra step to print the information seems
+> a hinderance to automated tools doing the looking.
+>=20
+> Eric
+>=20
+>=20
+
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+Principal Software Maintenance Engineer
+
+

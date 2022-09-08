@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC625B14C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDF15B14C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiIHGhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        id S230392AbiIHGiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiIHGhp (ORCPT
+        with ESMTP id S229970AbiIHGiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:37:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5E6C0E6F
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:37:42 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 08:37:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662619060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5caOl+kTQwoBp97UxIKqZHl3t4gL124ornrbJ/bWIMw=;
-        b=l1VQEKhOnTHbOA1hgaePJR/sBv8m7EvEZtmrArlvWiJ3eVRLCEi7FhQJH+UvEFVj/Q36/b
-        74YyuT6y4aPvjbKfvznOuK2CJFfmpeLILgiMKAQAQ86smAdqlb2xVWf1WqYIwVK4gh2uM7
-        kHQCbNMUSHQctzBxNWojrkkWURrGgicIzrufnZtX4QqRpSlM0lXzVI/FRqXRfBdB0rqNMA
-        qra19fekkqfI56jjoJS8TdKqfQVdV6A+rx1Gt6jO4sFffQZAlE2QjpVxslq0GoatUqF3Nj
-        F1FQ0Iy7YgKv2PN9zRp69iQ5H4Yu2uhI0fPOSLU4mNQD7kGJlTGVMRas6ndqow==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662619060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5caOl+kTQwoBp97UxIKqZHl3t4gL124ornrbJ/bWIMw=;
-        b=ZvbOSUgXiTVvIwNbwHny++jRoB8avSn+6UMWSXMeJSR/zb00i2OH2g97Dt76JodCxKwfIJ
-        A2v45Qy59/Ol6vBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        Thu, 8 Sep 2022 02:38:01 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3FEC6515;
+        Wed,  7 Sep 2022 23:37:59 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id z187so16919677pfb.12;
+        Wed, 07 Sep 2022 23:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=cvQFVKfsfpYxMErEhYXJffwhmqD/tkknSq1Emm1w1rc=;
+        b=OG40dAmcsya0mIfrs6M7VTGhsPQyc99M2zpnYeKUWlGxufzblnKLD/nYUPy/4B242c
+         PJj8eBvGrP7BtFMn0mr5prdEbu5LAT9j5o7d/nuGcYH9f2HLhkhsc7RGC8gDVmdc7J3G
+         tzq3zR+BUw5sSdJ6By3uj/31+WciaGyDV2UWLhkTTFXf3QhfufE79HLfGrMMBMyp+ufh
+         NyrR/9LU9nqQw3dsHNwJJrsqrgbNAGLUU0uzg2y2HmvGaSQWt4F1sR4k03w/FrwUUtuR
+         rMqv/xKkEy36HVFUD3E4daujJ7oZd3Dda5/aszKzA2NhcRDa2r9cKFQc/3ftaj5mEixu
+         vLNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=cvQFVKfsfpYxMErEhYXJffwhmqD/tkknSq1Emm1w1rc=;
+        b=2K1tqeUQ9D9sC/+Cgf4eNmD5RKwBgP5GD3Mi6DETPkYSJVNoDqhFMTdvxRwV+QNBeQ
+         X/VuvMvtP36LBVWlE5ABNMEAuvzLVh5usDBj0UmddszwIJc37EX4x+C7r5e7vx13ntA2
+         XbsZ6iaMW2Uzp5poxflFs3b5YmlFH/2NGrQQP8LNcq+4PvTJSbPGc6tHPEOkgYSd8X6v
+         OXYQ6/ctFCTkOgw+gYWuBDfk/7xsVnHZ1wKxfbb5QrZTIkVeASbl29ivG1689ofDkDBG
+         QU1FmWtSD32VGKL89+8nJKI9WbP33lN0OhzNINP5uvnavGHgmXNhkx3B/nG+JPKMNV4L
+         01/A==
+X-Gm-Message-State: ACgBeo1kiVBTLo/ndpXy8l1nNF4M7/GCR4UT5SR+aM91wVgnUKnWlPRE
+        BAv0O5txUEgeBidLdyNrGHWPgfmn99k=
+X-Google-Smtp-Source: AA6agR5HuV/ew0Uwj8ErnMLTC7jyrabpINK0Zcppz8U66W1F9QiUbP2zlOOEyMagiUtMQOTWu1S+PA==
+X-Received: by 2002:a65:5941:0:b0:41d:a203:c043 with SMTP id g1-20020a655941000000b0041da203c043mr6466422pgu.483.1662619078869;
+        Wed, 07 Sep 2022 23:37:58 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:7f21:d032:3f14:a4e6])
+        by smtp.gmail.com with ESMTPSA id o33-20020a17090a0a2400b001fb0fc33d72sm890716pjo.47.2022.09.07.23.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 23:37:56 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] locking: Detect includes rwlock.h outside of spinlock.h
-Message-ID: <YxmNsnCPSPt1SJcz@linutronix.de>
-References: <YweemHxJx7O8rjBx@linutronix.de>
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Subject: [PATCH 0/4] perf lock contention: Improve call stack handling (v1)
+Date:   Wed,  7 Sep 2022 23:37:50 -0700
+Message-Id: <20220908063754.1369709-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YweemHxJx7O8rjBx@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,35 +75,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-25 18:08:59 [+0200], To linux-kernel@vger.kernel.org wrote:
-> From: Michael S. Tsirkin <mst@redhat.com>
->=20
-> The check for __LINUX_SPINLOCK_H within rwlock.h (and other files)
-> detects the direct include of the header file if it is at the very
-> beginning of the include section.
-> If it is listed later then chances are high that spinlock.h was already
-> included (including rwlock.h) and the additional listing of rwlock.h
-> will not cause any failure.
->=20
-> On PREEMPT_RT this additional rwlock.h will lead to compile failures
-> since it uses a different rwlock implementation.
->=20
-> Add __LINUX_INSIDE_SPINLOCK_H to spinlock.h and check for this instead
-> of __LINUX_SPINLOCK_H to detect wrong includes. This will help detect
-> direct includes of rwlock.h with without PREEMPT_RT enabled.
->=20
-> [ bigeasy: add remaining __LINUX_SPINLOCK_H user and rewrite
->   commit description. ]
->=20
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->=20
-> This is to avoid patches like
->    https://lkml.kernel.org/r/20220816074816.173227-1-bigeasy@linutronix.de
->=20
-> in the future which is not the first I sent=E2=80=A6
+Hello,
 
-polite *ping*
+I found that call stack from the lock tracepoint (using bpf_get_stackid)
+can be different on each configuration.  For example it's very different
+when I run it on a VM than on a real machine.
 
-Sebastian
+The perf lock contention relies on the stack trace to get the lock
+caller names, this kind of difference can be annoying.  Ideally we could
+skip stack trace entries for internal BPF or lock functions and get the
+correct caller, but it's not the case as of today.  Currently it's hard
+coded to control the behavior of stack traces for the lock contention
+tracepoints.
+
+To handle those differences, add two new options to control the number of
+stack entries and how many it skips.  The default value worked well on
+my VM setup, but I had to use --stack-skip=5 on real machines.
+
+You can get it from 'perf/lock-stack-v1' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (4):
+  perf lock contention: Factor out get_symbol_name_offset()
+  perf lock contention: Show full callstack with -v option
+  perf lock contention: Allow to change stack depth and skip
+  perf lock contention: Skip stack trace from BPF
+
+ tools/perf/Documentation/perf-lock.txt        |  6 ++
+ tools/perf/builtin-lock.c                     | 89 ++++++++++++++-----
+ tools/perf/util/bpf_lock_contention.c         | 21 +++--
+ .../perf/util/bpf_skel/lock_contention.bpf.c  |  3 +-
+ tools/perf/util/lock-contention.h             |  3 +
+ 5 files changed, 96 insertions(+), 26 deletions(-)
+
+
+base-commit: 6c3bd8d3e01d9014312caa52e4ef1c29d5249648
+-- 
+2.37.2.789.g6183377224-goog
+

@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FB25B163E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3F65B1649
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiIHIFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S231224AbiIHIH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiIHIFu (ORCPT
+        with ESMTP id S231255AbiIHIHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:05:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C3677EB6;
-        Thu,  8 Sep 2022 01:05:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0008D6600357;
-        Thu,  8 Sep 2022 09:05:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662624347;
-        bh=2Y7yHVTAEwpkAdCsJ8eUbrLTKB/JI5p+uR+ZL9OPGCA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=as63iDwhRgAB7CCvwKim55w9EyCmboOuEiPtZK1t69u88aDlI/SjFC9dmHu5+dlyi
-         TnKsv9JOfGBjw7aMbjyr3m5Cuyoy6r00mQCeqEi7LL9OtqZRPEpnKZIEf/ZduGi7B3
-         RzEzvCcvbUihgnBK/aT768PuIZhM9RiTPlFijutTp4g9z7HHMR/hrVIeJtkazwE/3g
-         skIZvBcLIN9lHkTiWZehnnEwDw+mkWBcBdQyWi73Xm026mELU+Atw+rT6+1rktdF8O
-         CEIaHbfiC+cDHA+bz83mmdLmrUoW1pEliymco2qx6iJ2eJx1QD2sAa96nxrAL3PzZm
-         gI8hV6jc+RSGA==
-Message-ID: <60b79718-3a33-1bc5-b271-012d94c86491@collabora.com>
-Date:   Thu, 8 Sep 2022 10:05:44 +0200
+        Thu, 8 Sep 2022 04:07:21 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E98D5724
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:07:19 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id z9-20020a17090a468900b001ffff693b27so1584942pjf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=YzUytPikcty1WYKrU+7GKiUQs4mtIiNZsb2UDVO2dPA=;
+        b=cWcRXPvbteaUu350jbBJ1g/PJSCGwmK82zACgnDHTH5LgubfzIPeGbysldTJLebFKZ
+         GGq2u+8LRM9actV9+0IkIdAqtvm9R8s+AQc3fyMX1h2b5iyEMFYHdlvenBmtXyPUc8gn
+         O1f1sjGXGbvpDMy761SXvQ0fwBdY0/lvAWSIV2nOYX1yYbzqPaH3jizZDE5vWlNabKSv
+         QX9RHyGJoFHyS5KsfjzSj+7ffrgB0BslhJcHiRSCAK8oVtSOFbRWSNilEPKVB3Tu7zCI
+         hND64WxV5ut8VPa2KGYwD1z6gDfMaUK3ypOXJJGJGUAQQaSg5NzyeyGcoUQl8i1mUDlf
+         e60g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=YzUytPikcty1WYKrU+7GKiUQs4mtIiNZsb2UDVO2dPA=;
+        b=wEqbBpw+CDUUNLSsZcN39ZgFaNbU+unMBtjCg4fPvtf4Yin1wuMadXK5pCdIzndJ5w
+         R5tUDdW/oHVXL0n5pKefvbv6ONthl2Od7W95n+dZF8gk1lf2ivDgO7DkNW+tT15z0kHT
+         jFmMRFv6j7ZDBNsqZmMwkI8KS6SmrTeJ4v8N58XfLz/Yhi6219kI575dOuhV1pOkbX9U
+         gM/CfHnqbUQsQ9LqZw4ENw07JZrf0zCrKijmpY1jKcPmT8Czpvk7KpVlUAYeyN2TEV12
+         l/diy8RccfuGd6H2/h3V0+YZRzIDbNLQZiaLqqElfv80jhSrHImAz4knHINH2GWuXec+
+         SC5Q==
+X-Gm-Message-State: ACgBeo12SpcrPCyCjDkqvSUHvuJ4xeayvQAOyAcuDEOexwHdtqAqPfDS
+        v/VIt2/+vOYJ/tLDomG18NBHoA==
+X-Google-Smtp-Source: AA6agR6oCoelnac7U+zYnru+A9arygx//pWUK1YKaWD/Aum5XbxpdRdj3vrRoHUzTEViWitAe/W2Jg==
+X-Received: by 2002:a17:90a:74c5:b0:200:2d89:ef13 with SMTP id p5-20020a17090a74c500b002002d89ef13mr2898386pjl.81.1662624439235;
+        Thu, 08 Sep 2022 01:07:19 -0700 (PDT)
+Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.235])
+        by smtp.gmail.com with ESMTPSA id c23-20020aa79537000000b0053bbaab3511sm2146067pfp.172.2022.09.08.01.07.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 08 Sep 2022 01:07:19 -0700 (PDT)
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Rohit Jain <rohit.k.jain@oracle.com>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        Abel Wu <wuyun.abel@bytedance.com>
+Subject: [PATCH] sched/fair: Fix misuse of available_idle_cpu()
+Date:   Thu,  8 Sep 2022 16:07:02 +0800
+Message-Id: <20220908080702.58938-1-wuyun.abel@bytedance.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 3/7] phy: phy-mtk-tphy: add property to set
- pre-emphasis
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Eddie Hung <eddie.hung@mediatek.com>
-References: <20220829080830.5378-1-chunfeng.yun@mediatek.com>
- <20220829080830.5378-3-chunfeng.yun@mediatek.com>
- <219aef5a-af2a-6873-f682-cb6aef862425@collabora.com>
- <a4e5f9e360a3fc6d094bc719aa4523a4886cae93.camel@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <a4e5f9e360a3fc6d094bc719aa4523a4886cae93.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/09/22 03:39, Chunfeng Yun ha scritto:
-> On Wed, 2022-08-31 at 10:14 +0200, AngeloGioacchino Del Regno wrote:
->> Il 29/08/22 10:08, Chunfeng Yun ha scritto:
->>> Add a property to set usb2 phy's pre-emphasis, it's disabled by
->>> default
->>> on some SoCs.
->>>
->>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
->>> ---
->>> v2: no changes
->>> ---
->>>    drivers/phy/mediatek/phy-mtk-tphy.c | 10 ++++++++++
->>>    1 file changed, 10 insertions(+)
->>>
->>> diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c
->>> b/drivers/phy/mediatek/phy-mtk-tphy.c
->>> index 8ee7682b8e93..986fde0f63a0 100644
->>> --- a/drivers/phy/mediatek/phy-mtk-tphy.c
->>> +++ b/drivers/phy/mediatek/phy-mtk-tphy.c
->>> @@ -72,6 +72,8 @@
->>>    #define PA5_RG_U2_HS_100U_U3_EN	BIT(11)
->>>    
->>>    #define U3P_USBPHYACR6		0x018
->>> +#define PA6_RG_U2_PRE_EMP		GENMASK(31, 30)
->>> +#define PA6_RG_U2_PRE_EMP_VAL(x)	((0x3 & (x)) << 30)
->>
->> Hello Chunfeng,
->>
->> can you please clarify which SoC is this change referred to?
-> These bits are reserved before using 12nm process.
-> 
->>
->> If I'm not missing anything, there may be a register layout conflict
-> As I know these reserved bits are not used before, but now used to tune
-> pre-emphasis after supporting 12nm or 5nm process.
-> 
->> between
->> one version and the other for T-PHYs, for which, it may be a good
->> idea to add
->> a PHY version check before allowing to write settings that are
->> supported only
->> on a specific IP...
-> Do you know which SoC used bits, I can confirm it with our DE.
-> 
+The function available_idle_cpu() was introduced to distinguish
+between the code paths that cares if the vCPU is preempted and
+the ones don't care. In general, available_idle_cpu() is used in
+selecting cpus for immediate use, e.g. ttwu. While idle_cpu() is
+used in the paths that only cares about the cpu is idle or not,
+and __update_idle_core() is one of them.
 
-MT8195, MT8186 (and others), RG_USB20_PHY_REV is marked as bit 31:24.
+Use idle_cpu() instead in the idle path to make has_idle_core
+a better hint.
 
-Regards,
-Angelo
+Fixes: 943d355d7fee (sched/core: Distinguish between idle_cpu() calls based on desired effect, introduce available_idle_cpu())
+Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+---
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index efceb670e755..5a76d814f8bc 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6302,7 +6302,7 @@ void __update_idle_core(struct rq *rq)
+ 		if (cpu == core)
+ 			continue;
+ 
+-		if (!available_idle_cpu(cpu))
++		if (!idle_cpu(cpu))
+ 			goto unlock;
+ 	}
+ 
+-- 
+2.37.3
 

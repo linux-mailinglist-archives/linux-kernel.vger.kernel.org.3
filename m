@@ -2,129 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0075B1709
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1A75B170C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiIHIba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S230500AbiIHIbr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Sep 2022 04:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiIHIb2 (ORCPT
+        with ESMTP id S230483AbiIHIbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:31:28 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862DF5E546
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:31:26 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id c2-20020a6bec02000000b00689b26e92f0so10779978ioh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:31:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=tmob1Pwx3g7IXf8kuVys20j3kfq72jNaVH4vG9pNamI=;
-        b=6iIbfVR0xAeZfQa+BfKQeaOC9HPai6g6qgzGMRGXat/kbQq4nkI5KThV/EGG0trBFc
-         ahqZKu69phd8PxhJX5InL0+jjcp7qf+5hXN5Y+nOKF47FDOxa15o/ro68xk3to/EjaQw
-         0jSilLqco1HPmZvGSCCRUk+qP2zEoDPGD2AOGCJbbwMkegoYpnWVp94QLSU8ul7oo0hx
-         El7RDix+dAE+ponclVacHE2kO4cui+IuMUA5wIY4oL/W1f8GqzWazZiIiARtKMW0lD+n
-         7ZYwCejpM+yUsPSKxhi66mCq4lI7Z5k3aG3zwxrETxn2O/EDb02sqOO6/ugWqYvniZE5
-         KOLw==
-X-Gm-Message-State: ACgBeo2xzNPzyO6m/Jq2U06gNcNHXJJMx+xKkHOxLlJMqGGqdkMJwadt
-        j2ausJuTBeb106xOG8Qobu3cyZ+9smaehX8Ur0gVsfsPHidE
-X-Google-Smtp-Source: AA6agR4RyaQZMb0LT52K4J1w2Rh2S6e8XRPB1RjIvWa0mWOqyYR4CkJey2RmksPuRtZZgU0/givQVnJIleHFCKC7PaJf7Q2dp00O
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4303:b0:34c:143b:d394 with SMTP id
- bt3-20020a056638430300b0034c143bd394mr4082777jab.21.1662625885923; Thu, 08
- Sep 2022 01:31:25 -0700 (PDT)
-Date:   Thu, 08 Sep 2022 01:31:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000532e0e05e826413c@google.com>
-Subject: [syzbot] WARNING: ODEBUG bug in mgmt_index_removed
-From:   syzbot <syzbot+844c7bf1b1aa4119c5de@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+        Thu, 8 Sep 2022 04:31:41 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB804E1A8E;
+        Thu,  8 Sep 2022 01:31:37 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 54C54200005;
+        Thu,  8 Sep 2022 08:31:35 +0000 (UTC)
+Message-ID: <7b3641c5dcec258d03b178dfd1cc25b1ce81e880.camel@hadess.net>
+Subject: Re: [PATCH] HID: sony: Support for DS4 clones that do not implement
+ feature report 0x81
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Ivan Mironov <mironov.ivan@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 08 Sep 2022 10:31:34 +0200
+In-Reply-To: <20210113173402.17030-1-mironov.ivan@gmail.com>
+References: <20210113173402.17030-1-mironov.ivan@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 2021-01-13 at 22:34 +0500, Ivan Mironov wrote:
+> There are clones of DualShock 4 that are very similar to the
+> originals,
+> except of 1) they do not support HID feature report 0x81 and 2) they
+> do
+> not have any USB Audio interfaces despite they physically have audio
+> jack.
 
-syzbot found the following issue on:
+Do you have the brand/catalogue name for the device on which you tested
+this? I found a "YCCTEAM" joypad, but it seems that the audio interface
+is supposed to work (maybe that's only on wireless?).
 
-HEAD commit:    e47eb90a0a9a Add linux-next specific files for 20220901
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13fad8f5080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7933882276523081
-dashboard link: https://syzkaller.appspot.com/bug?extid=844c7bf1b1aa4119c5de
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Do you think you could also look into a patch for BlueZ's cable pairing
+plugin? It uses 0x81 too, even though it does have some fallback code.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+844c7bf1b1aa4119c5de@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
-WARNING: CPU: 1 PID: 4347 at lib/debugobjects.c:509 debug_print_object+0x16e/0x250 lib/debugobjects.c:509
-Modules linked in:
-CPU: 1 PID: 4347 Comm: syz-executor.1 Not tainted 6.0.0-rc3-next-20220901-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:509
-Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 00 46 49 8a 4c 89 ee 48 c7 c7 a0 39 49 8a e8 36 a5 3a 05 <0f> 0b 83 05 b5 56 dc 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffffc900148279c0 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff81620448 RDI: fffff52002904f2a
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 203a47554245444f R12: ffffffff89ef0860
-R13: ffffffff8a494060 R14: ffffffff816b41b0 R15: 1ffff92002904f43
-FS:  00007f431bb46700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000300 CR3: 0000000027d81000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- debug_object_assert_init lib/debugobjects.c:899 [inline]
- debug_object_assert_init+0x1f4/0x2e0 lib/debugobjects.c:870
- debug_timer_assert_init kernel/time/timer.c:792 [inline]
- debug_assert_init kernel/time/timer.c:837 [inline]
- del_timer+0x6d/0x110 kernel/time/timer.c:1257
- try_to_grab_pending+0x6d/0xd0 kernel/workqueue.c:1275
- __cancel_work_timer+0xa6/0x570 kernel/workqueue.c:3119
- mgmt_index_removed+0x218/0x340 net/bluetooth/mgmt.c:8964
- hci_sock_bind+0x472/0x1760 net/bluetooth/hci_sock.c:1218
- __sys_bind+0x1e9/0x250 net/socket.c:1776
- __do_sys_bind net/socket.c:1787 [inline]
- __se_sys_bind net/socket.c:1785 [inline]
- __x64_sys_bind+0x6f/0xb0 net/socket.c:1785
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f431aa89279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f431bb46168 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
-RAX: ffffffffffffffda RBX: 00007f431ab9bf80 RCX: 00007f431aa89279
-RDX: 0000000000000006 RSI: 0000000020000300 RDI: 0000000000000004
-RBP: 00007f431aae32e9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffce33d94af R14: 00007f431bb46300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/plugins/sixaxis.c#n111

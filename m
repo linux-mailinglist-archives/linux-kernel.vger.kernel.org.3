@@ -2,139 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F2E5B1574
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224DC5B156F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiIHHN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S230374AbiIHHMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiIHHNZ (ORCPT
+        with ESMTP id S229508AbiIHHMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:13:25 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33F7D4778;
-        Thu,  8 Sep 2022 00:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1662621015;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=PfeGL0sg6M1qDITuSaR33ABiwlNh0JNNpQKasyQHY9w=;
-    b=F4Gqllbp0TDCEP0rVJILYj2fwQKzRHcFjhF2a3FQ/9PIVX1TCqqjkzfl7Xds5aYyJR
-    CBWd0hFjQPC6SrQ4GmN8Ty6/bkpq/OF2jT6QNXgx1fibybvqPLgX/grEhuNCqraOO0To
-    16gH9XfiDh/2sF6GgUrcVvf/T9UYfNGyVwFdAkPBpjuUxm9pQ9kiCy/AvR4cEMafu6eP
-    XCcMgy5yovnDYyTHmeT0I6zX4NXmub0ITZJPgg6bG5/O+0suu0Rn1EKFe87R5HYbws9F
-    zS5CJMF6H5MAzIsE9mW7lp1kEZQjim/0XSY5iC7yVrmqz+8/TrNKlZSwXo2eYQg/oPNG
-    Gk4w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
-    by smtp.strato.de (RZmta 48.0.2 AUTH)
-    with ESMTPSA id wfa541y887AF6Dj
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 8 Sep 2022 09:10:15 +0200 (CEST)
-Message-ID: <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
-Date:   Thu, 8 Sep 2022 09:10:15 +0200
+        Thu, 8 Sep 2022 03:12:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399F0D474D;
+        Thu,  8 Sep 2022 00:12:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A6F9133BAA;
+        Thu,  8 Sep 2022 07:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662621165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wQxYLHyDLglTrc96Dwo9w9RPNpsCq3XWN1HyAjbRYNs=;
+        b=tzO1hqg8Cf+V3DOldPoJ0tAbfrcHQ/buUKHG+8XEIMml22acom6ipoa6KJxfv7pXLWnzPb
+        dvicd90Pr+rF+mf7X8aPjxI/j/QR3x9TEVgZ2XHIm66QAHuxOs5AWnjVv3I99n9b6GSa8l
+        ClarGp9lNgYGmVJgqD7angv+UmF6LpU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F64713A6D;
+        Thu,  8 Sep 2022 07:12:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Rg4TH+2VGWOnDAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 08 Sep 2022 07:12:45 +0000
+Date:   Thu, 8 Sep 2022 09:12:45 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
+References: <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
+ <20220901201502.sn6223bayzwferxv@moria.home.lan>
+ <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
+ <20220905234649.525vorzx27ybypsn@kmo-framework>
+ <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
+ <20220906182058.iijmpzu4rtxowy37@kmo-framework>
+ <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
+ <20220907130323.rwycrntnckc6h43n@kmo-framework>
+ <20220907094306.3383dac2@gandalf.local.home>
+ <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
- bcm_module_init()
-Content-Language: en-US
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>, mkl@pengutronix.de,
-        edumazet@google.com, kuba@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <cover.1662606045.git.william.xuanziyang@huawei.com>
- <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08.09.22 05:04, Ziyang Xuan wrote:
-> Now, register_netdevice_notifier() and register_pernet_subsys() are both
-> after can_proto_register(). It can create CAN_BCM socket and process socket
-> once can_proto_register() successfully, so it is possible missing notifier
-> event or proc node creation because notifier or bcm proc directory is not
-> registered or created yet. Although this is a low probability scenario, it
-> is not impossible.
+On Thu 08-09-22 02:35:48, Kent Overstreet wrote:
+> On Wed, Sep 07, 2022 at 09:45:18AM -0400, Steven Rostedt wrote:
+> > On Wed, 7 Sep 2022 09:04:28 -0400
+> > Kent Overstreet <kent.overstreet@linux.dev> wrote:
+> > 
+> > > On Wed, Sep 07, 2022 at 01:00:09PM +0200, Michal Hocko wrote:
+> > > > Hmm, it seems that further discussion doesn't really make much sense
+> > > > here. I know how to use my time better.  
+> > > 
+> > > Just a thought, but I generally find it more productive to propose ideas than to
+> > > just be disparaging.
+> > > 
+> > 
+> > But it's not Michal's job to do so. He's just telling you that the given
+> > feature is not worth the burden. He's telling you the issues that he has
+> > with the patch set. It's the submitter's job to address those concerns and
+> > not the maintainer's to tell you how to make it better.
+> > 
+> > When Linus tells us that a submission is crap, we don't ask him how to make
+> > it less crap, we listen to why he called it crap, and then rewrite to be
+> > not so crappy. If we cannot figure it out, it doesn't get in.
 > 
-> Move register_pernet_subsys() and register_netdevice_notifier() to the
-> front of can_proto_register(). In addition, register_pernet_subsys() and
-> register_netdevice_notifier() may fail, check their results are necessary.
+> When Linus tells someone a submission is crap, he _always_ has a sound, and
+> _specific_ technical justification for doing so.
 > 
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> ---
->   net/can/bcm.c | 18 +++++++++++++++---
->   1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/can/bcm.c b/net/can/bcm.c
-> index e60161bec850..e2783156bfd1 100644
-> --- a/net/can/bcm.c
-> +++ b/net/can/bcm.c
-> @@ -1744,15 +1744,27 @@ static int __init bcm_module_init(void)
->   
->   	pr_info("can: broadcast manager protocol\n");
->   
-> +	err = register_pernet_subsys(&canbcm_pernet_ops);
-> +	if (err)
-> +		return err;
+> "This code is going to be a considerable maintenance burden" is vapid, and lazy.
+> It's the kind of feedback made by someone who has looked at the number of lines
+> of code a patch touches and not much more.
 
-Analogue to your patch for the CAN_RAW socket here (which has been 
-applied to can-next right now) ...
+Then you have probably missed a huge part of my emails. Please
+re-read. If those arguments are not clear, feel free to ask for
+clarification. Reducing the whole my reasoning and objections to the
+sentence above and calling that vapid and lazy is not only unfair but
+also disrespectful.
 
-https://lore.kernel.org/linux-can/7af9401f0d2d9fed36c1667b5ac9b8df8f8b87ee.1661584485.git.william.xuanziyang@huawei.com/T/#u
-
-... I'm not sure whether this is the right sequence to acquire the 
-different resources here.
-
-E.g. in ipsec_pfkey_init() in af_key.c
-
-https://elixir.bootlin.com/linux/v5.19.7/source/net/key/af_key.c#L3887
-
-proto_register() is executed before register_pernet_subsys()
-
-Which seems to be more natural to me.
-
-Best regards,
-Oliver
-
-> +
-> +	err = register_netdevice_notifier(&canbcm_notifier);
-> +	if (err)
-> +		goto register_notifier_failed;
-> +
->   	err = can_proto_register(&bcm_can_proto);
->   	if (err < 0) {
->   		printk(KERN_ERR "can: registration of bcm protocol failed\n");
-> -		return err;
-> +		goto register_proto_failed;
->   	}
->   
-> -	register_pernet_subsys(&canbcm_pernet_ops);
-> -	register_netdevice_notifier(&canbcm_notifier);
->   	return 0;
-> +
-> +register_proto_failed:
-> +	unregister_netdevice_notifier(&canbcm_notifier);
-> +register_notifier_failed:
-> +	unregister_pernet_subsys(&canbcm_pernet_ops);
-> +	return err;
->   }
->   
->   static void __exit bcm_module_exit(void)
+-- 
+Michal Hocko
+SUSE Labs

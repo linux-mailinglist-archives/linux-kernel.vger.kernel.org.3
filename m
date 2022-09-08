@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A1F5B241D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD905B2420
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiIHRAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S231251AbiIHRBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiIHRAo (ORCPT
+        with ESMTP id S230476AbiIHRBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:00:44 -0400
+        Thu, 8 Sep 2022 13:01:03 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2BDBC4831
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:00:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11F48D2748
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:01:01 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58B85106F;
-        Thu,  8 Sep 2022 10:00:48 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA3EC153B;
+        Thu,  8 Sep 2022 10:01:06 -0700 (PDT)
 Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE0B33F71A;
-        Thu,  8 Sep 2022 10:00:39 -0700 (PDT)
-Message-ID: <5b4da95f-28ac-a571-6c01-cf1a94d0753d@arm.com>
-Date:   Thu, 8 Sep 2022 18:00:38 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA5493F71A;
+        Thu,  8 Sep 2022 10:00:57 -0700 (PDT)
+Message-ID: <2284408e-deb1-589b-bcdf-88e056980f79@arm.com>
+Date:   Thu, 8 Sep 2022 18:00:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v6 12/21] x86/resctrl: Calculate bandwidth from the
- previous __mon_event_count() chunks
+Subject: Re: [PATCH v6 05/21] x86/resctrl: Add domain offline callback for
+ resctrl work
 Content-Language: en-GB
 To:     haoxin <xhao@linux.alibaba.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
@@ -44,10 +44,10 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Cristian Marussi <cristian.marussi@arm.com>,
         xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com
 References: <20220902154829.30399-1-james.morse@arm.com>
- <20220902154829.30399-13-james.morse@arm.com>
- <87aa9fd2-cae8-972d-81d4-8855cbd81569@linux.alibaba.com>
+ <20220902154829.30399-6-james.morse@arm.com>
+ <d8fbb0c6-efe5-13bd-fb35-c6cb24ea7ff2@linux.alibaba.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <87aa9fd2-cae8-972d-81d4-8855cbd81569@linux.alibaba.com>
+In-Reply-To: <d8fbb0c6-efe5-13bd-fb35-c6cb24ea7ff2@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -61,56 +61,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Hao Xin,
 
-On 07/09/2022 07:47, haoxin wrote:
+On 07/09/2022 07:29, haoxin wrote:
 > 在 2022/9/2 下午11:48, James Morse 写道:
->> mbm_bw_count() is only called by the mbm_handle_overflow() worker once a
->> second. It reads the hardware register, calculates the bandwidth and
->> updates m->prev_bw_msr which is used to hold the previous hardware register
->> value.
+>> Because domains are exposed to user-space via resctrl, the filesystem
+>> must update its state when CPU hotplug callbacks are triggered.
 >>
->> Operating directly on hardware register values makes it difficult to make
->> this code architecture independent, so that it can be moved to /fs/,
->> making the mba_sc feature something resctrl supports with no additional
->> support from the architecture.
->> Prior to calling mbm_bw_count(), mbm_update() reads from the same hardware
->> register using __mon_event_count().
+>> Some of this work is common to any architecture that would support
+>> resctrl, but the work is tied up with the architecture code to
+>> free the memory.
 >>
->> Change mbm_bw_count() to use the current chunks value most recently saved
->> by __mon_event_count(). This removes an extra call to __rmid_read().
->> Instead of using m->prev_msr to calculate the number of chunks seen,
->> use the rr->val that was updated by __mon_event_count(). This removes an
->> extra call to mbm_overflow_count() and get_corrected_mbm_count().
->> Calculating bandwidth like this means mbm_bw_count() no longer operates
->> on hardware register values directly.
+>> Move the monitor subdir removal and the cancelling of the mbm/limbo
+>> works into a new resctrl_offline_domain() call. These bits are not
+>> specific to the architecture. Grouping them in one function allows
+>> that code to be moved to /fs/ and re-used by another architecture.
 
->> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
->> index 3e69386cfe00..2d81b6cd9632 100644
->> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
->> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+>> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> index 030a70326ccc..5830905a92d2 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+>> @@ -3233,6 +3231,45 @@ static int __init rdtgroup_setup_root(void)
+>>       return ret;
+>>   }
+>>   +static void domain_destroy_mon_state(struct rdt_domain *d)
 
->> @@ -516,10 +521,12 @@ static void mbm_update(struct rdt_resource *r, struct rdt_domain
->> *d, int rmid)
->>        */
->>       if (is_mbm_total_enabled()) {
->>           rr.evtid = QOS_L3_MBM_TOTAL_EVENT_ID;>> +        rr.val = 0;
+> add inline ?
 
-> In mbm_update,  there no use the rr.val, so there no need to initialize ？
-
->>           __mon_event_count(rmid, &rr);
->>       }
->>       if (is_mbm_local_enabled()) {
->>           rr.evtid = QOS_L3_MBM_LOCAL_EVENT_ID;
->> +        rr.val = 0;
-
-> ditto.
-
->>           __mon_event_count(rmid, &rr);
->>             /*
-
-No, but this just leaves that problem for someone else to discover the hard way! I think
-its fair for the compiler to complain that addition on an uninitialised field is a bug.
-
-I'd prefer to keep this as it is on the principle of 'least surprise'.
+As previously, the compiler doesn't need to be told it can inline static functions in a C
+file.
 
 
 Thanks,

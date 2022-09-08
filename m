@@ -2,139 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD405B22B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D86D5B22BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiIHPov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S231533AbiIHPpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbiIHPop (ORCPT
+        with ESMTP id S231381AbiIHPph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:44:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDAB20BF6;
-        Thu,  8 Sep 2022 08:44:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B35A7B82177;
-        Thu,  8 Sep 2022 15:44:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560D7C433C1;
-        Thu,  8 Sep 2022 15:44:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662651877;
-        bh=KKlPeweE+V5xU5UKySdETFhFvGBGdAvY07pcwu38RQE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=QwYDYggu9ENjDnFBPi2d659s4ilkA4jms8keuRvwMigE1nEJl+S/rDSDIvdjnffCU
-         M0r9JZnW8ubjjLcf5PrZHUCEgoOHiIgLK+htlTZAfZRw/dFQR1Y5ZNRyTC1OyAlLmz
-         h79BlCe0mWnpJLINHENoIhVn44gvhWjb3uDuIehDm2L5FmhkgwLVQOprp+aCAI+O6E
-         dp6Pzc3XRBwj5YQzY1YcsljiDbfYqxJxHAi9wzCsehjdo9JUhl26AdVNI94ty/in6P
-         PKmcXvw3C8qkq7UX8Gv1GU9d9VWTdD0sxqdfuNJ0wnsMpN8NNfCPaIOyzFyPJFZKde
-         o1uAof77gY5lA==
-Message-ID: <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>
-Cc:     NeilBrown <neilb@suse.de>,
-        "J. Bruce Fields" <bfields@fieldses.org>, adilger.kernel@dilger.ca,
-        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
-        fweimer@redhat.com, linux-man@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Date:   Thu, 08 Sep 2022 11:44:33 -0400
-In-Reply-To: <YxoIjV50xXKiLdL9@mit.edu>
-References: <20220907111606.18831-1-jlayton@kernel.org>
-         <166255065346.30452.6121947305075322036@noble.neil.brown.name>
-         <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
-         <20220907125211.GB17729@fieldses.org>
-         <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
-         <20220907135153.qvgibskeuz427abw@quack3>
-         <166259786233.30452.5417306132987966849@noble.neil.brown.name>
-         <20220908083326.3xsanzk7hy3ff4qs@quack3> <YxoIjV50xXKiLdL9@mit.edu>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 8 Sep 2022 11:45:37 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6974FAC24F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:45:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y127so18346273pfy.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date;
+        bh=2cXPsEEmqpGjBnsgwBYy/qYjnBkOZjWcTGgc9Qs3P1k=;
+        b=XWke3P1iCAuKHT1QtigkpG28d1MXKN2BF0T2iwIcmo7/sL6blxCmndF8dVnY6nCH5K
+         u1dlJ1I08sc1L4h317dDD+Ey9RKBqK0zkeRocHgjCkHyjocAfqGFYNNpq1d/niqcgSDA
+         NR8BUxRUtxKJ6P3IR5IX4xYXYYMu7HWYuwCoh6eWPQfyVwpwNoE5cp+CKeQBOusznsoU
+         OpHaTkG4qW11y5KsMKJ5dGHuJIonfuZKeLfuz6mWnES++N1hTOYmTHNffrneg8VVJnNB
+         XSYxu9vWegZlVMV2EhOkMKqXxhIs2OcuXjpYqNgyvt0clDbhDXbXNqLm0xRBx8xtHbup
+         IYRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2cXPsEEmqpGjBnsgwBYy/qYjnBkOZjWcTGgc9Qs3P1k=;
+        b=6YYNisRHCaFZ9o8UEFS8PAzI3/mWe19omF7ABICsCD2U79ayKByLJHuapPuB3I6wOM
+         kPozN7sEt83nn5QP2GAjdvPGG89Z1IZPwXfJsrt7fhYz5o4GljJklGUw7P0lYiBrDyaH
+         vDefUomhuEluINJrtxSEs/njtodP6+DMjr8rrv8h3d7Qzk+g1vglXmLDxSMD1ffGV3le
+         t3eJLzIxzxjMBCycu86UktfrW1lC03qFzWQoUuuOkZcVqrgMwQ10AKaDu1xBpdhr3/Hn
+         lqnE1bhz4yBg9ye1xcbChw52ZphD1xhZTGa8Q/krWb/Bcaa8jd5sekoXg215/plhux8z
+         V0KQ==
+X-Gm-Message-State: ACgBeo0R4aozXeSlZv5gL/Fh718kwf4/tcE2nEq43CjDn4rbHw7XDUG/
+        Dpjc/uM7c7ZAljeGG7wlMJVyl+x7lbexmncmkhF12g==
+X-Google-Smtp-Source: AA6agR5MSnQiwdnCkNknY/8pzsC6gDsw/OawAUwBq8sjFGwEMGwBRzl2H61BoEmA0jSkLSHyatRfkreEjSN9EynVGqs=
+X-Received: by 2002:a63:8043:0:b0:434:fe8f:6cd0 with SMTP id
+ j64-20020a638043000000b00434fe8f6cd0mr6366514pgd.115.1662651935822; Thu, 08
+ Sep 2022 08:45:35 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220812173526.15537-1-tharvey@gateworks.com> <20220812173526.15537-2-tharvey@gateworks.com>
+ <CAJ+vNU3QWWza-Q956GSLVvYJHC9owApyQD8Y1WNVDs0=qqz8-A@mail.gmail.com>
+In-Reply-To: <CAJ+vNU3QWWza-Q956GSLVvYJHC9owApyQD8Y1WNVDs0=qqz8-A@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 8 Sep 2022 08:45:24 -0700
+Message-ID: <CAJ+vNU3qv6yi48W6jX3-x-MiAFTU3AtbqsM-V8Dw29ZJFDrdKQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] arm64: dts: imx8mp-venice-gw74xx: remove invalid and
+ unused pinctrl_sai2
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-08 at 11:21 -0400, Theodore Ts'o wrote:
-> On Thu, Sep 08, 2022 at 10:33:26AM +0200, Jan Kara wrote:
-> > It boils down to the fact that we don't want to call mark_inode_dirty()
-> > from IOCB_NOWAIT path because for lots of filesystems that means journa=
-l
-> > operation and there are high chances that may block.
-> >=20
-> > Presumably we could treat inode dirtying after i_version change similar=
-ly
-> > to how we handle timestamp updates with lazytime mount option (i.e., no=
-t
-> > dirty the inode immediately but only with a delay) but then the time wi=
-ndow
-> > for i_version inconsistencies due to a crash would be much larger.
->=20
-> Perhaps this is a radical suggestion, but there seems to be a lot of
-> the problems which are due to the concern "what if the file system
-> crashes" (and so we need to worry about making sure that any
-> increments to i_version MUST be persisted after it is incremented).
->=20
-> Well, if we assume that unclean shutdowns are rare, then perhaps we
-> shouldn't be optimizing for that case.  So.... what if a file system
-> had a counter which got incremented each time its journal is replayed
-> representing an unclean shutdown.  That shouldn't happen often, but if
-> it does, there might be any number of i_version updates that may have
-> gotten lost.  So in that case, the NFS client should invalidate all of
-> its caches.
->=20
-> If the i_version field was large enough, we could just prefix the
-> "unclean shutdown counter" with the existing i_version number when it
-> is sent over the NFS protocol to the client.  But if that field is too
-> small, and if (as I understand things) NFS just needs to know when
-> i_version is different, we could just simply hash the "unclean
-> shtudown counter" with the inode's "i_version counter", and let that
-> be the version which is sent from the NFS client to the server.
->=20
-> If we could do that, then it doesn't become critical that every single
-> i_version bump has to be persisted to disk, and we could treat it like
-> a lazytime update; it's guaranteed to updated when we do an clean
-> unmount of the file system (and when the file system is frozen), but
-> on a crash, there is no guaranteee that all i_version bumps will be
-> persisted, but we do have this "unclean shutdown" counter to deal with
-> that case.
->=20
-> Would this make life easier for folks?
->=20
-> 						- Ted
+On Mon, Aug 22, 2022 at 10:03 AM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> On Fri, Aug 12, 2022 at 10:35 AM Tim Harvey <tharvey@gateworks.com> wrote:
+> >
+> > pinctrl_sai2 is not yet used and not properly defined - remove it to
+> > avoid:
+> > imx8mp-pinctrl 30330000.pinctrl: Invalid fsl,pins or pins propert
+> > y in node /soc@0/bus@30000000/pinctrl@30330000/sai2grp
+> >
+> > Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400 dts
+> > support")
+> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts | 9 ---------
+> >  1 file changed, 9 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > index de17021df53f..80f0f1aafdbf 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> > @@ -768,15 +768,6 @@ MX8MP_IOMUXC_NAND_DATA03__GPIO3_IO09       0x110
+> >                 >;
+> >         };
+> >
+> > -       pinctrl_sai2: sai2grp {
+> > -               fsl,pins = <
+> > -                       MX8MP_IOMUXC_SAI2_TXFS__AUDIOMIX_SAI2_TX_SYNC
+> > -                       MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00
+> > -                       MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK
+> > -                       MX8MP_IOMUXC_SAI2_MCLK__AUDIOMIX_SAI2_MCLK
+> > -               >;
+> > -       };
+> > -
+> >         pinctrl_spi2: spi2grp {
+> >                 fsl,pins = <
+> >                         MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK   0x82
+> > --
+> > 2.25.1
+> >
+>
+> Shawn,
+>
+> You can drop this. I didn't see Peng's patch commit 706dd9d30d3b
+> ("arm64: dts: imx8mp-venice-gw74xx: fix sai2 pin settings") which
+> takes care of this.
+>
+> Best Regards,
+>
+> Tim
 
-Thanks for chiming in, Ted. That's part of the problem, but we're
-actually not too worried about that case:
+Shawn,
 
-nfsd mixes the ctime in with i_version, so you'd have to crash+clock
-jump backward by juuuust enough to allow you to get the i_version and
-ctime into a state it was before the crash, but with different data.
-We're assuming that that is difficult to achieve in practice.
+Did you need me to re-submit the series this patch was in without it?
+I haven't seen any responses to the rest of the patches in this
+series.
 
-The issue with a reboot counter (or similar) is that on an unclean crash
-the NFS client would end up invalidating every inode in the cache, as
-all of the i_versions would change. That's probably excessive.
+Best Regards,
 
-The bigger issue (at the moment) is atomicity: when we fetch an
-i_version, the natural inclination is to associate that with the state
-of the inode at some point in time, so we need this to be updated
-atomically with certain other attributes of the inode. That's the part
-I'm trying to sort through at the moment.
---=20
-Jeff Layton <jlayton@kernel.org>
+Tim

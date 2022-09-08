@@ -2,165 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6B15B15A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653CD5B15AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiIHH2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
+        id S230188AbiIHHao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiIHH2e (ORCPT
+        with ESMTP id S230166AbiIHHaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:28:34 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48A2ABF0C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 00:28:32 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bt10so26302813lfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 00:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/zRU8A5zoUoera6+7kmx9n/i4jIslUbut0IRuDzdvno=;
-        b=SkAAEinM04H9PtwZ1jj8CzoAqhQTTLn94foHWPoddRmeWSz3LGkamHEXOymO2VqH0X
-         fl3NIuxXYFvv9LRbI7VnhjD2S32YGC7l5NKPKPop3wNgSMQAaphzCUEF+/EbISrWfkxY
-         TIsO7nr+qloe3bTQgZVnZmYx8sGTn0/Fk74P4QOqAaozAIErcI/ri/6x9TDRzWpbmzX2
-         tIlRUs+qYmGr/nFw0B3KJvb+BncgRP3BO/e3hDX5ccoP08kwOWl/1Rxv8bXBTWjvzktO
-         unmC71LY1ec24YDw7ZSDvYiEkd5H8n7p51/YK62/XbpDFj6KmTGN5mOq5wzihZp0v635
-         pYVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/zRU8A5zoUoera6+7kmx9n/i4jIslUbut0IRuDzdvno=;
-        b=7eDejcJslwP97Xu8u2fweWwJZHIF6kihlhb/ux6/r0CbmNgWp5R+DjnOvlxcc3kXBu
-         7gBVY/Gcl74/UA08NswkLfEf8XK/K2/GalLF6HEVJ/DJt7ONahMxtK1bxOArUy6hpnSU
-         IboXoQEwe5/Qd+JeiySpfPGVythzkwX2uzaBTgffOo7021YmY4k0npM3DPkcHAZ2Cs1h
-         uD0fuDioXz7Lw1vrKfBRrwkmyukXZlaIZSGLmkQ1ucyUNo1L2OybXztQ6IkS1iPT0bDW
-         6FWlso9TeEiqN9P3w7pkodw2jzc5q8cuMHudo5A+KAPZF4Kxksxf87qW8lL2NMQzSY+x
-         jAQA==
-X-Gm-Message-State: ACgBeo058LBnGkXQo1Hao6+I/H/1yTKWelMab0PjF5f6sI1W0oIU/wJt
-        qMdMVAkJMXT3/ikqzELK3z2KUw==
-X-Google-Smtp-Source: AA6agR4xJkIpSra4HQ47hmqX2ndsvUw8AiEud7UngRNoAhTtNTolU6lSMipCCm8VQHTaOwhjtqm3YQ==
-X-Received: by 2002:a05:6512:139c:b0:48f:da64:d050 with SMTP id p28-20020a056512139c00b0048fda64d050mr2094541lfa.268.1662622111120;
-        Thu, 08 Sep 2022 00:28:31 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a9-20020a196609000000b004946274b7d6sm2914742lfc.166.2022.09.08.00.28.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 00:28:30 -0700 (PDT)
-Message-ID: <219597ff-a409-e19c-b03f-86885d6825c8@linaro.org>
-Date:   Thu, 8 Sep 2022 09:28:29 +0200
+        Thu, 8 Sep 2022 03:30:39 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601AE91D18;
+        Thu,  8 Sep 2022 00:30:38 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 03:29:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662622236;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DqfWXb2eEuuOxMq6abU6PffruFzdNn4Aud1F5cFJAhI=;
+        b=Fw8tAVGZj5GyiSqYxRkRmSk4x1RT2ZwVJU0JDfghWsKBfIGHKaRr04lhoKOVAsK9mBuLF+
+        9iI0Zcp5Zlk1fasn3UZcG2E28IiTTnVsfmeKdAq1LMPY/5nchmAf+pI4zvkYYgOYnJoj7B
+        58GfzCiu+o2KhFlYF9EH5IZegrVCLG0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <20220908072950.yapakb5scocxezhy@kmo-framework>
+References: <20220901201502.sn6223bayzwferxv@moria.home.lan>
+ <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
+ <20220905234649.525vorzx27ybypsn@kmo-framework>
+ <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
+ <20220906182058.iijmpzu4rtxowy37@kmo-framework>
+ <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
+ <20220907130323.rwycrntnckc6h43n@kmo-framework>
+ <20220907094306.3383dac2@gandalf.local.home>
+ <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
+ <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: power: reset: restart-handler: add common
- schema
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220907123630.57383-1-krzysztof.kozlowski@linaro.org>
- <20220907163218.aja4pazw3sbxnoop@pali>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220907163218.aja4pazw3sbxnoop@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 18:32, Pali Rohár wrote:
-> On Wednesday 07 September 2022 14:36:30 Krzysztof Kozlowski wrote:
->> Add common schema for restart and shutdown handlers, so they all use
->> same meaning of "priority" field.  The Linux drivers already have this
->> property and some systems want to customize it per-board in DTS.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> See also:
->> https://lore.kernel.org/all/8fe93da3-f768-16ae-7025-1cfa97a42b27@linaro.org/
->> https://lore.kernel.org/all/20220831081715.14673-1-pali@kernel.org/
->> ---
->>  .../bindings/power/reset/gpio-restart.yaml    | 13 ++------
->>  .../bindings/power/reset/restart-handler.yaml | 30 +++++++++++++++++++
->>  2 files changed, 33 insertions(+), 10 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/power/reset/restart-handler.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
->> index a72d5c721516..d3d18e0f5db3 100644
->> --- a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
->> +++ b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
->> @@ -25,6 +25,9 @@ description: >
->>    inactive-delay, the GPIO is driven active again.  After a delay specified by wait-delay, the
->>    restart handler completes allowing other restart handlers to be attempted.
->>  
->> +allOf:
->> +  - $ref: restart-handler.yaml#
->> +
->>  properties:
->>    compatible:
->>      const: gpio-restart
->> @@ -41,16 +44,6 @@ properties:
->>        in its inactive state.
->>  
->>    priority:
->> -    $ref: /schemas/types.yaml#/definitions/uint32
->> -    description: |
->> -      A priority ranging from 0 to 255 (default 129) according to the following guidelines:
->> -
->> -        0:   Restart handler of last resort, with limited restart capabilities.
->> -        128: Default restart handler; use if no other restart handler is expected to be available,
->> -             and/or if restart functionality is sufficient to restart the entire system.
->> -        255: Highest priority restart handler, will preempt all other restart handlers.
->> -    minimum: 0
->> -    maximum: 255
->>      default: 129
->>  
->>    active-delay:
->> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
->> new file mode 100644
->> index 000000000000..f5d22ca0cd45
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
->> @@ -0,0 +1,30 @@
->> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Restart and shutdown handler generic binding
->> +
->> +maintainers:
->> +  - Sebastian Reichel <sre@kernel.org>
->> +
->> +description:
->> +  Restart and shutdown handler device is responsible for powering off the
->> +  system, e.g. my cutting off the power.  System might have several restart
->> +  handlers, which usually are tried from most precise to last resort.
->> +
->> +properties:
->> +  priority:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> IIRC priority is signed integer number, not unsigned.
+On Thu, Sep 08, 2022 at 09:12:45AM +0200, Michal Hocko wrote:
+> Then you have probably missed a huge part of my emails. Please
+> re-read. If those arguments are not clear, feel free to ask for
+> clarification. Reducing the whole my reasoning and objections to the
+> sentence above and calling that vapid and lazy is not only unfair but
+> also disrespectful.
 
-Although technically in the kernel it is int, all existing kernel users
-assign here unsigned number and existing bindings were unsigned int, so
-I don't think there is benefit to change it to signed.
+What, where you complained about slab's page allocations showing up in the
+profile instead of slab, and I pointed out to you that actually each and every
+slab call is instrumented, and you're just seeing some double counting (that we
+will no doubt fix?)
 
-Best regards,
-Krzysztof
+Or when you complained about allocation sites where it should actually be the
+caller that should be instrumented, and I pointed out that it'd be quite easy to
+simply change that code to use _kmalloc() and slab_tag_add() directly, if it
+becomes an issue.
+
+Of course, if we got that far, we'd have this code to thank for telling us where
+to look!
+
+Did I miss anything?

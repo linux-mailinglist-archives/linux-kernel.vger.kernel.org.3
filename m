@@ -2,243 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959725B13CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFA45B13CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiIHFBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 01:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
+        id S229644AbiIHFDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 01:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIHFBq (ORCPT
+        with ESMTP id S229456AbiIHFDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 01:01:46 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4860AB1B83;
-        Wed,  7 Sep 2022 22:01:45 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 0776E3200940;
-        Thu,  8 Sep 2022 01:01:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 08 Sep 2022 01:01:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rieck.me; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1662613299; x=
-        1662699699; bh=TogMmUmClj5qpvvj7LH7110KZK4ERIzVhP+QQAecSVo=; b=V
-        RjoZjUkKxrXsc5P5R8m05d4R7b5JqBRXrKWfZSP7JQgXodlHqcwdUBFhiiT8dmOu
-        0Lp+yOMeSBjUe+PoBf11hiGcHr0BCaNqI1h/RqtlmCdR4zyvjIjQQSXGmAdG8BA2
-        A01Fr/FZ/7r+oP30pqPJgIb/SJJhQf2wGnVFW996mEAROFiBLs/6u8OqZexU0yXF
-        qEit4PPeXijlsrikJzayjxok2C5rB/vgXelPtsxR8bV//FiTGB6Swqn1Z/6WVPJI
-        bPa5U7Briz7VBwXjQiavRl7bLXBJ67ypK2JrRH+2cEQ1g+xm0kt8GHo4B4MOMyds
-        OtALIoInGX+0k2LB0mujg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662613299; x=
-        1662699699; bh=TogMmUmClj5qpvvj7LH7110KZK4ERIzVhP+QQAecSVo=; b=r
-        BFSQ7+ZJNzpQxPhrNoae9p3FRWmBbUzTUSPD0vs5gdtgND833zYXMJy1bjW0+14H
-        ydYGWnihIsmExYvDgx0nxx0DgaaQ+laKND/hlPiu429wUPWDmR5IR1fpkz3rtOmp
-        kL/ZF+xcqLDRjNY3evxTDRW9FvY9iQJyBGNnZ9O8z8ad3AxFlg/ouxKFs8Wn6pYX
-        mPsT3BoV085WVZjhCIyIYH1JVKfEGI7GEQn4xiqfI/v2l8eLrp0g1VjTZ1dabt3q
-        HhKcwgQ7tBHEB0DRy1ZsQeQFQMha7Q7qqucG0ox+vm1QUTdYtg+tfq0XCTI+jGMt
-        ux8Zc1RfmL3qJVu9bI0qA==
-X-ME-Sender: <xms:MncZY4Y_-zCpQVo4QT6aqYBIsJpYkC2EhVyjLPydy1rMhZwWs9xmNA>
-    <xme:MncZYzaMiqHh51QI6xzNYYA-uknFqx_Z5yBMOlMW9MkR8ueITX1Nqnac8C-AtreC7
-    Nj9_qojk7MAgZlw>
-X-ME-Received: <xmr:MncZYy-PHk8CW7EvD7nm3KCk3SPfYxWDaNhe22YfC3XsFl3p1jtbBznARik6O0vKU3zX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtuddgleefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkjghfgggtgfesmhfureertddtjeenucfhrhhomhepuegrshht
-    ihgrnhcutfhivggtkhcuoegsrghsthhirghnsehrihgvtghkrdhmvgeqnecuggftrfgrth
-    htvghrnhepledvffelvedtkeeukeeivdevhfefkedukedtleeuffehheeuhfevtdekfeet
-    ffegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
-    grshhtihgrnhesrhhivggtkhdrmhgv
-X-ME-Proxy: <xmx:M3cZYyqd3ioBydyVdU8aKT2snw6XQbREOYeIvUQh6d0VKqKdZIfAYA>
-    <xmx:M3cZYzpr-MxjBZKdBXdqnfeRQoFca9QGFEF9c7LWXxuF7dyldcxBOQ>
-    <xmx:M3cZYwRgehwQDzL5aRMb0zqJooH9otov5zsg8nXibWu3ji4JPk472g>
-    <xmx:M3cZYxhOuYAx6gqQpGUXRI_FBbFg2cVh7d6Y9GXoSzVP9HIVt8WHqw>
-Feedback-ID: ie53945e4:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Sep 2022 01:01:37 -0400 (EDT)
-From:   Bastian Rieck <bastian@rieck.me>
-To:     linux-usb@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, grzegorz.alibozek@gmail.com,
-        andrew.co@free.fr, meven29@gmail.com, pchernik@gmail.com,
-        jorge.cep.mart@gmail.com, danielmorgan@disroot.org,
-        bernie@codewiz.org, saipavanchitta1998@gmail.com,
-        rubin@starset.net, maniette@gmail.com, nate@kde.org
-Subject: Re: [RFC PATCH 0/2] usb: typec: ucsi: Check connection on resume
-Date:   Thu, 08 Sep 2022 07:01:34 +0200
-Message-ID: <27257661.hdJqBvvX10@nimue>
-Face:   iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAAAFz UkdCAK7OHOkAAAAVUExURdnY2d3d3vDDp8KYgoJnXK3K7i8gH0swGw4AAAH1SURBVDjLZVTNcpsw EJbopGfAk3uRPD4z2g1njDY6J2nVB0hUvf8jdFcIDO36Z8R+/n5WCCt1qLbt9uJLLe+WP52WegDl t+XF7fbAYIWV40bmdHoHpK2Vboy19ijVCqNVjXHGOFB6Z2hxV8pIAcCBUfpNASzAvWYurhtBKKM+ xVXOVApWk9r/VhkWsQY+Ab1ozSeGKPX9IFJj9y+wuuO8xlonX4GhAPf/pIbCoHtbclUA9jlo1sdU gOiNQY8FODB8ttlZwinRrFqZpAIZAHNGgACj2hicyn7hd/q8hQkDEah2l1qsN+7zthg7EYWitQJ2 4rzLlb8shSPDlLh2kTmC3EWt6x5a01/MFYcBKLnivgIXyydhsK5nqTTyIdgYjWUhgyAeNGoxqXMI I+UkQJIJOr0B4G6UyRkkkvPU7nfQ8dRAxKmEsKdigLhCcEhqO7V1e/11uExXj/PaPwB82MBWQO1S Cr44F6CneXsuNpMkDAbCvD5Le2X2NSFRSGdzxYHAZk6W3tSppuQxFGA+A5hTyIkov8ZT/wlClj6F eAbiB+8SJYbOwFNcQDaF8DXGg3uM0VuheM/L+Gi/x/hTjichxAdSlr+8PLKAL+WqqEUh/I58W4F3 Kz7H0nhjW1mGP9HwX4B9EVXpvKuyiinmuWl+rA7CeP4L2hiGKBFny1gAAAAASUVORK5CYII=
-In-Reply-To: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
-References: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
+        Thu, 8 Sep 2022 01:03:33 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2069.outbound.protection.outlook.com [40.107.95.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4F26CD2B;
+        Wed,  7 Sep 2022 22:03:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XyRDb9AsSPhtjYuA+rbinQcICJQCfz+PD1JFF86ow5pgGcPDT0RuNk3yJOPl15ua7D8hSQjKG7HeciqYlU0s+6a98OiBchNrxh9s61UgicKOLlzrq1/3YpGf/Cm+cJIgh60OjY8/4hAYpdznCVUPpUuLmHy5K3PlfCe4+2W8D13kfqfr3dY1cJszlRenmYWOMT+iwtpQ31erUAoKTBt4AeUizP+eZ4xybdoDxEWmXaaqYtjBoBTl2HtI8N1hMawagqfNS/JGbxnMDvLfIBxdLqRwmyqLrlLGVwA2PGEp2nqYCqRC5ZoJcaf3IHazuk9JtF2aPnKtrm15vo3tjDddrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=viYW+sidf0LlHog2XV8uT7Puf6uJEO7JkkaOuXCuRwk=;
+ b=hqPqKdlWO9BnmIgcvP4WCi/SWZpVZU/y/xxbDVFqwYYhIv6mdpIKvyDSwYnre9jXaEfANUI1QPgUXWCcl+3TIZ5TXM3juxgIU8OV83qeLD4eF3qlbKbpZ4wt9N7JVkMOIjXQBmfDrS510F0Td/5xf0h02SXEKPxDxMvIunmbrVEDuAn2o+73EILB72N2PQXPi2YCx8DN8zSyEyyvsJvcRZHLKoLS61PWFtvZCXUf6hZyFHe+4IDtoDG76cIgHueyboG+f1U5EJiMzCSiZZxMZS0/nnOLK9m23jvMDrDPhQOFY8kHql3dqF2aIJuU2mODRrBGmHkGm0fJHAHAlaMhYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=viYW+sidf0LlHog2XV8uT7Puf6uJEO7JkkaOuXCuRwk=;
+ b=xcTviN5yjLktanr9ioA2SAyoQTOvHY2k/QKEHlNEIpV0K9SZ9cJctsFeA8lLFYmwWQ2LccF6TnYayfdtN0j4IziP40oVs7v/y4q43FLdtRsmzqnX5SBeLgnHAnSXGtLdZ6Kz9GKDiv6QRDTzytPyEG+JFkmqVfgRwsv/XGJoJd4=
+Received: from BN9P222CA0019.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::24)
+ by MW4PR12MB6731.namprd12.prod.outlook.com (2603:10b6:303:1eb::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Thu, 8 Sep
+ 2022 05:03:30 +0000
+Received: from BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10c:cafe::61) by BN9P222CA0019.outlook.office365.com
+ (2603:10b6:408:10c::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
+ Transport; Thu, 8 Sep 2022 05:03:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT054.mail.protection.outlook.com (10.13.177.102) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5612.13 via Frontend Transport; Thu, 8 Sep 2022 05:03:29 +0000
+Received: from sindhu.amdval.net (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 8 Sep
+ 2022 00:03:24 -0500
+From:   Sandipan Das <sandipan.das@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <x86@kernel.org>
+CC:     <peterz@infradead.org>, <bp@alien8.de>, <acme@kernel.org>,
+        <namhyung@kernel.org>, <jolsa@kernel.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>,
+        <dave.hansen@linux.intel.com>, <eranian@google.com>,
+        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
+        <santosh.shukla@amd.com>, <sandipan.das@amd.com>
+Subject: [PATCH] perf/x86/amd/uncore: Fix memory leak for events array
+Date:   Thu, 8 Sep 2022 10:33:15 +0530
+Message-ID: <4fa9e5ac6d6e41fa889101e7af7e6ba372cfea52.1662613255.git.sandipan.das@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="nextPart2200929.ftShZd65HK"
-Content-Transfer-Encoding: 7Bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT054:EE_|MW4PR12MB6731:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8911a4a-0d90-4cb1-591a-08da915778a8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gklJP2RsQirGnlB0Fs/r/rUwBlj0bU7Zu1G3hteiP3brBVNECEVoE4umqd6xrf3tEeKqVszZSXqW06uywKIR9T55bq3NZErtedVtl6vrqa6nHE+E2BjDHs8PItQkh9TirlaWIIQz6sUH9RegKrNXaU66FcuyN83bqZhCii5FfW/AYY0x3CBSXAt6tpQ4GqEqLV/dtUs+NSGpinJpcOKWV5EGGPTXkFEuOjGHY9sackKm5JBlYzfx1oUedrcdpoxODH9rOK0Gtb2M9v8hEo5t/DfSDmOUjq0Eer1hWx0oCjclaKvytGMz3E9IhDuQ4BN7u0pbHaomxzEtSifDZkuMtz+mqiLcCB8X7JeIxx5Tb5wCPkkyFBWmTxF8G8LlXMJDgq0uFGbQX8Sf9J0NK1AP73zmjT/d1MXwUkd9b2XILXObJaUkZ1ZKRvsnopPmuCtj9ZSOGMN1Msm3mKc4u8owH2ZPXCJ9OcjLWHB4ENntfqLtnXQVnw3gd1I5zCYHodyltxcWhQtwNGaWs0YrO5JyDw1iFVIHMNHH1MXZIy+x5i7q++Ax8U3ajfKLPVV98Bj+Bz9U50d3BPR+wBfulHTCebTiZtHug3CC8OfuExghVdmFVkHdLq1Ul9bYDQZXWqKXQ8VT4nhDEGsBI9vAZyIx5hFTuyEAH2kpBCNoiXdC/6efVCOK0CVjNhCiL2eou+ecYRmZLxazpXIYQUCGhIJnINyUkAIcFhoC2+yYpGqbFlaWFqvETy+x4xBTXnEwxR5I4oEFJKg3caD/C2GYgpz4KiljWL91ZckMmXJh5CnvYD80fJ6SssVCwmehW2SD0KI3De/r2A4sSQ1bngMVzsfv5Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(376002)(346002)(46966006)(40470700004)(36840700001)(81166007)(82740400003)(40460700003)(316002)(356005)(70206006)(70586007)(4326008)(54906003)(8676002)(7416002)(82310400005)(110136005)(44832011)(8936002)(336012)(5660300002)(40480700001)(16526019)(2616005)(36756003)(2906002)(186003)(36860700001)(47076005)(426003)(83380400001)(478600001)(26005)(41300700001)(6666004)(86362001)(36900700001)(505234007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 05:03:29.8202
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8911a4a-0d90-4cb1-591a-08da915778a8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6731
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
+When a CPU comes online, the per-CPU NB and LLC uncore contexts are
+freed but not the events array within the context structure. This
+causes a memory leak as identified by the kmemleak detector.
 
---nextPart2200929.ftShZd65HK
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+  [...]
+  unreferenced object 0xffff8c5944b8e320 (size 32):
+    comm "swapper/0", pid 1, jiffies 4294670387 (age 151.072s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      [<000000000759fb79>] amd_uncore_cpu_up_prepare+0xaf/0x230
+      [<00000000ddc9e126>] cpuhp_invoke_callback+0x2cf/0x470
+      [<0000000093e727d4>] cpuhp_issue_call+0x14d/0x170
+      [<0000000045464d54>] __cpuhp_setup_state_cpuslocked+0x11e/0x330
+      [<0000000069f67cbd>] __cpuhp_setup_state+0x6b/0x110
+      [<0000000015365e0f>] amd_uncore_init+0x260/0x321
+      [<00000000089152d2>] do_one_initcall+0x3f/0x1f0
+      [<000000002d0bd18d>] kernel_init_freeable+0x1ca/0x212
+      [<0000000030be8dde>] kernel_init+0x11/0x120
+      [<0000000059709e59>] ret_from_fork+0x22/0x30
+  unreferenced object 0xffff8c5944b8dd40 (size 64):
+    comm "swapper/0", pid 1, jiffies 4294670387 (age 151.072s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      [<00000000306efe8b>] amd_uncore_cpu_up_prepare+0x183/0x230
+      [<00000000ddc9e126>] cpuhp_invoke_callback+0x2cf/0x470
+      [<0000000093e727d4>] cpuhp_issue_call+0x14d/0x170
+      [<0000000045464d54>] __cpuhp_setup_state_cpuslocked+0x11e/0x330
+      [<0000000069f67cbd>] __cpuhp_setup_state+0x6b/0x110
+      [<0000000015365e0f>] amd_uncore_init+0x260/0x321
+      [<00000000089152d2>] do_one_initcall+0x3f/0x1f0
+      [<000000002d0bd18d>] kernel_init_freeable+0x1ca/0x212
+      [<0000000030be8dde>] kernel_init+0x11/0x120
+      [<0000000059709e59>] ret_from_fork+0x22/0x30
+  [...]
 
-Dear Heikki,
+Fix the problem by freeing the events array before freeing the uncore
+context.
 
-> I'm sending these as an RFC first because I'm not done testing.
->=20
-> I made a small modification to my original proposal (in the bug
-> report). Now also connection during suspend should be covered.
->=20
-> I would appreciate if you guys could test these again. If
-> everything works, and the bug is fixed, let me know, and I'll add
-> your Tested-by tags to the patches.
->
+Fixes: 39621c5808f5 ("perf/x86/amd/uncore: Use dynamic events array")
+Reported-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Tested-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+---
+ arch/x86/events/amd/uncore.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks so much for these changes=E2=80=94that's awesome! I have just finish=
-ed=20
-testing this against 5.19.7 (Arch Linux) with a Lenovo X1 (Gen 9).
-
-I am very happy to see that, as far as I can tell, the issue=20
-disappeared completely!
-
-However, I am receiving additional warnings via `journalctl` that I=20
-did not receive before; I have attached this trace as an additional=20
-log file. Nothing in there seems critical and I can confirm that the=20
-system continues to operate normally. I merely wanted to provide you=20
-with this additional information in case it is of relevance.
-
-Please let me know if there's anything else I can do here; I really=20
-appreciate the time you spent on this!
-
-All the best,
-  Bastian
---nextPart2200929.ftShZd65HK
-Content-Disposition: attachment; filename="trace.log"
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/x-log; charset="UTF-8"; name="trace.log"
-
-ep 08 06:41:34 nimue kernel: ------------[ cut here ]------------
-Sep 08 06:41:34 nimue kernel: WARNING: CPU: 0 PID: 448 at kernel/module/mai=
-n.c:849 module_put+0x8f/0xa0
-Sep 08 06:41:34 nimue kernel: Modules linked in: r8153_ecm cdc_ether usbnet=
- r8152 mii typec_displayport rfcomm snd_ctl_led snd_soc_skl_hda_dsp snd_soc=
-_intel_hda_dsp_common snd_soc_hdac_hdmi snd_sof_probes snd_hda_codec_hdmi s=
-nd_hda_codec_realtek snd_hda_codec_generic snd_soc_dmic snd_sof_pci_intel_t=
-gl snd_sof_intel_hda_common soundwire_intel soundwire_generic_allocation cc=
-m soundwire_cadence snd_sof_intel_hda algif_aead snd_sof_pci snd_sof_xtensa=
-_dsp des_generic libdes snd_sof ecb snd_sof_utils algif_skcipher snd_soc_hd=
-ac_hda snd_hda_ext_core snd_soc_acpi_intel_match cmac snd_soc_acpi soundwir=
-e_bus md4 algif_hash bnep snd_soc_core af_alg snd_compress joydev mousedev =
-intel_tcc_cooling iwlmvm ac97_bus x86_pkg_temp_thermal snd_pcm_dmaengine in=
-tel_powerclamp coretemp hid_multitouch mac80211 snd_hda_intel iTCO_wdt pmt_=
-telemetry intel_pmc_bxt snd_intel_dspcfg kvm_intel spi_nor snd_intel_sdw_ac=
-pi libarc4 iTCO_vendor_support mtd mei_hdcp mei_pxp intel_rapl_msr pmt_clas=
-s think_lmi snd_hda_codec iwlwifi
-Sep 08 06:41:34 nimue kernel:  firmware_attributes_class wmi_bmof kvm snd_h=
-da_core irqbypass intel_cstate intel_uncore pcspkr uvcvideo psmouse iwlmei =
-snd_hwdep vfat i2c_i801 spi_intel_pci videobuf2_vmalloc fat snd_pcm btusb s=
-pi_intel i2c_smbus videobuf2_memops intel_lpss_pci btrtl snd_timer btbcm me=
-i_me cfg80211 intel_lpss videobuf2_v4l2 btintel idma64 videobuf2_common btm=
-tk mei videodev mc bluetooth processor_thermal_device_pci_legacy processor_=
-thermal_device processor_thermal_rfim ecdh_generic processor_thermal_mbox c=
-rc16 thunderbolt intel_vsec thinkpad_acpi processor_thermal_rapl ucsi_acpi =
-intel_rapl_common ledtrig_audio typec_ucsi platform_profile igen6_edac inte=
-l_soc_dts_iosf typec rfkill roles snd wmi soundcore int3403_thermal soc_but=
-ton_array int340x_thermal_zone i2c_hid_acpi i2c_hid essiv authenc mac_hid i=
-ntel_hid int3400_thermal acpi_pad sparse_keymap acpi_thermal_rel acpi_tad p=
-kcs8_key_parser crypto_user fuse bpf_preload ip_tables x_tables btrfs blake=
-2b_generic libcrc32c crc32c_generic xor
-Sep 08 06:41:34 nimue kernel:  raid6_pq dm_crypt cbc encrypted_keys trusted=
- asn1_encoder tee tpm rng_core dm_mod serio_raw crct10dif_pclmul atkbd crc3=
-2_pclmul crc32c_intel libps2 ghash_clmulni_intel vivaldi_fmap nvme aesni_in=
-tel crypto_simd cryptd nvme_core xhci_pci xhci_pci_renesas i8042 serio i915=
- intel_gtt drm_buddy video drm_display_helper cec ttm
-Sep 08 06:41:34 nimue kernel: Unloaded tainted modules: pcc_cpufreq():1 acp=
-i_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1 pcc_cpufre=
-q():1 acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 acp=
-i_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufre=
-q():1 pcc_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1 pcc=
-_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq(=
-):1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 acpi_=
-cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq()=
-:1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_c=
-pufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 fjes():1 fjes()=
-:1 acpi_cpufreq():1 asus_ec_sensors():1 pcc_cpufreq():1 acpi_cpufreq():1 fj=
-es():1 pcc_cpufreq():1 fjes():1 pcc_cpufreq():1 acpi_cpufreq():1 fjes():1 a=
-cpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufr=
-eq():1 fjes():1 acpi_cpufreq():1
-Sep 08 06:41:34 nimue kernel:  asus_ec_sensors():1 acpi_cpufreq():1 fjes():=
-1 pcc_cpufreq():1 fjes():1 acpi_cpufreq():1
-Sep 08 06:41:34 nimue kernel: CPU: 0 PID: 448 Comm: kworker/0:2 Tainted: G =
-       W         5.19.7-arch1-1-ucsi-patch #1 7e4375cb15cb2751a8ce700399419=
-d2870882116
-Sep 08 06:41:34 nimue kernel: Hardware name: LENOVO 20XXS33A00/20XXS33A00, =
-BIOS N32ET75W (1.51 ) 12/02/2021
-Sep 08 06:41:34 nimue kernel: Workqueue: events ucsi_handle_connector_chang=
-e [typec_ucsi]
-Sep 08 06:41:34 nimue kernel: RIP: 0010:module_put+0x8f/0xa0
-Sep 08 06:41:34 nimue kernel: Code: 0f 48 8b 40 08 48 89 fe 48 89 c7 e8 8b =
-fa ff ff 65 ff 0d 84 05 0e 61 75 b4 e8 45 40 ec ff eb ad e8 22 40 ec ff c3 =
-cc cc cc cc <0f> 0b eb 99 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e f=
-a 55
-Sep 08 06:41:34 nimue kernel: RSP: 0018:ffffb61000487d18 EFLAGS: 00010297
-Sep 08 06:41:34 nimue kernel: RAX: 0000000000000000 RBX: ffff8db49cf5b008 R=
-CX: 0000000000000000
-Sep 08 06:41:34 nimue kernel: RDX: 00000000ffffffff RSI: 0000000000000000 R=
-DI: ffffffffc08bb180
-Sep 08 06:41:34 nimue kernel: RBP: 0000000000000000 R08: ffff8db480401758 R=
-09: ffffffffa0a51fb0
-Sep 08 06:41:34 nimue kernel: R10: 0000000000000000 R11: 0000000000000000 R=
-12: ffffffffc08bb018
-Sep 08 06:41:34 nimue kernel: R13: ffff8db49cf5b088 R14: 0000000000000080 R=
-15: ffff8db484364388
-Sep 08 06:41:34 nimue kernel: FS:  0000000000000000(0000) GS:ffff8dbbbf6000=
-00(0000) knlGS:0000000000000000
-Sep 08 06:41:34 nimue kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 000000008005=
-0033
-Sep 08 06:41:34 nimue kernel: CR2: 00007f2ef985a000 CR3: 00000003d7210001 C=
-R4: 0000000000f70ef0
-Sep 08 06:41:34 nimue kernel: PKRU: 55555554
-Sep 08 06:41:34 nimue kernel: Call Trace:
-Sep 08 06:41:34 nimue kernel:  <TASK>
-Sep 08 06:41:34 nimue kernel:  typec_altmode_update_active+0x6f/0x110 [type=
-c 4340e8e184497847e0034f471886b5beb7adb48f]
-Sep 08 06:41:34 nimue kernel:  typec_remove+0xf0/0x110 [typec 4340e8e184497=
-847e0034f471886b5beb7adb48f]
-Sep 08 06:41:34 nimue kernel:  device_release_driver_internal+0x1b6/0x230
-Sep 08 06:41:34 nimue kernel:  bus_remove_device+0xdc/0x150
-Sep 08 06:41:34 nimue kernel:  device_del+0x18f/0x410
-Sep 08 06:41:34 nimue kernel:  device_unregister+0x17/0x60
-Sep 08 06:41:34 nimue kernel:  ucsi_unregister_altmodes+0x41/0xa0 [typec_uc=
-si 91402ff21fa7795a95552024a8006e70bdb35a49]
-Sep 08 06:41:34 nimue kernel:  ucsi_handle_connector_change+0x219/0x2a0 [ty=
-pec_ucsi 91402ff21fa7795a95552024a8006e70bdb35a49]
-Sep 08 06:41:34 nimue kernel:  ? kfree+0x2e5/0x300
-Sep 08 06:41:34 nimue kernel:  process_one_work+0x1c4/0x380
-Sep 08 06:41:34 nimue kernel:  worker_thread+0x51/0x390
-Sep 08 06:41:34 nimue kernel:  ? rescuer_thread+0x3b0/0x3b0
-Sep 08 06:41:34 nimue kernel:  kthread+0xdb/0x110
-Sep 08 06:41:34 nimue kernel:  ? kthread_complete_and_exit+0x20/0x20
-Sep 08 06:41:34 nimue kernel:  ret_from_fork+0x1f/0x30
-Sep 08 06:41:34 nimue kernel:  </TASK>
-Sep 08 06:41:34 nimue kernel: ---[ end trace 0000000000000000 ]---
-
-
---nextPart2200929.ftShZd65HK--
-
-
+diff --git a/arch/x86/events/amd/uncore.c b/arch/x86/events/amd/uncore.c
+index d568afc705d2..83f15fe411b3 100644
+--- a/arch/x86/events/amd/uncore.c
++++ b/arch/x86/events/amd/uncore.c
+@@ -553,6 +553,7 @@ static void uncore_clean_online(void)
+ 
+ 	hlist_for_each_entry_safe(uncore, n, &uncore_unused_list, node) {
+ 		hlist_del(&uncore->node);
++		kfree(uncore->events);
+ 		kfree(uncore);
+ 	}
+ }
+-- 
+2.34.1
 

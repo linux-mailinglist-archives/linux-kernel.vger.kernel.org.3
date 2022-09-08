@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266345B18EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92025B18ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiIHJjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S230269AbiIHJkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiIHJj3 (ORCPT
+        with ESMTP id S229628AbiIHJkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:39:29 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044FBBC;
-        Thu,  8 Sep 2022 02:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1662629965;
-  x=1694165965;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GYN6K1XEtbZIYFOF497nm3dEoRDRacw5iqjWmI9bicw=;
-  b=bTnXta5bUEvS3Uf/3Rbdyta8/G8B3RbCDNnLKAkRsfh3+2ZCTy0bC4TX
-   XJ/PcxzcWcQ+4qIkuWKu8EPvw1u2L49a5RUOewa+b5BiREY/lBFV4pZix
-   7kz/43IH313mImItz0FfV0kuf/HW9A11nnBMHa+F80DX+MYfLh/J1Atwj
-   zLQQYk14zKQ3pKcAfHqTopxSdDUjnROo1i+NS58M8QKnaeI0olQZWqudW
-   39GbeW3uMeVXJWy71aqDf1YkqrgPVrMbvm1ZjWT8Z42Hj8zKg8Wk+2Dwc
-   iRgXN8e50fiWD6VYhvLMwPmpM+bNoE6XFg04yyrMgmi/7i1w4aLlk6byb
-   g==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <akpm@linux-foundation.org>
-CC:     <kernel@axis.com>, <adobriyan@gmail.com>, <vbabka@suse.cz>,
-        <dancol@google.com>, <linux-mm@kvack.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-Subject: [PATCH] proc: Enable smaps_rollup without ptrace rights
-Date:   Thu, 8 Sep 2022 11:39:19 +0200
-Message-ID: <20220908093919.843346-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 8 Sep 2022 05:40:39 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99433A4065;
+        Thu,  8 Sep 2022 02:40:38 -0700 (PDT)
+Received: from [192.168.169.80] (unknown [182.2.70.215])
+        by gnuweeb.org (Postfix) with ESMTPSA id 7BFA07E257;
+        Thu,  8 Sep 2022 09:40:35 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1662630038;
+        bh=9GtF7/yEBkr3DszkBXwjMPoNQDrMpR247woZPWbmsww=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=LyfdZKPLqAilUE8+7Lb8ALBPWP0h2R5x6S0KM7XTE+4UnWPLNbzpyVHjwOrRSIoPu
+         7yMLfGRc2qw7EX7LJyNPN7IdPoWRpz4MnIhx1mHJmXh2BQFQvCfF1fU2JL82M7UaFz
+         VBkjSfJYjyeDliIjBtH+/wzTl9HL0rMmZYnLmUa0+GAi9iuK2v5M4gL4BNqa54iFrg
+         VzVK2J/0F/OFXOe19Rh2TXVgnGQMQZXmzqZXDCC1qUjDu9RIC8GXYi1BnLI3Yq4/Tk
+         HtC3kMEkktQ4fWrUbrTg9dKqJmV5ncsIG+O46PlG3joVmvS6enFAuSXOjENDTI+AMV
+         +OlfmxwomwQdw==
+Message-ID: <c0c393cf-8f1a-b86e-db55-e493509dafd7@gnuweeb.org>
+Date:   Thu, 8 Sep 2022 16:40:32 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Cc:     stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220906132829.417117002@linuxfoundation.org>
+ <20220906132833.059733416@linuxfoundation.org>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH 5.19 086/155] drm/i915/reg: Fix spelling mistake
+ "Unsupport" -> "Unsupported"
+In-Reply-To: <20220906132833.059733416@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,109 +59,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smaps_rollup is currently only allowed on processes which the user has
-ptrace permissions for, since it uses a common proc open function used
-by other files like mem and smaps.
+On 9/6/22 8:30 PM, Greg Kroah-Hartman wrote:
+> From: Colin Ian King <colin.i.king@gmail.com>
+> 
+> [ Upstream commit 233f56745be446b289edac2ba8184c09365c005e ]
+> 
+> There is a spelling mistake in a gvt_vgpu_err error message. Fix it.
+> 
+> Fixes: 695fbc08d80f ("drm/i915/gvt: replace the gvt_err with gvt_vgpu_err")
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
+> Link: http://patchwork.freedesktop.org/patch/msgid/20220315202449.2952845-1-colin.i.king@gmail.com
+> Reviewed-by: Zhi Wang <zhi.a.wang@intel.com>
+> Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   drivers/gpu/drm/i915/gvt/handlers.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gvt/handlers.c b/drivers/gpu/drm/i915/gvt/handlers.c
+> index beea5895e4992..73e74a6a76037 100644
+> --- a/drivers/gpu/drm/i915/gvt/handlers.c
+> +++ b/drivers/gpu/drm/i915/gvt/handlers.c
+> @@ -905,7 +905,7 @@ static int update_fdi_rx_iir_status(struct intel_vgpu *vgpu,
+>   	else if (FDI_RX_IMR_TO_PIPE(offset) != INVALID_INDEX)
+>   		index = FDI_RX_IMR_TO_PIPE(offset);
+>   	else {
+> -		gvt_vgpu_err("Unsupport registers %x\n", offset);
+> +		gvt_vgpu_err("Unsupported registers %x\n", offset);
+>   		return -EINVAL;
+>   	}
 
-However, while smaps provides detailed, individual information about
-each memory map in the process (justifying its ptrace rights
-requirement), smaps_rollup only provides a summary of the memory usage,
-which is not unlike the information available from other places like the
-status and statm files, which do not need ptrace permissions.
+I don't think this one is a stable material. How did this get picked up?
 
-The first line of smaps_rollup could however be sensitive, since it
-exposes the randomized start and end of the process' address space.
-This information however does not seem essential to smap_rollup's
-purpose and could be replaced with placeholder values to preserve the
-format without leaking information.  (I could not find any user space in
-Debian or Android which uses the information in the first line.)
-
-Replace the start with 0 and end with ~0 and allow smaps_rollup to be
-opened and read regardless of ptrace permissions.
-
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- fs/proc/base.c     | 18 +++++++++++++++---
- fs/proc/internal.h |  1 +
- fs/proc/task_mmu.c |  5 ++---
- 3 files changed, 18 insertions(+), 6 deletions(-)
-
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 93f7e3d971e4..9482eb3954de 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -792,14 +792,16 @@ static const struct file_operations proc_single_file_operations = {
- 	.release	= single_release,
- };
- 
--
--struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode)
-+static struct mm_struct *__proc_mem_open(struct inode *inode, unsigned int mode, bool creds)
- {
- 	struct task_struct *task = get_proc_task(inode);
- 	struct mm_struct *mm = ERR_PTR(-ESRCH);
- 
- 	if (task) {
--		mm = mm_access(task, mode | PTRACE_MODE_FSCREDS);
-+		if (creds)
-+			mm = mm_access(task, mode | PTRACE_MODE_FSCREDS);
-+		else
-+			mm = get_task_mm(task);
- 		put_task_struct(task);
- 
- 		if (!IS_ERR_OR_NULL(mm)) {
-@@ -813,6 +815,16 @@ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode)
- 	return mm;
- }
- 
-+struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode)
-+{
-+	return __proc_mem_open(inode, mode, true);
-+}
-+
-+struct mm_struct *proc_mem_open_nocreds(struct inode *inode)
-+{
-+	return __proc_mem_open(inode, 0, false);
-+}
-+
- static int __mem_open(struct inode *inode, struct file *file, unsigned int mode)
- {
- 	struct mm_struct *mm = proc_mem_open(inode, mode);
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index 06a80f78433d..5c906661b018 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -293,6 +293,7 @@ struct proc_maps_private {
- } __randomize_layout;
- 
- struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
-+struct mm_struct *proc_mem_open_nocreds(struct inode *inode);
- 
- extern const struct file_operations proc_pid_maps_operations;
- extern const struct file_operations proc_pid_numa_maps_operations;
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 4e0023643f8b..13f910b51dce 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -969,8 +969,7 @@ static int show_smaps_rollup(struct seq_file *m, void *v)
- 		vma = vma->vm_next;
- 	}
- 
--	show_vma_header_prefix(m, priv->mm->mmap->vm_start,
--			       last_vma_end, 0, 0, 0, 0);
-+	show_vma_header_prefix(m, 0, ~0lu, 0, 0, 0, 0);
- 	seq_pad(m, ' ');
- 	seq_puts(m, "[rollup]\n");
- 
-@@ -1015,7 +1014,7 @@ static int smaps_rollup_open(struct inode *inode, struct file *file)
- 		goto out_free;
- 
- 	priv->inode = inode;
--	priv->mm = proc_mem_open(inode, PTRACE_MODE_READ);
-+	priv->mm = proc_mem_open_nocreds(inode);
- 	if (IS_ERR(priv->mm)) {
- 		ret = PTR_ERR(priv->mm);
- 
 -- 
-2.34.1
-
+Ammar Faizi

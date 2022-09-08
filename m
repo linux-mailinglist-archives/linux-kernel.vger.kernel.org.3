@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C80E5B169C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB415B16A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiIHIOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S231571AbiIHIOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiIHINg (ORCPT
+        with ESMTP id S231390AbiIHINm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:13:36 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E859D9EBE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:13:17 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id l65so17147763pfl.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:13:17 -0700 (PDT)
+        Thu, 8 Sep 2022 04:13:42 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ABFD6BB5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:13:26 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z21so13109811edi.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:13:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=jD1WgCeSA8uWA865ybZkInzC4AA4C89F3a1ntZPiE8k=;
-        b=gRx+CxMIiN6H9pj7fPVTKTaBOZuCbadXfe/izl78J7zwh9G/F/ZZfhDRPAR4KUqpIT
-         tzTV7y+tG4VbrnkuhCTSDnVuChYd1LK08RhOcWwdzZIjw2AGCjLp9xz3DJj7dl2RNmhS
-         laBZg/+nT7AZB8IzBfjPX3AwryZn3ulbsNQ5g=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=XWkSveJnRzdKknQVJvingAQ78zNNLel+FWq5VV07OlE=;
+        b=jRLi85+fXwo43KQrU4myTG9XTPSquksWe/XvRX7TYb7GraJKW8IJtYfovgGkczWfO1
+         bYwJMLLFG6PNudKjBUQzz73STtBFd6V4x5FD4C8WkgDYNMvtc+1Bl0Kja840zmydb7Dk
+         R1f+8EAh9SdZYshHDAY4euPG9fH7mHOJQvVccAuIrdg0ZDbUqPHo8WyX9mHuYCGimM24
+         YP3WQ6HmoChixUzx1paI/lXVpo3wZrRWlGGVbaMD9oe607cEm80TQq9udOFb7fMoKVdH
+         qENdLT4lSWItLbHHuJ2dWiNS4MMdyM1rMc/BVCp3BIYXfVem88Ot/yq4n9Crmzb5y308
+         lUmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=jD1WgCeSA8uWA865ybZkInzC4AA4C89F3a1ntZPiE8k=;
-        b=ZRTyGuNKbudMGgBlgNjVO6JFy7iYHP4Zn2dASuFOveN1y/2w0DedpMC2DiSinDm2bb
-         OVcPZ7A6gWQIP3SwI3+IJTAH2NacKXOKNoCtk6+Q4o1hOQ344kbPlg4TAbpThHQ/auQ0
-         HhWfHfa+K8jRxmLMz4cDazm7BR8rU6EANU0FbSAuzSW7eaOimINGMTEWf+nG4hc3Y/jQ
-         TtyVRPx8y4I06bn2bOOe+p7shYh+/4+dVsDzarmVybIowKOH+gdUfAk1xgYMtP2wpgJM
-         fYXPtv0nkJdMJ3COa71L9tQ9LpLN5nE+DV5SaJ+FhQNeTlRZps4zo2NEIv6YQLXfFmfE
-         NMgQ==
-X-Gm-Message-State: ACgBeo2c1vcFfy+VDPAiWp35KHF0FEnTrbXkqb+23m7g5nwY6OZBWgmd
-        jOuGnyQecIfCDXYGElp7zQZsvQ==
-X-Google-Smtp-Source: AA6agR5pAxhOg42yEVQWiNBTst6BWefRDET/Dw+fjQjsfFbYbib4gMXfhh2kApJRsESI7zxngjveLQ==
-X-Received: by 2002:a63:6683:0:b0:42b:1d69:a0ff with SMTP id a125-20020a636683000000b0042b1d69a0ffmr6965140pgc.475.1662624796587;
-        Thu, 08 Sep 2022 01:13:16 -0700 (PDT)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:5237:c185:9b01:8955])
-        by smtp.gmail.com with ESMTPSA id z22-20020aa79496000000b0052d4cb47339sm14159702pfk.151.2022.09.08.01.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 01:13:16 -0700 (PDT)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Hermes Wu <hermes.wu@ite.com.tw>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH 2/2] drm/bridge: it6505: Add pre_enable/post_disable callback
-Date:   Thu,  8 Sep 2022 16:12:58 +0800
-Message-Id: <20220908081259.503236-3-treapking@chromium.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220908081259.503236-1-treapking@chromium.org>
-References: <20220908081259.503236-1-treapking@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=XWkSveJnRzdKknQVJvingAQ78zNNLel+FWq5VV07OlE=;
+        b=0/47MJvJ45Ac2p1TnrWIIIAF/N85pxtFZVEgpiPwzWBqiOa2cCcGiiDhJh0xsfiTPp
+         RhURRoA7mux4kKU4VWI7xT24W3UdNsOO3hMEuPAuKuQKo3D1mCC43huDAklxPwjr88QR
+         FsDo43/JXLXr0XZQShAW0lycL8IDAG6HjZDpAoDbQ5DBJWsFzw+e8A/Fziix8+Pc+P+A
+         0avrlOvLZHksDvDp8qeScL2s+fwXBr1eKXbimm+U9mpQBiJGaeN6+ZAr9V7XVdsgQgUL
+         AJs08Y0h0UQldMJwfEACN9odcXBlZ3k0q57pDoeZdBq6zB5N9cCuLJ+QVsKAiDFZPOq2
+         jRCA==
+X-Gm-Message-State: ACgBeo0K7naZFFoPQJ2HYUtUU/bZnuTMniZnWq63yA0JkaSqYSOWjRKk
+        nRarWZi5ecwXWgugPL2/IsDP1haKX76Olsw6w9YxyA==
+X-Google-Smtp-Source: AA6agR61mT7tkyrz3ia2WmI9qL8rb9Hia3J00WfiGHtjyrq5l+uSjyAmKJyQgQF5xs6AGHNJPzuPDon8GNuoQIkZGu4=
+X-Received: by 2002:a05:6402:51d1:b0:448:bed1:269c with SMTP id
+ r17-20020a05640251d100b00448bed1269cmr6168449edd.205.1662624804730; Thu, 08
+ Sep 2022 01:13:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
+In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 8 Sep 2022 10:13:13 +0200
+Message-ID: <CACRpkdasPuDGzGLbeHo5oE-9aakVzhSmtbOUHpfu+KTEAHMCOA@mail.gmail.com>
+Subject: Re: [PATCH v1 01/11] PCI: tegra: switch to using devm_fwnode_gpiod_get
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Airlie <airlied@linux.ie>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,61 +99,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add atomic_pre_enable and atomic_post_disable callback to make sure the
-bridge is not powered off until atomic_post_disable is called. This
-prevents a power leakage when it6505 is powered off, but the upstream
-DRM bridge is still sending display signals.
+On Mon, Sep 5, 2022 at 8:31 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
 
-Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> I would like to limit (or maybe even remove) use of
+> [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
+> a bit, so let's switch to the generic device property API. It may even
+> help with handling secondary fwnodes when gpiolib is taught to handle
+> gpios described by swnodes.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
----
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
- drivers/gpu/drm/bridge/ite-it6505.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index 9d37660545fb..f5eea138ace4 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -2984,6 +2984,28 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
- 	}
- }
- 
-+static void it6505_bridge_atomic_pre_enable(struct drm_bridge *bridge,
-+					    struct drm_bridge_state *old_state)
-+{
-+	struct it6505 *it6505 = bridge_to_it6505(bridge);
-+	struct device *dev = &it6505->client->dev;
-+
-+	DRM_DEV_DEBUG_DRIVER(dev, "start");
-+
-+	pm_runtime_get_sync(dev);
-+}
-+
-+static void it6505_bridge_atomic_post_disable(struct drm_bridge *bridge,
-+					      struct drm_bridge_state *old_state)
-+{
-+	struct it6505 *it6505 = bridge_to_it6505(bridge);
-+	struct device *dev = &it6505->client->dev;
-+
-+	DRM_DEV_DEBUG_DRIVER(dev, "start");
-+
-+	pm_runtime_put_sync(dev);
-+}
-+
- static enum drm_connector_status
- it6505_bridge_detect(struct drm_bridge *bridge)
- {
-@@ -3018,6 +3040,8 @@ static const struct drm_bridge_funcs it6505_bridge_funcs = {
- 	.mode_valid = it6505_bridge_mode_valid,
- 	.atomic_enable = it6505_bridge_atomic_enable,
- 	.atomic_disable = it6505_bridge_atomic_disable,
-+	.atomic_pre_enable = it6505_bridge_atomic_pre_enable,
-+	.atomic_post_disable = it6505_bridge_atomic_post_disable,
- 	.detect = it6505_bridge_detect,
- 	.get_edid = it6505_bridge_get_edid,
- };
--- 
-2.37.2.789.g6183377224-goog
-
+Yours,
+Linus Walleij

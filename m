@@ -2,81 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019B55B1BA6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B125B1BAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiIHLhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        id S230527AbiIHLio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIHLhM (ORCPT
+        with ESMTP id S231438AbiIHLih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:37:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505807D7A9;
-        Thu,  8 Sep 2022 04:37:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07D9BB820BD;
-        Thu,  8 Sep 2022 11:37:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74312C433D6;
-        Thu,  8 Sep 2022 11:37:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662637028;
-        bh=nFaIloh72XswjqLypFm7qEwZe0n6G6z7SXTNzBgCMjg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=T8fy2B8GzUAkzTIPSAwnHwIr6BrIEln2MeWmJAxpt9MOd925gW1B2lQhZYSO4COYu
-         B2O8n2i73wr8nQ+Xl9fXqr5P9fydyAptj/hEQAIeJ51Xa/wC8HJ39zNDiXvXlWzeAH
-         Yda5slhtPSR7aZt2pwMzXhhFhRe5nrfP+UOan5Gou2I7n4cg45cMkkZXhJqXnq7/W9
-         aIDWYDkMNc0c9V1oMyr0Ojcp8Tb3pXVFnJPg/eIRJfpXyzU5wP48Yb60jYJPaVcfwS
-         jtr/wUtGXPernRKRBPdv9HqXzzQo9VLCkAV2iNdNCznGAQGrXT/r2lX5iXbMgopjjo
-         jBbL/T/kwrleQ==
-Message-ID: <c15f58c78e560bb9a597db6d22c317f98f020435.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        "neilb@suse.de" <neilb@suse.de>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
-Date:   Thu, 08 Sep 2022 07:37:05 -0400
-In-Reply-To: <9f8b9ee28dcc479ab6fb1105fc12ff190a9b5c48.camel@hammerspace.com>
-References: <20220907111606.18831-1-jlayton@kernel.org>
-                , <166255065346.30452.6121947305075322036@noble.neil.brown.name>
-                , <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
-                , <20220907125211.GB17729@fieldses.org>
-                , <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
-                , <8a71986b4fb61cd9b4adc8b4250118cbb19eec58.camel@hammerspace.com>
-         <166259706887.30452.6749778447732126953@noble.neil.brown.name>
-         <9f8b9ee28dcc479ab6fb1105fc12ff190a9b5c48.camel@hammerspace.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 8 Sep 2022 07:38:37 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01699119783
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:38:35 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id f11so13236142lfa.6
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=grqX19KGO8eCpQz3LigCL9EjlFRHcaI3gD40UOrTb78=;
+        b=aq7Pf89eDR+03e/1BvAyg2jjoqYLAHFBBg6Jzpu+powYbJ3VkVxIalvphU7patc+AL
+         28woYXGvjt1KmUAHQAcf5IeParcnJvnbZItooWH/18XzKJ8E3DXaCYVmgx5fHqidhVXR
+         4Rt2POJc0bYdUyEcbA05kiI8YSew9OoiRuXatoiWStgki6FfqC1QafVC3ZLQSoiBl580
+         PKYNAPh2W02ywtxJ+vRnh+oO9660gC+ZoYxcmUyu2RXSVCRer1PSOAyc16KDopjGQFoj
+         Uth/jmyWrJRxyomiSsHA3JTylisEmBNH3jBl1iojO8EZjn1NkgDPKiOUHthoomm3EXSX
+         Kytg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=grqX19KGO8eCpQz3LigCL9EjlFRHcaI3gD40UOrTb78=;
+        b=jLk9I33RU5ZHa5IuzVKGdDH85wWn+IJUdpXnvnhC+TY+bLACOdUaSg9kb/j92+cc/d
+         MRXKb+9Jh9StRWTQBabltTxN/x0o9xIFPKi2xODsUsZhorwB8PZIYOPKx4O3g4G6B0Vs
+         EAy5pkHKnciBRLD5qxfmpUxA/DBhIMhEbRZZToCFfm6GdSFmdDPRFuwT48wBzRAv4v+8
+         56M+JkAkpGPidVZnA3T0oc7fVR9h860h6TXKKnvhhxkbqiMxDJudmTghhmybUeC6cUPQ
+         F3z8yfLO3FLvmG5hdbaiTdEwNDcaDsYZ75J7oys3e6nIBK/n5rTMtG3jWlfZXnM1yJ2L
+         RhQg==
+X-Gm-Message-State: ACgBeo1En1vHf/oIQTI7y4eAXrsnavbkYMmlspgp2ikEoPk9gs3AU3RW
+        3F6eoWPATgDLXX7ZGnuIsL6NFQ==
+X-Google-Smtp-Source: AA6agR7OdszDXca1mtiu9oJ1zsvD0Ie5SZlza967cSFAEmoFSH0tSdNxKFXyn0iKi2nrmxkRabnGvw==
+X-Received: by 2002:a05:6512:312d:b0:497:a3df:a08b with SMTP id p13-20020a056512312d00b00497a3dfa08bmr2406053lfd.462.1662637114396;
+        Thu, 08 Sep 2022 04:38:34 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id j18-20020a056512345200b004979ec19387sm1480626lfr.305.2022.09.08.04.38.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 04:38:33 -0700 (PDT)
+Message-ID: <43c63dce-60fc-f21e-4ca3-5ba2518b79b7@linaro.org>
+Date:   Thu, 8 Sep 2022 13:38:32 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/4] media: dt-bindings: Document Renesas RZ/G2L CSI-2
+ block
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220905230406.30801-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220905230406.30801-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,100 +89,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-08 at 00:41 +0000, Trond Myklebust wrote:
-> On Thu, 2022-09-08 at 10:31 +1000, NeilBrown wrote:
-> > On Wed, 07 Sep 2022, Trond Myklebust wrote:
-> > > On Wed, 2022-09-07 at 09:12 -0400, Jeff Layton wrote:
-> > > > On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
-> > > > > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
-> > > > > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
-> > > > > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
-> > > > > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic
-> > > > > > > > with
-> > > > > > > > respect to the
-> > > > > > > > +other changes in the inode. On a write, for instance,
-> > > > > > > > the
-> > > > > > > > i_version it usually
-> > > > > > > > +incremented before the data is copied into the
-> > > > > > > > pagecache.
-> > > > > > > > Therefore it is
-> > > > > > > > +possible to see a new i_version value while a read still
-> > > > > > > > shows the old data.
-> > > > > > >=20
-> > > > > > > Doesn't that make the value useless?
-> > > > > > >=20
-> > > > > >=20
-> > > > > > No, I don't think so. It's only really useful for comparing
-> > > > > > to an
-> > > > > > older
-> > > > > > sample anyway. If you do "statx; read; statx" and the value
-> > > > > > hasn't
-> > > > > > changed, then you know that things are stable.=20
-> > > > >=20
-> > > > > I don't see how that helps.=A0 It's still possible to get:
-> > > > >=20
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0reader=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0writer
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0------=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0------
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0i_version++
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0read
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0statx
-> > > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0update page cache
-> > > > >=20
-> > > > > right?
-> > > > >=20
-> > > >=20
-> > > > Yeah, I suppose so -- the statx wouldn't necessitate any locking.
-> > > > In
-> > > > that case, maybe this is useless then other than for testing
-> > > > purposes
-> > > > and userland NFS servers.
-> > > >=20
-> > > > Would it be better to not consume a statx field with this if so?
-> > > > What
-> > > > could we use as an alternate interface? ioctl? Some sort of
-> > > > global
-> > > > virtual xattr? It does need to be something per-inode.
-> > >=20
-> > > I don't see how a non-atomic change attribute is remotely useful
-> > > even
-> > > for NFS.
-> > >=20
-> > > The main problem is not so much the above (although NFS clients are
-> > > vulnerable to that too) but the behaviour w.r.t. directory changes.
-> > >=20
-> > > If the server can't guarantee that file/directory/... creation and
-> > > unlink are atomically recorded with change attribute updates, then
-> > > the
-> > > client has to always assume that the server is lying, and that it
-> > > has
-> > > to revalidate all its caches anyway. Cue endless
-> > > readdir/lookup/getattr
-> > > requests after each and every directory modification in order to
-> > > check
-> > > that some other client didn't also sneak in a change of their own.
-> >=20
-> > NFS re-export doesn't support atomic change attributes on
-> > directories.
-> > Do we see the endless revalidate requests after directory
-> > modification
-> > in that situation?=A0 Just curious.
->=20
-> Why wouldn't NFS re-export be capable of supporting atomic change
-> attributes in those cases, provided that the server does? It seems to
-> me that is just a question of providing the correct information w.r.t.
-> atomicity to knfsd.
->=20
-> ...but yes, a quick glance at nfs4_update_changeattr_locked(), and what
-> happens when !cinfo->atomic should tell you all you need to know.
+On 06/09/2022 01:04, Lad Prabhakar wrote:
+> Document the CSI-2 block which is part of CRU found in Renesas
+> RZ/G2L (and alike) SoCs.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-The main reason we disabled atomic change attribute updates was that
-getattr calls on NFS can be pretty expensive. By setting the NOWCC flag,
-we can avoid those for WCC info, but at the expense of the client having
-to do more revalidation on its own.
---=20
-Jeff Layton <jlayton@kernel.org>
+Thank you for your patch. There is something to discuss/improve.
+
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r9a07g044-cpg.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    csi: csi2@10830400 {
+
+That's still not properly named. Node name just "csi".
+
+With that:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

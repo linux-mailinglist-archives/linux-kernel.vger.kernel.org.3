@@ -2,177 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6A55B19E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B3F5B19EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiIHK0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 06:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S229769AbiIHK1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 06:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiIHK0J (ORCPT
+        with ESMTP id S229480AbiIHK1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 06:26:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C9968A7D0;
-        Thu,  8 Sep 2022 03:26:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94A8D14BF;
-        Thu,  8 Sep 2022 03:26:14 -0700 (PDT)
-Received: from [10.57.15.197] (unknown [10.57.15.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D059C3F71A;
-        Thu,  8 Sep 2022 03:25:52 -0700 (PDT)
-Message-ID: <7ef259b2-121e-643e-49c2-0b65923d392d@arm.com>
-Date:   Thu, 8 Sep 2022 11:25:46 +0100
+        Thu, 8 Sep 2022 06:27:05 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Sep 2022 03:27:04 PDT
+Received: from esa9.fujitsucc.c3s2.iphmx.com (esa9.fujitsucc.c3s2.iphmx.com [68.232.159.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392FE98583;
+        Thu,  8 Sep 2022 03:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1662632824; x=1694168824;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=aMd9tLHJ3kpKKOj8pW39B6IBxgZjBQVV0Z8etTF+J1o=;
+  b=hM1WtNDaImEeWIOrvW0PFncP1ZO6sjMf/4DIqx8pe4eW4cnPWLTOOVn7
+   ndDU1Syj2IU6qMET1Ae8n2rggopuqXCmhjQUa+pqZFi1fPQVVf8ovnuOQ
+   i+5wqBenl05DgiW4dZnoPQhDkeizrn9I555ieP88bO35f1501MoWCXLKp
+   yme3MDNXvy9Sx37OadZvjvTiSfY8GnXnuVP88Eo6/N1Ac8NJLST9poXxY
+   Q+LXsuqmBXZ4G0P308+vFhlRDiyefBHU5NIF50eWBXJ1kFrd3TTeIPr0H
+   4kK+MKyWHQcU7m4V66tonWI/IS0q5qna7JHsXLw01koMlqZL/r48bhS8d
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="64820402"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654527600"; 
+   d="scan'208";a="64820402"
+Received: from mail-os0jpn01lp2109.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.109])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 19:25:56 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PIgr+9VqsE6Es4MRwkPB6dFvNcT7KIymyLWzLdof8CM5Yc+B1mgb2zDwS1PxEbIc+pIG3XNNAhYu48xkvlLc4NGVy0aPNrvuFru2z4JM38T87a90Yezb6SzBlWL8iLoogyT9AtGiapi49CoPxPGOMWroq5wSb/TP0MUVRnewTYGe32Ybef8xbol9pB49kCxIVJX7SkcBBZusQYPhRA2ou6G7KjJB2ANHyueApaZ21Yo6Pk3TZlluigf5MewBnKa62CmnXMFKN4aaCmMToTQU46+l3IiIY7kwmnBgl3jHe2od1PZh99+RqznEWoJ2m/59Vz2hRrFUwL2ogqpqL5e4QA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aMd9tLHJ3kpKKOj8pW39B6IBxgZjBQVV0Z8etTF+J1o=;
+ b=nxy+uoK4E8/SkYfuRY/aE3Bx2q/DV/1D/rieriTeBPn1JxiU53lghXl2RMUldGTb+GSQogV0xqrcgcEVTcR4vGRdF8U4+eMy+lQ0vZyBmW5RYdtTnbEjAqMDIImSshnELazfh+EQ3Bxr0l67WhvrFH7Lglsb612CauklF2tIBLI2Siz1isMHfss4+ElJ55C8XFKpw8k4NT+z0KMV1AkhkLbyINJ6JMWcI2JuubU82tP+IWe4Yg84stGgrZcjXbUt4qQvG3ensC21dGtJjeJmpsrFlZuAz89IeSD1m8BLm1VTl+aG4faUXZUB7GBx5Yv4GJkCfaLmbYmKF9LzVKV02w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+Received: from TYCPR01MB8455.jpnprd01.prod.outlook.com (2603:1096:400:15d::13)
+ by OSZPR01MB8290.jpnprd01.prod.outlook.com (2603:1096:604:184::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.15; Thu, 8 Sep
+ 2022 10:25:53 +0000
+Received: from TYCPR01MB8455.jpnprd01.prod.outlook.com
+ ([fe80::1931:760c:588e:9393]) by TYCPR01MB8455.jpnprd01.prod.outlook.com
+ ([fe80::1931:760c:588e:9393%9]) with mapi id 15.20.5588.011; Thu, 8 Sep 2022
+ 10:25:53 +0000
+From:   "matsuda-daisuke@fujitsu.com" <matsuda-daisuke@fujitsu.com>
+To:     'Zhu Yanjun' <zyjzyj2000@gmail.com>
+CC:     RDMA mailing list <linux-rdma@vger.kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Subject: Re: [RFC PATCH 0/7] RDMA/rxe: On-Demand Paging on SoftRoCE
+Thread-Topic: [RFC PATCH 0/7] RDMA/rxe: On-Demand Paging on SoftRoCE
+Thread-Index: AQHYwmOzpZdRkdIQi0a3gnTpfBllbK3VOKOAgAAXLXA=
+Date:   Thu, 8 Sep 2022 10:25:53 +0000
+Message-ID: <TYCPR01MB8455E06C51A4C581C735FE4FE5409@TYCPR01MB8455.jpnprd01.prod.outlook.com>
+References: <cover.1662461897.git.matsuda-daisuke@fujitsu.com>
+ <CAD=hENew09_VowX_c=O+wMBkXNFK1LRV5+TZ+VVHKQA5-itHvg@mail.gmail.com>
+In-Reply-To: <CAD=hENew09_VowX_c=O+wMBkXNFK1LRV5+TZ+VVHKQA5-itHvg@mail.gmail.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-securitypolicycheck: OK by SHieldMailChecker v2.5.2
+x-shieldmailcheckerpolicyversion: FJ-ISEC-20170217
+x-shieldmailcheckermailid: 610d3671719f4a7ab14689f7c6cd5321
+msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
+ =?utf-8?B?NTBfRW5hYmxlZD10cnVlOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJh?=
+ =?utf-8?B?Yy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRlPTIwMjItMDktMDhUMTA6MjU6?=
+ =?utf-8?B?NTBaOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0?=
+ =?utf-8?B?ZmVjZTA1MF9NZXRob2Q9U3RhbmRhcmQ7IE1TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?utf-8?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX05hbWU9RlVKSVRTVS1SRVNU?=
+ =?utf-8?B?UklDVEVE4oCLOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
+ =?utf-8?B?LTNiMGY0ZmVjZTA1MF9TaXRlSWQ9YTE5ZjEyMWQtODFlMS00ODU4LWE5ZDgt?=
+ =?utf-8?B?NzM2ZTI2N2ZkNGM3OyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1h?=
+ =?utf-8?B?YjRkLTNiMGY0ZmVjZTA1MF9BY3Rpb25JZD1kNDA1NDEwOS00YmY2LTRiMTgt?=
+ =?utf-8?B?OTMzZS0wYjliOGQ1OWNlZDk7IE1TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00?=
+ =?utf-8?B?MmFjLWFiNGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA=?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5cd931ac-da9d-4fb9-c3e2-08da91848239
+x-ms-traffictypediagnostic: OSZPR01MB8290:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kMECm5RLeHfC9/vn37OB7qjAoaQnHqcTpt0/MTRjb+8PwG62V9tllhuaRTGsid4vC5IeXfBivU/Ua9pZhG1Y9ERj+AZhbjRlPITXcjwdnBpS6Suwu/0NS01ZFNqVjAP07eQsKdjbpvATp+F/mef66QBPf3jOFWIhUaVoesdj1TEpDW1/txqcg66YZoFFNtSWBnC/uM4l35S1b4GhkFvOXcLvsHPSofYHGb7bKJWLkgfxJfZlAELOFxXbLj+PGdHsWn8oKpW/4gYg1x7dyJRmzzeFYfVi3y/uIXMvLxM0i2s54P6ZjP6YXkg+XAwl5IHNm/UaP8AlxSQzOudjBCA702VeEBhA7bm15ACjZbYkGsqlJzDgOXTXHiqjIfJ12uGfcv6VL63j3E2twQPohvLZMwHGBgWX/V5NQ63GaBgDKqE+ZlXyJCeitCj5VOAXhHJ4sMg9l8cO7fvbHeVTptLox4w9ajZpBXoxyqQOcXtyRtAoA1BxlMnQ1rADaLsHRbKNJxGOiVerBWIxfBXqJ7hcyufMk/vQanE7wgFWo/UA07OH0yfU0BIKMIqAftmax8fYMXeVVieVe7D+wuMRjbEAU2S+6/gIm6jG23uJMIKbqP9yCZHqV+nRG6/diLFszkI3Aw9PePXyudkOfEgDhVQ9nnmSKoue8/LbRRzdLIwEHdqbxAiQniPeRXNCgznF7vdhbJblhM0BPpP3cwTRX3zoI2DcjxooEtNX++MGcq+H3wr1InwkdCelzwNCqiZT0XGh6Jxo/JVdiwnyOTl5zmS0l8Y+U9eapQDa/n8r5sl46/Y=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB8455.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(6029001)(4636009)(136003)(396003)(39860400002)(366004)(346002)(376002)(1590799006)(8676002)(5660300002)(76116006)(66446008)(66946007)(66556008)(66476007)(52536014)(55016003)(64756008)(86362001)(4326008)(8936002)(1580799003)(6916009)(54906003)(316002)(71200400001)(4744005)(85182001)(33656002)(2906002)(7696005)(9686003)(41300700001)(26005)(478600001)(38070700005)(107886003)(6506007)(53546011)(38100700002)(122000001)(186003)(82960400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dSs1TmxUUWs5Q2FUamJOd0tZNmgyWk9FcWRXZ2ZTZDlPOVhudmFuaFlxWSsz?=
+ =?utf-8?B?UzNhL1IrWjQ1V1ZWK0hQaXNWNFhWMFh5ajF4Z1hhck5FZE91RXRUR1BUY0wz?=
+ =?utf-8?B?eGxaV3RLM0VIVzBmVkJlU1I1OEVKZzYyekMyaVdUa3M4ajhwdlJGM2c0V3Za?=
+ =?utf-8?B?MlE1WDBCVldSREt0Y1U3N0lkSEJZQUFSeUkvVTNTV3VLVkdVTGxKcUFsdEVH?=
+ =?utf-8?B?L3ZFNWFNcksrQTNQT3kxZk1qa3FEbHJXSGJqazlMZ21sdmZzQ213RUJqbkNU?=
+ =?utf-8?B?Rzc1VzZsNUliTTBncnlSdDd4dFBRbVY0MWFhOFQ0dWZFUjNsZlorR0RUaytn?=
+ =?utf-8?B?UndOcFVMalRxbW81U3IzSjJUcnczRGNoMEVvMWNpMUlRWWhyS20xZTRVY3RP?=
+ =?utf-8?B?WHJya1hpbzczeFZhVmJYeTFxR3k4b3VZNWpCMlR3QXl2eDJ3dUh2RlFyYUZY?=
+ =?utf-8?B?MzhGZ0VWbW11T29vUW8wS1UrNlROVE1YV0JPTDhuS1lheGE5T1JiOHNJWnFP?=
+ =?utf-8?B?bSszbkZ3Um44Z25MOFhxMldzOGVMMThjUUw4dXRGWDJFd1k2U3BoMlFCVElH?=
+ =?utf-8?B?aEJ3WGluNlhzY1BaZVNtM0ZkdW9pM1dNTmlvT3BINVRKWWdYUlFzRWpDU3lH?=
+ =?utf-8?B?cDU1RDllRmdqeDc2bGRrbTVocG9SMEFST0c4YWNWZlJaTVI3bEEwNDQzRlZT?=
+ =?utf-8?B?SFVhUnJtYWw1d0c2cjdZb1BGZlUzblNPakdsaWlvWjArWHRrSkMzRkIxUmNp?=
+ =?utf-8?B?MEFmK0VWQUU4WGpKNUhpZEpVS0dHV2RtVkJuNEdrTjdpaU03MHRyTmZYK2Ur?=
+ =?utf-8?B?RGgrVHFleUlseXBESXlWTTNVQkZvUXlidTN2WnVDR0Vaa1llcHg0Z3JlSER3?=
+ =?utf-8?B?TE5WRHFDZnppOW5LdG81bVJqbmpNczlGdmY4VkY0NE5INEQwMDd4aS9Fb0Yw?=
+ =?utf-8?B?Mm9KNUJGanQxd0RUZnZzMVY4d3hFeWM2U2REZk9zOElia25LekxFV1BtSXY2?=
+ =?utf-8?B?L2JORnArajR3c0Z4QnFqRmVyUXVMUzJzcGJ6NzcvWEEyRzVSbk1zZ2lxZ2hK?=
+ =?utf-8?B?VWgyaFRBTUR2UzdMUUdQaGJaY1hKMVYva1hWNlBCejVDODFJcXlPejAwMGVp?=
+ =?utf-8?B?dU9mZEhCbWtUeThHcEttQUcxRHRiVHl5TmhRRTJSU1JmaTFEdXRRNXQrYnAy?=
+ =?utf-8?B?N2JGelVOZVpOTTJsVmhPYVVBeFg5TGZVS0NHVHFkelRWVEZFTVpobzdnUlhR?=
+ =?utf-8?B?S0tudmtmZ0EzN29IeEVrK1JoU2hsMUJmbG1iNTgzL0NKMDg4ZUgvcCt0RWc2?=
+ =?utf-8?B?WUVsMjdNcHF6djg2cVBFcVZVV3dXUmJPNTVuUnVOTFNNdG1YSVJaUXZLR0hM?=
+ =?utf-8?B?Q0piSkp2VjBCYzc3WW5JcG9YQ3VsUGhZSXdTSFdrMDQycEtaZ01KbFBxWExq?=
+ =?utf-8?B?d0lrK0kvYWJDL3V3ZVIwK1drWUF4aGY5VnA4RXlUSFZUczcxY1h1TExTRjJP?=
+ =?utf-8?B?ek4zenhSYW9tVUg2dFBONUs1bUNLNFhZeE1ZSGpHZVlTVEhMTHM4QzJhb3E3?=
+ =?utf-8?B?UGdaSVNhS0NGTnR3RFlMbERBREdxZUVMYXBUSDkwajZSL1c4bzJ4ZDJkdG40?=
+ =?utf-8?B?ZnBvaWZhT0JwNGFRQ0NpQkt5K0FBd3l1bFh5VjR5d2FCV0piT0t3TUpiSXBk?=
+ =?utf-8?B?TFY5K1cyY3FUV2VwK0xBK0tuNm9pVnFqb1RmY1huNHZDTE9XYlNxaFo5TmNY?=
+ =?utf-8?B?U1JET3lOeGhGbkpUbWt3REJ3MU5uRTdqR09wUFdlaVV3cTlZejF3YXVmMmRF?=
+ =?utf-8?B?Rk5DdDN4bHZxVnlUcEJKOXhiOFQ3VXlqeVNja2dMUktMcDhYcWlFcng2azVr?=
+ =?utf-8?B?N2V4RWhNOHRid2w4TG1pTEFHWWNOM1BDV09ZSU5Iblo1UjBMYlA3VXpXTWVO?=
+ =?utf-8?B?NlFyb0RmN1hHenkzY2c5dzdPZllyTkprbWtkTklNWXdXOU9FT01FR05iYjFw?=
+ =?utf-8?B?akRwY1RyTjdNQ3E2dnhIOVFDTnNHY1ZzbzJCK1VRNTJlNEZnNWhHTkJYR3dL?=
+ =?utf-8?B?dkQrb1dONkxZSzluSjhHTGp1UFZjb010MlZ5R0pDQis3NG8yZHg5RlVNbjNt?=
+ =?utf-8?B?SFZ0R2ZGZzNpeXMwZit0UzNuU2JIZnI4UE1YbjY0enZ2b0R2ZTNmQkRNb3hS?=
+ =?utf-8?B?NWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v6 1/5] iommu: Return -EMEDIUMTYPE for incompatible domain
- and device/group
-Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>, Joerg Roedel <joro@8bytes.org>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
-        alex.williamson@redhat.com, suravee.suthikulpanit@amd.com,
-        marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        robdclark@gmail.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
-        jonathanh@nvidia.com, jean-philippe@linaro.org, cohuck@redhat.com,
-        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
-        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
-        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        kevin.tian@intel.com
-References: <20220815181437.28127-1-nicolinc@nvidia.com>
- <20220815181437.28127-2-nicolinc@nvidia.com> <YxiRkm7qgQ4k+PIG@8bytes.org>
- <Yxig+zfA2Pr4vk6K@nvidia.com> <9f91f187-2767-13f9-68a2-a5458b888f00@arm.com>
- <YxjOPo5FFqu2vE/g@nvidia.com> <0b466705-3a17-1bbc-7ef2-5adadc22d1ae@arm.com>
- <Yxk6sR4JiAAn3Jf5@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Yxk6sR4JiAAn3Jf5@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB8455.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5cd931ac-da9d-4fb9-c3e2-08da91848239
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 10:25:53.2255
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Rz/pzFmO9aPLaCVqaREuPgoTtGL+4GZbQL4DGtah9glOsm7klV2TEdmuBieFdIvdwsg49B/N5sI+h0IAR484rY2+pQGewPcbm/1GybBGhn0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8290
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-08 01:43, Jason Gunthorpe wrote:
-> On Wed, Sep 07, 2022 at 08:41:13PM +0100, Robin Murphy wrote:
-> 
->>>> FWIW, we're now very close to being able to validate dev->iommu against
->>>> where the domain came from in core code, and so short-circuit ->attach_dev
->>>> entirely if they don't match.
->>>
->>> I don't think this is a long term direction. We have systems now with
->>> a number of SMMU blocks and we really are going to see a need that
->>> they share the iommu_domains so we don't have unncessary overheads
->>> from duplicated io page table memory.
->>>
->>> So ultimately I'd expect to pass the iommu_domain to the driver and
->>> the driver will decide if the page table memory it represents is
->>> compatible or not. Restricting to only the same iommu instance isn't
->>> good..
->>
->> Who said IOMMU instance?
-> 
-> Ah, I completely misunderstood what 'dev->iommu' was referring too, OK
-> I see.
-> 
->> Again, not what I was suggesting. In fact the nature of iommu_attach_group()
->> already rules out bogus devices getting this far, so all a driver currently
->> has to worry about is compatibility of a device that it definitely probed
->> with a domain that it definitely allocated. Therefore, from a caller's point
->> of view, if attaching to an existing domain returns -EINVAL, try another
->> domain; multiple different existing domains can be tried, and may also
->> return -EINVAL for the same or different reasons; the final attempt is to
->> allocate a fresh domain and attach to that, which should always be nominally
->> valid and *never* return -EINVAL. If any attempt returns any other error,
->> bail out down the usual "this should have worked but something went wrong"
->> path. Even if any driver did have a nonsensical "nothing went wrong, I just
->> can't attach my device to any of my domains" case, I don't think it would
->> really need distinguishing from any other general error anyway.
-> 
-> The algorithm you described is exactly what this series does, it just
-> used EMEDIUMTYPE instead of EINVAL. Changing it to EINVAL is not a
-> fundamental problem, just a bit more work.
-> 
-> Looking at Nicolin's series there is a bunch of existing errnos that
-> would still need converting, ie EXDEV, EBUSY, EOPNOTSUPP, EFAULT, and
-> ENXIO are all returned as codes for 'domain incompatible with device'
-> in various drivers. So the patch would still look much the same, just
-> changing them to EINVAL instead of EMEDIUMTYPE.
-> 
-> That leaves the question of the remaining EINVAL's that Nicolin did
-> not convert to EMEDIUMTYPE.
-> 
-> eg in the AMD driver:
-> 
-> 	if (!check_device(dev))
-> 		return -EINVAL;
-> 
-> 	iommu = rlookup_amd_iommu(dev);
-> 	if (!iommu)
-> 		return -EINVAL;
-> 
-> These are all cases of 'something is really wrong with the device or
-> iommu, everything will fail'. Other drivers are using ENODEV for this
-> already, so we'd probably have an additional patch changing various
-> places like that to ENODEV.
-> 
-> This mixture of error codes is the basic reason why a new code was
-> used, because none of the existing codes are used with any
-> consistency.
-> 
-> But OK, I'm on board, lets use more common errnos with specific
-> meaning, that can be documented in a comment someplace:
->   ENOMEM - out of memory
->   ENODEV - no domain can attach, device or iommu is messed up
->   EINVAL - the domain is incompatible with the device
->   <others> - Same behavior as ENODEV, use is discouraged.
-> 
-> I think achieving consistency of error codes is a generally desirable
-> goal, it makes the error code actually useful.
-> 
-> Joerg this is a good bit of work, will you be OK with it?
-> 
->> Thus as long as we can maintain that basic guarantee that attaching
->> a group to a newly allocated domain can only ever fail for resource
->> allocation reasons and not some spurious "incompatibility", then we
->> don't need any obscure trickery, and a single, clear, error code is
->> in fact enough to say all that needs to be said.
-> 
-> As above, this is not the case, drivers do seem to have error paths
-> that are unconditional on the domain. Perhaps they are just protective
-> assertions and never happen.
-
-Right, that's the gist of what I was getting at - I think it's worth 
-putting in the effort to audit and fix the drivers so that that *can* be 
-the case, then we can have a meaningful error API with standard codes 
-effectively for free, rather than just sighing at the existing mess and 
-building a slightly esoteric special case on top.
-
-Case in point, the AMD checks quoted above are pointless, since it 
-checks the same things in ->probe_device, and if that fails then the 
-device won't get a group so there's no way for it to even reach 
-->attach_dev any more. I'm sure there's a *lot* of cruft that can be 
-cleared out now that per-device and per-domain ops give us this kind of 
-inherent robustness.
-
-Cheers,
-Robin.
-
-> Regardless, it doesn't matter. If they return ENODEV or EINVAL the
-> VFIO side algorithm will continue to work fine, it just does alot more
-> work if EINVAL is permanently returned.
-> 
-> Thanks,
-> Jason
+T24gVGh1LCBTZXAgOCwgMjAyMiA1OjQxIFBNIFpodSBZYW5qdW4gd3JvdGU6DQo+ID4gW0hvdyB0
+byB0ZXN0IE9EUD9dDQo+ID4gVGhlcmUgYXJlIG9ubHkgYSBmZXcgcmVzb3VyY2VzIGF2YWlsYWJs
+ZSBmb3IgdGVzdGluZy4gcHl2ZXJicyB0ZXN0Y2FzZXMgaW4NCj4gPiByZG1hLWNvcmUgYW5kIHBl
+cmZ0ZXN0WzddIGFyZSByZWNvbW1lbmRhYmxlIG9uZXMuIE5vdGUgdGhhdCB5b3UgbWF5IGhhdmUg
+dG8NCj4gPiBidWlsZCBwZXJmdGVzdCBmcm9tIHVwc3RyZWFtIHNpbmNlIG9sZGVyIHZlcnNpb25z
+IGRvIG5vdCBoYW5kbGUgT0RQDQo+ID4gY2FwYWJpbGl0aWVzIGNvcnJlY3RseS4NCj4gDQo+IGli
+dl9yY19waW5ncG9uZyBjYW4gYWxzbyB0ZXN0IHRoZSBvZHAgZmVhdHVyZS4NCg0KVGhpcyBtYXkg
+YmUgdGhlIGVhc2llc3Qgd2F5IHRvIHRyeSB0aGUgZmVhdHVyZS4NCg0KPiANCj4gUGxlYXNlIGFk
+ZCByeGUgb2RwIHRlc3QgY2FzZXMgaW4gcmRtYS1jb3JlLg0KDQpUaGlzIFJGQyBpbXBsZW1lbnRh
+dGlvbiBpcyBmdW5jdGlvbmFsbHkgYSBzdWJzZXQgb2YgbWx4NS4NClNvLCBiYXNpY2FsbHkgd2Ug
+Y2FuIHVzZSB0aGUgZXhpc3Rpbmcgb25lKHRlc3RzL3Rlc3Rfb2RwLnB5KS4NCkknbGwgYWRkIG5l
+dyBjYXNlcyB3aGVuIEkgbWFrZSB0aGVtIGZvciBhZGRpdGlvbmFsIHRlc3RpbmcuDQoNClRoYW5r
+cywNCkRhaXN1a2UgTWF0c3VkYQ0KDQo+IA0KPiBUaGFua3MgYSBsb3QuDQo+IFpodSBZYW5qdW4N
+Cg0KDQoNCg0K

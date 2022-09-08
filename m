@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9215B1874
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7354D5B1893
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbiIHJVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S231265AbiIHJYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiIHJUp (ORCPT
+        with ESMTP id S231738AbiIHJYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:20:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DB5D2B20;
-        Thu,  8 Sep 2022 02:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F7AC61C0D;
-        Thu,  8 Sep 2022 09:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D90D6C433D7;
-        Thu,  8 Sep 2022 09:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662628817;
-        bh=FUvuGhqZtmaM2z20lSw7K2UwexslQelsC6q//ijWWVo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=MBi9LL0eCxKQDfD4wK2GuZz3o8nYgCHQPaEuKM6z+NzY3mOMJXDqtm3H+pw1Nqkz6
-         X6qwa0CKOQNGIxs9ac7W9+qnotSlvROc4Mp+g95WwUCRe5nQf0erFI2iBCDQhWOiEZ
-         meibrtXUre+pox3t2YvqRwSzn7+tI6pF5xn/QF46sgs5UJFDtgPTf6n4kaGS///dOv
-         wFAGFZ4MRPOnSt06WcBko5Nwyga6l5LnisX0P/Qnj7Gi0rzKxQ0QUFfkKPf2Qr3YPx
-         jJLeuf83Ht/LHXg/+tBPyA3oVobvKz5YCRsRuunmMiNgGr9QKY2nfqQrC41FIigNcY
-         FYJ1lMujhzVhA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE471C73FED;
-        Thu,  8 Sep 2022 09:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 8 Sep 2022 05:24:24 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D6DF5C63
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:22:52 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z25so26740286lfr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 02:22:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=dH3CbhVOQrBIzFdsMYEQAzEoE3B2m4SSznn5rAk+rYM=;
+        b=FHf5Ic/nwRoqqtgsFHSSGFDXZc98X2hpVH5Ttn0/VY/T+Rl1xxX8eAP+p5gs+pa44G
+         dqojHG/7TfSA3gOeWxAIl+UZh8PDFCPoea9kdGdQqDETSUMlihGsJQtxcvAzwkVOy9sT
+         3fDJ01OAxnONes0Gle2gdPEa0FKu6zFZ/j+W9iF0qpfbRbL6px2LC8vg21uN+B1a+F6d
+         U7OQShHt5p86KP5e2r9IZo+K/7ynXnUdLMF1xVA5svaLjFkS8ALinaYJ0yT0hTOm1z5y
+         5k/Ar9Kn+1s6rjhMYGbHk8a9pG3X93HkuWGNY4axTv/+yed/0Q6jeQnF9lV+pUJTF328
+         eDOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=dH3CbhVOQrBIzFdsMYEQAzEoE3B2m4SSznn5rAk+rYM=;
+        b=V6f9lOrrcrhW1EVug3RnkEmgjvpw7EkMgVc04+U0gWbDTZw/m4hdiiSEXpGfa6JrRx
+         TgIYpIlg4iUUAtaOyF6MrdbasJPfox1xdxINWx+yhImFc6ftrtFQGrl6E/AQF7C8yUGv
+         8wrJn6yvKz1ur1/4vQGTgKZpAk3TpJ8uquTlXSm/EeY93kTZqPqgQzqTlItP+3PUhqN7
+         MYxv0Vne4/QP5pR4FZJWaZGYeoNU+UVXtXOLk86qy5obbdUxXJuK6WcWARR7fxHjq85t
+         MDQrL5HGmon598uXY7JLh9N1xGeA00DGeEOuoKHg8wUeidrgdnrdFZNB4I4AsFY6qXPc
+         tWVA==
+X-Gm-Message-State: ACgBeo3CUf0qKJjG/VPe1wcmgrHkLpjeSVD/E1c58SMyMEIh0EW2eBMW
+        +mfN5lLuDrd0Sw8wtT4rNVfc8w==
+X-Google-Smtp-Source: AA6agR4x1bQbWHYoUICIygFzuOYuWPgfmCbP5o72xJn3+fJ+P+x9kq1cdfCrhlbhILkhk07z1Y2DaA==
+X-Received: by 2002:a05:6512:1193:b0:492:7e33:870 with SMTP id g19-20020a056512119300b004927e330870mr2475777lfr.37.1662628970810;
+        Thu, 08 Sep 2022 02:22:50 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id bu13-20020a056512168d00b004947f8b6266sm175119lfb.203.2022.09.08.02.22.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 02:22:50 -0700 (PDT)
+Message-ID: <0b8b2e01-5209-6437-c79e-3cff9b29bfcb@linaro.org>
+Date:   Thu, 8 Sep 2022 11:22:48 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v9 2/2] ASoC: sun50i-dmic: dt-bindings: add DT bindings
+ for DMIC controller
+Content-Language: en-US
+To:     =?UTF-8?B?54+t5rab?= <fengzheng923@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <1661872039-40174-1-git-send-email-fengzheng923@gmail.com>
+ <25072fba-64e2-df11-c8f0-a274037141f0@linaro.org>
+ <CAE=m619qeaDYkWiB5kh50gY1Kndyrvo4oZuZjFKRCKK=j99K2w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAE=m619qeaDYkWiB5kh50gY1Kndyrvo4oZuZjFKRCKK=j99K2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch net v2] net: phy: lan87xx: change interrupt src of link_up to
- comm_ready
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166262881770.11432.13226560643030582200.git-patchwork-notify@kernel.org>
-Date:   Thu, 08 Sep 2022 09:20:17 +0000
-References: <20220905152750.5079-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20220905152750.5079-1-arun.ramadoss@microchip.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        prasanna.vengateshan@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,41 +82,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Mon, 5 Sep 2022 20:57:50 +0530 you wrote:
-> Currently phy link up/down interrupt is enabled using the
-> LAN87xx_INTERRUPT_MASK register. In the lan87xx_read_status function,
-> phy link is determined using the T1_MODE_STAT_REG register comm_ready bit.
-> comm_ready bit is set using the loc_rcvr_status & rem_rcvr_status.
-> Whenever the phy link is up, LAN87xx_INTERRUPT_SOURCE link_up bit is set
-> first but comm_ready bit takes some time to set based on local and
-> remote receiver status.
-> As per the current implementation, interrupt is triggered using link_up
-> but the comm_ready bit is still cleared in the read_status function. So,
-> link is always down.  Initially tested with the shared interrupt
-> mechanism with switch and internal phy which is working, but after
-> implementing interrupt controller it is not working.
-> It can fixed either by updating the read_status function to read from
-> LAN87XX_INTERRUPT_SOURCE register or enable the interrupt mask for
-> comm_ready bit. But the validation team recommends the use of comm_ready
-> for link detection.
-> This patch fixes by enabling the comm_ready bit for link_up in the
-> LAN87XX_INTERRUPT_MASK_2 register (MISC Bank) and link_down in
-> LAN87xx_INTERRUPT_MASK register.
+On 07/09/2022 15:03, 班涛 wrote:
+>>> +++
+>> b/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
+>>> @@ -0,0 +1,79 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/sound/allwinner,sun50i-h6-dmic.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Allwinner H6 DMIC Device Tree Bindings
+>>
+>> s/Device Tree Bindings//
+>>
 > 
-> [...]
+> So, modify it to 'Allwinner H6 DMIC Devices Tree Bindings', sure?
 
-Here is the summary with links:
-  - [net,v2] net: phy: lan87xx: change interrupt src of link_up to comm_ready
-    https://git.kernel.org/netdev/net/c/5382033a3522
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You pasted the same message, so what is the modification? I wrote you a
+ search&replace pattern.
 
 
+
+Best regards,
+Krzysztof

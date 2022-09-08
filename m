@@ -2,123 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7502B5B157A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927A35B1588
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiIHHQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S231288AbiIHHUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIHHQp (ORCPT
+        with ESMTP id S230236AbiIHHUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:16:45 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6092656A;
-        Thu,  8 Sep 2022 00:16:44 -0700 (PDT)
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2887GSk7002753;
-        Thu, 8 Sep 2022 16:16:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2887GSk7002753
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662621389;
-        bh=Zi1KVRpArAd4GR+l41DO7f/S57oZpGFbgNVPesyN+LI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HYgzSQA08bn/vrZoJrrsfn1nafgpdBorzTYJJ17aN/376DKO61InNDkP7mWtR+s8u
-         oiiu7gDNTjlT1gmEtHO9pO41lv7EBg/k+aQb7Wihs/tz/+l4JWVqFTWIZRf1/TgUPz
-         3KnSIs6wGZlcLyhQrqi5l075iCRIXEQTKfNYmdJv7pMimwYiJeA8k6Mc1mgjWayA0L
-         saG08GhyVKRXcQLXnB21STQckf2zSW4Pnx8KzYpKhNfV38rwQdG9JkX5koWYKWIycJ
-         fjBjLoZXr31w5HJcI4T4+uDs/QJHknple84JeFbKLoRWTc4VwsACMIUGiS7R5OcDzJ
-         A1ISG6xBJdJ7A==
-X-Nifty-SrcIP: [209.85.160.43]
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1280590722dso8623750fac.1;
-        Thu, 08 Sep 2022 00:16:28 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3pu5aVcQrUKVcEWhStTTlSqGuTSVWzg4/KP3pte+rsXcu4Nd6m
-        ylY/Kkt8Us0DMNw5QjSnbugmO2pcOPF+gQ1q33c=
-X-Google-Smtp-Source: AA6agR5xWpm1RVlxiP0x+wSspMDyK7HdF4a5HOzRxJyNSy1PDSTemdEx7Juu4iK1N3Ml/H8qsNZ8nDiNxaRx2DoAIBw=
-X-Received: by 2002:a05:6808:90a:b0:34b:826c:6116 with SMTP id
- w10-20020a056808090a00b0034b826c6116mr868875oih.194.1662621387757; Thu, 08
- Sep 2022 00:16:27 -0700 (PDT)
+        Thu, 8 Sep 2022 03:20:49 -0400
+X-Greylist: delayed 180 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Sep 2022 00:20:47 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C547CA570D;
+        Thu,  8 Sep 2022 00:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1662621464;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=R8zeBI33JQE161cSzuZ1/ZAK1yvWGkUNXkMuzy1AVZQ=;
+    b=oET3Fu1nJulbWnwUxXLWrdG0OdMl5Si0JnBWlQQlc/g2XThlRQ7Ur+nqF+1l1SPImL
+    kDn2DFeZ65IBrhwucaWA5ANVUbUfO+Um9rTgfly+cBL5vPmQsqWUl+YDGZGTP0GVJuxA
+    ysb+9i4cZOrrMMVmBpVm+/g86J/B2DX+hc5wWdMerU5DtxiepjNlE7QiqsN2rHh2iwmA
+    ogX4/FLnwBp4zdyJHiO+UAxjMRIEBRIasVE5cGFY0BOmppyyCMYywi488HSotaPp65n9
+    1tgaEzDSLGMdjrq2qv0Ty85ikHRCyxGXjSTo2WvFVl/cXfmJcs3PLu48+LEebAvJ7ldr
+    Idjg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::b82]
+    by smtp.strato.de (RZmta 48.0.2 AUTH)
+    with ESMTPSA id wfa541y887Hi6Fq
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 8 Sep 2022 09:17:44 +0200 (CEST)
+Message-ID: <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
+Date:   Thu, 8 Sep 2022 09:17:43 +0200
 MIME-Version: 1.0
-References: <20220906061313.1445810-1-masahiroy@kernel.org> <20220906061313.1445810-8-masahiroy@kernel.org>
-In-Reply-To: <20220906061313.1445810-8-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 8 Sep 2022 16:15:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR_nbuzH6Cj8E7jgZq+wuKEt9ra6RiRE2dUwPi1ZJOoWw@mail.gmail.com>
-Message-ID: <CAK7LNAR_nbuzH6Cj8E7jgZq+wuKEt9ra6RiRE2dUwPi1ZJOoWw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/8] kbuild: use obj-y instead extra-y for objects
- placed at the head
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
+ bcm_module_init()
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>, mkl@pengutronix.de,
+        edumazet@google.com, kuba@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1662606045.git.william.xuanziyang@huawei.com>
+ <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
+ <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
+In-Reply-To: <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 3:13 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> The objects placed at the head of vmlinux need special treatments:
->
->  - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
->    them before other archives in the linker command line.
->
->  - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
->    obj-y to avoid them going into built-in.a.
->
-> This commit gets rid of the latter.
->
-> Create vmlinux.a to collect all the objects that are unconditionally
-> linked to vmlinux. The objects listed in head-y are moved to the head
-> of vmlinux.a by using 'ar m'.
->
-> With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
-> for builtin objects.
->
-> There is no *.o that is directly linked to vmlinux. Drop unneeded code
-> in scripts/clang-tools/gen_compile_commands.py.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> (no changes since v1)
->
+Just another reference which make it clear that the reordering of 
+function calls in your patch is likely not correct:
+
+https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
+
+static int __init packet_init(void)
+{
+         int rc;
+
+         rc = proto_register(&packet_proto, 0);
+         if (rc)
+                 goto out;
+         rc = sock_register(&packet_family_ops);
+         if (rc)
+                 goto out_proto;
+         rc = register_pernet_subsys(&packet_net_ops);
+         if (rc)
+                 goto out_sock;
+         rc = register_netdevice_notifier(&packet_netdev_notifier);
+         if (rc)
+                 goto out_pernet;
+
+         return 0;
+
+out_pernet:
+         unregister_pernet_subsys(&packet_net_ops);
+out_sock:
+         sock_unregister(PF_PACKET);
+out_proto:
+         proto_unregister(&packet_proto);
+out:
+         return rc;
+}
 
 
 
-
-> @@ -198,12 +198,12 @@ KCOV_INSTRUMENT_paca.o := n
->  CFLAGS_setup_64.o              += -fno-stack-protector
->  CFLAGS_paca.o                  += -fno-stack-protector
->
-> -extra-$(CONFIG_PPC_FPU)                += fpu.o
-> -extra-$(CONFIG_ALTIVEC)                += vector.o
-> -extra-$(CONFIG_PPC64)          += entry_64.o
-> -extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE) += prom_init.o
-> +obj-$(CONFIG_PPC_FPU)          += fpu.o
-> +obj-$(CONFIG_ALTIVEC)          += vector.o
-> +obj-$(CONFIG_PPC64)            += entry_64.o
-> +obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)   += prom_init.o
->
-> -extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE) += prom_init_check
-> +obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)   += prom_init_check
-
-
-This line should not be changed.
-
-I fixed it up locally.
-
-https://lore.kernel.org/lkml/CAK7LNARzFmJjpyUciy1LRvaFo72aZcqRbzY-63ArpeszC+HfmQ@mail.gmail.com/
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+On 08.09.22 09:10, Oliver Hartkopp wrote:
+> 
+> 
+> On 08.09.22 05:04, Ziyang Xuan wrote:
+>> Now, register_netdevice_notifier() and register_pernet_subsys() are both
+>> after can_proto_register(). It can create CAN_BCM socket and process 
+>> socket
+>> once can_proto_register() successfully, so it is possible missing 
+>> notifier
+>> event or proc node creation because notifier or bcm proc directory is not
+>> registered or created yet. Although this is a low probability 
+>> scenario, it
+>> is not impossible.
+>>
+>> Move register_pernet_subsys() and register_netdevice_notifier() to the
+>> front of can_proto_register(). In addition, register_pernet_subsys() and
+>> register_netdevice_notifier() may fail, check their results are 
+>> necessary.
+>>
+>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+>> ---
+>>   net/can/bcm.c | 18 +++++++++++++++---
+>>   1 file changed, 15 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/net/can/bcm.c b/net/can/bcm.c
+>> index e60161bec850..e2783156bfd1 100644
+>> --- a/net/can/bcm.c
+>> +++ b/net/can/bcm.c
+>> @@ -1744,15 +1744,27 @@ static int __init bcm_module_init(void)
+>>       pr_info("can: broadcast manager protocol\n");
+>> +    err = register_pernet_subsys(&canbcm_pernet_ops);
+>> +    if (err)
+>> +        return err;
+> 
+> Analogue to your patch for the CAN_RAW socket here (which has been 
+> applied to can-next right now) ...
+> 
+> https://lore.kernel.org/linux-can/7af9401f0d2d9fed36c1667b5ac9b8df8f8b87ee.1661584485.git.william.xuanziyang@huawei.com/T/#u 
+> 
+> 
+> ... I'm not sure whether this is the right sequence to acquire the 
+> different resources here.
+> 
+> E.g. in ipsec_pfkey_init() in af_key.c
+> 
+> https://elixir.bootlin.com/linux/v5.19.7/source/net/key/af_key.c#L3887
+> 
+> proto_register() is executed before register_pernet_subsys()
+> 
+> Which seems to be more natural to me.
+> 
+> Best regards,
+> Oliver
+> 
+>> +
+>> +    err = register_netdevice_notifier(&canbcm_notifier);
+>> +    if (err)
+>> +        goto register_notifier_failed;
+>> +
+>>       err = can_proto_register(&bcm_can_proto);
+>>       if (err < 0) {
+>>           printk(KERN_ERR "can: registration of bcm protocol failed\n");
+>> -        return err;
+>> +        goto register_proto_failed;
+>>       }
+>> -    register_pernet_subsys(&canbcm_pernet_ops);
+>> -    register_netdevice_notifier(&canbcm_notifier);
+>>       return 0;
+>> +
+>> +register_proto_failed:
+>> +    unregister_netdevice_notifier(&canbcm_notifier);
+>> +register_notifier_failed:
+>> +    unregister_pernet_subsys(&canbcm_pernet_ops);
+>> +    return err;
+>>   }
+>>   static void __exit bcm_module_exit(void)

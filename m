@@ -2,109 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0EF5B18FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC81F5B18FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiIHJmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S230513AbiIHJmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiIHJmH (ORCPT
+        with ESMTP id S230448AbiIHJmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:42:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5249DB14CD;
-        Thu,  8 Sep 2022 02:42:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F366FB82054;
-        Thu,  8 Sep 2022 09:42:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9926AC433D6;
-        Thu,  8 Sep 2022 09:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662630123;
-        bh=ntPtZqkKQgA88xitl7MbgJ0C7eK0xZrwocnCU7VRuew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tE7YZ4K9o+VxFD5FsuXdd0Zel+JvLhbkWw1RHmZS8/U6uv7o7eQQDhpHZAoaC2ArY
-         Xi/wTRN3zduhbyS6aSQ3vTigRp/V8Mu3oCo59zcsEHQyBIVv76SD7agU0gE2OFowYg
-         qqtdYMMBUeAAko+5gKbPQGTrnCaf59/vGu4Boo1GtGfHt9romvmoxt1dKySq2hhhnF
-         96W3He9ANeFeTYxwL0EIrwdcb7i63cE8sKzOktoZ+6ohnPT9jqnSmZDD6+ARraRz3y
-         WsMJkZq2cLyiN/Kl5JvOH7XMuIEnuhGjQsi8qw/w3hrn7s/PEsX38K0a37scAiBTuE
-         c2+5pctL62D4w==
-Date:   Thu, 8 Sep 2022 10:41:55 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Terry Bowman <terry.bowman@amd.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        UNGLinuxDriver@microchip.com,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, katie.morris@in-advantage.com
-Subject: Re: [RESEND PATCH v16 mfd 3/8] pinctrl: ocelot: add ability to be
- used in a non-mmio configuration
-Message-ID: <Yxm447l7hNKrKbto@google.com>
-References: <20220905162132.2943088-1-colin.foster@in-advantage.com>
- <20220905162132.2943088-4-colin.foster@in-advantage.com>
+        Thu, 8 Sep 2022 05:42:22 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CBE1197B8;
+        Thu,  8 Sep 2022 02:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1662630141;
+  x=1694166141;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RsTH7ifEluKq6XX/DunK8Ba8dE7uhbH5m6Q9/jEy/qU=;
+  b=FMOJr7Db/2yT5w0nf2NHFa77MHrr+1/oI86jgPpjZOwSxtU6Xxm1N6fN
+   NOZU2Y/kL0cP1tKayC2IpOJ/NuITBUO2BgFdfRAQ0ceSjSaqsIR17cWfh
+   58+KmL2LZRRF4ByGC5ONQTlJg4xI1L/jQ1yjc0ijPOuOhoKgfIGftfGKd
+   +bIikI94VZ+u00yAjaC1UsJMIRm3samHlf3x8/ndZYSwfGnQ4vS9ildHd
+   HHSgh7U/Nr20tCjz08kLRBxhqKYqEbgu3P7xIbiDiBnPFvemBbpgy+vTu
+   389Mn1yTVtct6lUcFC+0PsY07v+LDNSIEP13XzcPfVWpTuSaXTaQrAIbH
+   A==;
+Date:   Thu, 8 Sep 2022 11:42:18 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+CC:     Alexey Dobriyan <adobriyan@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+Subject: Re: [RFC] process /proc/PID/smaps vs /proc/PID/smaps_rollup
+Message-ID: <Yxm4+rGMLtHLUmMU@axis.com>
+References: <20200929020520.GC871730@jagdpanzerIV.localdomain>
+ <20200929024018.GA529@jagdpanzerIV.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220905162132.2943088-4-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20200929024018.GA529@jagdpanzerIV.localdomain>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Sep 2022, Colin Foster wrote:
+On Tue, Sep 29, 2020 at 11:40:18AM +0900, Sergey Senozhatsky wrote:
+> On (20/09/29 11:05), Sergey Senozhatsky wrote:
+> > One of our unprivileged daemon process needs process PSS info. That
+> > info is usually available in /proc/PID/smaps on per-vma basis, on
+> > in /proc/PID/smaps_rollup as a bunch of accumulated per-vma values.
+> > The latter one is much faster and simpler to get, but, unlike smaps,
+> > smaps_rollup requires PTRACE_MODE_READ, which we don't want to
+> > grant to our unprivileged daemon.
+> > 
+> > So the question is - can we get, somehow, accumulated PSS info from
+> > a non-privileged process? (Iterating through all process' smaps
+> > vma-s consumes quite a bit of CPU time). This is related to another
+> > question - why do smaps and smaps_rollup have different permission
+> > requirements?
+> 
+> Hold on, seems that I misread something, /proc/PID/smaps is also
+> unavailable. So the question is, then, how do we get PSS info of
+> a random user-space process from an unprivileged daemon?
 
-> There are a few Ocelot chips that contain pinctrl logic, but can be
-> controlled externally. Specifically the VSC7511, 7512, 7513 and 7514. In
-> the externally controlled configurations these registers are not
-> memory-mapped.
-> 
-> Add support for these non-memory-mapped configurations.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> 
-> v16
->     * Add Andy Reviewed-by tag
-> 
-> v15
->     * No changes
-> 
-> v14
->     * Add Reviewed and Acked tags
-> 
-> ---
->  drivers/pinctrl/pinctrl-ocelot.c | 16 +++++-----------
->  1 file changed, 5 insertions(+), 11 deletions(-)
+smaps contains a lot of sensitive information, but perhaps smaps_rollup
+could be allowed without ptrace rights if the range information is
+masked.  I've posted a patch here:
 
-Applied, thanks.
-
--- 
-Lee Jones [李琼斯]
+ https://lore.kernel.org/linux-mm/20220908093919.843346-1-vincent.whitchurch@axis.com/

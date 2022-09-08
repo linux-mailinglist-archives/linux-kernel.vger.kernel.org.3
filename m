@@ -2,60 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E5F5B132B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 06:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F19C5B132D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 06:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiIHEKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 00:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
+        id S229546AbiIHEMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 00:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiIHEKo (ORCPT
+        with ESMTP id S229437AbiIHEMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 00:10:44 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0561758DF6;
-        Wed,  7 Sep 2022 21:10:41 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxrms8axljkiIUAA--.2777S3;
-        Thu, 08 Sep 2022 12:10:36 +0800 (CST)
-To:     yangtiezhu@loongson.cn
-References: <1662604440-30524-1-git-send-email-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH] sparc: kprobes: Free instructions in arch_remove_kprobe()
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        mhiramat@kernel.org, sparclinux@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <b9eded16-7480-ab8f-8ddc-21547ac27cda@loongson.cn>
-Date:   Thu, 8 Sep 2022 12:10:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 8 Sep 2022 00:12:38 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1582952085
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 21:12:36 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662610354;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zwoG+2A1DN6DhncHURTf/vjvqKNs3W4Fx+gG9cqxMPk=;
+        b=A7GwQ/Ajj9bHP0svWliAGuGUePBOMb64r707Tp5vlSTdrsJmZTgQPuScjqWudkJLh4qqWa
+        17h/ZbQmIyWrdOnnSKEanHP3cz04vi8Y/2JWEvBn7DrJsh+phenHD6h+SzGvaEh18t94iR
+        8NtWpBUq5P4esfn8vgvaHzPmZMUxzls=
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>, Yang Shi <shy828301@gmail.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mm/huge_memory: use pfn_to_online_page() in split_huge_pages_all()
+Date:   Thu,  8 Sep 2022 13:11:50 +0900
+Message-Id: <20220908041150.3430269-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <1662604440-30524-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Cxrms8axljkiIUAA--.2777S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY-7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z2
-        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
-        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
-        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY
-        jI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8XwCF04k20xvY0x0EwIxGrwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
-        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-        1UYxBIdaVFxhVjvjDU0xZFpf9x0JUcZ23UUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, please ignore this patch, it is not necessary.
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+
+NULL pointer dereference is triggered when calling thp split via debugfs
+on the system with offlined memory blocks.  With debug option enabled,
+the following kernel messages are printed out:
+
+  page:00000000467f4890 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x121c000
+  flags: 0x17fffc00000000(node=0|zone=2|lastcpupid=0x1ffff)
+  raw: 0017fffc00000000 0000000000000000 dead000000000122 0000000000000000
+  raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+  page dumped because: unmovable page
+  page:000000007d7ab72e is uninitialized and poisoned
+  page dumped because: VM_BUG_ON_PAGE(PagePoisoned(p))
+  ------------[ cut here ]------------
+  kernel BUG at include/linux/mm.h:1248!
+  invalid opcode: 0000 [#1] PREEMPT SMP PTI
+  CPU: 16 PID: 20964 Comm: bash Tainted: G          I        6.0.0-rc3-foll-numa+ #41
+  ...
+  RIP: 0010:split_huge_pages_write+0xcf4/0xe30
+
+This shows that page_to_nid() in page_zone() is unexpectedly called for an
+offlined memmap.
+
+Use pfn_to_online_page() to get struct page in PFN walker.
+
+Fixes: 49071d436b51 ("thp: add debugfs handle to split all huge pages")
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Co-developed-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Cc: <stable@vger.kernel.org> # 5.10+
+---
+ mm/huge_memory.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 5fa2ba86dae4..730eb6d6836b 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2894,11 +2894,9 @@ static void split_huge_pages_all(void)
+ 		max_zone_pfn = zone_end_pfn(zone);
+ 		for (pfn = zone->zone_start_pfn; pfn < max_zone_pfn; pfn++) {
+ 			int nr_pages;
+-			if (!pfn_valid(pfn))
+-				continue;
+ 
+-			page = pfn_to_page(pfn);
+-			if (!get_page_unless_zero(page))
++			page = pfn_to_online_page(pfn);
++			if (!page || !get_page_unless_zero(page))
+ 				continue;
+ 
+ 			if (zone != page_zone(page))
+-- 
+2.25.1
 

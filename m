@@ -2,165 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C145B217F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8349C5B21C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiIHPEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S232898AbiIHPNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiIHPE2 (ORCPT
+        with ESMTP id S232911AbiIHPNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:04:28 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2129.outbound.protection.outlook.com [40.107.94.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E972F6;
-        Thu,  8 Sep 2022 08:04:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lj8+n/RMFi+/vH0vifTOIYhEz764nAIgWFLHZr47EozememKcL36sHOX7OYmox9euAEAAnF3nSVUEXy8XCB1lEqPl7GIwUOkHwR0YbIwqveOpD/p2HJPY6dxC11lhRh08oNc8YhegnMAHtoOeAeg+vuxHHsiYt7GtwX1JYL4UwFOeP7h+PiyXjRFvR2RA3B9krzhq+ceMGgzEMxqMJnGGx114HS0JWSC4b+AqUxQ5oA6OmdLVoRAsis4tRDjohfg2JF94aGCWkB0G9SqAcE9IgCvuhnsCV+0ITpVoQ5v06kzQDkZkWZG2ZDjF/1zynKo4W7CZGTKbrgG9ZDJ8xGsQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ItOH2Lz1bJTErRwdLkVe3O/p5AKP5HRD4vzYsMDL7J8=;
- b=QT3hJHWxsxu6QG2CFG7H1jkVYC0qmMwWrZzmU2gc+8VSt4ROtD4wUlqlmh2Jw6cv/XilG8UNkEblJENKLlYt2PSQ/AvRiDwwmILHNAnlR5xKGEXagJLFoOxfopcWXoHs/UzES7yhl6g76Vc17vEKmTu4eb/QvTDLZRZpup9WmR1wDAJs/SxpZZvWkc7cr8nJcav/TpYwXvzxgq/DIMZmAh3At8p5nXXZE4c9k1NCqsNsg27l6vUlWfiW6qn17QUoZyeAR/lfVzNlvrJfNNiiR06eDDQwp5TSX4X0YvKg6eD14D1wUAaPS1VnCRKnhf37wrDrzmyPNCbBJl8NRUW1/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ItOH2Lz1bJTErRwdLkVe3O/p5AKP5HRD4vzYsMDL7J8=;
- b=IGcBX2aczbytWzK8XuVWVywwJAgqfD2AkFZN+2mvrryVCjgs+gw3BGkhdZeb5gzKjjkLMRt86Zwjdw9wRUmvTOW4CWYj4vEakhL/DMQJKrN0qzKB8O31bJPMD9mNxXJJios3UV1itICHIP4AhfGp0OfO6CDQ/iAV9WudzEcXwLo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by CH0PR10MB5114.namprd10.prod.outlook.com
- (2603:10b6:610:dd::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Thu, 8 Sep
- 2022 15:04:20 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::38ee:4bfb:c7b8:72e1]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::38ee:4bfb:c7b8:72e1%7]) with mapi id 15.20.5588.020; Thu, 8 Sep 2022
- 15:04:20 +0000
-Date:   Thu, 8 Sep 2022 08:04:13 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Lee Jones <lee@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "katie.morris@in-advantage.com" <katie.morris@in-advantage.com>
-Subject: Re: [RESEND PATCH v16 mfd 1/8] mfd: ocelot: add helper to get regmap
- from a resource
-Message-ID: <YxoEbfq6YKx/4Vko@colin-ia-desktop>
-References: <20220905162132.2943088-1-colin.foster@in-advantage.com>
- <20220905162132.2943088-2-colin.foster@in-advantage.com>
- <Yxm4oMq8dpsFg61b@google.com>
- <20220908142256.7aad25k553sqfgbm@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908142256.7aad25k553sqfgbm@skbuf>
-X-ClientProxiedBy: BYAPR06CA0069.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::46) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Thu, 8 Sep 2022 11:13:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CCEF3404
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:13:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2075F61D45
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF541C433C1;
+        Thu,  8 Sep 2022 15:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662650020;
+        bh=+dMQIFu4jwN7+1Pm5MUc2HmC+QhaEBeuiN3tG7+C0rg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CrLtnknTkb35ZsrOfTPPw+aOQ/nuwKBFV9ZTn2VswZYMOgitjj6mYdStweZeCvLqN
+         iyhGlY4e/Ng3De0AW3Y7ylIBLAmEhLNWU7qgkGwVbSAPC6Az+FuGNABSj7/jmjFaiY
+         ncQjgH2I3YVCRUJGVy+ziCAee9svQx2TvbnE82WANuU33WgS+uFdT1fw939Vk9fypT
+         iZVg73fi9zZTfaw/AryHjoG/Q+54f0UwwmannvHIaw0//EOENdGeoWmVo+gqCeg8qw
+         Rss6FOtATKPmVOzT86/uh5/memug/Wz37sCj2JdAI4nBzT9xeIl6ckhtibkC0VupV3
+         RhtPWiO6P2aww==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] riscv: vdso: fix NULL deference in vdso_join_timens() when vfork
+Date:   Thu,  8 Sep 2022 23:04:21 +0800
+Message-Id: <20220908150421.323-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 40459e03-0976-4a2a-81b6-08da91ab6831
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5114:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OW+RTij8GHaFU20YKsaa4b4D4UvMPcty+Cgif8y8wPYlBHazntyLhACPLztaAkf5C177O0PFTKUtKEro+/F81Id+GmDhyejODL55sx9uQR6PiRkp4N9rmnQifgOz8jkoJJ3pBR5FoNsk8eDrc1B2YC73jUr1iDRweiCJeV9nB/cQoQAlQyf78X2pbd2HpS381la+1+QcLP/GEA7BBWYBq4/8t21fEy65vNjP6ACQf6kFy3UKC4f0kke3ilRrl2xl81QgcN5IYwI/O+KIAuA2GZ7y9KhDYkAmI8IzGhQyyTDlhT+AaRld6SZZosbN/7E8yzabeuA/SRnHsVQw80hCvjpjeTsnpMS86b554z20j60PkgZe3SvMp/l7MIH++5WmC8i+WWo4Iq8sfnAM2p6mkEhVmY/Gt/4phOZmpIpgyTFMcUYLrx8JjcS5+ZTHXF4YTKd7qsQToPV3FDT0LtC1lTN7I/f+ekDfObBhRyVxJGAFAE72MN6G0RPMQJhwlv3jGCpJMgLD6fVMCQNOqVqVGXIAKc0eA+EXHGKNf45zlarYncIIHT/IT1y0yFsa7rG9hNRbvDYCjgaKwOb+z9acpR6WEbEGczzNEVLLSNywAM1DdhdV7JfwKM0A5rb77ylJp+bqXP6b7o2GIW/JmjG+kTuSSi0hnkoBBEnUbEeJTQdMUcOIvpZe4X3eb/d5NHzqjC1J8wYNNiYmTmTdgcQPEQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(396003)(346002)(39840400004)(136003)(366004)(38100700002)(8676002)(4326008)(66476007)(66556008)(66946007)(86362001)(186003)(83380400001)(6512007)(26005)(107886003)(6666004)(6506007)(6486002)(41300700001)(478600001)(9686003)(6916009)(316002)(54906003)(33716001)(2906002)(44832011)(7416002)(8936002)(5660300002)(4744005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?w5Ygj1KAwvwSh5STiUWhpnPVFHVaLViRH+FDy40h3TU9HDnJ91ix/uhN+nOs?=
- =?us-ascii?Q?yP2NKc6jA5D7wAs71Sztq9lLxb8mH9R5N7SKFCyRFbGxtp4Q9VODbskE99nn?=
- =?us-ascii?Q?tTY/8iFqQfiQ1VFS+WaAW0D47XA+qz1XZZe7S5kV+gG4wic25em6SzrCLAAa?=
- =?us-ascii?Q?txkU9XIh98eeRA4sxmyjpkGXmdOLpBDNNdIMQ2sWBvjrkDggDDIfjv1cumBL?=
- =?us-ascii?Q?kcPrLJ1qtwtlhgJAnpvCk5WrxrlRmGOnZuOqgJi4TDIU4aPq32HiZ6zlcDKW?=
- =?us-ascii?Q?uJHqBgg8r1MYChXVA81pku2ZRi/D6aYAv5Mjm8avQ6RfVrmNGQah3XA8rK0L?=
- =?us-ascii?Q?LqqBU81mgzCOIiyLEUaRXw7jZYS6STbV4tVi5/dGBM/OYnYKQsarOdupFIgL?=
- =?us-ascii?Q?dV0D7hWj50GvsYKLd3f1pm66V6YsMxJZd5YfNgqfjo0axurEEntjkctB2bSe?=
- =?us-ascii?Q?Y2PhXUZ8T7sooUVzhnm3Z0yvd0llrznpg6tQD7ydRNx+sdvqtJ466DZ/ZiWQ?=
- =?us-ascii?Q?CdNSMvvlbFRDpDCPe++Mpiaw1sKGMW6rqmgcIWNZGUGw+ape4QmCiGMRVxPY?=
- =?us-ascii?Q?0K1c0YsFotfxaZW8buYYscJ23jvHERY+P39yEuldElwHow6W8C5qKiRTjm2j?=
- =?us-ascii?Q?n1O5qZXKclDblJpsFBoGfmGnPJiTEzqWNvw/hAE1vWTIkcAHyrkQdkdh+sD3?=
- =?us-ascii?Q?vTv1hz/FiNjB4sdaNlc1jrs1/lVIyvU5rMYrvEVZCowV6Y3xSnTtQRZM2Fij?=
- =?us-ascii?Q?mmAMOMm3XURPmUWmmH1FPOWbPm+F7J3uDf7k1ejcwYi/1koMRdw1nKdF7kQe?=
- =?us-ascii?Q?RjF9M1k1X7elx2pKn0xVrp2OCve5cFZ8mx+VP6LwsAoZMBa4RHKIfa1wVvH1?=
- =?us-ascii?Q?tFPvXp0UwqNKGs5H2dVUbk10N0i61NgToTSSKATiPZS2cU5iYA7YZ42zLmMY?=
- =?us-ascii?Q?1z2T1d3Z1NWGlPXPSOZB5NXUZXEldMMcs8YwWYHmO28lcNkdtaOS7iKUTo8s?=
- =?us-ascii?Q?pD7mbL+JfaXm5x5ZtztgT0YJP1IW8OZLqViFIg+XB+t+ufD3k2fulYYsJ1W5?=
- =?us-ascii?Q?a5GJhUp8BnOas1rfpKz1HbgSV1THIXo/LD4Rge22qtsolH5ylBiq2NRfF2Gt?=
- =?us-ascii?Q?xQe5kV8cxao47qtS2J24+qOF8f2+ykPwKDm0izMxvif9Ym8kevnPHP2oe6f4?=
- =?us-ascii?Q?J7B4nVBA1baB/br8kNF+jXS1IruS32Q6oBWwjow4EjJYO5pNO/uYZa7/7dxT?=
- =?us-ascii?Q?DG5c0Z2Rbjp2/S5oPQAAOaGflPE6puxFhKmj4rbuTbKv8SgsGdv6KW/+/nTz?=
- =?us-ascii?Q?vbljENut2d1JgxOwie9yBSSgfDPhrJBoXDXBaohALXim143iGXIsWYi0QpOH?=
- =?us-ascii?Q?htfBLqZeDHsoQfsVmuOK1FCBURszqi+0YkrYXDeJHP3SQ/c6K/6qPKYb2QpF?=
- =?us-ascii?Q?Vx7MpoEJaPNtYnZlEoS/wyivtNhnk7usJsHFHAYGKOo8QPtd7i437l+VKS8x?=
- =?us-ascii?Q?Xrr1kJhnKH3rPV7A7NIVG65VnNzauDZ8AGsO5hgMYqHzTRjRjRNyA9BrLt8C?=
- =?us-ascii?Q?vMWVtSGgjYtiw8OasnL6lkp66hFtuhXJ/g/EmFDNZmnB5vV+bh94K5+Ncgbb?=
- =?us-ascii?Q?9A=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40459e03-0976-4a2a-81b6-08da91ab6831
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 15:04:20.2356
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: g4F9isRFW37vcwmPG+SdZwEU2vswaHjrGHuNyyPHdhAFI7meei+CzKrEitCxj8iyjjqaN0J59srRcSCfUgfRg5nNgs7wmN+WeTwXHT+d6Bw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5114
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 02:22:56PM +0000, Vladimir Oltean wrote:
-> On Thu, Sep 08, 2022 at 10:40:48AM +0100, Lee Jones wrote:
-> > Applied, thanks.
-> 
-> Hurray!
-> 
-> Colin, what plans do you have for the rest of VSC7512 upstreaming?
-> Do you need Lee to provide a stable branch for networking to pull, so
-> you can continue development in this kernel release cycle, or do you
-> expect that there won't be dependencies and you can therefore just test
-> on linux-next?
+Testing tools/testing/selftests/timens/vfork_exec.c got below
+kernel log:
 
-Yay!
+[    6.838454] Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000000020
+[    6.842255] Oops [#1]
+[    6.842871] Modules linked in:
+[    6.844249] CPU: 1 PID: 64 Comm: vfork_exec Not tainted 6.0.0-rc3-rt15+ #8
+[    6.845861] Hardware name: riscv-virtio,qemu (DT)
+[    6.848009] epc : vdso_join_timens+0xd2/0x110
+[    6.850097]  ra : vdso_join_timens+0xd2/0x110
+[    6.851164] epc : ffffffff8000635c ra : ffffffff8000635c sp : ff6000000181fbf0
+[    6.852562]  gp : ffffffff80cff648 tp : ff60000000fdb700 t0 : 3030303030303030
+[    6.853852]  t1 : 0000000000000030 t2 : 3030303030303030 s0 : ff6000000181fc40
+[    6.854984]  s1 : ff60000001e6c000 a0 : 0000000000000010 a1 : ffffffff8005654c
+[    6.856221]  a2 : 00000000ffffefff a3 : 0000000000000000 a4 : 0000000000000000
+[    6.858114]  a5 : 0000000000000000 a6 : 0000000000000008 a7 : 0000000000000038
+[    6.859484]  s2 : ff60000001e6c068 s3 : ff6000000108abb0 s4 : 0000000000000000
+[    6.860751]  s5 : 0000000000001000 s6 : ffffffff8089dc40 s7 : ffffffff8089dc38
+[    6.862029]  s8 : ffffffff8089dc30 s9 : ff60000000fdbe38 s10: 000000000000005e
+[    6.863304]  s11: ffffffff80cc3510 t3 : ffffffff80d1112f t4 : ffffffff80d1112f
+[    6.864565]  t5 : ffffffff80d11130 t6 : ff6000000181fa00
+[    6.865561] status: 0000000000000120 badaddr: 0000000000000020 cause: 000000000000000d
+[    6.868046] [<ffffffff8008dc94>] timens_commit+0x38/0x11a
+[    6.869089] [<ffffffff8008dde8>] timens_on_fork+0x72/0xb4
+[    6.870055] [<ffffffff80190096>] begin_new_exec+0x3c6/0x9f0
+[    6.871231] [<ffffffff801d826c>] load_elf_binary+0x628/0x1214
+[    6.872304] [<ffffffff8018ee7a>] bprm_execve+0x1f2/0x4e4
+[    6.873243] [<ffffffff8018f90c>] do_execveat_common+0x16e/0x1ee
+[    6.874258] [<ffffffff8018f9c8>] sys_execve+0x3c/0x48
+[    6.875162] [<ffffffff80003556>] ret_from_syscall+0x0/0x2
+[    6.877484] ---[ end trace 0000000000000000 ]---
 
-My plan was to start sending RFCs on the internal copper phys and get
-some feedback there. I assume there'll be a couple rounds and I don't
-expect to hit this next release (if I'm being honest).
+This is because the mm->context.vdso_info is NULL in vfork case. From
+another side, mm->context.vdso_info either points to vdso info
+for RV64 or vdso info for compat, there's no need to bloat riscv's
+mm_context_t, we can handle the difference when setup the additional
+page for vdso.
 
-So I'll turn this question around to the net people: would a round or
-two of RFCs that don't cleanly apply to net-next be acceptable? Then I
-could submit a patch right after the next merge window? I've been
-dragging these patches around for quite some time, I can do it for
-another month :-)
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Fixes: 3092eb456375 ("riscv: compat: vdso: Add setup additional pages implementation")
+---
+
+since v1:
+ - add "Fixes" tag
+ - fix build error when CONFIG_COMPAT is enabled.
+
+ arch/riscv/include/asm/mmu.h |   1 -
+ arch/riscv/kernel/vdso.c     | 178 +++++++++++++++++++----------------
+ 2 files changed, 95 insertions(+), 84 deletions(-)
+
+diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
+index cedcf8ea3c76..0099dc116168 100644
+--- a/arch/riscv/include/asm/mmu.h
++++ b/arch/riscv/include/asm/mmu.h
+@@ -16,7 +16,6 @@ typedef struct {
+ 	atomic_long_t id;
+ #endif
+ 	void *vdso;
+-	void *vdso_info;
+ #ifdef CONFIG_SMP
+ 	/* A local icache flush is needed before user execution can resume. */
+ 	cpumask_t icache_stale_mask;
+diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+index 69b05b6c181b..8ca3b821e1b5 100644
+--- a/arch/riscv/kernel/vdso.c
++++ b/arch/riscv/kernel/vdso.c
+@@ -27,6 +27,11 @@ extern char vdso_start[], vdso_end[];
+ extern char compat_vdso_start[], compat_vdso_end[];
+ #endif
+ 
++enum vdso_abi {
++	VDSO_ABI_RV64,
++	VDSO_ABI_RV32,
++};
++
+ enum vvar_pages {
+ 	VVAR_DATA_PAGE_OFFSET,
+ 	VVAR_TIMENS_PAGE_OFFSET,
+@@ -68,67 +73,7 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
+ 	return 0;
+ }
+ 
+-static void __init __vdso_init(struct __vdso_info *vdso_info)
+-{
+-	unsigned int i;
+-	struct page **vdso_pagelist;
+-	unsigned long pfn;
+-
+-	if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4))
+-		panic("vDSO is not a valid ELF object!\n");
+-
+-	vdso_info->vdso_pages = (
+-		vdso_info->vdso_code_end -
+-		vdso_info->vdso_code_start) >>
+-		PAGE_SHIFT;
+-
+-	vdso_pagelist = kcalloc(vdso_info->vdso_pages,
+-				sizeof(struct page *),
+-				GFP_KERNEL);
+-	if (vdso_pagelist == NULL)
+-		panic("vDSO kcalloc failed!\n");
+-
+-	/* Grab the vDSO code pages. */
+-	pfn = sym_to_pfn(vdso_info->vdso_code_start);
+-
+-	for (i = 0; i < vdso_info->vdso_pages; i++)
+-		vdso_pagelist[i] = pfn_to_page(pfn + i);
+-
+-	vdso_info->cm->pages = vdso_pagelist;
+-}
+-
+ #ifdef CONFIG_TIME_NS
+-struct vdso_data *arch_get_vdso_data(void *vvar_page)
+-{
+-	return (struct vdso_data *)(vvar_page);
+-}
+-
+-/*
+- * The vvar mapping contains data for a specific time namespace, so when a task
+- * changes namespace we must unmap its vvar data for the old namespace.
+- * Subsequent faults will map in data for the new namespace.
+- *
+- * For more details see timens_setup_vdso_data().
+- */
+-int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+-{
+-	struct mm_struct *mm = task->mm;
+-	struct vm_area_struct *vma;
+-	struct __vdso_info *vdso_info = mm->context.vdso_info;
+-
+-	mmap_read_lock(mm);
+-
+-	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+-		unsigned long size = vma->vm_end - vma->vm_start;
+-
+-		if (vma_is_special_mapping(vma, vdso_info->dm))
+-			zap_page_range(vma, vma->vm_start, size);
+-	}
+-
+-	mmap_read_unlock(mm);
+-	return 0;
+-}
+-
+ static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
+ {
+ 	if (likely(vma->vm_mm == current->mm))
+@@ -197,13 +142,6 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
+ 	},
+ };
+ 
+-static struct __vdso_info vdso_info __ro_after_init = {
+-	.name = "vdso",
+-	.vdso_code_start = vdso_start,
+-	.vdso_code_end = vdso_end,
+-	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+-	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+-};
+ 
+ #ifdef CONFIG_COMPAT
+ static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+@@ -216,21 +154,97 @@ static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+ 		.mremap = vdso_mremap,
+ 	},
+ };
++#endif
+ 
+-static struct __vdso_info compat_vdso_info __ro_after_init = {
+-	.name = "compat_vdso",
+-	.vdso_code_start = compat_vdso_start,
+-	.vdso_code_end = compat_vdso_end,
+-	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+-	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
++static struct __vdso_info vdso_info[] __ro_after_init = {
++	[VDSO_ABI_RV64] = {
++		.name = "vdso",
++		.vdso_code_start = vdso_start,
++		.vdso_code_end = vdso_end,
++		.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
++		.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
++	},
++#ifdef CONFIG_COMPAT
++	[VDSO_ABI_RV32] = {
++		.name = "compat_vdso",
++		.vdso_code_start = compat_vdso_start,
++		.vdso_code_end = compat_vdso_end,
++		.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
++		.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
++	},
++#endif
+ };
++
++static void __init __vdso_init(enum vdso_abi abi)
++{
++	unsigned int i;
++	struct page **vdso_pagelist;
++	unsigned long pfn;
++
++	if (memcmp(vdso_info[abi].vdso_code_start, "\177ELF", 4))
++		panic("vDSO is not a valid ELF object!\n");
++
++	vdso_info[abi].vdso_pages = (
++		vdso_info[abi].vdso_code_end -
++		vdso_info[abi].vdso_code_start) >>
++		PAGE_SHIFT;
++
++	vdso_pagelist = kcalloc(vdso_info[abi].vdso_pages,
++				sizeof(struct page *),
++				GFP_KERNEL);
++	if (vdso_pagelist == NULL)
++		panic("vDSO kcalloc failed!\n");
++
++	/* Grab the vDSO code pages. */
++	pfn = sym_to_pfn(vdso_info[abi].vdso_code_start);
++
++	for (i = 0; i < vdso_info[abi].vdso_pages; i++)
++		vdso_pagelist[i] = pfn_to_page(pfn + i);
++
++	vdso_info[abi].cm->pages = vdso_pagelist;
++}
++
++#ifdef CONFIG_TIME_NS
++struct vdso_data *arch_get_vdso_data(void *vvar_page)
++{
++	return (struct vdso_data *)(vvar_page);
++}
++
++/*
++ * The vvar mapping contains data for a specific time namespace, so when a task
++ * changes namespace we must unmap its vvar data for the old namespace.
++ * Subsequent faults will map in data for the new namespace.
++ *
++ * For more details see timens_setup_vdso_data().
++ */
++int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
++{
++	struct mm_struct *mm = task->mm;
++	struct vm_area_struct *vma;
++
++	mmap_read_lock(mm);
++
++	for (vma = mm->mmap; vma; vma = vma->vm_next) {
++		unsigned long size = vma->vm_end - vma->vm_start;
++
++		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_RV64].dm))
++			zap_page_range(vma, vma->vm_start, size);
++#ifdef CONFIG_COMPAT
++		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_RV32].dm))
++			zap_page_range(vma, vma->vm_start, size);
++#endif
++	}
++
++	mmap_read_unlock(mm);
++	return 0;
++}
+ #endif
+ 
+ static int __init vdso_init(void)
+ {
+-	__vdso_init(&vdso_info);
++	__vdso_init(VDSO_ABI_RV64);
+ #ifdef CONFIG_COMPAT
+-	__vdso_init(&compat_vdso_info);
++	__vdso_init(VDSO_ABI_RV32);
+ #endif
+ 
+ 	return 0;
+@@ -240,14 +254,14 @@ arch_initcall(vdso_init);
+ static int __setup_additional_pages(struct mm_struct *mm,
+ 				    struct linux_binprm *bprm,
+ 				    int uses_interp,
+-				    struct __vdso_info *vdso_info)
++				    enum vdso_abi abi)
+ {
+ 	unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
+ 	void *ret;
+ 
+ 	BUILD_BUG_ON(VVAR_NR_PAGES != __VVAR_PAGES);
+ 
+-	vdso_text_len = vdso_info->vdso_pages << PAGE_SHIFT;
++	vdso_text_len = vdso_info[abi].vdso_pages << PAGE_SHIFT;
+ 	/* Be sure to map the data page */
+ 	vdso_mapping_len = vdso_text_len + VVAR_SIZE;
+ 
+@@ -258,18 +272,17 @@ static int __setup_additional_pages(struct mm_struct *mm,
+ 	}
+ 
+ 	ret = _install_special_mapping(mm, vdso_base, VVAR_SIZE,
+-		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info->dm);
++		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info[abi].dm);
+ 	if (IS_ERR(ret))
+ 		goto up_fail;
+ 
+ 	vdso_base += VVAR_SIZE;
+ 	mm->context.vdso = (void *)vdso_base;
+-	mm->context.vdso_info = (void *)vdso_info;
+ 
+ 	ret =
+ 	   _install_special_mapping(mm, vdso_base, vdso_text_len,
+ 		(VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC),
+-		vdso_info->cm);
++		vdso_info[abi].cm);
+ 
+ 	if (IS_ERR(ret))
+ 		goto up_fail;
+@@ -291,8 +304,7 @@ int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+ 	if (mmap_write_lock_killable(mm))
+ 		return -EINTR;
+ 
+-	ret = __setup_additional_pages(mm, bprm, uses_interp,
+-							&compat_vdso_info);
++	ret = __setup_additional_pages(mm, bprm, uses_interp, VDSO_ABI_RV32);
+ 	mmap_write_unlock(mm);
+ 
+ 	return ret;
+@@ -307,7 +319,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 	if (mmap_write_lock_killable(mm))
+ 		return -EINTR;
+ 
+-	ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
++	ret = __setup_additional_pages(mm, bprm, uses_interp, VDSO_ABI_RV64);
+ 	mmap_write_unlock(mm);
+ 
+ 	return ret;
+-- 
+2.34.1
+

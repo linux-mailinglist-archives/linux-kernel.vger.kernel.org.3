@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D22D5B2248
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BF55B2256
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiIHPaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S229812AbiIHPc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbiIHP3a (ORCPT
+        with ESMTP id S229667AbiIHPc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:29:30 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E78F10C5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:28:32 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bt10so28344039lfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=4i5CLL5zXNm8xAxFuL3WcPaDXJBLZrrT7gdqgJWsssM=;
-        b=zTRaEBM8h/AgHiP43wRrK2eOvAhRe/F6UVkH7Us0KM5pGBJwh6gnpMRabZsbFR1PpE
-         l+2qclNxfjXdvhEoOaKViykvcrnPUncG4G2/sycriPDrfmeLDVaizgLHRxRGny2lwmr4
-         1tKttNWHXT7q5d2Yfwq2a7MhRZmGgktP/YPGKBG38Ged+lIxQm82obdCnOlMF8mbR8zm
-         iAz/SCLyLQBsD1kHVumD1hsB4xSdBxRPrgBEdbH1HOMLAAGzm9Pbu3+owyiszQSHPHme
-         uJfepAr2Sq8RFVoSMQ3RrrxCRiZWZ/LNFSKidz2TMVXTjPf2QV7Pa1Zof9cXcMc27cAc
-         HyOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4i5CLL5zXNm8xAxFuL3WcPaDXJBLZrrT7gdqgJWsssM=;
-        b=Fs9C+dHzQTqav8TmT+qPekFvydUIvJj3hXhOkjP1VA6zH24UX553/vPBybgK842E3u
-         lc922KfC4aCFp3DyUVYM7hEgUAhuGIL9KTCvInjmODa+3/dN/UgbL+9tIr+/65onhRnH
-         /9+hoPQJmpTs1o0KF2XqU2eJf1kNXTlrrwkjsYT3seUOy9ld8X8XzWYIjlhbLWwwsh+S
-         BJMcyYsK93nDoNnapFBSZP4YgiDTw7bxaisctF9tngp3I4NwVS1YyWqG6yu1hpgIov7F
-         cu4xEuJ6i6Xo8WWZt7iWwx5BT1awVq5RmBBZgSKa7ByiNUW0O8uEs9Y5opu5WMI16Ak5
-         XU7g==
-X-Gm-Message-State: ACgBeo2uwAosiir9ysG94v5F7dxjxOFRS4vA+Cdl1UxD2jlReH1WAbPY
-        PATzIgi8SHbqzmm5p+PRrL5hLg==
-X-Google-Smtp-Source: AA6agR5nuVkUg8vPgHt4g1SIgYv4bRvUoTVvbvAyY8N9q6d7yOOuKKJanXMI+72+uSgRSg908eTvBw==
-X-Received: by 2002:a05:6512:a8c:b0:48b:3e1c:c3ad with SMTP id m12-20020a0565120a8c00b0048b3e1cc3admr2960257lfu.678.1662650910246;
-        Thu, 08 Sep 2022 08:28:30 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x13-20020a056512078d00b0049759682c88sm1761246lfr.190.2022.09.08.08.28.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 08:28:29 -0700 (PDT)
-Message-ID: <d1b0360d-f32c-6311-5078-370c36f40ad9@linaro.org>
-Date:   Thu, 8 Sep 2022 17:28:28 +0200
+        Thu, 8 Sep 2022 11:32:26 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BC2DF91;
+        Thu,  8 Sep 2022 08:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662651144; x=1694187144;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hgS6CotZ3Q2j2e4c7OneYE8xCiB3LwVd0bcM6e338KU=;
+  b=Z1yM4pYmVBJrf1NUvVMbZvrha2/FoFapo7+71Q43l3z7b9mxpLttCzCs
+   sDf6XD1PTj+srU1XCOOzex2d1jAIfU7GfE8iRV4GLgGb/r6dUZYBCK0sg
+   Jj6Jqn7koYWdYxYjtedUSJ2ynF33cooDECe+TDskL9gKjAQ1CkRrKF5QJ
+   G9mxdLO9pS0a1HNjf+omEH8c8FMdlR94NS6Ze/npuaPEqFesr5XHF2Rlg
+   O5QveMt19n9TgaQAsV5+c3sDtc+NuKFHEthmA4EFqR3oZQTKJ6ydFH/Jk
+   9KlyX9iIh5z4qfPIMkK0jLZWOQ9UPMfFY+tS5zcviAUie1HoTmKTRK8Y/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="276951192"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="276951192"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 08:32:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="614927447"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 08 Sep 2022 08:32:14 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWJVm-00005N-10;
+        Thu, 08 Sep 2022 15:32:14 +0000
+Date:   Thu, 8 Sep 2022 23:31:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH V2 5/7] arm64/perf: Drive BRBE from perf event states
+Message-ID: <202209082350.lDY2EvGx-lkp@intel.com>
+References: <20220908051046.465307-6-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/8] ASoC: rockchip: rk3308: add audio card bindings
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>
-References: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
- <20220907142124.2532620-3-luca.ceresoli@bootlin.com>
- <aeabc681-9416-d25d-693a-30ba99f1796d@linaro.org>
- <20220908172016.6e23df8c@booty>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220908172016.6e23df8c@booty>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908051046.465307-6-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,39 +71,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 17:20, Luca Ceresoli wrote:
-> Hello Krzysztof,
-> 
-> thank you for reviewing my patches.
-> 
-> On Thu, 8 Sep 2022 13:49:34 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 07/09/2022 16:21, luca.ceresoli@bootlin.com wrote:
->>> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> 
-> [...]
-> 
->>> +properties:
->>> +  compatible:
->>> +    const: rockchip,rk3308-audio-graph-card  
->>
->> Is "graph" part of device name or you just put it there because of other
->> schema?
-> 
-> Indeed this comes from the "audio-graph-card" compatible string.
-> 
->> The compatible should reflect the device name, not some other
->> pieces in Linux or in bindings.
-> 
-> Would it be OK to rename it to rockchip,rk3308-audio-card (i.e. drop
-> the "graph-" infix)?
-> 
-> Fixes for the other comments you made to this and the other patches are
-> already queued for v2.
+Hi Anshuman,
 
-Yes, either rockchip,rk3308-audio-card or rockchip,rk3308-audio
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on acme/perf/core]
+[also build test WARNING on tip/perf/core arm64/for-next/core linus/master v6.0-rc4 next-20220908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220908-131425
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
+config: arm64-randconfig-r025-20220907 (https://download.01.org/0day-ci/archive/20220908/202209082350.lDY2EvGx-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/5c7c07e050abb38b80d0c129fdef3a6f4b761017
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anshuman-Khandual/arm64-perf-Enable-branch-stack-sampling/20220908-131425
+        git checkout 5c7c07e050abb38b80d0c129fdef3a6f4b761017
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/perf/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/perf/arm_pmu.c:535:12: warning: stack frame size (2064) exceeds limit (2048) in 'armpmu_event_init' [-Wframe-larger-than]
+   static int armpmu_event_init(struct perf_event *event)
+              ^
+   1 warning generated.
 
 
-Best regards,
-Krzysztof
+vim +/armpmu_event_init +535 drivers/perf/arm_pmu.c
+
+1b8873a0c6ec51 arch/arm/kernel/perf_event.c Jamie Iles       2010-02-02  534  
+b0a873ebbf87bf arch/arm/kernel/perf_event.c Peter Zijlstra   2010-06-11 @535  static int armpmu_event_init(struct perf_event *event)
+1b8873a0c6ec51 arch/arm/kernel/perf_event.c Jamie Iles       2010-02-02  536  {
+8a16b34e21199e arch/arm/kernel/perf_event.c Mark Rutland     2011-04-28  537  	struct arm_pmu *armpmu = to_arm_pmu(event->pmu);
+1b8873a0c6ec51 arch/arm/kernel/perf_event.c Jamie Iles       2010-02-02  538  
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  539  	/*
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  540  	 * Reject CPU-affine events for CPUs that are of a different class to
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  541  	 * that which this PMU handles. Process-following events (where
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  542  	 * event->cpu == -1) can be migrated between CPUs, and thus we have to
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  543  	 * reject them later (in armpmu_add) if they're scheduled on a
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  544  	 * different class of CPU.
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  545  	 */
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  546  	if (event->cpu != -1 &&
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  547  		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  548  		return -ENOENT;
+cc88116da0d18b arch/arm/kernel/perf_event.c Mark Rutland     2015-05-13  549  
+2481c5fa6db023 arch/arm/kernel/perf_event.c Stephane Eranian 2012-02-09  550  	/* does not support taken branch sampling */
+2481c5fa6db023 arch/arm/kernel/perf_event.c Stephane Eranian 2012-02-09  551  	if (has_branch_stack(event))
+2481c5fa6db023 arch/arm/kernel/perf_event.c Stephane Eranian 2012-02-09  552  		return -EOPNOTSUPP;
+2481c5fa6db023 arch/arm/kernel/perf_event.c Stephane Eranian 2012-02-09  553  
+e1f431b57ef9e4 arch/arm/kernel/perf_event.c Mark Rutland     2011-04-28  554  	if (armpmu->map_event(event) == -ENOENT)
+b0a873ebbf87bf arch/arm/kernel/perf_event.c Peter Zijlstra   2010-06-11  555  		return -ENOENT;
+b0a873ebbf87bf arch/arm/kernel/perf_event.c Peter Zijlstra   2010-06-11  556  
+c09adab01e4aee drivers/perf/arm_pmu.c       Mark Rutland     2017-03-10  557  	return __hw_perf_event_init(event);
+1b8873a0c6ec51 arch/arm/kernel/perf_event.c Jamie Iles       2010-02-02  558  }
+1b8873a0c6ec51 arch/arm/kernel/perf_event.c Jamie Iles       2010-02-02  559  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

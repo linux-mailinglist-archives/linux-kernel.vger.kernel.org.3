@@ -2,117 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506B15B213A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA855B2146
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiIHOvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S232757AbiIHOwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiIHOvN (ORCPT
+        with ESMTP id S232764AbiIHOwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:51:13 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D53E4DCB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:51:12 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e20so26485559wri.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ha0C+bSRVrCJnfze+oX7CrRnjc5k1OyYXKTo3Jn7s8c=;
-        b=b6OSmTFRch9kSSTz+Ta0LqaQz5NZSX9z6NLPWHgft6m8cIo2tiqNk165erPHJGcDao
-         lTMXKeGOJee77p4IwEQOLjWVzyAk/SVWvF0rBWvJNOEoYLh2KbANQhRVLrYnWMoP8OEs
-         QKPnonzkpYwxCrDr8iyWIpnkYmm/s8MADVWQJ6GC1LP2JfArmkbWhMdYgPekAdSaThgn
-         5KrElKBmhvACNt2aiv5VpDlmmtuiJZ3erkC7G/aG837/YMkpw61ghpvHLqZw8Sur0MrZ
-         p7PsQzbW9hYOW8wwZ7/KQd4R9GeKHSUveJq/JISF6YgN3A/BWHkd7zQM14YJzTBdW854
-         RykA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ha0C+bSRVrCJnfze+oX7CrRnjc5k1OyYXKTo3Jn7s8c=;
-        b=1bWR4qnWVOnV4vywOGxJkOW+2AXNxERNP+r786hMsfP+2VdltHeRGfVRelLgLfh3pT
-         Jyu+4IrYK8OEz3dhkLR6/Niy5dnlpEXdW4uWfykJy98HQ1nRZl/m7lHO18BVZZiyOnce
-         h3ULcXJPnT/PLAj/qowF5aeuWyT3Q/1whDM33z0kmNzTYYwB0eg6SUjVKHfOuP88Gs+u
-         GGeJi/ohGMzzaK3x8j3y0NnvddiXzg5kkzPTxgMNuHY/XPNkM1PsEzRru3tb4Tb2ASLS
-         gxwl0Hm3G1AD2lRqZSZI7Sz0zg1gU4Px52grTModi16rPDG5XMGesopEMzCi1wYHypR1
-         n8oA==
-X-Gm-Message-State: ACgBeo1aI35pY/mZxSHKDiumSWWs6B1fnpOOd8CE4POOwRaTDbAUUbK1
-        CAwVNEdg0KjguGbm1wwtPu7kBQ==
-X-Google-Smtp-Source: AA6agR5Hlu9JtsEx8ytH4x1f+4vTBU61IDC9bWPKmQGyMYnAms22L0KdfVkzm0vQtOGJvd+kl9A6mg==
-X-Received: by 2002:adf:db85:0:b0:225:2d24:9455 with SMTP id u5-20020adfdb85000000b002252d249455mr5579454wri.711.1662648670996;
-        Thu, 08 Sep 2022 07:51:10 -0700 (PDT)
-Received: from [10.35.4.106] ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id a10-20020a05600c348a00b003a31ca9dfb6sm3485742wmq.32.2022.09.08.07.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 07:51:10 -0700 (PDT)
-Message-ID: <e56b67a3-4721-638b-a3d6-54e4d407598d@sifive.com>
-Date:   Thu, 8 Sep 2022 15:51:08 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 0/6] Use composable cache instead of L2 cache
-Content-Language: en-GB
-To:     Zong Li <zong.li@sifive.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        greentime.hu@sifive.com, conor.dooley@microchip.com, bp@alien8.de,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220908144424.4232-1-zong.li@sifive.com>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <20220908144424.4232-1-zong.li@sifive.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 10:52:05 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2287611C176;
+        Thu,  8 Sep 2022 07:51:51 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 401F0580736;
+        Thu,  8 Sep 2022 10:51:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 08 Sep 2022 10:51:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662648710; x=1662652310; bh=fvxntO4oWr
+        KM9m3QBIVXQh/akrVVbow7ITon7TAcDFg=; b=T3ovjRGcfRJnLcD9Dj0p5JMeaT
+        BmkIJM8gPStOJLdxWxqgJFqY0TJ2gt83qcLKsXIFJt2rsolfrVqJEGRb9+/HVhKB
+        +fF4lCUWVTPNo8QnR9r0xRaikzaQHLToKHw6BRsdzGY2xsnpzV0bulCZM32WNMD7
+        vdwADYlleTuAgFAiVuGJKBPma3KAhJEwly6JefxBWenUkTv9Pn4SKl4goxlmdH9T
+        M09CzEy9q2zhJgYabJdZthlvO1Hy1H7wDVPcI+29THc4U2EiuEKLCIPflKDSzDQC
+        P1VksUmYQp2AzyVpRQ8x4Qwz2n8a3trFAMGmpNyyT15cJ3pmnqepgeBF6BEA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662648710; x=1662652310; bh=fvxntO4oWrKM9m3QBIVXQh/akrVV
+        bow7ITon7TAcDFg=; b=E0pselW5NBkdYlX81XJiShZr7kwPjW3sXXWQ5B7h6orf
+        zWyg4niSpfODKiiHWrCAI9oLMx7g9Zx78eqQ+WVOU+31aKdpBCbH4O/wvO49Oe0d
+        BYQqxcCLMKAKudcCjI93HIz8fc5f8T4USA91oHVr/bbAkxVaOEkZzdbh4CgZtdqB
+        J+Gnejw38SLVU1litTK5H05gBKkbwwCuB3hgO/WiCB1vFit9W/zKuSouPomYWHs+
+        pjrp2pPaQR2vzujJEl2xlFv8/XzYBffSRJb6N/hZ4ArJk4MHa8HySVoNj+I5gqMk
+        Lagjx6kQuCNUOdgmPQksE21Ypg2uepUCntElIISE1w==
+X-ME-Sender: <xms:hQEaYzbvT8jeqj55jJQ-DjWEvt1TS8nw953_lEVR1ieO7Axg3Ycneg>
+    <xme:hQEaYyZ6sbxsv0GMt4agYguZtplXeNmY0xVp5k66StalAWHrvkVfNGbR8YyuS7QP8
+    B9C_964bdBNw29I50Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:hQEaY19-t1GL_DlBR_Kuv3ninTvZ3c8KdXGxfnxJQ7MWB3C-xAA9IA>
+    <xmx:hQEaY5qUIc2aJKzc-Xc-OwX8_aOC1zASLIwNa2ZMZy65yZst08-fIA>
+    <xmx:hQEaY-plCkkIBjcFUMcVhsA-oAH7Wfy9PzyisPg93NurNWFzRSphfg>
+    <xmx:hgEaY1RoLO1Ga5sX8XtlT8LGTumNIQUIToAeeyaMcJ9aXXdG_IrQQw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D690EB60083; Thu,  8 Sep 2022 10:51:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <d414eff0-a74b-480b-9449-ad6d114ff911@www.fastmail.com>
+In-Reply-To: <3bdb5323c465daa81682ebd7f8594962320680e6.1662625281.git.christophe.leroy@csgroup.eu>
+References: <3bdb5323c465daa81682ebd7f8594962320680e6.1662625281.git.christophe.leroy@csgroup.eu>
+Date:   Thu, 08 Sep 2022 16:51:28 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] asm-generic: Remove empty #ifdef SA_RESTORER
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 15:44, Zong Li wrote:
-> Since composable cache may be L3 cache if private L2 cache exists, we
-> should use its original name "composable cache" to prevent confusion.
-> 
-> This patchset contains the modification which is related to ccache, such
-> as DT binding and EDAC driver.
-> 
-> The DT binding is based on top of Conor's patch, it has got ready for
-> merging, and it looks that it would be taken into the next few 6.0-rc
-> version. If there is any change, the next version of this series will be
-> posted as well.
-> https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
+On Thu, Sep 8, 2022, at 11:12 AM, Christophe Leroy wrote:
+> There was a #ifdef SA_RESTORER to guard the sa_restorer field
+> in struct sigaction.
+>
+> Commit 8a1ab3155c2a ("UAPI: (Scripted) Disintegrate
+> include/asm-generic") moved that struct into
+> uapi/asm-generic/signal.h but the #ifdef SA_RESTORER remained.
+>
+> Remove it.
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
 
-Is there a change log for the v2..v3 versions of this patch series?
 
-> Ben Dooks (2):
->    soc: sifive: ccache: reduce printing on init
->    soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
-> 
-> Zong Li (4):
->    dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
->    soc: sifive: ccache: rename SiFive L2 cache to Composable cache.
->    soc: sifive: ccache: determine the cache level from dts
->    soc: sifive: ccache: define the macro for the register shifts
-> 
->   ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
->   drivers/edac/Kconfig                          |   2 +-
->   drivers/edac/sifive_edac.c                    |  12 +-
->   drivers/soc/sifive/Kconfig                    |   6 +-
->   drivers/soc/sifive/Makefile                   |   2 +-
->   .../{sifive_l2_cache.c => sifive_ccache.c}    | 200 ++++++++++--------
->   .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
->   7 files changed, 151 insertions(+), 115 deletions(-)
->   rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
->   rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (31%)
->   rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
-> 
+Applied to asm-generic tree, thanks
 
+     Arnd

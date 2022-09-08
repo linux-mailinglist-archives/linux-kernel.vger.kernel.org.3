@@ -2,131 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798375B20D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1535B20E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiIHOjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S231739AbiIHOlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiIHOjN (ORCPT
+        with ESMTP id S231572AbiIHOkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:39:13 -0400
-Received: from alln-iport-8.cisco.com (alln-iport-8.cisco.com [173.37.142.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDF2EB84A;
-        Thu,  8 Sep 2022 07:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1087; q=dns/txt; s=iport;
-  t=1662647946; x=1663857546;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8NCt0KDXjpoYpVNujujYHgf2bPDgDdq5z15sk5PL364=;
-  b=K1+sS1g6CN1MqBI9TCNzfQVObB0Zqe7HQK0exVuvXJAhOwMsFkQeXwrS
-   FYn2oYng6NwCRlIqWDbRmINsp9ILD0K896KcRs9Oq+F/K4YAII9LLgxMC
-   zE8gvzM/NWqVkscKA+D5LPeLRGOtFoyeUiYlhplbhMCPIoEKUwsOkEDCg
-   o=;
-X-IPAS-Result: =?us-ascii?q?A0ANAABH/RljmJNdJa1aHAEBAQEBAQcBARIBAQQEAQFAg?=
- =?us-ascii?q?TsHAQELAYMkVT5FA4xqhkyCKJFgiyiBJQNUCwEBAQ0BATkJBAEBgVODMgKEZ?=
- =?us-ascii?q?gIlNAkOAQIEAQEBAQMCAwEBAQEBAQMBAQUBAQECAQcEFAEBAQEBAQEBHRkFD?=
- =?us-ascii?q?hAnhWgNhkMBAgM6PxALGC5XBhOCfQGDIAMQpjd4gTOBAYNQAYRMgV8GFBCBG?=
- =?us-ascii?q?QGQHiccgUlEhAg3PohRggwiBJdwNwNFHkIDC0I1GAMUAwUkBwMZDyMNDQQWB?=
- =?us-ascii?q?wwDAwUlAwICGwcCAgMCBhUFAgJNOAgECAQrJA8FAgcvBQQvAh4EBQYRCAIWA?=
- =?us-ascii?q?gYEBAQEFQIQCAIIJhcHEzMZAQVZEAkhHA4aDQUGEwMgbQVFDygyNTkrHRsKg?=
- =?us-ascii?q?Q4qKBUDBAQDAgYTAwMiAhAsMRQEKRMSLQcrcwkCAyJnBQMDBCgsAwkhHwcoJ?=
- =?us-ascii?q?jwHWToBBAMDECI9BgMJAwIkE0eBOSgFAw8ZlyOCTlIrIIJXommdH4E1g1yBR?=
- =?us-ascii?q?olnlGFMEahkLZZajTmaAAIEBgUCFoFhOoFbMxoIGxWCbgEBMhM+GQ+OOYhth?=
- =?us-ascii?q?WokMQIBOAIGCwEBAwmKUgEB?=
-IronPort-Data: A9a23:2am4p6i9A6Xi3RsXr9gjnN9wX161ihAKZh0ujC45NGQN5FlHY01je
- htvWWHVO/6PZzOhfY0ibI6/8EwO68WAyIQySAZtqSozE3hjpJueD7x1DKtf0wB+jyHnZBg6h
- ynLQoCYdKjYdleF+lH1dOKJQUBUjclkfJKkYAL/En03FFQMpBsJ00o5wbZo2t4w27BVPivU0
- T/Mi5yHULOa82Yc3lI8s8pvfzs24ZweEBtB1rAPTagjUG32zhH5P7pDTU2FFEYUd6EPdgKMq
- 0kv+5nilo/R109F5tpICd8XeGVSKlLZFVDmZna7x8FOjzAazhHe3JrXO9IaMll1mgyplexLi
- 49Cn6KdagolHo3lzbF1vxlwS0mSPIVc87PBZHO4q8HWlhSAeHr3yPIoB0YzVWEa0r8oWicVq
- rpJc3ZUMk/ra+GemNpXTsFgj8IiIc30NasUu2prynfSCvNOrZXrEv+VuoAGjWlh7ixINcTzd
- c0iRGFDVTDJQhh9HFgcWJURxvj90xETdBUB+A7K+sLb+VP7yA13zaioM9fPfNGObdtak1zep
- W/c+Wn9RBYAO7S3zTuD72LpheXSnCf3cJwdGaf+9fNwhlCXgGsJB3U+U1e2uvCkjki/VshEA
- 0MT/SUqoO4580nDZtz8VB2xpDiAvRsYc99ZCe499gDLzKfIiy6cD3MNTj9bb80Ot8IsQzEuk
- FiTkLvU6SdHqraZTzeW8a2Z6GrrfyMUNmQFIyQDSGPp/uUPvqk11QztX+9DGpKPzYf6Mw/d4
- D2GjAgX0uB7YdEw6423+lXOgjSJr5fPTxIo6gi/Yo5Dxl4iDGJCT9H1gWU3/cqsP67CFAjd4
- yJsd9y2qbFQUsnXy0RhVc1XRNmUC+C53CowaLKFN6Mg/DSk4XK4eoY4DNpWexoxYp9sldMEn
- CbuVe55/pRfOj6harV6JtvoTc8r1qPnU9/iU5g4j+aigLAsJWdrHwk3NSZ8OlwBdmB3zcnT3
- r/ALa6R4Y4yU/gP8dZPb751PUUX7i4/33jPYpvw0g6q17GTDFbMF+lfbQTTMrtisvLbyOkwz
- zq5H5bao/m4eLCuChQ7DaZPRbz3BSFhXMuv+5A/mhCre1Y6SAnN9MM9MZt4K9A6wMy5Z8/D/
- 2q2XQdD2UHjiHjcQThmmVg9AI4Dqa1X9CphVQR1ZA7A8yF6Pe6HsvxFH7NpJuZPyQCW5aMuJ
- xXzU5/eUq0np/Wu02l1UKQRW6Q4L0321FnUYnT9CNX9FrY5LzH0FhbfVlOH3EEz4uCf7KPSf
- 5XIOtvnfKc+
-IronPort-HdrOrdr: A9a23:z4M1cauNnmr+pW9bnrYxFoWj7skDTdV00zEX/kB9WHVpmwKj+P
- xGuM5rsCMc6QxhOk3I9urrBEDtex7hHNtOkO0s1NSZLWrbUQmTTb2KhLGKq1bd8m/FltK1vp
- 0PT0ERMrHN5HFB/KHHCM3SKadY/DFBm5rY49vj8w==
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="5.93,300,1654560000"; 
-   d="scan'208";a="927776969"
-Received: from rcdn-core-11.cisco.com ([173.37.93.147])
-  by alln-iport-8.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 08 Sep 2022 14:39:03 +0000
-Received: from zorba ([10.25.130.54])
-        by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTPS id 288Ecxgh010907
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 8 Sep 2022 14:39:01 GMT
-Date:   Thu, 8 Sep 2022 07:38:59 -0700
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        xe-linux-external@cisco.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC-PATCH] Makefile: dts: include directory makefile for
- DTC_FLAGS
-Message-ID: <20220908143859.GF4320@zorba>
-References: <20220907230339.271633-1-danielwa@cisco.com>
- <CAK7LNAQSUkWz9hvEmB1wSCMJ0Do209QZOgAxO=oSK6HQa7XgTg@mail.gmail.com>
+        Thu, 8 Sep 2022 10:40:45 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B895EB847;
+        Thu,  8 Sep 2022 07:40:16 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id a67so15049129ybb.3;
+        Thu, 08 Sep 2022 07:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=P6etuL406xLRhT6RqJwslD+tK1bv2bUyoaOC1vIESrQ=;
+        b=O7auhBhG7nxbGY34/Uxjtdn3WKa+7mB6yfQqIFe4x0OwSVxuqbTI0a7XpqHZl+qGjl
+         v/ztxcw4PGowK8XQDZJ85NQsGMFU+nhf+4Rj6XloT7dXP6SKyIuTcDO1CWY+MG8maIts
+         vu4AGwuE9yPyNwiToDAW6uOq2n4ZfgTiaTE1BEW8EQzTAenoM5lN/YtoAbSgid/W9UcZ
+         KMh1dco6H3N68pTCN/vGZuauX05Pg3FspKaE80UDKPtfwR2N8LffSYUjhADQW2NMHlpD
+         KRyAK9Ni45PHdEY6JlRZ0RgKUJs8OcVXqZRLhYeAXAIokd3607h/95knWVh8afYsysxc
+         s2ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=P6etuL406xLRhT6RqJwslD+tK1bv2bUyoaOC1vIESrQ=;
+        b=Nhukm0YAvJsfznbgQShTaD10vZjjg/CuiTqMMjAHJlrX1dDHmbCHWYbOXn/xfo9pAD
+         aekDOMtkRooNK6GEazgYhnXgvG9iz5SVRiR0kk9ni/V6TGs3LtRGrw9BL2XjbCJGYBUh
+         aL+iMzrbV6166LuwMebpv9O0vqqAX4LsOQANVUN+FBXjSIT5VpWf9kFNkfYfIL+Wkpxm
+         GOnGGlLOdLZkOM48L4PSw4F8bZblvH/3ohrlRPVMNhpmXrAqQ54K0BvI2ULq6LRRS536
+         rRg/aY8rVwcDOyRiu9FbdSOwosUU6xhAWjr+szis702R2QyVptkZ10eArEM05lwhYG7b
+         95wg==
+X-Gm-Message-State: ACgBeo3TbKdwvdvSxezfG9sbJQAPLVRYbJ4vGRz//JXcQUwwpoH9R9St
+        TO0Vu7G56IxXyubvYmyxMveNlbCl6LDSHttbfRE=
+X-Google-Smtp-Source: AA6agR7UZHUk270jZt+chAm9rm9ZheP07KjHt6vNXD9pMgs6BeYqfa8JQMvKdUhJpTPAuGK13ZGmu2capesX8rTXTyE=
+X-Received: by 2002:a25:83d2:0:b0:696:1071:1a01 with SMTP id
+ v18-20020a2583d2000000b0069610711a01mr7807235ybm.335.1662648015777; Thu, 08
+ Sep 2022 07:40:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNAQSUkWz9hvEmB1wSCMJ0Do209QZOgAxO=oSK6HQa7XgTg@mail.gmail.com>
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.25.130.54, [10.25.130.54]
-X-Outbound-Node: rcdn-core-11.cisco.com
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220906102154.32526-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220906102154.32526-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <8ecb62b7-53c4-1c43-65b3-567d8c12e131@microchip.com> <CAOnJCUKLpRz4Fbx1XiMnap-ELw2k1c8E9V8bZiSP+x7z9Z5QrA@mail.gmail.com>
+ <f362eaeb-6ccd-4392-a346-55fa5ae25e13@microchip.com> <OS0PR01MB5922833FDCA60892191B211A86409@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <5e894d87-8abb-540d-fbd6-8a1d6f9d0e91@microchip.com> <OS0PR01MB5922F6CC81114BCE7696BEDB86409@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <02df5db7-99bc-5476-2530-4237c3904933@microchip.com>
+In-Reply-To: <02df5db7-99bc-5476-2530-4237c3904933@microchip.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 8 Sep 2022 15:39:49 +0100
+Message-ID: <CA+V-a8sBvS6Xp0vEV__GTMu-qqy3QJoFzr+F42tL7jkTDszWYA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] riscv: vendors: andes: Add support to configure
+ the PMA regions
+To:     Conor Dooley <Conor.Dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, atishp@atishpatra.org,
+        guoheyi@linux.alibaba.com, guoren@linux.alibaba.com,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, atishp@rivosinc.com,
+        apatel@ventanamicro.com,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 04:08:06PM +0900, Masahiro Yamada wrote:
-> On Thu, Sep 8, 2022 at 8:03 AM Daniel Walker <danielwa@cisco.com> wrote:
+On Thu, Sep 8, 2022 at 3:04 PM <Conor.Dooley@microchip.com> wrote:
+>
+> On 08/09/2022 14:01, Biju Das wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > >
-> > The current Makefile will drop the DTC_FLAGS depending on how you
-> > build. For example,
+> > Hi Conor,
 > >
-> > make dtbs
+> > Thanks for the feedback.
 > >
-> > includes correct DTC_FLAGS. However if you run,
+> >> Subject: Re: [RFC PATCH 1/2] riscv: vendors: andes: Add support to
+> >> configure the PMA regions
+> >>
+> >> On 08/09/2022 09:39, Biju Das wrote:
+> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> >>> the content is safe
+> >>>
+> >>> Hi Conor, Atish,
+> >>>
+> >>> What RISC-V devices you have?
+> >>
+> >> A bunch ;)
+> >>
+> >> A __couple__ PolarFire SoC boards, HiFive Unleashed, D1 Nezha, Canaan
+> >> k210 MAIX something & the VisionFive.
 > >
-> > make nvidia/tegra210-p2371-2180.dtb
+> > If standard DMA api works without any issue means, on these platforms
+> > IO Coherence port is enabled in the hardware. So all peripherals
+> > involving DMA work as expected.
 > >
-> > The DTC_FLAGS are dropped. This appears to be caused by the top level
-> > Makefile not including the Makefile from the directory where the dts lives.
+> >>> Ours is RISC-V uniprocessor without IO Coherence Port.
+> >>
+> >> What does "IO Coherence Port" mean? Zicbo*?
 > >
-> > This normally doesn't matter because most dts files have nothing added
-> > from the Makefile. This changes when you have overlays, and the
-> > DTC_FLAGS modifier is mandatory for the dtb to work correctly.
-> 
-> 
-> I recently fixed another issue of single target builds.
-> https://patchwork.kernel.org/project/linux-kbuild/patch/20220906061313.1445810-2-masahiroy@kernel.org/
-> 
-> 
-> It fixed your issue as well.
-> 
-> 
+> > The HW will provide coherency between CPU and peripheral.
+> >
+> > If Zibco* is uniprocessor, then highly it may not have IO coherence
+> > Port enabled in their design.
+>
+> Zicbo* are cache management extensions as Geert pointed out.
+>
+> >
+> > Guo, Please confirm.
+> >
+> >>
+> >>> Currently USB, ethernet, SDHI/eMMC doesn't work with standard DMA
+> >>> api's.
+> >>
+> >> Sounds pretty similar to the D1 so.
+> >>
+> >>> On RISC-V world, how do we handle DMA api for uniprocessor without IO
+> >>> Coherence Port?
+> >>
+> >> If you do mean Zicbo* you're into errata territory there & I don't know
+> >> if that'll be acceptable upstream - not for me to make that call...
+> >
+> > It is not errata for sure. It is a HW design where we don't have
+> > IO cache coherency port enabled in the HW. So looks like it is not
+> > an extension or errata but it is core stuff.
+>
+> If you do non-coherent stuff that is not Zicbo*, the precedence set by
+> the D1 is errata. As I said to Prabhakar earlier, do a
+> `git grep "ERRATA_THEAD*`. I am not a maintainer so I don't know the
+> "rules" about doing cache management without the dedicated extensions
+> are.
+>
+Maybe we could have a discussion about this topic at LPC too ;)
 
-Yeah, it fixes the issue I was seeing. Are you planning to resubmit this or is
-the v2 the final version ?
-
-Daniel
+Cheers,
+Prabhakar

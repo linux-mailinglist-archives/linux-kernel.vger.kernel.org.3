@@ -2,96 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF855B27A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686DE5B2778
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiIHUXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S229593AbiIHUMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiIHUXc (ORCPT
+        with ESMTP id S229490AbiIHUMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:23:32 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F92A1D26
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:23:31 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id p48-20020a4a95f3000000b0044b0f5a8d17so3144610ooi.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 13:23:31 -0700 (PDT)
+        Thu, 8 Sep 2022 16:12:35 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BA7FF093;
+        Thu,  8 Sep 2022 13:12:34 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id n12so4140919wru.6;
+        Thu, 08 Sep 2022 13:12:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ejDQxdZ4Qg5U+Lwtd5v3XArCobKY1X4cdGX+F5+IEYg=;
-        b=jKhP/Ykfjcogl0cntL3IZHZafWe4kkcaNAAoHe0fvpVmVx5N9BTq5VDUXackqIxa9X
-         jKQ5MZ7rXs/IDfIGIIj9hdY9SXXRjMk9avJupj888NQKwtDEoApnjbGpJhSzwvk9kuIC
-         OR4L5D/e51/aj/ul5ZYCcxQSf1NJurMt6JnnBq5kGSiwsJ0TeahAJtUq9oktlA0vK2Rc
-         9ac1VrTBcsDD4RYA2M5GslqPiekWgf37oJx34paM7sjXGuNKTHQqyCgkrlsuia+5AbcQ
-         LUCYj+cgFOhLM6w8iuXvYXQ6rFi6+2QtjfdYEs+zSaXbj9ASjc0bURVUJsdXhbbnjXdd
-         0ixA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=NZgMNXmwX6SnvwK87AGk7VHv1cRLy9ojL7C9GfQltcQ=;
+        b=YJ4s58i5EeQ/uWSSo5Qua0Tu9JxeF7gHHmv6fGDm9QWyiqerXu4Ilr2+q5WcCokQpd
+         s5ar2mQZ4qckmj8UstMJ1D5NmhDBLq/hZCLkj/1jV6CIx4Lotf4dIr8qxuN18hOdbaRK
+         I3q+IFxGDa4L94z8INS+n2AlUJaBDKJ5s6GbSvprWURXKAUiyetY4D5W6f4J+dmAwoN/
+         zFtoXWrNsEuFGpQTrpFvl9HvTgJTUPCPd4vSDKzcXyzL2ggoLchBpbC2TNy1CAh1tG2d
+         uVX/3Wui6ini3rsil9KvPp43yLaUjvrqRUe3OgNIpv/8dX41fBz3KD8yrbz4cYzcavBj
+         jOwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ejDQxdZ4Qg5U+Lwtd5v3XArCobKY1X4cdGX+F5+IEYg=;
-        b=1SyZeMfUZGbAqOeHEdzJo7hp6d2ah/A54XOnF+s1TBG0z8VbPZTQurkXkI48UrpU8l
-         JS5MUSA4IPVBXq1+hSPbzsINMY6rFlyrQ4uWfs3Y27NEL0g1pLmylJ5iJjfzs21/mKzg
-         Svc+2HfkFHo+2+IkZcKZZNnbAwGG/mS+AUllD4MGzvunuJCcwqwlpjn/TRl8RLsUMp+K
-         NTb+GB7BsFcxSqECg2Q5HQ+i6iMiiCiUAMrLKCxgYY5GAgGXsgLiY0sMy7oT1C2TBzBp
-         rE1ZivxY5/OnjMWYeWAgBXmAREiwA6hcU4b3fxxM6+IHMek5Ke8cy2cUkE/gEAUwl8il
-         L8zQ==
-X-Gm-Message-State: ACgBeo1LWhM0Ns6f9mgR6sfxaoJZIXVJNca+qXWX3/SLXWwy6Or9/my7
-        1bGV3MQiLA09csjfPO4gWz0x7JRjeH9GHOzIEl8fNg==
-X-Google-Smtp-Source: AA6agR5IagjO74tDyXGwM67VEwLddpkc8dPouPyHGcwzWBoYBX5/0Nn4OrrCdKdqm1H9X247p/t1NLtV1atfoLbgCQE=
-X-Received: by 2002:a4a:e1ad:0:b0:448:b28c:5fe3 with SMTP id
- 13-20020a4ae1ad000000b00448b28c5fe3mr3639821ooy.21.1662668610979; Thu, 08 Sep
- 2022 13:23:30 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=NZgMNXmwX6SnvwK87AGk7VHv1cRLy9ojL7C9GfQltcQ=;
+        b=iljyor/V267lZRL+3zewqoFIN8A/0UapCc67dUYLsdMCQ+lBbQtGivdpZ/x7DrKgnV
+         0e3DlIKEfQNy5pdP+4No35QVhE3BC6HyyDHNffUyQDjrmzmkIOqVQq2JxoKq5eslT76z
+         ZWaWCEKOR7JQOQtytaM08Bhx9PQhGR2vKpksmkyRfF9GbPzZAD9MJwP0K0py1XbnyyBT
+         8V2i1cBt5tRpfw46ezm5YePZQ+mTwP1I6p+Dhu8koSxog9v9VEgh2rqOKxxYb3sgFdpz
+         +74wPnePk58DAtMAdO/0fn/muLBrgIX31SYdXcuCAHNi91V/VhjYcLuO1k+yfNp7Jp5U
+         bbLA==
+X-Gm-Message-State: ACgBeo1NBcqnPO/9S3DOpoh6ykmARxOqxWGki7n+7wu+d1Hb4NQRb36a
+        7vSRNhMxTQL/s/+CVEPc/IMM9rE3A7hRydXQ
+X-Google-Smtp-Source: AA6agR7zdskVsvESm8kGX7KqfMmGDv2c4HseHMS5FFGiG85C0bwgWAPGhSMfCb228haUWNp4WODYSw==
+X-Received: by 2002:a05:6000:1f9d:b0:228:6446:3d67 with SMTP id bw29-20020a0560001f9d00b0022864463d67mr6210529wrb.575.1662667952965;
+        Thu, 08 Sep 2022 13:12:32 -0700 (PDT)
+Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
+        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003a3561d4f3fsm4852904wms.43.2022.09.08.13.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 13:12:32 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        =?ISO-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        =?ISO-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Subject: Re: [PATCH v4 0/5] Allwinner H6 GPU devfreq
+Date:   Thu, 08 Sep 2022 22:12:31 +0200
+Message-ID: <4086439.1IzOArtZ34@kista>
+In-Reply-To: <20220906153034.153321-1-peron.clem@gmail.com>
+References: <20220906153034.153321-1-peron.clem@gmail.com>
 MIME-Version: 1.0
-References: <20220907125048.396126-1-andrew@daynix.com> <20220907125048.396126-2-andrew@daynix.com>
- <f59a8400-54ba-62eb-2e9b-b8a6b7533f90@kernel.org>
-In-Reply-To: <f59a8400-54ba-62eb-2e9b-b8a6b7533f90@kernel.org>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Thu, 8 Sep 2022 23:10:14 +0300
-Message-ID: <CABcq3pGKN5ovHC77HZJOK6sjpzsOKStmy4sTmaMq2EMkc0CoQg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] udp: allow header check for dodgy GSO_UDP_L4 packets.
-To:     David Ahern <dsahern@kernel.org>
-Cc:     edumazet@google.com, netdev@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jasowang@redhat.com, mst@redhat.com, pabeni@redhat.com,
-        yoshfuji@linux-ipv6.org, yan@daynix.com,
-        yuri.benditovich@daynix.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Dne torek, 06. september 2022 ob 17:30:29 CEST je Cl=E9ment P=E9ron napisal=
+(a):
+> Hi,
+>=20
+> This is a refresh of previous patches sent to enable GPU Devfreq on H6
+> Beelink GS1 but that wasn't stable at that time[0].
+>=20
+> With the recent fix on GPU PLL from Roman Stratiienko I have retested
+> and everything seems stable and works as expected[1].
+>=20
+> Regards,
+> Clement
 
-On Thu, Sep 8, 2022 at 3:40 AM David Ahern <dsahern@kernel.org> wrote:
->
-> On 9/7/22 6:50 AM, Andrew Melnychenko wrote:
-> > diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-> > index 6d1a4bec2614..8e002419b4d5 100644
-> > --- a/net/ipv4/udp_offload.c
-> > +++ b/net/ipv4/udp_offload.c
-> > @@ -387,7 +387,7 @@ static struct sk_buff *udp4_ufo_fragment(struct sk_buff *skb,
-> >       if (!pskb_may_pull(skb, sizeof(struct udphdr)))
-> >               goto out;
-> >
-> > -     if (skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4)
-> > +     if (skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4 && !skb_gso_ok(skb, features | NETIF_F_GSO_ROBUST))
->
-> that line needs to be wrapped.
+All patches except patch 4 pushed to sunxi tree. Thanks!
 
-Ok, I'll wrap it.
+Best regards,
+Jernej
 
->
-> >               return __udp_gso_segment(skb, features, false);
-> >
-> >       mss = skb_shinfo(skb)->gso_size;
->
+>=20
+> 0:
+> https://lore.kernel.org/lkml/CAJiuCce58Gaxf_Qg2cnMwvOgUqYU__eKb3MDX1Fe_+4=
+7h
+> tg2bA@mail.gmail.com/ 1:
+> https://lore.kernel.org/linux-arm-kernel/2562485.k3LOHGUjKi@kista/T/
+>=20
+> Changes since v3:
+>  - Try to be more explicit for panfrost OPP patch
+>  - Fix typo
+>=20
+> Changes since v2:
+>  - Fixes device-tree warnings
+>  - Add panfrost fix to enable regulator
+>  - Remove always-on regulator from device-tree
+>  - Update cooling map from vendor kernel
+>=20
+>=20
+> Cl=E9ment P=E9ron (5):
+>   arm64: defconfig: Enable devfreq cooling device
+>   arm64: dts: allwinner: h6: Add cooling map for GPU
+>   arm64: dts: allwinner: h6: Add GPU OPP table
+>   drm/panfrost: devfreq: set opp to the recommended one to configure
+>     regulator
+>   arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
+>=20
+>  .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  1 +
+>  .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 87 +++++++++++++++++++
+>  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 51 ++++++++++-
+>  arch/arm64/configs/defconfig                  |  1 +
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c   | 11 +++
+>  5 files changed, 149 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+>=20
+> --
+> 2.34.1
+
+

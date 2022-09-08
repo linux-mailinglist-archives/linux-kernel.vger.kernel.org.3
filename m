@@ -2,173 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418025B258A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4455B258B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiIHSWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S231324AbiIHSWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbiIHSWA (ORCPT
+        with ESMTP id S229736AbiIHSWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:22:00 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC4EEB855;
-        Thu,  8 Sep 2022 11:21:59 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id t14so20271096wrx.8;
-        Thu, 08 Sep 2022 11:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=0qMQLVEVJZBmgN+4OndfYCHKMuf7l9KBNcONt34CdKc=;
-        b=GcZoTl2bCRlFzOoz5mrR7kWHp6+udvfQfj1QwcUqbtCRz/DA8W+t8Al/tF2lbjU4JW
-         YqG6M9K63oE09s+sPMnVBIWAHX4ldXqlmA9f6TyzzTW8yYK8lX5LXE8EtxFin8xYiaLA
-         Q+cxyy89dgx7Zapzjgub6gTZWG1DqCqOZ8bBxzZepzOv1GJ+PqEJQAKkcTFJs3t/cQkz
-         jo0l0wFSXXZLMb8Pr/WJ8XEz/esYSRt1VQWZLLCOmjK/UkoptIN+MAXtAYbfHbK1TmcD
-         g5Lx8cGpVvd/nQOkNmAUawBsbRxre3OxOUKsEq9EZG5pXpwkxDOilKIAJ4x3BbmdvRaL
-         /Vsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=0qMQLVEVJZBmgN+4OndfYCHKMuf7l9KBNcONt34CdKc=;
-        b=VZmMNUCf2K8447qdDaqYvGOg++oAdNOP72cDEnBI1X3Ob9Qa7rH9yV8Sy6fTBH8hYj
-         w7QZALzoyyCIytLxldVFl2usfYnZrqPVIB0hJBD9ownJiNsKUITYfHYdjT5nvOwcR8UX
-         ydj0QeyVnt/bjWAmGYUSKGwACLjVpjMJdTGU/Urm6t3zwDCFKWeAUeEaH02gmcluulQw
-         WDTT++S+7a3cve11JhGlx3dYEfjNCK1NLu8Id5FAn1e90evU26CBBMmDuPaTUbhPdwaQ
-         kR6Tj5971NO1Bxwjr7FzT/Qiz8wMH1Xu8yczmrvgZLoMJWW6y22I9pqJtyYQjwx8HJtS
-         fNUw==
-X-Gm-Message-State: ACgBeo0WJC03BfIahgHRlHe1df5PpsA0zf8/As/P0dECpk//iPc1J3sM
-        vQfPwpz8XdKv9Up5TdxknPLy58NzfA==
-X-Google-Smtp-Source: AA6agR7aWX/HRycU6uw0R9yfi5EVkde2QgjMxCzhbJcJD71dTGHhItjYI9gpQcmJ1mrsBHaNOt8Vmw==
-X-Received: by 2002:a05:6000:1706:b0:22a:2c1d:f578 with SMTP id n6-20020a056000170600b0022a2c1df578mr3230336wrc.236.1662661317193;
-        Thu, 08 Sep 2022 11:21:57 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.251.11])
-        by smtp.gmail.com with ESMTPSA id m29-20020a05600c3b1d00b003a845fa1edfsm10465228wms.3.2022.09.08.11.21.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 11:21:56 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 21:21:54 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH] proc: give /proc/cmdline size
-Message-ID: <YxoywlbM73JJN3r+@localhost.localdomain>
+        Thu, 8 Sep 2022 14:22:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0557F1F1B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:22:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9457A61DB1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 18:22:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6196CC433D6;
+        Thu,  8 Sep 2022 18:22:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662661351;
+        bh=J68cIAc2CCed2bgOrr17GCBVeMa7VXnHmwblwXxfDmQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=upZUijli6CnLSsfh/tvmu5c5UN0c9V0kl6R+tPLmbVjDRZWzGk0MTqpSJG8vlMvT6
+         hcF58XysNcHBw1AMSQYc7xlQO1clUagMeoyllpW9JpkdU+bZEnSX7nqexGsEA6wtdb
+         3MaBwePsqsChrdmBepFLKDf8C4sNPO2qY8h8gErOd46NEH2nmbyrQjwEUS5tdsnyhX
+         kzsyd+C5Qh+G0VPMEz5oLT1Szk6/GyKvQx05vXX8XNtA7P8GZXGwsP+S2Dnvk16NMm
+         gMOdY2Y9J6nkl/ieTnw/lQSuL9h/KnC4MPvJdScnEEfD5qUNikW2dgfpHI82803y4s
+         SI3DkFcRlFDMA==
+From:   SeongJae Park <sj@kernel.org>
+To:     xiakaixu1987@gmail.com
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Kaixu Xia <kaixuxia@tencent.com>
+Subject: Re: [PATCH v2] mm/damon/vaddr: add a comment for 'default' case in damon_va_apply_scheme()
+Date:   Thu,  8 Sep 2022 18:22:28 +0000
+Message-Id: <20220908182228.92058-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1662606797-23534-1-git-send-email-kaixuxia@tencent.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most /proc files don't have length (in fstat sense). This leads
-to inefficiencies when reading such files with APIs commonly found in
-modern programming languages. They open file, then fstat descriptor,
-get st_size == 0 and either assume file is empty or start reading
-without knowing target size.
+Hi Kaixu,
 
-cat(1) does OK because it uses large enough buffer by default.
-But naive programs copy-pasted from SO aren't:
+On Thu, 8 Sep 2022 11:13:17 +0800 xiakaixu1987@gmail.com wrote:
 
-	let mut f = std::fs::File::open("/proc/cmdline").unwrap();
-	let mut buf: Vec<u8> = Vec::new();
-	f.read_to_end(&mut buf).unwrap();
+> From: Kaixu Xia <kaixuxia@tencent.com>
+> 
+> The switch case 'DAMOS_STAT' and switch case 'default' have same
+> return value in damon_va_apply_scheme(), and the 'default' case
+> is for DAMOS actions that not supported by 'vaddr'. It might
+> make sense to add a comment here.
+> 
+> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
 
-will result in
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
-	openat(AT_FDCWD, "/proc/cmdline", O_RDONLY|O_CLOEXEC) = 3
-	statx(0, NULL, AT_STATX_SYNC_AS_STAT, STATX_ALL, NULL) = -1 EFAULT (Bad address)
-	statx(3, "", AT_STATX_SYNC_AS_STAT|AT_EMPTY_PATH, STATX_ALL, {stx_mask=STATX_BASIC_STATS|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFREG|0444, stx_size=0, ...}) = 0
-	lseek(3, 0, SEEK_CUR)                   = 0
-	read(3, "BOOT_IMAGE=(hd3,gpt2)/vmlinuz-5.", 32) = 32
-	read(3, "19.6-100.fc35.x86_64 root=/dev/m", 32) = 32
-	read(3, "apper/fedora_localhost--live-roo"..., 64) = 64
-	read(3, "ocalhost--live-swap rd.lvm.lv=fe"..., 128) = 116
-	read(3, "", 12)
+> ---
 
-open/stat is OK, lseek looks silly but there are 3 unnecessary reads
-because Rust starts with 32 bytes per Vec<u8> and grows from there.
+From next time, giving change log from previous versions of the patch here
+would be a good practice:
+https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
 
-In case of /proc/cmdline, the length is known precisely.
 
-Make variables readonly while I'm at it.
+Thanks,
+SJ
 
-P.S.: I tried to scp /proc/cpuinfo today and got empty file
-	but this is separate story.
-
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
-
- fs/proc/cmdline.c    |    6 +++++-
- include/linux/init.h |    1 +
- init/main.c          |    7 +++++--
- 3 files changed, 11 insertions(+), 3 deletions(-)
-
---- a/fs/proc/cmdline.c
-+++ b/fs/proc/cmdline.c
-@@ -3,6 +3,7 @@
- #include <linux/init.h>
- #include <linux/proc_fs.h>
- #include <linux/seq_file.h>
-+#include "internal.h"
- 
- static int cmdline_proc_show(struct seq_file *m, void *v)
- {
-@@ -13,7 +14,10 @@ static int cmdline_proc_show(struct seq_file *m, void *v)
- 
- static int __init proc_cmdline_init(void)
- {
--	proc_create_single("cmdline", 0, NULL, cmdline_proc_show);
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_single("cmdline", 0, NULL, cmdline_proc_show);
-+	pde->size = saved_command_line_len + 1;
- 	return 0;
- }
- fs_initcall(proc_cmdline_init);
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -143,6 +143,7 @@ struct file_system_type;
- extern int do_one_initcall(initcall_t fn);
- extern char __initdata boot_command_line[];
- extern char *saved_command_line;
-+extern unsigned int saved_command_line_len;
- extern unsigned int reset_devices;
- 
- /* used by init/main.c */
---- a/init/main.c
-+++ b/init/main.c
-@@ -143,7 +143,8 @@ void (*__initdata late_time_init)(void);
- /* Untouched command line saved by arch-specific code. */
- char __initdata boot_command_line[COMMAND_LINE_SIZE];
- /* Untouched saved command line (eg. for /proc) */
--char *saved_command_line;
-+char *saved_command_line __ro_after_init;
-+unsigned int saved_command_line_len __ro_after_init;
- /* Command line for parameter parsing */
- static char *static_command_line;
- /* Untouched extra command line */
-@@ -665,6 +666,8 @@ static void __init setup_command_line(char *command_line)
- 			strcpy(saved_command_line + len, extra_init_args);
- 		}
- 	}
-+
-+	saved_command_line_len = strlen(saved_command_line);
- }
- 
- /*
-@@ -1372,7 +1375,7 @@ static void __init do_initcall_level(int level, char *command_line)
- static void __init do_initcalls(void)
- {
- 	int level;
--	size_t len = strlen(saved_command_line) + 1;
-+	size_t len = saved_command_line_len + 1;
- 	char *command_line;
- 
- 	command_line = kzalloc(len, GFP_KERNEL);
+>  mm/damon/vaddr.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> index 3c7b9d6dca95..3814200e61e4 100644
+> --- a/mm/damon/vaddr.c
+> +++ b/mm/damon/vaddr.c
+> @@ -646,6 +646,9 @@ static unsigned long damon_va_apply_scheme(struct damon_ctx *ctx,
+>  	case DAMOS_STAT:
+>  		return 0;
+>  	default:
+> +		/*
+> +		 * DAMOS actions that not yet supported by 'vaddr'.
+> +		 */
+>  		return 0;
+>  	}
+>  
+> -- 
+> 2.27.0

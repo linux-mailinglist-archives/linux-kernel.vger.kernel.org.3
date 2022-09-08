@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46BD5B249C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EBD5B249E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbiIHR1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S232321AbiIHR27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiIHR0T (ORCPT
+        with ESMTP id S231892AbiIHR2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:26:19 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874185FAE7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:25:32 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id e5so791287pfl.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:25:32 -0700 (PDT)
+        Thu, 8 Sep 2022 13:28:38 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C37BF37D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:27:11 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id m65so8685965vsc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:27:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=7IqgCAbBltCgwXLRh/YGIeJJalN5os7YVeD7L2fO/30=;
-        b=PQfW0BWqmSmYQkMR4MEBAgJeHxrnoQWDet2shcfdkN9DYclMzFsIMWu8BDMV9FcV0Y
-         mbCaRLcfR8qfuM4pOX6bV/naG6eDMb/1XCxOLiZkD658wnF6xVtRkrywFaMVmkIFisJW
-         FDM9H84/VjUH/TRTYVHq43wC54n/Q39N/aspB2cDdYhBJOukomNXpvuHoccq1ZTf7Rj5
-         ZGCrNuR0hLsCL9sePunVJcAZUVVT9El8dkF4d78JhRcFq28BwwXwYP95mD1HeC6garQw
-         wIHT+/jGOAf/HA1XpxbiV69AEULYFwyUtgChFti/xpDb/xJq3601LA26BJJ2e74j0OKq
-         YN0A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=MR9VHc9VsFF6ReBVLSZ3bpfSnxfuSaqR39dVcTGoeig=;
+        b=O3R7TkOXd9j4NZxQ7BCzKvYRaRJe7Q37eOSvz5eRKVCOSZ4/O295kpplyca3/FhmeW
+         sucSt0oqXEkyi8ROGufj+yaHRPErohlnloJjbcKzhDU4pzUBJMXcnPqgxafvbbzQrwbz
+         BCMSIOmYD8qVJ9cGGg+pdrZxjQ55YH8PyhrswEyBVteZ5LnwUoXRYdsJzn3Wa9LiEdqZ
+         r4wTk8hU9IxOlzQ1rgPNGTs8adltrOTj+7UUQlyM308v247NFxfkBTbIDaQy48zx6iZ7
+         w7Mc+c8feHJyPwI1j7EC8Bh/JLOi1O9rsu4uC2ggXoY5QviZ1AIluZbh9T/HYSudZJr6
+         6Sng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=7IqgCAbBltCgwXLRh/YGIeJJalN5os7YVeD7L2fO/30=;
-        b=Y78vi428Ak71PjhMxVjqfaq+GFD/VHugnuAvcWqK0A3ldm+QdKhNT8L/YoBxWl53Kh
-         iYdxo400D+KkiwQqkkQTQR7VjB24gqcE6cxaLFtDoWPi8HcB0MrE1QIbyDDlfSIQClQd
-         9KHBPLCh6cB7t9XgaLA7J76ZZkGfg6ZaygBNRnxs0cGLJi0hbUG3NKJLRJEkdvIRZr5l
-         VZSUvXPwRJF9DrqaPvhnppJhvXmyiW/ZXuNFYkdGkqDGlo9csr2smpZGQCWyv7Op0t58
-         ghl2wL8wBw9ne2EXovYhh8oSjk9GA+U8wVEBMAly5sQnlAow2fIQBgmgwuNYUAOPJJLc
-         RCNA==
-X-Gm-Message-State: ACgBeo3bR5Da/oRnv+5oyQ3QiUcDlRVVXPiYACl03P8nkPP4aUdSKhKE
-        C5huYsc4+6qHREaB8McwFsLuBg==
-X-Google-Smtp-Source: AA6agR7jDw1++R0RS0tvY4MCiKwZ1yRMzWCXkmjqDMTya/Z9SYJ1nLYVD2hrsj4IFfb5LK+GdZGiaA==
-X-Received: by 2002:a05:6a00:23c1:b0:52e:28f5:4e13 with SMTP id g1-20020a056a0023c100b0052e28f54e13mr9941256pfc.20.1662657931234;
-        Thu, 08 Sep 2022 10:25:31 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170902f68d00b0016f196209c9sm14816331plg.123.2022.09.08.10.25.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 10:25:30 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 17:25:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH] KVM/VMX: Do not declare vmread_error asmlinkage
-Message-ID: <Yxolh+QhLocER0oY@google.com>
-References: <20220817144045.3206-1-ubizjak@gmail.com>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=MR9VHc9VsFF6ReBVLSZ3bpfSnxfuSaqR39dVcTGoeig=;
+        b=Dkj6Q18ONOfN0dCZGNbsmY7+UBQ34D5qP4J1xNjp2o/iYcryibHoyMG1Lealm5n0AA
+         dYxP7czatvBFZI4euvtVpb0c9KL4q4MdLFknm2tCt7MYarVBFhE4WhiiH0VTGE4G/762
+         sI1XrfBbnu3wVac7U+jxqkl7XXMUbmMcA+PDfnwOOoWlV8o6MNzkh1gO4fJKXcpG3W0d
+         nACx0Hk08+30hsJpkwv4uJfnMYTWdT1pqVuiafYQgU7PPylUXUb5Wrc7ydol1rIgPg/i
+         AiSMSPZ2/VySTnsen0dV76bHk8yRo87sgHK9KqKVirw6z+uixBp3cqsa8/Vo9z9VMqEw
+         P4Mw==
+X-Gm-Message-State: ACgBeo3dU8sR49X+W6XVOO0GU+iUX06UtwscJnimuzuktNUtdSV2Xd7r
+        emYjl9zNNa7J8FBs1VuhGE31cgAvFVsZ+HW36I9X8vy1VEg=
+X-Google-Smtp-Source: AA6agR7r5SoVdSf5Vq2SICdwEss7KvFxt8vq17Jx/NxTK+EwoZzFxbKbp2dPyyGn3UPmIKDjILSy5Jt8aDON5rOSrYk=
+X-Received: by 2002:a67:b20f:0:b0:390:786b:96c with SMTP id
+ b15-20020a67b20f000000b00390786b096cmr3431227vsf.68.1662657988234; Thu, 08
+ Sep 2022 10:26:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817144045.3206-1-ubizjak@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a59:bb63:0:b0:2eb:9822:130e with HTTP; Thu, 8 Sep 2022
+ 10:26:27 -0700 (PDT)
+Reply-To: attorneyjoel4ever2021@gmail.com
+From:   Felix Joel <edmond.djamond@gmail.com>
+Date:   Thu, 8 Sep 2022 17:26:27 +0000
+Message-ID: <CAAORCvWqp=p3Mg-HhF6+7vep6Gg_u6jvbDV7ObHJim+o3vpR0Q@mail.gmail.com>
+Subject: =?UTF-8?Q?Jeg_venter_p=C3=A5_=C3=A5_h=C3=B8re_fra_deg?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e31 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [attorneyjoel4ever2021[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [edmond.djamond[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022, Uros Bizjak wrote:
-> There is no need to declare vmread_error asmlinkage, its arguments
-> can be passed via registers for both, 32-bit and 64-bit targets.
-> Function argument registers are considered call-clobbered registers,
-> they are saved in the trampoline just before the function call and
-> restored afterwards.
-> 
-> Note that asmlinkage and __attribute__((regparm(0))) have no effect
-> on 64-bit targets. The trampoline is called from the assembler glue
-> code that implements its own stack-passing function calling convention,
-> so the attribute on the trampoline declaration does not change anything
-> for 64-bit as well as 32-bit targets. We can declare it asmlinkage for
-> documentation purposes.
-> 
-> The patch unifies trampoline function argument handling between 32-bit
-> and 64-bit targets and improves generated code for 32-bit targets.
-> 
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> ---
-
-Minus the vmread_error_trampoline() change, pushed to branch `for_paolo/6.1` at:
-
-    https://github.com/sean-jc/linux.git
-
-Unless you hear otherwise, it will make its way to kvm/queue "soon".
-
-Note, the commit IDs are not guaranteed to be stable.
+--=20
+God kveld
+Jeg er advokat Felix Joel. Jeg kontaktet deg ang=C3=A5ende dette fondet $
+8,5 millioner dollar satt inn i en bank her av min avd=C3=B8de klient som
+har samme navn som deg. svar for mer informasjon,
+Takk,
+Barrister Felix Joel

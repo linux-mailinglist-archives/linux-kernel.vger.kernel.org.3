@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E675B1E12
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39435B1E14
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiIHNJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S232179AbiIHNJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiIHNJo (ORCPT
+        with ESMTP id S231669AbiIHNJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Sep 2022 09:09:44 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F1712ABB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:09:27 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id u6so24217983eda.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:09:27 -0700 (PDT)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E138A13DF7
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:09:28 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u9so37966101ejy.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=LnX4aqgVDvv4QK5SQJtid2l8o9K1NG1d+zs6u1fqVxk=;
-        b=nOmayWkJYg+/SXPROx6sHpXDPnA04xdnf4PBZNJCFtpz/Qyr13yVz1jxU/Mcw7Ojza
-         Q71/HYmNRh7vDKITSMUqTxP8xkq4r1B6JjPsr+JZp5iTwtuGv/GOt/oORIKpH0mGjNCv
-         vCm0jVfpBioeVVbPCarghmiA1OdO0K7WESYGloQ/lbIrTR2fSbcqare8Uv8/mIGhREn4
-         /fa6T8e3AT7bvKRjj89PizoSxn+vcBE8wb1E5Q8C+wAMYxgKfdZFuHq6EFr+tfzB9XU6
-         XpDdlKuIlmmTr+GeXgoLqMR9u34gu0suCw7il7W8oXjF0HvO5IFKcQiu7wFfwHPnk7fC
-         Mg3g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=UbzD73ANBmIAnFLQ4kLmnJvqIHDS1D6Ssvlro3k6SAc=;
+        b=CCRU87sl0dDdVinCDDVfHoNWtWcAWNbY9lxV4uj/16ArW1D5qzxNp83v0CEgRg3vw0
+         ppMN/Wrgqb0I1ZIDGu2qCdn/6yvNka5kIo++BJB6r/aIpViFVMWwbwsLpQPMO7J/ezr7
+         s19OXW8UHZ19vQqBcRPSu+DVLFrmBWKr3DSMkl6oboKOxFYjWJoH6rHpj6z1p8k+qLyi
+         qDkYw192zz9XREv6su1NYNCa1dTU7NGyCVyV1kvXKoFHjmzYdPl79O99/dhrqIsLOi5d
+         GMFItasEEZRm5Xqpon9FdfsJZD0HOCf/G+evRPKXDZqeEhEBxHDn74AyhI+clCIz/BGQ
+         kE1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=LnX4aqgVDvv4QK5SQJtid2l8o9K1NG1d+zs6u1fqVxk=;
-        b=g13iGgdM4QB7+UZQGWsdReClrdWdizSIZJ1QwS/KDb4DuFRR2lBHjt0JtnZA16LMid
-         XA6yVdGPSHDO1/xfhr6y3U5PdWKJsmNV/9L4nL2MdSoZtDZuyenS9KfSgKrm3rAjeKCQ
-         8n/Ns6d8me/fNNlVXv0Z1qpkDaF79E5m5FWHIsNj/5zLlyYK0CKjTne0vap0bmgns8v1
-         prmsz2JUmevjKJBKY17wjARbHynmbH5HSVcZY4CYQJpXVD6ESfsZLjCtS0gMv+ty39Ae
-         o4LofqOsdWr88/EF8g2YL/BycVWOagMZJ7RGZzdhY8P2U0dmS965tzL1LrGQtKCT9+sM
-         pTNw==
-X-Gm-Message-State: ACgBeo0nROFAJBZkcknM/RJK8fm/ToVDSQBhvRkDmnm/vkCxMk3ZyDm7
-        1x3cXFbZc0Q22Bz+C4tUBKOqsmUaAcQ=
-X-Google-Smtp-Source: AA6agR5edPFE9cvoFBzSJriSpzSOOImuyYXCbgd8ATz+8IF1ba1dHAIEI0Pw6xA2hrDAFLqYyancew==
-X-Received: by 2002:a05:6402:2a06:b0:447:820a:1afe with SMTP id ey6-20020a0564022a0600b00447820a1afemr7145683edb.291.1662642566076;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=UbzD73ANBmIAnFLQ4kLmnJvqIHDS1D6Ssvlro3k6SAc=;
+        b=zjN6j38Wb3+eTXJMQids1pQaKBuJEOJIxiUwRDcTiZ3ImmvpbveiwT41KrB35S0r/Z
+         k7a19gsyTVBojuoRbYFmA4b/+x9Tz8ZuTUwhIeP99ZH2gPq+MnAG2GNEpQWfulVX6FIY
+         O+OjE+JaPVDaBpuDFh/FzvtEmzI0PR7MyPMd7SdQ3r1KwRyM/hMmjkm4D2pjWrfPNB31
+         s8epSnqXmoFBKQxHjPha2utDLENCO8GHP+Vod2GW4C30BjfIo0GGtvSh1GwXmcfbOHbN
+         CzGvgbgUuf6gSXz7oejwJZjdJX4laLdqQaudV3dj0cXFH+n3YFDwVAlVR0jUhq+oIQq2
+         wDnA==
+X-Gm-Message-State: ACgBeo3zjGdTwJf5DrsIk2en+EGtNhttfj/SVI+Dtw5qA5ywk+jCJmG3
+        yMoZxKzaP+E667VwtgtMbqNkE77/G50=
+X-Google-Smtp-Source: AA6agR7u46nTrfb6Eb2z+eTVWECtts9/p08dYc2kxgLV8wGg+eN9CO6LeivOA6umOXzrd8Zv62WQ7A==
+X-Received: by 2002:a17:906:a0d3:b0:73d:be5b:2b52 with SMTP id bh19-20020a170906a0d300b0073dbe5b2b52mr6117358ejb.727.1662642566641;
         Thu, 08 Sep 2022 06:09:26 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
-        by smtp.gmail.com with ESMTPSA id cf6-20020a0564020b8600b0044edf0a2deasm4847978edb.69.2022.09.08.06.09.25
+        by smtp.gmail.com with ESMTPSA id cf6-20020a0564020b8600b0044edf0a2deasm4847978edb.69.2022.09.08.06.09.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 06:09:25 -0700 (PDT)
+        Thu, 08 Sep 2022 06:09:26 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 0/4] staging: r8188eu: some simple cleanups
-Date:   Thu,  8 Sep 2022 15:09:11 +0200
-Message-Id: <20220908130915.8406-1-straube.linux@gmail.com>
+Subject: [PATCH 1/4] staging: r8188eu: remove unused parameters from _BeaconFunctionEnable()
+Date:   Thu,  8 Sep 2022 15:09:12 +0200
+Message-Id: <20220908130915.8406-2-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220908130915.8406-1-straube.linux@gmail.com>
+References: <20220908130915.8406-1-straube.linux@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,25 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series contains some simple cleanups in different areas of the
-driver.
+The parameters 'Enable' and 'Linked' of _BeaconFunctionEnable() are
+unused. Remove them.
 
-Tested on x86_64 with Inter-Tech DMG-02.
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/staging/r8188eu/hal/usb_halinit.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Michael Straube (4):
-  staging: r8188eu: remove unused parameters from
-    _BeaconFunctionEnable()
-  staging: r8188eu: remove unused parameter from UpdateBrateTbl()
-  staging: r8188eu: make two functions static
-  staging: r8188eu: remove unnecessary return labels.
-
- drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 42 ++++++++++++++++++-
- drivers/staging/r8188eu/core/rtw_wlan_util.c  | 40 ------------------
- drivers/staging/r8188eu/hal/usb_halinit.c     |  5 +--
- .../staging/r8188eu/include/rtw_mlme_ext.h    |  2 -
- .../staging/r8188eu/os_dep/osdep_service.c    | 10 ++---
- 5 files changed, 47 insertions(+), 52 deletions(-)
-
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index 63c5cec655d5..a478b83dcbf3 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -496,8 +496,7 @@ static int _InitBeaconParameters(struct adapter *Adapter)
+ 	return 0;
+ }
+ 
+-static void _BeaconFunctionEnable(struct adapter *Adapter,
+-				  bool Enable, bool Linked)
++static void _BeaconFunctionEnable(struct adapter *Adapter)
+ {
+ 	rtw_write8(Adapter, REG_BCN_CTRL, (BIT(4) | BIT(3) | BIT(1)));
+ 
+@@ -1043,7 +1042,7 @@ void SetBeaconRelatedRegisters8188EUsb(struct adapter *adapt)
+ 	rtw_write8(adapt,  REG_RXTSF_OFFSET_CCK, 0x50);
+ 	rtw_write8(adapt, REG_RXTSF_OFFSET_OFDM, 0x50);
+ 
+-	_BeaconFunctionEnable(adapt, true, true);
++	_BeaconFunctionEnable(adapt);
+ 
+ 	rtw_resume_tx_beacon(adapt);
+ 
 -- 
 2.37.2
 

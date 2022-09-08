@@ -2,101 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6492F5B2325
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9725B232F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiIHQIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S230181AbiIHQMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiIHQIo (ORCPT
+        with ESMTP id S229510AbiIHQMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:08:44 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F9210C98F;
-        Thu,  8 Sep 2022 09:08:41 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id q21so17485113edc.9;
-        Thu, 08 Sep 2022 09:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date;
-        bh=c+UWBqauEpqfneLIMsp58ZZTXXVObQlDGf+MjI2qqhY=;
-        b=oW3oyWASfc4C/C49tI8S4mCfY/V706LSOSUOkg5VR9ssX5bqA+iz5Sq+jT3wdjnFMD
-         tX8Smd/Ha3+T9bTfaNO61behzvTdS1huttd+klbEtgMBw2m4jUW8mw7A7ZuidjDIkwRX
-         hR7TK/QQmV9ADh9Fy0YW4jEDo/es6tqK612OJX4+yDsWsmVWYuF7sKcauDNaFuiNPs21
-         p6TKy2WBHbE3agsb2D4C+aRaHN4Oh9wwUvRUvIpIy1m7GlrxQu862IZu0q0q8lFqdMRn
-         Gm0BU3UIGdmV8cqB+zArCOKSIzjRortStVf67gwRgXbZQ0AVliPSnme0AvWXPmHPN8hE
-         3tnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=c+UWBqauEpqfneLIMsp58ZZTXXVObQlDGf+MjI2qqhY=;
-        b=7dDoP6p4HiThYk411x2EwNkrsLurhaCtYC+XPLN/GxVVp6pbre7OVhPantU3L9ZJ40
-         WKzzo0gchXFY5BSYimb87hM6SsdGBSlb0xBzWOpEiU+HSquMWp/uaLgaI+T6NKmM6PDU
-         sh5T95CT8ErlA5oHOlaSXw0qf1U5MC5BFON4hvSA28ShzwCmNxc3Tok2nbOr/BMnzJXE
-         yn23BZna3I4fBm/gVexpUQa/4aNgU4QXORCPn9dyJ7WP8JiWR6478LBANwK6/soWyqdi
-         ER+MsBnJUPIrVVcKwWreJ3h9MufIPYU9NEPfh3poUnpkqqLC9cq6+zkulMi653CdVLts
-         mb8g==
-X-Gm-Message-State: ACgBeo1spKOWnaM3TCdaRMxm0vK9BG9/hcTAujX1SG4SXjmUam22T9k6
-        N+QJDs3ylh5keQA/9q4HmMWNa662alw=
-X-Google-Smtp-Source: AA6agR79zwlxVklVg/nlxKCYuqWTXjx5HaEeBBeMXLywvHJVJoYHpUoI4o6WS8vyHTaFWRwfR0ou+w==
-X-Received: by 2002:a05:6402:50cb:b0:440:87d4:3ad2 with SMTP id h11-20020a05640250cb00b0044087d43ad2mr7806671edb.219.1662653319629;
-        Thu, 08 Sep 2022 09:08:39 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id e12-20020a1709062c0c00b0073d53f4e053sm1378829ejh.104.2022.09.08.09.08.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 09:08:39 -0700 (PDT)
-Subject: Re: [PATCH] sfc/siena: fix repeated words in comments
-To:     wangjianli <wangjianli@cdjrlc.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220908124454.23465-1-wangjianli@cdjrlc.com>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <ec7f175f-a340-021b-b03e-80c9c1f17d31@gmail.com>
-Date:   Thu, 8 Sep 2022 17:08:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 8 Sep 2022 12:12:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371FCE5580;
+        Thu,  8 Sep 2022 09:12:02 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (unknown [70.107.189.129])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C7D66601FA8;
+        Thu,  8 Sep 2022 17:11:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662653520;
+        bh=s1PBe/pF5jJRbyhX3WY2pGtR1K/IVs/yQHt+cEPY7+0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V7N5SxKgNXkE3uhhv7ZXVkgT4pvDUknukRkXkl61R4/jVZ4XBueUDpfCU1lxCPOwH
+         LvJSO6jNTMRoOWPJGXIvz10MNmkDuCn9oi7WK1IurPMc+Qh74TKrzlDSt0U7SCcOqU
+         MZhGzF6qsaA1i9eXPUFJJ0Gv38EZwaXcu2ELIplCvJCX9ivQkykgO2PkN85j6VxssY
+         6vL/OwMn8f4Vm2jWxrj9Umayk+m33VIBt7i3gAXRghoKsZhArCMG0dbI8W+prz+EIt
+         h6v7GWRjdI6+DINlzVa8Fy+v8DBRSouseVm9wT43xDi1joxYUxFzkxVpkYyA8txfop
+         9djx3x4z6uSRg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Chunxu Li <chunxu.li@mediatek.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 00/10] ASoC: mediatek: Set i2s clock sharing from machine drivers
+Date:   Thu,  8 Sep 2022 12:11:44 -0400
+Message-Id: <20220908161154.648557-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-In-Reply-To: <20220908124454.23465-1-wangjianli@cdjrlc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 13:44, wangjianli wrote:
-> Delete the redundant word 'in'.
-> 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->  drivers/net/ethernet/sfc/siena/bitfield.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/sfc/siena/bitfield.h b/drivers/net/ethernet/sfc/siena/bitfield.h
-> index 1f981dfe4bdc..0b502d1c3c9e 100644
-> --- a/drivers/net/ethernet/sfc/siena/bitfield.h
-> +++ b/drivers/net/ethernet/sfc/siena/bitfield.h
-> @@ -117,7 +117,7 @@ typedef union efx_oword {
->   *
->   *   ( element ) << 4
->   *
-> - * The result will contain the relevant bits filled in in the range
-> + * The result will contain the relevant bits filled in the range
->   * [0,high-low), with garbage in bits [high-low+1,...).
->   */
->  #define EFX_EXTRACT_NATIVE(native_element, min, max, low, high)		\
-> 
 
-Nack, as per my other response on the main sfc patch.
--ed
+The i2s ports on MediaTek SoCs only support a single data lane. In order
+to achieve full-duplex operation thus two i2s ports, one for input and
+one for output, need to be used together and sharing a single clock from
+one of the ports.
+
+This clock sharing setting was previously read by the sound platform
+driver from the devicetree, but given that the input/output pairing is
+closely related to which codecs are connected to which ports, the
+machine sound driver can infer and set it, so that no DT property is
+required.
+
+At this point only mt8183-kukui was using the DT property, but given
+that this property was never documented, and that the API introduced in
+this series makes it obsolete, the undocumented DT property can safely
+be removed.
+
+This series adds a function to allow setting the i2s shared clocks,
+makes use of it in the machine drivers as required, and removes the no
+longer required DT properties and support for them in the drivers, for
+all of mt8192, mt8183 and mt8186.
+
+
+Nícolas F. R. A. Prado (10):
+  ASoC: mediatek: mt8192: Allow setting shared clocks from machine
+    driver
+  ASoC: mediatek: mt8192-mt6359: Make i2s9 share the clock from i2s8
+  ASoC: mediatek: mt8192: Remove clock share parsing from DT
+  ASoC: mediatek: mt8183: Allow setting shared clocks from machine
+    driver
+  ASoC: mediatek: mt8183: Configure shared clocks
+  ASoC: mediatek: mt8183: Remove clock share parsing from DT
+  arm64: dts: mediatek: kukui: Remove i2s-share properties
+  ASoC: mediatek: mt8186: Allow setting shared clocks from machine
+    driver
+  ASoC: mediatek: mt8186: Configure shared clocks
+  ASoC: mediatek: mt8186: Remove clock share parsing from DT
+
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  5 --
+ sound/soc/mediatek/mt8183/mt8183-afe-common.h |  3 ++
+ .../mediatek/mt8183/mt8183-da7219-max98357.c  | 33 +++++++++++++
+ sound/soc/mediatek/mt8183/mt8183-dai-i2s.c    | 45 ++++++++---------
+ .../mt8183/mt8183-mt6358-ts3a227-max98357.c   | 33 +++++++++++++
+ sound/soc/mediatek/mt8186/mt8186-afe-common.h |  3 ++
+ sound/soc/mediatek/mt8186/mt8186-dai-i2s.c    | 44 ++++++++---------
+ .../mt8186/mt8186-mt6366-da7219-max98357.c    | 18 +++++++
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 18 +++++++
+ sound/soc/mediatek/mt8192/mt8192-afe-common.h |  3 ++
+ sound/soc/mediatek/mt8192/mt8192-dai-i2s.c    | 49 ++++++++-----------
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c      |  9 ++++
+ 12 files changed, 180 insertions(+), 83 deletions(-)
+
+-- 
+2.37.3
+

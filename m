@@ -2,79 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05F45B27DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1020E5B27DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiIHUpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S229794AbiIHUpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIHUpW (ORCPT
+        with ESMTP id S229492AbiIHUpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:45:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD7152FE7;
-        Thu,  8 Sep 2022 13:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662669920; x=1694205920;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=trJg9IQop4EvJ5Exf6dImqRzP+GEfhRt13bo6iZ+hU8=;
-  b=TAGiqDlxQlSjItHT5C+1znO7G1NIEuCAxWaK7N5o5LGagGG5KUioAKmD
-   k/8KkieNKxhsoyilQFdu2SOA72nHWgXQCR1ClURnJns9K54js18qJjPkQ
-   mpJz92uCApHi4xnzp/sVY+bTpJBAGjvPYLVp+YF+oBLRpCUYheKzK575D
-   6hMuQIXPbss36X9vwo58Qix0ZnPzqK9/yD9JrNu0b2mXxf7aAcYpVkABk
-   gCmLQxRqbbvH2HuXJR50rTe9UhUluEAJKqp5yzbivXOEsfB98UpTvyeP8
-   4EITwj449+77nEJSNOde6gYvC690PbC7B4W7kt9LjzFB+BBDVxl6gBXxW
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298657908"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="298657908"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 13:45:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="740814983"
-Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 13:45:19 -0700
-Message-ID: <19dfab3e-8ab4-87ee-fadf-a1a58ae3d2d7@linux.intel.com>
-Date:   Thu, 8 Sep 2022 13:45:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v12 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yxl+PE4A+WUfQ7bl@kroah.com>
- <6cf407ed-95c7-0db4-d581-b85efad13239@linux.intel.com>
- <ac10ec37-91c8-031e-b3d3-843eaf28f0ee@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <ac10ec37-91c8-031e-b3d3-843eaf28f0ee@intel.com>
-Content-Type: text/plain; charset=UTF-8
+        Thu, 8 Sep 2022 16:45:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3F7C5789;
+        Thu,  8 Sep 2022 13:45:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3492FCE20A9;
+        Thu,  8 Sep 2022 20:45:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258FCC433D6;
+        Thu,  8 Sep 2022 20:45:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662669947;
+        bh=9J1C2KFcH969Z3x2PZqo6s1jyIaCFtzY0yxbCJi9HH0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J+NBqSIOd4nP66l7soHJqD67V7Ou0UKZW6aS3MEFeWbxGEZALOxpZzHnFCVf15uCq
+         aHbQv6TiWuMjPR2xKMLkV85Fbjru5rpcW/SktGCRoa06o2Aa5NMW8IPxbXwWrlINWj
+         mnpeHSkCjmB/0ihI6jJfJUv3fT0yIV9XMhj4bLT0=
+Date:   Thu, 8 Sep 2022 13:45:46 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] proc: give /proc/cmdline size
+Message-Id: <20220908134546.6054f611243da37b4f067938@linux-foundation.org>
+In-Reply-To: <YxoywlbM73JJN3r+@localhost.localdomain>
+References: <YxoywlbM73JJN3r+@localhost.localdomain>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,43 +51,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 8 Sep 2022 21:21:54 +0300 Alexey Dobriyan <adobriyan@gmail.com> wrote:
 
+> Most /proc files don't have length (in fstat sense). This leads
+> to inefficiencies when reading such files with APIs commonly found in
+> modern programming languages. They open file, then fstat descriptor,
+> get st_size == 0 and either assume file is empty or start reading
+> without knowing target size.
+> 
+> cat(1) does OK because it uses large enough buffer by default.
+> But naive programs copy-pasted from SO aren't:
 
-On 9/8/22 1:36 PM, Dave Hansen wrote:
-> On 9/8/22 12:07, Sathyanarayanan Kuppuswamy wrote:
->> On 9/7/22 10:31 PM, Greg Kroah-Hartman wrote:
->>> On Wed, Sep 07, 2022 at 05:27:20PM -0700, Kuppuswamy Sathyanarayanan wrote:
->>>> +	/*
->>>> +	 * Per TDX Module 1.0 specification, section titled
->>>> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
->>>> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
->>>> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
->>>> +	 * 0. Also check for valid user pointers.
->>>> +	 */
->>>> +	if (!req.reportdata || !req.tdreport || req.subtype ||
->>>> +		req.rpd_len != TDX_REPORTDATA_LEN ||
->>>> +		req.tdr_len != TDX_REPORT_LEN)
->>>> +		return -EINVAL;
->>> You never verify that your reserved[7] fields are actually set to 0,
->>> which means you can never use them in the future :(
->> Currently, we don't use those fields in our code. Why do we have to
->> make sure they are set to zero?
-> 
-> Yes.
-> 
->> Can't we add checks when we really use them in future?
-> 
-> No.
-> 
-> This has been a hard learned lesson both by people writing software and
-> designing hardware interfaces: if you _let_ folks pass garbage you have
-> to _keep_ letting them pass garbage forever.  It becomes part of the ABI.
-> 
-> I'm sorry you missed the memo on this one.  But, this is one million
-> percent a best practice across the industry.  Please do it.
+What is "SO"?
 
-Ok. Thanks for clarifying it. I will fix it in next version.
+> 	let mut f = std::fs::File::open("/proc/cmdline").unwrap();
+> 	let mut buf: Vec<u8> = Vec::new();
+> 	f.read_to_end(&mut buf).unwrap();
+> 
+> will result in
+> 
+> 	openat(AT_FDCWD, "/proc/cmdline", O_RDONLY|O_CLOEXEC) = 3
+> 	statx(0, NULL, AT_STATX_SYNC_AS_STAT, STATX_ALL, NULL) = -1 EFAULT (Bad address)
+> 	statx(3, "", AT_STATX_SYNC_AS_STAT|AT_EMPTY_PATH, STATX_ALL, {stx_mask=STATX_BASIC_STATS|STATX_MNT_ID, stx_attributes=0, stx_mode=S_IFREG|0444, stx_size=0, ...}) = 0
+> 	lseek(3, 0, SEEK_CUR)                   = 0
+> 	read(3, "BOOT_IMAGE=(hd3,gpt2)/vmlinuz-5.", 32) = 32
+> 	read(3, "19.6-100.fc35.x86_64 root=/dev/m", 32) = 32
+> 	read(3, "apper/fedora_localhost--live-roo"..., 64) = 64
+> 	read(3, "ocalhost--live-swap rd.lvm.lv=fe"..., 128) = 116
+> 	read(3, "", 12)
+> 
+> open/stat is OK, lseek looks silly but there are 3 unnecessary reads
+> because Rust starts with 32 bytes per Vec<u8> and grows from there.
+> 
+> In case of /proc/cmdline, the length is known precisely.
+> 
+> Make variables readonly while I'm at it.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+It seems arbitrary.  Why does /proc/cmdline in particular get this
+treatment?
+

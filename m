@@ -2,125 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB005B210C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC095B2115
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiIHOp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S232728AbiIHOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiIHOpB (ORCPT
+        with ESMTP id S231590AbiIHOpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:45:01 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518CC10572
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:44:50 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so2555218pjq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=J1tHlju2+cXYieX/pEOr8qlvVRzsaNnqR5zd8sgRAW4=;
-        b=gmV61+9vUSmtpDQFopsJ2ku3wTMWgbaDlPMVRXv9AHl4iBvo7ocd62TOfwkJbaLlD3
-         sdT+g6nLvNMzHUhHmtJMNBASiEfsmw5xvFYEEpF5JM8o+Z95TepA0A+CNZRGuWl2+0Ib
-         FSOAE6spy6vcklkB7VHY1c58jGl7J+cTfUZGw3XEpdmxWADy8O7kPJ70CNnTLI4noPYb
-         3kDm38AsD9c3hqaGc0CFGnWsvAUdNYGezZtE2RgipI8yB0lzYIr45BNTI/FRQzPqNSq2
-         TPB8PMf0lwv6udO9FeRhJ7E/YjNbr2+Col9SKCnYpk4TdSc9Kyt66l7al4XJYsNNmdU9
-         rxHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=J1tHlju2+cXYieX/pEOr8qlvVRzsaNnqR5zd8sgRAW4=;
-        b=gXIV5yz9kAaKkJKMLxKp5gTWuAhjfQpb994T87ZudypUJenav+NbgMP94lMkjK6/cf
-         3QvWNnPBQvLnSDPoiHrl4pjYs0JLMvTTvKuFNgrcTE9ZkOsBK1AbMwhRNA5lKXCsC+VC
-         st/y9dpKo18orTDkv4ZEselwgCwfmlUqaMrosemvN0Y3x2JkrPdaFv+NdSrPaSt6jqq3
-         TZt+MPQtFzIWKQgXnsEN4FX36MtwC2AbGt4nNm2tKd4FXIuQZJiEP41T2BD3r++P3IRe
-         /gP3Q1F0B7fdgfRoDUBtdgNR9Fyv3KgOWxAg35HZd7e/OZ0LUFeg5xaI6UgrCD/Bo7J4
-         5nbA==
-X-Gm-Message-State: ACgBeo2krRv1SJgVJM+AeawU8c6VkDLi1bfE5jU0xeOrTgu0mjonj8Uj
-        LKWIXNBanSnrAy3NS6P7TeVgjC1jSfThpQ==
-X-Google-Smtp-Source: AA6agR40T8VGOwQPVPXwn0xDEJUAihdvvc+xd5Ba8Hk/nOFgbOdiZAU3choIZea4zpjK/11k8ZrXAg==
-X-Received: by 2002:a17:902:d2c7:b0:176:c8a4:2f2 with SMTP id n7-20020a170902d2c700b00176c8a402f2mr9425217plc.119.1662648289321;
-        Thu, 08 Sep 2022 07:44:49 -0700 (PDT)
-Received: from localhost.localdomain (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902d40400b001750361f430sm4484728ple.155.2022.09.08.07.44.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 07:44:48 -0700 (PDT)
-From:   Zong Li <zong.li@sifive.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
-        conor.dooley@microchip.com, ben.dooks@sifive.com, bp@alien8.de,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v3 6/6] soc: sifive: ccache: define the macro for the register shifts
-Date:   Thu,  8 Sep 2022 14:44:24 +0000
-Message-Id: <20220908144424.4232-7-zong.li@sifive.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220908144424.4232-1-zong.li@sifive.com>
-References: <20220908144424.4232-1-zong.li@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 10:45:38 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79E5F7CE;
+        Thu,  8 Sep 2022 07:45:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id E13A4580AF9;
+        Thu,  8 Sep 2022 10:45:28 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 08 Sep 2022 10:45:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1662648328; x=1662651928; bh=SPGeHN3LN2nB2HRb9TjiHHXV8F5bbIF+9zw
+        vQ8/QAmk=; b=a4AZUOTQfrf9eYAEhx7fvxawPNOycWbjQv+0SVtsIZSVJUv8eXH
+        m7G2XiAXtLZpAoXfS25o3x6Z/tIToKvS48hRGuyH/DZqf5hJZFkkB8SsfbT1sR43
+        0T6Vlw7sorJevCpZlc9cIgJ1rk07U0U5op6mZh2bibaL0RroG8amXDEuT7W6QpwX
+        M3z6T1b0pgUNMLXOmYSxv4ntOvTCTG/joJ8jF7lSI6npthhm5UEPJvucwZKyDSkP
+        P+I35hwGJJBqskSAyfkLu6tta5h1NA2H23SbL8YMWBxd9gQ7j7NzFzUngESLAsU7
+        LuHuKR/NQbVlLURPCJd7Yt3yOD0iKair+mA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662648328; x=
+        1662651928; bh=SPGeHN3LN2nB2HRb9TjiHHXV8F5bbIF+9zwvQ8/QAmk=; b=m
+        KD0AvHMzH10BAdpwtcrbiKa7ehS3AodA1dNMOzP18aJU1fUVQdXAEW6cUj6uO0Vu
+        TJMs/ZkLwlQrildepm4bBybjcOGt35ziGfcC4sGiTtFipgjD39eaCL0RKqq0eYe9
+        Zs+gCkMMXky1BXilt2hXOAW/2TH95Ry3pOoLnwMoBt0V90CfRouIxo1kIeZPsoPK
+        gtclndlHe8l+dZ5huX/vuKCo+H2NQGDBDmsS/i/l2C2uI5yby/DCHNSLYW/vKMgI
+        bPLKY5M96DUcdRY5Pc5m+Fy1Fr27DYXjYhoNTJUbctBBwHEnbz1f2rq9yAcaiWZI
+        X2QQp+CRXmTuekNFoIopA==
+X-ME-Sender: <xms:CAAaY-wN57JOxo-d-aoF_CWZGlpVZLz81l_ZnX3KBQE9JVbLqmeU_Q>
+    <xme:CAAaY6QRaYggFq0V1-yw7yUm27v-6Z-l6nY8SCShVzF5STEPzizOGf0-_aNpfXK9A
+    GUi_jP7n076Z9tIC18>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:CAAaYwUzJu3JTcRmbTb8kuJOMZVtqf0FQfZF1es-6rpYE1AvxEKWzw>
+    <xmx:CAAaY0ijme5QnmjK2Ih3rXMQhT03R3LQN4wI8ov7cUNEN6PoLYeQkQ>
+    <xmx:CAAaYwD6wNLusk8rw_reuSHRq2yEwaTsup0yCViqkPyex7V1QEpCzg>
+    <xmx:CAAaY57P9prGQj2l8vECB_CfE06GTjvtopUc5p049L0vXberM65arg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7DFC8B60083; Thu,  8 Sep 2022 10:45:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <6ba5a3a9-93b0-49a9-ab49-7b6006e23067@www.fastmail.com>
+Date:   Thu, 08 Sep 2022 16:44:34 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] asm-generic: SOFTIRQ_ON_OWN_STACK rework
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define the macro for the register shifts, it could make the code be
-more readable
+The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
 
-Signed-off-by: Zong Li <zong.li@sifive.com>
----
- drivers/soc/sifive/sifive_ccache.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
 
-diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
-index b3929c4d6d5b..0ddcc657c694 100644
---- a/drivers/soc/sifive/sifive_ccache.c
-+++ b/drivers/soc/sifive/sifive_ccache.c
-@@ -13,6 +13,7 @@
- #include <linux/of_irq.h>
- #include <linux/of_address.h>
- #include <linux/device.h>
-+#include <linux/bitfield.h>
- #include <asm/cacheinfo.h>
- #include <soc/sifive/sifive_ccache.h>
- 
-@@ -33,6 +34,11 @@
- #define SIFIVE_CCACHE_DATECCFAIL_COUNT 0x168
- 
- #define SIFIVE_CCACHE_CONFIG 0x00
-+#define SIFIVE_CCACHE_CONFIG_BANK_MASK GENMASK_ULL(7, 0)
-+#define SIFIVE_CCACHE_CONFIG_WAYS_MASK GENMASK_ULL(15, 8)
-+#define SIFIVE_CCACHE_CONFIG_SETS_MASK GENMASK_ULL(23, 16)
-+#define SIFIVE_CCACHE_CONFIG_BLKS_MASK GENMASK_ULL(31, 24)
-+
- #define SIFIVE_CCACHE_WAYENABLE 0x08
- #define SIFIVE_CCACHE_ECCINJECTERR 0x40
- 
-@@ -87,11 +93,11 @@ static void ccache_config_read(void)
- 	u32 cfg;
- 
- 	cfg = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
--
--	pr_info("%u banks, %u ways, sets/bank=%llu, bytes/block=%llu\n",
--		(cfg & 0xff), (cfg >> 8) & 0xff,
--		BIT_ULL((cfg >> 16) & 0xff),
--		BIT_ULL((cfg >> 24) & 0xff));
-+	pr_info("%llu banks, %llu ways, sets/bank=%llu, bytes/block=%llu\n",
-+		FIELD_GET(SIFIVE_CCACHE_CONFIG_BANK_MASK, cfg),
-+		FIELD_GET(SIFIVE_CCACHE_CONFIG_WAYS_MASK, cfg),
-+		BIT_ULL(FIELD_GET(SIFIVE_CCACHE_CONFIG_SETS_MASK, cfg)),
-+		BIT_ULL(FIELD_GET(SIFIVE_CCACHE_CONFIG_BLKS_MASK, cfg)));
- 
- 	cfg = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
- 	pr_info("Index of the largest way enabled: %u\n", cfg);
--- 
-2.17.1
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-6.0-rc4
+
+for you to fetch changes up to 8cbb2b50ee2dcb082675237eaaa48fe8479f8aa5:
+
+  asm-generic: Conditionally enable do_softirq_own_stack() via Kconfig. (2022-09-05 17:20:55 +0200)
+
+----------------------------------------------------------------
+asm-generic: SOFTIRQ_ON_OWN_STACK rework
+
+Just one fixup patch, reworking the softirq_on_own_stack logic for
+preempt-rt kernels as discussed in
+https://lore.kernel.org/all/CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com/
+
+----------------------------------------------------------------
+Sebastian Andrzej Siewior (1):
+      asm-generic: Conditionally enable do_softirq_own_stack() via Kconfig.
+
+ arch/Kconfig                          | 3 +++
+ arch/arm/kernel/irq.c                 | 2 +-
+ arch/parisc/kernel/irq.c              | 2 +-
+ arch/powerpc/kernel/irq.c             | 4 ++--
+ arch/s390/include/asm/softirq_stack.h | 2 +-
+ arch/sh/kernel/irq.c                  | 2 +-
+ arch/sparc/kernel/irq_64.c            | 2 +-
+ arch/x86/include/asm/irq_stack.h      | 2 +-
+ arch/x86/kernel/irq_32.c              | 2 +-
+ include/asm-generic/softirq_stack.h   | 2 +-
+ 10 files changed, 13 insertions(+), 10 deletions(-)

@@ -2,91 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D665B1B1F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313BE5B1B26
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiIHLQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S230236AbiIHLSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiIHLQd (ORCPT
+        with ESMTP id S229695AbiIHLSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:16:33 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B9DD9EB0
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:16:31 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id z23so19506869ljk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=WOxGa6HDdZTkz+qaFAMzvcgUAVFd9V45w/3KQDKwpCI=;
-        b=QgYMkiugBcSQvEwKtmTDnsQFAgT1NHRFpcgN00InVwjf0e/82PfGO/50/cgJJNG+UE
-         IDviNRSwAUJcjGNR848LdzZUgBzup5swhYKMCMMCulJwOo/fYt4s9SwobZGHP00rTU3G
-         umbLymyj2oL6g1n4BHPInwe8bmP5sevNDdGM/1ivTzPSWxkbGmoMhVSB4j4FYQ4rM40M
-         tlRjvhjm2EVqZiUHkC3QvZXzVqYJzDqpufO5x2fAYdrB6fVZJwGuGrqLTsU1rEHgPlrX
-         nchASRVod92uw74+Ep/B4Tn7dU0WDJgcPXJnLL/gLQgOC8FQO2GEbXfvc+vC46IiHFQ7
-         mDxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=WOxGa6HDdZTkz+qaFAMzvcgUAVFd9V45w/3KQDKwpCI=;
-        b=nNgzIRNNRZGGCjqwWr+lNl4UgWDRb2RP6Zv8qGenEaVBmGgJtgAL/9D4rpZg2KefpR
-         ksBLAV1EgJYIg7lJ4fv3nr0HYlkvvBRPPBb26n0Ba2Z1qanYWMowI9udenGNgSK0SAaz
-         0pIgMEJRZWqzJfhTZMAeGqctNHBrBKXpSL74CfuhK3eHQWYypWteSX60rrKlaerxsiJA
-         9cOjJyy4tfebu1Bt8YDKfcyZai001/ZW2AAS2AXRDY7kzxp4OtNvg5o8r8JAdKUtDkkD
-         ABjho/HAJio2Fys8D+OmYYabHRr5kTSiChjBSjGZ5CmfD9IeKrYaxoDqDfTfeKPGp/lb
-         tnQA==
-X-Gm-Message-State: ACgBeo24xFHCAlQiEL9ia+j9dn6zQhcqCS9nGA24q/0jEGs0rhZcH6Gi
-        IzdBM12W99iMgGStkfkMyErytw==
-X-Google-Smtp-Source: AA6agR6kiJ4FX1LJJ/Uo44iVsHBip9Lv0pwLDM6D16vW1SGLhcD/fIU21n32DClqzX3EKl/GiPay4g==
-X-Received: by 2002:a05:651c:c86:b0:25e:7181:e1a5 with SMTP id bz6-20020a05651c0c8600b0025e7181e1a5mr2260875ljb.492.1662635789973;
-        Thu, 08 Sep 2022 04:16:29 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a9-20020a196609000000b004946274b7d6sm2992129lfc.166.2022.09.08.04.16.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 04:16:29 -0700 (PDT)
-Message-ID: <35722313-6585-1748-6821-aebe0859ef6e@linaro.org>
-Date:   Thu, 8 Sep 2022 13:16:28 +0200
+        Thu, 8 Sep 2022 07:18:00 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D87ED3B5;
+        Thu,  8 Sep 2022 04:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662635878; x=1694171878;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=j5a61ZKFUAdC26BITQdeai++FyrcXlsWeUVOGnGDHZk=;
+  b=cYHvVpNgooS3CGxH+y9cD4vTSAPlAS3mnqihgFAkzIfAg8Tmoga1vsBn
+   GdckT7dbMS5iJxzliNnSGhME0m5mqJ6momoOzrmYQ2dgAq5CRAw8aOgVJ
+   JlSCa4racHKf4uH9NPrlZ3JOdAtgO0s2/rqJSFVJI3Oqu+AghIwh4noko
+   sRGoTEydk7ZJmfBe958NGblYP2ktpbOw8sywuiVBBkixQye2C9RC6EUL8
+   5Dd4JNAtz+26ejnQhMPEh7M2bmC/RYPdqAFPr2tHCc7Ajf5iQ7he1tsyg
+   eF+G7JPkQWLmYHRGPvWUjo1OWFecVIdtekLaBK/crMTnJcClUrA7oykIl
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="179670048"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 04:17:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 8 Sep 2022 04:17:57 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Thu, 8 Sep 2022 04:17:54 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Shravan Chippa <shravan.chippa@microchip.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cyril Jean <Cyril.Jean@microchip.com>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        Vattipalli Praveen <praveen.kumar@microchip.com>,
+        Wolfgang Grandegger <wg@aries-embedded.de>,
+        Hugh Breslin <hugh.breslin@microchip.com>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 00/10] New PolarFire SoC devkit devicetrees & 22.09 reference design updates
+Date:   Thu, 8 Sep 2022 12:17:03 +0100
+Message-ID: <20220908111712.665287-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: net: Add generic Bluetooth controller
-Content-Language: en-US
-To:     Sven Peter <sven@svenpeter.dev>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
-        Rocky Liao <rjliao@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20220907170935.11757-1-sven@svenpeter.dev>
- <20220907170935.11757-2-sven@svenpeter.dev>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220907170935.11757-2-sven@svenpeter.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,65 +72,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 19:09, Sven Peter wrote:
-> 
-> Bluetooth controllers share the common local-bd-address property.
-> Add a generic YAML schema to replace bluetooth.txt for those.
-> 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
-> changes from v1:
->   - removed blueetooth.txt instead of just replacing it with a
->     deprecation note
->   - replaced references to bluetooth.txt
-> 
-> checkpatch complains here because it thinks I do to many things at once,
-> I think it's better to replace bluetooth.txt in single commit though.
-> Let me know if you prefer this to be split into multiple commits
-> instead.
-> 
-> .../bindings/net/bluetooth-controller.yaml    | 30 +++++++++++++++++++
+Hey all,
 
-I propose to keep it in net/bluetooth subdirectory. In next patch you
-can move there other files.
+Some 6.1 targeted changes here.
+Firstly, two new dev kits (one first-party & one from Aries Embedded).
+They've been sitting in our vendor tree, so are being sent where they
+belong.
 
->  .../devicetree/bindings/net/bluetooth.txt     |  5 ----
->  .../bindings/net/qualcomm-bluetooth.yaml      |  4 +--
->  .../bindings/soc/qcom/qcom,wcnss.yaml         |  8 ++---
->  4 files changed, 35 insertions(+), 12 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/bluetooth-controller.yaml
->  delete mode 100644 Documentation/devicetree/bindings/net/bluetooth.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/net/bluetooth-controller.yaml b/Documentation/devicetree/bindings/net/bluetooth-controller.yaml
-> new file mode 100644
-> index 000000000000..0ea8a20e30f9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/bluetooth-controller.yaml
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/bluetooth-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bluetooth Controller Generic Binding
-> +
-> +maintainers:
-> +  - Marcel Holtmann <marcel@holtmann.org>
-> +  - Johan Hedberg <johan.hedberg@gmail.com>
-> +  - Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^bluetooth(@.*)?$"
-> +
-> +  local-bd-address:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 6
+Secondly, another release of our reference design for the Icicle kit
+is due in September. Usually these do not really change much for the
+devicetree, but this time around a pair of changes impact the memory
+map.
 
-No need for minitems.
+The first of these is adding dma-ranges to the pcie controller. The
+controller had some issues to begin with & with the current reference
+design (v2022.05) would not work with mainline Linux nor has it since
+reference design v2021.08. A combination of the property, a change
+to the FPGA design & a small fix to the driver will get it working
+with mainline again. The other non-backwards compatible change to the
+reference design is moves of the peripherals instantiated in the
+fabric. Currently they are fairly spread out & a common complaint has
+been that this leaves little room in the fic3 section of the memory map
+for custom peripherals without removing the existing ones.
 
+This series depends on [0] so as not to add dtbs_check warnings. The
+fabric clock support is added by [1].
 
+Thanks,
+Conor.
 
-Best regards,
-Krzysztof
+Changes since v3:
+- add an extra patch reducing the fic3 clock rate
+
+Changes since v2:
+- drop the sd & emmc versions of the aries devicetree
+- remove a extra newline
+
+Changes since v1:
+- made the polarberry part of an enum in patch 1
+
+0 - https://lore.kernel.org/linux-gpio/20220825143522.3102546-1-conor.dooley@microchip.com/
+1 - https://lore.kernel.org/linux-clk/20220824093342.187844-1-conor.dooley@microchip.com/
+
+Conor Dooley (8):
+  dt-bindings: riscv: microchip: document icicle reference design
+  dt-bindings: riscv: microchip: document the aries m100pfsevp
+  riscv: dts: microchip: add pci dma ranges for the icicle kit
+  riscv: dts: microchip: move the mpfs' pci node to -fabric.dtsi
+  riscv: dts: microchip: icicle: update pci address properties
+  riscv: dts: microchip: icicle: re-jig fabric peripheral addresses
+  riscv: dts: microchip: reduce the fic3 clock rate
+  riscv: dts: microchip: add a devicetree for aries' m100pfsevp
+
+Shravan Chippa (1):
+  dt-bindings: riscv: microchip: document the sev kit
+
+Vattipalli Praveen (1):
+  riscv: dts: microchip: add sevkit device tree
+
+ .../devicetree/bindings/riscv/microchip.yaml  |  20 +-
+ arch/riscv/boot/dts/microchip/Makefile        |   2 +
+ .../dts/microchip/mpfs-icicle-kit-fabric.dtsi |  44 ++++-
+ .../boot/dts/microchip/mpfs-icicle-kit.dts    |   3 +-
+ .../dts/microchip/mpfs-m100pfs-fabric.dtsi    |  45 +++++
+ .../boot/dts/microchip/mpfs-m100pfsevp.dts    | 179 ++++++++++++++++++
+ .../dts/microchip/mpfs-polarberry-fabric.dtsi |  29 +++
+ .../dts/microchip/mpfs-sev-kit-fabric.dtsi    |  45 +++++
+ .../riscv/boot/dts/microchip/mpfs-sev-kit.dts | 145 ++++++++++++++
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |  29 ---
+ 10 files changed, 499 insertions(+), 42 deletions(-)
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfs-fabric.dtsi
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dts
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts
+
+-- 
+2.36.1
+

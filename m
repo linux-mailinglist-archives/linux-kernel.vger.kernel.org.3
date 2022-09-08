@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D585B198A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0465B198C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiIHKCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 06:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S230451AbiIHKDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 06:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiIHKCf (ORCPT
+        with ESMTP id S230325AbiIHKDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 06:02:35 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED5DE4DF3;
-        Thu,  8 Sep 2022 03:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662631354; x=1694167354;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RPZysXr4Y2V2xG7v9fsc8pk681BFZx9MpdstXcZ4B0w=;
-  b=DrnhusVlJelPnD6HR2gvGeSl5y/kltXFfhI6qAk+zPXvCYjvEs9iY3nq
-   rhjRMNChIs6SGKodgTQvs6xg21TwZWuQKuI7YxRKAjgSBnPLtz35aI/T0
-   KGcNMV1LuVGABcYDiCVC0+Dbf9HiN88q6DSL+BntohV0cZRnyQr2CqoUx
-   aSftM5feX2ckhKXCCBZWcGf+yRcUKPkHrSmkz9lyjTiYGJEonZbQerNYM
-   h3vkjim8WbvqnGqnF4Iish78IwBSiYRUhrMZSvMM+8V97BkpOnjQ+Kw3n
-   ujSBcYXSeulT+Ytm5Ey6CTEA7Jt+WoOaMENy0/nZ5+w5blRaFbZfclj/D
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="358858013"
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="358858013"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 03:02:34 -0700
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="617417161"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 03:02:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oWEMg-00A4M4-1q;
-        Thu, 08 Sep 2022 13:02:30 +0300
-Date:   Thu, 8 Sep 2022 13:02:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Josef Johansson <josef@oderland.se>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
-Message-ID: <Yxm9tlb4H7fspRMZ@smile.fi.intel.com>
-References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
- <Yxj1ZQjBfdG1u93d@shikoro>
- <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
- <b8eff79f-0be0-e6a5-64ba-e085b0ea52b2@oderland.se>
+        Thu, 8 Sep 2022 06:03:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7407CBAD83;
+        Thu,  8 Sep 2022 03:03:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58C9114BF;
+        Thu,  8 Sep 2022 03:03:36 -0700 (PDT)
+Received: from [10.1.39.19] (e122027.cambridge.arm.com [10.1.39.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 936833F73D;
+        Thu,  8 Sep 2022 03:03:23 -0700 (PDT)
+Message-ID: <65948185-b017-3da5-fdce-e28887b01ff4@arm.com>
+Date:   Thu, 8 Sep 2022 11:03:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8eff79f-0be0-e6a5-64ba-e085b0ea52b2@oderland.se>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 4/5] drm/panfrost: devfreq: set opp to the recommended
+ one to configure regulator
+Content-Language: en-GB
+To:     =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Qiang Yu <yuq825@gmail.com>
+References: <20220906153034.153321-1-peron.clem@gmail.com>
+ <20220906153034.153321-5-peron.clem@gmail.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20220906153034.153321-5-peron.clem@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 09:48:29AM +0200, Josef Johansson wrote:
-> On 9/8/22 08:07, Josef Johansson wrote:
-> > On 9/7/22 21:47, Wolfram Sang wrote:
-> > > On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
-> > > > ACPI core in conjunction with platform driver core provides
-> > > > an infrastructure to enumerate ACPI devices. Use it in order
-> > > > to remove a lot of boilerplate code.
-> > > > 
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > Josef, do you have resources to test this patch before I apply it?
-> > > 
-> > Yes, I'll make that happen today.
-> Hi,
+On 06/09/2022 16:30, Clément Péron wrote:
+> Enabling panfrost GPU OPP with dynamic regulator will make OPP
+> responsible to enable and configure it.
 > 
-> I compiled with linux-6.0.0-rc4 with your patch on top.
+> Unfortunatly OPP configure and enable the regulator when an OPP
+
+NIT: Unfortunately
+
+> is asked to be set, which is not the case during
+> panfrost_devfreq_init().
 > 
-> Have been running flawless so far. Boot showed no problems.
+> This leave the regulator unconfigured and if no GPU load is
+> triggered, no OPP is asked to be set which make the regulator framework
+> switching it off during regulator_late_cleanup() without
+> noticing and therefore make the board hang as any access to GPU
+> memory space make bus locks up.
 > 
-> Thanks!
+> Call dev_pm_opp_set_opp() with the recommend OPP in
+> panfrost_devfreq_init() to enable the regulator, this will properly
+> configure and enable the regulator and will avoid any switch off
+> by regulator_late_cleanup().
+> 
+> Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Clément Péron <peron.clem@gmail.com>
 
-Thank you!
+Reviewed-by: Steven Price <steven.price@arm.com>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Note this same sequence is used in the Lima driver, so it would be good
+to submit the fix there too as it presumably is affected by the same
+issue. I've CC'd Qiang for visibility.
 
+I'll push this patch to drm-misc-fixes (with the typo above fixed), the
+device tree patches can go through a different tree.
+
+Steve
+
+> ---
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> index 5110cd9b2425..fe5f12f16a63 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> @@ -131,6 +131,17 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  		return PTR_ERR(opp);
+>  
+>  	panfrost_devfreq_profile.initial_freq = cur_freq;
+> +
+> +	/*
+> +	 * Set the recommend OPP this will enable and configure the regulator
+> +	 * if any and will avoid a switch off by regulator_late_cleanup()
+> +	 */
+> +	ret = dev_pm_opp_set_opp(dev, opp);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(dev, "Couldn't set recommended OPP\n");
+> +		return ret;
+> +	}
+> +
+>  	dev_pm_opp_put(opp);
+>  
+>  	/*
 

@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B38C5B24DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4DE5B24F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbiIHRjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S232241AbiIHRlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiIHRiz (ORCPT
+        with ESMTP id S232227AbiIHRkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:38:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A691E917A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662658724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u3VyZ3w1bOu5Udrn5Alq1L+olcWnXxs8SfgOS75iA0c=;
-        b=G2VBfV2PEPKkaOEi2/g74kmduVLuVZi+lqjK6jko21u7sS1Wl3tZ574uEX2RymZK6tVLIz
-        9ZoaLxl3QhBi7806Jc08kXj28Ls4hK6xS/K9TBMsDfO9AdjMJbIWMZQVDLO2SORFTD9lX6
-        LZO/QA7iyjvTx0C5Ez9Lc/FzP05mUyA=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-634-rMXqd207PtW8IIE_uWUEcw-1; Thu, 08 Sep 2022 13:38:33 -0400
-X-MC-Unique: rMXqd207PtW8IIE_uWUEcw-1
-Received: by mail-qv1-f71.google.com with SMTP id c1-20020a0cfb01000000b00495ad218c74so13212597qvp.20
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:38:33 -0700 (PDT)
+        Thu, 8 Sep 2022 13:40:19 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C3810F6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:39:36 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso3082185pjk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=yocom-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=rU5trKe3Yoy2Ehis4NGQlVoaD7BHhUK/1S8Lg+uYpCo=;
+        b=TGRoxee7ib22Hu/bEhSHvSDvJVsO5n0bOkdRVANYV3o29bn+BOe5CM798GhVk4wcho
+         4+rd0dTJ5zhfYqmXNgw047iHF1tA2ZZCc3PSoA/5KW9+DM5zvtbGmgyi4SxiA0OfONH2
+         3kg2I38HZWHdwY0JFwZcor+HuiYF2gIYXwmVcPKWgGW098UehwcVQMrNxxivQBo2Fp9P
+         O/7XJf5e1fsSjDXdaKaSp9cYt3Qqt8c4Fwhgv/6Kzwwf7py2XIGugghgC/xUcFM0NUTB
+         Q2xCH+DOQNChuHvPTy/EN7xrvzAR8HlMcfiwqw61QZ+vh3rlu6QhMT/XpiH96+lHDZXA
+         MaaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=u3VyZ3w1bOu5Udrn5Alq1L+olcWnXxs8SfgOS75iA0c=;
-        b=GQxVe7AeEU2obiQnEPvxwLhAagAk2+1pbvjT+hw0+JY5oV1+ntBAw275y8mu4oqkgM
-         5FEU4rpbov3GJa3IycZJQ17nMOOtE/w+boRzEex8Yo33VC9e7pStUQF4w2jEN0uhVVzm
-         mI2fE1zoPtCfcB4ZhxzSNi+ZpDQVKHpb9SogQr9smR2LF8YdxvUH3PIYP9ZY3BdOa03K
-         bBpexpnOo9fqIm/jLagcxzAb2hy2Rs8+0IsBnUXRfQqWvlynZYMcjwcB5WyuTXYWtkJ+
-         WnbCSw2fZxfcE6QXRgLcElEYtZxHjIPLzr8mAAyxHIie/jQylpBW8CaIA0Wr7CMs8AX9
-         Opnw==
-X-Gm-Message-State: ACgBeo3clLyEu6jGOrrAJeldfHtf5rL6WYSmVSonEHNGL/e+Qj1FguU4
-        nvG6q92euktLuX/Lk9WIjYcfHFP+ancx5JHId3+9XKMeE//Wv724EZCEXjLQv6YyBKVN5EKW/HO
-        PL9bFXRWpRPS3XP7CO82JedeV
-X-Received: by 2002:a05:6214:2aae:b0:496:cf51:bacf with SMTP id js14-20020a0562142aae00b00496cf51bacfmr8541625qvb.29.1662658713332;
-        Thu, 08 Sep 2022 10:38:33 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6xoeqcxpfkCjwLToZdiSnU4SU+olAUgAizlwk76xC6Z+dQWjOGeSXKAZ5YEKu/VRuFnik+Mg==
-X-Received: by 2002:a05:6214:2aae:b0:496:cf51:bacf with SMTP id js14-20020a0562142aae00b00496cf51bacfmr8541609qvb.29.1662658713038;
-        Thu, 08 Sep 2022 10:38:33 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id x24-20020ac87a98000000b003431446588fsm14638554qtr.5.2022.09.08.10.38.31
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=rU5trKe3Yoy2Ehis4NGQlVoaD7BHhUK/1S8Lg+uYpCo=;
+        b=Nx8FC5r0W7WvzLZUXcEbhKV233WwX//0UNF+/9YOxPXNzC3KMhWXHVFke9Kp1+f28g
+         SzNHb1DV2YtCn/C+HRmUrFEjW94OpErCw8r/c77HLe9QLF961mBakdmwZh0yQkpCYzcg
+         UNTz+4hZ2XOn/KEVGWbh89WpQv4KdUwvJeDxcIyNtB6PhqjLPH1WdYA7F3iE4CrotnWI
+         /3l6gI2bZAUzTH0Lc7319dwQHKSBG9e5b3QV7DS004zBMzcntc1GFkczZf77DVhDtROK
+         MBHgWT1sP473tMJQnf77bfdTykyYKkZ/Ukn/khNM0JFstEh3gprb3EZdAuHcZdNW7P3T
+         xsjQ==
+X-Gm-Message-State: ACgBeo3fq+ou+3LYJFwoIsi+lN/mewwgZBOYW5ebXrauO3xcj2p+jsQX
+        JtjD2nS5uGfDEeTlCXePbnxveA==
+X-Google-Smtp-Source: AA6agR4UXvmZTkIPHXdo3TexkqBBdQT9rCCVFrsBsPlZp+rXOZ56j1lHaj2cWA+P2vg76kn7b78m1w==
+X-Received: by 2002:a17:90a:74c5:b0:200:2d89:ef13 with SMTP id p5-20020a17090a74c500b002002d89ef13mr5295554pjl.81.1662658773528;
+        Thu, 08 Sep 2022 10:39:33 -0700 (PDT)
+Received: from ghaven-kernel.yocom.org.beta.tailscale.net ([2601:600:8f80:973::5f])
+        by smtp.gmail.com with ESMTPSA id x76-20020a62864f000000b0052d4b0d0c74sm15166767pfd.70.2022.09.08.10.39.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 10:38:32 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 13:38:31 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 07/26] hugetlb: add hugetlb_pte to track HugeTLB page
- table entries
-Message-ID: <Yxool80IgkXnqS5Y@xz-m1.local>
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-8-jthoughton@google.com>
+        Thu, 08 Sep 2022 10:39:33 -0700 (PDT)
+From:   Nate Yocom <nate@yocom.org>
+To:     dmitry.torokhov@gmail.com
+Cc:     nate@yocom.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hadess@hadess.net,
+        benjamin.tissoires@redhat.com
+Subject: [PATCH v6 0/5] Input: joystick: xpad: Add X-Box Adaptive Controller support
+Date:   Thu,  8 Sep 2022 10:39:25 -0700
+Message-Id: <20220908173930.28940-1-nate@yocom.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220624173656.2033256-8-jthoughton@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-James,
+Adds support for the X-Box Adaptive Controller, which is protocol
+compatible with the XTYPE_XBOXONE support in the driver with two deltas:
 
-On Fri, Jun 24, 2022 at 05:36:37PM +0000, James Houghton wrote:
-> +static inline
-> +spinlock_t *hugetlb_pte_lockptr(struct mm_struct *mm, struct hugetlb_pte *hpte)
-> +{
-> +
-> +	BUG_ON(!hpte->ptep);
-> +	// Only use huge_pte_lockptr if we are at leaf-level. Otherwise use
-> +	// the regular page table lock.
-> +	if (hugetlb_pte_none(hpte) || hugetlb_pte_present_leaf(hpte))
-> +		return huge_pte_lockptr(hugetlb_pte_shift(hpte),
-> +				mm, hpte->ptep);
-> +	return &mm->page_table_lock;
-> +}
+ - The X-Box button sets 0x02 as its activation ID, where others set
+   0x01
+ - The controller has an additional Profile button with 4 active states,
+   which this change maps to an Axis control with 4 possible values
 
-Today when I re-read part of this thread, I found that I'm not sure whether
-this is safe.  IIUC taking different locks depending on the state of pte
-may lead to issues.
+Patch series adds device to the supported table, adds support for the
+Profile button, and adds support for the X-Box button as distinct
+changes.
 
-For example, could below race happen where two threads can be taking
-different locks even if stumbled over the same pmd entry?
+Signed-off-by: Nate Yocom <nate@yocom.org>
 
-         thread 1                          thread 2
-         --------                          --------
+Nate Yocom (5):
+  Input: joystick: xpad: Add X-Box Adaptive support
+  Input: joystick: xpad: Add X-Box Adaptive XBox button
+  Input: joystick: xpad: Add ABS_PROFILE to uapi
+  Input: joystick: xpad: Add ABS_PROFILE to Docs
+  Input: joystick: xpad: Add X-Box Adaptive Profile button
 
-    hugetlb_pte_lockptr (for pmd level)
-      pte_none()==true,
-        take pmd lock
-    pmd_alloc()
-                                hugetlb_pte_lockptr (for pmd level)
-                                  pte is pgtable entry (so !none, !present_leaf)
-                                    take page_table_lock
-                                (can run concurrently with thread 1...)
-    pte_alloc()
-    ...
+ v2: Fix warning Reported-by: kernel test robot <lkp@intel.com>
+ v3: Break into multi-part and remove VID/PID check for XBox button
+ v4: Rename Layer -> Profile as suggested by Bastien Nocera
+ v5: Add new ABS_PROFILE axis to uapi and use it for the profile button
+ v6: Add ABS_PROFILE to absolutes array and docs as requested by Dmitry
 
+ Documentation/input/event-codes.rst    |  6 ++++++
+ Documentation/input/gamepad.rst        |  6 ++++++
+ drivers/hid/hid-debug.c                |  3 ++-
+ drivers/input/joystick/xpad.c          | 15 ++++++++++++++-
+ include/uapi/linux/input-event-codes.h |  1 +
+ 5 files changed, 29 insertions(+), 2 deletions(-)
+
+
+base-commit: 26b1224903b3fb66e8aa564868d0d57648c32b15
 -- 
-Peter Xu
+2.30.2
 

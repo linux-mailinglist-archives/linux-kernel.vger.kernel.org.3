@@ -2,101 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA855B2146
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC6A5B213E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbiIHOwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
+        id S232744AbiIHOvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiIHOwF (ORCPT
+        with ESMTP id S232718AbiIHOvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:52:05 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2287611C176;
-        Thu,  8 Sep 2022 07:51:51 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 401F0580736;
-        Thu,  8 Sep 2022 10:51:50 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 10:51:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662648710; x=1662652310; bh=fvxntO4oWr
-        KM9m3QBIVXQh/akrVVbow7ITon7TAcDFg=; b=T3ovjRGcfRJnLcD9Dj0p5JMeaT
-        BmkIJM8gPStOJLdxWxqgJFqY0TJ2gt83qcLKsXIFJt2rsolfrVqJEGRb9+/HVhKB
-        +fF4lCUWVTPNo8QnR9r0xRaikzaQHLToKHw6BRsdzGY2xsnpzV0bulCZM32WNMD7
-        vdwADYlleTuAgFAiVuGJKBPma3KAhJEwly6JefxBWenUkTv9Pn4SKl4goxlmdH9T
-        M09CzEy9q2zhJgYabJdZthlvO1Hy1H7wDVPcI+29THc4U2EiuEKLCIPflKDSzDQC
-        P1VksUmYQp2AzyVpRQ8x4Qwz2n8a3trFAMGmpNyyT15cJ3pmnqepgeBF6BEA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662648710; x=1662652310; bh=fvxntO4oWrKM9m3QBIVXQh/akrVV
-        bow7ITon7TAcDFg=; b=E0pselW5NBkdYlX81XJiShZr7kwPjW3sXXWQ5B7h6orf
-        zWyg4niSpfODKiiHWrCAI9oLMx7g9Zx78eqQ+WVOU+31aKdpBCbH4O/wvO49Oe0d
-        BYQqxcCLMKAKudcCjI93HIz8fc5f8T4USA91oHVr/bbAkxVaOEkZzdbh4CgZtdqB
-        J+Gnejw38SLVU1litTK5H05gBKkbwwCuB3hgO/WiCB1vFit9W/zKuSouPomYWHs+
-        pjrp2pPaQR2vzujJEl2xlFv8/XzYBffSRJb6N/hZ4ArJk4MHa8HySVoNj+I5gqMk
-        Lagjx6kQuCNUOdgmPQksE21Ypg2uepUCntElIISE1w==
-X-ME-Sender: <xms:hQEaYzbvT8jeqj55jJQ-DjWEvt1TS8nw953_lEVR1ieO7Axg3Ycneg>
-    <xme:hQEaYyZ6sbxsv0GMt4agYguZtplXeNmY0xVp5k66StalAWHrvkVfNGbR8YyuS7QP8
-    B9C_964bdBNw29I50Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:hQEaY19-t1GL_DlBR_Kuv3ninTvZ3c8KdXGxfnxJQ7MWB3C-xAA9IA>
-    <xmx:hQEaY5qUIc2aJKzc-Xc-OwX8_aOC1zASLIwNa2ZMZy65yZst08-fIA>
-    <xmx:hQEaY-plCkkIBjcFUMcVhsA-oAH7Wfy9PzyisPg93NurNWFzRSphfg>
-    <xmx:hgEaY1RoLO1Ga5sX8XtlT8LGTumNIQUIToAeeyaMcJ9aXXdG_IrQQw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D690EB60083; Thu,  8 Sep 2022 10:51:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <d414eff0-a74b-480b-9449-ad6d114ff911@www.fastmail.com>
-In-Reply-To: <3bdb5323c465daa81682ebd7f8594962320680e6.1662625281.git.christophe.leroy@csgroup.eu>
-References: <3bdb5323c465daa81682ebd7f8594962320680e6.1662625281.git.christophe.leroy@csgroup.eu>
-Date:   Thu, 08 Sep 2022 16:51:28 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] asm-generic: Remove empty #ifdef SA_RESTORER
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 8 Sep 2022 10:51:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEF8F9136;
+        Thu,  8 Sep 2022 07:51:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4CC261D45;
+        Thu,  8 Sep 2022 14:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4026C433D7;
+        Thu,  8 Sep 2022 14:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662648693;
+        bh=w/NqRVcvSVbY8x3edIIhJ+5pecP8W7Yh1phAyoL+i9E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uTGAmwcFdest81NHp1IQeYY8ldKRgc5pzomlhl2M843Vy3CFCWqzPG9+GJ97sqsZE
+         iyDXIW5HwMLQxx1qccMjUe5xYv0KE8qnf70elwig63ySLkXBbCZ8N2AGsPUTCfllsC
+         jFj0RNBvp0Fx94z16R9dPZ/ltf/8XEiraRNk482KzSxjr1N5MtxyvH3l7suDvuouOM
+         BVby9dLPlNdNiM6Kt4YwEOPxsa3VoNBh7C3Bpbfwpny1+Ppj7caDUC860YtDpsWatT
+         J/Zb3C6xUKIWwDHUDd2V/WW45v+UFKr+TUaRcSGnbByPsRCeFwhwm+QE+Iuwemgy9r
+         8ZxlFkCb+CNtQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oWIsM-008wif-NR;
+        Thu, 08 Sep 2022 15:51:30 +0100
+Date:   Thu, 08 Sep 2022 15:51:30 +0100
+Message-ID: <877d2dvs0d.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
+        "lznuaa@gmail.com" <lznuaa@gmail.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
+Subject: Re: [EXT] Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller driver
+In-Reply-To: <AM9PR04MB879338D6D4B55A74CD002E6D88409@AM9PR04MB8793.eurprd04.prod.outlook.com>
+References: <20220907034856.3101570-1-Frank.Li@nxp.com>
+        <20220907034856.3101570-3-Frank.Li@nxp.com>
+        <87fsh2qpq4.wl-maz@kernel.org>
+        <AM9PR04MB879338D6D4B55A74CD002E6D88409@AM9PR04MB8793.eurprd04.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: frank.li@nxp.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us, kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev, lznuaa@gmail.com, imx@lists.linux.dev, manivannan.sadhasivam@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022, at 11:12 AM, Christophe Leroy wrote:
-> There was a #ifdef SA_RESTORER to guard the sa_restorer field
-> in struct sigaction.
->
-> Commit 8a1ab3155c2a ("UAPI: (Scripted) Disintegrate
-> include/asm-generic") moved that struct into
-> uapi/asm-generic/signal.h but the #ifdef SA_RESTORER remained.
->
-> Remove it.
->
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
+On Thu, 08 Sep 2022 15:23:53 +0100,
+Frank Li <frank.li@nxp.com> wrote:
+> 
+> >
+> > On Wed, 07 Sep 2022 04:48:54 +0100,
+> > Frank Li <Frank.Li@nxp.com> wrote:
+> > >
+> > > The MU block found in a number of Freescale/NXP SoCs supports
+> > generating
+> > > IRQs by writing data to a register
+> > >
+> > > This enables the MU block to be used as a MSI controller, by leveraging
+> > > the platform-MSI API
+> > 
+> > Missing full stop after each sentence.
+> 
+> [Frank Li] Do you means missed "."?
 
+Yes.
 
-Applied to asm-generic tree, thanks
+> > > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > > index 5e4e50122777d..e04c6521dce55 100644
+> > > --- a/drivers/irqchip/Kconfig
+> > > +++ b/drivers/irqchip/Kconfig
+> > > @@ -470,6 +470,15 @@ config IMX_INTMUX
+> > >       help
+> > >         Support for the i.MX INTMUX interrupt multiplexer.
+> > >
+> > > +config IMX_MU_MSI
+> > > +     bool "i.MX MU work as MSI controller"
+> > 
+> > Why bool? Doesn't it also work as a module?
+> 
+> [Frank Li] I remember you said that irq-chip can't be removed. 
+> So I am not sure why need build as module.
 
-     Arnd
+Not being removed doesn't mean it cannot be built as a module and
+loaded on demand. Why should I be forced to have this driver built-in
+if my kernel is used on a variety of systems, only one of them having
+this device?
+
+> > > +
+> > > +struct imx_mu_msi {
+> > > +     spinlock_t                      lock;
+> > > +     raw_spinlock_t                  reglock;
+> > 
+> > Why two locks? Isn't one enough to protect both MSI allocation (which
+> > happens once in a blue moon) and register access?
+> 
+> [Frank Li] Previously your comment, ask me to use raw_spinlock for
+> read\write register access.  I don't think raw_spinlock is good for
+> MSI allocation.
+
+Why wouldn't it be good enough? I'd really like to know.
+
+> 
+> > 
+> > Also, where are these locks initialised?
+> > 
+> 
+> [Frank Li] struct imx_mu_msi is fill zero when allocated.
+> Does it still need additional initialization for spinlock?
+
+Have you heard of lockdep? Or CONFIG_DEBUG_SPINLOCK?  Maybe you should
+try it.
+
+> > > +     if (!pdev)
+> > > +             return -ENODEV;
+> > 
+> > How can that happen?
+> > 
+> [Frank Li] Not sure, many driver check as it. 
+
+And? Just because someone does something pointless, you have to
+imitate them?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

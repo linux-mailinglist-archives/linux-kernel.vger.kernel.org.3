@@ -2,506 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79405B11E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 03:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBD65B11EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 03:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiIHBLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 21:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S229623AbiIHBMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 21:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiIHBK7 (ORCPT
+        with ESMTP id S230407AbiIHBMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 21:10:59 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2409F77F;
-        Wed,  7 Sep 2022 18:10:44 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id EF1F95801B3;
-        Wed,  7 Sep 2022 21:10:41 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 07 Sep 2022 21:10:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662599441; x=1662606641; bh=Q9
-        hIHxnztdrv2DGM0OCPF0EfEIaLl1Vb4zaFETp2jBc=; b=loAkZvnd5HfKJq6/AA
-        GuBtz9kINMyRm1mBTpBpF3tOQ4hh9lLscYbv1235Np1SpXXKRjqvfLLwiy97xYuR
-        4BsHMrnJq6PMSncX4l63CNvXwhceC69UKdTFNsGmfVIn0To+xYedDSwd/dmH3FEG
-        jmAZucJiJt5QnPAiEr+oErEVEWiS5OgkayL73ZYl7Wyhp8SB3TTW+Jak8kO7H6+D
-        DMCUPVTlEGxRqE6eTEXFazoVMXdeSSpsNOgZJNKEPeusK+t72wBfBth06fcbVjSX
-        E7qiUEgk9pKxXXUZQeFp67BwOrk4F+hmJ6bQXtloMTIkWkJ4m/A7rOSZwVwTnckr
-        NoGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662599441; x=1662606641; bh=Q9hIHxnztdrv2DGM0OCPF0EfEIaL
-        l1Vb4zaFETp2jBc=; b=zDv52f77k8N+7UfTUeedQOTyTkKg7Yd3L/FPIfaqPKrQ
-        cV1i5GZRJ026Z2njd33uwUnlIbcK+d6EmDfUCTP/7yzEOh1IUPYZKTh4xpbGgVnW
-        bI/YAO/buxDkKd3FuBrFrGmF4U/38W0b/KvrVABNwpXanYN7d3KBe+VVROgJatvb
-        bhwbfqqIG2VtVgN3e7hghMbgRpUqpy134BI3cEcNkHkuwBJMaQaf46Iwgu1eVqF4
-        hSZiJCIMiiMXc9tlBqx4AsKX5javeSb5us011DZcOmav15CpjEPq9fmY+UM694Fz
-        UGNXmHvoQv4gjV/iz//iHXuFHhmpopXb5ISCIWd+qw==
-X-ME-Sender: <xms:D0EZY191ykx22sa3eH6qYCga0lxMQJuj16B97IRTtlyzqOgdn-U-MA>
-    <xme:D0EZY5tvMXWyIIzPaoFzF1_XFJ6i4D5Ke9B9EYbY9rKdVJmWzrYtAyFpEqB8nWXnW
-    C0wH7pgtn-zmlRsoBk>
-X-ME-Received: <xmr:D0EZYzAflpQ9SHYHbRne24v4IUMRUm0l2mnZeupWr0HuSs36CF0gdwkRdDFCKNyGB7AD2w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtuddggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:D0EZY5fTE8lZVpB7V8xTRuN8Ys7_xwAKjzJV8d0CEn1C_SfgPr_o6w>
-    <xmx:D0EZY6OFAqs8Xf4YzDaIR_Lpdx0acaKLM5XXiDeyHQ11yzbGPfMoCA>
-    <xmx:D0EZY7n0TSGGg_ECIC9-h3n7rnPgvQHsohEwhsGCBZg20lXZt7KBVg>
-    <xmx:EUEZY97fbsA5PmNBNpF2CPdmBJoUhmNwBcRhKo7kY6f0hGwIF7LvDw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 21:10:39 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 199AE103799; Thu,  8 Sep 2022 04:10:37 +0300 (+03)
-Date:   Thu, 8 Sep 2022 04:10:37 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        Elena Reshetova <elena.reshetova@intel.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220908011037.ez2cdorthqxkerwk@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
- <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
- <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
- <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
+        Wed, 7 Sep 2022 21:12:08 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60050.outbound.protection.outlook.com [40.107.6.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9202C6CDE;
+        Wed,  7 Sep 2022 18:12:05 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=MSL2f4r7bLLhp5RA50ECGMiKNe3A/CPTTN6RiZKOJbolIbrBrW5cSrAX/EehVF5uPmTlThPEsno5AaDe27+dcuDzQz6IFhref3KNudbR9wJKLNJ40HDB0G/meyeeAywNzLyoCtdSI7POiMxAz6CGftgK7m8LUVl93u6VI+Hn1h9SdF1xkitFT0aql0Jic7ZECsdKzo4ARA/WIbJP/SPZZ1FM8Sbd57dSNUirIRDO06rfoUzD7uCI6+MgjpN4B/09Ls1t3+9TDGFUzyfoL278nXy5Qitg5ct30cCHjGR9k8+aQpfesreLAZ04KmPUohhmZClPLoCVY7noGF4q04uNeA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RI5k7oCjJeF2KrlJOww+T0lqpIYcoSNH5kH37hYcCeI=;
+ b=HBb0HRPMHl6dlF16Hs209jIvq0Km1kjWCcHMNETlhnQjiQWCQSCglnw/txKcxvxDbkNTUSUA0YzEKprTl0w9k3I7DojJxGUNKvboeNpDdHKPmaYqkPUqhauXq84k2JgKe1wJOzFOV9zyNtFsQ2yhcM5Gkl5S4Y4v6y8jOIlmShMgJ3jUSio+SBjdiB5BjUpa9zIjEa+s2F+c9XSH+H3SUnDT1rsRNon+VtyjgjBdkL3bs/upRFnjUM2uXiY690alQc+TTA+P8OLvnNM4tOiTUKGgEImI9Nit0PtaboBThVMMTl4KPFKIDpN1GuZslinC2bq2RElWMk5BndCLdMT8eA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
+ oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RI5k7oCjJeF2KrlJOww+T0lqpIYcoSNH5kH37hYcCeI=;
+ b=WVjUNTbDIkJr5MforGoVa6kqdFlIjV2ZKfigW8iWE6M0Cp6a+X9aNxR8Y+/aGZXXfPrKWu1sG/5quf7PDfhDgqyAaixlA3BPfcZKVnsFNrD+/BGQUGI2vj1J0Zxx7OAKm8Ly2eu6Y2uhbBix7S8UmNH8eoGEuawk0n4qCNuzPPA=
+Received: from AM6PR01CA0065.eurprd01.prod.exchangelabs.com
+ (2603:10a6:20b:e0::42) by PAVPR08MB9507.eurprd08.prod.outlook.com
+ (2603:10a6:102:313::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Thu, 8 Sep
+ 2022 01:12:01 +0000
+Received: from VE1EUR03FT024.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:20b:e0:cafe::55) by AM6PR01CA0065.outlook.office365.com
+ (2603:10a6:20b:e0::42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
+ Transport; Thu, 8 Sep 2022 01:12:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ VE1EUR03FT024.mail.protection.outlook.com (10.152.18.87) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.13 via Frontend Transport; Thu, 8 Sep 2022 01:12:00 +0000
+Received: ("Tessian outbound 6a3290ff1310:v123"); Thu, 08 Sep 2022 01:12:00 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 164c0efe5ba70b0b
+X-CR-MTA-TID: 64aa7808
+Received: from b38283e6ff2a.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id F64BF6A4-04E2-41BF-968F-727A7B8C1D3A.1;
+        Thu, 08 Sep 2022 01:11:54 +0000
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id b38283e6ff2a.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Thu, 08 Sep 2022 01:11:54 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YncUWK6/rP/1aa9OUBy+fFZKFkMWJQWSF8NVjCTodBxRCcaMLx9T68cv//mCx3BtVJ9pmbTSzUhTOzjeEv5Eyc44jJuVEZZvSsPVzkuUgg7C+kGaD+/sQVYMTyzy4lmr8pdxPcMhgXfWP4Op+vFxh9CjWVNcfmigh79n1fpHh2ikdn0cVxipjefA6MQLKwQEDZBJ/kLZzo+fKOrX1jg+xTKx9UIa3CU2PiMqPyo8nBuGggrszFpMqcrSzAupYB1jk+0VO42b2U+f9ExYPSYKaG90fHNuFsyeshN5eFCaTUGUcj5RdNDtE15QOKqy5N0Cotf/fzhOnszvnlKONGpylg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RI5k7oCjJeF2KrlJOww+T0lqpIYcoSNH5kH37hYcCeI=;
+ b=ZxMNbqLriIGqZG1CAo7tjQ7yDTjd+htI5oQXYGVqLJwj9MTPXyozqMw0EzP+sWtOMCFLWfaoecFGs2U3JSDOzLyLRIok12dKB9cIV9lv5BEstzx3dDOOSG8SAsPtUI2O+P/CcONL1clnUPmRZ2k73h7nc0AC0qg4bN+tH3SxC5B98zO8+0OZWLYWGvb2D83FxaQJmd0DHzVju/F2oMDIr4RuSXXmDVfb3QbEudt+6Nt5S5HlZvxEO8x3HBuZ6CEO7zouYMJw+7T6WbdOkyAI1EDlFkx5THMAUZ4F51C7tewogAjHtfpJ258uk7JPS9FDxVwYlyHOFJkiJ6Q+63NK1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RI5k7oCjJeF2KrlJOww+T0lqpIYcoSNH5kH37hYcCeI=;
+ b=WVjUNTbDIkJr5MforGoVa6kqdFlIjV2ZKfigW8iWE6M0Cp6a+X9aNxR8Y+/aGZXXfPrKWu1sG/5quf7PDfhDgqyAaixlA3BPfcZKVnsFNrD+/BGQUGI2vj1J0Zxx7OAKm8Ly2eu6Y2uhbBix7S8UmNH8eoGEuawk0n4qCNuzPPA=
+Received: from DBBPR08MB4538.eurprd08.prod.outlook.com (2603:10a6:10:d2::15)
+ by AM8PR08MB5667.eurprd08.prod.outlook.com (2603:10a6:20b:1d8::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Thu, 8 Sep
+ 2022 01:11:53 +0000
+Received: from DBBPR08MB4538.eurprd08.prod.outlook.com
+ ([fe80::c426:e28d:64d9:9d0f]) by DBBPR08MB4538.eurprd08.prod.outlook.com
+ ([fe80::c426:e28d:64d9:9d0f%7]) with mapi id 15.20.5588.018; Thu, 8 Sep 2022
+ 01:11:53 +0000
+From:   Justin He <Justin.He@arm.com>
+To:     "Kani, Toshi" <toshi.kani@hpe.com>, Len Brown <lenb@kernel.org>,
+        James Morse <James.Morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>
+CC:     Ard Biesheuvel <ardb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        nd <nd@arm.com>
+Subject: RE: [PATCH v5 5/8] EDAC/ghes: Make ghes_edac a proper module to
+ remove the dependency on ghes
+Thread-Topic: [PATCH v5 5/8] EDAC/ghes: Make ghes_edac a proper module to
+ remove the dependency on ghes
+Thread-Index: AQHYwTvHuK7oTkH+CUWEEqKBXV9tH63UsicAgAAKjyA=
+Date:   Thu, 8 Sep 2022 01:11:52 +0000
+Message-ID: <DBBPR08MB4538E77A2E291EB869A5A26CF7409@DBBPR08MB4538.eurprd08.prod.outlook.com>
+References: <20220905152439.77770-1-justin.he@arm.com>
+ <20220905152439.77770-6-justin.he@arm.com>
+ <MW4PR84MB184996C9B94E6F5DA3EBB11E82409@MW4PR84MB1849.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <MW4PR84MB184996C9B94E6F5DA3EBB11E82409@MW4PR84MB1849.NAMPRD84.PROD.OUTLOOK.COM>
+Accept-Language: en-US, zh-CN
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-MS-Office365-Filtering-Correlation-Id: 85aec2cf-1606-461d-436c-08da91372256
+x-ms-traffictypediagnostic: AM8PR08MB5667:EE_|VE1EUR03FT024:EE_|PAVPR08MB9507:EE_
+x-checkrecipientrouted: true
+nodisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: N064rkQtffRifvQGwdPpplAuHllgVJgny7sEp13XSJZaWnGT09rU9wqhFL/+r94idlRcvihQUMB4iJEiX6goylM28oSts/f0kCTsDA+Arbrkm3lbbseU/y+ZxWTjNhoMFImQ8inD8iAHVyaROTafQjlrvLKsLoT+pq7b6xXGdvF1DCTBjB4TknxLdRydH4ldW9HIW54HVgLU+UpOM7uDos/B/KgiuQ+qE5YWsZBa0UStQ2BvDbG0Dif/5y2VMLRUZkSkZPZXhprU5ArdlkLOBaIHT1xTC+7Gv7Xyw5vteZzLr1VyDUXlCxJp90l5Rf445Q0FFW9ptRWKPTgHbYo71kEoW/DB3oroM7vdZbpoz79f2G0HLfiMvIxq9G7zyt7m8gdv6H/Xspqct5Uc6V+02h2piK+6VkeUFkQcAC8MgVyjpMsLrpUfQaVbcunr2bko/2RWMRNHGoJKNKp0pyPLGe74Ily/IrIYhpV6ieTSWXji3yTxQnM+cmslwzIY+PydMSu/LdtcpAYJYbnC6Je3ImwcCNLr1hafbK5Gbs1oC3O77IrerBCqk7wvDnYkkfY2WLtJFRSqPq6ec5MSDT7Mq92DVL2BT42Y9Ovo3r58YRr6M/J9OskzaGbErE9Ze/Kls+3gFGM9Um1V/niAY0qpQi1x9SxzP0CjSZCYMsvt/9Qw/+aWrmHPwnv/b14a+7Dj3y4mC5RGVBo+lDG1kLEsY2HSrojsNb+NBsD21BArR5bBEzqLO3C36EOGIw6ukGWsHm3FvhtFzV6jClU5ONfHxgMp52e9CpR14M4548GOySg=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB4538.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(366004)(396003)(39860400002)(38070700005)(921005)(76116006)(38100700002)(122000001)(4326008)(54906003)(66946007)(66556008)(66476007)(8676002)(296002)(64756008)(66446008)(316002)(2906002)(55016003)(5660300002)(8936002)(186003)(7416002)(110136005)(7696005)(9686003)(83380400001)(478600001)(71200400001)(6506007)(52536014)(41300700001)(53546011)(26005)(33656002)(86362001);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB5667
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR03FT024.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 1bede179-4c99-4487-89c0-08da91371d7b
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rVpE4OStKVuws9oI6ayFnPTSJRygNMU+Fk81vmNCdGrRRdAvOsxMCHdGQN7uTwNgj3xcCLtVZdE9i7s1QVssLxEqInICY5oO7W0z/KvDwWHNtYWqV0dOgtc/znMSnCpHuFpCkWAMyvTVLTIVKIYPBbIOq2yuU582xMw7NmXllBALrkUjMX/y7GtOto7BBApM3fxm2DNt/FjvWFL3GHY9+gL1T+jj386R1h3AMD03DIu35/jpytz+tgl4734CjvWA2TJ2c+/vwds5akCvi54r1HSxMcqJBah/EaMFbqRke7haw2nseSEnjpaAusNYpQR+NFdYNh3vQ95bEDP73flh4qgL/zITHOldxjwBuY51k+TLPy+oM1EAIifUsB2uiI5Z/ypW8G+7osWpvH8k2yPfQYAcp2EgzdOhWMV3yhGiXxSbTa/Gh/1X7XgvBeiXwVtnmWqVWB1/xEPhN6jqB9Cdk8gYJuQvThgmPpszA0rg3t3F4lGL0QPcJthhU4YNfP6pd3hkP08rG3o7NJefOl1tz0UPSb1pvU4HF77tFyZA47cNIf3UvQGJhxKol3i0ltARzYpgQ32gBmv7ir2Q/8JTKIZI08DLCCKeMK1dLKtBO6G0k1awD3sLqimymTpSw+b2dqGI8abGBKgIoDwzbqgyePcA247lI+BEvunQiVn6JgIilnkaZdVmO6XOtgspjoJ8lcNOBpIbXh0rx/vPlfiLcEuuODg5mFbx/2jy01h8qhokA4tvzUrUMSvQNoulFpwsl7kTDSpBKYOMncKjP5SkX5hQ+C0ZOxmZPCnJAHEd87U=
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(39860400002)(346002)(136003)(40470700004)(46966006)(36840700001)(4326008)(8676002)(83380400001)(70206006)(54906003)(316002)(82310400005)(450100002)(110136005)(86362001)(26005)(70586007)(9686003)(47076005)(33656002)(186003)(336012)(55016003)(40480700001)(52536014)(2906002)(81166007)(356005)(921005)(8936002)(53546011)(7696005)(82740400003)(5660300002)(36860700001)(478600001)(6506007)(40460700003)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 01:12:00.9466
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85aec2cf-1606-461d-436c-08da91372256
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT024.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9507
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 05:24:39PM +0300, Kirill A . Shutemov wrote:
-> On Sat, Aug 20, 2022 at 10:15:32PM -0700, Hugh Dickins wrote:
-> > > I will try next week to rework it as shim to top of shmem. Does it work
-> > > for you?
-> > 
-> > Yes, please do, thanks.  It's a compromise between us: the initial TDX
-> > case has no justification to use shmem at all, but doing it that way
-> > will help you with some of the infrastructure, and will probably be
-> > easiest for KVM to extend to other more relaxed fd cases later.
-> 
-> Okay, below is my take on the shim approach.
-> 
-> I don't hate how it turned out. It is easier to understand without
-> callback exchange thing.
-> 
-> The only caveat is I had to introduce external lock to protect against
-> race between lookup and truncate. Otherwise, looks pretty reasonable to me.
-> 
-> I did very limited testing. And it lacks integration with KVM, but API
-> changed not substantially, any it should be easy to adopt.
-> 
-> Any comments?
-
-Updated version below. Nothing major. Some simplification and cleanups.
-
-diff --git a/include/linux/memfd.h b/include/linux/memfd.h
-index 4f1600413f91..334ddff08377 100644
---- a/include/linux/memfd.h
-+++ b/include/linux/memfd.h
-@@ -3,6 +3,7 @@
- #define __LINUX_MEMFD_H
- 
- #include <linux/file.h>
-+#include <linux/pfn_t.h>
- 
- #ifdef CONFIG_MEMFD_CREATE
- extern long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg);
-@@ -13,4 +14,27 @@ static inline long memfd_fcntl(struct file *f, unsigned int c, unsigned long a)
- }
- #endif
- 
-+struct inaccessible_notifier;
-+
-+struct inaccessible_notifier_ops {
-+	void (*invalidate)(struct inaccessible_notifier *notifier,
-+			   pgoff_t start, pgoff_t end);
-+};
-+
-+struct inaccessible_notifier {
-+	struct list_head list;
-+	const struct inaccessible_notifier_ops *ops;
-+};
-+
-+void inaccessible_register_notifier(struct file *file,
-+				    struct inaccessible_notifier *notifier);
-+void inaccessible_unregister_notifier(struct file *file,
-+				      struct inaccessible_notifier *notifier);
-+
-+int inaccessible_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
-+			 int *order);
-+void inaccessible_put_pfn(struct file *file, pfn_t pfn);
-+
-+struct file *memfd_mkinaccessible(struct file *memfd);
-+
- #endif /* __LINUX_MEMFD_H */
-diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-index 6325d1d0e90f..9d066be3d7e8 100644
---- a/include/uapi/linux/magic.h
-+++ b/include/uapi/linux/magic.h
-@@ -101,5 +101,6 @@
- #define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
- #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
- #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
-+#define INACCESSIBLE_MAGIC	0x494e4143	/* "INAC" */
- 
- #endif /* __LINUX_MAGIC_H__ */
-diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
-index 7a8a26751c23..48750474b904 100644
---- a/include/uapi/linux/memfd.h
-+++ b/include/uapi/linux/memfd.h
-@@ -8,6 +8,7 @@
- #define MFD_CLOEXEC		0x0001U
- #define MFD_ALLOW_SEALING	0x0002U
- #define MFD_HUGETLB		0x0004U
-+#define MFD_INACCESSIBLE	0x0008U
- 
- /*
-  * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
-diff --git a/mm/Makefile b/mm/Makefile
-index 9a564f836403..f82e5d4b4388 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -126,7 +126,7 @@ obj-$(CONFIG_HARDENED_USERCOPY) += usercopy.o
- obj-$(CONFIG_PERCPU_STATS) += percpu-stats.o
- obj-$(CONFIG_ZONE_DEVICE) += memremap.o
- obj-$(CONFIG_HMM_MIRROR) += hmm.o
--obj-$(CONFIG_MEMFD_CREATE) += memfd.o
-+obj-$(CONFIG_MEMFD_CREATE) += memfd.o memfd_inaccessible.o
- obj-$(CONFIG_MAPPING_DIRTY_HELPERS) += mapping_dirty_helpers.o
- obj-$(CONFIG_PTDUMP_CORE) += ptdump.o
- obj-$(CONFIG_PAGE_REPORTING) += page_reporting.o
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 08f5f8304746..1853a90f49ff 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -261,7 +261,8 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
- #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
- #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
- 
--#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-+#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | \
-+		       MFD_INACCESSIBLE)
- 
- SYSCALL_DEFINE2(memfd_create,
- 		const char __user *, uname,
-@@ -283,6 +284,14 @@ SYSCALL_DEFINE2(memfd_create,
- 			return -EINVAL;
- 	}
- 
-+	/* Disallow sealing when MFD_INACCESSIBLE is set. */
-+	if ((flags & MFD_INACCESSIBLE) && (flags & MFD_ALLOW_SEALING))
-+		return -EINVAL;
-+
-+	/* TODO: add hugetlb support */
-+	if ((flags & MFD_INACCESSIBLE) && (flags & MFD_HUGETLB))
-+		return -EINVAL;
-+
- 	/* length includes terminating zero */
- 	len = strnlen_user(uname, MFD_NAME_MAX_LEN + 1);
- 	if (len <= 0)
-@@ -331,10 +340,24 @@ SYSCALL_DEFINE2(memfd_create,
- 		*file_seals &= ~F_SEAL_SEAL;
- 	}
- 
-+	if (flags & MFD_INACCESSIBLE) {
-+		struct file *inaccessible_file;
-+
-+		inaccessible_file = memfd_mkinaccessible(file);
-+		if (IS_ERR(inaccessible_file)) {
-+			error = PTR_ERR(inaccessible_file);
-+			goto err_file;
-+		}
-+
-+		file = inaccessible_file;
-+	}
-+
- 	fd_install(fd, file);
- 	kfree(name);
- 	return fd;
- 
-+err_file:
-+	fput(file);
- err_fd:
- 	put_unused_fd(fd);
- err_name:
-diff --git a/mm/memfd_inaccessible.c b/mm/memfd_inaccessible.c
-new file mode 100644
-index 000000000000..dc79988a49d0
---- /dev/null
-+++ b/mm/memfd_inaccessible.c
-@@ -0,0 +1,219 @@
-+#include "linux/sbitmap.h"
-+#include <linux/memfd.h>
-+#include <linux/pagemap.h>
-+#include <linux/pseudo_fs.h>
-+#include <linux/shmem_fs.h>
-+#include <uapi/linux/falloc.h>
-+#include <uapi/linux/magic.h>
-+
-+struct inaccessible_data {
-+	struct mutex lock;
-+	struct file *memfd;
-+	struct list_head notifiers;
-+};
-+
-+static void inaccessible_notifier_invalidate(struct inaccessible_data *data,
-+				 pgoff_t start, pgoff_t end)
-+{
-+	struct inaccessible_notifier *notifier;
-+
-+	mutex_lock(&data->lock);
-+	list_for_each_entry(notifier, &data->notifiers, list) {
-+		notifier->ops->invalidate(notifier, start, end);
-+	}
-+	mutex_unlock(&data->lock);
-+}
-+
-+static int inaccessible_release(struct inode *inode, struct file *file)
-+{
-+	struct inaccessible_data *data = inode->i_mapping->private_data;
-+
-+	fput(data->memfd);
-+	kfree(data);
-+	return 0;
-+}
-+
-+static long inaccessible_fallocate(struct file *file, int mode,
-+				   loff_t offset, loff_t len)
-+{
-+	struct inaccessible_data *data = file->f_mapping->private_data;
-+	struct file *memfd = data->memfd;
-+	int ret;
-+
-+	if (mode & FALLOC_FL_PUNCH_HOLE) {
-+		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
-+			return -EINVAL;
-+		}
-+	}
-+
-+	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-+	inaccessible_notifier_invalidate(data, offset, offset + len);
-+	return ret;
-+}
-+
-+static const struct file_operations inaccessible_fops = {
-+	.release = inaccessible_release,
-+	.fallocate = inaccessible_fallocate,
-+};
-+
-+static int inaccessible_getattr(struct user_namespace *mnt_userns,
-+				const struct path *path, struct kstat *stat,
-+				u32 request_mask, unsigned int query_flags)
-+{
-+	struct inode *inode = d_inode(path->dentry);
-+	struct inaccessible_data *data = inode->i_mapping->private_data;
-+	struct file *memfd = data->memfd;
-+
-+	return memfd->f_inode->i_op->getattr(mnt_userns, path, stat,
-+					     request_mask, query_flags);
-+}
-+
-+static int inaccessible_setattr(struct user_namespace *mnt_userns,
-+				struct dentry *dentry, struct iattr *attr)
-+{
-+	struct inode *inode = d_inode(dentry);
-+	struct inaccessible_data *data = inode->i_mapping->private_data;
-+	struct file *memfd = data->memfd;
-+	int ret;
-+
-+	if (attr->ia_valid & ATTR_SIZE) {
-+		if (memfd->f_inode->i_size)
-+			return -EPERM;
-+
-+		if (!PAGE_ALIGNED(attr->ia_size))
-+			return -EINVAL;
-+	}
-+
-+	ret = memfd->f_inode->i_op->setattr(mnt_userns,
-+					    file_dentry(memfd), attr);
-+	return ret;
-+}
-+
-+static const struct inode_operations inaccessible_iops = {
-+	.getattr = inaccessible_getattr,
-+	.setattr = inaccessible_setattr,
-+};
-+
-+static int inaccessible_init_fs_context(struct fs_context *fc)
-+{
-+	if (!init_pseudo(fc, INACCESSIBLE_MAGIC))
-+		return -ENOMEM;
-+
-+	fc->s_iflags |= SB_I_NOEXEC;
-+	return 0;
-+}
-+
-+static struct file_system_type inaccessible_fs = {
-+	.owner		= THIS_MODULE,
-+	.name		= "[inaccessible]",
-+	.init_fs_context = inaccessible_init_fs_context,
-+	.kill_sb	= kill_anon_super,
-+};
-+
-+static struct vfsmount *inaccessible_mnt;
-+
-+static __init int inaccessible_init(void)
-+{
-+	inaccessible_mnt = kern_mount(&inaccessible_fs);
-+	if (IS_ERR(inaccessible_mnt))
-+		return PTR_ERR(inaccessible_mnt);
-+	return 0;
-+}
-+fs_initcall(inaccessible_init);
-+
-+struct file *memfd_mkinaccessible(struct file *memfd)
-+{
-+	struct inaccessible_data *data;
-+	struct address_space *mapping;
-+	struct inode *inode;
-+	struct file *file;
-+
-+	data = kzalloc(sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	data->memfd = memfd;
-+	mutex_init(&data->lock);
-+	INIT_LIST_HEAD(&data->notifiers);
-+
-+	inode = alloc_anon_inode(inaccessible_mnt->mnt_sb);
-+	if (IS_ERR(inode)) {
-+		kfree(data);
-+		return ERR_CAST(inode);
-+	}
-+
-+	inode->i_mode |= S_IFREG;
-+	inode->i_op = &inaccessible_iops;
-+	inode->i_mapping->private_data = data;
-+
-+	file = alloc_file_pseudo(inode, inaccessible_mnt,
-+				 "[memfd:inaccessible]", O_RDWR,
-+				 &inaccessible_fops);
-+	if (IS_ERR(file)) {
-+		iput(inode);
-+		kfree(data);
-+	}
-+
-+	file->f_flags |= O_LARGEFILE;
-+
-+	mapping = memfd->f_mapping;
-+	mapping_set_unevictable(mapping);
-+	mapping_set_gfp_mask(mapping,
-+			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
-+
-+	return file;
-+}
-+
-+void inaccessible_register_notifier(struct file *file,
-+				    struct inaccessible_notifier *notifier)
-+{
-+	struct inaccessible_data *data = file->f_mapping->private_data;
-+
-+	mutex_lock(&data->lock);
-+	list_add(&notifier->list, &data->notifiers);
-+	mutex_unlock(&data->lock);
-+}
-+EXPORT_SYMBOL_GPL(inaccessible_register_notifier);
-+
-+void inaccessible_unregister_notifier(struct file *file,
-+				      struct inaccessible_notifier *notifier)
-+{
-+	struct inaccessible_data *data = file->f_mapping->private_data;
-+
-+	mutex_lock(&data->lock);
-+	list_del(&notifier->list);
-+	mutex_unlock(&data->lock);
-+}
-+EXPORT_SYMBOL_GPL(inaccessible_unregister_notifier);
-+
-+int inaccessible_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
-+			 int *order)
-+{
-+	struct inaccessible_data *data = file->f_mapping->private_data;
-+	struct file *memfd = data->memfd;
-+	struct page *page;
-+	int ret;
-+
-+	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-+	if (ret)
-+		return ret;
-+
-+	*pfn = page_to_pfn_t(page);
-+	*order = thp_order(compound_head(page));
-+	SetPageUptodate(page);
-+	unlock_page(page);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(inaccessible_get_pfn);
-+
-+void inaccessible_put_pfn(struct file *file, pfn_t pfn)
-+{
-+	struct page *page = pfn_t_to_page(pfn);
-+
-+	if (WARN_ON_ONCE(!page))
-+		return;
-+
-+	put_page(page);
-+}
-+EXPORT_SYMBOL_GPL(inaccessible_put_pfn);
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+SGkgS2FuaQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEthbmksIFRv
+c2hpIDx0b3NoaS5rYW5pQGhwZS5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBTZXB0ZW1iZXIgOCwg
+MjAyMiA4OjMxIEFNDQo+IFRvOiBKdXN0aW4gSGUgPEp1c3Rpbi5IZUBhcm0uY29tPjsgTGVuIEJy
+b3duIDxsZW5iQGtlcm5lbC5vcmc+OyBKYW1lcw0KPiBNb3JzZSA8SmFtZXMuTW9yc2VAYXJtLmNv
+bT47IFRvbnkgTHVjayA8dG9ueS5sdWNrQGludGVsLmNvbT47IEJvcmlzbGF2DQo+IFBldGtvdiA8
+YnBAYWxpZW44LmRlPjsgTWF1cm8gQ2FydmFsaG8gQ2hlaGFiIDxtY2hlaGFiQGtlcm5lbC5vcmc+
+Ow0KPiBSb2JlcnQgUmljaHRlciA8cnJpY0BrZXJuZWwub3JnPjsgUm9iZXJ0IE1vb3JlIDxyb2Jl
+cnQubW9vcmVAaW50ZWwuY29tPjsNCj4gUWl1eHUgWmh1byA8cWl1eHUuemh1b0BpbnRlbC5jb20+
+OyBZYXplbiBHaGFubmFtDQo+IDx5YXplbi5naGFubmFtQGFtZC5jb20+OyBKYW4gTHVlYmJlIDxq
+bHVAcGVuZ3V0cm9uaXguZGU+OyBLaHVvbmcNCj4gRGluaCA8a2h1b25nQG9zLmFtcGVyZWNvbXB1
+dGluZy5jb20+DQo+IENjOiBBcmQgQmllc2hldXZlbCA8YXJkYkBrZXJuZWwub3JnPjsgbGludXgt
+YWNwaUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGxp
+bnV4LWVkYWNAdmdlci5rZXJuZWwub3JnOyBkZXZlbEBhY3BpY2Eub3JnOw0KPiBSYWZhZWwgSiAu
+IFd5c29ja2kgPHJhZmFlbEBrZXJuZWwub3JnPjsgU2h1YWkgWHVlDQo+IDx4dWVzaHVhaUBsaW51
+eC5hbGliYWJhLmNvbT47IEphcmtrbyBTYWtraW5lbiA8amFya2tvQGtlcm5lbC5vcmc+Ow0KPiBs
+aW51eC1lZmlAdmdlci5rZXJuZWwub3JnOyBuZCA8bmRAYXJtLmNvbT4NCj4gU3ViamVjdDogUkU6
+IFtQQVRDSCB2NSA1LzhdIEVEQUMvZ2hlczogTWFrZSBnaGVzX2VkYWMgYSBwcm9wZXIgbW9kdWxl
+IHRvDQo+IHJlbW92ZSB0aGUgZGVwZW5kZW5jeSBvbiBnaGVzDQo+IA0KPiBPbiBNb25kYXksIFNl
+cHRlbWJlciA1LCAyMDIyIDk6MjUgQU0sIEppYSBIZSB3cm90ZToNCj4gPiAtdm9pZCBnaGVzX2Vk
+YWNfdW5yZWdpc3RlcihzdHJ1Y3QgZ2hlcyAqZ2hlcykNCj4gPiArc3RhdGljIHZvaWQgZ2hlc19l
+ZGFjX3VucmVnaXN0ZXIoc3RydWN0IGdoZXMgKmdoZXMpDQo+ID4gIHsNCj4gPiAgCXN0cnVjdCBt
+ZW1fY3RsX2luZm8gKm1jaTsNCj4gPiAgCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQo+ID4NCj4gPiAt
+CWlmICghZ2hlc19lZGFjX2ZvcmNlX2VuYWJsZSkNCj4gPiAtCQlyZXR1cm47DQo+ID4gLQ0KPiAN
+Cj4gSSBhbSBub3QgZmFtaWxpYXIgd2l0aCB0aGlzIG9yaWdpbmFsIGNoZWNrLiAgQXNzdW1pbmcg
+aXQgaXMgc2FmZSB0byBkZWxldGUgaXQgbm93DQo+IChhcyB5b3UgbWVudGlvbmVkIGluIG90aGVy
+IGVtYWlsIHcvbyBkZXNjcmlwdGlvbiksIEkgc3VnZ2VzdCBhZGRpbmcgc29tZQ0KPiBkZXNjcmlw
+dGlvbiB0byB0aGUgY29tbWl0IGxvZy4NCj4gDQpUaGFua3MsIHdpbGwgZG8NCkkndmUgdGVzdGVk
+IHRoZSBpbnNtb2Qvcm1tb2QgbXVsdGlwbGUgdGltZXMgb24gQXJtIGhvc3QuDQoNCkkgd2lsbCB3
+YWl0IGZvciBvdGhlcnMnIGNvbW1lbnRzIGZvciBhIHdoaWxlIGJlZm9yZSBzZW5kaW5nIHRoZSBu
+ZXcgdmVyc2lvbi4NCj4gQXQgaGlnaC1sZXZlbCwgdGhlIHBhdGNoIGxvb2tzIGdvb2QgdG8gbWUu
+DQo+IEFja2VkLWJ5OiBUb3NoaSBLYW5pIDx0b3NoaS5rYW5pQGhwZS5jb20+DQoNClRoYW5rcyBh
+IGxvdCBmb3IgdGhlIGhlbHAg8J+Yig0KDQotLQ0KQ2hlZXJzLA0KSnVzdGluIChKaWEgSGUpDQo=

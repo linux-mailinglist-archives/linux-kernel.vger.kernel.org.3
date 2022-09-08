@@ -2,114 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218535B251D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3955B251E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiIHRrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S231790AbiIHRrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbiIHRqi (ORCPT
+        with ESMTP id S231749AbiIHRqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:46:38 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59483EB2FC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:46:13 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id x3so1155761qkn.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:46:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=EMErwM6jy216ZWxEVAGeIf0QWKItxFlC4co4l/8Yna4=;
-        b=uOrU3gpDY5vRQn8URLN+aN1Lxs8MOGftfB6BfIzx5RhM8yUH1bArziM7df1dc0zWWX
-         iod1NgnoU2cDaWtUh+77PGn7Urja7IizhggTLU0TQVUAJsn2l+JlZ3TFcDefaEuvACrK
-         D0pnl1NsXQOVNw4vzhrGmCddDq3O5Ugw9+QbI0EpressHNtLSDAzZjGhh18oDAKEXUGe
-         QOzOPng/aApcWDB8wmO20wQB+onBiXjvUkvOoG9k0Whw6s3y5z3NdJMre4LD8USEf3+F
-         Mgg5ssvBEFKBHhoJhf/Vp9RTyvuVCXh9PJDRCBBW2M46T+qcnK40pMsFAETROy7jmr3W
-         RSgg==
-X-Gm-Message-State: ACgBeo0KdXLiq/OooF8Q4jEaeaZxdRLPy71Y6DroJKWefYov0U9swFfz
-        uK0DStrSXT6isMAlqskQPOD+xN6PR0LMGw==
-X-Google-Smtp-Source: AA6agR71Quoop2CoUCxzjPLcDuhnLhaoVbrz3nVJm838z4yMAK1AdElZWqeyiXmCjv9g41laL0Ethw==
-X-Received: by 2002:a05:620a:1904:b0:6b8:9cfd:2b24 with SMTP id bj4-20020a05620a190400b006b89cfd2b24mr7459189qkb.489.1662659171786;
-        Thu, 08 Sep 2022 10:46:11 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id r9-20020a05620a298900b006b919c6749esm18744091qkp.91.2022.09.08.10.46.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 10:46:11 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id g5so27522020ybg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:46:10 -0700 (PDT)
-X-Received: by 2002:a25:8247:0:b0:6a9:443a:cc0b with SMTP id
- d7-20020a258247000000b006a9443acc0bmr8638582ybn.89.1662659170630; Thu, 08 Sep
- 2022 10:46:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220908125401.28130-1-wangjianli@cdjrlc.com> <514c7366cc8e78face3094a66bb2c4bf030f9432.camel@sipsolutions.net>
-In-Reply-To: <514c7366cc8e78face3094a66bb2c4bf030f9432.camel@sipsolutions.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 8 Sep 2022 19:45:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXtPREdgoXK4wyBJiZmubDtsT5Cjjn44MzGVnpu_Ph=YQ@mail.gmail.com>
-Message-ID: <CAMuHMdXtPREdgoXK4wyBJiZmubDtsT5Cjjn44MzGVnpu_Ph=YQ@mail.gmail.com>
-Subject: Re: [PATCH] um/kernel: fix repeated words in comments
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     wangjianli <wangjianli@cdjrlc.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 13:46:47 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 061BE63E2;
+        Thu,  8 Sep 2022 10:46:44 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,300,1654527600"; 
+   d="scan'208";a="132135180"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 09 Sep 2022 02:46:43 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3B68C400C9E6;
+        Fri,  9 Sep 2022 02:46:39 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] thermal/core: Add a check before calling set_trip_temp()
+Date:   Thu,  8 Sep 2022 18:46:10 +0100
+Message-Id: <20220908174610.7837-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 2:56 PM Johannes Berg <johannes@sipsolutions.net> wrote:
-> On Thu, 2022-09-08 at 20:54 +0800, wangjianli wrote:
-> > Delete the redundant word 'in'.
-> >
-> > Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> > ---
-> >  arch/um/kernel/physmem.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/um/kernel/physmem.c b/arch/um/kernel/physmem.c
-> > index e7c7b53a1435..91485119ae67 100644
-> > --- a/arch/um/kernel/physmem.c
-> > +++ b/arch/um/kernel/physmem.c
-> > @@ -169,7 +169,7 @@ __uml_setup("iomem=", parse_iomem,
-> >  );
-> >
-> >  /*
-> > - * This list is constructed in parse_iomem and addresses filled in in
-> > + * This list is constructed in parse_iomem and addresses filled in
-> >   * setup_iomem, both of which run during early boot.  Afterwards, it's
-> >
-> Fine, I guess, but honestly - that sentence doesn't parse well either
+The thermal driver [0] for Renesas RZ/G2L SoC does not implement
+set_trip_temp() callback but has trips commit 9326167058e8
+("thermal/core: Move set_trip_temp ops to the sysfs code") changed
+the behaviour which causes the below panic when trying to set the
+trip temperature:
 
-Not fine, the repeated "in" is correct.
-Q: "Where are addresses filled in?"
-A: "In setup_iomem".
+root@smarc-rzg2l:~# echo 51000 > /sys/class/thermal/thermal_zone0/trip_point_0_temp
+[   92.461521] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[   92.470958] Mem abort info:
+[   92.474311]   ESR = 0x0000000086000004
+[   92.478546]   EC = 0x21: IABT (current EL), IL = 32 bits
+[   92.484290]   SET = 0, FnV = 0
+[   92.487693]   EA = 0, S1PTW = 0
+[   92.491153]   FSC = 0x04: level 0 translation fault
+[   92.496461] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004e885000
+[   92.503736] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[   92.510869] Internal error: Oops: 86000004 [#3] PREEMPT SMP
+[   92.516556] CPU: 0 PID: 290 Comm: sh Tainted: G      D            6.0.0-rc4-next-20220906-arm64-renesas-00124-g84633c87c5f6-dirty #509
+[   92.528814] Hardware name: Renesas SMARC EVK based on r9a07g044l2 (DT)
+[   92.535441] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   92.542516] pc : 0x0
+[   92.544764] lr : trip_point_temp_store+0x84/0x140
+[   92.549582] sp : ffff80000a92bc10
+[   92.552961] x29: ffff80000a92bc10 x28: ffff00000d8a45c0 x27: 0000000000000000
+[   92.560249] x26: 0000000000000000 x25: ffff8000082b53e8 x24: ffff00000eaffc20
+[   92.567532] x23: ffff80000a92bd68 x22: ffff00000d3e0f80 x21: 0000000000000006
+[   92.574814] x20: ffff800009149000 x19: ffff00000b8ab000 x18: 0000000000000000
+[   92.582097] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaab028cdee0
+[   92.589378] x14: 0000000000000000 x13: 0000000000000000 x12: ffff80000a92bbd0
+[   92.596659] x11: ffff00000d3e0f80 x10: ffff800009149eb8 x9 : 000000000000000a
+[   92.603940] x8 : 00000000ffffffc9 x7 : 0000000000000005 x6 : 000000000000002a
+[   92.611220] x5 : 000000000000c738 x4 : 00000000ffffffd3 x3 : 0000000000000000
+[   92.618500] x2 : 000000000000c738 x1 : 0000000000000000 x0 : ffff00000b8ab000
+[   92.625781] Call trace:
+[   92.628282]  0x0
+[   92.630176]  dev_attr_store+0x14/0x28
+[   92.633935]  sysfs_kf_write+0x4c/0x70
+[   92.637681]  kernfs_fop_write_iter+0x160/0x1e0
+[   92.642213]  vfs_write+0x474/0x540
+[   92.645703]  ksys_write+0x68/0xf8
+[   92.649100]  __arm64_sys_write+0x18/0x20
+[   92.653111]  invoke_syscall+0x40/0xf8
+[   92.656866]  el0_svc_common.constprop.3+0x88/0x110
+[   92.661758]  do_el0_svc+0x20/0x78
+[   92.665158]  el0_svc+0x3c/0x90
+[   92.668291]  el0t_64_sync_handler+0x90/0xb8
+[   92.672563]  el0t_64_sync+0x148/0x14c
+[   92.676322] Code: bad PC value
+[   92.679453] ---[ end trace 0000000000000000 ]---
+/bin/start_getty: line 40:   290 Segmentation fault      ${setsid:-} ${getty} -L $1 $2 $3
 
-> way. Might be worth addressing that at the same time...
+Poky (Yocto Project Reference Distro) 3.2.1 smarc-rzg2l ttySC0
 
-addresses are filled in?
+smarc-rzg2l login:
 
-General note: please stop submitting these patches for auto-detected
-repeated words.  There are too many false positives.
-Thanks!
+This patch fixes the above issue by adding a check to see if
+set_trip_temp() callback is implemented before calling it.
 
-Gr{oetje,eeting}s,
+[0] drivers/thermal/rzg2l_thermal.c
 
-                        Geert
+Fixes: 9326167058e8 ("thermal/core: Move set_trip_temp ops to the sysfs code")
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Note: Patch applies on top of [0].
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+---
+ drivers/thermal/thermal_sysfs.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 78c5841bdfae..ec495c7dff03 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
+ 	if (kstrtoint(buf, 10, &temperature))
+ 		return -EINVAL;
+ 
+-	ret = tz->ops->set_trip_temp(tz, trip, temperature);
+-	if (ret)
+-		return ret;
++	if (tz->ops->set_trip_temp) {
++		ret = tz->ops->set_trip_temp(tz, trip, temperature);
++		if (ret)
++			return ret;
++	}
+ 
+ 	if (tz->trips)
+ 		tz->trips[trip].temperature = temperature;
+-- 
+2.25.1
+

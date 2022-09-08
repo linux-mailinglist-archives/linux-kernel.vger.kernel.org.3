@@ -2,52 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C475B1E0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F5C5B1DF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiIHNJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        id S232130AbiIHNHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiIHNJY (ORCPT
+        with ESMTP id S231549AbiIHNHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:09:24 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F8FB959D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:09:19 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MNfVv31CBz14QPc;
-        Thu,  8 Sep 2022 21:05:27 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 21:09:17 +0800
-Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 21:09:15 +0800
-From:   Zenghui Yu <yuzenghui@huawei.com>
-To:     <kvmarm@lists.cs.columbia.edu>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <maz@kernel.org>, <james.morse@arm.com>,
-        <alexandru.elisei@arm.com>, <suzuki.poulose@arm.com>,
-        <oliver.upton@linux.dev>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <wanghaibin.wang@huawei.com>,
-        Zenghui Yu <yuzenghui@huawei.com>
-Subject: [PATCH] KVM: arm64: Use kmemleak_free_part_phys() to unregister hyp_mem_base
-Date:   Thu, 8 Sep 2022 21:06:59 +0800
-Message-ID: <20220908130659.2021-1-yuzenghui@huawei.com>
-X-Mailer: git-send-email 2.23.0.windows.1
+        Thu, 8 Sep 2022 09:07:14 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35BAC00E1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:07:07 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id w8so27559169lft.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=5u6/MtXpxn1tTwAaduJUsG0IZt/fBpU15ZKPc1fiE2o=;
+        b=ehPfB6s0nVoR+tfYmVzHTZew8S0nkhf/njyDNfgALVDMbGOdgHuGGmQui0Pd7WnIsF
+         I3JDjrelF0pvS8dBTeBTtCZc8FneI1LHcuAFJCg8RicNTf6nRpUjcfWcM0AR0EpgScdJ
+         yvtWWmj6+anIcTY/ll1vMJZV+kHOAn+Bso7lm/mzGAZKtTDAdHRmZzAglSa9AOo/5Lgv
+         ftsdKfEsM8lFNMy8ljTbmhzHftdY9nEWVi0dkpR1/FoN2XMM3756dODbS4srP5aCoeko
+         JN0omm9q5QGOZhll2wwXkOHiCqv66gb6+/Ad+QJz5I62NEGPizwF0b+PJmcqGwlIHj4I
+         JExA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5u6/MtXpxn1tTwAaduJUsG0IZt/fBpU15ZKPc1fiE2o=;
+        b=Au2XoW3Z0TkcvD7Y6tJIcoE5uPZR16nGYnMtDbYrDQOnAmA0RKb4Kcoghwt00FTik5
+         rjwbuHHiGA9s4cyHLmosEorm61xpLbXJDMd5+gYyelAqltVCNLQL88I65eyd/VaM6jJx
+         bbLsuuEScj7KYBzi4odvXcr0B8ECJ8wY6mst2f9MTagZOvFIibQJ8Mr0mp1D5y+96bfE
+         usw+wtoaKNmlArJ99JbdAuYZKoaC8UKZlJIvBt+mXi5R8dz2OiTr+wjYSSQy4VycAaqL
+         iSPcsBX27mptgufhP470Id3d/SKh/n7QsONpmBlrB5/ioemDUYvoYpHTG4Vr6LGGbmX9
+         L/qA==
+X-Gm-Message-State: ACgBeo3zedByMEil1Wcze5DDNFBQfZQY6qGUJt9MD3kaZ1MrIwVe8eJ1
+        8+O7i6DtZ8n6nz1E3ReBI0tE545tZK4qBg==
+X-Google-Smtp-Source: AA6agR6wXnCQ6Vkqjjc03U6QxWxuJlZ7Fdfx0r4tDx4eRfk3Kfg7iqmZkdEZRBaoTN09hgyUFzPdFQ==
+X-Received: by 2002:a05:6512:10d0:b0:494:7811:e673 with SMTP id k16-20020a05651210d000b004947811e673mr2559502lfg.400.1662642426042;
+        Thu, 08 Sep 2022 06:07:06 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a25-20020a196619000000b00497cb9f95a0sm319728lfc.51.2022.09.08.06.07.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 06:07:05 -0700 (PDT)
+Message-ID: <603072dc-3595-ed54-53de-e88a0579d78f@linaro.org>
+Date:   Thu, 8 Sep 2022 15:07:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.185.179]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/6] dt-bindings: mediatek: modify VDOSYS0 mmsys device
+ tree Documentations for MT8188
+Content-Language: en-US
+To:     "nathan.lu" <nathan.lu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, wsd_upstream@mediatek.com,
+        lancelot.wu@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220906084449.20124-1-nathan.lu@mediatek.com>
+ <20220906084449.20124-3-nathan.lu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220906084449.20124-3-nathan.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,35 +96,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit 0c24e061196c ("mm: kmemleak: add rbtree and store physical
-address for objects allocated with PA"), kmemleak started to put the
-objects allocated with physical address onto object_phys_tree_root tree.
-The kmemleak_free_part() therefore no longer worked as expected on
-physically allocated objects (hyp_mem_base in this case) as it attempted to
-search and remove things in object_tree_root tree.
+On 06/09/2022 10:44, nathan.lu wrote:
+> From: Nathan Lu <nathan.lu@mediatek.com>
+> 
+> modify VDOSYS0 mmsys device tree Documentations for MT8188.
 
-Fix it by using kmemleak_free_part_phys() to unregister hyp_mem_base. This
-fixes an immediate crash when booting a KVM host in protected mode with
-kmemleak enabled.
 
-Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
----
- arch/arm64/kvm/arm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 09e726711631..951070c4831d 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -2114,7 +2114,7 @@ static int finalize_hyp_mode(void)
- 	 * at, which would end badly once inaccessible.
- 	 */
- 	kmemleak_free_part(__hyp_bss_start, __hyp_bss_end - __hyp_bss_start);
--	kmemleak_free_part(__va(hyp_mem_base), hyp_mem_size);
-+	kmemleak_free_part_phys(hyp_mem_base, hyp_mem_size);
- 	return pkvm_drop_host_privileges();
- }
- 
--- 
-2.33.0
 
+Best regards,
+Krzysztof

@@ -2,78 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40765B1CA5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFAA5B1CA9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiIHMUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S231631AbiIHMVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbiIHMUq (ORCPT
+        with ESMTP id S231612AbiIHMVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:20:46 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F215CD502
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:20:45 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id q21so13186275lfo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 05:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ZlfvZ8tQr5gNlUoouZ3I9uNRBlKistdcE0MDcCmrbq4=;
-        b=lYk5Cwl1ThhWYFUC/pQfIp7A8QMyj8x/zUm/1s/COaudKrgFe5IPBhLNuWG5Trg0Jn
-         MJOfvY8J+XqxwZDTDPF0gBV3hip+vFdnX32JaOD/turJT3vyHK5L5gC2XPudecHwH9P5
-         VyM6NaGK+XvOVmnuFVl8rJoWLYCfOYHdv6JwZb/TMZtcLGbiqV6stEmh+WLC9y7rysJr
-         +q8KF7RUh8epOBMfdNi+/Eb83XferTCf7HToUMIhHYuyVO6ANib62PhMfHJnzSEq1Qpf
-         t281+Bfhq80x511FOMO/LYUxSLLK7WJZOKKy3AumgJpIU/qtPmngdLN+NRnmddWrvAWL
-         Gk/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ZlfvZ8tQr5gNlUoouZ3I9uNRBlKistdcE0MDcCmrbq4=;
-        b=t27EX9eaCA2bnejYx5P562PzGy5uTEzVyO2mz4j2zctfbJ0hYcNOGIMcVGPwD4kPSY
-         KgQ4QBH6yHffm+HcInIWEljDDdgtx5w97B9R5IsCD6TWgFZBauu9ilE/hQ95QszwypOw
-         eY39er1/M0SYc03ZndDWzWh62iKPE8jIp746Y5LnLksGQCNpwiv9xpgZTTMoFwYtO5mK
-         k7caMoFs3PgCBnMvY6l65E4vKULLVUxdJACLQR+Q9l8fSyW1n+cJiH7zhS7c51CsPXUW
-         n3BqeJAPRI8bmElyaz0JX2cS8ly0R24v+uR16cwrfoYJrstHmfdnvt4L3F3ickQLN5WL
-         xFjg==
-X-Gm-Message-State: ACgBeo2FFtDuI3Vx/s4a7+ZwJnaxQytogaYgi4fbaXx18eMzHG/j8Gol
-        xT9c7rpajpMWQUaoRggLpW2bV5mp/Kkh+Q==
-X-Google-Smtp-Source: AA6agR7VMqh8oJ3l0AiaXQ9a3lUiXGzxnL5vBOUpqUUZWZrosS4vE1RT8abc3K2o+aleCTQ3rc4TPw==
-X-Received: by 2002:a05:6512:2252:b0:494:7a42:6ba9 with SMTP id i18-20020a056512225200b004947a426ba9mr2558006lfu.273.1662639643696;
-        Thu, 08 Sep 2022 05:20:43 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u10-20020ac258ca000000b0048b0975ac7asm361973lfo.151.2022.09.08.05.20.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 05:20:43 -0700 (PDT)
-Message-ID: <2b81d814-f47a-e548-83dc-b1e38857e8ce@linaro.org>
-Date:   Thu, 8 Sep 2022 14:20:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: sound: ts3a227e: add control of debounce
- times
-Content-Language: en-US
-To:     Astrid Rost <astrid.rost@axis.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     kernel@axis.com,
-        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220907135827.16209-1-astrid.rost@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220907135827.16209-1-astrid.rost@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 8 Sep 2022 08:21:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6C6F5C76
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:21:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2E556CE1F29
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 12:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E690C433D6;
+        Thu,  8 Sep 2022 12:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662639660;
+        bh=R8UfrDpDouHJ1MsY5QXY59Z1WV4i3w4cWc+dtHbs1MY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lz/ajbyjGBkp2jzECnPQ4kEtZ7GUL/P+H+rks2S8FiXpOj3mQXKMu2mTrTvLfGnNh
+         NTVHSiJIV+8ZKm4cR/bwVQLXBxFb6ngxI7DT7If6FDnwCC5U8jwcaMgAlicnV2tYBH
+         wsJGdSpOmdNoBAKqiJ5158QObMcTMHRvKZ+2XNJKkpBbu/Hv1APF+lwMXbX1TOr7tA
+         b5CUErdO7Jf9rN/YZakwPDwKi03dZCDXktYRMESMAwKk78Fwt8saCTpJCRenSFhw9C
+         m3aB9LTp2SP160Trd6xxxad44nwi/M0QdxF+3+cEwdMKdnLwT90kOlaOQ88xt6iusD
+         9xpK2aWkYazrg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regmap fixes for v6.0-rc4
+Date:   Thu, 08 Sep 2022 13:20:50 +0100
+Message-Id: <20220908122100.1E690C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,29 +48,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 15:58, Astrid Rost wrote:
-> Add devicetree parameters to control the insertion, release and press
-> debounce times.
-> 
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
-> ---
->  Documentation/devicetree/bindings/sound/ts3a227e.txt | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/ts3a227e.txt b/Documentation/devicetree/bindings/sound/ts3a227e.txt
-> index 21ab45bc7e8f..a4aa4154c54c 100644
-> --- a/Documentation/devicetree/bindings/sound/ts3a227e.txt
-> +++ b/Documentation/devicetree/bindings/sound/ts3a227e.txt
-> @@ -17,6 +17,15 @@ Optional properies:
->        Select 0/1/2/3/4/5/6/7 to specify MICBIAS voltage
->        2.1V/2.2V/2.3V/2.4V/2.5V/2.6V/2.7V/2.8V
->        Default value is "1" (2.2V).
-> + - ti,debounce-release: key release debounce (datasheet section 9.6.7).
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Use standard property units "-ms".
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Anyway new properties cannot be accepted. This has to be converted to DT
-schema (YAML).
+are available in the Git repository at:
 
-Best regards,
-Krzysztof
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-fix-v6.0-rc4
+
+for you to fetch changes up to f5723cfc01932c7a8d5c78dbf7e067e537c91439:
+
+  regmap: spi: Reserve space for register address/padding (2022-08-18 15:02:05 +0100)
+
+----------------------------------------------------------------
+regmap: Fix for v6.0
+
+A fix for how we handle controller constraints on SPI message sizes,
+only impacting systems with SPI controllers with very low limits like
+the AMD controller used in the Steam Deck.
+
+----------------------------------------------------------------
+Cristian Ciocaltea (1):
+      regmap: spi: Reserve space for register address/padding
+
+ drivers/base/regmap/regmap-spi.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)

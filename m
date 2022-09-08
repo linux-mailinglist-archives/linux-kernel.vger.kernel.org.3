@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D045B227C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E291F5B2285
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiIHPgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S231299AbiIHPhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiIHPgP (ORCPT
+        with ESMTP id S231288AbiIHPg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:36:15 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2480EB2D9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:36:11 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id r17so11568312ejy.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:36:11 -0700 (PDT)
+        Thu, 8 Sep 2022 11:36:58 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364DCF9F87
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:36:49 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m1so24964381edb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:36:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=knhMsKK0YzQCQKsiPtIuuMjv+O66fK9juB2+nIAHPk0=;
-        b=KfiYrfk6/8vzQ2y9m2B3d70Ln6jxPro9iQHMcnyBVr51+6I6SfcI70dnJnHWqHCLbE
-         aJ0jmwq7FZVQHflmDW5PlZ8FmTwwZILYAnf4a6PYNrrVqMzFdkKVGrjbC4QxwWgBTkYo
-         /gKG+JxCo++yPZryygU/Hzbxj0P4QZa7oUe0o=
+        bh=xrdt2Am83Q2/xE5e8Mu2ETEx+zDbeqSljE6QTT1gvG0=;
+        b=G0Te9Xax4qhzFqNgN7Wf9BDii2Ft+4lhIjZ1oSLn0xbKxfuhq7YAyuYF2rHp+dHDHz
+         lOvwCVLQkCmnJkDCfSoNLsrotggCNQpN1QfIvTeT0KHp+EAdBmkKmG6eNakRU6U0obDw
+         /9L3PKD5T/APWa7bq8F+MmMlHgtzZRWjEV/vE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=knhMsKK0YzQCQKsiPtIuuMjv+O66fK9juB2+nIAHPk0=;
-        b=3aiVeGZ+18Lnb22GF8//pUmOdU+tIOQfcT0HJ2AuqeRr086hhp8JW5FO8BQLyiSdmm
-         aLvTcBD2lLjqfcOiDvZwGLyO3iKPvSKf5lknjHJJ4q4m7HIBWmgKEGhuVE/02GS2rhQO
-         gpkzXVCZgibL1flgw5OzfWt7gGbBqdu5esOpzPmsBJ+Xi8qK1Q7sIjJjqOcaNWaRRNcd
-         PEtSlBb0AK2y6v6smZ0gvotBjVDNTHbgTnvHlfPfKKnhahBftGt+csdPpI2Etsiv/lEc
-         UYIjPUHpbqnG11vsbguGVtlARcfAs71HWI5+bFNw7fetw/ilNCX2v1freC25UjmknZ7R
-         A9BA==
-X-Gm-Message-State: ACgBeo2Eu2WzgaYFPMMGwWsHekVlThQGURNc5QvEmsgDT/hIpf6t2d0h
-        SuKEwQ7RwQvAXrRYKr7ly15xNNYlfh4YUw8msTo=
-X-Google-Smtp-Source: AA6agR7RJ1KQQ0WYQN+61AvMDcT5XjJQv6Ny8RAsnA0xc2GbtgLWkeCke3oMVQ7jv8QYintkfO2pJw==
-X-Received: by 2002:a17:907:7ba3:b0:776:ff9d:5c2 with SMTP id ne35-20020a1709077ba300b00776ff9d05c2mr1707541ejc.311.1662651370244;
-        Thu, 08 Sep 2022 08:36:10 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id jy5-20020a170907762500b007306d478c62sm1387335ejc.62.2022.09.08.08.36.08
+        bh=xrdt2Am83Q2/xE5e8Mu2ETEx+zDbeqSljE6QTT1gvG0=;
+        b=nbmUTP0VTEQ2btUFUbJ3InLC4prcgHOHyWFHQVS1g1bgHDweTf6GlPff2PgFhv17Ao
+         JUtyHl/uv9Xx4ZESptp+kLrWzRWf3BTgyc3xvp0K011aDD6yLw09waBFovOnnmM4vtog
+         kQ0sWndRptbpOU5IwRcrezR3S/BqlpJfoFrMkOFLOtKWcgPib6svKFY62b4Byw7+4iWp
+         BzMFhfsjYWuZsCU/esttRnqAhuBDb4bKLTkSNq8UbFAxvoiYvsuVbV8SgVyUj2cotlqG
+         SBDmxkEJDKrSL43woLJ0cQ3tN0VOYiHrGsnteKP2L1ARwZAAe7oDPZmrPYJJdNNKKhnD
+         1VlA==
+X-Gm-Message-State: ACgBeo1p0gANcKjkexGq7xZMOU3fyk3QGq3g1YWqO2D6R308o5C7afIO
+        nUCk8qvqyqBuRxpUeNsv6Zi6WcNUxRc46SGilig=
+X-Google-Smtp-Source: AA6agR5jOFzL5G5pTIsSZHMIet0RjKd3vacxUIrZSYunvn4lcf2RLtzYYsl+48ClDyOQzG+yel/5RQ==
+X-Received: by 2002:a05:6402:2804:b0:439:83c2:8be2 with SMTP id h4-20020a056402280400b0043983c28be2mr7787816ede.292.1662651406893;
+        Thu, 08 Sep 2022 08:36:46 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05640250d200b00445f9faf13csm12987170edb.72.2022.09.08.08.36.45
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 08:36:08 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id k9so26781369wri.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:36:08 -0700 (PDT)
-X-Received: by 2002:a5d:4d0c:0:b0:228:cd9f:5a4c with SMTP id
- z12-20020a5d4d0c000000b00228cd9f5a4cmr5725454wrt.138.1662651368080; Thu, 08
- Sep 2022 08:36:08 -0700 (PDT)
+        Thu, 08 Sep 2022 08:36:45 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id ay12so11106798wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:36:45 -0700 (PDT)
+X-Received: by 2002:a05:600c:42c3:b0:3a6:431:91bf with SMTP id
+ j3-20020a05600c42c300b003a6043191bfmr2569148wme.188.1662651405144; Thu, 08
+ Sep 2022 08:36:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220908085454.1024167-1-wenst@chromium.org>
-In-Reply-To: <20220908085454.1024167-1-wenst@chromium.org>
+References: <20220908085454.1024167-1-wenst@chromium.org> <20220908085454.1024167-2-wenst@chromium.org>
+In-Reply-To: <20220908085454.1024167-2-wenst@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 8 Sep 2022 08:35:55 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VgyOT0eJ9eqwqaHRw2L7ypsTkiyGeSyqu-rEBURj5TCg@mail.gmail.com>
-Message-ID: <CAD=FV=VgyOT0eJ9eqwqaHRw2L7ypsTkiyGeSyqu-rEBURj5TCg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm/panel-edp: Fix delays for Innolux N116BCA-EA1
+Date:   Thu, 8 Sep 2022 08:36:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wb+mTZ0OuwmqtgaKdeQJ68MN2havUp0ZpNZ=DfXBhThw@mail.gmail.com>
+Message-ID: <CAD=FV=Wb+mTZ0OuwmqtgaKdeQJ68MN2havUp0ZpNZ=DfXBhThw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm/panel-edp: Add Innolux N120ACA-EA1 panel entry
 To:     Chen-Yu Tsai <wenst@chromium.org>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -81,41 +81,33 @@ Hi,
 
 On Thu, Sep 8, 2022 at 1:55 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
 >
-> Commit 52824ca4502d ("drm/panel-edp: Better describe eDP panel delays")
-> clarified the various delays used for eDP panels, tying them to the eDP
-> panel timing diagram.
+> This panel has the same delay timing as N116BCA-EA1 from the same
+> company, which is also the same as delay_200_500_e80_d50.
 >
-> For Innolux N116BCA-EA1, .prepare_to_enable would be:
+> Add an entry for it.
 >
->     t4_min + t5_min + t6_min + max(t7_max, t8_min)
->
-> Since t4_min and t5_min are both 0, the panel can use either .enable or
-> .prepare_to_enable.
->
-> As .enable is better defined, switch to using .enable for this panel.
->
-> Also add .disable = 50, based on the datasheet's t9_min value. This
-> effectively makes the delays the same as delay_200_500_e80_d50.
->
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Fixes: 51d35631c970 ("drm/panel-simple: Add N116BCA-EA1")
 > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 > ---
->  drivers/gpu/drm/panel/panel-edp.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-
-Yup, this looks like a good fix to me. Thanks! I guess that patch
-you're fixing was from a time before I had analyzed the eDP panel
-delays quite so closely.
+>  drivers/gpu/drm/panel/panel-edp.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+> index 65e3a5361c80..15e18a64b03d 100644
+> --- a/drivers/gpu/drm/panel/panel-edp.c
+> +++ b/drivers/gpu/drm/panel/panel-edp.c
+> @@ -1890,6 +1890,7 @@ static const struct edp_panel_entry edp_panels[] = {
+>         EDP_PANEL_ENTRY('B', 'O', 'E', 0x0a5d, &delay_200_500_e50, "NV116WHM-N45"),
+>
+>         EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay, "N116BCA-EA1"),
+> +       EDP_PANEL_ENTRY('C', 'M', 'N', 0x1247, &delay_200_500_e80_d50, "N120ACA-EA1"),
+>
+>         EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140NWF5 RH"),
+>         EDP_PANEL_ENTRY('I', 'V', 'O', 0x854b, &delay_200_500_p2e100, "M133NW4J-R3"),
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-Given how non-controversial these types of patches are, I typically
-just apply them right away so I'll do that shortly. If this upsets
-anyone then please shout and I'll change my behavior. ;-)
+...and landed in drm-misc-next:
 
-I've applied this one to drm-misc-fixes.
-
-8f7115c1923c drm/panel-edp: Fix delays for Innolux N116BCA-EA1
+758d7b3483b6 drm/panel-edp: Add Innolux N120ACA-EA1 panel entry
 
 -Doug

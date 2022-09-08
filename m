@@ -2,90 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554475B29C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2A35B29D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiIHXBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S229838AbiIHXBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiIHXAs (ORCPT
+        with ESMTP id S229808AbiIHXBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:00:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D0882D07;
-        Thu,  8 Sep 2022 16:00:46 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MNvjk2MpSz4xXy;
-        Fri,  9 Sep 2022 09:00:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662678042;
-        bh=qz5Lrx2c2MWmCIq3Hyin3A1WrMqejpf+YarrcGYBbn0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=utB4jikDc4Intsv00aOcxrVAHne534vhEsl19iI+cu3t8SFhNbN+gvwMf1AfG4Dn/
-         NJGY3ag5EXI+Zo6vtRDu7pE9w828DkMyhrX4XmUq8ZFFQ8AQU8RdagBR22LGJcQeT8
-         DHrfk7sGngH4uY0jRYRDg92BcGMb30KkIJHKe7DNJDKXdRS/ebmuo7Ti/56fSgUPuY
-         HLcHXW8vPn4qKvA8eOCtkghEMHAMoebqaJp2vyXmkdVvHNo3/ngEA9BDp7Jx39tyhP
-         wwUyUpZMrRTw5XZ3JOcxTZNs2YmB/wJmSYSKuYODUZCWyGDMwmAgBZ9IKw+VsuDJg6
-         +5aTbXy9pt8nw==
-Date:   Fri, 9 Sep 2022 09:00:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kbuild tree
-Message-ID: <20220909090024.47458048@canb.auug.org.au>
+        Thu, 8 Sep 2022 19:01:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5383882D07;
+        Thu,  8 Sep 2022 16:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662678097; x=1694214097;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MFXBmJ7gfF/wkmTJSQPdplrbzWvYqllVCnJDUiWo50A=;
+  b=Otikuo+C4RZKqivczncfvulWtRcKZNgd5gy3agj9Yi2pjA+1uWgwJZnP
+   svWKQx6tTgTNsX42KgkZjFhmJh9ryU1hSpoxtViyfDh2fJ0NklPOQCT24
+   SkYO23/L0NnTPAaLL331SGBU9w79K1T377yx5uNpg4xD8yKKOOMBekGQ4
+   H+H5NoMW5TvDb8Tx+nuTgTpMNO3GjZyrBjdOagQnGL+ZNsdJy99N82GQF
+   KFxGFlubxV1TGBPdbvb+KYDMbxCf5qnCPguWPA2iPV06X5F5bKtZvszdn
+   xySiCmu3IRVu8zDmgdVO0FsGnGbM2GOjmrvF+wBEvj1+SWuIbiZ799ddS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="383638507"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="383638507"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:01:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="683419761"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Sep 2022 16:01:34 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWQWb-0000PZ-2y;
+        Thu, 08 Sep 2022 23:01:33 +0000
+Date:   Fri, 9 Sep 2022 07:00:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Duke Du <dukedu83@gmail.com>, jdelvare@suse.com,
+        linux@roeck-us.net, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, fran.hsu@quantatw.com,
+        george.hung@quantatw.com, charles.hsu@quantatw.com,
+        duke.du@quantatw.com
+Subject: Re: [PATCH v4] hwmon: Add driver for the TEXAS TPS546D24 Buck
+ Converter.
+Message-ID: <202209090609.0lCP8G6F-lkp@intel.com>
+References: <1662617599-15270-1-git-send-email-Duke.Du@quantatw.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tPggPsWl9sMS8..1Hq4NAsW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662617599-15270-1-git-send-email-Duke.Du@quantatw.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tPggPsWl9sMS8..1Hq4NAsW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Duke,
 
-Hi all,
+I love your patch! Perhaps something to improve:
 
-After merging the kbuild tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.0-rc4 next-20220908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-make[2]: *** No rule to make target 'objtool/objtool'.  Stop.
-make[1]: *** [/home/sfr/next/next/Makefile:1361: tools/objtool/objtool] Err=
-or 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:222: __sub-make] Error 2
+url:    https://github.com/intel-lab-lkp/linux/commits/Duke-Du/hwmon-Add-driver-for-the-TEXAS-TPS546D24-Buck-Converter/20220908-141642
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/92b26ac053d4e2673c22de7d93e91b8efbb3d1bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Duke-Du/hwmon-Add-driver-for-the-TEXAS-TPS546D24-Buck-Converter/20220908-141642
+        git checkout 92b26ac053d4e2673c22de7d93e91b8efbb3d1bb
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
-I have used the kbuild tree from next-20220907 again (with the last 4
-commits reverted).
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---=20
-Cheers,
-Stephen Rothwell
+All warnings (new ones prefixed by >>):
 
---Sig_/tPggPsWl9sMS8..1Hq4NAsW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+>> Documentation/hwmon/tps546d24.rst:4: WARNING: Title underline too short.
 
------BEGIN PGP SIGNATURE-----
+vim +4 Documentation/hwmon/tps546d24.rst
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMadAgACgkQAVBC80lX
-0GxYlgf/WFIvsoLgERjoCYJU6/7AeD3JgNkhwpMiwjvMf+a/rGg8whpxgfwfKEYE
-NC0dPX9BivtM/FQypROMgMEhp6uoMgMA7wx744sG4+kvbftKANJqMiFSRxtph7Kn
-Tot+jLC5GiFRHh6Su2LjVYLuQAvsCJ8qwIwJdUiuAqKj27L9OXODe7z0D4J3/Uyu
-tOhliNiG/3fgbP7YBjI8Xl22+8tKrTXG7qPoRf+kXDUoJZdDB8SjB8/QMYJZyRsf
-vfZyMnVmGiKfTDhOSPz95663zAYUfxXJfB1KQTOjQOXg6hSJU1q3kdCqsZzdTpxV
-wR+b3hLu65kVXGHmp/9tiF+UojN8VQ==
-=KtgH
------END PGP SIGNATURE-----
+     2	
+     3	Kernel driver tps546d24
+   > 4	======================
+     5	
 
---Sig_/tPggPsWl9sMS8..1Hq4NAsW--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

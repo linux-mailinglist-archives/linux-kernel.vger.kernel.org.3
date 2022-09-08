@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC675B1BB9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1BC5B1BBD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiIHLku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S231320AbiIHLl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiIHLkq (ORCPT
+        with ESMTP id S229480AbiIHLl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:40:46 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9CD11CD77
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:40:42 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bq23so27258187lfb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:40:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=qq/g+XZ2JG1ZYrx3xeBVADNTQBoVz4BOIGZJJbEw4f0=;
-        b=heg1JrEV84eY8Gs6IdvBMz1whgCoFw1U50y9XCCyoeV//ROtbYnmpDR47lPPduAt2C
-         gVYC1F9xXKQpIAA+odJPLIbbU6NVBUMthbo5CyvdQ7mpIyYhWfBCh2bBug2lXaYPDhz7
-         Crs216zxWWymg+rluvLHUVEOM1ZfpRD05Z95BjhMkEIabTZowvwYzPlFXCtdln4uhPtn
-         W2cGytNj3DxzUN9MRa30vvk0KawizOMwaWPbb1oI1oDCz+aqx/Ksiwt2iEc6rvq7GEBy
-         1QXm24jCzjQ3kYmNrd0Ky1Ys6JuZON4QZWN9LH6wBs3O0i9oAlBSHO2ewTyNlkpt1PnH
-         uirA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qq/g+XZ2JG1ZYrx3xeBVADNTQBoVz4BOIGZJJbEw4f0=;
-        b=J4Q3Ah1SrMV4GXcnLgf9EwXZEypUch/aLy3l5JQ+GwlN+COYrGslj1Npgha0gpaO5+
-         cBA1LJZNY/hLdmDdq7yCGyfeYOZJHwceBbqSwWkCFiSUrWTPy239XvsNWoqOISVd17kl
-         qXatDMaHW4UXDCytMVsNKL1FBQDE8nAYLQPxUU6Z3i1bGSw+dw0UxFPR/8h6FfIWVBEb
-         PPBXsius4pM8P9cW1mTjDALI6Yt1qiGBsPlMMN+oPv46M3qGZAGMVOTqCq6258Q1TeCb
-         K9qOm/JXDQr9Kt+/t6blCGxe2CufLLnW5m0azTyXn8/Otl7MycdHhYD6LEvp6DU5p6hG
-         K/HQ==
-X-Gm-Message-State: ACgBeo1WJ/KE1orkNHk9UQoT/HSY425cmxEnHHguyxVVeCnNyeTmeVNv
-        I7hOntSOhon6WnpbgfoT90ZlOg==
-X-Google-Smtp-Source: AA6agR4MHJFcXDkMHVXkwOkvsyyAjGenkME1tXoT11nKD0yOsg5Yi8PmifMypUg49w/SLQrIIDavvA==
-X-Received: by 2002:ac2:4429:0:b0:497:a5e9:d14a with SMTP id w9-20020ac24429000000b00497a5e9d14amr2894276lfl.372.1662637241277;
-        Thu, 08 Sep 2022 04:40:41 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 11-20020ac25f4b000000b00492ce573726sm3012704lfz.47.2022.09.08.04.40.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 04:40:40 -0700 (PDT)
-Message-ID: <29d456ed-620c-8dc9-01f0-54f96b670b94@linaro.org>
-Date:   Thu, 8 Sep 2022 13:40:39 +0200
+        Thu, 8 Sep 2022 07:41:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF702129527
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662637314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T398WtTFF5zSugQOFGipjBY5PyVjRUglaOoWYsHIwQE=;
+        b=Pv+f2sZtK0erJJQyVmiAY18uVHO1jDIC0OViSBCDrFP/mP2vf6l9BFrAuVlNxDBCXzplXA
+        ee3iADt2/R///hTMQVLx1lIX6iOWjAoEGsU8L7ftATLlfOORI803zlXtOvADcixD9ZeJvn
+        RkYyZpp3v1AkvgZPYmDRD/9uN7LZr/0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-_SKpC-DeMy2C31IH3WUUCA-1; Thu, 08 Sep 2022 07:41:49 -0400
+X-MC-Unique: _SKpC-DeMy2C31IH3WUUCA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD83018A01AF;
+        Thu,  8 Sep 2022 11:41:48 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.194.14])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 56730C15BB3;
+        Thu,  8 Sep 2022 11:41:48 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id BE2DB18009BE; Thu,  8 Sep 2022 13:41:46 +0200 (CEST)
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH] kvm/x86: reserve bit KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID
+Date:   Thu,  8 Sep 2022 13:41:46 +0200
+Message-Id: <20220908114146.473630-1-kraxel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 2/4] media: dt-bindings: Document Renesas RZ/G2L CRU
- block
-Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220905230406.30801-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220905230406.30801-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220905230406.30801-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,48 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 01:04, Lad Prabhakar wrote:
-> Document the CRU block found on Renesas RZ/G2L (and alike) SoCs.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+The KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID bit hints to the guest
+that the size of the physical address space as advertised by CPUID
+leaf 0x80000008 is actually valid and can be used.
 
-Thank you for your patch. There is something to discuss/improve.
+Unfortunately this is not the case today with qemu.  Default behavior is
+to advertise 40 address bits (which I think comes from the very first x64
+opteron processors).  There are lots of intel desktop processors around
+which support less than that (36 or 39 depending on age), and when trying
+to use the full 40 bit address space on those things go south quickly.
 
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - renesas,r9a07g044-cru       # RZ/G2{L,LC}
-> +          - renesas,r9a07g054-cru       # RZ/V2L
-> +      - const: renesas,rzg2l-cru
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 3
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: image_conv
-> +      - const: image_conv_err
-> +      - const: axi_mst_err
-> +
-> +  clocks:
-> +    items:
-> +      - description: CRU Main clock
-> +      - description: CPU Register access clock
-> +      - description: CRU image transfer clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: vclk
-> +      - const: pclk
-> +      - const: aclk
+This renders the physical address size information effectively useless
+for guests.  This patch paves the way to fix that by adding a hint for
+the guest so it knows whenever the physical address size is usable or
+not.
 
-Drop the "clk" suffixes. Remaining names could be made a bit more readable.
+The plan for qemu is to set the bit when the physical address size is
+valid.  That is the case when qemu is started with the host-phys-bits=on
+option set for the cpu.  Eventually qemu can also flip the default for
+that option from off to on, unfortunately that isn't easy for backward
+compatibility reasons.
 
-> +
-Best regards,
-Krzysztof
+The plan for the firmware is to check that bit and when it is set just
+query and use the available physical address space.  When the bit is not
+set be conservative and try not exceed 36 bits (aka 64G) address space.
+The latter is what the firmware does today unconditionally.
+
+Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+---
+ arch/x86/include/uapi/asm/kvm_para.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/uapi/asm/kvm_para.h b/arch/x86/include/uapi/asm/kvm_para.h
+index 6e64b27b2c1e..115bb34413cf 100644
+--- a/arch/x86/include/uapi/asm/kvm_para.h
++++ b/arch/x86/include/uapi/asm/kvm_para.h
+@@ -37,7 +37,8 @@
+ #define KVM_FEATURE_HC_MAP_GPA_RANGE	16
+ #define KVM_FEATURE_MIGRATION_CONTROL	17
+ 
+-#define KVM_HINTS_REALTIME      0
++#define KVM_HINTS_REALTIME                      0
++#define KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID  1
+ 
+ /* The last 8 bits are used to indicate how to interpret the flags field
+  * in pvclock structure. If no bits are set, all flags are ignored.
+-- 
+2.37.3
+

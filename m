@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73AA5B10B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506FB5B10BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiIGX75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 19:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S230038AbiIHADu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIGX74 (ORCPT
+        with ESMTP id S229551AbiIHADq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 19:59:56 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7574E4DB75
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 16:59:54 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 78so15051295pgb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 16:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Xm8twwbhSCZxaH4aFeYsoFerGkRqg7GnennRIfUkuB4=;
-        b=Nvf/udBBKl35LSP+VeG4z7B+tugFJniX0DKqaCKhWxzl5j3IeduP5Wf4qvFB54Ucjh
-         e3LaiMyfxfFLvoz11EEDHAhxDtgf67gHuKNSvLXp6PaCyjSbu2er0ZlaRdrZjAAJ5SS7
-         RcRJTttFQwcNJBsKwiogM2W+a9No31STFR+7o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Xm8twwbhSCZxaH4aFeYsoFerGkRqg7GnennRIfUkuB4=;
-        b=pb80D+P2DyDkheYFBcZ+xYaEF6Ch8WOK77SRXws0nBhOUIrIaDPhVUAQoQ+3dCtw3I
-         Qji44p3w9pTgXfDXwiA4NBVhAUrGA3BWjl/HM4D86Fi5v7zZ8GEoG2JBkB7SPiYEYdM2
-         f/nKFaV6/OqICxex31fjsYR8U61S+Hg05w+xyyrrg6p8vekoapEtsJs8+0AIc3DzX9ws
-         JnTV1ScOlkrpefYmtnM5dyLtAqivNwgUu18ufoyvwH7GDK60hK9VNg9EbBfDiEjZZ6J2
-         Ya9e3vWHWl9Vspyw1EyvNxgv9Hz0Adql+dJ46yKovE8u6ylHRueoBxqwHDsR2Z2xp1vX
-         46CQ==
-X-Gm-Message-State: ACgBeo35ia3BVHps7BntAGQQym8yzYNIP9NAeJQIJDZFcmYrwyQCT2cO
-        jpssBognA89nOYpW9dk1nijhtY6JTbLozA==
-X-Google-Smtp-Source: AA6agR6e+TA2LHRavyzzo6438GAoeDUBS7zGKy819y+7v9KvwJYGlmxIQ9m86IAP3JhW9ZfqP2YUmQ==
-X-Received: by 2002:a63:886:0:b0:434:8606:ce93 with SMTP id 128-20020a630886000000b004348606ce93mr5447876pgi.281.1662595193850;
-        Wed, 07 Sep 2022 16:59:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n125-20020a634083000000b0042b5095b7b4sm11288669pga.5.2022.09.07.16.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 16:59:53 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 16:59:52 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field
- within 'struct htt_tx_fetch_ind' is less aligned than 'union
- htt_tx_fetch_ind::(anonymous at
- drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct
- htt_tx_fetch_ind' being...
-Message-ID: <202209071657.0A6FF97@keescook>
-References: <202209031855.LVCj2Q6u-lkp@intel.com>
+        Wed, 7 Sep 2022 20:03:46 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDCB8A7FA;
+        Wed,  7 Sep 2022 17:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662595424; x=1694131424;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=URLWQZsCNym3oVouZaO+x+X4zDWx8UYslRszx3tig5E=;
+  b=QQTIfaAMXYib49gGuNLaf9LWjbnzKATpmVSPWBVt72oA/dBibUF23bfk
+   Wm7IpjTmki0rhVcLKBtEzLOkbH6EDm0UD5IjA1kSVgIgZlMDIGmcpv2YG
+   KN/PBQL/epQlmsWaDhABDnmuHgR41hpJVRuBQFRc3VxngyT76v8uYIcrm
+   1ctjW9OlVL+NS2DihSESZLmk0uJcIdryS6IYElBvLBTT73CkUaHWTebJk
+   FD/kW2IkpVokUqvKOfgjYR2069QV5tDyGD/8QBhcQso0bXnsAVg8t8Qt/
+   /U329vW01fE1MH1ZSDLkWAKEAnBxNBUQw6505PPESZsxXXCzG7SLAa6AE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="294609877"
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="294609877"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:03:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="683019230"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Sep 2022 17:03:39 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oW518-00077D-1Z;
+        Thu, 08 Sep 2022 00:03:38 +0000
+Date:   Thu, 8 Sep 2022 08:03:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frank Li <Frank.Li@nxp.com>, maz@kernel.org, tglx@linutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kw@linux.com,
+        bhelgaas@google.com
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org, peng.fan@nxp.com, aisheng.dong@nxp.com,
+        jdmason@kudzu.us, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, kishon@ti.com, lorenzo.pieralisi@arm.com,
+        ntb@lists.linux.dev, lznuaa@gmail.com, imx@lists.linux.dev,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v9 2/4] irqchip: Add IMX MU MSI controller driver
+Message-ID: <202209080757.hQMfrrfm-lkp@intel.com>
+References: <20220907034856.3101570-3-Frank.Li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202209031855.LVCj2Q6u-lkp@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220907034856.3101570-3-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,126 +72,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 06:08:27PM +0800, kernel test robot wrote:
-> Hi Kees,
-> 
-> FYI, the error/warning still remains.
+Hi Frank,
 
-Thanks for the heads-up. This appears unrelated to the treewide change
--- it just became a bit louder. The unaligned access warning was always
-present. "pahole" output shows no changes to struct member offsets nor
-struct sizes.
+I love your patch! Yet something to improve:
 
--Kees
+[auto build test ERROR on jonmason-ntb/ntb-next]
+[also build test ERROR on robh/for-next linus/master v6.0-rc4 next-20220907]
+[cannot apply to tip/irq/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   d895ec7938c431fe61a731939da76a6461bc6133
-> commit: fa7845cfd53f3b1d3f60efa55db89805595bc045 treewide: Replace open-coded flex arrays in unions
-> date:   11 months ago
-> config: arm-randconfig-r031-20220903 (https://download.01.org/0day-ci/archive/20220903/202209031855.LVCj2Q6u-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c55b41d5199d2394dd6cdb8f52180d8b81d809d4)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7845cfd53f3b1d3f60efa55db89805595bc045
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout fa7845cfd53f3b1d3f60efa55db89805595bc045
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from drivers/net/wireless/ath/ath10k/mac.c:8:
->    In file included from drivers/net/wireless/ath/ath10k/mac.h:11:
->    In file included from drivers/net/wireless/ath/ath10k/core.h:18:
->    drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            struct htt_rx_indication_prefix prefix;
->                                            ^
->    drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            struct htt_rx_indication_prefix prefix;
->                                            ^
-> >> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            union {
->            ^
->    drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            union {
->            ^
->    drivers/net/wireless/ath/ath10k/mac.c:5942:22: warning: parameter 'changed_flags' set but not used [-Wunused-but-set-parameter]
->                                        unsigned int changed_flags,
->                                                     ^
->    5 warnings generated.
-> --
->    In file included from drivers/net/wireless/ath/ath10k/debug.c:14:
->    In file included from drivers/net/wireless/ath/ath10k/core.h:18:
->    drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            struct htt_rx_indication_prefix prefix;
->                                            ^
->    drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            struct htt_rx_indication_prefix prefix;
->                                            ^
-> >> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            union {
->            ^
->    drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            union {
->            ^
->    4 warnings generated.
-> --
->    In file included from drivers/net/wireless/ath/ath10k/ce.c:8:
->    In file included from drivers/net/wireless/ath/ath10k/hif.h:11:
->    In file included from drivers/net/wireless/ath/ath10k/core.h:18:
->    drivers/net/wireless/ath/ath10k/htt.h:721:34: warning: field prefix within 'struct htt_rx_indication' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            struct htt_rx_indication_prefix prefix;
->                                            ^
->    drivers/net/wireless/ath/ath10k/htt.h:742:34: warning: field prefix within 'struct htt_rx_indication_hl' is less aligned than 'struct htt_rx_indication_prefix' and is usually due to 'struct htt_rx_indication_hl' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            struct htt_rx_indication_prefix prefix;
->                                            ^
-> >> drivers/net/wireless/ath/ath10k/htt.h:1677:2: warning: field  within 'struct htt_tx_fetch_ind' is less aligned than 'union htt_tx_fetch_ind::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1677:2)' and is usually due to 'struct htt_tx_fetch_ind' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            union {
->            ^
->    drivers/net/wireless/ath/ath10k/htt.h:1815:2: warning: field  within 'struct htt_resp' is less aligned than 'union htt_resp::(anonymous at drivers/net/wireless/ath/ath10k/htt.h:1815:2)' and is usually due to 'struct htt_resp' being packed, which can lead to unaligned accesses [-Wunaligned-access]
->            union {
->            ^
->    drivers/net/wireless/ath/ath10k/ce.c:127:1: warning: unused function 'ath10k_get_ring_byte' [-Wunused-function]
->    ath10k_get_ring_byte(unsigned int offset,
->    ^
->    drivers/net/wireless/ath/ath10k/ce.c:212:1: warning: unused function 'ath10k_ce_shadow_dest_ring_write_index_set' [-Wunused-function]
->    ath10k_ce_shadow_dest_ring_write_index_set(struct ath10k *ar,
->    ^
->    drivers/net/wireless/ath/ath10k/ce.c:449:20: warning: unused function 'ath10k_ce_error_intr_enable' [-Wunused-function]
->    static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
->                       ^
->    7 warnings generated.
-> 
-> 
-> vim +1677 drivers/net/wireless/ath/ath10k/htt.h
-> 
->   1670	
->   1671	struct htt_tx_fetch_ind {
->   1672		u8 pad0;
->   1673		__le16 fetch_seq_num;
->   1674		__le32 token;
->   1675		__le16 num_resp_ids;
->   1676		__le16 num_records;
-> > 1677		union {
->   1678			/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
->   1679			DECLARE_FLEX_ARRAY(__le32, resp_ids);
->   1680			DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
->   1681		};
->   1682	} __packed;
->   1683	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220907-115114
+base:   https://github.com/jonmason/ntb ntb-next
+config: s390-randconfig-s033-20220907 (https://download.01.org/0day-ci/archive/20220908/202209080757.hQMfrrfm-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/c1f079e633c10b4f2f1f3c8f52e447d13fda8ddb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Frank-Li/PCI-EP-driver-support-MSI-doorbell-from-host/20220907-115114
+        git checkout c1f079e633c10b4f2f1f3c8f52e447d13fda8ddb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: drivers/irqchip/irq-imx-mu-msi.o: in function `imx_mu_of_init':
+>> drivers/irqchip/irq-imx-mu-msi.c:316: undefined reference to `devm_platform_ioremap_resource_byname'
+
+
+vim +316 drivers/irqchip/irq-imx-mu-msi.c
+
+   288	
+   289	static int __init imx_mu_of_init(struct device_node *dn,
+   290					 struct device_node *parent,
+   291					 const struct imx_mu_dcfg *cfg
+   292					)
+   293	{
+   294		struct platform_device *pdev = of_find_device_by_node(dn);
+   295		struct device_link *pd_link_a;
+   296		struct device_link *pd_link_b;
+   297		struct imx_mu_msi *msi_data;
+   298		struct resource *res;
+   299		struct device *pd_a;
+   300		struct device *pd_b;
+   301		struct device *dev;
+   302		int ret;
+   303		int irq;
+   304	
+   305		if (!pdev)
+   306			return -ENODEV;
+   307	
+   308		dev = &pdev->dev;
+   309	
+   310		msi_data = devm_kzalloc(&pdev->dev, sizeof(*msi_data), GFP_KERNEL);
+   311		if (!msi_data)
+   312			return -ENOMEM;
+   313	
+   314		msi_data->cfg = cfg;
+   315	
+ > 316		msi_data->regs = devm_platform_ioremap_resource_byname(pdev, "processor-a-side");
+   317		if (IS_ERR(msi_data->regs)) {
+   318			dev_err(&pdev->dev, "failed to initialize 'regs'\n");
+   319			return PTR_ERR(msi_data->regs);
+   320		}
+   321	
+   322		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "processor-b-side");
+   323		if (!res)
+   324			return -EIO;
+   325	
+   326		msi_data->msiir_addr = res->start + msi_data->cfg->xTR;
+   327	
+   328		irq = platform_get_irq(pdev, 0);
+   329		if (irq <= 0)
+   330			return -ENODEV;
+   331	
+   332		platform_set_drvdata(pdev, msi_data);
+   333	
+   334		msi_data->clk = devm_clk_get(dev, NULL);
+   335		if (IS_ERR(msi_data->clk)) {
+   336			if (PTR_ERR(msi_data->clk) != -ENOENT)
+   337				return PTR_ERR(msi_data->clk);
+   338	
+   339			msi_data->clk = NULL;
+   340		}
+   341	
+   342		pd_a = dev_pm_domain_attach_by_name(dev, "processor-a-side");
+   343		if (IS_ERR(pd_a))
+   344			return PTR_ERR(pd_a);
+   345	
+   346		pd_b = dev_pm_domain_attach_by_name(dev, "processor-b-side");
+   347		if (IS_ERR(pd_b))
+   348			return PTR_ERR(pd_b);
+   349	
+   350		pd_link_a = device_link_add(dev, pd_a,
+   351				DL_FLAG_STATELESS |
+   352				DL_FLAG_PM_RUNTIME |
+   353				DL_FLAG_RPM_ACTIVE);
+   354	
+   355		if (!pd_link_a) {
+   356			dev_err(dev, "Failed to add device_link to mu a.\n");
+   357			goto err_pd_a;
+   358		}
+   359	
+   360		pd_link_b = device_link_add(dev, pd_b,
+   361				DL_FLAG_STATELESS |
+   362				DL_FLAG_PM_RUNTIME |
+   363				DL_FLAG_RPM_ACTIVE);
+   364	
+   365	
+   366		if (!pd_link_b) {
+   367			dev_err(dev, "Failed to add device_link to mu a.\n");
+   368			goto err_pd_b;
+   369		}
+   370	
+   371		ret = imx_mu_msi_domains_init(msi_data, dev);
+   372		if (ret)
+   373			goto err_dm_init;
+   374	
+   375		irq_set_chained_handler_and_data(irq,
+   376						 imx_mu_msi_irq_handler,
+   377						 msi_data);
+   378	
+   379		pm_runtime_enable(dev);
+   380	
+   381		return 0;
+   382	
+   383	err_dm_init:
+   384		device_link_remove(dev,	pd_b);
+   385	err_pd_b:
+   386		device_link_remove(dev, pd_a);
+   387	err_pd_a:
+   388		return -EINVAL;
+   389	}
+   390	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp

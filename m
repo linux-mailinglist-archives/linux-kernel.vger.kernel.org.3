@@ -2,122 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383835B215D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017465B2167
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiIHO4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        id S232575AbiIHO46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbiIHO4H (ORCPT
+        with ESMTP id S232679AbiIHO4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:56:07 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820A8E291B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:56:03 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id bg5-20020a05600c3c8500b003a7b6ae4eb2so1889041wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:56:03 -0700 (PDT)
+        Thu, 8 Sep 2022 10:56:54 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA1911CD67
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:56:51 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id q21so13942464lfo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ryNqK5MU3hvexcP0lqXzZYDdmqazm1TBDaWSc1Bec88=;
-        b=A+h3uk/z3zVLJRHckmNM4YxWpnH5mOtpniwEZgYBiShH8dX2ke8mlhluujBLTZaei9
-         rjyudPZLRVKoqa/kHk9XhTDRWTKV43CDnaG0QLijNIyvSfrtjtiEVrj0kxDbfaY+ExKT
-         S5DCBpVsRIsn3n7OmhoxhBZ2HYrO2tv189HgUJWmO7wCJcpLLgs+TXtdnwB89i7oREl+
-         bVaCOFRUFvKec6ZZ+32wyYO5lcjci9ktt29wYfSloA1IuJ9BrNjvCjoFwkZh/k/OZ9rQ
-         TWACHfJtoez2REps42w6sKBP7786aGnvKGae62AysmEoW9BUPSijQNuBTaWxzHhysHeb
-         AAdA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=AJmEg2q9mG/fH5ApWPAmlCUORJqYzRuMecwU+JJYy7c=;
+        b=suOq8Nck//LIb2Gnt9WDdFc62Oa1zliaLTDmluGSK0yAsThsDajGtvT1vb7/t5lmT+
+         NDwlzBJubLwCaH5bSfcRsTWNUUBTHXiuBEdnNHDulSIhZ4aIVxNAxoIcJn7+ujPAEbip
+         fp02FhpK7pStd1ylxpORRmMBwt3GLxBkXjKTkRdvyket8yESMsaS1x6JyzYNj7uWXZ3I
+         D5xye36d2w5N58E8UrW20Mo4CTAvJ4bhF8IeBOJsJSmYZmpbdC3DhbPMgyN+6+ar0phl
+         9Eofd1cFuwdetf/TqOvjqas7aAmo/QSuEv6z0c8x3AKcMzRq1GQOO5KxFkzcFDWZc1CL
+         9plA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ryNqK5MU3hvexcP0lqXzZYDdmqazm1TBDaWSc1Bec88=;
-        b=8BQ1xFfk7+4ZGBa18M0j2WW1j8ChBzZ8+axkvVGsp2YmoioN6lFS8ZuC4dry6ZInpb
-         3/DV0Oz0rs9LATS8+wUm5n6ZtMcNnrqA1KgMO284j0CsJ4MehVAAf9MxXVHO7PmVkOj2
-         g3nFq13vFgUdVjZpkIxQMJ40EBRn3ZouElBNg7W2a6VaoHcsKq0/Fk3bF1etKJEnzVyu
-         8bkzTHDvIp/s8c9nmlIKqP1wC3ZV+zOvvKkvEG5oadg8YMvH80oVrgYpfMU26tCwc7Cw
-         FDrHw8I4ajas81CVNGeL4p/2DvzrYsH399TEK3DTqUQzZVhgQV4FGfBk/u1A2XuhsGcn
-         q1kg==
-X-Gm-Message-State: ACgBeo21hzC5fkycPfFLi/UgwNobQrSjromz/MHXa35sp9lxZdgQTmuC
-        NfZXBYJ/j0G+WzGd+u2t7dMWFg==
-X-Google-Smtp-Source: AA6agR60ZmA7z2Rw4x/+vVZJ8ouM6ug3aiG0VoToRr4xXb6X+ui1JU9//Z03osUcjGe8LanO+R1DlA==
-X-Received: by 2002:a05:600c:1d1e:b0:3a5:4f8d:743f with SMTP id l30-20020a05600c1d1e00b003a54f8d743fmr2501614wms.121.1662648961741;
-        Thu, 08 Sep 2022 07:56:01 -0700 (PDT)
-Received: from fedora.fritz.box (p200300c1c7162d00e01b57df2fb57c15.dip0.t-ipconnect.de. [2003:c1:c716:2d00:e01b:57df:2fb5:7c15])
-        by smtp.gmail.com with ESMTPSA id fc15-20020a05600c524f00b003a5260b8392sm3440304wmb.23.2022.09.08.07.56.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 07:56:01 -0700 (PDT)
-From:   Harald Hoyer <harald@profian.com>
-To:     ashish.kalra@amd.com
-Cc:     ak@linux.intel.com, alpergun@google.com, ardb@kernel.org,
-        bp@alien8.de, dave.hansen@linux.intel.com, dgilbert@redhat.com,
-        dovmurik@linux.ibm.com, hpa@zytor.com, jarkko@kernel.org,
-        jmattson@google.com, jroedel@suse.de, kirill@shutemov.name,
-        kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, marcorr@google.com,
-        michael.roth@amd.com, mingo@redhat.com, pbonzini@redhat.com,
-        peterz@infradead.org, pgonda@google.com, rientjes@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        slp@redhat.com, srinivas.pandruvada@linux.intel.com,
-        tglx@linutronix.de, thomas.lendacky@amd.com, tobin@ibm.com,
-        tony.luck@intel.com, vbabka@suse.cz, vkuznets@redhat.com,
-        x86@kernel.org, Harald Hoyer <harald@profian.com>
-Subject: [[PATCH for v6]] KVM: SEV: fix snp_launch_finish
-Date:   Thu,  8 Sep 2022 16:55:57 +0200
-Message-Id: <20220908145557.1912158-1-harald@profian.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
-References: <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=AJmEg2q9mG/fH5ApWPAmlCUORJqYzRuMecwU+JJYy7c=;
+        b=6c3OPkg2giLeMdsGGS51L4exkf7xCEV+xkc8ZRqPSFVArwivRLM6UmRtNBngSY0fE1
+         If2JrjHVTn0DIFaTDuwcZIiLzKizrCInSAUkbV2iPrzmzpznqvXKlkG0rOFelc7u70wP
+         7TVuFKQHVyjZNNrLJl9hpRuQmW6YZAnvlf3OOqfIfiDEQKLZh1q8Ux+O+9dEtlAszr3l
+         9qzBlPn8WiPm7467INlnJskbFedpBTR/9TkrRNjgAl+jb7BKEdn3I3BllAeUR3o/GMa8
+         b2iW1wriyEANffccHyZ3LmFQ9rzRX3HkYSIM5xZ0h51zKbvlKCmitahR9erk2TJCtszx
+         dzzw==
+X-Gm-Message-State: ACgBeo2e0GlbJ9B61E4lT5Kc40vTUejYouBXO+geHzM0xgaexn4I5WC7
+        ZK7nYEEfQ4j7bV4Rcy4/FpoNOg==
+X-Google-Smtp-Source: AA6agR4yKt8FR62+ocnlzY5Vvxm8+qFHQD1FMbhG0EjNVe96hMqaezOVpdGmxZD9fOf7oWOwxt/QjA==
+X-Received: by 2002:a05:6512:3f19:b0:492:fdaa:b535 with SMTP id y25-20020a0565123f1900b00492fdaab535mr2611738lfa.267.1662649009795;
+        Thu, 08 Sep 2022 07:56:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a9-20020ac25e69000000b00498ee99a749sm277218lfr.304.2022.09.08.07.56.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 07:56:49 -0700 (PDT)
+Message-ID: <e0b13195-0aed-094d-c7af-4581b61d6453@linaro.org>
+Date:   Thu, 8 Sep 2022 16:56:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v4 2/2] power: reset: qcom-pon: add support for
+ qcom,pmk8350-pon compatible string
+Content-Language: en-US
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, corbet@lwn.net,
+        sre@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220725191314.19456-1-quic_amelende@quicinc.com>
+ <20220725191314.19456-3-quic_amelende@quicinc.com>
+ <57f8d9c4-6f49-ad3d-fc82-7a0f66d1775a@linaro.org>
+ <f9853511-e64c-9daf-b4e3-e334035771a8@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f9853511-e64c-9daf-b4e3-e334035771a8@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `params.auth_key_en` indicator does _not_ specify, whether an
-ID_AUTH struct should be sent or not, but, wheter the ID_AUTH struct
-contains an author key or not. The firmware always expects an ID_AUTH block.
+On 19/08/2022 22:26, Anjelique Melendez wrote:
+> 
+> 
+> On 7/26/2022 3:27 AM, Krzysztof Kozlowski wrote:
+>> On 25/07/2022 21:13, Anjelique Melendez wrote:
+>>> Add support for the new "qcom,pmk8350-pon" comptaible string.
+>>>
+>>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>>> ---
+>>>  drivers/power/reset/qcom-pon.c | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
+>>> index 4a688741a88a..16bc01738be9 100644
+>>> --- a/drivers/power/reset/qcom-pon.c
+>>> +++ b/drivers/power/reset/qcom-pon.c
+>>> @@ -82,6 +82,7 @@ static const struct of_device_id pm8916_pon_id_table[] = {
+>>>  	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
+>>>  	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
+>>>  	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
+>>> +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
+>>>  	{ }
+>>>  };
+>>>  MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
+>>
+>> This is now confusing. The new device has entirely different first and
+>> second IO address spaces, but you do not code here any differences.
+>>
+> 
+> Based on previous responses to this patch series, it was decided that a new
+> "qcom,pmk8350-pon" compatible string is needed to differentiate between gen1/gen2
+> vs gen3 children pon devices. Currently the child handles obtaining the register
+> address(es) from its parent's regmap in drivers/input/misc/pm8941-pwrkey.c
+> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/misc/pm8941-pwrkey.c?h=v6.0-rc1#n287).
+> The patch that handled that change can be found at
+> https://lore.kernel.org/linux-arm-msm/20220422191239.6271-4-quic_amelende@quicinc.com/.
+> 
+> This driver, as the parent, does not actually need any changes besides adding the
+> new parent compatible string. Specifically this driver handles reboot mode support.
+> Everything needed to handle reboot mode is in the first register and reboot mode
+> is handled the same as a "qcom,pm8998-pon" parent. The split of the pon register
+> in pmk8350 does not affect reboot mode. This is why before we added a new compatible
+> string "qcom,pm8998-pon" still worked for gen3 children devices. Even though 2
+> registers could be defined in the device tree, as a 2nd register is optional for gen3
+> children devices,the fact that this driver uses of_property_read_u32() will ensure that
+> the base address used for reboot mode comes from the first register.  
+> 
 
-Link: https://lore.kernel.org/all/cover.1655761627.git.ashish.kalra@amd.com/
-Signed-off-by: Harald Hoyer <harald@profian.com>
----
- arch/x86/kvm/svm/sev.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Ah, makes sense.
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 85357dc4d231..5cf4be6a33ba 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2242,17 +2242,18 @@ static int snp_launch_finish(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 
- 		data->id_block_en = 1;
- 		data->id_block_paddr = __sme_pa(id_block);
--	}
- 
--	if (params.auth_key_en) {
- 		id_auth = psp_copy_user_blob(params.id_auth_uaddr, KVM_SEV_SNP_ID_AUTH_SIZE);
- 		if (IS_ERR(id_auth)) {
- 			ret = PTR_ERR(id_auth);
- 			goto e_free_id_block;
- 		}
- 
--		data->auth_key_en = 1;
- 		data->id_auth_paddr = __sme_pa(id_auth);
-+
-+		if (params.auth_key_en) {
-+			data->auth_key_en = 1;
-+		}
- 	}
- 
- 	data->gctx_paddr = __psp_pa(sev->snp_context);
--- 
-2.37.1
 
+Best regards,
+Krzysztof

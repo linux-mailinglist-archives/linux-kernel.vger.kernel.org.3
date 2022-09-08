@@ -2,176 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D565B231B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519C05B2318
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbiIHQGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S231808AbiIHQF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiIHQGU (ORCPT
+        with ESMTP id S231685AbiIHQFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:06:20 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14447C275C;
-        Thu,  8 Sep 2022 09:06:19 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id w8so28463331lft.12;
-        Thu, 08 Sep 2022 09:06:18 -0700 (PDT)
+        Thu, 8 Sep 2022 12:05:54 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A93B3B03
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:05:52 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id k10so13909330lfm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=nz1fp5lwnD1Y399f3hQjrZY99PTaG/8NW7V7/WFUT8w=;
-        b=ieP5BxYKM9UDB4jtymp7DzdBc5lrk4wxFoK2f3w6l28S3pAD6Fd3+hXiECAuQBjYtC
-         Bjtgvyi+xGM7NWY7q/GUqtIjQX+uuD2GZfdLPPIsxV9M6Uku0WQZPfAckHmHwtWVV5Q9
-         4M2BaOesH6tyOKpzTvWSrThnDyvCMLP8Uv1FSdfnEgWfihM/cULfthZluGJIjmMyHcTR
-         f4LEXeJfvkyzQzUcI5PS74X+lWzIbNy0ePSW/3+ioScjs1S/axLi2iUwUkLNP9xMznCU
-         KN1PxFeyGZyKdl77ouYhf5RfQIpNE9ffzebjRvHn/aFuTMV5I3ugeINdGV1fwlJ8eDvC
-         rMmg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=jAEzEWGfThUgGqQnHMOL1f5To09yVbEuEWo/Ad2g1YE=;
+        b=c/Ng0z6ssSxi+cpYifD3Vfr1VP3RANTiQEUR6gMXz5q7H52V/1QlW79+sQxsIsnigc
+         ko+17v26gBwHYzcLiMjPH2aeVRBIJDBsQCgekYeDxDc8yQjoMJJnetu0CXNni8QVpQAf
+         aPxxKuLWxU4TG2mZbhutLQV1TAFVwbZDs7ZFnLI2vob89qKTzWOYITOUKDPfhnySnsgA
+         6FxC/bofZVHS8qp3Ae+yiikz+7+OMxW5p2gg7qtot7Xw4JADqKB4J63ijWi8A26ndVVa
+         zIj6435QZQdKw4GcFpwHOYXSaK1Aexsw58IdCoCqwhrYXC0eAhLxkRBsUV4QZnQV8lpU
+         CVVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=nz1fp5lwnD1Y399f3hQjrZY99PTaG/8NW7V7/WFUT8w=;
-        b=DoGJ7lbfd4jX3SldRqRBHRW9LcI72ZkjBRtB4e3La9zamkxkq/lfR+oQ6jhUiNjOdH
-         P/sEdUuezaGbluisy7xwB+2QbUZlzh7+HtLXnpjQLXLoAEIIme9KI3cOpy1on8tGzaBF
-         0TmUSH6Wmv+JS9ZoleHMGeO1Cd8s1aRE0zREcfxw2Yf9YlVE1fynrgMsqtbqj9LgGN/t
-         S/aPOPoB43Kw8mFpwACaJz5syQ6Qwlh74dpmZhDi9ITkFgcJprdQJg/sOpREHSr4wtTD
-         fQjTP2dJVWqGsdXMmaebUV48XQhXq/cysB4OBpCrYqHsKvWLcVoi1V7u+1DfCyuFQeev
-         MzBQ==
-X-Gm-Message-State: ACgBeo0w8w9acvLQ+kI0nTPn/6N8c/+S4a2lMMzYe/U12B8diqfeKdpa
-        SG4lEgGukf0JP+Ig1e/NvPA=
-X-Google-Smtp-Source: AA6agR5vQCfiSofF9T6A+rUaSGtgoDWsUQf44jQ2EyEOom0Jm9ZTpCA0G0Y4DvtUa8xEmm5ZPiR5fg==
-X-Received: by 2002:ac2:4144:0:b0:492:eb38:d8e9 with SMTP id c4-20020ac24144000000b00492eb38d8e9mr3236281lfi.215.1662653177289;
-        Thu, 08 Sep 2022 09:06:17 -0700 (PDT)
-Received: from localhost.localdomain ([89.46.86.70])
-        by smtp.gmail.com with ESMTPSA id u4-20020ac258c4000000b0048b03ec561fsm3086727lfo.150.2022.09.08.09.06.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 09:06:16 -0700 (PDT)
-From:   Marek Bykowski <marek.bykowski@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Marek Bykowski <marek.bykowski@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] =?UTF-8?q?of/fdt:=20Don't=20calculate=20phys=5Finitrd=5Fs?= =?UTF-8?q?ize=20from=20DT=20if=C2=A0start=20<=20end?=
-Date:   Thu,  8 Sep 2022 16:05:19 +0000
-Message-Id: <20220908160519.58041-1-marek.bykowski@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=jAEzEWGfThUgGqQnHMOL1f5To09yVbEuEWo/Ad2g1YE=;
+        b=AV8TQFQ6j6Nmh8OyIaJcfBn+ppZV8JNxr6w8I0I0JJ1Q9/CN1g7z5HgCBpLpDc3yoa
+         ZPf/0giFQGI6wjwTanSid/8t5BDEDGYgB5WhyLW8eRrFb2cX/DSBRx8h6D5BZO1Zesi5
+         37DGRHnoHlXFQchW7oUF8r6ift3bZqChdfbI/GOM0J8H98k2uFYgIIEI8xbCjf+hmJPT
+         r1PMC+F9YoU1XiimRgEAD8L1RxYpWz+o2RkHBoLoEQ2e1gJ+sOSAcg5uj0Rn40vPbCmH
+         mo7jMancUSsMp2shrYRpK7xjLbhl5SftfkZpS3VPXdD970s7l7O4dHQNFxnHZVB3tCjL
+         MEqw==
+X-Gm-Message-State: ACgBeo1C8UIepooKbV7FxSWrN2PoCKIl5VAvVUeagHab3R7ZbJTBk7qb
+        D+kqX6ubErhiCAvaqSGoGScxYw==
+X-Google-Smtp-Source: AA6agR6wR8uJbmz0AnOAI2ki1zJ4q03Vfc9sBBd2mOdp+EOPC5CGqg0mWL2FdJ3CzGHLAyt4QEZvEA==
+X-Received: by 2002:a05:6512:3765:b0:492:d076:9f77 with SMTP id z5-20020a056512376500b00492d0769f77mr2761185lft.247.1662653149752;
+        Thu, 08 Sep 2022 09:05:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k14-20020ac257ce000000b00490b5f09973sm241752lfo.92.2022.09.08.09.05.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 09:05:48 -0700 (PDT)
+Message-ID: <17d142eb-80c1-0aa5-c4fa-a8e4ccd97f08@linaro.org>
+Date:   Thu, 8 Sep 2022 18:05:47 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 05/13] dt-bindings: serial: atmel,at91-usart: convert
+ to json-schema
+Content-Language: en-US
+To:     Sergiu.Moga@microchip.com, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
+        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, jirislaby@kernel.org,
+        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com,
+        Tudor.Ambarus@microchip.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-6-sergiu.moga@microchip.com>
+ <e799ca9e-acb0-1bea-1c1a-b2ab79089381@linaro.org>
+ <fde16d80-28b4-aae6-363f-ad9dcf87a5e1@microchip.com>
+ <1d3904d9-7fec-2e61-f999-61b89c4becb6@linaro.org>
+ <753d73d0-44b9-9fba-1ed8-53691ecf2ee7@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <753d73d0-44b9-9fba-1ed8-53691ecf2ee7@microchip.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the properties 'linux,initrd-start' and 'linux,initrd-end' of
-the chosen node populated from the bootloader, eg. U-Boot, are so that
-start < end, then the phys_initrd_size calculated as subtraction of end
-from start is negative that subsequently gets converted to a high positive
-value for being unsigned long long.
+On 08/09/2022 17:27, Sergiu.Moga@microchip.com wrote:
+> On 08.09.2022 18:10, Krzysztof Kozlowski wrote:
+>> On 08/09/2022 17:06, Sergiu.Moga@microchip.com wrote:
+>>> On 08.09.2022 15:29, Krzysztof Kozlowski wrote:
+>>
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - reg
+>>>>> +  - interrupts
+>>>>> +  - clock-names
+>>>>> +  - clocks
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        $nodename:
+>>>>> +          pattern: "^serial@[0-9a-f]+$"
+>>>>
+>>>> You should rather check value of atmel,usart-mode, because now you won't
+>>>> properly match device nodes called "foobar". Since usart-mode has only
+>>>> two possible values, this will nicely simplify you if-else.
+>>>>
+>>>>
+>>>
+>>>
+>>> I did think of that but the previous binding specifies that
+>>> atmel,usart-mode is required only for the SPI mode and it is optional
+>>> for the USART mode. That is why I went for the node's regex since I
+>>> thought it is something that both nodes would have.
+>>
+>> I think it should be explicit - you configure node either to this or
+>> that, so the property should be always present.
+> 
+> 
+> 
+> No DT of ours has that property atm, since they are all on USART mode by 
+> default. If I were to make it required. all nodes would fail so I would 
+> have to add it to each of them.
 
-For example, on FVP ARM64 system I'm running, the U-Boot populates
-the 'linux,initrd-start' with 0x8800_0000 and 'linux,initrd-end' with 0.
-The phys_initrd_size calculated is then ffff_ffff_7800_0000
-(= 0 - 8800_0000 = -8800_0000 + ULLONG_MAX + 1). Then, the memory region
-with the (invalid) size is added to the bootmem and attempted paging in
-paging_init() that results in the kernel oops as shown below.
+Which is a problem because...?
 
-It should be stressed, it is generally a fault of the bootloader's with
-the kernel relying on it, however we should not allow the bootloader's
-misconfiguration to lead to the kernel oops. Not only the kernel should be
-bullet proof against it but also finding the root cause of the paging
-fault spanning over the bootloader, DT, and kernel may happen is not so
-easy.
+Have in mind that bindings can be changed. ABI here won't be broken.
 
-  Unable to handle kernel paging request at virtual address fffffffefe43c000
-  Mem abort info:
-    ESR = 0x96000007
-    EC = 0x25: DABT (current EL), IL = 32 bits
-    SET = 0, FnV = 0
-    EA = 0, S1PTW = 0
-  Data abort info:
-    ISV = 0, ISS = 0x00000007
-    CM = 0, WnR = 0
-  swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000080e3d000
-  [fffffffefe43c000] pgd=0000000080de9003, pud=0000000080de9003
-  Unable to handle kernel paging request at virtual address ffffff8000de9f90
-  Mem abort info:
-    ESR = 0x96000005
-    EC = 0x25: DABT (current EL), IL = 32 bits
-    SET = 0, FnV = 0
-    EA = 0, S1PTW = 0
-  Data abort info:
-    ISV = 0, ISS = 0x00000005
-    CM = 0, WnR = 0
-  swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000080e3d000
-  [ffffff8000de9f90] pgd=0000000000000000, pud=0000000000000000
-  Internal error: Oops: 96000005 [#1] PREEMPT SMP
-  Modules linked in:
-  CPU: 0 PID: 0 Comm: swapper Not tainted 5.4.51-yocto-standard #1
-  Hardware name: FVP Base (DT)
-  pstate: 60000085 (nZCv daIf -PAN -UAO)
-  pc : show_pte+0x12c/0x1b4
-  lr : show_pte+0x100/0x1b4
-  sp : ffffffc010ce3b30
-  x29: ffffffc010ce3b30 x28: ffffffc010ceed80
-  x27: fffffffefe43c000 x26: fffffffefe43a028
-  x25: 0000000080bf0000 x24: 0000000000000025
-  x23: ffffffc010b8d000 x22: ffffffc010e3d000
-  x23: ffffffc010b8d000 x22: ffffffc010e3d000
-  x21: 0000000080de9000 x20: ffffff7f80000f90
-  x19: fffffffefe43c000 x18: 0000000000000030
-  x17: 0000000000001400 x16: 0000000000001c00
-  x15: ffffffc010cef1b8 x14: ffffffffffffffff
-  x13: ffffffc010df1f40 x12: ffffffc010df1b70
-  x11: ffffffc010ce3b30 x10: ffffffc010ce3b30
-  x9 : 00000000ffffffc8 x8 : 0000000000000000
-  x7 : 000000000000000f x6 : ffffffc010df16e8
-  x5 : 0000000000000000 x4 : 0000000000000000
-  x3 : 00000000ffffffff x2 : 0000000000000000
-  x1 : 0000008080000000 x0 : ffffffc010af1d68
-  Call trace:
-   show_pte+0x12c/0x1b4
-   die_kernel_fault+0x54/0x78
-   __do_kernel_fault+0x11c/0x128
-   do_translation_fault+0x58/0xac
-   do_mem_abort+0x50/0xb0
-   el1_da+0x1c/0x90
-   __create_pgd_mapping+0x348/0x598
-   paging_init+0x3f0/0x70d0
-   setup_arch+0x2c0/0x5d4
-   start_kernel+0x94/0x49c
-  Code: 92748eb5 900052a0 9135a000 cb010294 (f8756a96) 
+> 
+> 
+> 
+> 
+>> The node name should not
+>> be responsible for it, even though we want node names to match certain
+>> patterns.
+>>
+> 
+> 
+> Does checkig for the node's pattern not make it better then? Since it 
+> imposes an additional check? 
 
-Signed-off-by: Marek Bykowski <marek.bykowski@gmail.com>
----
-v1 -> v2:
-- changed from just checking on end being 0 to start < end as suggested
-  from Rob
-- also amended the message description a bit
----
- drivers/of/fdt.c | 2 ++
- 1 file changed, 2 insertions(+)
+Not really, because if it is "foobar" your schema would not be applied
+correctly.
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 223d617ecfe1..e8abec8dcea3 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -889,6 +889,8 @@ static void __init early_init_dt_check_for_initrd(unsigned long node)
- 	if (!prop)
- 		return;
- 	end = of_read_number(prop, len/4);
-+	if (start >= end)
-+		return;
+> If it would not have a conventional 
+> pattern, it would fail through unevaluatedProperies:false at the end, 
+> since it would have properties that were contained inside a branch that 
+> the validation of the node would not have gone through since it contains 
+> a pattern that does not match the conditions of that branch.
 
- 	__early_init_dt_declare_initrd(start, end);
- 	phys_initrd_start = start;
---
-2.25.1
+Not for properties which are for example missing...
 
+
+Best regards,
+Krzysztof

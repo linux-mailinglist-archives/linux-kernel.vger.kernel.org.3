@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2D55B28F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191E65B28FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiIHWDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
+        id S229723AbiIHWGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiIHWCx (ORCPT
+        with ESMTP id S229549AbiIHWGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:02:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135573AB;
-        Thu,  8 Sep 2022 15:02:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4B593CE20FD;
-        Thu,  8 Sep 2022 22:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5250DC433D6;
-        Thu,  8 Sep 2022 22:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1662674569;
-        bh=8sy1ATs3JDer4J6KBpLpL/36vh5+x6IuTH2whh/yMVE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=x1eZtPss8z2xDuQ68b7Q5wAXvxzGWI3qEDMWP24UxzJLRN0Ko2W1T66YWttxzQSug
-         fl4/D5KUwLVvlUF4thcLin9nf2YLrJqrxEww2eV1LvdGqPuFVeNXBhmHAFqIVnbKnm
-         uoyYf/5C6LmYn6auMZsETC++A5gpXT7EgxuY4U8w=
-Date:   Thu, 8 Sep 2022 15:02:48 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH] mm/memcontrol: use kstrtobool for swapaccount param
- parsing
-Message-Id: <20220908150248.85fff32bf275844f0927a856@linux-foundation.org>
-In-Reply-To: <20220908083452.2844125-1-liushixin2@huawei.com>
-References: <20220908083452.2844125-1-liushixin2@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 18:06:09 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0C4EB81F6;
+        Thu,  8 Sep 2022 15:06:05 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8FC45204A5AD;
+        Thu,  8 Sep 2022 15:06:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8FC45204A5AD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1662674765;
+        bh=0IklZrohBoUgnAuhKbvOAkhT6zLzbap5UEa4RgA+F/w=;
+        h=From:To:Subject:Date:From;
+        b=MZWIlwSc+8A14CQFzY+ccAFtsiT73bXIW528iVOQbMQ89q914u/kIk/6QXeH3kHPX
+         y30zze+rLi2jUJHKM6+eoOw7fcg/GEQ0AEp+97X6yoRv2w4A3LSaB9Ote6J5YiT5AY
+         AIpqtH+woiR2fqO6ch0uDQ19ODjlm7tWPRxn3roY=
+From:   eahariha@linux.microsoft.com
+To:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org (open list:Hyper-V/Azure CORE AND DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/3] hv: Use PCI_VENDOR_ID_MICROSOFT for better discoverability
+Date:   Thu,  8 Sep 2022 15:05:55 -0700
+Message-Id: <1662674757-31945-1-git-send-email-eahariha@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sep 2022 16:34:52 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
+From: Easwar Hariharan <easwar.hariharan@microsoft.com>
 
-> --- a/mm/swap_cgroup.c
-> +++ b/mm/swap_cgroup.c
-> @@ -194,7 +194,7 @@ int swap_cgroup_swapon(int type, unsigned long max_pages)
->  	return 0;
->  nomem:
->  	pr_info("couldn't allocate enough memory for swap_cgroup\n");
-> -	pr_info("swap_cgroup can be disabled by swapaccount=0 boot option\n");
-> +	pr_info("swap_cgroup can be disabled by swapaccount=[oO][Ff]/N/n/0 boot option\n");
+Signed-off-by: Easwar Hariharan <easwar.hariharan@microsoft.com>
+---
+ drivers/hv/vmbus_drv.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I'm not sure this really needed changing.  "=0" was OK and the message
-now looks rather silly.  But whatever.
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 23c680d..8d90855 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -38,6 +38,8 @@
+ #include <clocksource/hyperv_timer.h>
+ #include "hyperv_vmbus.h"
+ 
++#define PCI_VENDOR_ID_MICROSOFT 0x1414
++
+ struct vmbus_dynid {
+ 	struct list_head node;
+ 	struct hv_vmbus_device_id id;
+@@ -2051,7 +2053,7 @@ struct hv_device *vmbus_device_create(const guid_t *type,
+ 	child_device_obj->channel = channel;
+ 	guid_copy(&child_device_obj->dev_type, type);
+ 	guid_copy(&child_device_obj->dev_instance, instance);
+-	child_device_obj->vendor_id = 0x1414; /* MSFT vendor ID */
++	child_device_obj->vendor_id = PCI_VENDOR_ID_MICROSOFT;
+ 
+ 	return child_device_obj;
+ }
+-- 
+1.8.3.1
+

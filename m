@@ -2,96 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DF45B12D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 05:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF885B12DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 05:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiIHDOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 23:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S230071AbiIHDXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 23:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiIHDOe (ORCPT
+        with ESMTP id S229472AbiIHDXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 23:14:34 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4F721A3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 20:14:31 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id l10so3267293plb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 20:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Lj2YfwNoO49u1JDvTZXx6+kIlpsbYxEjipNfytO+vCs=;
-        b=nQEK5nC8oAw6xALpVaD7cWoOAlsvszdvZRYNlOlnIP6f8eCsh8ue+N//oqGvqbqHO5
-         JPoGwPd+LVd8tyB6El85eVRif2ySMJwKKMXgjjv6bXH6/tKgZaXPd7e/7upZICjeGhGl
-         uBfXSj5FxyBTqiqllpHZjf4yr0Z+AlhunZ5hE1nG5Yqr/+IJWo2RrjdC8bkf7Rk1wuCn
-         9fRGaZMU0UdkDUe6ZyCRd8dRmZjMrwEH8kMoWOmGbu5fdFDrmWccstZwmtdiX99QbJFR
-         cBpSX7IRtqKjBpGGxsFUzXMlCQbrbyfnmPFkkxucaKggPvRKs894sOxOUs9/AsdS7Wc8
-         qS+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Lj2YfwNoO49u1JDvTZXx6+kIlpsbYxEjipNfytO+vCs=;
-        b=leqiM8QgMeUHlf1oCymRp1irMfquwD5djuuKwtSwUn9I/ozlCipt+PIWuPK3sThRMS
-         YfdeN7txfZCLATrRApWU1Tp8vpEEUC8zEQ32mpnbk6emR6QMOn9QvTsqHMdJKPhXCUGO
-         ma6WRPA3SDknPCo5rIGfSrv0DznbY85fvvTALCC5gDP5ojijMeBeTunGrh0B8PnrfJ6z
-         bH+M7r97WLtHAZQjiKZAUYzCDFhQsa6Xpj6T7TgxInVkgJAhsXwtw/ZJoVRB6ZxOetqw
-         Iu3MbKHWjYGe+j/OuOUkTkPeWH3ZwkN2ObRUOupxvW0PNv+b5tGsOgdwkKJuNU7cNlrk
-         KTbA==
-X-Gm-Message-State: ACgBeo3bgJ1OKlaG7QZTDV80mY4NNvbfafHN4r8inOuBT7N0Yc0haW5/
-        S7K06imlM9A0kGBmo6rEqRSuwCttGY0V
-X-Google-Smtp-Source: AA6agR7YKcNoEQt92SgUbr5dFIFg3iQEjYDhmdzCFobfDa2+qKVtlIHdsY8Xn/4H7W0btC7I0h5FfA==
-X-Received: by 2002:a17:90a:b782:b0:1fd:bef9:d49 with SMTP id m2-20020a17090ab78200b001fdbef90d49mr1757702pjr.221.1662606871311;
-        Wed, 07 Sep 2022 20:14:31 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id d13-20020a17090ae28d00b002008ba3a74csm457870pjz.52.2022.09.07.20.14.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Sep 2022 20:14:30 -0700 (PDT)
-From:   xiakaixu1987@gmail.com
-X-Google-Original-From: kaixuxia@tencent.com
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
-Subject: [PATCH v2] mm/damon/vaddr: add a comment for 'default' case in damon_va_apply_scheme()
-Date:   Thu,  8 Sep 2022 11:13:17 +0800
-Message-Id: <1662606797-23534-1-git-send-email-kaixuxia@tencent.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Sep 2022 23:23:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C03C6960;
+        Wed,  7 Sep 2022 20:23:09 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNPVq3WfqzmVHR;
+        Thu,  8 Sep 2022 11:19:31 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 11:23:07 +0800
+Received: from [10.67.109.184] (10.67.109.184) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 11:23:07 +0800
+Subject: Re: [PATCH bpf-next 1/2] bpf, cgroup: Fix attach flags being assigned
+ to effective progs
+From:   Pu Lehui <pulehui@huawei.com>
+To:     John Fastabend <john.fastabend@gmail.com>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+References: <20220820120234.2121044-1-pulehui@huawei.com>
+ <20220820120234.2121044-2-pulehui@huawei.com>
+ <6305451ee5e7e_292a82086e@john.notmuch>
+ <e726439f-0592-25c4-53e3-ce248940a736@huawei.com>
+Message-ID: <2985cda1-a443-8a9e-8f90-674b55159cb2@huawei.com>
+Date:   Thu, 8 Sep 2022 11:23:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <e726439f-0592-25c4-53e3-ce248940a736@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kaixu Xia <kaixuxia@tencent.com>
 
-The switch case 'DAMOS_STAT' and switch case 'default' have same
-return value in damon_va_apply_scheme(), and the 'default' case
-is for DAMOS actions that not supported by 'vaddr'. It might
-make sense to add a comment here.
 
-Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
----
- mm/damon/vaddr.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index 3c7b9d6dca95..3814200e61e4 100644
---- a/mm/damon/vaddr.c
-+++ b/mm/damon/vaddr.c
-@@ -646,6 +646,9 @@ static unsigned long damon_va_apply_scheme(struct damon_ctx *ctx,
- 	case DAMOS_STAT:
- 		return 0;
- 	default:
-+		/*
-+		 * DAMOS actions that not yet supported by 'vaddr'.
-+		 */
- 		return 0;
- 	}
- 
--- 
-2.27.0
-
+On 2022/9/8 11:07, Pu Lehui wrote:
+> 
+> 
+> On 2022/8/24 5:22, John Fastabend wrote:
+>> Pu Lehui wrote:
+>>> Attach flags is only valid for attached progs of this layer cgroup,
+>>> but not for effective progs. We know that the attached progs is at
+>>> the beginning of the effective progs array, so we can just populate
+>>> the elements in front of the prog_attach_flags array.
+>>>
+>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>
+>> Trying to parse above, could you add a bit more detail on why this is
+>> problem so readers don't need to track it down.
+>>
+>>> ---
+>>>   kernel/bpf/cgroup.c | 5 ++++-
+>>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>>> index 59b7eb60d5b4..9adf72e99907 100644
+>>> --- a/kernel/bpf/cgroup.c
+>>> +++ b/kernel/bpf/cgroup.c
+>>> @@ -1091,11 +1091,14 @@ static int __cgroup_bpf_query(struct cgroup 
+>>> *cgrp, const union bpf_attr *attr,
+>>>           }
+>>
+>> Because we are looking at it let me try to understand. There are two
+>> paths that set cnt relative bits here,
+>>
+> 
+> Hi John,
+> 
+> Thanks for your review. The reason is that:
+> For the following cgroup tree:
+>     root
+>      |
+>     cg1
+>      |
+>     cg2
+> 
+> I attached prog1 and prog2 to root cgroup with MULTI attach type, 
+sorry, typo, attach type -> attach flag
+> attached prog3 to cg1 with OVERRIDE attach type, and then used bpftool
+> to show this cgroup tree with effective query flag:
+> 
+> $ bpftool cgroup tree /sys/fs/cgroup effective
+> CgroupPath
+> ID       AttachType      AttachFlags     Name
+> /sys/fs/cgroup
+> 1        sysctl          multi           sysctl_tcp_mem
+> 2        sysctl          multi           sysctl_tcp_mem
+> /sys/fs/cgroup/cg1
+> 3        sysctl          override        sysctl_tcp_mem
+> 1        sysctl          override        sysctl_tcp_mem <- wrong
+> 2        sysctl          override        sysctl_tcp_mem <- wrong
+> /sys/fs/cgroup/cg1/cg2
+> 3        sysctl                          sysctl_tcp_mem
+> 1        sysctl                          sysctl_tcp_mem
+> 2        sysctl                          sysctl_tcp_mem
+> 
+> For cg1, obviously, the attach flags of prog1 and prog2 can not be 
+> OVERRIDE, and the attach flags of prog1 and prog2 is meaningless for 
+> cg1. We only need to care the attach flags of prog which attached to 
+> cg1, other progs attach flags should be omit.
+> 
+>>    if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE) {
+>>        ...
+>>        cnt = min_t(int, bpf_prog_array_length(effective), total_cnt);
+>>        ...
+>>    } else {
+>>       ...
+>>       progs = &cgrp->bpf.progs[atype];
+>>       cnt = min_t(int, prog_list_length(progs), total_cnt);
+>>       ...
+>>    }
+>>
+>> And the docs claim
+>>
+>>   *              **BPF_F_QUERY_EFFECTIVE**
+>>   *                      Only return information regarding programs 
+>> which are
+>>   *                      currently effective at the specified 
+>> *target_fd*.
+>>
+>> so in the EFFECTIVE case should we be reporting flags at all if the
+>> commit message says "attach flags is only valid for attached progs
+>> of this layer cgroup, but not for effective progs."
+>>
+>> And then in the else branch the change is what you have in the diff 
+>> anyways correct?
+>>
+>>>           if (prog_attach_flags) {
+>>> +            int progs_cnt = prog_list_length(&cgrp->bpf.progs[atype]);
+>>>               flags = cgrp->bpf.flags[atype];
+>>> -            for (i = 0; i < cnt; i++)
+>>
+>> Do we need to min with total_cnt here so we don't walk off a short 
+>> user list?
+>>
+> 
+> We should limit it, will fix it in v2. For query without effective flag, 
+> progs_cnt will equal to cnt, and for effective flag situation, progs_cnt 
+> only calculate prog count which attached to this cgroup layer.
+> 
+>>> +            /* attach flags only for attached progs, but not 
+>>> effective progs */
+>>> +            for (i = 0; i < progs_cnt; i++)
+>>>                   if (copy_to_user(prog_attach_flags + i, &flags, 
+>>> sizeof(flags)))
+>>>                       return -EFAULT;
+>>> +
+>>>               prog_attach_flags += cnt;
+>>>           }
+>>> -- 
+>>> 2.25.1
+>>>
+>> .
+>>
+> .

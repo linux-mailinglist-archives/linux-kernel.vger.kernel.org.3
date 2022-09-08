@@ -2,276 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B365B1480
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F4B5B1485
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiIHGP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
+        id S229574AbiIHGQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIHGPY (ORCPT
+        with ESMTP id S229476AbiIHGQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:15:24 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D47C85FCC;
-        Wed,  7 Sep 2022 23:15:23 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d82so3264066pfd.10;
-        Wed, 07 Sep 2022 23:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=peZT/o3/Rwk7cwSmlA95lM9nUMw76YizSZmiVcCi3zw=;
-        b=ek18FFuxMETzTmhw6GDkVlKTtFHuoV7gd6YfRU4AhyN2Mykcteg7vX0Z//Seyy9u3j
-         RAbVpcIr21ENhFnywNc3Wizkbcf9bBlwnMnTJcqcJhh7Ks8Hfes1g7JRuYp/RbdEjzel
-         bUr1oOAfePipZ7NxDLIpKIV07kqEdbDHRlGmmhDzBcknj9wN9DPuN2sZ+hAJQAzSYdXz
-         Y5HT0tqGVJ7cbza5SuLr2SkaXBFonVx+sOyz6Go79qRFH8Db1ieY0ULgr0RX1LDdYlAY
-         +hrGuXacE7xVQdwB8I4msdYFs1xKV0ieh+rKunohz1ksgeeqBXFLxsR6Ial97AJZoT3W
-         yESQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=peZT/o3/Rwk7cwSmlA95lM9nUMw76YizSZmiVcCi3zw=;
-        b=K00oQ+oZQVv+qt0PT1Hqsg7pHuiYRRw+IK/eU+cyRFAh7CRD9zUwM4Owb8RpLyoyBu
-         //kSmX55m3jqOIXdsbbYuGMG5ynL+9RsFtye38SPxWWfUtltM1U85/2yvTsL15zWs5Ty
-         6wL1JH4htxp3QIROwGonpcQQ8CwnbdK+oYotLEhmsRRPuRhlAPk2z0d574IHw3iTsNhl
-         MYVZ99qagRuwX1Hp8Q04N082nLySGNcFC16Nrvjc2dPh1gYhzD3NLARaunLTh2pNUC0X
-         TlCW1EEbSX+/hMGEq2UpNAW8tz9OSTkMA9UlOsW5AcB/e9h/uLPMJKDwqymL7ggFnfLW
-         AnTQ==
-X-Gm-Message-State: ACgBeo3Wah6eN2KWEGXjkeYAb4lN7t79w6M1bix4dWOu0yzGojlDzPxX
-        JOeK85J/pRepk4UjU+k+xkSCDJLTmP0xbw==
-X-Google-Smtp-Source: AA6agR4Ol9ODukriAyWNcdbU5EXdTIk7JzZAtHx5Ky+W/6LhsP1SUepMH0v27SwHDrSnh8N+E38PDA==
-X-Received: by 2002:a63:225c:0:b0:42c:3811:93fb with SMTP id t28-20020a63225c000000b0042c381193fbmr6286217pgm.543.1662617722545;
-        Wed, 07 Sep 2022 23:15:22 -0700 (PDT)
-Received: from dusj-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id a16-20020a621a10000000b00537a6b81bb7sm14268403pfa.148.2022.09.07.23.15.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Sep 2022 23:15:22 -0700 (PDT)
-From:   Duke Du <dukedu83@gmail.com>
-X-Google-Original-From: Duke Du <Duke.Du@quantatw.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     fran.hsu@quantatw.com, george.hung@quantatw.com,
-        charles.hsu@quantatw.com, duke.du@quantatw.com
-Subject: [PATCH v4] hwmon: Add driver for the TEXAS TPS546D24 Buck Converter.
-Date:   Thu,  8 Sep 2022 14:13:19 +0800
-Message-Id: <1662617599-15270-1-git-send-email-Duke.Du@quantatw.com>
+        Thu, 8 Sep 2022 02:16:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A488C02F;
+        Wed,  7 Sep 2022 23:16:19 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2885psqc028972;
+        Thu, 8 Sep 2022 06:16:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=lUhjfJ1ZplQ8/9znHOmo1ubgNXWxaHS+Zo/O5ytusWM=;
+ b=hQ4Y3IUI0n+a4VmEIuibwnK/6ylpX9pMI2I+Klmf90WMvXd9/CswYsHd/l6+lXhmXh3b
+ sKLI+X1DSNoRd8aKyy9X1MKVz85DQy5Afk1S1ov3cR2MbUR/71kn4lnSLO1UvHmbJjwe
+ stFrYKd9ouFUWTNVdjonawsNwQBhj1CpRrGp8q+dd+aoEX4bHy8hAwROIP8bJ44OvPoT
+ hkXan4jOTlD/tSuaj30THL/RdodXq0TOW5efh1aketZRmfHmRPTigGPF3JktBxZ9rrYC
+ JmqQrZm9GgozmZs1U5sqc4hvGrSN+jLD+97hDjTqJYF8+oDAd9gjV9NVmrcNHeos0E6i pg== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jf39xgv5t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 06:16:16 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2886GC37020835;
+        Thu, 8 Sep 2022 06:16:12 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3jc00m2t6p-1;
+        Thu, 08 Sep 2022 06:16:12 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2886GC0U020825;
+        Thu, 8 Sep 2022 06:16:12 GMT
+Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2886GBJm020823;
+        Thu, 08 Sep 2022 06:16:12 +0000
+Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
+        id 45E374372; Wed,  7 Sep 2022 23:16:11 -0700 (PDT)
+From:   Kalyan Thota <quic_kalyant@quicinc.com>
+To:     y@qualcomm.com, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com
+Subject: [v3] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
+Date:   Wed,  7 Sep 2022 23:16:10 -0700
+Message-Id: <1662617770-2795-1-git-send-email-quic_kalyant@quicinc.com>
 X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <y>
+References: <y>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aou5gqwR1aV8DEyccjM1GNEIuFYUl35n
+X-Proofpoint-GUID: aou5gqwR1aV8DEyccjM1GNEIuFYUl35n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_04,2022-09-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ malwarescore=0 priorityscore=1501 impostorscore=0 bulkscore=0 adultscore=0
+ spamscore=0 mlxscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209080023
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duke Du <dukedu83@gmail.com>
+Flush mechanism for DSPP blocks has changed in sc7280 family, it
+allows individual sub blocks to be flushed in coordination with
+master flush control.
 
-Add the pmbus driver for TEXAS tps546d24 Buck Converter.
-The vout mode of tps546d24 supported relative data format,
-which is not meet for the original driver (pmbus.c).
+Representation: master_flush && (PCC_flush | IGC_flush .. etc )
 
-Signed-off-by: Duke Du <dukedu83@gmail.com>
----
-Change in v1: 
-    Initial patchset.
-Change in v2:
-    Correct the tps546d24.rst format.
-Change in v3:
-    1. Modify the patch description. 
-    2. Put the change log between the dashes and diffstat.
-Change in v4:
-    1. Modify the patch description. 
-    2. Clear the bit 7 of PMBUS_VOUT_MODE to change the mode from relative 
-       to absolute.
-    3. Add the vendor prefix.
----
----
- Documentation/hwmon/index.rst     |  1 +
- Documentation/hwmon/tps546d24.rst | 35 ++++++++++++++++++++++
- MAINTAINERS                       |  7 +++++
- drivers/hwmon/pmbus/Kconfig       |  9 ++++++
- drivers/hwmon/pmbus/Makefile      |  1 +
- drivers/hwmon/pmbus/tps546d24.c   | 63 +++++++++++++++++++++++++++++++++++++++
- 6 files changed, 116 insertions(+)
- create mode 100644 Documentation/hwmon/tps546d24.rst
- create mode 100644 drivers/hwmon/pmbus/tps546d24.c
+This change adds necessary support for the above design.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index f7113b0..d3eede4 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
-    tps23861
-    tps40422
-    tps53679
-+   tps546d24
-    twl4030-madc-hwmon
-    ucd9000
-    ucd9200
-diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
-new file mode 100644
-index 0000000..3061fd8
---- /dev/null
-+++ b/Documentation/hwmon/tps546d24.rst
-@@ -0,0 +1,35 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+Kernel driver tps546d24
-+======================
-+
-+Supported chips:
-+
-+  * TI TPS546D24
-+
-+    Prefix: 'tps546d24'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.ti.com/lit/gpn/tps546d24
-+
-+Author: Duke Du <dukedu83@gmail.com>
-+
-+
-+Description
-+-----------
-+
-+The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
-+of high frequency operation and 40-A current output from a 7-mm x 5-mm
-+package.
-+
-+Two, three, and four TPS546D24A devices can be interconnected
-+to provide up to 160 A on a single output. The device has an option to
-+overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
-+pin to improve efficiency and reduce power dissipation of the converter.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012b..fa2d4fb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20583,6 +20583,13 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
- F:	drivers/char/tpm/
+Changes in v1:
+- Few nits (Doug, Dmitry)
+- Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+
+Changes in v2:
+- Move the address offset to flush macro (Dmitry)
+- Seperate ops for the sub block flush (Dmitry)
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  2 ++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 35 ++++++++++++++++++++++++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     | 10 ++++++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |  7 ++++++
+ 6 files changed, 55 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+index 601d687..ab38a52 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+@@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct drm_crtc *crtc)
  
-+TPS546D24 DRIVER
-+M:	Duke Du <dukedu83@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/tps546d24.rst
-+F:	drivers/hwmon/pmbus/tps546d24.c
-+
- TRACING
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	Ingo Molnar <mingo@redhat.com>
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 951e4a9..89668af 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -397,6 +397,15 @@ config SENSORS_TPS53679
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tps53679.
+ 		/* stage config flush mask */
+ 		ctl->ops.update_pending_flush_dspp(ctl,
+-			mixer[i].hw_dspp->idx);
++			mixer[i].hw_dspp->idx, DPU_DSPP_SUB_PCC);
+ 	}
+ }
  
-+config SENSORS_TPS546D24
-+	tristate "TPS546D24"
-+	help
-+	  If you say yes here you get hardware monitoring support for TEXAS
-+	  TPS546D24.
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+index 27f029f..0eecb2f 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+@@ -65,7 +65,10 @@
+ 	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
+ 
+ #define CTL_SC7280_MASK \
+-	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
++	(BIT(DPU_CTL_ACTIVE_CFG) | \
++	 BIT(DPU_CTL_FETCH_ACTIVE) | \
++	 BIT(DPU_CTL_VM_CFG) | \
++	 BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
+ 
+ #define MERGE_3D_SM8150_MASK (0)
+ 
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+index 38aa38a..6a0b784 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+@@ -191,6 +191,7 @@ enum {
+  * @DPU_CTL_SPLIT_DISPLAY:	CTL supports video mode split display
+  * @DPU_CTL_FETCH_ACTIVE:	Active CTL for fetch HW (SSPPs)
+  * @DPU_CTL_VM_CFG:		CTL config to support multiple VMs
++ * @DPU_CTL_DSPP_BLOCK_FLUSH: CTL config to support dspp sub-block flush
+  * @DPU_CTL_MAX
+  */
+ enum {
+@@ -198,6 +199,7 @@ enum {
+ 	DPU_CTL_ACTIVE_CFG,
+ 	DPU_CTL_FETCH_ACTIVE,
+ 	DPU_CTL_VM_CFG,
++	DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
+ 	DPU_CTL_MAX
+ };
+ 
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+index a35ecb6..31c8c44 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+@@ -33,6 +33,7 @@
+ #define   CTL_INTF_FLUSH                0x110
+ #define   CTL_INTF_MASTER               0x134
+ #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
++#define   CTL_DSPP_n_FLUSH(n)		((0x13C) + ((n - 1) * 4))
+ 
+ #define CTL_MIXER_BORDER_OUT            BIT(24)
+ #define CTL_FLUSH_MASK_CTL              BIT(17)
+@@ -287,8 +288,9 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
+ }
+ 
+ static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+-	enum dpu_dspp dspp)
++	enum dpu_dspp dspp, enum dpu_dspp_sub_blk dspp_sub_blk)
+ {
 +
-+	  This driver can also be built as a module. If so, the module will
-+	  be called tps546d24
-+
- config SENSORS_UCD9000
- 	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index e2fe86f..0002dbe 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
-+obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
- obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
- obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
- obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
-diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
-new file mode 100644
-index 0000000..84f3dc9
---- /dev/null
-+++ b/drivers/hwmon/pmbus/tps546d24.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for TEXAS TPS546D24 buck converter
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+static struct pmbus_driver_info tps546d24_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN
-+			| PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT
-+			| PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT
-+			| PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-+};
-+
-+static int tps546d24_probe(struct i2c_client *client)
+ 	switch (dspp) {
+ 	case DSPP_0:
+ 		ctx->pending_flush_mask |= BIT(13);
+@@ -307,6 +309,31 @@ static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+ 	}
+ }
+ 
++static void dpu_hw_ctl_update_pending_flush_dspp_subblocks(
++	struct dpu_hw_ctl *ctx,	enum dpu_dspp dspp, enum dpu_dspp_sub_blk dspp_sub_blk)
 +{
-+	int reg;
++	uint32_t flushbits = 0, active;
 +
-+	reg = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
-+	if (reg > 0x80)
-+		i2c_smbus_write_byte_data(client, PMBUS_VOUT_MODE, reg & 0x7f);
-+	return pmbus_do_probe(client, &tps546d24_info);
++	switch (dspp_sub_blk) {
++	case DPU_DSPP_SUB_IGC:
++		flushbits = BIT(2);
++		break;
++	case DPU_DSPP_SUB_PCC:
++		flushbits = BIT(4);
++		break;
++	case DPU_DSPP_SUB_GC:
++		flushbits = BIT(5);
++		break;
++	default:
++		return;
++	}
++
++	active = DPU_REG_READ(&ctx->hw, CTL_DSPP_n_FLUSH(dspp));
++	DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH(dspp), active | flushbits);
++
++	ctx->pending_flush_mask |= BIT(29);
 +}
 +
-+static const struct i2c_device_id tps546d24_id[] = {
-+	{"tps546d24", 0},
-+	{}
+ static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32 timeout_us)
+ {
+ 	struct dpu_hw_blk_reg_map *c = &ctx->hw;
+@@ -675,7 +702,11 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
+ 	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
+ 	ops->update_pending_flush_sspp = dpu_hw_ctl_update_pending_flush_sspp;
+ 	ops->update_pending_flush_mixer = dpu_hw_ctl_update_pending_flush_mixer;
+-	ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
++	if (cap & BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
++		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp_subblocks;
++	else
++		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
++
+ 	if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
+ 		ops->set_active_pipes = dpu_hw_ctl_set_fetch_pipe_active;
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+index 96c012e..227f1bd 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+@@ -149,12 +149,18 @@ struct dpu_hw_ctl_ops {
+ 
+ 	/**
+ 	 * OR in the given flushbits to the cached pending_flush_mask
+-	 * No effect on hardware
++	 *
++	 * If the hardware supports dspp sub block flush, then sub-block
++	 * flushes are written to the hardware and main dspp flush will
++	 * be cached in the pending_flush_mask.
++	 *
+ 	 * @ctx       : ctl path ctx pointer
+ 	 * @blk       : DSPP block index
++	 * @dspp_sub_blk : DSPP sub-block index
+ 	 */
+ 	void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
+-		enum dpu_dspp blk);
++		enum dpu_dspp blk,  enum dpu_dspp_sub_blk dspp_sub_blk);
++
+ 	/**
+ 	 * Write the value of the pending_flush_mask to hardware
+ 	 * @ctx       : ctl path ctx pointer
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+index d3b0ed0..c113d52 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+@@ -167,6 +167,13 @@ enum dpu_dspp {
+ 	DSPP_MAX
+ };
+ 
++enum dpu_dspp_sub_blk{
++	DPU_DSPP_SUB_PCC = 1,
++	DPU_DSPP_SUB_IGC,
++	DPU_DSPP_SUB_GC,
++	DPU_DSPP_SUB_MAX
 +};
-+MODULE_DEVICE_TABLE(i2c, tps546d24_id);
 +
-+static const struct of_device_id tps546d24_of_match[] = {
-+	{.compatible = "ti,tps546d24"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, tps546d24_of_match);
-+
-+/* This is the driver that will be inserted */
-+static struct i2c_driver tps546d24_driver = {
-+	.driver = {
-+		   .name = "tps546d24",
-+		   .of_match_table = of_match_ptr(tps546d24_of_match),
-+	   },
-+	.probe_new = tps546d24_probe,
-+	.id_table = tps546d24_id,
-+};
-+
-+module_i2c_driver(tps546d24_driver);
-+
-+MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
-+MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
+ enum dpu_ctl {
+ 	CTL_0 = 1,
+ 	CTL_1,
 -- 
 2.7.4
 

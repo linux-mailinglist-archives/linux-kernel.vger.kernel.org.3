@@ -2,146 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650845B1463
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C805B1489
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiIHGF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S229845AbiIHGRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiIHGFz (ORCPT
+        with ESMTP id S229476AbiIHGRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:05:55 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEC822B20
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:05:54 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-344fc86d87cso138474377b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 23:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=lJYRFzwH4JLePemhbCSx0zq48/URDmByv8p7ogaW1eM=;
-        b=dxgOW659IivH6ld+oycZtkdr3gYSMaf5uDZRsDYUvQ185actGdsTWmmMsrrWLgybri
-         AkY83nwjwwlVNWRdb6P3iQ1jcISGCuuCYVVz8tORRQuLq3P7H30d8+3dUx8chekDvaUX
-         1q/Lv+J0p7TDE5qNJqtLPLTyPlKRaaQ2XoOkT0bbM1dsym6ePdy8yT6jrpVR/ad6kBJI
-         lQIwyjMS1rQb8G2PPW+xSuI8oH532YZCPnArrFpBAV8ZBgin2MSD2kyMxHGMUd9c/+vt
-         iUraNSxXT2Mckc/uF3lJbsywOxUJB3MFM2DelphAU4bEt9wrs7twwgyEglRDr4Be+N4K
-         bAHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=lJYRFzwH4JLePemhbCSx0zq48/URDmByv8p7ogaW1eM=;
-        b=Ub0aGF7iQDVdwdi8K677atY8xQs11YBtc+8U+HqXDm83jE+aYxogW4FWknORUjLxag
-         6dEnP7FCyTYPXiGgUE/vrBlTxs/o/cD6LG/HIOnE+m4BZ1vslczYEAFowVSe4QEtWnau
-         ffN5eYS9r8vFwnj41zlv16B2oMI8aaPkpW5xaVbf16ebJ+bYdQtsbfPt/KUI7uJDzpmK
-         mp3/J5rd+E55IWOGDn0CGeffw0tNM9scz5vo14G37ylCQooCjNnkhBCwBp+vGd7aQl9e
-         rXPb3GUH0zmItnbJfzQiOcJWZ+z1kJsGC9xQW5SjvzQlD1YNQf92LPxcBmixCzIXV178
-         0J8g==
-X-Gm-Message-State: ACgBeo2mzZm5K8GunLsz8Y1JzHShkLgEIyq8gPBo1vlkdtDr2Ls/jw+W
-        VprsPhwpbBo4SwSQoo19lngjb4NMbGzyAWNa5DJxcg==
-X-Google-Smtp-Source: AA6agR7fk9QsTUWXLvr/tdr0+4a/qUd4BukcHMTp6u6ZV71YqzuR6ZHkzBSwnnqHEGFvGdP6PzzI7Orsef6bMbxf/8M=
-X-Received: by 2002:a81:bb41:0:b0:328:fd1b:5713 with SMTP id
- a1-20020a81bb41000000b00328fd1b5713mr6423586ywl.238.1662617153642; Wed, 07
- Sep 2022 23:05:53 -0700 (PDT)
+        Thu, 8 Sep 2022 02:17:48 -0400
+X-Greylist: delayed 605 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 23:17:46 PDT
+Received: from vsp02-out.oderland.com (vsp02-out.oderland.com [IPv6:2a02:28f0::27:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633D9F8E9
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:17:45 -0700 (PDT)
+X-Scanned-Cookie: f500bda16b244583931b552d2d35209f2e653c44
+Received: from office.oderland.com (office.oderland.com [91.201.60.5])
+        by vsp-out.oderland.com (Halon) with ESMTPSA
+        id 8aa1c8a6-2f3c-11ed-896b-b78c77300f9c;
+        Thu, 08 Sep 2022 08:07:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=oderland.se
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:Cc:
+        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=7JqDpecRODlTuakjMauVpsCN7cmSweX5A+Tuq3G622o=; b=KU0yVNqMlg0plNl8/TAr/32za8
+        Byl78iUSpA/VCl3dwojDCv5b/YvLlpbOmd0GPvPtQDU0r9WREaVzJYfKm14t7i1grFe3OnEVpkTIh
+        iwhUrgQdupU7XwtKMM0WgLbSL0ypi5pgPrIG9s14KXBFAJZRJA4r3rnKjq9sMYAaBWTpV/8cxRO5K
+        OIBy/uo0X3VE9jJF0G6WiuGW3erOYxxU8bi4UNkZa+U1Z5s18neWIdyaqZ+MaPIAgiw4fKmLxHu3r
+        QlayX26IxftDFJbFd3ER33OBtRtZox/eJtYGq2ZcZy1saq1jQtfHtTIXT/lC954NX+sGDm3AdJJyd
+        7xeKSGOQ==;
+Received: from 160.193-180-18.r.oderland.com ([193.180.18.160]:47584 helo=[10.137.0.14])
+        by office.oderland.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <josef@oderland.se>)
+        id 1oWAhQ-00FjFi-LF;
+        Thu, 08 Sep 2022 08:07:38 +0200
+Message-ID: <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
+Date:   Thu, 8 Sep 2022 08:07:37 +0200
 MIME-Version: 1.0
-References: <20220907173903.2268161-1-elver@google.com>
-In-Reply-To: <20220907173903.2268161-1-elver@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 8 Sep 2022 08:05:17 +0200
-Message-ID: <CANpmjNMH4_H75Z_aQ63C52TDma7PnjWWjmyv+MtXt2W522UAQQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kcsan: Instrument memcpy/memset/memmove with newer Clang
-To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
+ Thunderbird/104.0
+Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
+To:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+ <Yxj1ZQjBfdG1u93d@shikoro>
+Content-Language: en-US
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Josef Johansson <josef@oderland.se>
+In-Reply-To: <Yxj1ZQjBfdG1u93d@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+x-oderland-domain-valid: yes
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 19:39, Marco Elver <elver@google.com> wrote:
+On 9/7/22 21:47, Wolfram Sang wrote:
+> On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko wrote:
+>> ACPI core in conjunction with platform driver core provides
+>> an infrastructure to enumerate ACPI devices. Use it in order
+>> to remove a lot of boilerplate code.
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Josef, do you have resources to test this patch before I apply it?
 >
-> With Clang version 16+, -fsanitize=thread will turn
-> memcpy/memset/memmove calls in instrumented functions into
-> __tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
->
-> Add these functions to the core KCSAN runtime, so that we (a) catch data
-> races with mem* functions, and (b) won't run into linker errors with
-> such newer compilers.
->
-> Cc: stable@vger.kernel.org # v5.10+
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  kernel/kcsan/core.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> index fe12dfe254ec..66ef48aa86e0 100644
-> --- a/kernel/kcsan/core.c
-> +++ b/kernel/kcsan/core.c
-> @@ -18,6 +18,7 @@
->  #include <linux/percpu.h>
->  #include <linux/preempt.h>
->  #include <linux/sched.h>
-> +#include <linux/string.h>
->  #include <linux/uaccess.h>
->
->  #include "encoding.h"
-> @@ -1308,3 +1309,29 @@ noinline void __tsan_atomic_signal_fence(int memorder)
->         }
->  }
->  EXPORT_SYMBOL(__tsan_atomic_signal_fence);
-> +
-> +void *__tsan_memset(void *s, int c, size_t count);
-> +noinline void *__tsan_memset(void *s, int c, size_t count)
-> +{
-> +       check_access(s, count, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       return __memset(s, c, count);
-> +}
-> +EXPORT_SYMBOL(__tsan_memset);
-> +
-> +void *__tsan_memmove(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
-> +{
-> +       check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       check_access(src, len, 0, _RET_IP_);
-> +       return __memmove(dst, src, len);
-> +}
-> +EXPORT_SYMBOL(__tsan_memmove);
-> +
-> +void *__tsan_memcpy(void *dst, const void *src, size_t len);
-> +noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
-> +{
-> +       check_access(dst, len, KCSAN_ACCESS_WRITE, _RET_IP_);
-> +       check_access(src, len, 0, _RET_IP_);
-> +       return __memcpy(dst, src, len);
-> +}
-> +EXPORT_SYMBOL(__tsan_memcpy);
-
-I missed that s390 doesn't have arch memcpy variants, so this fails:
-
->> kernel/kcsan/core.c:1316:16: error: implicit declaration of function '__memset'; did you mean '__memset64'? [-Werror=implicit-function-declaration]
-
-I'll send a v2 where __tsan_mem* is aliased to generic versions if the
-arch doesn't have mem*() functions.
-
-
-
-
-> --
-> 2.37.2.789.g6183377224-goog
->
+Yes, I'll make that happen today.

@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6005B2699
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9CC5B269A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbiIHTP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 15:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S231820AbiIHTPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 15:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiIHTPY (ORCPT
+        with ESMTP id S231614AbiIHTPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 15:15:24 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4232374E29;
-        Thu,  8 Sep 2022 12:15:23 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id t3so13786688ply.2;
-        Thu, 08 Sep 2022 12:15:23 -0700 (PDT)
+        Thu, 8 Sep 2022 15:15:50 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F055B9FBD
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 12:15:49 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id e17so18265409edc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 12:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=YHnvyDtge2bDMZCHRPm32H8ARMZYnaM9vFyOk1RCgm8=;
-        b=IhF/5QBj7WQlQU/W89KkP51CbnOxpPC2/mmJkNa8i+KZK46QjfKrzL+FbCKdZb+z5W
-         zYPEN/yi1BfBnOL/ARfTcDPr1wxcBorVtB+0vVqM3myv3bzDBZAkmS919Z+QJnn7kR3W
-         ToMMmYoZCvVW160AjxJNSyE5doDbaYCDsgFJ3UmBuiCbFKpif8CRtIDPIsDVCAonvmc4
-         2Z0vYiyF9HNB+tlYDD29cFvy+HA2GewWq4RHP9WfwJv8XxHEYCGTBdUHVnoPo4RmO7Ts
-         Q3lF3EKAwxJCXdFecNH4y4nAMp/JQILgb0rIvhleNanDlT1QKWOt9NvD8cw1jmqGrV7r
-         Sz7w==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=brkHUeJ9wKI03sLk6Szr1Y+BAmgmA5eRffy8CVfu2Dc=;
+        b=G05EQ0Wr984wf1q9eYwe3KcsW7Qe7anlBWl3rfNx+B/Zt5sTvZOG/L1SCm4vbntrMb
+         t7OQcpUDL5D6QA5b9kCHhM8zzwqb6pxpBiyB4pcoOI3l3ICt0urighd5A0yOFg/IJqdp
+         SANRIzEtdmkl0GelFxwlfJhfvER83Sb+VDZve37prIYU3K1mzBtVvLoWiv4lnPyOFTMz
+         fZcEYBLPbU/lKmggP7WbNVqNNwEeMwQ29ARlKDyr+DLsKKD0Oa/bDrlCR1ely3JhkHTw
+         7JdtTNdVxNZ9SIcfgRteQQRlqXivLg4WsdIGW+V0nBx7P1+UQr34gLveS49Xt+QcE56f
+         dmvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=YHnvyDtge2bDMZCHRPm32H8ARMZYnaM9vFyOk1RCgm8=;
-        b=giymR5QqTfWak6/9og31prdZw7iSuQhMYsV8+TI2eRRsCKGMPsMiKdyjxWnUZg2Cpf
-         d26kpV14z6IZUcZuFvTKJx+GsFcKNxv4fHa6WDDcTWSE/Q3v8peCOwxIc4Mrevm2RZ94
-         E+OY/XpU/IOYnlExO8Sa/afPXva+W/pzSSngrcj3Efhc/Xhxdwt4LyxvXzxbCP5OOruX
-         s/gHv1RoQ/73KsbrUnhh9t/PfqOt366I0k3sx5hbw7X0A5opb0gERIeGCSVXMZP6pxeS
-         0wj2RfAz4bWs+iYcfBPmf1w+CpswhZIAHtGfNs9Ub3Al1n/sbSnFhrK9QL3ojHipGAbd
-         KVKQ==
-X-Gm-Message-State: ACgBeo2l/B5fG25Da7+JKjuOXED3e+lUUDTYKqm9f2pnCFSPMhA7W3ST
-        FXQrQ2j8j8foK83Ibr6+ghg=
-X-Google-Smtp-Source: AA6agR72v/cOfySC/mUUrrmMeYykkaeiOnKAj9Q6cCxt54+ZAUoMaPiSDQEWjyzQLw1WyAXpje4ULA==
-X-Received: by 2002:a17:903:2309:b0:176:de48:e940 with SMTP id d9-20020a170903230900b00176de48e940mr10272559plh.15.1662664522664;
-        Thu, 08 Sep 2022 12:15:22 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id bf10-20020a170902b90a00b00172ff99d0afsm14977203plb.140.2022.09.08.12.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 12:15:21 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 12:15:20 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v3 14/22] KVM: Move out KVM arch PM hooks and hardware
- enable/disable logic
-Message-ID: <20220908191520.GD470011@ls.amr.corp.intel.com>
-References: <cover.1662084396.git.isaku.yamahata@intel.com>
- <1c0165a7d2dd22810d9ae2cf8cf474a2e6dcb6d7.1662084396.git.isaku.yamahata@intel.com>
- <20220906074358.hwchunz6vdxefzb6@yy-desk-7060>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=brkHUeJ9wKI03sLk6Szr1Y+BAmgmA5eRffy8CVfu2Dc=;
+        b=XkAUZIZfCA6iTGs6FhyHnmQYyXZpq0se7BwYqTXS31ZUILvmYM7p47Umz/HPu9xVTg
+         yOQa9vZJxW8V2OXs3aH4Ki/40fXNRmRpN/k4p4844CM89E4Ns40Dfc36AhAUOSdZIaoD
+         WyrWkBDGmb/qA2KL6yP7W2rkdtwN5SSufJoxJwurRgUELiwH3PtYYjwjNge3AbKiZDc4
+         XKa9CzZCko8DfdZFCrlno2mFqb21y6iLLD8db7H2JA48oVCKBxnRk7JlCrv8nrhn3UDC
+         t1z6M8uTX+NzF4N5S9/pvgurZuMab33DkDfQ6bzloiFZRI/UOOlAuLGdRjcaE5xk9meB
+         7nSQ==
+X-Gm-Message-State: ACgBeo1U/nAsOjI0pQLHmxnTQ9M97zpxAoXbylBkv84ojyFfoN8H9sZU
+        v3ods4YZQpuH/9XM5OZ5uQSSyyVGchE=
+X-Google-Smtp-Source: AA6agR6R1aLc52UBz+r/zzyyf2WiwZszTIWjbB0izBL5EMq/+p/8KNN4FElnaye8WnA7eW47oxhcPw==
+X-Received: by 2002:aa7:ca50:0:b0:44e:973b:461e with SMTP id j16-20020aa7ca50000000b0044e973b461emr8525535edt.414.1662664547688;
+        Thu, 08 Sep 2022 12:15:47 -0700 (PDT)
+Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id r16-20020a50c010000000b00447bd64d4f6sm12983987edb.73.2022.09.08.12.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 12:15:46 -0700 (PDT)
+Message-ID: <b5d3f85e-9678-5cdf-4643-7f52d7e2cc82@gmail.com>
+Date:   Thu, 8 Sep 2022 21:15:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220906074358.hwchunz6vdxefzb6@yy-desk-7060>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] staging: r8188eu: remove some unused enums
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220908072815.31002-1-straube.linux@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220908072815.31002-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,142 +76,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:43:58PM +0800,
-Yuan Yao <yuan.yao@linux.intel.com> wrote:
-
-> On Thu, Sep 01, 2022 at 07:17:49PM -0700, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> >
-> > To make clear that those files are default implementation that KVM/x86 (and
-> > other KVM arch in future) will override them, split out those into a single
-> > file. Once conversions for all kvm archs are done, the file will be
-> > deleted.  kvm_arch_pre_hardware_unsetup() is introduced to avoid cross-arch
-> > code churn for now.  Once it's settled down,
-> > kvm_arch_pre_hardware_unsetup() can be merged into
-> > kvm_arch_hardware_unsetup() in each arch code.
-> >
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  include/linux/kvm_host.h |   1 +
-> >  virt/kvm/kvm_arch.c      | 103 ++++++++++++++++++++++-
-> >  virt/kvm/kvm_main.c      | 172 +++++----------------------------------
-> >  3 files changed, 124 insertions(+), 152 deletions(-)
-> >
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index f78364e01ca9..60f4ae9d6f48 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -1437,6 +1437,7 @@ static inline void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu) {}
-> >  int kvm_arch_hardware_enable(void);
-> >  void kvm_arch_hardware_disable(void);
-> >  int kvm_arch_hardware_setup(void *opaque);
-> > +void kvm_arch_pre_hardware_unsetup(void);
-> >  void kvm_arch_hardware_unsetup(void);
-> >  int kvm_arch_check_processor_compat(void);
-> >  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
-> > diff --git a/virt/kvm/kvm_arch.c b/virt/kvm/kvm_arch.c
-> > index 0eac996f4981..0648d4463d9e 100644
-> > --- a/virt/kvm/kvm_arch.c
-> > +++ b/virt/kvm/kvm_arch.c
-> > @@ -6,49 +6,148 @@
-> >   * Author:
-> >   *   Isaku Yamahata <isaku.yamahata@intel.com>
-> >   *                  <isaku.yamahata@gmail.com>
-> > + *
-> > + * TODO: Delete this file once the conversion of all KVM arch is done.
-> >   */
-> >
-> >  #include <linux/kvm_host.h>
-> >
-> > +static cpumask_t cpus_hardware_enabled = CPU_MASK_NONE;
-> > +static atomic_t hardware_enable_failed;
-> > +
-> >  __weak int kvm_arch_post_init_vm(struct kvm *kvm)
-> >  {
-> >  	return 0;
-> >  }
-> >
-> > +static void hardware_enable_nolock(void *caller_name)
-> > +{
-> > +	int cpu = raw_smp_processor_id();
-> > +	int r;
-> > +
-> > +	WARN_ON_ONCE(preemptible());
-> > +
-> > +	if (cpumask_test_cpu(cpu, &cpus_hardware_enabled))
-> > +		return;
-> > +
-> > +	cpumask_set_cpu(cpu, &cpus_hardware_enabled);
-> > +
-> > +	r = kvm_arch_hardware_enable();
-> > +
-> > +	if (r) {
-> > +		cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
-> > +		atomic_inc(&hardware_enable_failed);
-> > +		pr_warn("kvm: enabling virtualization on CPU%d failed during %s()\n",
-> > +			cpu, (const char *)caller_name);
-> > +	}
-> > +}
-> > +
-> > +static void hardware_disable_nolock(void *junk)
-> > +{
-> > +	int cpu = raw_smp_processor_id();
-> > +
-> > +	WARN_ON_ONCE(preemptible());
-> > +
-> > +	if (!cpumask_test_cpu(cpu, &cpus_hardware_enabled))
-> > +		return;
-> > +	cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
-> > +	kvm_arch_hardware_disable();
-> > +}
-> > +
-> > +__weak void kvm_arch_pre_hardware_unsetup(void)
-> > +{
-> > +	on_each_cpu(hardware_disable_nolock, NULL, 1);
-> > +}
-> > +
-> >  /*
-> >   * Called after the VM is otherwise initialized, but just before adding it to
-> >   * the vm_list.
-> >   */
-> >  __weak int kvm_arch_add_vm(struct kvm *kvm, int usage_count)
-> >  {
-> > -	return kvm_arch_post_init_vm(kvm);
-> > +	int r = 0;
-> > +
-> > +	if (usage_count != 1)
-> > +		return 0;
-> > +
-> > +	atomic_set(&hardware_enable_failed, 0);
-> > +	on_each_cpu(hardware_enable_nolock, (void *)__func__, 1);
+On 9/8/22 09:28, Michael Straube wrote:
+> Remove some unused enums to clean up the driver code.
 > 
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
+>   drivers/staging/r8188eu/include/rtl8188e_xmit.h |  6 ------
+>   drivers/staging/r8188eu/include/rtw_mlme.h      | 11 -----------
+>   drivers/staging/r8188eu/include/wlan_bssdef.h   |  4 ----
+>   3 files changed, 21 deletions(-)
 > 
-> This function is called in kvm_create_vm:
-> 
->  kvm_create_vm {
->  ...
->    enable_hardware_all()
->  ...
->    kvm_arch_add_vm()
->  ...
-> }
-> 
-> so don't need on_each_cpu(enable_hardware_nolock) here, or the
-> enable_hardware_all() shuold be removed from kvm_create_vm().
+> diff --git a/drivers/staging/r8188eu/include/rtl8188e_xmit.h b/drivers/staging/r8188eu/include/rtl8188e_xmit.h
+> index c69fed23ded9..6db7fabebea9 100644
+> --- a/drivers/staging/r8188eu/include/rtl8188e_xmit.h
+> +++ b/drivers/staging/r8188eu/include/rtl8188e_xmit.h
+> @@ -83,12 +83,6 @@
+>   /* OFFSET 20 */
+>   #define	RTY_LMT_EN		BIT(17)
+>   
+> -enum TXDESC_SC {
+> -	SC_DONT_CARE = 0x00,
+> -	SC_UPPER = 0x01,
+> -	SC_LOWER = 0x02,
+> -	SC_DUPLICATE = 0x03
+> -};
+>   /* OFFSET 20 */
+>   #define SGI			BIT(6)
+>   #define USB_TXAGG_NUM_SHT	24
+> diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
+> index 5dc2fe74b7b7..a959e2100c3f 100644
+> --- a/drivers/staging/r8188eu/include/rtw_mlme.h
+> +++ b/drivers/staging/r8188eu/include/rtw_mlme.h
+> @@ -63,17 +63,6 @@ enum rt_scan_type {
+>   	SCAN_MIX,
+>   };
+>   
+> -enum SCAN_RESULT_TYPE {
+> -	SCAN_RESULT_P2P_ONLY = 0,	/* Will return all the P2P devices. */
+> -	SCAN_RESULT_ALL = 1,		/* Will return all the scanned device,
+> -					 * include AP. */
+> -	SCAN_RESULT_WFD_TYPE = 2	/* Will just return the correct WFD
+> -					 * device. */
+> -					/* If this device is Miracast sink
+> -					 * device, it will just return all the
+> -					 * Miracast source devices. */
+> -};
+> -
+>   /*
+>   there are several "locks" in mlme_priv,
+>   since mlme_priv is a shared resource between many threads,
+> diff --git a/drivers/staging/r8188eu/include/wlan_bssdef.h b/drivers/staging/r8188eu/include/wlan_bssdef.h
+> index 9d1c9e763287..81bda91a4136 100644
+> --- a/drivers/staging/r8188eu/include/wlan_bssdef.h
+> +++ b/drivers/staging/r8188eu/include/wlan_bssdef.h
+> @@ -133,10 +133,6 @@ struct ndis_802_11_assoc_info {
+>   	u32  OffsetResponseIEs;
+>   };
+>   
+> -enum ndis_802_11_reload_def {
+> -	Ndis802_11ReloadWEPKeys
+> -};
+> -
+>   /*  Key mapping keys require a BSSID */
+>   struct ndis_802_11_key {
+>   	u32           Length;             /*  Length of this structure */
 
-
-Yes, it's removed. Please notice the following hunk.
-
-@@ -1196,10 +1191,6 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
-      if (r)
-              goto out_err_no_arch_destroy_vm;
-
--     r = hardware_enable_all();
--     if (r)
--             goto out_err_no_disable;
--
- #ifdef CONFIG_HAVE_KVM_IRQFD
-      INIT_HLIST_HEAD(&kvm->irq_ack_notifier_list);
- #endif
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150

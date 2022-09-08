@@ -2,113 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D675B1AB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D01B5B1AC1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiIHK4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 06:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S229548AbiIHK6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 06:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiIHK4m (ORCPT
+        with ESMTP id S229547AbiIHK6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 06:56:42 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CFB4DF31
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 03:56:41 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2889mlT9030782;
-        Thu, 8 Sep 2022 10:56:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=lYxAtXx8X/EDiK+zc3gC/WUgjZew/BLsc6IP9dnEjEg=;
- b=ACBJyOBZH4BJLQAofsJnwQAkFOxCtpDrw8++6oGra7GanGm6f4PpDMviYdo9M/LEm9YK
- 5IUq57AO2BjolmTjCFf7sqHIJPCWVbSKJ0hALdMkj6eu07AK+BTYXjNGyQf22E5C1kLw
- AEIy/t5lS099PKnZCaSn2GdhuowzN6QBMboeKYee4jz1Pzb8cwOTpUYMFgSg6RCJzpfw
- fHTMXfuK0IQ/QvkBBgY4eMEcTe8BzyF4D3kyJ1N2R8ZXYleWaZt/N16ApqAovucswPtl
- Oq3QBgSFMUsxfYHSDYK7romqcHUlmEwrK4xEPVzassu1M6+CKf3lJofN6dsDup4C0afh rg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jbwq2kh9e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Sep 2022 10:56:38 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2887jnYj022690;
-        Thu, 8 Sep 2022 10:56:37 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jbwc58723-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Sep 2022 10:56:37 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 288Aua4t002410;
-        Thu, 8 Sep 2022 10:56:36 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3jbwc5871m-1;
-        Thu, 08 Sep 2022 10:56:36 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Igor Torrente <igormtorrente@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/vkms: fix variable dereferenced before check warning
-Date:   Thu,  8 Sep 2022 03:56:23 -0700
-Message-Id: <20220908105623.72777-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 8 Sep 2022 06:58:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134805FF68
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 03:58:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94F1E61C3F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:58:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD07C433C1;
+        Thu,  8 Sep 2022 10:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662634680;
+        bh=65Xz5LWNy5zeYP5z8NNG7GUzsoo/VQzp/ROjifsWCzA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IDwnaXP5fIZ7Xf2XT8Fzh2nuWq0c+kJgnV0PD6vR/DARLCQHayEe3RV59afe+g5j4
+         NKJiDl02U3NLIa3mW0IMjmy5fSFaPprefHC7eoLUpV/F1bvVOJDSHguVe+R96JJKMo
+         6b/Q53Bfx223ugJxWarNRaghJhoYxMc/c00ZXNt6hnVPd5eCnuTbfWP+aAJySgNIk8
+         VrU7AwwtSBqi/VzhT9UEVe25H9qh90ADobKaZ4tphMA0vusU9QbmIF6qNfxq9autYD
+         XefVFUBwlKOf6dJVhiodNtgXBVXh5OugML9pviFrXOgGbQKVUA+THOkoahhc0Z0r80
+         x7AZpWqV2XVng==
+Message-ID: <f8b522ab-ff2f-c340-5640-e446c7e68d0a@kernel.org>
+Date:   Thu, 8 Sep 2022 18:57:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_06,2022-09-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 malwarescore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209080039
-X-Proofpoint-GUID: WiZDPMydGAJBt39ef98fwTNIvd0sTP6u
-X-Proofpoint-ORIG-GUID: WiZDPMydGAJBt39ef98fwTNIvd0sTP6u
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 -next] f2fs: fix wrong dirty page count when race
+ between mmap and fallocate.
+Content-Language: en-US
+To:     Shuqi Zhang <zhangshuqi3@huawei.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20220831022440.2985736-1-zhangshuqi3@huawei.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220831022440.2985736-1-zhangshuqi3@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch warns:
+On 2022/8/31 10:24, Shuqi Zhang wrote:
+> This is a BUG_ON issue as follows when running xfstest-generic-503:
+> WARNING: CPU: 21 PID: 1385 at fs/f2fs/inode.c:762 f2fs_evict_inode+0x847/0xaa0
+> Modules linked in:
+> CPU: 21 PID: 1385 Comm: umount Not tainted 5.19.0-rc5+ #73
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
+> 
+> Call Trace:
+> evict+0x129/0x2d0
+> dispose_list+0x4f/0xb0
+> evict_inodes+0x204/0x230
+> generic_shutdown_super+0x5b/0x1e0
+> kill_block_super+0x29/0x80
+> kill_f2fs_super+0xe6/0x140
+> deactivate_locked_super+0x44/0xc0
+> deactivate_super+0x79/0x90
+> cleanup_mnt+0x114/0x1a0
+> __cleanup_mnt+0x16/0x20
+> task_work_run+0x98/0x100
+> exit_to_user_mode_prepare+0x3d0/0x3e0
+> syscall_exit_to_user_mode+0x12/0x30
+> do_syscall_64+0x42/0x80
+> entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> Function flow analysis when BUG occurs:
+> f2fs_fallocate                    mmap
+>                                    do_page_fault
+>                                      pte_spinlock  // ---lock_pte
+>                                      do_wp_page
+>                                        wp_page_shared
+>                                          pte_unmap_unlock   // unlock_pte
+>                                            do_page_mkwrite
+>                                            f2fs_vm_page_mkwrite
+>                                              down_read(invalidate_lock)
+>                                              lock_page
+>                                              if (PageMappedToDisk(page))
+>                                                goto out;
+>                                              // set_page_dirty  --NOT RUN
+>                                              out: up_read(invalidate_lock);
+>                                          finish_mkwrite_fault // unlock_pte
+> f2fs_collapse_range
+>    down_write(i_mmap_sem)
+>    truncate_pagecache
+>      unmap_mapping_pages
+>        i_mmap_lock_write // down_write(i_mmap_rwsem)
+>          ......
+>          zap_pte_range
+>            pte_offset_map_lock // ---lock_pte
+>             set_page_dirty
+>              f2fs_dirty_data_folio
+>                if (!folio_test_dirty(folio)) {
+>                                          fault_dirty_shared_page
+>                                            set_page_dirty
+>                                              f2fs_dirty_data_folio
+>                                                if (!folio_test_dirty(folio)) {
+>                                                  filemap_dirty_folio
+>                                                  f2fs_update_dirty_folio // ++
+>                                                }
+>                                              unlock_page
+>                  filemap_dirty_folio
+>                  f2fs_update_dirty_folio // page count++
+>                }
+>            pte_unmap_unlock  // --unlock_pte
+>        i_mmap_unlock_write  // up_write(i_mmap_rwsem)
+>    truncate_inode_pages
+>    up_write(i_mmap_sem)
 
-drivers/gpu/drm/vkms/vkms_plane.c:110 vkms_plane_atomic_update() warn:
- variable dereferenced before check 'fb' (see line 108)
+Will this race condition affact f2fs private field update?
 
-Fix the warning by moving the dereference after the NULL check.
+Thanks,
 
-Fixes: 8ba1648567e2 ("drm: vkms: Refactor the plane composer to accept new formats")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
- drivers/gpu/drm/vkms/vkms_plane.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/vkms/vkms_plane.c b/drivers/gpu/drm/vkms/vkms_plane.c
-index f4319066adcc..c3a845220e10 100644
---- a/drivers/gpu/drm/vkms/vkms_plane.c
-+++ b/drivers/gpu/drm/vkms/vkms_plane.c
-@@ -105,11 +105,12 @@ static void vkms_plane_atomic_update(struct drm_plane *plane,
- 	struct drm_shadow_plane_state *shadow_plane_state;
- 	struct drm_framebuffer *fb = new_state->fb;
- 	struct vkms_frame_info *frame_info;
--	u32 fmt = fb->format->format;
-+	u32 fmt;
- 
- 	if (!new_state->crtc || !fb)
- 		return;
- 
-+	fmt = fb->format->format;
- 	vkms_plane_state = to_vkms_plane_state(new_state);
- 	shadow_plane_state = &vkms_plane_state->base;
- 
--- 
-2.31.1
-
+> 
+> When race happens between mmap-do_page_fault-wp_page_shared and
+> fallocate-truncate_pagecache-zap_pte_range, the zap_pte_range calls
+> function set_page_dirty without page lock. Besides, though
+> truncate_pagecache has immap and pte lock, wp_page_shared calls
+> fault_dirty_shared_page without any. In this case, two threads race
+> in f2fs_dirty_data_folio function. Page is set to dirty only ONCE,
+> but the count is added TWICE by calling filemap_dirty_folio.
+> Thus the count of dirty page cannot accord with the real dirty pages.
+> 
+> Following is the solution to in case of race happens without any lock.
+> Since folio_test_set_dirty in filemap_dirty_folio is atomic, judge return
+> value will not be at risk of race.
+> 
+> Signed-off-by: Shuqi Zhang <zhangshuqi3@huawei.com>
+> ---
+>   fs/f2fs/checkpoint.c | 3 +--
+>   fs/f2fs/data.c       | 3 +--
+>   fs/f2fs/node.c       | 3 +--
+>   3 files changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+> index 8259e0fa97e1..3a3329bf1033 100644
+> --- a/fs/f2fs/checkpoint.c
+> +++ b/fs/f2fs/checkpoint.c
+> @@ -448,8 +448,7 @@ static bool f2fs_dirty_meta_folio(struct address_space *mapping,
+>   
+>   	if (!folio_test_uptodate(folio))
+>   		folio_mark_uptodate(folio);
+> -	if (!folio_test_dirty(folio)) {
+> -		filemap_dirty_folio(mapping, folio);
+> +	if (filemap_dirty_folio(mapping, folio)) {
+>   		inc_page_count(F2FS_M_SB(mapping), F2FS_DIRTY_META);
+>   		set_page_private_reference(&folio->page);
+>   		return true;
+> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> index aa3ccddfa037..16c39bd948a0 100644
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -3697,8 +3697,7 @@ static bool f2fs_dirty_data_folio(struct address_space *mapping,
+>   		folio_mark_uptodate(folio);
+>   	BUG_ON(folio_test_swapcache(folio));
+>   
+> -	if (!folio_test_dirty(folio)) {
+> -		filemap_dirty_folio(mapping, folio);
+> +	if (filemap_dirty_folio(mapping, folio)) {
+>   		f2fs_update_dirty_folio(inode, folio);
+>   		return true;
+>   	}
+> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> index e06a0c478b39..3506ffcb31f8 100644
+> --- a/fs/f2fs/node.c
+> +++ b/fs/f2fs/node.c
+> @@ -2147,8 +2147,7 @@ static bool f2fs_dirty_node_folio(struct address_space *mapping,
+>   	if (IS_INODE(&folio->page))
+>   		f2fs_inode_chksum_set(F2FS_M_SB(mapping), &folio->page);
+>   #endif
+> -	if (!folio_test_dirty(folio)) {
+> -		filemap_dirty_folio(mapping, folio);
+> +	if (filemap_dirty_folio(mapping, folio)) {
+>   		inc_page_count(F2FS_M_SB(mapping), F2FS_DIRTY_NODES);
+>   		set_page_private_reference(&folio->page);
+>   		return true;

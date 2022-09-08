@@ -2,130 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73BE5B14D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E6D5B14DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbiIHGjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S229614AbiIHGkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIHGjB (ORCPT
+        with ESMTP id S230519AbiIHGjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:39:01 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73447C7BAE;
-        Wed,  7 Sep 2022 23:38:40 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2886Q4lK025050;
-        Thu, 8 Sep 2022 06:38:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LPgzPBamNRKA4KxAW8ALy4x4jbE4Kt2EiNmgCKQYneg=;
- b=d6wgSCVYo0O3nlKxcIiakYVxajL5ZG3zOY1iXxBXbWzIpSmVPeqK23dxrL4uZGYLY3Ut
- hK53jDNF5CYdAB6PV+LpMgwxmLnFT1MFM6TGW/ARTKRtBZXgbew2nBciTrgP7FNax97e
- JxFs3m2cozhrpgUQcmKSZEDGXWHrilNmgYmKBv7Ft2Omkz+C+FW0oQ1kdxNWYldnEEWb
- pE6xO1lwzI+ykATPtVe1l5Oj0edDu2LJgbnF2/3KtNkjYxQQv6f6rNNB3SIDFcYpveIm
- U8GwpNbT0AK0WQaSIB2DY1kVrnmrjrLn5Vwzu/RwufMkGvbAqQ6XTIAzi8ROARM1HD1i YA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jequfkmrs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 06:38:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2886cXHZ021247
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Sep 2022 06:38:33 GMT
-Received: from [10.216.34.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 7 Sep 2022
- 23:38:26 -0700
-Message-ID: <9609ade9-da03-6c3e-4d1a-80e97ac3b692@quicinc.com>
-Date:   Thu, 8 Sep 2022 12:08:23 +0530
+        Thu, 8 Sep 2022 02:39:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706AB2A709;
+        Wed,  7 Sep 2022 23:39:50 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 08:39:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1662619188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uCklRcd8QH5yU0ZLfjm8Su6BvKGC7lByKatEzlg7GMg=;
+        b=R2yS+AzL/DDj+5QU94usdh7eQJwUIEckdiB1lqs0ce4CBBxLfqUzXlJ/dKkRNKnPN66u0W
+        QmhCUV6KTMJIo0a+Q1bVKnAqPa1GB/QnZ713vzd9iqHaYUnA0nVYNY9zgc1s9iz3/c7NDc
+        Es253i48vXvUMpvFNnFl2A0wrb+NFspdsYY7Xc6XOvFTRsiL+S+RLpENX2KPfcv5xAZnG1
+        6GEP+2ad6+PqE5d10yDRTMz5HKIwdpGT1m4ybgQ1+dNBhHnNXopGZCpGY76vVE+aOhAneT
+        ETlJf/CV2OtewNZDfEnCHUTnTeLmBslI+pOvFpYnHqkc6m0Kup4yYuiNJ42Guw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1662619188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uCklRcd8QH5yU0ZLfjm8Su6BvKGC7lByKatEzlg7GMg=;
+        b=/EZcb9cquB9zayRZl/wGva2AWN9cX8veY4ISar2D2givsMxB+ZJyy99I3UUb/GQNj1IPaT
+        Ahl7ZOOb20p7PlCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 REPOST] asm-generic: Conditionally enable
+ do_softirq_own_stack() via Kconfig.
+Message-ID: <YxmOMxxeC/h7L1EW@linutronix.de>
+References: <Ywcx4QBdYNIBLJiy@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: sc7280: Add missing aggre0,
- aggre1 clocks
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <helgaas@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mka@chromium.org>,
-        <quic_vbadigan@quicinc.com>, <quic_hemantk@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <manivannan.sadhasivam@linaro.org>,
-        <swboyd@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <1662171184-25211-1-git-send-email-quic_krichai@quicinc.com>
- <1662171184-25211-4-git-send-email-quic_krichai@quicinc.com>
- <cc00fad3-08fb-462a-12ac-73143aa4206f@linaro.org>
-From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <cc00fad3-08fb-462a-12ac-73143aa4206f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9tovZ1LiDMIuOSwd9RYarpfoggFYj1RV
-X-Proofpoint-ORIG-GUID: 9tovZ1LiDMIuOSwd9RYarpfoggFYj1RV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_04,2022-09-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209080023
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Ywcx4QBdYNIBLJiy@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-08-25 10:25:06 [+0200], To Arnd Bergmann wrote:
+> Remove the CONFIG_PREEMPT_RT symbol from the ifdef around
+> do_softirq_own_stack() and move it to Kconfig instead.
+>=20
+> Enable softirq stacks based on SOFTIRQ_ON_OWN_STACK which depends on
+> HAVE_SOFTIRQ_ON_OWN_STACK and its default value is set to !PREEMPT_RT.
+> This ensures that softirq stacks are not used on PREEMPT_RT and avoids
+> a 'select' statement on an option which has a 'depends' statement.
+>=20
+> Link: https://lore.kernel.org/YvN5E%2FPrHfUhggr7@linutronix.de
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>=20
+> Arnd, could you please route it via your tree?=20
+>=20
+> v1=E2=80=A6v2:
+>    - Use "def_bool HAVE_SOFTIRQ_ON_OWN_STACK && !PREEMPT_RT"
 
-On 9/7/2022 5:52 PM, Krzysztof Kozlowski wrote:
-> On 03/09/2022 04:13, Krishna chaitanya chundru wrote:
->> Add missing aggre0, aggre1 clocks.
->>
->> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index e66fc67..a5ce095 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -2043,6 +2043,8 @@
->>   				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
->>   				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
->>   				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>,
->> +				 <&gcc GCC_AGGRE_NOC_PCIE_CENTER_SF_AXI_CLK>,
->> +				 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
->>   				 <&gcc GCC_DDRSS_PCIE_SF_CLK>;
->>   
->>   			clock-names = "pipe",
->> @@ -2055,6 +2057,8 @@
->>   				      "bus_slave",
->>   				      "slave_q2a",
->>   				      "tbu",
->> +				      "aggre0",
->> +				      "aggre1",
->>   				      "ddrss_sf_tbu";
->>   
-> Same as binding - adding entries in the middle causes ABI issues.
->
-> Best regards,
-> Krzysztof
-Ok I will change the order as suggested.
+a gentle *ping*
+
+Sebastian

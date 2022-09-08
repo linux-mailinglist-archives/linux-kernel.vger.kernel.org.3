@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05E75B2421
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B925B2422
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiIHRBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S231401AbiIHRBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiIHRBP (ORCPT
+        with ESMTP id S230497AbiIHRB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:01:15 -0400
+        Thu, 8 Sep 2022 13:01:29 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61C2BE5581
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:01:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79BB6EA423
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:01:28 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 523BF153B;
-        Thu,  8 Sep 2022 10:01:20 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89FE0153B;
+        Thu,  8 Sep 2022 10:01:34 -0700 (PDT)
 Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 399BA3F71A;
-        Thu,  8 Sep 2022 10:01:11 -0700 (PDT)
-Message-ID: <846894f1-9d13-26f3-2f26-80768942eecb@arm.com>
-Date:   Thu, 8 Sep 2022 18:01:04 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3A593F71A;
+        Thu,  8 Sep 2022 10:01:25 -0700 (PDT)
+Message-ID: <0586ab4b-e201-fbeb-927d-8ba709573b07@arm.com>
+Date:   Thu, 8 Sep 2022 18:01:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v6 04/21] x86/resctrl: Group struct rdt_hw_domain cleanup
+Subject: Re: [PATCH v5 00/21] x86/resctrl: Make resctrl_arch_rmid_read()
+ return values in bytes
 Content-Language: en-GB
-To:     haoxin <xhao@linux.alibaba.com>, x86@kernel.org,
+To:     haoxin <xhao@linux.alibaba.com>,
+        Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         H Peter Anvin <hpa@zytor.com>,
@@ -42,11 +43,12 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
         Cristian Marussi <cristian.marussi@arm.com>,
         xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com
-References: <20220902154829.30399-1-james.morse@arm.com>
- <20220902154829.30399-5-james.morse@arm.com>
- <33bedd74-a19e-8919-64c3-432c2eaba11d@linux.alibaba.com>
+References: <20220622164629.20795-1-james.morse@arm.com>
+ <f5ab048c-4a3a-8292-8a08-5fdaff739381@linux.alibaba.com>
+ <5adf4968-b079-2fd3-dd61-09ed16f74080@intel.com>
+ <a05e0397-50be-2f99-e461-60852c8efb3c@linux.alibaba.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <33bedd74-a19e-8919-64c3-432c2eaba11d@linux.alibaba.com>
+In-Reply-To: <a05e0397-50be-2f99-e461-60852c8efb3c@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -60,52 +62,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Hao Xin,
 
-On 07/09/2022 07:28, haoxin wrote:
+On 07/09/2022 06:46, haoxin wrote:
+> 在 2022/8/24 上午1:09, Reinette Chatre 写道:
+>> On 7/3/2022 8:54 AM, Xin Hao wrote:
+>>> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat mon_data/mon_L3_00/llc_occupancy
+>>> 3833856
+>>> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat mon_data/mon_L3_00/llc_occupancy
+>>> 3620864
+>>> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat mon_data/mon_L3_00/llc_occupancy
+>>> 3727360
+>>> [root@iZbp1bu26qv0j3ddyusot3Z p1]# cat size
+>>>      MB:0=100;1=100
+>>>      L3:0=3407872;1=3407872
+>>>
+>>> Obviously, the value has been overflowed,  Can you explain why？
+
+>> I do not think the conclusion should immediately be that there is an
+>> overflow issue. Have you perhaps run into the scenario "Notes on
+>> cache occupancy monitoring and control" described in
+>> Documentation/x86/resctrl.rst?
+>>
+>> When "memhog" starts it can allocate to the entire L3 for a while
+>> before it is moved to the constrained resource group. It's cache
+>> lines are not evicted as part of this move so it is not unusual for
+>> it to have more lines in L3 than it is allowed to allocate into.
 > 
-> 在 2022/9/2 下午11:48, James Morse 写道:
->> domain_add_cpu() and domain_remove_cpu() need to kfree() the child
->> arrays that were allocated by domain_setup_ctrlval().
->>
->> As this memory is moved around, and new arrays are created, adjusting
->> the error handling cleanup code becomes noisier.
->>
->> To simplify this, move all the kfree() calls into a domain_free() helper.
->> This depends on struct rdt_hw_domain being kzalloc()d, allowing it to
->> unconditionally kfree() all the child arrays.
+> Yes as you said, the mon_data/mon_L3_00/llc_occupancy does not immediately become the
+> value small than the set by schemata,  it may takes a few minutes to reduce to the set value.
+> 
+> I don't quite understand why it takes so long to see the llc_occupancy degrage.
 
->> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
->> index 25f30148478b..e37889f7a1a5 100644
->> --- a/arch/x86/kernel/cpu/resctrl/core.c
->> +++ b/arch/x86/kernel/cpu/resctrl/core.c
->> @@ -414,6 +414,13 @@ void setup_default_ctrlval(struct rdt_resource *r, u32 *dc, u32 *dm)
->>       }
->>   }
->>   +static void domain_free(struct rdt_hw_domain *hw_dom)
+Do you have workloads in other control groups causing cache allocations?
 
-> add inline ?
+One of the ways this stuff can be built is for the cache to use the policy to choose which
+lines to evict. The cache may already have some LRU or line-state preferences when it
+comes to eviction, so it may not apply the RDT policy as the first choice.
 
-It's best to let the compiler decide this. As this is in a C file, and is declared static,
-the compiler is free to duplicate and inline this function as it sees fit. The inline
-keyword would only be needed if this were in a header file.
-
-Looking at the built object file - the compiler chose not to duplicate this into the two
-callers, presumably because of the size of the function.
-
-Unless its relied on for correctness, or is a performance sensitive path, its best to let
-the compiler make its own decision here.
+If there is no cache pressure from outside the control group - does it matter how quickly
+it takes to apply?
 
 
 Thanks,
 
 James
-
-
->> +{
->> +    kfree(hw_dom->ctrl_val);
->> +    kfree(hw_dom->mbps_val);
->> +    kfree(hw_dom);
->> +}
->> +
->>   static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domain *d)
->>   {
->>       struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);

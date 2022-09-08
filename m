@@ -2,357 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F075D5B1B3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BC25B1B48
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiIHLTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S230466AbiIHLWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiIHLSw (ORCPT
+        with ESMTP id S230046AbiIHLWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:18:52 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F886113653;
-        Thu,  8 Sep 2022 04:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662635921; x=1694171921;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=I3jXcUdGBCjClyI41sB2okBg6s4Yf9mYbxXgDAS8A1o=;
-  b=cGmRK1hoEsUzOLXLB3RIa5dPKriySncZHLxgC6m6G9dIIG6o8cjVy6kV
-   QfHEclmVm0dYVlpi/+ZqIye1gwFX9F6D94VVfEcoHMmLNtsyfr5pRDkF3
-   VZDvtLiggA+hqxVq/YLpw4Gna+jIcfZClxageasOJWqlUnBE5eFHhnNHc
-   Drjxh29crXtGAeasjlOIqoKjTgnGoMjILr5SOWl1uNr1wFqosHaP7utoG
-   0XmdWeRVWFXLKAkMgRK8x7dIBRGYKNXkp0LPllldwZDnP7eZ+qF25wGMA
-   NldjOKLr0srlpPlM84KPfRNh4C3gNWljwP8aL62awMBxQhClxYY5xrzDr
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="176193122"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 04:18:37 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 8 Sep 2022 04:18:30 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 8 Sep 2022 04:18:27 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Shravan Chippa <shravan.chippa@microchip.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cyril Jean <Cyril.Jean@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Vattipalli Praveen <praveen.kumar@microchip.com>,
-        Wolfgang Grandegger <wg@aries-embedded.de>,
-        Hugh Breslin <hugh.breslin@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 10/10] riscv: dts: microchip: add a devicetree for aries' m100pfsevp
-Date:   Thu, 8 Sep 2022 12:17:13 +0100
-Message-ID: <20220908111712.665287-11-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220908111712.665287-1-conor.dooley@microchip.com>
-References: <20220908111712.665287-1-conor.dooley@microchip.com>
+        Thu, 8 Sep 2022 07:22:04 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A497DCEE;
+        Thu,  8 Sep 2022 04:21:58 -0700 (PDT)
+X-UUID: 275d55f4a7e44d4aa0f87045cdab10e6-20220908
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=8G3RXmk6EX/J/uFVEBqNvgPb8Qx9waaWfpLdoQyA9os=;
+        b=fQzkJcAWMStV2PgW5K0hm4MnIJFjief+o/XVOZW47Bei/bwuUy4JBKAixn7dctKuXmiKUAf5CXpVaUQ9fwAX0JZYvU63sHUhbXGJMk9byaMS2XEgcvS4DEH2pw8oPP6L/X+TwfvlOOlJtaR+0HDaust8bpmbUhTQw5FTaukIvIw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:2353ecbb-4a22-47c2-9d11-249a0598772b,OB:10,
+        LOB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Releas
+        e_Ham,ACTION:release,TS:45
+X-CID-INFO: VERSION:1.1.10,REQID:2353ecbb-4a22-47c2-9d11-249a0598772b,OB:10,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:45
+X-CID-META: VersionHash:84eae18,CLOUDID:13ffcaf5-6e85-48d9-afd8-0504bbfe04cb,C
+        OID:28ec86ee805f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
+X-UUID: 275d55f4a7e44d4aa0f87045cdab10e6-20220908
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 89100491; Thu, 08 Sep 2022 19:21:51 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 8 Sep 2022 19:21:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 8 Sep 2022 19:21:50 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     <mathieu.poirier@linaro.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <bjorn.andersson@linaro.org>, <bleung@chromium.org>,
+        <chrome-platform@lists.linux.dev>, <devicetree@vger.kernel.org>,
+        <dnojiri@chromium.org>, <enric.balletbo@collabora.com>,
+        <groeck@chromium.org>, <gustavoars@kernel.org>,
+        <keescook@chromium.org>, <krzk+dt@kernel.org>,
+        <lee.jones@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <matthias.bgg@gmail.com>,
+        <pmalani@chromium.org>, <robh+dt@kernel.org>,
+        <sebastian.reichel@collabora.com>, <tinghan.shen@mediatek.com>,
+        <weishunc@google.com>
+Subject: Re: [PATCH v2 4/9] remoteproc: mediatek: Support probing for the 2nd core of dual-core SCP
+Date:   Thu, 8 Sep 2022 19:17:57 +0800
+Message-ID: <20220908111757.14633-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220829194247.GC2264818@p14s>
+References: <20220829194247.GC2264818@p14s>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device trees for both configs used by the Aries Embedded
-M100PFSEVP. The M100OFSEVP consists of a MPFS250T on a SOM,
-featuring:
-- 2GB DDR4 SDRAM dedicated to the HMS
-- 512MB DDR4 SDRAM dedicated to the FPGA
-- 32 MB SPI NOR Flash
-- 4 GByte eMMC
+Hi Mathieu,
 
-and a carrier board with:
-- 2x Gigabit Ethernet
-- USB
-- 2x UART
-- 2x CAN
-- TFT connector
-- HSMC extension connector
-- 3x PMOD extension connectors
-- microSD-card slot
+> > The mtk_scp.c driver only supports the single core SCP and the
+> > 1st core of a dual-core SCP. This patch extends it for the 2nd core.
+> > 
+> > MT8195 SCP is a dual-core MCU. Both cores are housed in the same subsys.
+> 
+> s/subsys/subsystem
+> 
+> > They have the same viewpoint of registers and memory.
+> > 
+> > Core 1 of the SCP features its own set of core configuration registers,
+> > interrupt controller, timers, and DMAs. The rest of the peripherals
+> > in this subsystem are shared by core 0 and core 1.
+> > 
+> > As for memory, core 1 has its own cache memory. the SCP SRAM is shared
+> 
+> /the/The
+> 
+> > by core 0 and core 1.
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >  drivers/remoteproc/mtk_scp.c | 22 ++++++++++++++++++++--
+> >  1 file changed, 20 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> > index 3510c6d0bbc8..91b4aefde4ac 100644
+> > --- a/drivers/remoteproc/mtk_scp.c
+> > +++ b/drivers/remoteproc/mtk_scp.c
+> > @@ -23,6 +23,10 @@
+> >  #define MAX_CODE_SIZE 0x500000
+> >  #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
+> >  
+> > +#define SCP_CORE_0 0
+> > +#define SCP_CORE_1 1
+> > +#define SCP_CORE_SINGLE 0xF
+> > +
+> >  /**
+> >   * scp_get() - get a reference to SCP.
+> >   *
+> > @@ -836,6 +840,7 @@ static int scp_probe(struct platform_device *pdev)
+> >  	struct resource *res;
+> >  	const char *fw_name = "scp.img";
+> >  	int ret, i;
+> > +	u32 core_id = SCP_CORE_SINGLE;
+> >  
+> >  	ret = rproc_of_parse_firmware(dev, 0, &fw_name);
+> >  	if (ret < 0 && ret != -EINVAL)
+> > @@ -851,8 +856,16 @@ static int scp_probe(struct platform_device *pdev)
+> >  	scp->data = of_device_get_match_data(dev);
+> >  	platform_set_drvdata(pdev, scp);
+> >  
+> > +	ret = of_property_read_u32_index(dev->of_node, "mediatek,scp-core", 1, &core_id);
+> > +	if (ret == 0)
+> > +		dev_info(dev, "Boot SCP dual core %u\n", core_id);
+> 
+> Why is the DT property "mediatek,scp-core" needed at all?  Since the compatible
+> "mediatek,mt8195-scp-dual" has already been defined previously in this patchset,
+> initialising the second core, if present, is a matter of looking at the
+> compatile string. 
 
-Link: https://www.aries-embedded.com/polarfire-soc-fpga-microsemi-m100pfs-som-mpfs025t-pcie-serdes
-Link: https://www.aries-embedded.com/evaluation-kit/fpga/polarfire-microchip-soc-fpga-m100pfsevp-riscv-hsmc-pmod
-Link: https://downloads.aries-embedded.de/products/M100PFS/Hardware/M100PFSEVP-Schematics.pdf
-Co-developed-by: Wolfgang Grandegger <wg@aries-embedded.de>
-Signed-off-by: Wolfgang Grandegger <wg@aries-embedded.de>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/boot/dts/microchip/Makefile        |   1 +
- .../dts/microchip/mpfs-m100pfs-fabric.dtsi    |  45 +++++
- .../boot/dts/microchip/mpfs-m100pfsevp.dts    | 179 ++++++++++++++++++
- 3 files changed, 225 insertions(+)
- create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfs-fabric.dtsi
- create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dts
+This idea of identify cores by the compatible looks workable.
+I'll update this series at next version.
+Thanks!
 
-diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
-index f18477b2e86d..7427a20934f3 100644
---- a/arch/riscv/boot/dts/microchip/Makefile
-+++ b/arch/riscv/boot/dts/microchip/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
-+dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-m100pfsevp.dtb
- dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
- dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-sev-kit.dtb
- obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-m100pfs-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-m100pfs-fabric.dtsi
-new file mode 100644
-index 000000000000..7b9ee13b6a3a
---- /dev/null
-+++ b/arch/riscv/boot/dts/microchip/mpfs-m100pfs-fabric.dtsi
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/* Copyright (c) 2022 Microchip Technology Inc */
-+
-+/ {
-+	fabric_clk3: fabric-clk3 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <62500000>;
-+	};
-+
-+	fabric_clk1: fabric-clk1 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <125000000>;
-+	};
-+
-+	pcie: pcie@2000000000 {
-+		compatible = "microchip,pcie-host-1.0";
-+		#address-cells = <0x3>;
-+		#interrupt-cells = <0x1>;
-+		#size-cells = <0x2>;
-+		device_type = "pci";
-+		reg = <0x20 0x0 0x0 0x8000000>, <0x0 0x43000000 0x0 0x10000>;
-+		reg-names = "cfg", "apb";
-+		bus-range = <0x0 0x7f>;
-+		interrupt-parent = <&plic>;
-+		interrupts = <119>;
-+		interrupt-map = <0 0 0 1 &pcie_intc 0>,
-+				<0 0 0 2 &pcie_intc 1>,
-+				<0 0 0 3 &pcie_intc 2>,
-+				<0 0 0 4 &pcie_intc 3>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		clocks = <&fabric_clk1>, <&fabric_clk1>, <&fabric_clk3>;
-+		clock-names = "fic0", "fic1", "fic3";
-+		ranges = <0x3000000 0x0 0x8000000 0x20 0x8000000 0x0 0x80000000>;
-+		msi-parent = <&pcie>;
-+		msi-controller;
-+		status = "disabled";
-+		pcie_intc: interrupt-controller {
-+			#address-cells = <0>;
-+			#interrupt-cells = <1>;
-+			interrupt-controller;
-+		};
-+	};
-+};
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dts b/arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dts
-new file mode 100644
-index 000000000000..184cb36a175e
---- /dev/null
-+++ b/arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dts
-@@ -0,0 +1,179 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Original all-in-one devicetree:
-+ * Copyright (C) 2021-2022 - Wolfgang Grandegger <wg@aries-embedded.de>
-+ * Rewritten to use includes:
-+ * Copyright (C) 2022 - Conor Dooley <conor.dooley@microchip.com>
-+ */
-+/dts-v1/;
-+
-+#include "mpfs.dtsi"
-+#include "mpfs-m100pfs-fabric.dtsi"
-+
-+/* Clock frequency (in Hz) of the rtcclk */
-+#define MTIMER_FREQ	1000000
-+
-+/ {
-+	model = "Aries Embedded M100PFEVPS";
-+	compatible = "aries,m100pfsevp", "microchip,mpfs";
-+
-+	aliases {
-+		ethernet0 = &mac0;
-+		ethernet1 = &mac1;
-+		serial0 = &mmuart0;
-+		serial1 = &mmuart1;
-+		serial2 = &mmuart2;
-+		serial3 = &mmuart3;
-+		serial4 = &mmuart4;
-+		gpio0 = &gpio0;
-+		gpio1 = &gpio2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial1:115200n8";
-+	};
-+
-+	cpus {
-+		timebase-frequency = <MTIMER_FREQ>;
-+	};
-+
-+	ddrc_cache_lo: memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x0 0x40000000>;
-+	};
-+	ddrc_cache_hi: memory@1040000000 {
-+		device_type = "memory";
-+		reg = <0x10 0x40000000 0x0 0x40000000>;
-+	};
-+};
-+
-+&can0 {
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+};
-+
-+&gpio0 {
-+	interrupts = <13>, <14>, <15>, <16>,
-+		     <17>, <18>, <19>, <20>,
-+		     <21>, <22>, <23>, <24>,
-+		     <25>, <26>;
-+	ngpios = <14>;
-+	status = "okay";
-+
-+	pmic-irq-hog {
-+		gpio-hog;
-+		gpios = <13 0>;
-+		input;
-+	};
-+
-+	/* Set to low for eMMC, high for SD-card */
-+	mmc-sel-hog {
-+		gpio-hog;
-+		gpios = <12 0>;
-+		output-high;
-+	};
-+};
-+
-+&gpio2 {
-+	interrupts = <13>, <14>, <15>, <16>,
-+		     <17>, <18>, <19>, <20>,
-+		     <21>, <22>, <23>, <24>,
-+		     <25>, <26>, <27>, <28>,
-+		     <29>, <30>, <31>, <32>,
-+		     <33>, <34>, <35>, <36>,
-+		     <37>, <38>, <39>, <40>,
-+		     <41>, <42>, <43>, <44>;
-+	status = "okay";
-+};
-+
-+&mac0 {
-+	status = "okay";
-+	phy-mode = "gmii";
-+	phy-handle = <&phy0>;
-+	phy0: ethernet-phy@0 {
-+		reg = <0>;
-+	};
-+};
-+
-+&mac1 {
-+	status = "okay";
-+	phy-mode = "gmii";
-+	phy-handle = <&phy1>;
-+	phy1: ethernet-phy@0 {
-+		reg = <0>;
-+	};
-+};
-+
-+&mbox {
-+	status = "okay";
-+};
-+
-+&mmc {
-+	max-frequency = <50000000>;
-+	bus-width = <4>;
-+	cap-mmc-highspeed;
-+	cap-sd-highspeed;
-+	no-1-8-v;
-+	sd-uhs-sdr12;
-+	sd-uhs-sdr25;
-+	sd-uhs-sdr50;
-+	sd-uhs-sdr104;
-+	disable-wp;
-+	status = "okay";
-+};
-+
-+&mmuart1 {
-+	status = "okay";
-+};
-+
-+&mmuart2 {
-+	status = "okay";
-+};
-+
-+&mmuart3 {
-+	status = "okay";
-+};
-+
-+&mmuart4 {
-+	status = "okay";
-+};
-+
-+&pcie {
-+	status = "okay";
-+};
-+
-+&qspi {
-+	status = "okay";
-+};
-+
-+&refclk {
-+	clock-frequency = <125000000>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&spi0 {
-+	status = "okay";
-+};
-+
-+&spi1 {
-+	status = "okay";
-+};
-+
-+&syscontroller {
-+	status = "okay";
-+};
-+
-+&usb {
-+	status = "okay";
-+	dr_mode = "host";
-+};
--- 
-2.36.1
+> 
+> > +
+> >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
+> > -	scp->sram_base = devm_ioremap_resource(dev, res);
+> > +	if (core_id == SCP_CORE_1)
+> > +		scp->sram_base = devm_ioremap(dev, res->start, resource_size(res));
+> > +	else
+> > +		scp->sram_base = devm_ioremap_resource(dev, res);
+> > +
+> 
+> This looks very broken...  For this to work you would need to have two DT
+> entries with the "mediatek,mt8195-scp-dual" compatible properly, one with
+> "mediatek,scp-core = <&scp_dual1 0>;" and another one with "mediatek,scp-core = <&scp_dual0 1>;".
+> 
+> Which is also very broken...  Here you have a binding whose first argument is a
+> reference to the core sibling while the second argument is a characteristic of
+> the current core, which is highly confusing.
+> 
+> I suggest what when you see the compatible binding "mediatek,mt8195-scp", a
+> single core is initialized.  If you see "mediatek,mt8195-scp-dual", both cores
+> are initialized as part of the _same_ probe.
+> 
+> If the above analysis is not correct it means I misinterpreted your
+> work and if so, a serious amount of comments is needed _and_ a very detailed
+> example in "mtk,scp.yaml" that leaves no room for interpretation.
+> 
+> I will stop reviewing this patchset until you have clarified how this works.
+> 
+> Thanks,
+> Mathieu
+
+There's one problem of initializng the CORE1 using the same probe flow.
+The register space of CORE0 and CORE1 are overlapped in the device node.
+Both cores need to use the 'cfg' registers defined in scp yaml. 
+The devm_ioremap_resource catches address overlapping and returns error when 
+probing CORE1 driver.
+
+
+Best regards,
+TingHan
 

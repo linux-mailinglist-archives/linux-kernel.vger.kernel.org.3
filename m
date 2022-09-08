@@ -2,129 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE095B1442
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B875B144B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiIHGBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        id S229941AbiIHGBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiIHGA7 (ORCPT
+        with ESMTP id S229534AbiIHGBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:00:59 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF63993209;
-        Wed,  7 Sep 2022 23:00:54 -0700 (PDT)
+        Thu, 8 Sep 2022 02:01:36 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53955C6FFD;
+        Wed,  7 Sep 2022 23:01:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nq6wb5F2IaVjHYdtmedkl2S8IkMZvsIbwNv2oyFCZG6o9rhT6YnVfyiksGHFhwtLoDG/bipK2qpmYRrmEwMqxN/w0ajCbBrTvVg0dqoK4mE70KIBIbF1fxAkYq0MYugKgyE6pwU+UCbQud3vnxn19ehtLk05gGS4q19zQF3Rt4qHdxdH7Pw/DgypiTDm0NQUo++WDXg39zwdLOUYSLxnnZArwGW/XQLgyWbWNGidx8OsIYfi4xRzUgakZpNNZtw2vQdYSSSM1cT84Uvc7IjRgdauA9WZpSe+5JY6vhg5Nm5Re2dLCLlQdfx7xHK7GUzGxmqqOYrXCOF/evCfkTUmmw==
+ b=lg1G/nN5xNL9zrmw4GyI0SNk5C4qGC3zdITtQq/WamalMxcMo+fIPMQMyU5cluWGs2UFjZtjw/SdCbWogR7cF+ObALndOMG5Z0sxJESYAg84xR8xQUeUKqPa9ZdUKa073NCQTGJog7SgXZ8rzHe0nV8MwjWqEgssc8QItWfqcLbRhjdoMhg3s0seznkSqKm6w12kcjOW60usILFhQQ6CGECKA5y7+mDybrmWOcTe5HYVFMRhVfKtAWmiQHomMnvhavO6c6wdiF1XKR9goJCBc+9z42vtJEqJx04JpPyTS6dZ4AIdQnbI88HlGt4vUGedqbCn3AQbINBA1dw1OgwJ3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b0Y3MIpezrXEN73GZIkGBs5jVlRlGxTRqymhYrXEG8E=;
- b=e+5ubCqWeihO8ohmDa3arCDHqohN2jHgOCowoTHjMgKnN3BxAZM8+fzhwDOIM/+VvtQJKlW3AiX8UZXSbg7yp1Rd98w2IJhFOyAnLhPL9N5Arcdm1Z5YWLxawhXjCCpZVLqL+igFZxxWouFtqCR+VwkKPdSc/5Fuemdp7gp0zv3NeXG5dXwcxHyqaVSqeC7GBzCDsWIvYHVOdpZPEgLfv5Pc9n4zb8rLvrUHWJcSzb6TOgoUsMq1/nkqdcbeFyl3VEVxVq8Z/iL2TZ8Gf2YDjsBaGOmLrD5P83Y5mAUu3SVFUXHKZ1IB9HAjCRCKN2hnf0ERJp6d/5M0048NXWOCzQ==
+ bh=eK+qoBjzsn1uanRr5rTqz5Ww85Mb+v3bFG5Vi8r9LWk=;
+ b=Zvr0H+u+WPcn1D9bR7XQVHLv8okTq5lroDS0XHH4QdBi+w3PUFQ0p479FE0lXe1U+1LldA0YV3huyQtSfOwL17J2WHpl8BQmmgQRmvMyuOweBlweGuu9BVF1w1lU2/OtJ4Q4X6B/UiR9iTLjKsez7UfwJNCGGzi8NC7jJzUnB917fyFuTDIBbygRIoCM85fureSaRJrVScae2hiVQi1JO6vdRzH9PoAGXzQDDSAwqjqzYuw7ORok5qDe8b2IsX06dPIUEI0VEExv1vE5GUF4Mn9GEJ6n24XuK21BGNPa9mWeYPJz+y8JjeHMQCw63ZHQFBT9TpkPwWAIK/yBwvwPhw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b0Y3MIpezrXEN73GZIkGBs5jVlRlGxTRqymhYrXEG8E=;
- b=s5XASpGhpOCZSAIf2yK68PElRYKvbBg1Dl6UcL0MHja1iKtJmRK0JSsL/bxcPEdg6PIMgX6ZEi8yhOZrEMVihHiY3FAXrbDfteDYlKT9CsbRDWI6YHEXHZlFruxdHv0Ky8zFDNHkg+gbDxuadt6CvZdOoB28xgA+EjYMikfutqE=
+ bh=eK+qoBjzsn1uanRr5rTqz5Ww85Mb+v3bFG5Vi8r9LWk=;
+ b=0vyPCfsmsFZ6hUKFFaf67vTFgsbAF66vmiziJ2YYxb8cknvIsq4vfATAylFZSaHUCIsAdMu7qjhJyaaSVcLVvAwrOtErO2YzZ84HyZaOVl3KF5RvaAvlemqVUyudJQwzg/oE4kZPnnYsSZfzD+RRD0AQ7GpKUHI9e4o6/S4f/c4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13)
- by DS7PR12MB5789.namprd12.prod.outlook.com (2603:10b6:8:74::21) with
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BY5PR12MB4965.namprd12.prod.outlook.com (2603:10b6:a03:1c4::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Thu, 8 Sep
- 2022 06:00:52 +0000
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::e459:32ff:cdfc:fc8b]) by PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::e459:32ff:cdfc:fc8b%8]) with mapi id 15.20.5588.016; Thu, 8 Sep 2022
- 06:00:52 +0000
-Message-ID: <63e6c2da-653f-6f0d-8d56-f1c24122c76d@amd.com>
-Date:   Thu, 8 Sep 2022 11:30:40 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 4/4] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf
- 0x80000022
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Thu, 8 Sep
+ 2022 06:01:30 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::653f:e59b:3f40:8fed%6]) with mapi id 15.20.5612.015; Thu, 8 Sep 2022
+ 06:01:29 +0000
+Message-ID: <6be40bd0-f5b8-b672-4b22-4f6c5ec4059d@amd.com>
+Date:   Thu, 8 Sep 2022 08:01:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/3] dma-buf: Add ioctl to query mmap coherency/cache
+ info
 Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220905123946.95223-1-likexu@tencent.com>
- <20220905123946.95223-5-likexu@tencent.com>
- <CALMp9eQtjZ-iRiW5Jusa+NF-P0sdHtcoR8fPiBSKtNXKgstgVA@mail.gmail.com>
- <0e0f773b-0dde-2282-c2d0-fad2311f59a7@gmail.com>
- <CALMp9eQQe-XDUZmNtg5Z+Vv8hMu_R_fuTv2+-ZfuRwzNUmW0fA@mail.gmail.com>
- <d63e79d8-fcbc-9def-4a90-e7a4614493bb@gmail.com>
- <CALMp9eSXTpkKpmqJiS=0NuQOjCFKDeOqjN3wWfyPCBhx-H=Vsw@mail.gmail.com>
- <c07eb8bf-67fc-c645-18f2-cd1623c7a093@amd.com>
- <c6559d3e-38ec-9a2c-7698-995eb9f265c6@gmail.com>
-From:   Sandipan Das <sandipan.das@amd.com>
-In-Reply-To: <c6559d3e-38ec-9a2c-7698-995eb9f265c6@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220815211516.3169470-1-robdclark@gmail.com>
+ <20220815211516.3169470-2-robdclark@gmail.com>
+ <327c77d5-5812-a158-6c9f-c68e15a5a6b4@amd.com>
+ <CAF6AEGu3oxM+EX_FsLpw4m0KouMyFMLN=AGGbf=6TVQGkJ7jQg@mail.gmail.com>
+ <6396ccf9-a677-427d-f5f9-12d30ad2197e@amd.com>
+ <YxjKHg8wBYCkQskJ@phenom.ffwll.local>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <YxjKHg8wBYCkQskJ@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0194.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e8::19) To PH7PR12MB5712.namprd12.prod.outlook.com
- (2603:10b6:510:1e3::13)
+X-ClientProxiedBy: AM6P193CA0037.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:209:8e::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 30718b09-045a-4b07-4871-08da915f7c8c
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5789:EE_
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|BY5PR12MB4965:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0e3c358c-8a71-44b0-a0aa-08da915f92c2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: afWrnVvV1nP1XiGJCngOcqn30EMePqDB8JtxMw0RBfvqiOY8lpUub0K5ezwaVGiSYQfAoM0kGIitRsRysjFjghi3H/QqwsvIqY3f5FwR00V8JGhlShrX8BqDaBYXK8N5r+4/6h5R42KI8UDy/5jdREo0hMbm9K0JuCTDqXk8tOcvAYDzGxXSp0jsLF6rVdwnMLrCaA1jf1csBKHTQVKhEvYDlBaeP9ceIWoJPnWeZl9aVD4DLToSAx914GCXrVrNKBdE0hV1rF1ONZe01DMkRoSnoaPtTwT7ivXPtWPtp/BZZyr2bxHgIzLfLm2l04tG8xFCwATPGVTe15W49MV+uZFKs0Kh1HpWWb6vcHr5xV8clqXwwOmDkJLKORMBeeCnHPBvFmuJRZJWLh/bw0yR2WMPJflQnB+bq9v3HTuRSDnerYUR0p57Nka/UA45Aq4UzuHY7qaQsWurKYU2lXXDJ9qnkhTQeZovbvjf9XzkJEa/TCoWNSZkqpHoMh/hJ2NlHsl7g17BfQWf0yKVdRkAzk+a8I9NfC36DV823zLbaNicKUOT28/VS8gaACPoeSoYN5AOfM/jeNmH5oj+QXPJAp+95OH0idCsUQwqGU2fh/vbkk7YgdQNOVwHLtgvqNOeWBZLxrGpNqEVE8DW3IIrWe7w1q1UZR57KM5yda+nNa/5/BkXeyw4DfZAmB3d6ds7M4Vfl0W218E7URcqhIBCyQJvaDIlZHFHzjCOCgeIJvVWTXppk6qUS5Avbo/w7V+TePvqz/RXLL547rACaxk5ByugBaER18drwfSkdRYqaquNnOEQqvvgvKiqzHhWraQmvRSHZxO7YdQvyevS11fFNQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5712.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(478600001)(53546011)(6506007)(6666004)(26005)(6512007)(41300700001)(83380400001)(186003)(38100700002)(2616005)(8936002)(8676002)(31686004)(4326008)(86362001)(66946007)(66476007)(66556008)(31696002)(5660300002)(36756003)(2906002)(44832011)(54906003)(316002)(110136005)(6486002)(19627235002)(213903007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: gdBAdm8YyvdIa6KSa6u9OdIzyuS/v6qatLvxcqG/6VAdiRXsbWkSY4F0ciUcFT/2iscMlVVYzEptnKNHElDS8uu6gQbp2260VL5IOu04QcfkwGGHbgF+Rwgs64wpqC+96uZadxGR4j0ZFo0ydZz9sDoiFI3CWqAFW0AjjR1gBQNVuTEzORPAKxTddlSSns3W7NU2vcSqf24mRo6ukbIciW1/EvRggJW4rSp6mTIZgFCQs/id1nt1qraQma4rTAhUyWHyj8TYKCaBw7jSTIjeYm0NacWupFuA4flwsDawX2kq1m+LTCaR353LlsCcRllkg0H3++ySbH9p8kUjofE0ioVYDPK2lN/bELgPbFTekAZwiyDNdk9wRKc7/OFP1hCyYPwxJSbva1/9z/bhLdU5jD3mIu+YDTYkyh7GwgbnFg648J+3tDKZc/OTrZeBvy7NOq3YGuNzjC+LpBtj9m02/1KxKoN0DNfdgR61aMHEw4RXDYskEA6ckwaoQV3MKZlP7UiQf9xUtauBdTN50b1/hCt9jY8EPtO3wZAc1SKhh7kGz0SRTlo8hkB/ewTademFzeku5JRgVamKNlB0gAr4z1LMssfqEAJhRnJzs16wuhC3P9+brcpn9aj7gJP/NtA18y6V1U7RdNJxSJSlL6EyK2vpDuyu8Of2CXFpxeyIHKIcS5gCXsMKMroDXAazwsDSr8OTSGD9sDf4q4yiJrcVQB+x1To24dxdG+EO4xYR8RqYLP7fPz0AZmb4Jb1lNVoqVXdicEZ6eeEhquDoU4yRYqrZJAxcRs1JJ1T75dOI5aI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(186003)(2616005)(6666004)(26005)(41300700001)(6486002)(66574015)(478600001)(53546011)(31696002)(6506007)(6512007)(86362001)(38100700002)(83380400001)(31686004)(36756003)(66946007)(66556008)(66476007)(8676002)(316002)(5660300002)(110136005)(2906002)(30864003)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aUg1U1p2YWRpajhCcGY3NXFNZXlXRXV2MGpHMGxaeXZGcGVjeXVuZEVtZFE2?=
- =?utf-8?B?bFVjZTlDSHJZdDkwSDVlZlhqeGwxTTNwQVByOHQwN2lOR3BsaUErbDZrczdG?=
- =?utf-8?B?RzFBZUxFOE1qZ1dKSHFCUTFNSUFqUjZuNzFRdnNkeHE2UzdiakV0YmtaSDIz?=
- =?utf-8?B?WEFGdlpRT1RnR2ovSHhSV2Q0WTJUSTFuUXptRTlydzhBam1nOVk1cUw4WXVy?=
- =?utf-8?B?U0tJZFhlaUpSTTROcWRQeTNodTJCbThkRjRaVXVKYmZRdXdNT3dnSEJNUk5F?=
- =?utf-8?B?SHVzV1pwQzY0R3dVbFkxUVF2QUJIQWduWXFrZHB6QmVNS3J3WjNXRUxyb3FW?=
- =?utf-8?B?T0gyYjhubVg4TW9jbFNpaXU1WDkrYjBHc1ZnOS9jTDBpcjJ1Z0JyVkp1N2xG?=
- =?utf-8?B?QVFUdVhCTHJaUFBwNytlTkE5MlhPQmU4TndxUmNhQWNpbDhmRFJWa3F2eXJN?=
- =?utf-8?B?RENHd3g2TnJjMW9JN3h0OG4vZ3YzN0lRVjdTYXorNE1VSGwvSWNjK25PTnFM?=
- =?utf-8?B?SHV3eUFaSUh6U1RFUTlPckxlZmtRWFFjTEVBVGFGdUhPeXMyOFY1M2FoTzNx?=
- =?utf-8?B?MERGellSYmk1K0FlSWxMSGNTMElWSGw3aGVWWDlva3RITExqdHhwaERQY2N6?=
- =?utf-8?B?VmVWQk1KYTZtNXlMazU0a0h1ZmFicXFTbmlTVDkwTHZHbkxjQm9rZUNnejRZ?=
- =?utf-8?B?QTlpU2NDYnJkUkpibHM1c01xZXhNTVdEWU1nKzZWRUVpaWUzaVNLRVMvcG1J?=
- =?utf-8?B?VVpaT0FhUjdxR1hYWERTbU5xQXNIeDY4bUFYTGRteGVSUTg2MnRiR3dSNFJJ?=
- =?utf-8?B?QWVWL2NpRW1OZnpSRGFqYmlPMmFRbEV6NGZ4UUJIVmtGTDJOU1dRUUEwc2Vz?=
- =?utf-8?B?aFRoRm9iUE5OSXRFWnpuSit2aWhzRWtDeVFWbDcxRVMxaitLMUY4MzJLMG9C?=
- =?utf-8?B?L3haKytnYzlIYm05cTFWZHhKeTdHR1hydElHdStsT0xURm5hejg1OFE3SDl1?=
- =?utf-8?B?YmZiU1VSenlWaDJaY1U3YWtMY250SHVETTNCTmd1N1hHRU52VXc0anlIUC9C?=
- =?utf-8?B?QXlzZVV1YUx4MStoVDA0Vm44SWV3a2hvV2h4SEh1dlJhTjE3UDNVRWplK0E4?=
- =?utf-8?B?VTN4WXpvK0s0RzBCUlRZMTJsbVd4blA2UlBueUZPQXNYMGI4ZEdxSlpvR2xt?=
- =?utf-8?B?SWpXMW1IYjZ5ZzdxdGhXVkkvTUFmQ1dRQ2RuRCtYd3d3WE82RW81NlNEWTkz?=
- =?utf-8?B?YU05dDNqZ0hoN2k1b2xTa3pxU3RnaTg0QnVKZDN2TnFnbXVkS05sdGhZeDAx?=
- =?utf-8?B?VW1rYno0VDVuUXdBeDU4ZXYxTnppN3dPSktwRXJhL2FWeGgzTDlkemhzVFdI?=
- =?utf-8?B?WFNuVmRDbk9SYUIvMHFuQXBNNjRoaWxMVkptY0ZmcndxL04rd0hBRkd6VTd4?=
- =?utf-8?B?emlNSXBQL1phZlAxMHoyL1N0MVhaRDg1MHJzMFBqbG01SitWcFgyeGRLeDJK?=
- =?utf-8?B?cElZTHV3VTJEVTNEdkh4bVFTMHcyTVN5a1c0QkJPaDRFTFRyVlhuUnNlWDl4?=
- =?utf-8?B?OWpJQmNBcFpLcU5jbW0vckM4L1FLWmc5YzhPd1lQZGJmMWMzbzc2K2p1UDA2?=
- =?utf-8?B?L1ZLUmZGOEJyeTNoS29mTnhuZzZoVW9McFZJVGVoV1hmSHdObFYrUnJEWTdL?=
- =?utf-8?B?QXRXdUcwNWNyVGxrZXN5UnBHbUFTbmVlQjdLZHVjRjEwTjNFWEN5ZXJYd3px?=
- =?utf-8?B?VGVmSmJ4YkdwRnVXTFVScGNNMVpvbTM3MlpaTFpqbmxDbzBpNU1tSHBSMFg2?=
- =?utf-8?B?a0xheFJjUDNXR2w5czVSeXI0OFBYR3grVkg1ditJaFFic1ZrWkduUXZxSkRW?=
- =?utf-8?B?amRYRnRFbyt3Tk05M2EybTA4NlBNZXREVmhyNkpkOThVMm5oK3B5eXE5Zkpm?=
- =?utf-8?B?K0xLcm13elpzNG94cHRXTEUyMkJEVzE0T1VCek5NM3M1WExEaXBRamV3SlRp?=
- =?utf-8?B?bTNkTm5TZlI1SFRoZTdRMUZwM1FxSDdWcDlKMkNCUTNkcks3Y1Vpc2ZHZFlL?=
- =?utf-8?B?YU5RRE9OaDhqZndLbGpqanA0NGhJc2xQb2puRXlkVmdadXhjZUZYbFlqdUdz?=
- =?utf-8?Q?xe7zQGLkTizhMptrkGyKqzy12?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OHg4c2FWVEJSOVNkYjk0Uko0V0VCOHNwbDR3R2FrdkcxSkdiWTU1NkFsOFNK?=
+ =?utf-8?B?eFlFK09MQ28vNU1ZMUVBWFhCWkppRUtZd0xWTlBDUjdlNW1xWXhKMDNnbGU4?=
+ =?utf-8?B?eXNlT0JYenRXWDVUU0Qyb08yRGozUlRWbzNYbTNFTTk1TVZWVnY4SUlVbHFF?=
+ =?utf-8?B?M0FwdWhTVytkRHhseDlsamltQ2hBcHBPdE1ISjZjbmFoV3pJdXcxcUV0TTl6?=
+ =?utf-8?B?aEJzenp4V3NYVmgvem84WGMya2k2N1M2RmRHZUhKT0gwTkRSQndGdG8yblg4?=
+ =?utf-8?B?dUtySEhEVTgwT1ZkTzkramxJa2JveEFOc3NlNS9GSmFMdzFrZVlzWktjd1Q4?=
+ =?utf-8?B?NnpoVHVLa3RsVmtnTUdkVVZDQjQxREtRbUxOczJmYnlNN2t2YVRLUXRMM21a?=
+ =?utf-8?B?RHRlVUdLeFpLWlR6ZUQ0eXBkZk90U3JOU2J6Q0Q4ODIxcHNtNVVIUUVkVWpH?=
+ =?utf-8?B?djd0bEZ6a0JNRVdvMTFNZ2JQZEUwbjd4cEVOQUZoWXNOdkxZc2FZV09SajFO?=
+ =?utf-8?B?WHZsbFgvMFQ1WU5DbHZnV0lubytBOTg4NlR3S3R4cVFsT3Z4NjI3MzJDMVRV?=
+ =?utf-8?B?V3V2b0ZEZExLVGxvVGc4N0s3STRCSlowOU9JU0d0OUJtbDlCRSs3bFRTTGhG?=
+ =?utf-8?B?OUQ5dzk2dGV3UEhRcTY3TlFnZzdwaXEyTnYwRDF4ak5hV2lQQWtMUWxnQWgv?=
+ =?utf-8?B?QUlpVWNxVGF0ZG9Ra0VPUWZCL3IzdWpkUHVLN29sWUJBMDNSNXBvL2Y3SldH?=
+ =?utf-8?B?RE8vK0N1YmdIS003aHZJMDY2SVIvRnNtNWY0S3lhcnhWOXBJWmh3b2xlK3Bx?=
+ =?utf-8?B?YXk4dVpSUnVCQWhRTDE2SEdSeXJOdUR3SmhZZXlEUkNCalJORnA1VitITFRG?=
+ =?utf-8?B?MWtIZTNMOWFCVnhObm5wUU9IL1ZuYlAyTDd4aytnTDMxa1EwNDB3WGhrV1l4?=
+ =?utf-8?B?SEF3WGJlTTNqdTJLUVNYbVZUL21neTVjUDFrM1c4aDFibkNGOGNUckdMZWJQ?=
+ =?utf-8?B?bmZmOU1NUTZMNmxjcWlwUjNINUxmUzJzbmN4VWJJNzdBUnBZTDBvMzY4cDhw?=
+ =?utf-8?B?aW42OTE3RGNNRzRKZ0MrbGViMk52ZnFpS0VUWGZvbFVBYktJaC9aVEVFeU5T?=
+ =?utf-8?B?SENrMXdpK0NpZkwwNy9oU3JnSGgwRUlhQkJtUC9ScXNyeFlxQUNCaWZuQWZt?=
+ =?utf-8?B?VVVTVUdCUVhFTFlrUEt3anM3NmRMY0dyN1NDNkxhc0h4NWFyblhwQTFYcDRH?=
+ =?utf-8?B?ZkFJNC9kS0xvZGZHam44NVhxY3VVeGowRFBjN1pmNnJCbGJJUjFhY2VMaWtG?=
+ =?utf-8?B?UThFTTIvME5aUHpsWWY5NGkybVROcFRCejQvOEk3bWRWQnQzMUFMUnIyMGVz?=
+ =?utf-8?B?VnlHOXp1V1JtMW10UFJCSG5JTTV0M2xFTGxoUTVsNkY2UHN5aHpXMWxyeEd6?=
+ =?utf-8?B?S21vei8rT1FNUTk4VlRiaWo1WCtJbEtneUJOWkdoMkYzMnRPSWZEdGVkNzky?=
+ =?utf-8?B?akdUZjVBb2JMMmtBU2xiRVdkQ2M3dEZmWE9mTkNmWFc4Z2RuVlhkdXdiYVJS?=
+ =?utf-8?B?VmdxMXlCczJOU0VEa1B6SlVacDRsZS9sTUpXQjZUaVN5YkxJZjFoRno3Q0VM?=
+ =?utf-8?B?YXhHbU1tVHFsZDZueDRxckZvM2Z1ODl4QlM2YmwvanowU2FicmtCZFRjZjJQ?=
+ =?utf-8?B?OW90NGZnZmNOb1dGVHdtdDFhTVZrOVdkSXRHMGlMakFvbkloSS9ZU3I1blk0?=
+ =?utf-8?B?dXdzRThubHlLemNiV0JkYlJ0WXpJMlA5L0JkN0JpR3pGU2dhZUE2Wk9tZGMz?=
+ =?utf-8?B?ck1sZ1k1alRRQTNmY1VvdzBBQlFpbFJWK3NnbkdwbmhVSmVwY1pDNFR2MFJz?=
+ =?utf-8?B?YllJL0V2LzJmYlpoTmp0cFlQdlV0S2hXaXpYVkIwVEpNOUtxMjR3THBmTnli?=
+ =?utf-8?B?OU1GREEyd3FWVUVvbTZpcXB1elRrbnFRYVpkYzB3cm5oMFJVeHAyOG5WVkVz?=
+ =?utf-8?B?MVdZRkR6Rm1XcnArTjd0aVc1aW5sc0RjLy83dW9hWFExdXJzYVJRQ2d6dElE?=
+ =?utf-8?B?SWJHZG9DL2htVE56cVh1UHc3YzUwaHB1SHdVVTJXZzErYUNCdGg0ZGVWZ0Nz?=
+ =?utf-8?Q?jG006KJWLoJhgZ/SKRDAcoai6?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30718b09-045a-4b07-4871-08da915f7c8c
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5712.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e3c358c-8a71-44b0-a0aa-08da915f92c2
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 06:00:52.5241
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 06:01:29.7901
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aX/4fMnwxuG4smMJWrnCPoZixZor57+SEodkvRFgh8rA66ruuFAbbjmE0/lSkuge/oD9EX8418my5omwsVPW8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5789
+X-MS-Exchange-CrossTenant-UserPrincipalName: xeeJ5XFMCd4cAlMeSWT27iLIqWLq38yyzo6YEJjljTSDPfMH4dhUIiO46qF1r4EN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4965
 X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -135,132 +137,353 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/7/2022 12:09 PM, Like Xu wrote:
-> On 7/9/2022 1:52 pm, Sandipan Das wrote:
->> On 9/7/2022 9:41 AM, Jim Mattson wrote:
->>> On Tue, Sep 6, 2022 at 8:59 PM Like Xu <like.xu.linux@gmail.com> wrote:
->>> [...]
->>>>>>>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->>>>>>>> index 75dcf7a72605..08a29ab096d2 100644
->>>>>>>> --- a/arch/x86/kvm/cpuid.c
->>>>>>>> +++ b/arch/x86/kvm/cpuid.c
->>>>>>>> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>>>>>>>                    entry->edx = 0;
->>>>>>>>                    break;
->>>>>>>>            case 0x80000000:
->>>>>>>> -               entry->eax = min(entry->eax, 0x80000021);
->>>>>>>> +               entry->eax = min(entry->eax, 0x80000022);
->>>>>>>>                    /*
->>>>>>>>                     * Serializing LFENCE is reported in a multitude of ways, and
->>>>>>>>                     * NullSegClearsBase is not reported in CPUID on Zen2; help
->>>>>>>> @@ -1203,6 +1203,25 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>>>>>>>                    if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
->>>>>>>>                            entry->eax |= BIT(6);
->>>>>>>>                    break;
->>>>>>>> +       /* AMD Extended Performance Monitoring and Debug */
->>>>>>>> +       case 0x80000022: {
->>>>>>>> +               union cpuid_0x80000022_eax eax;
->>>>>>>> +               union cpuid_0x80000022_ebx ebx;
->>>>>>>> +
->>>>>>>> +               entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->>>>>>>> +               if (!enable_pmu)
->>>>>>>> +                       break;
->>>>>>>> +
->>>>>>>> +               if (kvm_pmu_cap.version > 1) {
->>>>>>>> +                       /* AMD PerfMon is only supported up to V2 in the KVM. */
->>>>>>>> +                       eax.split.perfmon_v2 = 1;
->>>>>>>> +                       ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
->>>>>>>> +                                                    KVM_AMD_PMC_MAX_GENERIC);
->>>>>>>
->>>>>>> Note that the number of core PMCs has to be at least 6 if
->>>>>>> guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE). I suppose this leaf
->>>>>>> could claim fewer, but the first 6 PMCs must work, per the v1 PMU
->>>>>>> spec. That is, software that knows about PERFCTR_CORE, but not about
->>>>>>> PMU v2, can rightfully expect 6 PMCs.
->>>>>>
->>>>>> I thought the NumCorePmc number would only make sense if
->>>>>> CPUID.80000022.eax.perfmon_v2
->>>>>> bit was present, but considering that the user space is perfectly fine with just
->>>>>> configuring the
->>>>>> NumCorePmc number without setting perfmon_v2 bit at all, so how about:
+Am 07.09.22 um 18:43 schrieb Daniel Vetter:
+> On Tue, Aug 16, 2022 at 06:50:54PM +0200, Christian König wrote:
+>> Am 16.08.22 um 16:26 schrieb Rob Clark:
+>>> On Tue, Aug 16, 2022 at 1:27 AM Christian König
+>>> <christian.koenig@amd.com> wrote:
+>>>> Am 15.08.22 um 23:15 schrieb Rob Clark:
+>>>>> From: Rob Clark <robdclark@chromium.org>
 >>>>>
->>>>> CPUID.80000022H might only make sense if X86_FEATURE_PERFCTR_CORE is
->>>>> present. It's hard to know in the absence of documentation.
+>>>>> This is a fairly narrowly focused interface, providing a way for a VMM
+>>>>> in userspace to tell the guest kernel what pgprot settings to use when
+>>>>> mapping a buffer to guest userspace.
+>>>>>
+>>>>> For buffers that get mapped into guest userspace, virglrenderer returns
+>>>>> a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
+>>>>> pages into the guest VM, it needs to report to drm/virtio in the guest
+>>>>> the cache settings to use for guest userspace.  In particular, on some
+>>>>> architectures, creating aliased mappings with different cache attributes
+>>>>> is frowned upon, so it is important that the guest mappings have the
+>>>>> same cache attributes as any potential host mappings.
+>>>>>
+>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>>>> ---
+>>>>> v2: Combine with coherency, as that is a related concept.. and it is
+>>>>>        relevant to the VMM whether coherent access without the SYNC ioctl
+>>>>>        is possible; set map_info at export time to make it more clear
+>>>>>        that it applies for the lifetime of the dma-buf (for any mmap
+>>>>>        created via the dma-buf)
+>>>> Well, exactly that's a conceptual NAK from my side.
 >>>>
->>>> Whenever this happens, we may always leave the definition of behavior to the
->>>> hypervisor.
->>>
->>> I disagree. If CPUID.0H reports "AuthenticAMD," then AMD is the sole
->>> authority on behavior.
-> 
-> The real world isn't like that, because even AMD has multiple implementations in cases
-> where the hardware specs aren't explicitly stated, and sometimes they're intentionally vague.
-> And the hypervisor can't do nothing, it prefers one over the other and maintains maximum compatibility with the legacy user space.
-> 
->>>
+>>>> The caching information can change at any time. For CPU mappings even
+>>>> without further notice from the exporter.
+>>> You should look before you criticize, as I left you a way out.. the
+>>> idea was that DMA_BUF_MAP_INCOHERENT should indicate that the buffer
+>>> cannot be mapped to the guest.  We could ofc add more DMA_BUF_MAP_*
+>>> values if something else would suit you better.  But the goal is to
+>>> give the VMM enough information to dtrt, or return an error if mapping
+>>> to guest is not possible.  That seems better than assuming mapping to
+>>> guest will work and guessing about cache attrs
+>> Well I'm not rejecting the implementation, I'm rejecting this from the
+>> conceptual point of view.
 >>
->> I understand that official documentation is not out yet. However, for Zen 4
->> models, it is expected that both the PerfMonV2 bit of CPUID.80000022H EAX and
->> the PerfCtrExtCore bit of CPUID.80000001H ECX will be set.
-> 
-> Is PerfCtrExtCore a PerfMonV2 or PerfMonV3+ precondition ?
-> Is PerfCtrExtCore a CPUID.80000022 precondition ?
-> 
-> Should we always expect CPUID_Fn80000022_EBX.NumCorePmc to reflect the real
-> Number of Core Performance Counters regardless of whether PerfMonV2 is set ?
-> 
-
-This is the suggested method for detecting the number of counters:
-
-  If CPUID Fn8000_0022_EAX[PerfMonV2] is set, then use the new interface in
-  CPUID Fn8000_0022_EBX to determine the number of counters.
-
-  Else if CPUID Fn8000_0001_ECX[PerfCtrExtCore] is set, then six counters
-  are available.
-
-  Else, four legacy counters are available.
-
-There will be an APM update that will have this information in the
-"Detecting Hardware Support for Performance Counters" section.
-
+>> We intentional gave the exporter full control over the CPU mappings. This
+>> approach here breaks that now.
 >>
->>>>>
->>>>>>           /* AMD Extended Performance Monitoring and Debug */
->>>>>>           case 0x80000022: {
->>>>>>                   union cpuid_0x80000022_eax eax;
->>>>>>                   union cpuid_0x80000022_ebx ebx;
->>>>>>                   bool perfctr_core;
->>>>>>
->>>>>>                   entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->>>>>>                   if (!enable_pmu)
->>>>>>                           break;
->>>>>>
->>>>>>                   perfctr_core = kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE);
->>>>>>                   if (!perfctr_core)
->>>>>>                           ebx.split.num_core_pmc = AMD64_NUM_COUNTERS;
->>>>>>                   if (kvm_pmu_cap.version > 1) {
->>>>>>                           /* AMD PerfMon is only supported up to V2 in the KVM. */
->>>>>>                           eax.split.perfmon_v2 = 1;
->>>>>>                           ebx.split.num_core_pmc = min(kvm_pmu_cap.num_counters_gp,
->>>>>>                                                        KVM_AMD_PMC_MAX_GENERIC);
->>>>>>                   }
->>>>>>                   if (perfctr_core) {
->>>>>>                           ebx.split.num_core_pmc = max(ebx.split.num_core_pmc,
->>>>>>                                                        AMD64_NUM_COUNTERS_CORE);
->>>>>>                   }
->>>>>
->>>>> This still isn't quite right. All AMD CPUs must support a minimum of 4 PMCs.
+>> I haven't seen the full detailed reason why we should do that and to be
+>> honest KVM seems to mess with things it is not supposed to touch.
+>>
+>> For example the page reference count of mappings marked with VM_IO is a
+>> complete no-go. This is a very strong evidence that this was based on rather
+>> dangerous halve knowledge about the background of the handling here.
+> Wut?
+
+Yep, that was also my initial reaction.
+
+> KVM grabs page references of VM_IO vma? I thought the issue was that we
+> still had some bo/dma-buf vma that didn't set either VM_IO or VM_PFNMAP,
+> and not that kvm was just outright breaking every core mm contract there
+> is.
+>
+> Is this really what's going on in that other thread about "fixing" ttm?
+
+At least it seems so. I haven't looked at the actual KVM code in detail, 
+but from what I've seen it looks like KVM implements similar 
+functionality to GUP to figure out which struct page a virtual address 
+points to, but without the correct checks GUP does.
+
+I absolutely don't understand either the why and what. Especially for 
+the user case of KVM grabbing a page reference doesn't seem to make any 
+sense.
+
+My suspicion is that this should have been an MMU notifier instead, but 
+this is really just a gut feeling. Maybe there is a good reason KVM 
+grabs this reference.
+
+Christian.
+
+> -Daniel
+>
+>> So as long as I don't see a full explanation why KVM is grabbing reference
+>> to pages while faulting them and why we manually need to forward the caching
+>> while the hardware documentation indicates otherwise I will be rejecting
+>> this whole approach.
+>>
+>> Regards,
+>> Christian.
+>>
+>>> BR,
+>>> -R
+>>>
+>>>> If the hardware can't use the caching information from the host CPU page
+>>>> tables directly then that pretty much completely breaks the concept that
+>>>> the exporter is responsible for setting up those page tables.
 >>>>
->>>> K7 at least. I could not confirm that all antique AMD CPUs have 4 counters w/o
->>>> perfctr_core.
->>>
->>> The APM says, "All implementations support the base set of four
->>> performance counter / event-select pairs." That is unequivocal.
->>>
->>
->> That is true. The same can be inferred from amd_core_pmu_init() in
->> arch/x86/events/amd/core.c. If PERFCTR_CORE is not detected, it assumes
->> that the four legacy counters are always available.
->>
->> - Sandipan
+>>>> Regards,
+>>>> Christian.
+>>>>
+>>>>>     drivers/dma-buf/dma-buf.c    | 63 +++++++++++++++++++++++++++------
+>>>>>     include/linux/dma-buf.h      | 11 ++++++
+>>>>>     include/uapi/linux/dma-buf.h | 68 ++++++++++++++++++++++++++++++++++++
+>>>>>     3 files changed, 132 insertions(+), 10 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+>>>>> index 32f55640890c..262c4706f721 100644
+>>>>> --- a/drivers/dma-buf/dma-buf.c
+>>>>> +++ b/drivers/dma-buf/dma-buf.c
+>>>>> @@ -125,6 +125,32 @@ static struct file_system_type dma_buf_fs_type = {
+>>>>>         .kill_sb = kill_anon_super,
+>>>>>     };
+>>>>>
+>>>>> +static int __dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+>>>>> +{
+>>>>> +     int ret;
+>>>>> +
+>>>>> +     /* check if buffer supports mmap */
+>>>>> +     if (!dmabuf->ops->mmap)
+>>>>> +             return -EINVAL;
+>>>>> +
+>>>>> +     ret = dmabuf->ops->mmap(dmabuf, vma);
+>>>>> +
+>>>>> +     /*
+>>>>> +      * If the exporter claims to support coherent access, ensure the
+>>>>> +      * pgprot flags match the claim.
+>>>>> +      */
+>>>>> +     if ((dmabuf->map_info != DMA_BUF_MAP_INCOHERENT) && !ret) {
+>>>>> +             pgprot_t wc_prot = pgprot_writecombine(vma->vm_page_prot);
+>>>>> +             if (dmabuf->map_info == DMA_BUF_COHERENT_WC) {
+>>>>> +                     WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) != pgprot_val(wc_prot));
+>>>>> +             } else {
+>>>>> +                     WARN_ON_ONCE(pgprot_val(vma->vm_page_prot) == pgprot_val(wc_prot));
+>>>>> +             }
+>>>>> +     }
+>>>>> +
+>>>>> +     return ret;
+>>>>> +}
+>>>>> +
+>>>>>     static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
+>>>>>     {
+>>>>>         struct dma_buf *dmabuf;
+>>>>> @@ -134,16 +160,12 @@ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
+>>>>>
+>>>>>         dmabuf = file->private_data;
+>>>>>
+>>>>> -     /* check if buffer supports mmap */
+>>>>> -     if (!dmabuf->ops->mmap)
+>>>>> -             return -EINVAL;
+>>>>> -
+>>>>>         /* check for overflowing the buffer's size */
+>>>>>         if (vma->vm_pgoff + vma_pages(vma) >
+>>>>>             dmabuf->size >> PAGE_SHIFT)
+>>>>>                 return -EINVAL;
+>>>>>
+>>>>> -     return dmabuf->ops->mmap(dmabuf, vma);
+>>>>> +     return __dma_buf_mmap(dmabuf, vma);
+>>>>>     }
+>>>>>
+>>>>>     static loff_t dma_buf_llseek(struct file *file, loff_t offset, int whence)
+>>>>> @@ -326,6 +348,27 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+>>>>>         return 0;
+>>>>>     }
+>>>>>
+>>>>> +static long dma_buf_info(struct dma_buf *dmabuf, void __user *uarg)
+>>>>> +{
+>>>>> +     struct dma_buf_info arg;
+>>>>> +
+>>>>> +     if (copy_from_user(&arg, uarg, sizeof(arg)))
+>>>>> +             return -EFAULT;
+>>>>> +
+>>>>> +     switch (arg.param) {
+>>>>> +     case DMA_BUF_INFO_MAP_INFO:
+>>>>> +             arg.value = dmabuf->map_info;
+>>>>> +             break;
+>>>>> +     default:
+>>>>> +             return -EINVAL;
+>>>>> +     }
+>>>>> +
+>>>>> +     if (copy_to_user(uarg, &arg, sizeof(arg)))
+>>>>> +             return -EFAULT;
+>>>>> +
+>>>>> +     return 0;
+>>>>> +}
+>>>>> +
+>>>>>     static long dma_buf_ioctl(struct file *file,
+>>>>>                           unsigned int cmd, unsigned long arg)
+>>>>>     {
+>>>>> @@ -369,6 +412,9 @@ static long dma_buf_ioctl(struct file *file,
+>>>>>         case DMA_BUF_SET_NAME_B:
+>>>>>                 return dma_buf_set_name(dmabuf, (const char __user *)arg);
+>>>>>
+>>>>> +     case DMA_BUF_IOCTL_INFO:
+>>>>> +             return dma_buf_info(dmabuf, (void __user *)arg);
+>>>>> +
+>>>>>         default:
+>>>>>                 return -ENOTTY;
+>>>>>         }
+>>>>> @@ -530,6 +576,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+>>>>>         dmabuf->priv = exp_info->priv;
+>>>>>         dmabuf->ops = exp_info->ops;
+>>>>>         dmabuf->size = exp_info->size;
+>>>>> +     dmabuf->map_info = exp_info->map_info;
+>>>>>         dmabuf->exp_name = exp_info->exp_name;
+>>>>>         dmabuf->owner = exp_info->owner;
+>>>>>         spin_lock_init(&dmabuf->name_lock);
+>>>>> @@ -1245,10 +1292,6 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
+>>>>>         if (WARN_ON(!dmabuf || !vma))
+>>>>>                 return -EINVAL;
+>>>>>
+>>>>> -     /* check if buffer supports mmap */
+>>>>> -     if (!dmabuf->ops->mmap)
+>>>>> -             return -EINVAL;
+>>>>> -
+>>>>>         /* check for offset overflow */
+>>>>>         if (pgoff + vma_pages(vma) < pgoff)
+>>>>>                 return -EOVERFLOW;
+>>>>> @@ -1262,7 +1305,7 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
+>>>>>         vma_set_file(vma, dmabuf->file);
+>>>>>         vma->vm_pgoff = pgoff;
+>>>>>
+>>>>> -     return dmabuf->ops->mmap(dmabuf, vma);
+>>>>> +     return __dma_buf_mmap(dmabuf, vma);
+>>>>>     }
+>>>>>     EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, DMA_BUF);
+>>>>>
+>>>>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+>>>>> index 71731796c8c3..37923c8d5c24 100644
+>>>>> --- a/include/linux/dma-buf.h
+>>>>> +++ b/include/linux/dma-buf.h
+>>>>> @@ -23,6 +23,8 @@
+>>>>>     #include <linux/dma-fence.h>
+>>>>>     #include <linux/wait.h>
+>>>>>
+>>>>> +#include <uapi/linux/dma-buf.h>
+>>>>> +
+>>>>>     struct device;
+>>>>>     struct dma_buf;
+>>>>>     struct dma_buf_attachment;
+>>>>> @@ -307,6 +309,13 @@ struct dma_buf {
+>>>>>          */
+>>>>>         size_t size;
+>>>>>
+>>>>> +     /**
+>>>>> +      * @map_info:
+>>>>> +      *
+>>>>> +      * CPU mapping/coherency information for the buffer.
+>>>>> +      */
+>>>>> +     enum dma_buf_map_info map_info;
+>>>>> +
+>>>>>         /**
+>>>>>          * @file:
+>>>>>          *
+>>>>> @@ -533,6 +542,7 @@ struct dma_buf_attachment {
+>>>>>      * @ops:    Attach allocator-defined dma buf ops to the new buffer
+>>>>>      * @size:   Size of the buffer - invariant over the lifetime of the buffer
+>>>>>      * @flags:  mode flags for the file
+>>>>> + * @map_info:        CPU mapping/coherency information for the buffer
+>>>>>      * @resv:   reservation-object, NULL to allocate default one
+>>>>>      * @priv:   Attach private data of allocator to this buffer
+>>>>>      *
+>>>>> @@ -545,6 +555,7 @@ struct dma_buf_export_info {
+>>>>>         const struct dma_buf_ops *ops;
+>>>>>         size_t size;
+>>>>>         int flags;
+>>>>> +     enum dma_buf_map_info map_info;
+>>>>>         struct dma_resv *resv;
+>>>>>         void *priv;
+>>>>>     };
+>>>>> diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
+>>>>> index b1523cb8ab30..07b403ffdb43 100644
+>>>>> --- a/include/uapi/linux/dma-buf.h
+>>>>> +++ b/include/uapi/linux/dma-buf.h
+>>>>> @@ -85,6 +85,72 @@ struct dma_buf_sync {
+>>>>>
+>>>>>     #define DMA_BUF_NAME_LEN    32
+>>>>>
+>>>>> +/**
+>>>>> + * enum dma_buf_map_info - CPU mapping info
+>>>>> + *
+>>>>> + * This enum describes coherency of a userspace mapping of the dmabuf.
+>>>>> + *
+>>>>> + * Importing devices should check dma_buf::map_info flag and reject an
+>>>>> + * import if unsupported.  For example, if the exporting device uses
+>>>>> + * @DMA_BUF_COHERENT_CACHED but the importing device does not support
+>>>>> + * CPU cache coherency, the dma-buf import should fail.
+>>>>> + */
+>>>>> +enum dma_buf_map_info {
+>>>>> +     /**
+>>>>> +      * @DMA_BUF_MAP_INCOHERENT: CPU mapping is incoherent.
+>>>>> +      *
+>>>>> +      * Use of DMA_BUF_IOCTL_SYNC is required for CPU managed coherenency.
+>>>>> +      */
+>>>>> +     DMA_BUF_MAP_INCOHERENT,
+>>>>> +
+>>>>> +     /**
+>>>>> +      * @DMA_BUF_COHERENT_WC: CPU mapping is coherent but not cached.
+>>>>> +      *
+>>>>> +      * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not required.
+>>>>> +      * However fences may be still required for synchronizing access.  Ie.
+>>>>> +      * coherency can only be relied upon by an explicit-fencing userspace.
+>>>>> +      * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC.
+>>>>> +      *
+>>>>> +      * The cpu mapping is writecombine.
+>>>>> +      */
+>>>>> +     DMA_BUF_COHERENT_WC,
+>>>>> +
+>>>>> +     /**
+>>>>> +      * @DMA_BUF_COHERENT_CACHED: CPU mapping is coherent and CPU cached.
+>>>>> +      *
+>>>>> +      * A cpu mmap'ing is coherent, and DMA_BUF_IOCTL_SYNC is not required.
+>>>>> +      * However fences may be still required for synchronizing access.  Ie.
+>>>>> +      * coherency can only be relied upon by an explicit-fencing userspace.
+>>>>> +      * An implicit-sync userspace must still use DMA_BUF_IOCTL_SYNC.
+>>>>> +      *
+>>>>> +      * The cpu mapping is cached.
+>>>>> +      */
+>>>>> +     DMA_BUF_COHERENT_CACHED,
+>>>>> +};
+>>>>> +
+>>>>> +/**
+>>>>> + * struct dma_buf_info - Query info about the buffer.
+>>>>> + */
+>>>>> +struct dma_buf_info {
+>>>>> +
+>>>>> +#define DMA_BUF_INFO_MAP_INFO    1
+>>>>> +
+>>>>> +     /**
+>>>>> +      * @param: Which param to query
+>>>>> +      *
+>>>>> +      * DMA_BUF_INFO_MAP_INFO:
+>>>>> +      *     Returns enum dma_buf_map_info, describing the coherency and
+>>>>> +      *     caching of a CPU mapping of the buffer.
+>>>>> +      */
+>>>>> +     __u32 param;
+>>>>> +     __u32 pad;
+>>>>> +
+>>>>> +     /**
+>>>>> +      * @value: Return value of the query.
+>>>>> +      */
+>>>>> +     __u64 value;
+>>>>> +};
+>>>>> +
+>>>>>     #define DMA_BUF_BASE                'b'
+>>>>>     #define DMA_BUF_IOCTL_SYNC  _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+>>>>>
+>>>>> @@ -95,4 +161,6 @@ struct dma_buf_sync {
+>>>>>     #define DMA_BUF_SET_NAME_A  _IOW(DMA_BUF_BASE, 1, __u32)
+>>>>>     #define DMA_BUF_SET_NAME_B  _IOW(DMA_BUF_BASE, 1, __u64)
+>>>>>
+>>>>> +#define DMA_BUF_IOCTL_INFO   _IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
+>>>>> +
+>>>>>     #endif
 

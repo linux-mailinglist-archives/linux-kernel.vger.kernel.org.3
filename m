@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895635B2A72
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EA25B2A81
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiIHXfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S229547AbiIHXk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiIHXeG (ORCPT
+        with ESMTP id S229451AbiIHXk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:34:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C0411EA7B;
-        Thu,  8 Sep 2022 16:31:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0222B822C0;
-        Thu,  8 Sep 2022 23:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08FAAC433C1;
-        Thu,  8 Sep 2022 23:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662679908;
-        bh=U/5tQNvjcfybPHJFh1Z/32quT5JSxEEFgfvgkY+MSWI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KDEdQtHou+iogq/Roo0Vt9iODcShCBEHoKiYHQLnNMdRhen2BjxPfpgazUaw1+/R9
-         EQ6km1Bl2aMFVQpeH47Bf2PA431PrldZvBIag0d963am+0x6sKBkLegJITwNv6OJ8s
-         Zf8N8xfDV01a9p6NFr42bxPNQQ4d6EXSxDhScE8vu5jb7nnFeJF4jopHEDujVHRNJK
-         RYhtTzUuAdpHe3Yr9HESTTBBez9a7mlHvxvg5QfWN8BiRwJstIb6bWHbrDK+dwTj2v
-         Uo3PLvfE0RF82KCdt2zuSlxB36ihJ84fO+FsLKXnuSmniASbCywsPSZfdrRvtA0nYH
-         JI1O9CF6bkc9A==
-Date:   Fri, 9 Sep 2022 02:31:41 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] selftests/sgx: Retry the ioctl()'s returned with
- EAGAIN
-Message-ID: <Yxp7Xck0/qaGMbH6@kernel.org>
-References: <20220905020411.17290-1-jarkko@kernel.org>
- <20220905020411.17290-2-jarkko@kernel.org>
- <fe0e7a0c-da41-5918-6ef4-8906598998a6@intel.com>
- <Yxp4iIKjOQflQC2i@kernel.org>
- <Yxp4syXLQez+BTbw@kernel.org>
+        Thu, 8 Sep 2022 19:40:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C13758DFD;
+        Thu,  8 Sep 2022 16:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XjxPO2gx8/ZRjoRujkZFtZwwfAjki0m/BAiBLxT6Ui4=; b=iJyD2NAhZ4H4PY4phmTFpsDggS
+        6yTyonULSS51/tP2qhdbShlZ6wqHXkJy6s9Rturc0AKL6AS3IweMhxNT5wTBPcTeKHApfHSWywOde
+        KdBoHO0O93fa/3tTjkwne0X6toDaFkYGmKdIqevG+mT8Fmeqcm8YbFBhEGYprweyfbjInk2oQQxNS
+        qjpamBh5NAdgQ+KmuFMq0vaEADcasPM/HXblNMQesNjJM/YJbUCKmF8nha63EZ5kHK6xCCD7VL5Ty
+        96gKcx/3aWwsrojCdGo8x6QElUxIKyvUuf2nnN/4fdcvWYyLwC6WVpPRv12aIbWPPmw1VT8v9lNwS
+        J11EnCHA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWR85-009tQR-Q2; Thu, 08 Sep 2022 23:40:17 +0000
+Date:   Thu, 8 Sep 2022 16:40:17 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Li zeming <zeming@nfschina.com>
+Cc:     keescook@chromium.org, yzaikin@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] proc: remove initialization assignment
+Message-ID: <Yxp9Yeq5Q7LUshv7@bombadil.infradead.org>
+References: <20220801085117.4313-1-zeming@nfschina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yxp4syXLQez+BTbw@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220801085117.4313-1-zeming@nfschina.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 02:20:22AM +0300, Jarkko Sakkinen wrote:
-> On Fri, Sep 09, 2022 at 02:19:40AM +0300, Jarkko Sakkinen wrote:
-> >                 EXPECT_LT(get_time() - start_time(), IOCTL_RETRY_TIMEOUT);
->                                                    ~~
->                                                    typo
+On Mon, Aug 01, 2022 at 04:51:17PM +0800, Li zeming wrote:
+> The allocation address of the core_parent pointer variable is first
+> executed in the function, no initialization assignment is required.
 > 
-> BR, Jarkko
+> Signed-off-by: Li zeming <zeming@nfschina.com>
 
-Also, the timeout can probably be like one second.
+Thanks!
 
-BR, Jarkko
+Queued up for sysctl-testing, if that comes back without issues, I'll
+move it to sysctl-next.
+
+  Luis

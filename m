@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8415B292B
+	by mail.lfdr.de (Postfix) with ESMTP id CA0875B292D
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiIHWVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S230041AbiIHWVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiIHWV2 (ORCPT
+        with ESMTP id S229988AbiIHWV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:21:28 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C1AF2D53;
-        Thu,  8 Sep 2022 15:21:27 -0700 (PDT)
+        Thu, 8 Sep 2022 18:21:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D954F2D57;
+        Thu,  8 Sep 2022 15:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662675686; x=1694211686;
-  h=from:to:subject:date:message-id:mime-version;
-  bh=0FBM4YibLbhK0yC9P25jJqUIpWq4171dM/TiSX6CXPs=;
-  b=tZbv99bZVKyynFoOCNsuX07TO4yOjZCkqERup3MZ/zrSPG5K33257mKl
-   db19RZmu1/QqUKvAD8C0cUQMmB6aF9kR2lbpTFhI5hrW6UKbHprHmzXbW
-   EckA7wdZYFW9bGYgXm9x+kq99XkFIDpPXnjtzLRpE6FSx/K7m3Pl+OF+O
-   9znTMU2G8gxyb18Ul/+9mUhOrww4ErNyRSbR9PjVN8QfayihFssR5NkYH
-   XLlCYI4jKyPD7/YFDBgewcQwcGiCEhxb4x3xAP9V8/8ifw47fb+c4y9iR
-   ienBMZInqsixoXI3hTprj6SOn6JmP5+dlYtrB3ktjke1dshhtZAY49XQ9
-   w==;
+  t=1662675688; x=1694211688;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version;
+  bh=l6Ka88zWywjg8uhcd76dLTmHDxR7Jrlx30uY4EP1GpI=;
+  b=taOFY2+vhNhzfo8qb/WXlVKIcdB/aBK2a+SzUe5+KbLavWloEunxMf2K
+   7B7iwCSanfyFNJ6IcHjwgLLrhQ0hiXKeuQ4oJCRAhF+HwuBCSaD6qZ5eX
+   esaQhRC/EIdubXn43wiEHFTptrbZLic+VNaV0WHAmY533X6zavKUV9dnK
+   0y7iwZe5wgRSuA6H10Z62GYdjQqxiHfx/LYRBnCQoGLjY+cQEil7WhjgI
+   pV/SKjion3Tsc7jXmEvPDdt2j65bU+ObvuWEiGBJOj2ehItd9lrqXztmm
+   UoGl/LjKOaMrulfSsYQKXDt4ZvLkWTRK6KoxGbhz1ENpZSqQHHf2/k/Nx
+   g==;
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="179767829"
+   d="scan'208";a="112846255"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 15:21:26 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 15:21:27 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 8 Sep 2022 15:21:26 -0700
+ 15.1.2507.12; Thu, 8 Sep 2022 15:21:27 -0700
 Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 8 Sep 2022 15:21:25 -0700
+ 15.1.2507.12 via Frontend Transport; Thu, 8 Sep 2022 15:21:26 -0700
 From:   Jerry Ray <jerry.ray@microchip.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -48,10 +49,12 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         "Jerry Ray" <jerry.ray@microchip.com>
-Subject: [linux][PATCH v8 1/2] dt-bindings: arm: at91: Add info on SAMA5D3-EDS
-Date:   Thu, 8 Sep 2022 17:21:24 -0500
-Message-ID: <20220908222125.19059-1-jerry.ray@microchip.com>
+Subject: [linux][PATCH v8 2/2] dts: arm: at91: Add SAMA5D3-EDS Board
+Date:   Thu, 8 Sep 2022 17:21:25 -0500
+Message-ID: <20220908222125.19059-2-jerry.ray@microchip.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220908222125.19059-1-jerry.ray@microchip.com>
+References: <20220908222125.19059-1-jerry.ray@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -64,47 +67,370 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding the SAMA5D3-EDS board from Microchip into the atmel AT91 board
-description yaml file.
+The SAMA5D3-EDS board is an Ethernet Development Platform allowing for
+evaluating many Microchip ethernet switch and PHY products.  Various
+daughter cards can connect via an RGMII connector or an RMII connector.
+
+The EDS board is not intended for stand-alone use and has no ethernet
+capabilities when no daughter board is connected.  As such, this device
+tree is intended to be used with a DT overlay defining the add-on board.
+To better ensure consistency, some items are defined here as a form of
+documentation so that all add-on overlays will use the same terms.
+
+Link: https://www.microchip.com/en-us/development-tool/SAMA5D3-ETHERNET-DEVELOPMENT-SYSTEM
 
 Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
 ---
 v7->v8:
  - correcting patch subject line.
 v6->v7:
- - Moved the placement of the Microchip SAMA5D3-EDS entry within the file.
+ - Renamed regulators, making things more consistent.
+ - Made slow_xtal and main_xtal entries direct overrides.
 v5->v6:
- - No code change - patch prefix naming modified to match with others.
+ - Replaced underscores in names where I can, improving naming.
 v4->v5:
- - No change
+ - patch now applies to v6.0-rc2
 v3->v4:
- - No change
+ - Fixed regulators as necessary to get the board to boot from SD Card.
 v2->v3:
- - No change
+ - Alphabetized pinctrl entries.
+ - cleaned up a warning in the regulators section.
+ - License tweaked to 'OR MIT'
+ - Included Makefile change
 v1->v2:
- - Added Device Tree documentation for Microchip SAMA5D3-EDS board
+ - Modified the compatible field in the device tree to reflect Microchip
+   Ethernet Development System Board.
 ---
- Documentation/devicetree/bindings/arm/atmel-at91.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm/boot/dts/Makefile             |   1 +
+ arch/arm/boot/dts/at91-sama5d3_eds.dts | 307 +++++++++++++++++++++++++
+ 2 files changed, 308 insertions(+)
+ create mode 100644 arch/arm/boot/dts/at91-sama5d3_eds.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-index 2b7848bb7769..9e2e66a7566d 100644
---- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-+++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-@@ -127,6 +127,13 @@ properties:
-           - const: atmel,sama5d3
-           - const: atmel,sama5
- 
-+      - description: Microchip SAMA5D3 Ethernet Development System Board
-+        items:
-+          - const: microchip,sama5d3-eds
-+          - const: atmel,sama5d36
-+          - const: atmel,sama5d3
-+          - const: atmel,sama5
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 05d8aef6e5d2..e92e639a2dc3 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -61,6 +61,7 @@ dtb-$(CONFIG_SOC_SAM_V7) += \
+ 	at91-sama5d2_icp.dtb \
+ 	at91-sama5d2_ptc_ek.dtb \
+ 	at91-sama5d2_xplained.dtb \
++	at91-sama5d3_eds.dtb \
+ 	at91-sama5d3_ksz9477_evb.dtb \
+ 	at91-sama5d3_xplained.dtb \
+ 	at91-dvk_som60.dtb \
+diff --git a/arch/arm/boot/dts/at91-sama5d3_eds.dts b/arch/arm/boot/dts/at91-sama5d3_eds.dts
+new file mode 100644
+index 000000000000..c7fbf7aa7826
+--- /dev/null
++++ b/arch/arm/boot/dts/at91-sama5d3_eds.dts
+@@ -0,0 +1,307 @@
++// SPDX-License-Identifier: GPL-2.0+ OR MIT
++/*
++ * at91-sama5d3_eds.dts - Device Tree file for the SAMA5D3 Ethernet
++ *    Development System board.
++ *
++ * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
++ *
++ * Author: Jerry Ray <jerry.ray@microchip.com>
++ */
++/dts-v1/;
++#include "sama5d36.dtsi"
 +
-       - description: CalAmp LMU5000 board
-         items:
-           - const: calamp,lmu5000
++/ {
++	model = "SAMA5D3 Ethernet Development System";
++	compatible = "microchip,sama5d3-eds", "atmel,sama5d36",
++		     "atmel,sama5d3", "atmel,sama5";
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	gpio {
++		compatible = "gpio-keys";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_key_gpio>;
++
++		button-3 {
++			label = "PB_USER";
++			gpios = <&pioE 29 GPIO_ACTIVE_LOW>;
++			linux,code = <0x104>;
++			wakeup-source;
++		};
++	};
++
++	memory@20000000 {
++		reg = <0x20000000 0x10000000>;
++	};
++
++	vcc_3v3_reg: regulator-1 {
++		compatible = "regulator-fixed";
++		regulator-name = "VCC_3V3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++	};
++
++	vcc_2v5_reg: regulator-2 {
++		compatible = "regulator-fixed";
++		regulator-name = "VCC_2V5";
++		regulator-min-microvolt = <2500000>;
++		regulator-max-microvolt = <2500000>;
++		regulator-always-on;
++		vin-supply = <&vcc_3v3_reg>;
++	};
++
++	vcc_1v8_reg: regulator-3 {
++		compatible = "regulator-fixed";
++		regulator-name = "VCC_1V8";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++		vin-supply = <&vcc_3v3_reg>;
++	};
++
++	vcc_1v2_reg: regulator-4 {
++		compatible = "regulator-fixed";
++		regulator-name = "VCC_1V2";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
++		regulator-always-on;
++	};
++
++	vcc_mmc0_reg: regulator-5 {
++		compatible = "regulator-fixed";
++		regulator-name = "mmc0-card-supply";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_vcc_mmc0_reg_gpio>;
++		gpio = <&pioE 2 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&can0 {
++	status = "okay";
++};
++
++&dbgu {
++	status = "okay";
++};
++
++&ebi {
++	pinctrl-0 = <&pinctrl_ebi_nand_addr>;
++	pinctrl-names = "default";
++	status = "okay";
++
++	nand_controller: nand-controller {
++		status = "okay";
++
++		nand@3 {
++			reg = <0x3 0x0 0x2>;
++			atmel,rb = <0>;
++			nand-bus-width = <8>;
++			nand-ecc-mode = "hw";
++			nand-ecc-strength = <4>;
++			nand-ecc-step-size = <512>;
++			nand-on-flash-bbt;
++			label = "atmel_nand";
++
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++
++				at91bootstrap@0 {
++					label = "at91bootstrap";
++					reg = <0x0 0x40000>;
++				};
++
++				bootloader@40000 {
++					label = "bootloader";
++					reg = <0x40000 0xc0000>;
++				};
++
++				bootloaderenvred@100000 {
++					label = "bootloader env redundant";
++					reg = <0x100000 0x40000>;
++				};
++
++				bootloaderenv@140000 {
++					label = "bootloader env";
++					reg = <0x140000 0x40000>;
++				};
++
++				dtb@180000 {
++					label = "device tree";
++					reg = <0x180000 0x80000>;
++				};
++
++				kernel@200000 {
++					label = "kernel";
++					reg = <0x200000 0x600000>;
++				};
++
++				rootfs@800000 {
++					label = "rootfs";
++					reg = <0x800000 0x0f800000>;
++				};
++			};
++		};
++	};
++};
++
++&i2c0 {
++	pinctrl-0 = <&pinctrl_i2c0_pu>;
++	status = "okay";
++};
++
++&i2c1 {
++	status = "okay";
++};
++
++&i2c2 {
++	pinctrl-0 = <&pinctrl_i2c2_pu>;
++	status = "okay";
++};
++
++&main_xtal {
++	clock-frequency = <12000000>;
++};
++
++&mmc0 {
++	pinctrl-0 = <&pinctrl_mmc0_clk_cmd_dat0 &pinctrl_mmc0_dat1_3
++		     &pinctrl_mmc0_dat4_7 &pinctrl_mmc0_cd>;
++	vmmc-supply = <&vcc_mmc0_reg>;
++	vqmmc-supply = <&vcc_3v3_reg>;
++	status = "okay";
++	slot@0 {
++		reg = <0>;
++		bus-width = <8>;
++		cd-gpios = <&pioE 0 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&pinctrl {
++	board {
++		pinctrl_i2c0_pu: i2c0-pu {
++			atmel,pins =
++				<AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>,
++				<AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
++		};
++
++		pinctrl_i2c2_pu: i2c2-pu {
++			atmel,pins =
++				<AT91_PIOA 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>,
++				<AT91_PIOA 19 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
++		};
++
++		pinctrl_key_gpio: key-gpio-0 {
++			atmel,pins =
++				<AT91_PIOE 29 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
++		};
++
++		pinctrl_mmc0_cd: mmc0-cd {
++			atmel,pins =
++				<AT91_PIOE 0 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
++		};
++
++		/* Reserved for reset signal to the RGMII connector. */
++		pinctrl_rgmii_rstn: rgmii-rstn {
++			atmel,pins =
++				<AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
++		};
++
++		/* Reserved for an interrupt line from the RMII and RGMII connectors. */
++		pinctrl_spi_irqn: spi-irqn {
++			atmel,pins =
++				<AT91_PIOB 28 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
++		};
++
++		pinctrl_spi0_cs: spi0-cs-default {
++			atmel,pins =
++				<AT91_PIOD 13 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++				 AT91_PIOD 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++		};
++
++		pinctrl_spi1_cs: spi1-cs-default {
++			atmel,pins = <AT91_PIOC 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++				      AT91_PIOC 28 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++		};
++
++		pinctrl_usba_vbus: usba-vbus {
++			atmel,pins =
++				<AT91_PIOE 9 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
++		};
++
++		pinctrl_usb_default: usb-default {
++			atmel,pins =
++				<AT91_PIOE 3 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++				 AT91_PIOE 4 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++		};
++
++		/* Reserved for VBUS fault interrupt. */
++		pinctrl_vbusfault_irqn: vbusfault-irqn {
++			atmel,pins =
++				<AT91_PIOE 5 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
++		};
++
++		pinctrl_vcc_mmc0_reg_gpio: vcc-mmc0-reg-gpio-default {
++			atmel,pins = <AT91_PIOE 2 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
++		};
++	};
++};
++
++&slow_xtal {
++	clock-frequency = <32768>;
++};
++
++&spi0 {
++	pinctrl-names = "default", "cs";
++	pinctrl-1 = <&pinctrl_spi0_cs>;
++	cs-gpios = <&pioD 13 0>, <0>, <0>, <&pioD 16 0>;
++	status = "okay";
++};
++
++&spi1 {
++	pinctrl-names = "default", "cs";
++	pinctrl-1 = <&pinctrl_spi1_cs>;
++	cs-gpios = <&pioC 25 0>, <0>, <0>, <&pioC 28 0>;
++	status = "okay";
++};
++
++&tcb0 {
++	timer0: timer@0 {
++		compatible = "atmel,tcb-timer";
++		reg = <0>;
++	};
++
++	timer1: timer@1 {
++		compatible = "atmel,tcb-timer";
++		reg = <1>;
++	};
++};
++
++&usb0 {	/* USB Device port with VBUS detection. */
++	atmel,vbus-gpio = <&pioE 9 GPIO_ACTIVE_HIGH>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usba_vbus>;
++	status = "okay";
++};
++
++&usb1 {	/* 3-port Host. First port is unused. */
++	atmel,vbus-gpio = <0
++			   &pioE 3 GPIO_ACTIVE_HIGH
++			   &pioE 4 GPIO_ACTIVE_HIGH
++			  >;
++	num-ports = <3>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb_default>;
++	status = "okay";
++};
++
++&usb2 {
++	status = "okay";
++};
 -- 
 2.17.1
 

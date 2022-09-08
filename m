@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4DE5B24F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1355B24F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbiIHRlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S231975AbiIHRlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbiIHRkT (ORCPT
+        with ESMTP id S232251AbiIHRkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:40:19 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C3810F6
+        Thu, 8 Sep 2022 13:40:39 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A0DE27
         for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:39:36 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso3082185pjk.0
+Received: by mail-pg1-x536.google.com with SMTP id c24so17408881pgg.11
         for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=yocom-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=rU5trKe3Yoy2Ehis4NGQlVoaD7BHhUK/1S8Lg+uYpCo=;
-        b=TGRoxee7ib22Hu/bEhSHvSDvJVsO5n0bOkdRVANYV3o29bn+BOe5CM798GhVk4wcho
-         4+rd0dTJ5zhfYqmXNgw047iHF1tA2ZZCc3PSoA/5KW9+DM5zvtbGmgyi4SxiA0OfONH2
-         3kg2I38HZWHdwY0JFwZcor+HuiYF2gIYXwmVcPKWgGW098UehwcVQMrNxxivQBo2Fp9P
-         O/7XJf5e1fsSjDXdaKaSp9cYt3Qqt8c4Fwhgv/6Kzwwf7py2XIGugghgC/xUcFM0NUTB
-         Q2xCH+DOQNChuHvPTy/EN7xrvzAR8HlMcfiwqw61QZ+vh3rlu6QhMT/XpiH96+lHDZXA
-         MaaQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=vTaJzQMO9aQaSOztqsBCXeGz2f0zGMSY5MlxCdWwSg8=;
+        b=gM1cOCVOyZsazktciwe2XNqwD+uixc4yUsTQG3i3iDnLna/bfq7pPsNHpfIYwKKjLm
+         2Yl/txOCUwQELNiVtzqWmdK4kppkfWXmgHkgE13VfJpVO0naIESplhWl2C1eukWHLe93
+         GvpNUfViKrFuNe/sMnVrworaKn2c14FQnjfhotFb1tOpoP6sawKR5rjJUrGhWpJzrl8E
+         ENKcqBP4xBadxP3muXdquQ6ZfcERDVFIevaHmxj3VPuWA/FSJfZjZTAEell6d9C31ouu
+         wV6BGzcVPlOpLMhOAqlRttLZ87WUUYYQG4g4t2cQc0yL7A3WyggwgGRg2lt7Oz+KeCV7
+         7Z0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=rU5trKe3Yoy2Ehis4NGQlVoaD7BHhUK/1S8Lg+uYpCo=;
-        b=Nx8FC5r0W7WvzLZUXcEbhKV233WwX//0UNF+/9YOxPXNzC3KMhWXHVFke9Kp1+f28g
-         SzNHb1DV2YtCn/C+HRmUrFEjW94OpErCw8r/c77HLe9QLF961mBakdmwZh0yQkpCYzcg
-         UNTz+4hZ2XOn/KEVGWbh89WpQv4KdUwvJeDxcIyNtB6PhqjLPH1WdYA7F3iE4CrotnWI
-         /3l6gI2bZAUzTH0Lc7319dwQHKSBG9e5b3QV7DS004zBMzcntc1GFkczZf77DVhDtROK
-         MBHgWT1sP473tMJQnf77bfdTykyYKkZ/Ukn/khNM0JFstEh3gprb3EZdAuHcZdNW7P3T
-         xsjQ==
-X-Gm-Message-State: ACgBeo3fq+ou+3LYJFwoIsi+lN/mewwgZBOYW5ebXrauO3xcj2p+jsQX
-        JtjD2nS5uGfDEeTlCXePbnxveA==
-X-Google-Smtp-Source: AA6agR4UXvmZTkIPHXdo3TexkqBBdQT9rCCVFrsBsPlZp+rXOZ56j1lHaj2cWA+P2vg76kn7b78m1w==
-X-Received: by 2002:a17:90a:74c5:b0:200:2d89:ef13 with SMTP id p5-20020a17090a74c500b002002d89ef13mr5295554pjl.81.1662658773528;
-        Thu, 08 Sep 2022 10:39:33 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=vTaJzQMO9aQaSOztqsBCXeGz2f0zGMSY5MlxCdWwSg8=;
+        b=UEY3Ug9Dl/Mct3o510Zi2BDETZ1Nkfhz+34Wr43Icw6SEFX7otihjQ91dVrdAKfbIN
+         964zGiv6TL1xmr0i13iW3ctXQy+CnHJ945iQPnqsDXc2Bc+Ael8QKhwJZwiNh4eh+pFy
+         CluzUEzbwE7zNuB69FXnRxjm0nEv0Jao0MJN5WJOjbHd7tvAj5Ne9vnQExbKlrm0uB9U
+         RqqX0Qq/dcZ73ANudVE1nGwdHyENKDXRGI9xHEabOQSygUmnplHmDkKgB4apT7yWrddA
+         cW2i+qAkYkMcgUtNHLKAMVmO1gXgxprJXgJJClqMBS8+4tVXCcMazY8hZC8YrsmMRqjs
+         nJ9w==
+X-Gm-Message-State: ACgBeo2rIlEpX4MaQBdLUd5JBI+lWyvh4/7Chiq1g8MvYqDRSqbHLxEI
+        T9zM3nFcJwF/cv5NN6cUKkR8oQ==
+X-Google-Smtp-Source: AA6agR6MrtDO7uvKfnogPTIOMXEJLmmWRDSvCOSO4jhbNzkHSPoRWpisn8/zZaxyoR/AL3wwDvlMsA==
+X-Received: by 2002:a63:ec55:0:b0:434:a8e6:7d0 with SMTP id r21-20020a63ec55000000b00434a8e607d0mr8845720pgj.390.1662658774794;
+        Thu, 08 Sep 2022 10:39:34 -0700 (PDT)
 Received: from ghaven-kernel.yocom.org.beta.tailscale.net ([2601:600:8f80:973::5f])
-        by smtp.gmail.com with ESMTPSA id x76-20020a62864f000000b0052d4b0d0c74sm15166767pfd.70.2022.09.08.10.39.32
+        by smtp.gmail.com with ESMTPSA id x76-20020a62864f000000b0052d4b0d0c74sm15166767pfd.70.2022.09.08.10.39.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 10:39:33 -0700 (PDT)
+        Thu, 08 Sep 2022 10:39:34 -0700 (PDT)
 From:   Nate Yocom <nate@yocom.org>
 To:     dmitry.torokhov@gmail.com
 Cc:     nate@yocom.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org, hadess@hadess.net,
         benjamin.tissoires@redhat.com
-Subject: [PATCH v6 0/5] Input: joystick: xpad: Add X-Box Adaptive Controller support
-Date:   Thu,  8 Sep 2022 10:39:25 -0700
-Message-Id: <20220908173930.28940-1-nate@yocom.org>
+Subject: [PATCH v6 1/5] Input: joystick: xpad: Add X-Box Adaptive support
+Date:   Thu,  8 Sep 2022 10:39:26 -0700
+Message-Id: <20220908173930.28940-2-nate@yocom.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220908173930.28940-1-nate@yocom.org>
+References: <20220908173930.28940-1-nate@yocom.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,42 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds support for the X-Box Adaptive Controller, which is protocol
-compatible with the XTYPE_XBOXONE support in the driver with two deltas:
-
- - The X-Box button sets 0x02 as its activation ID, where others set
-   0x01
- - The controller has an additional Profile button with 4 active states,
-   which this change maps to an Axis control with 4 possible values
-
-Patch series adds device to the supported table, adds support for the
-Profile button, and adds support for the X-Box button as distinct
-changes.
+Adds correct VID/PID for this XTYPE_XBOXONE compatible controller to
+xpad_device[] table.
 
 Signed-off-by: Nate Yocom <nate@yocom.org>
+Tested-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/input/joystick/xpad.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Nate Yocom (5):
-  Input: joystick: xpad: Add X-Box Adaptive support
-  Input: joystick: xpad: Add X-Box Adaptive XBox button
-  Input: joystick: xpad: Add ABS_PROFILE to uapi
-  Input: joystick: xpad: Add ABS_PROFILE to Docs
-  Input: joystick: xpad: Add X-Box Adaptive Profile button
-
- v2: Fix warning Reported-by: kernel test robot <lkp@intel.com>
- v3: Break into multi-part and remove VID/PID check for XBox button
- v4: Rename Layer -> Profile as suggested by Bastien Nocera
- v5: Add new ABS_PROFILE axis to uapi and use it for the profile button
- v6: Add ABS_PROFILE to absolutes array and docs as requested by Dmitry
-
- Documentation/input/event-codes.rst    |  6 ++++++
- Documentation/input/gamepad.rst        |  6 ++++++
- drivers/hid/hid-debug.c                |  3 ++-
- drivers/input/joystick/xpad.c          | 15 ++++++++++++++-
- include/uapi/linux/input-event-codes.h |  1 +
- 5 files changed, 29 insertions(+), 2 deletions(-)
-
-
-base-commit: 26b1224903b3fb66e8aa564868d0d57648c32b15
+diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+index 18190b529bca..c8b38bb73d34 100644
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -131,6 +131,7 @@ static const struct xpad_device {
+ 	{ 0x045e, 0x02e3, "Microsoft X-Box One Elite pad", 0, XTYPE_XBOXONE },
+ 	{ 0x045e, 0x02ea, "Microsoft X-Box One S pad", 0, XTYPE_XBOXONE },
+ 	{ 0x045e, 0x0719, "Xbox 360 Wireless Receiver", MAP_DPAD_TO_BUTTONS, XTYPE_XBOX360W },
++	{ 0x045e, 0x0b0a, "Microsoft X-Box Adaptive Controller", 0, XTYPE_XBOXONE },
+ 	{ 0x045e, 0x0b12, "Microsoft Xbox Series S|X Controller", MAP_SELECT_BUTTON, XTYPE_XBOXONE },
+ 	{ 0x046d, 0xc21d, "Logitech Gamepad F310", 0, XTYPE_XBOX360 },
+ 	{ 0x046d, 0xc21e, "Logitech Gamepad F510", 0, XTYPE_XBOX360 },
 -- 
 2.30.2
 

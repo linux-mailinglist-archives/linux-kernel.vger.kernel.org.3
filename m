@@ -2,271 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F4B5B1485
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282115B1487
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiIHGQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
+        id S230242AbiIHGQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiIHGQU (ORCPT
+        with ESMTP id S229476AbiIHGQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:16:20 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A488C02F;
-        Wed,  7 Sep 2022 23:16:19 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2885psqc028972;
-        Thu, 8 Sep 2022 06:16:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=lUhjfJ1ZplQ8/9znHOmo1ubgNXWxaHS+Zo/O5ytusWM=;
- b=hQ4Y3IUI0n+a4VmEIuibwnK/6ylpX9pMI2I+Klmf90WMvXd9/CswYsHd/l6+lXhmXh3b
- sKLI+X1DSNoRd8aKyy9X1MKVz85DQy5Afk1S1ov3cR2MbUR/71kn4lnSLO1UvHmbJjwe
- stFrYKd9ouFUWTNVdjonawsNwQBhj1CpRrGp8q+dd+aoEX4bHy8hAwROIP8bJ44OvPoT
- hkXan4jOTlD/tSuaj30THL/RdodXq0TOW5efh1aketZRmfHmRPTigGPF3JktBxZ9rrYC
- JmqQrZm9GgozmZs1U5sqc4hvGrSN+jLD+97hDjTqJYF8+oDAd9gjV9NVmrcNHeos0E6i pg== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jf39xgv5t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 06:16:16 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2886GC37020835;
-        Thu, 8 Sep 2022 06:16:12 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3jc00m2t6p-1;
-        Thu, 08 Sep 2022 06:16:12 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2886GC0U020825;
-        Thu, 8 Sep 2022 06:16:12 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2886GBJm020823;
-        Thu, 08 Sep 2022 06:16:12 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id 45E374372; Wed,  7 Sep 2022 23:16:11 -0700 (PDT)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     y@qualcomm.com, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com
-Subject: [v3] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
-Date:   Wed,  7 Sep 2022 23:16:10 -0700
-Message-Id: <1662617770-2795-1-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <y>
-References: <y>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: aou5gqwR1aV8DEyccjM1GNEIuFYUl35n
-X-Proofpoint-GUID: aou5gqwR1aV8DEyccjM1GNEIuFYUl35n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_04,2022-09-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- malwarescore=0 priorityscore=1501 impostorscore=0 bulkscore=0 adultscore=0
- spamscore=0 mlxscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209080023
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 02:16:37 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CE3B08AB;
+        Wed,  7 Sep 2022 23:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662617796; x=1694153796;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=K4lA7oWKtDqjiZ+U7ZlWOtn4qUcV89zEccB0ki4nK+k=;
+  b=F+FxxBTpGyP1pWDqnQpVFc9fVHQMfG04xhJVrMfeER5ubTcnV5N3eVYP
+   QdU6FvsIMjogt1jePiYq5iuN87Pi8gwoELOUKgrXLdEcB1cBYcqH+HtYI
+   IN+09T/4UtIMqsVF0ooz90kCDRLfv9EBhS3oNJx5bTHU1DX/wnr7OPc27
+   Jh35q5XolQOmlTpFjYDolCYsmqOmhdE6jHZuOd0XBVPoQpsCawZ/FNJWp
+   e05cBC2FoytJ1Ey0fkHFl03yiIhnKBp14z5TKtSQ+z1FgzdFSrMLFCYDF
+   BRnkTeWlLgAmCXFw3PpFiWF8Lu1o1Qy2fUUFYQcsiDzLmJHHm/MZ9fukP
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="189921321"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Sep 2022 23:16:35 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 7 Sep 2022 23:16:35 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 7 Sep 2022 23:16:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zcbl+vO77o9/LPGvalngC8Fj8MwhgATKtSv2JKfxEOJI7WAucn7Pv7XugaWFACZ5byZXSG3VU9vszu23WVUCKa9cHux6VIqYOSwtVOkw5Y534VeGzkj4pnyhQ/8hFHHbzDrUOhS6QLxu+eals9CVE698jnlsqNYCBBSdBlgq61aZlf51Iu2l3C7Dn+4tsH6rWhww+CpShEEaz5MGutcvflJleMfheuCaG4HLsJcNUs1uooXJ/dlUDExDV9O6juho7LaJOiVsya2VdkDItFRTThXI8axyIwHcsTuIgo1Z1FndT/fN5a3C6HlfzsxHK04v+1P83bLYg4F8jYnBuNMxNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HuOjG3R8zn+wrdyjiG/6cMnA6Fcr74ueVavKRjRsSk8=;
+ b=RlXksekqMoN9DssGGr2bX1pMNJu4045IZSSh/hlNNtvn3Rd+77rt+31L9h9HRwHJsLcUOnfNU9Hqip5autvI6Ci4aF6yTsMpPcR9mIhYdhVtEHuIdlww71quTha8Ar+gFinj/Ut/vG6UOZxvM4Z/ukBCRieb45WU7Mpjs8VhXOWz8pDRIqP32c7iPh94sDVqE67tIoNmBZrO/LbYtkEFNG970XmEGIU+Ki2j/L4DFQPrtxsdG/mB5/B8Z1X/5J3dpNcBEtOTwAtGyvEIYzgTbUzd0oCN07G/iEq4d6yMvirgyJDDVJJduZ/AJta7mtI5mPw+MrPi/AC8qyr9lyuOnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HuOjG3R8zn+wrdyjiG/6cMnA6Fcr74ueVavKRjRsSk8=;
+ b=kOtaID/DzM4VI3Yr7k/1N1Di5OWLkwLWva/y9srD9cW5tTNjlj6x1NUpFDmbg8wISRIo5E7LFY+Hjx+pOOeBq4wxnP9weBOrX8AIEcYD6zbYrTOYCJVHLEefe0sKb0+UpXIxa6xExHe/3Tfeo1E8x6ltFs9vs7f1L56ltgwKzO8=
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com (2603:10b6:408:81::24)
+ by CH2PR11MB4440.namprd11.prod.outlook.com (2603:10b6:610:48::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Thu, 8 Sep
+ 2022 06:16:25 +0000
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::3198:2077:56c7:1780]) by BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::3198:2077:56c7:1780%4]) with mapi id 15.20.5612.014; Thu, 8 Sep 2022
+ 06:16:24 +0000
+From:   <Kumaravel.Thiagarajan@microchip.com>
+To:     <weiyongjun@huaweicloud.com>, <arnd@arndb.de>,
+        <gregkh@linuxfoundation.org>
+CC:     <weiyongjun1@huawei.com>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH -next v2 5/5] misc: microchip: pci1xxxx: use
+ module_auxiliary_driver
+Thread-Topic: [PATCH -next v2 5/5] misc: microchip: pci1xxxx: use
+ module_auxiliary_driver
+Thread-Index: AQHYwsfZfRni+0Ehb0+ISLIO7/D6eq3VDGVw
+Date:   Thu, 8 Sep 2022 06:16:24 +0000
+Message-ID: <BN8PR11MB366875590A4F506A398B3FCDE9409@BN8PR11MB3668.namprd11.prod.outlook.com>
+References: <20220907145808.1789249-1-weiyongjun@huaweicloud.com>
+ <20220907145808.1789249-5-weiyongjun@huaweicloud.com>
+In-Reply-To: <20220907145808.1789249-5-weiyongjun@huaweicloud.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN8PR11MB3668:EE_|CH2PR11MB4440:EE_
+x-ms-office365-filtering-correlation-id: 9c2e5f73-d3f5-4ee2-a558-08da9161a860
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tNDOFQwzXob+1UyfMa+VdwCK4rzeiI69gx/ctszfaYfwrp5q2ugAzn5rYKPNOOchc/JsXOHc3c8XrPcLD4JZpKX8uzEC5GxoKWyMj6UyHJ/0eOuqo6t6KrOsMIdfc78nD2IauGqgSst2l1RcWjIjVQeiRReomcPZv7mK8fZo+VgvGXAsetadrUMZM9ew34ySVW7Na+u+pDZSgta2tgxYR7yMxjlD+9zDJvqX6DTnS0MbbqiJAHhSMuoYGnqHzO4iG8pYtgQ3EhKO9qOG1HY8ZdrhQvW/uh9gPzThpOSP8qsKsnQnTLgnD4jeTQGIbWxRTOUOGweP2g+xskCvfET4bts28cpF/KfvTPGA0Sqzp1CDZLEE1NokxU1nDwmoGmLQG+YzQ7T/b6w2HGsK+ici9Nx+d1YxV1MQRrjkNBTG7t4ffbYDBWop063aWMKXP0HnD8AyLd/gJTwvj0Bq6JccA+AlGlcrVl3tZPmJ9TnE9MeWUvrmt2YPqNVRGAIOpWGh477vQNIkzWK5k16vX6HkIa/o8g8W2WcNMeOxyNu/5aPE059xUIsQUrkDUHMROS1pHSOqOPezLAsdBz3kBToBg/yeaK/abPZ3+emezBSUXCjpncsaT7euwXxaJhihCk8o1qJ+2w/xhBBvHeDw2FrbwObyADMbcwOpaOD6yAlP6K3RkLYJ8pcQ0O91vzmtrZeMlqiSttsUmduHYYflM17uGepdY5ws9rdqy2ZW4M6Xkk2h/ZfxqUgu9duuLvsHRqI6METTP6juPAdUwEdViKdFw1C3LWg1FYZIJXDCk2ZMUttAPdheM6OGvJSixYkN9D9OOTQOF6TbXAy5KCDYUzJo1A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR11MB3668.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(366004)(39860400002)(396003)(136003)(346002)(52536014)(83380400001)(186003)(76116006)(38100700002)(122000001)(8936002)(5660300002)(7696005)(64756008)(66476007)(66446008)(66556008)(66946007)(2906002)(55016003)(478600001)(26005)(9686003)(6506007)(8676002)(33656002)(110136005)(71200400001)(4326008)(41300700001)(38070700005)(54906003)(86362001)(316002)(53546011)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?o53gn52UWf3wXVhDpZ/8iV+5GDPZ0MeMR1gh49fkv+48jayhIHI8zKQ+4UeD?=
+ =?us-ascii?Q?E9j0lxh8+6dtzGrR0GBz+MQeFoicGQ6b8MK7Mu92Bs5R8T+vdqgX6NVxSbBj?=
+ =?us-ascii?Q?mX+2PRzuUoxY6QF3fqcGmGRmHuixMsMAlpyMYrUuaHdEyXwHi80YIeLuCkYF?=
+ =?us-ascii?Q?V99us842SdaKqfDdQ976ji2grGiyLYsOJ1q/r0GwW3ESHL4Mec3AcMJPYr0g?=
+ =?us-ascii?Q?fywEmnZYnnwtpJkxc2eLNr4TfJkUKw2/wamMeamtxM2xXPC6XX4WUMJzVRIB?=
+ =?us-ascii?Q?7vBkMAM/YLpON5+akPzUZ4JOHWpCdDEweKIGdKNidl4BGTLhg2tr5zdNOKcm?=
+ =?us-ascii?Q?WvgRvm8aVkGWTYsEJx1YkYJU4kiHtb67PlhWpKV2FjFZOXeJGSbGHFF6v9Sc?=
+ =?us-ascii?Q?s2w7py46PGhJsXXoSd/LyBJhcYMe+GiAaL6Lxhkw2JUmfDuWaiqZ7PcMH2+i?=
+ =?us-ascii?Q?A1KUtNROzSTiDD7lKTZtZ7ko0X7a83jzDdaZBlQvg+YzWBNoeBVZbe+t8WE9?=
+ =?us-ascii?Q?Zz+fMbp2ckOz49LzU1mH/65/ekT3rJoKQswXtuqZl90shHm7z0IG2kH1Cneb?=
+ =?us-ascii?Q?6iGc8k/LquG3uecBwrBCFaE/wMb3wCs1yaO1T5wnMTlXGpfXrpKZgWGw6EzU?=
+ =?us-ascii?Q?wZDV/BvhrctO0zjj1YMuoi4l3lmiut4VLtxBdujfVir6qBZBwOh2dkCOXivI?=
+ =?us-ascii?Q?46V6d5TIwKMlNCutkUpDm/t0vkCDq6I76gAQ7yr+bjhNbbVdeRzoG+6GVaz/?=
+ =?us-ascii?Q?k6Pr78u5WX49BFfCUaXDe36JyMfNmEJjrZc6erbLoX6I9fbA7xg+1+ckcUt4?=
+ =?us-ascii?Q?MYQT6hqqSwR0eJKfSoF5taRsqQAZ50kTNM9upiZCJxe0CvKZj+I+x2lBBnMY?=
+ =?us-ascii?Q?vbtOZasS/Si9i6LktBBviKxqXpjaZEEtxS/kTe0bDy86zgOSw2dBnPVaIzaG?=
+ =?us-ascii?Q?OP73OxAUJLev6vSoEJeKTfYcYW28iXKiAw4rw5TN/7MdAaOnvtE7fBObj8PX?=
+ =?us-ascii?Q?FiXQN5rdJcDXu7qijKfgXuYtbgAaXQAUQhJ5d91Bo6omD4jfWUluVSaiL3eJ?=
+ =?us-ascii?Q?RrZQ2kl2xr1cRRJf0x6/Ph2GMz8Io4quzsuWqxgJgs5u6yFLUi0PdX9KB58h?=
+ =?us-ascii?Q?6/K27bL+9sdpNBbW5KI/Z7yJ51ojt4iTorJmMqgwrcM6bDt9r1J6kgXXqGym?=
+ =?us-ascii?Q?cE5SUeZ9GVK4wkd6osD/RblnUDpbFnO03fjZGiZDAAIZBOuvFzP51iMECikf?=
+ =?us-ascii?Q?bD79wWaNsJc8Hfi/SN2TgxEE00KxQSYatycvz5bM2Jl+bGV22rOLyCIixjw8?=
+ =?us-ascii?Q?FZetFmmorGrhHWtS0LUhmICXEj1VsMzBHGri2r7y3JV6/j+f65J5nFPezi1+?=
+ =?us-ascii?Q?jRwUww9dLucet0huwTmbDAFMWZOXSwH975FWjXvKnu4Cp/2hITmUmyQV7s7E?=
+ =?us-ascii?Q?XQrresUxrkHBjgjAnx4xlaWASyBHgHGUtdNwCSM7tuvngEMCkCCSF7eRFTh8?=
+ =?us-ascii?Q?yvKWopIjg9BJfYfk/jDeh5TqxxT/HK1GwLLdyoOmEv/nnPeAWQIFZpMlHhbo?=
+ =?us-ascii?Q?RFzcW/GCRqFpxoJp1oIoyJf1o5UxUCsHDJoPJ3azysSobC11I6rqaIufZXUO?=
+ =?us-ascii?Q?sftfRL9b36E8D+mB2mJrs7c=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR11MB3668.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c2e5f73-d3f5-4ee2-a558-08da9161a860
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 06:16:24.8951
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: J7Z36R6n/EACoIHghpY5PpvzJVxQnqoZglhJ/7HEQgdzgl3ewZNNiL6qyTyFWHPlSBBnIIxkFqQVca8B1AxGnv95qymu7ILiFWRCC94fBemncvlNteFE7MizkuQ3M5Nd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4440
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Flush mechanism for DSPP blocks has changed in sc7280 family, it
-allows individual sub blocks to be flushed in coordination with
-master flush control.
+> -----Original Message-----
+> From: Wei Yongjun <weiyongjun@huaweicloud.com>
+> Sent: Wednesday, September 7, 2022 8:28 PM
+> To: Kumaravel Thiagarajan - I21417
+> <Kumaravel.Thiagarajan@microchip.com>; Arnd Bergmann
+> <arnd@arndb.de>; Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Wei Yongjun <weiyongjun1@huawei.com>; linux-gpio@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: [PATCH -next v2 5/5] misc: microchip: pci1xxxx: use
+> module_auxiliary_driver
+>=20
+> From: Wei Yongjun <weiyongjun1@huawei.com>
+>=20
+> Use the module_auxiliary_driver() macro to make the code simpler by
+> eliminating module_init and module_exit calls.
+>=20
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Fixes: 7d3e4d807df2 ("misc: microchip: pci1xxxx: load gpio driver for the g=
+pio controller auxiliary device enumerated by the auxiliary bus driver.")
 
-Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+Reviewed-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 
-This change adds necessary support for the above design.
-
-Changes in v1:
-- Few nits (Doug, Dmitry)
-- Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
-
-Changes in v2:
-- Move the address offset to flush macro (Dmitry)
-- Seperate ops for the sub block flush (Dmitry)
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  2 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 35 ++++++++++++++++++++++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     | 10 ++++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h    |  7 ++++++
- 6 files changed, 55 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 601d687..ab38a52 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct drm_crtc *crtc)
- 
- 		/* stage config flush mask */
- 		ctl->ops.update_pending_flush_dspp(ctl,
--			mixer[i].hw_dspp->idx);
-+			mixer[i].hw_dspp->idx, DPU_DSPP_SUB_PCC);
- 	}
- }
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 27f029f..0eecb2f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -65,7 +65,10 @@
- 	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
- 
- #define CTL_SC7280_MASK \
--	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
-+	(BIT(DPU_CTL_ACTIVE_CFG) | \
-+	 BIT(DPU_CTL_FETCH_ACTIVE) | \
-+	 BIT(DPU_CTL_VM_CFG) | \
-+	 BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
- 
- #define MERGE_3D_SM8150_MASK (0)
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 38aa38a..6a0b784 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -191,6 +191,7 @@ enum {
-  * @DPU_CTL_SPLIT_DISPLAY:	CTL supports video mode split display
-  * @DPU_CTL_FETCH_ACTIVE:	Active CTL for fetch HW (SSPPs)
-  * @DPU_CTL_VM_CFG:		CTL config to support multiple VMs
-+ * @DPU_CTL_DSPP_BLOCK_FLUSH: CTL config to support dspp sub-block flush
-  * @DPU_CTL_MAX
-  */
- enum {
-@@ -198,6 +199,7 @@ enum {
- 	DPU_CTL_ACTIVE_CFG,
- 	DPU_CTL_FETCH_ACTIVE,
- 	DPU_CTL_VM_CFG,
-+	DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
- 	DPU_CTL_MAX
- };
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index a35ecb6..31c8c44 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -33,6 +33,7 @@
- #define   CTL_INTF_FLUSH                0x110
- #define   CTL_INTF_MASTER               0x134
- #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
-+#define   CTL_DSPP_n_FLUSH(n)		((0x13C) + ((n - 1) * 4))
- 
- #define CTL_MIXER_BORDER_OUT            BIT(24)
- #define CTL_FLUSH_MASK_CTL              BIT(17)
-@@ -287,8 +288,9 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
- }
- 
- static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
--	enum dpu_dspp dspp)
-+	enum dpu_dspp dspp, enum dpu_dspp_sub_blk dspp_sub_blk)
- {
-+
- 	switch (dspp) {
- 	case DSPP_0:
- 		ctx->pending_flush_mask |= BIT(13);
-@@ -307,6 +309,31 @@ static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
- 	}
- }
- 
-+static void dpu_hw_ctl_update_pending_flush_dspp_subblocks(
-+	struct dpu_hw_ctl *ctx,	enum dpu_dspp dspp, enum dpu_dspp_sub_blk dspp_sub_blk)
-+{
-+	uint32_t flushbits = 0, active;
-+
-+	switch (dspp_sub_blk) {
-+	case DPU_DSPP_SUB_IGC:
-+		flushbits = BIT(2);
-+		break;
-+	case DPU_DSPP_SUB_PCC:
-+		flushbits = BIT(4);
-+		break;
-+	case DPU_DSPP_SUB_GC:
-+		flushbits = BIT(5);
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	active = DPU_REG_READ(&ctx->hw, CTL_DSPP_n_FLUSH(dspp));
-+	DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH(dspp), active | flushbits);
-+
-+	ctx->pending_flush_mask |= BIT(29);
-+}
-+
- static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32 timeout_us)
- {
- 	struct dpu_hw_blk_reg_map *c = &ctx->hw;
-@@ -675,7 +702,11 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
- 	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
- 	ops->update_pending_flush_sspp = dpu_hw_ctl_update_pending_flush_sspp;
- 	ops->update_pending_flush_mixer = dpu_hw_ctl_update_pending_flush_mixer;
--	ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
-+	if (cap & BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
-+		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp_subblocks;
-+	else
-+		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
-+
- 	if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
- 		ops->set_active_pipes = dpu_hw_ctl_set_fetch_pipe_active;
- };
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-index 96c012e..227f1bd 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-@@ -149,12 +149,18 @@ struct dpu_hw_ctl_ops {
- 
- 	/**
- 	 * OR in the given flushbits to the cached pending_flush_mask
--	 * No effect on hardware
-+	 *
-+	 * If the hardware supports dspp sub block flush, then sub-block
-+	 * flushes are written to the hardware and main dspp flush will
-+	 * be cached in the pending_flush_mask.
-+	 *
- 	 * @ctx       : ctl path ctx pointer
- 	 * @blk       : DSPP block index
-+	 * @dspp_sub_blk : DSPP sub-block index
- 	 */
- 	void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
--		enum dpu_dspp blk);
-+		enum dpu_dspp blk,  enum dpu_dspp_sub_blk dspp_sub_blk);
-+
- 	/**
- 	 * Write the value of the pending_flush_mask to hardware
- 	 * @ctx       : ctl path ctx pointer
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-index d3b0ed0..c113d52 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-@@ -167,6 +167,13 @@ enum dpu_dspp {
- 	DSPP_MAX
- };
- 
-+enum dpu_dspp_sub_blk{
-+	DPU_DSPP_SUB_PCC = 1,
-+	DPU_DSPP_SUB_IGC,
-+	DPU_DSPP_SUB_GC,
-+	DPU_DSPP_SUB_MAX
-+};
-+
- enum dpu_ctl {
- 	CTL_0 = 1,
- 	CTL_1,
--- 
-2.7.4
+> ---
+>  drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+> b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+> index fa80a7788596..9cc771c604ed 100644
+> --- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+> +++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+> @@ -421,19 +421,7 @@ static struct auxiliary_driver pci1xxxx_gpio_driver =
+=3D {
+>         .probe =3D pci1xxxx_gpio_probe,
+>         .id_table =3D pci1xxxx_gpio_auxiliary_id_table  };
+> -
+> -static int __init pci1xxxx_gpio_driver_init(void) -{
+> -       return auxiliary_driver_register(&pci1xxxx_gpio_driver);
+> -}
+> -
+> -static void __exit pci1xxxx_gpio_driver_exit(void) -{
+> -       auxiliary_driver_unregister(&pci1xxxx_gpio_driver);
+> -}
+> -
+> -module_init(pci1xxxx_gpio_driver_init);
+> -module_exit(pci1xxxx_gpio_driver_exit);
+> +module_auxiliary_driver(pci1xxxx_gpio_driver);
+>=20
+>  MODULE_DESCRIPTION("Microchip Technology Inc. PCI1xxxx GPIO
+> controller");  MODULE_AUTHOR("Kumaravel Thiagarajan
+> <kumaravel.thiagarajan@microchip.com>");
+> --
+> 2.34.1
 

@@ -2,106 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9BF5B1C8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755B35B1C90
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiIHMOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S230481AbiIHMQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIHMOl (ORCPT
+        with ESMTP id S229574AbiIHMQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:14:41 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A201D315
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:14:40 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id u9so37621837ejy.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 05:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=PL7Z21/Ly2C+Bp4eRSpaZkiqNQbuppt5aGkuojHobXM=;
-        b=N9sMda+Nhf3WqJE4vqboHjiASiuKQ9PH/ytFH6O36VQcL7JC4vwawFnkoMrT7TZXb2
-         rEtHM11WmHNtUPJlSIkRrqk8NvUThA0754wy0RIYKH1DZGVgksna8qY0ELhpONKuvDZ5
-         7YL3UZQSaRsy92iDhuxiT8OWNimVxoIZMk0rc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PL7Z21/Ly2C+Bp4eRSpaZkiqNQbuppt5aGkuojHobXM=;
-        b=2tVVN7vtvxHf4MnTrLy6BrYfsUCj4HoMZIUmUboZ0+URHAS06Egic3xKYbh8LFfziV
-         RBigK0El+bGEOkJieEmsuJl/I3CYI2jeR7rU0BappzjEpDTVzwlvCQVp3NelyUoWY4eH
-         hJrYiT/zuWhPM30i/2M2WR5yjni7bb5+JHpKhbybHGOkHh+sctlltGTRF7lz9/XMmidc
-         I40LdoxdVw5Lk3Ws6+caYAUFdC0Ia1EpPHLlU6+O5+BXm9yIk5lGv/TcwDA8hnyW0ovo
-         5LYkhcpXW1xRVi7VCAWnF4gxYag7Nu+9X2tzqQ6OREstwbkgIXiUxvHUKSafHr+oWidn
-         6bJw==
-X-Gm-Message-State: ACgBeo2NJvahlHaDZlHLgNn5pDJuz8ub5iESL5QzD+hA/uB0DV0nxPmk
-        n6ZxSbZEafMRVQobdQyjR2VL3hKMniZBbvwB
-X-Google-Smtp-Source: AA6agR7ecprAmgvLdUW/SzGggUp9fPZzxDI8X4YbcmETOiGBJjRLJPrC30RwZ61W/f+wfzIXCDToxA==
-X-Received: by 2002:a17:906:fe0a:b0:76f:e373:d84b with SMTP id wy10-20020a170906fe0a00b0076fe373d84bmr5860220ejb.297.1662639278426;
-        Thu, 08 Sep 2022 05:14:38 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id fi5-20020a056402550500b0043bbb3535d6sm11903043edb.66.2022.09.08.05.14.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 05:14:36 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id s23so10723507wmj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 05:14:36 -0700 (PDT)
-X-Received: by 2002:a05:600c:3556:b0:3a6:220e:6242 with SMTP id
- i22-20020a05600c355600b003a6220e6242mr1953598wmq.145.1662639276233; Thu, 08
- Sep 2022 05:14:36 -0700 (PDT)
+        Thu, 8 Sep 2022 08:16:39 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE56AA4B2A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:16:32 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id EA3332B05A0A;
+        Thu,  8 Sep 2022 08:16:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 08 Sep 2022 08:16:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1662639386; x=1662646586; bh=KrUSQEGonb
+        AlAjJjGy+o4W945brRN+Avg2umBhBnQI0=; b=FDJ+i06umqUPBluRJ7zeRUbZGi
+        N7jURhZXBmo5/S/Usa0N7J90mrtZzUzd9Nnaqc/FSn/y2WncCNW0R/moHpGLsUYL
+        C5HWH/06WmYBIrzd3wE8FfKvD0KP4va0BIHvH8EF3nQZlPPz05ZBTb7yXqScAKuO
+        2cUl3GXynvvp+pozPGU+71VCeJvYCtvKDI5tFdQJ+tdXHAMzBJCwHKqsE0lKu/Pr
+        A8ao6EFdwHVEEFLchW5crqmZTnlYgKcXUd/7CLSB+FPVSiwYJTLsjONLCGGyUb5y
+        BFn+4WlR1jtVnr0gwwa1yiUURtwxTD5yuFucnCU7kZFiAss3Xjxn5XHd3GhA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662639386; x=1662646586; bh=KrUSQEGonbAlAjJjGy+o4W945brR
+        N+Avg2umBhBnQI0=; b=qSbjZbSSlScqRRb2KD+nkNMWqkO7dm28pU786LY/qda/
+        20Ta+Fxd1Nfb9NVVgPzUZ5oXSwIVH75WHvntED+kLxclil5DY0Pe1OLJHK/OlyA0
+        gpWzwt0FgxfMKod2+RxptaSG392n33NPqK/rCJPfYeu9E9KTI49qaIpha15PJwFe
+        n2fe8C/IedfcplqCjGsd87uRarm6rQxfP3WAZPBWsXbWbMkI3xxUOfRjmg/XKIdV
+        wfYk/382pZzKgJ+qRyqYgkzd+uFzaBZ1CidqctyDK7PR+nulsm3G8tT4B47TdQdK
+        yfTTbwtCbOcgqMJqt0PLyEhVSx/hdOjbLulLGn2KOQ==
+X-ME-Sender: <xms:Gd0ZYx-VJ_n8fwhNzqeinW9zRoOJIB3yBBBoJyfyI0tFQTcYQ_FvOg>
+    <xme:Gd0ZY1t0XkgJ6p7z-6oK4s3Ru034OpDPdtxoRb1VE7LajPBjrkGKfmnncnLXy9nN8
+    7Ck7iK31cV8Qbo7GtE>
+X-ME-Received: <xmr:Gd0ZY_CkBdJCltHOl2jashFOaN-V8z3B7N42MUSuy5gtYWjK0NmyFuSuXw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtvddgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetudffhfdtieeuleeivdevgeefvdfggfejuefhtdekueetfeduhfejfeej
+    veegueenucffohhmrghinhepmhhouggvrdhimhdpghhithhhuhgsrdgtohhmnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegt
+    vghrnhhordhtvggthh
+X-ME-Proxy: <xmx:Gd0ZY1dGuvC2jLOJEshGqp-NA3ciXfOKnk7LWOZHvBKJlbHTDeS6kw>
+    <xmx:Gd0ZY2Ph-WCqb7jAUhuUX7FJ_U8LaQhIzBiUa8BIUZN0-z70FI8IZA>
+    <xmx:Gd0ZY3mFDu01G1S9U0_8Ss8uXVSawJwGIIWaxxMzuTa6inA22MpeFA>
+    <xmx:Gt0ZY7ZmPog5GvP-mfXxmuJC3nvvPwh0VCe2U2NDnNmf_Ik9E6bz7qwRem4>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Sep 2022 08:16:25 -0400 (EDT)
+Date:   Thu, 8 Sep 2022 14:16:23 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mateusz Kwiatkowski <kfyatek@gmail.com>
+Cc:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v2 32/41] drm/vc4: vec: Convert to the new TV mode
+ property
+Message-ID: <20220908121623.m6n2zyk3aratb6ag@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-32-459522d653a7@cerno.tech>
+ <199cf4b3-8ace-e047-3050-b810cf0c6b63@tronnes.org>
+ <20220908112312.hlb7mzneuxnethhr@houat>
+ <aa510ec2-a72d-364b-424e-816872ab6923@gmail.com>
 MIME-Version: 1.0
-References: <Yw8L7HTZ/dE2/o9C@xsang-OptiPlex-9020> <CAHk-=wgG=mttS-m2OLcnsTwia2roHR2b-DxXXG-tbDH8_cUNiA@mail.gmail.com>
- <0214b84c-71fe-2133-b69d-1e39a19cc468@intel.com>
-In-Reply-To: <0214b84c-71fe-2133-b69d-1e39a19cc468@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 8 Sep 2022 08:14:20 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wi0FPu6E9sViTxaSmqxM=go+M+DuJpfdCW9f-1adpXUpQ@mail.gmail.com>
-Message-ID: <CAHk-=wi0FPu6E9sViTxaSmqxM=go+M+DuJpfdCW9f-1adpXUpQ@mail.gmail.com>
-Subject: Re: [LKP] Re: d4252071b9: fxmark.ssd_ext4_no_jnl_DWTL_54_directio.works/sec
- -26.5% regression
-To:     "Yin, Fengwei" <fengwei.yin@intel.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Mikulas Patocka <mpatocka@redhat.com>, lkp@lists.01.org,
-        lkp@intel.com, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tdggbbxhdgn6r5uy"
+Content-Disposition: inline
+In-Reply-To: <aa510ec2-a72d-364b-424e-816872ab6923@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 4:56 AM Yin, Fengwei <fengwei.yin@intel.com> wrote:
->
-> The test result looks good (only test with 72 process doesn't restore to same level as
-> original result).
 
-Thank you. I've committed that fix (with a slight syntax change and a
-full commit message).
+--tdggbbxhdgn6r5uy
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On an entirely different note, I'll just have to admit to my
-ignorance, and didn't know how you prefer your name in the "tested-by"
-line. For all I know, you might prefer the family name first, with or
-without a comma. But I ended up writing it Westernized as "Fengwei
-Yin", which seems to be the most common form in other kernel commit
-messages, and in some comments.
+On Thu, Sep 08, 2022 at 01:31:34PM +0200, Mateusz Kwiatkowski wrote:
+> W dniu 08.09.2022 o 13:23, Maxime Ripard pisze:
+> > Hi Noralf,
+> >
+> > On Tue, Aug 30, 2022 at 09:01:08PM +0200, Noralf Tr=F8nnes wrote:
+> >>> +static const struct drm_prop_enum_list tv_mode_names[] =3D {
+> >>
+> >> Maybe call it legacy_tv_mode_enums?
+> >>
+> >>>
+> >>> +=A0=A0 =A0{ VC4_VEC_TV_MODE_NTSC, "NTSC", },
+> >>>
+> >>> +=A0=A0 =A0{ VC4_VEC_TV_MODE_NTSC_J, "NTSC-J", },
+> >>>
+> >>> +=A0=A0 =A0{ VC4_VEC_TV_MODE_PAL, "PAL", },
+> >>>
+> >>> +=A0=A0 =A0{ VC4_VEC_TV_MODE_PAL_M, "PAL-M", },
+> >>
+> >> If you use DRM_MODE_TV_MODE_* here you don't need to translate the val=
+ue
+> >> using the switch statement in get/set property, you can use the value
+> >> directly to get/set tv.mode.
+> >
+> > I'm sorry, I'm not quite sure what you mean by that. If we expose the
+> > DRM_MODE_TV_MODE_* properties there, won't that change the values the
+> > userspace will need to use to set that property?
+>=20
+> I'd just like to point out that if numerical values of these enums are yo=
+ur
+> concern, then you're (or perhaps I am ;) already breaking this by adding =
+new
+> modes in patch 33/41 in this series.
+>=20
+> And the values (and names!) added by that patch (33/41) don't match those
+> currently used by the downstream version
+> (https://github.com/raspberrypi/linux/blob/rpi-5.15.y/drivers/gpu/drm/vc4=
+/vc4_vec.c).
+> If any userspace software is manipulating this property, it's most likely
+> targeting the downstream code. But since you're not aiming for consistenc=
+y with
+> that, I was under the impression that compatibility isn't a concern.
 
-Maybe you don't care, or maybe you care deeply. If you do, just let me
-know for future reference and I'll try to remember.
+I'm not really concerned about the compatibility with the downstream
+tree, if only because you already broke that compatibility with your
+patch :)
 
-(Maybe you don't care deeply, but I remember the mess international
-"spelling" of Finnish names used to be when 7-bit US-ASCII was the
-norm, so I _try_ to make sure that we at least attempt to get names of
-people right in the kernel.)
+So you're right, I'll reorganize that patch to keep the backward
+compatibility.
 
-I only later noticed that you actually signed your email "Yin,
-Fengwei", which is what makes me think I screwed up and is the reason
-for this note.
+Maxime
 
-              Linus
+--tdggbbxhdgn6r5uy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxndFwAKCRDj7w1vZxhR
+xZzpAQDu6178QjxcwYvkevzAeo7PrIc0OnYrnwJMv32MTXR4eQEAk5vzF3oEW4ES
+B3YR/wi67B2CLlhZDDEHOYE/bL80EQ8=
+=fmem
+-----END PGP SIGNATURE-----
+
+--tdggbbxhdgn6r5uy--

@@ -2,154 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CF95B233A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC285B2346
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiIHQMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S231404AbiIHQO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiIHQMe (ORCPT
+        with ESMTP id S231751AbiIHQOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:12:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919D91223AC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:12:18 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (unknown [70.107.189.129])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 888606601FBA;
-        Thu,  8 Sep 2022 17:12:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662653537;
-        bh=jIUdtkT4ddNfSHRyN+v/gxKe5FoYLf2qnOUA50l2MJs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jtWMhA7rx+v6qQhy1Em7Y3pjtbUzQj8/i1otNHUbCYCcSaCUyEfcrU2ep2jWw7n+c
-         Vi7Kw2+2ZrR9iKeic1dCieNkmsEanp0Dae2wZImJZrWNi7UyhFIG2bX6hvCUjh6S2R
-         My48lMeVEcfu0JzQXZKVWZrHkuDftmfZ9BCePITcAodyj2OABTO2xo4MCuJfO08ZWc
-         meiQP8R/jUvThecyTUbwOfNjOtkQl1GbPtCf1/xoIJwKQu8WwzWVdkHKF8OrnjPS1B
-         uELc+YqiumTjSPxbkalPp1hg7QzjL51eJyZyiKGo2/hawSfVf94nhOdPd+hpTPOI/M
-         VeILSfFXCcBRQ==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Chunxu Li <chunxu.li@mediatek.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 10/10] ASoC: mediatek: mt8186: Remove clock share parsing from DT
-Date:   Thu,  8 Sep 2022 12:11:54 -0400
-Message-Id: <20220908161154.648557-11-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220908161154.648557-1-nfraprado@collabora.com>
-References: <20220908161154.648557-1-nfraprado@collabora.com>
+        Thu, 8 Sep 2022 12:14:06 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF416E9012
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:13:33 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id q3so18262970pjg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Ynlv/HlbjINH5vzgYf4TA8R4RfVi30O2jA5crDrStO0=;
+        b=oYHv1zVyXadmL712N/OTN2ss+kfxkYYSZBY8SbeRcDbK5VRzMS9d5oRJiUpeOHaNnS
+         y6U8mteu3RX3xSdL5vGrsFWmQ0rr4DrfFKLnopVfEAmi84XeZniDURw9fK6qKvxsWiTq
+         0ZT0zNSgYguC3eYyLhWhzdiJaFpeL/WVVWjRo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ynlv/HlbjINH5vzgYf4TA8R4RfVi30O2jA5crDrStO0=;
+        b=tGqZrOPZuUsyN4n+MB56XuS4MpMiPgMzO2ZIAF1OQ4U6+CWJS/d8xqS9fySN7qKllQ
+         R2ZVuJdKavJU2BXRS74hksKUZwM6E+rWcNKt/TInE5lOURAb8qsKQN5XBkr3FpnafWW3
+         t/jQ4JBlkKLy+Vc0sQuayXaNR2xeewsa2dlvQ5/R7QvzUT7FWT9Ka/dqpBQ5uRUyRx8y
+         B3Bnb1ietT9Uk6mHfE7IKZ5UvbFjICMmiGX05IFfBdqUvLHXXX31qhojwY0hvRO2dUT5
+         7PYFY8kCVoXIxuslk0JWmR/9e9A4ktc/ndWrRZf/ntqYPSb01O3CIAp4+TMUfswO/yaY
+         rwNQ==
+X-Gm-Message-State: ACgBeo2pk+PBkRqMTOptCnFeetsCYA8wQ+9JvFVmHDFMrRBnPQp/v/Fs
+        EdDBkoyw0J7KW37g3AmdJq9c7Q==
+X-Google-Smtp-Source: AA6agR4b8HBqas+oT3K9pH3ycWp3TxRR1yMAxYD+7X/J4yLb8tb1538WM7cusSa+UKAv+3mrExLCmQ==
+X-Received: by 2002:a17:90b:1bc8:b0:200:43c7:5940 with SMTP id oa8-20020a17090b1bc800b0020043c75940mr5071911pjb.46.1662653613370;
+        Thu, 08 Sep 2022 09:13:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b14-20020a1709027e0e00b0016be596c8afsm14773738plm.282.2022.09.08.09.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 09:13:32 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 09:13:31 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     agk@redhat.com, mka@chromium.org, dm-devel@redhat.com,
+        dianders@chromium.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, sarthakkukreti@chromium.org
+Subject: Re: dm: verity-loadpin: Only trust verity targets with enforcement
+Message-ID: <202209080912.00880AD6@keescook>
+References: <20220907133055.1.Ic8a1dafe960dc0f8302e189642bc88ebb785d274@changeid>
+ <166259004596.4128104.7200162640366282166.b4-ty@chromium.org>
+ <YxoJcG5MN4OdaulL@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxoJcG5MN4OdaulL@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the clock sharing for i2s ports can be configured from the
-sound machine driver, remove the logic that was used to parse the
-properties from the devicetree.
+On Thu, Sep 08, 2022 at 11:25:36AM -0400, Mike Snitzer wrote:
+> On Wed, Sep 07 2022 at  6:34P -0400,
+> Kees Cook <keescook@chromium.org> wrote:
+> 
+> > On Wed, 7 Sep 2022 13:30:58 -0700, Matthias Kaehlcke wrote:
+> > > Verity targets can be configured to ignore corrupted data blocks.
+> > > LoadPin must only trust verity targets that are configured to
+> > > perform some kind of enforcement when data corruption is detected,
+> > > like returning an error, restarting the system or triggering a
+> > > panic.
+> > > 
+> > > 
+> > > [...]
+> > 
+> > Applied to for-next/hardening, thanks!
+> > 
+> > [1/1] dm: verity-loadpin: Only trust verity targets with enforcement
+> >       https://git.kernel.org/kees/c/2e1875c05267
+> 
+> Does this mean you're intending to send this upstream?  I prefer to
+> take all DM changes unless there is an external dependency.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
+Oh! Yeah, I added it to my tree since you'd asked me to take the
+original verity-loadpin series and this was a fix. I'm happy either
+way. Shall I drop this change from my tree?
 
- sound/soc/mediatek/mt8186/mt8186-dai-i2s.c | 30 ----------------------
- 1 file changed, 30 deletions(-)
-
-diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-i2s.c b/sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
-index 7e8cad682c83..f07181be4370 100644
---- a/sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
-@@ -44,7 +44,6 @@ struct mtk_afe_i2s_priv {
- 	int low_jitter_en;
- 	int master; /* only i2s0 has slave mode*/
- 
--	const char *share_property_name;
- 	int share_i2s_id;
- 
- 	int mclk_id;
-@@ -1140,50 +1139,26 @@ static const struct mtk_afe_i2s_priv mt8186_i2s_priv[DAI_I2S_NUM] = {
- 	[DAI_I2S0] = {
- 		.id = MT8186_DAI_I2S_0,
- 		.mclk_id = MT8186_I2S0_MCK,
--		.share_property_name = "i2s0-share",
- 		.share_i2s_id = -1,
- 	},
- 	[DAI_I2S1] = {
- 		.id = MT8186_DAI_I2S_1,
- 		.mclk_id = MT8186_I2S1_MCK,
--		.share_property_name = "i2s1-share",
- 		.share_i2s_id = -1,
- 	},
- 	[DAI_I2S2] = {
- 		.id = MT8186_DAI_I2S_2,
- 		.mclk_id = MT8186_I2S2_MCK,
--		.share_property_name = "i2s2-share",
- 		.share_i2s_id = -1,
- 	},
- 	[DAI_I2S3] = {
- 		.id = MT8186_DAI_I2S_3,
- 		/*  clock gate naming is hf_faud_i2s4_m_ck*/
- 		.mclk_id = MT8186_I2S4_MCK,
--		.share_property_name = "i2s3-share",
- 		.share_i2s_id = -1,
- 	}
- };
- 
--static int mt8186_dai_i2s_get_share(struct mtk_base_afe *afe)
--{
--	struct mt8186_afe_private *afe_priv = afe->platform_priv;
--	const struct device_node *of_node = afe->dev->of_node;
--	const char *of_str;
--	const char *property_name;
--	struct mtk_afe_i2s_priv *i2s_priv;
--	int i;
--
--	for (i = 0; i < DAI_I2S_NUM; i++) {
--		i2s_priv = afe_priv->dai_priv[mt8186_i2s_priv[i].id];
--		property_name = mt8186_i2s_priv[i].share_property_name;
--		if (of_property_read_string(of_node, property_name, &of_str))
--			continue;
--		i2s_priv->share_i2s_id = get_i2s_id_by_name(afe, of_str);
--	}
--
--	return 0;
--}
--
- /**
-  * mt8186_dai_i2s_set_share() - Set up I2S ports to share a single clock.
-  * @afe: Pointer to &struct mtk_base_afe
-@@ -1252,10 +1227,5 @@ int mt8186_dai_i2s_register(struct mtk_base_afe *afe)
- 	if (ret)
- 		return ret;
- 
--	/* parse share i2s */
--	ret = mt8186_dai_i2s_get_share(afe);
--	if (ret)
--		return ret;
--
- 	return 0;
- }
 -- 
-2.37.3
-
+Kees Cook

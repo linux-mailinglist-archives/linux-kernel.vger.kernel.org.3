@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D355B2491
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8440E5B249D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbiIHRZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        id S232225AbiIHR0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiIHRZP (ORCPT
+        with ESMTP id S232202AbiIHRZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:25:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E856157E3F;
-        Thu,  8 Sep 2022 10:25:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7958DB821DB;
-        Thu,  8 Sep 2022 17:25:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F98C4347C;
-        Thu,  8 Sep 2022 17:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662657910;
-        bh=GCiVQrHAmwsie7AsMWJgZavE3oU3xm6fSWOc49mDFmI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bm5rIPlx/0BsT6WANYrIo5eksfQ3ZHl7HQ//5M3nJmwTWrG8OKt2XGG20tlIbzZsv
-         gREn8JhQfvr60YHNNOhaDShwmBnOnCpu9nvPfKSomTVstq54aZKaRazlw5QjMvdLJY
-         fN9IUntS/1fFUOX3M6qjLr2D7S/e1oYFmX1dbp9NIdyO+rgN+jFfARiQA+x9DlNe7w
-         zIMxv5TafDusRr4vyY4FAcXQma0OZbV7ctE9pm5rT7zrHip9UDSQcfBSmNlupA92uK
-         pIM+e3NqISUkh7EjcsG35bFm87umbXxEFvnHoLaew2eB4Eg+4aevC7gdof9dBfu7KN
-         j+hOgRKkjSkpA==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com
-Cc:     linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: [RFC PATCH v5 8/8] nfsd: take inode_lock when querying for NFSv4 GETATTR
-Date:   Thu,  8 Sep 2022 13:24:48 -0400
-Message-Id: <20220908172448.208585-9-jlayton@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220908172448.208585-1-jlayton@kernel.org>
-References: <20220908172448.208585-1-jlayton@kernel.org>
+        Thu, 8 Sep 2022 13:25:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D706E9035
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662657924; x=1694193924;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qkWRGIWcpqPHAcc4NLL6JWNKw9TP9wc22oKFLdrHVgE=;
+  b=kcgYdsaNcurq0yNXE/r8tRJz/vDI8rWTqyVvWROV6DzWEQ9PumcSjm3A
+   A/GW/xCkojxdNp+eNPaUUf81NRbA4Z2KKbKyjbcpRxUR0AOChVOI4kSW0
+   MnOrprl3uQAdEZ0PBECR1iEMOcuOEGrihXUjveeoAVfC5uM9W22Pz0X/t
+   i55QdYb1+VBRnxHd6sFjMn7RygMOCHkc7y6To/bnckj0vgKuWgKsOf9GW
+   snLIZnIz6dLBfVSgeiQ8vCP2mYqCmyaWOmH61tQspOtI/tKo7dmQDW4pP
+   36GTAy1VTFSxnLv7kHhpiSbMlg9iZJ86ZBI2ChGtBiqnLNRj6vdkWWigk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="361229893"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="361229893"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 10:25:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="648130057"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 08 Sep 2022 10:25:22 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWLHF-0000Ax-2j;
+        Thu, 08 Sep 2022 17:25:21 +0000
+Date:   Fri, 09 Sep 2022 01:25:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/6.0-rc2-kspp-misc] BUILD SUCCESS
+ 8147c9d23ad1954a1bce66d72decf07edd211a0f
+Message-ID: <631a256f.+ktUD6glsIPzMaSv%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,57 +63,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i_version counter for regular files is updated in update_time, and
-that's usually done before copying the data to the pagecache. It's
-possible that a reader and writer could race like this:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/6.0-rc2-kspp-misc
+branch HEAD: 8147c9d23ad1954a1bce66d72decf07edd211a0f  media: usb: pwc-uncompress: Use flex array destination for memcpy()
 
-	reader		writer
-	------		------
-			i_version++
-	read
-	getattr
-			update page cache
+elapsed time: 1329m
 
-If that happens then the reader may associate the i_version value with
-the wrong inode state.
+configs tested: 139
+configs skipped: 3
 
-All of the existing filesystems that implement i_version take the
-i_rwsem in their write_iter operations before incrementing it. Take the
-inode_lock when issuing a getattr for NFSv4 attributes to prevent the
-above race.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/nfsd/nfs4xdr.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+powerpc                           allnoconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+i386                             allyesconfig
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+m68k                             allmodconfig
+arc                              allyesconfig
+i386                          randconfig-a005
+alpha                            allyesconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+i386                             alldefconfig
+powerpc                     ep8248e_defconfig
+m68k                          hp300_defconfig
+m68k                        m5272c3_defconfig
+arm                          exynos_defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+m68k                             allyesconfig
+sparc                             allnoconfig
+arm                        cerfcube_defconfig
+powerpc                      arches_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                     asp8347_defconfig
+arc                  randconfig-r043-20220907
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+i386                          randconfig-c001
+loongarch                           defconfig
+loongarch                         allnoconfig
+sparc                               defconfig
+sh                     sh7710voipgw_defconfig
+sh                             sh03_defconfig
+sh                           se7750_defconfig
+s390                             allmodconfig
+xtensa                       common_defconfig
+um                                  defconfig
+sh                            titan_defconfig
+arm                            mps2_defconfig
+arm                        clps711x_defconfig
+arc                           tb10x_defconfig
+powerpc                       eiger_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sh                          r7780mp_defconfig
+arm                            qcom_defconfig
+arm                          pxa3xx_defconfig
+arm                         s3c6400_defconfig
+powerpc                     stx_gp3_defconfig
+arm64                            alldefconfig
+sh                           se7722_defconfig
+riscv                randconfig-r042-20220908
+arc                  randconfig-r043-20220908
+s390                 randconfig-r044-20220908
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+powerpc                         wii_defconfig
+xtensa                  cadence_csp_defconfig
+m68k                       m5275evb_defconfig
+sh                         ap325rxa_defconfig
+csky                                defconfig
+sparc                            alldefconfig
+xtensa                           allyesconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+microblaze                          defconfig
+powerpc                        cell_defconfig
+parisc64                         alldefconfig
+sh                          r7785rp_defconfig
+arm                          iop32x_defconfig
+powerpc                     mpc83xx_defconfig
+xtensa                generic_kc705_defconfig
+arm                        realview_defconfig
+xtensa                              defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+ia64                          tiger_defconfig
+arc                              alldefconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220907
+ia64                             allmodconfig
 
-diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
-index 4eec2ce05e7e..f7951d8d55ca 100644
---- a/fs/nfsd/nfs4xdr.c
-+++ b/fs/nfsd/nfs4xdr.c
-@@ -2872,9 +2872,22 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
- 			goto out;
- 	}
- 
-+	/*
-+	 * The inode lock is needed here to ensure that there is not a
-+	 * write to the inode in progress that might change the size,
-+	 * or an in-progress directory morphing operation for directory
-+	 * inodes.
-+	 *
-+	 * READ and GETATTR are not guaranteed to be atomic, even when in
-+	 * the same compound, but we do try to present attributes in the
-+	 * GETATTR reply as representing a single point in time.
-+	 */
-+	inode_lock(d_inode(dentry));
- 	err = vfs_getattr(&path, &stat,
- 			  STATX_BASIC_STATS | STATX_BTIME | STATX_INO_VERSION,
- 			  AT_STATX_SYNC_AS_STAT);
-+	inode_unlock(d_inode(dentry));
-+
- 	if (err)
- 		goto out_nfserr;
- 	if (!(stat.result_mask & STATX_BTIME))
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20220907
+hexagon              randconfig-r045-20220907
+riscv                randconfig-r042-20220907
+s390                 randconfig-r044-20220907
+powerpc                 mpc8315_rdb_defconfig
+mips                           ip22_defconfig
+powerpc                     tqm8540_defconfig
+arm                           spitz_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+x86_64                        randconfig-k001
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+powerpc                     akebono_defconfig
+mips                      malta_kvm_defconfig
+arm                    vt8500_v6_v7_defconfig
+arm                      pxa255-idp_defconfig
+s390                             alldefconfig
+hexagon              randconfig-r041-20220908
+hexagon              randconfig-r045-20220908
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+
 -- 
-2.37.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

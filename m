@@ -2,191 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FD55B21B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BE35B21B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiIHPL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S232871AbiIHPLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiIHPLV (ORCPT
+        with ESMTP id S232620AbiIHPLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:11:21 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44871197AE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:11:19 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u18so15941152lfo.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:11:19 -0700 (PDT)
+        Thu, 8 Sep 2022 11:11:38 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8717D13B11E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:11:35 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 202so17028500pgc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=SMFrljKQFeZ7mrqOcjMaMCN0KzVyzr1TIqUCiZr3+Uw=;
-        b=Lnc/G9vbOnnC/Qru0Or4jWF60lsTjQKep87b+7LhKWkNJwBpE/zHEKwLyB8razA8Sb
-         3dcqmKtWrUMpxvAuHNE3Dgte9t9H/BUJi56/4HORgVE7W/gZFTVyU0QeoLJm2RFcTZmK
-         +rWjWqW1ksYynTwITrm4JnRNpUAGuJhSlisEQGXrfyFt1mPA743lL6ZbnQZfqaN/6uqs
-         qtMY0CwDQDu911TAEC8BYYk9+1otIX9rnU8bavQvDMifgpw81pCQtiuoU/JEKbjV4EZV
-         7SoJ/TOvp9kZQ5EfR8MEbz0x+n76oftCogiqwvmMYmYebKbwToQTes+ebtWJ9vVKGvSD
-         mdOA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=aTBij0MKfHujyUmk5AcvjcEPDYsuhsMOVk1UDlCpwHM=;
+        b=M8sDj3UF6N8I7JnxOD5qpHcBpkICJr+jJbnZkTKusip2DzAxWgiNLQ6mj7h8OEkpD6
+         7fubBL7T9kK7c3AohI7ypbXz811/OZvC5CTxzgbqPwOybqN9tFi6uw95Zcd5vSciyPK4
+         S+W7qD3SR4im8zMU0XHmJV/sA6tAILo//CEVix9HLeB9cKQUbxOKii2rsTpxve1LMRmx
+         5FFykgBQ2jC1ECefm4B0Xb/aBy+8hjxOghGPi8x3hmyqP5wIoPkS8aXgm2XC5x1Dnxt4
+         BPW0xb5jRAoqOXGUXO/9jXwGdfBAV11vjdL1x2Ewj6q4oFlLSU6ZWuyxR/86W9GK6GRG
+         dpvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=SMFrljKQFeZ7mrqOcjMaMCN0KzVyzr1TIqUCiZr3+Uw=;
-        b=p45R34QclmGxj917LM0XBkxaew3Fj1A+8N78jtfI0wy0Sl9TwXc+w5ivLLgQg7rWFv
-         uW2qMK78zYGKWkDRsKLVF8bIStq2Ks1wk4/d6XM6WclAnNvoj7PxKCy9jc4GJU0ILQaT
-         AkKlgl7C6vcYMieGraEvBcTTQQesfJR4ONJKvweRVt4LIwPgDGAHXGk4kB09LOHTYXLS
-         hA/3Acv3c4B4ggr75v7gD//Iq/bQcoSZhvGxuGUWrRjzv30RxYdWTDBtFzwPJDQ2Ejo0
-         oe4UzS2iplnFe6HvnCLCpyRZSKGWeGRABKDR1uJz8RkXLrfjaunT54HMDdVn6Ughc+4c
-         oioA==
-X-Gm-Message-State: ACgBeo2Nuj4wajkHXir/FgM+03yiNNw4YMMAPslmIMbFSzxlBxEEBE4z
-        N/RXol7o1IAm/SU/ft0CnVZP9w==
-X-Google-Smtp-Source: AA6agR7TUL6V8bOu369x1uzTLuCM1E6iuOLs+tiwk3Gy4dJZbNcRutp/mgpQcRKf0XIq+nPUivPVpQ==
-X-Received: by 2002:a05:6512:32c8:b0:492:f891:8a3a with SMTP id f8-20020a05651232c800b00492f8918a3amr3233766lfg.477.1662649878271;
-        Thu, 08 Sep 2022 08:11:18 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a3-20020a056512200300b004946a1e045fsm1804544lfb.197.2022.09.08.08.11.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 08:11:17 -0700 (PDT)
-Message-ID: <7a164961-5b32-8d80-a6f6-8c9f64622085@linaro.org>
-Date:   Thu, 8 Sep 2022 17:11:16 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=aTBij0MKfHujyUmk5AcvjcEPDYsuhsMOVk1UDlCpwHM=;
+        b=GtHgNmmWMzFU3EKv65qKjvbaaSurqBRSRebFhLP7uPfqj9ksMCUDZn6WDtI+ILuHpu
+         cXc2DtQjTKsome1GGnF54aBMspEED7xyoAnYBMZLAsgIug50X/jwVJniIoVNGwZJYcT9
+         Vkq5+k5UPV+TH+suQwHEJ7avkAy3TVkBp5Yt+ax3eZf+2l8W+ffBqZmN8B8bNrjB64ea
+         AYFaAOgpPCGARocIVMT2eKHkgKd7zRA7TcOekUqj1lAB8ipyzzelISUOKFit5LT5sLP4
+         5QCyNyk6HePrZaBhQU2hB6kIxFELKeWwlqDFneez7JZk0cO8k4/P1z/W9mlgpOE3C8Xw
+         m1XA==
+X-Gm-Message-State: ACgBeo3IuPqD1oKC4+jbHosm62kRUCuDFME6fsuI7KPbeJSLWxA6Iz4Q
+        xS+jizOVrJQp8w/to+n2YvlMMw==
+X-Google-Smtp-Source: AA6agR52H9GqkwF66V9j3sYZCEhIamP67gNhXAIhkPKoFl7VQPznDhLiYGxoAwhmixzGU+O0GNIEfA==
+X-Received: by 2002:a05:6a00:2395:b0:536:8296:51d5 with SMTP id f21-20020a056a00239500b00536829651d5mr9625772pfc.84.1662649894875;
+        Thu, 08 Sep 2022 08:11:34 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id jc3-20020a17090325c300b00174abcb02d6sm10263695plb.235.2022.09.08.08.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 08:11:34 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 15:11:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Harald Hoyer <harald@profian.com>
+Cc:     ashish.kalra@amd.com, ak@linux.intel.com, alpergun@google.com,
+        ardb@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        dgilbert@redhat.com, dovmurik@linux.ibm.com, hpa@zytor.com,
+        jarkko@kernel.org, jmattson@google.com, jroedel@suse.de,
+        kirill@shutemov.name, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
+        marcorr@google.com, michael.roth@amd.com, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org, pgonda@google.com,
+        rientjes@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        slp@redhat.com, srinivas.pandruvada@linux.intel.com,
+        tglx@linutronix.de, thomas.lendacky@amd.com, tobin@ibm.com,
+        tony.luck@intel.com, vbabka@suse.cz, vkuznets@redhat.com,
+        x86@kernel.org
+Subject: Re: [[PATCH for v6]] KVM: SEV: fix snp_launch_finish
+Message-ID: <YxoGItJDTEjfctaS@google.com>
+References: <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
+ <20220908145557.1912158-1-harald@profian.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [Patch v2 01/15] dt-bindings: media: s5p-mfc: Add new DT schema
- for MFC
-Content-Language: en-US
-To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski@linaro.org>,
-        'Smitha T Murthy' <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220907064715.55778-1-smitha.t@samsung.com>
- <CGME20220907063313epcas5p114f793010fd0f2797e93bd83ed18a1d7@epcas5p1.samsung.com>
- <20220907064715.55778-2-smitha.t@samsung.com>
- <08168057-853c-5b17-7d88-dc6c30e82f14@linaro.org>
- <000101d8c382$75750e00$605f2a00$@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <000101d8c382$75750e00$605f2a00$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908145557.1912158-1-harald@profian.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 14:56, Aakarsh Jain wrote:
+On Thu, Sep 08, 2022, Harald Hoyer wrote:
+> The `params.auth_key_en` indicator does _not_ specify, whether an
+> ID_AUTH struct should be sent or not, but, wheter the ID_AUTH struct
+> contains an author key or not. The firmware always expects an ID_AUTH block.
 > 
+> Link: https://lore.kernel.org/all/cover.1655761627.git.ashish.kalra@amd.com/
+
+Please provide feedback by directly responding to whatever patch/email is buggy.
+Or if that's too complicated for some reason (unlikely in this case), provide the
+fixup patch to the author *off-list*.
+
+> Signed-off-by: Harald Hoyer <harald@profian.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->> Sent: 07 September 2022 16:52
->> To: Smitha T Murthy <smitha.t@samsung.com>; linux-arm-
->> kernel@lists.infradead.org; linux-media@vger.kernel.org; linux-
->> kernel@vger.kernel.org; devicetree@vger.kernel.org
->> Cc: m.szyprowski@samsung.com; andrzej.hajda@intel.com;
->> mchehab@kernel.org; hverkuil-cisco@xs4all.nl;
->> ezequiel@vanguardiasur.com.ar; jernej.skrabec@gmail.com;
->> benjamin.gaignard@collabora.com; stanimir.varbanov@linaro.org;
->> dillon.minfei@gmail.com; david.plowman@raspberrypi.com;
->> mark.rutland@arm.com; robh+dt@kernel.org; krzk+dt@kernel.org;
->> andi@etezian.org; alim.akhtar@samsung.com; aswani.reddy@samsung.com;
->> pankaj.dubey@samsung.com; linux-fsd@tesla.com;
->> aakarsh.jain@samsung.com
->> Subject: Re: [Patch v2 01/15] dt-bindings: media: s5p-mfc: Add new DT
->> schema for MFC
->>
->> On 07/09/2022 08:47, Smitha T Murthy wrote:
->>> Adds DT schema for s5p-mfc in yaml format
->>
->> s/Adds/Convert/
->> (as convert to DT schema)
->>
-> ok, I will change.
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 85357dc4d231..5cf4be6a33ba 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2242,17 +2242,18 @@ static int snp_launch_finish(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  
+>  		data->id_block_en = 1;
+>  		data->id_block_paddr = __sme_pa(id_block);
+> -	}
+>  
+> -	if (params.auth_key_en) {
+>  		id_auth = psp_copy_user_blob(params.id_auth_uaddr, KVM_SEV_SNP_ID_AUTH_SIZE);
+>  		if (IS_ERR(id_auth)) {
+>  			ret = PTR_ERR(id_auth);
+>  			goto e_free_id_block;
+>  		}
+>  
+> -		data->auth_key_en = 1;
+>  		data->id_auth_paddr = __sme_pa(id_auth);
+> +
+> +		if (params.auth_key_en) {
+
+While I'm here though...  Single line if-statements don't need curly braces.
+
+> +			data->auth_key_en = 1;
+> +		}
+>  	}
+>  
+>  	data->gctx_paddr = __psp_pa(sev->snp_context);
+> -- 
+> 2.37.1
 > 
->> Please mention here changes to original binding (I see at least adding
->> iommus and dropping some properties).
->>
-> ok. I will make this changes. 
->>>
->>> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
->>> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
->>> ---
->>>  .../devicetree/bindings/media/s5p-mfc.txt     |  77 +------------
->>>  .../bindings/media/samsung,s5p-mfc.yaml       | 109
->> ++++++++++++++++++
->>>  2 files changed, 110 insertions(+), 76 deletions(-)  create mode
->>> 100644 Documentation/devicetree/bindings/media/samsung,s5p-mfc.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt
->>> b/Documentation/devicetree/bindings/media/s5p-mfc.txt
->>> index aa54c8159d9f..0b7c4dd40095 100644
->>> --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
->>> +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
->>> @@ -1,76 +1 @@
->>> -* Samsung Multi Format Codec (MFC)
->>> -
->>> -Multi Format Codec (MFC) is the IP present in Samsung SoCs which
->>> -supports high resolution decoding and encoding functionalities.
->>> -The MFC device driver is a v4l2 driver which can encode/decode -video
->>> raw/elementary streams and has support for all popular -video codecs.
->>> -
->>> -Required properties:
->>> -  - compatible : value should be either one among the following
->>> -	(a) "samsung,mfc-v5" for MFC v5 present in Exynos4 SoCs
->>> -	(b) "samsung,mfc-v6" for MFC v6 present in Exynos5 SoCs
->>> -	(c) "samsung,mfc-v7" for MFC v7 present in Exynos5420 SoC
->>> -	(d) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
->>> -	(e) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433
->> SoC
->>> -	(f) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
->>> -
->>> -  - reg : Physical base address of the IP registers and length of memory
->>> -	  mapped region.
->>> -
->>> -  - interrupts : MFC interrupt number to the CPU.
->>> -  - clocks : from common clock binding: handle to mfc clock.
->>> -  - clock-names : from common clock binding: must contain "mfc",
->>> -		  corresponding to entry in the clocks property.
->>> -
->>> -Optional properties:
->>> -  - power-domains : power-domain property defined with a phandle
->>> -			   to respective power domain.
->>> -  - memory-region : from reserved memory binding: phandles to two
->> reserved
->>> -	memory regions, first is for "left" mfc memory bus interfaces,
->>> -	second if for the "right" mfc memory bus, used when no SYSMMU
->>> -	support is available; used only by MFC v5 present in Exynos4 SoCs
->>> -
->>> -Obsolete properties:
->>> -  - samsung,mfc-r, samsung,mfc-l : support removed, please use memory-
->> region
->>> -	property instead
->>
->> When did they become obsolete? Is it enough of time to remove them?
-> 
-> these properties were there earlier, we didn't added them in obsolete properties.
-
-This is not the answer to my question. Is it enough of time to remove
-deprecated properties?
-
-
-
-Best regards,
-Krzysztof

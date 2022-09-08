@@ -2,80 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6A85B1186
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321295B1188
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiIHAnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 20:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S229896AbiIHAoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiIHAni (ORCPT
+        with ESMTP id S229498AbiIHAoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:43:38 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99AEB2777
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 17:43:37 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1278624b7c4so22069216fac.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 17:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date;
-        bh=0NDOpRRZXKSoT0ag7W3GTB/utuZq1B1nc2pEFCLA+SM=;
-        b=hljcWqxcGFzN8FxmRrg+VJublQkjR+8ByfCr5igMQXtQycm1WkYNnMcUWj781qo0EY
-         93TpacIccciqXXTc4QWx9paA5MA5TLas5OhhQ05r5Top/X3/MbuiToSgU/W0z1TxO7ez
-         IbG63SykKaqLNvV3z+iTBb6XMhRo/AXzo/WKE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0NDOpRRZXKSoT0ag7W3GTB/utuZq1B1nc2pEFCLA+SM=;
-        b=UI7Sr/gVXyoyUx9rrl6WWa/VYOEe2fr4VOccEIDD04o1bS5/Q2SO7Q2rRxcL/amac0
-         HUsUesA90bCeSJpuePHXo9Vkb1+8vUO7qUX988212tZG5UUMu323Z/ZzE57dAhUwdCUb
-         3dNei5bmzyvbC9TqH9M+7AzfhCPj/D3KxUSs0Ao3qZJ4OQZbgN3g0TjbFCQfXiX6/Eq4
-         KMHel0K2VsFhbzRXknA4biWIBKsyyyuWzVDC1tR0VpQZ0gGGcuNXK+Johc1TbxtMfHvS
-         CvNYk2Nlyet1svA5CGvNO1kofkzSR5H4er+d+zBtJ6IxSgSODaViToNi1j3atdOUX1z0
-         Vq7A==
-X-Gm-Message-State: ACgBeo0bQbbmmrIb9bDVoxuWj6ikyG6yd653u4Ge5u/1chWM0KnxJHfe
-        Gk2Ci24hPOpsVrAXd4Noid3FWHt906krQxeUccFgbJfsJng=
-X-Google-Smtp-Source: AA6agR7BSPSs98vSFaJfDu5M4EnQqDgWgsMOH8L9mxK0EGPdtbJUMA3iEP1v0WNDQ7RL/nqHOQkbX6Dg29/ju6EDcKE=
-X-Received: by 2002:a05:6808:bca:b0:344:ef42:930f with SMTP id
- o10-20020a0568080bca00b00344ef42930fmr436019oik.0.1662597817334; Wed, 07 Sep
- 2022 17:43:37 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 7 Sep 2022 19:43:36 -0500
+        Wed, 7 Sep 2022 20:44:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE77CBFC57;
+        Wed,  7 Sep 2022 17:44:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D7261B18;
+        Thu,  8 Sep 2022 00:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D131C433D6;
+        Thu,  8 Sep 2022 00:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662597857;
+        bh=g5nR0cX0QPYzLJn1sJLMWOJPxVQFmzSG3JCsEpMQcqA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=S5OUTbCwVAhMJxMa7IGDJMDUmzz8roBfoBf3nVOAiw210yURvlh3PIKH6NhXlRpo4
+         7xhR1uY9gn8axS/y26G9VJKiaRaHhmNvkZF4jm/vTkxSvu8gqXH/n+Yy8lOvXjGpPQ
+         60c6Svd0wV9asXyFsVrQnkkUTS7fsvxvyXIR6NeUmcmVif0KXfQNYxsKGzpqKUaTor
+         Zmpiy2Z6lD/S6DtExbJrBj8Zgl6nyQWY9LwLOIVRvbHDeKKKcXCnimMWtWHCZ4LZbj
+         HT5lEWVtdVf82PWm5gGg/ReODFsX3x2SAfFK2cHxBAkvSF3OfghCMVZKdX/b2J/Gaz
+         QyZnOz599W87A==
+Message-ID: <e1e6519f-2e77-05c1-697c-56b174addc6e@kernel.org>
+Date:   Wed, 7 Sep 2022 18:44:16 -0600
 MIME-Version: 1.0
-In-Reply-To: <1662564702-7253-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1662564702-7253-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 7 Sep 2022 19:43:36 -0500
-Message-ID: <CAE-0n52q3419nOSh3WOfyqhnDdFUSS4Oq4h-0CPQOZkQ54_UNQ@mail.gmail.com>
-Subject: Re: [PATCH] tty: serial: qcom-geni-serial: Replace hardcoded icc
- flags with macros.
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v3 0/6] TUN/VirtioNet USO features support.
+Content-Language: en-US
+To:     Andrew Melnychenko <andrew@daynix.com>, edumazet@google.com,
+        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jasowang@redhat.com, mst@redhat.com, pabeni@redhat.com,
+        yoshfuji@linux-ipv6.org
+Cc:     yan@daynix.com, yuri.benditovich@daynix.com
+References: <20220907125048.396126-1-andrew@daynix.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220907125048.396126-1-andrew@daynix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Vijaya Krishna Nivarthi (2022-09-07 08:31:42)
-> In suspend/resume routines, icc flags are hardcoded.
->
-> Replace the hardcodes with macros available from header.
->
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
+On 9/7/22 6:50 AM, Andrew Melnychenko wrote:
+> Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
+> Technically they enable NETIF_F_GSO_UDP_L4
+> (and only if USO4 & USO6 are set simultaneously).
+> It allows the transmission of large UDP packets. 
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Please spell out USO at least once in the cover letter to make sure the
+acronym is clear.
+
+> 
+> Different features USO4 and USO6 are required for qemu where Windows guests can
+> enable disable USO receives for IPv4 and IPv6 separately.
+> On the other side, Linux can't really differentiate USO4 and USO6, for now.
+
+Why is that and what is needed for Linux to differentiate between the 2
+protocols?
+
+> For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
+> In the future, there would be a mechanism to control UDP_L4 GSO separately.
+> 
+> New types for virtio-net already in virtio-net specification:
+> https://github.com/oasis-tcs/virtio-spec/issues/120
+> 
+> Test it WIP Qemu https://github.com/daynix/qemu/tree/USOv3
+> 
+> Andrew (5):
+>   uapi/linux/if_tun.h: Added new offload types for USO4/6.
+>   driver/net/tun: Added features for USO.
+>   uapi/linux/virtio_net.h: Added USO types.
+>   linux/virtio_net.h: Support USO offload in vnet header.
+>   drivers/net/virtio_net.c: Added USO support.
+> 
+> Andrew Melnychenko (1):
+>   udp: allow header check for dodgy GSO_UDP_L4 packets.
+> 
+>  drivers/net/tap.c               | 10 ++++++++--
+>  drivers/net/tun.c               |  8 +++++++-
+>  drivers/net/virtio_net.c        | 19 +++++++++++++++----
+>  include/linux/virtio_net.h      |  9 +++++++++
+>  include/uapi/linux/if_tun.h     |  2 ++
+>  include/uapi/linux/virtio_net.h |  5 +++++
+>  net/ipv4/udp_offload.c          |  2 +-
+>  7 files changed, 47 insertions(+), 8 deletions(-)
+> 
+

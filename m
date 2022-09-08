@@ -2,120 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5DF5B1450
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E53A5B147A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiIHGCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S230148AbiIHGOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiIHGC0 (ORCPT
+        with ESMTP id S229546AbiIHGOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:02:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501CACAC4E;
-        Wed,  7 Sep 2022 23:02:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5B07B81F9E;
-        Thu,  8 Sep 2022 06:02:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F130CC433D6;
-        Thu,  8 Sep 2022 06:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662616939;
-        bh=x0GKCvCjflBtX1AF1k1VB/0WylD+G87f6QGZUG42Y2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ku2XVBcA2SI7p1XDOyy886e45Ao6j8Vf6BL3m9vb5/jRoJBMWZyJZE0CEwY0kSqps
-         Hh0n8nfIk1uCuE3LC6HwdVZoxOQUN8qzGVRMtx423YhdIHty++t7SYfQvW2ipo2RRS
-         4Bls6YxoiZ+f/VG3IoE3hxD4KWaAksAsE/Pa/9yE=
-Date:   Thu, 8 Sep 2022 08:02:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Appana Durga Kedareswara rao 
-        <appana.durga.kedareswara.rao@amd.com>
-Cc:     appanad@amd.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, git@amd.com
-Subject: Re: [PATCH v3 4/4] drivers: misc: Add Support for TMR Inject IP
-Message-ID: <YxmFgblww9VfySnv@kroah.com>
-References: <20220908042444.2866731-1-appana.durga.kedareswara.rao@amd.com>
- <20220908042444.2866731-5-appana.durga.kedareswara.rao@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908042444.2866731-5-appana.durga.kedareswara.rao@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 02:14:00 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E424A50E6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:13:59 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q3so16738146pjg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 23:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=ngoKgI+Gpj5SpGutpSICvbZM5VaeXyWj2yjGsVSlTyI=;
+        b=UXmoGztAvkbEq8ev/rCGPZB8yRP3yewWsjk2wn+kToOvlBnkUnfjcJmlUy8VZsh+6o
+         upACSRU/9FbMwwZ0C7zy+5PrqftYa6eaR7WnqSL246uw0EdmMQrmF6AgaDl+zSXdCyNB
+         m/UM8PnMtSCCyBrBgLy1MsippYNrhWJQveq8t9ROubqbcEiHnTm09hZwdEansfEacwkj
+         DYIgydyEQYygV7VI8u9Y3RUTSw1sCWBJle01kKRs9OqS75pscLYWm+W25hx5bjCaPkoP
+         TqRr3PCqqduYYIfGksN50DVKUhwOnLD5NHhCOTsMdvP3YmH/fEICOtblI/FqZi++qURU
+         oDDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ngoKgI+Gpj5SpGutpSICvbZM5VaeXyWj2yjGsVSlTyI=;
+        b=OraReHuz2zLzSsW9H5gsT9mNaPhcbmSEtAFljOCkgu9aCdAgBUxf2mkL7tpzZa62qj
+         D7BINJZAgpLj4d3uHmkM+ASa1XG7FzXF0yDld3se6pWtaEsOh3QzWQYEZ1Y7ZzKK50ya
+         25A51fiTB/7JZWZsPOGjixlfvUVrQyUKVC2TCha31sxsjxiJz8pYGJDZU6hZlPSVmBu8
+         d+vnvtst14lqAJ51A8mncdXj0hBnOQpN8gKz59rpBkvZIrEO9zFQNmOBpsIZt+86gfZM
+         zsSOjDgCuJcfHy1rE6Q2Xt0QNs9GOhxc+mGyZgtkEszWR6JE/VGEG4OsiCBSahIbJTJh
+         oJ5g==
+X-Gm-Message-State: ACgBeo24rk3AoVuUyCW2KsbhrKlEmyQnD2kIKtiFeO/f/qDgFDkMXplc
+        neDmgQ6yK6oOkR3+M0eREPU=
+X-Google-Smtp-Source: AA6agR7vc1mfwDN0ui9GNVakudcVSEUPlFZb5nXcrH5tmYMdajmFL8Dk3nYYXQrt6R5mZvx9uqSPDA==
+X-Received: by 2002:a17:90b:4a09:b0:1fd:d4be:fed4 with SMTP id kk9-20020a17090b4a0900b001fdd4befed4mr2578331pjb.6.1662617639152;
+        Wed, 07 Sep 2022 23:13:59 -0700 (PDT)
+Received: from localhost.localdomain ([211.212.143.131])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170902f68800b00176b7dcf2c0sm7775886plg.240.2022.09.07.23.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 23:13:58 -0700 (PDT)
+From:   Steve Lee <steve.lee.analog@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     krzk@kernel.org, ryans.lee@analog.com,
+        Steve Lee <steve.lee.analog@gmail.com>
+Subject: [v2] ASoC: max98390: Remove unnecessary amp on/off conrtol
+Date:   Thu,  8 Sep 2022 15:03:59 +0900
+Message-Id: <20220908060359.13606-1-steve.lee.analog@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 09:54:44AM +0530, Appana Durga Kedareswara rao wrote:
-> The Triple Modular Redundancy(TMR) provides functional fault injection by
-> changing selected MicroBlaze instructions, which provides the possibility
-> to verify that the TMR subsystem error detection and fault recovery logic
-> is working properly, provided sysfs entries which allow the user to inject
-> a fault.
-> 
-> Usage:
-> echo 1 > /sys/kernel/debug/xtmr_inject/inject_fault/inject_fault
-> 
-> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
-> ---
-> Changes for v3:
-> --> Updated the driver to use fault-injection api as suggested by Greg.
-> --> Updated the Kconfig to compile the driver as a module.
-> Changes for v2:
-> --> Fixed Month in the sysfs description.
-> --> Fixed line over 80 char in driver.
-> --> Replaced kstrtol with kstrtoul as suggested by Michal.
-> --> Added error check for xlnx,magic value.
-> 
->  MAINTAINERS                      |   6 +
->  drivers/misc/Kconfig             |  10 ++
->  drivers/misc/Makefile            |   1 +
->  drivers/misc/xilinx_tmr_inject.c | 181 +++++++++++++++++++++++++++++++
->  4 files changed, 198 insertions(+)
->  create mode 100644 drivers/misc/xilinx_tmr_inject.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5fc5ec13985e..1207effa8e15 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13284,6 +13284,12 @@ F:	Documentation/ABI/testing/sysfs-driver-xilinx-tmr-manager
->  F:	Documentation/devicetree/bindings/misc/xlnx,tmr-manager.yaml
->  F:	drivers/misc/xilinx_tmr_manager.c
->  
-> +MICROBLAZE TMR INJECT
-> +M:	Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml
-> +F:	drivers/misc/xilinx_tmr_inject.c
-> +
->  MICROCHIP AT91 DMA DRIVERS
->  M:	Ludovic Desroches <ludovic.desroches@microchip.com>
->  M:	Tudor Ambarus <tudor.ambarus@microchip.com>
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 1508cc29b05a..7b1930a7f18a 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -506,6 +506,16 @@ config TMR_MANAGER
->  
->  	  Say N here unless you know what you are doing.
->  
-> +config TMR_INJECT
-> +	tristate "Select TMR Inject"
-> +	depends on TMR_MANAGER && FAULT_INJECTION
+ The Amp is already control in userspace before trigger calibrate function.
+Remove unnecessary control in calibrate function and
+add condition to check calibration is ready.
 
-But if CONFIG_FAULT_INJECTION_DEBUG_FS is not enabled, does this driver
-actually do anything?  Why not just depend on that option?
+Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
+---
+ sound/soc/codecs/max98390.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-thanks,
+diff --git a/sound/soc/codecs/max98390.c b/sound/soc/codecs/max98390.c
+index 91c0bf3d76fc..4b2ee70c29d7 100644
+--- a/sound/soc/codecs/max98390.c
++++ b/sound/soc/codecs/max98390.c
+@@ -635,10 +635,19 @@ static int max98390_dsm_calib_get(struct snd_kcontrol *kcontrol,
+ static int max98390_dsm_calib_put(struct snd_kcontrol *kcontrol,
+ 		struct snd_ctl_elem_value *ucontrol)
+ {
++	unsigned int val;
+ 	struct snd_soc_component *component =
+ 		snd_soc_kcontrol_component(kcontrol);
++	struct max98390_priv *max98390 =
++		snd_soc_component_get_drvdata(component);
+ 
+-	max98390_dsm_calibrate(component);
++	regmap_read(max98390->regmap, MAX98390_R23FF_GLOBAL_EN, &val);
++	if (val == 0x1)
++		max98390_dsm_calibrate(component);
++	else {
++		dev_err(component->dev, "AMP is not ready to run calibration\n");
++		return -ECANCELED;
++	}
+ 
+ 	return 0;
+ }
+@@ -826,9 +835,6 @@ static int max98390_dsm_calibrate(struct snd_soc_component *component)
+ 	struct max98390_priv *max98390 =
+ 		snd_soc_component_get_drvdata(component);
+ 
+-	regmap_write(max98390->regmap, MAX98390_R203A_AMP_EN, 0x81);
+-	regmap_write(max98390->regmap, MAX98390_R23FF_GLOBAL_EN, 0x01);
+-
+ 	regmap_read(max98390->regmap,
+ 		THERMAL_RDC_RD_BACK_BYTE1, &rdc);
+ 	regmap_read(max98390->regmap,
+@@ -847,9 +853,6 @@ static int max98390_dsm_calibrate(struct snd_soc_component *component)
+ 	dev_info(component->dev, "rdc resistance about %d.%02d ohm, reg=0x%X temp reg=0x%X\n",
+ 		 rdc_integer, rdc_factor, rdc_cal_result, temp);
+ 
+-	regmap_write(max98390->regmap, MAX98390_R23FF_GLOBAL_EN, 0x00);
+-	regmap_write(max98390->regmap, MAX98390_R203A_AMP_EN, 0x80);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.17.1
 
-greg k-h

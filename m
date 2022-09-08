@@ -2,86 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1345B2979
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BCF5B297E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiIHWkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S230017AbiIHWlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiIHWka (ORCPT
+        with ESMTP id S229800AbiIHWlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:40:30 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA265D0224;
-        Thu,  8 Sep 2022 15:40:27 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-127ba06d03fso24757351fac.3;
-        Thu, 08 Sep 2022 15:40:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UqRtNdBjaZuYngMpGzHkxPlD2Z2tvghx3hs0PUOk8Ro=;
-        b=kM+G+O1EbRPy3eGlx6q6ci3mlaBm7FHInWrKpsO6GSUmZI4fmuasTliGuoyIA4rjv0
-         7t8Mzn1fHmN00qvW29oGnvTijFq6OeMPjW1YAvda9cf/iGJOrRnvz/MHwyYnecOLd6sr
-         ezeUtohld9xhIAvmeMDvhGZMLAFWiNxozGnRRzBOh88POhymyYUr6gNMLzTjC5dhA/BA
-         PoyTTlfieoPXmel6/5gxbns0LYCDhLfi7xVMFexvYcHYd1sbPk8bwwAXv7ytHPYHMkdr
-         /3jWT5NDoiVOG1AEt5Z6g65CGL2ih+D2P4jOhW/X/r5APITakqz6tCaAzy6OSSrf2raC
-         uQ/A==
-X-Gm-Message-State: ACgBeo1lAdZrfM+5n7hBagvzQFX0VY9OTIV7e9vbiJL8EXwk2N6oEmzW
-        OIcfg5ZDuLzZZ+yHDyxC5w==
-X-Google-Smtp-Source: AA6agR4kPuvSIo/PK+ej3hWozKVvbOSKuzx2XBHYHML7hitYH8ivSF0WAozOM4f3BvqePVMjOUQIOw==
-X-Received: by 2002:a05:6808:21a6:b0:344:beb5:1fb1 with SMTP id be38-20020a05680821a600b00344beb51fb1mr2446228oib.175.1662676826989;
-        Thu, 08 Sep 2022 15:40:26 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cm16-20020a056870b61000b0011eeff77d1bsm258281oab.10.2022.09.08.15.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 15:40:26 -0700 (PDT)
-Received: (nullmailer pid 3472851 invoked by uid 1000);
-        Thu, 08 Sep 2022 22:40:25 -0000
-Date:   Thu, 8 Sep 2022 17:40:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, rtanwar@maxlinear.com,
-        devicetree@vger.kernel.org, jonnyc@amazon.com,
-        andriy.shevchenko@intel.com, linux@roeck-us.net,
-        linux-hwmon@vger.kernel.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org, hhhawa@amazon.com
-Subject: Re: [PATCH v4 09/21] dt-bindings: hwmon: (mr75203) change "resets"
- property to be optional
-Message-ID: <20220908224025.GA3472774-robh@kernel.org>
-References: <20220906083356.21067-1-farbere@amazon.com>
- <20220906083356.21067-10-farbere@amazon.com>
+        Thu, 8 Sep 2022 18:41:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BAAED3BD;
+        Thu,  8 Sep 2022 15:41:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5DA7D21EE2;
+        Thu,  8 Sep 2022 22:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662676871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=39pzd2H+Q2np9tNPeeLt0hZVac57Ld4M0d4EpbTDzso=;
+        b=EVICqEQt1WJTp5oZeW9lXiYAxJDBR8d9kFj/KsgIa2ZQqqj1/1hgX+RhYnaa8RtaQGB8v9
+        YFNE0vglYXwK0J64710bHzjyX4Q7iMIiU6EgQTOFb+43nM6kBU4hjywfL5Ww7V1rwDy6hh
+        GKewm2g3sQQZnUXz7pgv1U2tUq8Xw7U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662676871;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=39pzd2H+Q2np9tNPeeLt0hZVac57Ld4M0d4EpbTDzso=;
+        b=JA1FXNEdw0SSrND/axgRnsiCBodxCRELCCnti65e/mgOESNzYwt4gTvp8SWuivGtScAbON
+        uDmCA8c4B1Fr9kDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AE9DC1322C;
+        Thu,  8 Sep 2022 22:41:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HARlGH9vGmPiCgAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 08 Sep 2022 22:41:03 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906083356.21067-10-farbere@amazon.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     "Jan Kara" <jack@suse.cz>, "Jeff Layton" <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-reply-to: <YxoIjV50xXKiLdL9@mit.edu>
+References: <20220907111606.18831-1-jlayton@kernel.org>,
+ <166255065346.30452.6121947305075322036@noble.neil.brown.name>,
+ <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>,
+ <20220907125211.GB17729@fieldses.org>,
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>,
+ <20220907135153.qvgibskeuz427abw@quack3>,
+ <166259786233.30452.5417306132987966849@noble.neil.brown.name>,
+ <20220908083326.3xsanzk7hy3ff4qs@quack3>, <YxoIjV50xXKiLdL9@mit.edu>
+Date:   Fri, 09 Sep 2022 08:40:51 +1000
+Message-id: <166267685105.30452.17324304715046746056@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 08:33:44 +0000, Eliav Farber wrote:
-> Change "resets" property to be optional instead of required, for SOCs
-> that don't support a reset controller.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
-> V4 -> V3:
-> - Fix "reset" to "resets".
-> 
-> V3 -> v2:
-> - Change "reset" property to be optional instead of adding new
->   "reset-control-skip" property.
-> 
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
+On Fri, 09 Sep 2022, Theodore Ts'o wrote:
+> On Thu, Sep 08, 2022 at 10:33:26AM +0200, Jan Kara wrote:
+> > It boils down to the fact that we don't want to call mark_inode_dirty()
+> > from IOCB_NOWAIT path because for lots of filesystems that means journal
+> > operation and there are high chances that may block.
+> >=20
+> > Presumably we could treat inode dirtying after i_version change similarly
+> > to how we handle timestamp updates with lazytime mount option (i.e., not
+> > dirty the inode immediately but only with a delay) but then the time wind=
+ow
+> > for i_version inconsistencies due to a crash would be much larger.
+>=20
+> Perhaps this is a radical suggestion, but there seems to be a lot of
+> the problems which are due to the concern "what if the file system
+> crashes" (and so we need to worry about making sure that any
+> increments to i_version MUST be persisted after it is incremented).
+>=20
+> Well, if we assume that unclean shutdowns are rare, then perhaps we
+> shouldn't be optimizing for that case.  So.... what if a file system
+> had a counter which got incremented each time its journal is replayed
+> representing an unclean shutdown.  That shouldn't happen often, but if
+> it does, there might be any number of i_version updates that may have
+> gotten lost.  So in that case, the NFS client should invalidate all of
+> its caches.
 
-Acked-by: Rob Herring <robh@kernel.org>
+I was also thinking that the filesystem could help close that gap, but I
+didn't like the "whole filesysem is dirty" approach.
+I instead imagined a "dirty" bit in the on-disk inode which was set soon
+after any open-for-write and cleared when the inode was finally written
+after there are no active opens and no unflushed data.
+The "soon after" would set a maximum window on possible lost version
+updates (which people seem to have comfortable with) without imposing a
+sync IO operation on open (for first write).
+
+When loading an inode from disk, if the dirty flag was set then the
+difference between current time and on-disk ctime (in nanoseconds) could
+be added to the version number.
+
+But maybe that is too complex for the gain.
+
+NeilBrown

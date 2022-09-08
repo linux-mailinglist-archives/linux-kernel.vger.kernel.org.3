@@ -2,86 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91AFA5B2935
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F235C5B2937
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiIHWYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S229817AbiIHWZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiIHWYW (ORCPT
+        with ESMTP id S229445AbiIHWZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:24:22 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328F6F2D75;
-        Thu,  8 Sep 2022 15:24:18 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id B193C3200925;
-        Thu,  8 Sep 2022 18:24:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 18:24:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662675855; x=1662762255; bh=Rf
-        KgKsAWDv9z64NkeX5n18eQY3Xy8bpsCYz94ui+NtY=; b=Molw4rTtW99O7fWBBY
-        JqfueoWOvGjszRqoyrOkT16LeTOzSFCRBM+Qyh7XibqVXSSKaalOZUZbceLG7NOa
-        gltF7xkNlEyOngGni7QtN4tVS9KAkTQJAAGnL7S/hxDhTkSeXprbolZweDOhedAF
-        arjiB5MCSAM2OC1CKo4KzOneAwMRH3/dh21l9gz8GOztqnfknk8l4K1o5e3KRdHH
-        Xx1+Rb7SzJf720BXqLCMMMttdjHp8Hb5RUpGVzp8tGnHcht3Pw1Il++PUHp6C2uK
-        ZNrhcbr3OSaQEiNN2XCns3+2pbfgmspo2yfllexRb/gJ79SHHjhVIZiPkD46Biz+
-        VGPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662675855; x=1662762255; bh=RfKgKsAWDv9z64NkeX5n18eQY3Xy
-        8bpsCYz94ui+NtY=; b=Vh6h8h2z+MFzfzawgzNnZoo3DpQ3MEkwGc6lxdGzBosi
-        aObzU4WkuR8LFsbxx0RMSQRBiLd9BRPot7vxjdlJ1Koipewjj82G2Q/8DYagzP8J
-        Lfj0XegyxxmPdcNbaVsIyh+Ptp/ASMV5Q6obaRbQApr6BH/mbkjaN7VPGTOf9f3e
-        f/JZPCu8NnlGiX3dNUDkj6ISblBfHzJ7MuvPlLcKbFlyERxl9eNWip1zkEbKOmni
-        sPk7AkQOqDItDmTMwqds1VmeCWp4BFbG8pQC+stGmD2fT/DVwf3qBgIDuXYiiiq0
-        IvvtTrZsjoDPCrGIm8JbM6vV7nxldRbekM4i5Cw2LA==
-X-ME-Sender: <xms:jmsaY__e0Tg8hXrn7tTp4LH4yqYduKgzLRA29pKvXvdasztrAu9zDw>
-    <xme:jmsaY7sov7wAwygEI7MDC7JsLApZQEWsV1smCVjdtWVqAmBHiE-_QWlSWQZ4EujZl
-    iYhjE4m0HVFPKId-uM>
-X-ME-Received: <xmr:jmsaY9CxwMmdYeOwBGXsCQL5VrYP_mATIVw-k6dzjVP9BCK-pXGMhw6fdL7FuaRLBnak8Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtgedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:jmsaY7cBcJc4KRtk_cLaCH37Hy8iH2K76Yi7TlbFrYAUQpl22e7Ckg>
-    <xmx:jmsaY0PpMp_yY9QKFO2USeHzWMOaEXuIuM5tdu4EUXlrEpNUzmcM2A>
-    <xmx:jmsaY9kf6iq7BCLmiAAjqkRjSteEJoTAPcJXJgk6VslZ7wVoCseSYw>
-    <xmx:j2saY7dXAPKcjBuCckIgpsoTWRfEpGdonI44i0BmIhhYZKxoGjO1tQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Sep 2022 18:24:14 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 8A241104A93; Fri,  9 Sep 2022 01:24:10 +0300 (+03)
-Date:   Fri, 9 Sep 2022 01:24:10 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Sergei Antonov <saproj@gmail.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] mm: bring back update_mmu_cache() to finish_fault()
-Message-ID: <20220908222410.yg2sqqdezzwfi5mj@box.shutemov.name>
-References: <20220908204809.2012451-1-saproj@gmail.com>
+        Thu, 8 Sep 2022 18:25:41 -0400
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56A46A3455
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:25:39 -0700 (PDT)
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+        id 9E7A914002E; Fri,  9 Sep 2022 00:25:36 +0200 (CEST)
+Date:   Fri, 9 Sep 2022 00:25:36 +0200
+From:   "Christian A. Ehrhardt" <lk@c--e.de>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] kernfs: fix use-after-free in __kernfs_remove
+Message-ID: <Yxpr4HSSxNw3SDrI@cae.in-ulm.de>
+References: <20220907200811.654034-1-lk@c--e.de>
+ <YxojA7pDe8Ur7wpd@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220908204809.2012451-1-saproj@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <YxojA7pDe8Ur7wpd@slm.duckdns.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,99 +39,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 11:48:09PM +0300, Sergei Antonov wrote:
-> Running this test program on ARMv4 a few times (sometimes just once)
-> reproduces the bug.
-> 
-> int main()
-> {
->         unsigned i;
->         char paragon[SIZE];
->         void* ptr;
-> 
->         memset(paragon, 0xAA, SIZE);
->         ptr = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
->                    MAP_ANON | MAP_SHARED, -1, 0);
->         if (ptr == MAP_FAILED) return 1;
->         printf("ptr = %p\n", ptr);
->         for (i=0;i<10000;i++){
->                 memset(ptr, 0xAA, SIZE);
->                 if (memcmp(ptr, paragon, SIZE)) {
->                         printf("Unexpected bytes on iteration %u!!!\n", i);
->                         break;
->                 }
->         }
->         munmap(ptr, SIZE);
-> }
-> 
-> In the "ptr" buffer there appear runs of zero bytes which are aligned
-> by 16 and their lengths are multiple of 16.
-> 
-> Linux v5.11 does not have the bug, "git bisect" finds the first bad commit:
-> f9ce0be71d1f ("mm: Cleanup faultaround and finish_fault() codepaths")
-> 
-> Before the commit update_mmu_cache() was called during a call to
-> filemap_map_pages() as well as finish_fault(). After the commit
-> finish_fault() lacks it.
-> 
-> Bring back update_mmu_cache() to finish_fault() to fix the bug.
-> Also call update_mmu_tlb() only when returning VM_FAULT_NOPAGE to more
-> closely reproduce the code of alloc_set_pte() function that existed before
-> the commit.
-> 
-> On many platforms update_mmu_cache() is nop:
->  x86, see arch/x86/include/asm/pgtable
->  ARMv6+, see arch/arm/include/asm/tlbflush.h
-> So, it seems, few users ran into this bug.
-> 
-> Fixes: f9ce0be71d1f ("mm: Cleanup faultaround and finish_fault() codepaths")
-> Signed-off-by: Sergei Antonov <saproj@gmail.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-+Will.
+Hello Tejun,
 
-Seems I confused update_mmu_tlb() with update_mmu_cache() :/
-
-Looks good to me:
-
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-
-> ---
->  mm/memory.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+On Thu, Sep 08, 2022 at 07:14:43AM -1000, Tejun Heo wrote:
+> Hello, Christian.
 > 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 4ba73f5aa8bb..a78814413ac0 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4386,14 +4386,20 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
->  
->  	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
->  				      vmf->address, &vmf->ptl);
-> -	ret = 0;
-> +
->  	/* Re-check under ptl */
-> -	if (likely(!vmf_pte_changed(vmf)))
-> +	if (likely(!vmf_pte_changed(vmf))) {
->  		do_set_pte(vmf, page, vmf->address);
-> -	else
-> +
-> +		/* no need to invalidate: a not-present page won't be cached */
-> +		update_mmu_cache(vma, vmf->address, vmf->pte);
-> +
-> +		ret = 0;
-> +	} else {
-> +		update_mmu_tlb(vma, vmf->address, vmf->pte);
->  		ret = VM_FAULT_NOPAGE;
-> +	}
->  
-> -	update_mmu_tlb(vma, vmf->address, vmf->pte);
->  	pte_unmap_unlock(vmf->pte, vmf->ptl);
->  	return ret;
->  }
-> -- 
-> 2.34.1
+> On Wed, Sep 07, 2022 at 10:08:11PM +0200, Christian A. Ehrhardt wrote:
+> > Concurrent calls to __kernfs_remove can race on the removal
+> > of the root node: The race occurs if the root node(kn) is freed
+> > during kernfs_drain. The child node(pos) is explicitly protected
+> > with an additional ref count. Do the same for the root node.
 > 
+> I don't think this is right. We don't support parallel invocations of
+> __kernfs_remove() this way. If @kn can be freed during kernfs_drain(), it
+> also means that it can be freed before kernfs_rwsem is grabbed in
+> kernfs_remove().
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Point taken. However, the syzkaller reproducer reliably triggers
+the bug without the patch and the bug is gone with the patch.
+
+> The caller must be responsible for ensuring that @kn
+> remains allocated. Otherwise, it can't be made reliable.
+
+In this case the caller of __kernfs_remove is not kernfs_remove but
+kernfs_remove_by_name_ns and it fails to take a reference for the
+node that it looks up and deletes. Thus a second call to
+kernfs_remove_by_name_ns can remove the node while kernfs_drain
+drops the semaphore.
+
+I'll post an updated patch tomorrow.
+
+      regards   Christian
+

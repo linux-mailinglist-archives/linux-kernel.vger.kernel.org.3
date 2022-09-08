@@ -2,76 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9909B5B24CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176AC5B24D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbiIHRhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S231703AbiIHRjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbiIHRhP (ORCPT
+        with ESMTP id S232290AbiIHRiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:37:15 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBD3EE536
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:37:02 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id v1so5266798plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=yocom-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=yvwRDRcZM8L6JHil16m7teYV4wceQygldN8f81FISnM=;
-        b=oPzs650E3cV1ZP7+ksTS6gxhzOPZ94wkyrb0zINZ+JEOAnbvatF3d37RMJojiNfYwr
-         8gD4dVd0ry9JfFw4gC/qS2USvq4ov8VDqrLdYPjhH7tZQmP7xesDweaAaqptzIM+RiST
-         xYu8+yW8lO7pn1LSYoJiHENKLCne05wlSebz7gpN4ReLd0BjejGw5ZjQs4MUliszaWJx
-         I8k998gYnzD4eYZcpLwKYiYOuxdO4CjFEYKu5YHFkYoHkGy/jih/GS0HLc6OdO7cT1lh
-         pFyMhsA9sTAV/KUfNxqqtRORJ5b6DWHUX0I5DgoFINPtGbg0fvASBhXfxrLEuG6Jhh1f
-         rulg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=yvwRDRcZM8L6JHil16m7teYV4wceQygldN8f81FISnM=;
-        b=DvZecs+9ixlX/5QHUakzkJkNaeSeKcza/Ks8x05mBQ+brWu5PBt0DNx810/TgBKHFZ
-         21fxvOyLgaeDOv8r1iYQxl1Nz6eNMhwojX8OrJ+iG5sQVDo9d6EMjfZvP2zS8vcVkmGB
-         JjhvktxDU1ls1yvFt0sWW+LQGXVbRxnulX6xfaw5O6By1L4HCDjnYUk60O9+cf0GNyV/
-         LVOyJ501KtHVm6pzdA5sQMVm4ElOU5Z/uYjdQ39v3tRd3JZJlhc3AZeyP2Vb2qx9V4kF
-         6Gdpxmxs5mBp/AKFyoNAITiA8e5HepavNV1r40dwi/CcJPBh9VyblVmQED1CG9Nh776Q
-         A45w==
-X-Gm-Message-State: ACgBeo1DNKdsVmdQDvioCCPYvmQTB2uhO+OFp+Wqo/B0r1bk3pEX1u7t
-        cCNDZpgwLbCeTevkwoPiBfexmA==
-X-Google-Smtp-Source: AA6agR6siBaUT5c0m6RQpirS/n3YWTGnxr4qv2KYpiH2Y+MBMZg9RpemhWAHvAn5XP9srZnA0NSn+w==
-X-Received: by 2002:a17:90b:4a91:b0:202:59ed:94d5 with SMTP id lp17-20020a17090b4a9100b0020259ed94d5mr5102190pjb.213.1662658617954;
-        Thu, 08 Sep 2022 10:36:57 -0700 (PDT)
-Received: from ghaven-kernel ([2601:600:8f80:973::5f])
-        by smtp.gmail.com with ESMTPSA id k3-20020a628403000000b0053e5b905843sm5149847pfd.203.2022.09.08.10.36.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 10:36:57 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 10:36:55 -0700
-From:   Nate Yocom <nate@yocom.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bastien Nocera <hadess@hadess.net>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benjamin.tissoires@redhat.com
-Subject: Re: [PATCH v5 2/4] Input: joystick: xpad: Add ABS_PROFILE axis value
- to uapi
-Message-ID: <YxooNwOxeIXPKbBE@ghaven-kernel>
-References: <20220825222420.6833-1-nate@yocom.org>
- <20220825222420.6833-3-nate@yocom.org>
- <3e48ef8d13337ce1c3ec68baffc612fde4740b0e.camel@hadess.net>
- <Yw0OjoVzKV3QOYah@ghaven-kernel>
- <661ee8227c96aeba7aae9fff6ac9a73f1d81e765.camel@hadess.net>
- <Yxl/YxSRtV9Hv271@google.com>
+        Thu, 8 Sep 2022 13:38:51 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30307F16FE;
+        Thu,  8 Sep 2022 10:38:31 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MNmYj10qqz9smP;
+        Thu,  8 Sep 2022 19:38:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BDBoTQgGuw52; Thu,  8 Sep 2022 19:38:17 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MNmYf5ypHz9sm0;
+        Thu,  8 Sep 2022 19:38:14 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AF1418B763;
+        Thu,  8 Sep 2022 19:38:14 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id gLVE0QXSDFDW; Thu,  8 Sep 2022 19:38:14 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.247])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD3578B799;
+        Thu,  8 Sep 2022 19:38:13 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 288Hc4mo3449114
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 8 Sep 2022 19:38:04 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 288Hc2fn3449101;
+        Thu, 8 Sep 2022 19:38:02 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org
+Subject: [PATCH v1 01/19] powerpc/Kconfig: Fix non existing CONFIG_PPC_FSL_BOOKE
+Date:   Thu,  8 Sep 2022 19:37:34 +0200
+Message-Id: <4e7e6259e5af0e0e171f19ee1f85ab5b2553723f.1662658653.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662658667; l=1049; s=20211009; h=from:subject:message-id; bh=vcZllHU4xbDsrDFbzSYXrIU2Z+ZnrnqNpza6XREW0b4=; b=iYIQ4vJ6gMc5M+NiQzlNDeqjKntSNRcMDP/5ElZ3wP8ydW7mTYBPBIgFK2We3pv3+vTiMNZ0K0BH Go/gFfwnCiQniDqvwdQ2Vor//xGm7Ofv7ebiXLFtAq1YOnuz6xJl
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yxl/YxSRtV9Hv271@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,53 +66,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:36:35PM -0700, Dmitry Torokhov wrote:
-> On Wed, Sep 07, 2022 at 05:41:08PM +0200, Bastien Nocera wrote:
-> > On Mon, 2022-08-29 at 12:07 -0700, Nate Yocom wrote:
-> > > On Sat, Aug 27, 2022 at 12:40:46PM +0200, Bastien Nocera wrote:
-> > > > On Thu, 2022-08-25 at 15:24 -0700, Nate Yocom wrote:
-> > > > > Add an ABS_PROFILE axis for input devices which need it, e.g. X-
-> > > > > Box
-> > > > > Adaptive Controller and X-Box Elite 2.
-> > > > > ---
-> > > > >  include/uapi/linux/input-event-codes.h | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > > 
-> > > > > diff --git a/include/uapi/linux/input-event-codes.h
-> > > > > b/include/uapi/linux/input-event-codes.h
-> > > > > index dff8e7f17074..7ad931a32970 100644
-> > > > > --- a/include/uapi/linux/input-event-codes.h
-> > > > > +++ b/include/uapi/linux/input-event-codes.h
-> > > > > @@ -862,6 +862,7 @@
-> > > > >  #define ABS_TOOL_WIDTH         0x1c
-> > > > >  
-> > > > >  #define ABS_VOLUME             0x20
-> > > > > +#define ABS_PROFILE            0x21
-> > > > >  
-> > > > >  #define ABS_MISC               0x28
-> > > > >  
-> > > > 
-> > > > 
-> > > > You probably also want to add it to the absolutes array in
-> > > > drivers/hid/hid-debug.c.
-> > > 
-> > > doh, roger.
-> > > 
-> > > > Again, you might want to wait for confirmation from Dmitry that
-> > > > this is
-> > > > the right way to do this for the profiles.
-> > > 
-> > > Makes sense.  Dmitry?
-> > 
-> > Dmitry, could you please confirm whether ABS_PROFILE definition is
-> > correct?
-> 
-> Yes, I think this makes sense. Do we have a buy in from userspace folks
-> (Peter H, etc) for this?
-> 
-> I'd like some documentation added to Documentation/input/event-codes.rst
-> and potentially to Documentation/input/gamepad.rst even though profile
-> does not have to be gamepad specific event.
-> 
+CONFIG_PPC_FSL_BOOKE doesn't exist. Should be CONFIG_FSL_BOOKE.
 
-Will do, v6 incoming shortly.
+Fixes: 49e3d8ea6248 ("powerpc/fsl_booke: Enable STRICT_KERNEL_RWX")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 4c466acdc70d..cbe7bb029aec 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -828,7 +828,7 @@ config DATA_SHIFT
+ 	default 24 if STRICT_KERNEL_RWX && PPC64
+ 	range 17 28 if (STRICT_KERNEL_RWX || DEBUG_PAGEALLOC || KFENCE) && PPC_BOOK3S_32
+ 	range 19 23 if (STRICT_KERNEL_RWX || DEBUG_PAGEALLOC || KFENCE) && PPC_8xx
+-	range 20 24 if (STRICT_KERNEL_RWX || DEBUG_PAGEALLOC || KFENCE) && PPC_FSL_BOOKE
++	range 20 24 if (STRICT_KERNEL_RWX || DEBUG_PAGEALLOC || KFENCE) && FSL_BOOKE
+ 	default 22 if STRICT_KERNEL_RWX && PPC_BOOK3S_32
+ 	default 18 if (DEBUG_PAGEALLOC || KFENCE) && PPC_BOOK3S_32
+ 	default 23 if STRICT_KERNEL_RWX && PPC_8xx
+-- 
+2.37.1
+

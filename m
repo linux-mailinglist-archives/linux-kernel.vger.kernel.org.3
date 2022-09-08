@@ -2,147 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DBE5B1191
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00EA5B1192
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiIHAoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 20:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
+        id S229708AbiIHAqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiIHAoi (ORCPT
+        with ESMTP id S229514AbiIHAqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:44:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6071EE3F;
-        Wed,  7 Sep 2022 17:44:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8257620A26;
-        Thu,  8 Sep 2022 00:44:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662597873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vd0IdToeuUhRReKl6MOxK3dVsUzX7GC8yI72U+Yuyyg=;
-        b=0KaLBy+0bjMkKcidZXtSXkpNimV7ISQ+XlWwMNBE6gcZM5nmitzoRdN0v3/bJJHyEG5PT9
-        TiGmRzrcLK7qWPEu+uK/WGXJFqP/pp0gVY6PlF2wKmN0xJqlm3mMLDMSuW2nOb08ynPn/K
-        h4C0Sz8gOZzfPI9hVhlXTdODJkmdaeQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662597873;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vd0IdToeuUhRReKl6MOxK3dVsUzX7GC8yI72U+Yuyyg=;
-        b=yD/+9aK7KGPC6XXdWQ70geS3V0xmDA1X2y1FJPqRLaqKTpS89v4Lc6eXf+WU+e1Xa06kxl
-        DFsNH7TEUuTyxsDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3A261339E;
-        Thu,  8 Sep 2022 00:44:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iGonHuk6GWMzCgAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 08 Sep 2022 00:44:25 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Sep 2022 20:46:43 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095906B8C6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 17:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662598002; x=1694134002;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=q2II+pqlP31UjBbeOhUvkenmAced5uL/l+YMm+71tZ4=;
+  b=Gacp/d0Zn5hXFiDJIfzjgCqq5UhblQpgasVVGgqavxTg4BXyLFYhxUh8
+   wOl+Uf0/bHWk9gtHLhuvhjAO+hh4WMVaF8hMGseTaGGbGqKrfe77OxML9
+   6wZr5Ftlhb0awafUfrxd/iXpMorosdrzjVgXa29YvEpijUcZNmfsVy7Eo
+   8pESgw95KQvOiF49CeNHiTh5/WMJMETzxIMQAjfIlA/EV9+FoqzgfYs7O
+   kcKhznHKFPKdZpaiOpXdV0SSlb0atg8ugbHCp3sFrphDjH7I0ugHCLFJN
+   VXfPW/2nSQlBpOdBDr3vkO+0SEOlzaNriflCV2gHBIbUZuiFxsm/dqAzR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="277422452"
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="277422452"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:46:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="756990131"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Sep 2022 17:46:40 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oW5gm-0007AI-0P;
+        Thu, 08 Sep 2022 00:46:40 +0000
+Date:   Thu, 8 Sep 2022 08:45:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bluetooth-v2 5/5]
+ drivers/bluetooth/hci_bcm4377.c:1603:36: sparse: sparse: incorrect type in
+ assignment (different base types)
+Message-ID: <202209080834.nKZYsCt2-lkp@intel.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jan Kara" <jack@suse.cz>
-Cc:     "Jeff Layton" <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
-        fweimer@redhat.com, linux-man@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-reply-to: <20220907135153.qvgibskeuz427abw@quack3>
-References: <20220907111606.18831-1-jlayton@kernel.org>,
- <166255065346.30452.6121947305075322036@noble.neil.brown.name>,
- <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>,
- <20220907125211.GB17729@fieldses.org>,
- <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>,
- <20220907135153.qvgibskeuz427abw@quack3>
-Date:   Thu, 08 Sep 2022 10:44:22 +1000
-Message-id: <166259786233.30452.5417306132987966849@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Sep 2022, Jan Kara wrote:
-> On Wed 07-09-22 09:12:34, Jeff Layton wrote:
-> > On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
-> > > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
-> > > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
-> > > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
-> > > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic with res=
-pect to the
-> > > > > > +other changes in the inode. On a write, for instance, the i_vers=
-ion it usually
-> > > > > > +incremented before the data is copied into the pagecache. Theref=
-ore it is
-> > > > > > +possible to see a new i_version value while a read still shows t=
-he old data.
-> > > > >=20
-> > > > > Doesn't that make the value useless?
-> > > > >=20
-> > > >=20
-> > > > No, I don't think so. It's only really useful for comparing to an old=
-er
-> > > > sample anyway. If you do "statx; read; statx" and the value hasn't
-> > > > changed, then you know that things are stable.=20
-> > >=20
-> > > I don't see how that helps.  It's still possible to get:
-> > >=20
-> > > 		reader		writer
-> > > 		------		------
-> > > 				i_version++
-> > > 		statx
-> > > 		read
-> > > 		statx
-> > > 				update page cache
-> > >=20
-> > > right?
-> > >=20
-> >=20
-> > Yeah, I suppose so -- the statx wouldn't necessitate any locking. In
-> > that case, maybe this is useless then other than for testing purposes
-> > and userland NFS servers.
-> >=20
-> > Would it be better to not consume a statx field with this if so? What
-> > could we use as an alternate interface? ioctl? Some sort of global
-> > virtual xattr? It does need to be something per-inode.
->=20
-> I was thinking how hard would it be to increment i_version after updating
-> data but it will be rather hairy. In particular because of stuff like
-> IOCB_NOWAIT support which needs to bail if i_version update is needed. So
-> yeah, I don't think there's an easy way how to provide useful i_version for
-> general purpose use.
->=20
+tree:   https://github.com/AsahiLinux/linux bluetooth-v2
+head:   ff2f8e18dcd6c6a316c37431de67c7374fe6ca5f
+commit: ff2f8e18dcd6c6a316c37431de67c7374fe6ca5f [5/5] Bluetooth: hci_bcm4377: Add new driver for BCM4377 PCI boards
+config: sparc-randconfig-s051-20220907 (https://download.01.org/0day-ci/archive/20220908/202209080834.nKZYsCt2-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/AsahiLinux/linux/commit/ff2f8e18dcd6c6a316c37431de67c7374fe6ca5f
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bluetooth-v2
+        git checkout ff2f8e18dcd6c6a316c37431de67c7374fe6ca5f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash
 
-Why cannot IOCB_NOWAIT update i_version?  Do we not want to wait on the
-cmp_xchg loop in inode_maybe_inc_iversion(), or do we not want to
-trigger an inode update?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The first seems unlikely, but the second seems unreasonable.  We already
-acknowledge that after a crash iversion might go backwards and/or miss
-changes.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/bluetooth/hci_bcm4377.c:1603:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] enabled_caps @@     got restricted __le16 [usertype] @@
+   drivers/bluetooth/hci_bcm4377.c:1603:36: sparse:     expected restricted __le32 [usertype] enabled_caps
+   drivers/bluetooth/hci_bcm4377.c:1603:36: sparse:     got restricted __le16 [usertype]
 
-Thanks,
-NeilBrown
+vim +1603 drivers/bluetooth/hci_bcm4377.c
+
+  1582	
+  1583	static int bcm4377_init_context(struct bcm4377_data *bcm4377)
+  1584	{
+  1585		struct device *dev = &bcm4377->pdev->dev;
+  1586		dma_addr_t peripheral_info_dma;
+  1587	
+  1588		bcm4377->ctx = dmam_alloc_coherent(dev, sizeof(*bcm4377->ctx),
+  1589						   &bcm4377->ctx_dma, GFP_KERNEL);
+  1590		if (!bcm4377->ctx)
+  1591			return -ENOMEM;
+  1592		memset(bcm4377->ctx, 0, sizeof(*bcm4377->ctx));
+  1593	
+  1594		bcm4377->ring_state =
+  1595			dmam_alloc_coherent(dev, sizeof(*bcm4377->ring_state),
+  1596					    &bcm4377->ring_state_dma, GFP_KERNEL);
+  1597		if (!bcm4377->ring_state)
+  1598			return -ENOMEM;
+  1599		memset(bcm4377->ring_state, 0, sizeof(*bcm4377->ring_state));
+  1600	
+  1601		bcm4377->ctx->version = cpu_to_le16(1);
+  1602		bcm4377->ctx->size = cpu_to_le16(sizeof(*bcm4377->ctx));
+> 1603		bcm4377->ctx->enabled_caps = cpu_to_le16(2);
+  1604	
+  1605		/*
+  1606		 * The BT device will write 0x20 bytes of data to this buffer but
+  1607		 * the exact contents are unknown. It only needs to exist for BT
+  1608		 * to work such that we can just allocate and then ignore it.
+  1609		 */
+  1610		if (!dmam_alloc_coherent(&bcm4377->pdev->dev, 0x20,
+  1611					 &peripheral_info_dma, GFP_KERNEL))
+  1612			return -ENOMEM;
+  1613		bcm4377->ctx->peripheral_info_addr = cpu_to_le64(peripheral_info_dma);
+  1614	
+  1615		bcm4377->ctx->xfer_ring_heads_addr = cpu_to_le64(
+  1616			bcm4377->ring_state_dma +
+  1617			offsetof(struct bcm4377_ring_state, xfer_ring_head));
+  1618		bcm4377->ctx->xfer_ring_tails_addr = cpu_to_le64(
+  1619			bcm4377->ring_state_dma +
+  1620			offsetof(struct bcm4377_ring_state, xfer_ring_tail));
+  1621		bcm4377->ctx->completion_ring_heads_addr = cpu_to_le64(
+  1622			bcm4377->ring_state_dma +
+  1623			offsetof(struct bcm4377_ring_state, completion_ring_head));
+  1624		bcm4377->ctx->completion_ring_tails_addr = cpu_to_le64(
+  1625			bcm4377->ring_state_dma +
+  1626			offsetof(struct bcm4377_ring_state, completion_ring_tail));
+  1627	
+  1628		bcm4377->ctx->n_completion_rings =
+  1629			cpu_to_le16(BCM4377_N_COMPLETION_RINGS);
+  1630		bcm4377->ctx->n_xfer_rings = cpu_to_le16(BCM4377_N_TRANSFER_RINGS);
+  1631	
+  1632		bcm4377->ctx->control_completion_ring_addr =
+  1633			cpu_to_le64(bcm4377->control_ack_ring.ring_dma);
+  1634		bcm4377->ctx->control_completion_ring_n_entries =
+  1635			cpu_to_le16(bcm4377->control_ack_ring.n_entries);
+  1636		bcm4377->ctx->control_completion_ring_doorbell = cpu_to_le16(0xffff);
+  1637		bcm4377->ctx->control_completion_ring_msi = 0;
+  1638		bcm4377->ctx->control_completion_ring_header_size = 0;
+  1639		bcm4377->ctx->control_completion_ring_footer_size = 0;
+  1640	
+  1641		bcm4377->ctx->control_xfer_ring_addr =
+  1642			cpu_to_le64(bcm4377->control_h2d_ring.ring_dma);
+  1643		bcm4377->ctx->control_xfer_ring_n_entries =
+  1644			cpu_to_le16(bcm4377->control_h2d_ring.n_entries);
+  1645		bcm4377->ctx->control_xfer_ring_doorbell =
+  1646			cpu_to_le16(bcm4377->control_h2d_ring.doorbell);
+  1647		bcm4377->ctx->control_xfer_ring_msi = 0;
+  1648		bcm4377->ctx->control_xfer_ring_header_size = 0;
+  1649		bcm4377->ctx->control_xfer_ring_footer_size =
+  1650			bcm4377->control_h2d_ring.payload_size / 4;
+  1651	
+  1652		dev_dbg(&bcm4377->pdev->dev, "context initialized at IOVA %pad",
+  1653			&bcm4377->ctx_dma);
+  1654	
+  1655		return 0;
+  1656	}
+  1657	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,32 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD905B2420
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05E75B2421
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiIHRBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
+        id S230447AbiIHRBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiIHRBD (ORCPT
+        with ESMTP id S230476AbiIHRBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:01:03 -0400
+        Thu, 8 Sep 2022 13:01:15 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11F48D2748
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:01:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61C2BE5581
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:01:14 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA3EC153B;
-        Thu,  8 Sep 2022 10:01:06 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 523BF153B;
+        Thu,  8 Sep 2022 10:01:20 -0700 (PDT)
 Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA5493F71A;
-        Thu,  8 Sep 2022 10:00:57 -0700 (PDT)
-Message-ID: <2284408e-deb1-589b-bcdf-88e056980f79@arm.com>
-Date:   Thu, 8 Sep 2022 18:00:44 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 399BA3F71A;
+        Thu,  8 Sep 2022 10:01:11 -0700 (PDT)
+Message-ID: <846894f1-9d13-26f3-2f26-80768942eecb@arm.com>
+Date:   Thu, 8 Sep 2022 18:01:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v6 05/21] x86/resctrl: Add domain offline callback for
- resctrl work
+Subject: Re: [PATCH v6 04/21] x86/resctrl: Group struct rdt_hw_domain cleanup
 Content-Language: en-GB
 To:     haoxin <xhao@linux.alibaba.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
@@ -44,10 +43,10 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Cristian Marussi <cristian.marussi@arm.com>,
         xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com
 References: <20220902154829.30399-1-james.morse@arm.com>
- <20220902154829.30399-6-james.morse@arm.com>
- <d8fbb0c6-efe5-13bd-fb35-c6cb24ea7ff2@linux.alibaba.com>
+ <20220902154829.30399-5-james.morse@arm.com>
+ <33bedd74-a19e-8919-64c3-432c2eaba11d@linux.alibaba.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <d8fbb0c6-efe5-13bd-fb35-c6cb24ea7ff2@linux.alibaba.com>
+In-Reply-To: <33bedd74-a19e-8919-64c3-432c2eaba11d@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -61,36 +60,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Hao Xin,
 
-On 07/09/2022 07:29, haoxin wrote:
+On 07/09/2022 07:28, haoxin wrote:
+> 
 > 在 2022/9/2 下午11:48, James Morse 写道:
->> Because domains are exposed to user-space via resctrl, the filesystem
->> must update its state when CPU hotplug callbacks are triggered.
+>> domain_add_cpu() and domain_remove_cpu() need to kfree() the child
+>> arrays that were allocated by domain_setup_ctrlval().
 >>
->> Some of this work is common to any architecture that would support
->> resctrl, but the work is tied up with the architecture code to
->> free the memory.
+>> As this memory is moved around, and new arrays are created, adjusting
+>> the error handling cleanup code becomes noisier.
 >>
->> Move the monitor subdir removal and the cancelling of the mbm/limbo
->> works into a new resctrl_offline_domain() call. These bits are not
->> specific to the architecture. Grouping them in one function allows
->> that code to be moved to /fs/ and re-used by another architecture.
+>> To simplify this, move all the kfree() calls into a domain_free() helper.
+>> This depends on struct rdt_hw_domain being kzalloc()d, allowing it to
+>> unconditionally kfree() all the child arrays.
 
->> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> index 030a70326ccc..5830905a92d2 100644
->> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> @@ -3233,6 +3231,45 @@ static int __init rdtgroup_setup_root(void)
->>       return ret;
+>> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+>> index 25f30148478b..e37889f7a1a5 100644
+>> --- a/arch/x86/kernel/cpu/resctrl/core.c
+>> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+>> @@ -414,6 +414,13 @@ void setup_default_ctrlval(struct rdt_resource *r, u32 *dc, u32 *dm)
+>>       }
 >>   }
->>   +static void domain_destroy_mon_state(struct rdt_domain *d)
+>>   +static void domain_free(struct rdt_hw_domain *hw_dom)
 
 > add inline ?
 
-As previously, the compiler doesn't need to be told it can inline static functions in a C
-file.
+It's best to let the compiler decide this. As this is in a C file, and is declared static,
+the compiler is free to duplicate and inline this function as it sees fit. The inline
+keyword would only be needed if this were in a header file.
+
+Looking at the built object file - the compiler chose not to duplicate this into the two
+callers, presumably because of the size of the function.
+
+Unless its relied on for correctness, or is a performance sensitive path, its best to let
+the compiler make its own decision here.
 
 
 Thanks,
 
 James
+
+
+>> +{
+>> +    kfree(hw_dom->ctrl_val);
+>> +    kfree(hw_dom->mbps_val);
+>> +    kfree(hw_dom);
+>> +}
+>> +
+>>   static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domain *d)
+>>   {
+>>       struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);

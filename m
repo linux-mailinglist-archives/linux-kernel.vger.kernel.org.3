@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B925B1799
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A805B179C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiIHIs6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Sep 2022 04:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S229560AbiIHItl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiIHIsX (ORCPT
+        with ESMTP id S231659AbiIHIs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:48:23 -0400
-Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BB0FD211;
-        Thu,  8 Sep 2022 01:47:39 -0700 (PDT)
-Received: from mta90.sjtu.edu.cn (unknown [10.118.0.90])
-        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 0E1C41008B38A;
-        Thu,  8 Sep 2022 16:47:14 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id EC9A237C897;
-        Thu,  8 Sep 2022 16:47:14 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from mta90.sjtu.edu.cn ([127.0.0.1])
-        by localhost (mta90.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id iGKb-97UCSPo; Thu,  8 Sep 2022 16:47:14 +0800 (CST)
-Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id C223437C895;
-        Thu,  8 Sep 2022 16:47:14 +0800 (CST)
-Date:   Thu, 8 Sep 2022 16:47:14 +0800 (CST)
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-To:     jasowang <jasowang@redhat.com>
-Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Message-ID: <885555391.166391.1662626834724.JavaMail.zimbra@sjtu.edu.cn>
-In-Reply-To: <b1a7c454-860d-6a40-9da1-2a06f30ff1be@redhat.com>
-References: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn> <20220901055434.824-7-qtxuning1999@sjtu.edu.cn> <b1a7c454-860d-6a40-9da1-2a06f30ff1be@redhat.com>
-Subject: Re: [RFC v3 6/7] virtio: in order support for virtio_ring
+        Thu, 8 Sep 2022 04:48:59 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E360F11366F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yivMFvAuYoQCsKYoHw1xYjWDVKneaxLVfmyklrKww1g=; b=OX2vq17UWM1iOL8Bxve2zMEf83
+        yGbzOh9EOzIX3CLj3HAmrUCVlcDL4bZzICCRhFb7YvdPLE41NVwRcbMS4rzY6GadtBLjCY2cZfN1D
+        bxywaHKv0kIbXXIL4z+cfkHHESL8TrWX6YGxju44unxlc4wNvyIT9Kg1x8/dEIBwin0ne8mp0E5SR
+        DkFIWw8LNtdC4hHc66wWMfhBEhRc4wdFHNerj5ZWU1sAW07nsBNHaWkJI2XGzZwKCPqCEYL41iEfV
+        gHJ0aVWV4MQwVnlfX8z89NALg19UFqtXHq1JiZo9Zer+VUshMYI5pi/AO4rhlQRqFPA5ATkkpz0qm
+        AEzxCqCA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWDCW-00AfCa-53; Thu, 08 Sep 2022 08:47:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5F66A300074;
+        Thu,  8 Sep 2022 10:47:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4544C2B6563A7; Thu,  8 Sep 2022 10:47:55 +0200 (CEST)
+Date:   Thu, 8 Sep 2022 10:47:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] locking: Detect includes rwlock.h outside of spinlock.h
+Message-ID: <YxmsO8q2/eR0MPJk@hirez.programming.kicks-ass.net>
+References: <YweemHxJx7O8rjBx@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=GB2312
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.162.206.161]
-X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - GC104 (Mac)/8.8.15_GA_3928)
-Thread-Topic: virtio: in order support for virtio_ring
-Thread-Index: 2iwVT82Uw5vi6HYqcfI9aIykWWiagg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YweemHxJx7O8rjBx@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,199 +61,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 25, 2022 at 06:08:56PM +0200, Sebastian Andrzej Siewior wrote:
+> From: Michael S. Tsirkin <mst@redhat.com>
+> 
+> The check for __LINUX_SPINLOCK_H within rwlock.h (and other files)
+> detects the direct include of the header file if it is at the very
+> beginning of the include section.
+> If it is listed later then chances are high that spinlock.h was already
+> included (including rwlock.h) and the additional listing of rwlock.h
+> will not cause any failure.
+> 
+> On PREEMPT_RT this additional rwlock.h will lead to compile failures
+> since it uses a different rwlock implementation.
+> 
+> Add __LINUX_INSIDE_SPINLOCK_H to spinlock.h and check for this instead
+> of __LINUX_SPINLOCK_H to detect wrong includes. This will help detect
+> direct includes of rwlock.h with without PREEMPT_RT enabled.
+> 
+> [ bigeasy: add remaining __LINUX_SPINLOCK_H user and rewrite
+>   commit description. ]
+> 
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-
------ Original Message -----
-> From: "jasowang" <jasowang@redhat.com>
-> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
-> Tsirkin" <mst@redhat.com>
-> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
-> "virtualization" <virtualization@lists.linux-foundation.org>
-> Sent: Wednesday, September 7, 2022 1:38:03 PM
-> Subject: Re: [RFC v3 6/7] virtio: in order support for virtio_ring
-
-> ÔÚ 2022/9/1 13:54, Guo Zhi Ð´µÀ:
->> If in order feature negotiated, we can skip the used ring to get
->> buffer's desc id sequentially.  For skipped buffers in the batch, the
->> used ring doesn't contain the buffer length, actually there is not need
->> to get skipped buffers' length as they are tx buffer.
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->>   drivers/virtio/virtio_ring.c | 74 +++++++++++++++++++++++++++++++-----
->>   1 file changed, 64 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->> index 00aa4b7a49c2..d52624179b43 100644
->> --- a/drivers/virtio/virtio_ring.c
->> +++ b/drivers/virtio/virtio_ring.c
->> @@ -103,6 +103,9 @@ struct vring_virtqueue {
->>   	/* Host supports indirect buffers */
->>   	bool indirect;
->>   
->> +	/* Host supports in order feature */
->> +	bool in_order;
->> +
->>   	/* Host publishes avail event idx */
->>   	bool event;
->>   
->> @@ -144,6 +147,19 @@ struct vring_virtqueue {
->>   			/* DMA address and size information */
->>   			dma_addr_t queue_dma_addr;
->>   			size_t queue_size_in_bytes;
->> +
->> +			/* If in_order feature is negotiated, here is the next head to consume */
->> +			u16 next_desc_begin;
->> +			/*
->> +			 * If in_order feature is negotiated,
->> +			 * here is the last descriptor's id in the batch
->> +			 */
->> +			u16 last_desc_in_batch;
->> +			/*
->> +			 * If in_order feature is negotiated,
->> +			 * buffers except last buffer in the batch are skipped buffer
->> +			 */
->> +			bool is_skipped_buffer;
->>   		} split;
->>   
->>   		/* Available for packed ring */
->> @@ -584,8 +600,6 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
->>   					 total_sg * sizeof(struct vring_desc),
->>   					 VRING_DESC_F_INDIRECT,
->>   					 false);
->> -		vq->split.desc_extra[head & (vq->split.vring.num - 1)].flags &=
->> -			~VRING_DESC_F_NEXT;
-> 
-> 
-> This seems irrelevant.
-> 
-We have to unmask VRING_DESC_F_NEXT, so that we can calculate the length of a descriptor chain
-in get_buf_ctx_split.
-Thanks.
-> 
->>   	}
->>   
->>   	/* We're using some buffers from the free list. */
->> @@ -701,8 +715,16 @@ static void detach_buf_split(struct vring_virtqueue *vq,
->> unsigned int head,
->>   	}
->>   
->>   	vring_unmap_one_split(vq, i);
->> -	vq->split.desc_extra[i].next = vq->free_head;
->> -	vq->free_head = head;
->> +	/*
->> +	 * If in_order feature is negotiated,
->> +	 * the descriptors are made available in order.
->> +	 * Since the free_head is already a circular list,
->> +	 * it must consume it sequentially.
->> +	 */
->> +	if (!vq->in_order) {
->> +		vq->split.desc_extra[i].next = vq->free_head;
->> +		vq->free_head = head;
->> +	}
->>   
->>   	/* Plus final descriptor */
->>   	vq->vq.num_free++;
->> @@ -744,7 +766,7 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
->> *_vq,
->>   {
->>   	struct vring_virtqueue *vq = to_vvq(_vq);
->>   	void *ret;
->> -	unsigned int i;
->> +	unsigned int i, j;
->>   	u16 last_used;
->>   
->>   	START_USE(vq);
->> @@ -763,11 +785,38 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
->> *_vq,
->>   	/* Only get used array entries after they have been exposed by host. */
->>   	virtio_rmb(vq->weak_barriers);
->>   
->> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
->> -	i = virtio32_to_cpu(_vq->vdev,
->> -			vq->split.vring.used->ring[last_used].id);
->> -	*len = virtio32_to_cpu(_vq->vdev,
->> -			vq->split.vring.used->ring[last_used].len);
->> +	if (vq->in_order) {
->> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
-> 
-> 
-> Let's move this beyond the in_order check.
-> 
-Sorry for my mistake.
-> 
->> +		if (!vq->split.is_skipped_buffer) {
->> +			vq->split.last_desc_in_batch =
->> +				virtio32_to_cpu(_vq->vdev,
->> +						vq->split.vring.used->ring[last_used].id);
->> +			vq->split.is_skipped_buffer = true;
->> +		}
->> +		/* For skipped buffers in batch, we can ignore the len info, simply set len
->> as 0 */
-> 
-> 
-> This seems to break the caller that depends on a correct len.
-> 
-
-IMHO, we can do this because the device will only batch for skipped buffers which is tx.
-
-> 
->> +		if (vq->split.next_desc_begin != vq->split.last_desc_in_batch) {
->> +			*len = 0;
->> +		} else {
->> +			*len = virtio32_to_cpu(_vq->vdev,
->> +					       vq->split.vring.used->ring[last_used].len);
->> +			vq->split.is_skipped_buffer = false;
->> +		}
->> +		i = vq->split.next_desc_begin;
->> +		j = i;
->> +		/* Indirect only takes one descriptor in descriptor table */
->> +		while (!vq->indirect && (vq->split.desc_extra[j].flags & VRING_DESC_F_NEXT))
->> +			j = (j + 1) & (vq->split.vring.num - 1);
-> 
-> 
-> Any reason indirect descriptors can't be chained?
-> 
-> 
->> +		/* move to next */
->> +		j = (j + 1) % vq->split.vring.num;
->> +		/* Next buffer will use this descriptor in order */
->> +		vq->split.next_desc_begin = j;
-> 
-> 
-> Is it more efficient to poke the available ring?
-> 
-> Thanks
-> 
-> 
->> +	} else {
->> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
->> +		i = virtio32_to_cpu(_vq->vdev,
->> +				    vq->split.vring.used->ring[last_used].id);
->> +		*len = virtio32_to_cpu(_vq->vdev,
->> +				       vq->split.vring.used->ring[last_used].len);
->> +	}
->>   
->>   	if (unlikely(i >= vq->split.vring.num)) {
->>   		BAD_RING(vq, "id %u out of range\n", i);
->> @@ -2223,6 +2272,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
->> index,
->>   
->>   	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
->>   		!context;
->> +	vq->in_order = virtio_has_feature(vdev, VIRTIO_F_IN_ORDER);
->>   	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
->>   
->>   	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
->> @@ -2235,6 +2285,10 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
->> index,
->>   	vq->split.avail_flags_shadow = 0;
->>   	vq->split.avail_idx_shadow = 0;
->>   
->> +	vq->split.next_desc_begin = 0;
->> +	vq->split.last_desc_in_batch = 0;
->> +	vq->split.is_skipped_buffer = false;
->> +
->>   	/* No callback?  Tell other side not to bother us. */
->>   	if (!callback) {
->>   		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+Thanks!

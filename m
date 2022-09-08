@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8D05B137A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 06:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0505B137B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 06:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiIHEWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 00:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
+        id S230071AbiIHEWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 00:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiIHEWR (ORCPT
+        with ESMTP id S229819AbiIHEWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 00:22:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D51C69
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 21:21:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78B4FB81DA8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E76C433D6;
-        Thu,  8 Sep 2022 04:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662610592;
-        bh=1+aAstvbE2bUQV0BbstwqMS6S5sNwJIGfHGFeYUewaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L+lq45NGGDGsmGc84T9A9wHHVos52dAH08gzUwha2fIQPhvQE1sQhAoj6g14bVvvi
-         pGHY0PhMLOYLBiP3giWK3nOlaSb0qlj3NHT3+XKlmXr4q1SvaNaTjNAnK8s4nZh99K
-         q74G8p6c1XzPERzyFx6pgtMlO9mgRe5TpRM3BJK5Uhkr0YJC1pipBkVrQLe1c6or/G
-         xbbiF3tijZxrQzgXKHvtJIrUBtZjyauGGz7QHo8VXMtuvh3d+T7JmxyEIMgkR7MFlq
-         0/cP0c/hgqJ05O1VtNo4FnKU0niOifZ8ugWu9cb3j7GWs6CPe1AhyNi4IW5H53NYVB
-         MLP17kEhE9MqQ==
-Date:   Thu, 8 Sep 2022 07:16:17 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2 4/3] memblock tests: add new pageblock related macro
-Message-ID: <YxlskUbwXSiYr7hC@kernel.org>
-References: <20220907082643.186979-1-wangkefeng.wang@huawei.com>
+        Thu, 8 Sep 2022 00:22:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6826C75;
+        Wed,  7 Sep 2022 21:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662610915; x=1694146915;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X09slTsSQ7VnMYNmF84pcS2pMwdZUlN6Ob95RIFK5K8=;
+  b=UiEOl0JLw3J9BYfK4gqh0nuE1xMlLYMhf3LJwl90tAQMdLLimaxTluDv
+   C23DG28qIsvxf5UBddNAuFnkfdZSaBNUmWPUNTDFZIwRtGQZqwnT9DRwp
+   NmSSvWkjluRgegKI7bK+sxJj8+68CPOsWWlbfEfsm3JGykNA7JyOVJTLg
+   JiTxzkCIRxQbRt9G+lkKmOz+njpaGi3HeJctDV9yZYDH2iZhUiZ1Zzgjn
+   dllis9CpQVdb4vX1faA5GQ1/mAgy+djXuuLySqHIffu2aNd5H2CmJHLBt
+   Kkq2hcsy4h+djsFsIaYCYMOEOj+bVjTerJoYBpfmRg0KfxeTEirduTdyr
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="277452796"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="277452796"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 21:21:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="614739377"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 07 Sep 2022 21:21:51 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oW930-0007M9-1W;
+        Thu, 08 Sep 2022 04:21:50 +0000
+Date:   Thu, 8 Sep 2022 12:21:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        saikrishna12468@gmail.com, git@amd.com,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Subject: Re: [PATCH v4 2/2] edac: zynqmp_ocm: Add EDAC support for ZynqMP OCM
+Message-ID: <202209081225.5YuFsgGp-lkp@intel.com>
+References: <20220907111531.703-3-sai.krishna.potthuri@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907082643.186979-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220907111531.703-3-sai.krishna.potthuri@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,36 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew,
+Hi Sai,
 
-Do you mind taking this along with the pageblock macros series?
+I love your patch! Perhaps something to improve:
 
-On Wed, Sep 07, 2022 at 04:26:43PM +0800, Kefeng Wang wrote:
-> Add new pageblock_start_pfn() and pageblock_align() macro
-> which are needed by memblock tests.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  tools/testing/memblock/linux/mmzone.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/memblock/linux/mmzone.h b/tools/testing/memblock/linux/mmzone.h
-> index 7c2eb5c9bb54..e65f89b12f1c 100644
-> --- a/tools/testing/memblock/linux/mmzone.h
-> +++ b/tools/testing/memblock/linux/mmzone.h
-> @@ -22,6 +22,8 @@ enum zone_type {
->  
->  #define pageblock_order		(MAX_ORDER - 1)
->  #define pageblock_nr_pages	BIT(pageblock_order)
-> +#define pageblock_align(pfn)	ALIGN((pfn), pageblock_nr_pages)
-> +#define pageblock_start_pfn(pfn)	ALIGN_DOWN((pfn), pageblock_nr_pages)
->  
->  struct zone {
->  	atomic_long_t		managed_pages;
-> -- 
-> 2.35.3
-> 
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on ras/edac-for-next krzk-dt/for-next linus/master v6.0-rc4 next-20220907]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sai-Krishna-Potthuri/edac-Add-support-for-Xilinx-ZynqMP-OCM-EDAC/20220907-191854
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/038e95811e4eddd23a098d0faf7a90bbccdb6e52
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sai-Krishna-Potthuri/edac-Add-support-for-Xilinx-ZynqMP-OCM-EDAC/20220907-191854
+        git checkout 038e95811e4eddd23a098d0faf7a90bbccdb6e52
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/edac/xlnx,zynqmp-ocmc.yaml
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://01.org/lkp

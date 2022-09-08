@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1395B1D30
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE495B1D32
 	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiIHMf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S231854AbiIHMfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIHMfF (ORCPT
+        with ESMTP id S230463AbiIHMfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:35:05 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D634D146;
-        Thu,  8 Sep 2022 05:35:03 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-127f5411b9cso12561517fac.4;
-        Thu, 08 Sep 2022 05:35:03 -0700 (PDT)
+        Thu, 8 Sep 2022 08:35:15 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96A324F22
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:35:12 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id z25so27511072lfr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 05:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=MtvDPwj1xj98pXvIJlBDsjDT7GOeTmv6R4xmR0F7h50=;
+        b=ucFDlTPKrAXCjsKtyiEsczadOihwVme4pmfa92cwDRzdU5ydN1T+oxzE49b1O4MzYQ
+         /SDRABklxJrzY13pXcXVE6T43qjHK1tmp3ffLimBe+BEtPKsFhMhrvHhQFw10wQo4UMY
+         QH2g/KHlt6WK/anxVHDlCmparhH43DRUlHLxNjGTIaSwmh/lippSbERMFm5CY8GaiOMq
+         Yux3EwzYYbR7ml3R1QlCRwWDYc62eon4ZGTRPdHVjVV5eAC1gFLsLIx3pkwmhUsv7y19
+         EBkug2XFehtF7k2SscPy5nqKdkBk6AAIBCgJsLLwflySfa/J4IlNiBKJYMrGV5n3dQO6
+         wb0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=e5C7jtJ6NTss+adUkRAgRxPy8Hmrq7CnsR0YOjkHy3s=;
-        b=19EqMuCQIo6WgmVRo+SO+y6nHafUalNXl4E9NEOO/2QimIwUeGfZF0U4PC6SyG0H+j
-         JoOJc3NfS7FPAv2XQKZUk5lwy+PUwkMtPEArykFzBUJQiLeDscO158AJ7V0czA1OqmpX
-         AEl/RDXQy4cUosGjv72TnsFPiK6cASnvV8ioTS/5tXgFqLZTgj7arhqZNtrfYe0XQEYJ
-         Iib3LthWLcITpOlr29QeCUQ1GrOUG/uiyyIz9ntc8hOThV06/im1vqiFqjI4CdKyy9x8
-         Dv/0k9Egz52YnxBnJtHJTcQSbSBE9ZEEdwJWT5iq+ESsBjXx2cX28Og9LIgL0NqHKvOS
-         NDyw==
-X-Gm-Message-State: ACgBeo0BuWs2Eq7BYg1f+AfvkLEJVpRkgSYW/+opsIAAHpyTEDB+X8Pn
-        d+G7UlTtoV6XiCRKJ6LJ0OOd8TFA8A==
-X-Google-Smtp-Source: AA6agR6TDF1O7/bAlgHsru8fB4QnA/WpWyopfiDsnBoIOKPW0VBNKyKyXMzbD+fNLIJuXm64uTWpKA==
-X-Received: by 2002:a05:6870:b429:b0:127:8747:69fc with SMTP id x41-20020a056870b42900b00127874769fcmr1758108oap.171.1662640502392;
-        Thu, 08 Sep 2022 05:35:02 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k12-20020a056870818c00b00127a91041a9sm4442599oae.38.2022.09.08.05.35.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 05:35:02 -0700 (PDT)
-Received: (nullmailer pid 2262545 invoked by uid 1000);
-        Thu, 08 Sep 2022 12:35:00 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Weilong Chen <chenweilong@huawei.com>
-Cc:     xuwei5@huawei.com, robh+dt@kernel.org, wsa@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-i2c@vger.kernel.org, yangyicong@hisilicon.com
-In-Reply-To: <20220908025701.330210-2-chenweilong@huawei.com>
-References: <20220908025701.330210-1-chenweilong@huawei.com> <20220908025701.330210-2-chenweilong@huawei.com>
-Subject: Re: [PATCH next v3 2/2] dt-bindings: i2c: add entry for hisilicon,hisi-i2c
-Date:   Thu, 08 Sep 2022 07:35:00 -0500
-Message-Id: <1662640500.384045.2262544.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        bh=MtvDPwj1xj98pXvIJlBDsjDT7GOeTmv6R4xmR0F7h50=;
+        b=sGhwI2VOlG5Qyycu8F69wAhH1j9XOpZkOH4ZRcgbiYOtdh2AkXVxbZmhLhHZeGZ60D
+         itm97RosOB2Jd8+95ptgzYQj3a0IMxMEHp94IUyYzSpfcq+qk5X30alpfJB6F+YvDIzO
+         rfFuEkLRufg8FtUSBhuiUd+DlrbxfyP5WUAczYN5Zo2I3gln9X1mBqaJVrhWtfXWRfJ3
+         FmhJpPEbITmlttnhOCv4J/oHocQvuRVdWnhfavFMWjjf9ADZpaarhCNt4eiEkMmP5NWR
+         LYZL4ql6TNb9spJ6Jb2A5KVmRsQKm2P4cD0gJMpx1JQClEpN6vA0gabXqtKt0lzBYt88
+         GcQA==
+X-Gm-Message-State: ACgBeo3M81b8mRWDBAAkWe+w4hDUfCsLFxi+rlDHhuQGvdCnih9Mr4Wt
+        LZ1yZTn1JvaPZiTL2T/T1BkX/Q==
+X-Google-Smtp-Source: AA6agR6mbkVKvTFOT42qF/i7lu1Gz70hK93yc9UJvNcVj5Z6ed6r33DSj5rC/gPINepqjhD/JWdAfA==
+X-Received: by 2002:a05:6512:5c5:b0:497:f192:78ac with SMTP id o5-20020a05651205c500b00497f19278acmr1214013lfo.63.1662640511127;
+        Thu, 08 Sep 2022 05:35:11 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w9-20020a19c509000000b004947984b385sm635694lfe.87.2022.09.08.05.35.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 05:35:10 -0700 (PDT)
+Message-ID: <e93ef041-89d3-5718-4b1d-55bfd0c72797@linaro.org>
+Date:   Thu, 8 Sep 2022 14:35:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 13/13] dt-bindings: serial: atmel,at91-usart: Add gclk
+ as a possible USART clock
+Content-Language: en-US
+To:     Sergiu Moga <sergiu.moga@microchip.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, richard.genoud@gmail.com,
+        radu_nicolae.pirea@upb.ro, gregkh@linuxfoundation.org,
+        broonie@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        jirislaby@kernel.org, admin@hifiphile.com,
+        kavyasree.kotagiri@microchip.com, tudor.ambarus@microchip.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-14-sergiu.moga@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220906135511.144725-14-sergiu.moga@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Sep 2022 10:57:01 +0800, Weilong Chen wrote:
-> Add the new compatible for HiSilicon common i2c.
+On 06/09/2022 15:55, Sergiu Moga wrote:
+> The Devicetree nodes for FLEXCOM's USART can also have an alternative
+> clock source for the baudrate generator (other than the peripheral
+> clock), namely the Generick Clock. Thus make the binding aware of
+> this potential clock that someone may place in the clock related
+> properties of the USART node.
+
+Last sentence is confusing - what is the potential? Just skip it.
+
 > 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
 > ---
->  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
 > 
+> 
+> 
+> v1 -> v2:
+> - Nothing, this patch was not here before
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+You have confusing order of patches. Bindings mixed with DTS mixed with
+drivers. Keep things ordered.
+1. DTS changes needed for aligning to schema.
+2. all bindings
+3. rest
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.example.dtb: i2c@5038B0000: 'i2c-digital-filter' is a dependency of 'i2c-digital-filter-width-ns'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.example.dtb: i2c@5038B0000: reg: [[5, 59441152], [0, 65536]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.example.dtb: i2c@5038B0000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'reg' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.example.dtb: i2c@5038B0000: 'i2c-digital-filter' is a dependency of 'i2c-digital-filter-width-ns'
-	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/i2c/i2c-controller.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best regards,
+Krzysztof

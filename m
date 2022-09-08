@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CB65B20AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C345B20CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbiIHOhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S232695AbiIHOjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231940AbiIHOhC (ORCPT
+        with ESMTP id S232359AbiIHOjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:37:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812DFD6BAC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662647820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wFcDqpqfo5+BlCFcCMK6T6o/K8WN6HmeBg3zPocSOsQ=;
-        b=QbIlCjgNx9J2Q77eday2QeT5PwYMI8cKX9Nz+5HimDyXUB5wSYzPcGkleNfZajy1d1AMu+
-        AheUGYsTGT0MX79CtWPpaqiLqf4AfKHYTWbXXp/ddUOGTxAKRFcqumPHdAp8mbgjO/8IIi
-        nWCTn6RBpob3WAxByef3KwceFSs7Fi0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-368-SE5nQjTjMdCJg7EbTz-luQ-1; Thu, 08 Sep 2022 10:36:59 -0400
-X-MC-Unique: SE5nQjTjMdCJg7EbTz-luQ-1
-Received: by mail-wm1-f71.google.com with SMTP id c25-20020a05600c0ad900b003a5ebad295aso484167wmr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:36:59 -0700 (PDT)
+        Thu, 8 Sep 2022 10:39:01 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5351F11C141
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:38:49 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id gh9so16644955ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=XU8POBDfC19t7PMlJkcaZvi4Zmu4HuIqwyULXuHenmU=;
+        b=WXqQ8Jqzd/RH0CFVozN0N0R+rUyUdCjXXddzFKPn37VXeP0+RdRbIf0pkZ2eOq76eC
+         DiqpoFGzgJJk+pxD66Ih5ypsK/5e5D0RFILcpE2YBfEUki1kjBy3sAHL+aGYxdoo7q8N
+         aT7x+dVEY7w07iYUxiIgfe4wA2QEgS+7/8ric=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=wFcDqpqfo5+BlCFcCMK6T6o/K8WN6HmeBg3zPocSOsQ=;
-        b=ku54lSDD9Wb0+hG3eM6pf4um0gDZxmcM3X1K1Y4e66k8D6xIeUcNG/9CKDQ8oKnYiL
-         v6jhNvQWvEx8Rxe5EQhjr9SWTYEd+eYUzagKaTDY9UJd4p56CEh3wemdkXSbUf5nxvyK
-         51h6cBaeiQB85YMPI6sn18g2XzlUZ3U4vFWrvHuuMtCN+V8SMkwo1ecPGKAB9/e1Yaw1
-         S5OHn3Kz/rOIAZqLkLcHhfc3D6DFW6DD8cFKOs8xJXPgzCn0iGdlAi3B1ECkdCBWUbKQ
-         R3UNs3buMIRsPh/cDYJvSH+tRUVm9xNxCtB7K7lc7ZnKZNWBi05ypxksxNzxRa1WZ5VA
-         ERzQ==
-X-Gm-Message-State: ACgBeo2EkznTJF24CN8du9QS9eo1SmxsGIt5kPtEPOMyWcOVsSTBQNq4
-        UIbtU+aqkgDU0pBilhuxqXPEpKQlTVA7rMg6KBfM3Pt8XrO20cJUjVywfQKcZM5/zHGlOtWFrRq
-        +9BXMD+1UkbcGLN/wN4KjcFnp
-X-Received: by 2002:a5d:6da2:0:b0:228:64ca:3978 with SMTP id u2-20020a5d6da2000000b0022864ca3978mr5285517wrs.542.1662647818270;
-        Thu, 08 Sep 2022 07:36:58 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6BEGVkHcFX/ZuPLpySO7WMaIWzsWXcmGzFBbS0MxMsqv14mvHPWdYH6rv4OjZ1+HxLnAXdhw==
-X-Received: by 2002:a5d:6da2:0:b0:228:64ca:3978 with SMTP id u2-20020a5d6da2000000b0022864ca3978mr5285510wrs.542.1662647818042;
-        Thu, 08 Sep 2022 07:36:58 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-11-6-69.retail.telecomitalia.it. [87.11.6.69])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05600c444b00b003a3442f1229sm3131212wmn.29.2022.09.08.07.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 07:36:56 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 16:36:52 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Call to discuss vsock netdev/sk_buff [was Re: [PATCH 0/6]
- virtio/vsock: introduce dgrams, sk_buff, and qdisc]
-Message-ID: <20220908143652.tfyjjx2z6in6v66c@sgarzare-redhat>
-References: <cover.1660362668.git.bobby.eshleman@bytedance.com>
- <YxdKiUzlfpHs3h3q@fedora>
- <Yv5PFz1YrSk8jxzY@bullseye>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=XU8POBDfC19t7PMlJkcaZvi4Zmu4HuIqwyULXuHenmU=;
+        b=m0s5eoJihwBEBXDT0X8kf5btp0OYvaZn6hCzJkJhXSVgmbpV1JtQGtrTrMK0uCwHVg
+         mmH8JvSaYcqmTtG4royuG4kzVxDtgJwF+8egUUQz5DyLymZVdGnrAr9hQmMMKLkwLuKt
+         RoVbaUZto3LxWYUb3PW9Ps5uhTmrjflPJPbmhY6vuZLFPJUfrSDQQ9HHnrFzyFCwY7bz
+         CjjkL2mgkknABe1hDnRNKE8N/H9+NeZMwMjw+RZ855NYbyxzKN5SB5V9Mzd4RPgETXKN
+         +M0FJ1F/k9s57j7QYdXs/aBWzKffbjuwkVUabLKzyVtUTBid+31KUuPrAZoA7ksauPhE
+         ZFxg==
+X-Gm-Message-State: ACgBeo0vZrXX9StzbjCPJR/AwYTDdkgxvaemuU91/fru4FGq2A4KVzMp
+        4oAGsDjVy64lHpD4/Fp196hkOXXWXrHNBk4AzBY=
+X-Google-Smtp-Source: AA6agR7gLjoMPtfZaF5CbYBZxIiPPnRpBQ0bY/3vHP37m42XeBA+Sod6sWtHDnfhxfTXZn68OIsiaw==
+X-Received: by 2002:a17:906:9bd4:b0:770:4efb:acbe with SMTP id de20-20020a1709069bd400b007704efbacbemr6281509ejc.436.1662647926729;
+        Thu, 08 Sep 2022 07:38:46 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id um28-20020a170906cf9c00b0076f927ed0f1sm1271950ejb.127.2022.09.08.07.38.44
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 07:38:44 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id e16so7195178wrx.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:38:44 -0700 (PDT)
+X-Received: by 2002:a5d:6c62:0:b0:22a:2f59:cb7d with SMTP id
+ r2-20020a5d6c62000000b0022a2f59cb7dmr1892255wrz.405.1662647924384; Thu, 08
+ Sep 2022 07:38:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Yv5PFz1YrSk8jxzY@bullseye>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220907204924.173030-1-ahalaney@redhat.com> <abad381a-dfe7-9337-ff35-f657bf373d44@linaro.org>
+ <CAD=FV=VmnKtx9smitqvNgmiCs-UCnLGFgbPnKd41QWeo1t3c9g@mail.gmail.com> <168cde58-d061-97e7-54a5-5d3cccf3ce22@linaro.org>
+In-Reply-To: <168cde58-d061-97e7-54a5-5d3cccf3ce22@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 8 Sep 2022 07:38:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VMKGOLR5uupTk9Z2vyDfCksYjJLHF6DDM36rgh+=0xLA@mail.gmail.com>
+Message-ID: <CAD=FV=VMKGOLR5uupTk9Z2vyDfCksYjJLHF6DDM36rgh+=0xLA@mail.gmail.com>
+Subject: Re: [PATCH v3] regulator: dt-bindings: qcom,rpmh: Indicate
+ regulator-allow-set-load dependencies
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Johan Hovold <johan@kernel.org>,
+        Johan Hovold <johan+kernel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,40 +86,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 02:39:32PM +0000, Bobby Eshleman wrote:
->On Tue, Sep 06, 2022 at 09:26:33AM -0400, Stefan Hajnoczi wrote:
->> Hi Bobby,
->> If you are attending Linux Foundation conferences in Dublin, Ireland
->> next week (Linux Plumbers Conference, Open Source Summit Europe, KVM
->> Forum, ContainerCon Europe, CloudOpen Europe, etc) then you could meet
->> Stefano Garzarella and others to discuss this patch series.
->>
->> Using netdev and sk_buff is a big change to vsock. Discussing your
->> requirements and the future direction of vsock in person could help.
->>
->> If you won't be in Dublin, don't worry. You can schedule a video call if
->> you feel it would be helpful to discuss these topics.
->>
->> Stefan
+Hi,
+
+On Thu, Sep 8, 2022 at 7:29 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
->Hey Stefan,
+> On 08/09/2022 16:23, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Thu, Sep 8, 2022 at 3:25 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 07/09/2022 22:49, Andrew Halaney wrote:
+> >>> For RPMH regulators it doesn't make sense to indicate
+> >>> regulator-allow-set-load without saying what modes you can switch to,
+> >>> so be sure to indicate a dependency on regulator-allowed-modes.
+> >>>
+> >>> In general this is true for any regulators that are setting modes
+> >>> instead of setting a load directly, for example RPMH regulators. A
+> >>> counter example would be RPM based regulators, which set a load
+> >>> change directly instead of a mode change. In the RPM case
+> >>> regulator-allow-set-load alone is sufficient to describe the regulator
+> >>> (the regulator can change its output current, here's the new load),
+> >>> but in the RPMH case what valid operating modes exist must also be
+> >>> stated to properly describe the regulator (the new load is this, what
+> >>> is the optimum mode for this regulator with that load, let's change to
+> >>> that mode now).
+> >>>
+> >>> With this in place devicetree validation can catch issues like this:
+> >>>
+> >>>     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
+> >>>             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+> >>>
+> >>> Where the RPMH regulator hardware is described as being settable, but
+> >>> there are no modes described to set it to!
+> >>>
+> >>> Suggested-by: Johan Hovold <johan+kernel@kernel.org>
+> >>> Reviewed-by: Johan Hovold <johan+kernel@kernel.org>
+> >>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> >>> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> >>> ---
+> >>>
+> >>> v2: https://lore.kernel.org/linux-arm-msm/20220906201959.69920-1-ahalaney@redhat.com/
+> >>> Changes since v2:
+> >>>   - Updated commit message to explain how this is a property of the
+> >>>     hardware, and why it only applies to certain regulators like RPMH
+> >>>     (Johan + Krzysztof recommendation)
+> >>>   - Added Johan + Douglas' R-B tags
+> >>
+> >> You posted before we finished discussion so let me paste it here:
+> >>
+> >> The bindings don't express it, but the regulator core explicitly asks
+> >> for set_mode with set_load callbacks in drms_uA_update(), which depends
+> >> on REGULATOR_CHANGE_DRMS (toggled with regulator-allow-set-load).
+> >>
+> >> drms_uA_update() later calls regulator_mode_constrain() which checks if
+> >> mode changing is allowed (REGULATOR_CHANGE_MODE).
+> >>
+> >> Therefore based on current implementation and meaning of
+> >> set-load/allowed-modes properties, I would say that this applies to all
+> >> regulators. I don't think that RPMh is special here.
+> >
+> > RPMh is special compared to RPM because in RPMh the hardware exposes
+> > "modes" to the OS and in RPM the hardware doesn't. Specifically:
+> >
+> > In RPM, the OS (Linux) has no idea what mode the regulator is running
+> > at and what modes are valid. The OS just tells the RPM hardware "I'm
+> > requesting a load of X uA. Thanks!" So "regulator-allow-set-mode"
+> > basically says "yeah, let the OS talk to RPM about loads for this
+> > regulator.
 >
->That sounds like a great idea! I was unable to make the Dublin trip work
->so I think a video call would be best, of course if okay with everyone.
+> So how does set load works for this case? You mentioned
+> "allow-set-mode", but we talk about "allow-set-load".
 
-Looking better at the KVM forum sched, I found 1h slot for Sep 15 at 
-16:30 UTC.
+Ah, sorry. I meant "allow-set-load".
 
-Could this work for you?
+> > In RPMh, the OS knows all about the modes. For each regulator it's the
+> > OS's job to know how much load the regulator can handle before it
+> > needs to change modes. So the OS adds up all the load requests from
+> > all the users of the regulator and then translates that to a mode. The
+> > OS knows all about the modes possible for the regulator and limiting
+> > them to a subset is a concept that is sensible.
+> >
+> > This is why, for instance, there can be an "initial mode" specified
+> > for RPMh but not for RPM. The OS doesn't ever know what mode a RPM
+> > regulator is in but it does for RPMh.
+>
+> Sorry, I don't find it related. Whether RPM has modes or not, does not
+> matter to this discussion unless it sets as well allow-set-load without
+> the mode... and then how does it work? In current implementation it
+> shouldn't...
 
-It would be nice to also have HyperV and VMCI people in the call and 
-anyone else who is interested of course.
+From looking at the source code of Linux:
 
-@Dexuan @Bryan @Vishnu can you attend?
+* allow-set-load basically says whether the core regulator framework
+even pays attention when drivers specify how much load they're using.
 
-@MST @Jason @Stefan if you can be there that would be great, we could 
-connect together from Dublin.
+* On RPM then if allow-set-load is set then we'll sum up all of the
+load requests from clients and pass it to hardware.
 
-Thanks,
-Stefano
+* On RPMH, if allow-set-load is set then we'll sum up all the load
+requests, translate that to a mode, validate it against the set of
+"allowable" modes, and if it's valid then pass it to hardware.
 
+-Doug

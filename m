@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7CC5B2605
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220F85B2607
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiIHSnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        id S232369AbiIHSnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiIHSnK (ORCPT
+        with ESMTP id S231342AbiIHSno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:43:10 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E77E903E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:43:09 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-11eab59db71so46680394fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 11:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=6zqod/zHQn+N4MgMFRhMmGU9hOwlfJ/mvzIBoWZvy8M=;
-        b=PBcQ1FnJLlY3UjCMN/Sd8Ip7bxnlVraO0YMYsj21NVZUk7Q1qKrp4+uUENelubgk2x
-         q2+swuq/+T3Ic4QuKa9uE8YR/PYD3XHDeDcKnNoZtxX+QIdxiPFPBFYaI9jmh2M8taxj
-         Jgx5N4V6HMFxg7nvut0ZkdRu1vgM3N3pBONJs8Q38tPiiiVY42Ot1+2FlDEyrnXR95yM
-         wMYu0thlRPVWxvrXTUGUo5gbwlIpE6AdxuD25fL5Qfs4HdQipOFS5cXu3Iw8fX/BG3uz
-         bRZDttGiz8f8Jciwa4iplNlS9/IX8yUj1qWp1PUWtAzSka64iptu4BrEHp0Jaz//PoBv
-         6GmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6zqod/zHQn+N4MgMFRhMmGU9hOwlfJ/mvzIBoWZvy8M=;
-        b=vOK/pu65KJL53wv14QTmAPGKSLX61oxIrKj/Y0Ho1qaL6ymib9uPFP3Je3ZRIFCvRR
-         FuN9McCQiz2S/Za79b/sZvhnwQKsuH9n2OiENVhQICz/mhU6GFWp0Plr5tNEcdpFWukv
-         QOc2W+qg/8DO1b0DXGyCVarhs7aoqcW6/T8ghwVb35shN6vdb41fGbPnkQrjaoL89cPF
-         a2Fvh3L3eu6zi/sbgdyVOIZ4US7I7I2tsUZzuyM4mm9gtuUtdMjcyynr+Amwjw912Oi4
-         dYmQbTOOJvWmGHdZeOatYW4aHjQ9aJb0fl48YZQSB/zch/m7PQhNUl7cPk/7dqI7mXoD
-         oO4w==
-X-Gm-Message-State: ACgBeo1DbWL5HAlo0gUWY1NX+m9xWwJsjkqAZ0vbE+nf2rV+Vx2AO1dP
-        1rY6PXtBqyZ1PC6zMFjz7679GPallxeMDnamEgY=
-X-Google-Smtp-Source: AA6agR6zeZSZEL7HCwmiJstWsPopBbHt5tHL9okEH43A8WVQvLugmy6GVNHi9LmRuFWBMrqEFvnUdNFXRKmDBj/KLD8=
-X-Received: by 2002:a05:6870:462a:b0:127:1a2d:3478 with SMTP id
- z42-20020a056870462a00b001271a2d3478mr2815641oao.124.1662662589417; Thu, 08
- Sep 2022 11:43:09 -0700 (PDT)
+        Thu, 8 Sep 2022 14:43:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74D9B2DAF;
+        Thu,  8 Sep 2022 11:43:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52DADB82220;
+        Thu,  8 Sep 2022 18:43:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2CC433D6;
+        Thu,  8 Sep 2022 18:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662662621;
+        bh=9o8UhnmvSSPQAX15Og0MpXzXj8mBI1uz6bugcbcXZ3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vh5ViOxtHE8L/b75nj2myzQzSBr6t6JiYtj/GTWhSx5rpQk3/S6Hh7aGOQJm5K2+9
+         25gO3JcWwgcVzFvQL/V6D8eTFRmWZ0CpkLuCB5hctH2Z5RNep9zBvHSj1sP2C/VDYc
+         iPTzl2un/oFhShla4hnB59+v+rBPKaptwLGjRh5diJ2F1L8RfQpW9o/A1trGPqm/PP
+         cPVDgeWip7GUbwUl3CYfJ3lXqWzVcP3y2ToApjtiGDlpj3gq0TQ2EGN3DX19sz/owU
+         mmCLYLgJNSfdO8GVCLUEFOr+IeS8YxFtR354baTezosAPq4pkn62UBma+B2qYKO3LO
+         gxHeIBeVVv0qA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C0BBF404A1; Thu,  8 Sep 2022 15:43:38 -0300 (-03)
+Date:   Thu, 8 Sep 2022 15:43:38 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH 0/4] perf lock contention: Improve call stack handling
+ (v1)
+Message-ID: <Yxo32kpxsl9Mr7Mt@kernel.org>
+References: <20220908063754.1369709-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:9143:b0:b9:6343:3b87 with HTTP; Thu, 8 Sep 2022
- 11:43:09 -0700 (PDT)
-Reply-To: proctorjulius@yahoo.com
-From:   Julius Proctor <barcalder50@gmail.com>
-Date:   Thu, 8 Sep 2022 18:43:09 +0000
-Message-ID: <CAGNWyKz2DRdRKbcVTsy1GhZPubsXPgUwB6hhA1gstOAHxbsL=w@mail.gmail.com>
-Subject: Hallo, bitte antworte mir
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:31 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5004]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [barcalder50[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [barcalder50[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908063754.1369709-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sch=C3=B6nen Tag
+Em Wed, Sep 07, 2022 at 11:37:50PM -0700, Namhyung Kim escreveu:
+> Hello,
+> 
+> I found that call stack from the lock tracepoint (using bpf_get_stackid)
+> can be different on each configuration.  For example it's very different
+> when I run it on a VM than on a real machine.
+> 
+> The perf lock contention relies on the stack trace to get the lock
+> caller names, this kind of difference can be annoying.  Ideally we could
+> skip stack trace entries for internal BPF or lock functions and get the
+> correct caller, but it's not the case as of today.  Currently it's hard
+> coded to control the behavior of stack traces for the lock contention
+> tracepoints.
+> 
+> To handle those differences, add two new options to control the number of
+> stack entries and how many it skips.  The default value worked well on
+> my VM setup, but I had to use --stack-skip=5 on real machines.
+> 
+> You can get it from 'perf/lock-stack-v1' branch in
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
-Ich bin Julius Proctor, Anwalt der Anwaltskanzlei Proctor. Ich habe
-Sie bez=C3=BCglich des Nachlasses des verstorbenen Dr. Edwin in H=C3=B6he v=
-on
-8,5 Millionen Dollar kontaktiert, der auf Ihr Konto zur=C3=BCckgef=C3=BChrt
-werden soll. Dar=C3=BCber hinaus m=C3=B6chte ich, dass Sie bei dieser
-Transaktion vertraulich antworten.
+This clashed with a patch you Acked earlier, so lets see if someone has
+extra review comments and a v2 become needed for other reason, when you
+can refresh it, ok?
 
-Julius Proctor
+- Arnaldo
+ 
+> Thanks,
+> Namhyung
+> 
+> 
+> Namhyung Kim (4):
+>   perf lock contention: Factor out get_symbol_name_offset()
+>   perf lock contention: Show full callstack with -v option
+>   perf lock contention: Allow to change stack depth and skip
+>   perf lock contention: Skip stack trace from BPF
+> 
+>  tools/perf/Documentation/perf-lock.txt        |  6 ++
+>  tools/perf/builtin-lock.c                     | 89 ++++++++++++++-----
+>  tools/perf/util/bpf_lock_contention.c         | 21 +++--
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  |  3 +-
+>  tools/perf/util/lock-contention.h             |  3 +
+>  5 files changed, 96 insertions(+), 26 deletions(-)
+> 
+> 
+> base-commit: 6c3bd8d3e01d9014312caa52e4ef1c29d5249648
+> -- 
+> 2.37.2.789.g6183377224-goog
+
+-- 
+
+- Arnaldo

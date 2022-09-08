@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FA55B19A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68335B19B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 12:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiIHKIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 06:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S230478AbiIHKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 06:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiIHKI3 (ORCPT
+        with ESMTP id S229704AbiIHKL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 06:08:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A15D99E1;
-        Thu,  8 Sep 2022 03:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UOhmWhfh6ez2R/EXW1Q3Fuye0q5XANxmTIodoT9VFbo=; b=qFk19ChumB/kekbuPKhI78lIGm
-        3G5Y0dtk1WBtw9ftlUVMXmvv2kGtiSgXc6fgCLOd3a4LeV4nOEzBTwjV70C7LauC9XAifTDhqO3IT
-        rJqy7gAeZFK34IoGRjic3aBAJ4RVZS/2I/1T/vGLvAD3ridV6UkxgBHEJ+yIXuFbRBCXYsW2B7hHj
-        Qwuh8dN0SmPHMN9IKixHInZOTgwYlv4sBGXS83OkSeKrf0i14zB2T/6RnySLP8BtRq4b+Fbtd8nrI
-        B1yvFjZSN0msFTs6CpGVTvhZ7DoH0zut9+HX0ec5PigCcvZcC0q1zyDXu8VcG2rDKUC+fgpD8dtIc
-        DQPmiCnA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oWESM-00CFhk-8k; Thu, 08 Sep 2022 10:08:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Thu, 8 Sep 2022 06:11:27 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07152786CA;
+        Thu,  8 Sep 2022 03:11:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5E2AA3006A4;
-        Thu,  8 Sep 2022 12:08:19 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 461AF207ABF68; Thu,  8 Sep 2022 12:08:19 +0200 (CEST)
-Date:   Thu, 8 Sep 2022 12:08:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org
-Subject: Re: [PATCH v2 1/2] x86/kprobes: Fix kprobes instruction boudary
- check with CONFIG_RETHUNK
-Message-ID: <Yxm/EyW1upzPUZuH@hirez.programming.kicks-ass.net>
-References: <166260087224.759381.4170102827490658262.stgit@devnote2>
- <166260088298.759381.11727280480035568118.stgit@devnote2>
- <20220908050855.w77mimzznrlp6pwe@treble>
- <Yxm2QU1NJIkIyrrU@hirez.programming.kicks-ass.net>
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MNZf35Btwz4x1d;
+        Thu,  8 Sep 2022 20:11:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662631884;
+        bh=nhrDaWIOx3Riue88SzzVI1By9F+QCIAlO78rQFHqCh8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=D8xgvbgpSG2rVP9bbU+6V2w7eX9hQRxU8MVrMt2SiWBawM/o/nBl1/fvn+EQ3U+s4
+         92GAuE5q1+4QyucU15LKABXXbov9UnmG076iLcoDmmdDFBStaHZ6RVaSHtWbFuWqnO
+         iWrolKEUawSnpinLmuoV/nQS2NBXyKFd2hj1Y9L7Zam51jr2NfO0LqDV0Jcm0laWiJ
+         NFFIpfmb0z57PmlUuFzegB8peyxIWQkP3Mk9qgeUj+KjszLXbLijYgWhnbqHoZ7K7r
+         T5oX3iRvpcXdEbCCRlE6kBnKU5Bvzdwo/bqOAQjYTiQsePWyjgqb5IFyfMzfLnNHTw
+         R/lUEgXyE2QIA==
+Date:   Thu, 8 Sep 2022 20:11:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Sindhu-Devale <sindhu.devale@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the rdma-fixes tree
+Message-ID: <20220908201122.69e705fb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yxm2QU1NJIkIyrrU@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/b+hm+6p_DnfK=KCPTZjS/i5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 11:30:41AM +0200, Peter Zijlstra wrote:
-> Once that lands the rules are:
-> 
->  0-5 INT3 after RET, !CONFIG_RETHUNK && !CONFIG_SLS: 0
->                      CONFIG_SLS: 1
-> 		     CONFIG_RETHUNK: 4-5 depending on compiler version
-> 
->  0-1 INT3 after RET: !CONFIG_SLS: 0
-> 		     CONFIG_SLS: 0-1 depending on compiler version
-> 
-> Now, given we know the compiler version at build time, this could be
-> determined and used in kprobes, but meh.
+--Sig_/b+hm+6p_DnfK=KCPTZjS/i5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oh also, for giggles, we have a number of sites that have ret;int3
-independent of CONFIG_SLS because that was easier than figuring out what
-all should be done.
+Hi all,
+
+In commit
+
+  2c8844431d06 ("RDMA/irdma: Use s/g array in post send only when its valid=
+")
+
+Fixes tag
+
+  Fixes: 551c46e ("RDMA/irdma: Add user/kernel shared libraries")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/b+hm+6p_DnfK=KCPTZjS/i5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMZv8oACgkQAVBC80lX
+0GycFwf/V+EOm0RAfFUbReeDYXvP0t1g593I/2cirk2JKRRMoZINZjx8s1N4IfKr
+Zlt8mYmyMUcujnu/BxKTlEcTlvlCyksZhuNxd31g48TKP0FlmwC2BgdhBzRpE5/d
+jD7qstpVY3HJbt+MBcrQljWYF1m5zlCjSwxXgKveRvn2asNZ0YchGOG7cnf1D59A
+J1deMJXou6AYqXy/JFFJeNJiJHrHfWJgBCOqgxU0SQ3fQ0poBVm3JhL9R+BQk7zh
+8wiD5jdvbUh+yfG09vwGX/kBqPt54DsLH32Hse/X3jFBq/j1Hs+z1tg/3+UVWEG+
+dL0RiOtXIOC1F2/m6o5oA7NVqxuUsw==
+=12/m
+-----END PGP SIGNATURE-----
+
+--Sig_/b+hm+6p_DnfK=KCPTZjS/i5--

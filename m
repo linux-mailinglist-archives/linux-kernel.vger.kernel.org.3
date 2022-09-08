@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C685B28DD
+	by mail.lfdr.de (Postfix) with ESMTP id F16FD5B28DF
 	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 23:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiIHV5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 17:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S230256AbiIHV5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 17:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiIHV5F (ORCPT
+        with ESMTP id S230171AbiIHV5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 17:57:05 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E879A1316FB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 14:55:59 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id bu13-20020a056902090d00b00671743601f1so58707ybb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 14:55:59 -0700 (PDT)
+        Thu, 8 Sep 2022 17:57:06 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3ADB3B03
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 14:56:03 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-34500e31ee3so137607317b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 14:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=FOdYXA0ZEZeFGxTEMOy2snMybODZGQ47ZcBKwefAZGA=;
-        b=GCSdO2MEVxK9Oj8yCp1RL84HIPE9phdOwXrJh29yO/AXhQFcrwmazIXaEN3Vvc8prJ
-         7ibgUM9AZ7+foHp1KylElJCOy7X9yOqmNEoW7PKfHsZtniYmCw55qKU76hK8tekk5OV/
-         rpRwlF6mZtZnitdMW/1TUt31NjUvXIKRx+OAAPaaAbd22IQE9mjLJJALlVwP2x9d3FbP
-         nobraqTLx7PMNnEsmxmWnHhZftRCorEBcPUzCc0FU86A2ew6qfEdVQQb0yplG2HmXB7n
-         gwXnVTHME+tj6Ho+35AFVkeKPDjAOgSq/s8Jm0l10Zike7UShj+w24OW5yulnPF/YWgB
-         l4zg==
+        bh=YYrJQHPp1VsbrnyKnikDXxJr0Q0IFfWdTrn7QSp/nlU=;
+        b=RAO9dBKDPKviMcOwBkkzZY0G3x+gnPOK29NFIOS/Zr8789LtLOlEaeHEybcNsvLdIW
+         K+pwExbWGqldW8BJjVtsPZMGTJR3YhH90i0Txv330av0oqQtT/I4/nvWGh5MKlakz2so
+         5hIN+nonzm6i3iZB181y8mY7MbESrP96/nYqECARK6XBLztCpkuitNQRkrC/fKBt390x
+         C1uQ3nyJhQju/9EuNJyjkAoZ68HF9wch5/WFjrih+g8E79RhgyzSuuDTd6bYOLqDJcZ2
+         y7uASan7GCfY1xHDXgLVyn2OJADPTnjC8NCdgKG5ywLhIO7aMrDjSH/GSa7QdsPmgHM1
+         CyIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=FOdYXA0ZEZeFGxTEMOy2snMybODZGQ47ZcBKwefAZGA=;
-        b=V6dsQxrWdKoWzVNjWclU0tEHSOCNsY0Y7AnysqCnVlplFUlO+SnEDgtFDVvpsfv7Pw
-         df7ExMrDmVLMZ7RD801dab3f94bcCvRhIsdx5kKvt8F3wpGFW7cebfgGPFcbrFBZA44d
-         hhWSdenktjD0OqFmlqO6e/RshfjQfcYYALhnnyPEPGtDQXR5K7/kRiXB1foGdohvfrii
-         3tA6gzR4Wka3mR+3+C+KEzcmR48lApEGjQhXWX9Fl2L8N7dLIPJA3B8r7ZxGdNYiukkD
-         0vIT4jp4+fZ+idxZiHMLNvjXVncN4X4xJhEWz488rsmVHWqRD66wsVTdnMp7WFnpO4ep
-         DgPg==
-X-Gm-Message-State: ACgBeo3yhOG5skzkYEMINuHht9XEKtR+bymlA60NgWYTCAjYLVwADijU
-        JW+amjkZjAOpAeHUKhw3h6VHmA/lt6VNZALmJw09zEobL14hlgbfmqnyItYySbqULM6UEeAHl0U
-        qzq4GmPnVAH/eMptFqO7ZMlkygM0z9qK/kphmjklE4s9Xil5/NlxAXKWHw2KeD0kqk4F3eaUgA+
-        NSqamKMueXXA==
-X-Google-Smtp-Source: AA6agR4cwjBEM5ngeMz8OJhUS51aCH+VLhWHgGYQpEix4smq/bn6oTZsK/+QG6LhZrt8Fuq/YMF07fwi7CBwTNUFS8U=
+        bh=YYrJQHPp1VsbrnyKnikDXxJr0Q0IFfWdTrn7QSp/nlU=;
+        b=ZddB5FSKqRJXAC3gD7woa5DSdEfhOUTW/uQV+JPUd2RLxEVkDC/JQk80+ME1du6RrW
+         d7YOxhLvVE1yk8qSagM5jySXB2WB/Si1AmzPb8QgwFjabVkH0jSEvq10q4y0DFcPK6un
+         5EWnaJOZD/PyKnY1wDOoeK1lMJxKhzw1Ore3qku5USVJvRSIp3zqwnE4fPRu+drjFx/u
+         Lyaeju831LqTTvEfJt4i76CYSfopanSM7EB+aDKMHAjWUunG4TtUAZXIbeqFs5u3MLW9
+         L94bOOwcT7TV8ajBfTqOHt5KK+rZ+nmL7tZnEShfDKR+UYiBM0F3I//knH30bpWm2jll
+         e1cA==
+X-Gm-Message-State: ACgBeo3k7/+pfDEwoRDt52ZglSXYCDMJOy5i/Wd9UWEUKRFrXkzY/PR8
+        7I9bKHu/AifccjTN2lNAAhams/GoNZ2+nDql6cdN0diY40ibTfovrP+bpX2SHGkIUjxGuk9ScoS
+        pnf7T9R1tr5KQKHrRaVlAKgx3uf3D5/AIULSnTPVexDnZyvNpa3jZg4emuwT8NiL4V75ROV8er7
+        yNV1HLi8+tcg==
+X-Google-Smtp-Source: AA6agR5Q1US6p1T5MS7XFebio75PXfPm+oTSo10BuqyTKkQ0gqAhJ38ETDbGBcDqV94PluTx9li4JMCPkaAkCGoLKLU=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:a4e4:e6ec:9fdd:1bdd])
- (user=samitolvanen job=sendgmr) by 2002:a81:5443:0:b0:329:cd12:e96 with SMTP
- id i64-20020a815443000000b00329cd120e96mr9699307ywb.68.1662674159576; Thu, 08
- Sep 2022 14:55:59 -0700 (PDT)
-Date:   Thu,  8 Sep 2022 14:55:02 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a05:6902:1543:b0:6a9:adf8:14f9 with
+ SMTP id r3-20020a056902154300b006a9adf814f9mr9806374ybu.271.1662674162251;
+ Thu, 08 Sep 2022 14:56:02 -0700 (PDT)
+Date:   Thu,  8 Sep 2022 14:55:03 -0700
 In-Reply-To: <20220908215504.3686827-1-samitolvanen@google.com>
-Message-Id: <20220908215504.3686827-21-samitolvanen@google.com>
+Message-Id: <20220908215504.3686827-22-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20220908215504.3686827-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2981; i=samitolvanen@google.com;
- h=from:subject; bh=TQl874bpqor9ywOwc/gV6IgIv3bUozCx00xHJLAs6To=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmS2MZhLrVqCh+oVTKnuRWIFqHKJ0AmFaxnTOHKh
- baPVjUaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpktgAKCRBMtfaEi7xW7qOnDA
- CmOfqxEdlesooL2UZiKRNbfdKmUYKJEkWYpZ39pIT4gX5llHPRn6ulSLkNp/mpKf88x/xhOklD9zlH
- GiLtZYFS8G8/uqM9YX0g5f2F4ep4e0WopNmnCl0DDaTTq8GwNtlmEfNaQHeZCcSBJww6He/cMp/Ek4
- lEZ0hLPA/m4qmzQ2GE5ZIqSBcloIoDguBz6X3Kg9m3rtsygaxc5/SrDQLqup2EhKK5G8FteV02jRgR
- CLIT0bxMG4+1eHVprQFdIAIkXReIiwySwVjaptn/WRx+Ky++ixFr+AQvmyRL+zPb0b3Z0H5RqKNMxD
- ZB8QlSghcEMwJdLW1QPU15rd6hUXWmIYz3cJdIjzotbK+4NrKYL2irVmwVJ6U1GRxISLh00K5ZGOXv
- w2rq6rP3uqyEX0O1uf2ZEOUb62+cdJ07dG0qCuXfCftAp7XvAgWFdtcbeA072ywsoMQaZrrooGxNMP
- MiWdBTEFRIWOc9uhAD+adP4VPsCu6//QntQqutTSkPLPQ=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1011; i=samitolvanen@google.com;
+ h=from:subject; bh=UWuLwE4y600ClTatyK0xTSLvu56hvYR9AUlhuy/RYBM=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmS2BBGj4qMjQc0TkhRxkWipukSgdHFHNJbxjALg
+ KA9XqJGJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpktgAKCRBMtfaEi7xW7tnDC/
+ 0YewJWckrPSkwmm2Cp5oCkhzPhtbyWs+Y0ti12HWfm4sxYzV1zNPdfoO/xlWW4YUT3EGNpRhm652XA
+ 1YZnjCMK8RJ9VL0Mkj7BJ885cDES9oNpu/gFc5tvXbign7Whrk+XzM/OStzrXx7yhwZYc+B8eIBZD7
+ /sv3RgkBqGX7aNahcU4xiVpdwE9rdGjjov/qxhkiKbltHSgKqBzPeAagsC/HXzYiAJlS/HUVSc/1Oh
+ USSeATQh0fDw+EKujE2ITbZC9M2xnRw4dltthWBXcJupkTYvL+AkR6N1b5Nym/rwwYCYftIuFUZyVF
+ EzVcnJCbq4gaQpyF85+NOzZUESoUrn0BLrMWYvfQae/Ekp6s0jQWwsIy18tgEV6VaDF8gS3nzAh6KX
+ 3zL1l5wpZ7U0i197vi++LJVnvNti2UHclotv6EWBHZkZyGdf34HOHcAgdCxorRqu6n4mbDVi3q+yzs
+ EEJlV55qqrvRL3C2yd4Mt1uIUXywud8dPE1BGXLm4eKII=
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Subject: [PATCH v5 20/22] x86: Add types to indirectly called assembly functions
+Subject: [PATCH v5 21/22] x86/purgatory: Disable CFI
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -87,102 +87,40 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_CFI_CLANG, assembly functions indirectly called
-from C code must be annotated with type identifiers to pass CFI
-checking. Define the __CFI_TYPE helper macro to match the compiler
-generated function preamble, and ensure SYM_TYPED_FUNC_START also
-emits ENDBR with IBT.
+Disable CONFIG_CFI_CLANG for the stand-alone purgatory.ro.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/x86/crypto/blowfish-x86_64-asm_64.S |  5 +++--
- arch/x86/include/asm/linkage.h           | 12 ++++++++++++
- arch/x86/lib/memcpy_64.S                 |  3 ++-
- 3 files changed, 17 insertions(+), 3 deletions(-)
+ arch/x86/purgatory/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/crypto/blowfish-x86_64-asm_64.S b/arch/x86/crypto/blowfish-x86_64-asm_64.S
-index 802d71582689..4a43e072d2d1 100644
---- a/arch/x86/crypto/blowfish-x86_64-asm_64.S
-+++ b/arch/x86/crypto/blowfish-x86_64-asm_64.S
-@@ -6,6 +6,7 @@
-  */
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 31c634a22818..58a200dc762d 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -55,6 +55,10 @@ ifdef CONFIG_RETPOLINE
+ PURGATORY_CFLAGS_REMOVE		+= $(RETPOLINE_CFLAGS)
+ endif
  
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- 
- .file "blowfish-x86_64-asm.S"
- .text
-@@ -141,7 +142,7 @@ SYM_FUNC_START(__blowfish_enc_blk)
- 	RET;
- SYM_FUNC_END(__blowfish_enc_blk)
- 
--SYM_FUNC_START(blowfish_dec_blk)
-+SYM_TYPED_FUNC_START(blowfish_dec_blk)
- 	/* input:
- 	 *	%rdi: ctx
- 	 *	%rsi: dst
-@@ -332,7 +333,7 @@ SYM_FUNC_START(__blowfish_enc_blk_4way)
- 	RET;
- SYM_FUNC_END(__blowfish_enc_blk_4way)
- 
--SYM_FUNC_START(blowfish_dec_blk_4way)
-+SYM_TYPED_FUNC_START(blowfish_dec_blk_4way)
- 	/* input:
- 	 *	%rdi: ctx
- 	 *	%rsi: dst
-diff --git a/arch/x86/include/asm/linkage.h b/arch/x86/include/asm/linkage.h
-index 73ca20049835..f484d656d34e 100644
---- a/arch/x86/include/asm/linkage.h
-+++ b/arch/x86/include/asm/linkage.h
-@@ -43,6 +43,18 @@
- 
- #endif /* __ASSEMBLY__ */
- 
-+#define __CFI_TYPE(name)					\
-+	SYM_START(__cfi_##name, SYM_L_LOCAL, SYM_A_NONE)	\
-+	.fill 11, 1, 0x90 ASM_NL				\
-+	.byte 0xb8 ASM_NL					\
-+	.long __kcfi_typeid_##name ASM_NL			\
-+	SYM_FUNC_END(__cfi_##name)
++ifdef CONFIG_CFI_CLANG
++PURGATORY_CFLAGS_REMOVE		+= $(CC_FLAGS_CFI)
++endif
 +
-+/* SYM_TYPED_FUNC_START -- use for indirectly called globals, w/ CFI type */
-+#define SYM_TYPED_FUNC_START(name)				\
-+	SYM_TYPED_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)	\
-+	ENDBR
-+
- /* SYM_FUNC_START -- use for global functions */
- #define SYM_FUNC_START(name)				\
- 	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)	\
-diff --git a/arch/x86/lib/memcpy_64.S b/arch/x86/lib/memcpy_64.S
-index d0d7b9bc6cad..dd8cd8831251 100644
---- a/arch/x86/lib/memcpy_64.S
-+++ b/arch/x86/lib/memcpy_64.S
-@@ -2,6 +2,7 @@
- /* Copyright 2002 Andi Kleen */
- 
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- #include <asm/errno.h>
- #include <asm/cpufeatures.h>
- #include <asm/alternative.h>
-@@ -27,7 +28,7 @@
-  * Output:
-  * rax original destination
-  */
--SYM_FUNC_START(__memcpy)
-+SYM_TYPED_FUNC_START(__memcpy)
- 	ALTERNATIVE_2 "jmp memcpy_orig", "", X86_FEATURE_REP_GOOD, \
- 		      "jmp memcpy_erms", X86_FEATURE_ERMS
+ CFLAGS_REMOVE_purgatory.o	+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_purgatory.o		+= $(PURGATORY_CFLAGS)
  
 -- 
 2.37.2.789.g6183377224-goog

@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F485B2A6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92A95B2A70
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiIHXeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S230454AbiIHXeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiIHXeD (ORCPT
+        with ESMTP id S231348AbiIHXeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Sep 2022 19:34:03 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B6C108721
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:31:46 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id q6-20020a17090311c600b0017266460b8fso150805plh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:31:46 -0700 (PDT)
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B34310F8DF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 16:31:47 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id s13-20020a056a00194d00b005385093da2dso10056250pfk.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 16:31:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=xeFgTKLEFiHOB/M2DDI+MkAiIXTDAhcWUCQwueHFFYo=;
-        b=fHJCkeC4xm2CCMxwGvZeMN4WIrs+Rz2fN6+vaYnp/UJ6pc1sAQQxxB/ouafFLTNMa6
-         MXdzZ23sWrlw3ZuFX7HcAqF3t16sutl3QssHRs5L2LQpy12bj7jTCU437CctdcJ3fn0r
-         /9k3/R5oCr9E0VQhnkD6WWrq206x+JtlVfHib8u9W3zuE98hMB0fiA+CKg5KGeGrz3Oi
-         V6fogMfEyvwtVfm4gEIOl008Vswek6Elst5RLuWsn4LenjRCUp0PSkqOwEWyt/PBHnVH
-         eHK98WSnISjOpeBHV+iHAK/vvyiKnLd5UF/UmByhMVoi/BBcD0hg8srk1A9Waqbz2yXx
-         +DUA==
+        bh=Kq7Ss9OAHHpQQ8yCW1BLkqtyFB//rSEYUTl89YUKn0Q=;
+        b=VhldITLk7+bmmPtIWtuWHo+WTW8MShqlxBof+v4NI1fiQ7tYJy9DThm2Wthntum6xd
+         OX7WZbYcykUhQV/ZZ4De7i4UGVtBVXZBZuoA21BmEAUJbSKeX0Cu+DzuKjz8KobjGe0y
+         SfjiTKYX9It2saLW/Pvcn+qs9Frb/0CxihE7N+6Mz9M3y/JM/MFdS12gF6yQnPpvlhoY
+         WQxs1oyr3FGqderPqn/KiJbJocAQUAvGoJGkGyegUZ/fas6swqYPtvx1er3IIz/5nazu
+         bVSrswS/KqcFzBiEA2Kpxftq/+vVbGQr018WTPyzCkx7lhKXG7pyhK+VSnflJ+39MGs9
+         QojQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=xeFgTKLEFiHOB/M2DDI+MkAiIXTDAhcWUCQwueHFFYo=;
-        b=reN1RKZfWOsaF4TJ27xCxvjTPG9zfhGPTLPWUoluoFBztX0L/Qf30MXer6jzMTa5LY
-         JDYszsUe086EDR74n8UWvni4BXiVz9IhpKGH+VExkkGz+2ngp/lcrnbXIDBALbQy9d4R
-         tJ1h2dUwpiqIl5o2WdUbMUKDmhbIufvekgyZ/O3Lfr6sPdhYZto8wHSuAbOAgGiaLtPn
-         6FM2U3BD0vZ2pohS5X1aWpYIGLiwtWapHmRt5NR/5rSM5SpKQuc4wHGjciM+vioMVf+R
-         PmQqwd6Uh9YycP2xH1tlpoEjvqi3LQwLp43H0oo/rFjL3JxRVuwnpwi3tsoDP9xOYRKY
-         ky2w==
-X-Gm-Message-State: ACgBeo1ulJSfjyASZhTMbryzxgcLjni6PQUt1vfdcONH9TdGR2ugFE2N
-        PT0nY7xl+sBnuketYvXyv8N3V1G8Zz0=
-X-Google-Smtp-Source: AA6agR5+KvZYz7gdURCU07mIkYGoV0EpUavYTtuEpBeF40snucz+v+X1NUyfoJ3tC7ZKV8JLUy5EoDi1KEU=
+        bh=Kq7Ss9OAHHpQQ8yCW1BLkqtyFB//rSEYUTl89YUKn0Q=;
+        b=Z1fNQEEZsME7myUXdF+4+dW9z2ha9coOdyfHOdGGJH8NFjFjsdVLz3PyjD35Xxza/s
+         sMwPLMJxuOWRMHQx90/LAwXNwPhGHtcCPC6ywGUa6fhynWiC7XWcFXBYgmvOLuvBQ8jZ
+         /kh0jO+USB4cg75mW0f14KoS3F7xMmMEd690naWcGQRMU/8FMwdIrWWbPgTHOe1A+Vm1
+         Qq+vGZQN+ByFW3sSbNAHUKWvrCvVKNGd2VJQ5FrU+wO3T82YKNzqhtZAA8mVpGwqB0rO
+         lGItUA6XcIHQxBPYrd9QfvhB9Jynhb81OX3V7M39+YgTe0cVEB6vBeMhMV54unBQPaSK
+         Nnlg==
+X-Gm-Message-State: ACgBeo2uT3nBnk810ChYSwN9LcluS1tSRM/D2EEjOVDMXXFBIsgbDIEE
+        e6Q++c0JCAo5dUmUzDnqwQVzPN+OM1c=
+X-Google-Smtp-Source: AA6agR4C0togMqSWJ7Nl/286XAZPOB2ZvwN9FkL/sTRhlyIbmFJwUqT44ToPUX3IgcTitRDZZTuhTkJl0Qw=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:e7c2:b0:1f5:85ab:938c with SMTP id
- kb2-20020a17090ae7c200b001f585ab938cmr6706565pjb.133.1662679905144; Thu, 08
- Sep 2022 16:31:45 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a62:ed08:0:b0:537:17a6:57aa with SMTP id
+ u8-20020a62ed08000000b0053717a657aamr11662126pfh.6.1662679906905; Thu, 08 Sep
+ 2022 16:31:46 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  8 Sep 2022 23:31:32 +0000
+Date:   Thu,  8 Sep 2022 23:31:33 +0000
 In-Reply-To: <20220908233134.3523339-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220908233134.3523339-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220908233134.3523339-4-seanjc@google.com>
-Subject: [PATCH 3/5] KVM: selftests: Remove unnecessary register shuffling in fix_hypercall_test
+Message-ID: <20220908233134.3523339-5-seanjc@google.com>
+Subject: [PATCH 4/5] KVM: selftests: Explicitly verify KVM doesn't patch
+ hypercall if quirk==off
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -69,65 +70,92 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use input constraints to load RAX and RBX when testing that KVM correctly
-does/doesn't patch the "wrong" hypercall.  There's no need to manually
-load RAX and RBX, and no reason to clobber them either (KVM is not
-supposed to modify anything other than RAX).
+Explicitly verify that KVM doesn't patch in the native hypercall if the
+FIX_HYPERCALL_INSN quirk is disabled.  The test currently verifies that
+a #UD occurred, but doesn't actually verify that no patching occurred.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/fix_hypercall_test.c | 22 +++++++------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+ .../selftests/kvm/x86_64/fix_hypercall_test.c | 35 ++++++++++++++-----
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-index 2512df357ab3..dde97be3e719 100644
+index dde97be3e719..5925da3b3648 100644
 --- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
-@@ -30,14 +30,11 @@ static uint64_t svm_do_sched_yield(uint8_t apic_id)
+@@ -21,8 +21,8 @@ static bool ud_expected;
+ 
+ static void guest_ud_handler(struct ex_regs *regs)
  {
- 	uint64_t ret;
- 
--	asm volatile("mov %1, %%rax\n\t"
--		     "mov %2, %%rbx\n\t"
--		     "svm_hypercall_insn:\n\t"
-+	asm volatile("svm_hypercall_insn:\n\t"
- 		     "vmmcall\n\t"
--		     "mov %%rax, %0\n\t"
--		     : "=r"(ret)
--		     : "r"((uint64_t)KVM_HC_SCHED_YIELD), "r"((uint64_t)apic_id)
--		     : "rax", "rbx", "memory");
-+		     : "=a"(ret)
-+		     : "a"((uint64_t)KVM_HC_SCHED_YIELD), "b"((uint64_t)apic_id)
-+		     : "memory");
- 
- 	return ret;
+-	GUEST_ASSERT(ud_expected);
+-	GUEST_DONE();
++	regs->rax = -EFAULT;
++	regs->rip += HYPERCALL_INSN_SIZE;
  }
-@@ -47,14 +44,11 @@ static uint64_t vmx_do_sched_yield(uint8_t apic_id)
+ 
+ extern unsigned char svm_hypercall_insn[HYPERCALL_INSN_SIZE];
+@@ -57,17 +57,18 @@ static void guest_main(void)
  {
- 	uint64_t ret;
+ 	unsigned char *native_hypercall_insn, *hypercall_insn;
+ 	uint8_t apic_id;
++	uint64_t ret;
  
--	asm volatile("mov %1, %%rax\n\t"
--		     "mov %2, %%rbx\n\t"
--		     "vmx_hypercall_insn:\n\t"
-+	asm volatile("vmx_hypercall_insn:\n\t"
- 		     "vmcall\n\t"
--		     "mov %%rax, %0\n\t"
--		     : "=r"(ret)
--		     : "r"((uint64_t)KVM_HC_SCHED_YIELD), "r"((uint64_t)apic_id)
--		     : "rax", "rbx", "memory");
-+		     : "=a"(ret)
-+		     : "a"((uint64_t)KVM_HC_SCHED_YIELD), "b"((uint64_t)apic_id)
-+		     : "memory");
+ 	apic_id = GET_APIC_ID_FIELD(xapic_read_reg(APIC_ID));
  
- 	return ret;
+ 	if (is_intel_cpu()) {
+ 		native_hypercall_insn = vmx_hypercall_insn;
+ 		hypercall_insn = svm_hypercall_insn;
+-		svm_do_sched_yield(apic_id);
++		ret = svm_do_sched_yield(apic_id);
+ 	} else if (is_amd_cpu()) {
+ 		native_hypercall_insn = svm_hypercall_insn;
+ 		hypercall_insn = vmx_hypercall_insn;
+-		vmx_do_sched_yield(apic_id);
++		ret = vmx_do_sched_yield(apic_id);
+ 	} else {
+ 		GUEST_ASSERT(0);
+ 		/* unreachable */
+@@ -75,12 +76,28 @@ static void guest_main(void)
+ 	}
+ 
+ 	/*
+-	 * The hypercall didn't #UD (guest_ud_handler() signals "done" if a #UD
+-	 * occurs).  Verify that a #UD is NOT expected and that KVM patched in
+-	 * the native hypercall.
++	 * If the quirk is disabled, verify that guest_ud_handler() "returned"
++	 * -EFAULT and that KVM did NOT patch the hypercall.  If the quirk is
++	 * enabled, verify that the hypercall succeeded and that KVM patched in
++	 * the "right" hypercall.
+ 	 */
+-	GUEST_ASSERT(!ud_expected);
+-	GUEST_ASSERT(!memcmp(native_hypercall_insn, hypercall_insn, HYPERCALL_INSN_SIZE));
++	if (ud_expected) {
++		GUEST_ASSERT(ret == (uint64_t)-EFAULT);
++
++		/*
++		 * Divergence should occur only on the last byte, as the VMCALL
++		 * (0F 01 C1) and VMMCALL (0F 01 D9) share the first two bytes.
++		 */
++		GUEST_ASSERT(!memcmp(native_hypercall_insn, hypercall_insn,
++				     HYPERCALL_INSN_SIZE - 1));
++		GUEST_ASSERT(memcmp(native_hypercall_insn, hypercall_insn,
++				    HYPERCALL_INSN_SIZE));
++	} else {
++		GUEST_ASSERT(!ret);
++		GUEST_ASSERT(!memcmp(native_hypercall_insn, hypercall_insn,
++			     HYPERCALL_INSN_SIZE));
++	}
++
+ 	GUEST_DONE();
  }
+ 
 -- 
 2.37.2.789.g6183377224-goog
 

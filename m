@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A79D5B18A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC785B18AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiIHJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S230053AbiIHJ3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiIHJ2y (ORCPT
+        with ESMTP id S230350AbiIHJ3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:28:54 -0400
+        Thu, 8 Sep 2022 05:29:30 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB8F5C5B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:28:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7BF2BCA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:29:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662629332;
+        s=mimecast20190719; t=1662629367;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6pyH+1DweH0nMohfwtdsKO0eIInaeC+MrJ2yhdvIVIg=;
-        b=fzbKTVRHRVoLSzaHPiHz8nS42z9XfBBowzh+/NmdIHFlcFvCxJeYJHMReb6KCANtywPklR
-        rkPRbMNQ84qxlMZDt0vyYFY773ppbeBWGKIdNI5v7m1LEVAhC3/vnj8LmRJvqCJFp4EEgs
-        1oPNC8MHAAnVWrFbJYS7i1FL5V2BEug=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=casXnlyfem/cMcq/zKr8AiPcnoA42iZlvAPreQZv3fs=;
+        b=bpdFaZ8S4+uUF7ycFdr5UgGj967cK9Kk2C4ITqGcMRP7OdsT6iNHa6fn4XbIK7fmV7E7Bh
+        sQ/UkWo/tZ1yt1un+fO39QOJtfC+0xWUfzoIM+XzCGN9A9lWAHSSk8Av72JgyyrWDjxL58
+        X9w/WBtdKc3MpLwdRj+zzMRW8lHdNfs=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-21-iMNaf_FeNeCb2EOqxLr-Ug-1; Thu, 08 Sep 2022 05:28:51 -0400
-X-MC-Unique: iMNaf_FeNeCb2EOqxLr-Ug-1
-Received: by mail-ej1-f69.google.com with SMTP id qw34-20020a1709066a2200b00730ca5a94bfso6091567ejc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 02:28:51 -0700 (PDT)
+ us-mta-561-pxDbEA7TNoyNu6U23WkJTA-1; Thu, 08 Sep 2022 05:29:25 -0400
+X-MC-Unique: pxDbEA7TNoyNu6U23WkJTA-1
+Received: by mail-ed1-f71.google.com with SMTP id m18-20020a056402511200b0044862412596so11002525edd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 02:29:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=6pyH+1DweH0nMohfwtdsKO0eIInaeC+MrJ2yhdvIVIg=;
-        b=EUtu16OALDYWRUT8DQl9s2Y4jUtrBKp8yiMrKo8Dt95AcFV2pYG4kWoF+m21exMnVe
-         DWy0tSiBuesiPHgJtzM+UUh0G1OqFxfqUpCM/cQYL72WIkRKTmg24aNOKzm+n5KgsqDZ
-         HkfQn79QAPs+z7Ms/J0IbY5GiWpTjmYVeKF83ESiFKoUwx+Bh+OSjOuNA1ySofM4LPlY
-         rQdWyEzlrjMlCN036M0rCNKXiDPKSujZ2BnjD93hyIIM3iohLtXziUF432YOu28eJIz+
-         FfvGupu141Br6wZHzhxbFgFpZgcBzu6Hn/YigsPSokrr+VtDpfsTivmt2EUOpieq3c/C
-         Ny4g==
-X-Gm-Message-State: ACgBeo0Q499lVcyxlIJAZcUwYMNrfhJ9eUTxYzgre9OEVZAxAo6Z7Ufn
-        ShcitdOPeU5H5v0Ue/4qCh+aMzGJ9VclkCA1UPaIkSVVyTJSI3vId7FbijYNF/PAp02OZrWoe05
-        GMC3waKpZ+ijQ7IIIcGAkdzhm
-X-Received: by 2002:a17:906:8449:b0:73d:d822:3085 with SMTP id e9-20020a170906844900b0073dd8223085mr5369158ejy.270.1662629330604;
-        Thu, 08 Sep 2022 02:28:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7Wqx7dLY0r3hzFtR5IWrOsk+V2dyDrecCouKaoHpMnQxuHvZVs9kJ1VqFNaHwbksWE2d5mfQ==
-X-Received: by 2002:a17:906:8449:b0:73d:d822:3085 with SMTP id e9-20020a170906844900b0073dd8223085mr5369126ejy.270.1662629330408;
-        Thu, 08 Sep 2022 02:28:50 -0700 (PDT)
+        bh=casXnlyfem/cMcq/zKr8AiPcnoA42iZlvAPreQZv3fs=;
+        b=cObIkDmf74ThXSW22gdxf6hNmLPE8N6P/r9VC+UExjmvbyhzJlZbg02Dazx5bVVmNe
+         OcU3Upkrh9g1yBPE+5padPsaD3ks+RG4SFy6bH8Y4+srvb2c6IC23KjimU+M8gZGraKS
+         4NGl4PMQDVShsRQSFmhwup4PKAv0+FRDmg3AGQq8HBedpr5sLK+BpBj2qDwkUnGZ5Q3B
+         E2qF54QXNSe62dIxEH3C0ashuhDUb6lLcFxiuYQBYzVac8yxeXHX1fDySygJRf9B/IbQ
+         twoeJe7sXQOMC4P5D7/TRjkdujVshIonyxRBIdkzPR9l5a8kwIyyX1ms7pjjFaqiRjP3
+         vf3A==
+X-Gm-Message-State: ACgBeo2kDTV9XyLT1JJuZU/BVniGjCS0YQcLSS5xGwyE/27MfKCBwfa2
+        MLl5XIOM3xzdD3wU+QxGQcRkQ9KwLsQTX5G0WYBW8gON6Eaw24UhPHNAKmPWo+osbFam3p6toRN
+        hMWHk6ssSYwnP2Tv+2uKmaYZw
+X-Received: by 2002:a05:6402:e96:b0:443:a086:e3e8 with SMTP id h22-20020a0564020e9600b00443a086e3e8mr6634983eda.330.1662629364653;
+        Thu, 08 Sep 2022 02:29:24 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7dC5R82XPS91l4CxPlXPGCcS/hi02/tOGJdVWXrPtNkFqqjr46QX0/6Sg6lODyX2MG2aj1BQ==
+X-Received: by 2002:a05:6402:e96:b0:443:a086:e3e8 with SMTP id h22-20020a0564020e9600b00443a086e3e8mr6634970eda.330.1662629364485;
+        Thu, 08 Sep 2022 02:29:24 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id vh3-20020a170907d38300b00731582babcasm1007364ejc.71.2022.09.08.02.28.49
+        by smtp.gmail.com with ESMTPSA id w6-20020a50c446000000b004476c19d126sm12139269edf.38.2022.09.08.02.29.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 02:28:49 -0700 (PDT)
-Message-ID: <fd1c459c-0c49-8fee-f71e-b2756aad84e9@redhat.com>
-Date:   Thu, 8 Sep 2022 11:28:48 +0200
+        Thu, 08 Sep 2022 02:29:23 -0700 (PDT)
+Message-ID: <72acff59-81f0-f466-6197-d3e993f051ac@redhat.com>
+Date:   Thu, 8 Sep 2022 11:29:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v1 0/8] ACPI: unify _UID handling as integer
+Subject: Re: [PATCH v1 8/8] efi/dev-path-parser: Refactor _UID handling to use
+ acpi_dev_uid_to_integer()
 Content-Language: en-US
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
@@ -89,8 +90,9 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Robert Moore <robert.moore@intel.com>,
         Wolfram Sang <wsa@kernel.org>
 References: <20220907164606.65742-1-andriy.shevchenko@linux.intel.com>
+ <20220907164606.65742-9-andriy.shevchenko@linux.intel.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220907164606.65742-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220907164606.65742-9-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -105,53 +107,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 9/7/22 18:45, Andy Shevchenko wrote:
-> This series is about unification on how we handle ACPI _UID when
-> it's known to be an integer-in-the-string.
+On 9/7/22 18:46, Andy Shevchenko wrote:
+> ACPI utils provide acpi_dev_uid_to_integer() helper to extract _UID as
+> an integer. Use it instead of custom approach.
 > 
-> The idea of merging either all via ACPI tree, or (which I prefer)
-> taking ACPI stuff for v6.1 while the rest may be picked up later
-> on by respective maintainers separately.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/firmware/efi/dev-path-parser.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> Partially compile-tested (x86-64).
-> 
-> Andy Shevchenko (8):
->   ACPI: utils: Add acpi_dev_uid_to_integer() helper to get _UID as
->     integer
->   ACPI: LPSS: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   ACPI: x86: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   i2c: amd-mp2-plat: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->   i2c: mlxbf: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   perf: qcom_l2_pmu: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
->   spi: pxa2xx: Refactor _UID handling to use acpi_dev_uid_to_integer()
->   efi/dev-path-parser: Refactor _UID handling to use
->     acpi_dev_uid_to_integer()
-> 
->  drivers/acpi/acpi_lpss.c               | 15 ++++++------
->  drivers/acpi/utils.c                   | 24 ++++++++++++++++++
->  drivers/acpi/x86/utils.c               | 14 ++++++++---
->  drivers/firmware/efi/dev-path-parser.c | 10 +++++---
->  drivers/i2c/busses/i2c-amd-mp2-plat.c  | 27 +++++++-------------
->  drivers/i2c/busses/i2c-mlxbf.c         | 19 +++++---------
->  drivers/perf/qcom_l2_pmu.c             |  7 +++---
->  drivers/spi/spi-pxa2xx.c               | 34 +++++++-------------------
->  include/acpi/acpi_bus.h                |  1 +
->  include/linux/acpi.h                   |  5 ++++
->  10 files changed, 81 insertions(+), 75 deletions(-)
-> 
+> diff --git a/drivers/firmware/efi/dev-path-parser.c b/drivers/firmware/efi/dev-path-parser.c
+> index eb9c65f97841..113b3ca1bd76 100644
+> --- a/drivers/firmware/efi/dev-path-parser.c
+> +++ b/drivers/firmware/efi/dev-path-parser.c
+> @@ -15,9 +15,11 @@
+>  static long __init parse_acpi_path(const struct efi_dev_path *node,
+>  				   struct device *parent, struct device **child)
+>  {
+> -	char hid[ACPI_ID_LEN], uid[11]; /* UINT_MAX + null byte */
+>  	struct acpi_device *adev;
+>  	struct device *phys_dev;
+> +	char hid[ACPI_ID_LEN];
+> +	long ret;
 
-Thanks, patches 1-7 look good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-for patches 1-7.
-
-I have one small remark for patch 8, which I will send in
-a reply to patch 8.
+"long ret" should be "int ret" here since that is what acpi_dev_uid_to_integer()
+returns.
 
 Regards,
 
 Hans
+
+
+> +	u64 uid;
+>  
+>  	if (node->header.length != 12)
+>  		return -EINVAL;
+> @@ -27,12 +29,12 @@ static long __init parse_acpi_path(const struct efi_dev_path *node,
+>  		'A' + ((node->acpi.hid >>  5) & 0x1f) - 1,
+>  		'A' + ((node->acpi.hid >>  0) & 0x1f) - 1,
+>  			node->acpi.hid >> 16);
+> -	sprintf(uid, "%u", node->acpi.uid);
+>  
+>  	for_each_acpi_dev_match(adev, hid, NULL, -1) {
+> -		if (adev->pnp.unique_id && !strcmp(adev->pnp.unique_id, uid))
+> +		ret = acpi_dev_uid_to_integer(adev, &uid);
+> +		if (ret == -ENODATA && node->acpi.uid == 0)
+>  			break;
+> -		if (!adev->pnp.unique_id && node->acpi.uid == 0)
+> +		if (ret == 0 && node->acpi.uid == uid)
+>  			break;
+>  	}
+>  	if (!adev)
 

@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68E15B295D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B305B2923
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiIHWbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S229906AbiIHWRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiIHWa5 (ORCPT
+        with ESMTP id S229729AbiIHWQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:30:57 -0400
-X-Greylist: delayed 913 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Sep 2022 15:30:54 PDT
-Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [216.12.86.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F45B284E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:30:53 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 18:15:39 -0400
-From:   Rich Felker <dalias@libc.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Mundt <lethal@linux-sh.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] sh: machvec: Use char[] for section boundaries
-Message-ID: <20220908221538.GD8773@brightrain.aerifal.cx>
-References: <20220907234345.96798-1-keescook@chromium.org>
+        Thu, 8 Sep 2022 18:16:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCD0E9144
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:16:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F0B4B822A6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 22:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63755C433C1;
+        Thu,  8 Sep 2022 22:16:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662675415;
+        bh=JE10mbUSQvV4SLEVtxGEewRCL7LxHQ8Z4Hk4Ug6Gx40=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bqNr4u8E7dl2ZhOS8hXrXPNG6imPpAFM+Tm1VQ8hnxaegmOa2M82ra44QQRl7/JIa
+         WmrPKGvDyepk0B6onw7WPRU3Dbpc2DFUyD2EeyhDrmbvLZ4kdq5CTsFhBp4p5gSNFd
+         SRHwFAr9HSNX8Eb2fndf9HjwrLKHrW3jMHWbWu7DETrZcEp9+1CVPspNcV8xv3Hb6g
+         A/rOrbpG+IyCjtG1F7pTuVdkEXSoNWON5b7Ns7+WkHmpMKKFtriaH3JehvE8D8kS+3
+         gAjoBjzWqZkdnO7y0lNbwA7zehcDhXhJ8dh2dDRUCQ4b82+/zBB2Ii4R1woupaxmx0
+         dB1JwodMRvxzw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Xin Hao <xhao@linux.alibaba.com>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon/sysfs: change few functions execute order
+Date:   Thu,  8 Sep 2022 22:16:53 +0000
+Message-Id: <20220908221653.131120-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220908151042.239189ddb1635c0f598c6fd2@linux-foundation.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907234345.96798-1-keescook@chromium.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 04:43:45PM -0700, Kees Cook wrote:
-> As done for other sections, define the extern as a character array,
-> which relaxes many of the compiler-time object size checks, which would
-> otherwise assume it's a single long. Solves the following build error:
+On Thu, 8 Sep 2022 15:10:42 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+
+> On Thu,  8 Sep 2022 18:49:47 +0000 SeongJae Park <sj@kernel.org> wrote:
 > 
-> arch/sh/kernel/machvec.c: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]:  => 105:33
-
-LGMT. This is the approach I recommend for this general type of
-mechanism. So,
-
-Acked-by: Rich Felker <dalias@libc.org>
-
-Since I haven't been on top of collating patches for upstreaming, I'd
-be happy if anyone else wants to take this in their tree before I get
-back to it.
-
-Rich
-
-
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: linux-sh@vger.kernel.org
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Link: https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2209050944290.964530@ramsan.of.borg/
-> Fixes: 9655ad03af2d ("sh: Fixup machvec support.")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/sh/include/asm/sections.h |  2 +-
->  arch/sh/kernel/machvec.c       | 10 +++++-----
->  2 files changed, 6 insertions(+), 6 deletions(-)
+> > Hi Xin,
+> > 
+> > On Thu, 8 Sep 2022 16:19:32 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+> > 
+> > > These nr_{schemes,regions,contexts,kdamonds}_store() functions are both call
+> > 
+> > checkpatch complains as below:
+> > 
+> >     WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+> >     #10:
+> >     These nr_{schemes,regions,contexts,kdamonds}_store() functions are both call
 > 
-> diff --git a/arch/sh/include/asm/sections.h b/arch/sh/include/asm/sections.h
-> index 8edb824049b9..0cb0ca149ac3 100644
-> --- a/arch/sh/include/asm/sections.h
-> +++ b/arch/sh/include/asm/sections.h
-> @@ -4,7 +4,7 @@
->  
->  #include <asm-generic/sections.h>
->  
-> -extern long __machvec_start, __machvec_end;
-> +extern char __machvec_start[], __machvec_end[];
->  extern char __uncached_start, __uncached_end;
->  extern char __start_eh_frame[], __stop_eh_frame[];
->  
-> diff --git a/arch/sh/kernel/machvec.c b/arch/sh/kernel/machvec.c
-> index d606679a211e..57efaf5b82ae 100644
-> --- a/arch/sh/kernel/machvec.c
-> +++ b/arch/sh/kernel/machvec.c
-> @@ -20,8 +20,8 @@
->  #define MV_NAME_SIZE 32
->  
->  #define for_each_mv(mv) \
-> -	for ((mv) = (struct sh_machine_vector *)&__machvec_start; \
-> -	     (mv) && (unsigned long)(mv) < (unsigned long)&__machvec_end; \
-> +	for ((mv) = (struct sh_machine_vector *)__machvec_start; \
-> +	     (mv) && (unsigned long)(mv) < (unsigned long)__machvec_end; \
->  	     (mv)++)
->  
->  static struct sh_machine_vector * __init get_mv_byname(const char *name)
-> @@ -87,8 +87,8 @@ void __init sh_mv_setup(void)
->  	if (!machvec_selected) {
->  		unsigned long machvec_size;
->  
-> -		machvec_size = ((unsigned long)&__machvec_end -
-> -				(unsigned long)&__machvec_start);
-> +		machvec_size = ((unsigned long)__machvec_end -
-> +				(unsigned long)__machvec_start);
->  
->  		/*
->  		 * Sanity check for machvec section alignment. Ensure
-> @@ -102,7 +102,7 @@ void __init sh_mv_setup(void)
->  		 * vector (usually the only one) from .machvec.init.
->  		 */
->  		if (machvec_size >= sizeof(struct sh_machine_vector))
-> -			sh_mv = *(struct sh_machine_vector *)&__machvec_start;
-> +			sh_mv = *(struct sh_machine_vector *)__machvec_start;
->  	}
->  
->  	pr_notice("Booting machvec: %s\n", get_system_type());
-> -- 
-> 2.34.1
+> I fix that sort of thing.  A lot ;)
+
+Appreciate your efforts always.  If you need any help from my side, please let
+me know at any time.
+
+> 
+> > > kstrtoint() to get relative values from sysfs interface, if it return an
+> > > error, there get kobject instance would be meaningless through 'container_of'.
+> > 
+> > I was thinking the compiler could do that kind of optimization on its own, so I
+> > preferred to make the code shorter.
+> 
+> Yes, the compiler will do this.
+> 
+> > This change makes the code slightly longer, while the benefit of the change is
+> > unclear.  I'd like to keep it as is unless we get some clear benefit of this?
+> 
+> I find it a readability improvement.  Puts the initialization in a more
+> appropriate place and avoids those nasty tricks to prevent unreasonable
+> line lengths.
+
+Agreed.
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ

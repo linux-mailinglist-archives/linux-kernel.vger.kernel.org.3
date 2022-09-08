@@ -2,71 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB265B1271
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A645B1270
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiIHCZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 22:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S229810AbiIHCZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 22:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiIHCZa (ORCPT
+        with ESMTP id S229513AbiIHCZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 22:25:30 -0400
-Received: from m139.mail.163.com (m139.mail.163.com [220.181.13.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 948CC7AC17
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 19:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=qbJYb
-        4bVITOg8OhdAmppbUTTwKaAeKN83YyC043y728=; b=GMDvzX4NaCU+1oNwwETLL
-        uk25iw974lityHaS4YJXlj1aKrHi3rYzxWu6sDsGCKiWVmGf+LYaAS5FqiBzVC9a
-        +/mM6rPpQjoixn1y7HPy4o1/QWDZLzkBoXuuX6OxQtlDaDOhoDK7jD1a/MnlXmsD
-        A9PWkYEsa0b0/3Bekmcj0g=
-Received: from 13667453960$163.com ( [116.128.244.169] ) by
- ajax-webmail-wmsvr9 (Coremail) ; Thu, 8 Sep 2022 10:24:55 +0800 (CST)
-X-Originating-IP: [116.128.244.169]
-Date:   Thu, 8 Sep 2022 10:24:55 +0800 (CST)
-From:   "Yi Jiangshan" <13667453960@163.com>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     richard.genoud@gmail.com, jirislaby@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Jiangshan Yi" <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re:Re: [PATCH] tty: serial: atmel: fix spelling typo in comment
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <YxiP3NfgH+2iIiXy@kroah.com>
-References: <20220906063957.2951323-1-13667453960@163.com>
- <YxiP3NfgH+2iIiXy@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Wed, 7 Sep 2022 22:25:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB35274CF6;
+        Wed,  7 Sep 2022 19:25:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F47861B38;
+        Thu,  8 Sep 2022 02:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC622C433C1;
+        Thu,  8 Sep 2022 02:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662603919;
+        bh=PWwh/YXG9dx0dtWtHG3/yHBED6i5hSGCgtNE2Z2JIEw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IIACQOWpPN4boCxf86cEOuTjUAmlBp3ujxTTDa72QX6A6qpHmsr9l7Vrs2mZqcFiB
+         2bSH/iR5Uba+LM9ltYToBi1SNZSQrcgsjcDlOtDbOcL9/pveePKU0iKQxH6msIqVG0
+         55D+rm0/tOW01PHBX9dRVxNZCnemoDMYhEVlD3589yAPlM1kSV0IbKKtf8QTe2aguM
+         4o2ugbD6hcPcOKJ7GgkGG7T5N0tDY2WpmMB7qP2MEqoROoEMnMk/R8MM7xC9uSbs6j
+         uHEnP3wdFEheXflnL+3E1J9JSfXI/lgwXKAQe4P7pQFTpGIN0tHkNlgLD0v2bRPYTU
+         ZKAzi4usP643Q==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, bigeasy@linutronix.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V4 0/9] riscv: Add GENERIC_ENTRY, irq stack support
+Date:   Wed,  7 Sep 2022 22:24:58 -0400
+Message-Id: <20220908022506.1275799-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Message-ID: <d600b6b.e8c.1831aea231e.Coremail.13667453960@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: CcGowABHJ153UhljI3YqAA--.50479W
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiyBd2+1p7HojPGAACsw
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CkF0IDIwMjItMDktMDcgMjA6MzQ6MzYsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
-bi5vcmc+IHdyb3RlOgo+T24gVHVlLCBTZXAgMDYsIDIwMjIgYXQgMDI6Mzk6NTdQTSArMDgwMCwg
-SmlhbmdzaGFuIFlpIHdyb3RlOgo+PiBGcm9tOiBKaWFuZ3NoYW4gWWkgPHlpamlhbmdzaGFuQGt5
-bGlub3MuY24+Cj4+IAo+PiBGaXggc3BlbGxpbmcgdHlwbyBpbiBjb21tZW50Lgo+PiAKPj4gUmVw
-b3J0ZWQtYnk6IGsyY2kgPGtlcm5lbC1ib3RAa3lsaW5vcy5jbj4KPgo+V2hhdCBpcyAiazJjaSI/
-CgpUaGUgazJjaSBpcyBhbiBhdXRvbWF0ZWQgY29tcGlsYXRpb24sIGRldGVjdGlvbiBhbmQgdGVz
-dGluZyBwbGF0Zm9ybSBidWlsdCBieSB0aGUgY29tcGFueaGjSnVzdCBsaWtlIHRoZSBrZXJuZWwg
-dGVzdCByb2JvdCBidWlsdCBieSBJbnRlbKGjClNvIEkgd3JpdGUgbGlrZSB0aGlzo7oKUmVwb3J0
-ZWQtYnk6IGsyY2kgPGtlcm5lbC1ib3RAa3lsaW5vcy5jbj4KUmVmZXIgdG8gdGhlIGZvbGxvd2lu
-ZzoKUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPgpEb2N1bWVu
-dGF0aW9uL3Byb2Nlc3MvcmVzZWFyY2hlci1ndWlkZWxpbmVzLnJzdAoKdGhhbmtzLAoKSmlhbmdz
-aGFuIFlp
+From: Guo Ren <guoren@linux.alibaba.com>
+
+The patches convert riscv to use the generic entry infrastructure from
+kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
+prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+feature for the IRQ_STACKS config. You can try it directly with [1].
+
+[1] https://github.com/guoren83/linux/tree/generic_entry_v4
+
+V4:
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Ziji)
+
+V3: https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
+
+V2: https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1: https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Guo Ren (8):
+  riscv: elf_kexec: Fixup compile warning
+  riscv: compat_syscall_table: Fixup compile warning
+  riscv: ptrace: Remove duplicate operation
+  riscv: traps: Add noinstr to prevent instrumentation inserted
+  riscv: convert to generic entry
+  riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+  riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+  riscv: Add config of thread stack size
+
+ arch/riscv/Kconfig                    |  19 ++
+ arch/riscv/include/asm/csr.h          |   1 -
+ arch/riscv/include/asm/entry-common.h |   8 +
+ arch/riscv/include/asm/irq.h          |   3 +
+ arch/riscv/include/asm/ptrace.h       |  10 +-
+ arch/riscv/include/asm/stacktrace.h   |   5 +
+ arch/riscv/include/asm/syscall.h      |   6 +
+ arch/riscv/include/asm/thread_info.h  |  19 +-
+ arch/riscv/include/asm/vmap_stack.h   |  28 +++
+ arch/riscv/kernel/Makefile            |   1 +
+ arch/riscv/kernel/elf_kexec.c         |   2 +-
+ arch/riscv/kernel/entry.S             | 255 +++++---------------------
+ arch/riscv/kernel/irq.c               |  75 ++++++++
+ arch/riscv/kernel/ptrace.c            |  41 -----
+ arch/riscv/kernel/signal.c            |  21 +--
+ arch/riscv/kernel/sys_riscv.c         |  27 +++
+ arch/riscv/kernel/traps.c             |  19 +-
+ arch/riscv/mm/fault.c                 |  12 +-
+ 18 files changed, 263 insertions(+), 289 deletions(-)
+ create mode 100644 arch/riscv/include/asm/entry-common.h
+ create mode 100644 arch/riscv/include/asm/vmap_stack.h
+
+-- 
+2.36.1
+

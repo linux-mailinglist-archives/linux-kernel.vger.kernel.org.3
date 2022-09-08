@@ -2,122 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616F45B2884
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 23:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF7D5B2888
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 23:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiIHVZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 17:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S230028AbiIHV1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 17:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiIHVZR (ORCPT
+        with ESMTP id S229909AbiIHV1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 17:25:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A35E9C217
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 14:25:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15704B822A3
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 21:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6281AC433C1;
-        Thu,  8 Sep 2022 21:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662672313;
-        bh=PIkwN801hWDtiC90RvyMfOz9A3fCD2G50BPGSmF8eQg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=okDFr2aBiUNfcNhypfgsJPqPJRc9nV0bxDgmDYYW9Qq1xKz0E3Cdtw+0fuoUvNXfp
-         1bw0yYAMvKkCjwbT4rtH6y0a08ADcMA2a0vLuI6HQp0ApugBfRNTC7DBMl2lk3G1uO
-         uQ0WEP6Ijb8e9ag0I8g5yXtTYnqQUQNBw9E012ewMBgkVWrNq7O4cyvsCe4VxaLVMp
-         4b44hugJ9nR04/F4un5dF75biEaeYm14zQKqgRob0fOE+o7TCFAOs8yBh687zQ5Z20
-         b81HJNV7HJ+/diwsA/ojgnGXhEj5dXbTaYbx22CDgxs3idho6lvxAYULiVo/gJCDv4
-         2UW190/hk89aQ==
-Message-ID: <dbef29b2-ab0a-c3df-638c-381916a0d15a@kernel.org>
-Date:   Thu, 8 Sep 2022 23:25:08 +0200
+        Thu, 8 Sep 2022 17:27:46 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EAAA5998
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 14:27:45 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id 9so15948626plj.11
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 14:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=tNz6sUDLYT3e7yFiPMDST01YGryWrmTyyL5wc2tCzUU=;
+        b=QB56rA49XIYYaL+5n416TMQR7QkRyq6IFKkYOBPOFtLfRjvNWbmBfbSlh78sxydW2L
+         h6N3MEe7L4GOxCW/I1NzmGXcj/9r4QjZ7GFv0KGR91ZVWB709QdDcF+NmmIVOjSEffkH
+         JqRI/x8AM2OCx7pFnJhYBNJJum32YhFHknGlJpYI9SNEcUbkP6375EmQEZZfZz3/RXce
+         y7fA536hPxWYWnWxvwInF+h9sclTQ1UjCus6E8h+th1CbQkw/TnKEGpmdbb507jIO8Bm
+         BZLhq6jOGhjwwfrQAczJg/xJ6M5sso2sj5hd+kNSarh/6aH6wJkgCu9PCkhz3O8Mh/Bl
+         ItgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=tNz6sUDLYT3e7yFiPMDST01YGryWrmTyyL5wc2tCzUU=;
+        b=iepFACkYWzsRh2XxuDe3Y52APH6KL9z4m8ThKl4qkfE3jzG5BicMqL9sp9eelpTEnV
+         N1KYgraXRZU3aS8iIJFpBBUzTdbhi9Kt89R8uWk7LYFjhsT573TTqUn5wyOmjHJh9/b1
+         GzQUeUSl4/h6RkcWVtO0gEs67D6JwNGcBXlfAcUQ+nDG4/4PCYhR6D5TFx81c4Dk1hdp
+         L0qC1txaf+diM8gyaSTvOPqp/Bribw0QV49Ab32iIc/TqG667J0z8S0P+uU4eadrb4Gb
+         MwrGJnZGQZH+/aKhic53zMPttB4r9wiDqUtVZiu+qfKQHS2UgQ2AwyqsfdpmWmOZOlzA
+         Gjiw==
+X-Gm-Message-State: ACgBeo1Q7KqLUYPGLT2kyT5iS3w9a/7JyKAywvWs1Go1xcvpexyt/d7a
+        5mHhR0kHq6wA/SgPmEpI3ylK2g==
+X-Google-Smtp-Source: AA6agR5MBlEyYviP0pTmj23mtLYE6mNlvK8rEHr8k1m8jsw5q6vkh+f/KENStEHl2JgCeYf3ZW9H/g==
+X-Received: by 2002:a17:902:ce8b:b0:177:f1f0:8914 with SMTP id f11-20020a170902ce8b00b00177f1f08914mr5516364plg.137.1662672464552;
+        Thu, 08 Sep 2022 14:27:44 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id f195-20020a6238cc000000b0053b850b17c8sm62707pfa.152.2022.09.08.14.27.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 14:27:43 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 14:27:38 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        drjones@redhat.com
+Subject: Re: [V1 PATCH 2/5] selftests: kvm: Introduce kvm_arch_main and
+ helpers
+Message-ID: <YxpeSnTrLGPz1sjn@google.com>
+References: <20220903012849.938069-1-vannapurve@google.com>
+ <20220903012849.938069-3-vannapurve@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
-Content-Language: en-US
-To:     Muchun Song <muchun.song@linux.dev>, Chao Yu <chao@kernel.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, jaegeuk@kernel.org,
-        Chao Yu <chao.yu@oppo.com>, stable@kernel.org,
-        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com,
-        David Rientjes <rientjes@google.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>
-References: <20220830141009.150075-1-chao@kernel.org>
- <BAC9CE6A-5873-429F-ACE2-E0A9E507D807@linux.dev>
-From:   "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <BAC9CE6A-5873-429F-ACE2-E0A9E507D807@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220903012849.938069-3-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 05:09, Muchun Song wrote:
-> 
-> 
->> On Aug 30, 2022, at 22:10, Chao Yu <chao@kernel.org> wrote:
+On Sat, Sep 03, 2022 at 01:28:46AM +0000, Vishal Annapurve wrote:
+> Introduce following APIs:
+> 1) kvm_arch_main : to be called at the startup of each test.
+> 2) kvm_arch_post_vm_load: called after guest elf image is loaded into
+>    memory to populate any global state in guest memory.
 
-Please use scripts/get_maintainer.pl next time, I could have missed this.
-
->> From: Chao Yu <chao.yu@oppo.com>
->> 
->> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
->> out-of-memory, if it fails, return errno correctly rather than
->> triggering panic via BUG_ON();
-> 
-> I tend to agree with you. A mount operation shouldn’t panic the
-> kernel.
-
-Hmm kmalloc(64) shouldn't normally due that due to the the underlying page
-allocation falling into the "too small to fail" category, wonder if
-syzkaller was doing anything special here?
-
-But yeah we should get rid of all BUG_ONs eventually, just not sure if
-stable@ is needed here.
-
->> 
->> kernel BUG at mm/slub.c:5893!
->> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->> 
->> Call trace:
->> sysfs_slab_add+0x258/0x260 mm/slub.c:5973
->> __kmem_cache_create+0x60/0x118 mm/slub.c:4899
->> create_cache mm/slab_common.c:229 [inline]
->> kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
->> kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
->> f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
->> f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
->> f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
->> mount_bdev+0x1b8/0x210 fs/super.c:1400
->> f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
->> legacy_get_tree+0x30/0x74 fs/fs_context.c:610
->> vfs_get_tree+0x40/0x140 fs/super.c:1530
->> do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->> path_mount+0x358/0x914 fs/namespace.c:3370
->> do_mount fs/namespace.c:3383 [inline]
->> __do_sys_mount fs/namespace.c:3591 [inline]
->> __se_sys_mount fs/namespace.c:3568 [inline]
->> __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
->> 
->> Cc: <stable@kernel.org>
->> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
->> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> 
-> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-> 
-> Thanks.
-> 
-> 
-
+nit: Can you throw the post_vm_load in a separate commit? It's a
+logically distinct change. Also suggest naming it
+kvm_arch_post_vm_elf_load() to make it obvious it runs after
+kvm_vm_elf_load().

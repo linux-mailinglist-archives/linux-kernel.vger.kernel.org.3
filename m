@@ -2,269 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AA45B223C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB265B2243
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbiIHP3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S231641AbiIHP3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiIHP2i (ORCPT
+        with ESMTP id S231549AbiIHP3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:28:38 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBB21203DE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:27:35 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id i26so12580339lfp.11
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 08:27:34 -0700 (PDT)
+        Thu, 8 Sep 2022 11:29:07 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DADF1F09;
+        Thu,  8 Sep 2022 08:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662650875; x=1694186875;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=XiE5EqExJhlO64X7BZaUX7O9YHaSOxysO6FLbSSsdlE=;
+  b=IODL0yXRPPcYx5o7gseHkWhu+POG/GtfoaWFAOJ/ohSsblZ6xlSUNNq7
+   5z5mwIfZMTIc686ll5774nNhEY7Ng5FeARRKqWbYboRHhFImm3yULgrwb
+   +JGnyrTmz5WVgqULHn1nElc3PxGDY6I10DrI2C3Pf0UVwdm2k6YnYUv6d
+   lMZiIEGLnYd9H8A4XGKkUntTDrZrm0pmnJV2YoDTo/pt83D7kcf1i+zel
+   /WetYzBQk0eOaz1bz9P66I/S1p/w0kGNnw+2J4j4SaWjXge/QY429/wzH
+   uvNc3he2DL5AnnM2E7+VFGz3QrUYXoCK7wXNt0ja0fu3ees6gz4e2DvbB
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="179714305"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 08:27:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 8 Sep 2022 08:27:48 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Thu, 8 Sep 2022 08:27:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SpoWxFRTZhCL/Qt+s07fDf0qcw4lmOqHGktY1iyyaOtZh2A7NY0AkygLfffBC1glzAFrxyPHca3sZKSGRtv80m9EZ7Jcz1zxblVBTCknFOPNLnHQr4T18f8eiLwr1UAw5LNDRRvnXMm8GKFQ8xHyfhnGMNWb5r8xpgGXZhMcBVFQ+C3vAyudDuw3WONluENwMg64BQI1OeCiAT2CzFrlrk5+yH+OjvFC7pocB6hOWIyq+I/L8DaeYwN6RtlgvaerWLaX7cV60u8Kr+Lky/LF78dYbPwUdRxcwfPiglEFXe1KsDxGsak0T2Ro+gJhNGNBfoHIxK8WQRISAqDUaif6tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XiE5EqExJhlO64X7BZaUX7O9YHaSOxysO6FLbSSsdlE=;
+ b=TUpuNLaWnshuTx9N6WXQYXRgtweLM/xt0xypDx0dHfhszL3n+XagpLCPIY+/vC5kV+UlC0ko15RdTWeZC80EaZSS8rCvyJXyFVC08NrH3jsFwMvLDvXiUfH/B+wAsJ/tQyYAElsBdgxNv6KXjb5GjkBFjDJSziSm0YQbrCxW9aTcnuL3TWLxbM4tZBVaahS57l6MJPTnzrcI+ZnqYMkQsiOj1LaRC5/Uem+miMUsiyIZdvbDXmdU7sGjRxKqJl3bp/msC9VWr7i1CG1znseoQItAzYhe0s4GsaQHj5/uy50mOY4Vw1f4sejRA4aJ4sYKIQ2nwA3/8+BMaJSXuv7Hiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=GLjz+jpxG6Z7GkqektuPsextgrhLY3boxm/7UAEJFuA=;
-        b=QHTpkOmqk5aefGB0YRTIi1kYEfHygKIBs0Yc0X5PRfk+F3aMYgR+Pa/PYZVi3IKxNC
-         wA0nD8KdZhrW+a2eZIL3W1eqa8kVZiHJARMivg5dCKezawXBx92F0hhWYufzZQ9M5+kc
-         Itefl9kO7mj1vCLme/vnSERV0H75w8AM0/i4Hi9sRvQD9ta+s3Rz4qTF/c2vp2f67YeR
-         s94NUHl15tkuaoJP1QHxP6q5n2AjEoUuj9PfjxAWMV+k5897FsRwPK+o9Wd1iF/47ZMw
-         gpZfEGXW0n9r7V3NiuM3fHDbP8snko9defPl9omZFkasYj+Oa+cwi5lR4DISYPmIpPCF
-         Tflw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=GLjz+jpxG6Z7GkqektuPsextgrhLY3boxm/7UAEJFuA=;
-        b=qy7qNNEtWuSYHnnt5rwzZv0McV+n0S/z+eyfXfzmCDby7LxjOgBudi0OjoHtJ4GdDx
-         sIE5D+KT5DUCFJD5NuFQxL6A0JxRkpCE4Ql+Pw9HAv/CmXIwJixD/rlbBtjyfOSu+k35
-         f96rjfo+g7SWAd5I6gYER5jpEEXp6CRTfQf6SlmNmR+KyLhHDzlQ4tnsLIDn4TEWzAPJ
-         aWL73oTXgk8MHzl9JrzJMT2tiiygim+8ewRcOdPgV8wF0gdn4xwIk7rguxmZSd9vIHwL
-         2wlPeYp27SsjyqG3M1Wg+ry658Uk8lySoHMCKW+C/EVZvufr9fOC5N7LS2g9wo57EJUj
-         CcNQ==
-X-Gm-Message-State: ACgBeo0/P0h4Zuquz9Yk7yo3dBGFChlhag3RHcxB1qwAxNvCcZU83UwS
-        TFnWWVMmt+BlvJ1kUlN6i64guw==
-X-Google-Smtp-Source: AA6agR5LCDCevtBAKAGsypnxhGaBTyqQTZ0V+JmHdmWALJfREkwM6Z98qFbmv5jEqbCK/UwQ1uhNgA==
-X-Received: by 2002:a05:6512:10c1:b0:492:a27d:ff44 with SMTP id k1-20020a05651210c100b00492a27dff44mr2706443lfg.405.1662650851914;
-        Thu, 08 Sep 2022 08:27:31 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v23-20020ac258f7000000b00497a5a91763sm1178497lfo.12.2022.09.08.08.27.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 08:27:31 -0700 (PDT)
-Message-ID: <e81492b1-7fe3-ca79-e0cf-b562c8d67c68@linaro.org>
-Date:   Thu, 8 Sep 2022 17:27:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 02/13] dt-bindings: memory: snps: Add Baikal-T1 DDRC
- support
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XiE5EqExJhlO64X7BZaUX7O9YHaSOxysO6FLbSSsdlE=;
+ b=ARF/JTW2TY2F5lIYMK9V9xkIaQfjgnp1mNV915BOCGkMLRFlPTHxMmqLBzo99kvrWw+XW5GAuIneRK7RaJ766yiBus5V/KEmjj/tc1jpb8l1Z4iyeJrUDH2BpjIFkynjrQ/kluno9aZEVnwCTqNo/19xKCe3517yAe1fB4Kq7BM=
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com (2603:10b6:a02:c9::11)
+ by DM4PR11MB5231.namprd11.prod.outlook.com (2603:10b6:5:38a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Thu, 8 Sep
+ 2022 15:27:46 +0000
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::6852:5740:4bc9:d1b4]) by BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::6852:5740:4bc9:d1b4%7]) with mapi id 15.20.5588.014; Thu, 8 Sep 2022
+ 15:27:46 +0000
+From:   <Sergiu.Moga@microchip.com>
+To:     <krzysztof.kozlowski@linaro.org>, <lee@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <Claudiu.Beznea@microchip.com>, <richard.genoud@gmail.com>,
+        <radu_nicolae.pirea@upb.ro>, <gregkh@linuxfoundation.org>,
+        <broonie@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <jirislaby@kernel.org>, <admin@hifiphile.com>,
+        <Kavyasree.Kotagiri@microchip.com>, <Tudor.Ambarus@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v2 05/13] dt-bindings: serial: atmel,at91-usart: convert
+ to json-schema
+Thread-Topic: [PATCH v2 05/13] dt-bindings: serial: atmel,at91-usart: convert
+ to json-schema
+Thread-Index: AQHYwfjByH4K4eAxe0ucv3xGn9LEXq3VeUyAgAAr1QCAAAEigIAABOaA
+Date:   Thu, 8 Sep 2022 15:27:46 +0000
+Message-ID: <753d73d0-44b9-9fba-1ed8-53691ecf2ee7@microchip.com>
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-6-sergiu.moga@microchip.com>
+ <e799ca9e-acb0-1bea-1c1a-b2ab79089381@linaro.org>
+ <fde16d80-28b4-aae6-363f-ad9dcf87a5e1@microchip.com>
+ <1d3904d9-7fec-2e61-f999-61b89c4becb6@linaro.org>
+In-Reply-To: <1d3904d9-7fec-2e61-f999-61b89c4becb6@linaro.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
- <20220822191957.28546-3-Sergey.Semin@baikalelectronics.ru>
- <0bda4ff9-fc08-77f2-0e06-7469dcaec6d8@linaro.org>
- <20220826095447.qxfvty6xq4tufe75@mobilestation>
- <36b2b6d9-9ab4-a4bc-6476-bd5b5d3ef77e@linaro.org>
- <20220908094307.civtqiwxadas3ys3@mobilestation>
- <d49dc1ca-af81-4c08-db80-35d994c6c3a2@linaro.org>
- <20220908150806.oj7d5inifofvtiqk@mobilestation>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220908150806.oj7d5inifofvtiqk@mobilestation>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 18f4ead8-4ee8-4c2e-2ab8-08da91aeae55
+x-ms-traffictypediagnostic: DM4PR11MB5231:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1vEgVuhgRDr0GHEMljaQI+RKfEk2UadswFx5qAbcBNik0lBwP4oMou951c5TZAsokufp8RKhd97YHJ+bstVYH+TIHvgZuAnSQZhufQjaBL+3MA5YAaNdyhNKOosnPGLO8AhNr9KZi9RYlOYMOVQcF9Qye13iSuCZwQ/Tr8jDoaiYPoqSYkexu1zU8ty1sPhVAwE9Ia7oVrw/1JiWuiYwmRUr0WiDuGzCCjYFljgXAfCofveasPzpE8JehCmAlzOfaqdX7BRa6GWsFItjWj/qSNYpl5FQUbCV6FyumMjx0MNBASSwWrXOeqdkashmoJOnp/r6ZXo8eerWi5vdyv2SeV6v8DPP+nqsP4GpZ7sL9ETCEWpgDY4RQum0Ts2WA7MI1UK3FxTvDmQ1cQWlcDLgwy6rluRlSAy0zC2aEpZQ6zy6cZGVvPOBqW9KG6iMpHfd76M0/RzBcFuQJAVVPxUfJhpiDIutQWLUfXulWtonkt8rTVhOXBF2eBc4IVroREupSUtftI7dG3ztz4CvoNAwfkBc8M65Tqc/pjPtbpy2shjVJ3sghqih8unUe8+KDKzgjglV+by7QWK9gtn5M3SD/R3GtY8r2oLrPGsGBArR9F4KQeRZw19io0Hc7Va2hmxbLQka/1DrCpxuvd0zo599xjV5quXWnvK7BkBJlRb8WU18A/XV2SHA4nQTf0OdojEHeSvpAxxmekPuMRdJEMWy7OypyZu9zQaVpYxW0tCM/b25tvCAoLNzs3MlBBuVecylg76n7dxjDLO/XO4JBqSkzwLQRobVsx1gdsKtwcYhWUhwtNfBqoPf/pZiyGp0ZMG8+9sgTGXaEpVYXvvZudlQgA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2758.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(376002)(39860400002)(136003)(346002)(38070700005)(921005)(2616005)(186003)(83380400001)(122000001)(38100700002)(31696002)(86362001)(8936002)(110136005)(5660300002)(54906003)(6636002)(71200400001)(7416002)(36756003)(316002)(66946007)(8676002)(76116006)(4326008)(91956017)(66476007)(64756008)(66556008)(66446008)(31686004)(6506007)(53546011)(6512007)(26005)(2906002)(6486002)(966005)(478600001)(41300700001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T2FJZ0xyblhTdE04WlRkc1Q0eVMzQmFCMHNDTFNLRHF3SzFwU1hqS0RSRjhE?=
+ =?utf-8?B?SFhBYXNndGhXR3M0Y3FKdCtUOXY5MVg1VFUwa0VLRERDQmZ5WGg4V0NVOU9x?=
+ =?utf-8?B?ZXhLa1lRSU8zODk1akR4RE80Rnhmam10VHhEZGVFeUFUbkdHRy84TXQ2eW52?=
+ =?utf-8?B?Y1JrdVlad2E2L1ZYcVpyaGJzcStuNkdEdVppMXFNalNjRUxIRlI3MDYrWk1R?=
+ =?utf-8?B?YkRodjh4ZnFLa3oxZ01xZzh1L3dJR1RIMVhJbmMrNVJkM2VZWitWbTVodCts?=
+ =?utf-8?B?eWg3ZkhkaFk4UjQyTzZ1VDQ1VEZYOElxcGFRMVBkNkowREVCenN6YU81WkJs?=
+ =?utf-8?B?RUZkSzliemxqbURkaTlhZHoxNDF3N3RjK0t3UDlFOGFrK01JNFQ4c0V3c1VM?=
+ =?utf-8?B?dUtFaEpNYTZpQmNtK0RJbHg4SkFGemgrbUZCVkJLTHBudUc1bjM2RnJ2d0M0?=
+ =?utf-8?B?dFdFaHhnUGl2U2xJbmV3NzlYMnRPd0h4TlhlS2V0R2daQUJkejlRR2RmSmNx?=
+ =?utf-8?B?c1ErWmhxRG52L2xjdThYbHFJeW51eXhpKzBNcm9abFFGUmxYOStOTTZiTUdQ?=
+ =?utf-8?B?eXE1MXNwNHpmN1N0aFpKRTd3SlA2aHRQQnQ2UkJDeU8xQm9jZnpXSGZvTzR0?=
+ =?utf-8?B?QlM1WUxGWFI1ejFVeXRlRVZYRTRsc2NKU1ZrOFBWWUFjV3VLM1p2VzJ3aFVB?=
+ =?utf-8?B?RXRVVWMzSTNEUkNoOVU3d0pmTlA2OXJsMkZibUV5YzNsYVZVc0c4SWlPMlVP?=
+ =?utf-8?B?TmZXbmJ4WVYydXE3TFdkUkRwTVFtTlh3Y0h6dUtOSGJiWTBSajdhajQxNG1y?=
+ =?utf-8?B?Uy93a05TUG9wTnk4MERET2RjNnZzNC9FbjJzcUJveWtSek92TzRSTExXYU85?=
+ =?utf-8?B?alZMVkI3cWdsbEJrQU1jS3h4Y1FTcDRNVUJzYjN5K2RLSnN0Zk9vb3VGenJJ?=
+ =?utf-8?B?YmorVDZxbCtnK2xjc3BEaWNuV0M4TkdJMHZycWZ4b2ZoblViblQvSjRCRUND?=
+ =?utf-8?B?WkE2TXZicCszZ2VRTzVIdXRyQ0RCb0xTNlRDc09kY3MwcWNpcDFKV29tTmFK?=
+ =?utf-8?B?M0hpdFZsVHpUNkx1TmorTkxRdVUyaGNraEF0OWhHdTdSNEtBY0M4UnFRMU1M?=
+ =?utf-8?B?UytmaHJSZGwwcUhRUUM2alJ6VG1pNEpWTkRjMmxOS1FVT2Zyc2xFNitwbWtP?=
+ =?utf-8?B?S2RNL0c3eGpBMlFnMGxOMVo1bWsxS3NaMG1ueXQyZlI5dmRMb2I3TkJiVndO?=
+ =?utf-8?B?VmtVVW41Z0E0V2FwNXpaRGlxK1ZPRDJUbWFWSDhoeFlrQ2hKYjNpSWltMkx5?=
+ =?utf-8?B?NnJtTDlCNlZIK2JLL244Z204Q3MyNVNzTkhMei9QbzNFZGM0NWRJZm8vQU5r?=
+ =?utf-8?B?U1RFbXJ3RnVyZ1l5eFNML0lwWE5PSzQzejFLTm1WSEFOSW1kRGh5Q1RyeUdZ?=
+ =?utf-8?B?VnIwNUxzRFpkN0lPbnNDYzZHV2hVRTRTaXVCdnlRWG1JWWx5c1c4cktzYTkx?=
+ =?utf-8?B?NnN4K1cwdGpEelBwSTZOSm9DL2FMc21NLzhnWk1Ta1lTTk5WdGZrYUZLdDVF?=
+ =?utf-8?B?L2hxNkdiVWNhb0xvc3RnR2lQUVVpaEFPWkYveGU4bTd4MWZ6bUxBMGxqTnVQ?=
+ =?utf-8?B?eUFoVmFQaGMyR3VBaEZNQ2U2YkRBdENRR241VElPS0pwYThoV1FOSUxlRkZQ?=
+ =?utf-8?B?dUdEMzR6TzlpMDZZRXpxS2U5S2g0VHRqakhSUUsyblM2YXdCNXd2cnFGWS9q?=
+ =?utf-8?B?QU9WR0dKMjNYTGozRkN4ZmF2bEl3a0pOS09keUZMaXpneHI1bFhWZU1Sa1lr?=
+ =?utf-8?B?azluVENPbW9lL25Cd2pBQ3BNSlZiaXR4U21HSW8rUmozK0FBbDJaNjZlUnVG?=
+ =?utf-8?B?OGEwdlFlUWFuT3FlVnJlZC92YVB6eWxpTUZ3ZStOdGtHcVRybVFyZU9pRW94?=
+ =?utf-8?B?RnhwZlU2cHJiT3F6T1BsbjVEeG8vMTFvOE1pNkEvMlZicDIrS215eWdRY0U2?=
+ =?utf-8?B?a1o5VitINlppUzNKOGFZSVN3WG5VaGZtSGhEL3ZKVlhvZTRSRi9rM29qZGdJ?=
+ =?utf-8?B?cG9MeVhDcTZKV053dkF2dmhzQkhpdnhUQlRRK2FPQ0QwTFhoanptbmVOd3d6?=
+ =?utf-8?Q?uogSHX1ePLMlimivl3oro07Ku?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B01BFE1FE449984F87AE250AC080F986@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2758.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18f4ead8-4ee8-4c2e-2ab8-08da91aeae55
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 15:27:46.1031
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9knmsrn7R7vRishbNsE+rcXI5rqgsiBoI/G1J7ofKwbfVX/IeoEKw9K058TCGT6tq16QGZFmJBtkH1pvigQAanCLPLrXbjFj8m+QkxzxHNc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5231
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/09/2022 17:08, Serge Semin wrote:
-> On Thu, Sep 08, 2022 at 11:58:50AM +0200, Krzysztof Kozlowski wrote:
->> On 08/09/2022 11:46, Serge Semin wrote:
->>> On Mon, Sep 05, 2022 at 12:14:21PM +0200, Krzysztof Kozlowski wrote:
->>>> On 26/08/2022 11:54, Serge Semin wrote:
->>>>> On Tue, Aug 23, 2022 at 11:12:28AM +0300, Krzysztof Kozlowski wrote:
->>>>>> On 22/08/2022 22:19, Serge Semin wrote:
->>>>>>> Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
->>>>>>> with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
->>>>>>> are individual IRQs for each ECC and DFI events.The dedicated scrubber
->>>>>>
->>>>>
->>>>>> Missing space before "The".
->>>>>
->>>>> Ok. Thanks.
->>>>>
->>>>>>
->>>>>>> clock source is absent since it's fully synchronous to the core clock.
->>>>>>
->>>>>
->>>>>> You need allOf:if-then restricting this per variant.
->>>>>
->>>>> I really don't like the allOf-if-if-etc pattern because it gets to be
->>>>> very bulky if all the vendor-specific and generic platform
->>>>> peculiarities are placed in there. I am more keen of having a
->>>>> generic DT-schema which would be then allOf-ed by the vendor-specific
->>>>> device bindings. What do you think I'd provide such design in this
->>>>> case too?
->>>>
->>>> Sure, it would work.
->>>>
->>>>>
->>>>> But I'll need to move the compatible property definition to the
->>>>> "select" property. Like this:
->>>>>
->>>>> Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml:
->>>>> +[...]
->>>>> +# Please create a separate DT-schema for your DW uMCTL2 DDR controller
->>>>> +# and make sure it's assigned with the vendor-specific compatible string.
->>>>> +select:
->>>>> +  properties:
->>>>> +    compatible:
->>>>> +      oneOf:
->>>>> +        - deprecated: true
->>>>> +          description: Synopsys DW uMCTL2 DDR controller v3.80a
->>>>> +          const: snps,ddrc-3.80a
->>>>> +        - description: Synopsys DW uMCTL2 DDR controller
->>>>> +          const: snps,dw-umctl2-ddrc
->>>>> +        - description: Xilinx ZynqMP DDR controller v2.40a
->>>>> +          const: xlnx,zynqmp-ddrc-2.40a
->>>>> +  required:
->>>>> +    - compatible
->>>>
->>>
->>>> Not entirely. If you need select, then add it with compatibles, but all
->>>> descriptions and deprecated are staying in properties.
->>>
->>> Ok. But note in such case the compatible string constraints will get
->>> to be opened for any non-common string. Like this:
->>>
->>> + properties:
->>> +   compatible:
->>> +     oneOf:
->>> +       - const: snps,ddrc-3.80a
->>> +       - {}
->>
->> Not really. If you define here specific device compatibles in select,
->> they must be here as well.
->>
->>>
->>> It's required for the DT-schemas referencing the common one, otherwise
->>> they will fail DT-nodes evaluation due to the "compatible" property
->>> missing the vendor-specific string.
->>
-> 
->> o you probably mix here purposes. Either you define common schema or
->> device specific one. If you define common, usually it does not enforce
->> any compatibles. You do not need select, no need for compatibles either,
->> although you can add above syntax if it is valid. If you write here
->> specific device bindings, then compatibles should be listed. Judging
->> from what you wrote it's neither this nor that...
-> 
-> My idea was to provide both the common DT-schema and the
-> vendor-specific ones. But the later one would refer to the common
-> schema in the framework of the "allOf:" composition. Like this:
-> 
-> snps,dw-umctl2-ddrc.yaml:
-> + [...]
-> + select:
-> +   properties:
-> +     compatible:
-> +       enum:
-> +         - snps,ddrc-3.80a
-> + [...]
-> + properties:
-> +   compatible:
-> +     oneOf:
-> +       - const: snps,ddrc-3.80a
-> +       - {}
-
-This is not the approach snps,dwc3.yaml is doing. It is closer to
-snps,dw-pcie.yaml, but that one ends with additionalProperties:true so
-it is expected to be constrained by something else.
-
-You can choose either way, but what you wrote before looked different -
-basically loosing the compatibles documentation.
-
-> +   interrupts:
-> +   [...]
-> +   interrupt-names:
-> +   [...]
-> + additionalProperties: false
-> + [...]
-> 
-> baikal,bt1-ddrc.yaml:
-> + [...]
-> + allOf:
-> +   - "schemas/memory-controllers/snps,dw-umctl2-ddrc.yaml:#"
-> + [...]
-> + unevaluateProperties: false
-> + [...]
-> 
-> Thus the common schema as before would provide the widest set of the
-> properties and their constraints, while the vendor-specific one would
-> be !obligated! to follow the common schema conventions, but provide a
-> more specific set of the properties and constraints. A similar
-> approach is implemented for instance in the DW USB3 DT-schemas, but
-> with the generic compatible string fallback. In this case we don't
-> need the fallback string, but in order for the common schema being
-> applicable for both the common and vendor-specific DT-nodes the
-> compatible property constraints need to be designed as is provided in
-> the example above.
-
-Anyway, it's getting complicated so I am not sure about which option now
-we discuss. You cannot have deprecated entries in select and compatibles
-described there, without describing them in properties.
-
-> 
-> Alternatively we can split the snps,dw-umctl2-ddrc.yaml schema up into
-> the two ones:
-> snps,dw-umctl2-ddrc-common.yaml
-> and
-> snps,dw-umctl2-ddrc.yaml
-> So the first schema would contain all the common properties definition
-> and would be only used for being referenced in the particular device
-> DT-bindings (select: false). The snps,dw-umctl2-ddrc.yaml and
-> vendor-specific DT-schemas would just have it "allOf:"ed.
-> 
-> Personally I'd prefer the design pattern with the always-true
-> compatible property constraint as in the example above since it seems
-> easier to maintain than having the common and generic device
-> DT-schemas.
-> 
-> Note having a common DT-schema and a vendor-specific one referencing
-> the common schema is very much useful practice for the devices based
-> on the same IP-core. Vendor-device driver authors tend to create their
-> own bindings for the same clocks/resets/phys/etc thus making the
-> drivers much harder to maintain (for a bright example see what has
-> been done for the DW PCIe RP/EP IP-core). The worst part of it is that
-> ones the DT-bindings interface is implemented it can't be changed
-> since the kernel needs to be backward compatible with the DT-sources
-> compiled before. So the main goal of the common DT-schema is to fix
-> the common DT interface and make sure the new vendor-specific device
-> drivers would at least consider either to follow the IP-core DT
-> convention or to widen it up if required.
-
-
-Best regards,
-Krzysztof
+T24gMDguMDkuMjAyMiAxODoxMCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMDgv
+MDkvMjAyMiAxNzowNiwgU2VyZ2l1Lk1vZ2FAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+IE9uIDA4
+LjA5LjIwMjIgMTU6MjksIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+IA0KPj4+PiArcmVx
+dWlyZWQ6DQo+Pj4+ICsgIC0gY29tcGF0aWJsZQ0KPj4+PiArICAtIHJlZw0KPj4+PiArICAtIGlu
+dGVycnVwdHMNCj4+Pj4gKyAgLSBjbG9jay1uYW1lcw0KPj4+PiArICAtIGNsb2Nrcw0KPj4+PiAr
+DQo+Pj4+ICthbGxPZjoNCj4+Pj4gKyAgLSBpZjoNCj4+Pj4gKyAgICAgIHByb3BlcnRpZXM6DQo+
+Pj4+ICsgICAgICAgICRub2RlbmFtZToNCj4+Pj4gKyAgICAgICAgICBwYXR0ZXJuOiAiXnNlcmlh
+bEBbMC05YS1mXSskIg0KPj4+DQo+Pj4gWW91IHNob3VsZCByYXRoZXIgY2hlY2sgdmFsdWUgb2Yg
+YXRtZWwsdXNhcnQtbW9kZSwgYmVjYXVzZSBub3cgeW91IHdvbid0DQo+Pj4gcHJvcGVybHkgbWF0
+Y2ggZGV2aWNlIG5vZGVzIGNhbGxlZCAiZm9vYmFyIi4gU2luY2UgdXNhcnQtbW9kZSBoYXMgb25s
+eQ0KPj4+IHR3byBwb3NzaWJsZSB2YWx1ZXMsIHRoaXMgd2lsbCBuaWNlbHkgc2ltcGxpZnkgeW91
+IGlmLWVsc2UuDQo+Pj4NCj4+Pg0KPj4NCj4+DQo+PiBJIGRpZCB0aGluayBvZiB0aGF0IGJ1dCB0
+aGUgcHJldmlvdXMgYmluZGluZyBzcGVjaWZpZXMgdGhhdA0KPj4gYXRtZWwsdXNhcnQtbW9kZSBp
+cyByZXF1aXJlZCBvbmx5IGZvciB0aGUgU1BJIG1vZGUgYW5kIGl0IGlzIG9wdGlvbmFsDQo+PiBm
+b3IgdGhlIFVTQVJUIG1vZGUuIFRoYXQgaXMgd2h5IEkgd2VudCBmb3IgdGhlIG5vZGUncyByZWdl
+eCBzaW5jZSBJDQo+PiB0aG91Z2h0IGl0IGlzIHNvbWV0aGluZyB0aGF0IGJvdGggbm9kZXMgd291
+bGQgaGF2ZS4NCj4gDQo+IEkgdGhpbmsgaXQgc2hvdWxkIGJlIGV4cGxpY2l0IC0geW91IGNvbmZp
+Z3VyZSBub2RlIGVpdGhlciB0byB0aGlzIG9yDQo+IHRoYXQsIHNvIHRoZSBwcm9wZXJ0eSBzaG91
+bGQgYmUgYWx3YXlzIHByZXNlbnQuDQoNCg0KDQpObyBEVCBvZiBvdXJzIGhhcyB0aGF0IHByb3Bl
+cnR5IGF0bSwgc2luY2UgdGhleSBhcmUgYWxsIG9uIFVTQVJUIG1vZGUgYnkgDQpkZWZhdWx0LiBJ
+ZiBJIHdlcmUgdG8gbWFrZSBpdCByZXF1aXJlZC4gYWxsIG5vZGVzIHdvdWxkIGZhaWwgc28gSSB3
+b3VsZCANCmhhdmUgdG8gYWRkIGl0IHRvIGVhY2ggb2YgdGhlbS4NCg0KDQoNCg0KPiBUaGUgbm9k
+ZSBuYW1lIHNob3VsZCBub3QNCj4gYmUgcmVzcG9uc2libGUgZm9yIGl0LCBldmVuIHRob3VnaCB3
+ZSB3YW50IG5vZGUgbmFtZXMgdG8gbWF0Y2ggY2VydGFpbg0KPiBwYXR0ZXJucy4NCj4gDQoNCg0K
+RG9lcyBjaGVja2lnIGZvciB0aGUgbm9kZSdzIHBhdHRlcm4gbm90IG1ha2UgaXQgYmV0dGVyIHRo
+ZW4/IFNpbmNlIGl0IA0KaW1wb3NlcyBhbiBhZGRpdGlvbmFsIGNoZWNrPyBJZiBpdCB3b3VsZCBu
+b3QgaGF2ZSBhIGNvbnZlbnRpb25hbCANCnBhdHRlcm4sIGl0IHdvdWxkIGZhaWwgdGhyb3VnaCB1
+bmV2YWx1YXRlZFByb3BlcmllczpmYWxzZSBhdCB0aGUgZW5kLCANCnNpbmNlIGl0IHdvdWxkIGhh
+dmUgcHJvcGVydGllcyB0aGF0IHdlcmUgY29udGFpbmVkIGluc2lkZSBhIGJyYW5jaCB0aGF0IA0K
+dGhlIHZhbGlkYXRpb24gb2YgdGhlIG5vZGUgd291bGQgbm90IGhhdmUgZ29uZSB0aHJvdWdoIHNp
+bmNlIGl0IGNvbnRhaW5zIA0KYSBwYXR0ZXJuIHRoYXQgZG9lcyBub3QgbWF0Y2ggdGhlIGNvbmRp
+dGlvbnMgb2YgdGhhdCBicmFuY2guDQoNCg0KPj4NCj4+DQo+Pj4+ICsgICAgdGhlbjoNCj4+Pj4g
+KyAgICAgIGFsbE9mOg0KPj4+PiArICAgICAgICAtICRyZWY6IC9zY2hlbWFzL3NlcmlhbC9zZXJp
+YWwueWFtbCMNCj4+Pj4gKyAgICAgICAgLSAkcmVmOiAvc2NoZW1hcy9zZXJpYWwvcnM0ODUueWFt
+bCMNCj4+Pj4gKw0KPj4+PiArICAgICAgcHJvcGVydGllczoNCj4+Pj4gKyAgICAgICAgYXRtZWws
+dXNlLWRtYS1yeDoNCj4+Pj4gKyAgICAgICAgICB0eXBlOiBib29sZWFuDQo+Pj4+ICsgICAgICAg
+ICAgZGVzY3JpcHRpb246IHVzZSBvZiBQREMgb3IgRE1BIGZvciByZWNlaXZpbmcgZGF0YQ0KPj4+
+PiArDQo+Pj4+ICsgICAgICAgIGF0bWVsLHVzZS1kbWEtdHg6DQo+Pj4+ICsgICAgICAgICAgdHlw
+ZTogYm9vbGVhbg0KPj4+PiArICAgICAgICAgIGRlc2NyaXB0aW9uOiB1c2Ugb2YgUERDIG9yIERN
+QSBmb3IgdHJhbnNtaXR0aW5nIGRhdGENCj4+Pj4gKw0KPj4+PiArICAgICAgICBhdG1lbCxmaWZv
+LXNpemU6DQo+Pj4+ICsgICAgICAgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5p
+dGlvbnMvdWludDMyDQo+Pj4+ICsgICAgICAgICAgZGVzY3JpcHRpb246DQo+Pj4+ICsgICAgICAg
+ICAgICBNYXhpbXVtIG51bWJlciBvZiBkYXRhIHRoZSBSWCBhbmQgVFggRklGT3MgY2FuIHN0b3Jl
+IGZvciBGSUZPDQo+Pj4+ICsgICAgICAgICAgICBjYXBhYmxlIFVTQVJUUy4NCj4+Pj4gKyAgICAg
+ICAgICBlbnVtOiBbIDE2LCAzMiBdDQo+Pj4NCj4+PiBJIGRpZCBub3QgbWVudGlvbiBpdCBsYXN0
+IHRpbWUsIGJ1dCBJIHRoaW5rIGl0IHNob3VsZCBmb2xsb3cgZ2VuZXJpYw0KPj4+IHByYWN0aWNl
+LCBzbyBkZWZpbmUgYWxsIHByb3BlcnRpZXMgdG9wLWxldmVsIGFuZCBkaXNhbGxvdyB0aGVtIGZv
+ciBvdGhlcg0KPj4+IHR5cGUuIFRoaXMgYWxsb3dzIHlvdSB0byBzaW1wbHkgdXNlIGFkZGl0aW9u
+YWxQcm9wZXJ0aWVzOmZhbHNlIGF0IHRoZSBlbmQuDQo+Pj4NCj4+DQo+Pg0KPj4gV2hhdCB3b3Vs
+ZCBiZSBhIGdvb2QgZXhhbXBsZSBiaW5kaW5nIGluIHRoaXMgY2FzZT8NCj4gDQo+IFRoZSBleGFt
+cGxlIGJpbmRpbmcuDQo+IA0KPiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92NS4x
+OS9zb3VyY2UvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2V4YW1wbGUtc2NoZW1h
+LnlhbWwjTDIxMg0KPiANCg0KDQpBaCwgSSB1bmRlcnN0YW5kIG5vdy4gSSBkaWQgbm90IGdldCB3
+aGF0IHlvdSBtZWFudCBieSAiZGlzYWxsb3ciLCBJIA0KZ3Vlc3MgaXQncyBqdXN0IGEgInByb3Bl
+cnR5LW5hbWU6IGZhbHNlIi4NClRoYW5rcyENCg0KDQo+Pg0KPj4NCj4+Pj4gKw0KPj4+PiArICAg
+IGVsc2U6DQo+Pj4+ICsgICAgICBpZjoNCj4+Pj4gKyAgICAgICAgcHJvcGVydGllczoNCj4+Pj4g
+KyAgICAgICAgICAkbm9kZW5hbWU6DQo+Pj4+ICsgICAgICAgICAgICBwYXR0ZXJuOiAiXnNwaUBb
+MC05YS1mXSskIg0KPj4+PiArICAgICAgdGhlbjoNCj4+Pj4gKyAgICAgICAgYWxsT2Y6DQo+Pj4+
+ICsgICAgICAgICAgLSAkcmVmOiAvc2NoZW1hcy9zcGkvc3BpLWNvbnRyb2xsZXIueWFtbCMNCj4+
+Pj4gKw0KPj4+PiArICAgICAgICBwcm9wZXJ0aWVzOg0KPj4+PiArICAgICAgICAgIGF0bWVsLHVz
+YXJ0LW1vZGU6DQo+Pj4+ICsgICAgICAgICAgICBjb25zdDogMQ0KPj4+PiArDQo+Pj4+ICsgICAg
+ICAgICAgIiNzaXplLWNlbGxzIjoNCj4+Pj4gKyAgICAgICAgICAgIGNvbnN0OiAwDQo+Pj4+ICsN
+Cj4+Pj4gKyAgICAgICAgICAiI2FkZHJlc3MtY2VsbHMiOg0KPj4+PiArICAgICAgICAgICAgY29u
+c3Q6IDENCj4+Pg0KPj4+IFRoZSBzYW1lIC0gdG9wIGxldmVsIGFuZCBkaXNhbGxvdyB0aGVtIGZv
+ciB1YXJ0Lg0KPj4+DQo+Pg0KPj4NCj4+IFRoZXNlIHZhbHVlcyBvZiAjc2l6ZS1jZWxscyBhbmQg
+I2FkZHJlc3MtY2VsbHMgYXJlIG9ubHkgbWVhbnQgZm9yIHRoZQ0KPj4gU1BJIHNvIEkgZ3Vlc3Mg
+SSB3b3VsZCBzdGlsbCBoYXZlIHRvIHNwZWNpZnkgdGhlaXIgbWFuZGF0b3J5IGNvbnN0DQo+PiB2
+YWx1ZXMgaGVyZS4NCj4gDQo+IFN1cmUsIG9rLg0KPiANCj4+DQo+Pg0KPj4+PiArDQo+Pj4+ICsg
+ICAgICAgIHJlcXVpcmVkOg0KPj4+PiArICAgICAgICAgIC0gYXRtZWwsdXNhcnQtbW9kZQ0KPj4+
+PiArICAgICAgICAgIC0gIiNzaXplLWNlbGxzIg0KPj4+PiArICAgICAgICAgIC0gIiNhZGRyZXNz
+LWNlbGxzIg0KPj4+DQo+Pj4gRW5kIGVsc2UgaW4gdGhpcyBicmFuY2ggaXMgd2hhdD8NCj4+Pg0K
+Pj4NCj4+DQo+PiBZb3UgYXJlIHJpZ2h0LCBJIHdpbGwgcmVtb3ZlIHRoZSB1c2VsZXNzIGlmOiBh
+ZnRlciBlbHNlOg0KPiANCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg0KDQpSZWdhcmRz
+LA0KCVNlcmdpdQ0K

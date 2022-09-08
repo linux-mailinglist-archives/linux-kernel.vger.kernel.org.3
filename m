@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754B25B173A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F2A5B173D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiIHIgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S230481AbiIHIho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiIHIge (ORCPT
+        with ESMTP id S229876AbiIHIhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:36:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDC2DFF6A;
-        Thu,  8 Sep 2022 01:36:32 -0700 (PDT)
-Received: from [127.0.0.1] (dynamic-046-114-005-040.46.114.pool.telefonica.de [46.114.5.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EDA8A1EC0688;
-        Thu,  8 Sep 2022 10:36:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1662626187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XuHu7ijixnDVcJyxwfF2tvQPIz8t5KmGFJYE6RW2grE=;
-        b=l/ghC8xYF6HL+YnZsbaJsn5IFWs6Ve48MGemBwbO1llVjAOqrTkilywAXF6px9litEbnoX
-        AkvWkf8PsfSgDmMOs4E4bNW23Z36xAZfv8oN/nJcRSJEoYrzj8Amv5uE/FZAvbXEqZyJpu
-        B2n6GIoDyMj34ita6V0RTeVS/LHEafY=
-Date:   Thu, 08 Sep 2022 08:36:23 +0000
-From:   Boris Petkov <bp@alien8.de>
-To:     "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "saikrishna12468@gmail.com" <saikrishna12468@gmail.com>,
-        Robert Richter <rric@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>
-Subject: RE: [PATCH v4 2/2] edac: zynqmp_ocm: Add EDAC support for ZynqMP OCM
-In-Reply-To: <BY5PR12MB4258C4746631BBD6A7B388D6DB409@BY5PR12MB4258.namprd12.prod.outlook.com>
-References: <20220907111531.703-1-sai.krishna.potthuri@amd.com> <20220907111531.703-3-sai.krishna.potthuri@amd.com> <YxikJCguJWunfh6x@nazgul.tnic> <BY5PR12MB4258C4746631BBD6A7B388D6DB409@BY5PR12MB4258.namprd12.prod.outlook.com>
-Message-ID: <E7324951-0608-432F-8E9C-6C08DA64838D@alien8.de>
+        Thu, 8 Sep 2022 04:37:36 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33F2DFF76
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:37:35 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id y3so36418555ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=GbG2nhzmmss+G+c6SA6X2YAIAHWx8rKRjK8Vj+ZZWPM=;
+        b=KD+Iq3mtB6MLe4CjByKTs35ETQx8kt5r8obKdnXLZ7AUjXLjIlHpL+oJwVmoy9Xrh3
+         6j6KoTYMAyRuXbruQbRtWzbF6TEyM+ETuP0bynmc3x72xeMtZIKg5rD7auczbgdHjm3O
+         UoTxxs5QCss2VW941KUjZQl+9Gg40k1xZUQTsNYA9yRphGaeCHyxBevLq4ElFChatrju
+         pFIC0paBfhI5CCM6VTR1Fg7SJ1KYf7u+8VkV3aH6yxtgaidWTpELL+IntcK0RPQZGO5o
+         8pm6cP6XZ94P/1fCRKeXW6y+5pqwq95eWyzvuvFKe8Ymazt08R4eSaViUvb63IMsGkM9
+         Z1xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GbG2nhzmmss+G+c6SA6X2YAIAHWx8rKRjK8Vj+ZZWPM=;
+        b=VFrUySCu/RvK4hyzJZduTPdZddNqY8+yim/rltPXB3wvec/tZjTgjOpQbJsiSRXi5T
+         zzY/ri0R/Czsk9A8yVnoNbDx1tVozd5b6zgEYra1daPFPjoceSHoAMyk7v8V5SYrVlGS
+         r5ak9s26+4gKxUGABsWH3Ot920BJuoL3LTGVO8AW+yk9psE7ohn//xNl1txn2dXYF5hJ
+         RgadbfjRu2yRgrYPxJLYh0aJ9k7d8cUhOP/scjX91qjUHa0iufIrtfZbA1W7gU5LyP/G
+         unTClv/6jnvPC+RSZcL8Eba0FTns77DZ6exKwIKHGgMb6EwS81Tr8guxTsDz/m0soZGQ
+         WztQ==
+X-Gm-Message-State: ACgBeo3v4AsGnnze/cUTy/0wvbqfhitAUutbzlxkyPgjt0x5i0m34xUM
+        qnX3FokWOYibMl2fgXtPWfgiFjJdB4/qwWSfmLzcyA==
+X-Google-Smtp-Source: AA6agR7K2YSY0iF9ow7wVo6J+7idiXW229KpqRLBf+wEVc5EvDig8jY8Jl19Octj2OVVNsvtG+V7P3nxLcUQYiXS30k=
+X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
+ dd6-20020a1709069b8600b0073d72cf72afmr5327012ejc.440.1662626254482; Thu, 08
+ Sep 2022 01:37:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+In-Reply-To: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 8 Sep 2022 10:37:23 +0200
+Message-ID: <CACRpkdYwkurfb+BOc0-AnutedY9gBPAzD=z9TOW7dJLpG+RJCA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] PCI: histb: switch to using gpiod API
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On September 8, 2022 5:39:56 AM UTC, "Potthuri, Sai Krishna" <sai=2Ekrishna=
-=2Epotthuri@amd=2Ecom> wrote:
->Synopsys EDAC driver is targeted for DDR Memory Controller and this drive=
-r
->is for OCM (On Chip Memory) Controller, both are different hardware contr=
-ollers=2E
+On Tue, Sep 6, 2022 at 10:43 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
 
-It would be helpful if the driver help text explained a bit more what hw t=
-his driver is for=2E=2E=2E
+> This patch switches the driver away from legacy gpio/of_gpio API to
+> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> make private to gpiolib.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Thx=2E
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
---=20
-Sent from a small device: formatting sux and brevity is inevitable=2E 
+Yours,
+Linus Walleij

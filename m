@@ -2,159 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694FA5B195D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604325B1969
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiIHJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S229445AbiIHJ4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiIHJxN (ORCPT
+        with ESMTP id S229510AbiIHJ4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:53:13 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD3E9877B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:52:52 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id a8so5234014lff.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 02:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=MbAZZ7ImXCnAcX5j6c0OQ0QrifKC4P6NeZBSY/zCSx0=;
-        b=WB6zbmxVadcxx+HMpPhfMGJ27YOZ9tqaqpHpkNY2q/yJ3tdIjYxihvgxQ3UVOwQE6E
-         Th6aMRCdXhR8h+JQN/CE0zJ3kyoqqyrlLFH4OVVGE2XMkvJJPcPBptE6DiWa0CG7OIrt
-         5xgUrnGC/8IJbBK2p332HaMYn3wDK/RVm3ontNqr+CiWveggtsDeFtkBzQqGD8IGcYfa
-         1TF+eMa03ymKwcA45z3h0nuLSboJINw3u2GjU8pXXSYWYDVyTNYxls3QZ5Sertr7Gape
-         OA+0d+ldAFy4OiGWNKwZYCVV1m+Rf6TFBFrcg2I4uOUtegxhW6OO1EylDmW3b0jm5bDl
-         sZ9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=MbAZZ7ImXCnAcX5j6c0OQ0QrifKC4P6NeZBSY/zCSx0=;
-        b=jhMrmwBfAvX1V4bVfqFMgrfUeUEXzZLIJ+K4axk9YhpR9J5o+R7sHyrNPC8Uuappwl
-         tpRCfo48qTOD7FebNW+PEKYmzOS2Q7/UL29fqZ7RyPZ58zGUc4ufn7kfN0ejiwPp6uSc
-         ENKaqksUOAFtbBUIrYRUYA7X/IMKr5YVXm5f2rIYQepWioARF7HOZIGgxPmMbFJvXJbD
-         891iXavUYbEf3hAWWSBw/MRJZ/hY0E9Fh1HfnoN9UM1BEVL71vw4F6VeD/deT7TMQSbr
-         guJ89Fql20wKGowbemTDd92V9cSvZqPYjTJ9/XsGinzpaSs+9nKZhYPUVDBWEs+KPhkS
-         SSrQ==
-X-Gm-Message-State: ACgBeo2eXj69W+Roag1vN/k7WdkyqgZ+YB/+e5aS8beL/2G6bCOW1bq7
-        r2A7X1b4Z3+mGLct5wVe3bhN2w==
-X-Google-Smtp-Source: AA6agR4uIUy5M7yq+F2/csoUmcip3so7/aFAX2d6wiRe2HX9qa7VrFl3Pf3YfRp26nUrJMxDAnBTcg==
-X-Received: by 2002:a05:6512:ad1:b0:498:f052:3a18 with SMTP id n17-20020a0565120ad100b00498f0523a18mr483600lfu.348.1662630770805;
-        Thu, 08 Sep 2022 02:52:50 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05651211e700b0049487818dd9sm2958665lfs.60.2022.09.08.02.52.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 02:52:50 -0700 (PDT)
-Message-ID: <8a593e0b-99e0-b1f4-20ab-ab2df2940518@linaro.org>
-Date:   Thu, 8 Sep 2022 11:52:48 +0200
+        Thu, 8 Sep 2022 05:56:10 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC49A6F27E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:56:01 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 2889sVUL014413
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Thu, 8 Sep 2022 17:54:31 +0800 (CST)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 8 Sep 2022 17:54:32 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>
+Subject: [Resend PATCH] fs: use kvmalloc for big coredump file
+Date:   Thu, 8 Sep 2022 17:54:12 +0800
+Message-ID: <1662630852-12277-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: clock: add i.MX8M Anatop
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, abelvesa@kernel.org,
-        abel.vesa@linaro.org, sboyd@kernel.org
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20220906090013.3724305-1-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220906090013.3724305-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 2889sVUL014413
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/2022 11:00, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> i.MX8M Family features an anatop module the produces PLL to clock
-> control module(CCM) root clock. Add the missing yaml file.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../bindings/clock/imx8m-anatop.yaml          | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/imx8m-anatop.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/imx8m-anatop.yaml b/Documentation/devicetree/bindings/clock/imx8m-anatop.yaml
-> new file mode 100644
-> index 000000000000..e247a5774d17
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/imx8m-anatop.yaml
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-Filename: fsl,imx8m-anatop.yaml
+High order page allocation observed which even introduce kernel panic when generating
+coredump file, use kvmalloc_array instead of kmalloc_array
 
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/imx8m-anatop.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX8M Family Anatop Module
-> +
-> +maintainers:
-> +  - Peng Fan <peng.fan@nxp.com>
-> +
-> +description: |
-> +  NXP i.MX8M Family anatop PLL module which generates PLL to CCM root.
+[68058.982108] init: Untracked pid 3847 exited with status 0
+[68058.982343] init: Untracked pid 3847 did not have an associated service entry and will not be reaped
+[68059.038127] warn_alloc: 29 callbacks suppressed
+[68059.038132] TimerThread: page allocation failure: order:7, mode:0x40dc0(GFP_KERNEL|__GFP_COMP|__GFP_ZERO), nodemask=(null),cpuset=foreground,mems_allowed=0
+[68059.038155] CPU: 6 PID: 3597 Comm: TimerThread Tainted: G        W  OE     5.15.41-android13-8-01198-g03458ee9a090-ab000039 #1
+[68059.038159] Hardware name: Unisoc UMS9620-base Board (DT)
+[68059.038161] Call trace:
+[68059.038163]  dump_backtrace.cfi_jt+0x0/0x8
+[68059.038169]  dump_stack_lvl+0x98/0xe8
+[68059.038174]  warn_alloc+0x164/0x200
+[68059.038180]  __alloc_pages_slowpath+0x9d4/0xb64
+[68059.038183]  __alloc_pages+0x21c/0x39c
+[68059.038186]  kmalloc_order+0x4c/0x13c
+[68059.038189]  kmalloc_order_trace+0x34/0x154
+[68059.038192]  __kmalloc+0x600/0x8a8
+[68059.038196]  elf_core_dump+0x7c4/0x15d8
+[68059.038201]  do_coredump+0x680/0xe54
+[68059.038203]  get_signal+0x610/0x988
+[68059.038209]  do_signal+0xd4/0x2bc
+[68059.038213]  do_notify_resume+0xa0/0x1c8
+[68059.038216]  el0_svc+0x68/0x90
+[68059.038219]  el0t_64_sync_handler+0x88/0xec
+[68059.038222]  el0t_64_sync+0x1b4/0x1b8
 
-Description suggests it is a clock controller (you literally write it
-generates PLL), but bindings are for system registers (syscon). If it is
-PLL, you should make it a real clock provider.
+Reported-by: Guanglu Xu <guanglu.xu@unisoc.com>
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+ fs/coredump.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - fsl,imx8mm-anatop
-> +              - fsl,imx8mq-anatop
-> +          - const: syscon
-> +      - items:
-> +          - enum:
-> +              - fsl,imx8mn-anatop
-> +              - fsl,imx8mp-anatop
-> +          - const: fsl,imx8mm-anatop
-> +          - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    anatop: anatop@30360000 {
+diff --git a/fs/coredump.c b/fs/coredump.c
+index ebc43f9..52e9177 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -612,7 +612,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 			goto fail_dropcount;
+ 		}
+ 
+-		helper_argv = kmalloc_array(argc + 1, sizeof(*helper_argv),
++		helper_argv = kvmalloc_array(argc + 1, sizeof(*helper_argv),
+ 					    GFP_KERNEL);
+ 		if (!helper_argv) {
+ 			printk(KERN_WARNING "%s failed to allocate memory\n",
+@@ -631,7 +631,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 			retval = call_usermodehelper_exec(sub_info,
+ 							  UMH_WAIT_EXEC);
+ 
+-		kfree(helper_argv);
++		kvfree(helper_argv);
+ 		if (retval) {
+ 			printk(KERN_INFO "Core dump to |%s pipe failed\n",
+ 			       cn.corename);
+-- 
+1.9.1
 
-Node name: syscon or clock-controller if it is a clock provider.
-
-> +        compatible = "fsl,imx8mn-anatop", "fsl,imx8mm-anatop", "syscon";
-> +        reg = <0x30360000 0x10000>;
-> +    };
-> +
-> +...
-
-
-Best regards,
-Krzysztof

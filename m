@@ -2,173 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2405B2204
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A133D5B222A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiIHPYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S229674AbiIHP0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232544AbiIHPXw (ORCPT
+        with ESMTP id S231522AbiIHPZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:23:52 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD21EB2EE;
-        Thu,  8 Sep 2022 08:23:50 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-3487d84e477so46960687b3.6;
-        Thu, 08 Sep 2022 08:23:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hy6RYfrm5HmnR/mLw7f4LGBQqKyWCny7YZKaMviwD+g=;
-        b=GN+prGANnKxenbDDawxnZwSe02nuS3w13Yp/PwykK91iUw3ID+LM4DVPcg/qjxUYiG
-         vETZsHymfjp/V6cNrPR6BHzMREvrllk7sO8qpR1RB8AKXnAiD+0G8F48rYibNaSNivNQ
-         itpV+0Xq2/N1fBpyp6ZZ7IYQKIRMElpiFZYhGicXCqUZxMNELX6l4fHGmj6zP1ZMa3CY
-         6VFRe1ajrhw/r1UuNZASqmfUZxRY2QtXII5JVO8/h4RDZLjaFjoEx1nOMrx+o46zTUEO
-         HXA/OcWkLymJ9sZoQNS0dZDe5yEOZ1SWe9TjpFR9n0ggeWakDiv43QQCQKcSp2dAT73W
-         6afA==
-X-Gm-Message-State: ACgBeo0yavldGuCIwAhWisSv/I4lbeEvJap4TnntDjJeh6KtOAaN0YbH
-        NzMgqa9DfPBxPUQurT7QzIiTkpKKZtItrgRdapI=
-X-Google-Smtp-Source: AA6agR4+K4QtVakdvSj/SzUsZhmlxPpVSgQ4oBD/H0IpCFzmvMjxNr5X4ZPtuAg1ih2lTcK+8NYgIYU/kh+BqqrUjBU=
-X-Received: by 2002:a81:9407:0:b0:345:6683:d757 with SMTP id
- l7-20020a819407000000b003456683d757mr7948011ywg.326.1662650629499; Thu, 08
- Sep 2022 08:23:49 -0700 (PDT)
+        Thu, 8 Sep 2022 11:25:24 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB8F82F90;
+        Thu,  8 Sep 2022 08:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662650724; x=1694186724;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=g4pwWf8NVAnMTVuQQpLeybb/sfn8btgi5B2EDS6U7ho=;
+  b=IfMjQtXqYZ1uKpPLhRtSykgsL+6B8PZ0/vqcV0R/oCqukMW6JRPx1WUi
+   1XWOYGlJydTcEGC1oD2BwJ4ApWsU2RRzLh+GzlZD1qxLPPRKlBwb6aBjb
+   m7kq5/SphQda2BMQVU2Yfknh/xmU/INP/xI8qWObgD/oBHKEews4lQyhe
+   o=;
+X-IronPort-AV: E=Sophos;i="5.93,300,1654560000"; 
+   d="scan'208";a="239041919"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 15:25:11 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com (Postfix) with ESMTPS id E12232015A5;
+        Thu,  8 Sep 2022 15:25:08 +0000 (UTC)
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 8 Sep 2022 15:24:51 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Thu, 8 Sep 2022 15:24:51 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Thu, 8 Sep 2022 15:24:50 +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id 766CC4D8A; Thu,  8 Sep 2022 15:24:49 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <andriy.shevchenko@intel.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>
+Subject: [PATCH v5 00/21] Variety of fixes and new features for mr75203 driver
+Date:   Thu, 8 Sep 2022 15:24:28 +0000
+Message-ID: <20220908152449.35457-1-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220830231541.1135813-1-rrangel@chromium.org>
- <20220830171332.4.I8af4282adc72eb9f247adcd03676a43893a020a6@changeid>
- <YxftNQrRx3fwsobk@google.com> <CAHQZ30DPmn1hN+xfck7CgOGLcze0jtHxxWnq7yVVL0Q_DzG6UQ@mail.gmail.com>
- <98559c23-cc22-3b85-2102-0cc760240804@redhat.com> <CAHQZ30ACZ-1UtgbXwEc+tFRvW-KpDg87Q4nj5Dwysz2BB26yiQ@mail.gmail.com>
-In-Reply-To: <CAHQZ30ACZ-1UtgbXwEc+tFRvW-KpDg87Q4nj5Dwysz2BB26yiQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Sep 2022 17:23:37 +0200
-Message-ID: <CAJZ5v0iyF98fBgGFyvj_huVkyKvn4O0_WhA=-wC2VCG6A4DdjQ@mail.gmail.com>
-Subject: Re: [PATCH 4/8] i2c: acpi: Use ACPI GPIO wake capability bit to set wake_irq
-To:     Raul Rangel <rrangel@chromium.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 4:40 PM Raul Rangel <rrangel@chromium.org> wrote:
->
-> On Wed, Sep 7, 2022 at 2:12 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> >
-> > Hi,
-> >
-> > On 9/7/22 04:00, Raul Rangel wrote:
-> > > On Tue, Sep 6, 2022 at 7:00 PM Dmitry Torokhov
-> > > <dmitry.torokhov@gmail.com> wrote:
-> > >>
-> > >> On Tue, Aug 30, 2022 at 05:15:37PM -0600, Raul E Rangel wrote:
-> > >>> Device tree already has a mechanism to pass the wake_irq. It does this
-> > >>> by looking for the wakeup-source property and setting the
-> > >>> I2C_CLIENT_WAKE flag. This CL adds the ACPI equivalent. It uses at the
-> > >>> ACPI GpioInt wake flag to determine if the interrupt can be used to wake
-> > >>> the system. Previously the i2c drivers had to make assumptions and
-> > >>> blindly enable the wake IRQ. This can cause spurious wake events. e.g.,
-> > >>> If there is a device with an Active Low interrupt and the device gets
-> > >>> powered off while suspending, the interrupt line will go low since it's
-> > >>> no longer powered and wake the system. For this reason we should respect
-> > >>> the board designers wishes and honor the wake bit defined on the
-> > >>> GpioInt.
-> > >>>
-> > >>> This change does not cover the ACPI Interrupt or IRQ resources.
-> > >>>
-> > >>> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > >>> ---
-> > >>>
-> > >>>  drivers/i2c/i2c-core-acpi.c |  8 ++++++--
-> > >>>  drivers/i2c/i2c-core-base.c | 17 +++++++++++------
-> > >>>  drivers/i2c/i2c-core.h      |  4 ++--
-> > >>>  3 files changed, 19 insertions(+), 10 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-> > >>> index c762a879c4cc6b..cfe82a6ba3ef28 100644
-> > >>> --- a/drivers/i2c/i2c-core-acpi.c
-> > >>> +++ b/drivers/i2c/i2c-core-acpi.c
-> > >>> @@ -182,12 +182,13 @@ static int i2c_acpi_add_resource(struct acpi_resource *ares, void *data)
-> > >>>  /**
-> > >>>   * i2c_acpi_get_irq - get device IRQ number from ACPI
-> > >>>   * @client: Pointer to the I2C client device
-> > >>> + * @wake_capable: Set to 1 if the IRQ is wake capable
-> > >>>   *
-> > >>>   * Find the IRQ number used by a specific client device.
-> > >>>   *
-> > >>>   * Return: The IRQ number or an error code.
-> > >>>   */
-> > >>> -int i2c_acpi_get_irq(struct i2c_client *client)
-> > >>> +int i2c_acpi_get_irq(struct i2c_client *client, int *wake_capable)
-> > >>>  {
-> > >>>       struct acpi_device *adev = ACPI_COMPANION(&client->dev);
-> > >>>       struct list_head resource_list;
-> > >>> @@ -196,6 +197,9 @@ int i2c_acpi_get_irq(struct i2c_client *client)
-> > >>>
-> > >>>       INIT_LIST_HEAD(&resource_list);
-> > >>>
-> > >>> +     if (wake_capable)
-> > >>> +             *wake_capable = 0;
-> > >>> +
-> > >>>       ret = acpi_dev_get_resources(adev, &resource_list,
-> > >>>                                    i2c_acpi_add_resource, &irq);
-> > >>
-> > >
-> > >
-> > >> You also need to handle "Interrupt(..., ...AndWake)" case here. I would
-> > >> look into maybe defining
-> > >>
-> > >> #define IORESOURCE_IRQ_WAKECAPABLE      (1<<6)
-> > >>
-> > >> in include/linux/ioport.h and plumbing it through from ACPI layer.
-> > >>
-> > >> Thanks.
-> > >
-> > > AFAIK the Intel (Not 100% certain) and AMD IO-APIC's can't actually
-> > > wake a system from suspend/suspend-to-idle.
-> >
-> > That may be true for S3 suspend (it sounds about right) there
-> > certainly is no way to "arm for wakeup" on the APIC, but with
-> > s2idle all IRQs which are not explicitly disabled by the OS
-> > still function normally so there any IRQ can be a wakeup
-> > source (AFAIK).
+List of fixes:
+ - Fix "intel,vm-map" property to be optional.
+ - Fix VM sensor allocation when "intel,vm-map" not defined.
+ - Fix multi-channel voltage reading.
+ - Fix voltage equation for negative source input.
+ - Modify the temperature equation according to series 5 datasheet.
+ - Fix coding style issue.
 
-That's true.
+List of new features:
+ - Modify "reset" property to be optional.
+ - Add optional "moortec,vm-active-channels" property to define the number
+   of active channels per VM.
+ - Add support for mr76006 pre-scaler to multiply the voltage result by 2.
+ - Add support for series 6 temperature equation.
+ - Add coefficient properties to fine tune the temperature equation.
+ - Add debugfs to read and write temperature coefficients
 
-Moreover, even for S3 there are transitions into it and there may be
-wakeup interrupts taking place during those transitions.  Those may be
-any IRQs too.
+---------
 
-> > And even with S3 suspend I think some IRQs can act as wakeup,
-> > but that is configured by the BIOS then and not something which
-> > linux can enable/disable. E.g IIRC the parent IRQ of the GPIO
-> > controllers on x86 is an APIC IRQ ...
+Changes between v4 and v5:
+- 0004: Add detailed comment in code explaining the cast and the div instead of
+  right shift or use of BIT().
+- 0011: Fix typo in description (nou --> not).
+- 0020: Return j coefficient to use debugfs_create_file() instead of
+  debugfs_create_u32() because j is signed.
+- 0021: Move the coding style patch to be last in the series (it does not fix
+  the code), and remove the "Fixes:" tag.
 
-It's more about how the system is wired up AFAICS.  Basically, in
-order to wake up the system from S3, the given IRQ needs to be
-physically attached to an input that will trigger the platform wakeup
-logic while in S3.
+Changes between v3 and v4:
+*) Provide a Fixes tag for all fixes in the series.
+*) Start series with fixes.
+*) New patch to add description in moortec,mr75203.yaml.
+*) New patch to add moortec to vendor-prefixes.
+*) Fix moortec,mr75203.yaml checker errors.
+*) Remove validation of device-tree parameters.
+*) Fix per patch specific comments (detailed in each patch).
 
-> >
->
-> SGTM. I wanted to make sure there was interest before I invested the
-> time in adding the functionality. Hopefully I can push up a new patch
-> set tomorrow.
+Changes between v2 and v3:
+*) Add "moortec" prefix to all new device-tree properties.
+*) Change order of patches.
+*) Add explanations to better understand the changes.
+*) Change "reset" property to be optional and remove the
+  "reset-control-skip" property.
+*) Split the patch for "fix multi-channel voltage reading" to two
+   patches.
+*) Change pre-scaler property format and fix typo (scalar --> scaler).
+*) Fix voltage equation to support negative values instead of limiting
+   value to zero.
+*) Temperature equation - protect from overflow and add clamping.
+*) Add new "moortec,ts-series" property to select between temperature
+   equation of series 5 or series 6.
 
-Sounds good. :-)
+Changes between v1 and v2:
+ *) Fix compilation error for patch 08/16:
+    "warning: ISO C90 forbids variable length array"
+
+---------
+
+Eliav Farber (21):
+  dt-bindings: hwmon: (mr75203) fix "intel,vm-map" property to be
+    optional
+  hwmon: (mr75203) fix VM sensor allocation when "intel,vm-map" not
+    defined
+  hwmon: (mr75203) update pvt->v_num and vm_num to the actual number of
+    used sensors
+  hwmon: (mr75203) fix voltage equation for negative source input
+  hwmon: (mr75203) fix multi-channel voltage reading
+  hwmon: (mr75203) enable polling for all VM channels
+  dt-bindings: hwmon: (mr75203) add description for Moortec's PVT
+    controller
+  dt-bindings: hwmon: (mr75203) change "resets" property to be optional
+  hwmon: (mr75203) skip reset-control deassert for SOCs that don't
+    support it
+  dt-bindings: vendor-prefixes: add vendor prefix for Moortec
+  dt-bindings: hwmon: (mr75203) add "moortec,vm-active-channels"
+    property
+  hwmon: (mr75203) add VM active channel support
+  dt-bindings: hwmon: (mr75203) add "moortec,vm-pre-scaler-x2" property
+  hwmon: (mr75203) add VM pre-scaler x2 support
+  hwmon: (mr75203) modify the temperature equation according to series 5
+    datasheet
+  dt-bindings: hwmon: (mr75203) add "moortec,ts-series" property
+  hwmon: (mr75203) add support for series 6 temperature equation
+  dt-bindings: hwmon: (mr75203) add coefficient properties for the
+    thermal equation
+  hwmon: (mr75203) parse temperature coefficients from device-tree
+  hwmon: (mr75203) add debugfs to read and write temperature
+    coefficients
+  hwmon: (mr75203) fix coding style space errors
+
+ .../bindings/hwmon/moortec,mr75203.yaml       |  97 +++-
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ drivers/hwmon/mr75203.c                       | 433 +++++++++++++++---
+ 3 files changed, 466 insertions(+), 66 deletions(-)
+
+-- 
+2.37.1
+

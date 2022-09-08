@@ -2,139 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA2A5B2655
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7114F5B2657
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbiIHS4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S231531AbiIHS4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbiIHS4d (ORCPT
+        with ESMTP id S231611AbiIHS4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:56:33 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F8F103012
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:56:32 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id v5-20020a2583c5000000b006964324be8cso14241808ybm.14
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 11:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=DfW7Ir9+WQmyTVzhm1gHklyle9zrgzIRVd1ekvZC7CA=;
-        b=YZlecdlO47qUQNaOMtSKNTiIPStKS1fKX3wZJZpjcUQYeva7WWrJe+56JQfveBLrNn
-         tYsFb1Fv+9yYbFW1rgsXDxQ1uz/Z1k77RSLkHWxQ7k3lSEA4JCjtYinax4CuioLFqz99
-         2DeqE/AfmKVWrEMIgL9n59oamLmbJDLN1v5C1s6SQynu/SB75BwVt5FqGG9F4g3CLmCu
-         UfgTbQUeQMzSvBQHLSvf1j1LamHNZ6koiF2MsJBvu+tDMsa7bUZ1+p/9vdb332cepz8t
-         c40f5CQElmp4osWWN2p0uVU67uSwlvFcogFJTBfCNeZqceILZnWMXwNAkzDyz/YfdDEu
-         piSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=DfW7Ir9+WQmyTVzhm1gHklyle9zrgzIRVd1ekvZC7CA=;
-        b=LZe3u9r4/uMiNYF8dlqy3c0R5knjgBh9A3TxRi9cD8sbDMiNtOm8rYnSlWr+bX2DOR
-         OYC7cm3b+geZlw8JXjhqCuTF+RopuzDN2KH5hdZXtQeXnhJlj+SGHd1W52C297br9vio
-         jtPIoGR+oRwi3/D0sniqBMzgwmnV4d/H9pmhgOns3scb1+I05OC455NYpyO+ZGlOu1Zn
-         yq8CO/B+SvFmRd3ElH92FJap20gkDaXfXHe8/WiGUHJB7b6wcIzyfrqO3bC8WnkriHFV
-         p/3bcXEvZsNbMjfSvj07futVjXIasr4869aTeeKBpfCG1wPsf990afJlllqFUcpJ+Ja5
-         YgUw==
-X-Gm-Message-State: ACgBeo26LL4IEzYrm4LmupyqNPH674SACrQ9wnNEsXJClkVJT+r/Hnyj
-        JcGI5YHLjW/GnLZj7RJlOXWgFiN6dv8uvB3LVxYFMA==
-X-Google-Smtp-Source: AA6agR6gzaLqzOpRYQHI54Aj1+Zbxlvro56PlSplt5RM04nM9tJebeNTZSm/cZtRkkVVUCysFlG0cVUY+wd7xmBLHYjk6w==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:66bd:4175:b3a6:1479])
- (user=isaacmanjarres job=sendgmr) by 2002:a81:7cd7:0:b0:345:221c:5671 with
- SMTP id x206-20020a817cd7000000b00345221c5671mr8824096ywc.297.1662663391626;
- Thu, 08 Sep 2022 11:56:31 -0700 (PDT)
-Date:   Thu,  8 Sep 2022 11:56:25 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220908185625.3729874-1-isaacmanjarres@google.com>
-Subject: [PATCH stable-4.9] driver core: Don't probe devices after
- bus_type.match() probe deferral
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 14:56:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51939EB2C9;
+        Thu,  8 Sep 2022 11:56:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E12FA61D9A;
+        Thu,  8 Sep 2022 18:56:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBC9C433C1;
+        Thu,  8 Sep 2022 18:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662663408;
+        bh=ffuuiEg915m93Cbe2AVh4cFBTnX17cIXB+u7GWYV01I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qVkaJ8dYZl63fjKLQpX+dJIK2KIozMvxnjs55j1fsTnde9BOPsWzfFoUKXbMGlxpN
+         6ONl5oPAzs5t/cIXDFxN30PBmPBYA8Tsu6FUinpq/fi7gmEzYVu9sG6BgtaIY01PLH
+         nWWZHsJbziV5hJB8GkIZVxtNEdxF9C0QJvFtOonwLyWtlJRsmQTutA1bo1fPni4Qhs
+         C/Vzz7urEpwYdG4DneLoFRQCGrTXDwIBcdSoBxxVOFGL6RSBfGRi7oy9V1vX1eXxA3
+         5wWdTeAUyM51O0dTTkX+Qd/p85dTLWisgfMOj2E0aeK6aCo37Dz3E1nZfK5ta3C0Is
+         SqSy0J3NA1Adg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 00E04404A1; Thu,  8 Sep 2022 15:56:45 -0300 (-03)
+Date:   Thu, 8 Sep 2022 15:56:45 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     acme@redhat.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] perf: don't install data files with x permissions
+Message-ID: <Yxo67YH2kviK8+I4@kernel.org>
+References: <20220907105634.29649-1-jslaby@suse.cz>
+ <20220908060426.9619-1-jslaby@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908060426.9619-1-jslaby@suse.cz>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 25e9fbf0fd38868a429feabc38abebfc6dbf6542 upstream.
+Em Thu, Sep 08, 2022 at 08:04:26AM +0200, Jiri Slaby escreveu:
+> install(1), by default, installs with rwxr-xr-x permissions. Modify
+> perf's Makefile to pass '-m 644' when installing:
+> * Documentation/tips.txt
+> * examples/bpf/*
+> * perf-completion.sh
+> * perf_dlfilter.h header
+> * scripts/perl/Perf-Trace-Util/lib/Perf/Trace/*
+> * scripts/perl/*.pl
+> * tests/attr/*
+> * tests/attr.py
+> * tests/shell/lib/*.sh
+> * trace/strace/groups/*
+> 
+> All those are supposed to be non-executable. Either they are not scripts
+> at all, or they don't have shebang.
 
-Both __device_attach_driver() and __driver_attach() check the return
-code of the bus_type.match() function to see if the device needs to be
-added to the deferred probe list. After adding the device to the list,
-the logic attempts to bind the device to the driver anyway, as if the
-device had matched with the driver, which is not correct.
+Thanks, applied.
 
-If __device_attach_driver() detects that the device in question is not
-ready to match with a driver on the bus, then it doesn't make sense for
-the device to attempt to bind with the current driver or continue
-attempting to match with any of the other drivers on the bus. So, update
-the logic in __device_attach_driver() to reflect this.
+- Arnaldo
 
-If __driver_attach() detects that a driver tried to match with a device
-that is not ready to match yet, then the driver should not attempt to bind
-with the device. However, the driver can still attempt to match and bind
-with other devices on the bus, as drivers can be bound to multiple
-devices. So, update the logic in __driver_attach() to reflect this.
+ 
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Kan Liang <kan.liang@linux.intel.com>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
+> 
+> Notes:
+>     [v2] include also bpf example sources
+> 
+>  tools/perf/Makefile.perf | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index e5921b347153..bd947885a639 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -954,11 +954,11 @@ ifndef NO_LIBBPF
+>  	$(call QUIET_INSTALL, bpf-headers) \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf'; \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf/linux'; \
+> -		$(INSTALL) include/bpf/*.h -t '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf'; \
+> -		$(INSTALL) include/bpf/linux/*.h -t '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf/linux'
+> +		$(INSTALL) include/bpf/*.h -m 644 -t '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf'; \
+> +		$(INSTALL) include/bpf/linux/*.h -m 644 -t '$(DESTDIR_SQ)$(perf_include_instdir_SQ)/bpf/linux'
+>  	$(call QUIET_INSTALL, bpf-examples) \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perf_examples_instdir_SQ)/bpf'; \
+> -		$(INSTALL) examples/bpf/*.c -t '$(DESTDIR_SQ)$(perf_examples_instdir_SQ)/bpf'
+> +		$(INSTALL) examples/bpf/*.c -m 644 -t '$(DESTDIR_SQ)$(perf_examples_instdir_SQ)/bpf'
+>  endif
+>  	$(call QUIET_INSTALL, perf-archive) \
+>  		$(INSTALL) $(OUTPUT)perf-archive -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)'
+> @@ -967,13 +967,13 @@ endif
+>  ifndef NO_LIBAUDIT
+>  	$(call QUIET_INSTALL, strace/groups) \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(STRACE_GROUPS_INSTDIR_SQ)'; \
+> -		$(INSTALL) trace/strace/groups/* -t '$(DESTDIR_SQ)$(STRACE_GROUPS_INSTDIR_SQ)'
+> +		$(INSTALL) trace/strace/groups/* -m 644 -t '$(DESTDIR_SQ)$(STRACE_GROUPS_INSTDIR_SQ)'
+>  endif
+>  ifndef NO_LIBPERL
+>  	$(call QUIET_INSTALL, perl-scripts) \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/perl/Perf-Trace-Util/lib/Perf/Trace'; \
+> -		$(INSTALL) scripts/perl/Perf-Trace-Util/lib/Perf/Trace/* -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/perl/Perf-Trace-Util/lib/Perf/Trace'; \
+> -		$(INSTALL) scripts/perl/*.pl -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/perl'; \
+> +		$(INSTALL) scripts/perl/Perf-Trace-Util/lib/Perf/Trace/* -m 644 -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/perl/Perf-Trace-Util/lib/Perf/Trace'; \
+> +		$(INSTALL) scripts/perl/*.pl -m 644 -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/perl'; \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/perl/bin'; \
+>  		$(INSTALL) scripts/perl/bin/* -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/perl/bin'
+>  endif
+> @@ -990,23 +990,23 @@ endif
+>  		$(INSTALL) $(DLFILTERS) '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/dlfilters';
+>  	$(call QUIET_INSTALL, perf_completion-script) \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(sysconfdir_SQ)/bash_completion.d'; \
+> -		$(INSTALL) perf-completion.sh '$(DESTDIR_SQ)$(sysconfdir_SQ)/bash_completion.d/perf'
+> +		$(INSTALL) perf-completion.sh -m 644 '$(DESTDIR_SQ)$(sysconfdir_SQ)/bash_completion.d/perf'
+>  	$(call QUIET_INSTALL, perf-tip) \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(tip_instdir_SQ)'; \
+> -		$(INSTALL) Documentation/tips.txt -t '$(DESTDIR_SQ)$(tip_instdir_SQ)'
+> +		$(INSTALL) Documentation/tips.txt -m 644 -t '$(DESTDIR_SQ)$(tip_instdir_SQ)'
+>  
+>  install-tests: all install-gtk
+>  	$(call QUIET_INSTALL, tests) \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests'; \
+> -		$(INSTALL) tests/attr.py '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests'; \
+> +		$(INSTALL) tests/attr.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests'; \
+>  		$(INSTALL) tests/pe-file.exe* '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests'; \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/attr'; \
+> -		$(INSTALL) tests/attr/* '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/attr'; \
+> +		$(INSTALL) tests/attr/* -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/attr'; \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+>  		$(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+>  		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+> -		$(INSTALL) tests/shell/lib/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+> -		$(INSTALL) tests/shell/lib/*.py '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
+> +		$(INSTALL) tests/shell/lib/*.sh -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+> +		$(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
+>  
+>  install-bin: install-tools install-tests install-traceevent-plugins
+>  
+> -- 
+> 2.37.3
 
-Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-Cc: stable@vger.kernel.org
-Cc: Saravana Kannan <saravanak@google.com>
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
- drivers/base/dd.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index ff59a1851cb4..faaa0440b294 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -590,6 +590,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
- 	} else if (ret == -EPROBE_DEFER) {
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Device can't match with a driver right now, so don't attempt
-+		 * to match or bind with other drivers on the bus.
-+		 */
-+		return ret;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d", ret);
- 		return ret;
-@@ -732,6 +737,11 @@ static int __driver_attach(struct device *dev, void *data)
- 	} else if (ret == -EPROBE_DEFER) {
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Driver could not match with device, but may match with
-+		 * another device on the bus.
-+		 */
-+		return 0;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d", ret);
- 		return ret;
 -- 
-2.37.2.789.g6183377224-goog
 
+- Arnaldo

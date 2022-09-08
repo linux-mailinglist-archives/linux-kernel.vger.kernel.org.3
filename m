@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B99F5B111B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4335B111C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiIHA2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 20:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S230178AbiIHA25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiIHA2s (ORCPT
+        with ESMTP id S229476AbiIHA2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:28:48 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310FCD0221;
-        Wed,  7 Sep 2022 17:28:46 -0700 (PDT)
+        Wed, 7 Sep 2022 20:28:53 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2070.outbound.protection.outlook.com [40.107.102.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9785AD0205;
+        Wed,  7 Sep 2022 17:28:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PM58vSgHe7QF68qWN1mfpeQtk2ylAtWjkQcrAMTMxHTn31HZScxnRUJTLGkQwLLxFN83S1jJry6PM4O3qXdFWU1IuWh5X8gNwGK38JUK0XPaPCZrcHhf2eXx22TEJ6XreLraVQ/9tQgSDRHiv1kOV+cwiM/gqoC0UzT5D8Z5Ci3qiz6H5wajxcc/YwO+w3M+uxqPuCWLg+yjXRanIUnbT0VmyEP4EvFg4YrxqCrSjqEeUTP5zCdskhnz6B4YvyNKleHNPKm84JV8aOAbNeOy+kmCIUvucaZFGv2yFZOXD/rNgUsSmY/Hl0mOAyqwde5hm8DWOjaOuRV6qx+3aln6tQ==
+ b=GBdV0m1V4y+sOS/IrD46vUXKXhDEIFk74McZT0O8H4WD/75eiQFckhzpseEHxhMEuw5FKY0IfIO4VGP/ksPKfxosPqk3v0h1sDZZp5FUjAFp6KqKx+mNFbHZ4U6wjQV5BWhKSNnWiCsq6Yy6qexQ/CwQbi3go6w0mZeg/vgc0gWmlV7HFtUVqzEQgyr8YirQ/qlPQMhXB90Coa5zbhdm1qd8/oD9PC08N61JRQ0T7bsmpxTiaiwmiV9kR0Q3B+Nd8a/RSc28xMaK0yaZhqokiTZjTH06deLx0fBQRpFBiBE2YwgfzeK/zRmIl77b83cOpgaOqr1a4KoRmIeLw50dvQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IdLQYg8RDb396A262haJ2vGV8GQosuRznx2f8SQyqqU=;
- b=A8EZH/nmNpuxJNvoqxNDNyyJLOyourIOPZIgIQHFg5FGgaqlEvozODyyG3A1gsRFk5wIAxVDgYXOsrC49XAs6STQUyv2zqaleySdJW6atIePBzO1NX7LYKUAVZtfaBaESimN7LOSA9Hj2q0kC5bIwMXIoe7t80Hy/q9xB+0iRgM0H0c9zI/QIsn2xdRj2psoPYWhD1uTYisoxRSKSdNO2TpUb+PfRgdI6DmHSUpRzduWCl3zGcOz68IMmiNplzBIM2VlHWaXxqCf8XRNV9+h0a2XDW5wwwwYe8HMLoVfcmxzq6uwowQYr7i/6+jZa6ROWDM0iQP+ELhSLVgZl5sL+Q==
+ bh=tCMSbnxbO7oAgC4J7x9Y3L4VevIlnzuc/VnPjYyHHSI=;
+ b=OklTFtwbWmiMdelje48d4wEPZDCq3DNpP8dvFzJTf7soWJtQ7wJwDzDWAJivvUnJzl1hdpMAXD+I8C4S9PDvTgCErswhp13BujXCs15NJNn/6L31b5fLi6dkgQVEJbkLht/Qg6xq8omQzC6f9AQbro/luAx3RCpDDgGdegnLqoFX1xrhmXiJ/Mkqui+XYLCPCjsBa1l5S+UdBG/c+ZZbanXWfHG0jwXGK8Ov8KgibF2d0kXW5gKDOgFa6tlLr6tG9xhlGIfd9ru+3xpnlGHXt/Bz8I/+rifOL8I3STohd4e/ffHDc+6bUEE7e3v8VwxkF40wD2F0Rnx620KBdkvTsQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IdLQYg8RDb396A262haJ2vGV8GQosuRznx2f8SQyqqU=;
- b=vhFyT4qZVPzfEr6FHg/+jexJE0MnDjIpxs/M1UvDj30EfIQKRCzdcCK3m/2FBs5imHUj5/wRh+ASw/4uL+F4vdejphZ8jWHCvfmahdA6AlWkkt0UkcZeIGeagVml75Bl9jcY+QXJ3MFQyKB2oB+TJNxFKoC7NFOmk5JJmSFvNx4=
-Received: from BN8PR12CA0019.namprd12.prod.outlook.com (2603:10b6:408:60::32)
- by DS7PR12MB5790.namprd12.prod.outlook.com (2603:10b6:8:75::18) with
+ bh=tCMSbnxbO7oAgC4J7x9Y3L4VevIlnzuc/VnPjYyHHSI=;
+ b=T5FvfWhv3xc59E/F+d4A1cQVCxMAOqIgs3iKTrtE0Rpo/QERYkyxs15z2+luDO/pQ4fWbGyuyuJkLMC5KHP9ZxZFj/VH5Fi0hwuZVjMAuqvpJog6oWU2m3qHp3/xtOr3yIWTCRr8XbQOULr6/PFBz6vqh1FBpOmedGVUMWbMi34=
+Received: from BN9P222CA0013.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::18)
+ by DM4PR12MB6039.namprd12.prod.outlook.com (2603:10b6:8:aa::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Thu, 8 Sep
- 2022 00:28:44 +0000
-Received: from BN8NAM11FT097.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:60:cafe::2d) by BN8PR12CA0019.outlook.office365.com
- (2603:10b6:408:60::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
- Transport; Thu, 8 Sep 2022 00:28:44 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.15; Thu, 8 Sep
+ 2022 00:28:47 +0000
+Received: from BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10c:cafe::f9) by BN9P222CA0013.outlook.office365.com
+ (2603:10b6:408:10c::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12 via Frontend
+ Transport; Thu, 8 Sep 2022 00:28:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT097.mail.protection.outlook.com (10.13.176.147) with Microsoft SMTP
+ BN8NAM11FT065.mail.protection.outlook.com (10.13.177.63) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5612.13 via Frontend Transport; Thu, 8 Sep 2022 00:28:43 +0000
+ 15.20.5612.13 via Frontend Transport; Thu, 8 Sep 2022 00:28:47 +0000
 Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 7 Sep
- 2022 19:28:39 -0500
+ 2022 19:28:43 -0500
 From:   Meng Li <li.meng@amd.com>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
@@ -68,10 +68,12 @@ CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
         Meng Li <li.meng@amd.com>
-Subject: [RESEND PATCH 0/1] Add explanation for X86_AMD_PSTATE_UT
-Date:   Thu, 8 Sep 2022 08:28:20 +0800
-Message-ID: <20220908002821.1648880-1-li.meng@amd.com>
+Subject: [RESEND PATCH] cpufreq: amd-pstate: Add explanation for X86_AMD_PSTATE_UT
+Date:   Thu, 8 Sep 2022 08:28:21 +0800
+Message-ID: <20220908002821.1648880-2-li.meng@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220908002821.1648880-1-li.meng@amd.com>
+References: <20220908002821.1648880-1-li.meng@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -80,23 +82,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT097:EE_|DS7PR12MB5790:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd8a70ed-09c0-4535-4d8a-08da91311643
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT065:EE_|DM4PR12MB6039:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a2b4c3f-45e9-40f4-8345-08da9131187d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XK9JwZSxg7Ym9QuJV47y6p2rJSVemtgaw83reoLpp1QdSDu/RzZ+/ewMgWYZWuzsH/f48R0QAjdeyPQ03U6BIGmN36fvIg+upffDNSWdGAK7VBnLGcoBFvfCK8INwEYgn+na/T/bGWkUkbgwbHfw7oOhIqMrXJt0ENp+rBdcrwaO6xYPv1kRGE7MARRGvAWJ/IuCf8R2Bjcwwb1b7wbT+rYd+6QX/QVj8fEReseHl2rirnn5Jq7DzKnxzjd2ovPOjR8Ur7Xpb8/X8IzR+TYDPmVOrinsXLIrKFqGd56VDcwOwmArjgvCPb9AgnYFhE6WILxNqpZqpHaYdsXoESmh2WU6xpGDZLVITAQ4+weZArtotC9HDp6Em26okHAabTkp8xMcoI7LKVjszZbJMN9Heo16AaB0YsS27dm1eBP3c28vY6pOSXHQAOE5F9fiyGvsJWAbX1n0c7I46HFR3oeqX8BWyNPtJTZMF5Mn0fFdFbzuLd/M+Q0yjhy0MEMGNwomI1Gksc07siFnaAFtcPcYzAzj53WkPWp8jZXhwSAYsn+ghwVEPFaoI3MSaSxuYd/Dz5n+9wDdXGt6yYTab1fPBX8wLdtXlHjuTjiBiyVZ33WCPRkminNFHGEHoD+/z0Ek1vnaRFU1ICPQWbz+IFdhFB/0LtWtBWsga41l58gkhjqW854sWPxfpVnCBVRi0zIBL0A4awF4DvG6Kuu6EVdGcRsvNfekFVXr3gHdxBWFktejqR719TNxEaAeUu4a/FOusFt/pt+RfB2Zq84Nwv/ChzfwyDTAFl5zPOEqCUQfwu+uwKW7y1hiczUfHEN7OSN0
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(346002)(396003)(40470700004)(36840700001)(46966006)(26005)(16526019)(336012)(2616005)(1076003)(426003)(6666004)(5660300002)(8936002)(186003)(40480700001)(86362001)(7696005)(41300700001)(36756003)(47076005)(40460700003)(82740400003)(478600001)(356005)(82310400005)(70586007)(4744005)(54906003)(83380400001)(110136005)(36860700001)(2906002)(81166007)(70206006)(4326008)(8676002)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: EYow9Vmh9WmRvcDNnVc1vaLc7uByPtwPzMG00eJSMpTDeDsSP2+h0mnL6z5XBXc+eSDxEcir7CFbtIptFdJFXSS35ncXPbWgymf63YhzsuLVo6JJ8723Lgpzv5IiTlDwxgSE2eZVfJUYxC+Aw+42CUUBeF7JLVNxSvPUg84YHhaxdqosVLvKnJRr02Iwkjzg8s390j47TOlHgeaBY/25PxyN8k/sEMsLcmozpHEQ2fvfE+eKNMqeWb6XLKaiu/D7KXSl4rQ0nKCGHjVbjK5+KsNHy1UZDSqDN6ujRHJB8JV7viilpIB1p6soXRjEBRpQIJ0ZtxIL3lhO6Eh8voUiFzn+2IpApxX0GBjvRAwL4lssy5HuyPlvCCCz7eCfGfOvhwGhG6SI9stFV/7z8Rf7Xs0vvNtzw3HP26NRwkFRg60ZhbqydWyRd5pQyj3tQUaLan3TXHDUqsBQcsLYy/as1tfq5xuB2+wmBnc9cP5ZJl9Qkc1ZQq9vOMNzu6d1gsmb7VR0IYtABI+7NpMVjoPjqNwimUTWILc0lez60qYOp3Fhvob5iI929uHJmfsyHcR7nWKFl6c1WcUShospJM+4mSujWJEtSFVQjxdMTKPCFjYsbrUFSqzRyQ0zEkMeP/kCrv65vAfWzc05hsYEzeUQ1BR6ky8vJzMilpmWBVWXKq90RtdZxdnD6jfiVgKn8Bdr1cgtLwyi+rB4dTPY2kZG9ObIfqoJuS5UZI8EA78bDRBXJYEacXnQ1C1I5WH3b+jK+42BCotVJn+iCPb+jDza0XXVVgZVRK4nzqqNFCJpjWknp7/by02lWP9y3gEi6SOe
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(396003)(40470700004)(36840700001)(46966006)(40460700003)(4326008)(86362001)(7696005)(2616005)(426003)(83380400001)(16526019)(1076003)(186003)(81166007)(47076005)(82740400003)(36860700001)(356005)(336012)(26005)(8676002)(70586007)(70206006)(2906002)(316002)(110136005)(8936002)(478600001)(5660300002)(40480700001)(54906003)(82310400005)(36756003)(41300700001)(6666004)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 00:28:43.8656
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 00:28:47.5869
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd8a70ed-09c0-4535-4d8a-08da91311643
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a2b4c3f-45e9-40f4-8345-08da9131187d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT097.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5790
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6039
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -107,12 +109,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all:
-
-According to Shuah's review comments, add a new patches for expain
-X86_AMD_PSTATE_UT.
-
-amd-pstate-ut can also be built-in without X86_AMD_PSTATE enabled.
+This kernel module is used for testing. It's safe to say M here.
+It can also be built-in without X86_AMD_PSTATE enabled.
 Currently, only tests for amd-pstate are supported. If X86_AMD_PSTATE
 is set disabled, it can tell the users test can only run on amd-pstate
 driver, please set X86_AMD_PSTATE enabled.
@@ -120,13 +118,44 @@ In the future, comparison tests will be added. It can set amd-pstate
 disabled and set acpi-cpufreq enabled to run test cases, then compare
 the test results.
 
-Meng Li (1):
-  cpufreq: amd-pstate: Add explanation for X86_AMD_PSTATE_UT
-
+Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Meng Li <li.meng@amd.com>
+---
  drivers/cpufreq/Kconfig.x86                         | 8 ++++++++
  tools/testing/selftests/amd-pstate/amd-pstate-ut.sh | 1 +
  2 files changed, 9 insertions(+)
 
+diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
+index fdd819069d72..310779b07daf 100644
+--- a/drivers/cpufreq/Kconfig.x86
++++ b/drivers/cpufreq/Kconfig.x86
+@@ -58,6 +58,14 @@ config X86_AMD_PSTATE_UT
+ 	help
+ 	  This kernel module is used for testing. It's safe to say M here.
+ 
++	  It can also be built-in without X86_AMD_PSTATE enabled.
++	  Currently, only tests for amd-pstate are supported. If X86_AMD_PSTATE
++	  is set disabled, it can tell the users test can only run on amd-pstate
++	  driver, please set X86_AMD_PSTATE enabled.
++	  In the future, comparison tests will be added. It can set amd-pstate
++	  disabled and set acpi-cpufreq enabled to run test cases, then compare
++	  the test results.
++
+ config X86_ACPI_CPUFREQ
+ 	tristate "ACPI Processor P-States driver"
+ 	depends on ACPI_PROCESSOR
+diff --git a/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh b/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+index 273364650285..f8e82d91ffcf 100755
+--- a/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
++++ b/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+@@ -32,6 +32,7 @@ fi
+ scaling_driver=$(cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver)
+ if [ "$scaling_driver" != "amd-pstate" ]; then
+ 	echo "$0 # Skipped: Test can only run on amd-pstate driver."
++	echo "$0 # Please set X86_AMD_PSTATE enabled."
+ 	echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
+ 	exit $ksft_skip
+ fi
 -- 
 2.34.1
 

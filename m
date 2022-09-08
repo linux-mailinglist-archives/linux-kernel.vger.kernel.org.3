@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2B35B28D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 23:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00965B28C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 23:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiIHV5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 17:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S230138AbiIHV5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 17:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiIHV4Z (ORCPT
+        with ESMTP id S230256AbiIHV41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 17:56:25 -0400
+        Thu, 8 Sep 2022 17:56:27 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3CD12BF8F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 14:55:47 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-32a115757b6so156389877b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 14:55:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19A812BFB3
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 14:55:50 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-34558a60c39so96243067b3.16
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 14:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=P5XeXy2GIaSKYLkYAqglVvjH3kuWJ9tPWJSwe0Lo+wY=;
-        b=hx62HzwiHzddRJHYtkXI4QajxL+odl+FO37dBOwfzxb8NNyzv4/yv9wyRADQYJHrDX
-         JWYICnxQ4HQoyr+yvMUobWEYirWtQ3HKANeu1Y10LPfeC8jSnGodKUs0g3EtRQ4kT6Qd
-         0D/oc6nRgHCzFZSC18Qkj01D2+egHql1wXi106mydKoVY9hY4FURlxCXXnmzShibH931
-         phOl2Z0Pl+pvetz46HRs02jeeQFZkr5T3Ek1VjoeP/LjPvf1uU0rMP/1kLJXm6t+6ap/
-         LclWruX1iYwlH8NynScn/a6VSNGCyHyGI3XOynkr7rwXG4AHts4qQprn8mhR8A+VZd33
-         cRqA==
+        bh=usXbLw1pM2KvyZoDBuKyHSuX2iW4zvZIVdDHW6Ts0ZY=;
+        b=AE4JUukv8f9Zob1CSZjp3nG8WCaj3ktDo/dMYs0duivx37HcX6QQwPd62gAfqdbaOp
+         ptanisTDbgqESxDW0iDctlddt1gBINtCfgVxMm3AorZg6MHImPBAGieJc7i1uOt7Ic5u
+         e2EnKCy0bJiG/q+SSXxzDIswsm+9j3fTQhgLDvainjBzLtGVH7pqzyDI0rCIir4aTOlL
+         JL7f8C8gUvah7VB+5UzO6n5ibwm2KLG8F9D2rMwm84+DU46EsQ4CHToWmPNIYB8qnjfA
+         S7aP3kqsWt0J/j/dl6au199648A6c81VVr0lt1CkqxXM+61lSRu/wnEGVe/8d4zJGZMe
+         2+QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=P5XeXy2GIaSKYLkYAqglVvjH3kuWJ9tPWJSwe0Lo+wY=;
-        b=rPbSGIrprKlYJyb27HYhHuazKdy6h7bRfzqgbVLCcJgUdr8e3kaYxVa9s4kSkYUdM0
-         gGX4M5CUpoDUK3+CrgBGf3z2wewvA23S91ri7dSvxNpDic7r8JKTTIlRy1XyO0ltD+B2
-         OKZwshxYgc61lQjmqrKbqkQXOXMgfN/jcg0CUViyp/X7t2SvybXgVUgAyUH3B7lVvKAE
-         bbwz86Me7DAD5hlt0MdiVRZFa545rvdBDcsacwyI31rI02FFyf2pvauxLvSUl6YwHWNn
-         NZAcNSOtutDkXcFEGf84k8/Ln7rYi+3i0hucGnbj4fyYDllqvns7LS6tWJ2hIIsXyAcq
-         L/jg==
-X-Gm-Message-State: ACgBeo2yTWeKuFVsz6ZAdbbCOnzjJqwAcFE1LO0Hj1r9995eddphfE18
-        m7NBNHi56mT2saD5V5Eui6WRLfJWolKVuFq8VwhH4WHobPSyZ2d8YaS8wBdhVHNIvPdqG3BVuH+
-        GLOLbRT1FRRPuAC0XL9NRG6LeGdeLB+ybMxTUWto4yIfGt3pjRGJYGus6UQoMjZCojIaetqlVGY
-        UA2fRvBqDZtg==
-X-Google-Smtp-Source: AA6agR4HGxS3+r7EWurz3pEdejYHxzCA4+e4KopmW1I2S8OfDWvRZ5OIQmq1djGZpkTpe4gyzuVYJnGHX359T2kom9w=
+        bh=usXbLw1pM2KvyZoDBuKyHSuX2iW4zvZIVdDHW6Ts0ZY=;
+        b=U0+GYEz/EKsBnf4uCZtpUv6cA0027qeVXeyS8y+s1VG2BpXO6opj/9yls0JF44Tiac
+         nG4fxD1KdynuSiR5dzwarXt3/Q8A5prtESgRpNrg0PhwkAxMYTQbIvyNW/fgq0j8gn+1
+         Oe0STgrj80oMeRVs0/jhefy+tn472KwM53QRV//pnm2mnx2s+AHWI+wfjuKp96f1G94Q
+         Y4X65lVnGL0A+cC8bBCPnwXKJCmmKKTIRMMPsmovwnRYg7eBfEHKTk0xfPCYhe+bh6Cf
+         CG7tHfQetkKx2awbM/asyq9w+SJEHPD0SGkDeDztLHNT6xGhqRpj8ecie0lLqwhHJdcg
+         pIDA==
+X-Gm-Message-State: ACgBeo28HCSgMpLcfPb/ANHL7xJlX389bEXMVPDTxGY/4MWT31awO8Uv
+        qji7Fnh7ON1hJsSOX6jHbW6thYTQqTG0y2DQ/cslXyzwYXlOtk8Xvm5dXl9340mXdXoByr6b8C+
+        QHeqQQBzk/FKPHz08p7XLoQLTl1PrX3uawSvHtDAy9VGgIs4DEyAVQhXzr/+iVajsV0gKdrUpl3
+        noDCAYtprswQ==
+X-Google-Smtp-Source: AA6agR5WT7zakLIVotfkCP+Ltu8T016sdQ/qMO5CU/j3xR9ORhLtwu6lkBY4eBv6Q8pR6ikFX1Dtzbh+lC7Opjk3qVA=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:a4e4:e6ec:9fdd:1bdd])
- (user=samitolvanen job=sendgmr) by 2002:a05:6902:10c2:b0:6ae:131a:eac3 with
- SMTP id w2-20020a05690210c200b006ae131aeac3mr6582686ybu.276.1662674146355;
- Thu, 08 Sep 2022 14:55:46 -0700 (PDT)
-Date:   Thu,  8 Sep 2022 14:54:57 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a81:6f43:0:b0:335:9e7e:ad25 with SMTP
+ id k64-20020a816f43000000b003359e7ead25mr9472870ywc.518.1662674148732; Thu,
+ 08 Sep 2022 14:55:48 -0700 (PDT)
+Date:   Thu,  8 Sep 2022 14:54:58 -0700
 In-Reply-To: <20220908215504.3686827-1-samitolvanen@google.com>
-Message-Id: <20220908215504.3686827-16-samitolvanen@google.com>
+Message-Id: <20220908215504.3686827-17-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20220908215504.3686827-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2291; i=samitolvanen@google.com;
- h=from:subject; bh=mON8m7x3rUfa1D0nlNPBxEehMr1A/zDxXAQAEngsFEg=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmS1cVYdHINNLoBeCZ9uFVNyEFfBwFNRQPTvzufN
- DW569WSJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpktQAKCRBMtfaEi7xW7n1fC/
- 9ntySdFzUO3oTsyY2vU09I6p+wIqQMm9FgTwxmaQG1446FzMM4pSm/SX4JhZE9j5JO8X+roj+rnp/z
- hoLKBrMvE4bR6IyFTxO7Mvy3qSC20smGCBNQEzlDovULvMTBcz9vOxRopVfnk1UYwSrW9ctflDk9nk
- 4LAs9n5qb3YgtVh/R/Z8eYLffSUyid4RzFUP2hrOI9q4u8FDJmS4YcLXzXQXdrINqm1HCS+DuVZb2M
- cdX+RhevB8yVxZTIf7jZ/lUySTbyUOmjWUD8pHjbJcoo1ntxHci8Vmq1K4CjD6c3APzuxeX590QJkn
- KBYWzy/6MpMlQgqnqc+zSj9GPWNf3cOKfDlgR7zqw8OW/C1YzhnW9F1HGhVHZFo+7ezUBee0CAFSQI
- gcxtb0a8Df7ZA5bqq/2Fvw+mJSr2Po2uEi1HUVMcMh0t2DWkOSFxvudPDClnFcZve5BqD8NPpHJYmZ
- eVj3Qsqgk+JqnpMPVr/Oucx4m4puzPjSBwSLTyV7Uh0w4=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1445; i=samitolvanen@google.com;
+ h=from:subject; bh=OojUc6gvhYO7/nvSgMu6gZvuX/wXQ7p5p2ix4YG74Ww=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjGmS18ATy8CgQuYAQJpe1UeWUw98XLd/V3+KW2F/u
+ 4Z+6kC2JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYxpktQAKCRBMtfaEi7xW7lSuC/
+ 4sfH5L4f5/2SJ64jvWTm+1lc49S13k5MpSk0eZ/UEsUKzTgzzu4i3s7Q9UqdkRmWmqhbZylhnZgFbP
+ GNleTbZK4sC/NyBAMN9DqIujnWeWRIghfmZSMzF1NWoHIa8Si19YuRXRTnnVfB/KWCwcAi5MDKfWQE
+ eqwZCJKcO9hjR3Pnxe25vrAj54m6F3Q0bk1QY0bfYbfyMhC3XAW6WEGUJaI73A08owc1LxwtpRVj1N
+ MYDySP7kr7EF6/9u1H8SjmdLJlLCins4r3I/1dbOPQ5eAMqCW4LV/SbIdF+yDRhRMOfV2VjFyfAbxr
+ mdleL7w8DTTDlCbr+Klc/IenrmmnOOwDQDZwysQbJ7Ovt0tbfNphd/tAdItunYuMjg3U+GiGuWEG2j
+ 5M0n4Vyh7DU44YcziEwli2nYR/R/UUgv+RJpgz2QqW3Ld05ic5w8yjfU65prGhAypzJzeqx9BnOZg6
+ hZR3WFUEeET3Wqby5DqrJb95y73h3aP44Ssz5htKs3W8Q=
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Subject: [PATCH v5 15/22] treewide: Drop __cficanonical
+Subject: [PATCH v5 16/22] objtool: Preserve special st_shndx indexes in elf_update_symbol
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -94,68 +94,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_CFI_CLANG doesn't use a jump table anymore and therefore,
-won't change function references to point elsewhere. Remove the
-__cficanonical attribute and all uses of it.
+elf_update_symbol fails to preserve the special st_shndx values
+between [SHN_LORESERVE, SHN_HIRESERVE], which results in it
+converting SHN_ABS entries into SHN_UNDEF, for example. Explicitly
+check for the special indexes and ensure these symbols are not
+marked undefined.
 
-Note that the Clang definition of the attribute was removed earlier,
-just clean up the no-op definition and users.
-
+Fixes: ead165fa1042 ("objtool: Fix symbol creation")
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Kees Cook <keescook@chromium.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
- include/linux/compiler_types.h | 4 ----
- include/linux/init.h           | 4 ++--
- include/linux/pci.h            | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ tools/objtool/elf.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 4f2a819fd60a..6f2ec0976e2d 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -265,10 +265,6 @@ struct ftrace_likely_data {
- # define __nocfi
- #endif
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index c25e957c1e52..7e24b09b1163 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -619,6 +619,11 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 	Elf64_Xword entsize = symtab->sh.sh_entsize;
+ 	int max_idx, idx = sym->idx;
+ 	Elf_Scn *s, *t = NULL;
++	bool is_special_shndx = sym->sym.st_shndx >= SHN_LORESERVE &&
++				sym->sym.st_shndx != SHN_XINDEX;
++
++	if (is_special_shndx)
++		shndx = sym->sym.st_shndx;
  
--#ifndef __cficanonical
--# define __cficanonical
--#endif
--
- /*
-  * Any place that could be marked with the "alloc_size" attribute is also
-  * a place to be marked with the "malloc" attribute. Do this as part of the
-diff --git a/include/linux/init.h b/include/linux/init.h
-index 88f2964097f5..a0a90cd73ebe 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -220,8 +220,8 @@ extern bool initcall_debug;
- 	__initcall_name(initstub, __iid, id)
+ 	s = elf_getscn(elf->elf, symtab->idx);
+ 	if (!s) {
+@@ -704,7 +709,7 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 	}
  
- #define __define_initcall_stub(__stub, fn)			\
--	int __init __cficanonical __stub(void);			\
--	int __init __cficanonical __stub(void)			\
-+	int __init __stub(void);				\
-+	int __init __stub(void)					\
- 	{ 							\
- 		return fn();					\
- 	}							\
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 060af91bafcd..5da0846aa3c1 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -2019,8 +2019,8 @@ enum pci_fixup_pass {
- #ifdef CONFIG_LTO_CLANG
- #define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
- 				  class_shift, hook, stub)		\
--	void __cficanonical stub(struct pci_dev *dev);			\
--	void __cficanonical stub(struct pci_dev *dev)			\
-+	void stub(struct pci_dev *dev);					\
-+	void stub(struct pci_dev *dev)					\
- 	{ 								\
- 		hook(dev); 						\
- 	}								\
+ 	/* setup extended section index magic and write the symbol */
+-	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
++	if ((shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) || is_special_shndx) {
+ 		sym->sym.st_shndx = shndx;
+ 		if (!shndx_data)
+ 			shndx = 0;
 -- 
 2.37.2.789.g6183377224-goog
 

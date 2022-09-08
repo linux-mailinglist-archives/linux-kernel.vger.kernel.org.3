@@ -2,82 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2575B1B87
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2CE5B1B86
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiIHLdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
+        id S231415AbiIHLdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbiIHLdo (ORCPT
+        with ESMTP id S231377AbiIHLdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:33:44 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEE0ED38C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:33:42 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id c10so10037409ljj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=SHyR4FRu6T2HcLl5xmxY+V3df7MUMDZkcL9KsWa8P/M=;
-        b=ajrcOYDhY0MqBe/iaQtMLbZEPnCvrEafzbHJbHN8ZmpWM5+jlPx+THqBtLgXc4zyUP
-         XBzAEw0BSVPADegegOOELR0XtOjbnpjpvd2WTcJkY2i6WMBekK84YX8YtoTANf/qOfH/
-         nnGlsRwLMAh5/4yO8vTksgjLVWi+4+3OrJK6UlsnqWtOaol/hhcJ+B1I5Aw602UbbcbU
-         D74kae7ZKme3o3GkOam8vxKsKWfGjHtUqn5F6RVleihYURNJ4G6ICgBya2qykY+szOhn
-         LNH+iaEgv0u5mOu5ZN8qkuz69X7IOe1sv/eRaYyXoyrohrjNX8QXkZFk1p90QEfaRVJz
-         xdCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=SHyR4FRu6T2HcLl5xmxY+V3df7MUMDZkcL9KsWa8P/M=;
-        b=ycCECMiZ9UvJSkzer2boflkqynfT9oUwpuqyeusx/RCJlqYvH3AWeLsZzxvCa0kqmX
-         cxpQ3obSau466Fb42F0ZF3mrIsXtcIg9TQUZF7K5YwZKou6pIUtiFHnF/Fie/pc5xNHD
-         DAzXWdggTD2HyzIaEqKZM50n09kw1mJGJUKL+4hBglDzVrNew7DfQlFOQ1BxKvxqRv8f
-         wvsS0U0r7D6IP/PURjMpDWbWOrZ2n19fdEXF7jTmrtBMYxB9v4zcvGgWkmr/dLSrBr/q
-         iDvXgYKntzwoHCfqXfgdGIKROQvC8PJ7BWtezbpOQeg31ON5E1CVJ75uVH7cotM7l6if
-         KDbg==
-X-Gm-Message-State: ACgBeo3Ad/GKK11ktHAwEdLt5C40qcRx26gDka0QWm8ZFzvZL0bVDsoF
-        gu1Ezz2/QSy1SqQHp0dOiICujA==
-X-Google-Smtp-Source: AA6agR7YNjVF4CnQ3ndSgVJn98vT9qcDXD21WnxwPbPRgvbQ5LtOMNyq4DAjXdcJVDjXT/qdR4EpeA==
-X-Received: by 2002:a05:651c:245:b0:261:caa7:5be3 with SMTP id x5-20020a05651c024500b00261caa75be3mr2195487ljn.334.1662636820680;
-        Thu, 08 Sep 2022 04:33:40 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f18-20020a056512361200b00498ebd60c35sm247928lfs.165.2022.09.08.04.33.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 04:33:40 -0700 (PDT)
-Message-ID: <8528d39e-c03a-7d83-d8e7-5191d3110015@linaro.org>
-Date:   Thu, 8 Sep 2022 13:33:39 +0200
+        Thu, 8 Sep 2022 07:33:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984E2CEB2C;
+        Thu,  8 Sep 2022 04:33:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33DCE619F2;
+        Thu,  8 Sep 2022 11:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04909C433D6;
+        Thu,  8 Sep 2022 11:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662636814;
+        bh=fAv0H5mhmBOeV+oGdvgzNzv3ieu8oKLrIj4T6iX1Njg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HqsT+crZcE1Xz1oKUhzrLrQvGV+aUsn4Q5WOMlSKuT1swBFdAs/RBfAEaurpJnDXJ
+         pyZLwcVsz037q4SEMwGULQ61oM8fM0Sr3jZ6khWW3FIpcRVAiMzA82QGA9DHw55J8w
+         hC3HRB9p3Cz5r2KFZpiJStQWL/crzRbbPhQExtG8=
+Date:   Thu, 8 Sep 2022 13:33:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        linux-usb@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] usb: chipidea: make configs for glue drivers visible
+ with EXPERT
+Message-ID: <YxnTI927V0hGs+kz@kroah.com>
+References: <20220908104337.11940-1-lukas.bulwahn@gmail.com>
+ <20220908104337.11940-5-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 2/3] riscv: dts: starfive: Add common DT for JH7100
- based boards
-Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michael Zhu <michael.zhu@starfivetech.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20220902100806.2378543-1-cristian.ciocaltea@collabora.com>
- <20220902100806.2378543-3-cristian.ciocaltea@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220902100806.2378543-3-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908104337.11940-5-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,17 +64,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/09/2022 12:08, Cristian Ciocaltea wrote:
-> In preparation for adding initial device tree support for the StarFive
-> VisionFive board, which is similar with BeagleV Starlight, move most
-> of the content from jh7100-beaglev-starlight.dts to a new file, to be
-> shared between the two boards.
+On Thu, Sep 08, 2022 at 12:43:35PM +0200, Lukas Bulwahn wrote:
+> Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
+> introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
+> and just gives that intent a much better name. That has been clearly a good
+> and long overdue renaming, and it is clearly an improvement to the kernel
+> build configuration that has shown to help managing the kernel build
+> configuration in the last decade.
 > 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
+> this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
+> open for future contributors to implement that intended semantics:
+> 
+>     A new CONFIG_EMBEDDED option is added that automatically selects
+>     CONFIG_EXPERT when enabled and can be used in the future to isolate
+>     options that should only be considered for embedded systems (RISC
+>     architectures, SLOB, etc).
+> 
+> Since then, this CONFIG_EMBEDDED implicitly had two purposes:
+> 
+>   - It can make even more options visible beyond what CONFIG_EXPERT makes
+>     visible. In other words, it may introduce another level of enabling the
+>     visibility of configuration options: always visible, visible with
+>     CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
+> 
+>   - Set certain default values of some configurations differently,
+>     following the assumption that configuring a kernel build for an
+>     embedded system generally starts with a different set of default values
+>     compared to kernel builds for all other kind of systems.
+> 
+> Considering the first purpose, at the point in time where CONFIG_EMBEDDED
+> was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more options
+> become visible throughout all different menus for the kernel configuration.
+> Over the last decade, this has gradually increased, so that currently, with
+> CONFIG_EXPERT, roughly 170 more options become visible throughout all
+> different menus for the kernel configuration. In comparison, currently with
+> CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86,
+> one in arm, and five for the ChipIdea Highspeed Dual Role Controller.
+> 
+> As the numbers suggest, these two levels of enabling the visibility of even
+> more configuration options---beyond what CONFIG_EXPERT enables---never
+> evolved to a good solution in the last decade. In other words, this
+> additional level of visibility of configuration option with CONFIG_EMBEDDED
+> compared to CONFIG_EXPERT has since its introduction never become really
+> valuable. It requires quite some investigation to actually understand what
+> is additionally visible and it does not differ significantly in complexity
+> compared to just enabling CONFIG_EXPERT. This CONFIG_EMBEDDED---or any
+> other config to show more detailed options beyond CONFIG_EXPERT---is
+> unlikely to be valuable unless somebody puts significant effort in
+> identifying how such visibility options can be properly split and creating
+> clear criteria, when some config option is visible with CONFIG_EXPERT and
+> when some config option is visible only with some further option enabled
+> beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do. For now, it
+> is much more reasonable to simply make those additional seven options that
+> visible with CONFIG_EMBEDDED, visible with CONFIG_EXPERT, and then remove
+> CONFIG_EMBEDDED. If anyone spends significant effort in structuring the
+> visibility of config options, they may re-introduce suitable new config
+> options simply as they see fit.
+> 
+> Make the configs for usb chipidea glue drivers visible when CONFIG_EXPERT
+> is enabled.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  drivers/usb/chipidea/Kconfig | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Use proper arguments to git format-patch, so that the copy is properly
-detected.
+Now queued up in my USB tree, thanks.
 
-Best regards,
-Krzysztof
+greg k-h

@@ -2,176 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AE25B1554
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBEA5B1542
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiIHHDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
+        id S231234AbiIHHBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiIHHDt (ORCPT
+        with ESMTP id S230006AbiIHHBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:03:49 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9257CC2EA6;
-        Thu,  8 Sep 2022 00:03:37 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id nc14so35844860ejc.4;
-        Thu, 08 Sep 2022 00:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=02XXAQ3uOpN3dH9E7JIiJKNVPEVhN/C9uK0JMwrUFlA=;
-        b=MYA/7io0JQzjMRQAtwYV8HWCMQnKfxlmg0EizInlFB7c/Nr4aLdcByGIU1U8ApReR3
-         5G5R2GdXTrhvbmwOWzojZA4M1JFSJ2oHXKtje6lgsgOqE3XKWNIwM3gvvDM/kRpziKL4
-         kgz7DPXnTVwXKtoIPJq4ivVLMePbTbHaGbufqhTfTvfXa6Zav7f8azD6oHDiP1AW2PsE
-         GagivQG0BFf4FJczzHdGktl7rLMJVrja9nfuUU6PQPvc99o9+OERpVtHPDrxo0j/ch4t
-         YCQ5xHAqUQ3xvmtJAbdbApKaQqnFdQEaaVSJ5s5oC9cEw5ZGqNXGAUWKz70VZ7V4tfWd
-         08gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=02XXAQ3uOpN3dH9E7JIiJKNVPEVhN/C9uK0JMwrUFlA=;
-        b=TTw/T5789m0aMbKvbHNdgOciiXS+Sq4efGr4WRcosshdLXBaGy+F7CYj8WiOuDYgHN
-         hD0EYsn/V/GJ2X17taPRgV45DHjBlgVquoG7Fu3uBIg10TUmdwXDLrd9oZ0LVzs2tAqj
-         gBIVRbpO/R8sdtXJvdmi/HBuj79AJejO+TrEManTmw3TXktdBMtSll2ITgzoVR4muoM0
-         wk7RyWOZ9zxXNKwikvvCV9p5njtD98K/f8iyrEjpT67BNwEXDqPCVOdEuRPYeNz/TPnV
-         MRjjL0Ou5eHQUWUP3TWDHF6dKoK4AeIfQjUT8e+G3zDsKNcUtLQVOhYvHaQOUj7OWLop
-         TDNg==
-X-Gm-Message-State: ACgBeo1mIEq4bhCQA8BppC/BCDZFJxmf3DkS1ay59nCnT76negxzlNlk
-        9f984vOQHQxZUzp9PBUWu/E=
-X-Google-Smtp-Source: AA6agR4hR5ICYTsCtOG7Yrfqdg2H6b2VHaWBOqzPTMELn6zg+HYHpK5WxgNPyjX4AVmBCRue6yaNcg==
-X-Received: by 2002:a17:907:8687:b0:730:7c7b:b9ce with SMTP id qa7-20020a170907868700b007307c7bb9cemr4973642ejc.656.1662620615982;
-        Thu, 08 Sep 2022 00:03:35 -0700 (PDT)
-Received: from [192.168.0.182] ([188.24.116.38])
-        by smtp.gmail.com with ESMTPSA id b23-20020aa7d497000000b0044ec3285b23sm5255480edr.58.2022.09.08.00.03.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 00:03:35 -0700 (PDT)
-Message-ID: <06476041-e8d6-7030-2f46-ace964c42513@gmail.com>
-Date:   Thu, 8 Sep 2022 10:03:35 +0300
+        Thu, 8 Sep 2022 03:01:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EDA98368;
+        Thu,  8 Sep 2022 00:01:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662620498; x=1694156498;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rx3VgOsaulT5mMDT3vfE0KD1nxBcFnkb6sIlQqeZcfA=;
+  b=ETLBXLOxtQx7EM2AEfLLIuKC0gT3vnkjq/g77n5bPmSINHtdScwVcbbC
+   +jCIgOYW2KaQ3r8fTT5l93YgIFWLsF2eu6wZLwUmpqXgtONcJ3IcnrrTU
+   f0YgdBIbKYohD5A7RuqTLSIcojiAsfExEtFCOO5E+kGEOHSwrklLh3gtO
+   /S3xIXS6PHFjSAodlTf+NoPzzCPW+y9epMSjwedOex5H5AqBlZ0tEuFBp
+   ndRHy+nGvUfLDzVdyv+39IRlECgLwAqUrwrCEWRgA9aqOl7VQYHta+E6v
+   fdPCLJ2cLayXfKHJay9I0mtDyZsIerwX4/X7Ca3pYywPN25IDvwe3219u
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="179644063"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 00:01:38 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 8 Sep 2022 00:01:31 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 8 Sep 2022 00:01:29 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH] ARM: dts: lan966x: disable aes
+Date:   Thu, 8 Sep 2022 09:04:51 +0200
+Message-ID: <20220908070451.3730608-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v8 1/2] dt-bindings: iio: adc: add AD4130
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Rob Herring <robh@kernel.org>
-References: <20220715044948.434149-1-cosmin.tanislav@analog.com>
- <20220715044948.434149-2-cosmin.tanislav@analog.com>
- <CACRpkdZVkXM-8DZjTaOxnS05Wz5GHon0sK1g7hDbz5SDJf9A=A@mail.gmail.com>
-Content-Language: en-US
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-In-Reply-To: <CACRpkdZVkXM-8DZjTaOxnS05Wz5GHon0sK1g7hDbz5SDJf9A=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Disable AES node on lan966x pcb8290, pcb891 and pcb8309 because these
+boards have lan966x that uses secure OS which reserves the AES block.
+Therefore it can't be exposed to non-secure world.
 
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ arch/arm/boot/dts/lan966x-pcb8290.dts | 4 ++++
+ arch/arm/boot/dts/lan966x-pcb8291.dts | 4 ++++
+ arch/arm/boot/dts/lan966x-pcb8309.dts | 4 ++++
+ 3 files changed, 12 insertions(+)
 
-On 7/18/22 16:14, Linus Walleij wrote:
-> Hi Cosmin,
-> 
-> thanks for your patch!
-> 
-> On Fri, Jul 15, 2022 at 6:50 AM Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> 
->> AD4130-8 is an ultra-low power, high precision, measurement solution for
->> low bandwidth battery operated applications.
->>
->> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
->> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
->> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
->> selectable filter options, smart sequencer, sensor biasing and excitation
->> options, diagnostics, and a FIFO buffer.
->>
->> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
-> (...)
-> 
-> This caught my eye:
-> 
->> +  adi,int-clk-out:
->> +    description: Specify if the internal clock should be exposed on the CLK pin.
->> +    type: boolean
-> 
-> Okay, but would it not make more sense to just imply this if the clock
-> on the CLK
-> pin has any consumers? Like update this setting in hardware when the consumer
-> does clk_prepare() or so on that externally routed clock?
-> 
+diff --git a/arch/arm/boot/dts/lan966x-pcb8290.dts b/arch/arm/boot/dts/lan966x-pcb8290.dts
+index 8a304210653a..2ed53da914ac 100644
+--- a/arch/arm/boot/dts/lan966x-pcb8290.dts
++++ b/arch/arm/boot/dts/lan966x-pcb8290.dts
+@@ -27,6 +27,10 @@ phy_external_reset: phy_external_reset {
+ 	};
+ };
+ 
++&aes {
++	status = "disabled"; /* Reserved by secure OS */
++};
++
+ &gpio {
+ 	miim_a_pins: mdio-pins {
+ 		/* MDC, MDIO */
+diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
+index 289a31649422..f4f054cdf2a8 100644
+--- a/arch/arm/boot/dts/lan966x-pcb8291.dts
++++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
+@@ -53,6 +53,10 @@ led-s1-green {
+ 	};
+ };
+ 
++&aes {
++	status = "disabled"; /* Reserved by secure OS */
++};
++
+ &gpio {
+ 	fc3_b_pins: fc3-b-pins {
+ 		/* RX, TX */
+diff --git a/arch/arm/boot/dts/lan966x-pcb8309.dts b/arch/arm/boot/dts/lan966x-pcb8309.dts
+index cfd7c8933703..c436cd20d4b4 100644
+--- a/arch/arm/boot/dts/lan966x-pcb8309.dts
++++ b/arch/arm/boot/dts/lan966x-pcb8309.dts
+@@ -97,6 +97,10 @@ sfp3: sfp3 {
+ 	};
+ };
+ 
++&aes {
++	status = "disabled"; /* Reserved by secure OS */
++};
++
+ &flx3 {
+ 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+ 	status = "okay";
+-- 
+2.33.0
 
-You're right, this is indeed fit for being implemented using the clock
-framework.
-
->> +  adi,ext-clk-freq-hz:
->> +    description: Specify the frequency of the external clock.
->> +    enum: [76800, 153600]
->> +    default: 76800
-> 
-> This looks like cheating, i.e just outputting a clock on that pin
-> and ignoring to model the consumer.
-
-You got this wrong.
-
-The chip has 4 operating modes regarding clocking.
-
-Internal 76.8kHz clock (clkout can be used as an interrupt pin).
-Internal 76.8kHz clock, available externally on the clkout pin (clkout
-becomes an output).
-External 76.8kHz clock (clkout is an input).
-External 153.6kHz clock, internally divided by two (clkout is an input).
-
-This property is used to choose between what frequency to set the
-external clock up with. Indeed, if the external clock is not present,
-then exposing the 76.8kHz clock using the clock framework would be fine.
-
-Maybe you have a better suggestion about what to do with this?
-How do I tell the chip what frequency the external clock is, but also
-tell the clock what frequency to use? It's a bit of a conundrum for me.
-
-> 
-> Shouldn't this rather be a clkout subnode with 2 #clock-cells
-> and the fequency set in a cell in a consumer phandle?
-> Like how I did in
-> commit 7335631fcd5eecfa84555bd57433e6446d06ad21
-> "dt-bindings: clock: u8500: Add clkout clock bindings"
-> 
-> Usually it is the consumer that requests a specific clock and then the
-> producer will respond.
-> 
-> Certainly whatever is consuming this clock needs to be in the device tree
-> as well, and then this is the right pattern.
-> 
-> (In Linux you will then use the clk framework to manage the clock and callbacks
-> but that is irrelevant for the DT bindings.)
-> 
->> +  adi,bipolar:
->> +    description: Specify if the device should be used in bipolar mode.
->> +    type: boolean
-> 
-> Can you explain what this means? I don't understand what it would
-> mean for an analog device / AFE to be in bipolar mode.
-> 
-
-Range becomes [-VRef, VRef], as opposed to [0, VRef], resolution is
-halved.
-
-> Other than that it looks very nice!
-> 
-> Yours,
-> Linus Walleij

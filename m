@@ -2,140 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774015B175A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6BA5B175F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbiIHIlf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Sep 2022 04:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S231345AbiIHIm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiIHIlZ (ORCPT
+        with ESMTP id S229942AbiIHImx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:41:25 -0400
-Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E08112E40;
-        Thu,  8 Sep 2022 01:41:22 -0700 (PDT)
-Received: from mta90.sjtu.edu.cn (unknown [10.118.0.90])
-        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 8A1CD1008B392;
-        Thu,  8 Sep 2022 16:41:17 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id 6D88F37C894;
-        Thu,  8 Sep 2022 16:41:17 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from mta90.sjtu.edu.cn ([127.0.0.1])
-        by localhost (mta90.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 771Iyg8o78vt; Thu,  8 Sep 2022 16:41:17 +0800 (CST)
-Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id 3D69837C893;
-        Thu,  8 Sep 2022 16:41:17 +0800 (CST)
-Date:   Thu, 8 Sep 2022 16:41:14 +0800 (CST)
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-To:     jasowang <jasowang@redhat.com>
-Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Message-ID: <1010358496.165709.1662626474492.JavaMail.zimbra@sjtu.edu.cn>
-In-Reply-To: <ff96c12e-95cb-be57-9b5b-2da08b0630c6@redhat.com>
-References: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn> <20220901055434.824-4-qtxuning1999@sjtu.edu.cn> <ff96c12e-95cb-be57-9b5b-2da08b0630c6@redhat.com>
-Subject: Re: [RFC v3 3/7] vsock: batch buffers in tx
+        Thu, 8 Sep 2022 04:42:53 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ED5112B02
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:42:52 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id r18so9154170eja.11
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=mHQSSgNhDkCOub491AbEBE7T5spa2DJLZtfO6t6+O/A=;
+        b=yqn6NPkic3xE35zdfAsS1MeaHM57cjrz+j7qNGgMi12rgcIQS7rcb/cF4kPuIdq5sU
+         6S7Eh8WhmM3y0PR7hSOfvIyXqGG2QvJvDiwYdEi+ige8inRADkf2BwQp3wjiS06G0gZk
+         pDE5To0lxIzYA8cLvVkLa+8UFgE1g/C9AUd7Zezx2tU/oz4PA/TSM3zxyreZgdKk383D
+         nVv8rtfczJ4dVNQkG2go9nwd8F8GIAnyp2KYh4LE2Q/hUP63otPGmNrusiFIJ9ucbCNL
+         jhB/uKWSzb6Bd7oV8TMwwQSTy6iT30dvhDHXtf9AZEclAEMxUJ6SYZYjxbA3GDiJbEyB
+         cLTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=mHQSSgNhDkCOub491AbEBE7T5spa2DJLZtfO6t6+O/A=;
+        b=jhBIUnTm9zb6ZHCV/yZPrnq0ohAmdDNMb6BzRUir7F21DkA9ZH9XuN8c18/+P3qJiC
+         dIIx2YukV6MNejD8dLXUnpBkQi/PkCcHlrvLiFf9iAJ2nX76oPpUr8rIMvlQbjP/PTxG
+         bneuR+w8krx2mkQJ8OpN5WXB8xleFyDF+WOPFmUimk4m5OtRZeffiavagY6+dveLpN40
+         CPHva7lHj54Mi36ys9UqTlAWqvYE6jIgqygGg+4EZwGXKgfdBUCvwKPYOLbPzb6c6sU2
+         JzkCwtKAF33hSYjqgczTWT2LhksOau+KSTFHCYHNMXSYsc/5BhT2NO3qc+5YNGANycHN
+         MnqA==
+X-Gm-Message-State: ACgBeo0n6Fkb5zPDrUj7hrUfocuu28P/mZYHNixtapJ94IrMAxwldRhx
+        XxKDsrrljtl0zJKwoHWIMfiFEq+q37uFDkVX9eyUbQ==
+X-Google-Smtp-Source: AA6agR6+9iRUrEemUzwPpukwFryEqyHQQbUVBor9maor4rQNOJdvVLTNYDLuIH9ifvicN//eR+7p98ksvS2lWYSUNK0=
+X-Received: by 2002:a17:907:1690:b0:770:80d4:ec4c with SMTP id
+ hc16-20020a170907169000b0077080d4ec4cmr4651626ejc.690.1662626571261; Thu, 08
+ Sep 2022 01:42:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=GB2312
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.162.206.161]
-X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - GC104 (Mac)/8.8.15_GA_3928)
-Thread-Topic: vsock: batch buffers in tx
-Thread-Index: fUZ9bL4X165odfACHKzUbr6LjWRV9Q==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+ <20220906204301.3736813-2-dmitry.torokhov@gmail.com> <20220906211628.6u4hbpn4shjcvqel@pali>
+In-Reply-To: <20220906211628.6u4hbpn4shjcvqel@pali>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 8 Sep 2022 10:42:39 +0200
+Message-ID: <CACRpkdbG6gzYjkgW=3w33Mvmc3gdS6Wz-9t71JQti-AJ5aZRFA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PCI: mvebu: switch to using gpiod API
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 6, 2022 at 11:16 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> On Tuesday 06 September 2022 13:43:01 Dmitry Torokhov wrote:
 
+> > This patch switches the driver away from legacy gpio/of_gpio API to
+> > gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> > make private to gpiolib.
+>
+> There are many pending pci-mvebu.c patches waiting for review and merge,
+> so I would suggest to wait until all other mvebu patches are processed
+> and then process this one... longer waiting period :-(
 
------ Original Message -----
-> From: "jasowang" <jasowang@redhat.com>
-> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
-> Tsirkin" <mst@redhat.com>
-> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
-> "virtualization" <virtualization@lists.linux-foundation.org>
-> Sent: Wednesday, September 7, 2022 12:27:40 PM
-> Subject: Re: [RFC v3 3/7] vsock: batch buffers in tx
+What about the MVEBU maintainers create a git branch and pile up
+all patches and send a pull request to Bjorn then?
+This usually works.
 
-> ÔÚ 2022/9/1 13:54, Guo Zhi Ð´µÀ:
->> Vsock uses buffers in order, and for tx driver doesn't have to
->> know the length of the buffer. So we can do a batch for vsock if
->> in order negotiated, only write one used ring for a batch of buffers
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->>   drivers/vhost/vsock.c | 12 ++++++++++--
->>   1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
->> index 368330417bde..e08fbbb5439e 100644
->> --- a/drivers/vhost/vsock.c
->> +++ b/drivers/vhost/vsock.c
->> @@ -497,7 +497,7 @@ static void vhost_vsock_handle_tx_kick(struct vhost_work
->> *work)
->>   	struct vhost_vsock *vsock = container_of(vq->dev, struct vhost_vsock,
->>   						 dev);
->>   	struct virtio_vsock_pkt *pkt;
->> -	int head, pkts = 0, total_len = 0;
->> +	int head, pkts = 0, total_len = 0, add = 0;
->>   	unsigned int out, in;
->>   	bool added = false;
->>   
->> @@ -551,10 +551,18 @@ static void vhost_vsock_handle_tx_kick(struct vhost_work
->> *work)
->>   		else
->>   			virtio_transport_free_pkt(pkt);
->>   
->> -		vhost_add_used(vq, head, 0);
->> +		if (!vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
->> +			vhost_add_used(vq, head, 0);
-> 
-> 
-> I'd do this step by step.
-> 
-> 1) switch to use vhost_add_used_n() for vsock, less copy_to_user()
-> better performance
-> 2) do in-order on top
-> 
-> 
-LGTM!, I think it is the correct way.
-
->> +		} else {
->> +			vq->heads[add].id = head;
->> +			vq->heads[add++].len = 0;
-> 
-> 
-> How can we guarantee that we are in the boundary of the heads array?
-> 
-> Btw in the case of in-order we don't need to record the heads, instead
-> we just need to know the head of the last buffer, it reduces the stress
-> on the cache.
-> 
-> Thanks
-> 
-Yeah, I will change this and only copy last head for in order feature.
-
-Thanks
-> 
->> +		}
->>   		added = true;
->>   	} while(likely(!vhost_exceeds_weight(vq, ++pkts, total_len)));
->>   
->> +	/* If in order feature negotiaged, we can do a batch to increase performance
->> */
->> +	if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER) && added)
->> +		vhost_add_used_n(vq, vq->heads, add);
->>   no_more_replies:
->>   	if (added)
->>   		vhost_signal(&vsock->dev, vq);
+Yours,
+Linus Walleij

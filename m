@@ -2,63 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D775B27B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BE65B27B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiIHU0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
+        id S229755AbiIHUaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiIHU0L (ORCPT
+        with ESMTP id S229464AbiIHUaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:26:11 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1943ED2B39;
-        Thu,  8 Sep 2022 13:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=FAlGaLlUAtfaE4iIGxhp2DLAFKjHtKdEMLcHmqOjh5I=; b=kMfOI1tvtovnNXqTbT03edDZdd
-        cz+sN/41YnKEThh1ZXkm+/Xz2mQHUnn2P6eejBzjlLbd7GU/MfVCTdTwm3g/5VQDT1AQNIlIVHt/G
-        voV02MS+P5nCo/V8JC+XdyZ+N1xgN+UVmoy0J7RY96ELrrHsaG6LDwrntMCi8eBrbNbo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oWO5e-00G0Yh-NE; Thu, 08 Sep 2022 22:25:34 +0200
-Date:   Thu, 8 Sep 2022 22:25:34 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jingyu Wang <jingyuwang_vip@163.com>
-Cc:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ipv4: Fix some coding style in ah4.c file
-Message-ID: <YxpPvoejMMNliCrg@lunn.ch>
-References: <20220908022118.57973-1-jingyuwang_vip@163.com>
+        Thu, 8 Sep 2022 16:30:14 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260655E56A;
+        Thu,  8 Sep 2022 13:30:13 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.81.50) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 8 Sep 2022
+ 23:30:04 +0300
+Subject: Re: [PATCH] usb: gadget: rndis: Avoid dereference before NULL check
+To:     Jim Lin <jilin@nvidia.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Aniruddha TVS Rao <anrao@nvidia.com>
+References: <20220908175615.5095-1-jilin@nvidia.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <c182e228-28dc-aad7-afbb-073b2e6caa10@omp.ru>
+Date:   Thu, 8 Sep 2022 23:30:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908022118.57973-1-jingyuwang_vip@163.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220908175615.5095-1-jilin@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.81.50]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 09/08/2022 19:43:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 172645 [Sep 08 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 498 498 840112829f78e8dd3e3ddbbff8b15d552f4973a3
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.50 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.81.50 in (user) dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.81.50:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.81.50
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 09/08/2022 19:45:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 9/8/2022 7:02:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -165,7 +165,8 @@ static int ah_output(struct xfrm_state *x, struct sk_buff *skb)
->  	ahp = x->data;
->  	ahash = ahp->ahash;
+On 9/8/22 8:56 PM, Jim Lin wrote:
+
+> NULL check is performed after params->dev is dereferenced in
+> dev_get_stats.
+> Fixed by adding a NULL check before dereferencing params->dev and
+> removing subsequent NULL checks for it.
+
+   You've beaten me to send such a patch... :-)
+
+> 
+> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
+> ---
+>  drivers/usb/gadget/function/rndis.c | 37 ++++++++++++-----------------
+>  1 file changed, 15 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+> index 64de9f1b874c..d2f18f34c8e5 100644
+> --- a/drivers/usb/gadget/function/rndis.c
+> +++ b/drivers/usb/gadget/function/rndis.c
+> @@ -198,6 +198,9 @@ static int gen_ndis_query_resp(struct rndis_params *params, u32 OID, u8 *buf,
+>  	outbuf = (__le32 *)&resp[1];
+>  	resp->InformationBufferOffset = cpu_to_le32(16);
 >  
-> -	if ((err = skb_cow_data(skb, 0, &trailer)) < 0)
-> +	err = skb_cow_data(skb, 0, &trailer));
+> +	if (!params->dev)
+> +		return -ENODEV;
+> +
 
-I prefer the coding style issue over it not compiling at all.
+   Hm, isn't this checked at the start of rndis_query_response(), this function's
+only caller?
 
-I suggest you don't embarrass yourself any more by compile testing
-your changes.
+[...]
 
-     Andrew
+MBR, Sergey

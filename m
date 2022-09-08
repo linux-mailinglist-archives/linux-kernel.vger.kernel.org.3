@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DB85B2407
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F305B2411
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbiIHQ4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
+        id S230425AbiIHQ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231940AbiIHQzl (ORCPT
+        with ESMTP id S231848AbiIHQ4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:55:41 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1E53889
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:54:28 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id b16so25336880edd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=HYkXg+VQoVJj6IeGT/00BbjRESyJ1qTq+hPTwfNkG3M=;
-        b=hVzEqYOplJiXNR0qXrqsMYGZoQbw587ASqutE/A55+sAOSlXgJ6GspWw2Ym+KjLXka
-         fiaxTttTHvmbRlwxo1yprNkcGenIVm6v2Nx49Qv2Zm4QSy9S8vifjUDjmK3oX8Z98Yo8
-         bXcHGCio0UTdcRTGn8wGqD+Uoj25XuP7XM2ccT4/Qbk5b3NKgr+0h4Wa+bgePeLKzxiL
-         0STAI6oYqdIVxDXN6v5uRIXR/ozWRqSQ13UusKfeaHj4taFCEbCOxSPG21ZaNBMSR07O
-         deGGGFuhD+92QUnaNMRrtxFDvv/JvmWyyGNsKNedGV5QaxIuI7Rzn4JNlNN+3SsVpdbb
-         WvGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=HYkXg+VQoVJj6IeGT/00BbjRESyJ1qTq+hPTwfNkG3M=;
-        b=UGg+TH6rDh4zMKcHG6Otmx005keSZA/TvTp+ccV08TUki4jWtylH7v1BR8M6nP7tb1
-         pNFk2ScafiwyZ9V4aJ5rtuykqKfZQAMKOpMrK1QbNTSarfYAtWGk2hoc+EsYCBJdUGbS
-         oTP3CLJlxfPfZTVwkRg/O1SXijL/Dv7piAsoDecFYi2nLk9znPJlcYheFfH7i0NFJNTM
-         7Vh8ffTEX0QBYW0MpiNSpmxbvhZjuANTfKPN7xGsofgAkxUmnrDyuHrwy4iE8jgWcgo1
-         CA2YKJ37WHlzhkTH5XkQ+CgZvBtxj90pXtYd4sya/tjq7rj/I2dgbwIRLItefpliw054
-         7RoQ==
-X-Gm-Message-State: ACgBeo2affbfNBjQTgMcQ7P/h9WkfjUSbO3aoMMxEk21AfW7A6Q/k2ZU
-        O1Iz0Zte+DG6iKdK+4aLOF8TRQ==
-X-Google-Smtp-Source: AA6agR4SmpRJpS84G3cq6HUzYMumaeFB7osxWETQkEUI/Bqq07vVb7t+xdKEmnn+1JHPpxc05yZ18A==
-X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id eb5-20020a0564020d0500b00425b5c8faebmr7831185edb.273.1662656066618;
-        Thu, 08 Sep 2022 09:54:26 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id eh13-20020a0564020f8d00b0044f0c01196esm3628593edb.65.2022.09.08.09.54.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 09:54:26 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 18:54:25 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc:     linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        mchitale@ventanamicro.com
-Subject: Re: [PATCH v2 2/4] riscv: Introduce support for defining instructions
-Message-ID: <20220908165425.ikiyrmhtbwkmko23@kamzik>
-References: <20220831172500.752195-1-ajones@ventanamicro.com>
- <20220831172500.752195-3-ajones@ventanamicro.com>
- <3006889.o7ts2hSHzF@diego>
+        Thu, 8 Sep 2022 12:56:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F376E69F5A;
+        Thu,  8 Sep 2022 09:55:34 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288DxiM8000402;
+        Thu, 8 Sep 2022 16:55:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Zb2Vyqb8iMaiwwbB1NgqnHc10eroVhqKB9x097YjH88=;
+ b=IUJmGAY3GCy7/JDL2YZG5hyjTnjQAnP720VvPMfD2d+bgDHRWwpruEcXu4NQejj1ItVN
+ zL1U8zXnWd6utaC3+zM3VWDP1SGRpqbLv1d++vkzzgwsT17l/jLCcT8xtxIlHk8gkUyl
+ Ml5gCEORhLDkVHv89hhoFKIo0GsKuLGJkZ3/tagW0tp5ZDJITvrcm91LoM5rzfsHARdq
+ M6wcy2SEcXV4rRR14+OsueCWph9onNVtMQeu8u2CRSOQpxB+1g8gjqPc+d2bLZQBAiNz
+ u3RctxnkGwNNrCmsknXgN7f86io+T/kaANR2wjRVZVfCHg4klp9bmREujKPW5qXFci3x 6g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jf1swu1jp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 16:55:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 288GtMAP005128
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Sep 2022 16:55:22 GMT
+Received: from [10.110.115.160] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 8 Sep 2022
+ 09:55:21 -0700
+Message-ID: <3a772604-e14c-2399-de49-dbabf5f3ee09@quicinc.com>
+Date:   Thu, 8 Sep 2022 09:55:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3006889.o7ts2hSHzF@diego>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4/4] dt-bindings: qcom-pmic-gpio: Add PM7250B and PM8450
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <konrad.dybcio@somainline.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220907201528.9351-1-quic_amelende@quicinc.com>
+ <20220907201528.9351-5-quic_amelende@quicinc.com>
+ <70f262d5-8d78-1c9a-2491-106af668f81a@linaro.org>
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+In-Reply-To: <70f262d5-8d78-1c9a-2491-106af668f81a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qHJpNJt54oAUTfohzoXwz0KxUWIbRZEf
+X-Proofpoint-ORIG-GUID: qHJpNJt54oAUTfohzoXwz0KxUWIbRZEf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 impostorscore=0 adultscore=0 priorityscore=1501
+ mlxscore=0 spamscore=0 malwarescore=0 clxscore=1015 mlxlogscore=994
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209080060
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,45 +86,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 05:49:44PM +0200, Heiko Stübner wrote:
-...
-> > +#define OPCODE(v)	__ASM_STR(v)
-> > +#define FUNC3(v)	__ASM_STR(v)
-> > +#define FUNC7(v)	__ASM_STR(v)
-> > +#define RD(v)		__ASM_STR(v)
-> > +#define RS1(v)		__ASM_STR(v)
-> > +#define RS2(v)		__ASM_STR(v)
-> 
-> you might want some sort of prefix here
-> 	RISCV_RS1(v) ?
-> 
-> While trying to adapt this for the cmo stuff I ran into the issue
-> of bpf complaining that "IMM" is already defined there.
-> 
-> And names above are generic enough that these also
-> might conflict with other stuff.
-> 
 
-Ah, thanks for the heads up. Indeed, if this gets included in another
-header, which gets widely included, then we have a good chance of
-bumping into something. It's a pity, but, as you suggest, we probably
-need prefixes and __ isn't likely enough alone. I also see __REG is
-used elsewhere.
 
-Thanks,
-drew
-
+On 9/8/2022 4:13 AM, Krzysztof Kozlowski wrote:
+> On 07/09/2022 22:15, Anjelique Melendez wrote:
+>> Update the Qualcomm Technologies, Inc. PMIC GPIO binding documentation
+>> to include compatible strings for PM7250B and PM8450 PMICs.
+>>
+>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>> ---
+>>  Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+>> index 694898f382be..a548323e54f1 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml
+>> @@ -24,6 +24,7 @@ properties:
+>>            - qcom,pm6150-gpio
+>>            - qcom,pm6150l-gpio
+>>            - qcom,pm6350-gpio
+>> +          - qcom,pm7250b-gpio
+>>            - qcom,pm7325-gpio
+>>            - qcom,pm8005-gpio
+>>            - qcom,pm8008-gpio
 > 
+> This is incomplete. You need to update allOf.
+ACK - will add for next version
 > 
-> 
-> > +#define __REG(v)	__ASM_STR(x ## v)
-> > +#define __RD(v)		__REG(v)
-> > +#define __RS1(v)	__REG(v)
-> > +#define __RS2(v)	__REG(v)
-> > +
-> > +#endif /* __ASM_INSN_DEF_H */
-> > 
-> 
-> 
-> 
-> 
+> Best regards,
+> Krzysztof

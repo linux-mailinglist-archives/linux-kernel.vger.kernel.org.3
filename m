@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6775B20A1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C995B20A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiIHOf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        id S232635AbiIHOgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbiIHOfX (ORCPT
+        with ESMTP id S231501AbiIHOgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:35:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37564E60E;
-        Thu,  8 Sep 2022 07:35:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Sep 2022 10:36:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDBCA50DC;
+        Thu,  8 Sep 2022 07:35:59 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.27.54.142])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 898FAB820F1;
-        Thu,  8 Sep 2022 14:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6C0C433D6;
-        Thu,  8 Sep 2022 14:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662647720;
-        bh=PqNEivvRBkbJb/bbw9l3rUVufBVDSk0Ladwi3ZMei4c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DvPM9/MNiL2AWkrZCDCQVlyvRmAPn1sJ4jgnmoRTJlPISCsQEe9eeLoIZGUSbxYEW
-         OQRLRbrrEFn6jS/IIvO4GE02egOz6aFNlk+QyYm+QkWAP7ETaVKx65Y9ahuutZ5yj6
-         s+k+djMhH6IbfT6n3C0sfrpgah04rNWTh0pmxzoXeGwy55xu2cQ6ZCHsTfEU/ij5pN
-         kzpaTmeUjvJ29PFAncIm0P4H9UMRabQZR6POxAK1hsQWOozBSg7c7QPUAjv0lEfiV0
-         wj5a/oI/IIX1Qehx3JE+TbSPKXDhS20frkeySg1/YHZXUcM33TGeOw1sKZzkmf+igW
-         iRmd+OyjXQhlA==
-Date:   Thu, 8 Sep 2022 15:35:15 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Astrid Rost <astrid.rost@axis.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F064E6601F95;
+        Thu,  8 Sep 2022 15:35:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662647757;
+        bh=yxWthJQQFVyrsOLPbde9GuvBF4vIyWDhHqgg0BlNRAk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NtBdI5kJn9GypI1bNaHxCRe/R2YNffP8X2c0sCP9yx+FWWt/ukEaWS7En7VQA6dC8
+         fza9h27A/mPIRJzU57eYPSITn/593dRZEzUH8qFW0sUjGLkDJE1iTWjbxvX77SSYen
+         /U+4CUqzswlEi/nh0I29vdHaxdpxjR8JFA5jSFYBKY9fHE1YtqevvgzsISxOVPv221
+         /+f7peI9RWaC8/XZ42sa6HSUntdlQEIgO299oe7t3bg9uyAv24tgStoM+B6MFiDEdS
+         TDh94n0TEjjlTSrpyEDGXRW9S++Hda8k7uNk3vd/+Jcoml5KOccyVNlRC8StsARvZ2
+         Btkbwm1r+gM2Q==
+Message-ID: <958a72a9-9594-32d2-3a90-780cef92109e@collabora.com>
+Date:   Thu, 8 Sep 2022 17:35:53 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/3] riscv: dts: starfive: Add common DT for JH7100
+ based boards
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel@axis.com,
-        alsa-devel-mejlinglistan <alsa-devel@alsa-project.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: sound: ts3a227e: add control of debounce
- times
-Message-ID: <Yxn9o1MVMPnFO3PM@sirena.org.uk>
-References: <20220907135827.16209-1-astrid.rost@axis.com>
- <2b81d814-f47a-e548-83dc-b1e38857e8ce@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EM1t5E+8UNLJ5GtZ"
-Content-Disposition: inline
-In-Reply-To: <2b81d814-f47a-e548-83dc-b1e38857e8ce@linaro.org>
-X-Cookie: Metermaids eat their young.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20220902100806.2378543-1-cristian.ciocaltea@collabora.com>
+ <20220902100806.2378543-3-cristian.ciocaltea@collabora.com>
+ <8528d39e-c03a-7d83-d8e7-5191d3110015@linaro.org>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <8528d39e-c03a-7d83-d8e7-5191d3110015@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 9/8/22 14:33, Krzysztof Kozlowski wrote:
+> On 02/09/2022 12:08, Cristian Ciocaltea wrote:
+>> In preparation for adding initial device tree support for the StarFive
+>> VisionFive board, which is similar with BeagleV Starlight, move most
+>> of the content from jh7100-beaglev-starlight.dts to a new file, to be
+>> shared between the two boards.
+>>
+>> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Use proper arguments to git format-patch, so that the copy is properly
+> detected.
 
---EM1t5E+8UNLJ5GtZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Right, handled this in v3:
 
-On Thu, Sep 08, 2022 at 02:20:42PM +0200, Krzysztof Kozlowski wrote:
+https://lore.kernel.org/all/20220908142914.359777-1-cristian.ciocaltea@collabora.com/
 
-> Anyway new properties cannot be accepted. This has to be converted to DT
-> schema (YAML).
+Thanks for reviewing,
+Cristian
 
-Doing a whole binding conversion feels like a bit of a steep requirement
-when people are just adding a simple property, it's a lot of stop energy
-to figure out the tooling, do the conversion and deal with all the
-bikeshedding that the tools don't catch.  It's definitely nice if people
-want to look at that, for more complex binding changes it gets more
-reasonable but for trivial properties it's disproportionate.
-
---EM1t5E+8UNLJ5GtZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMZ/aIACgkQJNaLcl1U
-h9DbfAf/SjeLoEAMFhlUsKxoxGL1+jQv4Ma3wez0+Bs/BrWB8l3ltKTI8q2/mf79
-OtmVsUbz7odAzUgR5Kim/NroXNhPrNSF54TPxCnnDNfYjpQ5lhpuZynnzC7t6MBB
-kUWFp2bUcqTNkJdAm8LMQQ/V9E4Hhs4R3FnJj/rp5t4DhfKPRRQ655Euf2RuQLVo
-c0zRwdfrEctvDWlXMDpSMmvnAOA6W+X7LHZNLq6mGpaplYC762+ZQ1oZanV+DpTc
-FEWB53nfh0lrj+Khe2umbtQiADFitdIOQLZa60fkw9YQAM9zSYr9I4BekdeDVBBQ
-czc028DwfmOyoAEm9lCr7Cr9NwZX1g==
-=XuqR
------END PGP SIGNATURE-----
-
---EM1t5E+8UNLJ5GtZ--
+> Best regards,
+> Krzysztof

@@ -2,125 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEDA5B181B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624165B181E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 11:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiIHJKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 05:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
+        id S230377AbiIHJLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 05:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiIHJKe (ORCPT
+        with ESMTP id S231737AbiIHJKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 05:10:34 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21E4D21E6;
-        Thu,  8 Sep 2022 02:10:29 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id t65so5188679pgt.2;
-        Thu, 08 Sep 2022 02:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=jTqtul/Z9mMalwu5ubZotPsoAGUQsm/DOSMJnjh6dr8=;
-        b=no2P4SUySPsgEf9LrWgiTEZ8iOeot7dhoSv5Eq44hgdOF0BYS6RPSNeT9kF7JsF5Mr
-         ytc/A2SEGZj/zR4ROCKftMAiRcYSrnRseA+mSWtgaJkaNh/+j++P/GGiOQiJNLZC1JWn
-         KGR+DrC2ZXrKVL5fU+SxdCM2sSxazdqaRrF10mw97jXaEt/VaG/dGacRg9KHNPLofkuD
-         fX077YZy+bu3maiKhCmwXqKHFEKvdPJSKGepKq9fZVUyAne1gs3Ua4yIK6tPhNDCdwCb
-         vTL8XF2MmPIQyR9GwBjmcZiQaQShTeiEOxSCNb0rkaQnzD9v14BhZeX/fbwKDhqM8ufZ
-         M6VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=jTqtul/Z9mMalwu5ubZotPsoAGUQsm/DOSMJnjh6dr8=;
-        b=O4kI5kBJfATZu3Zd4vZXO6wqp+L/b1XcMc/bLj6jfm2/tQ9nVApmXZyR6rpbtV+Aus
-         o01oTRDdbMedua+8A2Sst0y7QjMiqvAVMSmZ6jTtI3F0L6znH2NtGCxYwkp0qgHaUrxI
-         Wt0SCBxOiE+lGsiYSgBfWSfeCWo8DYQH9tLKITdRhr/F+kZyaq48famNYYSFsWcUW+0D
-         snHdJjSqPJPEiDQhLmUWzWL4dWE1JUSko3fOUEdMlrWpXPB29+W5lbn7mgIz0y1uKIzS
-         uOYZd4vS6etTL5twwPdUW1RczCWotyJEjlhgnG4fF8osm/QeaXvk9/1GolJ4sd0ESxDO
-         TV4w==
-X-Gm-Message-State: ACgBeo0A+RIcP8OgRaglEfyyF19j86QBZk1gHq6aSspDmE1JI1t3BLxt
-        jdJiskeCVhMrE/O+07HMt0A=
-X-Google-Smtp-Source: AA6agR5D1Ba9T8KNCi69P9rVO/Pvw+LbF76KG9Y8Izk9bv+tumAV3VGCo0jphXhqjTZmsP4gDLRJ8Q==
-X-Received: by 2002:a05:6a00:10cf:b0:528:48c3:79e0 with SMTP id d15-20020a056a0010cf00b0052848c379e0mr8261474pfu.18.1662628229176;
-        Thu, 08 Sep 2022 02:10:29 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-7.three.co.id. [180.214.232.7])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170903018700b00177f4ef7970sm987441plg.11.2022.09.08.02.10.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 02:10:28 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id BC3C7104014; Thu,  8 Sep 2022 16:10:23 +0700 (WIB)
-Date:   Thu, 8 Sep 2022 16:10:23 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v12 3/3] Documentation/x86: Document TDX attestation
- process
-Message-ID: <Yxmxf6zQorvuVPKi@debian.me>
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Thu, 8 Sep 2022 05:10:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C698A99B7D;
+        Thu,  8 Sep 2022 02:10:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 67D6622AE9;
+        Thu,  8 Sep 2022 09:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662628240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TxW0nswTE1xcIJ8762DBIkIeOfhvNnUbpYK3mr2ADcA=;
+        b=omOTbZnG7ZtT/+msLgPFiupSzqzfz6PWf0ZQzyxsFvr+2w41Ovp5KbqnsO2nSPmK5atgqf
+        XA1PeM6WBHR8k7y3u9CIY2NRE5GCUZCn7O2NG5RoI9/NM88Kzoy0RW9PSNY0ZBICwGc0Ii
+        byZwKXbeOzfsDd2ogPZTwt/lotlKJ3w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662628240;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TxW0nswTE1xcIJ8762DBIkIeOfhvNnUbpYK3mr2ADcA=;
+        b=mBBSmJSDnX2+tMF/6jNewVNM2OLQE8EZ3WWhaspIV6rFaUTlJLnckb3cZlzzmveU/7aKLN
+        3E6QQBa8KKatrfBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5BDAA13A6D;
+        Thu,  8 Sep 2022 09:10:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ualkFpCxGWPWPwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 08 Sep 2022 09:10:40 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E48C1A067E; Thu,  8 Sep 2022 11:10:39 +0200 (CEST)
+From:   Jan Kara <jack@suse.cz>
+To:     Ted Tso <tytso@mit.edu>
+Cc:     <linux-ext4@vger.kernel.org>, Mike Galbraith <efault@gmx.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, Jan Kara <jack@suse.cz>
+Subject: [PATCH] mbcache: Avoid nesting of cache->c_list_lock under bit locks
+Date:   Thu,  8 Sep 2022 11:10:32 +0200
+Message-Id: <20220908091032.10513-1-jack@suse.cz>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="z6mtDtut/Q3b/8t6"
-Content-Disposition: inline
-In-Reply-To: <20220908002723.923241-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2089; h=from:subject; bh=dRJj3j9qfjEl6wYp/YsGfWVb12vOG36l+ern9zbLpCQ=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBjGbGC9duuau5H/8u1XvR/jnI288SB12rOUZo41awT Mr3qGX+JATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCYxmxggAKCRCcnaoHP2RA2VC4CA DSr6mnDQ+GmRI+9UKxbEX6oPTOMrtelKFNhJ6dGLD/AuClpviLsxHcQrJFTSSKfOQb9jHpD/f4mQbB 9hmkpA6NnNaOVxkooLs8khFseUVaH2m3q/sND/Lxh2e705O429Tmt1i+5wp175Y3anzV6V7IA+cdm0 U963MgZusPasmH78DdAXEC32I5Z3TcQnbVSR0jSB4hH8sTVvYm1mJ5q++sVcuaWUSP/vO4HA8zMOqT t+jwOULBptCfgsx3jGM2/y8NGBMAE6Xvu42d3jlWLcqX1dKxcffgIaWIXXNewVWJ59gt6hGI8uUo7k Pwuqt7qw86iRm9BkGYo+hZu/ZhSZuC
+X-Developer-Key: i=jack@suse.cz; a=openpgp; fpr=93C6099A142276A28BBE35D815BC833443038D8C
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 307af6c87937 ("mbcache: automatically delete entries from cache
+on freeing") started nesting cache->c_list_lock under the bit locks
+protecting hash buckets of the mbcache hash table in
+mb_cache_entry_create(). This causes problems for real-time kernels
+because there spinlocks are sleeping locks while bitlocks stay atomic.
+Luckily the nesting is easy to avoid by holding entry reference until
+the entry is added to the LRU list. This makes sure we cannot race with
+entry deletion.
 
---z6mtDtut/Q3b/8t6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 307af6c87937 ("mbcache: automatically delete entries from cache on freeing")
+Reported-by: Mike Galbraith <efault@gmx.de>
+Signed-off-by: Jan Kara <jack@suse.cz>
+---
+ fs/mbcache.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-On Wed, Sep 07, 2022 at 05:27:22PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> Document details about TDX attestation process and related user API
-> support.
->=20
-> Attestation details can be found in Guest-Host-Communication Interface
-> (GHCI) for Intel Trust Domain Extensions (TDX), section titled "TD
-> attestation".
->=20
+diff --git a/fs/mbcache.c b/fs/mbcache.c
+index 47ccfcbe0a22..e272ad738faf 100644
+--- a/fs/mbcache.c
++++ b/fs/mbcache.c
+@@ -90,8 +90,14 @@ int mb_cache_entry_create(struct mb_cache *cache, gfp_t mask, u32 key,
+ 		return -ENOMEM;
+ 
+ 	INIT_LIST_HEAD(&entry->e_list);
+-	/* Initial hash reference */
+-	atomic_set(&entry->e_refcnt, 1);
++	/*
++	 * We create entry with two references. One reference is kept by the
++	 * hash table, the other reference is used to protect us from
++	 * mb_cache_entry_delete_or_get() until the entry is fully setup. This
++	 * avoids nesting of cache->c_list_lock into hash table bit locks which
++	 * is problematic for RT.
++	 */
++	atomic_set(&entry->e_refcnt, 2);
+ 	entry->e_key = key;
+ 	entry->e_value = value;
+ 	entry->e_reusable = reusable;
+@@ -106,15 +112,12 @@ int mb_cache_entry_create(struct mb_cache *cache, gfp_t mask, u32 key,
+ 		}
+ 	}
+ 	hlist_bl_add_head(&entry->e_hash_list, head);
+-	/*
+-	 * Add entry to LRU list before it can be found by
+-	 * mb_cache_entry_delete() to avoid races
+-	 */
++	hlist_bl_unlock(head);
+ 	spin_lock(&cache->c_list_lock);
+ 	list_add_tail(&entry->e_list, &cache->c_list);
+ 	cache->c_entry_count++;
+ 	spin_unlock(&cache->c_list_lock);
+-	hlist_bl_unlock(head);
++	mb_cache_entry_put(cache, entry);
+ 
+ 	return 0;
+ }
+-- 
+2.35.3
 
-The doc LGTM, thanks.
-
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---z6mtDtut/Q3b/8t6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxmxeQAKCRD2uYlJVVFO
-oygOAP9p+Qux0e+GyeKI/gYB/Aem5r1asUQLvgg1Li53bg7LgAEAtZtRWyD+GZyl
-ED0dXEWb7g4yp8LJV/ueAV1RmQtMdQY=
-=QgKp
------END PGP SIGNATURE-----
-
---z6mtDtut/Q3b/8t6--

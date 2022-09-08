@@ -2,43 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E395B24C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9909B5B24CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiIHRgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S232142AbiIHRhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiIHRgE (ORCPT
+        with ESMTP id S231475AbiIHRhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:36:04 -0400
-Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3BD4C57AF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:36:01 -0700 (PDT)
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
-        with SMTP; 8 Sep 2022 20:35:56 +0300
-Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 288HZtw0026086;
-        Thu, 8 Sep 2022 13:35:55 -0400
-Received: (from asmaa@localhost)
-        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 288HZtei032730;
-        Thu, 8 Sep 2022 13:35:55 -0400
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>, robh@kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: [PATCH v3 9/9] i2c-mlxbf.c: Update binding devicetree
-Date:   Thu,  8 Sep 2022 13:35:44 -0400
-Message-Id: <20220908173544.32615-10-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20220908173544.32615-1-asmaa@nvidia.com>
-References: <20220908173544.32615-1-asmaa@nvidia.com>
+        Thu, 8 Sep 2022 13:37:15 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBD3EE536
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:37:02 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id v1so5266798plo.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=yocom-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=yvwRDRcZM8L6JHil16m7teYV4wceQygldN8f81FISnM=;
+        b=oPzs650E3cV1ZP7+ksTS6gxhzOPZ94wkyrb0zINZ+JEOAnbvatF3d37RMJojiNfYwr
+         8gD4dVd0ry9JfFw4gC/qS2USvq4ov8VDqrLdYPjhH7tZQmP7xesDweaAaqptzIM+RiST
+         xYu8+yW8lO7pn1LSYoJiHENKLCne05wlSebz7gpN4ReLd0BjejGw5ZjQs4MUliszaWJx
+         I8k998gYnzD4eYZcpLwKYiYOuxdO4CjFEYKu5YHFkYoHkGy/jih/GS0HLc6OdO7cT1lh
+         pFyMhsA9sTAV/KUfNxqqtRORJ5b6DWHUX0I5DgoFINPtGbg0fvASBhXfxrLEuG6Jhh1f
+         rulg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=yvwRDRcZM8L6JHil16m7teYV4wceQygldN8f81FISnM=;
+        b=DvZecs+9ixlX/5QHUakzkJkNaeSeKcza/Ks8x05mBQ+brWu5PBt0DNx810/TgBKHFZ
+         21fxvOyLgaeDOv8r1iYQxl1Nz6eNMhwojX8OrJ+iG5sQVDo9d6EMjfZvP2zS8vcVkmGB
+         JjhvktxDU1ls1yvFt0sWW+LQGXVbRxnulX6xfaw5O6By1L4HCDjnYUk60O9+cf0GNyV/
+         LVOyJ501KtHVm6pzdA5sQMVm4ElOU5Z/uYjdQ39v3tRd3JZJlhc3AZeyP2Vb2qx9V4kF
+         6Gdpxmxs5mBp/AKFyoNAITiA8e5HepavNV1r40dwi/CcJPBh9VyblVmQED1CG9Nh776Q
+         A45w==
+X-Gm-Message-State: ACgBeo1DNKdsVmdQDvioCCPYvmQTB2uhO+OFp+Wqo/B0r1bk3pEX1u7t
+        cCNDZpgwLbCeTevkwoPiBfexmA==
+X-Google-Smtp-Source: AA6agR6siBaUT5c0m6RQpirS/n3YWTGnxr4qv2KYpiH2Y+MBMZg9RpemhWAHvAn5XP9srZnA0NSn+w==
+X-Received: by 2002:a17:90b:4a91:b0:202:59ed:94d5 with SMTP id lp17-20020a17090b4a9100b0020259ed94d5mr5102190pjb.213.1662658617954;
+        Thu, 08 Sep 2022 10:36:57 -0700 (PDT)
+Received: from ghaven-kernel ([2601:600:8f80:973::5f])
+        by smtp.gmail.com with ESMTPSA id k3-20020a628403000000b0053e5b905843sm5149847pfd.203.2022.09.08.10.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 10:36:57 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 10:36:55 -0700
+From:   Nate Yocom <nate@yocom.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Bastien Nocera <hadess@hadess.net>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benjamin.tissoires@redhat.com
+Subject: Re: [PATCH v5 2/4] Input: joystick: xpad: Add ABS_PROFILE axis value
+ to uapi
+Message-ID: <YxooNwOxeIXPKbBE@ghaven-kernel>
+References: <20220825222420.6833-1-nate@yocom.org>
+ <20220825222420.6833-3-nate@yocom.org>
+ <3e48ef8d13337ce1c3ec68baffc612fde4740b0e.camel@hadess.net>
+ <Yw0OjoVzKV3QOYah@ghaven-kernel>
+ <661ee8227c96aeba7aae9fff6ac9a73f1d81e765.camel@hadess.net>
+ <Yxl/YxSRtV9Hv271@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+In-Reply-To: <Yxl/YxSRtV9Hv271@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,122 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the latest version of the i2c-mlxbf.c driver, the "Smbus block"
-resource was broken down to 3 separate resources "Smbus timer",
-"Smbus master" and "Smbus slave" to accommodate for BlueField-3
-SoC registers' changes.
+On Wed, Sep 07, 2022 at 10:36:35PM -0700, Dmitry Torokhov wrote:
+> On Wed, Sep 07, 2022 at 05:41:08PM +0200, Bastien Nocera wrote:
+> > On Mon, 2022-08-29 at 12:07 -0700, Nate Yocom wrote:
+> > > On Sat, Aug 27, 2022 at 12:40:46PM +0200, Bastien Nocera wrote:
+> > > > On Thu, 2022-08-25 at 15:24 -0700, Nate Yocom wrote:
+> > > > > Add an ABS_PROFILE axis for input devices which need it, e.g. X-
+> > > > > Box
+> > > > > Adaptive Controller and X-Box Elite 2.
+> > > > > ---
+> > > > >  include/uapi/linux/input-event-codes.h | 1 +
+> > > > >  1 file changed, 1 insertion(+)
+> > > > > 
+> > > > > diff --git a/include/uapi/linux/input-event-codes.h
+> > > > > b/include/uapi/linux/input-event-codes.h
+> > > > > index dff8e7f17074..7ad931a32970 100644
+> > > > > --- a/include/uapi/linux/input-event-codes.h
+> > > > > +++ b/include/uapi/linux/input-event-codes.h
+> > > > > @@ -862,6 +862,7 @@
+> > > > >  #define ABS_TOOL_WIDTH         0x1c
+> > > > >  
+> > > > >  #define ABS_VOLUME             0x20
+> > > > > +#define ABS_PROFILE            0x21
+> > > > >  
+> > > > >  #define ABS_MISC               0x28
+> > > > >  
+> > > > 
+> > > > 
+> > > > You probably also want to add it to the absolutes array in
+> > > > drivers/hid/hid-debug.c.
+> > > 
+> > > doh, roger.
+> > > 
+> > > > Again, you might want to wait for confirmation from Dmitry that
+> > > > this is
+> > > > the right way to do this for the profiles.
+> > > 
+> > > Makes sense.  Dmitry?
+> > 
+> > Dmitry, could you please confirm whether ABS_PROFILE definition is
+> > correct?
+> 
+> Yes, I think this makes sense. Do we have a buy in from userspace folks
+> (Peter H, etc) for this?
+> 
+> I'd like some documentation added to Documentation/input/event-codes.rst
+> and potentially to Documentation/input/gamepad.rst even though profile
+> does not have to be gamepad specific event.
+> 
 
-Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
----
- .../bindings/i2c/mellanox,i2c-mlxbf.yaml      | 49 ++++++++++++++-----
- 1 file changed, 37 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-index 93198d5d43a6..12dbe7e7967e 100644
---- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-+++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-@@ -8,6 +8,7 @@ title: Mellanox I2C SMBus on BlueField SoCs
- 
- maintainers:
-   - Khalil Blaiech <kblaiech@nvidia.com>
-+  - Asmaa Mnebhi <asmaa@nvidia.com>
- 
- allOf:
-   - $ref: /schemas/i2c/i2c-controller.yaml#
-@@ -17,14 +18,19 @@ properties:
-     enum:
-       - mellanox,i2c-mlxbf1
-       - mellanox,i2c-mlxbf2
-+      - mellanox,i2c-mlxbf3
- 
-   reg:
-     minItems: 3
-+    maxItems: 6
-     items:
-       - description: Smbus block registers
-       - description: Cause master registers
-       - description: Cause slave registers
-       - description: Cause coalesce registers
-+      - description: Smbus timer registers
-+      - description: Smbus master registers
-+      - description: Smbus slave registers
- 
-   interrupts:
-     maxItems: 1
-@@ -35,6 +41,13 @@ properties:
-       bus frequency used to configure timing registers;
-       The frequency is expressed in Hz. Default is 100000.
- 
-+  resource_version:
-+    enum: [ 0, 1 ]
-+    description:
-+      Version of the device tree. resource_version = 0 when the driver uses
-+      Smbus block resource. resource_version = 1 when the driver uses Smbus
-+      timer, Smbus master and Smbus slave resources.
-+
- required:
-   - compatible
-   - reg
-@@ -42,18 +55,6 @@ required:
- 
- unevaluatedProperties: false
- 
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - mellanox,i2c-mlxbf1
--
--then:
--  properties:
--    reg:
--      maxItems: 3
--
- examples:
-   - |
-     i2c@2804000 {
-@@ -61,8 +62,13 @@ examples:
-         reg = <0x02804000 0x800>,
-               <0x02801200 0x020>,
-               <0x02801260 0x020>;
-+              <0x00000001 0x1>;
-+              <0x02804000 0x40>,
-+              <0x02804200 0x200>,
-+              <0x02804400 0x200>,
-         interrupts = <57>;
-         clock-frequency = <100000>;
-+        resource_version = <1>;
-     };
- 
-   - |
-@@ -72,6 +78,25 @@ examples:
-               <0x02808e00 0x020>,
-               <0x02808e20 0x020>,
-               <0x02808e40 0x010>;
-+              <0x02808800 0x040>;
-+              <0x02808a00 0x200>,
-+              <0x02808c00 0x200>,
-         interrupts = <57>;
-         clock-frequency = <400000>;
-+        resource_version = <1>;
-+    };
-+
-+  - |
-+    i2c@2808800 {
-+        compatible = "mellanox,i2c-mlxbf3";
-+        reg = <0x00000001 0x1>,
-+              <0x13404400 0x020>,
-+              <0x13404420 0x020>,
-+              <0x13404440 0x010>;
-+              <0x13404480 0x40>,
-+              <0x13404200 0x200>,
-+              <0x13404000 0x200>,
-+        interrupts = <35>;
-+        clock-frequency = <400000>;
-+        resource_version = <1>;
-     };
--- 
-2.30.1
-
+Will do, v6 incoming shortly.

@@ -2,183 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B845B125C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8F95B1260
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiIHCLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 22:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S229838AbiIHCP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 22:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIHCLs (ORCPT
+        with ESMTP id S229492AbiIHCPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 22:11:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB0782756
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 19:11:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CC4E618C5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 02:11:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA44C433D6;
-        Thu,  8 Sep 2022 02:11:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662603106;
-        bh=uV6fHvWLrW9oUUvLJaMCTiPsk7SdJN2d7KArwXblLIw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WnvRvutecSNrVpSDb638Iel8sGedSJvts/q3V43cr3GKiXQRsM3Ct9+PdiDhbpFdd
-         0CKIRvzNkvdLgUx8kopOQ9PrTDQtSvLRiCs3elts1MX6mTNubvycW5qvZybPnRKexL
-         ByxHrI0ZM1+Tfd7gkPwS7HTgOM75Bm7L1pPb7EMzwihylCDt90+4g9VDCPTBwU8QrA
-         4a7ewnntBkDFse3EqoOa8MU2lokucpEWUl9OmUYG0HFJgsMMGiNjPag0Ska4EvIftD
-         iPD60l3dcoVONldzRew44Z377pL16yofkaZVnz1OAlDo99FNO200cj0xkeVooEE0Ea
-         x3lH2PnP3jSuQ==
-Message-ID: <0af788ed-8797-22a2-ae0c-433fdd6a2188@kernel.org>
-Date:   Thu, 8 Sep 2022 10:11:41 +0800
+        Wed, 7 Sep 2022 22:15:53 -0400
+Received: from out199-4.us.a.mail.aliyun.com (out199-4.us.a.mail.aliyun.com [47.90.199.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392547F242
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 19:15:50 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VP05V7o_1662603345;
+Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VP05V7o_1662603345)
+          by smtp.aliyun-inc.com;
+          Thu, 08 Sep 2022 10:15:47 +0800
+From:   Xin Hao <xhao@linux.alibaba.com>
+To:     sj@kernel.org
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xhao@linux.alibaba.com
+Subject: [PATCH V2] mm/damon: Remove duplicate get_monitoring_region() definitions
+Date:   Thu,  8 Sep 2022 10:15:43 +0800
+Message-Id: <20220908021544.70212-1-xhao@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] f2fs: fix to disallow getting inner inode via
- f2fs_iget()
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-References: <20220830225358.300027-1-chao@kernel.org>
- <YxlNGeh6Sr4isEFf@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YxlNGeh6Sr4isEFf@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/9/8 10:02, Jaegeuk Kim wrote:
-> On 08/31, Chao Yu wrote:
->> From: Chao Yu <chao.yu@oppo.com>
->>
->> Introduce f2fs_iget_inner() for f2fs_fill_super() to get inner inode:
->> meta inode, node inode or compressed inode, and add f2fs_check_nid_range()
->> in f2fs_iget() to avoid getting inner inode from external interfaces.
-> 
-> So, we don't want to check the range of inner inode numbers? What'd be the
-> way to check it's okay?
+In lru_sort.c and reclaim.c, they are all defining get_monitoring_region()
+function, there is no need to define it separately.
 
-For node_ino, meta_ino, root_ino, we have checked them in sanity_check_raw_super()
-as below:
+BTW, this patch removes two struct 'damon_lru_sort_ram_walk_arg' and
+'damon_reclaim_ram_walk_arg', though the two structs are removed, if we
+want to add more fields to these structs for other purposes later, it will
+not too late for us to use them again.
+For example:
+    struct damon_reclaim_ram_walk_arg {
+	struct damon_addr_range raw_walk;
+	xxx  A;
+	xxx  B;
+    }
+    struct damon_lru_sort_ram_walk_arg {
+	struct damon_addr_range raw_walk;
+	xxx  A;
+	xxx  B;
+    }
 
-	/* check reserved ino info */
-	if (le32_to_cpu(raw_super->node_ino) != 1 ||
-		le32_to_cpu(raw_super->meta_ino) != 2 ||
-		le32_to_cpu(raw_super->root_ino) != 3) {
-		f2fs_info(sbi, "Invalid Fs Meta Ino: node(%u) meta(%u) root(%u)",
-			  le32_to_cpu(raw_super->node_ino),
-			  le32_to_cpu(raw_super->meta_ino),
-			  le32_to_cpu(raw_super->root_ino));
-		return -EFSCORRUPTED;
-	}
+Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+---
+ include/linux/damon.h |  1 +
+ mm/damon/core.c       | 28 ++++++++++++++++++++++++++++
+ mm/damon/lru_sort.c   | 37 ++-----------------------------------
+ mm/damon/ops-common.h |  1 +
+ mm/damon/reclaim.c    | 37 ++-----------------------------------
+ 5 files changed, 34 insertions(+), 70 deletions(-)
 
-compressed_ino should always be NM_I(sbi)->max_nid, it can be checked in
-f2fs_init_compress_inode()?
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index 7b1f4a488230..f27b92e5afc2 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -500,6 +500,7 @@ void damon_add_region(struct damon_region *r, struct damon_target *t);
+ void damon_destroy_region(struct damon_region *r, struct damon_target *t);
+ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 		unsigned int nr_ranges);
++bool damon_get_sram_monitoring_region(unsigned long *start, unsigned long *end);
+ 
+ struct damos *damon_new_scheme(
+ 		unsigned long min_sz_region, unsigned long max_sz_region,
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 7d25dc582fe3..05a2d1b9d03d 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -276,6 +276,34 @@ struct damos *damon_new_scheme(
+ 	return scheme;
+ }
+ 
++static inline int walk_system_ram(struct resource *res, void *arg)
++{
++	struct damon_addr_range *a = arg;
++
++	if (a->end - a->start < resource_size(res)) {
++		a->start = res->start;
++		a->end = res->end;
++	}
++	return 0;
++}
++
++/*
++ * Find biggest 'System RAM' resource and store its start and end address in
++ * @start and @end, respectively.  If no System RAM is found, returns false.
++ */
++bool damon_get_sram_monitoring_region(unsigned long *start, unsigned long *end)
++{
++	struct damon_addr_range arg = {};
++
++	walk_system_ram_res(0, ULONG_MAX, &arg, walk_system_ram);
++	if (arg.end <= arg.start)
++		return false;
++
++	*start = arg.start;
++	*end = arg.end;
++	return true;
++}
++
+ void damon_add_scheme(struct damon_ctx *ctx, struct damos *s)
+ {
+ 	list_add_tail(&s->list, &ctx->schemes);
+diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
+index 9de6f00a71c5..cbe7e865dc74 100644
+--- a/mm/damon/lru_sort.c
++++ b/mm/damon/lru_sort.c
+@@ -257,39 +257,6 @@ module_param(nr_cold_quota_exceeds, ulong, 0400);
+ static struct damon_ctx *ctx;
+ static struct damon_target *target;
+ 
+-struct damon_lru_sort_ram_walk_arg {
+-	unsigned long start;
+-	unsigned long end;
+-};
+-
+-static int walk_system_ram(struct resource *res, void *arg)
+-{
+-	struct damon_lru_sort_ram_walk_arg *a = arg;
+-
+-	if (a->end - a->start < resource_size(res)) {
+-		a->start = res->start;
+-		a->end = res->end;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * Find biggest 'System RAM' resource and store its start and end address in
+- * @start and @end, respectively.  If no System RAM is found, returns false.
+- */
+-static bool get_monitoring_region(unsigned long *start, unsigned long *end)
+-{
+-	struct damon_lru_sort_ram_walk_arg arg = {};
+-
+-	walk_system_ram_res(0, ULONG_MAX, &arg, walk_system_ram);
+-	if (arg.end <= arg.start)
+-		return false;
+-
+-	*start = arg.start;
+-	*end = arg.end;
+-	return true;
+-}
+-
+ /* Create a DAMON-based operation scheme for hot memory regions */
+ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
+ {
+@@ -404,8 +371,8 @@ static int damon_lru_sort_apply_parameters(void)
+ 	if (monitor_region_start > monitor_region_end)
+ 		return -EINVAL;
+ 	if (!monitor_region_start && !monitor_region_end &&
+-			!get_monitoring_region(&monitor_region_start,
+-				&monitor_region_end))
++	    !damon_get_sram_monitoring_region(&monitor_region_start,
++					      &monitor_region_end))
+ 		return -EINVAL;
+ 	addr_range.start = monitor_region_start;
+ 	addr_range.end = monitor_region_end;
+diff --git a/mm/damon/ops-common.h b/mm/damon/ops-common.h
+index 52329ff361cd..e6f1c9b48042 100644
+--- a/mm/damon/ops-common.h
++++ b/mm/damon/ops-common.h
+@@ -16,3 +16,4 @@ int damon_pageout_score(struct damon_ctx *c, struct damon_region *r,
+ 			struct damos *s);
+ int damon_hot_score(struct damon_ctx *c, struct damon_region *r,
+ 			struct damos *s);
++bool get_monitoring_region(unsigned long *start, unsigned long *end);
+diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+index a7faf51b4bd4..484bb802d249 100644
+--- a/mm/damon/reclaim.c
++++ b/mm/damon/reclaim.c
+@@ -229,39 +229,6 @@ module_param(nr_quota_exceeds, ulong, 0400);
+ static struct damon_ctx *ctx;
+ static struct damon_target *target;
+ 
+-struct damon_reclaim_ram_walk_arg {
+-	unsigned long start;
+-	unsigned long end;
+-};
+-
+-static int walk_system_ram(struct resource *res, void *arg)
+-{
+-	struct damon_reclaim_ram_walk_arg *a = arg;
+-
+-	if (a->end - a->start < resource_size(res)) {
+-		a->start = res->start;
+-		a->end = res->end;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * Find biggest 'System RAM' resource and store its start and end address in
+- * @start and @end, respectively.  If no System RAM is found, returns false.
+- */
+-static bool get_monitoring_region(unsigned long *start, unsigned long *end)
+-{
+-	struct damon_reclaim_ram_walk_arg arg = {};
+-
+-	walk_system_ram_res(0, ULONG_MAX, &arg, walk_system_ram);
+-	if (arg.end <= arg.start)
+-		return false;
+-
+-	*start = arg.start;
+-	*end = arg.end;
+-	return true;
+-}
+-
+ static struct damos *damon_reclaim_new_scheme(void)
+ {
+ 	struct damos_watermarks wmarks = {
+@@ -323,8 +290,8 @@ static int damon_reclaim_apply_parameters(void)
+ 	if (monitor_region_start > monitor_region_end)
+ 		return -EINVAL;
+ 	if (!monitor_region_start && !monitor_region_end &&
+-			!get_monitoring_region(&monitor_region_start,
+-				&monitor_region_end))
++	    !damon_get_sram_monitoring_region(&monitor_region_start,
++					      &monitor_region_end))
+ 		return -EINVAL;
+ 	addr_range.start = monitor_region_start;
+ 	addr_range.end = monitor_region_end;
+-- 
+2.31.0
 
-Thanks,
-
-> 
->>
->> Signed-off-by: Chao Yu <chao.yu@oppo.com>
->> ---
->> v2:
->> - don't override errno from f2fs_check_nid_range()
->> - fix compile error
->>   fs/f2fs/compress.c |  2 +-
->>   fs/f2fs/f2fs.h     |  1 +
->>   fs/f2fs/inode.c    | 13 ++++++++++++-
->>   fs/f2fs/super.c    |  4 ++--
->>   4 files changed, 16 insertions(+), 4 deletions(-)
->>
->> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
->> index 730256732a9e..c38b22bb6432 100644
->> --- a/fs/f2fs/compress.c
->> +++ b/fs/f2fs/compress.c
->> @@ -1947,7 +1947,7 @@ int f2fs_init_compress_inode(struct f2fs_sb_info *sbi)
->>   	if (!test_opt(sbi, COMPRESS_CACHE))
->>   		return 0;
->>   
->> -	inode = f2fs_iget(sbi->sb, F2FS_COMPRESS_INO(sbi));
->> +	inode = f2fs_iget_inner(sbi->sb, F2FS_COMPRESS_INO(sbi));
->>   	if (IS_ERR(inode))
->>   		return PTR_ERR(inode);
->>   	sbi->compress_inode = inode;
->> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->> index 408d8034ed74..35f9e1a6a1bf 100644
->> --- a/fs/f2fs/f2fs.h
->> +++ b/fs/f2fs/f2fs.h
->> @@ -3467,6 +3467,7 @@ int f2fs_pin_file_control(struct inode *inode, bool inc);
->>   void f2fs_set_inode_flags(struct inode *inode);
->>   bool f2fs_inode_chksum_verify(struct f2fs_sb_info *sbi, struct page *page);
->>   void f2fs_inode_chksum_set(struct f2fs_sb_info *sbi, struct page *page);
->> +struct inode *f2fs_iget_inner(struct super_block *sb, unsigned long ino);
->>   struct inode *f2fs_iget(struct super_block *sb, unsigned long ino);
->>   struct inode *f2fs_iget_retry(struct super_block *sb, unsigned long ino);
->>   int f2fs_try_to_free_nats(struct f2fs_sb_info *sbi, int nr_shrink);
->> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
->> index 6d11c365d7b4..965f87c1dd63 100644
->> --- a/fs/f2fs/inode.c
->> +++ b/fs/f2fs/inode.c
->> @@ -480,7 +480,7 @@ static int do_read_inode(struct inode *inode)
->>   	return 0;
->>   }
->>   
->> -struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->> +struct inode *f2fs_iget_inner(struct super_block *sb, unsigned long ino)
->>   {
->>   	struct f2fs_sb_info *sbi = F2FS_SB(sb);
->>   	struct inode *inode;
->> @@ -568,6 +568,17 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->>   	return ERR_PTR(ret);
->>   }
->>   
->> +struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
->> +{
->> +	int ret;
->> +
->> +	ret = f2fs_check_nid_range(F2FS_SB(sb), ino);
->> +	if (ret)
->> +		return ERR_PTR(ret);
->> +
->> +	return f2fs_iget_inner(sb, ino);
->> +}
->> +
->>   struct inode *f2fs_iget_retry(struct super_block *sb, unsigned long ino)
->>   {
->>   	struct inode *inode;
->> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
->> index b8e5fe244596..a5f5e7483791 100644
->> --- a/fs/f2fs/super.c
->> +++ b/fs/f2fs/super.c
->> @@ -4157,7 +4157,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
->>   		goto free_xattr_cache;
->>   
->>   	/* get an inode for meta space */
->> -	sbi->meta_inode = f2fs_iget(sb, F2FS_META_INO(sbi));
->> +	sbi->meta_inode = f2fs_iget_inner(sb, F2FS_META_INO(sbi));
->>   	if (IS_ERR(sbi->meta_inode)) {
->>   		f2fs_err(sbi, "Failed to read F2FS meta data inode");
->>   		err = PTR_ERR(sbi->meta_inode);
->> @@ -4265,7 +4265,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
->>   		goto free_nm;
->>   
->>   	/* get an inode for node space */
->> -	sbi->node_inode = f2fs_iget(sb, F2FS_NODE_INO(sbi));
->> +	sbi->node_inode = f2fs_iget_inner(sb, F2FS_NODE_INO(sbi));
->>   	if (IS_ERR(sbi->node_inode)) {
->>   		f2fs_err(sbi, "Failed to read node inode");
->>   		err = PTR_ERR(sbi->node_inode);
->> -- 
->> 2.25.1

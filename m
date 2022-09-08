@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094815B1EA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBAA5B1EA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiIHNWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S230177AbiIHNWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiIHNV3 (ORCPT
+        with ESMTP id S232442AbiIHNWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:21:29 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89299E55A2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:21:22 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b16so24352157edd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=yGzjUAVlbWD9K7WB5zdnXNvMsAG9MdKx18Dh/BG0fAc=;
-        b=T+IPtcdLJg303fTaAq+ct5LWwvXOQ/rhVoGClZGMLoYPhMskJNU1QqUjBpaDX6bQB8
-         aysHXs4c5+QV/fGHzpw6Lm9KAbX8P2lwqEZX62zLFZjvW8/0xTFB+5zF6AEa67/YiKBG
-         oS/YRtgioKnhYbPZiAERB+c7qzh2bDvxLHeiNhcLDameybe8YdRmW2GRaUy94un4d/z5
-         Am6C6RjA+Elb0Ua6loxzqY/pnzbTW0XbWcXVq0w53ZWmhdBtdM7k2Sq7jUOrRF9Z3iLo
-         iiGJNf9dSTtQ2+bBF2K91nEj4KfaLqF2ZHeGg26GHAV1YTQ0Gd1J4qizLXne8F+NgrC1
-         i83w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=yGzjUAVlbWD9K7WB5zdnXNvMsAG9MdKx18Dh/BG0fAc=;
-        b=NXJKlqQejTHiLe18IodwdUMahdhqsoSLqMhWdaD5pzmZ9tLuXdpI/zsFfXGl2Ax9fW
-         4nguQS3+X+f6j27HbIbTYY39KTN6Kro51GU+WnBDTcM3NhUkTCauq4Z783HaXPHTDs3w
-         Cn0z/PMBIOP0OgQ0cX0rFxw0/qFbaR6/ctE8NE5UFUkPjADfpgExpBSwD7MWnjHolaep
-         AdIAKGcjPueNMPWgAuE9xKOGI9vvjfvA0mkH8tm1X2MsZ01aNFIx+zSmzCjYNXExS1BZ
-         47EMVUSdKh8npSgPXM2QWwWq3niBjdxqVruzJVsviA4zhOE5T+dlvFvlcaA7k0yiWgG9
-         /sFA==
-X-Gm-Message-State: ACgBeo2QBY/HLcTUF9fipiQDybMiZMCISaNLcuU8xzg+SE5uJ0/v72kx
-        6m3G45SbfVM4jdjXROk4tydLOIrnZLidliWe+yisWQ==
-X-Google-Smtp-Source: AA6agR5gu7ZZe9a+j6qGcOZMau8x3QW1vVI/bIdW6gIkpHsboKtJFXGRe4Kpf2DvG8FECjqzZPxoKKIEbjvKVFz3v08=
-X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
- ez23-20020a056402451700b004437fe12d60mr7126269edb.133.1662643281146; Thu, 08
- Sep 2022 06:21:21 -0700 (PDT)
+        Thu, 8 Sep 2022 09:22:01 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE1EDEAB;
+        Thu,  8 Sep 2022 06:21:59 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1662643315tab8ymgc
+Received: from localhost.localdomain ( [182.148.14.0])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Sep 2022 21:21:54 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000B00A0000000
+X-QQ-FEAT: xqT8U4SkSphChMcRjDeTUTfb1FnuAqPwtVCFh/ImXYNkoPONLbnBuW4izTcJe
+        igGcVHBn8mYmK4ez2cKlQbachpcb0A86qOUdr4Vzmq6dG+12ls2diCGDsmdnRavYSBaFXhV
+        M5859I4GejJhTqYjpN+UmMqsid39CrIHgysB69wu7wP2H0qZcNbKQoJWlZsCozulli5+sHG
+        ifXcRtgo7a4vYrxigPd1WmkwxEC35kcjFHj3s0qGml3/HBKpvH5ffbLYO5otb3iiQU3pbrC
+        JoTvgyk4BTYTbLhAtDxsc2MyVm33qjampBW9pjfk5rqqaUXAm4bYpUHfm3y22mNEBCKZNYZ
+        HCAG87IGMuPDyEzWorl+IJh1zOHmZgOWTN4ZNAGZ0oQqzmOWTo=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] i2c/busses: fix repeated words in comments
+Date:   Thu,  8 Sep 2022 21:21:48 +0800
+Message-Id: <20220908132148.42995-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <Yhe0pCpfeCpyfPWg@orome> <20220816102725.14708-1-pshete@nvidia.com>
-In-Reply-To: <20220816102725.14708-1-pshete@nvidia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 8 Sep 2022 15:21:10 +0200
-Message-ID: <CACRpkdbMnRNTLcCtqNjKpxWxMbAXLssnuBEuNqAfgDfj3XVfXQ@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: tegra186: add Tegra234 PMC compatible in GPIO driver
-To:     Prathamesh Shete <pshete@nvidia.com>
-Cc:     bgolaszewski@baylibre.com, linux-gpio@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathanh@nvidia.com, thierry.reding@gmail.com,
-        smangipudi@nvidia.com, Manish Bhardwaj <mbhardwaj@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 12:27 PM Prathamesh Shete <pshete@nvidia.com> wrote:
+Delete the redundant word 'to'.
 
-> Using this patch we are adding PMC compatible string for
-> Tegra234 in GPIO driver so the IRQ hierarchy can be set.
->
-> Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/i2c/busses/i2c-viperboard.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/i2c/busses/i2c-viperboard.c b/drivers/i2c/busses/i2c-viperboard.c
+index 8b5322c3bce0..8f87394abbcf 100644
+--- a/drivers/i2c/busses/i2c-viperboard.c
++++ b/drivers/i2c/busses/i2c-viperboard.c
+@@ -318,7 +318,7 @@ static int vprbrd_i2c_xfer(struct i2c_adapter *i2c, struct i2c_msg *msgs,
+ 			amsg->addr = pmsg->addr;
+ 			amsg->unknown1 = 0x00;
+ 			amsg->len = cpu_to_le16(pmsg->len);
+-			/* send the addr, the data goes to to board */
++			/* send the addr, the data goes to board */
+ 			ret = vprbrd_i2c_addr(vb->usb_dev, amsg);
+ 			if (ret < 0)
+ 				error = ret;
+-- 
+2.36.1
 
-It also has Thierry's ACK from v1.
-
-Yours,
-Linus Walleij

@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE1D5B252F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC945B2533
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiIHRwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        id S231634AbiIHRyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiIHRwM (ORCPT
+        with ESMTP id S230450AbiIHRyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:52:12 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2114D99DE;
-        Thu,  8 Sep 2022 10:52:11 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t14so20139283wrx.8;
-        Thu, 08 Sep 2022 10:52:11 -0700 (PDT)
+        Thu, 8 Sep 2022 13:54:51 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599252469
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:54:50 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3457bc84d53so95039987b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=kT+2AbTrH1Kh7uAi7sVUDrkL8YeDLjiGtQ85nst8gfU=;
-        b=eUcl9Y0xLe5I1Pus5u74csvo/LKTlohSmCxPX+tbDeSL8iGEViZmBkXiZ3VWD0Upb0
-         2mO2ePdJpdfgmdIkZJw2OWHce4Etar9/2uwx+eWAfsMk/xYvMG8kWDL9lFMTihWUF/fV
-         bAXfVAJZsThVpObTsyA9GhaBhbAj+Zfl0M6dIXAQ7k355UQZurA+m/tnDm2RVa0AoNol
-         Wat9+o0uEhzf4Q9TL65H97HxJUe/5OZwkpQI8m5RfZ4TRTxG20QARrA78afMW1s01a4I
-         791yhCMweJ6cS5t/6LhoghDmmbnsGX5CKYjtnGo3zWWH4MtUSJHkpauzP2CtE9z8EUqY
-         G4nA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4o6pEGvC0xR1WYCpAN/WgF7OkvsbjOlTp/AoxTDmWXU=;
+        b=MoqgM7jyFVT39XmQ2SFHCSX5yFBGlrr6am1GQA+mo3OH3ZfqZJ0X2qIYszdvXX50bh
+         oRtOzmvY0g9j67TavgJWauoVX88NWkSRVbmNaED64NML/RMlVtggHX466sFYVWRdyGzy
+         xBvrKC60nBUE78KNd5CqrmtjS18ycsR5mWoCiuiHS77pWfU5z160zeGXUM9nAZ1cXyqz
+         5KiRD1U+/uREhHhVxLO2kCi9T+MdbGZcdqiTb0wE9/5NvWF5cU82QMcZRtu50Vf+H/gC
+         BMNY4l1gP/OIqU4CY3zaz/789iSGF9/yuISlNQ2Bf8vQ7QXt7MW2hvUcorwffvEYMRhz
+         bqhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=kT+2AbTrH1Kh7uAi7sVUDrkL8YeDLjiGtQ85nst8gfU=;
-        b=Jwg4W/8o2wtxaa1fPDtdz2Be0skmBldtZm6urrbsJ41akfLrcTTU4Gs9iDcsW8Vbw8
-         SZ8vR3BPTvHGW7RA3//WHsdf1r2jiEiNoHkn5e0MUEGdL2vKXf7x0V3lkJJyORhiPxPa
-         QGDDIv7e1vOhlygT43gM2vGsk5HYRxFPyI+i2hTc0WEXkPFLHoGmwNh9OKq5v0fwgbqL
-         1ysi05TM4I8qUNmLDSwZGXaG4t9ODRA7uZWG14F/wwUCRSJl/XGBRenipgpQELoc8qJ+
-         k+ItbhA2XUOyLnU6DCmzV/pnslFO50ojEmBMAalIChTAn59oE7CrtZQ2/ngJD93nfCQ4
-         5PZw==
-X-Gm-Message-State: ACgBeo1qP4VJOJeRTc5RpevmLBCEmIGk14qWOwjoWvD3BhnqjxEuQLv4
-        /GiamulItUkFeH8UMEBPv1g=
-X-Google-Smtp-Source: AA6agR6ac9wu3/ypYFwz28EfERWFSyeR30QK/KsEUG2H6NdnyQUu/tU98reF2mS37pHqFLnbL2ZBhw==
-X-Received: by 2002:a5d:64cf:0:b0:220:6d8e:1db0 with SMTP id f15-20020a5d64cf000000b002206d8e1db0mr5580917wri.564.1662659529837;
-        Thu, 08 Sep 2022 10:52:09 -0700 (PDT)
-Received: from [192.168.74.101] ([77.78.20.135])
-        by smtp.gmail.com with ESMTPSA id v11-20020adfe4cb000000b00228a17f92fesm14705767wrm.51.2022.09.08.10.52.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 10:52:09 -0700 (PDT)
-Message-ID: <843b8280-5e71-c008-0ca2-4d289ca6e7da@gmail.com>
-Date:   Thu, 8 Sep 2022 20:52:10 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4o6pEGvC0xR1WYCpAN/WgF7OkvsbjOlTp/AoxTDmWXU=;
+        b=7JCw2UmEtqejEKgZtF7RbEgQrdwizWSnQMXgICwIuyBuHIczAfl6T4bhWc18VUvbfu
+         7wEmpxTKdVlQt+FH/N4RKTlHbN1MuJ0IdU+zGNzimkmLzaUlydMJ88r7LAklt83cdNAc
+         ZCOeZt2hTga080/gAfMdkGET2y29EPHPdvy+LpT1wrNUQHam5BB3nbw4uUhk0DRx1DI1
+         QyyCDCgCuoBe4SL+W/aDWeN5xR04IFeoa6iC3BOQ60ibBPlO9tzBn6F1lvEjPGDpC3tt
+         V6l5WUHLZdSCkn2/IfLslRyDmooDf5Zd/g5nAVm7XXIahNQQHumSyeG/Yks5oVLthEce
+         2hrQ==
+X-Gm-Message-State: ACgBeo2ONV/Czwz7kKqPB4RJlgWFTIItoct3Avd7s71lVT1wjXn02p+B
+        ofuKo7sT+HMEZMhWWipiyWYDwYLSkejQ4RboFCCSzg==
+X-Google-Smtp-Source: AA6agR64MqWStEy43/wInEWWHQqJckl2u3w2fnpuKGZdtvM772eO0H6J4oJPu9XUFZhQcbsuxiooxwVtHUPCgyJqgbE=
+X-Received: by 2002:a81:5790:0:b0:348:9584:bf4b with SMTP id
+ l138-20020a815790000000b003489584bf4bmr3154763ywb.483.1662659689250; Thu, 08
+ Sep 2022 10:54:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 9/9] arm64: dts: qcom: sm4250: Add support for
- oneplus-billie2
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org
-References: <20220903174150.3566935-1-iskren.chernev@gmail.com>
- <20220903174150.3566935-10-iskren.chernev@gmail.com>
- <e655cddd-677b-f277-667f-48107671db2a@linaro.org>
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-In-Reply-To: <e655cddd-677b-f277-667f-48107671db2a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-8-jthoughton@google.com> <Yxool80IgkXnqS5Y@xz-m1.local>
+In-Reply-To: <Yxool80IgkXnqS5Y@xz-m1.local>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 8 Sep 2022 10:54:37 -0700
+Message-ID: <CADrL8HUNs8UgHE4MJ4ciX_uDaizAcA8OysJzQN=OTWJ8JJQ53w@mail.gmail.com>
+Subject: Re: [RFC PATCH 07/26] hugetlb: add hugetlb_pte to track HugeTLB page
+ table entries
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,20 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/6/22 11:33, Krzysztof Kozlowski wrote:
-> On 03/09/2022 19:41, Iskren Chernev wrote:
->> Remaining issues from make dtbs_check:
->> - rpm-requests: it doesn't like the pm6125-regulators subnode. Every other
->>   DTS I checked is written in this way.
+On Thu, Sep 8, 2022 at 10:38 AM Peter Xu <peterx@redhat.com> wrote:
 >
-> Yes, I sent patches for it, already merged, so please rebase on linux-next.
+> James,
 >
-> https://lore.kernel.org/all/20220828084341.112146-1-krzysztof.kozlowski@linaro.org/
+> On Fri, Jun 24, 2022 at 05:36:37PM +0000, James Houghton wrote:
+> > +static inline
+> > +spinlock_t *hugetlb_pte_lockptr(struct mm_struct *mm, struct hugetlb_pte *hpte)
+> > +{
+> > +
+> > +     BUG_ON(!hpte->ptep);
+> > +     // Only use huge_pte_lockptr if we are at leaf-level. Otherwise use
+> > +     // the regular page table lock.
+> > +     if (hugetlb_pte_none(hpte) || hugetlb_pte_present_leaf(hpte))
+> > +             return huge_pte_lockptr(hugetlb_pte_shift(hpte),
+> > +                             mm, hpte->ptep);
+> > +     return &mm->page_table_lock;
+> > +}
 >
-> Please rebase and test with
-> Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> Today when I re-read part of this thread, I found that I'm not sure whether
+> this is safe.  IIUC taking different locks depending on the state of pte
+> may lead to issues.
+>
+> For example, could below race happen where two threads can be taking
+> different locks even if stumbled over the same pmd entry?
+>
+>          thread 1                          thread 2
+>          --------                          --------
+>
+>     hugetlb_pte_lockptr (for pmd level)
+>       pte_none()==true,
+>         take pmd lock
+>     pmd_alloc()
+>                                 hugetlb_pte_lockptr (for pmd level)
+>                                   pte is pgtable entry (so !none, !present_leaf)
+>                                     take page_table_lock
+>                                 (can run concurrently with thread 1...)
+>     pte_alloc()
+>     ...
 
-It looks like this patch covers SPMI regulators. In most devices RPM/H (i.e
-indirect) regulators are used, so this doesn't fix it for me.
+Thanks for pointing out this race. Yes, it is wrong to change which
+lock we take depending on the value of the PTE, as we would need to
+lock the PTE first to correctly make the decision. This has already
+been fixed in the next version of this series :). That is, we choose
+which lock to grab based on the PTE's page table level.
+
+- James
+
+>
+> --
+> Peter Xu
+>

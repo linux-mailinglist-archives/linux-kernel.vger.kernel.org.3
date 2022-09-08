@@ -2,132 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5D85B15C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8715B15C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbiIHHfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S230384AbiIHHhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiIHHfe (ORCPT
+        with ESMTP id S229924AbiIHHhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:35:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B642B442D;
-        Thu,  8 Sep 2022 00:35:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E363661B53;
-        Thu,  8 Sep 2022 07:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85081C433D6;
-        Thu,  8 Sep 2022 07:35:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662622532;
-        bh=myFJHXYjylDbYqIz67EITWqaRTZwH+KbFTWFLPlfzHo=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=rWSxQRj9NIxwyjwIuwvIl8vk6rh0HO0v9Un8qVwQb2Mjb9i3M1dBBlrDEGJdKzLju
-         fUECPIfqKlf79D3qC3DfzNDh23UNWQLrM4EMxgZD16KLrq2SV7LkyUG0r6R+VXWSHT
-         WdQF9Bcyr2+liLSTs3pLe19n4Z0olvO4Pk29pCWvBeyNf4mMKSNxiQT4QJ1vNwKPIT
-         CAZRDpcJb2a1MPBo4QPIHnwcSzbmLu3clK7K3rFBDKOgI+dNlB+6OE+5ZnKbYRCIDA
-         vDb8gNfd0Rr2lDPX83BJw9Pq7v/m0CgB9OgJrZY+idMEpA3Tjy3yHDHX6hc88zpSyF
-         6NZp5BLTI4DrA==
-Date:   Thu, 8 Sep 2022 08:35:26 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v3 1/1] bpf: Drop unprotected find_vpid() in favour of
- find_get_pid()
-Message-ID: <YxmbPqKZMEXHL6sI@google.com>
-References: <20220809134752.1488608-1-lee@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220809134752.1488608-1-lee@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 03:37:01 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8D2BD1EB;
+        Thu,  8 Sep 2022 00:36:59 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id B11592B05F1B;
+        Thu,  8 Sep 2022 03:36:55 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 08 Sep 2022 03:36:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662622615; x=1662626215; bh=fczRBUafZA
+        b4RaXJzlTRQu/tA13OrDvjbdcplYkYK0Q=; b=KYC9GwDVAiDSqJoafeGR6xgqIn
+        u2V5ZePsZlHt04gAtkSEZNWPe+Vr0ia3erf2Ac0RxEheFHfFv8yS5kFB8CKcFmOa
+        P+f+Mk7oqEgzxx74Kli6kSlFVKElrrUUYIzuER839ay3Z8I7x1EmBZjwyf4w3NbJ
+        p2efCDw7/pdjmuQN0sUaZi9wI5F/AyND9toXg6SLiLRM4a/UBLKOE4KyJFt+KReP
+        DoizUMe0iKnr1OBAFMVbLv7Rz8B9FSikbe5RWDFgKerNqkv5WjsjpfsUPgOTtT7b
+        OQVCyXbF6jsJjf65pnSGXNYKW3CUwl/ysKC1hAHRvOdhWv0dUJZbJluUyyOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662622615; x=1662626215; bh=fczRBUafZAb4RaXJzlTRQu/tA13O
+        rDvjbdcplYkYK0Q=; b=GAN/KmWUPR3xfVYijN3Pa0JG8akP4pFFH6QV0xgZbuxx
+        QD7qMzoSeZN8JivaxtILausWbCAEWc4DZdEaY3aXqOpJg7I+lEtxCtWVS5GGq8DR
+        IEZybaN9fCu16aUcJa1PR2wdjtFdDWWDzwoFIN6mc+zask/5TffpHKFYuAx3Zi6u
+        377Wy/R+ySpTyg+87XAOm+GGXnfXTJF2AWkKMWzW7wQCuhj3iqOiSZCC9qJLshjZ
+        bhuh5vUXoDvu+z2FpgVYVQL0JE0VqbqMIybBqTm2kdaVHG3nGKUKTU6KXmaWAsJE
+        k1KyDjgqq9TmIltMFzMpZgxKLL3F9D1lS0h4uqV5fg==
+X-ME-Sender: <xms:lpsZY1Jpv4sBdOdHa8r2gDqOF7pmxBMX8zNwbUKITFR_tmon5oF6Eg>
+    <xme:lpsZYxKgrfR4QP2GXNvXtx_7r-uUFOwDmkoDaYns8Oo2taq94IX4sQkVro6drr298
+    rBImXk5qwTRpTe7pRA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtuddguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:lpsZY9urtU-0GbZPLpopELSKTHkdA0YMKCEE1P7EkBO5otcHsDd-Rw>
+    <xmx:lpsZY2ZaiMVDhLSJeBsE0z4pGDppm9txfP0UPhizkLApD1Hk_Oajhg>
+    <xmx:lpsZY8blkaL1SFxluXrdBwOiut7Q3H5nnaq_SNjj-LanjlcxQK_zQA>
+    <xmx:l5sZY5QF1DahoZrrWG2qX-8E4zYYVF5Pwjx8qFCQxJTjou-qMXmYH-PU1AdcEv6y>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1A49FB60083; Thu,  8 Sep 2022 03:36:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com>
+In-Reply-To: <20220908022506.1275799-9-guoren@kernel.org>
+References: <20220908022506.1275799-1-guoren@kernel.org>
+ <20220908022506.1275799-9-guoren@kernel.org>
+Date:   Thu, 08 Sep 2022 09:35:48 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     guoren@kernel.org, palmer@rivosinc.com,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org,
+        "Huacai Chen" <chenhuacai@kernel.org>, apatel@ventanamicro.com,
+        atishp@atishpatra.org, "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>, bigeasy@linutronix.de
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Guo Ren" <guoren@linux.alibaba.com>,
+        "Andreas Schwab" <schwab@suse.de>
+Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 Aug 2022, Lee Jones wrote:
-
-> The documentation for find_vpid() clearly states:
-> 
->   "Must be called with the tasklist_lock or rcu_read_lock() held."
-> 
-> Presently we do neither.
-> 
-> Let's use find_get_pid() which searches for the vpid, then takes a
-> reference to it preventing early free, all within the safety of
-> rcu_read_lock().  Once we have our reference we can safely make use of
-> it up until the point it is put.
-> 
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: bpf@vger.kernel.org
-> Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> Signed-off-by: Lee Jones <lee@kernel.org>
+On Thu, Sep 8, 2022, at 4:25 AM, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> 0cac21b02ba5 ("risc v: use 16KB kernel stack on 64-bit") increase the
+> thread size mandatory, but some scenarios, such as D1 with a small
+> memory footprint, would suffer from that. After independent irq stack
+> support, let's give users a choice to determine their custom stack size.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Andreas Schwab <schwab@suse.de>
 > ---
+>  arch/riscv/Kconfig                   | 9 +++++++++
+>  arch/riscv/include/asm/thread_info.h | 4 ++--
+>  2 files changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index da548ed7d107..e436b5793ab6 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -442,6 +442,15 @@ config IRQ_STACKS
+>  	  Add independent irq & softirq stacks for percpu to prevent kernel stack
+>  	  overflows. We may save some memory footprint by disabling IRQ_STACKS.
 > 
-> v1 => v2:
->   * Commit log update - description - no code differences
-> 
-> v2 => v3:
->   * Commit log update - spelling of find_vpid() - no code differences
+> +config THREAD_SIZE_ORDER
+> +	int "Pages of thread stack size (as a power of 2)"
+> +	range 1 4
+> +	default "1" if 32BIT
+> +	default "2" if 64BIT
+> +	help
+> +	  Specify the Pages of thread stack size (from 8KB to 64KB), which also
+> +	  affects irq stack size, which is equal to thread stack size.
 
-Did anyone get a chance to look at this please?
+I would suggest hiding this under 'depends on EXPERT', no
+need to bother normal users with that question because the
+defaults are probably what everyone should use unless they are
+extremely limited.
 
-Would you like a [RESEND]?
+> #ifdef CONFIG_64BIT
+> -#define THREAD_SIZE_ORDER	(2 + KASAN_STACK_ORDER)
+> +#define THREAD_SIZE_ORDER	(CONFIG_THREAD_SIZE_ORDER + KASAN_STACK_ORDER)
+>  #else
+> -#define THREAD_SIZE_ORDER	(1 + KASAN_STACK_ORDER)
+> +#define THREAD_SIZE_ORDER	(CONFIG_THREAD_SIZE_ORDER + KASAN_STACK_ORDER)
+>  #endif
 
->  kernel/bpf/syscall.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 83c7136c5788d..c20cff30581c4 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->  	const struct perf_event *event;
->  	struct task_struct *task;
->  	struct file *file;
-> +	struct pid *ppid;
->  	int err;
->  
->  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-> @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->  	if (attr->task_fd_query.flags != 0)
->  		return -EINVAL;
->  
-> -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-> +	ppid = find_get_pid(pid);
-> +	task = get_pid_task(ppid, PIDTYPE_PID);
-> +	put_pid(ppid);
->  	if (!task)
->  		return -ENOENT;
->  
+The two sides of the #ifdef are now the same, so you no longer
+need both. You could also consider expressing the KASAN_STACK_ORDER
+bit in Kconfig logic for consistency, and put those into the
+defaults as well. Unless you actually use CONFIG_KASAN_STACK,
+the stack requirements of KASAN are not too bad, so that way one
+could decide to still use a smaller stack even with KASAN.
 
--- 
-Lee Jones [李琼斯]
+If you want to make the setting really useful, you can add two
+more ideas:
+
+- When VMAP_STACK is set, make it possible to select non-power-of-two
+  stack sizes. Most importantly, 12KB should be a really interesting
+  choice as 8KB is probably still not enough for many 64-bit workloads,
+  but 16KB is often more than what you need. You probably don't
+  want to allow 64BIT/8KB without VMAP_STACK anyway since that just
+  makes it really hard to debug, so hiding the option when VMAP_STACK
+  is disabled may also be a good idea.
+
+- For testing purposes, you can even allow byte-exact stack sizes
+  that allow finding out what the actual minimum is by adding a
+  fixed offset during kernel entry. See add_random_kstack_offset()
+  for how to adjust the stack.
+
+With all those ideas added in, the Kconfig logic would be
+something like (assuming you can use 
+
+config THREAD_SIZE
+       int "Kernel stack size (in bytes)" if VMAP_STACK && EXPERT
+       range 4096 65536
+       default 8192 if 32BIT && !KASAN
+       default 32768 if 64BIT && KASAN
+       default 16384
+
+config THREAD_SIZE_ORDER
+       int
+       default 0 if THREAD_SIZE = 4096
+       default 1 if THREAD_SIZE <= 8192 
+       default 2 if THREAD_SIZE <= 16384
+       default 3 if THREAD_SIZE <= 32768
+       default 4
+
+      Arnd

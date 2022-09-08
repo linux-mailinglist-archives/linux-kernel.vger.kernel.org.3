@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DE35B284E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 23:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DEC5B285B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 23:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiIHVRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 17:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S229970AbiIHVTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 17:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiIHVRq (ORCPT
+        with ESMTP id S229582AbiIHVS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 17:17:46 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA141017C1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 14:17:43 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o4so19001582pjp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 14:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1vH0xwAwu857qan4VhlR5/CP90WnznqN8sYcRDZICDI=;
-        b=gk2T77pZStWaE9I/LqZa9c/bsifhcll3rtR6/fuLmnHZ/awo/H8bGlIFRRUDD+vETi
-         towhPxtzCYTUn9pkzSmxzV945mtXgao4gJOnF3+h33jtXFUU5+43QFLY8Eaac/XWeU6n
-         az9u7NRr0n3kaSLEq44j4F2lGfgmUTCZ2H6W/05sFO9IAfAABugwXYCscy4QVLg3oZlq
-         N9p03h2qHahtM6f4Tw6aP203Me92JQGYB+DRWcZqOCBjkBCgevgjQeKaHMnHZHkM6tzj
-         4w4LHDtA4Hcjb4thTHEj4GZc/NHC6dXe5bIb9sddO5BE63FB6m8ENUmnbhqEMxLndQuo
-         gkKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=1vH0xwAwu857qan4VhlR5/CP90WnznqN8sYcRDZICDI=;
-        b=YQyEdcmxjlLN8SYbOaTjMK7D2kZbKl+oVF3H0vP2exCz6MAVcgR20W0b8cJXooo2rC
-         0IB7Iu5es+FUeFcysPYhmNo1d7KCGzVRjAPQCOLUsRLZt8I5eIFEJc9WCdIzIbMqM54u
-         16MBsgGt+d1HhYzne7oFbfX87J5MNGibQp4foAVn8RSYBHPJb3LWG8OCCskfmMujw/mz
-         3NM/b1w9SQm2z6yQRl4sF/uOB+IRHl6vAyAlvgCpUI+0NB3GZjs+5cn2sHY16G9pfE3v
-         OjlouIdQiEZHr8j9cgydnkauu+J21Y+mEdNHAzMQXF6ujmPEO4E+lrq9PS3NIK+nXaEG
-         rAOw==
-X-Gm-Message-State: ACgBeo2YZknHaK8hfAQjdpoODZAibi9P6RNb6+XVRDFbX/R4CBg6BUio
-        ydufecmtei0c3nLVK8ij3j5c3miGVlQ30Q==
-X-Google-Smtp-Source: AA6agR406OgVPwuy7NM5Fgfa+SA+jopPEu8bBwU13dMzAfJWMQfbzvKO+PqomEr74863czx6xmVe/g==
-X-Received: by 2002:a17:902:e8d1:b0:172:9bc0:bc9d with SMTP id v17-20020a170902e8d100b001729bc0bc9dmr10827487plg.20.1662671862950;
-        Thu, 08 Sep 2022 14:17:42 -0700 (PDT)
-Received: from localhost.localdomain (c-98-35-249-89.hsd1.ca.comcast.net. [98.35.249.89])
-        by smtp.gmail.com with ESMTPSA id pi10-20020a17090b1e4a00b00200de8ebc2bsm2306168pjb.13.2022.09.08.14.17.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 08 Sep 2022 14:17:42 -0700 (PDT)
-From:   "Yichun Zhang (agentzh)" <yichun@openresty.com>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     "Yichun Zhang (agentzh)" <yichun@openresty.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
-Subject: [PATCH] relay: replay_file_open(): NULL ptr deref in CPU hotplugs
-Date:   Thu,  8 Sep 2022 14:17:30 -0700
-Message-Id: <20220908211731.11534-1-yichun@openresty.com>
-X-Mailer: git-send-email 2.17.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Sep 2022 17:18:58 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D79D7423;
+        Thu,  8 Sep 2022 14:18:54 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288JNtlt006817;
+        Thu, 8 Sep 2022 21:18:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=t+zvnrxkVhAaJLOW7/6oGGs4/8MFrNwkd7LOwSIRTDw=;
+ b=pYI3xVZjOEAHbzy40iHThzgHHBApCBuDmj9WmvRwRh0VZTIT8N23oMtQMF3cojvkzIBw
+ z8mamJo8nUlYlRw3ZYuR2gqoC2f6n1pdPKJLfdEnkMpUT/GwmOwbte6XNF1pRMYDFZfy
+ I74Q/AxAv3/KCeym1JLjlU3JerupLi8EbenE+e2rWZDJ2S93GkHB6m1eIeXhmH3BLu4b
+ 86VqnXiMwGZ9hTDWEyptrh7UYDDXPYk2PBXEhOlaD+QP3Ds6MKQY8U/Ojni9C4iFgali
+ GLnZYzABAkq5j9oLzq/8bHRl0gIpfFyCoEJHGdC3qDGt6jWnopQ0Bxt1/093HBVjJ/T0 /Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfcpbt9k9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 21:18:47 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 288LIlnH020104
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Sep 2022 21:18:47 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 8 Sep 2022 14:18:46 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/2] cleared DP_DOWNSPREAD_CTRL register
+Date:   Thu, 8 Sep 2022 14:18:35 -0700
+Message-ID: <1662671917-17194-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2Kpp7qIh4Hw5r13L2CYQDKXSyA3m3_kS
+X-Proofpoint-GUID: 2Kpp7qIh4Hw5r13L2CYQDKXSyA3m3_kS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_12,2022-09-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=905 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209080076
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPU hotplug may introduce race conditions. We reproduced kernel panics
-due to this NULL ptr deref error when doing frequent random CPU hotplugs
-in a KVM guest.
+cleared DP_DOWNSPREAD_CTRL register before start link training
 
-Signed-off-by: Yichun Zhang (agentzh) <yichun@openresty.com>
----
- kernel/relay.c | 3 +++
- 1 file changed, 3 insertions(+)
+Kuogee Hsieh (2):
+  drm/msm/dp: cleared DP_DOWNSPREAD_CTRL register before start link
+    training
+  drm/msm/dp: retry 3 times if set sink to D0 poweer state failed
 
-diff --git a/kernel/relay.c b/kernel/relay.c
-index 6a611e779e95..2db69fd527d1 100644
---- a/kernel/relay.c
-+++ b/kernel/relay.c
-@@ -816,6 +816,9 @@ EXPORT_SYMBOL_GPL(relay_flush);
- static int relay_file_open(struct inode *inode, struct file *filp)
- {
- 	struct rchan_buf *buf = inode->i_private;
-+	if (unlikely(buf == NULL))
-+		return -ENOENT;
-+
- 	kref_get(&buf->kref);
- 	filp->private_data = buf;
- 
+ drivers/gpu/drm/msm/dp/dp_ctrl.c | 13 +++++--------
+ drivers/gpu/drm/msm/dp/dp_link.c | 21 ++++++++++++---------
+ 2 files changed, 17 insertions(+), 17 deletions(-)
+
 -- 
-2.17.2
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

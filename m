@@ -2,56 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ACF5B13EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E585B13F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiIHFRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 01:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S229954AbiIHFTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 01:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiIHFRV (ORCPT
+        with ESMTP id S229510AbiIHFTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 01:17:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024D6BD1F2;
-        Wed,  7 Sep 2022 22:17:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4C27B81F05;
-        Thu,  8 Sep 2022 05:17:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C45C433C1;
-        Thu,  8 Sep 2022 05:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662614237;
-        bh=aY+4jyT4b1htONdVNHh0+w7cNyo+79xZD5hrCdXk8dk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n5pKL/olty8aLxKn+CXfeqTREfa79fOg2uq7sV1L01DqLgActG1aXxl+0oG9lyseS
-         5WK1SAWX+97YNtmfxmBq+AQ7j7972P96CPf0TPdNp/v+GQXO8HTCNy9oAd3U3W4cDM
-         flqxEZu9kOUVAyuAGMq73634K+1JtJ1bcGLWh6k89KKEFwgeFoYuLxGzVIi6OEAz4A
-         06+mWlK0PZAd9ZKVSjnF3XW/riivc118E/77O8VhnfTbPFPVR7dQhteO/AGPTZWNAK
-         lrEPRsPzKoPkGfR2fO3isX//2gJDeweerOOsscHrt2JR9oO/XRlLdya23ApJ8ENcRt
-         vMfvELMKuyo9w==
-Date:   Thu, 8 Sep 2022 08:17:11 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>
-Subject: Re: [PATCH] security/keys: Remove inconsistent __user annotation
-Message-ID: <Yxl614jNUYvYywUc@kernel.org>
-References: <20220907121230.21252-1-vincenzo.frascino@arm.com>
- <f1cefdb9-363a-c938-f02a-851173431610@infradead.org>
- <CAHC9VhQytyFMvq-M0YrqzKxJDyj58KKG0XDjBfTV02sYCzeALQ@mail.gmail.com>
+        Thu, 8 Sep 2022 01:19:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FA16437
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 22:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662614368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B1eDsyH0NCED46aCkehmhrnDxVmlGdOirQ4ogyDejUk=;
+        b=fDnsrOHQxdFuZMm90vLxW+L2256a2SGdsONildFxUkvS8r/5SXatzGAT2rw0iZeUbGlb2M
+        JV3Jx7GGw8/Nn0VOG4/63qYCZWakCO3h4rHxS0sQ6qCta5YjzA5JXlmpYjGOIYIa5ICBjx
+        rOODsMgED2uLqzhGcqKBc4cv+aqdQHk=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-433-fdLznIvYMWmgacb5ig_X7w-1; Thu, 08 Sep 2022 01:19:27 -0400
+X-MC-Unique: fdLznIvYMWmgacb5ig_X7w-1
+Received: by mail-qk1-f200.google.com with SMTP id h20-20020a05620a245400b006bb0c6074baso13628475qkn.6
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 22:19:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=B1eDsyH0NCED46aCkehmhrnDxVmlGdOirQ4ogyDejUk=;
+        b=K83nJgfvHn4CFmTCA/kK58GIIJnq0U1YAPrOv+P5IPlOiXVG/RD7e2SImSppMQE95R
+         6jLdBzqrfcbh6e6Gv1CiS/06O0Z1U6M+m6ozFRqPinOYWIsl+PCu/JvKzYxkweVilzT7
+         1uNyjVlmje7/3pQDkzgHe9jJFyOyt6Qt8Sr/k7a78/j96GSHF2HPsilnfZNTj1BY1Cqh
+         qCibmZvwEVkEIpE60M6sjEobCO9Zn5eBnYgw5CfLjA235iSuO6nWoeUhv9cZFtTaPsHe
+         uYJSzirQv5/MTM75+jGn4NjF805cpnHQuYDEvekvzlDbk9EGrRNF4k5wxbLqTa9crUF2
+         SnHg==
+X-Gm-Message-State: ACgBeo1ZKk0TB4X1oDSdHn4ipqnERi2kBatOT29D5OclpPetxfKE7K2z
+        XxNIEvDmRSVk3mFhf3xR75VezdM242QxJdbFS/E4/78C+5h9hZGQ+3OiWWl31KiNYFmu9d36voJ
+        UTaL0WLqj5foq6Uw7wNgVWhPR
+X-Received: by 2002:ad4:5aad:0:b0:4aa:a266:d1a7 with SMTP id u13-20020ad45aad000000b004aaa266d1a7mr6185325qvg.70.1662614366714;
+        Wed, 07 Sep 2022 22:19:26 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4r1VbJFq8CGl7/bxp5VatqXI2qjsFPHqpStma1EuagWySTzIlSshzGyNA5TkIFgOJkVROScA==
+X-Received: by 2002:ad4:5aad:0:b0:4aa:a266:d1a7 with SMTP id u13-20020ad45aad000000b004aaa266d1a7mr6185310qvg.70.1662614366505;
+        Wed, 07 Sep 2022 22:19:26 -0700 (PDT)
+Received: from redhat.com ([45.144.113.243])
+        by smtp.gmail.com with ESMTPSA id a9-20020ac844a9000000b0034305a91aaesm13189404qto.83.2022.09.07.22.19.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 22:19:25 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 01:19:20 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>, netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        davem <davem@davemloft.net>
+Subject: Re: [PATCH net] virtio-net: add cond_resched() to the command
+ waiting loop
+Message-ID: <20220908011858-mutt-send-email-mst@kernel.org>
+References: <20220905045341.66191-1-jasowang@redhat.com>
+ <20220905031405-mutt-send-email-mst@kernel.org>
+ <CACGkMEtjQ0Jfok-gcRW+kuinsua2X0TscyTNfBJoXHny0Yob+g@mail.gmail.com>
+ <056ba905a2579903a372258383afdf6579767ad0.camel@redhat.com>
+ <CACGkMEuiDqqOEKUWRN9LvQKv8Jz4mi3aSZMwbhUsJkZp=C-0RQ@mail.gmail.com>
+ <c9180ac41b00543e3531a343afae8f5bdca64d8d.camel@redhat.com>
+ <20220907034407-mutt-send-email-mst@kernel.org>
+ <d32101bb-783f-dbd1-545a-be291c27cb63@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhQytyFMvq-M0YrqzKxJDyj58KKG0XDjBfTV02sYCzeALQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d32101bb-783f-dbd1-545a-be291c27cb63@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +92,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 11:43:17AM -0400, Paul Moore wrote:
-> On Wed, Sep 7, 2022 at 10:06 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> > On 9/7/22 05:12, Vincenzo Frascino wrote:
-> > > The declaration of keyring_read does not match the definition
-> > > (security/keys/keyring.c). In this case the definition is correct
-> > > because it matches what defined in "struct key_type::read"
-> > > (linux/key-type.h).
-> > >
-> > > Fix the declaration removing the inconsistent __user annotation.
-> > >
-> > > Cc: David Howells <dhowells@redhat.com>
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Cc: Paul Moore <paul@paul-moore.com>
-> > > Cc: James Morris <jmorris@namei.org>
-> > > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> > > ---
-> > > Note: This issue was discovered during the porting of the linux kernel
-> > > on Morello [1].
-> > >
-> > > [1] https://git.morello-project.org/morello/kernel/linux
-> >
-> > FTR, I have sent this same patch 3 times.
-> > Good luck.
+On Thu, Sep 08, 2022 at 10:21:45AM +0800, Jason Wang wrote:
 > 
-> David or Jarkko, this patch is both trivial and obviously correct,
-> please merge this into the keys tree for the next merge window else
-> I'll take it via the LSM tree.
+> 在 2022/9/7 15:46, Michael S. Tsirkin 写道:
+> > On Wed, Sep 07, 2022 at 09:07:20AM +0200, Paolo Abeni wrote:
+> > > On Wed, 2022-09-07 at 10:09 +0800, Jason Wang wrote:
+> > > > On Tue, Sep 6, 2022 at 6:56 PM Paolo Abeni <pabeni@redhat.com> wrote:
+> > > > > On Mon, 2022-09-05 at 15:49 +0800, Jason Wang wrote:
+> > > > > > On Mon, Sep 5, 2022 at 3:15 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > On Mon, Sep 05, 2022 at 12:53:41PM +0800, Jason Wang wrote:
+> > > > > > > > Adding cond_resched() to the command waiting loop for a better
+> > > > > > > > co-operation with the scheduler. This allows to give CPU a breath to
+> > > > > > > > run other task(workqueue) instead of busy looping when preemption is
+> > > > > > > > not allowed.
+> > > > > > > > 
+> > > > > > > > What's more important. This is a must for some vDPA parent to work
+> > > > > > > > since control virtqueue is emulated via a workqueue for those parents.
+> > > > > > > > 
+> > > > > > > > Fixes: bda324fd037a ("vdpasim: control virtqueue support")
+> > > > > > > That's a weird commit to fix. so it fixes the simulator?
+> > > > > > Yes, since the simulator is using a workqueue to handle control virtueue.
+> > > > > Uhmm... touching a driver for a simulator's sake looks a little weird.
+> > > > Simulator is not the only one that is using a workqueue (but should be
+> > > > the first).
+> > > > 
+> > > > I can see  that the mlx5 vDPA driver is using a workqueue as well (see
+> > > > mlx5_vdpa_kick_vq()).
+> > > > 
+> > > > And in the case of VDUSE, it needs to wait for the response from the
+> > > > userspace, this means cond_resched() is probably a must for the case
+> > > > like UP.
+> > > > 
+> > > > > Additionally, if the bug is vdpasim, I think it's better to try to
+> > > > > solve it there, if possible.
+> > > > > 
+> > > > > Looking at vdpasim_net_work() and vdpasim_blk_work() it looks like
+> > > > > neither needs a process context, so perhaps you could rework it to run
+> > > > > the work_fn() directly from vdpasim_kick_vq(), at least for the control
+> > > > > virtqueue?
+> > > > It's possible (but require some rework on the simulator core). But
+> > > > considering we have other similar use cases, it looks better to solve
+> > > > it in the virtio-net driver.
+> > > I see.
+> > > 
+> > > > Additionally, this may have better behaviour when using for the buggy
+> > > > hardware (e.g the control virtqueue takes too long to respond). We may
+> > > > consider switching to use interrupt/sleep in the future (but not
+> > > > suitable for -net).
+> > > Agreed. Possibly a timeout could be useful, too.
+> > > 
+> > > Cheers,
+> > > 
+> > > Paolo
+> > 
+> > Hmm timeouts are kind of arbitrary.
+> > regular drivers basically derive them from hardware
+> > behaviour but with a generic driver like virtio it's harder.
+> > I guess we could add timeout as a config field, have
+> > device make a promise to the driver.
+> > 
+> > Making the wait interruptible seems more reasonable.
 > 
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
+> 
+> Yes, but I think we still need this patch for -net and -stable.
+> 
+> Thanks
 
-I picked it to my tree.
+I was referring to Paolo's idea of having a timeout.
 
-BR, Jarkko
+-- 
+MST
+

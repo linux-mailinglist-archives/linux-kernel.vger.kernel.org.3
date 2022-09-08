@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22AA5B28F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864FA5B28F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiIHWCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S229577AbiIHWCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiIHWCS (ORCPT
+        with ESMTP id S229449AbiIHWCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:02:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0404E18342
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:01:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1960961E3D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 22:01:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15275C433D6;
-        Thu,  8 Sep 2022 22:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662674496;
-        bh=nGZ4swDa3OFvOI7Xc2HZQiOx17JQyHGawucvj1sg054=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FIBQCxzhYuqa7ClmAaVqNVmugUKUPwZJth+7t3svZimMaKx65CZYWwkORB+gYg5GD
-         o6i1R95XaC880lC+LaW3nPcC8eLXVc4pPVIOEKDwG2et95Yzgq5E7/fuSxETOAQ531
-         P1p8PCUyY70JzuYXGrGRyNKQvq7TQJHk/rTPpK5+S9y5O4TfSauLk/xWg7jrjzL0QX
-         ET5bgHsXX4SQApCPUOBTL9U0kVgPqoEx61+G9Kc9mEWxdPrqSqks39j/RwKvPEUQGx
-         yvMWir1TnOSzTWjV7LqvWja/rVCC4BwJZZNFUj1hN5Jm4LpYjhrbwpIRulHJcL/xAO
-         cGnn+omjPvSEg==
-Message-ID: <03886bfdb74195c08f92ce7acc112ff387b1a2da.camel@kernel.org>
-Subject: Re: [PATCH v5 0/6] tracing/hist: Add percentage histogram suffixes
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Date:   Thu, 08 Sep 2022 17:01:34 -0500
-In-Reply-To: <166226473132.223837.9011128463174539022.stgit@devnote2>
-References: <166226473132.223837.9011128463174539022.stgit@devnote2>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Thu, 8 Sep 2022 18:02:36 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205B3B15;
+        Thu,  8 Sep 2022 15:02:35 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288Lhjvq002046;
+        Thu, 8 Sep 2022 22:02:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=PY33xXugMpJrxaOfLtDoKIpmmKkUXM1FA6wgweiD9z8=;
+ b=rn4kWPRg+UTz8Kl47uLenQ34cqMnrIoCLtr9K9QNF+Y5lohghgSf5Ky3E6DKrtLXO5l6
+ L2lR38/OvjTfnNyNF5d3miJfp8fjj1TnhOnkoEabFMJUsA+kEeFrFPqg48e8ILMcCIgK
+ TciToMV+1Ukrit45EIXj8hmYiBIn1rIgeykfsN+oA99gpaRUvPxbkm28SWDDrJk5adTl
+ D6xxni0+h52UzcYksmd9Rgx3bZSDSy5behv94taei+DzrKdNh70HXGVOXeAMokXKKnxS
+ IH9e9qgcmpcZaQ6TkHEd37YjGMmneZ6sEUYQdEp9CBNYPb4wZZPUUXoRCmfcqSmIF4oQ MQ== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jfrjb8dbm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 22:02:25 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 288Locc6032133;
+        Thu, 8 Sep 2022 22:02:24 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma03dal.us.ibm.com with ESMTP id 3jbxjakmvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 22:02:24 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 288M2NIv30343552
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Sep 2022 22:02:23 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DAC628059;
+        Thu,  8 Sep 2022 22:02:23 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38E5928058;
+        Thu,  8 Sep 2022 22:02:23 +0000 (GMT)
+Received: from localhost (unknown [9.41.178.242])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu,  8 Sep 2022 22:02:23 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     linux-security-module@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com
+Subject: [PATCH] lockdown: ratelimit denial messages
+Date:   Thu,  8 Sep 2022 17:02:22 -0500
+Message-Id: <20220908220222.267255-1-nathanl@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Q3v9Rph-wyIMIc2GsPuy45gHr07uejIA
+X-Proofpoint-ORIG-GUID: Q3v9Rph-wyIMIc2GsPuy45gHr07uejIA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_12,2022-09-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ lowpriorityscore=0 bulkscore=0 phishscore=0 mlxscore=0 mlxlogscore=811
+ priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209080076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWFzYW1pLAoKT24gU3VuLCAyMDIyLTA5LTA0IGF0IDEzOjEyICswOTAwLCBNYXNhbWkgSGly
-YW1hdHN1IChHb29nbGUpIHdyb3RlOgo+IEhpLAo+IAo+IEhlcmUgaXMgdGhlIDV0aCB2ZXJzaW9u
-IG9mIC5wZXJjZW50IGFuZCAuZ3JhcGggc3VmZml4ZXMgZm9yIGhpc3RvZ3JhbQo+IHRyaWdnZXIg
-dG8gc2hvdyB0aGUgdmFsdWUgaW4gcGVyY2VudGFnZSBhbmQgaW4gYmFyLWdyYXBoCj4gcmVzcGVj
-dGl2ZWx5Lgo+IFRoZSBwcmV2aW91cyB2ZXJzaW9uIGlzIGhlcmU7Cj4gCj4gaHR0cHM6Ly9sb3Jl
-Lmtlcm5lbC5vcmcvYWxsLzE2NjE1NzI5ODUzNy4zNDg5MjQuMjUzNzE2MjA5MDUwNTM5NzM3Ny5z
-dGdpdEBkZXZub3RlMgo+IAo+IFRoaXMgdmVyc2lvbiB1cGRhdGVkIHRoZSBsYXN0IHBhdGNoIHRv
-IGFkZCAibm9oaXRjb3VudCIgb3B0aW9uIGZvcgo+IHN1cHJlc3NpbmcgZGlzcGxheSBvZiBoaXRj
-b3VudCBhY2NvcmRpbmcgdG8gVG9tJ3Mgc3VnZ2VzdGlvbls1LzZdLAo+IGZpeCBSRUFETUUgZmls
-ZVs0LzZdLCBhbmQgdXBkYXRlIHRoZSBoaXN0b2dyYW0gZG9jdW1lbnRbNi82XS4KPiAKPiBUaGlz
-IHdpbGwgaGVscCB1cyB0byBjaGVjayB0aGUgdHJlbmQgb2YgdGhlIGhpc3RvZ3JhbSBpbnN0YW50
-bHkKPiB3aXRob3V0IGFueSBwb3N0IHByb2Nlc3NpbmcgdG9vbC4KPiAKPiBIZXJlIHNob3dzIGFu
-IGV4YW1wbGUgb2YgdGhlIHBlcmNlbnRhZ2UgYW5kIHRoZSBiYXIgZ3JhcGggb2YKPiB0aGUgcnVu
-dGltZSBvZiB0aGUgcnVubmluZyB0YXNrcyB3aXRob3V0IHJhdyBoaXRjb3VudCBmaWVsZC4KPiAK
-PiDCoCAjIGNkIC9zeXMva2VybmVsL2RlYnVnL3RyYWNpbmcvCj4gwqAgIyBlY2hvCj4gaGlzdDpr
-ZXlzPXBpZDp2YWxzPWhpdGNvdW50LnBlcmNlbnQsaGl0Y291bnQuZ3JhcGg6c29ydD1waWQ6Tk9I
-QyA+IFwKPiDCoMKgwqDCoMKgwqDCoCBldmVudHMvc2NoZWQvc2NoZWRfc3RhdF9ydW50aW1lL3Ry
-aWdnZXIKPiDCoCAjIHNsZWVwIDEwCj4gwqAgIyBjYXQgZXZlbnRzL3NjaGVkL3NjaGVkX3N0YXRf
-cnVudGltZS9oaXN0Cj4gwqAjIGV2ZW50IGhpc3RvZ3JhbQo+IMKgIwo+IMKgIyB0cmlnZ2VyIGlu
-Zm86Cj4gaGlzdDprZXlzPXBpZDp2YWxzPWhpdGNvdW50LnBlcmNlbnQsaGl0Y291bnQuZ3JhcGg6
-c29ydD1waWQ6c2l6ZT0yMDQ4Cj4gOm5vaGl0Y291bnQgW2FjdGl2ZV0KPiDCoCMKPiDCoAo+IMKg
-eyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCAxNCB9wqAgaGl0Y291bnQgKCUpOsKgwqAgNi45McKgIGhp
-dGNvdW50Ogo+ICMjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAKPiDCoHsgcGlk
-OsKgwqDCoMKgwqDCoMKgwqAgMTYgfcKgIGhpdGNvdW50ICglKTrCoMKgIDEuMTPCoAo+IGhpdGNv
-dW50OsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgCj4gwqB7IHBpZDrC
-oMKgwqDCoMKgwqDCoMKgIDU3IH3CoCBoaXRjb3VudCAoJSk6wqDCoCA2Ljk5wqAgaGl0Y291bnQ6
-Cj4gIyPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgeyBwaWQ6wqDCoMKg
-wqDCoMKgwqDCoCA2MSB9wqAgaGl0Y291bnQgKCUpOsKgIDU1LjI4wqAgaGl0Y291bnQ6Cj4gIyMj
-IyMjIyMjIyMjIyMjIyMjIyMKPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNjcgfcKgIGhpdGNv
-dW50ICglKTrCoMKgIDUuNTLCoCBoaXRjb3VudDoKPiAjI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgCj4gwqB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDY5IH3CoCBoaXRjb3VudCAo
-JSk6wqAgMjAuMDjCoCBoaXRjb3VudDoKPiAjIyMjIyMjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IAo+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA3MSB9wqAgaGl0Y291bnQgKCUpOsKgwqAgMC40
-MMKgCj4gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAK
-PiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNzcgfcKgIGhpdGNvdW50ICglKTrCoMKgIDAuOTfC
-oAo+IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgCj4g
-wqB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDc4IH3CoCBoaXRjb3VudCAoJSk6wqDCoCAwLjU2wqAK
-PiBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKg
-eyBwaWQ6wqDCoMKgwqDCoMKgwqAgMTQ1IH3CoCBoaXRjb3VudCAoJSk6wqDCoCAxLjEzwqAKPiBo
-aXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgeyBw
-aWQ6wqDCoMKgwqDCoMKgwqAgMTUzIH3CoCBoaXRjb3VudCAoJSk6wqDCoCAwLjQ4wqAKPiBoaXRj
-b3VudDrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgeyBwaWQ6
-wqDCoMKgwqDCoMKgwqAgMTU0IH3CoCBoaXRjb3VudCAoJSk6wqDCoCAwLjQ4wqAKPiBoaXRjb3Vu
-dDrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgCj4gwqBUb3Rh
-bHM6Cj4gwqDCoMKgwqAgSGl0czogMTIzMAo+IMKgwqDCoMKgIEVudHJpZXM6IDEyCj4gwqDCoMKg
-wqAgRHJvcHBlZDogMAo+IAo+IAo+IFdpdGggdGhlIE5PSEMgKG9yIG5vaGl0Y291bnQpIG9wdGlv
-biwgdGhlIGhpc3RvZ3JhbSB3aWxsIHNraXAKPiBkaXNwbGF5IG9mIHJhdyBoaXRjb3VudCwgYnV0
-IGl0IHdpbGwgYWxsb3cgdG8gZGlzcGxheSBwZXJjZW50Cj4gYW5kIGdyYXBoIG9mIGhpdGNvdW50
-Lgo+IAo+IFRyaWdnZXLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-UmVzdWx0Cj4gdmFsPXJ1bnRpbWXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC0+IFNob3cg
-aGl0Y291bnQgYW5kIHJ1bnRpbWUKPiB2YWw9cnVudGltZTpOT0hDwqDCoMKgwqDCoMKgwqDCoMKg
-IC0+IFNob3cgcnVudGltZQo+IHZhbD1oaXRjb3VudDpOT0hDwqDCoMKgwqDCoMKgwqDCoCAtPiBF
-cnJvcgo+IChub3ZhbCnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLT4gc2hv
-dyBoaXRjb3VudAo+IChub3ZhbCk6Tk9IQ8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC0+IEVy
-cm9yCj4gdmFsPWhpdGNvdW50LnBhcmNlbnTCoMKgwqDCoMKgIC0+IHNob3cgaGl0Y291bnQgYW5k
-IGhpdGNvdW50JQo+IHZhbD1oaXRjb3VudC5wYXJjZW50Ok5PSEMgLT4gc2hvdyBoaXRjb3VudCUK
-Ckl0IGFsbCBsb29rcyBnb29kIHRvIG1lLCB0aGFua3MhICBGb3IgdGhlIHdob2xlIHNldDoKClJl
-dmlld2VkLWJ5OiBUb20gWmFudXNzaSA8emFudXNzaUBrZXJuZWwub3JnPgpUZXN0ZWQtYnk6IFRv
-bSBaYW51c3NpIDx6YW51c3NpQGtlcm5lbC5vcmc+CgpUb20KCgoKPiAKPiBUaGFuayB5b3UsCj4g
-Cj4gLS0tCj4gCj4gTWFzYW1pIEhpcmFtYXRzdSAoR29vZ2xlKSAoNSk6Cj4gwqDCoMKgwqDCoCB0
-cmFjaW5nOiBGaXggdG8gY2hlY2sgZXZlbnRfbXV0ZXggaXMgaGVsZCB3aGlsZSBhY2Nlc3NpbmcK
-PiB0cmlnZ2VyIGxpc3QKPiDCoMKgwqDCoMKgIHRyYWNpbmc6IEFkZCAucGVyY2VudCBzdWZmaXgg
-b3B0aW9uIHRvIGhpc3RvZ3JhbSB2YWx1ZXMKPiDCoMKgwqDCoMKgIHRyYWNpbmc6IEFkZCAuZ3Jh
-cGggc3VmZml4IG9wdGlvbiB0byBoaXN0b2dyYW0gdmFsdWUKPiDCoMKgwqDCoMKgIHRyYWNpbmc6
-IEFkZCBub2hpdGNvdW50IG9wdGlvbiBmb3Igc3VwcHJlc3NpbmcgZGlzcGxheSBvZiByYXcKPiBo
-aXRjb3VudAo+IMKgwqDCoMKgwqAgdHJhY2luZzogZG9jczogVXBkYXRlIGhpc3RvZ3JhbSBkb2Mg
-Zm9yIC5wZXJjZW50Ly5ncmFwaCBhbmQKPiAnbm9oaXRjb3VudCcKPiAKPiBUb20gWmFudXNzaSAo
-MSk6Cj4gwqDCoMKgwqDCoCB0cmFjaW5nOiBBbGxvdyBtdWx0aXBsZSBoaXRjb3VudCB2YWx1ZXMg
-aW4gaGlzdG9ncmFtcwo+IAo+IAo+IMKgRG9jdW1lbnRhdGlvbi90cmFjZS9oaXN0b2dyYW0ucnN0
-wqDCoCB8wqDCoCAxMCArKwo+IMKga2VybmVsL3RyYWNlL3RyYWNlLmPCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgfMKgwqDCoCA3ICsKPiDCoGtlcm5lbC90cmFjZS90cmFjZV9ldmVudHNf
-aGlzdC5jwqDCoMKgIHzCoCAxNzcKPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0t
-LQo+IMKga2VybmVsL3RyYWNlL3RyYWNlX2V2ZW50c190cmlnZ2VyLmMgfMKgwqDCoCAzIC0KPiDC
-oDQgZmlsZXMgY2hhbmdlZCwgMTcxIGluc2VydGlvbnMoKyksIDI2IGRlbGV0aW9ucygtKQo+IAo+
-IC0tCj4gTWFzYW1pIEhpcmFtYXRzdSAoR29vZ2xlKSA8bWhpcmFtYXRAa2VybmVsLm9yZz4KCg==
+User space can flood the log with lockdown denial messages:
+
+[  662.555584] Lockdown: bash: debugfs access is restricted; see man kernel_lockdown.7
+[  662.563237] Lockdown: bash: debugfs access is restricted; see man kernel_lockdown.7
+[  662.571134] Lockdown: bash: debugfs access is restricted; see man kernel_lockdown.7
+[  662.578668] Lockdown: bash: debugfs access is restricted; see man kernel_lockdown.7
+[  662.586021] Lockdown: bash: debugfs access is restricted; see man kernel_lockdown.7
+[  662.593398] Lockdown: bash: debugfs access is restricted; see man kernel_lockdown.7
+
+Ratelimiting these shouldn't meaningfully degrade the quality of the
+information logged.
+
+Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
+---
+ security/lockdown/lockdown.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 87cbdc64d272..a79b985e917e 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -63,7 +63,7 @@ static int lockdown_is_locked_down(enum lockdown_reason what)
+ 
+ 	if (kernel_locked_down >= what) {
+ 		if (lockdown_reasons[what])
+-			pr_notice("Lockdown: %s: %s is restricted; see man kernel_lockdown.7\n",
++			pr_notice_ratelimited("Lockdown: %s: %s is restricted; see man kernel_lockdown.7\n",
+ 				  current->comm, lockdown_reasons[what]);
+ 		return -EPERM;
+ 	}
+-- 
+2.37.1
 

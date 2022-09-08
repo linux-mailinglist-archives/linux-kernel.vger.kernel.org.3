@@ -2,186 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678715B234F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00E45B2359
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiIHQOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S231264AbiIHQPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbiIHQOI (ORCPT
+        with ESMTP id S231963AbiIHQOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:14:08 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48AFE900A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:13:45 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id y29so7905620ljq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:13:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=VGZLHz/DjSRVcLx6zUosYKxPYPae57PloyXxh6yBjFE=;
-        b=dsFVeRa1bSoDF3YlyFpkO0lUc4GxEkNbkxSgLKPZSQ7ZHTqR+W5InuYk65I3E2AmMB
-         JUZThfrZ7O1XQMWK+UTdm7WVCI/SEO7pL2wWtVGYrmbxwDcTUduzMASmwh1gV58Hlf3p
-         YbeY2EQkGkZaT0R40q8NOTTGjPzjvnT9nAz9H9NryVyLR3m8w6KL9MHEQk4/kSE0dHEG
-         TMTrfFIIb9BmsHmnG71qLRtuUpg1yBOHqdzrL9DoPSjbyqjGtS1CcHyIbQklqL/3ta29
-         9rVrdXk4VorUaSjYwrt84b+ffPKmsH1L2czLQV9VVRqzx2EBcLzbjkppdG2XJR5phRcD
-         lh7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=VGZLHz/DjSRVcLx6zUosYKxPYPae57PloyXxh6yBjFE=;
-        b=s6xXRkDnDq7zX/3T4T5PxgANz71ulKGDfGPxZZ+3xZf0Q1NgaHUKFdT2g5rlxRvesR
-         XRZuZAtGKG4Yh92eMrWeEIRk1Ev7TKLFmiP/UCTMYTOXes4RsS2iAFCEtW7F2/V9qdGS
-         rJUL/F8lGSK08Uyw3imdpYBPO6Z/asvVhvvFTwHB6TnjZQAY5THvLK58X7tTU5bJIlAS
-         A4A7+UhtxonkCeiMZMVUoOdlvAL/E+Sj17pnqy1lCvDI3punWAdx2VoOtPz76aKAtBdP
-         GzYty6vZaRClsuO4Ehx4vVTu+xR6bdqPt7/r0bewFHOwtPZnt982O7kyuwm9/3dv/0Gr
-         qznw==
-X-Gm-Message-State: ACgBeo2QYJhZc4FMRvHDFJOa6Rr/RsbYU3ZlVGCeLCOz4tZakscExQIV
-        hmghYV7AGuNVJ/KDY24Xqi6mTQ==
-X-Google-Smtp-Source: AA6agR5euMPFHV8tq4RX29WSwoo6iMXfa2emLRM698nFMAI6coSP8baP1dOf8aabxmfysCJGeKnvPw==
-X-Received: by 2002:a2e:a7cc:0:b0:269:18c5:4ded with SMTP id x12-20020a2ea7cc000000b0026918c54dedmr2760227ljp.476.1662653624162;
-        Thu, 08 Sep 2022 09:13:44 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v12-20020a056512348c00b0048a7c162bbesm3082779lfr.279.2022.09.08.09.13.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 09:13:43 -0700 (PDT)
-Message-ID: <ab80670a-267a-45d8-92d0-750e7dce5682@linaro.org>
-Date:   Thu, 8 Sep 2022 19:13:43 +0300
+        Thu, 8 Sep 2022 12:14:52 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7974D249;
+        Thu,  8 Sep 2022 09:14:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iRFufvCZUeUDOQJRnxng9G3ynBf9d5LmYDnyRj+4X3sbvRGlmFEA/WVx/vOEtUabvovxNpZooT57GrKK/yfD1oGI6Uhh2gSp3fvCMD+vriCHmHAPvre22nmfmFfCgH73sDw5W5ZkFgApnLFMTUgupwLbkzeinleOWsB+LBSjy1fnTNnk6p6nH7sP2XS6tWy8+8aVbPBcFU5LuMWJ54/vBx4W5lBBE/tAx0y3UURhZe08kVWrZy0aE0kaFUxNkq+64m/mBtcF9qwru7K/NtE/EYusxHzHLSRW9wiFmF7kucXrh7YTRpCRT8DKIlxiCcnS50ah1RMUyvgKHOAQLaXo3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yJF2EmhiFTi6X5MwBd2ldmxkE6wrBxgYe+fji5XwIS0=;
+ b=FCgjNrN/jdCB6mexx2ALaQzVfwZoFxw0YQjIBc8fzAv0s+rRE7YvszcyQ10EfuUecMr86CWNid3v9zu9blDe8svRZoCVCF6Xy0KnD8LC69inrH7yHgV5+cY7mjPSg/mnLvaramLtTjz78nmQR5K7WWGIElmBe28KoVxB+tsG6nB0/gNu55h+KguY9gU82nx6Ji0SEZfICzifH+g+AJxRkx5jmw5D6s6V4SeF585V536uWESrmkDGGEKFA+pPDcYj9r9VmF+1YsUiZcU5oMevvbar9JT+KS5dD7/MHl+AqNQYefbVhEgmcd1FMAiufFLzBfrIwdTKhemGhtAeGiznKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yJF2EmhiFTi6X5MwBd2ldmxkE6wrBxgYe+fji5XwIS0=;
+ b=Ssp9+comEwxraWD6+6lCCAOeHQ/xCw+7ezoEkPVzzAEVEHeWLnv/udJ7ebeUpeAmuNeTX3LizuGXnFT8DwR700vWRfB9gxfVmTEk/dUE9ZrIMsJd9LxnD0Lfatntz4Nh8GIP95rghxw+3HRTlnUK112RQWlwXtwZqdIDUZdVz4lL1N5MH45PkrPe4J6ZqTPqY37I5M7ScdqlFl9LthVb1npZQAAUlsL0VjYJZ+cpoodoi+jywsKv8Bk+Dvwpz4vkaMqHmXC4xuoqDxtEXnKUGxd6iYgebS2nn/tBFwWhR3/wXj0W8COYFYjr3W9wVlC+sWQPf9uNhf7m5FurmyP8Nw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by LV2PR12MB5943.namprd12.prod.outlook.com (2603:10b6:408:170::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.16; Thu, 8 Sep
+ 2022 16:14:43 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5612.019; Thu, 8 Sep 2022
+ 16:14:43 +0000
+Date:   Thu, 8 Sep 2022 13:14:42 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
+        robin.murphy@arm.com, alex.williamson@redhat.com,
+        suravee.suthikulpanit@amd.com, marcan@marcan.st,
+        sven@svenpeter.dev, alyssa@rosenzweig.io, robdclark@gmail.com,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, thierry.reding@gmail.com, vdumpa@nvidia.com,
+        jonathanh@nvidia.com, jean-philippe@linaro.org, cohuck@redhat.com,
+        tglx@linutronix.de, shameerali.kolothum.thodi@huawei.com,
+        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
+        yangyingliang@huawei.com, jon@solid-run.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        kevin.tian@intel.com
+Subject: Re: [PATCH v6 1/5] iommu: Return -EMEDIUMTYPE for incompatible
+ domain and device/group
+Message-ID: <YxoU8lw+qIw9woRL@nvidia.com>
+References: <20220815181437.28127-1-nicolinc@nvidia.com>
+ <20220815181437.28127-2-nicolinc@nvidia.com>
+ <YxiRkm7qgQ4k+PIG@8bytes.org>
+ <Yxig+zfA2Pr4vk6K@nvidia.com>
+ <YxilZbRL0WBR97oi@8bytes.org>
+ <YxjQiVnpU0dr7SHC@nvidia.com>
+ <Yxnt9uQTmbqul5lf@8bytes.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yxnt9uQTmbqul5lf@8bytes.org>
+X-ClientProxiedBy: MN2PR04CA0014.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::27) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: msm8953: add MDSS
-Content-Language: en-GB
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220906183334.203787-1-luca@z3ntu.xyz>
- <20220906183334.203787-4-luca@z3ntu.xyz>
- <CAA8EJpqjnafKyUrd1ntYFeGTDtRxgEUSu0Mg9wNGxObJ3wF0Kw@mail.gmail.com>
- <12049260.O9o76ZdvQC@g550jk>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <12049260.O9o76ZdvQC@g550jk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|LV2PR12MB5943:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4d7caab-751a-4bb2-77c3-08da91b53d6f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /zD05OSIEdRUR4IkCWRwkgl8BMPaJIl9ErhfUPpSjqBDvEwzhxCgdSj6f2lOwdusVXu+zoF3GjjpcqVte5jsblUzqNk0ifCKFZUdniPgbYBD2pmAn8oniGMUXdCa+cwXdzilCT9ucfBS+AZctw2Pe/cb2E1uuUuFY0ZOMY/yg9Oe/RhoTsXa1s775ha0FIW9qWAi9Cd5Vic7TENvAdCXNI6VY9NgalCDXXvAzQ2aFw7PXGAcuXqDWHPk3iRDY1W5ecfYhVtfysT5g2NbxN8QZliV/5LG9LTFqoLrydrPA2izokmM7BrrEViGK2qosQc0js47O67HDwibk6Cin2T11HmWOoj07EB6Hmj/MraDzeZeMN9bPgFfK+XsvO8rqLtDGCBs2fkKE2GcnAQyNfp5T1aGeWVUd+3gNlFjhxu1H1ivokNJLU2ekj3ZEnkvgzlfRMfhPRyiWN7SRYHFgCHB+XoKmHSOT46JWrP/oOTEGUMQCHoIfVwlmS+fOaMSE+n5TPTItqXpRgGTD6qDKQ8q3PoOXuc7Kv2x8uO2fXrfUr/A7L158cPB8yFluK2qxv5QcMB+Iwbt8W2Vq2WcTdQLs+Qkd3A6sSZuCudbwuhPO35Ti2miXMoGim/dgLgY1/TwDlexmYHMoMfu/DcQKeajQcrR/5F8T67flC8dCB03p212flUQBFM526CcmVr6QECZQipZ/RjdjjoI1Uws+Q4VZVfccD/uK18R85xoRHCLqf3OTaIlObbK4TfawWsorZDt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(346002)(366004)(396003)(86362001)(83380400001)(6506007)(6916009)(8676002)(316002)(478600001)(41300700001)(6486002)(186003)(2616005)(6512007)(26005)(7406005)(4326008)(7416002)(36756003)(5660300002)(2906002)(38100700002)(66476007)(66556008)(66946007)(8936002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rgHdQNvKytT8KAjagVLrkQzSXmc557KiaR+7oeg/yK6pqghbhQxw2c2txssU?=
+ =?us-ascii?Q?3+VLiAnjLtudsMQGahypFfA2gzFqNL5wvfknWF7g+oNS5SSgOQ+oGC2b0IFp?=
+ =?us-ascii?Q?JtKFhJVkDdNnlMG9ECrO036HYhtakKrHDx2Z/L86Doc8imhGv4ZXUFCZF1hd?=
+ =?us-ascii?Q?oZwmuLmivheuSjx1QFW3wb03Ns0KLUmLcpAHj/UXMyGON4ZwDarBdCBQjrB4?=
+ =?us-ascii?Q?OXHjbfub6x+KvTyaNymyVSU2HZF/Vw5tGV1s8s8CktIhDaufzCUl13aR9xnh?=
+ =?us-ascii?Q?1rFxO8zHaPlhKf6ZslxoVUoapVV8EGJAolCTTrVL+f0xzhAzXGgloiaFLz7U?=
+ =?us-ascii?Q?V+CbTfdEk3XIWecvhALALdA707ptW2aXgnJVvJZPU1dZ/JGA/QU67FhTgpY4?=
+ =?us-ascii?Q?Uy35aSaCbDDhLNaVASGPWdjV1dRCEiRSkHKcpievWmisHzF05mIbrAwZ9sGm?=
+ =?us-ascii?Q?bu30UTsMwdvMqFGUYO35hwPcpPRGqPRP6HUJqe6aE6gw7HQ2HhreroU49tjL?=
+ =?us-ascii?Q?HEssdJzeunJXRDRkOvM7UJ86WUELcu53T6XlCKyvj3ihNpD4lhFwzVktakSv?=
+ =?us-ascii?Q?i0uxjrw8nj0OAxe0bFiNDEMLEApw60FwWnXIa2of5t1gMHt1ik3uN4gJBIKj?=
+ =?us-ascii?Q?4mEaQa79VTlNqtapv3zM6374VdkvwDSptlai3txGLZB17DSBOoeYMT21zHr/?=
+ =?us-ascii?Q?fU/tAOLunEOzcV9crso6vbiVz/HVy5bnA7lnos15xRTqEaaXe6cMPK34vqrs?=
+ =?us-ascii?Q?tqPBBrQNwhwlMcA6LrRzIL1Tzgyg5mg8FbTU7uxCi1Xsi2/QwEz8ciVln3CK?=
+ =?us-ascii?Q?xwX4E1HpkovP73Wb7QqKBSC+ZVx0igzK9gkvIYI5CNy3ikt/DP5p5NTefwz9?=
+ =?us-ascii?Q?LmEy7MouknWYjkZ+jJCwxvzfUxpfTmr7zZNwXoydWwiGFOtqKJVHGX88I5Az?=
+ =?us-ascii?Q?VJX2Mlstn4GMALkVU7wpMwIG9CQTUc3iU0/IqN8ZCn+//Wn+OkTxgcwAzIen?=
+ =?us-ascii?Q?bQ6kk7L7CG815H80d0lz3yRn124PxVaVTGF22dM1qzIikO/IqlR7amJ6tWTf?=
+ =?us-ascii?Q?jahu7FKa2mJ1sULvdZHESpEvQQQcLjVwN/lI0ILfWdsagv7p79j+fzt+l6EF?=
+ =?us-ascii?Q?KkjjHffys/FGPjj3VY6/ypEpKh2HyHjVKbqnXW4CIuuZIuAeLnRP4sLOHlDr?=
+ =?us-ascii?Q?hUpIy/8LcFmaA4IC0kcRCu6IYBDJ0IDidtlyJMDu35dXUSdbCwdYyPbkdJ14?=
+ =?us-ascii?Q?bdFkXiYIm3/AMrzkHFOLrojoPkoSa4zOKdT7qPzKmtD+QHJk5XOTHpB0XPML?=
+ =?us-ascii?Q?+UHzUKhXS9bJjdusSti1GlY1JmF+S9Rg5MCDTowo6+TzQarcSmZO/+RCBadh?=
+ =?us-ascii?Q?EJuMQ11InmWSvEB2QyXbee4kgKeY/PbBrIVmKNMvj4stC3eSL7RozelVJoVo?=
+ =?us-ascii?Q?44XFIjdeEZnzdb09qPNGi/njjKZMs5NwMWb7/P9cYCbh5HE/YdByp81sZO4R?=
+ =?us-ascii?Q?XGP/SPYdsYe0NC1ckgCqwSjODinCei388QaHjjfPvUUuCCL1mti4yw3Oyxit?=
+ =?us-ascii?Q?05ioUHbQNV0+Gdtj0X7l0FouBL3t1B27UkTjPN6q?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4d7caab-751a-4bb2-77c3-08da91b53d6f
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 16:14:43.4200
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hov2lXuRoI9HiQ5O5iBgBzBu+ifG5c+sRk5XINO5fJejfnzolvke5urr8RtE47as
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5943
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 18:30, Luca Weiss wrote:
-> Hi Dmitry,
+On Thu, Sep 08, 2022 at 03:28:22PM +0200, Joerg Roedel wrote:
+> > It has been 3 months since EMEDIUMTYPE was first proposed and 6
+> > iterations of the series, don't you think it is a bit late in the game
+> > to try to experiment with rust error handling idioms?
 > 
-> On Dienstag, 6. September 2022 21:41:11 CEST Dmitry Baryshkov wrote:
->> On Tue, 6 Sept 2022 at 21:36, Luca Weiss <luca@z3ntu.xyz> wrote:
->>> From: Vladimir Lypak <vladimir.lypak@gmail.com>
->>>
->>> Add the MDSS, MDP and DSI nodes that are found on msm8953 SoC.
->>>
->>> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
->>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->>> ---
->>> Changes since v2:
->>> - add "core" clock for mdss as suggested by Dmitry Baryshkov
->>>
->>>   arch/arm64/boot/dts/qcom/msm8953.dtsi | 210 ++++++++++++++++++++++++++
->>>   1 file changed, 210 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi
->>> b/arch/arm64/boot/dts/qcom/msm8953.dtsi index 3d11331e78d2..580333141a66
->>> 100644
->>> --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
->>> @@ -726,6 +726,216 @@ tcsr_phy_clk_scheme_sel: syscon@193f044 {
->>>
->>>                          reg = <0x193f044 0x4>;
->>>                  
->>>                  };
->>>
->>> +               mdss: mdss@1a00000 {
->>> +                       compatible = "qcom,mdss";
->>> +
->>> +                       reg = <0x1a00000 0x1000>,
->>> +                             <0x1ab0000 0x1040>;
->>> +                       reg-names = "mdss_phys",
->>> +                                   "vbif_phys";
->>> +
->>> +                       power-domains = <&gcc MDSS_GDSC>;
->>> +                       interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
->>> +
->>> +                       interrupt-controller;
->>> +                       #interrupt-cells = <1>;
->>> +
->>> +                       clocks = <&gcc GCC_MDSS_AHB_CLK>,
->>> +                                <&gcc GCC_MDSS_AXI_CLK>,
->>> +                                <&gcc GCC_MDSS_VSYNC_CLK>,
->>> +                                <&gcc GCC_MDSS_MDP_CLK>;
->>> +                       clock-names = "iface",
->>> +                                     "bus",
->>> +                                     "vsync",
->>> +                                     "core";
->>> +
->>> +                       #address-cells = <1>;
->>> +                       #size-cells = <1>;
->>> +                       ranges;
->>> +
->>> +                       status = "disabled";
->>> +
->>> +                       mdp: mdp@1a01000 {
->>> +                               compatible = "qcom,mdp5";
->>
->> Could you please change this to "qcom,msm8953-mdp5", "qcom,mdp5".
+> If I am not mistaken, I am the person who gets blamed when crappy IOMMU
+> code is sent upstream. So it is also up to me to decide in which state
+> and how close to merging a given patch series is an whether it is
+> already 'late in the game'.
+
+I don't think the maintainer is the one who gets blamed. The community
+is responsible as a collective group for it's decisions. The
+maintainer is the leader of the community, responsible to foster it,
+and contributes their guidance, but doesn't bare an unlimited
+responsibility for what is merged.
+
+In a case like this I am the advocate, Nicolin wrote the patches,
+Kevin reviewed, Alex ack'd them - we as a group are ultimately
+responsible to repair, defend, or whatever is needed.
+
+> I am wondering if this can be solved by better defining what the return
+> codes mean and adjust the call-back functions to match the definition.
+> Something like:
 > 
-> This would be the first dtsi using the two compatibles then, correct? Are there
-> any plans to adjust other SoCs?
+> 	-ENODEV : Device not mapped my an IOMMU
+> 	-EBUSY  : Device attached and domain can not be changed
+> 	-EINVAL : Device and domain are incompatible
+> 	...
 
-Yes, this is a long-going plan. Having just "qcom,mdp5" doesn't allow 
-switching between mdp5 and dpu1 drivers. Thus I'd ask to add per-SoC 
-compat strings.
+Yes, this was gone over in a side thread the pros/cons, so lets do
+it. Nicolin will come with something along these lines.
 
-It's up to you (and Rob/Krzysztof) whether to leave just one compat 
-string or have both of them: a per-soc one and a generic one.
-
-> 
->>
->>> +                               reg = <0x1a01000 0x89000>;
->>> +                               reg-names = "mdp_phys";
->>> +
->>
->> [skipped]
->>
->>> +
->>> +                       dsi0_phy: dsi-phy@1a94400 {
->>
->> Let's probably use a generic name 'phy' here and for dsi1_phy.
-> 
-> Here also, the bindings examples all use dsi-phy@, are there any plans to
-> change that and adjust other dtsi files?
-
-Yes, sc7280 already uses phy@ for both DSI and eDP PHYs.
-
-> 
->>
->> The rest looks good to me.
-> 
-> Thanks!
--- 
-With best wishes
-Dmitry
-
+Thanks,
+Jason

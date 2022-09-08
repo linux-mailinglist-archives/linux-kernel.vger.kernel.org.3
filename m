@@ -2,275 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050675B12C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 05:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302185B12C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 05:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiIHDDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 23:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S229940AbiIHDEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 23:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiIHDDl (ORCPT
+        with ESMTP id S229476AbiIHDEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 23:03:41 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8ED494ED0;
-        Wed,  7 Sep 2022 20:03:39 -0700 (PDT)
-Received: from pyrite.rasen.tech (h175-177-042-159.catv02.itscom.jp [175.177.42.159])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CF9616CC;
-        Thu,  8 Sep 2022 05:03:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662606217;
-        bh=kWgC4kyl7hRCmKDIAfZCkdxQxR8KWFoZ2PmRnE3X/qc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SJdRxRG0W1jZqSi74SoQJpmbrQ3vWTdNKtpEZRaEIYdAUBiTmM2VsMJ4rnZi2FNJe
-         MhkFP9fhUm/tq88WvNYbe8HYddNQdCQYLcRKdRGFh55Zc39QJbLD95uBU/ZgGo/pMp
-         9Q38C0Tq1TdW69aFlaVsspx49sN0AuggSSncvF/g=
-Date:   Thu, 8 Sep 2022 12:03:21 +0900
-From:   paul.elder@ideasonboard.com
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        linux-media@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] media: imx7-media-csi: Add support for fast-tracking
- queued buffers
-Message-ID: <20220908030321.GA1140330@pyrite.rasen.tech>
-References: <20220907114737.1127612-1-paul.elder@ideasonboard.com>
- <YxjgkAjvsaZkS2cY@pendragon.ideasonboard.com>
+        Wed, 7 Sep 2022 23:04:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B64F2DFD;
+        Wed,  7 Sep 2022 20:04:28 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNP4C5zc6zZcKc;
+        Thu,  8 Sep 2022 10:59:55 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 11:04:25 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
+        <edumazet@google.com>, <kuba@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] can: bcm: random optimizations
+Date:   Thu, 8 Sep 2022 11:04:18 +0800
+Message-ID: <cover.1662606045.git.william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxjgkAjvsaZkS2cY@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Do some small optimization for can_bcm.
 
-On Wed, Sep 07, 2022 at 09:18:56PM +0300, Laurent Pinchart wrote:
-> Hi Paul,
-> 
-> Thank you for the patch.
-> 
-> On Wed, Sep 07, 2022 at 08:47:37PM +0900, Paul Elder wrote:
-> > The CSI hardware compatible with this driver handles buffers using a
-> > ping-pong mechanism with two sets of destination addresses. Normally,
-> > when an interrupt comes in to signal the completion of one buffer, say
-> > FB0, it assigns the next buffer in the queue to the next FB0, and the
-> > hardware starts to capture into FB1 in the meantime.
-> 
-> Could you replace FB0 and FB1 with FB1 and FB2 respectively, to match
-> the naming of the registers ?
+Ziyang Xuan (2):
+  can: bcm: registration process optimization in bcm_module_init()
+  can: bcm: check the result of can_send() in bcm_can_tx()
 
-Oops, I forgot to do it in the commit message.
+ net/can/bcm.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
-> 
-> > In a buffer underrun situation, in the above example without loss of
-> > generality, if a new buffer is queued before the interrupt for FB0 comes
-> > in, we can program the buffer into FB1 (which is programmed with a dummy
-> > buffer, as there is a buffer underrun).
-> > 
-> > This of course races with the interrupt that signals FB0 completion, as
-> > once that interrupt comes in, we are no longer guaranteed that the
-> > programming of FB1 was in time and must assume it was too late. This
-> > race is resolved partly by locking the programming of FB1. If it came
-> > after the interrupt for FB0, then the variable that is used to determine
-> > which FB to program would have been swapped by the interrupt handler.
-> > 
-> > This alone isn't sufficient, however, because the interrupt could still
-> > be generated (thus the hardware starts capturing into the other fb)
-> > while the fast-tracking routine has the irq lock. Thus, after
-> > programming the fb register to fast-track the buffer, the isr also must
-> > be checked to confirm that an interrupt didn't come in the meantime. If
-> > it has, we must assume that programming the register for the
-> > fast-tracked buffer was not in time, and queue the buffer normally.
-> > 
-> > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-> > Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-> > 
-> > ---
-> > Changes in v2:
-> > - fix the potential race condition where the interrupt comes in while
-> >   the fast tracking routine has the irqlock
-> > - change return value from int to bool
-> > ---
-> >  drivers/staging/media/imx/imx7-media-csi.c | 63 ++++++++++++++++++++++
-> >  1 file changed, 63 insertions(+)
-> > 
-> > diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-> > index a0553c24cce4..0ebef44a7627 100644
-> > --- a/drivers/staging/media/imx/imx7-media-csi.c
-> > +++ b/drivers/staging/media/imx/imx7-media-csi.c
-> > @@ -1296,12 +1296,75 @@ static int imx7_csi_video_buf_prepare(struct vb2_buffer *vb)
-> >  	return 0;
-> >  }
-> >  
-> > +static bool imx7_csi_fast_track_buffer(struct imx7_csi *csi,
-> > +				       struct imx7_csi_vb2_buffer *buf)
-> > +{
-> > +	unsigned long flags;
-> > +	dma_addr_t phys;
-> > +	int buf_num;
-> > +	u32 isr;
-> > +
-> > +	if (!csi->is_streaming)
-> > +		return false;
-> > +
-> > +	phys = vb2_dma_contig_plane_dma_addr(&buf->vbuf.vb2_buf, 0);
-> > +
-> > +	/*
-> > +	 * buf_num holds the fb id of the most recently (*not* the next
-> > +	 * anticipated) triggered interrupt. Without loss of generality, if
-> > +	 * buf_num is 0 and we get to this section before the irq for fb2, the
-> 
-> s/fb2/FB2/ to match hardware registers and the commit message ?
+-- 
+2.25.1
 
-ack
-
-> 
-> > +	 * buffer that we are fast-tracking into fb1 should be programmed in
-> > +	 * time to be captured into. If the irq for fb2 already happened, then
-> > +	 * buf_num would be 1, and we would fast-track the buffer into fb2
-> > +	 * instead. This guarantees that we won't try to fast-track into fb1
-> > +	 * and race against the start-of-capture into fb1.
-> > +	 *
-> > +	 * We only fast-track the buffer if the currently programmed buffer is
-> > +	 * a dummy buffer. We can check the active_vb2_buf instead as it is
-> > +	 * always modified along with programming the fb[1,2] registers via the
-> > +	 * lock (besides setup and cleanup).
-> > +	 */
-> 
-> I think this needs to be updated, it still indicates we handle the race
-> just by checking buf_num. How about the following ?
-> 
-> 	/*
-> 	 * buf_num holds the framebuffer ID of the most recently (*not* the next
-> 	 * anticipated) triggered interrupt. Without loss of generality, if
-> 	 * buf_num is 0, the hardware is capturing to FB2. If FB1 has been
-> 	 * programmed with a dummy buffer (as indicated by active_vb2_buf[0]
-> 	 * being NULL), then we can fast-track the new buffer by programming its
-> 	 * address in FB1 before the hardware completes FB2, instead of adding
-> 	 * it to the buffer queue and incurring a delay of one additional frame.
-
-Okay that's a lot easier to follow than the one that I wrote.
-
-> 	 *
-> 	 * The irqlock prevents races with the interrupt handler that queues the
-
-The interrupt handler doesn't /queue/ the buffer, it programs the FB
-register with the buffer at the front of the buffer queue. That's why I
-said "programs the next buffer" in my original text.
-
-Although I don't think racing with the interrupt handler for
-programming the next buffer is important in this context, since the
-interrupt handler is going to program FB2, while we're trying to program FB1
-before that that interrupt comes in.
-
-It's mainly buf_num that's relevant to locking the irqlock.
-
-> 	 * next buffer and updates buf_num, but we can still race with the
-> 	 * hardware if we program the buffer in FB1 just after the hardware
-> 	 * completes FB2 and switches to FB1 and before we notice the buf_num
-> 	 * change.
-
-buf_num won't actually be changed because we have the lock. Maybe
-"before buf_num can be updated by the interrupt handler for FB2"?
-
-> The fast-tracked buffer would then be ignored by the hardware
-> 	 * while the driver would think it has successfully been processed.
-> 	 *
-> 	 * To avoid this problem, if we can't avoid the race, we can detect that
-> 	 * we have lost it by checking, after programming the buffer in FB1, if
-> 	 * the interrupt flag indicated completion of FB2 has been raised. If
-
-s/indicated/indicating/
-
-> 	 * that is not the case, fast-tracking succeeded, and we can update
-> 	 * active_vb2_buf[0]. Otherwise, we may or may not have lost the race
-> 	 * (as the interrupt flag may have been raised just after programming
-> 	 * FB1 and before we read the interrupt status register), and we need to
-> 	 * assume the worst case of a race loss and queue the buffer through the
-> 	 * slow path.
-> 	 */
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> If you're fine with these changes there's no need to submit a v3, I'll
-> update the comment and the commit message locally.
-
-Yeah I'm fine with these.
-
-> 
-> > +
-> > +	spin_lock_irqsave(&csi->irqlock, flags);
-> > +
-> > +	buf_num = csi->buf_num;
-> > +	if (csi->active_vb2_buf[buf_num]) {
-> > +		spin_unlock_irqrestore(&csi->irqlock, flags);
-> > +		return false;
-> > +	}
-> > +
-> > +	imx7_csi_update_buf(csi, phys, buf_num);
-> > +
-> > +	isr = imx7_csi_reg_read(csi, CSI_CSISR);
-> > +	/*
-> > +	 * The interrupt for the /other/ fb just came (the isr hasn't run yet
-> > +	 * though, because we have the lock here); we can't be sure we've
-> > +	 * programmed buf_num fb in time, so queue the buffer to the buffer
-> > +	 * queue normally. No need to undo writing the fb register, since we
-> > +	 * won't return it as active_vb2_buf is NULL, so it's okay to
-> > +	 * potentially write it to both fb1 and fb2; only the one where it was
-
-I guess there should be s/fb/FB/ throughout this block too.
-
-> > +	 * queued normally will be returned.
-> > +	 */
-
-(You mention this in your other reply)
-
-Yeah I guess this block should go inside the if. I didn't really
-aesthetically like a huge block of text inside a tiny if block but maybe
-that's more correct.
-
-
-Thanks,
-
-Paul
-
-> > +	if (isr & (buf_num ? BIT_DMA_TSF_DONE_FB1 : BIT_DMA_TSF_DONE_FB2)) {
-> > +		spin_unlock_irqrestore(&csi->irqlock, flags);
-> > +		return false;
-> > +	}
-> > +
-> > +	csi->active_vb2_buf[buf_num] = buf;
-> > +
-> > +	spin_unlock_irqrestore(&csi->irqlock, flags);
-> > +	return true;
-> > +}
-> > +
-> >  static void imx7_csi_video_buf_queue(struct vb2_buffer *vb)
-> >  {
-> >  	struct imx7_csi *csi = vb2_get_drv_priv(vb->vb2_queue);
-> >  	struct imx7_csi_vb2_buffer *buf = to_imx7_csi_vb2_buffer(vb);
-> >  	unsigned long flags;
-> >  
-> > +	if (imx7_csi_fast_track_buffer(csi, buf))
-> > +		return;
-> > +
-> >  	spin_lock_irqsave(&csi->q_lock, flags);
-> >  
-> >  	list_add_tail(&buf->list, &csi->ready_q);

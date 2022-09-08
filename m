@@ -2,226 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A135B1296
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7228A5B129D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiIHClt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 22:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
+        id S229973AbiIHCoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 22:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiIHClr (ORCPT
+        with ESMTP id S229611AbiIHCow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 22:41:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2087B56EA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 19:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662604906; x=1694140906;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=27hkdOl8DwhNIfV+ukFLHPmMnApW8R146r5/5ZGJnLw=;
-  b=eV+3GXD83kds64EFpqtVMcycwZj1NvhEcQzfULDXzs3B1w6WawLH6zah
-   vaQbe5yhBZMljRSGBfSGu2kFNoZvuTFq0xkxOJWOVR3Z0cL0hhWOUtlAR
-   7yevgXSeFCQ3uN7zjoTzJmPAVSvX/0u7PVnYJA5FO9vLiePyTX3vxMujj
-   5Dx/s3RxZhDqKy4KHWogYqivZ8xFVVvXDzX44RMGsZK62Jkhyx+n7LpcU
-   rCtVxmY67ue/GLdWUPu+bZyjV7R/AfxtEP8/NuK1NDyhC7JKXdupwyA+d
-   x58+c7lOOzK2QNsuDXK1hZAkgioLfh0GCDhL1ps29t2vdt3FIgqCb2Q6x
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="284066527"
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="284066527"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 19:41:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="617307750"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Sep 2022 19:41:44 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 1/1] iommu/vt-d: Make SVA and IOPF irrelevant
-Date:   Thu,  8 Sep 2022 10:35:57 +0800
-Message-Id: <20220908023557.4582-1-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Sep 2022 22:44:52 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D0331EAFB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 19:44:50 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxFeIaVxljUhcUAA--.17099S3;
+        Thu, 08 Sep 2022 10:44:43 +0800 (CST)
+Subject: Re: [PATCH 1/3] LoongArch: tools: Add relocs tool support
+To:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <1662113335-14282-1-git-send-email-tangyouling@loongson.cn>
+ <1662113335-14282-2-git-send-email-tangyouling@loongson.cn>
+ <c9880165f0355fc3be3ec23153b43ad33e558b5d.camel@xry111.site>
+ <4df8a26c49a35c1fce36d80c370f738fa71a2bef.camel@xry111.site>
+ <f0e77716-9533-724a-2ea9-86bc5b52066c@loongson.cn>
+ <78a4a6b0970c309daa336a2329e69d28df486552.camel@xry111.site>
+ <fffdd2ac-4ba6-8eb3-f269-b22a3d9c32f6@loongson.cn>
+ <0b2d115c42ff6cb9b8c65d852ec2f0746ca6e8d9.camel@xry111.site>
+ <d852f590-95b4-3fd1-924a-68c0a6bb1b1b@loongson.cn>
+ <29cd929b-185b-1c4b-f200-08f2a724b59d@loongson.cn>
+ <a218373f773ef193903daa528291ec8bb384ddd2.camel@xry111.site>
+ <83a7aad8-125b-29b5-715d-0061ce1b0647@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <011b5d39-e0cb-69cc-66fd-ed46afe7695e@loongson.cn>
+Date:   Thu, 8 Sep 2022 10:44:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <83a7aad8-125b-29b5-715d-0061ce1b0647@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8AxFeIaVxljUhcUAA--.17099S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF15KFy7KF18JF18Gr43GFg_yoW5Gw1DpF
+        W8GFWUKFs8JFyUXa9Fqw4UuFyY9ws5JF1fXa4ktw10vF9IvF93Ww42qry3Cayqkr97Ga1a
+        qF1YqFyvgF95AFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbN6pPUUUUU==
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing IOPF handling code relies on the per-PASID SVA data
-structures. It does not apply to scenarios other than SVA. This
-decouples the I/O page fault reporting and responding code from
-SVA related data structures so that the PRQ handling code could
-become generic.
+Hi, Ruoyao
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/intel/iommu.h |  1 -
- drivers/iommu/intel/svm.c   | 65 +++++--------------------------------
- 2 files changed, 8 insertions(+), 58 deletions(-)
+On 09/07/2022 06:19 PM, Youling Tang wrote:
+> Hi, Ruoyao
+>
+> On 09/06/2022 01:17 PM, Xi Ruoyao wrote:
+>> On Tue, 2022-09-06 at 10:16 +0800, Youling Tang wrote:
+>>
+>>> Switch to relative exception tables:
+>>>
+>>> https://github.com/tangyouling/linux/commit/6525b8da
+>>> https://github.com/tangyouling/linux/commit/b6ac0827
+>>>
+>>> Will switch to the relative exception tables after applying the above
+>>> two patches. So there is no need to relocate the exception table
+>>> (remove relocate_exception_table).
+>>>
+>>> Now we can remove the relocation of la.abs , got and ex_table, but
+>>> still need to relocate LARCH_64. Is there anything else that needs to
+>>> be modified to eliminate this relocation?
+>>
+>> You may see the RISC-V patch as a reference:
+>>
+>> https://lore.kernel.org/all/20211009171259.2515351-2-alexandre.ghiti@canonical.com/
+>>
+>>
+>> Basically, make the linker to generate R_*_RELATIVE instead of R_*_64
+>> for pointers.  And, perform R_*_RELATIVE relocation loading the kernel.
+>>
+>> Something problematic IMO: RISC-V uses "-shared" to trick the linker to
+>> generate R_*_RELATIVE but I consider it ugly (if the kernel is a shared
+>> library, my grandma will be a wagon!)  I prefer "-pie -static", but our
+>> Glibc does not have static-pie support for now.  It won't really affect
+>> the kernel (we are -nostdlib), but we cannot learn how to handle
+>> R_*_RELATIVE in static pie from Glibc then.
+>>
+>
+> After applying all the patches in the link [1], the implementation of
+> the relocs tool can now be removed :).
+>
+> commit: 244fb0971a ... ad45233ef6
+>
+> [1] https://github.com/tangyouling/loongarch-next/commits/loongarch-next
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 08618d94fbac..175f5f559e86 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -757,7 +757,6 @@ struct intel_svm_dev {
- 	struct device *dev;
- 	struct intel_iommu *iommu;
- 	struct iommu_sva sva;
--	unsigned long prq_seq_number;
- 	u32 pasid;
- 	int users;
- 	u16 did;
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index b391e46e537e..23a62bead112 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -32,6 +32,7 @@ static void intel_svm_drain_prq(struct device *dev, u32 pasid);
- #define to_intel_svm_dev(handle) container_of(handle, struct intel_svm_dev, sva)
- 
- static DEFINE_XARRAY_ALLOC(pasid_private_array);
-+static unsigned long prq_seq_number;
- static int pasid_private_add(ioasid_t pasid, void *priv)
- {
- 	return xa_alloc(&pasid_private_array, &pasid, priv,
-@@ -48,23 +49,6 @@ static void *pasid_private_find(ioasid_t pasid)
- 	return xa_load(&pasid_private_array, pasid);
- }
- 
--static struct intel_svm_dev *
--svm_lookup_device_by_sid(struct intel_svm *svm, u16 sid)
--{
--	struct intel_svm_dev *sdev = NULL, *t;
--
--	rcu_read_lock();
--	list_for_each_entry_rcu(t, &svm->devs, list) {
--		if (t->sid == sid) {
--			sdev = t;
--			break;
--		}
--	}
--	rcu_read_unlock();
--
--	return sdev;
--}
--
- static struct intel_svm_dev *
- svm_lookup_device_by_dev(struct intel_svm *svm, struct device *dev)
- {
-@@ -689,11 +673,10 @@ static void handle_bad_prq_event(struct intel_iommu *iommu,
- 
- static irqreturn_t prq_event_thread(int irq, void *d)
- {
--	struct intel_svm_dev *sdev = NULL;
- 	struct intel_iommu *iommu = d;
--	struct intel_svm *svm = NULL;
- 	struct page_req_dsc *req;
- 	int head, tail, handled;
-+	struct pci_dev *pdev;
- 	u64 address;
- 
- 	/*
-@@ -713,8 +696,6 @@ static irqreturn_t prq_event_thread(int irq, void *d)
- 			pr_err("IOMMU: %s: Page request without PASID\n",
- 			       iommu->name);
- bad_req:
--			svm = NULL;
--			sdev = NULL;
- 			handle_bad_prq_event(iommu, req, QI_RESP_INVALID);
- 			goto prq_advance;
- 		}
-@@ -741,34 +722,15 @@ static irqreturn_t prq_event_thread(int irq, void *d)
- 		if (unlikely(req->lpig && !req->rd_req && !req->wr_req))
- 			goto prq_advance;
- 
--		if (!svm || svm->pasid != req->pasid) {
--			/*
--			 * It can't go away, because the driver is not permitted
--			 * to unbind the mm while any page faults are outstanding.
--			 */
--			svm = pasid_private_find(req->pasid);
--			if (IS_ERR_OR_NULL(svm))
--				goto bad_req;
--		}
--
--		if (!sdev || sdev->sid != req->rid) {
--			sdev = svm_lookup_device_by_sid(svm, req->rid);
--			if (!sdev)
--				goto bad_req;
--		}
--
--		sdev->prq_seq_number++;
--
--		/*
--		 * If prq is to be handled outside iommu driver via receiver of
--		 * the fault notifiers, we skip the page response here.
--		 */
--		if (intel_svm_prq_report(iommu, sdev->dev, req))
-+		pdev = pci_get_domain_bus_and_slot(iommu->segment,
-+						   PCI_BUS_NUM(req->rid),
-+						   req->rid & 0xff);
-+		if (!pdev || intel_svm_prq_report(iommu, &pdev->dev, req))
- 			handle_bad_prq_event(iommu, req, QI_RESP_INVALID);
- 
--		trace_prq_report(iommu, sdev->dev, req->qw_0, req->qw_1,
-+		trace_prq_report(iommu, &pdev->dev, req->qw_0, req->qw_1,
- 				 req->priv_data[0], req->priv_data[1],
--				 sdev->prq_seq_number);
-+				 prq_seq_number++);
- prq_advance:
- 		head = (head + sizeof(*req)) & PRQ_RING_MASK;
- 	}
-@@ -803,8 +765,6 @@ int intel_svm_page_response(struct device *dev,
- 			    struct iommu_page_response *msg)
- {
- 	struct iommu_fault_page_request *prm;
--	struct intel_svm_dev *sdev = NULL;
--	struct intel_svm *svm = NULL;
- 	struct intel_iommu *iommu;
- 	bool private_present;
- 	bool pasid_present;
-@@ -823,8 +783,6 @@ int intel_svm_page_response(struct device *dev,
- 	if (!msg || !evt)
- 		return -EINVAL;
- 
--	mutex_lock(&pasid_mutex);
--
- 	prm = &evt->fault.prm;
- 	sid = PCI_DEVID(bus, devfn);
- 	pasid_present = prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID;
-@@ -841,12 +799,6 @@ int intel_svm_page_response(struct device *dev,
- 		goto out;
- 	}
- 
--	ret = pasid_to_svm_sdev(dev, prm->pasid, &svm, &sdev);
--	if (ret || !sdev) {
--		ret = -ENODEV;
--		goto out;
--	}
--
- 	/*
- 	 * Per VT-d spec. v3.0 ch7.7, system software must respond
- 	 * with page group response if private data is present (PDP)
-@@ -876,7 +828,6 @@ int intel_svm_page_response(struct device *dev,
- 		qi_submit_sync(iommu, &desc, 1, 0);
- 	}
- out:
--	mutex_unlock(&pasid_mutex);
- 	return ret;
- }
- 
--- 
-2.25.1
+The previous LDFLAGS_vmlinux has not changed,
+LDFLAGS_vmlinux  += -G0 -static -n -nostdlib
+
+When enabling CONFIG_RELOCATABLE to generate the PIE kernel, link
+vmliunx with different flags:
+
+1）LDFLAGS_vmlinux   += -shared -Bsymbolic -z notext -z norelro
+This way is similar to arm64.
+
+The following warnings appear when linking when using the old toolchain
+(no warnings for the new toolchain):
+
+kernel/kallsyms.o(.text+0x4): warning: R_LARCH_SOP_PUSH_PCREL against
+[undefweak] `kallsyms_offsets':
+Undefweak need to be resolved dynamically, but PLT stub doesn't
+represent.
+
+2）LDFLAGS_vmlinux  += -pie
+No warnings appear, it looks fine together.
+
+I looked at some commits for arm64, at first arm64 used -pie -shared
+(direct link fails in LoongArch), Removed -pie after link [1] and only
+used -shared.
+
+[1] 
+https://github.com/torvalds/linux/commit/3bbd3db86470c701091fb1d67f1fab6621debf50
+
+Youling.
+
+>
+> Youling.
+>
 

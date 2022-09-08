@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168625B17C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398CC5B17CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiIHIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S229942AbiIHIzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbiIHIxq (ORCPT
+        with ESMTP id S229561AbiIHIzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:53:46 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740E4E1AAF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:53:45 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bt10so26609977lfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:53:45 -0700 (PDT)
+        Thu, 8 Sep 2022 04:55:11 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C24C4821
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:55:09 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id m3so6493406pjo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:55:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9VquOKQ3hKK4VW69duKHqam2B9oML/lOcHv1HNPnEmA=;
-        b=DB7qj/3lifsH8Ly2TJe/zzZdOFOyFijp7RptdtdBcsW8wQUZtDpQESqx3Vnq7I0VXE
-         9SHdT6AtmEImEgTN2AiQGYkN5Nqf+RwhQfIBBULoFvCriWLOBp6rXnNzluUgnZri4hlc
-         NTCOAEfkS3c3s0/6qAe4gaDZBj00ohmpjXivIXBinMQSMoCE2P9p14MFl302C/XwplG8
-         rIYJlO8MPS9DPBOBkCzuG9QJbpWK8aOsQxUqwoYXLyxL0z7hIo2mp6fg4CBiaYZmv0rq
-         T9MVBMSlPYWnL/sHFpZkNsLPiEqhvm430q3lymG7+4bQ6Kzo5+UpXhf8hSYt3og+MWnh
-         nf/Q==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=uacXOofD8iMt8GLUR5lx4NNyko53fwtDtrMNESrEi8c=;
+        b=CITPCIDUriXf+nDAVczMxdww75NlJvrkYEzD6+e9xKCS+gVi9AWf5wp4Hx49+wjx/I
+         rCeT33PSgA704aayIDWByWvmBlFnby0oJy5zZZRfIRlnO83GPAWQ/7LDkqtcxOPGPp+N
+         BHQppY+hkRZRKxeMeRsVquLb/tniJrf6EVcRQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9VquOKQ3hKK4VW69duKHqam2B9oML/lOcHv1HNPnEmA=;
-        b=u7u4Q27Cl/u9+tFySGIJje3YVXWwLmDvzPzAB1H3KpJLTa10BkPFsFR2OmyNhmZrHJ
-         nHXALa7sK8CGxJgB8I9lfX5w/HLM5594QsbSDfUrwHFxu7wSD2BU9XUeDF3O8QwEKVzB
-         +59UBqKYrnglgoEnpPMuUxxEfzyEMBtXAFIb3bif+koNesckF4u1KHXxsfZnsu+mIoxj
-         S/q0Cwq0ThBfkJtlLAjgrk+ql8kI8fn8dKgviM6EWWuPEl13CKU09+xBdiy4pO3YGwzR
-         MueEmsMZzLxJdimR1Tc4l6Eb5jY4RzTzFGpzGBme++8OiLGy1Bex4EwlzWVFEDjWUxdv
-         mFgw==
-X-Gm-Message-State: ACgBeo2Y9S1MikFsw1uhcOkAjCuPFG9MbYbiaB5u/wXM9IeqIAaFo+U9
-        3PvpcIF0YA8//l7q8q4G12/XDg==
-X-Google-Smtp-Source: AA6agR5d9Kr7OR2aZotVHTJ06sSnIQxXzgza6rDlRHbtVbyZcqSkboT1leot3yaDXuIbY10+N2GMQg==
-X-Received: by 2002:a05:6512:e97:b0:492:c677:f867 with SMTP id bi23-20020a0565120e9700b00492c677f867mr2476900lfb.190.1662627223427;
-        Thu, 08 Sep 2022 01:53:43 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s26-20020a05651c201a00b0026a999966bbsm1661652ljo.24.2022.09.08.01.53.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 01:53:43 -0700 (PDT)
-Message-ID: <456b1bd4-e3bd-1806-8af9-45c6ab9c289d@linaro.org>
-Date:   Thu, 8 Sep 2022 10:53:41 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=uacXOofD8iMt8GLUR5lx4NNyko53fwtDtrMNESrEi8c=;
+        b=sSZ6MjPA/XMsYBk+r0c31b/3JE6xgHcfEhFRNui1dDSN8K4AaH4XYG8ZB1x3/2NJJA
+         BC8bgcr66yZghfdr7L7ZWPmu+P+0N1WMn41XnJIWCMKkyIMxJzI/hQltPdm/Xp486vSO
+         YiuDVszmBnOOAPWsVhfJJzRT0HYn9XrV0AddsR0lay6K6fOJ3OABpbCkM8KB+OkepKO7
+         H2OwD5OD1jTTLsBpdzFWoK5X9k8FllPu1pe/oXVn4n/h+f9nibcFm/Thn3jStLFWwHqP
+         iJlwYY7fb6aH94nbIdOL+QAakFeZ88guFldqNew4WBopoeZLAlkVm9ndMA0MfXNEV78R
+         Ottg==
+X-Gm-Message-State: ACgBeo0mzP5EZwMJkxYVSQ4tbcBaJKdaZvFhvayS9zj9preDdVhUIFcz
+        6ilXWal6FuNlaIcV6e4RBaSsdw==
+X-Google-Smtp-Source: AA6agR6NcpB09eefHHYXp6GkJKUOTTDK2AyTs5wLlrRzKJdAfD4PHYm6JQ29Zc8u7kSciiOn6EqWZA==
+X-Received: by 2002:a17:902:c94a:b0:16f:81c1:255a with SMTP id i10-20020a170902c94a00b0016f81c1255amr7603761pla.35.1662627308604;
+        Thu, 08 Sep 2022 01:55:08 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:c6ba:fe7c:d2b:242e])
+        by smtp.gmail.com with ESMTPSA id mj19-20020a17090b369300b001f334aa9170sm1188629pjb.48.2022.09.08.01.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 01:55:08 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Douglas Anderson <dianders@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] drm/panel-edp: Fix delays for Innolux N116BCA-EA1
+Date:   Thu,  8 Sep 2022 16:54:53 +0800
+Message-Id: <20220908085454.1024167-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/4] dt-bindings: usb: dwc3: Add
- gfladj-refclk-lpm-sel-quirk
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com>
- <20220907144624.2810117-2-alexander.stein@ew.tq-group.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220907144624.2810117-2-alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,17 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 16:46, Alexander Stein wrote:
-> This selects SOF/ITP to be running on ref_clk.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+Commit 52824ca4502d ("drm/panel-edp: Better describe eDP panel delays")
+clarified the various delays used for eDP panels, tying them to the eDP
+panel timing diagram.
 
+For Innolux N116BCA-EA1, .prepare_to_enable would be:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    t4_min + t5_min + t6_min + max(t7_max, t8_min)
 
-Best regards,
-Krzysztof
+Since t4_min and t5_min are both 0, the panel can use either .enable or
+.prepare_to_enable.
+
+As .enable is better defined, switch to using .enable for this panel.
+
+Also add .disable = 50, based on the datasheet's t9_min value. This
+effectively makes the delays the same as delay_200_500_e80_d50.
+
+Cc: Douglas Anderson <dianders@chromium.org>
+Fixes: 51d35631c970 ("drm/panel-simple: Add N116BCA-EA1")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ drivers/gpu/drm/panel/panel-edp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index 2bef3e707a95..65e3a5361c80 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -1295,7 +1295,8 @@ static const struct panel_desc innolux_n116bca_ea1 = {
+ 	},
+ 	.delay = {
+ 		.hpd_absent = 200,
+-		.prepare_to_enable = 80,
++		.enable = 80,
++		.disable = 50,
+ 		.unprepare = 500,
+ 	},
+ };
+-- 
+2.37.2.789.g6183377224-goog
+

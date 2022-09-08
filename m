@@ -2,117 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC095B2115
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2612B5B2111
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232728AbiIHOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S232715AbiIHOpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiIHOpi (ORCPT
+        with ESMTP id S232359AbiIHOpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:45:38 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79E5F7CE;
-        Thu,  8 Sep 2022 07:45:32 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E13A4580AF9;
-        Thu,  8 Sep 2022 10:45:28 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 10:45:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1662648328; x=1662651928; bh=SPGeHN3LN2nB2HRb9TjiHHXV8F5bbIF+9zw
-        vQ8/QAmk=; b=a4AZUOTQfrf9eYAEhx7fvxawPNOycWbjQv+0SVtsIZSVJUv8eXH
-        m7G2XiAXtLZpAoXfS25o3x6Z/tIToKvS48hRGuyH/DZqf5hJZFkkB8SsfbT1sR43
-        0T6Vlw7sorJevCpZlc9cIgJ1rk07U0U5op6mZh2bibaL0RroG8amXDEuT7W6QpwX
-        M3z6T1b0pgUNMLXOmYSxv4ntOvTCTG/joJ8jF7lSI6npthhm5UEPJvucwZKyDSkP
-        P+I35hwGJJBqskSAyfkLu6tta5h1NA2H23SbL8YMWBxd9gQ7j7NzFzUngESLAsU7
-        LuHuKR/NQbVlLURPCJd7Yt3yOD0iKair+mA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662648328; x=
-        1662651928; bh=SPGeHN3LN2nB2HRb9TjiHHXV8F5bbIF+9zwvQ8/QAmk=; b=m
-        KD0AvHMzH10BAdpwtcrbiKa7ehS3AodA1dNMOzP18aJU1fUVQdXAEW6cUj6uO0Vu
-        TJMs/ZkLwlQrildepm4bBybjcOGt35ziGfcC4sGiTtFipgjD39eaCL0RKqq0eYe9
-        Zs+gCkMMXky1BXilt2hXOAW/2TH95Ry3pOoLnwMoBt0V90CfRouIxo1kIeZPsoPK
-        gtclndlHe8l+dZ5huX/vuKCo+H2NQGDBDmsS/i/l2C2uI5yby/DCHNSLYW/vKMgI
-        bPLKY5M96DUcdRY5Pc5m+Fy1Fr27DYXjYhoNTJUbctBBwHEnbz1f2rq9yAcaiWZI
-        X2QQp+CRXmTuekNFoIopA==
-X-ME-Sender: <xms:CAAaY-wN57JOxo-d-aoF_CWZGlpVZLz81l_ZnX3KBQE9JVbLqmeU_Q>
-    <xme:CAAaY6QRaYggFq0V1-yw7yUm27v-6Z-l6nY8SCShVzF5STEPzizOGf0-_aNpfXK9A
-    GUi_jP7n076Z9tIC18>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:CAAaYwUzJu3JTcRmbTb8kuJOMZVtqf0FQfZF1es-6rpYE1AvxEKWzw>
-    <xmx:CAAaY0ijme5QnmjK2Ih3rXMQhT03R3LQN4wI8ov7cUNEN6PoLYeQkQ>
-    <xmx:CAAaYwD6wNLusk8rw_reuSHRq2yEwaTsup0yCViqkPyex7V1QEpCzg>
-    <xmx:CAAaY57P9prGQj2l8vECB_CfE06GTjvtopUc5p049L0vXberM65arg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7DFC8B60083; Thu,  8 Sep 2022 10:45:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <6ba5a3a9-93b0-49a9-ab49-7b6006e23067@www.fastmail.com>
-Date:   Thu, 08 Sep 2022 16:44:34 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] asm-generic: SOFTIRQ_ON_OWN_STACK rework
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 8 Sep 2022 10:45:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FF0558C9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662648302;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D1NWLsPufrv1Z1Z1oT9L72C7JiwJYlyGG1fa5hFdEoc=;
+        b=PVx855HONZv7tAvBuviq6riQYwqnHmRjGiJDETDYIX0xP0eBpDXXmZYF2Kf3Ckc/o67HKq
+        OM70uMNHcXlTl1DNWJPYCWTj27Osbb3wcdc22qWsxJ+inHnYXD9EuOX43ZelrNslP+PviH
+        oY+phoEfKD0wzMI3LJeFm8niZj5G0gc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-614-2BjxvtEdPpagh8NSQ7u33g-1; Thu, 08 Sep 2022 10:45:01 -0400
+X-MC-Unique: 2BjxvtEdPpagh8NSQ7u33g-1
+Received: by mail-wm1-f72.google.com with SMTP id p3-20020a7bcc83000000b003b2973dab4bso1234399wma.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:45:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=D1NWLsPufrv1Z1Z1oT9L72C7JiwJYlyGG1fa5hFdEoc=;
+        b=OsJT0NksPuO0xd+6vvXo+rFqgjqComXDl0lo9dRlwiEjy2hM88YsHjDA6ysgrDoUzl
+         i1x5+zBtOi0/dUWDeZUAqfxlU4Dyq059m3LvuZKOCoB2oIRjUW0Wc6WObL7qirfYQDH4
+         NNgApqfKsOEhL50rO3KGkQ8eXXMyBfLZC4sfaY1VamHdslSGH8JhP3LESGRfQENw1DnO
+         1wN+PHMyNGfljUSg27Htj8lE/CLCKWPauKSnYKf0gmllwKMmeaAXVvNBbcmTdSraw0UF
+         ttHe+6zx7M81jQ1yA1yv2lqpj9uVJoDOo645mdEqnssQkRaYt/CuZgEWsRXxxYrU0HJI
+         w8lw==
+X-Gm-Message-State: ACgBeo3zAf5XXGcbD9aQJ4xX65RE8TBkatUBoilsmqaV4av5dsAcszfh
+        rmJzm4oqFmJw5yesaKES4EMNk/NIm/FYVg/9DCh89K41h6qdwFwXTm0n9/S0U7b8ZllEnd4tluF
+        1OSxb8o1pGv86BNgML4uWmglA
+X-Received: by 2002:a05:600c:1c23:b0:3a5:d936:e5bb with SMTP id j35-20020a05600c1c2300b003a5d936e5bbmr2387517wms.59.1662648300352;
+        Thu, 08 Sep 2022 07:45:00 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7fJgOmrcKJ8ShbrwnUHuBpfa0K9y45SnAFXKT+MRGLC/LnSpWU83I3ibPwXZDWaCCVfMnJPw==
+X-Received: by 2002:a05:600c:1c23:b0:3a5:d936:e5bb with SMTP id j35-20020a05600c1c2300b003a5d936e5bbmr2387497wms.59.1662648300076;
+        Thu, 08 Sep 2022 07:45:00 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-119-112.dyn.eolo.it. [146.241.119.112])
+        by smtp.gmail.com with ESMTPSA id z11-20020a056000110b00b00228dcf471e8sm9480472wrw.56.2022.09.08.07.44.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 07:44:59 -0700 (PDT)
+Message-ID: <52fcd27efafb415baa0bc52440296306110c56d7.camel@redhat.com>
+Subject: Re: [PATCH net v3] net: mptcp: fix unreleased socket in accept queue
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        menglong8.dong@gmail.com
+Cc:     mathew.j.martineau@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, fw@strlen.de,
+        peter.krystad@linux.intel.com, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>
+Date:   Thu, 08 Sep 2022 16:44:58 +0200
+In-Reply-To: <e4b7eddc-3a73-0994-467e-6d65d6ad80c0@tessares.net>
+References: <20220907111132.31722-1-imagedong@tencent.com>
+         <e4b7eddc-3a73-0994-467e-6d65d6ad80c0@tessares.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
+On Thu, 2022-09-08 at 15:56 +0200, Matthieu Baerts wrote:
+> Hi Menglong,
+> 
+> On 07/09/2022 13:11, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> > 
+> > The mptcp socket and its subflow sockets in accept queue can't be
+> > released after the process exit.
+> > 
+> > While the release of a mptcp socket in listening state, the
+> > corresponding tcp socket will be released too. Meanwhile, the tcp
+> > socket in the unaccept queue will be released too. However, only init
+> > subflow is in the unaccept queue, and the joined subflow is not in the
+> > unaccept queue, which makes the joined subflow won't be released, and
+> > therefore the corresponding unaccepted mptcp socket will not be released
+> > to.
+> 
+> Thank you for the v3.
+> 
+> Unfortunately, our CI found a possible recursive locking:
+> 
+> > - KVM Validation: debug:
+> >   - Unstable: 1 failed test(s): selftest_mptcp_join - Critical: 1 Call Trace(s) ❌:
+> >   - Task: https://cirrus-ci.com/task/5418283233968128
+> >   - Summary: https://api.cirrus-ci.com/v1/artifact/task/5418283233968128/summary/summary.txt
+> 
+> https://lore.kernel.org/mptcp/4e6d3d9e-1f1a-23ae-cb56-2d4f043f17ae@gmail.com/T/#u
+> 
+> Do you mind looking at it please?
 
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
+Ah, that is actually a false positive, but we must silence it. The main
+point is that the lock_sock() in mptcp_close() rightfully lacks the
+_nested annotation.
 
-are available in the Git repository at:
+Instead of adding such annotation only for this call site, which would
+be both ugly and dangerous, I suggest to factor_out from mptcp_close()
+all the code the run under the socket lock, say in:
+ 
+bool __mptcp_close(struct sock *sk, long timeout)
+	// return true if the caller need to cancel the mptcp worker
+	// (outside the socket lock)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-6.0-rc4
+and then in mptcp_subflow_queue_clean():
 
-for you to fetch changes up to 8cbb2b50ee2dcb082675237eaaa48fe8479f8aa5:
+	sock_hold(sk);
 
-  asm-generic: Conditionally enable do_softirq_own_stack() via Kconfig. (2022-09-05 17:20:55 +0200)
+	slow = lock_sock_fast_nested(sk);
+        next = msk->dl_next;
+        msk->first = NULL;
+        msk->dl_next = NULL;
+	do_cancel_work = __mptcp_close(sk, 0);
+	unlock_sock_fast(sk, slow);
 
-----------------------------------------------------------------
-asm-generic: SOFTIRQ_ON_OWN_STACK rework
+	if (do_cancel_work)
+		mptcp_cancel_work(sk);
+	sock_put(sk);
 
-Just one fixup patch, reworking the softirq_on_own_stack logic for
-preempt-rt kernels as discussed in
-https://lore.kernel.org/all/CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com/
+All the above could require 2 different patches, 1 to factor-out the
+helper, and 1 to actually implement the fix.
 
-----------------------------------------------------------------
-Sebastian Andrzej Siewior (1):
-      asm-generic: Conditionally enable do_softirq_own_stack() via Kconfig.
+Cheers,
 
- arch/Kconfig                          | 3 +++
- arch/arm/kernel/irq.c                 | 2 +-
- arch/parisc/kernel/irq.c              | 2 +-
- arch/powerpc/kernel/irq.c             | 4 ++--
- arch/s390/include/asm/softirq_stack.h | 2 +-
- arch/sh/kernel/irq.c                  | 2 +-
- arch/sparc/kernel/irq_64.c            | 2 +-
- arch/x86/include/asm/irq_stack.h      | 2 +-
- arch/x86/kernel/irq_32.c              | 2 +-
- include/asm-generic/softirq_stack.h   | 2 +-
- 10 files changed, 13 insertions(+), 10 deletions(-)
+Paolo
+

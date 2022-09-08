@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790B95B13D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E925B13D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiIHFJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 01:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S229695AbiIHFJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 01:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIHFI7 (ORCPT
+        with ESMTP id S229668AbiIHFJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 01:08:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C2C92F55;
-        Wed,  7 Sep 2022 22:08:58 -0700 (PDT)
+        Thu, 8 Sep 2022 01:09:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF98C92F55;
+        Wed,  7 Sep 2022 22:09:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 198D761B10;
-        Thu,  8 Sep 2022 05:08:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1315CC433C1;
-        Thu,  8 Sep 2022 05:08:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93595B81F74;
+        Thu,  8 Sep 2022 05:08:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C59C433D7;
+        Thu,  8 Sep 2022 05:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662613737;
-        bh=QsZjgBJZJF19qwvAwR531aY4+u0JK0AQgWq2N0eYle4=;
+        s=k20201202; t=1662613738;
+        bh=dg8wftGIvmW8f8CxANQmVU9WzgpbVESeuK33TzXQNuE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NPVxZnsK0w3qoAmhBJq9Fqt1PaphkFN+MrdHkyRUHvmHY5bU0bY0guGSSvI7UDonC
-         XSJrcqUIcH0btVB8msSmTF4cllbLffmD37XJselbSFSuipN/u0RFo17CjzC6dtXVpB
-         GzrFRs5+88GQkyB4ix7cdQ8Llnbg3pEtvM+JyzoF8y++uc7uwHVbj25SGlSpvXk32S
-         2d8iyZisnR8e+uYxtRZHEt8FieXE0TlygqWItyDl9t29JVVpZztqdM7e9EfPfXCTJz
-         LvLNIlrj0mCtWQ7yxTwzmXq6xFtlaegHlIlBQdMVDu2cjSkJXZScWj3c0fOcQm9AHB
-         bo8upoWe+l7Xw==
-Date:   Thu, 8 Sep 2022 08:08:51 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>
-Subject: Re: [PATCH] security/keys: Remove inconsistent __user annotation
-Message-ID: <Yxl447f+lYtKjyJb@kernel.org>
-References: <20220907121230.21252-1-vincenzo.frascino@arm.com>
+        b=HpROFulEeTkGHTFH1WQZcXr5tmSa3vWhKhn99/2aXSWhe7QrS/o92XogewYtQT75M
+         yXKmuFb9SBJ5x/+C+/h+NtIrwvrwU4Lmi7b93zmj9yPltoOSHkdNkXKrzxSFfL04wD
+         ie5mjahJpvZyqGTWpRYxS343ak7RJJEuS34xcFGU4sN/T18prCGq4AUEIegR6o3o+3
+         kI4c8F8nbSIxHhku1MkNhYnpIZ8RhwHKdPGk/eK+TEOg/CS1HU0aBKmHFAsDwM2uD0
+         BpmwwmQ0Xj1Qzlrjor1fu74rWCJ1C6H18rqdNu0t/jrCmMfFZEpGaqRp15XE80mHg2
+         7L1sMat+zGXBg==
+Date:   Wed, 7 Sep 2022 22:08:55 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org
+Subject: Re: [PATCH v2 1/2] x86/kprobes: Fix kprobes instruction boudary
+ check with CONFIG_RETHUNK
+Message-ID: <20220908050855.w77mimzznrlp6pwe@treble>
+References: <166260087224.759381.4170102827490658262.stgit@devnote2>
+ <166260088298.759381.11727280480035568118.stgit@devnote2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220907121230.21252-1-vincenzo.frascino@arm.com>
+In-Reply-To: <166260088298.759381.11727280480035568118.stgit@devnote2>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,45 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 01:12:30PM +0100, Vincenzo Frascino wrote:
-> The declaration of keyring_read does not match the definition
-> (security/keys/keyring.c). In this case the definition is correct
-> because it matches what defined in "struct key_type::read"
-> (linux/key-type.h).
+On Thu, Sep 08, 2022 at 10:34:43AM +0900, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> Fix the declaration removing the inconsistent __user annotation.
+> Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
+> speculative execution after RET instruction, kprobes always failes to
+> check the probed instruction boundary by decoding the function body if
+> the probed address is after such sequence. (Note that some conditional
+> code blocks will be placed after function return, if compiler decides
+> it is not on the hot path.)
 > 
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
-> Note: This issue was discovered during the porting of the linux kernel
-> on Morello [1].
+> This is because kprobes expects someone (e.g. kgdb) puts the INT3 as
+> a software breakpoint and it will replace the original instruction.
+> But these INT3 are not such purpose, it doesn't need to recover the
+> original instruction.
 > 
-> [1] https://git.morello-project.org/morello/kernel/linux
-> 
->  security/keys/keyring.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> index 5e6a90760753..4448758f643a 100644
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
-> @@ -79,7 +79,7 @@ static void keyring_revoke(struct key *keyring);
->  static void keyring_destroy(struct key *keyring);
->  static void keyring_describe(const struct key *keyring, struct seq_file *m);
->  static long keyring_read(const struct key *keyring,
-> -			 char __user *buffer, size_t buflen);
-> +			 char *buffer, size_t buflen);
->  
->  struct key_type key_type_keyring = {
->  	.name		= "keyring",
-> -- 
-> 2.37.3
-> 
+> To avoid this issue, memorize the branch target address during decoding
+> and if there is INT3, restart decoding from unchecked target address.
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+Hm, is kprobes conflicting with kgdb actually a realistic concern?
+Seems like a dangerous combination
 
-BR, Jarkko
+Either way, this feels overengineered.  Sort of like implementing
+objtool in the kernel.
+
+And it's incomplete: for a switch statement jump table (or C goto jump
+table like in BPF), you can't detect the potential targets of the
+indirect branch.
+
+Wouldn't it be much simpler to just encode the knowledge that
+
+  	if (CONFIG_RETHUNK && !X86_FEATURE_RETHUNK)
+		// all rets are followed by four INT3s
+	else if (CONFIG_SLS)
+		// all rets are followed by one INT3
+
+?
+	
+-- 
+Josh

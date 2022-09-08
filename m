@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04D25B20F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E95D5B20F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbiIHOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S232366AbiIHOn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiIHOnS (ORCPT
+        with ESMTP id S232076AbiIHOny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:43:18 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA631D2777
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:43:16 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id w8so28041174lft.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=n8VGGC+7+I4IjFN0ib/PUjyurgUsEjooklHf6RmDYUg=;
-        b=ZxdGhDBFjbOpQmDm+bvokfEUhGG1h4jISBv5G5/iyMzHUYo7MnhY5DCOp8n4Is7E0Z
-         TQTTn9foxYpacFYzuB0/d1SJabnhH/mgJR82/CeiVTjvwgeQHI53w1FF2AL2D7UwIFGY
-         W2LUkr6K/RkMpBo8gNMhXcp4LiQSyz1W11dvTKUjs3+Ux4uh2UZTfG2vk7bkaCnY+eRm
-         jTT/Chbtx29UvPTz+OGPLt1w/xNbNEERAhEFW+5WAGTncArweLWKH/9D5pyl2efWhl3i
-         pIAhsH2AWnyEwLTYmujSexcgV4wPY/rtEZpEDVNeYcsz1uwAGG2Cc5lC2ROg/Z9A00TD
-         vFBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=n8VGGC+7+I4IjFN0ib/PUjyurgUsEjooklHf6RmDYUg=;
-        b=H6byXM+d4Z1dt3EzKg5YGUlR4rON7e8g90u89O7kh5R3YaywRKw+4nwFQx2BvIvCjC
-         wvpK+5OEygCU0TXRZ//bCxkb9x2WjWPETDynyLMaDh3UaSOcHiPCv4GJCM4eZOSK59yj
-         bvRxW1acOVCvQpWo6TDs74Entx+tUFFnCPaFHmcfn4w9vBJaIPfjrmqheNGqSBCffrOX
-         3bV0F9w94wMMMEcSb61FvQ79ZwDBd/w6L4iBtnWzlz4rKUEgE8Lie8dCXhCESWrp8WQT
-         WSppQ66TDV6JB2c8y6lmgbNP1DwdWK5GMn0LKvnQCcSkrvkIJjaqbmXl/QXLyekM034f
-         OLAQ==
-X-Gm-Message-State: ACgBeo2zt3AHEvU2eNFikuAPVTQvycxIRK6VlOoEzbmZxEOerXWMfzzF
-        LtrPHdM81v17VGIiYcAj3NXwIw==
-X-Google-Smtp-Source: AA6agR4vo2geJ+bD2HdOnszq/5/BOl1SbzOVNQ+QLutzfKR1QkYQv+a7YFX6i+H7RE1zgYN8hG1jsA==
-X-Received: by 2002:a05:6512:152a:b0:496:80f3:7fe0 with SMTP id bq42-20020a056512152a00b0049680f37fe0mr2823929lfb.579.1662648195222;
-        Thu, 08 Sep 2022 07:43:15 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a6-20020a05651c010600b002688cceee44sm3221569ljb.132.2022.09.08.07.43.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 07:43:14 -0700 (PDT)
-Message-ID: <71d970bc-fe6f-91e7-80c1-711af1af5530@linaro.org>
-Date:   Thu, 8 Sep 2022 16:43:13 +0200
+        Thu, 8 Sep 2022 10:43:54 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6947BD2777;
+        Thu,  8 Sep 2022 07:43:53 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288DZ7Zq016893;
+        Thu, 8 Sep 2022 14:43:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MDFsiyVxKlxb2IykLyL7WXyRlrugQKzQNnjQEfykscY=;
+ b=EfFkMrSecf5t2XpVMXNCyESk1zAmeOfkNLOx20YdUqiTd2jf91/stLVX2oIIlGfa8ogo
+ FbrcfrRl7ocGsi6exXgUlZRKB8aWDqDrcL1GBdtJ/lBgFgwRpwF86yKlc4TyNyCNhCPz
+ 0yiWQPNs6ACbcvopo9VsQjDF3y3asMbV6DbZoz9q+ETMEuTuSihgOsFX/ZF9wfbxpNbk
+ NT0dRcDoAT+vuhfQDgtIrptpjoKd8QqO5+HuoDXx0FjzOiXmxwdbwZns4ZI6onVkUDD6
+ gZ8ivQ5LRS5o+8Bn+MGvHLjJNDh35qiG74nlnS8JYmdIs14AWP4oJbTTik9vlW0noe/F Mw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jfdc70tu9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 14:43:43 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 288Ehggm009612
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Sep 2022 14:43:43 GMT
+Received: from [10.216.56.128] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 8 Sep 2022
+ 07:43:40 -0700
+Message-ID: <0b0da58e-7281-32e7-2aab-8a89c70ba574@quicinc.com>
+Date:   Thu, 8 Sep 2022 20:13:37 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH 4/4] dt-bindings: net: snps,dwmac: Update interrupt-names
+Subject: Re: [PATCH] drivers/remoteproc: fix repeated words in comments
 Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, netdev@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>
-References: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
- <20220907204924.2040384-5-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220907204924.2040384-5-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     wangjianli <wangjianli@cdjrlc.com>, <andersson@kernel.org>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220908123237.16911-1-wangjianli@cdjrlc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20220908123237.16911-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Ht1DqY_iwPNB2DiDz-6jDy_pZ4XZ6YIE
+X-Proofpoint-ORIG-GUID: Ht1DqY_iwPNB2DiDz-6jDy_pZ4XZ6YIE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ spamscore=0 phishscore=0 clxscore=1015 adultscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209080053
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,50 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 22:49, Bhupesh Sharma wrote:
-> As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
-> interrupt error msg") noted, not every stmmac based platform
-> makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
+Hi,
+
+On 9/8/2022 6:02 PM, wangjianli wrote:
+> Delete the redundant word 'in'.
 > 
-> So, update the 'interrupt-names' inside 'snps,dwmac' YAML
-> bindings to reflect the same.
-> 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: David Miller <davem@davemloft.net>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 > ---
->  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+>   drivers/remoteproc/remoteproc_core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> index f89ca308d55f..4d7fe4ee3d87 100644
-> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> @@ -105,10 +105,12 @@ properties:
->  
->    interrupt-names:
->      minItems: 1
-> -    items:
-> -      - const: macirq
-> -      - const: eth_wake_irq
-> -      - const: eth_lpi
-> +    maxItems: 3
-> +    contains:
-> +      enum:
-> +        - macirq
-> +        - eth_wake_irq
-> +        - eth_lpi
->  
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index e5279ed9a8d7..6e8849f0df18 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -346,7 +346,7 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i)
+>   		if (rproc_check_carveout_da(rproc, mem, rsc->vring[i].da, size))
+>   			return -ENOMEM;
+>   	} else {
+> -		/* Register carveout in in list */
+> +		/* Register carveout in list */
 
-This gives quite a flexibility, e.g. missing macirq. Instead should be
-probably a list with enums:
-items:
-  - const: macirq
-  - enum: [eth_wake_irq, eth_lpi]
-  - enum: [eth_wake_irq, eth_lpi]
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-
-Best regards,
-Krzysztof
+-Mukesh
+>   		mem = rproc_mem_entry_init(dev, NULL, 0,
+>   					   size, rsc->vring[i].da,
+>   					   rproc_alloc_carveout,

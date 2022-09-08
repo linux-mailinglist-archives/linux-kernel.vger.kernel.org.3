@@ -2,173 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BD65B2AAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69D65B2A9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIHX53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S229898AbiIHXxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiIHX5X (ORCPT
+        with ESMTP id S229566AbiIHXxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:57:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132CDFBF20;
-        Thu,  8 Sep 2022 16:57:21 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288LltR0016279;
-        Thu, 8 Sep 2022 23:57:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DP+1a705Ln6azuRbeCkaSx6hxJZpQPx385zZM8JCxVc=;
- b=WTslEZ8quKY0pkQI0Unoz7Qou0LBoSDfEPWldx5LNnEdTEelGlGosHlY5x75gE0Mj7NQ
- vxPePqv2ud3BhvGd+/TPj2XvcsbuMpw+b4sxun9PfvNlCK0uR2JQ8i7KOaMN5TbLYJpg
- ssXjw8er6V6KzyFMHPLGnMsEQLhuUREaEokix0bT/zmCAaZbaY3qPgIBNahR44Ct8uHq
- DSy0c/bKzUmG8y+th9RP9VNppDvcW9xnnIbuJx67FmtnP6u05KPuEOm5jZDD0A6TKgWo
- kYvZqML+/puGKKEd7K2iVGcY4mi81f5pdDDyvrFxKx85eYw6ncWxabelj0UlsgJj3I0b dw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jf85138yh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 23:57:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 288NqBWk025748
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Sep 2022 23:52:11 GMT
-Received: from [10.110.115.160] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 8 Sep 2022
- 16:52:10 -0700
-Message-ID: <330b5f46-1bd2-5727-b63c-c730fbdda22c@quicinc.com>
-Date:   Thu, 8 Sep 2022 16:52:10 -0700
+        Thu, 8 Sep 2022 19:53:20 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D04AB1AB;
+        Thu,  8 Sep 2022 16:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662681199; x=1694217199;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=T283FVBX95jJVUVJfhotCzb7jPZ3g0V6CxJ2ND8P1Xo=;
+  b=aqFvPstsjpwf/OsJeCQs8kht7C6+5zNKuF6HNb5dPDhdKegl2Weis97K
+   MZ2oEmqF11JlcKyCHBTgQVg8X7S022SgpWavsp3p8WOq2zcVbqBL4vzsB
+   zTU82WiSD5PQCPwC4M9cSejUCcowqI9UR66Ew4JxZabJvHrV8tlmvlZHZ
+   J2NyJJm2mXHa5QKx+fghmZznwFyG13HXKEBnWe9FZV7dbKTz3QIqXL7QS
+   WHkwhahANlpYQwMPjTtd9B7DkU4gD3guvMyg3bQ8FY83jJfx4rKrytxuJ
+   PjeiaXlM8t3+9gQ+LkwyLt0baqATTTnLC+3Pgzqk7EnUMzt9xIqdTyH/X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="284372755"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="284372755"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:53:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="740864197"
+Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 16:53:18 -0700
+Message-ID: <49f7bb67-2f4f-8e06-5420-5b279fdf3199@linux.intel.com>
+Date:   Thu, 8 Sep 2022 16:53:18 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/4] pinctrl: qcom: spmi-gpio: Fix the GPIO strength
- mapping
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v12 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <konrad.dybcio@somainline.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Anirudh Ghayal <quic_aghayal@quicinc.com>
-References: <20220907201528.9351-1-quic_amelende@quicinc.com>
- <20220907201528.9351-3-quic_amelende@quicinc.com>
- <2b809e98-85ea-6ad9-e810-106563937ddc@linaro.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <2b809e98-85ea-6ad9-e810-106563937ddc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220908002723.923241-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Yxl+PE4A+WUfQ7bl@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Yxl+PE4A+WUfQ7bl@kroah.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jqFcEesKsAWjweVhpnPr5B8ZFqIB3Jqh
-X-Proofpoint-ORIG-GUID: jqFcEesKsAWjweVhpnPr5B8ZFqIB3Jqh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_13,2022-09-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 spamscore=0 phishscore=0 clxscore=1015 mlxscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209080084
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dave/Greg,
 
+On 9/7/22 10:31 PM, Greg Kroah-Hartman wrote:
+> On Wed, Sep 07, 2022 at 05:27:20PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>> +	/*
+>> +	 * Per TDX Module 1.0 specification, section titled
+>> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
+>> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
+>> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
+>> +	 * 0. Also check for valid user pointers.
+>> +	 */
+>> +	if (!req.reportdata || !req.tdreport || req.subtype ||
+>> +		req.rpd_len != TDX_REPORTDATA_LEN ||
+>> +		req.tdr_len != TDX_REPORT_LEN)
+>> +		return -EINVAL;
+> 
+> You never verify that your reserved[7] fields are actually set to 0,
+> which means you can never use them in the future :(
+> 
+> Please fix that up, thanks.
 
-On 9/8/2022 4:14 AM, Krzysztof Kozlowski wrote:
-> On 07/09/2022 22:15, Anjelique Melendez wrote:
->> From: Anirudh Ghayal <quic_aghayal@quicinc.com>
->>
->> The SPMI based PMICs have the HIGH and LOW GPIO output
->> strength mappings interchanged, fix them.
->>
->> Keep the mapping same for older SSBI based PMICs.
->>
->> CRs-Fixed: 2246473
-> 
-> What is this tag about?
-Forgot to remove this tag before up streamed. Will remove for next version.
-> 
->> Signed-off-by: Anirudh Ghayal <quic_aghayal@quicinc.com>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->> ---
->>  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c     | 2 +-
->>  drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c     | 4 ++--
->>  include/dt-bindings/pinctrl/qcom,pmic-gpio.h | 9 +++++++--
->>  3 files changed, 10 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
->> index cf6b6047de8d..fceccf1ec099 100644
->> --- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
->> +++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
->> @@ -525,7 +525,7 @@ static int pmic_gpio_config_set(struct pinctrl_dev *pctldev, unsigned int pin,
->>  			pad->pullup = arg;
->>  			break;
->>  		case PMIC_GPIO_CONF_STRENGTH:
->> -			if (arg > PMIC_GPIO_STRENGTH_LOW)
->> +			if (arg > PMIC_GPIO_STRENGTH_HIGH)
->>  				return -EINVAL;
->>  			pad->strength = arg;
->>  			break;
->> diff --git a/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c b/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
->> index 1b41adda8129..0f96d130813b 100644
->> --- a/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
->> +++ b/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
->> @@ -1,7 +1,7 @@
->>  // SPDX-License-Identifier: GPL-2.0-only
->>  /*
->>   * Copyright (c) 2015, Sony Mobile Communications AB.
->> - * Copyright (c) 2013, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2013, 2018 The Linux Foundation. All rights reserved.
->>   */
->>  
->>  #include <linux/module.h>
->> @@ -371,7 +371,7 @@ static int pm8xxx_pin_config_set(struct pinctrl_dev *pctldev,
->>  			banks |= BIT(0);
->>  			break;
->>  		case PM8XXX_QCOM_DRIVE_STRENGH:
->> -			if (arg > PMIC_GPIO_STRENGTH_LOW) {
->> +			if (arg > PM8921_GPIO_STRENGTH_LOW) {
->>  				dev_err(pctrl->dev, "invalid drive strength\n");
->>  				return -EINVAL;
->>  			}
->> diff --git a/include/dt-bindings/pinctrl/qcom,pmic-gpio.h b/include/dt-bindings/pinctrl/qcom,pmic-gpio.h
->> index e5df5ce45a0f..950be952ad3e 100644
->> --- a/include/dt-bindings/pinctrl/qcom,pmic-gpio.h
->> +++ b/include/dt-bindings/pinctrl/qcom,pmic-gpio.h
-> 
-> You cannot mix bindings with driver. This is an ABI break.
-Ack - Will separate into two changes.
->> @@ -12,9 +12,14 @@
->>  #define PMIC_GPIO_PULL_UP_1P5_30	3
->>  
->>  #define PMIC_GPIO_STRENGTH_NO		0
->> -#define PMIC_GPIO_STRENGTH_HIGH		1
->> +#define PMIC_GPIO_STRENGTH_LOW		1
->>  #define PMIC_GPIO_STRENGTH_MED		2
->> -#define PMIC_GPIO_STRENGTH_LOW		3
->> +#define PMIC_GPIO_STRENGTH_HIGH		3
-> 
-> Didn't you just break all DTSes in the world?
-Ack - lol. Next version will include changes to update any DTS
-that uses PMIC_GPIO_STRENGTH_ 
-> 
-> Best regards,
-> Krzysztof
+Would you prefer a new posting (v12.1 or v13) with this change, or do you
+want to continue the review in the same version?
 
-Thanks,
-Anjelique
+> 
+> greg k-h
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

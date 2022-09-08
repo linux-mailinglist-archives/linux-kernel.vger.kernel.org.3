@@ -2,46 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74245B1D35
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6A05B1D3B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiIHMg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S229811AbiIHMhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbiIHMgq (ORCPT
+        with ESMTP id S231522AbiIHMhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:36:46 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FEEE6209
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:36:43 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1662640584tam1w07w
-Received: from localhost.localdomain ( [182.148.14.0])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 08 Sep 2022 20:36:22 +0800 (CST)
-X-QQ-SSF: 0100000000200090C000B00A0000000
-X-QQ-FEAT: NCCf6GxSCjvw1iXhK9qC7rQ2uhCMxKhxNDHZO29CryP9okCDowcQgOAmGUBA0
-        305O50IoPtW1SUwsa0tUrHDmdwPFSiTjiHFGZ2RIBqqfxz8+FFrxu7npK2b1+vEefTyrvGk
-        eQMq5gOhqz9zxgs2N4WvGcgGzh0bmcDWSsd6/ivDZ2YsUmofRqaxaoPOhVG2ZbHsvFLltRU
-        scoTeY4HqGgVng8EYIIcGnJZ99Pidz9egejujj+kuW4Q5KRFSTqmNztLUEMux01Y3G6o+qY
-        TJ0KgNpewgfC71emy71V1rqOEkzO3WmYGWLGo1C0WEM0GmuGyJRPXqrdb4D3D9G8a1A7tg5
-        ZLorMAQUpaPwMU1mESnLg9SVq/WUMkB90caIGn78FUUK+Y8qRg=
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     hjc@rock-chips.com, heiko@sntech.de, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] drm/rockchip: fix repeated words in comments
-Date:   Thu,  8 Sep 2022 20:36:16 +0800
-Message-Id: <20220908123616.19195-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 8 Sep 2022 08:37:15 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD35A7204
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:37:14 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id q8so13038532qvr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 05:37:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=WcekcDNFeJzxZPSod6l4pgL2wFziikSEFQBuSo6O52M=;
+        b=KKyDjjUP/2p/6f7MjEn3kMEeJ9Uy23+vKM3cRtzBVt8VoKvtO19GZa9khWTOIgKXfU
+         i8Wg2YqI7xe6VOUzHA1blR13LADAZdvcQEwpXYTDVgQlqE6jyPfQLsPIW6IFt8PC1Twz
+         x1/2IkKExw1n1GVsGI2IcwHf6pcYkgxICIHCs5zME9TCi20awY/+j2rjTx1gBo2XawTZ
+         hkPlifBFFpN7SWmfPgwIEuuHCjIW6iQRdS0k/Y45tBs1sBIxtTNCbnlbGq2Q0vhyPQMt
+         KUHxfIEXp877QAvYoOIiX2SlcsbptrwrQuaci6jQ2mMpkHWg65mjQ+2UlqkyzZ97Lyu0
+         1xuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=WcekcDNFeJzxZPSod6l4pgL2wFziikSEFQBuSo6O52M=;
+        b=AJvS9WbUq35H9RU4/UmyHIsB8qt6fLo77eR09ZIfZUGRT0fwhyfNuhKl6JHMFof7es
+         84O8a04vQJC2vUMFncdowu0ZSxKnZaIXS7X+pVctVkgx5jsPtH/KrmSOmb2RZJh/Zz3K
+         R+qchLPHCXLfhTm510KEaNLcnKgeKRm8eYMPTecSRqX6wVbsAzyoqDyWK4rcvBaQOIx4
+         VS1J/j8z/Ys+GZdZrq1u4etqZ0j8wjtGjyINjoJIVMHje51B5n9DseDUMHDbHsTNMHjG
+         KKi2+OM1eTNd0bhc6oqg+LiamCBZ9fE3UGYpEjNjkDiodLFBOHmUBY4BIpXEnyZvZeJW
+         hfDg==
+X-Gm-Message-State: ACgBeo1t+2coFrnzpI4bgTwI3hO4SFdjD33jvgY3qCqgndY7iOSuEEgl
+        hkz7lXO3+JQQgjSl7fUMYEIMWA==
+X-Google-Smtp-Source: AA6agR4iyYT8//K0u4eC6uIKjTIJa5MHHn5Yfbf3X3qv/3RmHXDYo2nTKmbY5oFt97DH+rTTDZyaNQ==
+X-Received: by 2002:a05:6214:c66:b0:499:2f1a:1cec with SMTP id t6-20020a0562140c6600b004992f1a1cecmr6905971qvj.93.1662640633361;
+        Thu, 08 Sep 2022 05:37:13 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id br7-20020a05622a1e0700b00344f91f6fe0sm14363098qtb.67.2022.09.08.05.37.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 05:37:09 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oWGmJ-0090gF-SU;
+        Thu, 08 Sep 2022 09:37:07 -0300
+Date:   Thu, 8 Sep 2022 09:37:07 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Eric Auger <eric.auger@redhat.com>
+Cc:     Yi Liu <yi.l.liu@intel.com>, Kevin Tian <kevin.tian@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2 15/15] vfio: Add struct device to vfio_device
+Message-ID: <Yxnh87ZIS2JwvN7D@ziepe.ca>
+References: <20220901143747.32858-1-kevin.tian@intel.com>
+ <20220901143747.32858-16-kevin.tian@intel.com>
+ <50d82b01-86a3-e6a3-06f7-7f98e60131eb@redhat.com>
+ <546463b8-54fa-2071-6a9a-e4087eb8bb2c@intel.com>
+ <4c9350cd-c2ce-dc84-9a29-210907d2a2a2@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4c9350cd-c2ce-dc84-9a29-210907d2a2a2@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,26 +111,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'in'.
+On Thu, Sep 08, 2022 at 11:39:07AM +0200, Eric Auger wrote:
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >> I am not totally clear about remaining 'struct device *dev;' in
+> >> vfio_device struct. I see it used in some places. Is it supposed to
+> >> disappear at some point?
+> >
+> > no, Eric. *dev will not disappear, it stores the dev pointet passed in by
+> > caller of vfio_init_device().
+> 
+> yeah I see but you have device->device.parent = device->dev;
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-index bdd48f87d098..fab710910997 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-@@ -1188,7 +1188,7 @@ static bool vop_crtc_mode_fixup(struct drm_crtc *crtc,
- 	 *
- 	 * Key points:
- 	 *
--	 * - DRM works in in kHz.
-+	 * - DRM works in kHz.
- 	 * - Clock framework works in Hz.
- 	 * - Rockchip's clock driver picks the clock rate that is the
- 	 *   same _OR LOWER_ than the one requested.
--- 
-2.36.1
+IIRC we have a number of these redundancies now, often the drivers
+store another copy of the dev too.
 
+A significant use of dev is for printing things, what should be done
+here is to create a subsystem wide vfio_warn/etc that takes in the
+vfio_device, and then print properly from there. Now that we have a
+struct device all the prints should also include the VFIO struct
+device name, and then the PCI device perhaps in brackets.
+
+Jason

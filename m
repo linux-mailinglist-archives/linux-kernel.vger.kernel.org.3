@@ -2,192 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F163F5B158A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6D55B158F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiIHHVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S231241AbiIHHZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiIHHVI (ORCPT
+        with ESMTP id S229656AbiIHHZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:21:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8092A7221;
-        Thu,  8 Sep 2022 00:21:06 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNVnN3F5LzmVJn;
-        Thu,  8 Sep 2022 15:17:28 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 15:21:04 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 15:21:04 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-CC:     Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] sched: Move numa_balancing sysctls to its own file
-Date:   Thu, 8 Sep 2022 15:25:31 +0800
-Message-ID: <20220908072531.87916-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Thu, 8 Sep 2022 03:25:48 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548F180F5F;
+        Thu,  8 Sep 2022 00:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662621947; x=1694157947;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pKsF5uQWUHQU4hDEQ8RNMaO1sn4gtBd+JNvACFAQ7uA=;
+  b=lPl3oNyRd6seIMERKBDUg3GXYm22MRLPq/9PHtX0GJ98bUl1mcalwBkB
+   Fs+YWIkRAz+oGJV6xMHXrzo4HbAKWdR7q1/5zLC6WNEqVR2h+O50s9AlA
+   l6bAXtQK907nvKeHo/VCU/Hp5X4ztO8oz8mM62QvHKfjgwz7DhgznASTV
+   HQ1JE+/QX5gvg99NybN4bFhBzgIDcJu2TBg1tIcWKkK8SPnkBzpgmyOSV
+   YNGlZ6BuYUnDm98YGAzVW94E3BYISbMW1LNnt/wRiXWQRV71lvgeYfwPT
+   O5PEI0j4V+ppvKDyB5Lk2hFgRGfFpqOppGOLNgsGck0AtqrJUUAJJYTy0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="284112570"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="284112570"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 00:25:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="644960899"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.172.13]) ([10.249.172.13])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 00:25:43 -0700
+Message-ID: <3b78a0c7-de8f-fe44-ec58-bcc4e231191b@intel.com>
+Date:   Thu, 8 Sep 2022 15:25:40 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.13.0
+Subject: Re: [RFC PATCH 0/2] KVM: VMX: Fix VM entry failure on
+ PT_MODE_HOST_GUEST while host is using PT
+Content-Language: en-US
+To:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+References: <20220825085625.867763-1-xiaoyao.li@intel.com>
+ <CY5PR11MB6365897E8E6D0B590A298FA0DC769@CY5PR11MB6365.namprd11.prod.outlook.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <CY5PR11MB6365897E8E6D0B590A298FA0DC769@CY5PR11MB6365.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sysctl_numa_balancing_promote_rate_limit and sysctl_numa_balancing
-are part of sched, move them to its own file.
+On 8/29/2022 3:49 PM, Wang, Wei W wrote:
+> On Thursday, August 25, 2022 4:56 PM, Xiaoyao Li wrote:
+>> There is one bug in KVM that can hit vm-entry failure 100% on platform
+>> supporting PT_MODE_HOST_GUEST mode following below steps:
+>>
+>>    1. #modprobe -r kvm_intel
+>>    2. #modprobe kvm_intel pt_mode=1
+>>    3. start a VM with QEMU
+>>    4. on host: #perf record -e intel_pt//
+>>
+>> The vm-entry failure happens because it violates the requirement stated in
+>> Intel SDM 26.2.1.1 VM-Execution Control Fields
+>>
+>>    If the logical processor is operating with Intel PT enabled (if
+>>    IA32_RTIT_CTL.TraceEn = 1) at the time of VM entry, the "load
+>>    IA32_RTIT_CTL" VM-entry control must be 0.
+>>
+>> On PT_MODE_HOST_GUEST node, PT_MODE_HOST_GUEST is always set. Thus
+>> KVM needs to ensure IA32_RTIT_CTL.TraceEn is 0 before VM-entry. Currently
+>> KVM manually WRMSR(IA32_RTIT_CTL) to clear TraceEn bit. However, it
+>> doesn't work everytime since there is a posibility that IA32_RTIT_CTL.TraceEn
+>> is re-enabled in PT PMI handler before vm-entry. This series tries to fix the
+>> issue by exposing two interfaces from Intel PT driver for the purose to stop and
+>> resume Intel PT on host. It prevents PT PMI handler from re-enabling PT. By the
+>> way, it also fixes another issue that PT PMI touches PT MSRs whihc leads to
+>> what KVM stores for host bemomes stale.
+> 
+> I'm thinking about another approach to fixing it. I think we need to have the
+> running host pt event disabled when we switch to guest and don't expect to
+> receive the host pt interrupt at this point. Also, the host pt context can be
+> save/restored by host perf core (instead of KVM) when we disable/enable
+> the event.
+> 
+> diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+> index 82ef87e9a897..1d3e03ecaf6a 100644
+> --- a/arch/x86/events/intel/pt.c
+> +++ b/arch/x86/events/intel/pt.c
+> @@ -1575,6 +1575,7 @@ static void pt_event_start(struct perf_event *event, int mode)
+> 
+>          pt_config_buffer(buf);
+>          pt_config(event);
+> +       pt->event = event;
+> 
+>          return;
+> 
+> @@ -1600,6 +1601,7 @@ static void pt_event_stop(struct perf_event *event, int mode)
+>                  return;
+> 
+>          event->hw.state = PERF_HES_STOPPED;
+> +       pt->event = NULL;
+> 
+>          if (mode & PERF_EF_UPDATE) {
+>                  struct pt_buffer *buf = perf_get_aux(&pt->handle);
+> @@ -1624,6 +1626,15 @@ static void pt_event_stop(struct perf_event *event, int mode)
+>          }
+>   }
+> 
+> +
+> +struct perf_event *pt_get_curr_event(void)
+> +{
+> +       struct pt *pt = this_cpu_ptr(&pt_ctx);
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- include/linux/sched/sysctl.h |  4 ----
- kernel/sched/core.c          | 13 ++++++++++++-
- kernel/sched/fair.c          | 18 +++++++++++++++---
- kernel/sysctl.c              | 19 -------------------
- 4 files changed, 27 insertions(+), 27 deletions(-)
+Wei,
 
-diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-index 303ee7dd0c7e..9431b7e00047 100644
---- a/include/linux/sched/sysctl.h
-+++ b/include/linux/sched/sysctl.h
-@@ -27,12 +27,8 @@ enum sched_tunable_scaling {
- 
- #ifdef CONFIG_NUMA_BALANCING
- extern int sysctl_numa_balancing_mode;
--extern unsigned int sysctl_numa_balancing_promote_rate_limit;
- #else
- #define sysctl_numa_balancing_mode	0
- #endif
- 
--int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
--		size_t *lenp, loff_t *ppos);
--
- #endif /* _LINUX_SCHED_SYSCTL_H */
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b60422300af6..677225b71538 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4407,7 +4407,7 @@ static void reset_memory_tiering(void)
- 	}
- }
- 
--int sysctl_numa_balancing(struct ctl_table *table, int write,
-+static int sysctl_numa_balancing(struct ctl_table *table, int write,
- 			  void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	struct ctl_table t;
-@@ -4534,6 +4534,17 @@ static struct ctl_table sched_core_sysctls[] = {
- 		.proc_handler   = sysctl_sched_uclamp_handler,
- 	},
- #endif /* CONFIG_UCLAMP_TASK */
-+#ifdef CONFIG_NUMA_BALANCING
-+	{
-+		.procname	= "numa_balancing",
-+		.data		= NULL, /* filled in by handler */
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= sysctl_numa_balancing,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_FOUR,
-+	},
-+#endif /* CONFIG_NUMA_BALANCING */
- 	{}
- };
- static int __init sched_core_sysctl_init(void)
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index cf3300b1a1d2..ff37620bdfbe 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -178,6 +178,11 @@ int __weak arch_asym_cpu_priority(int cpu)
- static unsigned int sysctl_sched_cfs_bandwidth_slice		= 5000UL;
- #endif
- 
-+#ifdef CONFIG_NUMA_BALANCING
-+/* Restrict the NUMA promotion throughput (MB/s) for each target node. */
-+static unsigned int sysctl_numa_balancing_promote_rate_limit = 65536;
-+#endif
-+
- #ifdef CONFIG_SYSCTL
- static struct ctl_table sched_fair_sysctls[] = {
- 	{
-@@ -197,6 +202,16 @@ static struct ctl_table sched_fair_sysctls[] = {
- 		.extra1         = SYSCTL_ONE,
- 	},
- #endif
-+#ifdef CONFIG_NUMA_BALANCING
-+	{
-+		.procname	= "numa_balancing_promote_rate_limit_MBps",
-+		.data		= &sysctl_numa_balancing_promote_rate_limit,
-+		.maxlen		= sizeof(unsigned int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+	},
-+#endif /* CONFIG_NUMA_BALANCING */
- 	{}
- };
- 
-@@ -1094,9 +1109,6 @@ unsigned int sysctl_numa_balancing_scan_delay = 1000;
- /* The page with hint page fault latency < threshold in ms is considered hot */
- unsigned int sysctl_numa_balancing_hot_threshold = MSEC_PER_SEC;
- 
--/* Restrict the NUMA promotion throughput (MB/s) for each target node. */
--unsigned int sysctl_numa_balancing_promote_rate_limit = 65536;
--
- struct numa_group {
- 	refcount_t refcount;
- 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index f10a610aa834..2ea3bf603b89 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1631,25 +1631,6 @@ int proc_do_static_key(struct ctl_table *table, int write,
- }
- 
- static struct ctl_table kern_table[] = {
--#ifdef CONFIG_NUMA_BALANCING
--	{
--		.procname	= "numa_balancing",
--		.data		= NULL, /* filled in by handler */
--		.maxlen		= sizeof(unsigned int),
--		.mode		= 0644,
--		.proc_handler	= sysctl_numa_balancing,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_FOUR,
--	},
--	{
--		.procname	= "numa_balancing_promote_rate_limit_MBps",
--		.data		= &sysctl_numa_balancing_promote_rate_limit,
--		.maxlen		= sizeof(unsigned int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--	},
--#endif /* CONFIG_NUMA_BALANCING */
- 	{
- 		.procname	= "panic",
- 		.data		= &panic_timeout,
--- 
-2.35.3
+I'm not sure if we can use pt->handle.event instead or not.
+
+> +       return pt->event;
+> +}
+> +EXPORT_SYMBOL_GPL(pt_get_curr_event);
+> +
+>   static long pt_event_snapshot_aux(struct perf_event *event,
+>                                    struct perf_output_handle *handle,
+>                                    unsigned long size)
+> diff --git a/arch/x86/events/intel/pt.h b/arch/x86/events/intel/pt.h
+> index 96906a62aacd..d46a85bb06bb 100644
+> --- a/arch/x86/events/intel/pt.h
+> +++ b/arch/x86/events/intel/pt.h
+> @@ -121,6 +121,7 @@ struct pt_filters {
+>    * @output_mask:       cached RTIT_OUTPUT_MASK MSR value
+>    */
+>   struct pt {
+> +       struct perf_event       *event;
+>          struct perf_output_handle handle;
+>          struct pt_filters       filters;
+>          int                     handle_nmi;
+> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+> index f6fc8dd51ef4..be8dd24922a7 100644
+> --- a/arch/x86/include/asm/perf_event.h
+> +++ b/arch/x86/include/asm/perf_event.h
+> @@ -553,11 +553,14 @@ static inline int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+> 
+>   #ifdef CONFIG_CPU_SUP_INTEL
+>    extern void intel_pt_handle_vmx(int on);
+> + extern struct perf_event *pt_get_curr_event(void);
+>   #else
+>   static inline void intel_pt_handle_vmx(int on)
+>   {
+> 
+> +
+>   }
+> +struct perf_event *pt_get_curr_event(void) { }
+>   #endif
+> 
+
 

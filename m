@@ -2,246 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E7C5B2514
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062CA5B250C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiIHRoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S231468AbiIHRmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiIHRn1 (ORCPT
+        with ESMTP id S232376AbiIHRmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:43:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6AA2D1C5;
-        Thu,  8 Sep 2022 10:41:11 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288GLMLY004064;
-        Thu, 8 Sep 2022 17:40:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=SmSTj2/HdzqYj70y36yqizzCyVn5KVKz4ABjNdpPPK0=;
- b=DJsJt65OXxR4koGfezS0IQDxlrW6NwIjYRD1MWGWzM7VBc8wCBiTw+6zy1LuToucxk3D
- IkL8zu+ndC0KiXPdaP+e+wmg+OuzTsHnGddCYvf+jimNLL4mJBF2J4oP5BG2YZ1vmQ5w
- Eii7q8rAIurNYSd9r9ieYQ1KnBVchrEZhctyh5WOGoC6BEI8Xo6MD0PzhJJB6BbcYlZP
- PEbVmwUiGj5Jk5LHJpDwWha48tuOU/ajTfmb86JyIvAV4vieQNh/7ps60lIFvEZ2tEt7
- 1nOtLn1Z4KCOnOtHppBXU9aIvGsrI/94+Q9LizcUAKpVSjAsxnPExFtkVNImLBdN1MOO 2Q== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jfku6ah5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 17:40:30 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 288HKOcP031828;
-        Thu, 8 Sep 2022 17:40:28 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jbxj8xwj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 17:40:28 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 288HePO121692888
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 8 Sep 2022 17:40:25 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1210F5204F;
-        Thu,  8 Sep 2022 17:40:25 +0000 (GMT)
-Received: from tarunpc.ibmuc.com (unknown [9.43.79.171])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8C4825204E;
-        Thu,  8 Sep 2022 17:40:22 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     ltp@lists.linux.it, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, aneesh.kumar@linux.ibm.com,
-        Tarun Sahu <tsahu@linux.ibm.com>
-Subject: [RFC PATCH] Hugetlb: Migrating hugetlb tests from libhugetlbfs
-Date:   Thu,  8 Sep 2022 23:09:47 +0530
-Message-Id: <20220908173947.17956-1-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 8 Sep 2022 13:42:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDC6F22E3;
+        Thu,  8 Sep 2022 10:40:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 315E8B8219F;
+        Thu,  8 Sep 2022 17:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF787C433D6;
+        Thu,  8 Sep 2022 17:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662658815;
+        bh=lOOhDMJqAJ4IWViD/vMxAvwDHCCQ4KSk3LDLvJPm2b8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=jOjgqtB8wXqzhfDI4J+C/903aXH0rQaTb7qR5v89q/oUZzCQQO6ekfmeefPsnCQk4
+         RnO7TCnkT3eE/qMb7GnFEjmQHCCy70T2gWRHLb1+qsgKWLOB1zNiI9LqA0O9M/LHTb
+         TotEhE768MXAJqYpU5jYDz1lCKtOnuKq+tzKSlzlW0gouCHWcrpLCC4I7vZNM26k6y
+         5IZqUpWB6q2nfS6ZoK31qn8JMnEqiXBC+Bk7AgzcifSL4lr2QlltiMcQxWifvj7Iaw
+         LZx96/KNZs18aoGi3MMb8wSgWM5WtSggbiLe1/rkhJb4Qioq6nCWk9qjCYRVfrmxqG
+         okXyb82PbMNyQ==
+Message-ID: <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+From:   Jeff Layton <jlayton@kernel.org>
+To:     "J. Bruce Fields" <bfields@fieldses.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Date:   Thu, 08 Sep 2022 13:40:11 -0400
+In-Reply-To: <20220908155605.GD8951@fieldses.org>
+References: <20220907111606.18831-1-jlayton@kernel.org>
+         <166255065346.30452.6121947305075322036@noble.neil.brown.name>
+         <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+         <20220907125211.GB17729@fieldses.org>
+         <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+         <20220907135153.qvgibskeuz427abw@quack3>
+         <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+         <20220908083326.3xsanzk7hy3ff4qs@quack3> <YxoIjV50xXKiLdL9@mit.edu>
+         <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+         <20220908155605.GD8951@fieldses.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: S5Nx9Kq0tV_sLB5rl_gKVTuSIszC-y5a
-X-Proofpoint-GUID: S5Nx9Kq0tV_sLB5rl_gKVTuSIszC-y5a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 malwarescore=0 spamscore=0 clxscore=1011 impostorscore=0
- bulkscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=904
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209080062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Libhugetlbfs is not being maintained actively, and some distro is
-dropping support for it. There are some tests that are good for testing
-hugetlb functionality in kernel, which can be migrated to either kernel
-kselftests or LTP.
-I am submitting this patch to get comments from community on the
-following
-    1. The test framework in ltp is most suitable for the tests that are
-    in libhugetlbfs/tests/ which follow similar test framework. And there
-    is already a section for hugetlb specific tests in LTP. So it makes
-    more sense and less effort to migrate the test to LTP. Though I
-    recommend migrating these tests to LTP, I would like to discuss tests
-    should be migrated to LTP or kselftests.
-    2. Libhugetlbfs tests has license GNU Lesser GPL 2.1 or later, while
-    kernel and LTP has license GPL2 or later, so can the test be
-    migrated to kernel/kselftests or LTP.
+On Thu, 2022-09-08 at 11:56 -0400, J. Bruce Fields wrote:
+> On Thu, Sep 08, 2022 at 11:44:33AM -0400, Jeff Layton wrote:
+> > On Thu, 2022-09-08 at 11:21 -0400, Theodore Ts'o wrote:
+> > > On Thu, Sep 08, 2022 at 10:33:26AM +0200, Jan Kara wrote:
+> > > > It boils down to the fact that we don't want to call mark_inode_dir=
+ty()
+> > > > from IOCB_NOWAIT path because for lots of filesystems that means jo=
+urnal
+> > > > operation and there are high chances that may block.
+> > > >=20
+> > > > Presumably we could treat inode dirtying after i_version change sim=
+ilarly
+> > > > to how we handle timestamp updates with lazytime mount option (i.e.=
+, not
+> > > > dirty the inode immediately but only with a delay) but then the tim=
+e window
+> > > > for i_version inconsistencies due to a crash would be much larger.
+> > >=20
+> > > Perhaps this is a radical suggestion, but there seems to be a lot of
+> > > the problems which are due to the concern "what if the file system
+> > > crashes" (and so we need to worry about making sure that any
+> > > increments to i_version MUST be persisted after it is incremented).
+> > >=20
+> > > Well, if we assume that unclean shutdowns are rare, then perhaps we
+> > > shouldn't be optimizing for that case.  So.... what if a file system
+> > > had a counter which got incremented each time its journal is replayed
+> > > representing an unclean shutdown.  That shouldn't happen often, but i=
+f
+> > > it does, there might be any number of i_version updates that may have
+> > > gotten lost.  So in that case, the NFS client should invalidate all o=
+f
+> > > its caches.
+> > >=20
+> > > If the i_version field was large enough, we could just prefix the
+> > > "unclean shutdown counter" with the existing i_version number when it
+> > > is sent over the NFS protocol to the client.  But if that field is to=
+o
+> > > small, and if (as I understand things) NFS just needs to know when
+> > > i_version is different, we could just simply hash the "unclean
+> > > shtudown counter" with the inode's "i_version counter", and let that
+> > > be the version which is sent from the NFS client to the server.
+> > >=20
+> > > If we could do that, then it doesn't become critical that every singl=
+e
+> > > i_version bump has to be persisted to disk, and we could treat it lik=
+e
+> > > a lazytime update; it's guaranteed to updated when we do an clean
+> > > unmount of the file system (and when the file system is frozen), but
+> > > on a crash, there is no guaranteee that all i_version bumps will be
+> > > persisted, but we do have this "unclean shutdown" counter to deal wit=
+h
+> > > that case.
+> > >=20
+> > > Would this make life easier for folks?
+> > >=20
+> > > 						- Ted
+> >=20
+> > Thanks for chiming in, Ted. That's part of the problem, but we're
+> > actually not too worried about that case:
+> >=20
+> > nfsd mixes the ctime in with i_version, so you'd have to crash+clock
+> > jump backward by juuuust enough to allow you to get the i_version and
+> > ctime into a state it was before the crash, but with different data.
+> > We're assuming that that is difficult to achieve in practice.
+>=20
+> But a change in the clock could still cause our returned change
+> attribute to go backwards (even without a crash).  Not sure how to
+> evaluate the risk, but it was enough that Trond hasn't been comfortable
+> with nfsd advertising NFS4_CHANGE_TYPE_IS_MONOTONIC.
+>=20
+> Ted's idea would be sufficient to allow us to turn that flag on, which I
+> think allows some client-side optimizations.
+>=20
 
-The below patch is libhugetlbfs/tests/direct.c which has been migrated
-to ltp/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+Good point.
 
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
----
- runtest/hugetlb                               |   2 +
- testcases/kernel/mem/.gitignore               |   1 +
- .../kernel/mem/hugetlb/hugemmap/hugemmap07.c  | 106 ++++++++++++++++++
- 3 files changed, 109 insertions(+)
- create mode 100644 testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+> > The issue with a reboot counter (or similar) is that on an unclean cras=
+h
+> > the NFS client would end up invalidating every inode in the cache, as
+> > all of the i_versions would change. That's probably excessive.
+>=20
+> But if we use the crash counter on write instead of read, we don't
+> invalidate caches unnecessarily.  And I think the monotonicity would
+> still be close enough for our purposes?
+>=20
+> > The bigger issue (at the moment) is atomicity: when we fetch an
+> > i_version, the natural inclination is to associate that with the state
+> > of the inode at some point in time, so we need this to be updated
+> > atomically with certain other attributes of the inode. That's the part
+> > I'm trying to sort through at the moment.
+>=20
+> That may be, but I still suspect the crash counter would help.
+>=20
 
-diff --git a/runtest/hugetlb b/runtest/hugetlb
-index f719217ab..ee02835d3 100644
---- a/runtest/hugetlb
-+++ b/runtest/hugetlb
-@@ -3,6 +3,8 @@ hugemmap02 hugemmap02
- hugemmap04 hugemmap04
- hugemmap05 hugemmap05
- hugemmap06 hugemmap06
-+hugemmap07 hugemmap07
-+
- hugemmap05_1 hugemmap05 -m
- hugemmap05_2 hugemmap05 -s
- hugemmap05_3 hugemmap05 -s -m
-diff --git a/testcases/kernel/mem/.gitignore b/testcases/kernel/mem/.gitignore
-index ff2910533..df5256ec8 100644
---- a/testcases/kernel/mem/.gitignore
-+++ b/testcases/kernel/mem/.gitignore
-@@ -4,6 +4,7 @@
- /hugetlb/hugemmap/hugemmap04
- /hugetlb/hugemmap/hugemmap05
- /hugetlb/hugemmap/hugemmap06
-+/hugetlb/hugemmap/hugemmap07
- /hugetlb/hugeshmat/hugeshmat01
- /hugetlb/hugeshmat/hugeshmat02
- /hugetlb/hugeshmat/hugeshmat03
-diff --git a/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c b/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
-new file mode 100644
-index 000000000..798735ed0
---- /dev/null
-+++ b/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
-@@ -0,0 +1,106 @@
-+/*
-+ * License/Copyright Details
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <sys/mount.h>
-+#include <limits.h>
-+#include <sys/param.h>
-+#include <sys/types.h>
-+
-+#include "tst_test.h"
-+
-+#define P0 "ffffffff"
-+#define IOSZ 4096
-+char buf[IOSZ] __attribute__((aligned(IOSZ)));
-+static int  fildes = -1, nfildes = -1;
-+static char TEMPFILE[MAXPATHLEN];
-+static char NTEMPFILE[MAXPATHLEN];
-+
-+void test_directio(void)
-+{
-+	long hpage_size;
-+	void *p;
-+	int ret;
-+
-+	hpage_size = SAFE_READ_MEMINFO("Hugepagesize:");
-+
-+	fildes = SAFE_OPEN(TEMPFILE, O_RDWR | O_CREAT, 0600);
-+	nfildes = SAFE_OPEN(NTEMPFILE, O_CREAT|O_EXCL|O_RDWR|O_DIRECT, 0600);
-+
-+	p = mmap(NULL, hpage_size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fildes, 0);
-+	if (p == MAP_FAILED)
-+		tst_brk(TFAIL | TERRNO, "mmap() Failed on %s", TEMPFILE);
-+
-+	memcpy(p, P0, 8);
-+
-+	/* Direct write from huge page */
-+	ret = write(nfildes, p, IOSZ);
-+	if (ret == -1)
-+		tst_brk(TFAIL | TERRNO, "Direct-IO write from huge page");
-+	if (ret != IOSZ)
-+		tst_brk(TFAIL, "Short direct-IO write from huge page");
-+	if (lseek(nfildes, 0, SEEK_SET) == -1)
-+		tst_brk(TFAIL | TERRNO, "lseek");
-+
-+	/* Check for accuracy */
-+	ret = read(nfildes, buf, IOSZ);
-+	if (ret == -1)
-+		tst_brk(TFAIL | TERRNO, "Direct-IO read to normal memory");
-+	if (ret != IOSZ)
-+		tst_brk(TFAIL, "Short direct-IO read to normal memory");
-+	if (memcmp(P0, buf, 8))
-+		tst_brk(TFAIL, "Memory mismatch after Direct-IO write");
-+	if (lseek(nfildes, 0, SEEK_SET) == -1)
-+		tst_brk(TFAIL | TERRNO, "lseek");
-+
-+	/* Direct read to huge page */
-+	memset(p, 0, IOSZ);
-+	ret = read(nfildes, p, IOSZ);
-+	if (ret == -1)
-+		tst_brk(TFAIL | TERRNO, "Direct-IO read to huge page");
-+	if (ret != IOSZ)
-+		tst_brk(TFAIL, "Short direct-IO read to huge page");
-+
-+	/* Check for accuracy */
-+	if (memcmp(p, P0, 8))
-+		tst_brk(TFAIL, "Memory mismatch after Direct-IO read");
-+	tst_res(TPASS, "Successfully tested Hugepage Direct I/O");
-+}
-+
-+void setup(void)
-+{
-+	if (tst_hugepages == 0)
-+		tst_brk(TCONF, "Not enough hugepages for testing.");
-+
-+	if (!Hopt)
-+		Hopt = tst_get_tmpdir();
-+	SAFE_MOUNT("none", Hopt, "hugetlbfs", 0, NULL);
-+
-+	snprintf(TEMPFILE, sizeof(TEMPFILE), "%s/mmapfile%d", Hopt, getpid());
-+	snprintf(NTEMPFILE, sizeof(NTEMPFILE), "%s/nmmapfile%d", "/home/", getpid());
-+}
-+
-+void cleanup(void)
-+{
-+	close(fildes);
-+	close(nfildes);
-+	remove(TEMPFILE);
-+	remove(NTEMPFILE);
-+	umount2(Hopt, MNT_DETACH);
-+}
-+
-+static struct tst_test test = {
-+	.needs_root = 1,
-+	.needs_tmpdir = 1,
-+	.options = (struct tst_option[]) {
-+		{"H:", &Hopt,   "Location of hugetlbfs, i.e.  -H /var/hugetlbfs"},
-+		{"s:", &nr_opt, "Set the number of the been allocated hugepages"},
-+		{}
-+	},
-+	.setup = setup,
-+	.cleanup = cleanup,
-+	.test_all = test_directio,
-+	.hugepages = {2, TST_REQUEST},
-+};
--- 
-2.31.1
+Yeah, ok. That does make some sense. So we would mix this into the
+i_version instead of the ctime when it was available. Preferably, we'd
+mix that in when we store the i_version rather than adding it afterward.
 
+Ted, how would we access this? Maybe we could just add a new (generic)
+super_block field for this that ext4 (and other filesystems) could
+populate at mount time?
+--=20
+Jeff Layton <jlayton@kernel.org>

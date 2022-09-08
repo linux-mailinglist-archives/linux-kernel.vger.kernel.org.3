@@ -2,120 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2175B24AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 856EB5B24B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiIHReS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S231733AbiIHRf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiIHReO (ORCPT
+        with ESMTP id S231124AbiIHRfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:34:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA89BC58C3;
-        Thu,  8 Sep 2022 10:34:13 -0700 (PDT)
+        Thu, 8 Sep 2022 13:35:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07485FE3
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:35:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662658453; x=1694194453;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=yPoPiu4s5AIvWYRtd6XRgDWLB41yZsUhqTPTHKz4Q3c=;
-  b=eS3FwQVzLLKg3O67WOwhilfi72KLy1lY/LqABwz1kdblZii5iG4FBIXv
-   /wIyAu4Wh2UuF918bctkB/Tcvx2zS+VbQ5bGYqiDi5SoILhYwmy2/lRau
-   aw918TQ2vo0aJqZREtayrb8g7JPcMi1HLPAowTTP0CtL/dV+fBOmes7vG
-   BVdI4OJyemvRKAm2X3zwL3kbfn4fEmFTihf/ZIXtuJ1nMOEJzqENN9XxQ
-   +CpqIe0vvgoTWsJPBrkNL1R5dGlreewGljci0CQF977ParNRQLAW5g26k
-   wvTSHcTB9zjxksVoLnuYWAjCsorWVCkTL4KC2lMoNB9xjEttV7muoNuJq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298611243"
+  t=1662658524; x=1694194524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YNFerqpJPpOJPGDi6l26UsPT7NdSVmzfo2zjn07INMQ=;
+  b=c5XvHLuA2+oBqOcwrIGc1zTrBBp0YPmoHkhpB8X1S2wWDM8Z/CHNjUB+
+   5MaB6mX34MCL8gGQNVOHiJj269h3ZZGyE8h7/osnu9BHpH8fJd+LwYS9F
+   FWzNy25gy1QmKMy1gm1MCNaBpdoVyvjC0FoirclTaXf4v+xpETr0gOGk9
+   1RPUUVt7Vdzy7KEtIKFAyWJsb6UwQVoHwnAh+m7jzQpQsPTwa9Q+f7y/m
+   USEGkLwwmNolGRplF/NNxeW0e/kuwoRbuXnNZtJm6emw08saTYLTFQpeX
+   Se1xDdR2IjCcv6Oy/6xthGK9A8Ui9vR4/CKh0ojieZha5sPJ6Pt/Nn6gv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="323472306"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="298611243"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 10:34:13 -0700
+   d="scan'208";a="323472306"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 10:35:24 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="676796260"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 10:34:12 -0700
-Date:   Thu, 8 Sep 2022 10:34:07 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de
-Subject: Re: [PATCH v1 4/5] fpga: dfl: add generic support for MSIX
- interrupts
-In-Reply-To: <YxnMLI17XvjN74DW@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2209081031450.61321@rhweight-WRK1>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com> <20220906190426.3139760-5-matthew.gerlach@linux.intel.com> <YxeqTdny7Nu7LzZo@smile.fi.intel.com> <alpine.DEB.2.22.394.2209071433320.3336870@rhweight-WRK1>
- <YxnMLI17XvjN74DW@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+   d="scan'208";a="704094746"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Sep 2022 10:35:22 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWLQw-0000Bh-0o;
+        Thu, 08 Sep 2022 17:35:22 +0000
+Date:   Fri, 9 Sep 2022 01:34:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Matteo Croce <mcroce@microsoft.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: [esmil:visionfive 1/42] arch/riscv/lib/string.c:90:7: error:
+ redefinition of '__memcpy'
+Message-ID: <202209090127.x1z9vvlp-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/esmil/linux visionfive
+head:   044c1f5e968de7d30940431fbb90da599074ea1c
+commit: c247f6e6c7ba6abb92177ba2a742f60a3244d6d2 [1/42] riscv: optimized memcpy
+config: riscv-randconfig-r021-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090127.x1z9vvlp-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/c247f6e6c7ba6abb92177ba2a742f60a3244d6d2
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout c247f6e6c7ba6abb92177ba2a742f60a3244d6d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+>> arch/riscv/lib/string.c:90:57: warning: attribute declaration must precede definition [-Wignored-attributes]
+   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+                                                           ^
+   include/linux/compiler_attributes.h:372:56: note: expanded from macro '__weak'
+   #define __weak                          __attribute__((__weak__))
+                                                          ^
+   arch/riscv/lib/string.c:31:7: note: previous definition is here
+   void *__memcpy(void *dest, const void *src, size_t count)
+         ^
+>> arch/riscv/lib/string.c:90:7: error: redefinition of '__memcpy'
+   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
+         ^
+   arch/riscv/include/asm/string.h:25:31: note: expanded from macro 'memcpy'
+   #define memcpy(dst, src, len) __memcpy(dst, src, len)
+                                 ^
+   arch/riscv/lib/string.c:31:7: note: previous definition is here
+   void *__memcpy(void *dest, const void *src, size_t count)
+         ^
+   1 warning and 1 error generated.
 
 
-On Thu, 8 Sep 2022, Andy Shevchenko wrote:
+vim +/__memcpy +90 arch/riscv/lib/string.c
 
-> On Wed, Sep 07, 2022 at 02:37:32PM -0700, matthew.gerlach@linux.intel.com wrote:
->> On Tue, 6 Sep 2022, Andy Shevchenko wrote:
->>> On Tue, Sep 06, 2022 at 12:04:25PM -0700, matthew.gerlach@linux.intel.com wrote:
->
-> ...
->
->>>> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
->>>> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
->>>> +		v = readq(base);
->>>> +		v = FIELD_GET(DFH_VERSION, v);
->>>> +
->>>> +		if (v == 1) {
->>>> +			v =  readq(base + DFHv1_CSR_SIZE_GRP);
->>>
->>> I am already lost what v keeps...
->>>
->>> Perhaps
->>>
->>> 		v = readq(base);
->>> 		switch (FIELD_GET(DFH_VERSION, v)) {
->>> 		case 1:
->>> 			...
->>> 			break;
->>> 		}
->>
->> How about?
->> 		if (FIELD_GET(DFH_VERSION, readq(base)) == 1) {
->> 			...
->> 		}
->
-> This one tends to be expanded in the future, so I would keep it switch case.
->
+    89	
+  > 90	void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
 
-I'm okay with using the switch statement, but how about the following?
-
- 		switch (FIELD_GET(DFH_VERSION, readq(base))) {
-                 case 1:
- 			...
- 			break;
- 		}
-> -- 
-> With Best Regards,
-> Andy Shevchenko
->
->
->
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

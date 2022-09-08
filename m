@@ -2,144 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD6E5B152D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8885B1531
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiIHGw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S230509AbiIHGxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiIHGwS (ORCPT
+        with ESMTP id S230203AbiIHGxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:52:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616F27C1CF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662619930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hsijMxTSad9+etIswpyvNlofc7rOPZg7qkz5qLNTm5U=;
-        b=F4eOawKmGueIBI15767x4ro2+AYpok72RrtznwFdMp51KXA8hkzFy6EyrOGOXrs1Zb9BS9
-        UCfUNxwVFbaBYFqiz1zMJBOl2CnvoNFzaFmaXiikeRJQrBokQ/RT7iQvLyuOYLS9BXVgH3
-        zWwK8OYXgl0N01uaKQg14MqgYoOraQM=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-154-dFUR8R6wOO-VBhJzwcRBdg-1; Thu, 08 Sep 2022 02:52:09 -0400
-X-MC-Unique: dFUR8R6wOO-VBhJzwcRBdg-1
-Received: by mail-pf1-f199.google.com with SMTP id g15-20020aa7874f000000b0053e8b9630c7so1779779pfo.19
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 23:52:09 -0700 (PDT)
+        Thu, 8 Sep 2022 02:53:35 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A796C77B;
+        Wed,  7 Sep 2022 23:53:33 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id h27so12208298qkk.9;
+        Wed, 07 Sep 2022 23:53:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hsijMxTSad9+etIswpyvNlofc7rOPZg7qkz5qLNTm5U=;
-        b=ciuJbclhv8ut28zPwJyYwZCn99bEffBoPnZqyFYLA1+mRslx13FdB46dYUpYPgzDrs
-         wQ4d4nLe+g07WS2gNgUlRGz1DuW+14k8/yjdTrTXvLEJMasvAeVGeb1dz0M1dcYwAMxh
-         eqdyQtR0uIubNx9za3kYb8WO46e6HppSyam73l6GWu8+UycLXYZs7/XDT/P5yjPCp/R+
-         u3x1Q2p75KVOMyo/CWpxrKzxzHhf21sdDLZAXMv6loi6s7m4o8VZb21WTRPtWdtrx3jX
-         jTfEzfOnvxolwYLz2Lv7IorgTPb5OQ/kil83D4s9+YDeDX4Tx+4uyyfpviIz3dDAkwJk
-         VJ8A==
-X-Gm-Message-State: ACgBeo0Wyy0DLExKZqG/ISgGRHWsyH5qy4gTqHZ863JjnKhSVTaaXE3k
-        Or2aIqj1jZG484FjqgUzl5IvBYkEflIQRksGfiCf4rloiXb2yNp9jN+dMRuOwiEveEq6G+MjqpS
-        9sdtjvPPkD7akpihJPnUO0NnFHrhddNiJdInFbXp8
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id l12-20020a170903120c00b00172728a3b24mr7284535plh.61.1662619928448;
-        Wed, 07 Sep 2022 23:52:08 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4HjG9eauKPMtAdqBVzAeY9G0t626mqYn6+lAMqJFuESU6xLOUh649xA+CLbMXfFvNlCtFJSoUmtmssd7c2IT8=
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id
- l12-20020a170903120c00b00172728a3b24mr7284515plh.61.1662619928200; Wed, 07
- Sep 2022 23:52:08 -0700 (PDT)
+        bh=gmy5/+4JSKjjn31BCUCNFwApzR9XPUHVEEwjpPd0TFU=;
+        b=D6u3Hzr+/7aEbAjCLrTckGPDHBJo6R8d9uBPPxVbcpawzXV1aiP+al/j2WFiNnuF6R
+         wm0R3Y/GA8rX9ktPsGDFDO2Lcs3XNA6avLDb4VmUa8JUh0dtH0IRNEp1t+32e7ZgI9CO
+         TC/Z76HqaCQZNho2H6hwOhlFADsmIMRQV6Qz0+OSxHZhmKpnJFWj5WpDOdkUt8gwbO9S
+         5UpnIGztsrClXQp30cKmrAYvqCud8WDExn8uHwxh7GCyNp+JjfIcDtYp5VHi98X05dXe
+         I6uy6l9PQDIVkaPITAgf1PTTqGmcX40NDolmHFSvM/JG4Ybm87woDGbEoJjQ97TFU1Sb
+         1JSw==
+X-Gm-Message-State: ACgBeo3MUvi957vxOqG6byczPNrP6iG3+Xw/KA5pW1jG6qnbeDXjCwax
+        YBnYWxiPrYH9JLtsHuZN2ejh1tn5AXu/9A==
+X-Google-Smtp-Source: AA6agR6BfIS2tTdC/6V6owURSibEQZ/Bm97oiIXHd8UZFgIcCtHy+SVkYTTxgcnnPZZzvluZ0PCwCg==
+X-Received: by 2002:a37:2d05:0:b0:6be:8620:57f with SMTP id t5-20020a372d05000000b006be8620057fmr5123469qkh.688.1662620012282;
+        Wed, 07 Sep 2022 23:53:32 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id t24-20020a37ea18000000b006b95f832aebsm15881888qkj.96.2022.09.07.23.53.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 23:53:31 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id b136so4255111yba.2;
+        Wed, 07 Sep 2022 23:53:31 -0700 (PDT)
+X-Received: by 2002:a25:e64c:0:b0:6a9:89cf:155 with SMTP id
+ d73-20020a25e64c000000b006a989cf0155mr5445388ybh.365.1662620011556; Wed, 07
+ Sep 2022 23:53:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825222420.6833-1-nate@yocom.org> <20220825222420.6833-3-nate@yocom.org>
- <3e48ef8d13337ce1c3ec68baffc612fde4740b0e.camel@hadess.net>
- <Yw0OjoVzKV3QOYah@ghaven-kernel> <661ee8227c96aeba7aae9fff6ac9a73f1d81e765.camel@hadess.net>
- <Yxl/YxSRtV9Hv271@google.com>
-In-Reply-To: <Yxl/YxSRtV9Hv271@google.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 8 Sep 2022 08:51:57 +0200
-Message-ID: <CAO-hwJLYSG=AT0CyputHBWNexV3NtFpvfu=jM2Fp60=3s4wauQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] Input: joystick: xpad: Add ABS_PROFILE axis value
- to uapi
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bastien Nocera <hadess@hadess.net>, Nate Yocom <nate@yocom.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <20220907234345.96798-1-keescook@chromium.org>
+In-Reply-To: <20220907234345.96798-1-keescook@chromium.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 8 Sep 2022 08:53:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXTWgEttXyCggiUjc29zbsJ9OvKJa1WC+4V9RZQCQro7g@mail.gmail.com>
+Message-ID: <CAMuHMdXTWgEttXyCggiUjc29zbsJ9OvKJa1WC+4V9RZQCQro7g@mail.gmail.com>
+Subject: Re: [PATCH] sh: machvec: Use char[] for section boundaries
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Paul Mundt <lethal@linux-sh.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 7:36 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On Thu, Sep 8, 2022 at 1:43 AM Kees Cook <keescook@chromium.org> wrote:
+> As done for other sections, define the extern as a character array,
+> which relaxes many of the compiler-time object size checks, which would
+> otherwise assume it's a single long. Solves the following build error:
 >
-> On Wed, Sep 07, 2022 at 05:41:08PM +0200, Bastien Nocera wrote:
-> > On Mon, 2022-08-29 at 12:07 -0700, Nate Yocom wrote:
-> > > On Sat, Aug 27, 2022 at 12:40:46PM +0200, Bastien Nocera wrote:
-> > > > On Thu, 2022-08-25 at 15:24 -0700, Nate Yocom wrote:
-> > > > > Add an ABS_PROFILE axis for input devices which need it, e.g. X-
-> > > > > Box
-> > > > > Adaptive Controller and X-Box Elite 2.
-> > > > > ---
-> > > > >  include/uapi/linux/input-event-codes.h | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/include/uapi/linux/input-event-codes.h
-> > > > > b/include/uapi/linux/input-event-codes.h
-> > > > > index dff8e7f17074..7ad931a32970 100644
-> > > > > --- a/include/uapi/linux/input-event-codes.h
-> > > > > +++ b/include/uapi/linux/input-event-codes.h
-> > > > > @@ -862,6 +862,7 @@
-> > > > >  #define ABS_TOOL_WIDTH         0x1c
-> > > > >
-> > > > >  #define ABS_VOLUME             0x20
-> > > > > +#define ABS_PROFILE            0x21
-> > > > >
-> > > > >  #define ABS_MISC               0x28
-> > > > >
-> > > >
-> > > >
-> > > > You probably also want to add it to the absolutes array in
-> > > > drivers/hid/hid-debug.c.
-> > >
-> > > doh, roger.
-> > >
-> > > > Again, you might want to wait for confirmation from Dmitry that
-> > > > this is
-> > > > the right way to do this for the profiles.
-> > >
-> > > Makes sense.  Dmitry?
-> >
-> > Dmitry, could you please confirm whether ABS_PROFILE definition is
-> > correct?
+> arch/sh/kernel/machvec.c: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]:  => 105:33
 >
-> Yes, I think this makes sense. Do we have a buy in from userspace folks
-> (Peter H, etc) for this?
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: linux-sh@vger.kernel.org
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Link: https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2209050944290.964530@ramsan.of.borg/
+> Fixes: 9655ad03af2d ("sh: Fixup machvec support.")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-AFAICT, libinput wouldn't use that new axis, simply because it doesn't
-care about game controllers.
-So it all comes down to game users to validate this (and probably only
-android is now the main consumer of these given that SDL and Steam are
-directly using hidraw or libusb to talk to controllers).
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Cheers,
-Benjamin
+Gr{oetje,eeting}s,
 
->
-> I'd like some documentation added to Documentation/input/event-codes.rst
-> and potentially to Documentation/input/gamepad.rst even though profile
-> does not have to be gamepad specific event.
->
-> Thanks.
->
-> --
-> Dmitry
->
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

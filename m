@@ -2,157 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0295B1B0D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7C05B1B11
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiIHLOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
+        id S229548AbiIHLOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiIHLOd (ORCPT
+        with ESMTP id S229911AbiIHLOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:14:33 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A9965D6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:14:30 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id bq23so27155290lfb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=lOTUL/dGX2qPnIqVnwqCm/JY0MdVEu1ffIFeANierVc=;
-        b=NX7So7RqwuHTuhro/7Y2amMeoTl8U7qDm58/rnMgnh0JXl2yypGWS7ZCmEiSoebmOM
-         xsmcTXEoSwGvPogukmTIO1NSa0d0Qc0UFbvjBCy/er+bBz/4GsqvJ5tkGLXlUZANpNku
-         Jtqnszc3V7nGQsxhaLeT8DB1MfcB3kBZq5JtmCxlQDU0Au3qhj3DaZJe41fy4e5HkjY/
-         HoV2MuTSJnBOfx4RYVLvnT361S9krAm2UQC8AGht8Hb2Ba6tkq9LMOPxyjOX813RW5E/
-         5w/16BXUeBpOMLjfpA0qjB1x62w7fQP0R1Jk46nDu1WmI5g5vX0ZYkDMr2NFiGt3qeqi
-         kmyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=lOTUL/dGX2qPnIqVnwqCm/JY0MdVEu1ffIFeANierVc=;
-        b=yLHCYBbDrPqaT0lkz/Nmj0mADuUtAKWhBtSj0jecoh5MqSmu84MEVJXuIVEqKd3diK
-         TtRk34+7uxs3zZ4qB6pzJjRFez8cKHhmmSnpIAvwsjz/ydC4cY3V28tHeN50yn+eD/bH
-         alQ/jkuyJvgEvSkjwYDNr3r6hOkuWSUotv1LZipSf0CmCZFOyko488bTAOnejoig5/QT
-         DJYXu3NH0nrt40RM/DljA6mcl5bBt8HQd9ewpyOVDbRtinJyC7D+lZDVCjzrxK+p0UTz
-         YdiC0yGZN9bHRUfIHDnsH/3x0i8yqKgNeMc7EKGN6ChFl94SYnvTwr+g1o8Sggf22Fk3
-         il0Q==
-X-Gm-Message-State: ACgBeo2OMVm97BJefY2jdfQ+PX31wYxf0GvRIJ0RvYvx3pBnMj2eabi6
-        YgN+EvOlUTY979zAdiYqCK42eg==
-X-Google-Smtp-Source: AA6agR6ebzXGdrPSFf63QuBPnJL4RLwLE7F1HkNbloP41rBlJpnREYtrcdAFYLV3eEsjjIT3cWEs9g==
-X-Received: by 2002:a05:6512:1585:b0:494:9fd0:2ca with SMTP id bp5-20020a056512158500b004949fd002camr2454869lfb.439.1662635668679;
-        Thu, 08 Sep 2022 04:14:28 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056512348800b0048b256bb005sm3007314lfr.49.2022.09.08.04.14.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 04:14:27 -0700 (PDT)
-Message-ID: <2b809e98-85ea-6ad9-e810-106563937ddc@linaro.org>
-Date:   Thu, 8 Sep 2022 13:14:25 +0200
+        Thu, 8 Sep 2022 07:14:45 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ECEBCA7;
+        Thu,  8 Sep 2022 04:14:41 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MNc0q6JS1zHnj4;
+        Thu,  8 Sep 2022 19:12:43 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 19:14:39 +0800
+Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
+ bcm_module_init()
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
+        <edumazet@google.com>, <kuba@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+References: <cover.1662606045.git.william.xuanziyang@huawei.com>
+ <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
+ <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
+ <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
+Date:   Thu, 8 Sep 2022 19:14:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/4] pinctrl: qcom: spmi-gpio: Fix the GPIO strength
- mapping
+In-Reply-To: <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Anjelique Melendez <quic_amelende@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Anirudh Ghayal <quic_aghayal@quicinc.com>
-References: <20220907201528.9351-1-quic_amelende@quicinc.com>
- <20220907201528.9351-3-quic_amelende@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220907201528.9351-3-quic_amelende@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/09/2022 22:15, Anjelique Melendez wrote:
-> From: Anirudh Ghayal <quic_aghayal@quicinc.com>
+> Just another reference which make it clear that the reordering of function calls in your patch is likely not correct:
 > 
-> The SPMI based PMICs have the HIGH and LOW GPIO output
-> strength mappings interchanged, fix them.
+> https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
 > 
-> Keep the mapping same for older SSBI based PMICs.
+> static int __init packet_init(void)
+> {
+>         int rc;
 > 
-> CRs-Fixed: 2246473
-
-What is this tag about?
-
-> Signed-off-by: Anirudh Ghayal <quic_aghayal@quicinc.com>
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> ---
->  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c     | 2 +-
->  drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c     | 4 ++--
->  include/dt-bindings/pinctrl/qcom,pmic-gpio.h | 9 +++++++--
->  3 files changed, 10 insertions(+), 5 deletions(-)
+>         rc = proto_register(&packet_proto, 0);
+>         if (rc)
+>                 goto out;
+>         rc = sock_register(&packet_family_ops);
+>         if (rc)
+>                 goto out_proto;
+>         rc = register_pernet_subsys(&packet_net_ops);
+>         if (rc)
+>                 goto out_sock;
+>         rc = register_netdevice_notifier(&packet_netdev_notifier);
+>         if (rc)
+>                 goto out_pernet;
 > 
-> diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> index cf6b6047de8d..fceccf1ec099 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-> @@ -525,7 +525,7 @@ static int pmic_gpio_config_set(struct pinctrl_dev *pctldev, unsigned int pin,
->  			pad->pullup = arg;
->  			break;
->  		case PMIC_GPIO_CONF_STRENGTH:
-> -			if (arg > PMIC_GPIO_STRENGTH_LOW)
-> +			if (arg > PMIC_GPIO_STRENGTH_HIGH)
->  				return -EINVAL;
->  			pad->strength = arg;
->  			break;
-> diff --git a/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c b/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
-> index 1b41adda8129..0f96d130813b 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
->   * Copyright (c) 2015, Sony Mobile Communications AB.
-> - * Copyright (c) 2013, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2013, 2018 The Linux Foundation. All rights reserved.
->   */
->  
->  #include <linux/module.h>
-> @@ -371,7 +371,7 @@ static int pm8xxx_pin_config_set(struct pinctrl_dev *pctldev,
->  			banks |= BIT(0);
->  			break;
->  		case PM8XXX_QCOM_DRIVE_STRENGH:
-> -			if (arg > PMIC_GPIO_STRENGTH_LOW) {
-> +			if (arg > PM8921_GPIO_STRENGTH_LOW) {
->  				dev_err(pctrl->dev, "invalid drive strength\n");
->  				return -EINVAL;
->  			}
-> diff --git a/include/dt-bindings/pinctrl/qcom,pmic-gpio.h b/include/dt-bindings/pinctrl/qcom,pmic-gpio.h
-> index e5df5ce45a0f..950be952ad3e 100644
-> --- a/include/dt-bindings/pinctrl/qcom,pmic-gpio.h
-> +++ b/include/dt-bindings/pinctrl/qcom,pmic-gpio.h
+>         return 0;
+> 
+> out_pernet:
+>         unregister_pernet_subsys(&packet_net_ops);
+> out_sock:
+>         sock_unregister(PF_PACKET);
+> out_proto:
+>         proto_unregister(&packet_proto);
+> out:
+>         return rc;
+> }
+> 
 
-You cannot mix bindings with driver. This is an ABI break.
-> @@ -12,9 +12,14 @@
->  #define PMIC_GPIO_PULL_UP_1P5_30	3
->  
->  #define PMIC_GPIO_STRENGTH_NO		0
-> -#define PMIC_GPIO_STRENGTH_HIGH		1
-> +#define PMIC_GPIO_STRENGTH_LOW		1
->  #define PMIC_GPIO_STRENGTH_MED		2
-> -#define PMIC_GPIO_STRENGTH_LOW		3
-> +#define PMIC_GPIO_STRENGTH_HIGH		3
+I had a simple test with can_raw. kernel modification as following:
 
-Didn't you just break all DTSes in the world?
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -118,6 +118,8 @@ static int can_create(struct net *net, struct socket *sock, int protocol,
+        const struct can_proto *cp;
+        int err = 0;
 
-Best regards,
-Krzysztof
++       printk("%s: protocol: %d\n", __func__, protocol);
++
+        sock->state = SS_UNCONNECTED;
+
+        if (protocol < 0 || protocol >= CAN_NPROTO)
+diff --git a/net/can/raw.c b/net/can/raw.c
+index 5dca1e9e44cf..6052fd0cc7b2 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -943,6 +943,9 @@ static __init int raw_module_init(void)
+        pr_info("can: raw protocol\n");
+
+        err = can_proto_register(&raw_can_proto);
++       printk("%s: can_proto_register done\n", __func__);
++       msleep(5000); // 5s
++       printk("%s: to register_netdevice_notifier\n", __func__);
+        if (err < 0)
+                pr_err("can: registration of raw protocol failed\n");
+        else
+
+I added 5 seconds delay after can_proto_register() and some debugs.
+Testcase codes just try to create a CAN_RAW socket in user space as following:
+
+int main(int argc, char **argv)
+{
+        int s;
+
+        s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+        if (s < 0) {
+                perror("socket");
+                return 0;
+        }
+        close(s);
+        return 0;
+}
+
+Execute 'modprobe can_raw' and the testcase we can get message as following:
+
+[  109.312767] can: raw protocol
+[  109.312772] raw_module_init: can_proto_register done
+[  111.296178] can_create: protocol: 1
+[  114.809141] raw_module_init: to register_netdevice_notifier
+
+It proved that it can create CAN_RAW socket and process socket once can_proto_register() successfully.
+CAN_BCM is the same.
+
+In the vast majority of cases, creating protocol socket and operating it are after protocol module initialization.
+The scenario that I pointed in my patch is a low probability.
+
+af_packet.c and af_key.c do like that doesn't mean it's very correct. I think so.
+
+Thank you for your prompt reply.
+
+> 
+> 
+> On 08.09.22 09:10, Oliver Hartkopp wrote:
+>>
+>>
+>> On 08.09.22 05:04, Ziyang Xuan wrote:
+>>> Now, register_netdevice_notifier() and register_pernet_subsys() are both
+>>> after can_proto_register(). It can create CAN_BCM socket and process socket
+>>> once can_proto_register() successfully, so it is possible missing notifier
+>>> event or proc node creation because notifier or bcm proc directory is not
+>>> registered or created yet. Although this is a low probability scenario, it
+>>> is not impossible.
+>>>
+>>> Move register_pernet_subsys() and register_netdevice_notifier() to the
+>>> front of can_proto_register(). In addition, register_pernet_subsys() and
+>>> register_netdevice_notifier() may fail, check their results are necessary.
+>>>
+>>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+>>> ---
+>>>   net/can/bcm.c | 18 +++++++++++++++---
+>>>   1 file changed, 15 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/net/can/bcm.c b/net/can/bcm.c
+>>> index e60161bec850..e2783156bfd1 100644
+>>> --- a/net/can/bcm.c
+>>> +++ b/net/can/bcm.c
+>>> @@ -1744,15 +1744,27 @@ static int __init bcm_module_init(void)
+>>>       pr_info("can: broadcast manager protocol\n");
+>>> +    err = register_pernet_subsys(&canbcm_pernet_ops);
+>>> +    if (err)
+>>> +        return err;
+>>
+>> Analogue to your patch for the CAN_RAW socket here (which has been applied to can-next right now) ...
+>>
+>> https://lore.kernel.org/linux-can/7af9401f0d2d9fed36c1667b5ac9b8df8f8b87ee.1661584485.git.william.xuanziyang@huawei.com/T/#u
+>>
+>> ... I'm not sure whether this is the right sequence to acquire the different resources here.
+>>
+>> E.g. in ipsec_pfkey_init() in af_key.c
+>>
+>> https://elixir.bootlin.com/linux/v5.19.7/source/net/key/af_key.c#L3887
+>>
+>> proto_register() is executed before register_pernet_subsys()
+>>
+>> Which seems to be more natural to me.
+>>
+>> Best regards,
+>> Oliver
+>>
+>>> +
+>>> +    err = register_netdevice_notifier(&canbcm_notifier);
+>>> +    if (err)
+>>> +        goto register_notifier_failed;
+>>> +
+>>>       err = can_proto_register(&bcm_can_proto);
+>>>       if (err < 0) {
+>>>           printk(KERN_ERR "can: registration of bcm protocol failed\n");
+>>> -        return err;
+>>> +        goto register_proto_failed;
+>>>       }
+>>> -    register_pernet_subsys(&canbcm_pernet_ops);
+>>> -    register_netdevice_notifier(&canbcm_notifier);
+>>>       return 0;
+>>> +
+>>> +register_proto_failed:
+>>> +    unregister_netdevice_notifier(&canbcm_notifier);
+>>> +register_notifier_failed:
+>>> +    unregister_pernet_subsys(&canbcm_pernet_ops);
+>>> +    return err;
+>>>   }
+>>>   static void __exit bcm_module_exit(void)
+> .

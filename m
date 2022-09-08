@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1305B1FBE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B06D5B1FC2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiIHN4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S232129AbiIHN4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiIHNz6 (ORCPT
+        with ESMTP id S232079AbiIHN4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:55:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57462A3D61;
-        Thu,  8 Sep 2022 06:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Lr/PQpeByMLLN+ILQwpeyfV6Da7XXJFl68gYJENbuhA=; b=WaIQZNhzo4T0/dmF2oe0ILT0HB
-        CMkPKTAxWhcnd+P/yjg6F/XIDQOm3O0bDRDNkZMgX8RfD7lqJqsHfceFPCWmQhtBABiQvLndRpJhb
-        JTSIV/pudRsBHWkWiD+TNDcxPAId5Ncnuqd/l0tyv4l3uqp5V/2O/0xaVbeslLx2eXx4tYKvSUQ1e
-        igqXW4oRiY3Upcx3iBJCHG7uj9WAUQw7s1qbip9HcpKuj/1CRq5B3azRsvJpAEKPHSGe1BOGqAxKu
-        wXNHgvYoeo/R8G3xOb83I46mByV8wQ4vWzWRituBIhHhkV3C9ZAX1x3JoNtLq0QXZxBfc6mtAru7D
-        hCJtBsJA==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oWI0U-004E9Q-Pp; Thu, 08 Sep 2022 13:55:50 +0000
-Message-ID: <530783de-fc1b-bfc3-1027-bcec919ac3ab@infradead.org>
-Date:   Thu, 8 Sep 2022 06:55:50 -0700
+        Thu, 8 Sep 2022 09:56:42 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2A1F8255
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 06:56:36 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r18so11007467eja.11
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 06:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=oU7r9URdkHR4hFtjwb+DGbO5ThpZ489lVmOF+LZfRK0=;
+        b=UQlzr6tCetqVbCOOX2ttQ/neOUnakbzGJShT7CCa07IJuqxjOzl+EOWl/kv99025Iy
+         rCDQcVk1pCFItNZQ/tvHphz+S7cmtNw9x42goeylzffmomGRsueAsM7xcL8I3cfWC/qF
+         KFfnufPnVdlKSc22AbRxrP5tMpvvRvvTo+BR7MBP2Sqkf/1IFL8fMcKO/hSe+W6+tlNR
+         SgbSCHx09n1Y8nXPKoM4arIoWokszvDSY94Pjn4G38V08HlvuJzx6+lHIeUVbqekZd1m
+         FF5F/dlhvn8S82lH7Y00yvifqIo+ANWsQ466ROvddquwTgi1TrDwIgKG2jZtyzlNqMtf
+         mY1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=oU7r9URdkHR4hFtjwb+DGbO5ThpZ489lVmOF+LZfRK0=;
+        b=tKGdtu13lr684H4jEniJbTarg8rMBmK6DcaplVahdhnSk18Gzy8jPvB0hSn2U/RxQB
+         AaPtT6ljVJksonxEmeEgZgzVJX9shIlTvLZe7d2g2c8JZux8yR1P7nUPI43aSBxCVnGX
+         UHkiFCtvOwgiOfJvGSD7Y+nds5WAs7TN2FJtyFCFD0KfA2yVQM+rwqT0aD1EliG9SNLo
+         rHeQvsTDkPc/R3pofbbL3koMBeHMTVZQEKc60S0j3rUAULnS5xmb/Te6tzimRzVwE+2w
+         P0XH7WzorjAmRFNmAEFqZmZi1O1Aeg8sGB/JdDvaQqMZVAxLimThyseVZOH6nhok07qU
+         Yt6w==
+X-Gm-Message-State: ACgBeo3B5bcXeB0CpTx2TbsrpDotgbub5Zi4G3A/zzvDcXJqlkpnQPiG
+        to2b7E+RLAWEE1TbIwkn2Vch0Q==
+X-Google-Smtp-Source: AA6agR71PQQCRleuxeuH7B8IXp8332nCARvv5AMHLZ9ubQsUxlJHU9AyInKTff/3PUJPpU6bxUx9mA==
+X-Received: by 2002:a17:906:974f:b0:778:ce93:38e3 with SMTP id o15-20020a170906974f00b00778ce9338e3mr588170ejy.644.1662645395092;
+        Thu, 08 Sep 2022 06:56:35 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:8618:9875:a93a:7063? ([2a02:578:8593:1200:8618:9875:a93a:7063])
+        by smtp.gmail.com with ESMTPSA id u24-20020a056402111800b0044ebe6f364csm6002652edv.45.2022.09.08.06.56.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 06:56:16 -0700 (PDT)
+Message-ID: <e4b7eddc-3a73-0994-467e-6d65d6ad80c0@tessares.net>
+Date:   Thu, 8 Sep 2022 15:56:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
-Subject: Re: [PATCH] media/i2c: fix repeated words in comments
-Content-Language: en-US
-To:     wangjianli <wangjianli@cdjrlc.com>, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220908123000.15066-1-wangjianli@cdjrlc.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220908123000.15066-1-wangjianli@cdjrlc.com>
+Subject: Re: [PATCH net v3] net: mptcp: fix unreleased socket in accept queue
+Content-Language: en-GB
+To:     menglong8.dong@gmail.com, pabeni@redhat.com
+Cc:     mathew.j.martineau@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, fw@strlen.de,
+        peter.krystad@linux.intel.com, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>
+References: <20220907111132.31722-1-imagedong@tencent.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220907111132.31722-1-imagedong@tencent.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,32 +80,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Menglong,
 
-
-On 9/8/22 05:30, wangjianli wrote:
-> Delete the redundant word 'in'.
+On 07/09/2022 13:11, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->  drivers/media/i2c/adv7175.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> The mptcp socket and its subflow sockets in accept queue can't be
+> released after the process exit.
 > 
-> diff --git a/drivers/media/i2c/adv7175.c b/drivers/media/i2c/adv7175.c
-> index b58689728243..bc8f8bbedb45 100644
-> --- a/drivers/media/i2c/adv7175.c
-> +++ b/drivers/media/i2c/adv7175.c
-> @@ -209,7 +209,7 @@ static int adv7175_s_std_output(struct v4l2_subdev *sd, v4l2_std_id std)
->  		/* This is an attempt to convert
->  		 * SECAM->PAL (typically it does not work
->  		 * due to genlock: when decoder is in SECAM
-> -		 * and encoder in in PAL the subcarrier can
+> While the release of a mptcp socket in listening state, the
+> corresponding tcp socket will be released too. Meanwhile, the tcp
+> socket in the unaccept queue will be released too. However, only init
+> subflow is in the unaccept queue, and the joined subflow is not in the
+> unaccept queue, which makes the joined subflow won't be released, and
+> therefore the corresponding unaccepted mptcp socket will not be released
+> to.
 
-		               is in
+Thank you for the v3.
 
-> +		 * and encoder in PAL the subcarrier can
->  		 * not be synchronized with horizontal
->  		 * quency) */
->  		adv7175_write_block(sd, init_pal, sizeof(init_pal));
+Unfortunately, our CI found a possible recursive locking:
 
+> - KVM Validation: debug:
+>   - Unstable: 1 failed test(s): selftest_mptcp_join - Critical: 1 Call Trace(s) ❌:
+>   - Task: https://cirrus-ci.com/task/5418283233968128
+>   - Summary: https://api.cirrus-ci.com/v1/artifact/task/5418283233968128/summary/summary.txt
+
+https://lore.kernel.org/mptcp/4e6d3d9e-1f1a-23ae-cb56-2d4f043f17ae@gmail.com/T/#u
+
+Do you mind looking at it please?
+
+Also, because it is not just a simple fix, may you send any new versions
+only to MPTCP mailing list please? So without the other mailing lists
+and netdev maintainers to reduce the audience during the development.
+
+Once the patch is ready, we will apply it in MPTCP tree and send it to
+netdev. That's what we usually for MPTCP related patches.
+
+Cheers,
+Matt
 -- 
-~Randy
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

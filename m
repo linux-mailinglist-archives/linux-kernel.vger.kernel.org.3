@@ -2,185 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569AE5B142D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589D55B1430
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiIHFtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 01:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S229954AbiIHFt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 01:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIHFtJ (ORCPT
+        with ESMTP id S229480AbiIHFtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 01:49:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70F994EE8;
-        Wed,  7 Sep 2022 22:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662616147; x=1694152147;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=PlruszmZkiKggFul+Xw0XzbaWBx8Xsm59T6oRQw7ROA=;
-  b=LydntmHMpW4EVlJ98zHeanC1UszIxW8geadMDefqIWo3mcce0sr4ZyHU
-   qXiKL/crPd2qgL7Fb6r5E1s81ZXsQkHiptpVQ8i7Kr9TRR3nmWXhRvXPQ
-   XONqqlOHwXrNO3/D69CZZQXW/3ak4B/pOXy06YINDJdr4OBAdouhHfRTU
-   Kz7yAt+OHzt/eH/MHtYEpCJG7ggFNZWkx72sLDGgpI6puFNXJdpOb3ny0
-   06ppQ8gcQyiU0TYKXKvEvq+wggA3lTg+gpNHb/Kz+oQ+5W74QuA2g+rRv
-   xm5rIPkKf/JyPRFMBd2lO0M7HRfX2MWL8ppWNxM0Q33cXP3huFTYzP78e
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="297880276"
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="297880276"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 22:49:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="565807521"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 07 Sep 2022 22:49:07 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Sep 2022 22:49:06 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 7 Sep 2022 22:49:06 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 7 Sep 2022 22:49:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ihRaLgrDV0losRDOsegPn6d/1R4LDVI7xkL0ochV0vIgUJQ+GDrkUM2YgO+CMJZ43TwetjKwoJFtCYNKOoYQR/ITBRfxzIf9mcnFhk33MIq3zykOFDAO3WsBivtRH4KXmBybx1QPxWEzk89Zxlo3wf55/FBTWpBGbdC/Rhc5sndOtgEWq08ue1UNe0mwZCq2M0kMVorCwWtn1uMpbzMZWxCl3TLEr918x492IT/dgtHS7zygCdks3oJE6ng0+hL+DnWk+3ldD6QjzSUdeTkuUnL6SlMpsaUl8GiNPU23pENIJ8xtdfXfB4Gt2dEAe+nMamGIKVqE4Na6KGyiwVeJMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9NheIfK1dEmbgjxcXh7xGNJ8TfJYSqcUrJjlJIWEcNg=;
- b=SVtzLhEBs0ztfxgfeRnkVQRNPkR29kbF1IVph10K2izMwZdCncrFPPqqdCrAr1Qho8+THCg/zAnaHeRepDS1bc81Nb2ahnMF5FiMNDtmFORDQe5fYONeQTQMUzhixBJ1hGkk/4xsQ193N+o0Aw3pK1SCrTWMeggmbzvLknlcHUvRR4HwWt0QLdmQNmuIEZKVS1eUMxEV2ENnzscV89oHuzm2P7h9oWFoxha8yZcTF90kuAgOVx3UsXqxSmBs9gxN8on6LpUKlfFfWSHiKWzQiWB3pta8YkMWAE6V1HY5+F3FR5Clcj6JUE+JBw3jF4dGXBbaCP8F7WjYHn944UgYdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by MW4PR11MB7032.namprd11.prod.outlook.com
- (2603:10b6:303:227::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 8 Sep
- 2022 05:49:00 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12%6]) with mapi id 15.20.5588.017; Thu, 8 Sep 2022
- 05:49:00 +0000
-Date:   Wed, 7 Sep 2022 22:48:57 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Robert Richter <rrichter@amd.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ira Weiny" <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Robert Richter <rrichter@amd.com>
-Subject: RE: [PATCH 02/15] cxl/core: Check physical address before mapping it
- in devm_cxl_iomap_block()
-Message-ID: <6319824968fa7_580162946f@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20220831081603.3415-1-rrichter@amd.com>
- <20220831081603.3415-3-rrichter@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220831081603.3415-3-rrichter@amd.com>
-X-ClientProxiedBy: BYAPR02CA0056.namprd02.prod.outlook.com
- (2603:10b6:a03:54::33) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Thu, 8 Sep 2022 01:49:52 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A004F18B11;
+        Wed,  7 Sep 2022 22:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1662616191; x=1694152191;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=29FOG/05C6CfZJ2KGlkFFdslxcHqhGghDDdbqMYZeak=;
+  b=LOOCXtXwN47C+k5gGbxV/JZR4EbEmOFjq2RfzSp9gifOpOQnR5zgHg7v
+   H7wHCsS+QiKTVyLeUNbOG/fLpxpNonMxdVoWM4Jmo9bGHx6naYPg/OfCR
+   MYEWwBVjJwdKiZ8g4YpgAL3OYg4fwHswol6Z/pyCycUw6mhWSY3yb8mLA
+   cGfgICPNQKRL9cC7h2e2ZitsIuFmDt2y4ngzVbsRwEfzbD39SLydpV2zK
+   hj8aQhHNrmivTekG/aTPhWKrrkMvTelgz4ZXGfda1aWa7pvkJY3MzU7Id
+   TCDNukjTTGQjvetUMPwzU+a1rJwr3C1G5umJyht6Ud4cR15S0AeEpkjN7
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,299,1654552800"; 
+   d="scan'208";a="26056366"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 08 Sep 2022 07:49:48 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 08 Sep 2022 07:49:48 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 08 Sep 2022 07:49:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1662616188; x=1694152188;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=29FOG/05C6CfZJ2KGlkFFdslxcHqhGghDDdbqMYZeak=;
+  b=TFJlNMjObpxmbrGPesWS7wtLdqBUxjWhk+y073sFIgISZuf5hnyzHj/L
+   zRbnrXM/4vb1I3nAk6l2l3mV8GsA1Z4yI4hQt/pUeF7+bq8Ly/DOMQuce
+   Tqgvwy21W4RmMZY4vw1PkTci6acr/YVG2bJtky07BMu5wRKkm37nT2yTS
+   HYxPOHAABQMNV9gnTOb0VPJ1kzij3itkIdvHdyKOv4p5h5PWAMPOzp75x
+   44+49HuICroT4X3KRAR3EtW8mFtC23JEqQJyoUIVt9ZpaMBdWp/7h+EkZ
+   agsnW4h+feFg8qO/gG4PkLN3+yuQiDlxRgn47W14fgZEJ0VbYdRc9wW5I
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,299,1654552800"; 
+   d="scan'208";a="26056365"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 08 Sep 2022 07:49:47 +0200
+Received: from steina-w.localnet (unknown [10.123.49.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9D309280056;
+        Thu,  8 Sep 2022 07:49:47 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
+Date:   Thu, 08 Sep 2022 07:49:45 +0200
+Message-ID: <3126965.5fSG56mABF@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <PA4PR04MB9640CB3CA93301CA1571D85789419@PA4PR04MB9640.eurprd04.prod.outlook.com>
+References: <20220907144624.2810117-1-alexander.stein@ew.tq-group.com> <PA4PR04MB9640CB3CA93301CA1571D85789419@PA4PR04MB9640.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2e9be781-4fd9-40aa-e673-08da915dd3dc
-X-MS-TrafficTypeDiagnostic: MW4PR11MB7032:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WFE/BQ6/DWz1i66oe6rFImXLUOyFbbyIPhlTYD3iLTeAQ7ghP7Habh80P0nhfgQRue3JH6cFbfHGMgAKEhkXdcyx5BMER1UnoaL9k7bBFpOXB/zqYpQXxD3qTZepvAYU2IOoR86az4yv/8264VxZLbsJOVqnJAKK2Q0fmdm2+nJyv9EHteEkrDUENgLq+grtjL3iB89xmOo0xYUR46rm8TXvCme+7xZwRr0PKiX3CYI8RWEO8RT1S1paRAXgzzkceZbU/7vBZ4Obwgl/ncpzeTGz4gpbx9tzmxfHaR+28bi4gvyGvGqI1rsE7DFGXxn1slAXyDnw/SqpvwJVfDFHoIbUeXX7nKdVSph5SlYuraM21KlVqdDnvMIeSS1dm0IWfKtneyHBsjXFejJpOu7ORQOd8Z1yrNqzmN5HkhvO5ERljs0+CC3rr9p6o5v323W9uDb//wc0zBRlEANs2FfxTG84VmEimvhlkeN9o6kh/li8y6OiElPNPRcmEEJz5SrvtxssanwPf+zKDLnNq/0WoE1RMyRN6WcVLfkqHwXBY7bzATI87ns8qW3UPEBqDPEQRhbXKdDwAIaWOSs5UA7ulJopC/3M/ZJ5tBTmWlerHH6b2SCCOTmy1Ik2SmvqUuW6gEwNwUxUNZydTYoG5tk73Rfpb8X+bwb+9hx6YQJ5MtGg7QnUsuocbfCa3uuBI3ae3Lp/hAbZspR5oQDTQFqFtw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(136003)(346002)(39860400002)(376002)(6486002)(6512007)(8936002)(66946007)(66556008)(66476007)(6506007)(41300700001)(6666004)(86362001)(5660300002)(9686003)(478600001)(8676002)(186003)(26005)(4744005)(4326008)(2906002)(54906003)(110136005)(83380400001)(38100700002)(316002)(82960400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rp9G8EhOZLXV9pT6sQEWkoCNtSV/AIuOapr6/3TvBpdlPqu1+OZuM4IOJFqf?=
- =?us-ascii?Q?1SP9/I0ZNTJJiZ+Z57p0FPfbRx1DRBs3tGoMJ7CZ146ZO+2JM9jGXMDpFrYF?=
- =?us-ascii?Q?808rEStyk2RqNPcyXTrW8zEU3+vuI7T1dsfJNDMSoBzFoLYUipUxVSHqX/Sq?=
- =?us-ascii?Q?N0ErgxdYNtLQ9RRdCc9aZQxaQ83xDn1tcACD8mGZo9iu2cHlwTR/4wguZ4Aa?=
- =?us-ascii?Q?zOK+RtsZNZwBwVo5cq4HStZwnVlgJ3j+cZHZ1qhYZ5yKZ8F3KBSeCKux2KUK?=
- =?us-ascii?Q?i+u3N8h40VgQlSShSg8mnsiJZljsoveHVIzWBv7NorSUo+AonzrPAJ45WSt6?=
- =?us-ascii?Q?MJMU/45T4dQSvf3ZqYlWJS+o3iQJUwUDmQX0IMyweqIBD1gU/4jG8vzl2rvH?=
- =?us-ascii?Q?zNdLwEPYA/KWd4ZGBZOtQQru3M627JArK4u1RxihfBkXVDLy1LMYMHnDXqH7?=
- =?us-ascii?Q?vlh43L7ks2X5j0BbGc0mSuVlHYqJfFMha+B4fc/CxZoEa22gffmniHWnobr9?=
- =?us-ascii?Q?DPVC0/+ztydZJsU3l4YrRTfgof+GvbtbGnO5PKSxmHryqg8dhvM25mkE++fK?=
- =?us-ascii?Q?9ugIZm1T5Pf1+9pXwNCP+iD3o5g+ZZmDqnmZ9WgjyAXCVsA6P8gzefaf7HSN?=
- =?us-ascii?Q?x8+Hup01fjH4XTJz/iLqdnKLx5Gg/KTtGif6rM79kdA/3c7hMtnCV5CjplsR?=
- =?us-ascii?Q?PWNKpyc5rEpD0DrazzOrj5tCD3Ct4sROcrg42RhKFhOEgwj/ZLVuyQNIRQ18?=
- =?us-ascii?Q?qx4PTZYdSLNcDr7+KEOAjasjgN12pU9/ljchqg1+IAW2nTSDxdsTjlva0BrV?=
- =?us-ascii?Q?Bx6c4XJPqwcXNVM/LsKzcuG9tz57WPDKR8Z0GR+6QzrY8ARkUg9im09Bcpyu?=
- =?us-ascii?Q?wazsu3tOgUpGqHv2VK4DUUwuNYZ9rfFZRfaZTdZA82AeiHHVCnISSMrqljHQ?=
- =?us-ascii?Q?IbMqtmPiFcQyNSMPozADdpPrY/2SE1B6p38X0yjc0/MniBdqLqcxeUXbYTsl?=
- =?us-ascii?Q?qbg+tSEaYS3jqo9Y0hb+T2lyWmjiW8f1AyG5priJ6fOJVrd251AdtNorocBL?=
- =?us-ascii?Q?TO7werCa0Xh5usJov/ucoQR2mkghXSevKu8tIOLQvipcJqcd4w2vDh2iLZ1h?=
- =?us-ascii?Q?JYfWSmh/IInwVBmIQEFizm+UsBXrzBZol0RtCU1scPHVTgnAuNdjToc12toU?=
- =?us-ascii?Q?hDumR0l8guLzyDSmzgxATRW5nDRT4c5VceXC0pn9cbXUUT3z1D4NPE/G6u+e?=
- =?us-ascii?Q?TA/oLu2pPqYHlBNQq57zGaMVFop1aY1zhI3lRHlewwl81mkP4zUVi3stvgo9?=
- =?us-ascii?Q?8kNxj4w+GvsukskT/yHjH7t9TUuJuvNja0+m5B1Sn/LZ7MqJTMK+jpmy1s1R?=
- =?us-ascii?Q?vQp7SEzlQBBbdc+8WU0wd4wToCcnJnGQIUjZ/OUM8vM43pl2KbI19WtcEkf9?=
- =?us-ascii?Q?bpUciZmVCUenz3cWWhUq3AwpjWahuXcZv8jO1RPXdhds8xkO4tCNLP5VcCb1?=
- =?us-ascii?Q?bexz58MyuNzEQqTGA9ABAaYpIALm782FjZ+vAUP9JJ6DBL/irJGvzEyIAIdg?=
- =?us-ascii?Q?LiZPb9L5KVZ4CIQWpe7zBNz5w2OaS0qS6WOX661x5H3GR0ZPSjgzMAZMuF2x?=
- =?us-ascii?Q?/g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e9be781-4fd9-40aa-e673-08da915dd3dc
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 05:48:59.9895
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y361tmUAk6fO0uztD36f9o6ycjRJHb8Rzjch+qaT3+N34bpVPGeOrizhhyoTy2Ek2F2NALVyWGXvNNgLalEys340seq2j5P/seGPklou8oA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7032
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Richter wrote:
-> The physical base address of a CXL range can be invalid and is then
-> set to CXL_RESOURCE_NONE. Early check this case before mapping a
-> memory block in devm_cxl_iomap_block().
-> 
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> ---
->  drivers/cxl/core/regs.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-> index 39a129c57d40..f216c017a474 100644
-> --- a/drivers/cxl/core/regs.c
-> +++ b/drivers/cxl/core/regs.c
-> @@ -165,6 +165,9 @@ void __iomem *devm_cxl_iomap_block(struct device *dev, resource_size_t addr,
->  	void __iomem *ret_val;
->  	struct resource *res;
->  
-> +	if (addr == CXL_RESOURCE_NONE)
-> +		return NULL;
-> +
->  	res = devm_request_mem_region(dev, addr, length, dev_name(dev));
->  	if (!res) {
->  		resource_size_t end = addr + length - 1;
-> -- 
-> 2.30.2
-> 
+Hi,
 
-devm_request_mem_region() succeeds for you when this happens? More
-details about the failure scenario please.
+Am Mittwoch, 7. September 2022, 18:08:25 CEST schrieb Jun Li:
+> Hi
+> 
+> > -----Original Message-----
+> > From: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Sent: Wednesday, September 7, 2022 10:46 PM
+> > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
+> > <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo <shawnguo@kernel.org>;
+> > Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-imx
+> > <linux-imx@nxp.com>; Jun Li <jun.li@nxp.com>
+> > Cc: Alexander Stein <alexander.stein@ew.tq-group.com>;
+> > linux-usb@vger.kernel.org; devicetree@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: [PATCH 0/4] USB host support for TQMa8MPxL + MBa8MPxL
+> > 
+> > Hi everybody,
+> > 
+> > this is a series based on the RFC at [1] for USB host support on TQMa8MPxL
+> > + MBa8MPxL. The main difference is that USB DR support has already been
+> > added and has been removed from this series.
+> > 
+> > The DT configuration itself (patch 4) is rather straight forward, but
+> > leads
+> > 
+> > to the following dmesg errors regarding superspeed ports:
+> > > [    8.549243] hub 2-1:1.0: hub_ext_port_status failed (err = -110)
+> > > [   22.885263] usb 2-1: Failed to suspend device, error -110
+> > 
+> > This hardware works fine using the downstream kernel, because for imx8mp
+> > this ITP sync feature is enabled conditionally [2] & [3].
+> > Hacking this into mainline resulted in a working superspeed setup as well.
+> > I also noticed that on some android kernel [4] depending in IP core
+> > version
+> > either GCTL.SOFTITPSYNC or GFLADJ.GFLADJ_REFCLK_LPM_SEL is enabled
+> > unconditionally.
+> > So I opted for the latter one using some quirk (patch 1-3).
+> > 
+> > I have to admit I do not know what this is actually about, nor why my
+> > setup
+> > does not work without this change or why this fixed my problem. So maybe
+> > someone with more knowledge can say if this is the way to go or what this
+> > is about.
+> 
+> This can be updated:)
+> 
+> > I also added snps,dis_u3_susphy_quirk to the board level as for some
+> > reason
+> > USB Superspeed U3 does not work. Detecting the onboard hub takes much
+> > longer and once all devices are diconnected from the hub it is put into
+> > runtime suspend (U3) and new attached devices are not detected at all.
+> > Until the cause is known and fixed runtime suspend has to be disabled.
+> 
+> For this issue you are reporting, I am not sure if this is caused by a USB
+> clock change merged on v5.19, if you use latest kernel, can you try with
+> below patches applied to see if U3 can work for you?
+
+Awesome, This does the trick!
+I was already running with patches [1] & [2], but was missing patch [3]. With 
+all of them applied, USB detects a newly attached superspeed device when the 
+HUB is in runtime suspend (U3).
+
+I forgot: thanks for checking with synopsis regarding soft ITP sync feature.
+
+Best regards,
+Alexander
+
+> [1]
+> https://patchwork.kernel.org/project/linux-arm-kernel/patch/1662547028-2227
+> 9-1-git-send-email-jun.li@nxp.com/ [2]
+> https://patchwork.kernel.org/project/linux-arm-kernel/patch/1662547028-2227
+> 9-2-git-send-email-jun.li@nxp.com/ [3]
+> https://patchwork.kernel.org/project/linux-arm-kernel/patch/1661328612-3932
+> -1-git-send-email-jun.li@nxp.com/
+>
+> Li Jun
+> 
+> > Thanks and best regards,
+> > Alexander
+> > 
+> > [1]
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.
+> > kernel.org%2Fall%2F20220622130440.955465-1-alexander.stein%40ew.tq-grou
+> > p.com%2F&amp;data=05%7C01%7Cjun.li%40nxp.com%7Cd1bdfb58b364464e957d08da
+> > 90dfc29f%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63798158796971424
+> > 0%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6I
+> > k1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=WSQHERVO9SCWk%2B%2Fmq8g
+> > K78yluy5VE7T%2BhUaDMlNhbWk%3D&amp;reserved=0
+> > [2]
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsourc
+> > e.codeaurora.org%2Fexternal%2Fimx%2Flinux-imx%2Ftree%2Fdrivers%2Fusb%2F
+> > dwc3%2Fdwc3-imx8mp.c%3Fh%3Dlf-5.10.y%23n134&amp;data=05%7C01%7Cjun.li%4
+> > 0nxp.com%7Cd1bdfb58b364464e957d08da90dfc29f%7C686ea1d3bc2b4c6fa92cd99c5
+> > c301635%7C0%7C0%7C637981587969870477%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
+> > 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7
+> > C&amp;sdata=9%2FxYZoZSelekGcWIZZNwRQqy8LTGPnnn13Rf4L5a0iY%3D&amp;reserv
+> > ed=0
+> > [3]
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsourc
+> > e.codeaurora.org%2Fexternal%2Fimx%2Flinux-imx%2Ftree%2Fdrivers%2Fusb%2F
+> > dwc3%2Fcore.c%3Fh%3Dlf-5.10.y%23n333&amp;data=05%7C01%7Cjun.li%40nxp.co
+> > m%7Cd1bdfb58b364464e957d08da90dfc29f%7C686ea1d3bc2b4c6fa92cd99c5c301635
+> > %7C0%7C0%7C637981587969870477%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwM
+> > DAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;s
+> > data=Or9hvtM%2F9DhPZbfv%2BKzwAm8QTyXg4y0ddVbMFqOM67Q%3D&amp;reserved=0
+> > [4]
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fandro
+> > id.googlesource.com%2Fkernel%2Fmsm%2F%2B%2F87a6b154766907020cc74c7726e8
+> > a68aaa9d7f6b%255E%2521%2F%23F0&amp;data=05%7C01%7Cjun.li%40nxp.com%7Cd1
+> > bdfb58b364464e957d08da90dfc29f%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7
+> > C0%7C637981587969870477%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
+> > QIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3
+> > tjAzUL81SwFkaoUh56CND%2B27FHqdo6TbY7Z66ldE8Q%3D&amp;reserved=0
+> > 
+> > Alexander Stein (4):
+> >   dt-bindings: usb: dwc3: Add gfladj-refclk-lpm-sel-quirk
+> >   usb: dwc3: core: add gfladj_refclk_lpm_sel quirk
+> >   arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel quirk to USB nodes
+> >   arm64: dts: tqma8mpql: add support for 2nd USB (host) interface
+> >  
+> >  .../devicetree/bindings/usb/snps,dwc3.yaml    |  5 +++
+> >  .../freescale/imx8mp-tqma8mpql-mba8mpxl.dts   | 42 +++++++++++++++++++
+> >  arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  2 +
+> >  drivers/usb/dwc3/core.c                       |  8 +++-
+> >  drivers/usb/dwc3/core.h                       |  2 +
+> >  5 files changed, 58 insertions(+), 1 deletion(-)
+> > 
+> > --
+> > 2.25.1
+
+
+
+

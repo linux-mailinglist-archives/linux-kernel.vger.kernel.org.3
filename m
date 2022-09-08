@@ -2,59 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EE05B2788
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FEA5B278C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiIHURe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S229565AbiIHURs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiIHURc (ORCPT
+        with ESMTP id S229699AbiIHURn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:17:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4E9F1F2B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662668251; x=1694204251;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AbjYMadHnJrO2BRZtz1Y0SklCk/+BqZcKLXpD/0d3Sw=;
-  b=QN0Eta+EM+qxfJ43fWwizJGLc67yEIYv84XeWUUfFTSfE+dnahOUyeQA
-   9rwM0K8vRGdHAzRXiGHX2+tXwCHuuSbW/z5UZmtX6FtvJgQXxafOwaYOX
-   flrHUzuWZN/3tg6HRt+ZMhOoukIweVdwXh8j/EZctbBeqypiDwAff8OwR
-   5mGqL6IDfTxw5SpNMCRbBq0lieF1kRmpODmG8XIcGxI71Fc1tqVploAua
-   hv6dWzY/emi7GkhiMw2SIp+dfLXmA9BuSkK4jYP2uF6c/fslOugY/Hm/S
-   02JPwFbWgWR2588qvMT5GXmzA6tXrA3G2Zswh1uyZaw5ZwWm2qXUUnOEF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="359044323"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="359044323"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 13:17:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="645246136"
-Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 08 Sep 2022 13:17:29 -0700
-Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oWNxo-0000IH-24;
-        Thu, 08 Sep 2022 20:17:28 +0000
-Date:   Fri, 9 Sep 2022 04:17:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matteo Croce <mcroce@microsoft.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 2/42] arch/riscv/lib/string.c:113:7: error:
- redefinition of '__memmove'
-Message-ID: <202209090450.atBceE0E-lkp@intel.com>
+        Thu, 8 Sep 2022 16:17:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ABC1023F5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662668261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GikWZTxGj/63HCy54SuFQr3ZFtzXKVCYYeh8Zi7wQj0=;
+        b=KZjQQ+aPVxF0gSUYNbV+G3r4L1YRs4ObnIbvtJQcCtki03PRXXfyddnnBlCP5wHudL+4TK
+        euK+i1IeEPpes/HEaQPjgUfbgF/U+et/MOxg8Aa/jEE0SSccZIkb6ZLfRARA5VAHL1cigG
+        ZVVjBXeldobzvt8v9cXS3FfFrZBrfEg=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-601-clzppcO7PbKy9byA6UJOaA-1; Thu, 08 Sep 2022 16:17:40 -0400
+X-MC-Unique: clzppcO7PbKy9byA6UJOaA-1
+Received: by mail-io1-f71.google.com with SMTP id g12-20020a5d8c8c000000b006894fb842e3so12258411ion.21
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 13:17:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=GikWZTxGj/63HCy54SuFQr3ZFtzXKVCYYeh8Zi7wQj0=;
+        b=O+aLzj79ZoVO0OxeqIbzmlYpAN9Faw2VNPDGNck2ThnHk2baR6hiF1eYvp5NgzrT5i
+         xRenhlDVSR225wkzEiIatdDCqjuUpzjFVfeq+Lmy8BgowzlK8gohAbJU+n2Vhelu6rPs
+         EAXjHdRHbTLmQLvF2UuPRySxGmqDZZ8hMx0RTYnzi0cPAtPE3OT5nwz6gttmR1jNA/pU
+         ODaACAxR+R187OhmFV43CZlVlFWIcv66abJvEAKP/7tr0OY71hhh0Wis0nv/iZ5Wir8k
+         qnXxKNeEhdECw3rG3K497qS6ygvDCSdnm+bWIC0gxdBzD+H7IjB0lBYqh7aiRq+HmYPU
+         RDEA==
+X-Gm-Message-State: ACgBeo0f4D8f3MSsphyjq6cGVMFlTYOaZBiCtl6fjRbfRyg0s1+jPQ6b
+        couYOqV87CU0x/r1QWt7seSebLA7dgjJZERJlTQbNv2FQ0obrmpPPjerpQvo5WmdnOnWNKDlsiU
+        3tTfTJGeSXgYYUlLjkNlOW8Uz
+X-Received: by 2002:a05:6638:1450:b0:346:8a18:737c with SMTP id l16-20020a056638145000b003468a18737cmr5866073jad.149.1662668260203;
+        Thu, 08 Sep 2022 13:17:40 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4bf3RGZy+4hv8eZB5owi2SQBjkJww84tNK4SaY69049bB9OXpEkDKFHS1lXlnWgZWIpF29XQ==
+X-Received: by 2002:a05:6638:1450:b0:346:8a18:737c with SMTP id l16-20020a056638145000b003468a18737cmr5866067jad.149.1662668260023;
+        Thu, 08 Sep 2022 13:17:40 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id p5-20020a02b005000000b003583d27d258sm1125812jah.105.2022.09.08.13.17.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 13:17:39 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 14:17:33 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v3] vfio/fsl-mc: Fix a typo in a message
+Message-ID: <20220908141733.1af63ac3.alex.williamson@redhat.com>
+In-Reply-To: <a7c1394346725b7435792628c8d4c06a0a745e0b.1662134821.git.christophe.jaillet@wanadoo.fr>
+References: <a7c1394346725b7435792628c8d4c06a0a745e0b.1662134821.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,73 +81,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   044c1f5e968de7d30940431fbb90da599074ea1c
-commit: 77842bff71e70078f7d70d35da62fbb03d929cda [2/42] riscv: optimized memmove
-config: riscv-randconfig-r021-20220907 (https://download.01.org/0day-ci/archive/20220909/202209090450.atBceE0E-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/esmil/linux/commit/77842bff71e70078f7d70d35da62fbb03d929cda
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 77842bff71e70078f7d70d35da62fbb03d929cda
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+On Fri,  2 Sep 2022 18:07:54 +0200
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> L and S are swapped in the message.
+> s/VFIO_FLS_MC/VFIO_FSL_MC/
+> 
+> Also use 'ret' instead of 'WARN_ON(ret)' to avoid a duplicated message.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Changes in v3:
+>   * Remove WARN_ON() and WARN() and only keep dev_warn()   [Diana Madalina Craciun <diana.craciun@oss.nxp.com>]
 
-All errors (new ones prefixed by >>):
+Applied to vfio next branch for v6.1.  Thanks,
 
-   arch/riscv/lib/string.c:90:57: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-                                                           ^
-   include/linux/compiler_attributes.h:372:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   arch/riscv/lib/string.c:31:7: note: previous definition is here
-   void *__memcpy(void *dest, const void *src, size_t count)
-         ^
-   arch/riscv/lib/string.c:90:7: error: redefinition of '__memcpy'
-   void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-         ^
-   arch/riscv/include/asm/string.h:25:31: note: expanded from macro 'memcpy'
-   #define memcpy(dst, src, len) __memcpy(dst, src, len)
-                                 ^
-   arch/riscv/lib/string.c:31:7: note: previous definition is here
-   void *__memcpy(void *dest, const void *src, size_t count)
-         ^
-   arch/riscv/lib/string.c:113:58: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
-                                                            ^
-   include/linux/compiler_attributes.h:372:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   arch/riscv/lib/string.c:97:7: note: previous definition is here
-   void *__memmove(void *dest, const void *src, size_t count)
-         ^
->> arch/riscv/lib/string.c:113:7: error: redefinition of '__memmove'
-   void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
-         ^
-   arch/riscv/include/asm/string.h:27:32: note: expanded from macro 'memmove'
-   #define memmove(dst, src, len) __memmove(dst, src, len)
-                                  ^
-   arch/riscv/lib/string.c:97:7: note: previous definition is here
-   void *__memmove(void *dest, const void *src, size_t count)
-         ^
-   2 warnings and 2 errors generated.
+Alex
 
-
-vim +/__memmove +113 arch/riscv/lib/string.c
-
-   112	
- > 113	void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

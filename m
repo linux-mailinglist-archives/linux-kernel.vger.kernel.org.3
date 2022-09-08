@@ -2,131 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5105B2195
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E755B2199
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbiIHPHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S232856AbiIHPIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbiIHPHr (ORCPT
+        with ESMTP id S232831AbiIHPIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:07:47 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFA6E7F83
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 08:07:47 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7B535580C03;
-        Thu,  8 Sep 2022 11:07:46 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 11:07:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662649666; x=1662653266; bh=jBH1raHOU+
-        zAoGN37kydJN2v9pqHvn8WmSNpPSnMW4c=; b=rIFVjjReo1OGRqliFHle7QCLpq
-        q3wRDEDFtl5QjVGT0sAh87+/OlCz3x4E3i8WBWNFEKOOrxHtfNOgMjifOiMeYLo5
-        KSAqrnm30tCJIBVRiKV7LbRS0s2Qjh8+Sxp6U+YxSphy4qGRisM0myGtP7QvNRda
-        IPy3OOBX4e52KM0qGyzzUJB9Dlad50VE4rxGc4CBvHh7Nu9R1UMCtJ3X2ZMgz79W
-        Vg6UMKDdm7hB4eNM5VLaI08kmj/w6qYcFdQlkW3QkK+6n6u9rokEhjckiy0DDu2T
-        7oSYrJUl5YUZUmOHaqERa5E2Pgpa8WqYX8mrJ7orliirKP1uP4FjSehfhO/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662649666; x=1662653266; bh=jBH1raHOU+zAoGN37kydJN2v9pqH
-        vn8WmSNpPSnMW4c=; b=FNeGymq0w4fqIhVj7Pbf8C63hXMmN8clA1RmFg0R7jgV
-        VAM6KWNnM89cO8XbJg+niB7/1cK7sSay4IB1ikeDAwIVQBcNzHj62qAxb/zjj89Z
-        kcKBdHnO8wUh0r6Oxys2UddJhJaNl9HiI98nSL/9od91Muat+kkPETrD13URHdCS
-        SDliEP0SLUF4Lfar3UFCuEw9He+/kvgY3NzigPoyPAa3iOjagM535BBCPrPd8rYW
-        rCQ8HRSv6C+RDXRtJAjm4SeTiDEfBrjd2NXGXNmnUaWB+cMzCpLltjIOkmvomrc9
-        Q+2BcOMN4hENXQQ8xhj9mKemgpjgQrtXHEoR8549WQ==
-X-ME-Sender: <xms:QAUaY5xIYDmQWxvzwodUbbYWyn_GcmQdyFFABmpa1NZ9jTTGxzVpGg>
-    <xme:QAUaY5QuAW83debL8aZWVKxeADtSEcvq0pcve0NaLNIut77fsV32X4SR-Zx5dkkhP
-    d0hW_ToAyzJEQfadYk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:QQUaYzUlKpOnlayN8LwvKL93CvETYdk4kmficl08fYJbguSRYUfxXA>
-    <xmx:QQUaY7jhHg7QR4gyJa-V0UkVs_gV5BtSE_JFE0iL6p5XL361GT5lnA>
-    <xmx:QQUaY7Av1aP0O8XjOxRs8A7rTgt3wrDbxMKLGNsqhPb5y_zU-toaVw>
-    <xmx:QQUaY90MIWSHe9BRRIJaO-e-Hm41zov9DfZ-aubVDj4RgQEihYno_g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C85ADB60083; Thu,  8 Sep 2022 11:07:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <8afc110f-641e-40f0-9bf9-b7b2ca3df6a1@www.fastmail.com>
-In-Reply-To: <87v8pyemmw.fsf@mpe.ellerman.id.au>
-References: <20190621085822.1527-1-malat@debian.org>
- <7cb1285a-42e6-2b67-664f-7d206bc9fd80@csgroup.eu>
- <87v8pyemmw.fsf@mpe.ellerman.id.au>
-Date:   Thu, 08 Sep 2022 17:07:24 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Mathieu Malaterre" <malat@debian.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, "Paul Mackerras" <paulus@samba.org>,
-        linux-kernel@vger.kernel.org, "Joel Stanley" <joel@jms.id.au>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] powerpc/lib/xor_vmx: Relax frame size for clang
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 8 Sep 2022 11:08:12 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A3E3D51;
+        Thu,  8 Sep 2022 08:08:11 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id y29so7663309ljq.7;
+        Thu, 08 Sep 2022 08:08:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=YLaSuFd5lBqt/iz7YkEFiNfltibKHcycV4w46Fy7wFs=;
+        b=Ph+SvjSkTW6QsPROxN1BJZF2H9lESHqodUx0BqCZcptDcyZRbRCwdxCbMmyYwOTiVP
+         gLYIRUZBaFahB1a2/tHLQOLC2yxRftoFdUX+fdAMjAG/7I/dl7ew28PXEI9qHRjPLvCA
+         W51Msi2UAFMsnziPYX8IaHWbkHlSudcqwXylzlOGbkd6QXHF+0EZ8RGcjAVngQFw1gke
+         jwke1Bnv7AW3yQmeQdUhWnIiITWtStj0cU7yJ+a3AU0SY9thi0AOvksyVX+ir6ws3LPo
+         VpSMu2AudF67IUFSbbpslw29Os6MQn3hUd26ytU2RbAmbxpTh4SjXh5HN1TUGxEMZF0d
+         L6JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=YLaSuFd5lBqt/iz7YkEFiNfltibKHcycV4w46Fy7wFs=;
+        b=LDVYgCCEo+nJ0V9ianQFZeK3aNEZ6O4dN7D4btyQhTiesOBSrWTvmZa4VJwKkr07XR
+         kdqaZWbIbmSAeYe/5QGksAv4ti7ixpBowQa5WAvRZ7vGb4HvzKkMctTLvsgxB3lupqtK
+         +Vk4k1wHHy8P6xM/wA9ji9Dy/A8PM0DNoE47Cd5WNvJqdvS5OqwhVAkXwKiqC/bsDlVH
+         7Pm+FIuiZ7tU56OmIGfjOWxVKpsHK9ET76689JqyXzGy2aDEfax3Zm5bpuiI9/H/iOLo
+         pmG7DVdmNLDauQwVWBvOjjhjKk3KHIPUye4os7+Ux/yrInjiu9mRI+WRAaGc/OUc4Kiu
+         834w==
+X-Gm-Message-State: ACgBeo0FCV1YIucpWBH8CUgoGodtB6Gu7cTXw/WSruJQDBZpBUBG8+w/
+        OcdUkLibVbLoxw4n5IGLukw=
+X-Google-Smtp-Source: AA6agR6hiSFLtuoITbolv+d616KIQfslm6ytvTmqFZ9GT+NI8hBvOFIrWzJ0gXkitkNHphOwOYI+Jw==
+X-Received: by 2002:a2e:a99b:0:b0:25e:be66:72f2 with SMTP id x27-20020a2ea99b000000b0025ebe6672f2mr2516901ljq.27.1662649688965;
+        Thu, 08 Sep 2022 08:08:08 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id r21-20020ac24d15000000b00492e69be4d6sm3070426lfi.27.2022.09.08.08.08.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 08:08:08 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 18:08:06 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Punnaiah Choudary Kalluri 
+        <punnaiah.choudary.kalluri@xilinx.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/13] dt-bindings: memory: snps: Add Baikal-T1 DDRC
+ support
+Message-ID: <20220908150806.oj7d5inifofvtiqk@mobilestation>
+References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822191957.28546-3-Sergey.Semin@baikalelectronics.ru>
+ <0bda4ff9-fc08-77f2-0e06-7469dcaec6d8@linaro.org>
+ <20220826095447.qxfvty6xq4tufe75@mobilestation>
+ <36b2b6d9-9ab4-a4bc-6476-bd5b5d3ef77e@linaro.org>
+ <20220908094307.civtqiwxadas3ys3@mobilestation>
+ <d49dc1ca-af81-4c08-db80-35d994c6c3a2@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d49dc1ca-af81-4c08-db80-35d994c6c3a2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 8, 2022, at 2:27 AM, Michael Ellerman wrote:
-> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
->
-> Yeah that would make some sense.
->
-> On 64-bit the largest frame in that file is 1424, which is below the
-> default 2048 byte limit.
->
-> So maybe just increase it for 32-bit && KASAN.
->
-> What would be nice is if the FRAME_WARN value could be calculated as a
-> percentage of the THREAD_SHIFT, but that's not easily doable with the
-> way things are structured in Kconfig.
->
+On Thu, Sep 08, 2022 at 11:58:50AM +0200, Krzysztof Kozlowski wrote:
+> On 08/09/2022 11:46, Serge Semin wrote:
+> > On Mon, Sep 05, 2022 at 12:14:21PM +0200, Krzysztof Kozlowski wrote:
+> >> On 26/08/2022 11:54, Serge Semin wrote:
+> >>> On Tue, Aug 23, 2022 at 11:12:28AM +0300, Krzysztof Kozlowski wrote:
+> >>>> On 22/08/2022 22:19, Serge Semin wrote:
+> >>>>> Baikal-T1 DDR controller is based on the DW uMCTL2 DDRC IP-core v2.51a
+> >>>>> with up to DDR3 protocol capability and 32-bit data bus + 8-bit ECC. There
+> >>>>> are individual IRQs for each ECC and DFI events.The dedicated scrubber
+> >>>>
+> >>>
+> >>>> Missing space before "The".
+> >>>
+> >>> Ok. Thanks.
+> >>>
+> >>>>
+> >>>>> clock source is absent since it's fully synchronous to the core clock.
+> >>>>
+> >>>
+> >>>> You need allOf:if-then restricting this per variant.
+> >>>
+> >>> I really don't like the allOf-if-if-etc pattern because it gets to be
+> >>> very bulky if all the vendor-specific and generic platform
+> >>> peculiarities are placed in there. I am more keen of having a
+> >>> generic DT-schema which would be then allOf-ed by the vendor-specific
+> >>> device bindings. What do you think I'd provide such design in this
+> >>> case too?
+> >>
+> >> Sure, it would work.
+> >>
+> >>>
+> >>> But I'll need to move the compatible property definition to the
+> >>> "select" property. Like this:
+> >>>
+> >>> Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml:
+> >>> +[...]
+> >>> +# Please create a separate DT-schema for your DW uMCTL2 DDR controller
+> >>> +# and make sure it's assigned with the vendor-specific compatible string.
+> >>> +select:
+> >>> +  properties:
+> >>> +    compatible:
+> >>> +      oneOf:
+> >>> +        - deprecated: true
+> >>> +          description: Synopsys DW uMCTL2 DDR controller v3.80a
+> >>> +          const: snps,ddrc-3.80a
+> >>> +        - description: Synopsys DW uMCTL2 DDR controller
+> >>> +          const: snps,dw-umctl2-ddrc
+> >>> +        - description: Xilinx ZynqMP DDR controller v2.40a
+> >>> +          const: xlnx,zynqmp-ddrc-2.40a
+> >>> +  required:
+> >>> +    - compatible
+> >>
+> > 
+> >> Not entirely. If you need select, then add it with compatibles, but all
+> >> descriptions and deprecated are staying in properties.
+> > 
+> > Ok. But note in such case the compatible string constraints will get
+> > to be opened for any non-common string. Like this:
+> > 
+> > + properties:
+> > +   compatible:
+> > +     oneOf:
+> > +       - const: snps,ddrc-3.80a
+> > +       - {}
+> 
+> Not really. If you define here specific device compatibles in select,
+> they must be here as well.
+> 
+> > 
+> > It's required for the DT-schemas referencing the common one, otherwise
+> > they will fail DT-nodes evaluation due to the "compatible" property
+> > missing the vendor-specific string.
+> 
 
-Increasing the warning limit slightly for 32-bit with
-CONFIG_KASAN_STACK makes sense, but there are a lot of
-related concerns:
+> o you probably mix here purposes. Either you define common schema or
+> device specific one. If you define common, usually it does not enforce
+> any compatibles. You do not need select, no need for compatibles either,
+> although you can add above syntax if it is valid. If you write here
+> specific device bindings, then compatibles should be listed. Judging
+> from what you wrote it's neither this nor that...
 
-- I was hoping to still stay under 1280 bytes for the warning
-  limit, so that even with KASAN_STACK enabled, we are able to
-  catch warnings in functions that use a stupid amount of
-  local variables, without getting too many false positives.
+My idea was to provide both the common DT-schema and the
+vendor-specific ones. But the later one would refer to the common
+schema in the framework of the "allOf:" composition. Like this:
 
-- if the XOR code has its frame size explode like this, it's
-  probably an indication of the compiler doing something wrong,
-  not the kernel code. The result is likely that the "optimized"
-  XOR implementation is slower than the default version as a
-  result, and the kernel will pick the other one at boot time.
-  This needs to be confirmed of course, but an easier workaround
-  for this instance might be to just disable the xor_vmx module
-  when KASAN_STACK is set.
+snps,dw-umctl2-ddrc.yaml:
++ [...]
++ select:
++   properties:
++     compatible:
++       enum:
++         - snps,ddrc-3.80a
++ [...]
++ properties:
++   compatible:
++     oneOf:
++       - const: snps,ddrc-3.80a
++       - {}
++   interrupts:
++   [...]
++   interrupt-names:
++   [...]
++ additionalProperties: false
++ [...]
 
-- The warning limit on 32-bit is actually 2028 bytes when
-  GCC_PLUGIN_LATENT_ENTROPY is set. I think this is a mistake
-  and we should lower /that/ limit instead, but a side-effect
-  here is that an allmodconfig kernel build with gcc will fail
-  to warn about bugs that exist both with gcc and clang, while
-  clang complains about it.
+baikal,bt1-ddrc.yaml:
++ [...]
++ allOf:
++   - "schemas/memory-controllers/snps,dw-umctl2-ddrc.yaml:#"
++ [...]
++ unevaluateProperties: false
++ [...]
 
-      Arnd
+Thus the common schema as before would provide the widest set of the
+properties and their constraints, while the vendor-specific one would
+be !obligated! to follow the common schema conventions, but provide a
+more specific set of the properties and constraints. A similar
+approach is implemented for instance in the DW USB3 DT-schemas, but
+with the generic compatible string fallback. In this case we don't
+need the fallback string, but in order for the common schema being
+applicable for both the common and vendor-specific DT-nodes the
+compatible property constraints need to be designed as is provided in
+the example above.
+
+Alternatively we can split the snps,dw-umctl2-ddrc.yaml schema up into
+the two ones:
+snps,dw-umctl2-ddrc-common.yaml
+and
+snps,dw-umctl2-ddrc.yaml
+So the first schema would contain all the common properties definition
+and would be only used for being referenced in the particular device
+DT-bindings (select: false). The snps,dw-umctl2-ddrc.yaml and
+vendor-specific DT-schemas would just have it "allOf:"ed.
+
+Personally I'd prefer the design pattern with the always-true
+compatible property constraint as in the example above since it seems
+easier to maintain than having the common and generic device
+DT-schemas.
+
+Note having a common DT-schema and a vendor-specific one referencing
+the common schema is very much useful practice for the devices based
+on the same IP-core. Vendor-device driver authors tend to create their
+own bindings for the same clocks/resets/phys/etc thus making the
+drivers much harder to maintain (for a bright example see what has
+been done for the DW PCIe RP/EP IP-core). The worst part of it is that
+ones the DT-bindings interface is implemented it can't be changed
+since the kernel needs to be backward compatible with the DT-sources
+compiled before. So the main goal of the common DT-schema is to fix
+the common DT interface and make sure the new vendor-specific device
+drivers would at least consider either to follow the IP-core DT
+convention or to widen it up if required.
+
+-Sergey
+
+> 
+> Best regards,
+> Krzysztof

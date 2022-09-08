@@ -2,223 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7C05B1B11
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377645B1B15
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiIHLOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
+        id S230188AbiIHLPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiIHLOp (ORCPT
+        with ESMTP id S230108AbiIHLOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:14:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ECEBCA7;
-        Thu,  8 Sep 2022 04:14:41 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MNc0q6JS1zHnj4;
-        Thu,  8 Sep 2022 19:12:43 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 19:14:39 +0800
-Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
- bcm_module_init()
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
-        <edumazet@google.com>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-References: <cover.1662606045.git.william.xuanziyang@huawei.com>
- <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
- <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
- <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
-Date:   Thu, 8 Sep 2022 19:14:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 8 Sep 2022 07:14:51 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB90C33E25
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:14:48 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id s15so19479647ljp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Rl5eBRjVMIfBFMNhgiMgpTHOyqMi/gFtjav/siqbg5c=;
+        b=WTg9aG4AzDMi0Q7cADc+b4QdQGc5LBmrXMLkEFgfxX6soYvyl6QXho9+lbC5TsVZWI
+         9ktpj88zxEhY2f5uKp5p9SsEfOq87C1CcoEdXcJrin1w2R6/tenO0S2FBIxmwD2gxEpu
+         nMSuYmHG8hsCCWYMTcHMmvEqnsXagq1DgSL5tB8blpJZLXuL75Lu2jHUCKwqs9xP/gNo
+         etHeQjWcZgfqzbQ5HD0ljOU44AaXOOzZsgEi7G4gn/7yj9R4rLw2nFSETOdMl2khHv6A
+         H1dIBLOFxKOAkJtnsVXRPmQJAiO+rOSI2X48BMF+j6OUz9s9/GZgclosyRhaZEGLRWHb
+         rdag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Rl5eBRjVMIfBFMNhgiMgpTHOyqMi/gFtjav/siqbg5c=;
+        b=ATk39PR5EguIedkQUzHarX09eqVYUAdLvDsFZ6XbSZg3+7UlBi6LSuU3bhU2Stw5fc
+         cV/LRN9M7w4UjQnQbZu9aqUwz7YEBpPCdtufFq50k34QYN435w3yx75bu/wKD8Bo/7Fh
+         EyHFRxZZG4q8JbWhG1osLh5iyeJ/GE3sTR1uFFB6dupNnjqx9vSIRYr/m5r3BDEkiFbC
+         v2TYmF/tRjkNLMw/hDoduNeQcqqz28bcGmhZJiqAdT38eX+pVfbooqd8jTQiOema6xD3
+         V7cJs53t9v3wcigsdiwb9qGsYDYWpGBhzjGQuADFIXUfML/ldEObBw8dBTraROGQ68Jk
+         Ntew==
+X-Gm-Message-State: ACgBeo1lbBjTr+fGSz7NRn237D/OEeMIxBsi3Ay0S+t6jtWE5yllGG1Z
+        5ulg7xkMeL+zc8o/BwNA2dGI6w==
+X-Google-Smtp-Source: AA6agR4z5wi0efa/Fv9BjzVLS5RePp44A7tbdiGNCs3gHxPAQwi1JvV7Brlx7I2QndRlJsG3vyAAsQ==
+X-Received: by 2002:a2e:98d1:0:b0:263:76b4:5dc4 with SMTP id s17-20020a2e98d1000000b0026376b45dc4mr2221209ljj.460.1662635687241;
+        Thu, 08 Sep 2022 04:14:47 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05651211e700b0049487818dd9sm2986214lfs.60.2022.09.08.04.14.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 04:14:46 -0700 (PDT)
+Message-ID: <169beab2-141a-82c8-9205-76ba85e0e8d1@linaro.org>
+Date:   Thu, 8 Sep 2022 13:14:44 +0200
 MIME-Version: 1.0
-In-Reply-To: <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 3/4] pinctrl: qcom: spmi-gpio: Add compatible for PM7250B
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jishnu Prakash <quic_jprakash@quicinc.org>,
+        David Collins <quic_collinsd@quicinc.org>
+References: <20220907201528.9351-1-quic_amelende@quicinc.com>
+ <20220907201528.9351-4-quic_amelende@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220907201528.9351-4-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Just another reference which make it clear that the reordering of function calls in your patch is likely not correct:
+On 07/09/2022 22:15, Anjelique Melendez wrote:
+> From: Jishnu Prakash <quic_jprakash@quicinc.org>
 > 
-> https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
+> Add support for qcom,pm7250b-gpio variant.
 > 
-> static int __init packet_init(void)
-> {
->         int rc;
-> 
->         rc = proto_register(&packet_proto, 0);
->         if (rc)
->                 goto out;
->         rc = sock_register(&packet_family_ops);
->         if (rc)
->                 goto out_proto;
->         rc = register_pernet_subsys(&packet_net_ops);
->         if (rc)
->                 goto out_sock;
->         rc = register_netdevice_notifier(&packet_netdev_notifier);
->         if (rc)
->                 goto out_pernet;
-> 
->         return 0;
-> 
-> out_pernet:
->         unregister_pernet_subsys(&packet_net_ops);
-> out_sock:
->         sock_unregister(PF_PACKET);
-> out_proto:
->         proto_unregister(&packet_proto);
-> out:
->         return rc;
-> }
-> 
+> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.org>
+> Signed-off-by: David Collins <quic_collinsd@quicinc.org>
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
 
-I had a simple test with can_raw. kernel modification as following:
 
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -118,6 +118,8 @@ static int can_create(struct net *net, struct socket *sock, int protocol,
-        const struct can_proto *cp;
-        int err = 0;
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-+       printk("%s: protocol: %d\n", __func__, protocol);
-+
-        sock->state = SS_UNCONNECTED;
 
-        if (protocol < 0 || protocol >= CAN_NPROTO)
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 5dca1e9e44cf..6052fd0cc7b2 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -943,6 +943,9 @@ static __init int raw_module_init(void)
-        pr_info("can: raw protocol\n");
-
-        err = can_proto_register(&raw_can_proto);
-+       printk("%s: can_proto_register done\n", __func__);
-+       msleep(5000); // 5s
-+       printk("%s: to register_netdevice_notifier\n", __func__);
-        if (err < 0)
-                pr_err("can: registration of raw protocol failed\n");
-        else
-
-I added 5 seconds delay after can_proto_register() and some debugs.
-Testcase codes just try to create a CAN_RAW socket in user space as following:
-
-int main(int argc, char **argv)
-{
-        int s;
-
-        s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-        if (s < 0) {
-                perror("socket");
-                return 0;
-        }
-        close(s);
-        return 0;
-}
-
-Execute 'modprobe can_raw' and the testcase we can get message as following:
-
-[  109.312767] can: raw protocol
-[  109.312772] raw_module_init: can_proto_register done
-[  111.296178] can_create: protocol: 1
-[  114.809141] raw_module_init: to register_netdevice_notifier
-
-It proved that it can create CAN_RAW socket and process socket once can_proto_register() successfully.
-CAN_BCM is the same.
-
-In the vast majority of cases, creating protocol socket and operating it are after protocol module initialization.
-The scenario that I pointed in my patch is a low probability.
-
-af_packet.c and af_key.c do like that doesn't mean it's very correct. I think so.
-
-Thank you for your prompt reply.
-
-> 
-> 
-> On 08.09.22 09:10, Oliver Hartkopp wrote:
->>
->>
->> On 08.09.22 05:04, Ziyang Xuan wrote:
->>> Now, register_netdevice_notifier() and register_pernet_subsys() are both
->>> after can_proto_register(). It can create CAN_BCM socket and process socket
->>> once can_proto_register() successfully, so it is possible missing notifier
->>> event or proc node creation because notifier or bcm proc directory is not
->>> registered or created yet. Although this is a low probability scenario, it
->>> is not impossible.
->>>
->>> Move register_pernet_subsys() and register_netdevice_notifier() to the
->>> front of can_proto_register(). In addition, register_pernet_subsys() and
->>> register_netdevice_notifier() may fail, check their results are necessary.
->>>
->>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->>> ---
->>>   net/can/bcm.c | 18 +++++++++++++++---
->>>   1 file changed, 15 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/net/can/bcm.c b/net/can/bcm.c
->>> index e60161bec850..e2783156bfd1 100644
->>> --- a/net/can/bcm.c
->>> +++ b/net/can/bcm.c
->>> @@ -1744,15 +1744,27 @@ static int __init bcm_module_init(void)
->>>       pr_info("can: broadcast manager protocol\n");
->>> +    err = register_pernet_subsys(&canbcm_pernet_ops);
->>> +    if (err)
->>> +        return err;
->>
->> Analogue to your patch for the CAN_RAW socket here (which has been applied to can-next right now) ...
->>
->> https://lore.kernel.org/linux-can/7af9401f0d2d9fed36c1667b5ac9b8df8f8b87ee.1661584485.git.william.xuanziyang@huawei.com/T/#u
->>
->> ... I'm not sure whether this is the right sequence to acquire the different resources here.
->>
->> E.g. in ipsec_pfkey_init() in af_key.c
->>
->> https://elixir.bootlin.com/linux/v5.19.7/source/net/key/af_key.c#L3887
->>
->> proto_register() is executed before register_pernet_subsys()
->>
->> Which seems to be more natural to me.
->>
->> Best regards,
->> Oliver
->>
->>> +
->>> +    err = register_netdevice_notifier(&canbcm_notifier);
->>> +    if (err)
->>> +        goto register_notifier_failed;
->>> +
->>>       err = can_proto_register(&bcm_can_proto);
->>>       if (err < 0) {
->>>           printk(KERN_ERR "can: registration of bcm protocol failed\n");
->>> -        return err;
->>> +        goto register_proto_failed;
->>>       }
->>> -    register_pernet_subsys(&canbcm_pernet_ops);
->>> -    register_netdevice_notifier(&canbcm_notifier);
->>>       return 0;
->>> +
->>> +register_proto_failed:
->>> +    unregister_netdevice_notifier(&canbcm_notifier);
->>> +register_notifier_failed:
->>> +    unregister_pernet_subsys(&canbcm_pernet_ops);
->>> +    return err;
->>>   }
->>>   static void __exit bcm_module_exit(void)
-> .
+Best regards,
+Krzysztof

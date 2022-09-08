@@ -2,79 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8AF5B1788
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B925B1799
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiIHIrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S230509AbiIHIs6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Sep 2022 04:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiIHIqz (ORCPT
+        with ESMTP id S231726AbiIHIsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:46:55 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF127149459
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:46:32 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b16so23283711edd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:46:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ike64CUEUd9DsY2jLXloOMGX1zcdA8CVovnEVfdpkWw=;
-        b=LKcaO49R7C8D7BiAe7tCsdVClR1PBI8B7udt+lfBQSS+x1yUq4VGovYQ1webE9nqw7
-         lIQNKZXg+37DOjGos6CnFYKzKtsnkszwufk4cSmLu7jdwiMyGSYw6aRUDNMp2JNTPn9Q
-         s0W5Y+tE3hEbzoF1CfjLlQOGKmHlcZeN/wT8wL24n6MQIgEEqgol87G35WOjwpcuI2lk
-         qNFj7GRCe8xMlX3yyyXSqkgxlEUai6VUTz3ZY1QcAKRzdDCfDLicOza3s7aofcV2xmZm
-         bl3Cf3g4utherIQaOE6u/cHbjoZ+HQ3QQBNu2v35D1poam90vFvonghu7DIe2RuqpQ/m
-         WORA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ike64CUEUd9DsY2jLXloOMGX1zcdA8CVovnEVfdpkWw=;
-        b=FUEY7DDPHe/zbT4AAIvhwlJrmVV8JqMnR8TQXk1tOOZhe+kHktqs8rAQ2aygR4C5UN
-         6gplOjKUb8da+rkHic2IUuQV1I77mf0WJNBrbPmAlckWmUhl/L0N1YEC/lo7LjglDFWm
-         K9MWVKWVIhFVE4EIz+3kZkV4Bm2wmUnFDcXFcYRpYf0qTLNpJHo3FmgYerrsRYBU3jYB
-         eJNjrm7I6tiHGW906kcm+pJIumJMMeRkHeFRsYBSK/yjmNHC1hRcyo5aia+bWkSOWXO6
-         hSDpCd3lDpW6nQ6lolL9sHuL8GFzqI0UrAvUuTI0/jkniwTJNwlXn9BLXJXSIn4yyvbJ
-         bXqQ==
-X-Gm-Message-State: ACgBeo0QjKIVDMgXAhqvqhqpryArDyTgolXAo9yZGEX51pTF3atxXmNm
-        5W3g+9YPiFfoXjqK2hHFf0R3+5sTSUQKm4LT+A/TInryyyYgsA==
-X-Google-Smtp-Source: AA6agR4U76xtXaCBaEkcc16Efe+w9c+SR2weFMmxwjNiQ7qKd8luRRl6XC6xXOWShNwUnwGUtUi4ZhBzOgU6QexOVu0=
-X-Received: by 2002:aa7:d6d9:0:b0:44d:e1b7:d905 with SMTP id
- x25-20020aa7d6d9000000b0044de1b7d905mr6280515edr.32.1662626790778; Thu, 08
- Sep 2022 01:46:30 -0700 (PDT)
+        Thu, 8 Sep 2022 04:48:23 -0400
+Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BB0FD211;
+        Thu,  8 Sep 2022 01:47:39 -0700 (PDT)
+Received: from mta90.sjtu.edu.cn (unknown [10.118.0.90])
+        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 0E1C41008B38A;
+        Thu,  8 Sep 2022 16:47:14 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta90.sjtu.edu.cn (Postfix) with ESMTP id EC9A237C897;
+        Thu,  8 Sep 2022 16:47:14 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from mta90.sjtu.edu.cn ([127.0.0.1])
+        by localhost (mta90.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id iGKb-97UCSPo; Thu,  8 Sep 2022 16:47:14 +0800 (CST)
+Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
+        by mta90.sjtu.edu.cn (Postfix) with ESMTP id C223437C895;
+        Thu,  8 Sep 2022 16:47:14 +0800 (CST)
+Date:   Thu, 8 Sep 2022 16:47:14 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+To:     jasowang <jasowang@redhat.com>
+Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Message-ID: <885555391.166391.1662626834724.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <b1a7c454-860d-6a40-9da1-2a06f30ff1be@redhat.com>
+References: <20220901055434.824-1-qtxuning1999@sjtu.edu.cn> <20220901055434.824-7-qtxuning1999@sjtu.edu.cn> <b1a7c454-860d-6a40-9da1-2a06f30ff1be@redhat.com>
+Subject: Re: [RFC v3 6/7] virtio: in order support for virtio_ring
 MIME-Version: 1.0
-References: <20220907080251.3391659-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220907080251.3391659-1-horatiu.vultur@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 8 Sep 2022 10:46:19 +0200
-Message-ID: <CACRpkdYNvL9xf61BPJ1QDotXkJBG18+o=ZsFwoLw_LL-qGZ-Qw@mail.gmail.com>
-Subject: Re: [PATCH v2] pinctrl: ocelot: Fix interrupt controller
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com, UNGLinuxDriver@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.162.206.161]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - GC104 (Mac)/8.8.15_GA_3928)
+Thread-Topic: virtio: in order support for virtio_ring
+Thread-Index: 2iwVT82Uw5vi6HYqcfI9aIykWWiagg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 9:59 AM Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
 
-> When an external device generated a level based interrupt then the
-> interrupt controller could miss the interrupt. The reason is that the
-> interrupt controller can detect only link changes.
 
-I see there are some further comments, I expect to just merge v3 into
-fixes as this needs to go into the -rc:s right?
+----- Original Message -----
+> From: "jasowang" <jasowang@redhat.com>
+> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
+> Tsirkin" <mst@redhat.com>
+> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
+> "virtualization" <virtualization@lists.linux-foundation.org>
+> Sent: Wednesday, September 7, 2022 1:38:03 PM
+> Subject: Re: [RFC v3 6/7] virtio: in order support for virtio_ring
 
-Yours,
-Linus Walleij
+> ÔÚ 2022/9/1 13:54, Guo Zhi Ð´µÀ:
+>> If in order feature negotiated, we can skip the used ring to get
+>> buffer's desc id sequentially.  For skipped buffers in the batch, the
+>> used ring doesn't contain the buffer length, actually there is not need
+>> to get skipped buffers' length as they are tx buffer.
+>>
+>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+>> ---
+>>   drivers/virtio/virtio_ring.c | 74 +++++++++++++++++++++++++++++++-----
+>>   1 file changed, 64 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+>> index 00aa4b7a49c2..d52624179b43 100644
+>> --- a/drivers/virtio/virtio_ring.c
+>> +++ b/drivers/virtio/virtio_ring.c
+>> @@ -103,6 +103,9 @@ struct vring_virtqueue {
+>>   	/* Host supports indirect buffers */
+>>   	bool indirect;
+>>   
+>> +	/* Host supports in order feature */
+>> +	bool in_order;
+>> +
+>>   	/* Host publishes avail event idx */
+>>   	bool event;
+>>   
+>> @@ -144,6 +147,19 @@ struct vring_virtqueue {
+>>   			/* DMA address and size information */
+>>   			dma_addr_t queue_dma_addr;
+>>   			size_t queue_size_in_bytes;
+>> +
+>> +			/* If in_order feature is negotiated, here is the next head to consume */
+>> +			u16 next_desc_begin;
+>> +			/*
+>> +			 * If in_order feature is negotiated,
+>> +			 * here is the last descriptor's id in the batch
+>> +			 */
+>> +			u16 last_desc_in_batch;
+>> +			/*
+>> +			 * If in_order feature is negotiated,
+>> +			 * buffers except last buffer in the batch are skipped buffer
+>> +			 */
+>> +			bool is_skipped_buffer;
+>>   		} split;
+>>   
+>>   		/* Available for packed ring */
+>> @@ -584,8 +600,6 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+>>   					 total_sg * sizeof(struct vring_desc),
+>>   					 VRING_DESC_F_INDIRECT,
+>>   					 false);
+>> -		vq->split.desc_extra[head & (vq->split.vring.num - 1)].flags &=
+>> -			~VRING_DESC_F_NEXT;
+> 
+> 
+> This seems irrelevant.
+> 
+We have to unmask VRING_DESC_F_NEXT, so that we can calculate the length of a descriptor chain
+in get_buf_ctx_split.
+Thanks.
+> 
+>>   	}
+>>   
+>>   	/* We're using some buffers from the free list. */
+>> @@ -701,8 +715,16 @@ static void detach_buf_split(struct vring_virtqueue *vq,
+>> unsigned int head,
+>>   	}
+>>   
+>>   	vring_unmap_one_split(vq, i);
+>> -	vq->split.desc_extra[i].next = vq->free_head;
+>> -	vq->free_head = head;
+>> +	/*
+>> +	 * If in_order feature is negotiated,
+>> +	 * the descriptors are made available in order.
+>> +	 * Since the free_head is already a circular list,
+>> +	 * it must consume it sequentially.
+>> +	 */
+>> +	if (!vq->in_order) {
+>> +		vq->split.desc_extra[i].next = vq->free_head;
+>> +		vq->free_head = head;
+>> +	}
+>>   
+>>   	/* Plus final descriptor */
+>>   	vq->vq.num_free++;
+>> @@ -744,7 +766,7 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   {
+>>   	struct vring_virtqueue *vq = to_vvq(_vq);
+>>   	void *ret;
+>> -	unsigned int i;
+>> +	unsigned int i, j;
+>>   	u16 last_used;
+>>   
+>>   	START_USE(vq);
+>> @@ -763,11 +785,38 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   	/* Only get used array entries after they have been exposed by host. */
+>>   	virtio_rmb(vq->weak_barriers);
+>>   
+>> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> -	i = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].id);
+>> -	*len = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].len);
+>> +	if (vq->in_order) {
+>> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+> 
+> 
+> Let's move this beyond the in_order check.
+> 
+Sorry for my mistake.
+> 
+>> +		if (!vq->split.is_skipped_buffer) {
+>> +			vq->split.last_desc_in_batch =
+>> +				virtio32_to_cpu(_vq->vdev,
+>> +						vq->split.vring.used->ring[last_used].id);
+>> +			vq->split.is_skipped_buffer = true;
+>> +		}
+>> +		/* For skipped buffers in batch, we can ignore the len info, simply set len
+>> as 0 */
+> 
+> 
+> This seems to break the caller that depends on a correct len.
+> 
+
+IMHO, we can do this because the device will only batch for skipped buffers which is tx.
+
+> 
+>> +		if (vq->split.next_desc_begin != vq->split.last_desc_in_batch) {
+>> +			*len = 0;
+>> +		} else {
+>> +			*len = virtio32_to_cpu(_vq->vdev,
+>> +					       vq->split.vring.used->ring[last_used].len);
+>> +			vq->split.is_skipped_buffer = false;
+>> +		}
+>> +		i = vq->split.next_desc_begin;
+>> +		j = i;
+>> +		/* Indirect only takes one descriptor in descriptor table */
+>> +		while (!vq->indirect && (vq->split.desc_extra[j].flags & VRING_DESC_F_NEXT))
+>> +			j = (j + 1) & (vq->split.vring.num - 1);
+> 
+> 
+> Any reason indirect descriptors can't be chained?
+> 
+> 
+>> +		/* move to next */
+>> +		j = (j + 1) % vq->split.vring.num;
+>> +		/* Next buffer will use this descriptor in order */
+>> +		vq->split.next_desc_begin = j;
+> 
+> 
+> Is it more efficient to poke the available ring?
+> 
+> Thanks
+> 
+> 
+>> +	} else {
+>> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> +		i = virtio32_to_cpu(_vq->vdev,
+>> +				    vq->split.vring.used->ring[last_used].id);
+>> +		*len = virtio32_to_cpu(_vq->vdev,
+>> +				       vq->split.vring.used->ring[last_used].len);
+>> +	}
+>>   
+>>   	if (unlikely(i >= vq->split.vring.num)) {
+>>   		BAD_RING(vq, "id %u out of range\n", i);
+>> @@ -2223,6 +2272,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
+>> index,
+>>   
+>>   	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
+>>   		!context;
+>> +	vq->in_order = virtio_has_feature(vdev, VIRTIO_F_IN_ORDER);
+>>   	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
+>>   
+>>   	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
+>> @@ -2235,6 +2285,10 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
+>> index,
+>>   	vq->split.avail_flags_shadow = 0;
+>>   	vq->split.avail_idx_shadow = 0;
+>>   
+>> +	vq->split.next_desc_begin = 0;
+>> +	vq->split.last_desc_in_batch = 0;
+>> +	vq->split.is_skipped_buffer = false;
+>> +
+>>   	/* No callback?  Tell other side not to bother us. */
+>>   	if (!callback) {
+>>   		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;

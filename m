@@ -2,105 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7E85B1752
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED44E5B1754
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbiIHIk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S231517AbiIHIkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiIHIkU (ORCPT
+        with ESMTP id S231349AbiIHIk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:40:20 -0400
-Received: from outbound-smtp44.blacknight.com (outbound-smtp44.blacknight.com [46.22.136.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06FC9859A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:40:17 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp44.blacknight.com (Postfix) with ESMTPS id 5918CF81DB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:40:16 +0100 (IST)
-Received: (qmail 21798 invoked from network); 8 Sep 2022 08:40:16 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 8 Sep 2022 08:40:16 -0000
-Date:   Thu, 8 Sep 2022 09:40:08 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Zhenhua Huang <quic_zhenhuah@quicinc.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Joonsoo Kim <js1304@gmail.com>
-Subject: Re: [PATCH] mm/page_owner.c: remove redudant drain_all_pages
-Message-ID: <20220908084008.tmerssqksyrg3knl@techsingularity.net>
-References: <1662537673-9392-1-git-send-email-quic_zhenhuah@quicinc.com>
+        Thu, 8 Sep 2022 04:40:27 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A8DB24B2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:40:25 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id s11so23227692edd.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=QvDzqY2hjVaNgPAWrfBGXhW6k1ypWOnwlPzqmniUjzs=;
+        b=cKMExsE4llX1yiRL6nddDLOc7f5eRDKHQY9BFAKukSDU6p5qPUT/qlX0qsqsThmlk+
+         /HHgIksrwKGHcpkmmQx4xp6CJd0tcEMwpIayxXuxUVlGHlNuRi+d38ok/nDQL71Dl5MR
+         9fm9GWHorQ67KoJ7hL04xsn7v7tuaK6qDpSaTpijIFdjHnn3XCuqfBJTlYaMZpzeqZrh
+         Rt4+TGsKaH6rnt/pxd63NY0KjdeRekqStlHtKTO+B1WhG24RJqttHMNSHl1xsHsICdEg
+         isGfB8C0ygjXF9zVODiUK3L2Qlx/syGK42BJWSAo1Xn2OaaJOtm1rsCsxW/k3Wi6FMmf
+         +tJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=QvDzqY2hjVaNgPAWrfBGXhW6k1ypWOnwlPzqmniUjzs=;
+        b=z1bEKVzBZzK9FOE9mbrR6AsmSpax+8qWpkP6r22S9FDB/+m7UBfrAQiHJJtYMvWz3K
+         5JMW3hVfASmrAJ+3xZz+gdKNWJxXvvoKpmfTPqIRdDqzSvFkJyhxx51xe3DnelfQW/Qk
+         z3X2CovvjAHSeN5sKCE5V2QexMXaGY+Ko2edxwDZ/O0WswH1TeWdVfG3N5LaaLVg9rJv
+         KX6c684iynSjg2TX7Vg5dgcExALRMcjWEB58ZQ6FG6MYF6J6YZKGT7nqdoEIMBT22e+r
+         wZUoxgAbcBN/hifBZKrj/XOernk+l3GtmiCPyydOQ7Sl4GSxzOFp6jFEq4LRyT2d7juC
+         Du0Q==
+X-Gm-Message-State: ACgBeo0u+KSc+8TrBuEcpqplj84SFBSxzpJhIvLE0VLIT2Oj7y4r9wGP
+        2YOD8wBCO/xGGM94CBKvdDPshbrY5yRYcr7s4N4X4Q==
+X-Google-Smtp-Source: AA6agR4zR0djfYE9/8fJNaKKNolyAXhKrAvX4YMH/GOJAHYeF72v+Sk3vApAaY9yIrfgOxpkVXbrmQuJ7NA43Y8ZTec=
+X-Received: by 2002:aa7:d6d9:0:b0:44d:e1b7:d905 with SMTP id
+ x25-20020aa7d6d9000000b0044de1b7d905mr6263350edr.32.1662626423832; Thu, 08
+ Sep 2022 01:40:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <1662537673-9392-1-git-send-email-quic_zhenhuah@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220906132557.3916-1-wangdeming@inspur.com>
+In-Reply-To: <20220906132557.3916-1-wangdeming@inspur.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 8 Sep 2022 10:40:12 +0200
+Message-ID: <CACRpkdbzB+UH2eLhMxP-BND-5eW7J6cqieOdTSy3c_ZG8hcgQg@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: Fix spelling typo in comment.
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 04:01:13PM +0800, Zhenhua Huang wrote:
-> Page owner info of pages in pcp list have already been reset:
-> 	free_unref_page
-> 		-> free_unref_page_prepare
-> 			-> free_pcp_prepare
-> 				-> free_pages_prepare which do page owner
-> 				reset
-> 		-> free_unref_page_commit which add pages into pcp list
-> It can also be confirmed from dump that page owner info of pcp pages are
-> correct. Hence there is no more need to drain when reading.
-> 
-> Signed-off-by: Zhenhua Huang <quic_zhenhuah@quicinc.com>
+On Wed, Sep 7, 2022 at 4:12 AM Deming Wang <wangdeming@inspur.com> wrote:
 
-This is subtle because there is no comment explaining why drain_all_pages
-is called and git history does not help. I agree that the page owner
-information has already been reset and has been since the very beginning
-but I do not think that is *why* drain_all_pages is called here.
+> fix the world maxiumum to maximum.
+>
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
 
-After the drain_all_pages, there is a fairly standard PFN walker with this
-in it;
+This is already fixed upstream.
+Thanks anyway!
 
-        /* Find an allocated page */
-        for (; pfn < max_pfn; pfn++) {
-	....
-                page = pfn_to_page(pfn);
-                if (PageBuddy(page)) {
-                        unsigned long freepage_order = buddy_order_unsafe(page);
-
-                        if (freepage_order < MAX_ORDER)
-                                pfn += (1UL << freepage_order) - 1;
-                        continue;
-                }	
-	....
-        }
-
-The PFN walker is trying to skip free pages efficiently and PCP pages
-are not buddy pages so the order is unknown. The order *can* be known but
-it's risky to try detecting it. I suspect the drain_all_pages is called
-to move PCP pages to the buddy list so they can identified as buddy pages
-and skipped and has nothing to do with resetting the page owner.
-
-If that is correct then I think it is overkill to drain the PCP lists
-to marginally improve the efficiency of the PFN walker and the drain is
-subject to a race. Just because the PCP lists are drained does not mean
-a new PCP page will be added during the PFN walk. Furthermore, PCP pages
-get skipped because PAGE_EXT_OWNER_ALLOCATED is cleared so it's not about
-scan safety. The drain is a guaranteed expensive operation that is unlikely
-to be offset by a slight increase in efficiently of the PFN walker when
-skipping free pages so the drain_all_pages should be dropped. I believe
-the patch itself is correct but the changelog needs to be changed.
-
-With a changelog stating that the patch is removing an expensive and
-unnecessary operation as PCP pages are safely skipped;
-
-	Acked-by: Mel Gorman <mgorman@techsingularity.net>
-
-But just in case -- Joonsoo, can you clarify why drain_all_pages was
-originally called?
-
--- 
-Mel Gorman
-SUSE Labs
+Yours,
+Linus Walleij

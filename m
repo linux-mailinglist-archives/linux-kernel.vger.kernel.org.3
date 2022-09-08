@@ -2,100 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4455B258B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476AB5B2595
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiIHSWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S231622AbiIHSW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiIHSWd (ORCPT
+        with ESMTP id S231908AbiIHSWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:22:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0557F1F1B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:22:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9457A61DB1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 18:22:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6196CC433D6;
-        Thu,  8 Sep 2022 18:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662661351;
-        bh=J68cIAc2CCed2bgOrr17GCBVeMa7VXnHmwblwXxfDmQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=upZUijli6CnLSsfh/tvmu5c5UN0c9V0kl6R+tPLmbVjDRZWzGk0MTqpSJG8vlMvT6
-         hcF58XysNcHBw1AMSQYc7xlQO1clUagMeoyllpW9JpkdU+bZEnSX7nqexGsEA6wtdb
-         3MaBwePsqsChrdmBepFLKDf8C4sNPO2qY8h8gErOd46NEH2nmbyrQjwEUS5tdsnyhX
-         kzsyd+C5Qh+G0VPMEz5oLT1Szk6/GyKvQx05vXX8XNtA7P8GZXGwsP+S2Dnvk16NMm
-         gMOdY2Y9J6nkl/ieTnw/lQSuL9h/KnC4MPvJdScnEEfD5qUNikW2dgfpHI82803y4s
-         SI3DkFcRlFDMA==
-From:   SeongJae Park <sj@kernel.org>
-To:     xiakaixu1987@gmail.com
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH v2] mm/damon/vaddr: add a comment for 'default' case in damon_va_apply_scheme()
-Date:   Thu,  8 Sep 2022 18:22:28 +0000
-Message-Id: <20220908182228.92058-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1662606797-23534-1-git-send-email-kaixuxia@tencent.com>
-References: 
+        Thu, 8 Sep 2022 14:22:54 -0400
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398B7F10D8;
+        Thu,  8 Sep 2022 11:22:53 -0700 (PDT)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 1456B607F; Thu,  8 Sep 2022 14:22:52 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 1456B607F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1662661372;
+        bh=tcd0OCSNWv9F8gta/KRyPIJslgaIHLsZ5kto0SVYY+4=;
+        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
+        b=HI44ybOnJ4MmTizmstLbVBDNQo1/h12dSOxeF8h+ha7rnqXA24yHaqpYRO6/6Hnya
+         5/VbgN7+3aX3DCaLHNJpEGw5OlCtoQl/R/3xNY9yB9tnSZ5CFzktzK3u1Kg4S7agy9
+         6c1ct0ywl/Do7Vh2ie5K8s71iwxNKgOwr870V9E8=
+Date:   Thu, 8 Sep 2022 14:22:52 -0400
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        NeilBrown <neilb@suse.de>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Message-ID: <20220908182252.GA18939@fieldses.org>
+References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+ <20220907125211.GB17729@fieldses.org>
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+ <20220907135153.qvgibskeuz427abw@quack3>
+ <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+ <20220908083326.3xsanzk7hy3ff4qs@quack3>
+ <YxoIjV50xXKiLdL9@mit.edu>
+ <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+ <20220908155605.GD8951@fieldses.org>
+ <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+From:   bfields@fieldses.org (J. Bruce Fields)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kaixu,
-
-On Thu, 8 Sep 2022 11:13:17 +0800 xiakaixu1987@gmail.com wrote:
-
-> From: Kaixu Xia <kaixuxia@tencent.com>
+On Thu, Sep 08, 2022 at 01:40:11PM -0400, Jeff Layton wrote:
+> Yeah, ok. That does make some sense. So we would mix this into the
+> i_version instead of the ctime when it was available. Preferably, we'd
+> mix that in when we store the i_version rather than adding it afterward.
 > 
-> The switch case 'DAMOS_STAT' and switch case 'default' have same
-> return value in damon_va_apply_scheme(), and the 'default' case
-> is for DAMOS actions that not supported by 'vaddr'. It might
-> make sense to add a comment here.
-> 
-> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+> Ted, how would we access this? Maybe we could just add a new (generic)
+> super_block field for this that ext4 (and other filesystems) could
+> populate at mount time?
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+Couldn't the filesystem just return an ino_version that already includes
+it?
 
-> ---
-
-From next time, giving change log from previous versions of the patch here
-would be a good practice:
-https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
-
-
-Thanks,
-SJ
-
->  mm/damon/vaddr.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> index 3c7b9d6dca95..3814200e61e4 100644
-> --- a/mm/damon/vaddr.c
-> +++ b/mm/damon/vaddr.c
-> @@ -646,6 +646,9 @@ static unsigned long damon_va_apply_scheme(struct damon_ctx *ctx,
->  	case DAMOS_STAT:
->  		return 0;
->  	default:
-> +		/*
-> +		 * DAMOS actions that not yet supported by 'vaddr'.
-> +		 */
->  		return 0;
->  	}
->  
-> -- 
-> 2.27.0
+--b.

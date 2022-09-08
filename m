@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A107B5B24C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB225B24C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiIHRgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S229491AbiIHRgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiIHRgC (ORCPT
+        with ESMTP id S231789AbiIHRgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:36:02 -0400
+        Thu, 8 Sep 2022 13:36:01 -0400
 Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 837FCC2F82
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 832A4BF372
         for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:35:56 -0700 (PDT)
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
         with SMTP; 8 Sep 2022 20:35:54 +0300
 Received: from bu-vnc02.mtbu.labs.mlnx (bu-vnc02.mtbu.labs.mlnx [10.15.2.65])
-        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 288HZp0Z026068;
-        Thu, 8 Sep 2022 13:35:51 -0400
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 288HZqLS026071;
+        Thu, 8 Sep 2022 13:35:52 -0400
 Received: (from asmaa@localhost)
-        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 288HZpiY032706;
+        by bu-vnc02.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 288HZpaG032717;
         Thu, 8 Sep 2022 13:35:51 -0400
 From:   Asmaa Mnebhi <asmaa@nvidia.com>
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Asmaa Mnebhi <asmaa@nvidia.com>,
         Khalil Blaiech <kblaiech@nvidia.com>
-Subject: [PATCH v3 3/9] i2c-mlxbf.c: incorrect base address passed during io write
-Date:   Thu,  8 Sep 2022 13:35:38 -0400
-Message-Id: <20220908173544.32615-4-asmaa@nvidia.com>
+Subject: [PATCH v3 4/9] i2c-mlxbf: prevent stack overflow in mlxbf_i2c_smbus_start_transaction()
+Date:   Thu,  8 Sep 2022 13:35:39 -0400
+Message-Id: <20220908173544.32615-5-asmaa@nvidia.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20220908173544.32615-1-asmaa@nvidia.com>
 References: <20220908173544.32615-1-asmaa@nvidia.com>
@@ -46,32 +46,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct the base address used during io write.
-This bug had no impact over the overall functionality of the read and write
-transactions. MLXBF_I2C_CAUSE_OR_CLEAR=0x18 so writing to (smbus->io + 0x18)
-instead of (mst_cause->ioi + 0x18) actually writes to the sc_low_timeout
-register which just sets the timeout value before a read/write aborts.
+memcpy() is called in a loop while 'operation->length' upper bound
+is not checked and 'data_idx' also increments.
 
-Fixes: b5b5b32081cd206b (i2c: mlxbf: I2C SMBus driver for Mellanox BlueField SoC)
+Fixes: b5b5b32081cd206b ("i2c: mlxbf: I2C SMBus driver for Mellanox BlueField SoC")
 Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
 Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 ---
- drivers/i2c/busses/i2c-mlxbf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-mlxbf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index 087a70981283..da0bdbd66e2e 100644
+index da0bdbd66e2e..a8c5fef3f1cd 100644
 --- a/drivers/i2c/busses/i2c-mlxbf.c
 +++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -662,7 +662,7 @@ static int mlxbf_i2c_smbus_enable(struct mlxbf_i2c_priv *priv, u8 slave,
- 	/* Clear status bits. */
- 	writel(0x0, priv->smbus->io + MLXBF_I2C_SMBUS_MASTER_STATUS);
- 	/* Set the cause data. */
--	writel(~0x0, priv->smbus->io + MLXBF_I2C_CAUSE_OR_CLEAR);
-+	writel(~0x0, priv->mst_cause->io + MLXBF_I2C_CAUSE_OR_CLEAR);
- 	/* Zero PEC byte. */
- 	writel(0x0, priv->smbus->io + MLXBF_I2C_SMBUS_MASTER_PEC);
- 	/* Zero byte count. */
+@@ -731,6 +731,9 @@ mlxbf_i2c_smbus_start_transaction(struct mlxbf_i2c_priv *priv,
+ 		if (flags & MLXBF_I2C_F_WRITE) {
+ 			write_en = 1;
+ 			write_len += operation->length;
++			if (data_idx + operation->length >
++					MLXBF_I2C_MASTER_DATA_DESC_SIZE)
++				return -ENOBUFS;
+ 			memcpy(data_desc + data_idx,
+ 			       operation->buffer, operation->length);
+ 			data_idx += operation->length;
 -- 
 2.30.1
 

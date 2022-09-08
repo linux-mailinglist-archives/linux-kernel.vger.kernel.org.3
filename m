@@ -2,216 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67175B299B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021465B29A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIHWv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S229608AbiIHWxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIHWv4 (ORCPT
+        with ESMTP id S229437AbiIHWxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:51:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA99F9FA9;
-        Thu,  8 Sep 2022 15:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662677516; x=1694213516;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=wcR2TtMAra+e5KBv11nyUEwWD4iLInVrFcyt7sot920=;
-  b=boCxe9ZkLCpLbmjfu/1nsQtPUfUVp1DTxWpQVtE5OmRXaODuRPu0QuiK
-   rj9m9VIFauclH3hlmtzhFGX2bbZ4NEGoebddC7JaVsp3KgyE/e/1XW2YW
-   2QAwZmSYMMTen2QMW1llos3bF4B9skcUqlbyXTroKsSO9PWcWcWs46MzQ
-   zzRA2pkep1GlrRHvZKxTaBrhB6audWOHblklmdW2vDcVtXJyYeJr6Kx1Y
-   xpzsr3GiGNLc8m4OxIeOhamsM90HdSjV1XHnHw1b4PcokwZ0st4nCEauF
-   P5/bk6bB3exPyZbxTBGsNaXmO81EX49tUTM1pPOA+G/CW8E7td0NR5AHM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="297342280"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="297342280"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 15:51:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="648222805"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga001.jf.intel.com with ESMTP; 08 Sep 2022 15:51:55 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Sep 2022 15:51:55 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Sep 2022 15:51:54 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 8 Sep 2022 15:51:54 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 8 Sep 2022 15:51:54 -0700
+        Thu, 8 Sep 2022 18:53:35 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2121.outbound.protection.outlook.com [40.107.20.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9C11228FB;
+        Thu,  8 Sep 2022 15:53:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JJMOLRlOv1VWwG8EActVdHXoKApVaWM3KFXmczbLMNIKLfP5H710ukvJfrupyTqTfdHXDMV1les3pSJvRrB4oQciLO+cN7g8Wg+Yt16jQgmG7HyIOM+kTRnIKSGaIx/gEY2zmttwKuE+g8DBGTPS00POfSa/sza6zfP/nXwljSbzeh4up0w0o59s+ZGv6SW5eZqnYy1wrU67MtJjQ2Hj52o0vN8LbYhgnDRsLur9LyCoNiljzH0JGEBWYd7a7GQUgzWYDTiB+WHJnbPcxuA1hYwJl/ww0pDZx4ayNxSS8bpJ8PeRYRCiBp2yiWYvImTalClaGZw3UgmmbP7yxWjdow==
+ b=DoYxImvtVyNqxTugzCLNkfotofoR5qDbkWZlcQR9s69VqvcmKtb+56dW0HFr5Sk/ZHcovqks1lkulQZbZG6+Q3551U7WKK8o7UMxC/18bgLwpuoxvBeam/yueUU9cXacjd1AhIw/a9BGI6iGa7TTdJKHtv4qaPUTinsI+bBCOCqei+wOb1U7/6X2NTKqrnaTsb4TbQr1Fw9iqH2Oi9QMKIQIoeulCmc5Cp3f1vwpdCSHzIV9IHj/5UWV52mfkVqjg7DLB/g9fMxevHhe8BNc3SNH4R5cwODkVP1y04zITgbyulmnl5xE1RZzPEz6wcEn1P5GFdmCL2obVr50lzievg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yzw3wJ4LjxPbRXQcy7jlX2T2yw9Ky8WjfOdK2eGkLAw=;
- b=GOTLRjYBacb59Wyt8l6pQ8/q+5xu6dUj+Rtyi4AVU/1LvuQf8QGTdsNS9tsF39oaZ7MnpTx2K+IKHlmfj7CiHKu+Ra2TpJt0+UmllOl7CJlqo0QZ1rNVAMXNN6pUSHwniOzxz1ayuSjl5HWA/AMWMzwV+w2xJKJfQBx3ZlOv2rbMInaL99iDMIEdx5irFQqxudAB0i+EEsis2IUpn31JfAkCydzJNWDTd01FXxaiTuKa5l94A6x8dDSToiIIoqn9KVWoIBy2jn6ihYpAuviq/IpsNAQfvUC1r1bx8KfdX2xLxOLaRvyp/3O1rV1yv0hDQux2w6pl5cmHUdMPzmJPXQ==
+ bh=ViGWiJgKBCJo2OaPCFNFrusGO+K2n1EOuFTj1dXWosg=;
+ b=TB26dOh5FVmzj3ZULRQe+e3xv3iJiNhDHBxRda0JDu47jZij3ldiCUN+LCpoRYmGYFXq58670cJVNF3p3fCiHnoSbJ0dF/eAyzKevhYlcBttN3njScBYeVlB3yorvIVr/YHpFXyuUGOyzdZRuiqYotzay5xDyJyRb9gUAW88XWVAAAlDyAERf9YbEM7XTLHY5hj/8Hrxex2q0LqSpufEFUCxjCuzNjFmufM9L3fgePioBx3ISsZEG2i5k51mCGT8mjScsCV/eva1nnhw0GTJjRB5XiZ6YCzPWPb2Voij6y0ww1WW1kZ5+anzNG9LQXtHJPt7xG8TBNu6xvVTqWqceQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ViGWiJgKBCJo2OaPCFNFrusGO+K2n1EOuFTj1dXWosg=;
+ b=gExm2HSeU5i4AKFIR/vHsvguU8qg12SsybBERveq6zgJbl9YoD/Y1FBA12+xePF1WjVh8dxVN/Z8VZviOyIDHSKHDWnmBAx0ZBP2N07Msv0YqkRM5BuuzbmbNAKYwkrZcreFkhruBvSODAr05Kh4Oy7oQGijxrSenUzIJVQsih8=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by SN6PR11MB3245.namprd11.prod.outlook.com
- (2603:10b6:805:be::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Thu, 8 Sep
- 2022 22:51:53 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::9847:345e:4c5b:ca12%6]) with mapi id 15.20.5588.017; Thu, 8 Sep 2022
- 22:51:53 +0000
-Date:   Thu, 8 Sep 2022 15:51:50 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>, <x86@kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-cxl@vger.kernel.org>,
-        <peterz@infradead.org>, <bp@alien8.de>, <dave.jiang@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <a.manzanares@samsung.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] memregion: Add arch_flush_memregion() interface
-Message-ID: <631a7206afc2_166f29413@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20220829212918.4039240-1-dave@stgolabs.net>
- <20220907153016.f7cd4f42a337fedae8319f28@linux-foundation.org>
- <631940536d040_2736529437@dwillia2-xfh.jf.intel.com.notmuch>
- <20220908141319.00000f01@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220908141319.00000f01@huawei.com>
-X-ClientProxiedBy: SJ0PR05CA0181.namprd05.prod.outlook.com
- (2603:10b6:a03:330::6) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from PAXP190MB1789.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:283::6)
+ by AM0P190MB0737.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:195::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Thu, 8 Sep
+ 2022 22:53:30 +0000
+Received: from PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
+ ([fe80::e8ee:18d2:8c59:8ae]) by PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
+ ([fe80::e8ee:18d2:8c59:8ae%9]) with mapi id 15.20.5588.014; Thu, 8 Sep 2022
+ 22:53:29 +0000
+From:   Yevhen Orlov <yevhen.orlov@plvision.eu>
+To:     netdev@vger.kernel.org
+Cc:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-kernel@vger.kernel.org,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Subject: [PATCH net-next v5 0/9] net: marvell: prestera: add nexthop routes offloading
+Date:   Fri,  9 Sep 2022 01:52:02 +0300
+Message-Id: <20220908225211.31482-1-yevhen.orlov@plvision.eu>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: FR3P281CA0028.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::19) To PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:102:283::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6097e4fc-6926-4312-695d-08da91ecb8d6
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3245:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76f2e629-733c-401f-5ad1-08da91ecf2b9
+X-MS-TrafficTypeDiagnostic: AM0P190MB0737:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lmDFPhALjNY56VUZoSem01JVJuWj+BV1TFXlwlHR+RTGYmpPK1kJyUJYfWEo1x2iKiAa2weHukD60FOXWB27wZFXRXtle55OafpvSj2oqjxwl8I1JDFNfIq+h5hrGSeG69KDdDrU/HIrLjJfjN7NFzBWBbFtYaGxGCZhUfkew3k50LP3GddsNgkjEdF5CK4KVYgfk4k6p7QmqemiyQJQRXDItkbIDN1TTsF9fBbfcZPl4RikSffOAI2wlczM1KWPE1SesvA2HrurOp8paaql9cxwvQUBElOVRf37yaOvYplzUjHybZDrUMxb/B70JkNaNBDxqC752j7BslMC2AYxQcPLCS+y+AYnqdW6Lqsp8cA9YozDN4jChCy5jjKn2UaLjPnUplCfUhMSap1nNe9Qk2PszEY8mcpynMvShJNz5PE1ku36IxVMPWApYla3qxINfWCNsPOay6nOPtc1ieKKRV7BbVKJyAtGOQlkDv7KKduPcgk5yCUPOllcGmPDtOGxSw4mjB/7omS0c6JYzYE7l88vv4Yi/TlMQNuRgIXkfh0I6uvA0O0sE0s8H/AB+16yK3FQr5xjAPS3G/MrDSnG6ey3aSf/9xwNdhPiSK0ynUG5SWZIM+iXtahR1akAqr3RoCqCbd7naPzSOmGeowdmTYCt5CMJFZXsoseJIOYutEqUF4KCd8U2vKLfeYvmZsv5Nz3swwiSCdC53pc+c3kNTA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(396003)(346002)(376002)(39860400002)(54906003)(478600001)(316002)(110136005)(6506007)(6512007)(9686003)(26005)(8936002)(2906002)(5660300002)(7416002)(86362001)(66476007)(66556008)(4326008)(8676002)(83380400001)(66946007)(186003)(41300700001)(82960400001)(38100700002)(6486002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: G0M5936uYcqEz25bbrxnTGVHk9F0NoNxcq72GZOaJb2rXJ4p3Lyo9/9XCqeKxQhPXZqykiybJeh98jXSk8OF1PBlly5nkcDtlUdL7iDSwqEeMD3rOKvtczO6ji8/Fd3kCAUhiaiUcox5BiW9A+xjo3fMSUN8pQXj0lqQoewCOhysEOi4OawVkfDZLmUov9X/9cGJONeJJapSnW4Kp8xt40mw9FnSxWNkXJfbYtsoJyYFkEvMgfULwkablbVbIqn1esUnNjMe3FAPy2GHMYRIf4/yfRAvK8Iq41tyVwlA8NGuu3n4xmWXSdas4R+4UtnMzhmLuZjgQQCJazbSIjF0CxDvMx93vw80vmw26P6zvxkM1n4Fa2DfMpAg1EhXP50L4XVr87dtb2WSAMOU1LYCgS3XXsxbuF5oNfgVP5Zyr7AjVJZOpOI4zlmWcIbrETgftKBjoh0qWnEY4MONZ8x0fjOCXU5hTyEX7HpIQng8IZTGkDvGMWuzx23Vxuk3+NPupNGjPyeuo3NT1N6vBkgwIkQXE+rZr2Qg+iMwFp/Xa0g0Avod+3rvzYETxwTAHDQhewYg1/uc2GVeCFiKwXGUq/bxEIZcL4IOAx4ImPKyCQ9/S8I32DOMPf1cjOrvCQqvd8dKUwC1BrMWGpNFtYR4X1NdFwMnQ+NS10K+BZPXqqGSZwl0Wo/Pn31OUqd/8oNRsdiuLwJkgECgbu8BI82DzWtZHvq6EawNfOoStrKYe2ebAf+oP7WFL1plTK2HmrSYeyQ1NC8JNVBYKfVQYgY1zw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXP190MB1789.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(34036004)(366004)(39830400003)(396003)(136003)(376002)(38100700002)(41320700001)(86362001)(38350700002)(66476007)(508600001)(66556008)(4326008)(8936002)(107886003)(5660300002)(6666004)(41300700001)(8676002)(66946007)(26005)(54906003)(6486002)(6916009)(316002)(66574015)(2616005)(186003)(1076003)(83380400001)(52116002)(2906002)(6512007)(7416002)(6506007)(44832011)(36756003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wRrRTFeMZKvYqqMKseFiPVxNO+R2RE1w48tRo8Y+X1vmpcsUqC4fqtrfMn82?=
- =?us-ascii?Q?ars9w0SIYiPaojZJwQWKGJtstmYbGnQo5lGr9f/lZiBJts4LXKmprxDcIH4q?=
- =?us-ascii?Q?UD+gMqdCYMB9Gmx+ymiIdIwmJedc7OIlfImk8dV38d1SIxO/4hfjAzSFfDFq?=
- =?us-ascii?Q?UuLUtowSuuNbfQvfb6BNn1JbT7VB2Yqd1eOpJE5to1cVftjk37VRf5GFGc2w?=
- =?us-ascii?Q?V0NKXZNPHeSfBQex7Uvqt6Wk3A1d5/zBLajCYFov/6AyW8Yp8RFZeTNQfP0+?=
- =?us-ascii?Q?yxShc1nwY92CA4XJmW6L+aOFrEVpIaaGYmCuIL1hBDJQR8zRGaMZChV2w1mZ?=
- =?us-ascii?Q?IGFp7Y+xVXBH5BLT51r1o6b/nTUNYiaazNhwPsrKxLX9/cRmIHt7S5fVjlwJ?=
- =?us-ascii?Q?r2Pub4UEZRI6fQL4+rx6HWthFtJ89Lzre4c+v/8Ohz0eKYg2zzcX49R8vEu7?=
- =?us-ascii?Q?lCtHrGViGVFecRBW2zdlLYJebSGgBIXUoVhpQaSqaMxyFHnyO3/lm7dNu2tY?=
- =?us-ascii?Q?n8B46yi/e2MILQSYliab3J0xKZ92sLjlP8bFoAGQn+IyiEis7WlBzcYDOT3d?=
- =?us-ascii?Q?54oA/K+Mk70GSwHb8dsr4WPbz+sTs6dmo91wPFDKppF6Qk3582MM2LIW0fOJ?=
- =?us-ascii?Q?dkEp3DaP/86wwguMPXpM9bV3oo9nKWeOMlW7vKZb6gedgdo3Hm9PHjaIdaax?=
- =?us-ascii?Q?zTkBxuS2m0BsqAOY/uhfZF7U2yprZ8BDpiGTe7kPTwgbVp5lWIWHvOacNdKO?=
- =?us-ascii?Q?Mfmep9/sk8e3TCpqQpErv2tG8VkrwH/wlp1ijBEVeoHZNhYgHh0tpiYfkuXR?=
- =?us-ascii?Q?chh3RZJiVBKXuZ98WohBSXXrzj1CQrPWOHA4+iyNKI6LlnWAY2qMx+Ai6bns?=
- =?us-ascii?Q?uf13+TjrDttTpzeNSI4XznELjYDsrV/IUSpmxaqeDqz7UbhpRrAU2SU96Xaz?=
- =?us-ascii?Q?9+1g1U4kp1vMBvfLOpgpP/syPT2IYpySKh6cFXAKtB/oLy5LPGVK6LUq7IEC?=
- =?us-ascii?Q?O+IegBY96GWetjXF9sYrlNFzA9HyZmDL+11PFS4B+R39MvgbdTmn2WeSbIOY?=
- =?us-ascii?Q?Y8N0JYIUYCchsHonwpZ5KHRUokZg2auv2YePNTLZXfTMeDnlM38iD5UJSKD7?=
- =?us-ascii?Q?3l8Pnw+lT3eO7U58Mzhi60/eKaQ7Vb+gXSM1NuL28ylEPvIu4tyqKQDin6OT?=
- =?us-ascii?Q?zY4ZsH2JNn7Lrrmdou3FhO99tBzumkdmCHOeIra2yQM2ofgFSPw7lhYglXHW?=
- =?us-ascii?Q?pVuiVnXLVO/qj+t9ccvkfu8DxIuJ97HYMk4CXzk1BTeqTZjzDbnHPIrxhwR2?=
- =?us-ascii?Q?2pMfG2q9YQiVUi9z1+c1soMnjC569We/UsYXovgfxj66BIYKY58YziFRG3Dm?=
- =?us-ascii?Q?+hN33R2ONmaT+kl/oDBfc07581g5bsGvWq0r7LeNXBNaLXPK3gP5pas9fM8c?=
- =?us-ascii?Q?zoBZwTO3ynQmY6eskcq7SmCCbbrQrkBWQscz2Lg/fBAp8r0vQkIfQNtb9sv8?=
- =?us-ascii?Q?mSrALB8BICijm9GZ1ONAn0xEE1VNKD5hseodWWhdbupAMTuj147SXIOVv5rf?=
- =?us-ascii?Q?zlBtmt9JzijGpwcrSIieUstBU0PIZfaBLyTfl/hVBA0TuNZx6inCa/9GtkRH?=
- =?us-ascii?Q?yQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6097e4fc-6926-4312-695d-08da91ecb8d6
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tbmCGuePufBtq0UsOrvrLp2QG2lBc51L1o5eqwljsbfooCLPa8y+94DRFd6c?=
+ =?us-ascii?Q?2Bi9a2PsFMnew/lod7D89zRyf+DiQpkJMjXIMJUQVLxIRdvtc0klKRYxDx8f?=
+ =?us-ascii?Q?CVUXECorUUHW/EOWlJadcM/B0TzQCXMpYojqOlTY353C9Y8SYaDFWiON2Q4q?=
+ =?us-ascii?Q?eOfVt9l/+wML7BlAVTDPPiO7DjDwEiAO3ETOMSQjyTAid9u+YxPg/ahsIj2Q?=
+ =?us-ascii?Q?ayCRansOYighhqRqWDFQkeaSVSDmNK/gAXLb/BJxZtAmymWalF9O0QI6RdlO?=
+ =?us-ascii?Q?ZRX4cAYZ3RaoYdDQP66f8SvD5TlvoTWAHkmaAO2v9cX2/sIonrxDrXsZ8HUi?=
+ =?us-ascii?Q?4peTmUMQgJiXebHNiaHV+FX5gGtAKXfflRXUbcrQ/rehnVT/bzGFT6UxUgn7?=
+ =?us-ascii?Q?zbD/V458d4OIEOoqtuKIhKhWpZMY5cc6Q8KAtKlmJEYAujA4mgP4MlOujrdm?=
+ =?us-ascii?Q?VjiPv46BxcHRTTcd41fCSJ8RTOvaUBn5G1Kyn/XfY9GE9gpSPJ4/Ia7NWmE7?=
+ =?us-ascii?Q?whpXd2bFhIDEAHcia4fR6SYDUeJUWCPQ+doHAknUxfELyb/SX/99OwVs3Woh?=
+ =?us-ascii?Q?A/MQc2M89QBp0rwAG9oyGrP1bEwQw4soG1FtkjBWYhSetDg19P/2NQVDanTk?=
+ =?us-ascii?Q?uhpmTmuYDob3EgICFhDnIq1c2rlLvDxy0DO3yOHAhVsHtVNZDuntMSEm68q9?=
+ =?us-ascii?Q?fK69kORMvEGz31o9+7hTCwCoL4uIWAsRmF0/kWHK+viUwQFYm+6gctsPaK/9?=
+ =?us-ascii?Q?k3f2/EQxSnVER0Uy6H/S69fCtkfBZr3VUBSmr5z8dF0q3FhvhHKfUayGn2hk?=
+ =?us-ascii?Q?zRCHKyBvaQNQu2FkvJ2Z2UlUSRQMHJr+ZUwfitntvo22G8w8FZwM4Uytjo/w?=
+ =?us-ascii?Q?+4F1q1FcmP4EjIqvm+EnDjrLJGzGC0TbshwebllkxjyQLfScG9TTF5lIrEqO?=
+ =?us-ascii?Q?BHybmuy8d2nV+9Sa1hl65UdMK3iwM0I3hg/rr/hronUA44POdvXsJb7mmp9w?=
+ =?us-ascii?Q?i3DQHMUfZmjj0c9LGVUPC/quLACO6MRAPVXkQY0mX4gZ/+1X3pd0x0RpJpbr?=
+ =?us-ascii?Q?7yLI6H1mPst38K4qMhD3JjMjZp9Uxfl4IH48c/K9E7wVdYqyNULU+A6XbvH9?=
+ =?us-ascii?Q?KKKNpbuL7xLhS9fsrB+DzJc+/l1FuQkEaHCM+qSTqmK2uXP+g53z+sStojn/?=
+ =?us-ascii?Q?oR+7jpnzhqp6UzGA8oE7nWuvtn+RXkfHwX/YoO+a6i6qHQwLBTR+XL3uzM+E?=
+ =?us-ascii?Q?OfJRiq/yG0tnZ5qrRapssojj3sxFzAzm2WwnbL+HZaPtkws75pGyNPkY59f0?=
+ =?us-ascii?Q?yi6OySFQqE4xBwR6FIkkoSQYlwFux+x+ud8enz2RFPv3bpUvtmHhZfqeHrfu?=
+ =?us-ascii?Q?kH3UKB6QJsGm/6IyCHRAsnsekJDBhyt7plMWIRKgg0Y+cNTn3erPoemCDGj2?=
+ =?us-ascii?Q?nXgj8XA/eEnTVhiGwUYcHJJqwZzvlO/d56HaaguEr1+qRnzdrbVKWQ35MHa3?=
+ =?us-ascii?Q?HxRqtIukbch1sgyEk9bJgJLVTd/MDYGumxJ3LEeOgtKxcdVVODp2BCiPXAQz?=
+ =?us-ascii?Q?89NNkFjpQWAqCcC/T/O7hCa8yglN1W1rmGsDqeZSknAHMoZ/PhMBVF1kAM+y?=
+ =?us-ascii?Q?0g=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76f2e629-733c-401f-5ad1-08da91ecf2b9
+X-MS-Exchange-CrossTenant-AuthSource: PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 22:51:52.7746
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 22:53:29.8607
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mDNc+atoRR1mpWeSY9hBTUK3jomqjE5TGnB2suKybnNN8JSVc6DOAqhriywF2iDzV1gMXaStxydB4UIChGAHMBFjhW6omtK9HGLlAWMAKTQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3245
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7BW8Qnxjdo5gnVNKwVqtyCjasFCexL03hx1axG8vMilKQsyKH0FeHeyhHlJIQ0Sg1IBqxA2r/Ng3jmxMfZA6cAYVG5Oc8PRi87vkhveG5dA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P190MB0737
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Cameron wrote:
-> On Wed, 7 Sep 2022 18:07:31 -0700
-> Dan Williams <dan.j.williams@intel.com> wrote:
-> 
-> > Andrew Morton wrote:
-> > > I really dislike the term "flush".  Sometimes it means writeback,
-> > > sometimes it means invalidate.  Perhaps at other times it means
-> > > both.
-> > > 
-> > > Can we please be very clear in comments and changelogs about exactly
-> > > what this "flush" does.   With bonus points for being more specific in the 
-> > > function naming?
-> > >   
-> > 
-> > That's a good point, "flush" has been cargo-culted along in Linux's
-> > cache management APIs to mean write-back-and-invalidate. In this case I
-> > think this API is purely about invalidate. It just so happens that x86
-> > has not historically had a global invalidate instruction readily
-> > available which leads to the overuse of wbinvd.
-> > 
-> > It would be nice to make clear that this API is purely about
-> > invalidating any data cached for a physical address impacted by address
-> > space management event (secure erase / new region provision). Write-back
-> > is an unnecessary side-effect.
-> > 
-> > So how about:
-> > 
-> > s/arch_flush_memregion/cpu_cache_invalidate_memregion/?
-> 
-> Want to indicate it 'might' write back perhaps?
-> So could be invalidate or clean and invalidate (using arm ARM terms just to add
-> to the confusion ;)
-> 
-> Feels like there will be potential race conditions where that matters as we might
-> force stale data to be written back.
-> 
-> Perhaps a comment is enough for that. Anyone have the "famous last words" feeling?
+Add support for nexthop routes for Marvell Prestera driver.
+Subscribe on NEIGH_UPDATE events.
 
-Is "invalidate" not clear that write-back is optional? Maybe not.
+Add features:
+ - Support connected route adding
+   e.g.: "ip address add 1.1.1.1/24 dev sw1p1"
+   e.g.: "ip route add 6.6.6/24 dev sw1p1"
+ - Support nexthop route adding
+   e.g.: "ip route add 5.5.5/24 via 1.1.1.2"
+ - Support ECMP route adding
+   e.g.: "ip route add 5.5.5/24 nexthop via 1.1.1.2 nexthop via 1.1.1.3"
+ - Support "offload" and "trap" flags per each nexthop
+ - Support "offload" flag for neighbours
 
-Also, I realized that we tried to include the address range to allow for
-the possibility of flushing by virtual address range, but that
-overcomplicates the use. I.e. if someone issue secure erase and the
-region association is not established does that mean that mean that the
-cache invalidation is not needed? It could be the case that someone
-disables a device, does the secure erase, and then reattaches to the
-same region. The cache invalidation is needed, but at the time of the
-secure erase the HPA was unknown.
+Limitations:
+ - Only "local" and "main" tables supported
+ - Only generic interfaces supported for router (no bridges or vlans)
 
-All this to say that I feel the bikeshedding will need to continue until
-morale improves.
+Flags meaning:
+  ip route add 5.5.5/24 nexthop via 2.2.2.2 nexthop via 2.2.2.3
+  ip route show
+  ...
+  5.5.5.0/24 rt_offload
+        nexthop via 2.2.2.2 dev sw1p31 weight 1 trap
+        nexthop via 2.2.2.3 dev sw1p31 weight 1 trap
+  ...
+  # When you just add route - lpm entry became occupied
+  # in HW ("rt_offload" flag), but related to nexthops neighbours
+  # still not resolved ("trap" flag).
+  #
+  # After some time...
+  ip route show
+  ...
+  5.5.5.0/24 rt_offload
+        nexthop via 2.2.2.2 dev sw1p31 weight 1 offload
+        nexthop via 2.2.2.3 dev sw1p31 weight 1 offload
+  ...
+  # You will see, that appropriate neighbours was resolved and nexthop
+  # entries occupied in HW too ("offload" flag)
 
-I notice that the DMA API uses 'sync' to indicate, "make this memory
-consistent/coherent for the CPU or the device", so how about an API like
+Co-developed-by: Taras Chornyi <tchornyi@marvell.com>
+Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
+Co-developed-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
 
-    memregion_sync_for_cpu(int res_desc)
+Changes for v2:
+* Add more reviewers in CC
+* Check if route nexthop or direct with fib_nh_gw_family instead of fib_nh_scope
+  This is needed after,
+  747c14307214 ("ip: fix dflt addr selection for connected nexthop"),
+  because direct route is now with the same scope as nexthop (RT_SCOPE_LINK)
 
-...where the @res_desc would be IORES_DESC_CXL for all CXL and
-IORES_DESC_PERSISTENT_MEMORY for the current nvdimm use case.
+Changes for v3:
+* Resolve "unused functions" warnings, after
+  patch ("net: marvell: prestera: Add heplers to interact ... "), and before
+  patch ("net: marvell: prestera: Add neighbour cache accounting")
+
+Changes for v4:
+* Rebase to the latest master to resolve patch applying issues
+
+Changes for v5:
+* Repack structures to prevent holes
+* Remove unused variables
+* Fix misspeling issues
+
+Yevhen Orlov (9):
+  net: marvell: prestera: Add router nexthops ABI
+  net: marvell: prestera: Add cleanup of allocated fib_nodes
+  net: marvell: prestera: Add strict cleanup of fib arbiter
+  net: marvell: prestera: add delayed wq and flush wq on deinit
+  net: marvell: prestera: Add length macros for prestera_ip_addr
+  net: marvell: prestera: Add heplers to interact with fib_notifier_info
+  net: marvell: prestera: add stub handler neighbour events
+  net: marvell: prestera: Add neighbour cache accounting
+  net: marvell: prestera: Propagate nh state from hw to kernel
+
+ .../net/ethernet/marvell/prestera/prestera.h  |   12 +
+ .../ethernet/marvell/prestera/prestera_hw.c   |  130 ++
+ .../ethernet/marvell/prestera/prestera_hw.h   |   11 +
+ .../ethernet/marvell/prestera/prestera_main.c |   11 +
+ .../marvell/prestera/prestera_router.c        | 1141 ++++++++++++++++-
+ .../marvell/prestera/prestera_router_hw.c     |  377 +++++-
+ .../marvell/prestera/prestera_router_hw.h     |   76 +-
+ 7 files changed, 1716 insertions(+), 42 deletions(-)
+
+-- 
+2.17.1
+

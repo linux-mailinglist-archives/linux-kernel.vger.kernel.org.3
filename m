@@ -2,118 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C38D5B1715
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A315B1720
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 10:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiIHIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 04:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S230052AbiIHIdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 04:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiIHIcl (ORCPT
+        with ESMTP id S230377AbiIHId3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 04:32:41 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED802DABB3
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 01:32:38 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u9so36379677ejy.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 01:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=jfNxp3kBTvkWQp+z++yGCicLFIdP3WSDrE1bvSJvPmY=;
-        b=N7OrHuhPmgpLtKe7tnHDZ7RwDs9JtGDJ1pEZAugqax5yV6+dKsP1g39dwektERtKK9
-         CqiUuFQqXSSuUbo+lbqds7kHNQyuAL/Veez+V9HFOwJssWjKLEA54Jx+xvOnWdZg1gU6
-         JOxfP/9/NxYiQrnLd3UxjZHv8TMQ+wgHt7KdSXV0V6cbJmW4D2Gwb7ov2pd9SlH66fj6
-         WijmIrNii/pRVcLStzTngeZFuroX0sCBHB94+ZwmirZBSIfw1kFdXAtYlaSw1bazNWqB
-         9cSY6xpglQGMGo0jkZGZJzkv20FP4T7zRyAO/IH7JbUYsvCN+q3yaVGE1LQNbtGUJdZX
-         OmGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jfNxp3kBTvkWQp+z++yGCicLFIdP3WSDrE1bvSJvPmY=;
-        b=hrfhH9/6faWf6/PqQIN9lMDcgcjj33KFrYM7HECpxVXpiyXznPXfpAr60UhO5ckYXo
-         0go8FtVzyAnvSIGJHWzTm1/ZchrfGsI0BQRcTMpfHuAa1/RMBXJmpbfhTgTFiK824U5A
-         jK427ndeo+G0du/mi/c6ZmqC2zjY2z5tfv3QplwLuFQreGd93L7Q7XGlxThV7QRlNABq
-         3eceRTX8gYhhErgE5UzP5Gj3bU5zUrtSRUXRu5MVEF0odyJ/+Qwn4TdlgvzbQInPEa4J
-         mlXauCk0vhnoOqZsjf6/tUv8vUVFz+kgBolBmYl+q6zjjLT0XAf2kkZdznblJjTPktJ7
-         iqGA==
-X-Gm-Message-State: ACgBeo3MkakWw5gdzFcksWLdomj+BSnrfj6CHho2rdrVqrWsv3tJamDj
-        aR2VQhPMT8Lb+12ORQf32YRkzOFwS3a4SHzzwd0Ptg==
-X-Google-Smtp-Source: AA6agR5Pikao0PJyi3RWxDK9ckpLNq+5mIIPSLz2103lmxoJTGOdaR+FFIYnzUMOtVhVwUgnD2qSZsn8UUkJGH1BEqg=
-X-Received: by 2002:a17:907:1690:b0:770:80d4:ec4c with SMTP id
- hc16-20020a170907169000b0077080d4ec4cmr4628049ejc.690.1662625957353; Thu, 08
- Sep 2022 01:32:37 -0700 (PDT)
+        Thu, 8 Sep 2022 04:33:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4450E1A96;
+        Thu,  8 Sep 2022 01:33:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7CA5F22486;
+        Thu,  8 Sep 2022 08:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662626007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8sjzYxBjz9/JeFT8Y7oHbqmg7W+DAyx1ya6iI90ZaMQ=;
+        b=G99I5obrt4hV3c27dz2o4YfAIhoIVrbbH3dfLPAMW0LzbBqu0EvtmmhrUcACOb2o9ed70/
+        cNXhGP9N/+SW8xSfPOoGS+uL+IcwKESwEcFuRCZSQaJZZy4oj7W1K/mG+gn7S20YmAbsz1
+        rqsKa2EzYzVRz173gUhOyD7GM3th61E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662626007;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8sjzYxBjz9/JeFT8Y7oHbqmg7W+DAyx1ya6iI90ZaMQ=;
+        b=+whd4o3JKfEbh5M21ThDe8yY7TUw+sX0ZNwz+FFg91wQqsJpbtfAwaWS5pMeJQ6pxu12Mo
+        I/KruOUqr3Z7G+Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 68BFC1322C;
+        Thu,  8 Sep 2022 08:33:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 95yKGdeoGWNILwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 08 Sep 2022 08:33:27 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id EE081A067E; Thu,  8 Sep 2022 10:33:26 +0200 (CEST)
+Date:   Thu, 8 Sep 2022 10:33:26 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
+        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+Message-ID: <20220908083326.3xsanzk7hy3ff4qs@quack3>
+References: <20220907111606.18831-1-jlayton@kernel.org>
+ <166255065346.30452.6121947305075322036@noble.neil.brown.name>
+ <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>
+ <20220907125211.GB17729@fieldses.org>
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>
+ <20220907135153.qvgibskeuz427abw@quack3>
+ <166259786233.30452.5417306132987966849@noble.neil.brown.name>
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-6-b29adfb27a6c@gmail.com>
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-6-b29adfb27a6c@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 8 Sep 2022 10:32:26 +0200
-Message-ID: <CACRpkdY_TrA7DB1AkQhNALbAdMdw+T2PkA4+s9ORUNAA--DZEg@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] PCI: aardvark: switch to using devm_gpiod_get_optional()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166259786233.30452.5417306132987966849@noble.neil.brown.name>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 8:31 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On Thu 08-09-22 10:44:22, NeilBrown wrote:
+> On Wed, 07 Sep 2022, Jan Kara wrote:
+> > On Wed 07-09-22 09:12:34, Jeff Layton wrote:
+> > > On Wed, 2022-09-07 at 08:52 -0400, J. Bruce Fields wrote:
+> > > > On Wed, Sep 07, 2022 at 08:47:20AM -0400, Jeff Layton wrote:
+> > > > > On Wed, 2022-09-07 at 21:37 +1000, NeilBrown wrote:
+> > > > > > On Wed, 07 Sep 2022, Jeff Layton wrote:
+> > > > > > > +The change to \fIstatx.stx_ino_version\fP is not atomic with respect to the
+> > > > > > > +other changes in the inode. On a write, for instance, the i_version it usually
+> > > > > > > +incremented before the data is copied into the pagecache. Therefore it is
+> > > > > > > +possible to see a new i_version value while a read still shows the old data.
+> > > > > > 
+> > > > > > Doesn't that make the value useless?
+> > > > > > 
+> > > > > 
+> > > > > No, I don't think so. It's only really useful for comparing to an older
+> > > > > sample anyway. If you do "statx; read; statx" and the value hasn't
+> > > > > changed, then you know that things are stable. 
+> > > > 
+> > > > I don't see how that helps.  It's still possible to get:
+> > > > 
+> > > > 		reader		writer
+> > > > 		------		------
+> > > > 				i_version++
+> > > > 		statx
+> > > > 		read
+> > > > 		statx
+> > > > 				update page cache
+> > > > 
+> > > > right?
+> > > > 
+> > > 
+> > > Yeah, I suppose so -- the statx wouldn't necessitate any locking. In
+> > > that case, maybe this is useless then other than for testing purposes
+> > > and userland NFS servers.
+> > > 
+> > > Would it be better to not consume a statx field with this if so? What
+> > > could we use as an alternate interface? ioctl? Some sort of global
+> > > virtual xattr? It does need to be something per-inode.
+> > 
+> > I was thinking how hard would it be to increment i_version after updating
+> > data but it will be rather hairy. In particular because of stuff like
+> > IOCB_NOWAIT support which needs to bail if i_version update is needed. So
+> > yeah, I don't think there's an easy way how to provide useful i_version for
+> > general purpose use.
+> > 
+> 
+> Why cannot IOCB_NOWAIT update i_version?  Do we not want to wait on the
+> cmp_xchg loop in inode_maybe_inc_iversion(), or do we not want to
+> trigger an inode update?
+> 
+> The first seems unlikely, but the second seems unreasonable.  We already
+> acknowledge that after a crash iversion might go backwards and/or miss
+> changes.
 
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> device property API.
->
-> I believe that the only reason the driver, instead of the standard
-> devm_gpiod_get_optional(), used devm_gpiod_get_from_of_node() is
-> because it wanted to set up a pretty consumer name for the GPIO,
-> and we now have a special API for that.
->
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+It boils down to the fact that we don't want to call mark_inode_dirty()
+from IOCB_NOWAIT path because for lots of filesystems that means journal
+operation and there are high chances that may block.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Presumably we could treat inode dirtying after i_version change similarly
+to how we handle timestamp updates with lazytime mount option (i.e., not
+dirty the inode immediately but only with a delay) but then the time window
+for i_version inconsistencies due to a crash would be much larger.
 
-Yours,
-Linus Walleij
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

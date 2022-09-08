@@ -2,139 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36775B29D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BFF5B29D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 01:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiIHXBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 19:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S229976AbiIHXCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 19:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiIHXBb (ORCPT
+        with ESMTP id S229508AbiIHXCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 19:01:31 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC4B82D07;
-        Thu,  8 Sep 2022 16:01:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D0A3D336AE;
-        Thu,  8 Sep 2022 23:01:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662678087; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xy/c6DrfacbSWG6gKyZHom3flbC+WLVPqFWDGXwmFQw=;
-        b=IeUqcmcN2pH1qmadf0Pchq9/88nnlj0PxSIlEX2iIxcVgzyqofXNRW4tFrA7RcpXSot6xS
-        0k5Zq69AnsyFOMA+k+sUEkRzgWv0k7z6NNtsubduewv57ktYqrzRWk4HPHfF5AIwX0o9dc
-        vdHAgxJ6HhoUyoufPpa7bKSIf+2J8fw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662678087;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xy/c6DrfacbSWG6gKyZHom3flbC+WLVPqFWDGXwmFQw=;
-        b=ygJFcjmFtUS7tcIiTptD8Wumi8jQDvwi/mc1uB+J7WNwXp5qeZcsDUxFASW0jiKo/3xInC
-        IourZPWz6WE6vJAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4AD2B13A6D;
-        Thu,  8 Sep 2022 23:01:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wQFoAEB0GmNwEQAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 08 Sep 2022 23:01:20 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Thu, 8 Sep 2022 19:02:07 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6C02529B;
+        Thu,  8 Sep 2022 16:02:06 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id jm11so120172plb.13;
+        Thu, 08 Sep 2022 16:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=NHcEwmsstqIOlIz3moRAOT/hW63/MeqC/fZR0hJqwjs=;
+        b=DRYwpjUFac0zr2ZfI4cOt/nxoEYrZpIuOj8NBQQbxFW9hiO8nZ8goqkWx+af5btkHR
+         1RFlvGVTY6aMH3Y8M5C2dJ1Z7cCgWxL/cPqc6cBbFcqP7YQaaeKp1Q74DovwXxDStTU6
+         fSKFeVYuTBwCw/DhTK6aujw3kLDKtT59ixHvE3Sio303oDuotDAy1FnQa9z7eLnmzPlk
+         SRiTJ+DHQYJdiDjM3y2KVNqRz46wW7WTfLEA/pw0ndgtbu/IjPQ1taOLMD8oovHOYXPD
+         gVrUp19mCCSPQG2m4vqbhZ91dkOkDI2ntCV/dDuQJgaUR49lWAzn3hsaHdj5vTSJI7VO
+         2EjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=NHcEwmsstqIOlIz3moRAOT/hW63/MeqC/fZR0hJqwjs=;
+        b=MRzU6J26u486KnKQkPXOMVlsiOLVf3lE+ALqKFX9uYNFCMt/KNWCT9SGm89SYrK51r
+         ylu90k/+6L5Dj8lyJXkf+zx0m55RrI4x99TpMU+KCai8xnwfeFVaSTAlWxzOINcUj791
+         HRnKGdAGxIqxitocJfEjK9wIraOHtIV7THT8gAYipXgVoS87F1SGcaKenp5Sghs9Bn7L
+         7TFvbqMktGW0fO4D8PV9fG0Yw1W+EYoZ8zvacWfz0NhYR6oyjWEA8YvyBZaZXrZ8d3+E
+         HmlV0n9SE6SV+6DE06T8tvOflt6X/RI37zzyfVjnkMhONoYv/2697ARU03sIa5THt187
+         XspQ==
+X-Gm-Message-State: ACgBeo0U2/6h6bIVhrl0m0IQaejKu00LjPif7LfOk8mDZsS99LzYecu0
+        AwzQeBmpA3uEhbJe8qKdOjo=
+X-Google-Smtp-Source: AA6agR4j0GT838XqGLx0/jhdoTsv4JzUgzMbNuTXzxMxzLpAXdnv8miR9iH5jIRpD+bgIW6eF2sIBQ==
+X-Received: by 2002:a17:903:1248:b0:172:f3c7:97a6 with SMTP id u8-20020a170903124800b00172f3c797a6mr10994327plh.128.1662678125654;
+        Thu, 08 Sep 2022 16:02:05 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:b77b:e812:1879:ec2f])
+        by smtp.gmail.com with ESMTPSA id o7-20020a656a47000000b004308422060csm12872839pgu.69.2022.09.08.16.02.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 16:02:05 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Marco Elver <elver@google.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v3] perf test: Skip sigtrap test on old kernels
+Date:   Thu,  8 Sep 2022 16:01:50 -0700
+Message-Id: <20220908230150.4105955-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, "Jan Kara" <jack@suse.cz>,
-        adilger.kernel@dilger.ca, djwong@kernel.org, david@fromorbit.com,
-        trondmy@hammerspace.com, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-In-reply-to: <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
-References: <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>,
- <20220907125211.GB17729@fieldses.org>,
- <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>,
- <20220907135153.qvgibskeuz427abw@quack3>,
- <166259786233.30452.5417306132987966849@noble.neil.brown.name>,
- <20220908083326.3xsanzk7hy3ff4qs@quack3>, <YxoIjV50xXKiLdL9@mit.edu>,
- <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>,
- <20220908155605.GD8951@fieldses.org>,
- <9e06c506fd6b3e3118da0ec24276e85ea3ee45a1.camel@kernel.org>,
- <20220908182252.GA18939@fieldses.org>,
- <44efe219dbf511492b21a653905448d43d0f3363.camel@kernel.org>
-Date:   Fri, 09 Sep 2022 09:01:16 +1000
-Message-id: <166267807678.30452.18035749642786839300@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022, Jeff Layton wrote:
-> On Thu, 2022-09-08 at 14:22 -0400, J. Bruce Fields wrote:
-> > On Thu, Sep 08, 2022 at 01:40:11PM -0400, Jeff Layton wrote:
-> > > Yeah, ok. That does make some sense. So we would mix this into the
-> > > i_version instead of the ctime when it was available. Preferably, we'd
-> > > mix that in when we store the i_version rather than adding it afterward.
-> > > 
-> > > Ted, how would we access this? Maybe we could just add a new (generic)
-> > > super_block field for this that ext4 (and other filesystems) could
-> > > populate at mount time?
-> > 
-> > Couldn't the filesystem just return an ino_version that already includes
-> > it?
-> > 
-> 
-> Yes. That's simple if we want to just fold it in during getattr. If we
-> want to fold that into the values stored on disk, then I'm a little less
-> clear on how that will work.
-> 
-> Maybe I need a concrete example of how that will work:
-> 
-> Suppose we have an i_version value X with the previous crash counter
-> already factored in that makes it to disk. We hand out a newer version
-> X+1 to a client, but that value never makes it to disk.
+If it runs on an old kernel, perf_event_open would fail because of the
+new fields sigtrap and sig_data.  Just skipping the test could miss an
+actual bug in the kernel.
 
-As I understand it, the crash counter would NEVER appear in the on-disk
-i_version.
-The crash counter is stable while a filesystem is mounted so is the same
-when loading an inode from disk and when writing it back.
+Let's check BTF (when we have libbpf) if it has the sigtrap field in the
+perf_event_attr.  Otherwise, we can check it with a minimal event config.
 
-When loading, add crash counter to on-disk i_version to provide
-in-memory i_version.
-when storing, subtract crash counter from in-memory i_version to provide
-on-disk i_version.
+Cc: Marco Elver <elver@google.com>
+Acked-by: Song Liu <song@kernel.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/tests/sigtrap.c | 65 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
 
-"add" and "subtract" could be any reversible hash, and its inverse.  I
-would probably shift the crash counter up 16 and add/subtract.
+diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+index e32ece90e164..1de7478ec189 100644
+--- a/tools/perf/tests/sigtrap.c
++++ b/tools/perf/tests/sigtrap.c
+@@ -54,6 +54,63 @@ static struct perf_event_attr make_event_attr(void)
+ 	return attr;
+ }
+ 
++#ifdef HAVE_BPF_SKEL
++#include <bpf/btf.h>
++
++static bool attr_has_sigtrap(void)
++{
++	bool ret = false;
++	struct btf *btf;
++	const struct btf_type *t;
++	const struct btf_member *m;
++	const char *name;
++	int i, id;
++
++	btf = btf__load_vmlinux_btf();
++	if (btf == NULL) {
++		/* should be an old kernel */
++		return false;
++	}
++
++	id = btf__find_by_name_kind(btf, "perf_event_attr", BTF_KIND_STRUCT);
++	if (id < 0)
++		goto out;
++
++	t = btf__type_by_id(btf, id);
++	for (i = 0, m = btf_members(t); i < btf_vlen(t); i++, m++) {
++		name = btf__name_by_offset(btf, m->name_off);
++		if (!strcmp(name, "sigtrap")) {
++			ret = true;
++			break;
++		}
++	}
++out:
++	btf__free(btf);
++	return ret;
++}
++#else  /* !HAVE_BPF_SKEL */
++static bool attr_has_sigtrap(void)
++{
++	struct perf_event_attr attr = {
++		.type		= PERF_TYPE_SOFTWARE,
++		.config		= PERF_COUNT_SW_DUMMY,
++		.size		= sizeof(attr),
++		.remove_on_exec = 1, /* Required by sigtrap. */
++		.sigtrap	= 1, /* Request synchronous SIGTRAP on event. */
++	};
++	int fd;
++	bool ret = false;
++
++	fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
++	if (fd >= 0) {
++		ret = true;
++		close(fd);
++	}
++
++	return ret;
++}
++#endif  /* HAVE_BPF_SKEL */
++
+ static void
+ sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __maybe_unused)
+ {
+@@ -139,7 +196,13 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+ 
+ 	fd = sys_perf_event_open(&attr, 0, -1, -1, perf_event_open_cloexec_flag());
+ 	if (fd < 0) {
+-		pr_debug("FAILED sys_perf_event_open(): %s\n", str_error_r(errno, sbuf, sizeof(sbuf)));
++		if (attr_has_sigtrap()) {
++			pr_debug("FAILED sys_perf_event_open(): %s\n",
++				 str_error_r(errno, sbuf, sizeof(sbuf)));
++		} else {
++			pr_debug("perf_event_attr doesn't have sigtrap\n");
++			ret = TEST_SKIP;
++		}
+ 		goto out_restore_sigaction;
+ 	}
+ 
+-- 
+2.37.2.789.g6183377224-goog
 
-NeilBrown
-
-
-> 
-> The machine crashes and comes back up, and we get a query for i_version
-> and it comes back as X. Fine, it's an old version. Now there is a write.
-> What do we do to ensure that the new value doesn't collide with X+1? 
-> -- 
-> Jeff Layton <jlayton@kernel.org>
-> 

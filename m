@@ -2,222 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278535B29B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB0C5B29BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiIHW5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S230249AbiIHW5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiIHW4o (ORCPT
+        with ESMTP id S230002AbiIHW5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:56:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4634A13D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662677753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DU3bqKRijLSCOFrgdgPnLMDq2V/URDpkahXyMh3M2e4=;
-        b=MKuo+g3ExtZb7z+uV0TMLl/W4r9i9bh4kqeSpMfY3bSa+lV8LQYYxtXv3vcbmPTXE6zTuj
-        DUhglEcDAGZ00ubrGFifDR7lSslI8q2Gx/1uTF6lesX9kNVwvgf+pP4fEwRs5z3w9F+NAZ
-        DR+0gTzG2o00rZS/xmfk0bYDgpWtoYU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-423-ea5wydnNNNWaDOcORTs1ZA-1; Thu, 08 Sep 2022 18:55:49 -0400
-X-MC-Unique: ea5wydnNNNWaDOcORTs1ZA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 8 Sep 2022 18:57:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A537A61D4;
+        Thu,  8 Sep 2022 15:56:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 237DA3C0D85E;
-        Thu,  8 Sep 2022 22:55:49 +0000 (UTC)
-Received: from localhost (ovpn-12-17.pek2.redhat.com [10.72.12.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BED9E1121315;
-        Thu,  8 Sep 2022 22:55:47 +0000 (UTC)
-Date:   Fri, 9 Sep 2022 06:55:43 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, will@kernel.org,
-        catalin.marinas@arm.com, Nicolas Saenz Julienne <nsaenz@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        guanghuifeng@linux.alibaba.com, mark.rutland@arm.com,
-        linux-mm@kvack.org, thunder.leizhen@huawei.com,
-        wangkefeng.wang@huawei.com, kexec@lists.infradead.org
-Subject: Re: [PATCH 1/2] arm64, kdump: enforce to take 4G as the crashkernel
- low memory end
-Message-ID: <Yxpy7zitNEVt3qfx@MiWiFi-R3L-srv>
-References: <20220828005545.94389-1-bhe@redhat.com>
- <20220828005545.94389-2-bhe@redhat.com>
- <Yw8PvF5d2uuWy6Cl@kernel.org>
- <Yw9wU/S8cP0ntR3g@MiWiFi-R3L-srv>
- <YxBeS0G+F+fsBgod@kernel.org>
- <YxCk0mX5IzhvK9Pv@MiWiFi-R3L-srv>
- <YxXPannyTqBZInAt@kernel.org>
- <YxXmsKYGTd1+/U12@MiWiFi-R3L-srv>
- <CAMj1kXFDhbMPNcFnogyi7RXATqyHpqJLK9wiz=djRM3g65J8Zg@mail.gmail.com>
- <YxnvPu/tNvlBeJ/c@MiWiFi-R3L-srv>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 827F4336AE;
+        Thu,  8 Sep 2022 22:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662677770; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V/LYZrcvNodh/7MwFf1oux5I1ZCF23mKPOyEkmy1bmY=;
+        b=yf86J7MMb0nSJGInF2byX3Gx0TVw6ItHMAwhXNkBV93Lxnb84Qkn0RyR7Tf8XQUPqMgnMU
+        oKzYjq7adc4eDLEE2j7RQZV8Vuz7Gaz4IwoFQlV90InDd76vyTEJ3hWZmtAGfa2/NLUJKV
+        vy/EMltmy0OecdJgQ2Sw95MVDk3B5ro=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662677770;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V/LYZrcvNodh/7MwFf1oux5I1ZCF23mKPOyEkmy1bmY=;
+        b=bpUSGYajGzTyZf5k90o8rBQqb6HoSS09yv2OsUMZ63gqKCCwDDr93pY/nvFh4RrB4YTiWg
+        l9kL/8PM8/6souCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E523113A6D;
+        Thu,  8 Sep 2022 22:56:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hDpRJgBzGmPODwAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 08 Sep 2022 22:56:00 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxnvPu/tNvlBeJ/c@MiWiFi-R3L-srv>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, "Jan Kara" <jack@suse.cz>,
+        "J. Bruce Fields" <bfields@fieldses.org>, adilger.kernel@dilger.ca,
+        djwong@kernel.org, david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, brauner@kernel.org,
+        fweimer@redhat.com, linux-man@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
+ STATX_INO_VERSION field
+In-reply-to: <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+References: <20220907111606.18831-1-jlayton@kernel.org>,
+ <166255065346.30452.6121947305075322036@noble.neil.brown.name>,
+ <79aaf122743a295ddab9525d9847ac767a3942aa.camel@kernel.org>,
+ <20220907125211.GB17729@fieldses.org>,
+ <771650a814ab1ff4dc5473d679936b747d9b6cf5.camel@kernel.org>,
+ <20220907135153.qvgibskeuz427abw@quack3>,
+ <166259786233.30452.5417306132987966849@noble.neil.brown.name>,
+ <20220908083326.3xsanzk7hy3ff4qs@quack3>, <YxoIjV50xXKiLdL9@mit.edu>,
+ <02928a8c5718590bea5739b13d6b6ebe66cac577.camel@kernel.org>
+Date:   Fri, 09 Sep 2022 08:55:57 +1000
+Message-id: <166267775728.30452.17640919701924887771@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/22 at 09:33pm, Baoquan He wrote:
-> On 09/06/22 at 03:05pm, Ard Biesheuvel wrote:
-> > On Mon, 5 Sept 2022 at 14:08, Baoquan He <bhe@redhat.com> wrote:
-> > >
-> > > On 09/05/22 at 01:28pm, Mike Rapoport wrote:
-> > > > On Thu, Sep 01, 2022 at 08:25:54PM +0800, Baoquan He wrote:
-> > > > > On 09/01/22 at 10:24am, Mike Rapoport wrote:
-> > > > >
-> > > > > max_zone_phys() only handles cases when CONFIG_ZONE_DMA/DMA32 enabled,
-> > > > > the disabledCONFIG_ZONE_DMA/DMA32 case is not included. I can change
-> > > > > it like:
-> > > > >
-> > > > > static phys_addr_t __init crash_addr_low_max(void)
-> > > > > {
-> > > > >         phys_addr_t low_mem_mask = U32_MAX;
-> > > > >         phys_addr_t phys_start = memblock_start_of_DRAM();
-> > > > >
-> > > > >         if ((!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) ||
-> > > > >              (phys_start > U32_MAX))
-> > > > >                 low_mem_mask = PHYS_ADDR_MAX;
-> > > > >
-> > > > >         return low_mem_mast + 1;
-> > > > > }
-> > > > >
-> > > > > or add the disabled CONFIG_ZONE_DMA/DMA32 case into crash_addr_low_max()
-> > > > > as you suggested. Which one do you like better?
-> > > > >
-> > > > > static phys_addr_t __init crash_addr_low_max(void)
-> > > > > {
-> > > > >         if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
-> > > > >             return PHYS_ADDR_MAX + 1;
-> > > > >
-> > > > >         return max_zone_phys(32);
-> > > > > }
-> > > >
-> > > > I like the second variant better.
-> > >
-> > > Sure, will change to use the 2nd one . Thanks.
-> > >
-> > 
-> > While I appreciate the effort that has gone into solving this problem,
-> > I don't think there is any consensus that an elaborate fix is required
-> > to ensure that the crash kernel can be unmapped from the linear map at
-> > all cost. In fact, I personally think we shouldn't bother, and IIRC,
-> > Will made a remark along the same lines back when the Huawei engineers
-> > were still driving this effort.
-> >
-> > So perhaps we could align on that before doing yet another version of this?
-> 
-> Yes, certainly. That can save everybody's effort if there's different
-> opinion. Thanks for looking into this and the suggestion. 
-> 
-> About Will's remark, I checked those discussing threads, guess you are
-> mentioning the words in link [1]. I copy them at bottom for better
-> reference. Pleasae correct me if I am wrong.
-> 
-> With my understanding, Will said so because the patch is too complex,
-> and there's risk that page table kernel data itself is using could share
-> the same block/section mapping as crashkernel region. With these
-> two cons, I agree with Will that we would rather take off the protection
-> on crashkernel region which is done by mapping or unmapping the region,
-> even though the protection enhances kdump's ronusness.
-> 
-> Crashkernel reservation needs to know the low meory end so that DMA
-> buffer can be addressed by the dumping target, e.g storage disk. On the
-> current arm64, we have facts:
-> 1)Currently, except of Raspberry Pi 4, all arm64 systems can support
->   32bit DMA addressing. So, except of RPi4, the low memory end can be
->   decided after memblock init is done, namely at the end of
->   arm64_memblock_init(). We don't need to defer the crashkernel
->   reservation until zone_sizes_init() is done. Those cases can be checked
->   in patch code.
-> 2)For RPi4, if its storage disk is 30bit DMA addressing, then we can
->   use crashkernel=xM@yM to specify reservation location under 1G to
->   work around this.
-> 
-> ***
-> Based on above facts, with my patch applied:
-> pros:
-> 1) Performance issue is resolved;
-> 2) As you can see, the code with this patch applied will much 
->   simpler, more straightforward and clearer;
-> 3) The protection can be kept;
-> 4) Crashkernel reservation can be easier to succeed on small memory
->    system, e.g virt guest system. The earlier the reservation is done,
->    it's more likely to get the whole chunk of meomry.
-> cons:
-> 1) Only RPi4 is put in inconvenience for crashkernel reservation. It
->    needs to use crashkernel=xM@yM to work around.
-> 
-> ***
-> Take off the protection which is done by mapping or unmapping
-> crashkernel region as you and Will suggested:
-> pros:
-> 1) Performance issue is resolved;
-> 2) RPi4 will have the same convenience to set crashkernel;
-> 
-> cons:
-> 1) No protection is taken on crashkernel region;
-> 2) Code logic is twisting. There are two places to separately reserve
->    crashkernel, one is at the end of arm64_memblock_init(), one is at
->    the end of bootmem_init(). 
-> 3) Except of both CONFIG_ZONE_DMA|DMA32 disabled case, crashkernel
->    reservation is deferred. On small memory system, e.g virt guest system,
->    it increases risk that the resrevation could fail very possibly caused
->    by memory fragmentation.
-> 
-> Besides, comparing the above two solutions, I also want to say kdump
-> is developed for enterprise level of system. We need combine with
-> reality when considering reasonable solution. E.g on x86_64, it has DMA
-> zone of 16M and DMA32 zone from 16M to 4G always in normal kernel. For
-> kdump, we ignore DMA zone directly because it's for ISA style devices. 
-> Kdump doesn't support ISA style device with only 24bit DMA addressing
-> capability at the beginning, because it doesn't make sense, we never
-> hear that an enterprise level of x86_64 system needs to arm with kdump.
+On Fri, 09 Sep 2022, Jeff Layton wrote:
+> On Thu, 2022-09-08 at 11:21 -0400, Theodore Ts'o wrote:
+> > On Thu, Sep 08, 2022 at 10:33:26AM +0200, Jan Kara wrote:
+> > > It boils down to the fact that we don't want to call mark_inode_dirty()
+> > > from IOCB_NOWAIT path because for lots of filesystems that means journal
+> > > operation and there are high chances that may block.
+> > >=20
+> > > Presumably we could treat inode dirtying after i_version change similar=
+ly
+> > > to how we handle timestamp updates with lazytime mount option (i.e., not
+> > > dirty the inode immediately but only with a delay) but then the time wi=
+ndow
+> > > for i_version inconsistencies due to a crash would be much larger.
+> >=20
+> > Perhaps this is a radical suggestion, but there seems to be a lot of
+> > the problems which are due to the concern "what if the file system
+> > crashes" (and so we need to worry about making sure that any
+> > increments to i_version MUST be persisted after it is incremented).
+> >=20
+> > Well, if we assume that unclean shutdowns are rare, then perhaps we
+> > shouldn't be optimizing for that case.  So.... what if a file system
+> > had a counter which got incremented each time its journal is replayed
+> > representing an unclean shutdown.  That shouldn't happen often, but if
+> > it does, there might be any number of i_version updates that may have
+> > gotten lost.  So in that case, the NFS client should invalidate all of
+> > its caches.
+> >=20
+> > If the i_version field was large enough, we could just prefix the
+> > "unclean shutdown counter" with the existing i_version number when it
+> > is sent over the NFS protocol to the client.  But if that field is too
+> > small, and if (as I understand things) NFS just needs to know when
+> > i_version is different, we could just simply hash the "unclean
+> > shtudown counter" with the inode's "i_version counter", and let that
+> > be the version which is sent from the NFS client to the server.
+> >=20
+> > If we could do that, then it doesn't become critical that every single
+> > i_version bump has to be persisted to disk, and we could treat it like
+> > a lazytime update; it's guaranteed to updated when we do an clean
+> > unmount of the file system (and when the file system is frozen), but
+> > on a crash, there is no guaranteee that all i_version bumps will be
+> > persisted, but we do have this "unclean shutdown" counter to deal with
+> > that case.
+> >=20
+> > Would this make life easier for folks?
+> >=20
+> > 						- Ted
+>=20
+> Thanks for chiming in, Ted. That's part of the problem, but we're
+> actually not too worried about that case:
+>=20
+> nfsd mixes the ctime in with i_version, so you'd have to crash+clock
+> jump backward by juuuust enough to allow you to get the i_version and
+> ctime into a state it was before the crash, but with different data.
+> We're assuming that that is difficult to achieve in practice.
+>=20
+> The issue with a reboot counter (or similar) is that on an unclean crash
+> the NFS client would end up invalidating every inode in the cache, as
+> all of the i_versions would change. That's probably excessive.
+>=20
+> The bigger issue (at the moment) is atomicity: when we fetch an
+> i_version, the natural inclination is to associate that with the state
+> of the inode at some point in time, so we need this to be updated
+> atomically with certain other attributes of the inode. That's the part
+> I'm trying to sort through at the moment.
 
-Sorry, here I mean we never hear that an enterprise level of x86_64
-system owns ISA storage disk and needs to arm with kdump.
+I don't think atomicity matters nearly as much as ordering.
+The i_version must not be visible before the change that it reflects.
+It is OK for it to be after.  Even seconds after without great cost.  It
+is bad for it to be earlier.  Any unlocked gap after the i_version
+update and before the change is visible can result in a race and
+incorrect caching.
 
-> 
-> Hi Ard, Will, Catalin and other reviewers,
-> 
-> Above is my understaning and thinking about the encountered issue,
-> plesae help check and point out what's missing or incorrect.
-> 
-> Hi Nicolas,
-> 
-> If it's convenient to you, please help make clear if the storage disk or
-> network card can only address 32bit DMA buffer on RPi4. Really
-                                ~~30bit, typo                              
-> appreciate that.
-> 
-> ***
-> [1]Will's remark on Huawei's patch
-> https://lore.kernel.org/all/20220718131005.GA12406@willie-the-truck/T/#u
-> 
-> ====quote Will's remark here
-> I do not think that this complexity is justified. As I have stated on
-> numerous occasions already, I would prefer that we leave the crashkernel
-> mapped when rodata is not "full". That fixes your performance issue and
-> matches what we do for module code, so I do not see a security argument
-> against it.
-> 
-> I do not plan to merge this patch as-is.
-> ===
-> 
+Even for directory updates where NFSv4 wants atomic before/after version
+numbers, they don't need to be atomic w.r.t. the change being visible.
+
+If three concurrent file creates cause the version number to go from 4
+to 7, then it is important that one op sees "4,5", one sees "5,6" and
+one sees "6,7", but it doesn't matter if concurrent lookups only see
+version 4 even while they can see the newly created names.
+
+A longer gap increases the risk of an unnecessary cache flush, but it
+doesn't lead to incorrectness.
+
+So I think we should put the version update *after* the change is
+visible, and not require locking (beyond a memory barrier) when reading
+the version. It should be as soon after as practical, bit no sooner.
+
+NeilBrown
 

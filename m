@@ -2,156 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE835B206E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08385B2071
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbiIHOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S232299AbiIHOXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiIHOXA (ORCPT
+        with ESMTP id S232218AbiIHOXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:23:00 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2049.outbound.protection.outlook.com [40.107.22.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2415BA5721;
-        Thu,  8 Sep 2022 07:22:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WjivMmXDZGzJajzawUXjaWlYY5C+4k8sXGky9mX20fCeNAPwo6Y+nLF7xHDiYau51ihlQTvEbfkoJH/Tsy+9stL8CQXbRaaDlnRmPY30V6Xt7pWFg3UkJFNxhdMW0cxeH0nWkzyN0usSnEOhz9ChEGjIYrj/PCjN4Hc9sNabM97Kz5DA3AtfPXwTeXGQNYOFbbjeRz1+7akLx/yIIVtI5dA7kVY9UStUvVvKp40dwNSxDoCqUmfFRfjZ1urezGpbrQXk4yZI9VFhklsx3ck8HMGtWRz/Zq/sV3Mm7GZN12h6Wz+Hpe6DRuFM+q0/gMHb+FjSabtj1+Qr9by5SDN/7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IjEqt/po8qpBZHKLR5lzdqWsc9H5IhpUShSJnxTJ8QM=;
- b=nR18kVAcMkq8Cy/g0rR/WJAUsOQFwwI2VwdvuHCCwxj2idh5tLq2T993PwClkAa/QZXnJY6cb1ChTEi4v5FAVWN1t8gmc4Xk9au+NiNqJI8RHfHNgeIX3V0i+wxZBQqp+gPxARTaCI//QNvnpbV7mF56va614N217uYCQ8GkRn3UUpHE2x4q9NUY+dtFQVdlwiD0w/hcsggsgydnF7Wrxb3D7NZPulhJsZy/U7gBAPVtLL+z874vEG7Ncg8ImKuICksfX3Q2xSkEWQ4S7zojsBC6XOd9yeDRZpnjQs7h70OM5GjVMrhC49Hhjvm12qvewqpwsnBiwcvWPIzPf7RcMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IjEqt/po8qpBZHKLR5lzdqWsc9H5IhpUShSJnxTJ8QM=;
- b=hAu1kFlp6eKfBrIP3PmTmFM5PAVf0tJE6ACg4fMlkQpmLElpymi+L82wKmYfgO43QVmlUU8TVkTpTxi8TryT1pR2ktCejJRVWEUhmemWgKw2aQQOlEru3Gpo4hN4jHQw1RBTIgFoYO4Oy6DrEHlLEbFDPkpsiCN/MKW3aVDDuWg=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DB9PR04MB8496.eurprd04.prod.outlook.com (2603:10a6:10:2c8::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.15; Thu, 8 Sep
- 2022 14:22:57 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3412:9d57:ec73:fef3]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3412:9d57:ec73:fef3%5]) with mapi id 15.20.5588.017; Thu, 8 Sep 2022
- 14:22:56 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        Lee Jones <lee@kernel.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "katie.morris@in-advantage.com" <katie.morris@in-advantage.com>
-Subject: Re: [RESEND PATCH v16 mfd 1/8] mfd: ocelot: add helper to get regmap
- from a resource
-Thread-Topic: [RESEND PATCH v16 mfd 1/8] mfd: ocelot: add helper to get regmap
- from a resource
-Thread-Index: AQHYwUOdDJSLJ7OoIUmdxm/qLSQnvK3VS58AgABO1AA=
-Date:   Thu, 8 Sep 2022 14:22:56 +0000
-Message-ID: <20220908142256.7aad25k553sqfgbm@skbuf>
-References: <20220905162132.2943088-1-colin.foster@in-advantage.com>
- <20220905162132.2943088-2-colin.foster@in-advantage.com>
- <Yxm4oMq8dpsFg61b@google.com>
-In-Reply-To: <Yxm4oMq8dpsFg61b@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 41f3c8d1-c464-49c9-6a8f-08da91a5a00e
-x-ms-traffictypediagnostic: DB9PR04MB8496:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8n1S6FXtBnkVVaaKgGxmgKQVZkmFkDCBK+s8dFpBIrteX5z/8kp8YsQqqTgCk8o+f2UHx2CrlAJ1+Yq0K9ZOHb0KWkUo//nH/ss5ozD8wWbuhTOqKrkoCnwAGyAcqigDjHm6XlQ/SnPGxZkr9gG1Ms7fKw+ffAazmwDfcWi3yrtpTpkx27SJ55UBXqRD1hoJsciE/nWtbPugxnHS2V6BcQ5mrJ0aLuScZvIdAz5ixICCzRorrqxSKPDPwgMR53s86Vj7kuMVJysXF8LO7h9N4IwpLPZ0gBbL6n6erGfQOFp/bqbqVm5dFErUVEme6V6Pyr1aLWw7zMbuPDKgt/+UeR2fbKVk5WqNiMEMT9sr3CJliGs6+eLtToRJlJocW75tzUE5oSgzexWzi122rDHzzlGcxvHtIS+6E1c13uUJDPrgWCqATh55CRYh/nC0+uTFVw0YYEl5AUyb7RgINKZU8cNz+fWq3rCN+KBXaRBc+eOY5CSMnDnivxScuTyqtlk/gix9lyk3Q9jh/BHHIR4YGLHiv05cDQK7VmCjkiD7H3fFEpk4iu80Dr4KW9FZfGmWvGeWyiMS7cQCWc7/RV0o4NsnvynCQN9wKi6y+szrqDbeOwCOJ3M8B6L/j0Jsh+cUc95UHRSDjXsGEZ05uLX1iIZtdNRcQh29Sl3qaM6jYme4z/mZLz0DaPOHoDrE8Gs9NWpbC80nh8QZ7/+yuo6bo2pdPa46MoJ7iWh2VjMCWtYlOz5B2MUSlQwNS6ZoYWv7PLAI2f6oISk8hWcEX68MgQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(136003)(396003)(366004)(376002)(346002)(39860400002)(1076003)(122000001)(186003)(38100700002)(2906002)(33716001)(83380400001)(66946007)(54906003)(86362001)(110136005)(41300700001)(316002)(66556008)(66446008)(66476007)(64756008)(8676002)(76116006)(91956017)(4326008)(5660300002)(6486002)(38070700005)(7416002)(44832011)(71200400001)(478600001)(4744005)(6512007)(8936002)(6506007)(9686003)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?obgf8DMVO859bn0bBPAcU2qWbi/7MEWrJ1rIkN8AiBLjMCR1cVk9MRUessgo?=
- =?us-ascii?Q?Dbpsm0D5KGlGGaiYVjiKEP685Jgnb5FXzOLCXtdDy4COAGjgWHS3y3BaBeTQ?=
- =?us-ascii?Q?siXahbnkcjDwCKah9YKL4REE/fM7vajB1GTZAgHAgco+koSxvwmmIC2NWlgW?=
- =?us-ascii?Q?rrHvuDbX2x5ymp/sdopiTTmeZwX7AImyh44ZgSPmiHZ+eLd3IUKNnbsPwM/d?=
- =?us-ascii?Q?NZHcSgDXb4tJsG3P0hfkRBK3Pxha9GSkI5sGtd626A9Ne9zQc+wSaunqPRVT?=
- =?us-ascii?Q?mVxk+h5UGWt/Ox9yfQIzu9dPZGVdtv/nWtu0pZxn7KJlpEfkJ/HdlehBg1zg?=
- =?us-ascii?Q?YQ2WZorX92Yq56DhucJjFQG179312Cpmop9GKRWuBBA8ltahWTDDFLuElnn+?=
- =?us-ascii?Q?yp18lnZfoTYI14IOZgTfkrxaV/UHkOuhMmX0ocAR1cHdQKFhCRty56UOazGB?=
- =?us-ascii?Q?moICkHWkBL3kcOXRSnDMoFVTkIXBqV7t7wpLlFppswARRHdCjgr0+wO7R9cT?=
- =?us-ascii?Q?gA+2xV4Kv6e18juTPmXqfJUPtuSVdI4yDevdy5fiDzeTsIKYI84CYB5LRxG/?=
- =?us-ascii?Q?lzoXZTrPMqsH9AK6nZ5tMdurzlvsbs/lsTXfzYIz18jYMiDgnuHyNY8rgZ3o?=
- =?us-ascii?Q?h33PESnvXc2lrWHEF3G1gDBoBJATpoLcYtiwHW/Dip+U3wxrBade9rrKrVY3?=
- =?us-ascii?Q?Ww10W9a7n2cppqpJQOwJbDILGuT/v2VKCZh2wSRHZDi6Qu1WsTfHkUSY6kjV?=
- =?us-ascii?Q?fHACDyA3dqKYi1A/doT+52+++rYEVvDveUBAYHFFeZ0RfWYH+hyVO1mlDTL7?=
- =?us-ascii?Q?m/ry0hFtl84ab8KqHWRfV0XOEGFsmGfpwZ+W1Ln6A96Q65syyf3ZNHm3xyp1?=
- =?us-ascii?Q?qdJR9E5kWzCHKDPVW3rDsSYBCwIvlqfrcwcxSaIynIBWQ2pxU/ZbeFS2e9yC?=
- =?us-ascii?Q?M5amWoIfPKwMeQhB5OuxN0PaCE1Q0pwntI5TG+Ffiybj1/RFIJhEadzqPwpI?=
- =?us-ascii?Q?I0gOBhBUh7SWBsqMK4fV6S+g/GeAWy0JDWWmy6lAF8rX2eKcOUI5VQrj18GG?=
- =?us-ascii?Q?cqKUGLoNzWfKYtFBL3QCYKzvJwSOR7BSiwQrYS/siiW2oHQK0m155tm3ChRb?=
- =?us-ascii?Q?eG1Lconn/GQN1ITyrV3GfCQggAT6zdXormd6psU2nlXLlRVsIbjlUt3jfOfH?=
- =?us-ascii?Q?pQj2I6oxMn/nT1mdmTGaG4dmAEneUgqhUNRRTj+mm9kHAUFqk8LIoouihz5y?=
- =?us-ascii?Q?KioQGfD4eDoQ8LABKDQV8JWfRvOn/eyS6unb8MQCQrBdroGvNluvYMLAyotk?=
- =?us-ascii?Q?vBYMPHrK9Ra5v0cIDzXBrtUBIhQEnVYiC6u0w1aJfDppnRvlov4olharehkU?=
- =?us-ascii?Q?OOyjp6z2nWycxIdX4EWdcLeHALiDMRrJBpt0gRIs4/RTtenrCrYtH0Xe20WI?=
- =?us-ascii?Q?bSMDWpCSrQE40C5aClo27OWKQkTBNyBfzeoyLKOZf12CzQYxL1fzNJXOTISZ?=
- =?us-ascii?Q?Jeuo3M+nkS3CFlnuKZXvMTC5QpWMZiFoWuIU6Nw3gj3JQBEE53xjmizVenDU?=
- =?us-ascii?Q?NYChbg4I1Qb3Hb5y314EKaXeFW49V4sOnmH1lwAvAaE2XWTEEa/PlMkjskX/?=
- =?us-ascii?Q?HA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <164EF5490D348A42A22F589C31CD3AB6@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 8 Sep 2022 10:23:50 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214CD11210B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:23:48 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y3so38488113ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=p3DDNNeH7lCPlmJjEkAMIprBwVt2TkoLL2ZSNR+i2uQ=;
+        b=hr+/b7N8DmRxnyhKeaX2jbus5KsLh9ib5SrIzFoqDskfSog0lF0nErMjN+RvJQ5Dhs
+         yKGk3leGwE21sivoesF0Y6xu/fikwpjHBMQEZIBYGYtUDkB4Sd/aNj0AmBVL//tmT7WR
+         MCCrcT+0lGehCTy7ghtFoXH+FRvDxOx/lQ0Bs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=p3DDNNeH7lCPlmJjEkAMIprBwVt2TkoLL2ZSNR+i2uQ=;
+        b=xbe5W6GZ7U15LWljQgFnaDnJ+XTR4btgIXb5xogjXGH70JqplPQWAs4eomPzDWLQ3u
+         /4YHSUle0pfM6S2DSp/8+fl9gpz7s69G/UxoXcHYgdtNqrKAg0T2D2uFmVzwUNNJ5sxV
+         RHnI6mnvYWmtDbOTE1wsaD4GUejCOYnsYtiOz9mSdxMY6EiVMjnhRwic9CgKbVpAbxrx
+         RcB0F13SCsFsVy0KQ5Q6/7EdH8D5BOQW9qZ+yYaq72KKXCevWmrPIjPpq9F/euoEd/Is
+         ZBVLF0frUp9xWh/3DaDatxwSxNwhWV0FGdtXXXTF8gRo3qLYsaUk4Srf63SnIoyFAy7C
+         TMOQ==
+X-Gm-Message-State: ACgBeo2LGb+DKzxcCxNN+kyBjbYwMH8Lu7/S8fvNduffCUD389Nye94D
+        4biZbrNZL8binT2eFpMjVKKfqF0AqfHpKdtb
+X-Google-Smtp-Source: AA6agR4U3KmUB6DGsw0YIrXxGxSaogrL+u8BRRaWb9QlKsH33/GVOOg4WgA70IEUNmvSL25GZxUPvQ==
+X-Received: by 2002:a17:906:fe04:b0:777:b13d:30a6 with SMTP id wy4-20020a170906fe0400b00777b13d30a6mr1283632ejb.248.1662647027169;
+        Thu, 08 Sep 2022 07:23:47 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906211200b0073c10031dc9sm1277153ejt.80.2022.09.08.07.23.46
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 07:23:46 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id d2so9280006wrn.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:23:46 -0700 (PDT)
+X-Received: by 2002:a5d:4d0c:0:b0:228:cd9f:5a4c with SMTP id
+ z12-20020a5d4d0c000000b00228cd9f5a4cmr5509487wrt.138.1662647025759; Thu, 08
+ Sep 2022 07:23:45 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41f3c8d1-c464-49c9-6a8f-08da91a5a00e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 14:22:56.6652
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zOPqOv3MX80ktPNcd+pYmN9218KgVQHK3kBE25A5trKYANA3CTl76ejeua5nDsIuKivbZah5TMzgvL2S2R1WSw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8496
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220907204924.173030-1-ahalaney@redhat.com> <abad381a-dfe7-9337-ff35-f657bf373d44@linaro.org>
+In-Reply-To: <abad381a-dfe7-9337-ff35-f657bf373d44@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 8 Sep 2022 07:23:33 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VmnKtx9smitqvNgmiCs-UCnLGFgbPnKd41QWeo1t3c9g@mail.gmail.com>
+Message-ID: <CAD=FV=VmnKtx9smitqvNgmiCs-UCnLGFgbPnKd41QWeo1t3c9g@mail.gmail.com>
+Subject: Re: [PATCH v3] regulator: dt-bindings: qcom,rpmh: Indicate
+ regulator-allow-set-load dependencies
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Johan Hovold <johan@kernel.org>,
+        Johan Hovold <johan+kernel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 10:40:48AM +0100, Lee Jones wrote:
-> Applied, thanks.
+Hi,
 
-Hurray!
+On Thu, Sep 8, 2022 at 3:25 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 07/09/2022 22:49, Andrew Halaney wrote:
+> > For RPMH regulators it doesn't make sense to indicate
+> > regulator-allow-set-load without saying what modes you can switch to,
+> > so be sure to indicate a dependency on regulator-allowed-modes.
+> >
+> > In general this is true for any regulators that are setting modes
+> > instead of setting a load directly, for example RPMH regulators. A
+> > counter example would be RPM based regulators, which set a load
+> > change directly instead of a mode change. In the RPM case
+> > regulator-allow-set-load alone is sufficient to describe the regulator
+> > (the regulator can change its output current, here's the new load),
+> > but in the RPMH case what valid operating modes exist must also be
+> > stated to properly describe the regulator (the new load is this, what
+> > is the optimum mode for this regulator with that load, let's change to
+> > that mode now).
+> >
+> > With this in place devicetree validation can catch issues like this:
+> >
+> >     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
+> >             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+> >
+> > Where the RPMH regulator hardware is described as being settable, but
+> > there are no modes described to set it to!
+> >
+> > Suggested-by: Johan Hovold <johan+kernel@kernel.org>
+> > Reviewed-by: Johan Hovold <johan+kernel@kernel.org>
+> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> > ---
+> >
+> > v2: https://lore.kernel.org/linux-arm-msm/20220906201959.69920-1-ahalaney@redhat.com/
+> > Changes since v2:
+> >   - Updated commit message to explain how this is a property of the
+> >     hardware, and why it only applies to certain regulators like RPMH
+> >     (Johan + Krzysztof recommendation)
+> >   - Added Johan + Douglas' R-B tags
+>
+> You posted before we finished discussion so let me paste it here:
+>
+> The bindings don't express it, but the regulator core explicitly asks
+> for set_mode with set_load callbacks in drms_uA_update(), which depends
+> on REGULATOR_CHANGE_DRMS (toggled with regulator-allow-set-load).
+>
+> drms_uA_update() later calls regulator_mode_constrain() which checks if
+> mode changing is allowed (REGULATOR_CHANGE_MODE).
+>
+> Therefore based on current implementation and meaning of
+> set-load/allowed-modes properties, I would say that this applies to all
+> regulators. I don't think that RPMh is special here.
 
-Colin, what plans do you have for the rest of VSC7512 upstreaming?
-Do you need Lee to provide a stable branch for networking to pull, so
-you can continue development in this kernel release cycle, or do you
-expect that there won't be dependencies and you can therefore just test
-on linux-next?=
+RPMh is special compared to RPM because in RPMh the hardware exposes
+"modes" to the OS and in RPM the hardware doesn't. Specifically:
+
+In RPM, the OS (Linux) has no idea what mode the regulator is running
+at and what modes are valid. The OS just tells the RPM hardware "I'm
+requesting a load of X uA. Thanks!" So "regulator-allow-set-mode"
+basically says "yeah, let the OS talk to RPM about loads for this
+regulator.
+
+In RPMh, the OS knows all about the modes. For each regulator it's the
+OS's job to know how much load the regulator can handle before it
+needs to change modes. So the OS adds up all the load requests from
+all the users of the regulator and then translates that to a mode. The
+OS knows all about the modes possible for the regulator and limiting
+them to a subset is a concept that is sensible.
+
+This is why, for instance, there can be an "initial mode" specified
+for RPMh but not for RPM. The OS doesn't ever know what mode a RPM
+regulator is in but it does for RPMh.
+
+-Doug

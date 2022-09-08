@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F54C5B1DBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE13C5B1DBA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbiIHM41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S231737AbiIHM4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbiIHM4W (ORCPT
+        with ESMTP id S230497AbiIHM4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:56:22 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59C5895DF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:56:19 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1662641764t6anmvuv
-Received: from localhost.localdomain ( [182.148.14.0])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 08 Sep 2022 20:56:03 +0800 (CST)
-X-QQ-SSF: 0100000000200090C000B00A0000000
-X-QQ-FEAT: H7ipuM2k/9pzSk/YbezjBnfj2Gmo7EGbkzqs3TI1GW1VhtLkskNeT8bo12+iZ
-        YYMQCSM0bMIdOSveI8/4ESFT6BQw4V/ESuyWMZ1kP9J4ukVSKjbReaHo8aOtIigYAVcePGJ
-        BT8+QOWb3TflTQWfTJWNEUI7vlAHfUXef/SHgRUxxIwdZtPZr6d7RLzldACO5YbtZZ59J74
-        SyNg3Wqq02ZqFiWDJvZepjPgafNcxNnw6faa8MuXPwl665jB7iJoD5y+eJADsstu+p4vOrR
-        fS0uctV1WzZS/DAeK2uCdbzWm0Qw8vcXRIB9fzd84U98MJntj/A1NibpmMamkAwyTIUlsB1
-        cjGvgIVvapF8odbp8Zt1fhq+fCl0PzmguHbXnQY2QeJHO5N5PsxT9i/07WwTQ==
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     daniel@zonque.org, haojian.zhuang@gmail.com, robert.jarzmik@free.fr
-Cc:     linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] arm/mach-pxa: fix repeated words in comments
-Date:   Thu,  8 Sep 2022 20:55:57 +0800
-Message-Id: <20220908125557.29246-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 8 Sep 2022 08:56:18 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FCD8E44C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=mo6NlbP81uv17J7rxsGK8qsFkgGcB1sLT6G0zNwoAOA=;
+        t=1662641774; x=1663851374; b=lZ4PHophL5MUpWK9DMHgt8HKpDpSeaglkMlSvgoaxPt/tiG
+        QE9R+Vs76mCJGoJrzCmXeQuerjZQbAR/NE5Y+JAKzQ4fYPVB4vM2gyaqfgywnmB2tSy45L9ADwQVo
+        qFPV5ufFD1uvpYUPpBvRoW6z332bFX3PiaQ35U9vZp+NfjYdijy/DVwZm39sN2VM83zWqmzc6Mu2v
+        EccRsWSUu4Dp9U/l5m3lfJOm5mS1V/ilqU2/v9DftW+VTgA30wenDPOIaliBk5P6GUnU55jxuIA8s
+        hwR+RQxeQlo8Tkunp5whhLnTipVe+FTiuBI7VYVu4Dhkc/mYP1gWDfYAWDNfTZMA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1oWH4f-00BBha-0C;
+        Thu, 08 Sep 2022 14:56:05 +0200
+Message-ID: <514c7366cc8e78face3094a66bb2c4bf030f9432.camel@sipsolutions.net>
+Subject: Re: [PATCH] um/kernel: fix repeated words in comments
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     wangjianli <wangjianli@cdjrlc.com>, richard@nod.at,
+        anton.ivanov@cambridgegreys.com
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Thu, 08 Sep 2022 14:56:03 +0200
+In-Reply-To: <20220908125401.28130-1-wangjianli@cdjrlc.com>
+References: <20220908125401.28130-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'in'.
+On Thu, 2022-09-08 at 20:54 +0800, wangjianli wrote:
+> Delete the redundant word 'in'.
+>=20
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  arch/um/kernel/physmem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/um/kernel/physmem.c b/arch/um/kernel/physmem.c
+> index e7c7b53a1435..91485119ae67 100644
+> --- a/arch/um/kernel/physmem.c
+> +++ b/arch/um/kernel/physmem.c
+> @@ -169,7 +169,7 @@ __uml_setup("iomem=3D", parse_iomem,
+>  );
+> =20
+>  /*
+> - * This list is constructed in parse_iomem and addresses filled in in
+> + * This list is constructed in parse_iomem and addresses filled in
+>   * setup_iomem, both of which run during early boot.  Afterwards, it's
+>=20
+Fine, I guess, but honestly - that sentence doesn't parse well either
+way. Might be worth addressing that at the same time...
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- arch/arm/mach-pxa/palm27x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/mach-pxa/palm27x.c b/arch/arm/mach-pxa/palm27x.c
-index 1a8d25eecac3..116183859357 100644
---- a/arch/arm/mach-pxa/palm27x.c
-+++ b/arch/arm/mach-pxa/palm27x.c
-@@ -160,7 +160,7 @@ void __init palm27x_lcd_init(int power, struct pxafb_mode_info *mode)
- #if	defined(CONFIG_USB_PXA27X) || \
- 	defined(CONFIG_USB_PXA27X_MODULE)
- 
--/* The actual GPIO offsets get filled in in the palm27x_udc_init() call */
-+/* The actual GPIO offsets get filled in the palm27x_udc_init() call */
- static struct gpiod_lookup_table palm27x_udc_gpiod_table = {
- 	.dev_id = "gpio-vbus",
- 	.table = {
--- 
-2.36.1
-
+johannes

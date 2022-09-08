@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766C05B20FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800395B20FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbiIHOoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S232549AbiIHOou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiIHOog (ORCPT
+        with ESMTP id S232431AbiIHOok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:44:36 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C4D63BD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:44:30 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id jm11so18051543plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:44:30 -0700 (PDT)
+        Thu, 8 Sep 2022 10:44:40 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44953BDF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 07:44:34 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id z9-20020a17090a468900b001ffff693b27so2698286pjf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 07:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=f1u38+lpP3uUpdpRuDgUoYZwjE7yjDfDzNqW/1OTveQ=;
-        b=ZNproLrsTmwfqHcFUDE41Pn3ppB+VvLZUt0OoQ/lZ8e72Q4YKxyaVCpMJUEyJDSnCa
-         eSvRWzccMzwJdj0YsjFjIxTL0dooM5nXCJQP1PHx6bQAleNplo75lHpEsF01QFXIRXG5
-         hWhwYer3PbDbVMh2Q+ageHD13Lg3lZ9UNYzjE6R3Kpgb6kr2VESZ2zW03pvIHxwhUhLQ
-         VM/VmGpj/f69qM5euFPl+/zTJxdrJzD15osyWfZUKyDS3KpIYPFOb2AJBH0xSX0/InSq
-         sbmzdRs2AAJLvnjkxQfmgN7ca08+AGeBoJY+Ywl58w7EF52lSkWP1Ztdmuv5l+ZSF/97
-         tFjQ==
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date;
+        bh=1O4MLVbmX/2gc1Qfnxh9Du1G8eStsMcSf2LwqkEqzqw=;
+        b=CF4korFnZ5botkl98V+ysIFWWuooEKPxVpYRIYrlQXlJ0Er70IRasrkpMnG9/WD29r
+         HmURGNeghbycuovGIHa+Kk7xNgx1ZQ7pVJUGkziOtFTfkHzK1QKnaUKwx8c7n4DnEXFh
+         snsW9yyPo7pirx0A4pfzQ388lif5TmabuC39IGnDsAkv48MP4jeXNi5Q4muEu58hq5lE
+         j9cl1E/o3UnYAGZhRNfXt9dsXJ5prGoQXcHLDjvyA8HfCmrv4lAW0YKEFnlZNWvG5RB7
+         a8McQq+bWHVvIC5i3za6GWi1y7MuJkE1DV7ygt3EOvcpZIIRoBvRVzBKoB399ZUXkWkO
+         mhaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=f1u38+lpP3uUpdpRuDgUoYZwjE7yjDfDzNqW/1OTveQ=;
-        b=W/nvWOKduymV+bfLwo/xQg3qMl6hrBSCWZ/i+zJD/irlcw8tytaYviswB/i0r37lSc
-         8ms+D26b3krB07G9zdT15ohoRaLNgQ0NVyRxxlJzZl684nzoA0NHMU0G+KHYKuk36uGj
-         uhLv8xh/Gm+u5J1Nf8PcwjuoFp7Cp4/lVn7mNzoCnRFeIthS3EHQPGxrZwgfxM0ASXYd
-         l1PAML9jU0EEVESj6s8WWYvpZNqsWBVPTqouoHH+1eyqZE+CdUwShSQZbcA77uypLqBV
-         1LYFy0ejr6ViM+tcXlW8OXZMsAWl1hKblL57bmpHkMFTAHgQxhVK/JuA0cCbuvoKmSFn
-         b4nQ==
-X-Gm-Message-State: ACgBeo3EJeJDxEV4wzBasmmGpSKMr3KMvocRNLqczJRe4nq896vJZ3Zt
-        YqOa+TnMsVurhxlHzG5noNgpkQ==
-X-Google-Smtp-Source: AA6agR44jEvcjSHnfI5NxCT6ZhnkMwVUCWHJdZqCZKYRVa7ZlaxswBnb0759Edh4RKcLiWU9DD+ttw==
-X-Received: by 2002:a17:90a:e586:b0:1fa:d28b:ab9b with SMTP id g6-20020a17090ae58600b001fad28bab9bmr4692671pjz.47.1662648270190;
-        Thu, 08 Sep 2022 07:44:30 -0700 (PDT)
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1O4MLVbmX/2gc1Qfnxh9Du1G8eStsMcSf2LwqkEqzqw=;
+        b=YRW3a+cx38yupGqHt/v7HeP0GS5F7qbctXpgbOyMe1F0kzuYgQ302e1OYWXDBmZSrj
+         vu+M6uvgcEAQ/7SIXmNFW3Xctts9CJ5NDgQLuASB+hhTWwOLashKQBe8bu2rt4jHidmO
+         90gwxCDuxUgnmrPlBu0Hw4hzYlZEmLv/smGst94RQSgCmw/K2mSa80LFltlzBeEDPDme
+         ATLmusBSUATf0cQlDFaSo2OSicavQY5899fVXNr/TYzVW1TG2l3FHWr9oaKJM1JBuTkd
+         EK9jh7Z3CfMYqgj14zvGSoMzSQXxbl/J+wNKbMDH2ksbQmHqRWbNEAZ6glDRHcZKku/O
+         KCvQ==
+X-Gm-Message-State: ACgBeo3g06SpnfXKUJ4WGrgzuohaI6tMvdoeIJkawE9SmugM2cFbCvB4
+        ieDn977aFZqMB/PU3sM5tC4/qg==
+X-Google-Smtp-Source: AA6agR4fMCwBAw9So2S8D12dXe5cZLB6a/xZwSPlAPYJak+1KFwxCj6yOCUEkLh9GcOh/8oUsn2oiQ==
+X-Received: by 2002:a17:903:264e:b0:176:e9d3:64b6 with SMTP id je14-20020a170903264e00b00176e9d364b6mr8255573plb.172.1662648273289;
+        Thu, 08 Sep 2022 07:44:33 -0700 (PDT)
 Received: from localhost.localdomain (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902d40400b001750361f430sm4484728ple.155.2022.09.08.07.44.27
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902d40400b001750361f430sm4484728ple.155.2022.09.08.07.44.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 07:44:29 -0700 (PDT)
+        Thu, 08 Sep 2022 07:44:32 -0700 (PDT)
 From:   Zong Li <zong.li@sifive.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         palmer@dabbelt.com, paul.walmsley@sifive.com,
@@ -55,13 +56,15 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v3 0/6] Use composable cache instead of L2 cache
-Date:   Thu,  8 Sep 2022 14:44:18 +0000
-Message-Id: <20220908144424.4232-1-zong.li@sifive.com>
+Subject: [PATCH v3 1/6] dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
+Date:   Thu,  8 Sep 2022 14:44:19 +0000
+Message-Id: <20220908144424.4232-2-zong.li@sifive.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220908144424.4232-1-zong.li@sifive.com>
+References: <20220908144424.4232-1-zong.li@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,39 +73,95 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Since composable cache may be L3 cache if private L2 cache exists, we
-should use its original name "composable cache" to prevent confusion.
+should use its original name Composable cache to prevent confusion.
 
-This patchset contains the modification which is related to ccache, such
-as DT binding and EDAC driver.
-
-The DT binding is based on top of Conor's patch, it has got ready for
-merging, and it looks that it would be taken into the next few 6.0-rc
-version. If there is any change, the next version of this series will be
-posted as well.
-https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
-
-Ben Dooks (2):
-  soc: sifive: ccache: reduce printing on init
-  soc: sifive: ccache: use pr_fmt() to remove CCACHE: prefixes
-
-Zong Li (4):
-  dt-bindings: sifive-ccache: change Sifive L2 cache to Composable cache
-  soc: sifive: ccache: rename SiFive L2 cache to Composable cache.
-  soc: sifive: ccache: determine the cache level from dts
-  soc: sifive: ccache: define the macro for the register shifts
-
- ...five-l2-cache.yaml => sifive,ccache0.yaml} |  28 ++-
- drivers/edac/Kconfig                          |   2 +-
- drivers/edac/sifive_edac.c                    |  12 +-
- drivers/soc/sifive/Kconfig                    |   6 +-
- drivers/soc/sifive/Makefile                   |   2 +-
- .../{sifive_l2_cache.c => sifive_ccache.c}    | 200 ++++++++++--------
- .../{sifive_l2_cache.h => sifive_ccache.h}    |  16 +-
- 7 files changed, 151 insertions(+), 115 deletions(-)
+Signed-off-by: Zong Li <zong.li@sifive.com>
+Suggested-by: Conor Dooley <conor.dooley@microchip.com>
+Suggested-by: Ben Dooks <ben.dooks@sifive.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ ...five-l2-cache.yaml => sifive,ccache0.yaml} | 28 +++++++++++++++----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
  rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive,ccache0.yaml} (83%)
- rename drivers/soc/sifive/{sifive_l2_cache.c => sifive_ccache.c} (31%)
- rename include/soc/sifive/{sifive_l2_cache.h => sifive_ccache.h} (12%)
 
+diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+similarity index 83%
+rename from Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+rename to Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+index ca3b9be58058..bf3f07421f7e 100644
+--- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
++++ b/Documentation/devicetree/bindings/riscv/sifive,ccache0.yaml
+@@ -2,18 +2,18 @@
+ # Copyright (C) 2020 SiFive, Inc.
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/riscv/sifive-l2-cache.yaml#
++$id: http://devicetree.org/schemas/riscv/sifive,ccache0.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: SiFive L2 Cache Controller
++title: SiFive Composable Cache Controller
+ 
+ maintainers:
+   - Sagar Kadam <sagar.kadam@sifive.com>
+   - Paul Walmsley  <paul.walmsley@sifive.com>
+ 
+ description:
+-  The SiFive Level 2 Cache Controller is used to provide access to fast copies
+-  of memory for masters in a Core Complex. The Level 2 Cache Controller also
++  The SiFive Composable Cache Controller is used to provide access to fast copies
++  of memory for masters in a Core Complex. The Composable Cache Controller also
+   acts as directory-based coherency manager.
+   All the properties in ePAPR/DeviceTree specification applies for this platform.
+ 
+@@ -22,6 +22,7 @@ select:
+     compatible:
+       contains:
+         enum:
++          - sifive,ccache0
+           - sifive,fu540-c000-ccache
+           - sifive,fu740-c000-ccache
+ 
+@@ -33,6 +34,7 @@ properties:
+     oneOf:
+       - items:
+           - enum:
++              - sifive,ccache0
+               - sifive,fu540-c000-ccache
+               - sifive,fu740-c000-ccache
+           - const: cache
+@@ -45,7 +47,7 @@ properties:
+     const: 64
+ 
+   cache-level:
+-    const: 2
++    enum: [2, 3]
+ 
+   cache-sets:
+     enum: [1024, 2048]
+@@ -115,6 +117,22 @@ allOf:
+         cache-sets:
+           const: 1024
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: sifive,ccache0
++
++    then:
++      properties:
++        cache-level:
++          enum: [2, 3]
++
++    else:
++      properties:
++        cache-level:
++          const: 2
++
+ additionalProperties: false
+ 
+ required:
 -- 
 2.17.1
 

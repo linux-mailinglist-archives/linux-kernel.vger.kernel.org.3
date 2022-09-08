@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554CB5B2174
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3025B2178
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 17:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbiIHPBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 11:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S232760AbiIHPCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 11:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbiIHPBb (ORCPT
+        with ESMTP id S231981AbiIHPCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:01:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2474ED9B7;
-        Thu,  8 Sep 2022 08:01:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4CF561D38;
-        Thu,  8 Sep 2022 15:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03C4C433C1;
-        Thu,  8 Sep 2022 15:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662649287;
-        bh=pCqMEF+hRGXhMV+bGw+tm59DrO7QZ5nD5ZCcllSjM/g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dY1apBZg3O93aJIBk19Yd3jF5YPM60PkzpYA8YGXIUnNpQJlj5a36B7Xdd77fqQdb
-         MOy1Ol7wuY3KPZRUFAQuZEjznAilft0+6d3a3smt4kFWExvbpX0WjFGfhTvEFT0cHP
-         tq9AfEcf/DgxaZq7ZE47yOTlkXq8bCLhpn0sFagS8cygr2uR7J7rPHUModY7FIoOmY
-         zgIjtQt2PvzU8VPrCrilXnySvPtls+ul1/7Ff9dMCJDFKRvBBp6JfFNlCS7uOV6myb
-         aIBfhcATkRf72jVv/BoUoIk12Xedsr8paI9IAh7kNFi0jg8lhKDXOHGFnia/iaSbE+
-         O7u4EU3GoecHw==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org
-Subject: [PATCH v3 1/2] x86/kprobes: Fix kprobes instruction boudary check with CONFIG_RETHUNK
-Date:   Fri,  9 Sep 2022 00:01:22 +0900
-Message-Id: <166264928214.775585.6657611968575138295.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <166264927154.775585.16570756675363838701.stgit@devnote2>
-References: <166264927154.775585.16570756675363838701.stgit@devnote2>
-User-Agent: StGit/0.19
+        Thu, 8 Sep 2022 11:02:38 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C043CED9A5;
+        Thu,  8 Sep 2022 08:02:35 -0700 (PDT)
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 288F26HX020965;
+        Fri, 9 Sep 2022 00:02:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 288F26HX020965
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662649327;
+        bh=8hQteixhTRn0IXFAmCEqnMliHvXuSMH7IbIKeVN8/rQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WyohYophnaNZeLJr8jkYQ8cIE01qdIWlIuOr1CCUXAZDh1wPUuW3dcrlNWenG1EZD
+         4nesU49MQMbrTya6ETvsACljXAWwdnVphffel7Nq4jH5P5pSAdV02S7nsJ7VguuluS
+         kK7WP7+pGSpMRm9vDQVC22FiVzsFfTCQiSpIQLaKqvUaBZsfErF/k2v6mZHDLSga3t
+         GLO59188ubtP5O19aj4D16tqufBF7odnVFq9zoi++rWgF70FDKfA9Yuwb8saz456Cq
+         VU4nQ+4EKRGMc8wrdYQrMkZ8cCO15K55xxw7lcvYoDKyRpa5wX+LonNVWnt+t3ZXhj
+         1zxCcH6o26ATw==
+X-Nifty-SrcIP: [209.85.210.48]
+Received: by mail-ot1-f48.google.com with SMTP id t11-20020a05683014cb00b0063734a2a786so12510577otq.11;
+        Thu, 08 Sep 2022 08:02:07 -0700 (PDT)
+X-Gm-Message-State: ACgBeo12REupkMkTEj71Vv0MzH4gZtcp8iuDUlP9HhKz3m3/FB33f55C
+        GDgGy4jm4LkinVeE/llKwe5Bu4AGrUcggTNMo1w=
+X-Google-Smtp-Source: AA6agR5EIgPiVg+b9R2y17Oh6bb4VRfCwISrVT+nftqwkQ3XwlwJlQzx0MbpWzAc8RpiE3LyivfufYGI7/vyN8EjMDU=
+X-Received: by 2002:a9d:4806:0:b0:637:cdca:f8d3 with SMTP id
+ c6-20020a9d4806000000b00637cdcaf8d3mr3689470otf.225.1662649326153; Thu, 08
+ Sep 2022 08:02:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220907230339.271633-1-danielwa@cisco.com> <CAK7LNAQSUkWz9hvEmB1wSCMJ0Do209QZOgAxO=oSK6HQa7XgTg@mail.gmail.com>
+ <20220908143859.GF4320@zorba>
+In-Reply-To: <20220908143859.GF4320@zorba>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 9 Sep 2022 00:01:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQEEVF7x1_gX-Y2fFf6Cp3RtRLr41YLkv+s8YHzo1ikKA@mail.gmail.com>
+Message-ID: <CAK7LNAQEEVF7x1_gX-Y2fFf6Cp3RtRLr41YLkv+s8YHzo1ikKA@mail.gmail.com>
+Subject: Re: [RFC-PATCH] Makefile: dts: include directory makefile for DTC_FLAGS
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        xe-linux-external@cisco.com,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Thu, Sep 8, 2022 at 11:39 PM Daniel Walker <danielwa@cisco.com> wrote:
+>
+> On Thu, Sep 08, 2022 at 04:08:06PM +0900, Masahiro Yamada wrote:
+> > On Thu, Sep 8, 2022 at 8:03 AM Daniel Walker <danielwa@cisco.com> wrote:
+> > >
+> > > The current Makefile will drop the DTC_FLAGS depending on how you
+> > > build. For example,
+> > >
+> > > make dtbs
+> > >
+> > > includes correct DTC_FLAGS. However if you run,
+> > >
+> > > make nvidia/tegra210-p2371-2180.dtb
+> > >
+> > > The DTC_FLAGS are dropped. This appears to be caused by the top level
+> > > Makefile not including the Makefile from the directory where the dts lives.
+> > >
+> > > This normally doesn't matter because most dts files have nothing added
+> > > from the Makefile. This changes when you have overlays, and the
+> > > DTC_FLAGS modifier is mandatory for the dtb to work correctly.
+> >
+> >
+> > I recently fixed another issue of single target builds.
+> > https://patchwork.kernel.org/project/linux-kbuild/patch/20220906061313.1445810-2-masahiroy@kernel.org/
+> >
+> >
+> > It fixed your issue as well.
+> >
+> >
+>
+> Yeah, it fixes the issue I was seeing. Are you planning to resubmit this or is
+> the v2 the final version ?
+>
+> Daniel
 
-Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
-speculative execution after RET instruction, kprobes always failes to
-check the probed instruction boundary by decoding the function body if
-the probed address is after such sequence. (Note that some conditional
-code blocks will be placed after function return, if compiler decides
-it is not on the hot path.)
 
-This is because kprobes expects kgdb puts the INT3 as a software
-breakpoint and it will replace the original instruction.
-But these INT3 are not such purpose, it doesn't need to recover the
-original instruction.
+I do not have a plan to submit v3
+(unless a new issue comes up)
 
-To avoid this issue, kprobes checks whether the INT3 is owned by
-kgdb or not, and if so, stop decoding and make it fail. The other
-INT3 will come from CONFIG_RETHUNK/CONFIG_SLS and those can be
-treated as a one-byte instruction.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
-Cc: stable@vger.kernel.org
----
- arch/x86/kernel/kprobes/core.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 4c3c27b6aea3..c6dd7ae68c8f 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -37,6 +37,7 @@
- #include <linux/extable.h>
- #include <linux/kdebug.h>
- #include <linux/kallsyms.h>
-+#include <linux/kgdb.h>
- #include <linux/ftrace.h>
- #include <linux/kasan.h>
- #include <linux/moduleloader.h>
-@@ -283,12 +284,15 @@ static int can_probe(unsigned long paddr)
- 		if (ret < 0)
- 			return 0;
- 
-+#ifdef CONFIG_KGDB
- 		/*
--		 * Another debugging subsystem might insert this breakpoint.
--		 * In that case, we can't recover it.
-+		 * If there is a dynamically installed kgdb sw breakpoint,
-+		 * this function should not be probed.
- 		 */
--		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE)
-+		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE &&
-+		    kgdb_has_hit_break(addr))
- 			return 0;
-+#endif
- 		addr += insn.length;
- 	}
- 
-
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C4D5B153C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC91A5B153B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiIHG7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S230033AbiIHG7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiIHG7p (ORCPT
+        with ESMTP id S229561AbiIHG72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:59:45 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3C6B1E2;
-        Wed,  7 Sep 2022 23:59:39 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1278a61bd57so23465634fac.7;
-        Wed, 07 Sep 2022 23:59:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=PL5sFutse4CuxEfTtpSy/YygDoAtPS3qoXDa8gawEm8=;
-        b=AJ5hPhg4/qg9iMKZvpW+NcKUjXT5JPU4T1ss3T+By2VzK3BP+PbWt4JwaP8Lmhkbb0
-         pqG4CedSfKj1SyXpCA2vFjsYvZIF0j5iCzKdULZJkZBQACvoKM+2YFKOpiKb0LoRw5ml
-         AUPIJckFHSjANi/cPYL8GUfrLHUlveNx9KR1MDwxyOLuk3BOSM5rYMVZX4mM2CdnDZRk
-         NYjO5zN2t07DHnlrDju9FDKwJJuwb6EKT6GImR1uIxQ0EtBOlXzQwkcr4HG3l8KC8oCj
-         z2z30S0C/PvSH6xTOMeA+Bvc1/DeQHIxDUpiwNyJfcZ+toMuEOSBgahMg9YysOeq4iE3
-         fsRw==
-X-Gm-Message-State: ACgBeo3f3dBjQiFipb6MWEI53vYZACDEBB24RHyMg81wxX+cf9faO2nA
-        kf8VTLwMIBHWNU8lOB6OGNpp9uL4UvW8SH3JD2Q=
-X-Google-Smtp-Source: AA6agR77tCrqb7/HX1SoQqqTfvx/HEve3UlERGZqx3jX1p5BWKbmxqvSBEnIV9yuTVXek2CF/RW9hkoJYJqdEhlzt5c=
-X-Received: by 2002:a05:6808:302a:b0:345:ec04:8f11 with SMTP id
- ay42-20020a056808302a00b00345ec048f11mr851693oib.5.1662620378888; Wed, 07 Sep
- 2022 23:59:38 -0700 (PDT)
+        Thu, 8 Sep 2022 02:59:28 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219E02E7;
+        Wed,  7 Sep 2022 23:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662620362; x=1694156362;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jpVU4iOl8VZsAtBVAq669SyX2EvKQ/EEeFGahcq39aA=;
+  b=JWA/ssv+e+tp3YprsRxl21JzU4dAcuv4Ieb7uuxStdhmj3rGg9+2Vpvv
+   kN6aoOHRwozY78wsPosAuJa3UvJm9fy+glS/0D1qThkg+xmjt6iA9cyyg
+   F0kxCJTC0SB/zXRby4+MqiBBMW8Qn6IbCS842VhWA8bbcZocPJA+KS9xT
+   kmoNOycaQwDJ65FnfdZTxmzoJNtS6A2l4Zmrna65s1YU+lceeTCibWRbX
+   o2Of02mfXy9CuqbysZVTFn3YsPsQGGuVZlSjg1If2vB8VfnlRpwuIZsTC
+   5EZ4ygTDLgWIsMEBrjdWE3qMpZCBJkh+ewMeS6yyEA1XRoNbRkpoCsDZ6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="383381602"
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="383381602"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 23:59:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
+   d="scan'208";a="610586177"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by orsmga007.jf.intel.com with ESMTP; 07 Sep 2022 23:59:18 -0700
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com
+Subject: [PATCH] perf script: Fix Cannot print 'iregs' field for hybrid systems
+Date:   Thu,  8 Sep 2022 15:00:30 +0800
+Message-Id: <20220908070030.3455164-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220908014854.151203-1-yangjihong1@huawei.com>
-In-Reply-To: <20220908014854.151203-1-yangjihong1@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 7 Sep 2022 23:59:27 -0700
-Message-ID: <CAM9d7ciPd4vf3v1rdOD43vR-bh0pjj1LCcrMVTLfH6Fcxx_Dsw@mail.gmail.com>
-Subject: Re: [PATCH] perf lock: Remove redundant word 'contention' in help message
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,64 +60,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-On Wed, Sep 7, 2022 at 6:52 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> Before:
->   # perf lock -h
->
->    Usage: perf lock [<options>] {record|report|script|info|contention|contention}
->
->       -D, --dump-raw-trace  dump raw trace in ASCII
->       -f, --force           don't complain, do it
->       -i, --input <file>    input file name
->       -v, --verbose         be more verbose (show symbol address, etc)
->           --kallsyms <file>
->                             kallsyms pathname
->           --vmlinux <file>  vmlinux pathname
->
-> After:
->   # perf lock -h
->
->    Usage: perf lock [<options>] {record|report|script|info|contention}
->
->       -D, --dump-raw-trace  dump raw trace in ASCII
->       -f, --force           don't complain, do it
->       -i, --input <file>    input file name
->       -v, --verbose         be more verbose (show symbol address, etc)
->           --kallsyms <file>
->                             kallsyms pathname
->           --vmlinux <file>  vmlinux pathname
->
-> Fixes: 528b9cab3b81 ("perf lock: Add 'contention' subcommand")
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+Commit b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems to
+collect metadata records") adds a dummy event on hybrid systems to fix the
+symbol "unknown" issue when the workload is created in a P-core but runs
+on an E-core. The added dummy event will cause "perf script -F iregs" to
+fail. Dummy events do not have "iregs" attribute set, so when we do
+evsel__check_attr, the "iregs" attribute check will fail, so the issue
+happened.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+The following commit [1] has fixed a similar issue by skipping the attr
+check for the dummy event because it does not have any samples anyway. It
+works okay for the normal mode, but the issue still happened when running
+the test in the pipe mode. In the pipe mode, it calls process_attr() which
+still checks the attr for the dummy event. This commit fixed the issue by
+skipping the attr check for the dummy event in the API evsel__check_attr,
+Otherwise, we have to patch everywhere when evsel__check_attr() is called.
 
-Thanks for the fix!
+Before:
 
-Namhyung
+ #./perf record -o - --intr-regs=di,r8,dx,cx -e br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf script -F iregs |head -5
+Samples for 'dummy:HG' event do not have IREGS attribute set. Cannot print 'iregs' field.
+0x120 [0x90]: failed to process type: 64
 
+After:
 
-> ---
->  tools/perf/builtin-lock.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index dd11d3471baf..ea40ae52cd2c 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -1874,8 +1874,7 @@ int cmd_lock(int argc, const char **argv)
->                 NULL
->         };
->         const char *const lock_subcommands[] = { "record", "report", "script",
-> -                                                "info", "contention",
-> -                                                "contention", NULL };
-> +                                                "info", "contention", NULL };
->         const char *lock_usage[] = {
->                 NULL,
->                 NULL
-> --
-> 2.30.GIT
->
+ # ./perf record -o - --intr-regs=di,r8,dx,cx -e br_inst_retired.near_call:p -c 1000 --per-thread true 2>/dev/null|./perf script -F iregs |head -5
+ ABI:2    CX:0x55b8efa87000    DX:0x55b8efa7e000    DI:0xffffba5e625efbb0    R8:0xffff90e51f8ae100
+ ABI:2    CX:0x7f1dae1e4000    DX:0xd0    DI:0xffff90e18c675ac0    R8:0x71
+ ABI:2    CX:0xcc0    DX:0x1    DI:0xffff90e199880240    R8:0x0
+ ABI:2    CX:0xffff90e180dd7500    DX:0xffff90e180dd7500    DI:0xffff90e180043500    R8:0x1
+ ABI:2    CX:0x50    DX:0xffff90e18c583bd0    DI:0xffff90e1998803c0    R8:0x58
+
+[1]https://lore.kernel.org/lkml/20220831124041.219925-1-jolsa@kernel.org/
+
+Fixes: b91e5492f9d7 ("perf record: Add a dummy event on hybrid systems to collect metadata records")
+
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Suggested-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-script.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 585171479876..1a8790385eba 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -445,6 +445,9 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
+ 	struct perf_event_attr *attr = &evsel->core.attr;
+ 	bool allow_user_set;
+ 
++	if (evsel__is_dummy_event(evsel))
++		return 0;
++
+ 	if (perf_header__has_feat(&session->header, HEADER_STAT))
+ 		return 0;
+ 
+-- 
+2.25.1
+

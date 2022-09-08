@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC285B2346
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678715B234F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiIHQO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S230140AbiIHQOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiIHQOG (ORCPT
+        with ESMTP id S231874AbiIHQOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:14:06 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF416E9012
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:13:33 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id q3so18262970pjg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:13:33 -0700 (PDT)
+        Thu, 8 Sep 2022 12:14:08 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48AFE900A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:13:45 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id y29so7905620ljq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Ynlv/HlbjINH5vzgYf4TA8R4RfVi30O2jA5crDrStO0=;
-        b=oYHv1zVyXadmL712N/OTN2ss+kfxkYYSZBY8SbeRcDbK5VRzMS9d5oRJiUpeOHaNnS
-         y6U8mteu3RX3xSdL5vGrsFWmQ0rr4DrfFKLnopVfEAmi84XeZniDURw9fK6qKvxsWiTq
-         0ZT0zNSgYguC3eYyLhWhzdiJaFpeL/WVVWjRo=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=VGZLHz/DjSRVcLx6zUosYKxPYPae57PloyXxh6yBjFE=;
+        b=dsFVeRa1bSoDF3YlyFpkO0lUc4GxEkNbkxSgLKPZSQ7ZHTqR+W5InuYk65I3E2AmMB
+         JUZThfrZ7O1XQMWK+UTdm7WVCI/SEO7pL2wWtVGYrmbxwDcTUduzMASmwh1gV58Hlf3p
+         YbeY2EQkGkZaT0R40q8NOTTGjPzjvnT9nAz9H9NryVyLR3m8w6KL9MHEQk4/kSE0dHEG
+         TMTrfFIIb9BmsHmnG71qLRtuUpg1yBOHqdzrL9DoPSjbyqjGtS1CcHyIbQklqL/3ta29
+         9rVrdXk4VorUaSjYwrt84b+ffPKmsH1L2czLQV9VVRqzx2EBcLzbjkppdG2XJR5phRcD
+         lh7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ynlv/HlbjINH5vzgYf4TA8R4RfVi30O2jA5crDrStO0=;
-        b=tGqZrOPZuUsyN4n+MB56XuS4MpMiPgMzO2ZIAF1OQ4U6+CWJS/d8xqS9fySN7qKllQ
-         R2ZVuJdKavJU2BXRS74hksKUZwM6E+rWcNKt/TInE5lOURAb8qsKQN5XBkr3FpnafWW3
-         t/jQ4JBlkKLy+Vc0sQuayXaNR2xeewsa2dlvQ5/R7QvzUT7FWT9Ka/dqpBQ5uRUyRx8y
-         B3Bnb1ietT9Uk6mHfE7IKZ5UvbFjICMmiGX05IFfBdqUvLHXXX31qhojwY0hvRO2dUT5
-         7PYFY8kCVoXIxuslk0JWmR/9e9A4ktc/ndWrRZf/ntqYPSb01O3CIAp4+TMUfswO/yaY
-         rwNQ==
-X-Gm-Message-State: ACgBeo2pk+PBkRqMTOptCnFeetsCYA8wQ+9JvFVmHDFMrRBnPQp/v/Fs
-        EdDBkoyw0J7KW37g3AmdJq9c7Q==
-X-Google-Smtp-Source: AA6agR4b8HBqas+oT3K9pH3ycWp3TxRR1yMAxYD+7X/J4yLb8tb1538WM7cusSa+UKAv+3mrExLCmQ==
-X-Received: by 2002:a17:90b:1bc8:b0:200:43c7:5940 with SMTP id oa8-20020a17090b1bc800b0020043c75940mr5071911pjb.46.1662653613370;
-        Thu, 08 Sep 2022 09:13:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709027e0e00b0016be596c8afsm14773738plm.282.2022.09.08.09.13.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 09:13:32 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 09:13:31 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     agk@redhat.com, mka@chromium.org, dm-devel@redhat.com,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sarthakkukreti@chromium.org
-Subject: Re: dm: verity-loadpin: Only trust verity targets with enforcement
-Message-ID: <202209080912.00880AD6@keescook>
-References: <20220907133055.1.Ic8a1dafe960dc0f8302e189642bc88ebb785d274@changeid>
- <166259004596.4128104.7200162640366282166.b4-ty@chromium.org>
- <YxoJcG5MN4OdaulL@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VGZLHz/DjSRVcLx6zUosYKxPYPae57PloyXxh6yBjFE=;
+        b=s6xXRkDnDq7zX/3T4T5PxgANz71ulKGDfGPxZZ+3xZf0Q1NgaHUKFdT2g5rlxRvesR
+         XRZuZAtGKG4Yh92eMrWeEIRk1Ev7TKLFmiP/UCTMYTOXes4RsS2iAFCEtW7F2/V9qdGS
+         rJUL/F8lGSK08Uyw3imdpYBPO6Z/asvVhvvFTwHB6TnjZQAY5THvLK58X7tTU5bJIlAS
+         A4A7+UhtxonkCeiMZMVUoOdlvAL/E+Sj17pnqy1lCvDI3punWAdx2VoOtPz76aKAtBdP
+         GzYty6vZaRClsuO4Ehx4vVTu+xR6bdqPt7/r0bewFHOwtPZnt982O7kyuwm9/3dv/0Gr
+         qznw==
+X-Gm-Message-State: ACgBeo2QYJhZc4FMRvHDFJOa6Rr/RsbYU3ZlVGCeLCOz4tZakscExQIV
+        hmghYV7AGuNVJ/KDY24Xqi6mTQ==
+X-Google-Smtp-Source: AA6agR5euMPFHV8tq4RX29WSwoo6iMXfa2emLRM698nFMAI6coSP8baP1dOf8aabxmfysCJGeKnvPw==
+X-Received: by 2002:a2e:a7cc:0:b0:269:18c5:4ded with SMTP id x12-20020a2ea7cc000000b0026918c54dedmr2760227ljp.476.1662653624162;
+        Thu, 08 Sep 2022 09:13:44 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id v12-20020a056512348c00b0048a7c162bbesm3082779lfr.279.2022.09.08.09.13.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 09:13:43 -0700 (PDT)
+Message-ID: <ab80670a-267a-45d8-92d0-750e7dce5682@linaro.org>
+Date:   Thu, 8 Sep 2022 19:13:43 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxoJcG5MN4OdaulL@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: msm8953: add MDSS
+Content-Language: en-GB
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220906183334.203787-1-luca@z3ntu.xyz>
+ <20220906183334.203787-4-luca@z3ntu.xyz>
+ <CAA8EJpqjnafKyUrd1ntYFeGTDtRxgEUSu0Mg9wNGxObJ3wF0Kw@mail.gmail.com>
+ <12049260.O9o76ZdvQC@g550jk>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <12049260.O9o76ZdvQC@g550jk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +85,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 11:25:36AM -0400, Mike Snitzer wrote:
-> On Wed, Sep 07 2022 at  6:34P -0400,
-> Kees Cook <keescook@chromium.org> wrote:
+On 07/09/2022 18:30, Luca Weiss wrote:
+> Hi Dmitry,
 > 
-> > On Wed, 7 Sep 2022 13:30:58 -0700, Matthias Kaehlcke wrote:
-> > > Verity targets can be configured to ignore corrupted data blocks.
-> > > LoadPin must only trust verity targets that are configured to
-> > > perform some kind of enforcement when data corruption is detected,
-> > > like returning an error, restarting the system or triggering a
-> > > panic.
-> > > 
-> > > 
-> > > [...]
-> > 
-> > Applied to for-next/hardening, thanks!
-> > 
-> > [1/1] dm: verity-loadpin: Only trust verity targets with enforcement
-> >       https://git.kernel.org/kees/c/2e1875c05267
+> On Dienstag, 6. September 2022 21:41:11 CEST Dmitry Baryshkov wrote:
+>> On Tue, 6 Sept 2022 at 21:36, Luca Weiss <luca@z3ntu.xyz> wrote:
+>>> From: Vladimir Lypak <vladimir.lypak@gmail.com>
+>>>
+>>> Add the MDSS, MDP and DSI nodes that are found on msm8953 SoC.
+>>>
+>>> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+>>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+>>> ---
+>>> Changes since v2:
+>>> - add "core" clock for mdss as suggested by Dmitry Baryshkov
+>>>
+>>>   arch/arm64/boot/dts/qcom/msm8953.dtsi | 210 ++++++++++++++++++++++++++
+>>>   1 file changed, 210 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi
+>>> b/arch/arm64/boot/dts/qcom/msm8953.dtsi index 3d11331e78d2..580333141a66
+>>> 100644
+>>> --- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+>>> @@ -726,6 +726,216 @@ tcsr_phy_clk_scheme_sel: syscon@193f044 {
+>>>
+>>>                          reg = <0x193f044 0x4>;
+>>>                  
+>>>                  };
+>>>
+>>> +               mdss: mdss@1a00000 {
+>>> +                       compatible = "qcom,mdss";
+>>> +
+>>> +                       reg = <0x1a00000 0x1000>,
+>>> +                             <0x1ab0000 0x1040>;
+>>> +                       reg-names = "mdss_phys",
+>>> +                                   "vbif_phys";
+>>> +
+>>> +                       power-domains = <&gcc MDSS_GDSC>;
+>>> +                       interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+>>> +
+>>> +                       interrupt-controller;
+>>> +                       #interrupt-cells = <1>;
+>>> +
+>>> +                       clocks = <&gcc GCC_MDSS_AHB_CLK>,
+>>> +                                <&gcc GCC_MDSS_AXI_CLK>,
+>>> +                                <&gcc GCC_MDSS_VSYNC_CLK>,
+>>> +                                <&gcc GCC_MDSS_MDP_CLK>;
+>>> +                       clock-names = "iface",
+>>> +                                     "bus",
+>>> +                                     "vsync",
+>>> +                                     "core";
+>>> +
+>>> +                       #address-cells = <1>;
+>>> +                       #size-cells = <1>;
+>>> +                       ranges;
+>>> +
+>>> +                       status = "disabled";
+>>> +
+>>> +                       mdp: mdp@1a01000 {
+>>> +                               compatible = "qcom,mdp5";
+>>
+>> Could you please change this to "qcom,msm8953-mdp5", "qcom,mdp5".
 > 
-> Does this mean you're intending to send this upstream?  I prefer to
-> take all DM changes unless there is an external dependency.
+> This would be the first dtsi using the two compatibles then, correct? Are there
+> any plans to adjust other SoCs?
 
-Oh! Yeah, I added it to my tree since you'd asked me to take the
-original verity-loadpin series and this was a fix. I'm happy either
-way. Shall I drop this change from my tree?
+Yes, this is a long-going plan. Having just "qcom,mdp5" doesn't allow 
+switching between mdp5 and dpu1 drivers. Thus I'd ask to add per-SoC 
+compat strings.
 
+It's up to you (and Rob/Krzysztof) whether to leave just one compat 
+string or have both of them: a per-soc one and a generic one.
+
+> 
+>>
+>>> +                               reg = <0x1a01000 0x89000>;
+>>> +                               reg-names = "mdp_phys";
+>>> +
+>>
+>> [skipped]
+>>
+>>> +
+>>> +                       dsi0_phy: dsi-phy@1a94400 {
+>>
+>> Let's probably use a generic name 'phy' here and for dsi1_phy.
+> 
+> Here also, the bindings examples all use dsi-phy@, are there any plans to
+> change that and adjust other dtsi files?
+
+Yes, sc7280 already uses phy@ for both DSI and eDP PHYs.
+
+> 
+>>
+>> The rest looks good to me.
+> 
+> Thanks!
 -- 
-Kees Cook
+With best wishes
+Dmitry
+

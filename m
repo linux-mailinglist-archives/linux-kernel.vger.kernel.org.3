@@ -2,92 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF445B1DB5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DA15B1DB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 14:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiIHMyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 08:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S231971AbiIHMzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 08:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiIHMyf (ORCPT
+        with ESMTP id S230497AbiIHMyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:54:35 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2531013DC1;
-        Thu,  8 Sep 2022 05:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662641673; x=1694177673;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4z8nV3faxJ7DE6XzcpT01ziGzPcP3sN5QVEmlDYT5uc=;
-  b=KDGWUSjk/lQR1vJUsC0YqQyinobPWkyjcQ6/KAYcDMzSHXf6zRPGyVfA
-   vqVKito/zl2HHe8Hg+rBa8Qj0tFsOa9AnHfDZVT7ko6oxxdI8j7gKnxrO
-   SaVpoA5PwiDLE8D17fz20AefA93PYbjd6KPFQlkejJKoMjf5Bn7UZN+pM
-   wQKcnsZsi5P6Q9S7sp5b4MI2DNgqbYlXYjvdlVGlzPQis/Asb270INLAK
-   04EZlHIXXdbigQaMJ5zHoMjtUf1DH/iMqHYhK7LNBORSww+BikLJFrT+J
-   cxcvVvrsnMYaSLL0BWDYtBTnmD8pvySVtig13FZt0OIjRcZWlrwCpYQ6+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="294740338"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="294740338"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 05:54:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="740659831"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 08 Sep 2022 05:54:31 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 41A98235; Thu,  8 Sep 2022 15:54:47 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] spi: Group cs_change and cs_off flags together in struct spi_transfer
-Date:   Thu,  8 Sep 2022 15:54:44 +0300
-Message-Id: <20220908125444.30727-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 8 Sep 2022 08:54:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2582ED7E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 05:54:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C65CB1F6E6;
+        Thu,  8 Sep 2022 12:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662641692; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pxCPsA42d5aRC10EUmd/OSOfCOyGgvazLm4CGXkGadc=;
+        b=THSWm4TTTsRjzn12V1zhQzMiraTVxiUoONEGE6bsMgJXnnWXKskQc5vTcMBrNTbjWxFRqv
+        a0R3Vb2mXlpNoYXZpomM7EwtqNub/ogy8bUZkiS/vK7v1kEtxGQnKLdCJyJzWT4Bgm5zDG
+        0HdBCu9OqC6bpDItDQeGQBc47ads/rU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662641692;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pxCPsA42d5aRC10EUmd/OSOfCOyGgvazLm4CGXkGadc=;
+        b=0CS3iBKk0Va566/CXwTCmCAHEbEDLc+FOKEmsgAM1NJ2E+D0XR0WMEXZ9ft5YduTmac4xR
+        KkcQ7lVZDOY9nmDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9645F1322C;
+        Thu,  8 Sep 2022 12:54:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Jen4IxzmGWPpLQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 08 Sep 2022 12:54:52 +0000
+Date:   Thu, 08 Sep 2022 14:54:51 +0200
+Message-ID: <87tu5iauw4.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 08/12] drm/udl: Pass rectangle directly to udl_handle_damage()
+In-Reply-To: <f9fb7d5d-6858-e221-098a-a8729e8a1857@suse.de>
+References: <20220908095115.23396-1-tiwai@suse.de>
+        <20220908095115.23396-9-tiwai@suse.de>
+        <f9fb7d5d-6858-e221-098a-a8729e8a1857@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 5e0531f6b90a ("spi: Add capability to perform some transfer
-with chipselect off") added a new flag but squezed it into a wrong
-group of struct spi_transfer members (note that SPI_NBITS_* are macros
-for easier interpretation of the tx_nbits and rx_nbits bitfields.
+On Thu, 08 Sep 2022 14:47:52 +0200,
+Thomas Zimmermann wrote:
+> 
+> Hi
+> 
+> Am 08.09.22 um 11:51 schrieb Takashi Iwai:
+> > Just for some code simplification.
+> > 
+> > Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> 
+> With my comments fixed, you can add
+> 
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
+> > ---
+> >   drivers/gpu/drm/udl/udl_modeset.c | 20 +++++++++-----------
+> >   1 file changed, 9 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
+> > index c9b837ac26a7..0142fc6a478a 100644
+> > --- a/drivers/gpu/drm/udl/udl_modeset.c
+> > +++ b/drivers/gpu/drm/udl/udl_modeset.c
+> > @@ -244,14 +244,13 @@ static long udl_log_cpp(unsigned int cpp)
+> >     static int udl_handle_damage(struct drm_framebuffer *fb,
+> >   			     const struct iosys_map *map,
+> > -			     int x, int y, int width, int height)
+> > +			     struct drm_rect *clip)
+> 
+> Should probably be declared const.
+> 
+> >   {
+> >   	struct drm_device *dev = fb->dev;
+> >   	void *vaddr = map->vaddr; /* TODO: Use mapping abstraction properly */
+> >   	int i, ret;
+> >   	char *cmd;
+> >   	struct urb *urb;
+> > -	struct drm_rect clip;
+> >   	int log_bpp;
+> >     	ret = udl_log_cpp(fb->format->cpp[0]);
+> > @@ -259,8 +258,6 @@ static int udl_handle_damage(struct drm_framebuffer *fb,
+> >   		return ret;
+> >   	log_bpp = ret;
+> >   -	drm_rect_init(&clip, x, y, width, height);
+> > -
+> >   	ret = drm_gem_fb_begin_cpu_access(fb, DMA_FROM_DEVICE);
+> >   	if (ret)
+> >   		return ret;
+> > @@ -272,11 +269,11 @@ static int udl_handle_damage(struct drm_framebuffer *fb,
+> >   	}
+> >   	cmd = urb->transfer_buffer;
+> >   -	for (i = clip.y1; i < clip.y2; i++) {
+> > +	for (i = clip->y1; i < clip->y2; i++) {
+> >   		const int line_offset = fb->pitches[0] * i;
+> > -		const int byte_offset = line_offset + (clip.x1 << log_bpp);
+> > -		const int dev_byte_offset = (fb->width * i + clip.x1) << log_bpp;
+> > -		const int byte_width = (clip.x2 - clip.x1) << log_bpp;
+> > +		const int byte_offset = line_offset + (clip->x1 << log_bpp);
+> > +		const int dev_byte_offset = (fb->width * i + clip->x1) << log_bpp;
+> > +		const int byte_width = (clip->x2 - clip->x1) << log_bpp;
+> 
+> Please use drm_rect_width(clip) instead. Somehow there's already too
+> much code that open-codes this.
+> 
+> >   		ret = udl_render_hline(dev, log_bpp, &urb, (char *)vaddr,
+> >   				       &cmd, byte_offset, dev_byte_offset,
+> >   				       byte_width);
+> > @@ -329,6 +326,7 @@ udl_simple_display_pipe_enable(struct drm_simple_display_pipe *pipe,
+> >   	struct udl_device *udl = to_udl(dev);
+> >   	struct drm_display_mode *mode = &crtc_state->mode;
+> >   	struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
+> > +	struct drm_rect clip;
+> 
+> Better do a static init with DRM_RECT_INIT(0, 0, fb->width,
+> fb->height) and remove the other init call below.
 
-Group cs_change and cs_off flags together.
+OK, below is the revised patch.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Do you want me a full respin for v4?
+
+
+Takashi
+
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH] drm/udl: Pass rectangle directly to udl_handle_damage()
+
+Just for some code simplification.
+
+Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- include/linux/spi/spi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/udl/udl_modeset.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index e111cf5e77de..bffcad4e7d6e 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -959,10 +959,10 @@ struct spi_transfer {
- 	struct sg_table rx_sg;
+diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
+index c9b837ac26a7..d5e20bf144bc 100644
+--- a/drivers/gpu/drm/udl/udl_modeset.c
++++ b/drivers/gpu/drm/udl/udl_modeset.c
+@@ -244,14 +244,13 @@ static long udl_log_cpp(unsigned int cpp)
  
- 	unsigned	dummy_data:1;
-+	unsigned	cs_off:1;
- 	unsigned	cs_change:1;
- 	unsigned	tx_nbits:3;
- 	unsigned	rx_nbits:3;
--	unsigned	cs_off:1;
- #define	SPI_NBITS_SINGLE	0x01 /* 1bit transfer */
- #define	SPI_NBITS_DUAL		0x02 /* 2bits transfer */
- #define	SPI_NBITS_QUAD		0x04 /* 4bits transfer */
+ static int udl_handle_damage(struct drm_framebuffer *fb,
+ 			     const struct iosys_map *map,
+-			     int x, int y, int width, int height)
++			     const struct drm_rect *clip)
+ {
+ 	struct drm_device *dev = fb->dev;
+ 	void *vaddr = map->vaddr; /* TODO: Use mapping abstraction properly */
+ 	int i, ret;
+ 	char *cmd;
+ 	struct urb *urb;
+-	struct drm_rect clip;
+ 	int log_bpp;
+ 
+ 	ret = udl_log_cpp(fb->format->cpp[0]);
+@@ -259,8 +258,6 @@ static int udl_handle_damage(struct drm_framebuffer *fb,
+ 		return ret;
+ 	log_bpp = ret;
+ 
+-	drm_rect_init(&clip, x, y, width, height);
+-
+ 	ret = drm_gem_fb_begin_cpu_access(fb, DMA_FROM_DEVICE);
+ 	if (ret)
+ 		return ret;
+@@ -272,11 +269,11 @@ static int udl_handle_damage(struct drm_framebuffer *fb,
+ 	}
+ 	cmd = urb->transfer_buffer;
+ 
+-	for (i = clip.y1; i < clip.y2; i++) {
++	for (i = clip->y1; i < clip->y2; i++) {
+ 		const int line_offset = fb->pitches[0] * i;
+-		const int byte_offset = line_offset + (clip.x1 << log_bpp);
+-		const int dev_byte_offset = (fb->width * i + clip.x1) << log_bpp;
+-		const int byte_width = (clip.x2 - clip.x1) << log_bpp;
++		const int byte_offset = line_offset + (clip->x1 << log_bpp);
++		const int dev_byte_offset = (fb->width * i + clip->x1) << log_bpp;
++		const int byte_width = drm_rect_width(clip) << log_bpp;
+ 		ret = udl_render_hline(dev, log_bpp, &urb, (char *)vaddr,
+ 				       &cmd, byte_offset, dev_byte_offset,
+ 				       byte_width);
+@@ -329,6 +326,7 @@ udl_simple_display_pipe_enable(struct drm_simple_display_pipe *pipe,
+ 	struct udl_device *udl = to_udl(dev);
+ 	struct drm_display_mode *mode = &crtc_state->mode;
+ 	struct drm_shadow_plane_state *shadow_plane_state = to_drm_shadow_plane_state(plane_state);
++	struct drm_rect clip = DRM_RECT_INIT(0, 0, fb->width, fb->height);
+ 	char *buf;
+ 	char *wrptr;
+ 	int color_depth = UDL_COLOR_DEPTH_16BPP;
+@@ -354,7 +352,7 @@ udl_simple_display_pipe_enable(struct drm_simple_display_pipe *pipe,
+ 
+ 	udl->mode_buf_len = wrptr - buf;
+ 
+-	udl_handle_damage(fb, &shadow_plane_state->data[0], 0, 0, fb->width, fb->height);
++	udl_handle_damage(fb, &shadow_plane_state->data[0], &clip);
+ 
+ 	/* enable display */
+ 	udl_crtc_write_mode_to_hw(crtc);
+@@ -396,8 +394,7 @@ udl_simple_display_pipe_update(struct drm_simple_display_pipe *pipe,
+ 		return;
+ 
+ 	if (drm_atomic_helper_damage_merged(old_plane_state, state, &rect))
+-		udl_handle_damage(fb, &shadow_plane_state->data[0], rect.x1, rect.y1,
+-				  rect.x2 - rect.x1, rect.y2 - rect.y1);
++		udl_handle_damage(fb, &shadow_plane_state->data[0], &rect);
+ }
+ 
+ static const struct drm_simple_display_pipe_funcs udl_simple_display_pipe_funcs = {
 -- 
-2.35.1
+2.35.3
 

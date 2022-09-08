@@ -2,193 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70955B23BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B685B23C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiIHQk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S231278AbiIHQky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiIHQkZ (ORCPT
+        with ESMTP id S231274AbiIHQku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:40:25 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA9BE620F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:40:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id o4so18339150pjp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=44f96G3kCRZjV7Y8+rtld0XE0LiSAJByVTyxhZXDjtw=;
-        b=fl0OF4gPksEMzbO6l5ojcJJdCc+d34Eu6l34U9JHsmWZmYqMRhxCjrXQimUdVzxZ4Z
-         h+tlSUaFHV90shVtftbvG5kp6jvxSzUOEKtBj2Y5ndd7aK8uDUqK0mMDgxzuYabkB9X/
-         yLPxRKLVx4lqp802+KHlONlx8+g7D2gfQV2FY9nkD/vJPTNBj3IQoZeW2yJ8c5KuVD4P
-         2btMsSs/jWYhOpHZVxep5SkPu3rK/BKMxCFCG1Re+YjZWo6eWO6o4IG7Gq8pQN42LiJO
-         BGDLDtAidqsf49nSAQ+Iw8owS4IsNHK1io4In3hBdCVR0VwpuFEt11DTABFzWzxxrKt4
-         uuwQ==
+        Thu, 8 Sep 2022 12:40:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F17F4103
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662655247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pkfsc+Qd/gwYAug2VWPkSKKYrJX5Z5R+zOqDD2izm4g=;
+        b=CN0WctdZCN9KIa1PXewYuTDwMMsEkFiaB/EB3ScffMXiFnO2B06FL51uCSc1hWaVUl8Y7l
+        KHThGe/JcBdUW8qOkB/TBVWIQG+IPPaN+meojzfCZ8QVpKwkrVfqD7UuLBYajZt9pVPczh
+        JQNBoNW7o1uuJyR89krM7QKUMGP4EL8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-78-4PFuv_ygNOmAEtWP-_M-Gg-1; Thu, 08 Sep 2022 12:40:46 -0400
+X-MC-Unique: 4PFuv_ygNOmAEtWP-_M-Gg-1
+Received: by mail-qk1-f197.google.com with SMTP id de43-20020a05620a372b00b006bc3aa1908dso1076826qkb.15
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:40:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=44f96G3kCRZjV7Y8+rtld0XE0LiSAJByVTyxhZXDjtw=;
-        b=WlHPQq9hxU0hwEtYSMgy4eCDcpXBM0YsJn3L+pxyiQQGEpBLcvLb41GFikpEYjRcLB
-         Wwiv4Kw5l741okNFaC4VYfGjTpaPwdnx1EGoiJKebyIRrchA2kfK7XmtA+1IHMh/2BYY
-         vIj+nAN4s6UO4ODJAZHsbjJFrdunKmGaCCyfYQbdThmJGgW0AdC2dzhQd73v9xts3mu5
-         eMR6gSCQ5LqVHbbL8iUHu08gOO89cve4qLAvAdOFDltB4OseJ97Fp4IrPwwSRqUK0f8L
-         bNt0Yi7bbM98mRLfX3hT5Nd3pkRllNCjbksIUtiKNqdWInm2d6p0fYfXTF7YNDxRkSQS
-         hS+w==
-X-Gm-Message-State: ACgBeo39xTmbgNmQ2zi8zUMcBgSsyBxiY27OfhkizJsMcWoX2uCDV0Bt
-        PENw3c+3GdrXi71TueaaBxJAeQ==
-X-Google-Smtp-Source: AA6agR6OtvAZQ1VlqtdckX4M37HUd6tnzFOMxCB7aH5ZyWfFq8tToKkiSh7ojqXsfhbd+jx/tPhW7w==
-X-Received: by 2002:a17:90a:588c:b0:1fd:a1bc:ff71 with SMTP id j12-20020a17090a588c00b001fda1bcff71mr4945546pji.134.1662655222365;
-        Thu, 08 Sep 2022 09:40:22 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id w24-20020aa79558000000b0053725e331a1sm14927604pfq.82.2022.09.08.09.40.20
+        bh=pkfsc+Qd/gwYAug2VWPkSKKYrJX5Z5R+zOqDD2izm4g=;
+        b=2ZFKKQbt+XDI2HrL8izxR96vDzoyguOol9acgSfm1noRPvbRnP3Ce6G5bbQIDGMMrC
+         X8PiaOPNRlwoPLMg+K66N+CnZ25Mi2e9jhocH4oMrRQ4oalox2qXlPI6ZDUVhMH34WP1
+         I2DCpS4jLusDQLuHDeKJxgL2DU2/tI5HSai+B0EqOuxP/I19X/YvJiOQbhMPOpsZvOkR
+         kKR4yHU5OCBnX99yBYC9K70YCKQIHeCnsu7+cneqKPQnWqtxbDjUCU741Z5ItLCX6LwG
+         HrCaUtauh4L10gAuHUNXPxPIpcjfXo9U0RZxORVIygRlA9+jUEVYUpMGzf1RMfYQbnxR
+         h6Jg==
+X-Gm-Message-State: ACgBeo3AYPGnh9QsYM+31MDQiIQKw3gEKGNVL+8/cihFMSGGeeoczyLL
+        bilCjXNJdFCZMULYfFMPY51Fy9o+mJrzUKQAHS5iTuP8s1sATZdMILAdMmN+2gO5pMkm7nBSGJ4
+        IPbQNhuthr20ugdxSyI52aHjU
+X-Received: by 2002:a05:620a:14aa:b0:6cb:e3a2:311b with SMTP id x10-20020a05620a14aa00b006cbe3a2311bmr904222qkj.266.1662655245504;
+        Thu, 08 Sep 2022 09:40:45 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR53cNBgQZY4hEhzYVT/VkqEs1YXNR9ifPFn0pnI+C10iK7Hb4Aw/802twYiNtloEdpZjdtoJg==
+X-Received: by 2002:a05:620a:14aa:b0:6cb:e3a2:311b with SMTP id x10-20020a05620a14aa00b006cbe3a2311bmr904197qkj.266.1662655245128;
+        Thu, 08 Sep 2022 09:40:45 -0700 (PDT)
+Received: from redhat.com ([45.144.113.243])
+        by smtp.gmail.com with ESMTPSA id v38-20020a05622a18a600b0035a7070e909sm701989qtc.38.2022.09.08.09.40.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 09:40:21 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 09:40:16 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/14] KVM: arm64: Free removed stage-2 tables in RCU
- callback
-Message-ID: <Yxoa8AQozMWuayTD@google.com>
-References: <20220830194132.962932-1-oliver.upton@linux.dev>
- <20220830194132.962932-10-oliver.upton@linux.dev>
- <YxkUciuwLFvByLOu@google.com>
+        Thu, 08 Sep 2022 09:40:44 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 12:40:35 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Igor Skalkin <igor.skalkin@opensynergy.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        mgo@opensynergy.com
+Subject: Re: [PATCH] virtio_bt: Fix alignment in configuration struct
+Message-ID: <20220908123911-mutt-send-email-mst@kernel.org>
+References: <20220807221152.38948-1-Igor.Skalkin@opensynergy.com>
+ <20220807185846-mutt-send-email-mst@kernel.org>
+ <02222fcb-eaba-617a-c51c-f939678e3d74@opensynergy.com>
+ <20220808081054-mutt-send-email-mst@kernel.org>
+ <20220811035817-mutt-send-email-mst@kernel.org>
+ <CABBYNZKZGxbt=jdpBL77x1mCeTPdDE-p-Pt8JjZN+KoRgR3Ohw@mail.gmail.com>
+ <20220830094441-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxkUciuwLFvByLOu@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220830094441-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 03:00:18PM -0700, David Matlack wrote:
-> On Tue, Aug 30, 2022 at 07:41:27PM +0000, Oliver Upton wrote:
-> > There is no real urgency to free a stage-2 subtree that was pruned.
-> > Nonetheless, KVM does the tear down in the stage-2 fault path while
-> > holding the MMU lock.
+On Tue, Aug 30, 2022 at 09:45:02AM -0400, Michael S. Tsirkin wrote:
+> On Thu, Aug 11, 2022 at 10:02:31AM -0700, Luiz Augusto von Dentz wrote:
+> > Hi Michael,
 > > 
-> > Free removed stage-2 subtrees after an RCU grace period. To guarantee
-> > all stage-2 table pages are freed before killing a VM, add an
-> > rcu_barrier() to the flush path.
+> > On Thu, Aug 11, 2022 at 1:00 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Mon, Aug 08, 2022 at 08:16:11AM -0400, Michael S. Tsirkin wrote:
+> > > > On Mon, Aug 08, 2022 at 02:04:43PM +0200, Igor Skalkin wrote:
+> > > > > On 8/8/22 01:00, Michael S. Tsirkin wrote:
+> > > > >
+> > > > >     On Mon, Aug 08, 2022 at 12:11:52AM +0200, Igor Skalkin wrote:
+> > > > >
+> > > > >         According to specification [1], "For the device-specific configuration
+> > > > >         space, the driver MUST use 8 bit wide accesses for 8 bit wide fields,
+> > > > >         16 bit wide and aligned accesses for 16 bit wide fields and 32 bit wide
+> > > > >         and aligned accesses for 32 and 64 bit wide fields.".
+> > > > >
+> > > > >         Current version of the configuration structure:
+> > > > >
+> > > > >             struct virtio_bt_config {
+> > > > >                 __u8  type;
+> > > > >                 __u16 vendor;
+> > > > >                 __u16 msft_opcode;
+> > > > >             } __attribute__((packed));
+> > > > >
+> > > > >         has both 16bit fields non-aligned.
+> > > > >
+> > > > >         This commit fixes it.
+> > > > >
+> > > > >         [1] https://ddec1-0-en-ctp.trendmicro.com:443/wis/clicktime/v1/query?url=https%3a%2f%2fdocs.oasis%2dopen.org%2fvirtio%2fvirtio%2fv1.1%2fvirtio%2dv1.1.pdf&umid=d1786ace-e8ea-40e8-9665-96c0949174e5&auth=53c7c7de28b92dfd96e93d9dd61a23e634d2fbec-39b15885ceebe9fda9357320aec1ccbac416a470
+> > > > >
+> > > > >         Signed-off-by: Igor Skalkin <Igor.Skalkin@opensynergy.com>
+> > > > >
+> > > > >     This is all true enough, but the problem is
+> > > > >     1. changing uapi like this can't be done, will break userspace
+> > > > >     2. the driver has more issues and no one seems to want to
+> > > > >        maintain it.
+> > > > >     I posted a patch "Bluetooth: virtio_bt: mark broken" and intend
+> > > > >     to merge it for this release.
+> > > > >
+> > > > > This is very sad. We already use this driver in our projects.
+> > > >
+> > > > Really?  Can you step up to maintain it? Then we can fix the issues
+> > > > and it won't be broken.
+> > >
+> > > Just a reminder that I'm waiting for a response on that.
+> > > I just don't know enough about bluetooth.
 > > 
-> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> > ---
-> >  arch/arm64/kvm/mmu.c | 35 ++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 34 insertions(+), 1 deletion(-)
+> > Just a heads up that Marcel is on vacation, he did mention that he had
+> > done some work to update virtio_bt thus why I didn't apply any of the
+> > changes yet.
+> 
+> Any update? when does Marcel return?
+
+
+Annnnnnd ... this is falling between the chairs again?
+Guys if anyone wants to use this driver it needs a maintainer.
+
+> > > --
+> > > MST
+> > >
 > > 
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index 91521f4aab97..265951c05879 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
-> > @@ -97,6 +97,38 @@ static void *stage2_memcache_zalloc_page(void *arg)
-> >  	return kvm_mmu_memory_cache_alloc(mc);
-> >  }
-> >  
-> > +#define STAGE2_PAGE_PRIVATE_LEVEL_MASK	GENMASK_ULL(2, 0)
-> > +
-> > +static inline unsigned long stage2_page_private(u32 level, void *arg)
-> > +{
-> > +	unsigned long pvt = (unsigned long)arg;
-> > +
-> > +	BUILD_BUG_ON(KVM_PGTABLE_MAX_LEVELS > STAGE2_PAGE_PRIVATE_LEVEL_MASK);
-> > +	WARN_ON_ONCE(pvt & STAGE2_PAGE_PRIVATE_LEVEL_MASK);
-> > +
-> > +	return pvt | level;
-> > +}
-> > +
-> > +static void stage2_free_removed_table_rcu_cb(struct rcu_head *head)
-> > +{
-> > +	struct page *page = container_of(head, struct page, rcu_head);
-> > +	unsigned long pvt = page_private(page);
-> > +	void *arg = (void *)(pvt & ~STAGE2_PAGE_PRIVATE_LEVEL_MASK);
-> > +	u32 level = (u32)(pvt & STAGE2_PAGE_PRIVATE_LEVEL_MASK);
-> > +	void *pgtable = page_to_virt(page);
-> > +
-> > +	kvm_pgtable_stage2_free_removed(pgtable, level, arg);
-> > +}
-> > +
-> > +static void stage2_free_removed_table(void *pgtable, u32 level, void *arg)
-> > +{
-> > +	unsigned long pvt = stage2_page_private(level, arg);
-> > +	struct page *page = virt_to_page(pgtable);
-> > +
-> > +	set_page_private(page, (unsigned long)pvt);
-> > +	call_rcu(&page->rcu_head, stage2_free_removed_table_rcu_cb);
-> > +}
-> > +
-> >  static void *kvm_host_zalloc_pages_exact(size_t size)
-> >  {
-> >  	return alloc_pages_exact(size, GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-> > @@ -627,7 +659,7 @@ static struct kvm_pgtable_mm_ops kvm_s2_mm_ops = {
-> >  	.zalloc_page		= stage2_memcache_zalloc_page,
-> >  	.zalloc_pages_exact	= kvm_host_zalloc_pages_exact,
-> >  	.free_pages_exact	= free_pages_exact,
-> > -	.free_removed_table	= kvm_pgtable_stage2_free_removed,
-> > +	.free_removed_table	= stage2_free_removed_table,
-> >  	.get_page		= kvm_host_get_page,
-> >  	.put_page		= kvm_host_put_page,
-> >  	.page_count		= kvm_host_page_count,
-> > @@ -770,6 +802,7 @@ void kvm_free_stage2_pgd(struct kvm_s2_mmu *mmu)
-> >  	if (pgt) {
-> >  		kvm_pgtable_stage2_destroy(pgt);
-> >  		kfree(pgt);
-> > +		rcu_barrier();
-> 
-> A comment here would be useful to document the behavior. e.g.
-> 
->         /*
->          * Wait for all stage-2 page tables that are being freed
->          * asynchronously via RCU callback because ...
->          */
-> 
-> Speaking of, what's the reason for this rcu_barrier()? Is there any
-> reason why KVM can't let in-flight stage-2 freeing RCU callbacks run at
-> the end of the next grace period?
-
-After thinking about this more I have 2 follow-up questions:
-
-1. Should the RCU barrier come before kvm_pgtable_stage2_destroy() and
-   kfree(pgt)? Otherwise an RCU callback running
-   kvm_pgtable_stage2_free_removed() could access the pgt after it has
-   been freed?
-
-2. In general, is it safe for kvm_pgtable_stage2_free_removed() to run
-   outside of the MMU lock? Yes the page tables have already been
-   disconnected from the tree, but kvm_pgtable_stage2_free_removed()
-   also accesses shared data structures likstruct kvm_pgtable. I *think*
-   it might be safe after you fix (1.) but it would be more robust to
-   avoid accessing shared data structures at all outside of the MMU lock
-   and just do the page table freeing in the RCU callback.
-
-> 
-> >  	}
-> >  }
-> >  
+> > 
 > > -- 
-> > 2.37.2.672.g94769d06f0-goog
-> > 
+> > Luiz Augusto von Dentz
+

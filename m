@@ -2,59 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086895B2767
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096E85B27A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 22:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiIHUFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 16:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S229786AbiIHUWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 16:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIHUFC (ORCPT
+        with ESMTP id S229788AbiIHUWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 16:05:02 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9B63AB29
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:05:00 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 13:04:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662667499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tCYR+bp1yumL+xeMTJSnVNXEiq4gtT5BoKEGNiTR/BU=;
-        b=UNie+naMu/8ei3YoYW0dxhjpBhdS85jx2yoN8nLgTaMA4ZZTnSlFwpAIkC9CoFWJ3a1USj
-        BQXZWTQguCdpdDiJQaem4CreJMMJnxqXdY04uPpwT2WQ+aR9wBBumuOfp9k+Dbg69eQEbv
-        RO8uqFupTg9W4M4qwvJeaQhRD7GqzA8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Jingyu Wang <jingyuwang_vip@163.com>
-Cc:     akpm@linux-foundation.org, ebiederm@xmission.com, hbh25y@gmail.com,
-        legion@kernel.org, longman@redhat.com, songmuchun@bytedance.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipc: mqueue: remove unnecessary conditionals
-Message-ID: <YxpK2XxR8A+oESV5@P9FQF9L96D.corp.robot.car>
-References: <20220908185452.76590-1-jingyuwang_vip@163.com>
+        Thu, 8 Sep 2022 16:22:44 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B30109019
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 13:22:43 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-127dca21a7dso20178487fac.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 13:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=RX8VIBrkIrN+uaJDyGYK1oayYALRo341SLY9FJGeLKg=;
+        b=BOSQ+7TVFALXbxC/myMu5Chncu9V3l4sSSxY4m0Bx02D2bgLEFpAbb5BltskTSr+5F
+         F70VCqtvBpr3Q4AFCBsDmpLukbkEYUhpmykaTpNj12w37og7JsupiMmJKnsVhnBNAbdJ
+         hAhMAUzA1kQlQmqsKZ/GOKRml0/zJTsu2tPGYflD2YKqBQuBWqCz2Ipf8dbhnqCxz/Z3
+         rCsguQKWgB3xbFyTgY/FoqIJ69KBVkn0ktWbgK+gfzDaVhmOc84RzmawuiGIbSZPF06g
+         /Qb0TXYcSI7c8gutf7cwJsaoPMP5cQ3oy2G3bklXfmkKos4jtJhiBNaRVkg+RACOz7Bz
+         tM1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=RX8VIBrkIrN+uaJDyGYK1oayYALRo341SLY9FJGeLKg=;
+        b=7+ej7SpIk41EWWPE9kr2fZ01rQJyXsRHCiOuM29oTkQGKqyYjujEJJVZw1b2uflLSc
+         viE8bTWqhzIpUIfFT+IQlSbAYu5cn6pmBg1Ou/nETh8TvzfXyZ7HAabAF54lHBHAshLT
+         De1ShRYIr4518h4950Ut4iMss/wVk8x7G9iVgkU+3Qzu9UA4B8mwf8Uxcf51XMyQWOF5
+         YEQ+lpLCHF794nll365EjpZdeX8qPVDyWBfp9uXf9fSn6kdYBXCemnTCelsmQxyMTQE2
+         cdDqRRVciWQiSWCATmY9bpZxy/oLu/6Nfk6RnKUxdmtX7KDqbryPVeSp+UTF4HI0hgtP
+         Y44A==
+X-Gm-Message-State: ACgBeo1jHcSO4qHWqcrNQBwQnmZcx9ef3dQiF1QwsUyRWoC8TRCIcIs3
+        FGWylH4q1TCveO/BAVv+QjBvjXN9D1puZVmtDxu4Sg==
+X-Google-Smtp-Source: AA6agR49XRbIMolMgRxwv8qrnpTs2QgNkLEpVvZTqKvSQ7ilNqc92R6DLRt+yLI0hlnLZ5GHBBBhLlWXrjDL36m0UZg=
+X-Received: by 2002:a05:6808:2382:b0:344:90f9:b79 with SMTP id
+ bp2-20020a056808238200b0034490f90b79mr2264444oib.137.1662668561813; Thu, 08
+ Sep 2022 13:22:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908185452.76590-1-jingyuwang_vip@163.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220907125048.396126-1-andrew@daynix.com> <e1e6519f-2e77-05c1-697c-56b174addc6e@kernel.org>
+In-Reply-To: <e1e6519f-2e77-05c1-697c-56b174addc6e@kernel.org>
+From:   Andrew Melnichenko <andrew@daynix.com>
+Date:   Thu, 8 Sep 2022 23:09:24 +0300
+Message-ID: <CABcq3pFbKB26x2yCAxMFTU02uAkQrRCRvY1YNYRcx6zHbG54Kg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] TUN/VirtioNet USO features support.
+To:     David Ahern <dsahern@kernel.org>
+Cc:     edumazet@google.com, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        jasowang@redhat.com, mst@redhat.com, pabeni@redhat.com,
+        yoshfuji@linux-ipv6.org, yan@daynix.com,
+        yuri.benditovich@daynix.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 02:54:52AM +0800, Jingyu Wang wrote:
-> iput() has already handled null and non-null parameter, so it is no
-> need to use if().
-> 
-> Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
+Hi all,
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+On Thu, Sep 8, 2022 at 3:44 AM David Ahern <dsahern@kernel.org> wrote:
+>
+> On 9/7/22 6:50 AM, Andrew Melnychenko wrote:
+> > Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
+> > Technically they enable NETIF_F_GSO_UDP_L4
+> > (and only if USO4 & USO6 are set simultaneously).
+> > It allows the transmission of large UDP packets.
+>
+> Please spell out USO at least once in the cover letter to make sure the
+> acronym is clear.
 
-Thanks!
+USO - UDP Segmentation Offload. Ability to split UDP packets into
+several segments.
+Allows sending/receiving big UDP packets. At some point, it looks like
+UFO(fragmentation),
+but each segment contains a UDP header.
+
+>
+> >
+> > Different features USO4 and USO6 are required for qemu where Windows guests can
+> > enable disable USO receives for IPv4 and IPv6 separately.
+> > On the other side, Linux can't really differentiate USO4 and USO6, for now.
+>
+> Why is that and what is needed for Linux to differentiate between the 2
+> protocols?
+
+Well, this feature requires for Windows VM guest interaction. Windows may have
+a separate configuration for USO4/USO6. Currently, we support Windows guests
+with enabled USO4 and USO6 simultaneously.
+To implement this on Linux host, will require at least one additional
+netdev feature
+and changes in Linux network stack. Discussion about that will be in
+the future after
+some research.
+
+>
+> > For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
+> > In the future, there would be a mechanism to control UDP_L4 GSO separately.
+> >
+> > New types for virtio-net already in virtio-net specification:
+> > https://github.com/oasis-tcs/virtio-spec/issues/120
+> >
+> > Test it WIP Qemu https://github.com/daynix/qemu/tree/USOv3
+> >
+> > Andrew (5):
+> >   uapi/linux/if_tun.h: Added new offload types for USO4/6.
+> >   driver/net/tun: Added features for USO.
+> >   uapi/linux/virtio_net.h: Added USO types.
+> >   linux/virtio_net.h: Support USO offload in vnet header.
+> >   drivers/net/virtio_net.c: Added USO support.
+> >
+> > Andrew Melnychenko (1):
+> >   udp: allow header check for dodgy GSO_UDP_L4 packets.
+> >
+> >  drivers/net/tap.c               | 10 ++++++++--
+> >  drivers/net/tun.c               |  8 +++++++-
+> >  drivers/net/virtio_net.c        | 19 +++++++++++++++----
+> >  include/linux/virtio_net.h      |  9 +++++++++
+> >  include/uapi/linux/if_tun.h     |  2 ++
+> >  include/uapi/linux/virtio_net.h |  5 +++++
+> >  net/ipv4/udp_offload.c          |  2 +-
+> >  7 files changed, 47 insertions(+), 8 deletions(-)
+> >
+>

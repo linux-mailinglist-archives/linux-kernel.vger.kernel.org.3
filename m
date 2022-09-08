@@ -2,182 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EBD5B1FD7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494AC5B1FDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbiIHN51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S232490AbiIHN7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbiIHN4y (ORCPT
+        with ESMTP id S232444AbiIHN7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:56:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83E7B6D14;
-        Thu,  8 Sep 2022 06:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662645410; x=1694181410;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ClRv4YDuC6sHMGg76v4yV0u46OLwed7onWZxOHGjYlw=;
-  b=hAYdbV1kCjaKXzNcOCx5Ed4565b3J0300//eYlKC6k97iL/oF29LPlE7
-   QvZtRBtHKYB3MN3tRQl8wfGL18OczHLaCwLP8niImVK2MoWRmZwOAW7GY
-   3Zy9QjuOyXUB57nKtTIo2umTRMyCDZ50cEOkXb68PZRIjpk+rXOUwq2y6
-   qoYxBaIapcJeavfDcnvW103JEOBwi5/zvXIXL8MdWOtrPapDJBD7qvpsk
-   FDGDzjBg4xvF8p0Dm3t/MfbIQPnDZ55WQwYMy4IMgUwjLnfjUQlfCccu4
-   8GJ4PdfFgYJ6cyxf1PBq+ZzrFOoNOtREiImPaVLTz1dCE08n0Pd4dEDEN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="358906744"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="358906744"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 06:56:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="943352130"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2022 06:56:48 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id B8D8B6CD; Thu,  8 Sep 2022 16:57:02 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>
-Subject: [PATCH v2 9/9] pwm: lpss: Allow other drivers to enable PWM LPSS
-Date:   Thu,  8 Sep 2022 16:56:58 +0300
-Message-Id: <20220908135658.64463-10-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
-References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
+        Thu, 8 Sep 2022 09:59:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D9B1316F0;
+        Thu,  8 Sep 2022 06:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=F+/Dxjohl88DP9zeW/Xq+d0mtw7wj+FfyyXk6EaZSa8=; b=URjDC6QafAo8lH5tx9N07vvvRg
+        7U/2jNIrM6zD2kAmhisaZZcqoycHrpRbj0oE3acueFAa5SVqP8WHnqRJAz+QEl9qHGRkEWD2fZTQE
+        HjbbYmKLWkebzrfHQoNE/5kl2Yc+uY5rgC3HFhmPVVLTl8sYAOF1BQW+Wd5XFcqTuBrvHx+g5xT8r
+        +XdVKx1WlcaLrSRYfwE1phdKUIo8XYGvzHA1V9rGlihPu2A9jSkiiQaY9BuQjN13pUWXAY73Fwabp
+        EqAPnHXI1drft5hKgKcYpqDCHS0n9IKMxdoxpTzg2EQQxxkUOjVhYhI9HVF814Xdwc5/WwyarCWNn
+        uALq/oEw==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWI2Z-004Gmq-L3; Thu, 08 Sep 2022 13:57:59 +0000
+Message-ID: <f76d0607-4753-3131-3b09-9d2ef4b3a60f@infradead.org>
+Date:   Thu, 8 Sep 2022 06:57:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] mellanox/mlxsw: fix repeated words in comments
+Content-Language: en-US
+To:     wangjianli <wangjianli@cdjrlc.com>, idosch@nvidia.com,
+        petrm@nvidia.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220908124350.22861-1-wangjianli@cdjrlc.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220908124350.22861-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PWM LPSS device can be embedded in another device.
-In order to enable it, allow that drivers to probe
-a corresponding device.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pwm/pwm-lpss.h                        | 26 ++--------------
- .../linux/platform_data/x86}/pwm-lpss.h       | 30 ++++---------------
- 2 files changed, 7 insertions(+), 49 deletions(-)
- copy {drivers/pwm => include/linux/platform_data/x86}/pwm-lpss.h (52%)
 
-diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
-index 0249c01befd5..fe32e336db8e 100644
---- a/drivers/pwm/pwm-lpss.h
-+++ b/drivers/pwm/pwm-lpss.h
-@@ -13,11 +13,9 @@
- #include <linux/pwm.h>
- #include <linux/types.h>
- 
--#define MAX_PWMS			4
--
--struct device;
-+#include <linux/platform_data/x86/pwm-lpss.h>
- 
--struct pwm_lpss_boardinfo;
-+#define MAX_PWMS			4
- 
- struct pwm_lpss_chip {
- 	struct pwm_chip chip;
-@@ -25,29 +23,9 @@ struct pwm_lpss_chip {
- 	const struct pwm_lpss_boardinfo *info;
- };
- 
--struct pwm_lpss_boardinfo {
--	unsigned long clk_rate;
--	unsigned int npwm;
--	unsigned long base_unit_bits;
--	/*
--	 * Some versions of the IP may stuck in the state machine if enable
--	 * bit is not set, and hence update bit will show busy status till
--	 * the reset. For the rest it may be otherwise.
--	 */
--	bool bypass;
--	/*
--	 * On some devices the _PS0/_PS3 AML code of the GPU (GFX0) device
--	 * messes with the PWM0 controllers state,
--	 */
--	bool other_devices_aml_touches_pwm_regs;
--};
--
- extern const struct pwm_lpss_boardinfo pwm_lpss_byt_info;
- extern const struct pwm_lpss_boardinfo pwm_lpss_bsw_info;
- extern const struct pwm_lpss_boardinfo pwm_lpss_bxt_info;
- extern const struct pwm_lpss_boardinfo pwm_lpss_tng_info;
- 
--struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *base,
--				     const struct pwm_lpss_boardinfo *info);
--
- #endif	/* __PWM_LPSS_H */
-diff --git a/drivers/pwm/pwm-lpss.h b/include/linux/platform_data/x86/pwm-lpss.h
-similarity index 52%
-copy from drivers/pwm/pwm-lpss.h
-copy to include/linux/platform_data/x86/pwm-lpss.h
-index 0249c01befd5..296bd837ddbb 100644
---- a/drivers/pwm/pwm-lpss.h
-+++ b/include/linux/platform_data/x86/pwm-lpss.h
-@@ -1,29 +1,14 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Intel Low Power Subsystem PWM controller driver
-- *
-- * Copyright (C) 2014, Intel Corporation
-- *
-- * Derived from the original pwm-lpss.c
-- */
-+/* Intel Low Power Subsystem PWM controller driver */
- 
--#ifndef __PWM_LPSS_H
--#define __PWM_LPSS_H
-+#ifndef __PLATFORM_DATA_X86_PWM_LPSS_H
-+#define __PLATFORM_DATA_X86_PWM_LPSS_H
- 
--#include <linux/pwm.h>
- #include <linux/types.h>
- 
--#define MAX_PWMS			4
--
- struct device;
- 
--struct pwm_lpss_boardinfo;
--
--struct pwm_lpss_chip {
--	struct pwm_chip chip;
--	void __iomem *regs;
--	const struct pwm_lpss_boardinfo *info;
--};
-+struct pwm_lpss_chip;
- 
- struct pwm_lpss_boardinfo {
- 	unsigned long clk_rate;
-@@ -42,12 +27,7 @@ struct pwm_lpss_boardinfo {
- 	bool other_devices_aml_touches_pwm_regs;
- };
- 
--extern const struct pwm_lpss_boardinfo pwm_lpss_byt_info;
--extern const struct pwm_lpss_boardinfo pwm_lpss_bsw_info;
--extern const struct pwm_lpss_boardinfo pwm_lpss_bxt_info;
--extern const struct pwm_lpss_boardinfo pwm_lpss_tng_info;
--
- struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *base,
- 				     const struct pwm_lpss_boardinfo *info);
- 
--#endif	/* __PWM_LPSS_H */
-+#endif	/* __PLATFORM_DATA_X86_PWM_LPSS_H */
+On 9/8/22 05:43, wangjianli wrote:
+> Delete the redundant word 'in'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+> index 2c4443c6b964..48f1fa62a4fd 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+> @@ -1819,7 +1819,7 @@ void mlxsw_sp_ipip_entry_demote_tunnel(struct mlxsw_sp *mlxsw_sp,
+>  /* The configuration where several tunnels have the same local address in the
+>   * same underlay table needs special treatment in the HW. That is currently not
+>   * implemented in the driver. This function finds and demotes the first tunnel
+> - * with a given source address, except the one passed in in the argument
+> + * with a given source address, except the one passed in the argument
+
+Yeah, either way is OK.
+
+>   * `except'.
+>   */
+>  bool
+
 -- 
-2.35.1
-
+~Randy

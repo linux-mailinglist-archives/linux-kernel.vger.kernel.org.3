@@ -2,150 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5325B1157
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2855B115B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiIHAeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 20:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S230131AbiIHAgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbiIHAdg (ORCPT
+        with ESMTP id S230363AbiIHAfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:33:36 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B4D3460
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 17:32:42 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id fy31so34260348ejc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 17:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=yswe5UvynuPJmR7TROq3C4jcUZ2Pkk4MSSkw0eJxwM8=;
-        b=RkxT4GcJVYPfiUjCX955mRFINqGAq8VNN+LptWtiNk61ojlzsZX1EH4in57b27Q/LO
-         nStb2XViM4M5FE2zTh5UeL8Yq0cwNHwWw0lzxPY5Z4mMTesQbMvgFFVdKGfsapCzipDp
-         JcBLTzaFfxQqmZaQswxYLJTgMv1n97y/FFzZHfOs7ewCMYKx9/3y+kLgk+FDt1VsAaaj
-         +qyvrpsuSOTexTHnKv6NbvoHXOBnyneEBlNvNbKBvQw+7EFluonjlGWcc7bOVXqgsziq
-         KwPlbO4cNU9YW53onLVS7YwSrJTm0Ih/M5fqWDnTXziOeqJkC1QddiOm1NY2oQgFAFCN
-         nHwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=yswe5UvynuPJmR7TROq3C4jcUZ2Pkk4MSSkw0eJxwM8=;
-        b=t1ysJMj1FU3vhuTseXstLWlWTtd2N9NqEQUyPYBFLsCch7OQxgyeU2POkR8Eu2wDYj
-         B6R1sqMykLHNJtiyMb2tNUMH1LXBS+PDvfnKGrsEAnTrAiLGL5KfeqWt0q21w0g2Gbmd
-         rYc3zCeGVR1xCaZ/EtnK/Na5RH1UOU13ay1i8W0N3q/uPq3BurKiXz7EljVw0pYcv8e/
-         LJ3DoYcWq9OBvrg1IHRVr9vLwLAzGVu2AUaEPnq8p9JB8FkGPfHcS8EvMmfDgdb/SOds
-         RQ7AXIftNHHQ/jVviqazrQl78W9si3wQqD4pG4uKG9o3VCkvE8PneMWKrNqResKakZmP
-         MRSg==
-X-Gm-Message-State: ACgBeo3y86Dr2wU/DuysHZB4iPAuNeSJ3ZeRPbrg2QG3G5wsL+/uPOBc
-        ozdUV4albdxVS37Ly7EwQx7kFHXL6i4W4U3t9nUUCQ==
-X-Google-Smtp-Source: AA6agR4uDJOCaTz0FVi+KJnVIm61TPqwATLn4YOd9952FLaly2lRXMCdPQHjmdT6KeTEoCF0irQD994IPBPL2xcbUxQ=
-X-Received: by 2002:a17:906:d54e:b0:73d:dcb2:39ac with SMTP id
- cr14-20020a170906d54e00b0073ddcb239acmr4090828ejc.520.1662597147359; Wed, 07
- Sep 2022 17:32:27 -0700 (PDT)
+        Wed, 7 Sep 2022 20:35:44 -0400
+Received: from alln-iport-5.cisco.com (alln-iport-5.cisco.com [173.37.142.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1714FD1E36;
+        Wed,  7 Sep 2022 17:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1404; q=dns/txt; s=iport;
+  t=1662597317; x=1663806917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RIBVDKUd2eWG+7DSM2KXpHjUNSr7Biv7xJk7pancMFY=;
+  b=cxCb0WJakiVAFJrWNjnbrhc9mdKfs0O+bELP/V/ZtaQSVPcmVtty3mUv
+   vLoMoh5zVr7GZeN6aVmvmo2YskdDq0jPTpAlN48dbQ9sDMGKltVi2yBF3
+   LWoxg3ErfuBiboOHXKVs9eXq6HNcmiMjxG9nUKNawa5Nn/j0tcmQUYRjf
+   c=;
+X-IPAS-Result: =?us-ascii?q?A0AFAABXOBljmJNdJa1aGwEBAQEBAQEBBQEBARIBAQEDA?=
+ =?us-ascii?q?wEBAUCBOwYBAQELAYN5PkWMbYZMgiUDgROQS4snFIERA1QLAQEBDQEBQgQBA?=
+ =?us-ascii?q?YUGAoRlAiU0CQ4BAgQBAQEBAwIDAQEBAQEBAwEBBQEBAQIBBwQUAQEBAQEBA?=
+ =?us-ascii?q?QEdGQUOECeFdYZDAQIDJxM/EAsOCi5XBhOCfYMhA6YReIEBMoEBiB2BZRQQg?=
+ =?us-ascii?q?RkBkB4nHIFJRIEVgnM3PoQLH4Qngi4El183A0UeQgMLQzYYAxQDBSQHAxkPI?=
+ =?us-ascii?q?w0NBBYHDAMDBSUDAgIbBwICAwIGFQUCAk04CAQIBCskDwUCBy8FBC8CHgQFB?=
+ =?us-ascii?q?hEIAhYCBgQEBAQVAhAIAggmFwcTMxkBBVkQCSEcDhoNBQYTAyBtBUUPKDI1O?=
+ =?us-ascii?q?SsdGwqBDiooFQMEBAMCBhMDAyACECwxFAQpExItBytzCQIDImcFAwMEKCwDC?=
+ =?us-ascii?q?SEfBygmPAdZOgEEAwMQIj0GAwkDAiRagTwrBQMQGZkHexOBcaIEghWeVINcg?=
+ =?us-ascii?q?UaeSEwRqGWXB6JdhFsCBAYFAhaBYTqBWzMaCBsVgyJRGQ+OOY5XJDE7AgYLA?=
+ =?us-ascii?q?QEDCYgKgkgBAQ?=
+IronPort-Data: A9a23:x/Uc1KjXQFnoVdVdklJ3fwsCX161lBAKZh0ujC45NGQN5FlHY01je
+ htvWjvQPv6OZTb0LthyOoy38xlS6J7SnYJmSQFury42Fn5jpJueD7x1DKtf0wB+jyHnZBg6h
+ ynLQoCYdKjYdleF+lH1dOKJQUBUjclkfJKkYAL/En03FFQMpBsJ00o5wbZo2tEw3LBVPivU0
+ T/Mi5yHULOa82Yc3lI8s8pvfzs24ZweEBtB1rAPTagjUG32zhH5P7pDTU2FFEYUd6EPdgKMq
+ 0kv+5nilo/R109F5tpICd8XeGVSKlLZFVDmZna7x8FOjzAazhHe3JrXO9I/NAB3shy4luxb4
+ /kSvpifZCIABpzDzbF1vxlwS0mSPIVc87PBZHO4q8HWlhSAeHr3yPIoB0YzVWEa0r8oWicVq
+ rpJc3ZUMk/ra+GemNpXTsFgj8IiIc30NasUu2prynfSCvNOrZXrEv6TvIMEgmZp7ixINfz5Z
+ usrVCRrVg3FRUFSHV1KGbgMn9790xETdBUB+A7K+sLb+VP7yA13zaioM9fPfNGObdtak1zep
+ W/c+Wn9RBYAO7S3xTeb83mhmvXCkAvlV48IUr617PhnhBuU3GN7IAcRX1v4reWRiUOkXd9bb
+ UsO9UIGtaE06EGvT8K7Vhukp3iFuQM0WN1WCPA+6wbLwa3Riy6XHG8bRzhNLtgnr9MeSjkj1
+ 1vPlNTsbQGDq5WPQn6bs7yTtz73YHFTJm4ZbihCRgwAizX+nG0tpjGSCfZaOZ+8svfeNW77x
+ x+niQEGtrpG2KbnyJ6H1VzAhjutoL3AQQg0+hjbUwqZAuVROdXNi2uAtAWz0BpQEGqKZgLb7
+ SRbwaBy+MhLXM/SzHbSKAkYNOvxj8tpJgEwlrKG83MJzTWm+3e5cZtX5lmSz282b55UIFcFj
+ KIv0D69CbdJN3esKKRweY/0Up1sxqn7HtOjXffRBjavXnSTXFLWlM2NTRfAt4wIrKTKufpjU
+ Xt8WZ3wZUv28Yw9kFKLqx41iNfHPBwWy2LJXozcxB+6y7eYb3P9Ye5bbgHTMb1lt/ja8Vq9H
+ zNj2y2ilkU3vArWP3m/zGLvBQxiwYUTXMqv8JUHKoZv3CI/RD1xYxMu/V/RU9U1w/sK/gs51
+ nq8QURfgEHunmHKLB7iV5yQQO2HYHqLllpiZXZEFQ/xgxALON/zhI9BLMFfVed8q4ReIQtcE
+ qNtlzOoWKofE1wqOl01MPHAkWCVXE3z2lrVZXT1OGNXklwJb1Whx+IItzDHrEEmZhdbf+Nuy
+ 1F8/ms3maY+ejk=
+IronPort-HdrOrdr: A9a23:an81FqmNaqI7eoayaflwmlnZSE3pDfIX3DAbv31ZSRFFG/FwWf
+ rAoB0+726QtN9xYgBDpTnuAsO9qB/nmKKdpLNhWYtKPzOW21dATrsC0WKK+VSJcBEWtNQ86U
+ 4KScZD4bPLYWSSpPyKhzVR170bsaC6GGfCv5a580tQ
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.93,298,1654560000"; 
+   d="scan'208";a="931144691"
+Received: from rcdn-core-11.cisco.com ([173.37.93.147])
+  by alln-iport-5.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 08 Sep 2022 00:35:13 +0000
+Received: from zorba ([10.25.130.54])
+        by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTPS id 2880ZBqb032497
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 8 Sep 2022 00:35:12 GMT
+Date:   Wed, 7 Sep 2022 17:35:10 -0700
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Rob Herring <robh+dt@kernel.org>, xe-linux-external@cisco.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] driver: of: overlay: demote message to warning
+Message-ID: <20220908003510.GE4320@zorba>
+References: <20220907230709.271889-1-danielwa@cisco.com>
+ <973f7127-8165-45f6-071f-04360046b7d7@gmail.com>
 MIME-Version: 1.0
-References: <20220815093905.134164-1-hsinyi@chromium.org> <CAD=FV=XYNKF8q1mttru_J188pYMjSphQsEfQAO1Bt7GvjJRKXw@mail.gmail.com>
- <CAJMQK-gjg9evLY3oP5rgaGoRdQQTLqnK2-FChaabJTCxLTTmYA@mail.gmail.com>
- <CAMuczyUH1tefU_4+dx495_5kdrxRdA3pmXS-eyjzMCcYFfjNXQ@mail.gmail.com>
- <CAJMQK-jEgRq68JXSWtS4y5_39vJ1pWCT2-Atg31__veRtnuREA@mail.gmail.com>
- <CAD=FV=UXFiA4hW8_cmO0Di-NCpqvkjTqqOfbc6DfD5Rs8aT6hA@mail.gmail.com>
- <CAD=FV=Vg5o-OxyQnemB+XfkGundDA-R31QhkmHJv4RmTMcF2gA@mail.gmail.com> <CAD=FV=Vqs+wPsOUgVK9VyzqDHewBR6HyQgcddQpe9Sd6OG6Nuw@mail.gmail.com>
-In-Reply-To: <CAD=FV=Vqs+wPsOUgVK9VyzqDHewBR6HyQgcddQpe9Sd6OG6Nuw@mail.gmail.com>
-From:   Rock Chiu <rock.chiu@paradetech.corp-partner.google.com>
-Date:   Thu, 8 Sep 2022 08:32:16 +0800
-Message-ID: <CAMuczyVbLE0mg9K4NNn=epWE9vVJjFbua=7gDtV+xLGqJ1+Jrw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ps8640: Add double reset T4 and T5 to
- power-on sequence
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Yen <jason.yen@paradetech.corp-partner.google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <973f7127-8165-45f6-071f-04360046b7d7@gmail.com>
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.25.130.54, [10.25.130.54]
+X-Outbound-Node: rcdn-core-11.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Jason.
+On Wed, Sep 07, 2022 at 06:54:02PM -0500, Frank Rowand wrote:
+> On 9/7/22 18:07, Daniel Walker wrote:
+> > This warning message shows by default on the vast majority of overlays
+> > applied. Despite the text identifying this as a warning it is marked
+> > with the loglevel for error. At Cisco we filter the loglevels to only
+> > show error messages. We end up seeing this message but it's not really
+> > an error.
+> > 
+> > For this reason it makes sense to demote the message to the warning
+> > loglevel.
+> > 
+> > Cc: xe-linux-external@cisco.com
+> > Signed-off-by: Daniel Walker <danielwa@cisco.com>
+> > ---
+> >  drivers/of/overlay.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+> > index bd8ff4df723d..4ae276ed9a65 100644
+> > --- a/drivers/of/overlay.c
+> > +++ b/drivers/of/overlay.c
+> > @@ -358,7 +358,7 @@ static int add_changeset_property(struct overlay_changeset *ovcs,
+> >  	}
+> >  
+> >  	if (!of_node_check_flag(target->np, OF_OVERLAY))
+> > -		pr_err("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
+> > +		pr_warn("WARNING: memory leak will occur if overlay removed, property: %pOF/%s\n",
+> >  		       target->np, new_prop->name);
+> >  
+> >  	if (ret) {
+> 
+> NACK
+> 
+> This is showing a real problem with the overlay.
 
--Rock
+What's the real problem ?
 
-Doug Anderson <dianders@chromium.org> =E6=96=BC 2022=E5=B9=B48=E6=9C=8830=
-=E6=97=A5 =E9=80=B1=E4=BA=8C =E6=B8=85=E6=99=A85:49=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> Hi,
->
-> On Mon, Aug 22, 2022 at 9:33 AM Doug Anderson <dianders@chromium.org> wro=
-te:
-> >
-> > Hi,
-> >
-> > On Thu, Aug 18, 2022 at 8:03 AM Doug Anderson <dianders@chromium.org> w=
-rote:
-> > >
-> > > Hi,
-> > >
-> > > On Wed, Aug 17, 2022 at 8:22 PM Hsin-Yi Wang <hsinyi@chromium.org> wr=
-ote:
-> > > >
-> > > > On Thu, Aug 18, 2022 at 11:19 AM Rock Chiu
-> > > > <rock.chiu@paradetech.corp-partner.google.com> wrote:
-> > > > >
-> > > > > How does T4/T5  impact the real case? We talked previously the T4=
-/T5
-> > > > > shouldn't cause user impact.
-> > > > > Do we have testing data from ODM?
-> > > > >
-> > > > Please leave comments below the previous comment's headline.
-> > > >
-> > > > I'm confused. The reason I upstreamed this patch is because this is=
- in
-> > > > your application note and you asked us to help upstream it. Now do =
-you
-> > > > mean that we don't need T4 and T5?
-> > >
-> > > I think Rock is asking what problems the extra delay is causing. In
-> > > other words: why do we care about keeping these delays short?
-> > >
-> > > The answer is that it affects boot speed and also resume speed of
-> > > devices. Adding these two delays here means that there's an extra 100
-> > > ms before the user can see something on the screen. That may not seem
-> > > like a lot, but those kinds of delays add up quickly. At least on
-> > > Chromebooks, booting quickly is always a big goal.
-> >
-> > While I'm not very happy with this change and I don't really
-> > understand why these delays need to be so long, if folks are really
-> > certain that we need them and can't make them shorter then I guess we
-> > can land it. I'll wait a few more days in case anyone wants to chime
-> > in with their thoughts.
->
-> I'll continue to grumble, but I did push it.
->
-> 55453c0914d9 drm/bridge: ps8640: Add double reset T4 and T5 to power-on s=
-equence
->
-> I pushed to "drm-misc-next" and not "drm-misc-fixes". It doesn't feel
-> massively urgent since apparently we've been without the
-> "double-reset" for years and having the extra bake time feels like the
-> better way to lean.
->
-> -Doug
+Daniel

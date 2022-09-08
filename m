@@ -2,57 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E925B13D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B10A5B13D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiIHFJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 01:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S229716AbiIHFLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 01:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiIHFJB (ORCPT
+        with ESMTP id S229498AbiIHFLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 01:09:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF98C92F55;
-        Wed,  7 Sep 2022 22:09:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93595B81F74;
-        Thu,  8 Sep 2022 05:08:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C59C433D7;
-        Thu,  8 Sep 2022 05:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662613738;
-        bh=dg8wftGIvmW8f8CxANQmVU9WzgpbVESeuK33TzXQNuE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HpROFulEeTkGHTFH1WQZcXr5tmSa3vWhKhn99/2aXSWhe7QrS/o92XogewYtQT75M
-         yXKmuFb9SBJ5x/+C+/h+NtIrwvrwU4Lmi7b93zmj9yPltoOSHkdNkXKrzxSFfL04wD
-         ie5mjahJpvZyqGTWpRYxS343ak7RJJEuS34xcFGU4sN/T18prCGq4AUEIegR6o3o+3
-         kI4c8F8nbSIxHhku1MkNhYnpIZ8RhwHKdPGk/eK+TEOg/CS1HU0aBKmHFAsDwM2uD0
-         BpmwwmQ0Xj1Qzlrjor1fu74rWCJ1C6H18rqdNu0t/jrCmMfFZEpGaqRp15XE80mHg2
-         7L1sMat+zGXBg==
-Date:   Wed, 7 Sep 2022 22:08:55 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        bpf <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org
-Subject: Re: [PATCH v2 1/2] x86/kprobes: Fix kprobes instruction boudary
- check with CONFIG_RETHUNK
-Message-ID: <20220908050855.w77mimzznrlp6pwe@treble>
-References: <166260087224.759381.4170102827490658262.stgit@devnote2>
- <166260088298.759381.11727280480035568118.stgit@devnote2>
+        Thu, 8 Sep 2022 01:11:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2645EB655E;
+        Wed,  7 Sep 2022 22:10:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFDC7D6E;
+        Wed,  7 Sep 2022 22:11:03 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.41.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 226C13F7B4;
+        Wed,  7 Sep 2022 22:10:52 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: [PATCH V2 0/7] arm64/perf: Enable branch stack sampling
+Date:   Thu,  8 Sep 2022 10:40:39 +0530
+Message-Id: <20220908051046.465307-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <166260088298.759381.11727280480035568118.stgit@devnote2>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,42 +45,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 10:34:43AM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
-> speculative execution after RET instruction, kprobes always failes to
-> check the probed instruction boundary by decoding the function body if
-> the probed address is after such sequence. (Note that some conditional
-> code blocks will be placed after function return, if compiler decides
-> it is not on the hot path.)
-> 
-> This is because kprobes expects someone (e.g. kgdb) puts the INT3 as
-> a software breakpoint and it will replace the original instruction.
-> But these INT3 are not such purpose, it doesn't need to recover the
-> original instruction.
-> 
-> To avoid this issue, memorize the branch target address during decoding
-> and if there is INT3, restart decoding from unchecked target address.
+This series enables perf branch stack sampling support on arm64 platform
+via a new arch feature called Branch Record Buffer Extension (BRBE). All
+relevant register definitions could be accessed here.
 
-Hm, is kprobes conflicting with kgdb actually a realistic concern?
-Seems like a dangerous combination
+https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
 
-Either way, this feels overengineered.  Sort of like implementing
-objtool in the kernel.
+This series applies on v6.0-rc4 after the BRBE related perf ABI changes series
+(V7) that was posted earlier, and a branch sample filter helper patch.
 
-And it's incomplete: for a switch statement jump table (or C goto jump
-table like in BPF), you can't detect the potential targets of the
-indirect branch.
+https://lore.kernel.org/all/20220824044822.70230-1-anshuman.khandual@arm.com/
 
-Wouldn't it be much simpler to just encode the knowledge that
+https://lore.kernel.org/all/20220906084414.396220-1-anshuman.khandual@arm.com/
 
-  	if (CONFIG_RETHUNK && !X86_FEATURE_RETHUNK)
-		// all rets are followed by four INT3s
-	else if (CONFIG_SLS)
-		// all rets are followed by one INT3
+Following issues have been resolved
 
-?
-	
+- Jame's concerns regarding permission inadequacy related to perfmon_capable()
+- Jame's concerns regarding using perf_event_paranoid along with perfmon_capable()
+
+Following issues remain inconclusive
+
+- Rob's concerns regarding the series structure, arm_pmu callbacks based framework
+
+Changes in V2:
+
+- Dropped branch sample filter helpers consolidation patch from this series 
+- Added new hw_perf_event.flags element ARMPMU_EVT_PRIV to cache perfmon_capable()
+- Use cached perfmon_capable() while configuring BRBE branch record filters
+
+Changes in V1:
+
+https://lore.kernel.org/linux-arm-kernel/20220613100119.684673-1-anshuman.khandual@arm.com/
+
+- Added CONFIG_PERF_EVENTS wrapper for all branch sample filter helpers
+- Process new perf branch types via PERF_BR_EXTEND_ABI
+
+Changes in RFC V2:
+
+https://lore.kernel.org/linux-arm-kernel/20220412115455.293119-1-anshuman.khandual@arm.com/
+
+- Added branch_sample_priv() while consolidating other branch sample filter helpers
+- Changed all SYS_BRBXXXN_EL1 register definition encodings per Marc
+- Changed the BRBE driver as per proposed BRBE related perf ABI changes (V5)
+- Added documentation for struct arm_pmu changes, updated commit message
+- Updated commit message for BRBE detection infrastructure patch
+- PERF_SAMPLE_BRANCH_KERNEL gets checked during arm event init (outside the driver)
+- Branch privilege state capture mechanism has now moved inside the driver
+
+Changes in RFC V1:
+
+https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: James Clark <james.clark@arm.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (7):
+  arm64/perf: Add register definitions for BRBE
+  arm64/perf: Update struct arm_pmu for BRBE
+  arm64/perf: Update struct pmu_hw_events for BRBE
+  driver/perf/arm_pmu_platform: Add support for BRBE attributes detection
+  arm64/perf: Drive BRBE from perf event states
+  arm64/perf: Add BRBE driver
+  arm64/perf: Enable branch stack sampling
+
+ arch/arm64/include/asm/sysreg.h | 222 ++++++++++++++++
+ arch/arm64/kernel/perf_event.c  |  48 ++++
+ drivers/perf/Kconfig            |  11 +
+ drivers/perf/Makefile           |   1 +
+ drivers/perf/arm_pmu.c          |  82 +++++-
+ drivers/perf/arm_pmu_brbe.c     | 448 ++++++++++++++++++++++++++++++++
+ drivers/perf/arm_pmu_brbe.h     | 259 ++++++++++++++++++
+ drivers/perf/arm_pmu_platform.c |  34 +++
+ include/linux/perf/arm_pmu.h    |  67 +++++
+ 9 files changed, 1169 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/perf/arm_pmu_brbe.c
+ create mode 100644 drivers/perf/arm_pmu_brbe.h
+
 -- 
-Josh
+2.25.1
+

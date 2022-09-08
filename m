@@ -2,207 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154205B12E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 05:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8682F5B12E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 05:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiIHD0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 23:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S230092AbiIHD0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 23:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiIHD0M (ORCPT
+        with ESMTP id S230126AbiIHD0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 23:26:12 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2097.outbound.protection.outlook.com [40.107.117.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F8890C68;
-        Wed,  7 Sep 2022 20:26:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NUjNsVXRMXpEuEN98OneX1MBN85Kog+LXg09DJmPHiv9vdyyT/8MSZmBfXt71gBl9/GNNx1imzKTuOodQK/VCOxOPXDJaarIhz37MOWFnJO7GBaO3oYaDZ4lEKwPBO/arqUWUWXz+Gwpvl9IcnSUphQEXRwUS4HbfB3Gl7DqjHU8b/Ac8C28GD8ligtjD0rYbqVe5vMyFtzK1gaa09LgczPi+MN8rntOcvZsV7SfAOUkTvs/ktZ+mSaCimpubo1CS0q9bSWsV4FxEl2Ba78UUewfjqW4+ffNbDGxErxILelQ01kN8OtilYbl/YvMa/8N7nBUBFFCwkswDKP/BB0ykQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2YbnG1X6Ja3LbZJ5wz65Pp0E0HigoKCAxexfw31unqI=;
- b=XFYOrMiTMPnqWZOa6ltI1ji97yLX3CCpttsyTY9ioqdkNauJvyF1t48YAmU72g+zfwa3NQa6Z55bjFJyIdZLKM36dd5BdFzPNG5pfCQFhuW6aeiraOtGxWJ/f0avilKfWW8SUa6fO89yz/xGjrS/AFXdMAIBKyrNmNxtaVstVd7mp0GVCQHXsQscbqgSJEIvFKey3sut8R+PHwxHLRqQwoOiRqqx4D4T08VTnnJgWgZGE4U8qhBwUlkuRf604AJzyTtAb9q4mkuxVkZ2Q5Qkt0V/pU1TD0hjkrlT/DtmeJyK5/hZwh1gEOLgrYTeBZFVttu19UPYuyzjMrrHj2jvSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2YbnG1X6Ja3LbZJ5wz65Pp0E0HigoKCAxexfw31unqI=;
- b=Ovsxgwk6939nTwGPOkwB9bkXNrsKqaWWZJVV8MKCQKCfcOt1epE+lC61GC82uIXvd0XNG/GfKkZdcGnrkEhkDBWyC446//EEK7U7bKODsllwR3Tx6RbdO6z4FSb0pkCIteiEmsgZ4NIdyBJpDTOUk8XHB5dOfrzxgW1ahWvz29ZczN4vOl5U1ZTE5GS+zPXAkqGwEPBuXAx+HKakhXVfbkn9k9oFK51+2IZ4Lj4gZZmvWiQJTUDXdjcUpIZhiVE5TrTYcibyZ91EzPu2/9O9bY2iijAIxih0aTvuLKkJ7tNug5nr5eMvbrmL0umkmhc+5vu7bgRxxpYUMxCFIbIi/w==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by TYZPR06MB4633.apcprd06.prod.outlook.com (2603:1096:400:124::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Thu, 8 Sep
- 2022 03:26:05 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c44:6fe1:af1:7b42]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c44:6fe1:af1:7b42%5]) with mapi id 15.20.5612.014; Thu, 8 Sep 2022
- 03:26:04 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH v1 4/4] dt-bindings: bus: add documentation for Aspeed
- AHBC
-Thread-Topic: [PATCH v1 4/4] dt-bindings: bus: add documentation for Aspeed
- AHBC
-Thread-Index: AQHYvpFQWGemIcDpzUOpE+PtjZ1bGK3Uec+AgABuMXA=
-Date:   Thu, 8 Sep 2022 03:26:04 +0000
-Message-ID: <HK0PR06MB32025230C219AD97D39537AF80409@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220902060012.3758637-1-neal_liu@aspeedtech.com>
- <20220902060012.3758637-5-neal_liu@aspeedtech.com>
- <20220907205033.GA317033-robh@kernel.org>
-In-Reply-To: <20220907205033.GA317033-robh@kernel.org>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HK0PR06MB3202:EE_|TYZPR06MB4633:EE_
-x-ms-office365-filtering-correlation-id: 3cc453af-41a6-448c-0d05-08da9149dc99
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +nivzF7O9WThG3bIzV34xIhFw+6kN+dg4LjknwPS+oHicYAwttaaml2HcinfevrLtZqHN359MrV/wyFE0pDKNxxpD9SRv8W67UdKFGEoRVYBjtlh8H10//R9l6llg3UOctZrUjDriP3XH0wJNBwo7ZjoUxOxtESBL+Mr6/bVEJmxg0wE5V6mRil9QVS7xiIxhzhtHSw7gtMHrIFIF/io/iW4jBbyG/rEsLOVoT6tKzLl1pr6AUJqa6jMzooj1YTzS3gRiGQPx8hWdeGGmsfIGZ2btdNTC+3N1/eAvmYGpAzN1dIjK98E7kRGlSAM52yk3IHGh5S9dXKSm5zKq5Wh+44luIMm8VqngoD2me/7K5Vmw/EfZ+lMhfr7HsBXZ5/G6eeisCFQrA30O4VKIP8FuYJkTGYo8WQra6QgCwhzfuKQZZUtpgywLXXydI+VV/F/sogK0UwRJ2wp/x75n5pUmq4vJ74XfTg90qsOF4Fmrj0Wh1UgykU+7wlsltIhI07zVjedNYA0MTLawHFNTc3icowC0G6H+iIDuml5EElpflJxGghx7QlvIEeEtUoaOn2LUf3GLSUWtR9Djo4SBDr+NIgU6EKGvtSRleVZPLzwewkCtDVG46Vunf5zrNA8uAcw/p+7lyQTAG2kP65ZuR5QtO7wRbg+EJz5X8GmvGnQIHOiVBw46EXYhZ/H43srKj0GuRmmZOD24aRbCqC7W3TNx89ZvTl1exXjcne9QtQ5h0upDbLRUDl9/8lJFg+6ehMYZodkVXqdrLvj7apWUhCTviqq6oXEATuyqs57DO1IqS5N5z/CV+Id3I6B9+9q0zdOcqHiot8wt4zEYXPuwwIrMg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(346002)(376002)(39840400004)(366004)(38070700005)(38100700002)(122000001)(316002)(6916009)(71200400001)(54906003)(5660300002)(52536014)(66556008)(7416002)(8936002)(66476007)(76116006)(8676002)(4326008)(66946007)(66446008)(2906002)(64756008)(186003)(41300700001)(966005)(83380400001)(107886003)(478600001)(55016003)(26005)(7696005)(6506007)(9686003)(86362001)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?w2IZd9kln/1z+oCxQvySstIBJHDby30ilf6ZVHsKFM2QlMAcjAFFoDAmrmnq?=
- =?us-ascii?Q?G1Ga+7cBp3NOYYylbTwXfvxrtdlCO3laMZFXWGSLW0EPuNt4aViX9yJWQzKQ?=
- =?us-ascii?Q?fMSkmrSIUEoeVgPvpnN8j4geMF0C+a1ubTHHuO/lJM/emaUDe2yEOodNOH1h?=
- =?us-ascii?Q?sqUPCsLhpNqPCzr03JwsLWkYTuzCTTAhbOLAiye6omwlTNPVNDmIUSHPXFrr?=
- =?us-ascii?Q?jhihD5PAuKLH2/r+3VCBHgwWQzEu+DzQVfQXrnCjzGyINVvnJhCachp3sPpk?=
- =?us-ascii?Q?c7vPSc2aFh0VEQuO5+6xorziuUnwxYe2ajHR7L1EJxBLXsnQIExWcUk+RK/Q?=
- =?us-ascii?Q?Crpb7xInwUzSxs1mcC6ipxEYz+69zmBoVl+5GowlrZ4TlSGKiE3u9kC8k/ka?=
- =?us-ascii?Q?o9aEBE76B4qpy/3qghNzcOYRqWXndxP3iGeqmltJ2fBVKLsJeLrDEV5g75BP?=
- =?us-ascii?Q?1chmpXK7h53uQqK02+9PDYLinks9QAv08wtq2jdt0oobH9XkAgsp1yf+A5TY?=
- =?us-ascii?Q?xBn0PI8DQV73MZz3NWEhPntV0qBhn+51dsoFDsspdCmj4KQM5lrtKNmJ77FK?=
- =?us-ascii?Q?SqcwgqMgolmKYOH6XsMmCO0K2TibczfNuIL7DEVCCd9nY6m+/rdh+/GvrZy5?=
- =?us-ascii?Q?flcO6l6WYkk4m/cY1z3BGGYWWs7euTCs8ZOEYgxbYXiFwkWz0FyGzPC2GjL7?=
- =?us-ascii?Q?uosJIaBC9bxKNC2TKJvboakEwCLbsbNcHMs8i4Ijxuauzi/8bLAES3Rpd6G8?=
- =?us-ascii?Q?xOH8v+qnui59xViOC90ZEVag9eimtF83ouK/XCZf6+IQA2wLGhbfC06irYjw?=
- =?us-ascii?Q?W+QPuDuULiN5i3ft2MkoSq6CBe+iynOeLYJrU4lrsKFzUlGLRdoM9k5njWiG?=
- =?us-ascii?Q?hAJ4cfpSbC6TfI8lcK5QwVz/Qn5kFX+sktn/kAM+/PILkQYJc8Pu3g5KZP1j?=
- =?us-ascii?Q?eYVuzaI55dCKz4sRrabQWux56QH0IiGZUeuNctTPbXfY20beXEtcD2nMauPx?=
- =?us-ascii?Q?P2jr3rY5OwaehDK3m2BVWIKx5D0qbx3wqhH+TQ3yp+nnHGyAsM1AiB83FOJx?=
- =?us-ascii?Q?5BtaMfmRmJ4vvVVosUBDopgsBKM0omX034aTa2YYf+UA6N7BPH1Im621FsyK?=
- =?us-ascii?Q?duD+xzzx+d8haLnVzJ2GoohKZDU1QjTftd6LrNeikmzv8OM3Z3dWsUCjGYak?=
- =?us-ascii?Q?JhyXY+guwR7EPN7V+c4ES/aBFnuN5ONeFYRS7EWLdY/qLSghD9uAK3KMHsOX?=
- =?us-ascii?Q?Xet/+2E/R9W8HZnRK/FxWXJJ6zBqFL8oInRL8Hh2/IjuIPKXtoSk3cL+dICI?=
- =?us-ascii?Q?nqaQCbOGNhmx4fHfn/L3DJ5iiHn7VIqhEGFbuDxbbmdeaPD+/kH7KZogo4wV?=
- =?us-ascii?Q?lKRH9GXCano9ilscBk98iFdOQn8cls/ysyPdqYkNMo0tQj207Lel1MbBIIA0?=
- =?us-ascii?Q?p/FkJw1dQZH22KI9SDyRiwABI/6E0xgoV6QJUPTqrMS0G1J1/oniPjRbQlGY?=
- =?us-ascii?Q?WBGxnFqgvuiswH2v+1NYk3Xovy/aCqDMXvShLRdvgNkEauvEF72sCk4rllU6?=
- =?us-ascii?Q?QEAPzfbsDq5pEbj9Fn6B038aztjBxSEtvmOcVfkK?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Sep 2022 23:26:38 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FD4C7B9B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 20:26:32 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662607590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9wlDlkkG1ImB+EZnZEJ1/Kgs9joivM85L9/pPmkCVi4=;
+        b=XU4dt1nZ41gsfK1gvEHgK2T/h7cGbXJ+kGO1TN3Pq6g/hsUavBMNJzaxZLwy67rIqbQ4lL
+        7x0ZKNlKNyJVh0k80/ExMPv3IcctjB295nSGfpzgUlOoSa22MzQMTBqOvZ231pNn2DE+LN
+        F1X+K7cchJYjhoguc9ZCiRkLoHhyuwo=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     sj@kernel.org, akpm@linux-foundation.org
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH v2] mm/damon: introduce struct damos_access_pattern
+Date:   Thu,  8 Sep 2022 11:26:11 +0800
+Message-Id: <20220908032611.4072174-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cc453af-41a6-448c-0d05-08da9149dc99
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 03:26:04.5848
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: M3N2is5F9XP3GTgL3okfm5zPz0z+CWBKUJi5TBfrT4b2SAkqGZrqiUkSmf52G8BrXQbXNijC56z+zcJNskvuQw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4633
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Sep 02, 2022 at 02:00:12PM +0800, Neal Liu wrote:
-> > Add device tree binding documentation for the Aspeed Advanced
-> > High-Performance Bus (AHB) Controller.
-> >
-> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > ---
-> >  .../bindings/bus/aspeed,ast2600-ahbc.yaml     | 39
-> +++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> >
-> > diff --git
-> > a/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> > b/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> > new file mode 100644
-> > index 000000000000..ca09eb531666
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
-> > @@ -0,0 +1,39 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/bus/aspeed,ast2600-ahbc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: ASPEED Advanced High-Performance Bus Controller (AHBC) Device
-> > +Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Neal Liu <neal_liu@aspeedtech.com>
-> > +  - Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-> > +
-> > +description: |
-> > +  Advanced High-performance Bus Controller (AHBC) supports plenty of
-> > +mechanisms
-> > +  including a priority arbiter, an address decoder and a data
-> > +multiplexer
-> > +  to control the overall operations of Advanced Highperformance
->=20
-> High-performance
->=20
-> > +  Bus (AHB). AHB is the main system bus for ARM CPU to communicate
-> > + with the  related peripherals.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - aspeed,ast2600-ahbc
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    ahbc: bus@1e600000 {
-> > +        compatible =3D "aspeed,ast2600-ahbc";
-> > +        reg =3D <0x1e600000 0x100>;
->=20
-> Shouldn't devices on the bus be child nodes?
+The damon_new_scheme() has too many parameters, we can introduce struct
+damos_access_pattern to simplify it.
 
-Yes, I miss this part, I'll update it.
-Thanks.
+In additon, we couldn't use bpf trace kprobe that more than 5 parameters.
 
-> > +    };
-> > --
-> > 2.25.1
-> >
-> >
+v2:
+ - make the name of structure more sense.
+
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ include/linux/damon.h | 38 +++++++++++++++++++----------------
+ mm/damon/core.c       | 31 ++++++++++++++---------------
+ mm/damon/dbgfs.c      | 22 +++++++++++----------
+ mm/damon/lru_sort.c   | 46 ++++++++++++++++++++++++++-----------------
+ mm/damon/reclaim.c    | 23 +++++++++++++---------
+ mm/damon/sysfs.c      | 16 ++++++++++-----
+ 6 files changed, 101 insertions(+), 75 deletions(-)
+
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index 7b1f4a488230..7ddfb4551a13 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -216,13 +216,27 @@ struct damos_stat {
+ };
+ 
+ /**
+- * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
++ * struct damos_access_pattern - Specify the access pattern of target regions.
+  * @min_sz_region:	Minimum size of target regions.
+  * @max_sz_region:	Maximum size of target regions.
+  * @min_nr_accesses:	Minimum ``->nr_accesses`` of target regions.
+  * @max_nr_accesses:	Maximum ``->nr_accesses`` of target regions.
+  * @min_age_region:	Minimum age of target regions.
+  * @max_age_region:	Maximum age of target regions.
++ */
++
++struct damos_access_pattern {
++	unsigned long min_sz_region;
++	unsigned long max_sz_region;
++	unsigned int min_nr_accesses;
++	unsigned int max_nr_accesses;
++	unsigned int min_age_region;
++	unsigned int max_age_region;
++};
++
++/**
++ * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
++ * @pattern:		Access pattern of target regions.
+  * @action:		&damo_action to be applied to the target regions.
+  * @quota:		Control the aggressiveness of this scheme.
+  * @wmarks:		Watermarks for automated (in)activation of this scheme.
+@@ -230,10 +244,8 @@ struct damos_stat {
+  * @list:		List head for siblings.
+  *
+  * For each aggregation interval, DAMON finds regions which fit in the
+- * condition (&min_sz_region, &max_sz_region, &min_nr_accesses,
+- * &max_nr_accesses, &min_age_region, &max_age_region) and applies &action to
+- * those.  To avoid consuming too much CPU time or IO resources for the
+- * &action, &quota is used.
++ * &pattern and applies &action to those. To avoid consuming too much
++ * CPU time or IO resources for the &action, &quota is used.
+  *
+  * To do the work only when needed, schemes can be activated for specific
+  * system situations using &wmarks.  If all schemes that registered to the
+@@ -248,12 +260,7 @@ struct damos_stat {
+  * &action is applied.
+  */
+ struct damos {
+-	unsigned long min_sz_region;
+-	unsigned long max_sz_region;
+-	unsigned int min_nr_accesses;
+-	unsigned int max_nr_accesses;
+-	unsigned int min_age_region;
+-	unsigned int max_age_region;
++	struct damos_access_pattern pattern;
+ 	enum damos_action action;
+ 	struct damos_quota quota;
+ 	struct damos_watermarks wmarks;
+@@ -501,12 +508,9 @@ void damon_destroy_region(struct damon_region *r, struct damon_target *t);
+ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 		unsigned int nr_ranges);
+ 
+-struct damos *damon_new_scheme(
+-		unsigned long min_sz_region, unsigned long max_sz_region,
+-		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
+-		unsigned int min_age_region, unsigned int max_age_region,
+-		enum damos_action action, struct damos_quota *quota,
+-		struct damos_watermarks *wmarks);
++struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
++			enum damos_action action, struct damos_quota *quota,
++			struct damos_watermarks *wmarks);
+ void damon_add_scheme(struct damon_ctx *ctx, struct damos *s);
+ void damon_destroy_scheme(struct damos *s);
+ 
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 9964b9d00768..57450a0160ab 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -230,24 +230,21 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 	return 0;
+ }
+ 
+-struct damos *damon_new_scheme(
+-		unsigned long min_sz_region, unsigned long max_sz_region,
+-		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
+-		unsigned int min_age_region, unsigned int max_age_region,
+-		enum damos_action action, struct damos_quota *quota,
+-		struct damos_watermarks *wmarks)
++struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
++			enum damos_action action, struct damos_quota *quota,
++			struct damos_watermarks *wmarks)
+ {
+ 	struct damos *scheme;
+ 
+ 	scheme = kmalloc(sizeof(*scheme), GFP_KERNEL);
+ 	if (!scheme)
+ 		return NULL;
+-	scheme->min_sz_region = min_sz_region;
+-	scheme->max_sz_region = max_sz_region;
+-	scheme->min_nr_accesses = min_nr_accesses;
+-	scheme->max_nr_accesses = max_nr_accesses;
+-	scheme->min_age_region = min_age_region;
+-	scheme->max_age_region = max_age_region;
++	scheme->pattern.min_sz_region = pattern->min_sz_region;
++	scheme->pattern.max_sz_region = pattern->max_sz_region;
++	scheme->pattern.min_nr_accesses = pattern->min_nr_accesses;
++	scheme->pattern.max_nr_accesses = pattern->max_nr_accesses;
++	scheme->pattern.min_age_region = pattern->min_age_region;
++	scheme->pattern.max_age_region = pattern->max_age_region;
+ 	scheme->action = action;
+ 	scheme->stat = (struct damos_stat){};
+ 	INIT_LIST_HEAD(&scheme->list);
+@@ -666,10 +663,12 @@ static bool __damos_valid_target(struct damon_region *r, struct damos *s)
+ 	unsigned long sz;
+ 
+ 	sz = r->ar.end - r->ar.start;
+-	return s->min_sz_region <= sz && sz <= s->max_sz_region &&
+-		s->min_nr_accesses <= r->nr_accesses &&
+-		r->nr_accesses <= s->max_nr_accesses &&
+-		s->min_age_region <= r->age && r->age <= s->max_age_region;
++	return s->pattern.min_sz_region <= sz &&
++		sz <= s->pattern.max_sz_region &&
++		s->pattern.min_nr_accesses <= r->nr_accesses &&
++		r->nr_accesses <= s->pattern.max_nr_accesses &&
++		s->pattern.min_age_region <= r->age &&
++		r->age <= s->pattern.max_age_region;
+ }
+ 
+ static bool damos_valid_target(struct damon_ctx *c, struct damon_target *t,
+diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+index 652a94deafe3..5624e1805bb3 100644
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -131,9 +131,9 @@ static ssize_t sprint_schemes(struct damon_ctx *c, char *buf, ssize_t len)
+ 	damon_for_each_scheme(s, c) {
+ 		rc = scnprintf(&buf[written], len - written,
+ 				"%lu %lu %u %u %u %u %d %lu %lu %lu %u %u %u %d %lu %lu %lu %lu %lu %lu %lu %lu %lu\n",
+-				s->min_sz_region, s->max_sz_region,
+-				s->min_nr_accesses, s->max_nr_accesses,
+-				s->min_age_region, s->max_age_region,
++				s->pattern.min_sz_region, s->pattern.max_sz_region,
++				s->pattern.min_nr_accesses, s->pattern.max_nr_accesses,
++				s->pattern.min_age_region, s->pattern.max_age_region,
+ 				damos_action_to_dbgfs_scheme_action(s->action),
+ 				s->quota.ms, s->quota.sz,
+ 				s->quota.reset_interval,
+@@ -221,8 +221,6 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
+ 	struct damos *scheme, **schemes;
+ 	const int max_nr_schemes = 256;
+ 	int pos = 0, parsed, ret;
+-	unsigned long min_sz, max_sz;
+-	unsigned int min_nr_a, max_nr_a, min_age, max_age;
+ 	unsigned int action_input;
+ 	enum damos_action action;
+ 
+@@ -233,13 +231,16 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
+ 
+ 	*nr_schemes = 0;
+ 	while (pos < len && *nr_schemes < max_nr_schemes) {
++		struct damos_access_pattern pattern = {};
+ 		struct damos_quota quota = {};
+ 		struct damos_watermarks wmarks;
+ 
+ 		ret = sscanf(&str[pos],
+ 				"%lu %lu %u %u %u %u %u %lu %lu %lu %u %u %u %u %lu %lu %lu %lu%n",
+-				&min_sz, &max_sz, &min_nr_a, &max_nr_a,
+-				&min_age, &max_age, &action_input, &quota.ms,
++				&pattern.min_sz_region, &pattern.max_sz_region,
++				&pattern.min_nr_accesses, &pattern.max_nr_accesses,
++				&pattern.min_age_region, &pattern.max_age_region,
++				&action_input, &quota.ms,
+ 				&quota.sz, &quota.reset_interval,
+ 				&quota.weight_sz, &quota.weight_nr_accesses,
+ 				&quota.weight_age, &wmarks.metric,
+@@ -251,7 +252,9 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
+ 		if ((int)action < 0)
+ 			goto fail;
+ 
+-		if (min_sz > max_sz || min_nr_a > max_nr_a || min_age > max_age)
++		if (pattern.min_sz_region > pattern.max_sz_region ||
++		    pattern.min_nr_accesses > pattern.max_nr_accesses ||
++		    pattern.min_age_region > pattern.max_age_region)
+ 			goto fail;
+ 
+ 		if (wmarks.high < wmarks.mid || wmarks.high < wmarks.low ||
+@@ -259,8 +262,7 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
+ 			goto fail;
+ 
+ 		pos += parsed;
+-		scheme = damon_new_scheme(min_sz, max_sz, min_nr_a, max_nr_a,
+-				min_age, max_age, action, &quota, &wmarks);
++		scheme = damon_new_scheme(&pattern, action, &quota, &wmarks);
+ 		if (!scheme)
+ 			goto fail;
+ 
+diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
+index 9de6f00a71c5..59f6115e59de 100644
+--- a/mm/damon/lru_sort.c
++++ b/mm/damon/lru_sort.c
+@@ -293,6 +293,17 @@ static bool get_monitoring_region(unsigned long *start, unsigned long *end)
+ /* Create a DAMON-based operation scheme for hot memory regions */
+ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
+ {
++	struct damos_access_pattern pattern = {
++		/* Find regions having PAGE_SIZE or larger size */
++		.min_sz_region = PAGE_SIZE,
++		.max_sz_region = ULONG_MAX,
++		/* and accessed for more than the threshold */
++		.min_nr_accesses = hot_thres,
++		.max_nr_accesses = UINT_MAX,
++		/* no matter its age*/
++		.min_age_region = 0,
++		.max_age_region = UINT_MAX,
++	};
+ 	struct damos_watermarks wmarks = {
+ 		.metric = DAMOS_WMARK_FREE_MEM_RATE,
+ 		.interval = wmarks_interval,
+@@ -313,26 +324,31 @@ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
+ 		.weight_nr_accesses = 1,
+ 		.weight_age = 0,
+ 	};
+-	struct damos *scheme = damon_new_scheme(
+-			/* Find regions having PAGE_SIZE or larger size */
+-			PAGE_SIZE, ULONG_MAX,
+-			/* and accessed for more than the threshold */
+-			hot_thres, UINT_MAX,
+-			/* no matter its age */
+-			0, UINT_MAX,
++
++	return damon_new_scheme(
++			&pattern,
+ 			/* prioritize those on LRU lists, as soon as found */
+ 			DAMOS_LRU_PRIO,
+ 			/* under the quota. */
+ 			&quota,
+ 			/* (De)activate this according to the watermarks. */
+ 			&wmarks);
+-
+-	return scheme;
+ }
+ 
+ /* Create a DAMON-based operation scheme for cold memory regions */
+ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
+ {
++	struct damos_access_pattern pattern = {
++		/* Find regions having PAGE_SIZE or larger size */
++		.min_sz_region = PAGE_SIZE,
++		.max_sz_region = ULONG_MAX,
++		/* and not accessed at all */
++		.min_nr_accesses = 0,
++		.max_nr_accesses = 0,
++		/* for min_age or more micro-seconds*/
++		.min_age_region = cold_thres,
++		.max_age_region = UINT_MAX,
++	};
+ 	struct damos_watermarks wmarks = {
+ 		.metric = DAMOS_WMARK_FREE_MEM_RATE,
+ 		.interval = wmarks_interval,
+@@ -354,21 +370,15 @@ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
+ 		.weight_nr_accesses = 0,
+ 		.weight_age = 1,
+ 	};
+-	struct damos *scheme = damon_new_scheme(
+-			/* Find regions having PAGE_SIZE or larger size */
+-			PAGE_SIZE, ULONG_MAX,
+-			/* and not accessed at all */
+-			0, 0,
+-			/* for cold_thres or more micro-seconds, and */
+-			cold_thres, UINT_MAX,
++
++	return damon_new_scheme(
++			&pattern,
+ 			/* mark those as not accessed, as soon as found */
+ 			DAMOS_LRU_DEPRIO,
+ 			/* under the quota. */
+ 			&quota,
+ 			/* (De)activate this according to the watermarks. */
+ 			&wmarks);
+-
+-	return scheme;
+ }
+ 
+ static int damon_lru_sort_apply_parameters(void)
+diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+index a7faf51b4bd4..3d78dcca1701 100644
+--- a/mm/damon/reclaim.c
++++ b/mm/damon/reclaim.c
+@@ -264,6 +264,17 @@ static bool get_monitoring_region(unsigned long *start, unsigned long *end)
+ 
+ static struct damos *damon_reclaim_new_scheme(void)
+ {
++	struct damos_access_pattern pattern = {
++		/* Find regions having PAGE_SIZE or larger size */
++		.min_sz_region = PAGE_SIZE,
++		.max_sz_region = ULONG_MAX,
++		/* and not accessed at all */
++		.min_nr_accesses = 0,
++		.max_nr_accesses = 0,
++		/* for min_age or more micro-seconds*/
++		.min_age_region = min_age / aggr_interval,
++		.max_age_region = UINT_MAX,
++	};
+ 	struct damos_watermarks wmarks = {
+ 		.metric = DAMOS_WMARK_FREE_MEM_RATE,
+ 		.interval = wmarks_interval,
+@@ -284,21 +295,15 @@ static struct damos *damon_reclaim_new_scheme(void)
+ 		.weight_nr_accesses = 0,
+ 		.weight_age = 1
+ 	};
+-	struct damos *scheme = damon_new_scheme(
+-			/* Find regions having PAGE_SIZE or larger size */
+-			PAGE_SIZE, ULONG_MAX,
+-			/* and not accessed at all */
+-			0, 0,
+-			/* for min_age or more micro-seconds, and */
+-			min_age / aggr_interval, UINT_MAX,
++
++	return damon_new_scheme(
++			&pattern,
+ 			/* page out those, as soon as found */
+ 			DAMOS_PAGEOUT,
+ 			/* under the quota. */
+ 			&quota,
+ 			/* (De)activate this according to the watermarks. */
+ 			&wmarks);
+-
+-	return scheme;
+ }
+ 
+ static int damon_reclaim_apply_parameters(void)
+diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+index fe6c6870cf86..012b5e9476bc 100644
+--- a/mm/damon/sysfs.c
++++ b/mm/damon/sysfs.c
+@@ -2259,11 +2259,20 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+ static struct damos *damon_sysfs_mk_scheme(
+ 		struct damon_sysfs_scheme *sysfs_scheme)
+ {
+-	struct damon_sysfs_access_pattern *pattern =
++	struct damon_sysfs_access_pattern *access_pattern =
+ 		sysfs_scheme->access_pattern;
+ 	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
+ 	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
+ 	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
++
++	struct damos_access_pattern pattern = {
++		.min_sz_region = access_pattern->sz->min,
++		.max_sz_region = access_pattern->sz->max,
++		.min_nr_accesses = access_pattern->nr_accesses->min,
++		.max_nr_accesses = access_pattern->nr_accesses->max,
++		.min_age_region = access_pattern->age->min,
++		.max_age_region = access_pattern->age->max,
++	};
+ 	struct damos_quota quota = {
+ 		.ms = sysfs_quotas->ms,
+ 		.sz = sysfs_quotas->sz,
+@@ -2280,10 +2289,7 @@ static struct damos *damon_sysfs_mk_scheme(
+ 		.low = sysfs_wmarks->low,
+ 	};
+ 
+-	return damon_new_scheme(pattern->sz->min, pattern->sz->max,
+-			pattern->nr_accesses->min, pattern->nr_accesses->max,
+-			pattern->age->min, pattern->age->max,
+-			sysfs_scheme->action, &quota, &wmarks);
++	return damon_new_scheme(&pattern, sysfs_scheme->action, &quota, &wmarks);
+ }
+ 
+ static int damon_sysfs_set_schemes(struct damon_ctx *ctx,
+-- 
+2.25.1
+

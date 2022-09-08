@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079F95B22F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9265B22FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbiIHQA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
+        id S231523AbiIHQBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiIHQAX (ORCPT
+        with ESMTP id S229997AbiIHQBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:00:23 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770EF7B78F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:00:22 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so2790434pjm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=uUAptloKXsUhc5RdRAer9UcXRS270T3TKnFTRNXj8IE=;
-        b=VnRpsbSsELxB/oSot/2j6eMfU1heBpPQFSiokJNJsEWZBKYql0eypvaIz7fux1H30h
-         QzFWu7cN+1JV/mlix7z8lnMHYZr/5e/gEPossmBKL0emMirrVmB3bXBvmDL73cPu0z53
-         Pru5E/dNRV/NAi6Tw0yI/PqWmgogcEZPpba0j24fz+iBDcjTGQRR/7eI30j/VKnESigD
-         mmHKtaIvtjUDKqQj+RqJijWLFKyADgguZbtG/MOLRnJRIWdJjz08mUE6eED6pMM/O1Oe
-         yym8lYFktVwoxGdFGVagt1570kxrtVwQZ3non7YVMkoS6+ZXgbBCxGyVpqZ3dmet+HRr
-         tvaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uUAptloKXsUhc5RdRAer9UcXRS270T3TKnFTRNXj8IE=;
-        b=xX5EgUaE8M7KcH0wJyRLaQmbPjG3Z4pbZXtoncVWaGo3cL3VRA49UjJbBxH1mMNWLz
-         IbDbzH9Wvjb4H5JIGPcyYqeWT7fobJlXCAe5joL6r6y+AmfvoeqtWkViI78anxz7DYkC
-         gQ5csl/LCaM+JQJ9ZBt+H7Dm9sjdzX6AHpR9Tp2AAqrZpqYEnVf4vC7JldOgMqbjJn6s
-         DhzyU+aIZDMeaQbK/7fVPS+0Ptzna68j+K12b53chr1mNM8L8evedJlvOOEWn2C77/m5
-         Zg9YywCeGDfnKAF8G4qFlEuq356fL1A5gMhdm8D3Vgryenp0g3nCLMGFjWbiYjHmAwTt
-         9rWw==
-X-Gm-Message-State: ACgBeo0Jl57FHN+AZWTukgR/lKgZP7I7dy1+i4yiUJgIaugW7VKNSGdl
-        vXBP5NBsHZv2ZQRd/yUYoHguvZQ0D4R90Ow7cYz2up3dLRmsrQ==
-X-Google-Smtp-Source: AA6agR5madP3qGyz1BQfqw3nC2KML73nEGwhEuS5oVy2zsJA6zOqe6vCk5VeGmvO8XNL96AqFkx91ucSEd3mQ9kQCv4=
-X-Received: by 2002:a17:902:9887:b0:172:7090:6485 with SMTP id
- s7-20020a170902988700b0017270906485mr9826023plp.63.1662652821976; Thu, 08 Sep
- 2022 09:00:21 -0700 (PDT)
+        Thu, 8 Sep 2022 12:01:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E58AC697E;
+        Thu,  8 Sep 2022 09:01:43 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 18:01:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1662652901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yq5ZQcpZgpbBySLyDiNZZpodPZiaJP/0RYxixe2+d8Y=;
+        b=e48N5fhr2y9PwwEu4uAAHEca8MQ1r9J0zvBqQ4mqQAv8TJiw4oXHTwLajcP8Ov9mUuTY2A
+        NY7+gsgPYsD3qZ5oW4C6q0N0UYLaBf7V63qtTrDVVX59UtMUG9TbQGkeeKj5rZowcgD1rZ
+        RpiA1SbHcPIcGodqhzQzB2cDtBNQ+KMH6kjTUs4lYStFI9jvb30FeYms3LqNX11neDKg6F
+        V41X60sakn2aUL6Beatbop1XjlAI5+Ct62PB8ULQJ528p43sPgHsfG0iXPsSGcIn3Mc4OS
+        gTsyEwC2qz/ZnMTeAo7Fx0TkKYpiQb3RrhNc9SOX7BLF0Suxe0eO0wGWopkKDA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1662652901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yq5ZQcpZgpbBySLyDiNZZpodPZiaJP/0RYxixe2+d8Y=;
+        b=aMO74v0Iyk5F71GBnyRyg+lFUxAvArjrSitIstuy8jq+PoE6YxmdL1Ii01YRHsh5Y9xYd0
+        +XKKoqZcfnhU+fBQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V4 7/8] riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+Message-ID: <YxoR5Fv6hOkzMSTg@linutronix.de>
+References: <20220908022506.1275799-1-guoren@kernel.org>
+ <20220908022506.1275799-8-guoren@kernel.org>
 MIME-Version: 1.0
-References: <CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com>
- <59b6dd0a-7cbb-5dbd-8da0-57baeba3327e@gmail.com>
-In-Reply-To: <59b6dd0a-7cbb-5dbd-8da0-57baeba3327e@gmail.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 8 Sep 2022 09:00:10 -0700
-Message-ID: <CAJ+vNU2FVQRwCa3DnOwkFjaZg-ntFLZmetwDbSggDXDdwOOGTg@mail.gmail.com>
-Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Marek Vasut <marex@denx.de>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220908022506.1275799-8-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 9:14 PM Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->
-> Hi Tim,
->
-> On 9/2/22 01:23, Tim Harvey wrote:
-> > Greetings,
-> >
-> > I've found that the bd71847 clk driver (CONFIG_COMMON_CLK_BD718XX
-> > drivers/clk/clk-bd718x7.c) disables clk-32k-out (the BD71847 C32K_OUT
-> > pin) which is connected IMX8MM RTC_XTALI which ends up disabling the
-> > IMX RTC as well as the IMX WDOG functionality.
->
-> //snip
->
-> > This happens via clk_unprepare_unused() as nothing is flagging the
-> > clk-32k-out as being used. What should be added to the device-tree to
-> > signify that this clk is indeed necessary and should not be disabled?
->
-> I have seen following proposal from Marek Vasut:
->
-> https://lore.kernel.org/all/20220517235919.200375-1-marex@denx.de/T/#m52d6d0831bf43d5f293e35cb27f3021f278d0564
->
-> I am not sure if the discussion is completed though. I guess it was
-> agreed this was needed/usefull and maybe the remaining thing to decide
-> was just the property naming.
->
-> Best Regards
->         -- Matti
->
+On 2022-09-07 22:25:05 [-0400], guoren@kernel.org wrote:
+> --- a/arch/riscv/kernel/irq.c
+> +++ b/arch/riscv/kernel/irq.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/seq_file.h>
+>  #include <asm/smp.h>
+>  #include <asm/vmap_stack.h>
+> +#include <asm/softirq_stack.h>
+>  
+>  #ifdef CONFIG_IRQ_STACKS
+>  static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
+> @@ -38,6 +39,21 @@ static void init_irq_stacks(void)
+>  		per_cpu(irq_stack_ptr, cpu) = per_cpu(irq_stack, cpu);
+>  }
+>  #endif /* CONFIG_VMAP_STACK */
+> +
+> +#ifndef CONFIG_PREEMPT_RT
 
-Thanks Matti,
+Could you please replace it with 
+	#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
 
-Marek - has there been any progress on determining how best to keep
-certain clocks from being disabled?
+instead? See
+	https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=8cbb2b50ee2dcb082675237eaaa48fe8479f8aa5
 
-Best Regards,
+> +static void do_riscv_softirq(struct pt_regs *regs)
+> +{
+> +	__do_softirq();
+> +}
+> +
+> +void do_softirq_own_stack(void)
+> +{
+> +	ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id());
+> +
+> +	call_on_stack(NULL, sp, do_riscv_softirq, 0);
+> +}
+> +#endif /* CONFIG_PREEMPT_RT */
+> +
+>  #else
+>  static void init_irq_stacks(void) {}
+>  #endif /* CONFIG_IRQ_STACKS */
 
-Tim
+Sebastian

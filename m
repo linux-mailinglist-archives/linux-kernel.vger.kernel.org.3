@@ -2,461 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7195B2695
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6005B2699
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 21:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiIHTO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 15:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
+        id S231641AbiIHTP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 15:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiIHTOz (ORCPT
+        with ESMTP id S229898AbiIHTPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 15:14:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC0647B93
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 12:14:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AF9561DF1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 19:14:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6CC6C433C1;
-        Thu,  8 Sep 2022 19:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662664492;
-        bh=yZK4GKE4bBaOcZKG8OpufGWJ5T4bJN3vGP8XxsKNhoc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S3Z0hLtOXOal4z6XZKqMmfXH04b4SnBO5ffm5jNG6HrJej+TuA3AelCLMHtrm8qNI
-         fAueYoaEilTKnD1ucrEK9dKmeXiMx9DIcRoADFix4IM9l+o8s1CXToujYw3WXC3g9i
-         TRjmkgUl5N5wOjknEym/C41n+ps+iH4pY8SdBLPKyRgh6/V63utpBMCUdOji/fYb7y
-         H014yO0ZqVJs0/1lFCwmNnhdRUga3JSVaC13qs5GLLoeod5zFEHrlf1OpXz0gOF40m
-         XgepXYQX3qPycctY7c/2WAeAMPHqo8A0K0xTizQ46onD5bZ43iVDW9NQWV+Y8SEnvi
-         JtGKzSwbdvc3w==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>,
-        SeongJae Park <sj@kernel.org>
-Subject: [PATCH v3] mm/damon: introduce struct damos_access_pattern
-Date:   Thu,  8 Sep 2022 19:14:43 +0000
-Message-Id: <20220908191443.129534-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Thu, 8 Sep 2022 15:15:24 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4232374E29;
+        Thu,  8 Sep 2022 12:15:23 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id t3so13786688ply.2;
+        Thu, 08 Sep 2022 12:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=YHnvyDtge2bDMZCHRPm32H8ARMZYnaM9vFyOk1RCgm8=;
+        b=IhF/5QBj7WQlQU/W89KkP51CbnOxpPC2/mmJkNa8i+KZK46QjfKrzL+FbCKdZb+z5W
+         zYPEN/yi1BfBnOL/ARfTcDPr1wxcBorVtB+0vVqM3myv3bzDBZAkmS919Z+QJnn7kR3W
+         ToMMmYoZCvVW160AjxJNSyE5doDbaYCDsgFJ3UmBuiCbFKpif8CRtIDPIsDVCAonvmc4
+         2Z0vYiyF9HNB+tlYDD29cFvy+HA2GewWq4RHP9WfwJv8XxHEYCGTBdUHVnoPo4RmO7Ts
+         Q3lF3EKAwxJCXdFecNH4y4nAMp/JQILgb0rIvhleNanDlT1QKWOt9NvD8cw1jmqGrV7r
+         Sz7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=YHnvyDtge2bDMZCHRPm32H8ARMZYnaM9vFyOk1RCgm8=;
+        b=giymR5QqTfWak6/9og31prdZw7iSuQhMYsV8+TI2eRRsCKGMPsMiKdyjxWnUZg2Cpf
+         d26kpV14z6IZUcZuFvTKJx+GsFcKNxv4fHa6WDDcTWSE/Q3v8peCOwxIc4Mrevm2RZ94
+         E+OY/XpU/IOYnlExO8Sa/afPXva+W/pzSSngrcj3Efhc/Xhxdwt4LyxvXzxbCP5OOruX
+         s/gHv1RoQ/73KsbrUnhh9t/PfqOt366I0k3sx5hbw7X0A5opb0gERIeGCSVXMZP6pxeS
+         0wj2RfAz4bWs+iYcfBPmf1w+CpswhZIAHtGfNs9Ub3Al1n/sbSnFhrK9QL3ojHipGAbd
+         KVKQ==
+X-Gm-Message-State: ACgBeo2l/B5fG25Da7+JKjuOXED3e+lUUDTYKqm9f2pnCFSPMhA7W3ST
+        FXQrQ2j8j8foK83Ibr6+ghg=
+X-Google-Smtp-Source: AA6agR72v/cOfySC/mUUrrmMeYykkaeiOnKAj9Q6cCxt54+ZAUoMaPiSDQEWjyzQLw1WyAXpje4ULA==
+X-Received: by 2002:a17:903:2309:b0:176:de48:e940 with SMTP id d9-20020a170903230900b00176de48e940mr10272559plh.15.1662664522664;
+        Thu, 08 Sep 2022 12:15:22 -0700 (PDT)
+Received: from localhost ([192.55.55.51])
+        by smtp.gmail.com with ESMTPSA id bf10-20020a170902b90a00b00172ff99d0afsm14977203plb.140.2022.09.08.12.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 12:15:21 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 12:15:20 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
+        Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v3 14/22] KVM: Move out KVM arch PM hooks and hardware
+ enable/disable logic
+Message-ID: <20220908191520.GD470011@ls.amr.corp.intel.com>
+References: <cover.1662084396.git.isaku.yamahata@intel.com>
+ <1c0165a7d2dd22810d9ae2cf8cf474a2e6dcb6d7.1662084396.git.isaku.yamahata@intel.com>
+ <20220906074358.hwchunz6vdxefzb6@yy-desk-7060>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220906074358.hwchunz6vdxefzb6@yy-desk-7060>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yajun Deng <yajun.deng@linux.dev>
+On Tue, Sep 06, 2022 at 03:43:58PM +0800,
+Yuan Yao <yuan.yao@linux.intel.com> wrote:
 
-The damon_new_scheme() has too many parameters, we can introduce struct
-damos_access_pattern to simplify it.
+> On Thu, Sep 01, 2022 at 07:17:49PM -0700, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >
+> > To make clear that those files are default implementation that KVM/x86 (and
+> > other KVM arch in future) will override them, split out those into a single
+> > file. Once conversions for all kvm archs are done, the file will be
+> > deleted.  kvm_arch_pre_hardware_unsetup() is introduced to avoid cross-arch
+> > code churn for now.  Once it's settled down,
+> > kvm_arch_pre_hardware_unsetup() can be merged into
+> > kvm_arch_hardware_unsetup() in each arch code.
+> >
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  include/linux/kvm_host.h |   1 +
+> >  virt/kvm/kvm_arch.c      | 103 ++++++++++++++++++++++-
+> >  virt/kvm/kvm_main.c      | 172 +++++----------------------------------
+> >  3 files changed, 124 insertions(+), 152 deletions(-)
+> >
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index f78364e01ca9..60f4ae9d6f48 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -1437,6 +1437,7 @@ static inline void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu) {}
+> >  int kvm_arch_hardware_enable(void);
+> >  void kvm_arch_hardware_disable(void);
+> >  int kvm_arch_hardware_setup(void *opaque);
+> > +void kvm_arch_pre_hardware_unsetup(void);
+> >  void kvm_arch_hardware_unsetup(void);
+> >  int kvm_arch_check_processor_compat(void);
+> >  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
+> > diff --git a/virt/kvm/kvm_arch.c b/virt/kvm/kvm_arch.c
+> > index 0eac996f4981..0648d4463d9e 100644
+> > --- a/virt/kvm/kvm_arch.c
+> > +++ b/virt/kvm/kvm_arch.c
+> > @@ -6,49 +6,148 @@
+> >   * Author:
+> >   *   Isaku Yamahata <isaku.yamahata@intel.com>
+> >   *                  <isaku.yamahata@gmail.com>
+> > + *
+> > + * TODO: Delete this file once the conversion of all KVM arch is done.
+> >   */
+> >
+> >  #include <linux/kvm_host.h>
+> >
+> > +static cpumask_t cpus_hardware_enabled = CPU_MASK_NONE;
+> > +static atomic_t hardware_enable_failed;
+> > +
+> >  __weak int kvm_arch_post_init_vm(struct kvm *kvm)
+> >  {
+> >  	return 0;
+> >  }
+> >
+> > +static void hardware_enable_nolock(void *caller_name)
+> > +{
+> > +	int cpu = raw_smp_processor_id();
+> > +	int r;
+> > +
+> > +	WARN_ON_ONCE(preemptible());
+> > +
+> > +	if (cpumask_test_cpu(cpu, &cpus_hardware_enabled))
+> > +		return;
+> > +
+> > +	cpumask_set_cpu(cpu, &cpus_hardware_enabled);
+> > +
+> > +	r = kvm_arch_hardware_enable();
+> > +
+> > +	if (r) {
+> > +		cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
+> > +		atomic_inc(&hardware_enable_failed);
+> > +		pr_warn("kvm: enabling virtualization on CPU%d failed during %s()\n",
+> > +			cpu, (const char *)caller_name);
+> > +	}
+> > +}
+> > +
+> > +static void hardware_disable_nolock(void *junk)
+> > +{
+> > +	int cpu = raw_smp_processor_id();
+> > +
+> > +	WARN_ON_ONCE(preemptible());
+> > +
+> > +	if (!cpumask_test_cpu(cpu, &cpus_hardware_enabled))
+> > +		return;
+> > +	cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
+> > +	kvm_arch_hardware_disable();
+> > +}
+> > +
+> > +__weak void kvm_arch_pre_hardware_unsetup(void)
+> > +{
+> > +	on_each_cpu(hardware_disable_nolock, NULL, 1);
+> > +}
+> > +
+> >  /*
+> >   * Called after the VM is otherwise initialized, but just before adding it to
+> >   * the vm_list.
+> >   */
+> >  __weak int kvm_arch_add_vm(struct kvm *kvm, int usage_count)
+> >  {
+> > -	return kvm_arch_post_init_vm(kvm);
+> > +	int r = 0;
+> > +
+> > +	if (usage_count != 1)
+> > +		return 0;
+> > +
+> > +	atomic_set(&hardware_enable_failed, 0);
+> > +	on_each_cpu(hardware_enable_nolock, (void *)__func__, 1);
+> 
+> 
+> This function is called in kvm_create_vm:
+> 
+>  kvm_create_vm {
+>  ...
+>    enable_hardware_all()
+>  ...
+>    kvm_arch_add_vm()
+>  ...
+> }
+> 
+> so don't need on_each_cpu(enable_hardware_nolock) here, or the
+> enable_hardware_all() shuold be removed from kvm_create_vm().
 
-In additon, we couldn't use bpf trace kprobe that more than 5 parameters.
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-Reviewed-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
-Changes from v2
-(https://lore.kernel.org/damon/20220908032611.4072174-1-yajun.deng@linux.dev/):
- - Fix cosmetic nits in v2 (SeongJae Park)
- - Wordsmith damos_access_pattern description comment (SeongJae Park)
- - Adds 'Reviewed-by:' and 'Signed-off-by:' from SeongJae Park
+Yes, it's removed. Please notice the following hunk.
 
-Changes from v1
-(https://lore.kernel.org/damon/20220907092626.3013765-1-yajun.deng@linux.dev/):
- - make the name of structure more sense.
+@@ -1196,10 +1191,6 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+      if (r)
+              goto out_err_no_arch_destroy_vm;
 
- include/linux/damon.h | 37 ++++++++++++++++++----------------
- mm/damon/core.c       | 31 ++++++++++++++---------------
- mm/damon/dbgfs.c      | 27 +++++++++++++++----------
- mm/damon/lru_sort.c   | 46 ++++++++++++++++++++++++++-----------------
- mm/damon/reclaim.c    | 23 +++++++++++++---------
- mm/damon/sysfs.c      | 17 +++++++++++-----
- 6 files changed, 106 insertions(+), 75 deletions(-)
-
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index d54acec048d6..90f20675da22 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -216,13 +216,26 @@ struct damos_stat {
- };
- 
- /**
-- * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
-+ * struct damos_access_pattern - Target access pattern of the given scheme.
-  * @min_sz_region:	Minimum size of target regions.
-  * @max_sz_region:	Maximum size of target regions.
-  * @min_nr_accesses:	Minimum ``->nr_accesses`` of target regions.
-  * @max_nr_accesses:	Maximum ``->nr_accesses`` of target regions.
-  * @min_age_region:	Minimum age of target regions.
-  * @max_age_region:	Maximum age of target regions.
-+ */
-+struct damos_access_pattern {
-+	unsigned long min_sz_region;
-+	unsigned long max_sz_region;
-+	unsigned int min_nr_accesses;
-+	unsigned int max_nr_accesses;
-+	unsigned int min_age_region;
-+	unsigned int max_age_region;
-+};
-+
-+/**
-+ * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
-+ * @pattern:		Access pattern of target regions.
-  * @action:		&damo_action to be applied to the target regions.
-  * @quota:		Control the aggressiveness of this scheme.
-  * @wmarks:		Watermarks for automated (in)activation of this scheme.
-@@ -230,10 +243,8 @@ struct damos_stat {
-  * @list:		List head for siblings.
-  *
-  * For each aggregation interval, DAMON finds regions which fit in the
-- * condition (&min_sz_region, &max_sz_region, &min_nr_accesses,
-- * &max_nr_accesses, &min_age_region, &max_age_region) and applies &action to
-- * those.  To avoid consuming too much CPU time or IO resources for the
-- * &action, &quota is used.
-+ * &pattern and applies &action to those. To avoid consuming too much
-+ * CPU time or IO resources for the &action, &quota is used.
-  *
-  * To do the work only when needed, schemes can be activated for specific
-  * system situations using &wmarks.  If all schemes that registered to the
-@@ -248,12 +259,7 @@ struct damos_stat {
-  * &action is applied.
-  */
- struct damos {
--	unsigned long min_sz_region;
--	unsigned long max_sz_region;
--	unsigned int min_nr_accesses;
--	unsigned int max_nr_accesses;
--	unsigned int min_age_region;
--	unsigned int max_age_region;
-+	struct damos_access_pattern pattern;
- 	enum damos_action action;
- 	struct damos_quota quota;
- 	struct damos_watermarks wmarks;
-@@ -509,12 +515,9 @@ void damon_destroy_region(struct damon_region *r, struct damon_target *t);
- int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
- 		unsigned int nr_ranges);
- 
--struct damos *damon_new_scheme(
--		unsigned long min_sz_region, unsigned long max_sz_region,
--		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
--		unsigned int min_age_region, unsigned int max_age_region,
--		enum damos_action action, struct damos_quota *quota,
--		struct damos_watermarks *wmarks);
-+struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
-+			enum damos_action action, struct damos_quota *quota,
-+			struct damos_watermarks *wmarks);
- void damon_add_scheme(struct damon_ctx *ctx, struct damos *s);
- void damon_destroy_scheme(struct damos *s);
- 
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 338bc79771b9..c2f9e30f450a 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -265,24 +265,21 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
- 	return 0;
- }
- 
--struct damos *damon_new_scheme(
--		unsigned long min_sz_region, unsigned long max_sz_region,
--		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
--		unsigned int min_age_region, unsigned int max_age_region,
--		enum damos_action action, struct damos_quota *quota,
--		struct damos_watermarks *wmarks)
-+struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
-+			enum damos_action action, struct damos_quota *quota,
-+			struct damos_watermarks *wmarks)
- {
- 	struct damos *scheme;
- 
- 	scheme = kmalloc(sizeof(*scheme), GFP_KERNEL);
- 	if (!scheme)
- 		return NULL;
--	scheme->min_sz_region = min_sz_region;
--	scheme->max_sz_region = max_sz_region;
--	scheme->min_nr_accesses = min_nr_accesses;
--	scheme->max_nr_accesses = max_nr_accesses;
--	scheme->min_age_region = min_age_region;
--	scheme->max_age_region = max_age_region;
-+	scheme->pattern.min_sz_region = pattern->min_sz_region;
-+	scheme->pattern.max_sz_region = pattern->max_sz_region;
-+	scheme->pattern.min_nr_accesses = pattern->min_nr_accesses;
-+	scheme->pattern.max_nr_accesses = pattern->max_nr_accesses;
-+	scheme->pattern.min_age_region = pattern->min_age_region;
-+	scheme->pattern.max_age_region = pattern->max_age_region;
- 	scheme->action = action;
- 	scheme->stat = (struct damos_stat){};
- 	INIT_LIST_HEAD(&scheme->list);
-@@ -720,10 +717,12 @@ static bool __damos_valid_target(struct damon_region *r, struct damos *s)
- 	unsigned long sz;
- 
- 	sz = r->ar.end - r->ar.start;
--	return s->min_sz_region <= sz && sz <= s->max_sz_region &&
--		s->min_nr_accesses <= r->nr_accesses &&
--		r->nr_accesses <= s->max_nr_accesses &&
--		s->min_age_region <= r->age && r->age <= s->max_age_region;
-+	return s->pattern.min_sz_region <= sz &&
-+		sz <= s->pattern.max_sz_region &&
-+		s->pattern.min_nr_accesses <= r->nr_accesses &&
-+		r->nr_accesses <= s->pattern.max_nr_accesses &&
-+		s->pattern.min_age_region <= r->age &&
-+		r->age <= s->pattern.max_age_region;
- }
- 
- static bool damos_valid_target(struct damon_ctx *c, struct damon_target *t,
-diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-index 652a94deafe3..1422037cedd2 100644
---- a/mm/damon/dbgfs.c
-+++ b/mm/damon/dbgfs.c
-@@ -131,9 +131,12 @@ static ssize_t sprint_schemes(struct damon_ctx *c, char *buf, ssize_t len)
- 	damon_for_each_scheme(s, c) {
- 		rc = scnprintf(&buf[written], len - written,
- 				"%lu %lu %u %u %u %u %d %lu %lu %lu %u %u %u %d %lu %lu %lu %lu %lu %lu %lu %lu %lu\n",
--				s->min_sz_region, s->max_sz_region,
--				s->min_nr_accesses, s->max_nr_accesses,
--				s->min_age_region, s->max_age_region,
-+				s->pattern.min_sz_region,
-+				s->pattern.max_sz_region,
-+				s->pattern.min_nr_accesses,
-+				s->pattern.max_nr_accesses,
-+				s->pattern.min_age_region,
-+				s->pattern.max_age_region,
- 				damos_action_to_dbgfs_scheme_action(s->action),
- 				s->quota.ms, s->quota.sz,
- 				s->quota.reset_interval,
-@@ -221,8 +224,6 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
- 	struct damos *scheme, **schemes;
- 	const int max_nr_schemes = 256;
- 	int pos = 0, parsed, ret;
--	unsigned long min_sz, max_sz;
--	unsigned int min_nr_a, max_nr_a, min_age, max_age;
- 	unsigned int action_input;
- 	enum damos_action action;
- 
-@@ -233,13 +234,18 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
- 
- 	*nr_schemes = 0;
- 	while (pos < len && *nr_schemes < max_nr_schemes) {
-+		struct damos_access_pattern pattern = {};
- 		struct damos_quota quota = {};
- 		struct damos_watermarks wmarks;
- 
- 		ret = sscanf(&str[pos],
- 				"%lu %lu %u %u %u %u %u %lu %lu %lu %u %u %u %u %lu %lu %lu %lu%n",
--				&min_sz, &max_sz, &min_nr_a, &max_nr_a,
--				&min_age, &max_age, &action_input, &quota.ms,
-+				&pattern.min_sz_region, &pattern.max_sz_region,
-+				&pattern.min_nr_accesses,
-+				&pattern.max_nr_accesses,
-+				&pattern.min_age_region,
-+				&pattern.max_age_region,
-+				&action_input, &quota.ms,
- 				&quota.sz, &quota.reset_interval,
- 				&quota.weight_sz, &quota.weight_nr_accesses,
- 				&quota.weight_age, &wmarks.metric,
-@@ -251,7 +257,9 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
- 		if ((int)action < 0)
- 			goto fail;
- 
--		if (min_sz > max_sz || min_nr_a > max_nr_a || min_age > max_age)
-+		if (pattern.min_sz_region > pattern.max_sz_region ||
-+		    pattern.min_nr_accesses > pattern.max_nr_accesses ||
-+		    pattern.min_age_region > pattern.max_age_region)
- 			goto fail;
- 
- 		if (wmarks.high < wmarks.mid || wmarks.high < wmarks.low ||
-@@ -259,8 +267,7 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
- 			goto fail;
- 
- 		pos += parsed;
--		scheme = damon_new_scheme(min_sz, max_sz, min_nr_a, max_nr_a,
--				min_age, max_age, action, &quota, &wmarks);
-+		scheme = damon_new_scheme(&pattern, action, &quota, &wmarks);
- 		if (!scheme)
- 			goto fail;
- 
-diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-index 3a9ea4554289..702c8c3afb49 100644
---- a/mm/damon/lru_sort.c
-+++ b/mm/damon/lru_sort.c
-@@ -234,6 +234,17 @@ static bool get_monitoring_region(unsigned long *start, unsigned long *end)
- /* Create a DAMON-based operation scheme for hot memory regions */
- static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
- {
-+	struct damos_access_pattern pattern = {
-+		/* Find regions having PAGE_SIZE or larger size */
-+		.min_sz_region = PAGE_SIZE,
-+		.max_sz_region = ULONG_MAX,
-+		/* and accessed for more than the threshold */
-+		.min_nr_accesses = hot_thres,
-+		.max_nr_accesses = UINT_MAX,
-+		/* no matter its age */
-+		.min_age_region = 0,
-+		.max_age_region = UINT_MAX,
-+	};
- 	struct damos_watermarks wmarks = {
- 		.metric = DAMOS_WMARK_FREE_MEM_RATE,
- 		.interval = wmarks_interval,
-@@ -254,26 +265,31 @@ static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
- 		.weight_nr_accesses = 1,
- 		.weight_age = 0,
- 	};
--	struct damos *scheme = damon_new_scheme(
--			/* Find regions having PAGE_SIZE or larger size */
--			PAGE_SIZE, ULONG_MAX,
--			/* and accessed for more than the threshold */
--			hot_thres, UINT_MAX,
--			/* no matter its age */
--			0, UINT_MAX,
-+
-+	return damon_new_scheme(
-+			&pattern,
- 			/* prioritize those on LRU lists, as soon as found */
- 			DAMOS_LRU_PRIO,
- 			/* under the quota. */
- 			&quota,
- 			/* (De)activate this according to the watermarks. */
- 			&wmarks);
+-     r = hardware_enable_all();
+-     if (r)
+-             goto out_err_no_disable;
 -
--	return scheme;
- }
- 
- /* Create a DAMON-based operation scheme for cold memory regions */
- static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
- {
-+	struct damos_access_pattern pattern = {
-+		/* Find regions having PAGE_SIZE or larger size */
-+		.min_sz_region = PAGE_SIZE,
-+		.max_sz_region = ULONG_MAX,
-+		/* and not accessed at all */
-+		.min_nr_accesses = 0,
-+		.max_nr_accesses = 0,
-+		/* for min_age or more micro-seconds */
-+		.min_age_region = cold_thres,
-+		.max_age_region = UINT_MAX,
-+	};
- 	struct damos_watermarks wmarks = {
- 		.metric = DAMOS_WMARK_FREE_MEM_RATE,
- 		.interval = wmarks_interval,
-@@ -295,21 +311,15 @@ static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
- 		.weight_nr_accesses = 0,
- 		.weight_age = 1,
- 	};
--	struct damos *scheme = damon_new_scheme(
--			/* Find regions having PAGE_SIZE or larger size */
--			PAGE_SIZE, ULONG_MAX,
--			/* and not accessed at all */
--			0, 0,
--			/* for cold_thres or more micro-seconds, and */
--			cold_thres, UINT_MAX,
-+
-+	return damon_new_scheme(
-+			&pattern,
- 			/* mark those as not accessed, as soon as found */
- 			DAMOS_LRU_DEPRIO,
- 			/* under the quota. */
- 			&quota,
- 			/* (De)activate this according to the watermarks. */
- 			&wmarks);
--
--	return scheme;
- }
- 
- static int damon_lru_sort_apply_parameters(void)
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index 2c5960ad9c08..8eb78b6a3296 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -191,6 +191,17 @@ static bool get_monitoring_region(unsigned long *start, unsigned long *end)
- 
- static struct damos *damon_reclaim_new_scheme(void)
- {
-+	struct damos_access_pattern pattern = {
-+		/* Find regions having PAGE_SIZE or larger size */
-+		.min_sz_region = PAGE_SIZE,
-+		.max_sz_region = ULONG_MAX,
-+		/* and not accessed at all */
-+		.min_nr_accesses = 0,
-+		.max_nr_accesses = 0,
-+		/* for min_age or more micro-seconds */
-+		.min_age_region = min_age / aggr_interval,
-+		.max_age_region = UINT_MAX,
-+	};
- 	struct damos_watermarks wmarks = {
- 		.metric = DAMOS_WMARK_FREE_MEM_RATE,
- 		.interval = wmarks_interval,
-@@ -211,21 +222,15 @@ static struct damos *damon_reclaim_new_scheme(void)
- 		.weight_nr_accesses = 0,
- 		.weight_age = 1
- 	};
--	struct damos *scheme = damon_new_scheme(
--			/* Find regions having PAGE_SIZE or larger size */
--			PAGE_SIZE, ULONG_MAX,
--			/* and not accessed at all */
--			0, 0,
--			/* for min_age or more micro-seconds, and */
--			min_age / aggr_interval, UINT_MAX,
-+
-+	return damon_new_scheme(
-+			&pattern,
- 			/* page out those, as soon as found */
- 			DAMOS_PAGEOUT,
- 			/* under the quota. */
- 			&quota,
- 			/* (De)activate this according to the watermarks. */
- 			&wmarks);
--
--	return scheme;
- }
- 
- static int damon_reclaim_apply_parameters(void)
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 1719bb3531e3..9fcf7bae41eb 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -2259,11 +2259,20 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
- static struct damos *damon_sysfs_mk_scheme(
- 		struct damon_sysfs_scheme *sysfs_scheme)
- {
--	struct damon_sysfs_access_pattern *pattern =
-+	struct damon_sysfs_access_pattern *access_pattern =
- 		sysfs_scheme->access_pattern;
- 	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
- 	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
- 	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
-+
-+	struct damos_access_pattern pattern = {
-+		.min_sz_region = access_pattern->sz->min,
-+		.max_sz_region = access_pattern->sz->max,
-+		.min_nr_accesses = access_pattern->nr_accesses->min,
-+		.max_nr_accesses = access_pattern->nr_accesses->max,
-+		.min_age_region = access_pattern->age->min,
-+		.max_age_region = access_pattern->age->max,
-+	};
- 	struct damos_quota quota = {
- 		.ms = sysfs_quotas->ms,
- 		.sz = sysfs_quotas->sz,
-@@ -2280,10 +2289,8 @@ static struct damos *damon_sysfs_mk_scheme(
- 		.low = sysfs_wmarks->low,
- 	};
- 
--	return damon_new_scheme(pattern->sz->min, pattern->sz->max,
--			pattern->nr_accesses->min, pattern->nr_accesses->max,
--			pattern->age->min, pattern->age->max,
--			sysfs_scheme->action, &quota, &wmarks);
-+	return damon_new_scheme(&pattern, sysfs_scheme->action, &quota,
-+			&wmarks);
- }
- 
- static int damon_sysfs_set_schemes(struct damon_ctx *ctx,
+ #ifdef CONFIG_HAVE_KVM_IRQFD
+      INIT_HLIST_HEAD(&kvm->irq_ack_notifier_list);
+ #endif
 -- 
-2.25.1
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

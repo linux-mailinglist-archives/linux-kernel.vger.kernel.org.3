@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302E85B2095
+	by mail.lfdr.de (Postfix) with ESMTP id C6DD95B2097
 	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 16:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbiIHO3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 10:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S232642AbiIHO3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 10:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiIHO32 (ORCPT
+        with ESMTP id S232240AbiIHO33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 10:29:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0A5DEF;
-        Thu,  8 Sep 2022 07:29:24 -0700 (PDT)
+        Thu, 8 Sep 2022 10:29:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BAAE5B;
+        Thu,  8 Sep 2022 07:29:27 -0700 (PDT)
 Received: from localhost (unknown [188.27.54.142])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD4FA6601F97;
-        Thu,  8 Sep 2022 15:29:22 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B080A6601F98;
+        Thu,  8 Sep 2022 15:29:25 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662647363;
-        bh=ACPX1O/55jmYl4XQH9KqX/fcKaXpHRpw86mnaJXhFSo=;
+        s=mail; t=1662647365;
+        bh=UBRhn4lgQdW+8dZvVkiyGpxcNAQi4SGnZihszf2Oqls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NP12pTaOh/knK67jBR9i0s0Xdp9Zkjan2OZ6mS6UngUmk+pzewDfy9+UIyC6BNUXD
-         vx/WuEUFkgfbL4+hKCRHYdHntAmuaDomenFTuPmMKv1EjA2Cr30Xl/S1gBPC1h6pw5
-         GbipM+7Y/b0VOUq5mxpTS7C+C6GyoTOp8Jrt3/3r8dkByRZruQNdY0iovNOCfR08HH
-         TTEC3WJbEvjFBGeskTkLZREf079UwrqkIzkyKw66gdLhYoGChEZEvzPdlFaCgfxxJw
-         DgVcHImk12/LeX6ETVIizFJyJ43D0K00Qh2dEpUW3xNq+pLpsP13cw/QKLzXnlKgZF
-         W1HEWaGa01wag==
+        b=YeHMh8lyNHyGV1o/lF9ugmKfUtLvDXeW/Dsa+0c2bR/BzMK75ZNKEZhR+PzzHwqCc
+         ebkaL/WMiWlgyzP54wM082YnK7r3uH5fnhOUXmzkOTNKCqt6v7IYgz9A0Bp0VE1P6R
+         22M2IaUVGFKi2Zhjo3nG9xniKdhKHxhGsFh61hTWscdR+05sOJ/x5SAzcqpdyS44mx
+         GwOnTmJg8ZU+QwlrZ6D8fh5oh0LbgbjNw5XoKSbbjs1BNrs9m2c+m0ythdobqkPrNY
+         HOaP2Y97L4I6PdxO5j3ErWQf9r8DOR0hHlgwK7SNLvNdsMwMqlY9OAgwT3jq+JbCQY
+         G28SOcriSXt3Q==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -43,11 +43,10 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Conor Dooley <conor.dooley@microchip.com>
 Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 1/3] dt-bindings: riscv: starfive: Add StarFive VisionFive V1 board
-Date:   Thu,  8 Sep 2022 17:29:12 +0300
-Message-Id: <20220908142914.359777-2-cristian.ciocaltea@collabora.com>
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: [PATCH v3 2/3] riscv: dts: starfive: Add common DT for JH7100 based boards
+Date:   Thu,  8 Sep 2022 17:29:13 +0300
+Message-Id: <20220908142914.359777-3-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220908142914.359777-1-cristian.ciocaltea@collabora.com>
 References: <20220908142914.359777-1-cristian.ciocaltea@collabora.com>
@@ -62,33 +61,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the compatibles for StarFive VisionFive V1 SBC [1].
-The board is based on the StarFive JH7100 SoC.
-
-[1] https://github.com/starfive-tech/VisionFive
+In preparation for adding initial device tree support for the StarFive
+VisionFive board, which is similar with BeagleV Starlight, move most
+of the content from jh7100-beaglev-starlight.dts to a new file, to be
+shared between the two boards.
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/riscv/starfive.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../dts/starfive/jh7100-beaglev-starlight.dts | 153 +-----------------
+ ...aglev-starlight.dts => jh7100-common.dtsi} |   3 -
+ 2 files changed, 1 insertion(+), 155 deletions(-)
+ copy arch/riscv/boot/dts/starfive/{jh7100-beaglev-starlight.dts => jh7100-common.dtsi} (96%)
 
-diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/Documentation/devicetree/bindings/riscv/starfive.yaml
-index 5b36243fd674..5d3fcee52d59 100644
---- a/Documentation/devicetree/bindings/riscv/starfive.yaml
-+++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
-@@ -19,7 +19,9 @@ properties:
-   compatible:
-     oneOf:
-       - items:
--          - const: beagle,beaglev-starlight-jh7100-r0
-+          - enum:
-+              - beagle,beaglev-starlight-jh7100-r0
-+              - starfive,visionfive-v1
-           - const: starfive,jh7100
+diff --git a/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts b/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
+index c9af67f7a0d2..7cda3a89020a 100644
+--- a/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
++++ b/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
+@@ -5,160 +5,9 @@
+  */
  
- additionalProperties: true
+ /dts-v1/;
+-#include "jh7100.dtsi"
+-#include <dt-bindings/gpio/gpio.h>
+-#include <dt-bindings/leds/common.h>
+-#include <dt-bindings/pinctrl/pinctrl-starfive.h>
++#include "jh7100-common.dtsi"
+ 
+ / {
+ 	model = "BeagleV Starlight Beta";
+ 	compatible = "beagle,beaglev-starlight-jh7100-r0", "starfive,jh7100";
+-
+-	aliases {
+-		serial0 = &uart3;
+-	};
+-
+-	chosen {
+-		stdout-path = "serial0:115200n8";
+-	};
+-
+-	cpus {
+-		timebase-frequency = <6250000>;
+-	};
+-
+-	memory@80000000 {
+-		device_type = "memory";
+-		reg = <0x0 0x80000000 0x2 0x0>;
+-	};
+-
+-	leds {
+-		compatible = "gpio-leds";
+-
+-		led-ack {
+-			gpios = <&gpio 43 GPIO_ACTIVE_HIGH>;
+-			color = <LED_COLOR_ID_GREEN>;
+-			function = LED_FUNCTION_HEARTBEAT;
+-			linux,default-trigger = "heartbeat";
+-			label = "ack";
+-		};
+-	};
+-};
+-
+-&gpio {
+-	i2c0_pins: i2c0-0 {
+-		i2c-pins {
+-			pinmux = <GPIOMUX(62, GPO_LOW,
+-				  GPO_I2C0_PAD_SCK_OEN,
+-				  GPI_I2C0_PAD_SCK_IN)>,
+-				 <GPIOMUX(61, GPO_LOW,
+-				  GPO_I2C0_PAD_SDA_OEN,
+-				  GPI_I2C0_PAD_SDA_IN)>;
+-			bias-disable; /* external pull-up */
+-			input-enable;
+-			input-schmitt-enable;
+-		};
+-	};
+-
+-	i2c1_pins: i2c1-0 {
+-		i2c-pins {
+-			pinmux = <GPIOMUX(47, GPO_LOW,
+-				  GPO_I2C1_PAD_SCK_OEN,
+-				  GPI_I2C1_PAD_SCK_IN)>,
+-				 <GPIOMUX(48, GPO_LOW,
+-				  GPO_I2C1_PAD_SDA_OEN,
+-				  GPI_I2C1_PAD_SDA_IN)>;
+-			bias-pull-up;
+-			input-enable;
+-			input-schmitt-enable;
+-		};
+-	};
+-
+-	i2c2_pins: i2c2-0 {
+-		i2c-pins {
+-			pinmux = <GPIOMUX(60, GPO_LOW,
+-				  GPO_I2C2_PAD_SCK_OEN,
+-				  GPI_I2C2_PAD_SCK_IN)>,
+-				 <GPIOMUX(59, GPO_LOW,
+-				  GPO_I2C2_PAD_SDA_OEN,
+-				  GPI_I2C2_PAD_SDA_IN)>;
+-			bias-disable; /* external pull-up */
+-			input-enable;
+-			input-schmitt-enable;
+-		};
+-	};
+-
+-	uart3_pins: uart3-0 {
+-		rx-pins {
+-			pinmux = <GPIOMUX(13, GPO_LOW, GPO_DISABLE,
+-				  GPI_UART3_PAD_SIN)>;
+-			bias-pull-up;
+-			drive-strength = <14>;
+-			input-enable;
+-			input-schmitt-enable;
+-			slew-rate = <0>;
+-		};
+-		tx-pins {
+-			pinmux = <GPIOMUX(14, GPO_UART3_PAD_SOUT,
+-				  GPO_ENABLE, GPI_NONE)>;
+-			bias-disable;
+-			drive-strength = <35>;
+-			input-disable;
+-			input-schmitt-disable;
+-			slew-rate = <0>;
+-		};
+-	};
+-};
+-
+-&i2c0 {
+-	clock-frequency = <100000>;
+-	i2c-sda-hold-time-ns = <300>;
+-	i2c-sda-falling-time-ns = <500>;
+-	i2c-scl-falling-time-ns = <500>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&i2c0_pins>;
+-	status = "okay";
+-
+-	pmic@5e {
+-		compatible = "ti,tps65086";
+-		reg = <0x5e>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-
+-		regulators {
+-		};
+-	};
+-};
+-
+-&i2c1 {
+-	clock-frequency = <400000>;
+-	i2c-sda-hold-time-ns = <300>;
+-	i2c-sda-falling-time-ns = <100>;
+-	i2c-scl-falling-time-ns = <100>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&i2c1_pins>;
+-	status = "okay";
+-};
+-
+-&i2c2 {
+-	clock-frequency = <100000>;
+-	i2c-sda-hold-time-ns = <300>;
+-	i2c-sda-falling-time-ns = <500>;
+-	i2c-scl-falling-time-ns = <500>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&i2c2_pins>;
+-	status = "okay";
+-};
+-
+-&osc_sys {
+-	clock-frequency = <25000000>;
+-};
+-
+-&osc_aud {
+-	clock-frequency = <27000000>;
+-};
+-
+-&uart3 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&uart3_pins>;
+-	status = "okay";
+ };
+diff --git a/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts b/arch/riscv/boot/dts/starfive/jh7100-common.dtsi
+similarity index 96%
+copy from arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
+copy to arch/riscv/boot/dts/starfive/jh7100-common.dtsi
+index c9af67f7a0d2..6a66abacb612 100644
+--- a/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
++++ b/arch/riscv/boot/dts/starfive/jh7100-common.dtsi
+@@ -11,9 +11,6 @@
+ #include <dt-bindings/pinctrl/pinctrl-starfive.h>
+ 
+ / {
+-	model = "BeagleV Starlight Beta";
+-	compatible = "beagle,beaglev-starlight-jh7100-r0", "starfive,jh7100";
+-
+ 	aliases {
+ 		serial0 = &uart3;
+ 	};
 -- 
 2.37.3
 

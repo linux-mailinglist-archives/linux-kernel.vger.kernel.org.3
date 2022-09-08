@@ -2,182 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0555B1115
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B99F5B111B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 02:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiIHA17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 20:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
+        id S229940AbiIHA2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 20:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiIHA1v (ORCPT
+        with ESMTP id S229476AbiIHA2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:27:51 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8A5D021B;
-        Wed,  7 Sep 2022 17:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662596870; x=1694132870;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gWcX42VVm+IGeOaSGWSpSN4x1dFMPM6iK64tZSfvgbs=;
-  b=KQM3CSuH85pUo7Dq2EaJP+Gd04jUgrZNPQPRi91ctGGQU8NwB8ibElCq
-   1gR5YPubCmwAbyTWQCmHz3V+hr9SX1Dkm6W1PoGpTVNjV4Is8ln11Qzao
-   0D/BBNa+7wpDigDCcpb4idA1gDaWTe757RDFXRjs3rZwd3bx9UdYa8fUN
-   TaKgCs0qJ5Px921TeJPp8wbAtAQSMZ6a0JvxuexUoVLLZBmcftfc5nghn
-   OvfaCKSt3D0inFmnDLY8SqaIJcGpYEdwpjSi87pAeqjBh0jowLNMYuGAP
-   U5uPJu6wKsiZdvmFEQrPR5/Zl7NLIUHVaTRKz/EG2K0i7x6XlPKc2BJg0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="360993124"
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="360993124"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:27:50 -0700
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="676440358"
-Received: from pbarrios-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.252.133.9])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:27:49 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v12 3/3] Documentation/x86: Document TDX attestation process
-Date:   Wed,  7 Sep 2022 17:27:22 -0700
-Message-Id: <20220908002723.923241-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Wed, 7 Sep 2022 20:28:48 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310FCD0221;
+        Wed,  7 Sep 2022 17:28:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PM58vSgHe7QF68qWN1mfpeQtk2ylAtWjkQcrAMTMxHTn31HZScxnRUJTLGkQwLLxFN83S1jJry6PM4O3qXdFWU1IuWh5X8gNwGK38JUK0XPaPCZrcHhf2eXx22TEJ6XreLraVQ/9tQgSDRHiv1kOV+cwiM/gqoC0UzT5D8Z5Ci3qiz6H5wajxcc/YwO+w3M+uxqPuCWLg+yjXRanIUnbT0VmyEP4EvFg4YrxqCrSjqEeUTP5zCdskhnz6B4YvyNKleHNPKm84JV8aOAbNeOy+kmCIUvucaZFGv2yFZOXD/rNgUsSmY/Hl0mOAyqwde5hm8DWOjaOuRV6qx+3aln6tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IdLQYg8RDb396A262haJ2vGV8GQosuRznx2f8SQyqqU=;
+ b=A8EZH/nmNpuxJNvoqxNDNyyJLOyourIOPZIgIQHFg5FGgaqlEvozODyyG3A1gsRFk5wIAxVDgYXOsrC49XAs6STQUyv2zqaleySdJW6atIePBzO1NX7LYKUAVZtfaBaESimN7LOSA9Hj2q0kC5bIwMXIoe7t80Hy/q9xB+0iRgM0H0c9zI/QIsn2xdRj2psoPYWhD1uTYisoxRSKSdNO2TpUb+PfRgdI6DmHSUpRzduWCl3zGcOz68IMmiNplzBIM2VlHWaXxqCf8XRNV9+h0a2XDW5wwwwYe8HMLoVfcmxzq6uwowQYr7i/6+jZa6ROWDM0iQP+ELhSLVgZl5sL+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IdLQYg8RDb396A262haJ2vGV8GQosuRznx2f8SQyqqU=;
+ b=vhFyT4qZVPzfEr6FHg/+jexJE0MnDjIpxs/M1UvDj30EfIQKRCzdcCK3m/2FBs5imHUj5/wRh+ASw/4uL+F4vdejphZ8jWHCvfmahdA6AlWkkt0UkcZeIGeagVml75Bl9jcY+QXJ3MFQyKB2oB+TJNxFKoC7NFOmk5JJmSFvNx4=
+Received: from BN8PR12CA0019.namprd12.prod.outlook.com (2603:10b6:408:60::32)
+ by DS7PR12MB5790.namprd12.prod.outlook.com (2603:10b6:8:75::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.17; Thu, 8 Sep
+ 2022 00:28:44 +0000
+Received: from BN8NAM11FT097.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:60:cafe::2d) by BN8PR12CA0019.outlook.office365.com
+ (2603:10b6:408:60::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14 via Frontend
+ Transport; Thu, 8 Sep 2022 00:28:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT097.mail.protection.outlook.com (10.13.176.147) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5612.13 via Frontend Transport; Thu, 8 Sep 2022 00:28:43 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 7 Sep
+ 2022 19:28:39 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [RESEND PATCH 0/1] Add explanation for X86_AMD_PSTATE_UT
+Date:   Thu, 8 Sep 2022 08:28:20 +0800
+Message-ID: <20220908002821.1648880-1-li.meng@amd.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT097:EE_|DS7PR12MB5790:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd8a70ed-09c0-4535-4d8a-08da91311643
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XK9JwZSxg7Ym9QuJV47y6p2rJSVemtgaw83reoLpp1QdSDu/RzZ+/ewMgWYZWuzsH/f48R0QAjdeyPQ03U6BIGmN36fvIg+upffDNSWdGAK7VBnLGcoBFvfCK8INwEYgn+na/T/bGWkUkbgwbHfw7oOhIqMrXJt0ENp+rBdcrwaO6xYPv1kRGE7MARRGvAWJ/IuCf8R2Bjcwwb1b7wbT+rYd+6QX/QVj8fEReseHl2rirnn5Jq7DzKnxzjd2ovPOjR8Ur7Xpb8/X8IzR+TYDPmVOrinsXLIrKFqGd56VDcwOwmArjgvCPb9AgnYFhE6WILxNqpZqpHaYdsXoESmh2WU6xpGDZLVITAQ4+weZArtotC9HDp6Em26okHAabTkp8xMcoI7LKVjszZbJMN9Heo16AaB0YsS27dm1eBP3c28vY6pOSXHQAOE5F9fiyGvsJWAbX1n0c7I46HFR3oeqX8BWyNPtJTZMF5Mn0fFdFbzuLd/M+Q0yjhy0MEMGNwomI1Gksc07siFnaAFtcPcYzAzj53WkPWp8jZXhwSAYsn+ghwVEPFaoI3MSaSxuYd/Dz5n+9wDdXGt6yYTab1fPBX8wLdtXlHjuTjiBiyVZ33WCPRkminNFHGEHoD+/z0Ek1vnaRFU1ICPQWbz+IFdhFB/0LtWtBWsga41l58gkhjqW854sWPxfpVnCBVRi0zIBL0A4awF4DvG6Kuu6EVdGcRsvNfekFVXr3gHdxBWFktejqR719TNxEaAeUu4a/FOusFt/pt+RfB2Zq84Nwv/ChzfwyDTAFl5zPOEqCUQfwu+uwKW7y1hiczUfHEN7OSN0
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(346002)(396003)(40470700004)(36840700001)(46966006)(26005)(16526019)(336012)(2616005)(1076003)(426003)(6666004)(5660300002)(8936002)(186003)(40480700001)(86362001)(7696005)(41300700001)(36756003)(47076005)(40460700003)(82740400003)(478600001)(356005)(82310400005)(70586007)(4744005)(54906003)(83380400001)(110136005)(36860700001)(2906002)(81166007)(70206006)(4326008)(8676002)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 00:28:43.8656
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd8a70ed-09c0-4535-4d8a-08da91311643
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT097.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5790
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document details about TDX attestation process and related user API
-support.
+Hi all:
 
-Attestation details can be found in Guest-Host-Communication Interface
-(GHCI) for Intel Trust Domain Extensions (TDX), section titled "TD
-attestation".
+According to Shuah's review comments, add a new patches for expain
+X86_AMD_PSTATE_UT.
 
-[Bagas Sanjaya fixed htmldocs warning]
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
+amd-pstate-ut can also be built-in without X86_AMD_PSTATE enabled.
+Currently, only tests for amd-pstate are supported. If X86_AMD_PSTATE
+is set disabled, it can tell the users test can only run on amd-pstate
+driver, please set X86_AMD_PSTATE enabled.
+In the future, comparison tests will be added. It can set amd-pstate
+disabled and set acpi-cpufreq enabled to run test cases, then compare
+the test results.
 
-Changes since v11:
- * Fixed htmldocs warnings.
+Meng Li (1):
+  cpufreq: amd-pstate: Add explanation for X86_AMD_PSTATE_UT
 
- Documentation/x86/tdx.rst | 75 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ drivers/cpufreq/Kconfig.x86                         | 8 ++++++++
+ tools/testing/selftests/amd-pstate/amd-pstate-ut.sh | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
-index b8fa4329e1a5..c9e3ecf86e0b 100644
---- a/Documentation/x86/tdx.rst
-+++ b/Documentation/x86/tdx.rst
-@@ -210,6 +210,81 @@ converted to shared on boot.
- For coherent DMA allocation, the DMA buffer gets converted on the
- allocation. Check force_dma_unencrypted() for details.
- 
-+Attestation
-+===========
-+
-+Attestation is used to verify the TDX guest trustworthiness to other
-+entities before provisioning secrets to the guest. For example, a key
-+server may request for attestation before releasing the encryption keys
-+to mount the encrypted rootfs or secondary drive.
-+
-+TDX module records the state of the TDX guest in various stages of guest
-+boot process using build time measurement register (MRTD) and runtime
-+measurement registers (RTMR). Measurements related to guest initial
-+configuration and firmware image is recorded in the MRTD register.
-+Measurements related to initial state, kernel image, firmware image,
-+command line options, initrd, ACPI tables, etc are recorded in RTMR
-+registers. For more details, please refer to TDX Virtual Firmware design
-+specification, sec titled "TD Measurement".
-+
-+At TDX guest runtime, the Intel TDX module reuses the Intel SGX attestation
-+infrastructure to provide support for attesting to these measurements as
-+described below.
-+
-+The attestation process consists of two steps: TDREPORT generation and
-+Quote generation.
-+
-+TDX guest uses TDCALL[TDG.MR.REPORT] to get the TDREPORT (TDREPORT_STRUCT)
-+from the TDX module. TDREPORT is a fixed-size data structure generated by
-+the TDX module which contains guest-specific information (such as build
-+and boot measurements), platform security version, and the MAC to protect
-+the integrity of the TDREPORT.
-+
-+After getting the TDREPORT, the second step of the attestation process
-+is to send it to the QE to generate the Quote. TDREPORT by design can only
-+be verified on local platform as the MAC key is bound to the platform. To
-+support remote verification of the TDREPORT, TDX leverages Intel SGX Quote
-+Enclave (QE) to verify the TDREPORT locally and convert it to a remote
-+verifiable Quote. Method of sending TDREPORT to QE is implemenentation
-+specific. Attestation software can choose whatever communication channel
-+available (i.e. vsock or hypercall) to send the TDREPORT to QE and receive
-+the Quote.
-+
-+To allow userspace attestation agent get the TDREPORT, TDX guest driver
-+exposes an IOCTL (TDX_CMD_GET_REPORT) interface via /dev/tdx-guest misc
-+device.
-+
-+TDX Guest driver
-+================
-+
-+The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest misc
-+device to allow user space to get certain TDX guest specific details
-+(like attestation report, attestation quote or storage keys, etc).
-+
-+In this section, for each supported IOCTL, following information is
-+provided along with generic description.
-+
-+:Input parameters: Parameters passed to the IOCTL and related details.
-+:Output: Details about output data and return value (with details
-+         about the non common error values).
-+
-+TDX_CMD_GET_REPORT
-+------------------
-+
-+:Input parameters: struct tdx_report_req
-+:Output: Upon successful execution, TDREPORT data is copied to
-+         tdx_report_req.tdreport and returns 0 or returns
-+         -EIO on TDCALL failure and standard error number on
-+         other common failures.
-+
-+The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
-+get the TDX guest measurements data (with few other info) in the format
-+of TDREPORT_STRUCT. It uses TDCALL[TDG.MR.REPORT] to get the TDREPORT
-+from the TDX Module.
-+
-+Format of TDREPORT_STRUCT can be found in TDX 1.0 Module specification,
-+sec titled "TDREPORT_STRUCT".
-+
- References
- ==========
- 
 -- 
 2.34.1
 

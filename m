@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0215B15BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5D85B15C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 09:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiIHHeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 03:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S230466AbiIHHfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 03:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiIHHeP (ORCPT
+        with ESMTP id S229924AbiIHHfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:34:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9632A9C510;
-        Thu,  8 Sep 2022 00:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qOOipAMFA6jU/iAD0NNT6fAlhjOnSrPaO5m9WLa7Ha0=; b=XWBTcDwPn7I4lM/UNGkV9JDC7V
-        LCGE6JzoqcxPZHavPhQOjtc8pc1L45zx/Z2uFkIMZMs3VYT4POhxsWq5PHApBJxUSSbMmk/Hr/aiv
-        CEifLxaRKaSOiaR4y0jtY8R3Hr/YaFoxr48v8KhsNv6unvME1pwvn3iZrUgFDitZ9Xl+74K4NKKm2
-        NYV3WlSA02f8JTjdBIlt8QFSF2HGaTRkd6y2wSAl9os41Vtu4WbyQSZyDe6WjCofFt/kp+bWuL/9a
-        bCdlkmqc6G0o2XCGIf4rM1CpC6pvFHO9CnZpGUmTN5oFCDVqj9AKAj24niruMjW18qgGtG/mKfiXU
-        S1p/LumQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oWC2d-00Ae5F-8k; Thu, 08 Sep 2022 07:33:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B03D30004F;
-        Thu,  8 Sep 2022 09:33:35 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A0DA92B99E10D; Thu,  8 Sep 2022 09:33:35 +0200 (CEST)
-Date:   Thu, 8 Sep 2022 09:33:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, bigeasy@linutronix.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V4 4/8] riscv: traps: Add noinstr to prevent
- instrumentation inserted
-Message-ID: <Yxmaz7wJPEBQ7Vki@hirez.programming.kicks-ass.net>
-References: <20220908022506.1275799-1-guoren@kernel.org>
- <20220908022506.1275799-5-guoren@kernel.org>
+        Thu, 8 Sep 2022 03:35:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B642B442D;
+        Thu,  8 Sep 2022 00:35:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E363661B53;
+        Thu,  8 Sep 2022 07:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85081C433D6;
+        Thu,  8 Sep 2022 07:35:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662622532;
+        bh=myFJHXYjylDbYqIz67EITWqaRTZwH+KbFTWFLPlfzHo=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=rWSxQRj9NIxwyjwIuwvIl8vk6rh0HO0v9Un8qVwQb2Mjb9i3M1dBBlrDEGJdKzLju
+         fUECPIfqKlf79D3qC3DfzNDh23UNWQLrM4EMxgZD16KLrq2SV7LkyUG0r6R+VXWSHT
+         WdQF9Bcyr2+liLSTs3pLe19n4Z0olvO4Pk29pCWvBeyNf4mMKSNxiQT4QJ1vNwKPIT
+         CAZRDpcJb2a1MPBo4QPIHnwcSzbmLu3clK7K3rFBDKOgI+dNlB+6OE+5ZnKbYRCIDA
+         vDb8gNfd0Rr2lDPX83BJw9Pq7v/m0CgB9OgJrZY+idMEpA3Tjy3yHDHX6hc88zpSyF
+         6NZp5BLTI4DrA==
+Date:   Thu, 8 Sep 2022 08:35:26 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v3 1/1] bpf: Drop unprotected find_vpid() in favour of
+ find_get_pid()
+Message-ID: <YxmbPqKZMEXHL6sI@google.com>
+References: <20220809134752.1488608-1-lee@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220908022506.1275799-5-guoren@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220809134752.1488608-1-lee@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 10:25:02PM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Without noinstr the compiler is free to insert instrumentation (think
-> all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> yet ready to run this early in the entry path, for instance it could
-> rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
-> 
-> Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> ---
->  arch/riscv/kernel/traps.c | 8 ++++----
->  arch/riscv/mm/fault.c     | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index 635e6ec26938..3ed3dbec250d 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -97,7 +97,7 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
->  #define __trap_section
->  #endif
->  #define DO_ERROR_INFO(name, signo, code, str)				\
-> -asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
-> +asmlinkage __visible __trap_section void noinstr name(struct pt_regs *regs)	\
+On Tue, 09 Aug 2022, Lee Jones wrote:
 
-But now you have __trap_section and noinstr both adding a section
-attribute.
+> The documentation for find_vpid() clearly states:
+> 
+>   "Must be called with the tasklist_lock or rcu_read_lock() held."
+> 
+> Presently we do neither.
+> 
+> Let's use find_get_pid() which searches for the vpid, then takes a
+> reference to it preventing early free, all within the safety of
+> rcu_read_lock().  Once we have our reference we can safely make use of
+> it up until the point it is put.
+> 
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: bpf@vger.kernel.org
+> Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Lee Jones <lee@kernel.org>
+> ---
+> 
+> v1 => v2:
+>   * Commit log update - description - no code differences
+> 
+> v2 => v3:
+>   * Commit log update - spelling of find_vpid() - no code differences
+
+Did anyone get a chance to look at this please?
+
+Would you like a [RESEND]?
+
+>  kernel/bpf/syscall.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 83c7136c5788d..c20cff30581c4 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+>  	const struct perf_event *event;
+>  	struct task_struct *task;
+>  	struct file *file;
+> +	struct pid *ppid;
+>  	int err;
+>  
+>  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
+> @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+>  	if (attr->task_fd_query.flags != 0)
+>  		return -EINVAL;
+>  
+> -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
+> +	ppid = find_get_pid(pid);
+> +	task = get_pid_task(ppid, PIDTYPE_PID);
+> +	put_pid(ppid);
+>  	if (!task)
+>  		return -ENOENT;
+>  
+
+-- 
+Lee Jones [李琼斯]

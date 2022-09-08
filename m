@@ -2,122 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBA15B29A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A9C5B29B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 00:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiIHWzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 18:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S230206AbiIHWzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 18:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiIHWy3 (ORCPT
+        with ESMTP id S229807AbiIHWz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:54:29 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2119.outbound.protection.outlook.com [40.107.20.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA77129534;
-        Thu,  8 Sep 2022 15:53:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dlOjkxXxOoIktp8DmjLU3N0YTWuAEsrrsUAGsFcrPQOVXyl8HFS1ovmo18XYMjAqR2buTaeLigxSyrlCyWWpalcYCSEPVoQRkg5Z8HmDGJwzj9aB1bJHXn9WZ81TrRb+rzpG4Lf4u2HKxWXdUsYOXFsTsP4N9J5OxohmaiFbhydVQQQeA9YVDnibZ/Rb9Ak6wv7GmMzn5nH029eZ4/ic8MSlQCoFkYsi7q/YuOGSXEuTLp/+ETCQtfcVjSRbORFjV4OVwZuEkdH6G+YXryh4dk7fz3SbX/JtY8arUX66M+Ue1zbi534gJLiAYbJF7zC+VhCCkOfZVE8bBcq6Hh77uQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1FRi4MKdVQKkjAvbSbI8Z4LVY0AcS5GJdL9hNfW93Dg=;
- b=mN/1GpQIm1BnpCZkjj87PdiG+rez09mbmyJ2jIThCvtaFJuYBCCrv6+7pgWcy6XGgHl9eUbEqpP8B9oFfSnQiaMR8DbnGtWFhQPcH6/Y2JmM5O5Sz7I4oKEyC8wiU6/tdu1hb0kcpE9l51r0X3lfB7tETN5kADexXf1lWlU0pthzE/gcBhea+fVbyCcajjL93R23igZuDznSFpMWBzI6NRofqlJZYIpvr4uRg05HeZcFkcWpHGK7D06azyXSQ76BPUvkQlfvnSE4k7XLbqiyjkrDfAZDphUdENS2y3TZQQ1CXznQdm42GpSm8xhB4QWGZwT2ZMt48XSzgaFgEJvGsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1FRi4MKdVQKkjAvbSbI8Z4LVY0AcS5GJdL9hNfW93Dg=;
- b=P/5Ask8K1DJ+Da0ru7TQ3rPPUf5DctRUmQmtaNzMJmWsExGTq3z5XvEo3MS5cV6UBNs37qS/xnTc/6nQfkpe4u/Fjl2H8OhgarSQ6Ol9iiH7Z2HMtWfJNN7tDofA07lScv2k2x/7T6O674wGZd7Sj4WzYcSxjjnU6jF7/HL6nYI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from PAXP190MB1789.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:283::6)
- by AM0P190MB0737.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:195::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Thu, 8 Sep
- 2022 22:53:41 +0000
-Received: from PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
- ([fe80::e8ee:18d2:8c59:8ae]) by PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
- ([fe80::e8ee:18d2:8c59:8ae%9]) with mapi id 15.20.5588.014; Thu, 8 Sep 2022
- 22:53:41 +0000
-From:   Yevhen Orlov <yevhen.orlov@plvision.eu>
-To:     netdev@vger.kernel.org
-Cc:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        linux-kernel@vger.kernel.org,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Subject: [PATCH net-next v5 9/9] net: marvell: prestera: Propagate nh state from hw to kernel
-Date:   Fri,  9 Sep 2022 01:52:11 +0300
-Message-Id: <20220908225211.31482-10-yevhen.orlov@plvision.eu>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220908225211.31482-1-yevhen.orlov@plvision.eu>
-References: <20220908225211.31482-1-yevhen.orlov@plvision.eu>
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0028.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1c::19) To PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:102:283::6)
+        Thu, 8 Sep 2022 18:55:28 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4A33A159
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 15:54:48 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id t65so7166700pgt.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 15:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=daVFUOIJ1WvNWC1qEjueC76owjUfPHOYDg0UZR0lqUg=;
+        b=oZxlNPWf5K+8wt2ZAuxUKrIs0mMJQNNHHogkvWprEm/R4G4qfoYzEZThBQQl92orD2
+         SM2jjY0tI864pjaB2AYavXwPkqvThI45Op0T4e2NyE7MNEcV2ndfFd30BDDq1WdB4pu1
+         sGKTd+PlRflXg5hgtQBFqBEd9IYbY5HpWoDoeGcohkv0dYTiQ+i3+qK3M+WnUh2nl+ae
+         ZpPFdMxJXzEzE0zw3BjPyRn77gSjeguZ+B5DQjyUUhGEtJyTsXvwUTG62RKsnt8+O4tw
+         d0Hr1Ce3tFx230OGyqBdaNRTCTIMmXBnAoV1wtsDyUJjr21N2EbB80j1gGjIprlKQu9f
+         aRtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=daVFUOIJ1WvNWC1qEjueC76owjUfPHOYDg0UZR0lqUg=;
+        b=Pr7xPD4yfsAhx+lNlAvAJFN12K4gIr46gcSedqgb6zmvgAXbjofBuEXBc7nTj0cRw1
+         ztPP4dWr4vawOhJOano+lxzpWkwqoL7L0ouA0SiZM2m8wzyRenpuDJCmifCDH8rk1UIk
+         lfeNO9UpPllLs3iGBgSP/B6Eg7RG4rEYEleS70ioO3wwGsspt25YSv1F9z9KRAoE0s2V
+         n1vbNspwSUBxUoo4QEB9BjoMF8ctL6v5qRRWynAEx5bpWdRK069BIqMyZ2D44Xaz57Fo
+         0mOWXMesmNhQicc2HQImMkZ/1mUeJWwQ7c3SfVyGErq9RWlBtfcez3J0USIj06p59Gqp
+         cmsw==
+X-Gm-Message-State: ACgBeo2XYoSVZFITGhQRxA88uWkp9F+XVV0bWOHw5/2Hci932BLv4mMZ
+        an+FNjvjSugtZykH0Hrdre7DlA==
+X-Google-Smtp-Source: AA6agR6YEcDGbO4Kg4ywJJcJmZ+toO7/NZn4H/ZK6esHhw0XWPy9bdN7Q3xmO8DIIoBKbujZOqpxzA==
+X-Received: by 2002:a63:fc13:0:b0:42b:890d:5954 with SMTP id j19-20020a63fc13000000b0042b890d5954mr9712872pgi.200.1662677687671;
+        Thu, 08 Sep 2022 15:54:47 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b00540d75197f2sm139144pfq.143.2022.09.08.15.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 15:54:46 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 15:54:41 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        drjones@redhat.com
+Subject: Re: [V1 PATCH 3/5] selftests: kvm: x86: Execute vmcall/vmmcall
+ according to CPU type
+Message-ID: <YxpysbHZb2G56K+f@google.com>
+References: <20220903012849.938069-1-vannapurve@google.com>
+ <20220903012849.938069-4-vannapurve@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6c7d925d-5423-4a60-dea6-08da91ecf9b1
-X-MS-TrafficTypeDiagnostic: AM0P190MB0737:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8ObS+nxX7WLcRwRb643YmTEPlzVEbMcJG/HyNXr2gAuTnhlo2W3Eg53mdF7ef0UpQYUrLmKMBkZ/99qPa/F3g8vqyk+C3jkpz9me8Xy/MO9ALuJlfGvqojU9F/2Yjvwz1RzyOJiSBbFqa7Se9uDI6NuMyzFIhY+UfnH6mc1kPjvS15qnlZCv5/FXxWudMlporgptnmEFAVrnE+JPJEbNAWWDVyv+9NrOTsIJor1My1g+ATVtZTVaGf4d6wNymxJxP3ezU9yP4/HSzltsnx4lNhN4G4nYIQ1b/xfSYkWrFK01V1yGjVJwgC0kvMQIVbdqrlFRSyxaqCLVpvT8/HvotoE7w2AkhyUbAvmgti/isTBM2NYIjR6ti7SA+l3DC2WrcPAfCiusgrO/lMueYfuGb+VccfZap1nK9x2UYbUrcFMZApAiyiqzoZBM59tS9ZkqsTMQ95NBHKz+njD7TOd9SBFMDxR4Jftbg83defv7DSDP+ZaIAMnobT1Kb/07phIDMhY1rIJ6BRJE20/w5cG1Eu0o7Td3E7y6iOKIGsIxQrGzqowrDQwi5GevULTnw8oj7lZxUXakksZzYFS947TKZAfe8/jieQUvrrwpHZYBHGou9PKpQX/ikgHfH/5PV5mc3kNhuXbUDxfjFUM3lTsT0uNeQMxXf8Qfnrd9a87lsym7wAEjLfEX7YJZE3OgZZXVkaShtiRSn5Nj8VyLe9VWEMx+Xcw4rgLIKeb+uNCusGmEBlBNzBvCW+xVsGzeYdR6
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXP190MB1789.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39840400004)(346002)(34036004)(366004)(396003)(136003)(376002)(38100700002)(41320700001)(86362001)(38350700002)(66476007)(508600001)(66556008)(4326008)(8936002)(107886003)(5660300002)(6666004)(41300700001)(8676002)(66946007)(26005)(54906003)(6486002)(6916009)(316002)(66574015)(2616005)(186003)(1076003)(83380400001)(52116002)(2906002)(6512007)(7416002)(6506007)(44832011)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uvTe/qsOPosA0HnedMdoZfeHVnxPdNB3jl2wYdcqvnejuB34yzQ5fQD35Xap?=
- =?us-ascii?Q?UNIJl4Xqf//mJSj+tBxCU3njONQWSdZVHDt8BuPq8W8OyYS00g9sRTzGjL9m?=
- =?us-ascii?Q?HSuprzKEm6icyQWPZYdbZUSSzAFpgb30cYtDEkljOA60NSPUrf+Fh437t8/p?=
- =?us-ascii?Q?oARhQlQP4+2EUW/ZvwueiuPabwVQpLCZHqc+8Xz1SJXCKg/JZIvzwvNzqoZz?=
- =?us-ascii?Q?CiD+MPzH1lqcAo59PJW2Bh36H4Vr9Ko+BOUsjRKLuL2ZFu/+AMQaYUdO4oim?=
- =?us-ascii?Q?Dd6F4HxiohiCsiQZbbtpltGl2H3Ii42LLQ9sm6f8bwCPMp58c1+QDR4Mhtv2?=
- =?us-ascii?Q?FTufOVyegCWZJg3/U/uIKiVraKSLaKIkYh3g1NnMFNJUsbKP8d2/fV/BUNNU?=
- =?us-ascii?Q?IvegCFDzbztQTuqhKyK1aa8OdwqgBNcKPED8yBGk5HUx4t274rGeb7DwpKHM?=
- =?us-ascii?Q?TwejSwTFnkq30dYPgK2suZl7KUoNkZksCWVJonAkAjHB1UwM3jF/sglAzR8J?=
- =?us-ascii?Q?TYZqO//VbxW6CxEUtKuOffZS8PO6zU4dFBu4kX0ljrnHGcgD5tRT0K3ZP3Wr?=
- =?us-ascii?Q?v0ZCUgsMie9qzn3rWUI+MEIuPoG0JYDkmqItzpRisGK/aZreUwP94yzBygCx?=
- =?us-ascii?Q?G1P8R12/sNGRdZx49LfH/MjELw+03J6rut5umHx6LVacB0KiLrUvu6NOqMzQ?=
- =?us-ascii?Q?tZhcpOqpRIoBSRaMp59WsWBXbEeWAZ/jtfosqA6l2PAswFcJY76AUvsnk4AW?=
- =?us-ascii?Q?PJJkoyP2Pm8fg3n0glhqc7I1akvMSL5Xry2L+i8NUuT8Op8daar3FaMptB0u?=
- =?us-ascii?Q?/y6Ncd+GSPQtFgJiCPzyNofo1tExvr979v/Q0iJQKk42pMD9A6MdSzBfESVu?=
- =?us-ascii?Q?upjEDSx+NF6SCwX7uOzkePy0dcOmEPnTAB+GBd7+KtDxkGFaLKEG2gyvizQX?=
- =?us-ascii?Q?sg+6HKeD6UZMHJxyieBO7+VJO6Fezrv82C3YXfK/OQxcPRoN+1T9ui1xcUVH?=
- =?us-ascii?Q?BerFcD6cYxanS6ctZsJaO2Uo+S8Vqs76Fkj7rK1OP2htuKOVz9OxGv3oaeXn?=
- =?us-ascii?Q?nURtVTuhVaxlpnWveJaCf8LOvLwhuPviuX3HeWENSJWiHuYElKTXzoFpQ9u9?=
- =?us-ascii?Q?4lr4G7xidrIVMxxHftcWuyfG06wNApjfp4UHP3dwOgsTOd9wRT7JR/NcfndP?=
- =?us-ascii?Q?9nXQti5qfDaG2dD8lapj/GuDH+0VBToIDGskwDn+9qRAPv/oPgf5Km+42Cfj?=
- =?us-ascii?Q?arAQzzKzafbVWHh5DXcwhjhPGKghnugMCEIK41h36h4uH00CfxEfJJ8Kh/gb?=
- =?us-ascii?Q?2G/PyTXW5aGmwhUpfginVnl2m58rohsN1xomDK3pG+b5QQRMsU5OxWYUaevC?=
- =?us-ascii?Q?tkugYkKTLE2F3J6KtE5FN627E7UbldCKCa+X8jJPr3LvmiJeq/C/kkIILJT1?=
- =?us-ascii?Q?IFnJMnU2KnYNHwRPoRJJe8ex+/NgbsXe/LCx0ekrFQ/6t1vKqYmWLCqJaZaq?=
- =?us-ascii?Q?iTJqvXtLFN3aVFovegmJ57d9Eme+N5V3NZKLckzjp09S78jVHLG/FwsOwEeN?=
- =?us-ascii?Q?7Aatz9oQVq2xGQl0zyA8CvDx9mxK3tWRd67cd5IEZwnB6uKnhgm5GNgiFF3L?=
- =?us-ascii?Q?ug=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c7d925d-5423-4a60-dea6-08da91ecf9b1
-X-MS-Exchange-CrossTenant-AuthSource: PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 22:53:41.5245
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lwandHs6vSVkoB6x5RAn2ZWWIsF9Huv6cKyrvQwZx/coyoTVn/u2WStZRA8gds1IzEY6jgX3/SMQ11BaG/ayvZmW5P2pkzoiHZd8ISOBvqQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P190MB0737
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220903012849.938069-4-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -125,206 +76,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We poll nexthops in HW and call for each active nexthop appropriate
-neighbour.
+Please use "KVM: selftest: ..." for the shortlog.
 
-Also we provide implicity neighbour resolving.
-For example, user have added nexthop route:
-  # ip route add 5.5.5.5 via 1.1.1.2
-But neighbour 1.1.1.2 doesn't exist. In this case we will try to call
-neigh_event_send, even if there is no traffic.
-This is useful, when you have add route, which will be used after some
-time but with a lot of traffic (burst). So, we has prepared, offloaded
-route in advance.
+On Sat, Sep 03, 2022 at 01:28:47AM +0000, Vishal Annapurve wrote:
+> Modify following APIs for x86 implementation:
+> 1) kvm_arch_main : Query the cpu vendor and cache the value in advance.
+> 2) kvm_arch_post_vm_load: Populate cpu type in the guest memory so that
+> 	guest doesn't need to execute cpuid instruction again.
 
-Co-developed-by: Taras Chornyi <tchornyi@marvell.com>
-Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
-Co-developed-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
----
- .../net/ethernet/marvell/prestera/prestera.h  |   3 +
- .../marvell/prestera/prestera_router.c        | 111 ++++++++++++++++++
- 2 files changed, 114 insertions(+)
+This commit message only describes a subset of the changes in this
+commit, and does not provide any context on why the changes are being
+made (other than a clue about avoiding CPUID).
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera.h b/drivers/net/ethernet/marvell/prestera/prestera.h
-index 540a36069b79..35554ee805cd 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera.h
-+++ b/drivers/net/ethernet/marvell/prestera/prestera.h
-@@ -324,6 +324,9 @@ struct prestera_router {
- 	struct notifier_block netevent_nb;
- 	u8 *nhgrp_hw_state_cache; /* Bitmap cached hw state of nhs */
- 	unsigned long nhgrp_hw_cache_kick; /* jiffies */
-+	struct {
-+		struct delayed_work dw;
-+	} neighs_update;
- };
- 
- struct prestera_rxtx_params {
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router.c b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-index ff05e99501b6..0f9e28d60c86 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_router.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-@@ -16,6 +16,9 @@
- #include "prestera.h"
- #include "prestera_router_hw.h"
- 
-+#define PRESTERA_IMPLICITY_RESOLVE_DEAD_NEIGH
-+#define PRESTERA_NH_PROBE_INTERVAL 5000 /* ms */
-+
- struct prestera_kern_neigh_cache_key {
- 	struct prestera_ip_addr addr;
- 	struct net_device *dev;
-@@ -32,6 +35,7 @@ struct prestera_kern_neigh_cache {
- 	/* Lock cache if neigh is present in kernel */
- 	bool in_kernel;
- };
-+
- struct prestera_kern_fib_cache_key {
- 	struct prestera_ip_addr addr;
- 	u32 prefix_len;
-@@ -1017,6 +1021,78 @@ __prestera_k_arb_util_fib_overlapped(struct prestera_switch *sw,
- 	return rfc;
- }
- 
-+static void __prestera_k_arb_hw_state_upd(struct prestera_switch *sw,
-+					  struct prestera_kern_neigh_cache *nc)
-+{
-+	struct prestera_nh_neigh_key nh_key;
-+	struct prestera_nh_neigh *nh_neigh;
-+	struct neighbour *n;
-+	bool hw_active;
-+
-+	prestera_util_nc_key2nh_key(&nc->key, &nh_key);
-+	nh_neigh = prestera_nh_neigh_find(sw, &nh_key);
-+	if (!nh_neigh) {
-+		pr_err("Cannot find nh_neigh for cached %pI4n",
-+		       &nc->key.addr.u.ipv4);
-+		return;
-+	}
-+
-+	hw_active = prestera_nh_neigh_util_hw_state(sw, nh_neigh);
-+
-+#ifdef PRESTERA_IMPLICITY_RESOLVE_DEAD_NEIGH
-+	if (!hw_active && nc->in_kernel)
-+		goto out;
-+#else /* PRESTERA_IMPLICITY_RESOLVE_DEAD_NEIGH */
-+	if (!hw_active)
-+		goto out;
-+#endif /* PRESTERA_IMPLICITY_RESOLVE_DEAD_NEIGH */
-+
-+	if (nc->key.addr.v == PRESTERA_IPV4) {
-+		n = neigh_lookup(&arp_tbl, &nc->key.addr.u.ipv4,
-+				 nc->key.dev);
-+		if (!n)
-+			n = neigh_create(&arp_tbl, &nc->key.addr.u.ipv4,
-+					 nc->key.dev);
-+	} else {
-+		n = NULL;
-+	}
-+
-+	if (!IS_ERR(n) && n) {
-+		neigh_event_send(n, NULL);
-+		neigh_release(n);
-+	} else {
-+		pr_err("Cannot create neighbour %pI4n", &nc->key.addr.u.ipv4);
-+	}
-+
-+out:
-+	return;
-+}
-+
-+/* Propagate hw state to kernel */
-+static void prestera_k_arb_hw_evt(struct prestera_switch *sw)
-+{
-+	struct prestera_kern_neigh_cache *n_cache;
-+	struct rhashtable_iter iter;
-+
-+	rhashtable_walk_enter(&sw->router->kern_neigh_cache_ht, &iter);
-+	rhashtable_walk_start(&iter);
-+	while (1) {
-+		n_cache = rhashtable_walk_next(&iter);
-+
-+		if (!n_cache)
-+			break;
-+
-+		if (IS_ERR(n_cache))
-+			continue;
-+
-+		rhashtable_walk_stop(&iter);
-+		__prestera_k_arb_hw_state_upd(sw, n_cache);
-+		rhashtable_walk_start(&iter);
-+	}
-+	rhashtable_walk_stop(&iter);
-+	rhashtable_walk_exit(&iter);
-+}
-+
- /* Propagate kernel event to hw */
- static void prestera_k_arb_n_evt(struct prestera_switch *sw,
- 				 struct neighbour *n)
-@@ -1463,6 +1539,34 @@ static int prestera_router_netevent_event(struct notifier_block *nb,
- 	return NOTIFY_DONE;
- }
- 
-+static void prestera_router_update_neighs_work(struct work_struct *work)
-+{
-+	struct prestera_router *router;
-+
-+	router = container_of(work, struct prestera_router,
-+			      neighs_update.dw.work);
-+	rtnl_lock();
-+
-+	prestera_k_arb_hw_evt(router->sw);
-+
-+	rtnl_unlock();
-+	prestera_queue_delayed_work(&router->neighs_update.dw,
-+				    msecs_to_jiffies(PRESTERA_NH_PROBE_INTERVAL));
-+}
-+
-+static int prestera_neigh_work_init(struct prestera_switch *sw)
-+{
-+	INIT_DELAYED_WORK(&sw->router->neighs_update.dw,
-+			  prestera_router_update_neighs_work);
-+	prestera_queue_delayed_work(&sw->router->neighs_update.dw, 0);
-+	return 0;
-+}
-+
-+static void prestera_neigh_work_fini(struct prestera_switch *sw)
-+{
-+	cancel_delayed_work_sync(&sw->router->neighs_update.dw);
-+}
-+
- int prestera_router_init(struct prestera_switch *sw)
- {
- 	struct prestera_router *router;
-@@ -1496,6 +1600,10 @@ int prestera_router_init(struct prestera_switch *sw)
- 		goto err_nh_state_cache_alloc;
- 	}
- 
-+	err = prestera_neigh_work_init(sw);
-+	if (err)
-+		goto err_neigh_work_init;
-+
- 	router->inetaddr_valid_nb.notifier_call = __prestera_inetaddr_valid_cb;
- 	err = register_inetaddr_validator_notifier(&router->inetaddr_valid_nb);
- 	if (err)
-@@ -1526,6 +1634,8 @@ int prestera_router_init(struct prestera_switch *sw)
- err_register_inetaddr_notifier:
- 	unregister_inetaddr_validator_notifier(&router->inetaddr_valid_nb);
- err_register_inetaddr_validator_notifier:
-+	prestera_neigh_work_fini(sw);
-+err_neigh_work_init:
- 	kfree(router->nhgrp_hw_state_cache);
- err_nh_state_cache_alloc:
- 	rhashtable_destroy(&router->kern_neigh_cache_ht);
-@@ -1544,6 +1654,7 @@ void prestera_router_fini(struct prestera_switch *sw)
- 	unregister_netevent_notifier(&sw->router->netevent_nb);
- 	unregister_inetaddr_notifier(&sw->router->inetaddr_nb);
- 	unregister_inetaddr_validator_notifier(&sw->router->inetaddr_valid_nb);
-+	prestera_neigh_work_fini(sw);
- 	prestera_queue_drain();
- 
- 	prestera_k_arb_abort(sw);
--- 
-2.17.1
+I also think this could be split up into 2 separate commits.
 
+I would suggest first patch changes is_{intel,amd}_cpu() to return a cached
+result. e.g.
+
+  KVM: selftests: Precompute the result for is_{intel,amd}_cpu()
+
+  Cache the vendor CPU type in a global variable so that multiple calls
+  to is_intel_cpu() do not need to re-execute CPUID. This will be useful
+  in a follow-up commit to check if running on AMD or Intel from within
+  a selftest guest where executing CPUID requires a VM-exit.
+
+Then add support for AMD to kvm_hypercall():
+
+  KVM: selftests: Add AMD support to kvm_hypercall()
+
+  Add support for AMD hypercalls to kvm_hypercall() so that it can be
+  used in selftests running on Intel or AMD hosts. This will be used in
+  a follow up commit to ...
+
+  As part of this change, sync the global variable is_cpu_amd into the
+  guest so the guest can determine which hypercall instruction to use
+  without needing to re-execute CPUID for every hypercall.
+
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  .../testing/selftests/kvm/lib/x86_64/processor.c  | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index e22cfc4bf284..ac104653ab43 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -19,6 +19,7 @@
+>  #define MAX_NR_CPUID_ENTRIES 100
+>  
+>  vm_vaddr_t exception_handlers;
+> +static int is_cpu_amd = -1;
+
+Should this just be a bool? Since you are initializing it before main(),
+there is really no way for any code to observe it's pre-initialized
+value. And nothing even checks if is_cpu_amd -1, it just silently
+returns false from is_intel_cpu() and is_amd_cpu().
+
+>  
+>  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
+>  {
+> @@ -1019,7 +1020,7 @@ static bool cpu_vendor_string_is(const char *vendor)
+>  
+>  bool is_intel_cpu(void)
+>  {
+> -	return cpu_vendor_string_is("GenuineIntel");
+> +	return (is_cpu_amd == 0);
+>  }
+>  
+>  /*
+> @@ -1027,7 +1028,7 @@ bool is_intel_cpu(void)
+>   */
+>  bool is_amd_cpu(void)
+>  {
+> -	return cpu_vendor_string_is("AuthenticAMD");
+> +	return (is_cpu_amd == 1);
+>  }
+>  
+>  void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+> @@ -1182,9 +1183,15 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+>  {
+>  	uint64_t r;
+>  
+> -	asm volatile("vmcall"
+> +	if (is_amd_cpu())
+> +		asm volatile("vmmcall"
+>  		     : "=a"(r)
+>  		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+> +	else
+> +		asm volatile("vmcall"
+> +		     : "=a"(r)
+> +		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+> +
+>  	return r;
+>  }
+>  
+> @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+>  
+>  void kvm_arch_main(void)
+>  {
+> +	is_cpu_amd = cpu_vendor_string_is("AuthenticAMD") ? 1 : 0;
+>  }
+>  
+>  void kvm_arch_post_vm_load(struct kvm_vm *vm)
+>  {
+> +	sync_global_to_guest(vm, is_cpu_amd);
+>  }
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 

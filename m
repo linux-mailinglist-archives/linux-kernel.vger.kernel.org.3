@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD295B2596
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DE35B2599
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiIHSXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S231687AbiIHSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiIHSXR (ORCPT
+        with ESMTP id S229964AbiIHSYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:23:17 -0400
+        Thu, 8 Sep 2022 14:24:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B56F2967;
-        Thu,  8 Sep 2022 11:23:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A49EF2945;
+        Thu,  8 Sep 2022 11:24:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E96AB821E1;
-        Thu,  8 Sep 2022 18:23:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AE4C433D6;
-        Thu,  8 Sep 2022 18:23:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1ABFB821DB;
+        Thu,  8 Sep 2022 18:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E836C433C1;
+        Thu,  8 Sep 2022 18:24:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662661391;
-        bh=veGfQcuXT/TZaz1MGKphv5ehLEA9QrpIEJJIWFyMTPI=;
+        s=k20201202; t=1662661451;
+        bh=i1IlDHKxy8OFtCHlFz7v4XemmtvEnPd4tiCVmhk3mn8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s3kDBIOG4XjlB/QyzJBTb74S8Mt25ig2TjV9jtaQONJripVaVwskU5AJv4Q9iSxod
-         7vjwpkrp0EeYEoyJlNA9fT6717cjQ3PJTX/vyZDyyg5tjvt9FPHvgSvMwFgkLnh+nZ
-         0hUPOAKHNQvoK1FDgnh2HNwJiIqtcS5bebknkfNORmZXSSasUc7DZX2lfDZbmdAFJe
-         TjH5RXkbk5iLCfkXEusDhZQLMH+kfjA7ZDbcBqE6BVit/nsf3t4eGR7ObfwUzAC9zS
-         jbTwWf9GIyGNQud3n9sFyw9BW+9UEylaohHCBmEy53S2VNhSzrk7yQoWGgxFzdLYIs
-         8CP/q7fbIZvyg==
+        b=Vr2GLrF921V8MmUwFrNYq7iQ1vTMddvuKCjl9f36TMxcYKfxBr3ZWDuxkX21YydHw
+         yo/zkFKT0aGGINn9VTK7guhq3Aa4KDYLsXAfxWBkWA12Dx7hn6lmRlgRHieORqeYkC
+         hteaWd43wm6zAQ1VXwnBXd+Qpc70QXjOIrgf6CnozWq7EHz8P0L7LNW5F+4WiAHe8L
+         ZfyroGiDv4q9aY5CxADOT4F6S9dmgF5l2OtemMrcrSP0is1/jeCRYiLXZ/7WDThn7O
+         fyIhJzeGpzU5u3w1ExkqpRYhBF1rzF5waa31o0IE08UqZmPF1nbgCvlnYu3F2pSLoM
+         nSKSxoph/ASUg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E1916404A1; Thu,  8 Sep 2022 15:23:07 -0300 (-03)
-Date:   Thu, 8 Sep 2022 15:23:07 -0300
+        id D4488404A1; Thu,  8 Sep 2022 15:24:08 -0300 (-03)
+Date:   Thu, 8 Sep 2022 15:24:08 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Shang XiaoJing <shangxiaojing@huawei.com>,
+Cc:     Yang Jihong <yangjihong1@huawei.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -45,14 +45,15 @@ Cc:     Shang XiaoJing <shangxiaojing@huawei.com>,
         Jiri Olsa <jolsa@kernel.org>,
         linux-perf-users <linux-perf-users@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/4] perf: Clean up by adding helpers
-Message-ID: <YxozC0P1gdKkLqP+@kernel.org>
-References: <20220908021141.27134-1-shangxiaojing@huawei.com>
- <CAM9d7cgOVSohQ6cLnPc3QJZ9aus_pq8xjiRf8WRy8WOuaogoTQ@mail.gmail.com>
+Subject: Re: [PATCH] perf lock: Remove redundant word 'contention' in help
+ message
+Message-ID: <YxozSIIVx4UwseYS@kernel.org>
+References: <20220908014854.151203-1-yangjihong1@huawei.com>
+ <CAM9d7ciPd4vf3v1rdOD43vR-bh0pjj1LCcrMVTLfH6Fcxx_Dsw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAM9d7cgOVSohQ6cLnPc3QJZ9aus_pq8xjiRf8WRy8WOuaogoTQ@mail.gmail.com>
+In-Reply-To: <CAM9d7ciPd4vf3v1rdOD43vR-bh0pjj1LCcrMVTLfH6Fcxx_Dsw@mail.gmail.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -64,41 +65,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Sep 08, 2022 at 12:08:06AM -0700, Namhyung Kim escreveu:
-> Hello,
-> 
-> On Wed, Sep 7, 2022 at 6:37 PM Shang XiaoJing <shangxiaojing@huawei.com> wrote:
-> >
-> > Some clean up in builtin-lock.c, builtin-timechart.c, and
-> > builtin-trace.c.
-> >
-> > Shang XiaoJing (4):
-> >   perf trace: Use zalloc to save initialization of syscall_stats
-> >   perf lock: Add get_key_by_aggr_mode helper
-> >   perf timechart: Add create_pidcomm helper
-> >   perf timechart: Add p_state_end helper
-> 
+Em Wed, Sep 07, 2022 at 11:59:27PM -0700, Namhyung Kim escreveu:
+> On Wed, Sep 7, 2022 at 6:52 PM Yang Jihong <yangjihong1@huawei.com> wrote:
+> > Fixes: 528b9cab3b81 ("perf lock: Add 'contention' subcommand")
+> > Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+ 
 > Acked-by: Namhyung Kim <namhyung@kernel.org>
+ 
+> Thanks for the fix!
 
 Thanks, applied.
 
 - Arnaldo
 
- 
-> Thanks,
-> Namhyung
-> 
-> 
-> >
-> >  tools/perf/builtin-lock.c      | 129 ++++++++++++++-------------------
-> >  tools/perf/builtin-timechart.c |  65 +++++++++--------
-> >  tools/perf/builtin-trace.c     |   5 +-
-> >  3 files changed, 88 insertions(+), 111 deletions(-)
-> >
-> > --
-> > 2.17.1
-> >
-
--- 
-
-- Arnaldo

@@ -2,158 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B615B1245
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881EE5B124D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 04:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiIHB7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Sep 2022 21:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S230103AbiIHCBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Sep 2022 22:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIHB71 (ORCPT
+        with ESMTP id S229716AbiIHCBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Sep 2022 21:59:27 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0851CB18;
-        Wed,  7 Sep 2022 18:59:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MNMkD69YTz4xD3;
-        Thu,  8 Sep 2022 11:59:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662602358;
-        bh=WQMypIQOXO6oFTr6CtsUzHPJrofSi4/VF3WEKPql46Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oSh+TKlbIv9LRKLxRquA2TzOo4W3OdzwUNPL5uv7b+piKZ4Bpj5FcuoXuM88VQ7EZ
-         7/71PyQfM2W5RKMvl9yrjIL8Qa05PiwcPmRDqiQrcy0iGmY8tFHZUPxJcnoUleil1R
-         cf6qS86ego8ocxZDKlKm/Ih2230trTafvt1yl7tcb1AnxspqGSAt3Djk/DKu7dU//3
-         0zQntMYD8BJayloVZk0WYuDuJrp453fX1IoS6LpCzBT5MEa6ju+HBr/QFc13+oi6dm
-         rcdN0+fFGWbNpWOLFGg4pff6xzFgg6l/hzMQ9T0s9fQMpLZxz0QC7efZk2mppFdNm/
-         nYxzk/TGvW3Jg==
-Date:   Thu, 8 Sep 2022 11:59:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steffen Klassert <steffen.klassert@secunet.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Eyal Birger <eyal.birger@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lior Nahmanson <liorna@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: linux-next: manual merge of the ipsec-next tree with the net-next
- tree
-Message-ID: <20220908115914.69ed4771@canb.auug.org.au>
+        Wed, 7 Sep 2022 22:01:50 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D147B2BF;
+        Wed,  7 Sep 2022 19:01:49 -0700 (PDT)
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 28821XjL012230;
+        Thu, 8 Sep 2022 11:01:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28821XjL012230
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662602494;
+        bh=6Y1Bya3aPZIeSCr6IhdukpsTZDl2mHIQOZnpZe9hjBU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hC6w73/jbQba9O4cZKC0LRYCxDjbEM7J4YwUZ+TXWkQ6p+n1ytM22WZ+1NNPqOUrq
+         ZtDzyIpKPB2UGdcOFYc3TIZ/3OIZCA519hrGV/3vCt/ef+hGI50ch/xJyGYvW5M4mO
+         l1g6cqI4BkcKuoWzvynpDu3v9hv1KFHUce5+W/A5ACyvxPdfHuZnnEiHzfG3Y+vasj
+         kLski423IKrQiQh0RGx9esWdiyt0axCXTcxFs9G0NGhdkMh2SxmmtLB1UJSsdoeMOi
+         XttpO2B3Na0Pm8PuS/F84vEvl3+NKW3SE0NWYBBnYzHeOik6pkGyY2EXmGhwQtxstP
+         SGapoNPOx+Q7g==
+X-Nifty-SrcIP: [209.85.161.45]
+Received: by mail-oo1-f45.google.com with SMTP id c9-20020a4a4f09000000b0044e1294a737so2744625oob.3;
+        Wed, 07 Sep 2022 19:01:33 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2xwQWhlJyGe8tgJDwOsixTqNKCVQ5ZezKH+7rvTUXM6/ObnRGK
+        abimIXtgkrH8LqJ6n/DK1hsSrMtWZEcIYb2ZUDs=
+X-Google-Smtp-Source: AA6agR5LEebdg5DlSdHbvjogjPHbIZgd4TjczzfDaGtjQ3D+KX3gf7+iYfPULy+rgzHwPdEJkWdG1FpOt2ozkzowVUw=
+X-Received: by 2002:a4a:9789:0:b0:451:437b:cc58 with SMTP id
+ w9-20020a4a9789000000b00451437bcc58mr2283450ooi.96.1662602492951; Wed, 07 Sep
+ 2022 19:01:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//MNlCg_j4vK0.DfBhen4Xg_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906061313.1445810-1-masahiroy@kernel.org>
+ <Yxj7/WxCcdIuEHG6@bergen.fjasle.eu> <Yxj8lTPByGnahpWq@bergen.fjasle.eu>
+In-Reply-To: <Yxj8lTPByGnahpWq@bergen.fjasle.eu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 8 Sep 2022 11:00:56 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQuJibnWaseXVwc9eLAeQkj6AhyxVk-YHeRgEi7vjNBjg@mail.gmail.com>
+Message-ID: <CAK7LNAQuJibnWaseXVwc9eLAeQkj6AhyxVk-YHeRgEi7vjNBjg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] kbuild: various cleanups
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//MNlCg_j4vK0.DfBhen4Xg_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 8, 2022 at 5:18 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> On Wed, 7 Sep 2022 22:15:57 +0200 Nicolas Schier wrote:
+> > On Tue,  6 Sep 2022 15:13:05 +0900 Masahiro Yamada wrote:
+> > >
+> > >  - Refactor single target build to make it work more correctly
+> > >  - Link vmlinux and modules in parallel
+> > >  - Remove head-y syntax
+> > >
+> > >
+> > > Masahiro Yamada (8):
+> > >   kbuild: fix and refactor single target build
+> > >   kbuild: rename modules.order in sub-directories to .modules.order
+> > >   kbuild: move core-y and drivers-y to ./Kbuild
+> > >   kbuild: move .vmlinux.objs rule to Makefile.modpost
+> > >   kbuild: move vmlinux.o rule to the top Makefile
+> > >   kbuild: unify two modpost invocations
+> > >   kbuild: use obj-y instead extra-y for objects placed at the head
+> > >   kbuild: remove head-y syntax
+> >
+> > I'm not able to apply the patchset, neither on your current kbuild
+> > branch nor on for-next.  What am I missing here?  Could you give me a
+> > hint for a patchset base?
+> >
+> > Thanks and kind regards,
+> > Nicolas
+>
+>
+> ooops.  It _is_ already on kbuild, sorry for the noise.
 
-Hi all,
 
-Today's linux-next merge of the ipsec-next tree got a conflict in:
+Yes.
+If you are happy to review and/or test the branch,
+I will add Reviewed-by/Tested-by when I rebase it.
 
-  include/net/dst_metadata.h
 
-between commit:
 
-  0a28bfd4971f ("net/macsec: Add MACsec skb_metadata_dst Tx Data path suppo=
-rt")
 
-from the net-next tree and commit:
-
-  5182a5d48c3d ("net: allow storing xfrm interface metadata in metadata_dst=
-")
-
-from the ipsec-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/net/dst_metadata.h
-index 22a6924bf6da,57f75960fa28..000000000000
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@@ -10,7 -9,7 +10,8 @@@
-  enum metadata_type {
-  	METADATA_IP_TUNNEL,
-  	METADATA_HW_PORT_MUX,
- +	METADATA_MACSEC,
-+ 	METADATA_XFRM,
-  };
- =20
-  struct hw_port_info {
-@@@ -18,17 -17,18 +19,23 @@@
-  	u32 port_id;
-  };
- =20
- +struct macsec_info {
- +	sci_t sci;
- +};
- +
-+ struct xfrm_md_info {
-+ 	u32 if_id;
-+ 	int link;
-+ };
-+=20
-  struct metadata_dst {
-  	struct dst_entry		dst;
-  	enum metadata_type		type;
-  	union {
-  		struct ip_tunnel_info	tun_info;
-  		struct hw_port_info	port_info;
- +		struct macsec_info	macsec_info;
-+ 		struct xfrm_md_info	xfrm_info;
-  	} u;
-  };
- =20
-@@@ -89,9 -110,9 +117,12 @@@ static inline int skb_metadata_dst_cmp(
-  		return memcmp(&a->u.tun_info, &b->u.tun_info,
-  			      sizeof(a->u.tun_info) +
-  					 a->u.tun_info.options_len);
- +	case METADATA_MACSEC:
- +		return memcmp(&a->u.macsec_info, &b->u.macsec_info,
- +			      sizeof(a->u.macsec_info));
-+ 	case METADATA_XFRM:
-+ 		return memcmp(&a->u.xfrm_info, &b->u.xfrm_info,
-+ 			      sizeof(a->u.xfrm_info));
-  	default:
-  		return 1;
-  	}
-
---Sig_//MNlCg_j4vK0.DfBhen4Xg_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMZTHIACgkQAVBC80lX
-0Gz5gwf8CPfl/S8PoQzhBTW3z3C+pZdJ4NhXFkTTv6JMeWiJ0VNSlAbYFI0G7WAv
-Tp8Bq2zWsrMzg1UM0U+KZ0+JUcZ6fKSXE5iHfqOYEmu1f8XvxIKJLIWx3veUiaeP
-8JDgJ3ruQs90PC27KgzKUJqp9sE1ZAcGerOu1ozL+emv885ldG/mRA4m+AJZPuox
-dt4Rf18Iu6YHTdExmcOXLUNhipDu6eie6hy7TPGRL237bgaVrl0A207D2SXqu+y4
-TC7jiGHZmtSyTDJvYKcDN49wukE6KF67K9mxQTrVLe1c20Zqvqmbt4oKcv5b1emR
-YUnhjUqEmOnwRb6vccP9A0gHBg+jww==
-=1GGK
------END PGP SIGNATURE-----
-
---Sig_//MNlCg_j4vK0.DfBhen4Xg_--
+-- 
+Best Regards
+Masahiro Yamada

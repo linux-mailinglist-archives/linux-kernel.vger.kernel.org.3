@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031D05B14DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CA25B14E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 08:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiIHGms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 02:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S230464AbiIHGoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 02:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIHGmn (ORCPT
+        with ESMTP id S229563AbiIHGoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 02:42:43 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D25A61F4
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:42:42 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MNV1F3G4Zz9shS;
-        Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GZRoIOsfxZ4l; Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MNV1F2Fwbz9sfJ;
-        Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 36F248B78B;
-        Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 7M4xRQDFRu1Q; Thu,  8 Sep 2022 08:42:41 +0200 (CEST)
-Received: from [192.168.232.247] (unknown [192.168.232.247])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D4E0E8B763;
-        Thu,  8 Sep 2022 08:42:40 +0200 (CEST)
-Message-ID: <65b3c3f4-78ba-8051-b5d9-12fe7081a6ed@csgroup.eu>
-Date:   Thu, 8 Sep 2022 08:42:41 +0200
+        Thu, 8 Sep 2022 02:44:04 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248BBD074A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Sep 2022 23:44:03 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id bj14so11055782wrb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Sep 2022 23:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=b1chxNIA9RagmiiPQ3s0ZgKMM+t+BegCoFA6aXi2sCQ=;
+        b=jeKC50xikkVr+XUBcWVw7YZKtH76yHzg6jBpUlm2TN2zSwcymPnD85WGsIDmQw/Bsf
+         RBeosEnMZJr4LV/hmfDDMEzkAJwkg1UgmAnzNZBSGKDhXaj+KExW+G0BxqAWNWzupZZb
+         /imLfb3UJzBFk4qm5eGD+CcvrXqPRwa7FubEsU6ATiS12x5ryfeuG1MxmJb6RmlY9Fpt
+         U8JmDuCFaNRzxqSMxqtAVgZoVSgWs147QP0C1uvlR+oua8f63fB3CcM6pqIEYo7dT8kI
+         0TIQOdE3XDeSb+97TyIvDtlqRAUrDsKIKWhPy5UjYW1EJ5l4Q7SibZdFCjz+iAR82bDN
+         FfUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=b1chxNIA9RagmiiPQ3s0ZgKMM+t+BegCoFA6aXi2sCQ=;
+        b=3h95vtdrU5nLGBuWN0Viwg/lLguiZk/Lsj4VF8Yz4TNVWrKgX/3YO+MwnHhn8emTSA
+         eFBT3m6HGprEKmalx7qY5G3oS0p2OiPc8G4WFeQIVhFq3Hw5qxg1pjMAmIRG++/khhlq
+         cHSKXblffj9bNUNK0OwjIZhyP/rV42RF+Mw3juir5tdNPzKrdaG2RS/F86H+nXdX/WHa
+         ba387KE1njDsnHj1QD3Y6SXMtlI0uvUWPVRI4CfbqiFuOP69P0Cro5RJAYwTyu9mXl3g
+         gZ01ICEPe2vdJ7iVohnbUXTb7nddQIZj4EYI2r/b1J3L4UN60MyZ0S57TOdxpjStfTwu
+         6Cgg==
+X-Gm-Message-State: ACgBeo24oFsezqM1rsUN9l47bXCBwgukGfcHBTda8OrI/IoZGrHCSpr7
+        ajFqZzWt5iih8Zj/dOY+2n9xhvj9haCQVg==
+X-Google-Smtp-Source: AA6agR7Cp81jZgWnP23GY49qR/Z2d7YmFLYivEyV79iG3OySTF/7KPstfBIxLMAITgWkKhp/wsdIKg==
+X-Received: by 2002:a5d:4d0a:0:b0:228:d9c0:5abe with SMTP id z10-20020a5d4d0a000000b00228d9c05abemr4213510wrt.693.1662619441727;
+        Wed, 07 Sep 2022 23:44:01 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id v16-20020a5d5910000000b00228a6ce17b4sm13414688wrd.37.2022.09.07.23.44.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 23:44:01 -0700 (PDT)
+Message-ID: <1f0f036d-2e8c-d95b-5cfb-81a1b538642a@linaro.org>
+Date:   Thu, 8 Sep 2022 07:44:00 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 1/1] arch/powerpc: Don't assume start_text & head_end
- align
-Content-Language: fr-FR
-To:     Alastair D'Silva <alastair@au1.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>
-Cc:     Alastair D'Silva <alastair@d-silva.org>,
-        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-References: <20190313033852.13028-1-alastair@au1.ibm.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20190313033852.13028-1-alastair@au1.ibm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] slimbus: qcom-ngd-ctrl: allow compile testing without
+ QCOM_RPROC_COMMON
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20220826093711.1059319-1-krzysztof.kozlowski@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220826093711.1059319-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,59 +77,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-Le 13/03/2019 à 04:38, Alastair D'Silva a écrit :
-> From: Alastair D'Silva <alastair@d-silva.org>
+On 26/08/2022 10:37, Krzysztof Kozlowski wrote:
+> The Qualcomm common remote-proc code (CONFIG_QCOM_RPROC_COMMON) has
+> necessary stubs, so it is not needed for compile testing.
 > 
-> When building LTO kernels, the start_text symbol is not guaranteed to mark
-> the end of the head section.
-> 
-> Instead, look explicitly for __head_end.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Could you please give more details ?
+Applied thanks,
 
-Have you encountered a problem ?
-
- From commit c494adefef9f ("powerpc/64: Tool to check head sections 
-location sanity"), I understand that we want to make sure text_start is 
-where it is, not that __head_end is.
-
-Thanks
-Christophe
-
-
-> 
-> Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
+--srini
 > ---
->   arch/powerpc/tools/head_check.sh | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
+>   drivers/slimbus/Kconfig | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/powerpc/tools/head_check.sh b/arch/powerpc/tools/head_check.sh
-> index ad9e57209aa4..1b0f634038c3 100644
-> --- a/arch/powerpc/tools/head_check.sh
-> +++ b/arch/powerpc/tools/head_check.sh
-> @@ -44,7 +44,7 @@ nm="$1"
->   vmlinux="$2"
+> diff --git a/drivers/slimbus/Kconfig b/drivers/slimbus/Kconfig
+> index 1235b7dc8496..2ed821f75816 100644
+> --- a/drivers/slimbus/Kconfig
+> +++ b/drivers/slimbus/Kconfig
+> @@ -22,7 +22,8 @@ config SLIM_QCOM_CTRL
 >   
->   # gcc-4.6-era toolchain make _stext an A (absolute) symbol rather than T
-> -$nm "$vmlinux" | grep -e " [TA] _stext$" -e " t start_first_256B$" -e " a text_start$" -e " t start_text$" -m4 > .tmp_symbols.txt
-> +$nm "$vmlinux" | grep -e " [TA] _stext$" -e " t start_first_256B$" -e " a text_start$" -e " T __head_end$" -m4 > .tmp_symbols.txt
->   
->   
->   vma=$(cat .tmp_symbols.txt | grep -e " [TA] _stext$" | cut -d' ' -f1)
-> @@ -63,12 +63,12 @@ fi
->   
->   top_vma=$(echo $vma | cut -d'0' -f1)
->   
-> -expected_start_text_addr=$(cat .tmp_symbols.txt | grep " a text_start$" | cut -d' ' -f1 | sed "s/^0/$top_vma/")
-> +expected_head_end_addr=$(cat .tmp_symbols.txt | grep " a text_start$" | cut -d' ' -f1 | sed "s/^0/$top_vma/")
->   
-> -start_text_addr=$(cat .tmp_symbols.txt | grep " t start_text$" | cut -d' ' -f1)
-> +head_end_addr=$(cat .tmp_symbols.txt | grep " T __head_end$" | cut -d' ' -f1)
->   
-> -if [ "$start_text_addr" != "$expected_start_text_addr" ]; then
-> -	echo "ERROR: start_text address is $start_text_addr, should be $expected_start_text_addr"
-> +if [ "$head_end_addr" != "$expected_head_end_addr" ]; then
-> +	echo "ERROR: __head_end address is $head_end_addr, should be $expected_head_end_addr"
->   	echo "ERROR: try to enable LD_HEAD_STUB_CATCH config option"
->   	echo "ERROR: see comments in arch/powerpc/tools/head_check.sh"
->   
+>   config SLIM_QCOM_NGD_CTRL
+>   	tristate "Qualcomm SLIMbus Satellite Non-Generic Device Component"
+> -	depends on HAS_IOMEM && DMA_ENGINE && NET && QCOM_RPROC_COMMON
+> +	depends on HAS_IOMEM && DMA_ENGINE && NET
+> +	depends on QCOM_RPROC_COMMON || COMPILE_TEST
+>   	depends on ARCH_QCOM || COMPILE_TEST
+>   	select QCOM_QMI_HELPERS
+>   	select QCOM_PDR_HELPERS

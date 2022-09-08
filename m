@@ -2,186 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3845B262B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCDB5B262C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 20:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiIHSuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 14:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S232129AbiIHSuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 14:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbiIHStz (ORCPT
+        with ESMTP id S232405AbiIHSt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 14:49:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A168B30546
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 11:49:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32ED961DCB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 18:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12022C433D7;
-        Thu,  8 Sep 2022 18:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662662990;
-        bh=9blEcl+kQyexkHeFxKpL4hVCHMxyX6MRyBgDynt2ggA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LUYMF6ihxRMbLcvAo6bo2tuSSmkMIp+xGcGekfAMRsJYAgB2hx3pUoob0W9ZShep4
-         7xx/DZ/EZc5vgUVSoMNN7y1PT7Tri5U9UjSmREmB261CbfPx108eUd4pihulssseze
-         yFRu7JUKS3AxNeF5JUMc+MSIyphZIyLh/kNTS2pWhCOkR6a8vGNrBfCiKR6OmnX27+
-         z7UcDie4z0fmoQOy8gw9D8x0XXdgOiCT17IVj3ePqmRnd1VsQ86XVtJFJbsY0nlrk+
-         f/8qHDKwjwVyfOW9H/YgqUTq1nffhfYpZeyojGYCB/v/DaIQYFELps/7O9uHmitbdD
-         EdkJ9T5DOMQRA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Xin Hao <xhao@linux.alibaba.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon/sysfs: change few functions execute order
-Date:   Thu,  8 Sep 2022 18:49:47 +0000
-Message-Id: <20220908184947.103206-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220908081932.77370-1-xhao@linux.alibaba.com>
-References: 
+        Thu, 8 Sep 2022 14:49:56 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2898C03C;
+        Thu,  8 Sep 2022 11:49:53 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id s206so17601727pgs.3;
+        Thu, 08 Sep 2022 11:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=tJTwU4stupW8LHT+ZyN0zQCc5o/+KAr70ucKLAwyn7k=;
+        b=TzysSwcbkYenIlokh8kQco3QIGs7ps1wA9TKybuAyhI+dWuEiy/p8plwELhN9NEkMo
+         gVOVnRThI+UjBo7Nel93fHX3ew1chrv2UijXR83IuWUipXoNzVi8uTRm0bmlMXkPpocd
+         b5MMzbCARCWWspXUkwKp81mcgiUyxJ/ZLFJYuypiT7xHX80BJsjK0/rCZ0TdAwNot0S4
+         MgpdkNKvXF/PpDCflsgq4+o9WKPW6bhIIJOZdzIpNJld9kqY0IDZ+ZUjjzEUI5BET/M+
+         ua/GDG1orPPCYK6vixsUMQYDvZ8WSh9NWiV/b+Zca41gzj6TpVDkNZw4syJeyZvJr7ZE
+         FDRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=tJTwU4stupW8LHT+ZyN0zQCc5o/+KAr70ucKLAwyn7k=;
+        b=4F+x2ADRCLFdM2nHMHipLy4WF09Uc/aRhn2E5LW34Wa2cu8V2EZmvWXdTe1Q+koAfU
+         K0vsRF69saSeTYeRbbpUI0TNN3XW74BETsVYCPSerN39sITFyhjs8ivNWczpbgf2LrJX
+         cDjnKUDGlxG/Gj4TTZbIxxSDhs+6HgKxkqtIXEzMqcDv0isZS+/JJjcfLmIdiNjVO3qK
+         wXoK6gdmZQ2cyMW5ny+XJYDARa5GHufahGsPb964PqDFc9qKRAuqkemakrdsIy3uTUDn
+         o9acJkAt/7Mu3ZB8lH9ryOYWc6tI1M7hI3Bms80mjRD2VJDzfzS/nJQzFrbdXkVEi7Rd
+         D0hQ==
+X-Gm-Message-State: ACgBeo26dMbkPqVtlU9/JCQ0JbDlI7Vo/ZJVdvHckV3fpQmClZcVVi6S
+        ATQkA8//p8L8IoS64TBsH4yRIvit1eyVhA==
+X-Google-Smtp-Source: AA6agR65KK4K4Qyp3j4pikU0YAtfTtI6KYQctfgMjhTGVte+r4H5EvUi1yAWGf4hTXqcQSMxerb9rA==
+X-Received: by 2002:a05:6a00:21c8:b0:52e:3404:eba5 with SMTP id t8-20020a056a0021c800b0052e3404eba5mr10435950pfj.67.1662662991469;
+        Thu, 08 Sep 2022 11:49:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id nd15-20020a17090b4ccf00b002006f8e7688sm2117124pjb.32.2022.09.08.11.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 11:49:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 8 Sep 2022 11:49:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, robert.marko@sartura.hr,
+        luka.perkov@sartura.hr, jdelvare@suse.com, dev@aboehler.at,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] hwmon: (tps23861) create unique debugfs directory
+ per device
+Message-ID: <20220908184949.GA3191400@roeck-us.net>
+References: <20220907015405.16547-1-mr.nuke.me@gmail.com>
+ <20220907015405.16547-2-mr.nuke.me@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907015405.16547-2-mr.nuke.me@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
+On Tue, Sep 06, 2022 at 08:54:05PM -0500, Alexandru Gagniuc wrote:
+> On systems with more than one tps23861, creating the debugfs directory
+> for additional devices fails with
+> 
+>     debugfs: Directory 'tps23861' with parent '/' already present!
+> 
+> To resolve this, include the hwmon device name in the directory name.
+> Since the name is unique, this guarantees that the debugfs directory
+> is unique.
+> 
+> Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On Thu, 8 Sep 2022 16:19:32 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
-
-> These nr_{schemes,regions,contexts,kdamonds}_store() functions are both call
-
-checkpatch complains as below:
-
-    WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-    #10:
-    These nr_{schemes,regions,contexts,kdamonds}_store() functions are both call
-
-> kstrtoint() to get relative values from sysfs interface, if it return an
-> error, there get kobject instance would be meaningless through 'container_of'.
-
-I was thinking the compiler could do that kind of optimization on its own, so I
-preferred to make the code shorter.
-
-This change makes the code slightly longer, while the benefit of the change is
-unclear.  I'd like to keep it as is unless we get some clear benefit of this?
-
+Applied to hwmon-next.
 
 Thanks,
-SJ
+Guenter
 
-> 
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
 > ---
->  mm/damon/sysfs.c | 24 ++++++++++++++----------
->  1 file changed, 14 insertions(+), 10 deletions(-)
+>  drivers/hwmon/tps23861.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
-> diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-> index 88f208ff235d..54fdfcdbb3e4 100644
-> --- a/mm/damon/sysfs.c
-> +++ b/mm/damon/sysfs.c
-> @@ -1031,8 +1031,7 @@ static ssize_t nr_schemes_show(struct kobject *kobj,
->  static ssize_t nr_schemes_store(struct kobject *kobj,
->  		struct kobj_attribute *attr, const char *buf, size_t count)
+> diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+> index 019009b71a90..a3d7d6b75a26 100644
+> --- a/drivers/hwmon/tps23861.c
+> +++ b/drivers/hwmon/tps23861.c
+> @@ -503,9 +503,17 @@ static int tps23861_port_status_show(struct seq_file *s, void *data)
+>  
+>  DEFINE_SHOW_ATTRIBUTE(tps23861_port_status);
+>  
+> -static void tps23861_init_debugfs(struct tps23861_data *data)
+> +static void tps23861_init_debugfs(struct tps23861_data *data,
+> +				  struct device *hwmon_dev)
 >  {
-> -	struct damon_sysfs_schemes *schemes = container_of(kobj,
-> -			struct damon_sysfs_schemes, kobj);
-> +	struct damon_sysfs_schemes *schemes;
->  	int nr, err = kstrtoint(buf, 0, &nr);
->  
->  	if (err)
-> @@ -1040,6 +1039,8 @@ static ssize_t nr_schemes_store(struct kobject *kobj,
->  	if (nr < 0)
->  		return -EINVAL;
->  
-> +	schemes = container_of(kobj, struct damon_sysfs_schemes, kobj);
+> -	data->debugfs_dir = debugfs_create_dir(data->client->name, NULL);
+> +	const char *debugfs_name;
 > +
->  	if (!mutex_trylock(&damon_sysfs_lock))
->  		return -EBUSY;
->  	err = damon_sysfs_schemes_add_dirs(schemes, nr);
-> @@ -1237,8 +1238,7 @@ static ssize_t nr_regions_show(struct kobject *kobj,
->  static ssize_t nr_regions_store(struct kobject *kobj,
->  		struct kobj_attribute *attr, const char *buf, size_t count)
->  {
-> -	struct damon_sysfs_regions *regions = container_of(kobj,
-> -			struct damon_sysfs_regions, kobj);
-> +	struct damon_sysfs_regions *regions;
->  	int nr, err = kstrtoint(buf, 0, &nr);
->  
->  	if (err)
-> @@ -1246,6 +1246,8 @@ static ssize_t nr_regions_store(struct kobject *kobj,
->  	if (nr < 0)
->  		return -EINVAL;
->  
-> +	regions = container_of(kobj, struct damon_sysfs_regions, kobj);
+> +	debugfs_name = devm_kasprintf(&data->client->dev, GFP_KERNEL, "%s-%s",
+> +				      data->client->name, dev_name(hwmon_dev));
+> +	if (!debugfs_name)
+> +		return;
 > +
->  	if (!mutex_trylock(&damon_sysfs_lock))
->  		return -EBUSY;
->  	err = damon_sysfs_regions_add_dirs(regions, nr);
-> @@ -1440,8 +1442,7 @@ static ssize_t nr_targets_show(struct kobject *kobj,
->  static ssize_t nr_targets_store(struct kobject *kobj,
->  		struct kobj_attribute *attr, const char *buf, size_t count)
->  {
-> -	struct damon_sysfs_targets *targets = container_of(kobj,
-> -			struct damon_sysfs_targets, kobj);
-> +	struct damon_sysfs_targets *targets;
->  	int nr, err = kstrtoint(buf, 0, &nr);
+> +	data->debugfs_dir = debugfs_create_dir(debugfs_name, NULL);
 >  
->  	if (err)
-> @@ -1449,6 +1450,8 @@ static ssize_t nr_targets_store(struct kobject *kobj,
->  	if (nr < 0)
->  		return -EINVAL;
+>  	debugfs_create_file("port_status",
+>  			    0400,
+> @@ -554,7 +562,7 @@ static int tps23861_probe(struct i2c_client *client)
+>  	if (IS_ERR(hwmon_dev))
+>  		return PTR_ERR(hwmon_dev);
 >  
-> +	targets = container_of(kobj, struct damon_sysfs_targets, kobj);
-> +
->  	if (!mutex_trylock(&damon_sysfs_lock))
->  		return -EBUSY;
->  	err = damon_sysfs_targets_add_dirs(targets, nr);
-> @@ -1962,8 +1965,7 @@ static ssize_t nr_contexts_show(struct kobject *kobj,
->  static ssize_t nr_contexts_store(struct kobject *kobj,
->  		struct kobj_attribute *attr, const char *buf, size_t count)
->  {
-> -	struct damon_sysfs_contexts *contexts = container_of(kobj,
-> -			struct damon_sysfs_contexts, kobj);
-> +	struct damon_sysfs_contexts *contexts;
->  	int nr, err;
+> -	tps23861_init_debugfs(data);
+> +	tps23861_init_debugfs(data, hwmon_dev);
 >  
->  	err = kstrtoint(buf, 0, &nr);
-> @@ -1973,6 +1975,7 @@ static ssize_t nr_contexts_store(struct kobject *kobj,
->  	if (nr < 0 || 1 < nr)
->  		return -EINVAL;
->  
-> +	contexts = container_of(kobj, struct damon_sysfs_contexts, kobj);
->  	if (!mutex_trylock(&damon_sysfs_lock))
->  		return -EBUSY;
->  	err = damon_sysfs_contexts_add_dirs(contexts, nr);
-> @@ -2741,8 +2744,7 @@ static ssize_t nr_kdamonds_show(struct kobject *kobj,
->  static ssize_t nr_kdamonds_store(struct kobject *kobj,
->  		struct kobj_attribute *attr, const char *buf, size_t count)
->  {
-> -	struct damon_sysfs_kdamonds *kdamonds = container_of(kobj,
-> -			struct damon_sysfs_kdamonds, kobj);
-> +	struct damon_sysfs_kdamonds *kdamonds;
->  	int nr, err;
->  
->  	err = kstrtoint(buf, 0, &nr);
-> @@ -2751,6 +2753,8 @@ static ssize_t nr_kdamonds_store(struct kobject *kobj,
->  	if (nr < 0)
->  		return -EINVAL;
->  
-> +	kdamonds = container_of(kobj, struct damon_sysfs_kdamonds, kobj);
-> +
->  	if (!mutex_trylock(&damon_sysfs_lock))
->  		return -EBUSY;
->  	err = damon_sysfs_kdamonds_add_dirs(kdamonds, nr);
-> -- 
-> 2.31.0
+>  	return 0;
+>  }

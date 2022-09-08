@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CF55B1FDB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0D55B1FB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 15:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbiIHN6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 09:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S231298AbiIHNzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 09:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbiIHN53 (ORCPT
+        with ESMTP id S229620AbiIHNz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:57:29 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFBB10C981;
-        Thu,  8 Sep 2022 06:57:19 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNgZX48QpzjX4P;
-        Thu,  8 Sep 2022 21:53:40 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 8 Sep
- 2022 21:57:16 +0800
-From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <pantelis.antoniou@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <zhengbin13@huawei.com>
-Subject: [PATCH -next] net: fs_enet: Fix wrong check in do_pd_setup
-Date:   Thu, 8 Sep 2022 13:55:13 +0000
-Message-ID: <20220908135513.53449-1-zhengyongjun3@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 8 Sep 2022 09:55:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824CA7645C;
+        Thu,  8 Sep 2022 06:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=EyfNfLo5vV2B3+XKBz4A9NHtFJoeyAoyzFNjxdeTbE4=; b=auWoYLQvbVXNMIP5X1T5DoiNw6
+        zZg4ee7r8fLRHXpIFnWxYeRN1W77Ni+sIgJfeUmE5ww1xvi0LWLWRzOGMBVtRS5BnwLSp6yf/vDBM
+        4WDFf1fE+2pSyhjhKlWJB51Dtc1z5YjX93Bx9Y36394MPQhlbDVkFuIDfmY9CIklm7BSUoFab3hcl
+        naoPUHeOG5djeyW4lBDMWsZO0PIuA46DO3v1gtXKTPrA87bQKIk8cUkklulKTNPd1UdnPtsLACPGo
+        QH1wUkMQKzPcCVw9bzZ9FAbg/s7RjszqzwapANiA5EKHJ8niCevED1vnV3BIDtz/KWwReJx7vMQMk
+        pg78iAUw==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWI01-004DPv-8y; Thu, 08 Sep 2022 13:55:21 +0000
+Message-ID: <670e8810-0646-f57e-ac14-f7e441cf5cd3@infradead.org>
+Date:   Thu, 8 Sep 2022 06:55:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] input/serio: fix repeated words in comments
+Content-Language: en-US
+To:     wangjianli <wangjianli@cdjrlc.com>, dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220908122835.13888-1-wangjianli@cdjrlc.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220908122835.13888-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,27 +52,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Should check of_iomap return value 'fep->fec.fecp' instead of 'fep->fcc.fccp'
 
-Fixes: 976de6a8c304 ("fs_enet: Be an of_platform device when CONFIG_PPC_CPM_NEW_BINDING is set.")
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
----
- drivers/net/ethernet/freescale/fs_enet/mac-fec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-fec.c b/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
-index 99fe2c210d0f..61f4b6e50d29 100644
---- a/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
-+++ b/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
-@@ -98,7 +98,7 @@ static int do_pd_setup(struct fs_enet_private *fep)
- 		return -EINVAL;
+On 9/8/22 05:28, wangjianli wrote:
+> Delete the redundant word 'in'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/input/serio/q40kbd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/input/serio/q40kbd.c b/drivers/input/serio/q40kbd.c
+> index a1c61f5de047..fd25679af251 100644
+> --- a/drivers/input/serio/q40kbd.c
+> +++ b/drivers/input/serio/q40kbd.c
+> @@ -81,7 +81,7 @@ static void q40kbd_stop(void)
+>  
+>  /*
+>   * q40kbd_open() is called when a port is open by the higher layer.
+> - * It allocates the interrupt and enables in in the chip.
 
- 	fep->fec.fecp = of_iomap(ofdev->dev.of_node, 0);
--	if (!fep->fcc.fccp)
-+	if (!fep->fec.fecp)
- 		return -EINVAL;
+                                     enables it in the chip.
 
- 	return 0;
---
-2.17.1
+> + * It allocates the interrupt and enables in the chip.
+>   */
+>  
+>  static int q40kbd_open(struct serio *port)
 
+-- 
+~Randy

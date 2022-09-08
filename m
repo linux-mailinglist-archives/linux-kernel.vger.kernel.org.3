@@ -2,44 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145FE5B1B35
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AA85B1B41
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 13:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiIHLTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 07:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S231286AbiIHLUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 07:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiIHLSk (ORCPT
+        with ESMTP id S231281AbiIHLUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 07:18:40 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E37ED3B5;
-        Thu,  8 Sep 2022 04:18:28 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oWFYA-0002mj-Ng; Thu, 08 Sep 2022 13:18:26 +0200
-Message-ID: <dbceb7d0-8fd8-4202-2913-18e90c70ff55@leemhuis.info>
-Date:   Thu, 8 Sep 2022 13:18:26 +0200
+        Thu, 8 Sep 2022 07:20:23 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16AA6FA28
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 04:19:28 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id q21so12939692lfo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 04:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=iNS4D8S65NtETFVlL5t6U8r/BJqMmTweciJ4EUvTtkU=;
+        b=Agb4n/PkJh9KNvgaGgewkPd2pInTS1xvRzqSeJtko+vl6q6Bi/ZF5/0eFTUhkYUbNb
+         GPTiGBvmjQV50ga5vDtJxlaiF9jqaRHlq9gWS3h0tKgxPsNEPM/GXQpjcywZYc8o8+Ly
+         +f9cFHPsCST7fTQIsPAE8MGTqq4WuGMPkkShwUP1z8Up2boqP2iFCyYxtp/xlNCrZzxO
+         yPUUX+MbNB43/GyfKar520l072jW26fqkA5FrKQZs8uAc+i4B4o2fR4Fb1FOwPkxzcsz
+         b9Lce2ZYnEvViv+AsYe1N5cqKgMezKtQKy5dKBFxLLFZQ2zLInkCEQRU17vtPzPOBvSS
+         fG1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=iNS4D8S65NtETFVlL5t6U8r/BJqMmTweciJ4EUvTtkU=;
+        b=hh9AUrS5EK3EzpJlWzv0mq2Xs7JnF1GrVrF00Bof9/j798ozO8cH9OET4u6W7m/XSf
+         c4L+5IaGuPmIUm90Q6KP7tFmNVQyEao2jpX5upV0Her0ke9rJqb0j3i2pPfmn99AOiAV
+         +MrUV1tIwBTngNCxt0UmdPpG1sPggsqx7LVyIzAsuYcVCQ6loNZYMBFE1wyUIb5XS/8b
+         vdHhUm2mEZBdwlunXeX7h51dkdz2xpvc8ORJ3s1rxD8QZGEZ8SNmxbOTGlUhsg6xY7Dc
+         m/Ch5DIIBZdKKtIA2qlvzbB7LG7Lk8Ej6OE1T+hiHlwmK6K81anNb+pw/8F6c/NpCxMe
+         XNnQ==
+X-Gm-Message-State: ACgBeo13te0a/2rOiOxkJkUyGkPz7D+OPdjU7q8OiXNNwKelXBf0mA7H
+        nkh1gloyfk8dB29ITQC7I1WGrw==
+X-Google-Smtp-Source: AA6agR69Y8vwmrHUvKObGzWP7Nlk4SetLItoUzeAWtumVSWoKGzQstY7fN7XL6OTB4HvjPFGGx80Rw==
+X-Received: by 2002:a05:6512:1154:b0:48b:3020:b29 with SMTP id m20-20020a056512115400b0048b30200b29mr2461897lfg.338.1662635959295;
+        Thu, 08 Sep 2022 04:19:19 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id i5-20020a056512318500b0048d1101d0d6sm228678lfe.121.2022.09.08.04.19.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 04:19:18 -0700 (PDT)
+Message-ID: <bcb799ea-d58e-70dc-c5c2-daaff1b19bf5@linaro.org>
+Date:   Thu, 8 Sep 2022 13:19:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: Regression in 5.19.0: USB errors during boot #forregzbot
-Content-Language: en-US, de-DE
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <25342.20092.262450.330346@wylie.me.uk>
- <Yv5Q8gDvVTGOHd8k@kroah.com> <20220821062345.GA26598@lst.de>
- <25345.60162.942383.502797@wylie.me.uk> <20220821142610.GA2979@lst.de>
- <25346.25145.488362.162952@wylie.me.uk>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <25346.25145.488362.162952@wylie.me.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: net: Add Broadcom BCM4377 family PCIe
+ Bluetooth
+Content-Language: en-US
+To:     Sven Peter <sven@svenpeter.dev>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220907170935.11757-1-sven@svenpeter.dev>
+ <20220907170935.11757-3-sven@svenpeter.dev>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220907170935.11757-3-sven@svenpeter.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662635909;1dc62638;
-X-HE-SMSGID: 1oWFYA-0002mj-Ng
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,34 +89,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
-
-On 21.08.22 18:50, Alan J. Wylie wrote:
-> at 16:26 on Sun 21-Aug-2022 Christoph Hellwig (hch@lst.de) wrote:
+On 07/09/2022 19:09, Sven Peter wrote:
+> These chips are combined Wi-Fi/Bluetooth radios which expose a
+> PCI subfunction for the Bluetooth part.
+> They are found in Apple machines such as the x86 models with the T2
+> chip or the arm64 models with the M1 or M2 chips.
 > 
->> Thanks for confirming my suspicion.  I'd still like to fix the issue
->> with CONFIG_GART_IOMMU enabled once I've tracked it down.  Would you
->> be willing to test patches?
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+> changes from v1:
+>   - added apple,* pattern to brcm,board-type
+>   - s/PCI/PCIe/
+>   - fixed 1st reg cell inside the example to not contain the bus number
 > 
-> I'll be glad to help.
+> .../bindings/net/brcm,bcm4377-bluetooth.yaml  | 78 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 79 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
 > 
-> I've also had a look in the loft and my box of bits for an old
-> Athlon64/Opteron/Turion/Sempron processor, but I'm afraid all I've got
-> are:
-> 
-> Phenom II X6 1055T
-> Phenom II X2 545
-> Athlon 2  x2 270
+> diff --git a/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> new file mode 100644
+> index 000000000000..fb851f8e6bcb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/brcm,bcm4377-bluetooth.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom BCM4377 family PCIe Bluetooth Chips
+> +
+> +allOf:
+> +  - $ref: bluetooth-controller.yaml#
 
-#regzbot backburner: unusual config, workaround found, devs still want
-to fix it, but apparently not urgent
-#regzbot ignore-activity
+Put it before properties (so after description).
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> +
+> +maintainers:
+> +  - Sven Peter <sven@svenpeter.dev>
+> +
+> +description:
+> +  This binding describes Broadcom BCM4377 family PCIe-attached bluetooth chips
+> +  usually found in Apple machines. The Wi-Fi part of the chip is described in
+> +  bindings/net/wireless/brcm,bcm4329-fmac.yaml.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - pci14e4,5fa0 # BCM4377
+> +      - pci14e4,5f69 # BCM4378
+> +      - pci14e4,5f71 # BCM4387
+> +
+> +  reg:
+> +    description: PCI device identifier.
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+maxItems: X
+
+> +
+> +  brcm,board-type:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: Board type of the Bluetooth chip. This is used to decouple
+> +      the overall system board from the Bluetooth module and used to construct
+> +      firmware and calibration data filenames.
+> +      On Apple platforms, this should be the Apple module-instance codename
+> +      prefixed by "apple,", e.g. "apple,atlantisb".
+> +    pattern: '^apple,.*'
+> +
+> +  brcm,taurus-cal-blob:
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +    description: A per-device calibration blob for the Bluetooth radio. This
+> +      should be filled in by the bootloader from platform configuration
+> +      data, if necessary, and will be uploaded to the device.
+> +      This blob is used if the chip stepping of the Bluetooth module does not
+> +      support beamforming.
+
+Isn't it:
+s/beamforming/beam forming/
+?
+
+> +
+> +  brcm,taurus-bf-cal-blob:
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +    description: A per-device calibration blob for the Bluetooth radio. This
+> +      should be filled in by the bootloader from platform configuration
+> +      data, if necessary, and will be uploaded to the device.
+> +      This blob is used if the chip stepping of the Bluetooth module supports
+> +      beamforming.
+
+Same here.
+
+> +
+> +  local-bd-address: true
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - local-bd-address
+> +  - brcm,board-type
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pcie {
+> +      #address-cells = <3>;
+> +      #size-cells = <2>;
+> +
+> +      bluetooth@0,1 {
+
+The unit address seems to be different than reg.
+
+> +        compatible = "pci14e4,5f69";
+> +        reg = <0x100 0x0 0x0 0x0 0x0>;
+> +        brcm,board-type = "apple,honshu";
+> +        /* To be filled by the bootloader */
+> +        local-bd-address = [00 00 00 00 00 00];
+> +      };
+> +    };
+
+Best regards,
+Krzysztof

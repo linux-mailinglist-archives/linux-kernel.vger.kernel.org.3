@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AB95B2426
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6705B2427
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 19:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiIHRCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 13:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S230461AbiIHREA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 13:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiIHRCa (ORCPT
+        with ESMTP id S229579AbiIHRD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:02:30 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68486EA434
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:02:29 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id cb8so13441498qtb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 10:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date;
-        bh=4FKXe+Ug9h9TTK4rIUjXxMykKpWTxJo5iWfCJb/kRDQ=;
-        b=FYkcSTCDFYtfmi1XTrnA8hCoxcvVEzL7y95tnDILJ/cijlT0lMpOzisaHWoL0H0iy6
-         tbkW8Uxh2+Ivg/XKc1FKHtVjmehduJWpSkbbxYLHNdaL9EqRUxSoYBzVpmRN39nHip8D
-         CLSNh+cGdNqeWy7SJGBxgOYt1Yvu3s3IfyA50xq3uCrXKMqL2E1QmWbrGq2KCQfll7RM
-         5oOLdMOSBq3wt5urW2n/wjGVYlqxIOE16IphM9e5oojkcW5PA6AbQkReDZaMio5cNQom
-         W9fPByEkhG2QZVg6vEpdxqOgD17pkfMohNuPSKkD5SWsN6vuxkg8umPTkPe0n7UV5WiE
-         s3Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4FKXe+Ug9h9TTK4rIUjXxMykKpWTxJo5iWfCJb/kRDQ=;
-        b=SblrnSgr8Gyj1Qa9ruc291F9vTPK2+g494ahS2Zt4KZhugZ1RmAwpC+h2m03o7cupH
-         qpLr2mgDs0Xd9QkCWG1AKRxRJ253rhcP4POEebWwbG6iBolBDrE9KL5OwHlUi4kp5OKx
-         r8EIGHiPBuG1BTu0+05DnuPE9NkkrhLuhIM2CMxenl5J0gNLrf8Svy3xmAlIdZJkJPld
-         eeCM6WOQ9Fj+lhy7CGXZHhcCW65urnRMspjSkJ9zx0V8httTNo3/9eYrvPNuS4+Y8pUS
-         6ErbOJIf7LHnhtAoiX7u/NnREJn+Wmnl9L/hId4DpL2hQBGj+rCSyY69BQTXRP+yGdfe
-         n2uQ==
-X-Gm-Message-State: ACgBeo1I9YWAVTI8OF2Hc9ZFy8b1Fg00+pSrkVLpUmCTvo4gk1RvAbq5
-        dg6tzEI6/J5gh6dw/QJ0GopxqJIcMtYqeJZmwm8=
-X-Google-Smtp-Source: AA6agR5sgDlE5ML894d+PHsHU9dkGiCECAz/TWydBU5Ef/cJe+h3XbAO2Uhj/I0/gVPxm9ea/mRUG6+Rxk38ULlp1hw=
-X-Received: by 2002:a05:622a:5a07:b0:343:4e03:d5a with SMTP id
- fy7-20020a05622a5a0700b003434e030d5amr8485249qtb.357.1662656548499; Thu, 08
- Sep 2022 10:02:28 -0700 (PDT)
+        Thu, 8 Sep 2022 13:03:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1343EA63F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 10:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S72PXY7em62V5ORzoBo68HbWhNjf9hfLKLeX6cFiRBw=; b=X1xuCy4RuMs5gUYI1iEwbPB2FI
+        xQqAjy+a28O2Ik8P/N6sTMrFVGAbbkg2PANdVLnLBKLnS2eFZhXrfBIb5VX0s4IquBcbSZAk9RXhE
+        TDZTcNpKLPdZfNTBRFCegJ7xrStOXFEos7XicKF1W41myg1Eo7UwO0atKEtjw2Ds/Y5zIIRHrejXY
+        84RB/2tPV0hJAh+y/7UGVOOEjVnwJHrv10tbtrF57tLs1hMCcg3uLEi9ZbDB5BjOooXTKtnNfCtlz
+        893sVtbNOwKEO9tKdlKG8LGT1WZIiYnbk8q+ybi97wLGzCbbOAOjyA5riVeTom/lO66RwMSQxkghO
+        deBbyHgw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWKwL-00CW3s-4L; Thu, 08 Sep 2022 17:03:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0708B3006A4;
+        Thu,  8 Sep 2022 19:03:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ECFD42B9A6AC0; Thu,  8 Sep 2022 19:03:41 +0200 (CEST)
+Date:   Thu, 8 Sep 2022 19:03:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, linux-kernel@vger.kernel.org,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Subject: Re: [PATCH] locking/rwsem: Disable preemption while trying for rwsem
+ lock
+Message-ID: <YxogbSDYhsmp3CNC@hirez.programming.kicks-ass.net>
+References: <1662028090-26495-1-git-send-email-quic_mojha@quicinc.com>
+ <Yxn87KDv1h4mwbIL@hirez.programming.kicks-ass.net>
+ <0aafd6bd-6c4c-bb77-7b33-a6d04ee6e5b3@quicinc.com>
 MIME-Version: 1.0
-Sender: miamichael3321@gmail.com
-Received: by 2002:ad4:4343:0:0:0:0:0 with HTTP; Thu, 8 Sep 2022 10:02:28 -0700 (PDT)
-From:   Anthony Kwami <kwamianthony939@gmail.com>
-Date:   Thu, 8 Sep 2022 10:02:28 -0700
-X-Google-Sender-Auth: ECBwSy-SfdHaUXwayO1RQiyHBTY
-Message-ID: <CAO8TYoEy+e54n9BiVXghGqcu3MW1L9neiir0ZU=shJvQLeSKqw@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0aafd6bd-6c4c-bb77-7b33-a6d04ee6e5b3@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo,
+On Thu, Sep 08, 2022 at 09:18:29PM +0530, Mukesh Ojha wrote:
+> Hi Peter,
+> 
+> Thanks for your time in reviewing this patch.
+> 
+> On 9/8/2022 8:02 PM, Peter Zijlstra wrote:
+> > On Thu, Sep 01, 2022 at 03:58:10PM +0530, Mukesh Ojha wrote:
+> > > From: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> > > 
+> > > Make the region inside the rwsem_write_trylock non preemptible.
+> > > 
+> > > We observe RT task is hogging CPU when trying to acquire rwsem lock
+> > > which was acquired by a kworker task but before the rwsem owner was set.
+> > > 
+> > > Here is the scenario:
+> > > 1. CFS task (affined to a particular CPU) takes rwsem lock.
+> > > 
+> > > 2. CFS task gets preempted by a RT task before setting owner.
+> > > 
+> > > 3. RT task (FIFO) is trying to acquire the lock, but spinning until
+> > > RT throttling happens for the lock as the lock was taken by CFS task.
+> > > 
+> > > This patch attempts to fix the above issue by disabling preemption
+> > > until owner is set for the lock. while at it also fix this issue
+> > > at the place where owner being set/cleared.
+> > > 
+> > > Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> > > Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> > 
+> > This is not a valid SoB chain.
+> 
+> Since this patch of adding preempt disable() at rwsem_write_trylock() is
+> originated from Gokul.
+> 
+> Would be adding him in
+> Original-patch-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> 
+> Convert myself to the author/SoB.
+> 
 
-     Ich hoffe, dass Sie diesmal meine Nachricht sehen.
-
-Ich habe Ihnen vor zwei Tagen eine E-Mail geschickt, aber ich habe
-Ihre immer noch nicht erhalten
-Antwort. Ich erwarte Ihre Antwort so schnell wie m=C3=B6glich.
-
-B/ Gr=C3=BC=C3=9Fe,
-
-Antonius
+Oh, my bad, I missed From is actually Gokul. So yeah, all good, ignore
+that.

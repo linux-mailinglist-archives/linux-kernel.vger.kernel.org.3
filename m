@@ -2,116 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F3E5B23B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70955B23BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 18:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiIHQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 12:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S230416AbiIHQk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 12:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiIHQgi (ORCPT
+        with ESMTP id S230083AbiIHQkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 12:36:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE10D570E;
-        Thu,  8 Sep 2022 09:36:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 957A6B818B5;
-        Thu,  8 Sep 2022 16:36:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8FEC433C1;
-        Thu,  8 Sep 2022 16:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662654994;
-        bh=z+EAy5tr+0u3cXH5bl2QTwxzn2sBd84H77A80gvaElU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=alCtEdhdRgiGW9ouvPeAWzLHKBgiFcKflgrGN4umL8ZgvwlCt/vuOHyxMsZlaOknf
-         6r9awQI3KJ/7JMagoAP2TYbUZN+ihpRJrrqBzXa0775dC/zJbek88ugWWH8ijBKMDC
-         SUC1n4tLJ6YaGJCuyYtOMcnKMI3iUxNLqChE4V+nIxwxlaG4jwtRkgHCczbCOAEqhJ
-         JjMm9OSWn4KDv5OWHKig1nleHbxkCmn3AcoAW7Wg6MUXy6vvE+a8ecf7NZ12roYK26
-         S6toLc9x/ERxzgQLxng2NdgAf1E69bbExqT0yMCbsK+y0EZw6pF++kBtjsMRAhrnVB
-         MjlSz3kQONVtA==
-Date:   Thu, 8 Sep 2022 17:36:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     luca.ceresoli@bootlin.com
-Cc:     alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH 5/8] ASoC: rockchip: i2s-tdm: Fix clk_id usage in
- .set_sysclk()
-Message-ID: <YxoaC5OAv/oES+jQ@sirena.org.uk>
-References: <20220907142124.2532620-1-luca.ceresoli@bootlin.com>
- <20220907142124.2532620-6-luca.ceresoli@bootlin.com>
+        Thu, 8 Sep 2022 12:40:25 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA9BE620F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 09:40:23 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id o4so18339150pjp.4
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 09:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=44f96G3kCRZjV7Y8+rtld0XE0LiSAJByVTyxhZXDjtw=;
+        b=fl0OF4gPksEMzbO6l5ojcJJdCc+d34Eu6l34U9JHsmWZmYqMRhxCjrXQimUdVzxZ4Z
+         h+tlSUaFHV90shVtftbvG5kp6jvxSzUOEKtBj2Y5ndd7aK8uDUqK0mMDgxzuYabkB9X/
+         yLPxRKLVx4lqp802+KHlONlx8+g7D2gfQV2FY9nkD/vJPTNBj3IQoZeW2yJ8c5KuVD4P
+         2btMsSs/jWYhOpHZVxep5SkPu3rK/BKMxCFCG1Re+YjZWo6eWO6o4IG7Gq8pQN42LiJO
+         BGDLDtAidqsf49nSAQ+Iw8owS4IsNHK1io4In3hBdCVR0VwpuFEt11DTABFzWzxxrKt4
+         uuwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=44f96G3kCRZjV7Y8+rtld0XE0LiSAJByVTyxhZXDjtw=;
+        b=WlHPQq9hxU0hwEtYSMgy4eCDcpXBM0YsJn3L+pxyiQQGEpBLcvLb41GFikpEYjRcLB
+         Wwiv4Kw5l741okNFaC4VYfGjTpaPwdnx1EGoiJKebyIRrchA2kfK7XmtA+1IHMh/2BYY
+         vIj+nAN4s6UO4ODJAZHsbjJFrdunKmGaCCyfYQbdThmJGgW0AdC2dzhQd73v9xts3mu5
+         eMR6gSCQ5LqVHbbL8iUHu08gOO89cve4qLAvAdOFDltB4OseJ97Fp4IrPwwSRqUK0f8L
+         bNt0Yi7bbM98mRLfX3hT5Nd3pkRllNCjbksIUtiKNqdWInm2d6p0fYfXTF7YNDxRkSQS
+         hS+w==
+X-Gm-Message-State: ACgBeo39xTmbgNmQ2zi8zUMcBgSsyBxiY27OfhkizJsMcWoX2uCDV0Bt
+        PENw3c+3GdrXi71TueaaBxJAeQ==
+X-Google-Smtp-Source: AA6agR6OtvAZQ1VlqtdckX4M37HUd6tnzFOMxCB7aH5ZyWfFq8tToKkiSh7ojqXsfhbd+jx/tPhW7w==
+X-Received: by 2002:a17:90a:588c:b0:1fd:a1bc:ff71 with SMTP id j12-20020a17090a588c00b001fda1bcff71mr4945546pji.134.1662655222365;
+        Thu, 08 Sep 2022 09:40:22 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id w24-20020aa79558000000b0053725e331a1sm14927604pfq.82.2022.09.08.09.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 09:40:21 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 09:40:16 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/14] KVM: arm64: Free removed stage-2 tables in RCU
+ callback
+Message-ID: <Yxoa8AQozMWuayTD@google.com>
+References: <20220830194132.962932-1-oliver.upton@linux.dev>
+ <20220830194132.962932-10-oliver.upton@linux.dev>
+ <YxkUciuwLFvByLOu@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n9PmSJv+Ru1ZxyoW"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220907142124.2532620-6-luca.ceresoli@bootlin.com>
-X-Cookie: Metermaids eat their young.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YxkUciuwLFvByLOu@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 07, 2022 at 03:00:18PM -0700, David Matlack wrote:
+> On Tue, Aug 30, 2022 at 07:41:27PM +0000, Oliver Upton wrote:
+> > There is no real urgency to free a stage-2 subtree that was pruned.
+> > Nonetheless, KVM does the tear down in the stage-2 fault path while
+> > holding the MMU lock.
+> > 
+> > Free removed stage-2 subtrees after an RCU grace period. To guarantee
+> > all stage-2 table pages are freed before killing a VM, add an
+> > rcu_barrier() to the flush path.
+> > 
+> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> > ---
+> >  arch/arm64/kvm/mmu.c | 35 ++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 34 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index 91521f4aab97..265951c05879 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -97,6 +97,38 @@ static void *stage2_memcache_zalloc_page(void *arg)
+> >  	return kvm_mmu_memory_cache_alloc(mc);
+> >  }
+> >  
+> > +#define STAGE2_PAGE_PRIVATE_LEVEL_MASK	GENMASK_ULL(2, 0)
+> > +
+> > +static inline unsigned long stage2_page_private(u32 level, void *arg)
+> > +{
+> > +	unsigned long pvt = (unsigned long)arg;
+> > +
+> > +	BUILD_BUG_ON(KVM_PGTABLE_MAX_LEVELS > STAGE2_PAGE_PRIVATE_LEVEL_MASK);
+> > +	WARN_ON_ONCE(pvt & STAGE2_PAGE_PRIVATE_LEVEL_MASK);
+> > +
+> > +	return pvt | level;
+> > +}
+> > +
+> > +static void stage2_free_removed_table_rcu_cb(struct rcu_head *head)
+> > +{
+> > +	struct page *page = container_of(head, struct page, rcu_head);
+> > +	unsigned long pvt = page_private(page);
+> > +	void *arg = (void *)(pvt & ~STAGE2_PAGE_PRIVATE_LEVEL_MASK);
+> > +	u32 level = (u32)(pvt & STAGE2_PAGE_PRIVATE_LEVEL_MASK);
+> > +	void *pgtable = page_to_virt(page);
+> > +
+> > +	kvm_pgtable_stage2_free_removed(pgtable, level, arg);
+> > +}
+> > +
+> > +static void stage2_free_removed_table(void *pgtable, u32 level, void *arg)
+> > +{
+> > +	unsigned long pvt = stage2_page_private(level, arg);
+> > +	struct page *page = virt_to_page(pgtable);
+> > +
+> > +	set_page_private(page, (unsigned long)pvt);
+> > +	call_rcu(&page->rcu_head, stage2_free_removed_table_rcu_cb);
+> > +}
+> > +
+> >  static void *kvm_host_zalloc_pages_exact(size_t size)
+> >  {
+> >  	return alloc_pages_exact(size, GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+> > @@ -627,7 +659,7 @@ static struct kvm_pgtable_mm_ops kvm_s2_mm_ops = {
+> >  	.zalloc_page		= stage2_memcache_zalloc_page,
+> >  	.zalloc_pages_exact	= kvm_host_zalloc_pages_exact,
+> >  	.free_pages_exact	= free_pages_exact,
+> > -	.free_removed_table	= kvm_pgtable_stage2_free_removed,
+> > +	.free_removed_table	= stage2_free_removed_table,
+> >  	.get_page		= kvm_host_get_page,
+> >  	.put_page		= kvm_host_put_page,
+> >  	.page_count		= kvm_host_page_count,
+> > @@ -770,6 +802,7 @@ void kvm_free_stage2_pgd(struct kvm_s2_mmu *mmu)
+> >  	if (pgt) {
+> >  		kvm_pgtable_stage2_destroy(pgt);
+> >  		kfree(pgt);
+> > +		rcu_barrier();
+> 
+> A comment here would be useful to document the behavior. e.g.
+> 
+>         /*
+>          * Wait for all stage-2 page tables that are being freed
+>          * asynchronously via RCU callback because ...
+>          */
+> 
+> Speaking of, what's the reason for this rcu_barrier()? Is there any
+> reason why KVM can't let in-flight stage-2 freeing RCU callbacks run at
+> the end of the next grace period?
 
---n9PmSJv+Ru1ZxyoW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+After thinking about this more I have 2 follow-up questions:
 
-On Wed, Sep 07, 2022 at 04:21:21PM +0200, luca.ceresoli@bootlin.com wrote:
+1. Should the RCU barrier come before kvm_pgtable_stage2_destroy() and
+   kfree(pgt)? Otherwise an RCU callback running
+   kvm_pgtable_stage2_free_removed() could access the pgt after it has
+   been freed?
 
-> -static int rockchip_i2s_tdm_set_sysclk(struct snd_soc_dai *cpu_dai, int stream,
-> +static int rockchip_i2s_tdm_set_sysclk(struct snd_soc_dai *cpu_dai, int clk_id,
->  				       unsigned int freq, int dir)
->  {
->  	struct rk_i2s_tdm_dev *i2s_tdm = to_info(cpu_dai);
-> @@ -978,15 +981,18 @@ static int rockchip_i2s_tdm_set_sysclk(struct snd_soc_dai *cpu_dai, int stream,
->  	if (i2s_tdm->clk_trcm) {
->  		i2s_tdm->mclk_tx_freq = freq;
->  		i2s_tdm->mclk_rx_freq = freq;
-> +
-> +		dev_dbg(i2s_tdm->dev, "mclk freq: %u", freq);
->  	} else {
-> -		if (stream == SNDRV_PCM_STREAM_PLAYBACK)
-> +		if (clk_id == CLK_IDX_MCLK_TX)
->  			i2s_tdm->mclk_tx_freq = freq;
-> -		else
-> +		else if (clk_id == CLK_IDX_MCLK_RX)
->  			i2s_tdm->mclk_rx_freq = freq;
-> -	}
-> +		else
-> +			return -ENOTSUPP;
+2. In general, is it safe for kvm_pgtable_stage2_free_removed() to run
+   outside of the MMU lock? Yes the page tables have already been
+   disconnected from the tree, but kvm_pgtable_stage2_free_removed()
+   also accesses shared data structures likstruct kvm_pgtable. I *think*
+   it might be safe after you fix (1.) but it would be more robust to
+   avoid accessing shared data structures at all outside of the MMU lock
+   and just do the page table freeing in the RCU callback.
 
-This should be a switch statement for clarity and exensibility.
-
---n9PmSJv+Ru1ZxyoW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMaGgoACgkQJNaLcl1U
-h9AUXwf/Ybq47bEk4QDfoPEAToGlvieUKHsFJ8BDFyusjrLmwXm1GWgzWOuF7VuB
-rAHrRYsRWOIXHMW6oVOf+Zlll9w1n292d2eyelotnTsvAAgBi/vG6g4OmOtTD3I9
-W9rPB2x+xkR2rz/sQd/hbGxPxa6sU0ymEX5ScOuA9NejRSr3Y0t/GgY3LWOCKJsC
-2U9Oj5P/qX4qPDo/6Qf7ybfVr7jXwWsatgIzX5DyRpbKbvk9JbDMv5dssp9VStUU
-Q998qqb8+Reec2p62tuZd8JpotC3OVhkiSTcHeO0UCgcuLCz+QQ3PPxgESe9BQWG
-wUSmVEs8J1Ushh+d+5shIT+ZQyBApA==
-=MFhn
------END PGP SIGNATURE-----
-
---n9PmSJv+Ru1ZxyoW--
+> 
+> >  	}
+> >  }
+> >  
+> > -- 
+> > 2.37.2.672.g94769d06f0-goog
+> > 

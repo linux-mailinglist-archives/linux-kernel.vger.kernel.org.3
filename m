@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EA45B13D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98165B13D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Sep 2022 07:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiIHFLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 01:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S229788AbiIHFL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 01:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiIHFLP (ORCPT
+        with ESMTP id S229777AbiIHFLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 01:11:15 -0400
+        Thu, 8 Sep 2022 01:11:20 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22E34B6D6D;
-        Wed,  7 Sep 2022 22:11:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B1F6BADA2;
+        Wed,  7 Sep 2022 22:11:17 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 20835106F;
-        Wed,  7 Sep 2022 22:11:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8ED7D6E;
+        Wed,  7 Sep 2022 22:11:22 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.41.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 08AF23F7B4;
-        Wed,  7 Sep 2022 22:11:07 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 52EC53F7B4;
+        Wed,  7 Sep 2022 22:11:12 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
@@ -30,9 +30,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         James Clark <james.clark@arm.com>,
         Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH V2 3/7] arm64/perf: Update struct pmu_hw_events for BRBE
-Date:   Thu,  8 Sep 2022 10:40:42 +0530
-Message-Id: <20220908051046.465307-4-anshuman.khandual@arm.com>
+Subject: [PATCH V2 4/7] driver/perf/arm_pmu_platform: Add support for BRBE attributes detection
+Date:   Thu,  8 Sep 2022 10:40:43 +0530
+Message-Id: <20220908051046.465307-5-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220908051046.465307-1-anshuman.khandual@arm.com>
 References: <20220908051046.465307-1-anshuman.khandual@arm.com>
@@ -47,9 +47,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A single perf event instance BRBE related contexts and data will be tracked
-in struct pmu_hw_events. Hence update the structure to accommodate required
-details related to BRBE.
+This adds arm pmu infrastrure to probe BRBE implementation's attributes via
+driver exported callbacks later. The actual BRBE feature detection will be
+added by the driver itself.
+
+CPU specific BRBE entries, cycle count, format support gets detected during
+PMU init. This information gets saved in per-cpu struct pmu_hw_events which
+later helps in operating BRBE during a perf event context.
 
 Cc: Will Deacon <will@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
@@ -57,49 +61,61 @@ Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- include/linux/perf/arm_pmu.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 3d427ac0ca45..18e519e4e658 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -43,6 +43,11 @@
- 	},								\
+diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
+index 513de1f54e2d..800e4a6e8bc3 100644
+--- a/drivers/perf/arm_pmu_platform.c
++++ b/drivers/perf/arm_pmu_platform.c
+@@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
+ 	return err;
  }
  
-+/*
-+ * Maximum branch records in BRBE
-+ */
-+#define BRBE_MAX_ENTRIES 64
++static void arm_brbe_probe_cpu(void *info)
++{
++	struct pmu_hw_events *hw_events;
++	struct arm_pmu *armpmu = info;
 +
- /* The events for a given PMU register set. */
- struct pmu_hw_events {
- 	/*
-@@ -69,6 +74,23 @@ struct pmu_hw_events {
- 	struct arm_pmu		*percpu_pmu;
++	/*
++	 * Return from here, if BRBE driver has not been
++	 * implemented for this PMU. This helps prevent
++	 * kernel crash later when brbe_probe() will be
++	 * called on the PMU.
++	 */
++	if (!armpmu->brbe_probe)
++		return;
++
++	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
++	armpmu->brbe_probe(hw_events);
++}
++
++static int armpmu_request_brbe(struct arm_pmu *armpmu)
++{
++	int cpu, err = 0;
++
++	for_each_cpu(cpu, &armpmu->supported_cpus) {
++		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
++		if (err)
++			return err;
++	}
++	return err;
++}
++
+ static void armpmu_free_irqs(struct arm_pmu *armpmu)
+ {
+ 	int cpu;
+@@ -229,6 +259,10 @@ int arm_pmu_device_probe(struct platform_device *pdev,
+ 	if (ret)
+ 		goto out_free_irqs;
  
- 	int irq;
++	ret = armpmu_request_brbe(pmu);
++	if (ret)
++		goto out_free_irqs;
 +
-+	/* Detected BRBE attributes */
-+	bool				v1p1;
-+	int				brbe_cc;
-+	int				brbe_nr;
-+
-+	/* Evaluated BRBE configuration */
-+	u64				brbfcr;
-+	u64				brbcr;
-+
-+	/* Tracked BRBE context */
-+	unsigned int			brbe_users;
-+	void				*brbe_context;
-+
-+	/* Captured BRBE buffer - copied as is into perf_sample_data */
-+	struct perf_branch_stack	brbe_stack;
-+	struct perf_branch_entry	brbe_entries[BRBE_MAX_ENTRIES];
- };
- 
- enum armpmu_attr_groups {
+ 	ret = armpmu_register(pmu);
+ 	if (ret) {
+ 		dev_err(dev, "failed to register PMU devices!\n");
 -- 
 2.25.1
 

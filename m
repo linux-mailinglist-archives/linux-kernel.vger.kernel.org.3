@@ -2,256 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E315B2D31
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723ED5B2D35
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiIID7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 23:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S229687AbiIIEBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 00:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiIID66 (ORCPT
+        with ESMTP id S229562AbiIIEBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 23:58:58 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB5F3122D;
-        Thu,  8 Sep 2022 20:58:55 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MP2FM4mtRz14QWk;
-        Fri,  9 Sep 2022 11:55:03 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 11:58:53 +0800
-Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
- bcm_module_init()
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
-        <edumazet@google.com>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-References: <cover.1662606045.git.william.xuanziyang@huawei.com>
- <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
- <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
- <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
- <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
- <053c7de3-c76c-82fd-2d44-2e7c1673ae98@hartkopp.net>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <9228b20a-3baa-32ad-6059-5cf0ffdb97a3@huawei.com>
-Date:   Fri, 9 Sep 2022 11:58:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 9 Sep 2022 00:01:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7837D074A;
+        Thu,  8 Sep 2022 21:01:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A80161E35;
+        Fri,  9 Sep 2022 04:01:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16162C433C1;
+        Fri,  9 Sep 2022 04:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662696103;
+        bh=9PLi232bcOnEaVbw2xQNicyLAvrsStubFpd3g24HjS8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TKjmeoR2dbaaPj+sb57Jx3PPxOKZQnISq6tuHl3KURjplc474Wsl+FG1myLQNQq7k
+         vn+heCFNH8b+vdX1bDyNTmOZoG5Q2kzAxb8+kjed/itQsRlOg5iJE10lanYcUjyqkb
+         RMtXLmRMhhz3BWiUmEJQMe/mCAK7mYZnjk4BjrxbzSuXlCDyhTnd5/AF8bGcFewTI3
+         kNhgzS/EOHbxrAzMUnhPkxFCaFUmzWtDJqgjMF8kfpYEC4LSHh7fgDvqgjIsJ38cvm
+         gpCbQ+FqkQTsgzcmPaFmWnD7aEZMLRtiYwMADhEpdeoldiF33ZuM1rFE1OpGy9oiHm
+         gA5QrYY6nRKdg==
+Date:   Fri, 9 Sep 2022 07:01:36 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/5] selftests/sgx: Retry the ioctl()'s returned with
+ EAGAIN
+Message-ID: <Yxq6oAcGkg33tkb8@kernel.org>
+References: <20220905020411.17290-1-jarkko@kernel.org>
+ <20220905020411.17290-2-jarkko@kernel.org>
+ <fe0e7a0c-da41-5918-6ef4-8906598998a6@intel.com>
+ <Yxp4iIKjOQflQC2i@kernel.org>
+ <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <053c7de3-c76c-82fd-2d44-2e7c1673ae98@hartkopp.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 08, 2022 at 05:06:58PM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 9/8/2022 4:19 PM, Jarkko Sakkinen wrote:
+> > On Thu, Sep 08, 2022 at 03:43:06PM -0700, Reinette Chatre wrote:
+> >> Hi Jarkko and Haitao,
+> >>
+> >> On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
+> >>> From: Haitao Huang <haitao.huang@linux.intel.com>
+> >>>
+> >>> For EMODT and EREMOVE ioctl()'s with a large range, kernel
+> >>> may not finish in one shot and return EAGAIN error code
+> >>> and count of bytes of EPC pages on that operations are
+> >>> finished successfully.
+> >>>
+> >>> Change the unclobbered_vdso_oversubscribed_remove test
+> >>> to rerun the ioctl()'s in a loop, updating offset and length
+> >>> using the byte count returned in each iteration.
+> >>>
+> >>> Fixes: 6507cce561b4 ("selftests/sgx: Page removal stress test")
+> >>
+> >> Should this patch be moved to the "critical fixes for v6.0" series?
+> > 
+> > I think not because it does not risk stability of the
+> > kernel itself. It's "nice to have" but not mandatory.
+> 
+> ok, thank you for considering it.
+> 
+> ...
+> 
+> >>> @@ -453,16 +454,30 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
+> >>>  	modt_ioc.offset = heap->offset;
+> >>>  	modt_ioc.length = heap->size;
+> >>>  	modt_ioc.page_type = SGX_PAGE_TYPE_TRIM;
+> >>> -
+> >>> +	count = 0;
+> >>>  	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
+> >>>  	       heap->size);
+> >>> -	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> >>> -	errno_save = ret == -1 ? errno : 0;
+> >>> +	do {
+> >>> +		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> >>> +
+> >>> +		errno_save = ret == -1 ? errno : 0;
+> >>> +		if (errno_save != EAGAIN)
+> >>> +			break;
+> >>> +
+> >>> +		EXPECT_EQ(modt_ioc.result, 0);
+> >>
+> >> If this check triggers then there is something seriously wrong and in that case
+> >> it may also be that this loop may be unable to terminate or the error condition would
+> >> keep appearing until the loop terminates (which may be many iterations). Considering
+> >> the severity and risk I do think that ASSERT_EQ() would be more appropriate,
+> >> similar to how ASSERT_EQ() is used in patch 5/5.
+> >>
+> >> Apart from that I think that this looks good.
+> >>
+> >> Thank you very much for adding this.
+> >>
+> >> Reinette
+> > 
+> > Hmm... I could along the lines:
+> > 
+> > /*
+> >  * Get time since Epoch is milliseconds.
+> >  */
+> > unsigned long get_time(void)
+> > {
+> >     struct timeval start;
+> > 
+> >     gettimeofday(&start, NULL);
+> > 
+> >     return (unsigneg long)start.tv_sec * 1000L + (unsigned long)start.tv_usec / 1000L;
+> > }
+> > 
+> > and
+> > 
+> > #define IOCTL_RETRY_TIMEOUT 100
+> > 
+> > In the test function:
+> > 
+> >         unsigned long start_time;
+> > 
+> >         /* ... */
+> > 
+> >         start_time = get_time();
+> >         do {
+> >                 EXPECT_LT(get_time() - start_time(), IOCTL_RETRY_TIMEOUT);
+> > 
+> >                 /* ... */
+> >         }
+> > 
+> >         /* ... */
+> > 
+> > What do you think?
+> 
+> I do think that your proposal can be considered for an additional check in this
+> test but the way I understand it it does not address my feedback.
+> 
+> In this patch the flow is:
+> 
+> 	do {
+> 		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> 
+> 		errno_save = ret == -1 ? errno : 0;
+> 		if (errno_save != EAGAIN)
+> 			break;
+> 
+> 		EXPECT_EQ(modt_ioc.result, 0);
+> 		...
+> 	} while ...
 > 
 > 
-> On 9/8/22 13:14, Ziyang Xuan (William) wrote:
->>> Just another reference which make it clear that the reordering of function calls in your patch is likely not correct:
->>>
->>> https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
->>>
->>> static int __init packet_init(void)
->>> {
->>>          int rc;
->>>
->>>          rc = proto_register(&packet_proto, 0);
->>>          if (rc)
->>>                  goto out;
->>>          rc = sock_register(&packet_family_ops);
->>>          if (rc)
->>>                  goto out_proto;
->>>          rc = register_pernet_subsys(&packet_net_ops);
->>>          if (rc)
->>>                  goto out_sock;
->>>          rc = register_netdevice_notifier(&packet_netdev_notifier);
->>>          if (rc)
->>>                  goto out_pernet;
->>>
->>>          return 0;
->>>
->>> out_pernet:
->>>          unregister_pernet_subsys(&packet_net_ops);
->>> out_sock:
->>>          sock_unregister(PF_PACKET);
->>> out_proto:
->>>          proto_unregister(&packet_proto);
->>> out:
->>>          return rc;
->>> }
->>>
->>
->> I had a simple test with can_raw. kernel modification as following:
->>
->> --- a/net/can/af_can.c
->> +++ b/net/can/af_can.c
->> @@ -118,6 +118,8 @@ static int can_create(struct net *net, struct socket *sock, int protocol,
->>          const struct can_proto *cp;
->>          int err = 0;
->>
->> +       printk("%s: protocol: %d\n", __func__, protocol);
->> +
->>          sock->state = SS_UNCONNECTED;
->>
->>          if (protocol < 0 || protocol >= CAN_NPROTO)
->> diff --git a/net/can/raw.c b/net/can/raw.c
->> index 5dca1e9e44cf..6052fd0cc7b2 100644
->> --- a/net/can/raw.c
->> +++ b/net/can/raw.c
->> @@ -943,6 +943,9 @@ static __init int raw_module_init(void)
->>          pr_info("can: raw protocol\n");
->>
->>          err = can_proto_register(&raw_can_proto);
->> +       printk("%s: can_proto_register done\n", __func__);
->> +       msleep(5000); // 5s
->> +       printk("%s: to register_netdevice_notifier\n", __func__);
->>          if (err < 0)
->>                  pr_err("can: registration of raw protocol failed\n");
->>          else
->>
->> I added 5 seconds delay after can_proto_register() and some debugs.
->> Testcase codes just try to create a CAN_RAW socket in user space as following:
->>
->> int main(int argc, char **argv)
->> {
->>          int s;
->>
->>          s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
->>          if (s < 0) {
->>                  perror("socket");
->>                  return 0;
->>          }
->>          close(s);
->>          return 0;
->> }
->>
->> Execute 'modprobe can_raw' and the testcase we can get message as following:
->>
->> [  109.312767] can: raw protocol
->> [  109.312772] raw_module_init: can_proto_register done
->> [  111.296178] can_create: protocol: 1
->> [  114.809141] raw_module_init: to register_netdevice_notifier
->>
->> It proved that it can create CAN_RAW socket and process socket once can_proto_register() successfully.
->> CAN_BCM is the same.
+> If this EXPECT_EQ() check fails then it means that errno_save is EAGAIN
+> and modt_ioc.result != 0. This should never happen because in the kernel
+> (sgx_enclave_modify_types()) the only time modt_ioc.result can be set is
+> when the ioctl() returns EFAULT.
 > 
-> Well, opening a CAN_RAW socket is not a proof that you can delay register_netdevice_notifier() that much.
-> 
-> After creating the socket you need to set the netdevice and can add some CAN filters and execute bind() on that socket.
+> In my opinion this check should be changed to:
+> 		ASSERT_EQ(modt_ioc.result, 0);
 
-Yes，all these socket operations need time, most likely, register_netdevice_notifier() and register_pernet_subsys() had been done.
-But it maybe not for some reasons, for example, cpu# that runs {raw,bcm}_module_init() is stuck temporary,
-or pernet_ops_rwsem lock competition in register_netdevice_notifier() and register_pernet_subsys().
+Right, I missed this. It should be definitely ASSERT_EQ(().
 
-If the condition which I pointed happens, I think my solution can solve.
-
-> 
-> And these filters need to be removed be the netdev notifier when someone plugs out the USB CAN adapter.
-> 
->> In the vast majority of cases, creating protocol socket and operating it are after protocol module initialization.
->> The scenario that I pointed in my patch is a low probability.
->>
->> af_packet.c and af_key.c do like that doesn't mean it's very correct. I think so.
-> 
-> I'm not sure either and this is why I'm asking.
-> 
-> Maybe having the notifier enabled first does not have a negative effect when removing the USB CAN interface when there is CAN_RAW protocol has been registered.
-> 
-> But if so, the PF_PACKET code should be revisited too
-It is a low probability scenario. Maybe not everyone agrees that it is worth it. But I will try to speak my voice.
-
-Thank you.
-
-> 
-> Best regards,
-> Oliver
-> 
->>
->> Thank you for your prompt reply.
->>
->>>
->>>
->>> On 08.09.22 09:10, Oliver Hartkopp wrote:
->>>>
->>>>
->>>> On 08.09.22 05:04, Ziyang Xuan wrote:
->>>>> Now, register_netdevice_notifier() and register_pernet_subsys() are both
->>>>> after can_proto_register(). It can create CAN_BCM socket and process socket
->>>>> once can_proto_register() successfully, so it is possible missing notifier
->>>>> event or proc node creation because notifier or bcm proc directory is not
->>>>> registered or created yet. Although this is a low probability scenario, it
->>>>> is not impossible.
->>>>>
->>>>> Move register_pernet_subsys() and register_netdevice_notifier() to the
->>>>> front of can_proto_register(). In addition, register_pernet_subsys() and
->>>>> register_netdevice_notifier() may fail, check their results are necessary.
->>>>>
->>>>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->>>>> ---
->>>>>    net/can/bcm.c | 18 +++++++++++++++---
->>>>>    1 file changed, 15 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/net/can/bcm.c b/net/can/bcm.c
->>>>> index e60161bec850..e2783156bfd1 100644
->>>>> --- a/net/can/bcm.c
->>>>> +++ b/net/can/bcm.c
->>>>> @@ -1744,15 +1744,27 @@ static int __init bcm_module_init(void)
->>>>>        pr_info("can: broadcast manager protocol\n");
->>>>> +    err = register_pernet_subsys(&canbcm_pernet_ops);
->>>>> +    if (err)
->>>>> +        return err;
->>>>
->>>> Analogue to your patch for the CAN_RAW socket here (which has been applied to can-next right now) ...
->>>>
->>>> https://lore.kernel.org/linux-can/7af9401f0d2d9fed36c1667b5ac9b8df8f8b87ee.1661584485.git.william.xuanziyang@huawei.com/T/#u
->>>>
->>>> ... I'm not sure whether this is the right sequence to acquire the different resources here.
->>>>
->>>> E.g. in ipsec_pfkey_init() in af_key.c
->>>>
->>>> https://elixir.bootlin.com/linux/v5.19.7/source/net/key/af_key.c#L3887
->>>>
->>>> proto_register() is executed before register_pernet_subsys()
->>>>
->>>> Which seems to be more natural to me.
->>>>
->>>> Best regards,
->>>> Oliver
->>>>
->>>>> +
->>>>> +    err = register_netdevice_notifier(&canbcm_notifier);
->>>>> +    if (err)
->>>>> +        goto register_notifier_failed;
->>>>> +
->>>>>        err = can_proto_register(&bcm_can_proto);
->>>>>        if (err < 0) {
->>>>>            printk(KERN_ERR "can: registration of bcm protocol failed\n");
->>>>> -        return err;
->>>>> +        goto register_proto_failed;
->>>>>        }
->>>>> -    register_pernet_subsys(&canbcm_pernet_ops);
->>>>> -    register_netdevice_notifier(&canbcm_notifier);
->>>>>        return 0;
->>>>> +
->>>>> +register_proto_failed:
->>>>> +    unregister_netdevice_notifier(&canbcm_notifier);
->>>>> +register_notifier_failed:
->>>>> +    unregister_pernet_subsys(&canbcm_pernet_ops);
->>>>> +    return err;
->>>>>    }
->>>>>    static void __exit bcm_module_exit(void)
->>> .
-> .
+BR, Jarkko

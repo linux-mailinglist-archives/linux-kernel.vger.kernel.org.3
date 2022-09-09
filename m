@@ -2,147 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6BC5B2DE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 07:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1F05B2DEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 07:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiIIFCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 01:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S230131AbiIIFG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 01:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiIIFCd (ORCPT
+        with ESMTP id S229926AbiIIFGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 01:02:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E33A1203C4
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 22:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662699751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1PNt4WnP8SesGYEMWPmF26KWK+Q0I3FnYPYyt+YtwCo=;
-        b=LRYqNpoLevgJUDe+Vo7CPGEO/OzJiuZ4WtNxLCDzm13dztz9Mw2CmGclMUeMucmAPdZJ6d
-        TyyvE2SFB6/vi2NzQq1345gtjh0rMbVrzpw717Om9TAr0O31RI5e/sCLbhZEpEk0Kpk9Hu
-        rrelyRz+f5RqSI5XJenEeTSFeFjx4KU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-B9AxOiE5MOe6ZXyjNEgN0Q-1; Fri, 09 Sep 2022 01:02:28 -0400
-X-MC-Unique: B9AxOiE5MOe6ZXyjNEgN0Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D8F2880231E;
-        Fri,  9 Sep 2022 05:02:27 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.194.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C9B7E1121315;
-        Fri,  9 Sep 2022 05:02:26 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 98CF018000A3; Fri,  9 Sep 2022 07:02:24 +0200 (CEST)
-Date:   Fri, 9 Sep 2022 07:02:24 +0200
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kvm/x86: reserve bit
- KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID
-Message-ID: <20220909050224.rzlt4x7tjrespw3k@sirius.home.kraxel.org>
-References: <20220908114146.473630-1-kraxel@redhat.com>
- <YxoBtD+3sgEEiaFF@google.com>
+        Fri, 9 Sep 2022 01:06:54 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B43F125180;
+        Thu,  8 Sep 2022 22:06:52 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bs13so493671ljb.8;
+        Thu, 08 Sep 2022 22:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date;
+        bh=cwuBJuMjTVi/CkTAYIXNFMchlYeTZUc9h+0hnqcgwY8=;
+        b=hNa/gmW2fGECeFKNYN7A06mLghUODwkhBN/MW1TN2T0bISn5E/GEieGvilhx/RQl5j
+         /drIGgF1P8fX6ZFLUmwtgyh9xURlOwT8jljdjNDk/S4Ly5S9BpAD7lYcldKVcnVkZFxu
+         fQ5+r4hxWDqSk9L3O5fuQNAene5p95dU3oocR30izhZ5Iq+2hq05yq0qPXju5jFUMAmT
+         l6tRBYXvIpsg808XIhac8ECkwbK1kcyjpJmdKxpamdqz4/nekcauLAlAF1K5HTLCBdvV
+         MRrzpVKply0tAChYqKruTg/AP826eZMDkAbUK+6Er99YsWoulsaNOouUOtanDkrHxk7s
+         7iNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=cwuBJuMjTVi/CkTAYIXNFMchlYeTZUc9h+0hnqcgwY8=;
+        b=XhKQ/Qi6TBPdWUmJZfOprZiBzLtmaCM7sAvcMa9CqJQRLgI052sxkNJS+nj350bwBf
+         1W49EFXZXNBeO1K6oJ5N4Ta0FjnACRBZ1TE+8L1JQg63FbL7ds8UwXvhsmDf0bVUZtvR
+         tG6rW+1XUOnrxRqjtURmbbNS7aDRWZfcfBqvXLgw6sbJ2sywUNScwQNE+LepmJhRbRJS
+         G2FJkPFTrNVgJDcmDL3t/0SBCNjyokpIzEFPW99TpY/4/wiOUWGo90Vn4bp4m+tTf/QU
+         CyzLi8omN0l6yBAfDgwI7WWNs+crAwy0ho9P7UUtkFyaLstCkLB9ZRsem8BR5dxtqVqJ
+         aXSg==
+X-Gm-Message-State: ACgBeo3u09UBZqoFgtsc+/Fg0qV6hoAJZcEIKSBRXIMffCjtopQJk/Bo
+        qZZYsobBmwEWahiG9k5Yxto=
+X-Google-Smtp-Source: AA6agR5JEptILhAHOQnaAy+7BAcpCBGMG/fJYqDauqR7hQwlxtcaBP6BDcAoY0oSaXDd0Ai6o1g5vg==
+X-Received: by 2002:a2e:7309:0:b0:26b:df01:9f03 with SMTP id o9-20020a2e7309000000b0026bdf019f03mr954120ljc.221.1662700010642;
+        Thu, 08 Sep 2022 22:06:50 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id s2-20020a056512314200b004946a38be45sm123279lfi.50.2022.09.08.22.06.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 22:06:49 -0700 (PDT)
+Message-ID: <8736ba4e-1c61-995a-f090-ef322d84e5f6@gmail.com>
+Date:   Fri, 9 Sep 2022 08:06:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxoBtD+3sgEEiaFF@google.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk <linux-clk@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>
+References: <CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com>
+ <59b6dd0a-7cbb-5dbd-8da0-57baeba3327e@gmail.com>
+ <CAJ+vNU2FVQRwCa3DnOwkFjaZg-ntFLZmetwDbSggDXDdwOOGTg@mail.gmail.com>
+ <2ab24cc4-4aa2-d364-9b29-55f5d6b23626@denx.de>
+ <CAJ+vNU0voeMW06Je6nyrV1Ud3sT8Us+RACcQtsKUwKVaXF+dQw@mail.gmail.com>
+ <ce0ffc43-bae7-a55b-ebea-985abc765c33@denx.de>
+ <DU0PR04MB9417D8123D40FBC980E9C05388439@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <a03ce7a3-dfa5-6016-afbf-33193a5e2376@denx.de>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
+In-Reply-To: <a03ce7a3-dfa5-6016-afbf-33193a5e2376@denx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 02:52:36PM +0000, Sean Christopherson wrote:
-> On Thu, Sep 08, 2022, Gerd Hoffmann wrote:
-> > The KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID bit hints to the guest
-> > that the size of the physical address space as advertised by CPUID
-> > leaf 0x80000008 is actually valid and can be used.
-> > 
-> > Unfortunately this is not the case today with qemu.  Default behavior is
-> > to advertise 40 address bits (which I think comes from the very first x64
-> > opteron processors).  There are lots of intel desktop processors around
-> > which support less than that (36 or 39 depending on age), and when trying
-> > to use the full 40 bit address space on those things go south quickly.
-> > 
-> > This renders the physical address size information effectively useless
-> > for guests.  This patch paves the way to fix that by adding a hint for
-> > the guest so it knows whenever the physical address size is usable or
-> > not.
-> > 
-> > The plan for qemu is to set the bit when the physical address size is
-> > valid.  That is the case when qemu is started with the host-phys-bits=on
-> > option set for the cpu.  Eventually qemu can also flip the default for
-> > that option from off to on, unfortunately that isn't easy for backward
-> > compatibility reasons.
-> > 
-> > The plan for the firmware is to check that bit and when it is set just
-> > query and use the available physical address space.  When the bit is not
-> > set be conservative and try not exceed 36 bits (aka 64G) address space.
-> > The latter is what the firmware does today unconditionally.
-> > 
-> > Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
-> > ---
-> >  arch/x86/include/uapi/asm/kvm_para.h | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/include/uapi/asm/kvm_para.h b/arch/x86/include/uapi/asm/kvm_para.h
-> > index 6e64b27b2c1e..115bb34413cf 100644
-> > --- a/arch/x86/include/uapi/asm/kvm_para.h
-> > +++ b/arch/x86/include/uapi/asm/kvm_para.h
-> > @@ -37,7 +37,8 @@
-> >  #define KVM_FEATURE_HC_MAP_GPA_RANGE	16
-> >  #define KVM_FEATURE_MIGRATION_CONTROL	17
-> >  
-> > -#define KVM_HINTS_REALTIME      0
-> > +#define KVM_HINTS_REALTIME                      0
-> > +#define KVM_HINTS_PHYS_ADDRESS_SIZE_DATA_VALID  1
+Hi dee Ho peeps,
+
+On 9/9/22 05:35, Marek Vasut wrote:
+> On 9/9/22 04:06, Peng Fan wrote:
+>>> Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT 
+>>> failure
+>>>
+>>> On 9/8/22 21:25, Tim Harvey wrote:
+>>>> On Thu, Sep 8, 2022 at 9:55 AM Marek Vasut <marex@denx.de> wrote:
+>>>>>
+>>>>> On 9/8/22 18:00, Tim Harvey wrote:
+>>>>>> On Thu, Sep 1, 2022 at 9:14 PM Matti Vaittinen
+>>> <mazziesaccount@gmail.com> wrote:
+>>>>>>>
+>>>>>>> Hi Tim,
+>>>>>>>
+>>>>>>> On 9/2/22 01:23, Tim Harvey wrote:
+>>>>>>>> Greetings,
+>>>>>>>>
+>>>>>>>> I've found that the bd71847 clk driver
+>>> (CONFIG_COMMON_CLK_BD718XX
+>>>>>>>> drivers/clk/clk-bd718x7.c) disables clk-32k-out (the BD71847
+>>>>>>>> C32K_OUT
+>>>>>>>> pin) which is connected IMX8MM RTC_XTALI which ends up disabling
+>>>>>>>> the IMX RTC as well as the IMX WDOG functionality.
+>>>>>>>
+>>>>>>> //snip
+>>>>>>>
+>>>>>>>> This happens via clk_unprepare_unused() as nothing is flagging the
+>>>>>>>> clk-32k-out as being used. What should be added to the device-tree
+>>>>>>>> to signify that this clk is indeed necessary and should not be 
+>>>>>>>> disabled?
+>>>>>>>
+>>>>>>> I have seen following proposal from Marek Vasut:
+>>>>>>>
+>>>>>>>
+>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fl
+>>>>>>> ore.kernel.org%2Fall%2F20220517235919.200375-1-
+>>> marex%40denx.de%2FT%
+>>>>>>>
+>>> 2F%23m52d6d0831bf43d5f293e35cb27f3021f278d0564&amp;data=05%7C0
+>>> 1%7Cp
+>>>>>>>
+>>> eng.fan%40nxp.com%7C07d48edcc47c4694e08208da91da2bf4%7C686ea1d
+>>> 3bc2b
+>>>>>>>
+>>> 4c6fa92cd99c5c301635%7C0%7C0%7C637982664162868785%7CUnknown%
+>>> 7CTWFpb
+>>>>>>>
+>>> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
+>>> 6
+>>>>>>>
+>>> Mn0%3D%7C3000%7C%7C%7C&amp;sdata=uF26u9g4onuqCWzPRAvD%2F%
+>>> 2FLByaEhh5
+>>>>>>> Dtah9K8CcAOAM%3D&amp;reserved=0
+>>>>>>>
+>>>>>>> I am not sure if the discussion is completed though. I guess it was
+>>>>>>> agreed this was needed/usefull and maybe the remaining thing to
+>>>>>>> decide was just the property naming.
+>>>>>>>
+>>>>>>> Best Regards
+>>>>>>>            -- Matti
+>>>>>>>
+>>>>>>
+>>>>>> Thanks Matti,
+>>>>>>
+>>>>>> Marek - has there been any progress on determining how best to keep
+>>>>>> certain clocks from being disabled?
+>>>>>
+>>>>> No. You can read the discussion above.
+>>>>
+>>>> Marek,
+>>>>
+>>>> I wasn't on the linux-clk list at that time so can't respond to the
+>>>> thread but the discussion seems to have died out a couple of months
+>>>> ago with no agreement between you or Stephen on how to deal with it.
+>>>>
+>>>> So where do we take this from here? It looks like there are about 18
+>>>> boards with dt's using "rohm,bd718*" which would all have non working
+>>>> RTC/WDOG with CONFIG_COMMON_CLK_BD718XX enabled (which it is in
+>>>> arch/arm64/configs/defconfig) right?
+
+Yeah. The ROHM BD71837 and BD71847 (and BD71850 - which is one of the 
+variants) are used quite a lot. I am pretty sure not fixing this in 
+upstream is increasing downstream solutions. I don't think that should 
+be preferred.
+
+>>
+>> Is there any requirement that the bd718xx clk needs to be runtime on/off?
 > 
-> Why does KVM need to get involved?  This is purely a userspace problem.
+> Yes, the 32kHz clock on BD71xxx should behave like any other clock, 
+> unless specified otherwise, see below.
+> 
+>> I suppose the clk should always be never be off, if yes, why not have 
+>> something:
+> 
+> What is needed in this specific case of BD718xx is I think clock 
+> consumer on the MX8M clock driver side which would claim the 32kHz input 
+> from the PMIC and up the clock enable count to keep the 32 kHz clock 
+> always on.
 
-It doesn't.  I only need reserve a hints bit, and the canonical source
-for that happens to live in the kernel.  That's why this patch doesn't
-touch any actual code ;)
+This sounds like a solution that would describe the actual HW setup. I 
+don't know the CCF of the i.MX8 well enough to tell whether this can 
+ensure the clk is not disabled before the consumer is found or when the 
+consumer is going down though. Simplest thing to me would really be to 
+just mark the clk as "do-not-touch" one on the boards where it must not 
+be touched.
 
-> E.g. why not use QEMU's fw_cfg to communicate this information to the
-> guest?
+  The PMIC is most likely supplying 32 kHz clock to the MX8M,
+> which if the 32 kHz clock are turned off would hang (I observed that 
+> before too).
+> 
+> What I tried to address in this thread is a generic problem which 
+> commonly appears on various embedded systems, except every time anyone 
+> tried to solve it in a generic manner, it was rejected or they gave up.
 
-That is indeed the other obvious way to implement this.  Given this
-information will be needed in code paths which already do CPUID queries
-using CPUID to transport that information looked like the better option
-to me.
+I agree with Marek - generic solution would be nice. I don't think this 
+is something specific to this PMIC.
 
-> Defining this flag arguably breaks backwards compatibility for VMMs
-> that already accurately advertise MAXPHYADDR.  The absence of the flag
-> would imply that MAXPHYADDR is invalid, which is not the case.
+> The problem is this -- you have an arbitrary clock, and you need to keep 
+> it running always otherwise the system fails, and you do not have a 
+> clock consumer in the DT for whatever reason e.g. because the SoC is 
+> only used as a clock source for some unrelated clock net. There must be 
+> a way to mark the clock as "never disable these", i.e. critical-clock. 
+> (I feel like I keep repeating this over and over in this thread, so 
+> please read the whole thread backlog)
 
-That is true no matter how we try to transport that information from the
-host to the guest (even with fw_cfg because other hypervisors start
-using that interface too).
+Thanks for the explanation and effor you did Marek.
 
-In practice it is not much of a problem though.  The firmware needs to
-know the exact platform it runs on anyway to initialize everything
-properly, so the logic can easily be restricted to qemu.
+My take on this is that from a (generic) component vendor perspective it 
+is a bad idea to hard-code the clock status (enable/disable) in the PMIC 
+driver. A vendor wants to provide a driver which allows use of the 
+component in wide variety of systems/boards. When the PMIC contains a 
+clock gate, the PMIC driver should provide the means of controlling it. 
+Some setups may want it enabled, other disabled and some want runtime 
+control. This "use-policy" must not be hard coded in the driver - it 
+needs to come from HW description which explains how the clk line is 
+wired and potentially also from the consumer drivers. This enables the 
+same PMIC driver to support all different setups with their own needs, 
+right?
 
-take care,
-  Gerd
+I am not sure if some non email discussions have been ongoing around 
+this topic but just by reading the emails it seemed to me that Marek's 
+suggestion was acked by the DT folks - and I don't think that Stephen 
+was (at the end of the day) against that either(?). Maybe I missed 
+something.
 
+Yours
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~

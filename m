@@ -2,40 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6795B2D36
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E755B2D3A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiIIED1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 00:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S229983AbiIIEEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 00:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiIIEDV (ORCPT
+        with ESMTP id S229616AbiIIEEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 00:03:21 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A713882F84
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 21:03:19 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1B81A203AC1;
-        Fri,  9 Sep 2022 06:03:18 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C51E4203AD3;
-        Fri,  9 Sep 2022 06:03:17 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 17D9D1820F59;
-        Fri,  9 Sep 2022 12:03:16 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] ASoC: fsl_asrc: Add initialization finishing check in runtime resume
-Date:   Fri,  9 Sep 2022 11:44:58 +0800
-Message-Id: <1662695098-24602-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 9 Sep 2022 00:04:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0CBD076C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 21:03:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662696238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=slFM8Vfq1w8ltNdHtnQPBjam8+h5JdYTs6yxTf4F8W8=;
+        b=hL35hO1UhrEh6y616ZsH5PF8fv+WZyeUxPsS5GaRtC779M5UY5oPAaMYfPxXcApjIx91kl
+        xuu3jahHmCk9/WaAuApL+6DGE2857SSWDBkwmNz6mTt0Ul8javamd3S0ecAcRPho2FSUcm
+        2W22EdcUnRboXY46uZ4FeThL5rTAlno=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-241-oYY8UzDONviIPnSY1II-wQ-1; Fri, 09 Sep 2022 00:03:54 -0400
+X-MC-Unique: oYY8UzDONviIPnSY1II-wQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53DD8811E80;
+        Fri,  9 Sep 2022 04:03:54 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.32.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E1E3D2026D4C;
+        Fri,  9 Sep 2022 04:03:53 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Paul Moore <paul@paul-moore.com>, Jan Kara <jack@suse.cz>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full permission event response
+Date:   Fri, 09 Sep 2022 00:03:53 -0400
+Message-ID: <2254543.ElGaqSPkdT@x2>
+Organization: Red Hat
+In-Reply-To: <Yxqn6NVQr0jTQHiu@madcap2.tricolour.ca>
+References: <cover.1659996830.git.rgb@redhat.com> <2254258.ElGaqSPkdT@x2> <Yxqn6NVQr0jTQHiu@madcap2.tricolour.ca>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,100 +65,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the initialization is not finished, then filling input data to
-the FIFO may fail. So it is better to add initialization finishing
-check in the runtime resume for suspend & resume case.
+On Thursday, September 8, 2022 10:41:44 PM EDT Richard Guy Briggs wrote:
+> > I'm trying to abide by what was suggested by the fs-devel folks. I can
+> > live with it. But if you want to make something non-generic for all
+> > users of fanotify, call the new field "trusted". This would decern when
+> > a decision was made because the file was untrusted or access denied for
+> > another reason.
+>
+> So, "u32 trusted;" ?  How would you like that formatted?
+> "fan_trust={0|1}"
 
-And consider the case of three instances working in parallel,
-increase the retry times to 50 for more initialization time.
+So how does this play out if there is another user? Do they want a num= and 
+trust=  if not, then the AUDIT_FANOTIFY record will have multiple formats 
+which is not good. I'd rather suggest something generic that can be 
+interpreted based on who's attached to fanotify. IOW we have a fan_type=0 and 
+then followed by info0= info1=  the interpretation of those solely depend on 
+fan_type. If the fan_type does not need both, then any interpretation skips 
+what it doesn't need. If fan_type=1, then it follows what arg0= and arg1= is 
+for that format. But make this pivot on fan_type and not actual names.
+ 
+> > > You mention that you know what you want to put in the struct, why not
+> > > share the details with all of us so we are all on the same page and
+> > > can have a proper discussion.
+> > 
+> > Because I want to abide by the original agreement and not impose
+> > opinionated requirements that serve no one else. I'd rather have
+> > something anyone can use. I want to play nice.
+> 
+> If someone else wants to use something, why not give them a type of
+> their own other than FAN_RESPONSE_INFO_AUDIT_RULE that they can shape
+> however they like?
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Reviewed-by: Nicolin Chen <nicolinc@gmail.com>
----
-changes in v3:
-- update warning message.
+Please, let's keep AUDIT_FANOTIFY normalized but pivot on fan_type.
 
-changes in v2:
-- update comments.
+-Steve
 
- sound/soc/fsl/fsl_asrc.c | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
-
-diff --git a/sound/soc/fsl/fsl_asrc.c b/sound/soc/fsl/fsl_asrc.c
-index aa5edf32d988..936aef5d2767 100644
---- a/sound/soc/fsl/fsl_asrc.c
-+++ b/sound/soc/fsl/fsl_asrc.c
-@@ -20,6 +20,7 @@
- 
- #define IDEAL_RATIO_DECIMAL_DEPTH 26
- #define DIVIDER_NUM  64
-+#define INIT_RETRY_NUM 50
- 
- #define pair_err(fmt, ...) \
- 	dev_err(&asrc->pdev->dev, "Pair %c: " fmt, 'A' + index, ##__VA_ARGS__)
-@@ -27,6 +28,9 @@
- #define pair_dbg(fmt, ...) \
- 	dev_dbg(&asrc->pdev->dev, "Pair %c: " fmt, 'A' + index, ##__VA_ARGS__)
- 
-+#define pair_warn(fmt, ...) \
-+	dev_warn(&asrc->pdev->dev, "Pair %c: " fmt, 'A' + index, ##__VA_ARGS__)
-+
- /* Corresponding to process_option */
- static unsigned int supported_asrc_rate[] = {
- 	5512, 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000,
-@@ -579,7 +583,7 @@ static void fsl_asrc_start_pair(struct fsl_asrc_pair *pair)
- {
- 	struct fsl_asrc *asrc = pair->asrc;
- 	enum asrc_pair_index index = pair->index;
--	int reg, retry = 10, i;
-+	int reg, retry = INIT_RETRY_NUM, i;
- 
- 	/* Enable the current pair */
- 	regmap_update_bits(asrc->regmap, REG_ASRCTR,
-@@ -592,6 +596,10 @@ static void fsl_asrc_start_pair(struct fsl_asrc_pair *pair)
- 		reg &= ASRCFG_INIRQi_MASK(index);
- 	} while (!reg && --retry);
- 
-+	/* NOTE: Doesn't treat initialization timeout as an error */
-+	if (!retry)
-+		pair_warn("initialization isn't finished\n");
-+
- 	/* Make the input fifo to ASRC STALL level */
- 	regmap_read(asrc->regmap, REG_ASRCNCR, &reg);
- 	for (i = 0; i < pair->channels * 4; i++)
-@@ -1257,6 +1265,7 @@ static int fsl_asrc_runtime_resume(struct device *dev)
- {
- 	struct fsl_asrc *asrc = dev_get_drvdata(dev);
- 	struct fsl_asrc_priv *asrc_priv = asrc->private;
-+	int reg, retry = INIT_RETRY_NUM;
- 	int i, ret;
- 	u32 asrctr;
- 
-@@ -1295,6 +1304,24 @@ static int fsl_asrc_runtime_resume(struct device *dev)
- 	regmap_update_bits(asrc->regmap, REG_ASRCTR,
- 			   ASRCTR_ASRCEi_ALL_MASK, asrctr);
- 
-+	/* Wait for status of initialization for all enabled pairs */
-+	do {
-+		udelay(5);
-+		regmap_read(asrc->regmap, REG_ASRCFG, &reg);
-+		reg = (reg >> ASRCFG_INIRQi_SHIFT(0)) & 0x7;
-+	} while ((reg != ((asrctr >> ASRCTR_ASRCEi_SHIFT(0)) & 0x7)) && --retry);
-+
-+	/*
-+	 * NOTE: Doesn't treat initialization timeout as an error
-+	 * Some of the pairs may success, then still can continue.
-+	 */
-+	if (!retry) {
-+		for (i = ASRC_PAIR_A; i < ASRC_PAIR_MAX_NUM; i++) {
-+			if ((asrctr & ASRCTR_ASRCEi_MASK(i)) && !(reg & (1 << i)))
-+				dev_warn(dev, "Pair %c initialization isn't finished\n", 'A' + i);
-+		}
-+	}
-+
- 	return 0;
- 
- disable_asrck_clk:
--- 
-2.34.1
 

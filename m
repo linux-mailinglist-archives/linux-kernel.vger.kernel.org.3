@@ -2,238 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A07A5B2C55
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8EE85B2CBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiIIDD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 23:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S229908AbiIIDIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 23:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIIDDY (ORCPT
+        with ESMTP id S230353AbiIIDHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 23:03:24 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF551582C;
-        Thu,  8 Sep 2022 20:03:15 -0700 (PDT)
-X-UUID: c0d2c67193eb42889d5a7552711bcfff-20220909
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=nRrzLr0u0a2LxRzP4qr8jLs8uhCW1lHwfV7WYpZt4U8=;
-        b=b1y6SmNnlGbReW+FCttMYoLLKWVCvbSyUJFPYSmwY72wOgVyOY6KjyU5ATHawDqLavb8RxzXAOgVUyeqgQ/lNHcg6QSrzzJwr+XgzGF0v10wxGmO/ATce/p5lrPDjypbQQvbmZFYoCii/Id8g7RfO4vaByeWuPOovD6EiorbDgI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:39093756-2afb-4449-b842-cb0b23810449,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:45
-X-CID-INFO: VERSION:1.1.10,REQID:39093756-2afb-4449-b842-cb0b23810449,OB:0,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:45
-X-CID-META: VersionHash:84eae18,CLOUDID:8329e0eb-2856-4fce-b125-09d4c7ebe045,C
-        OID:059c1f7df189,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: c0d2c67193eb42889d5a7552711bcfff-20220909
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 756152050; Fri, 09 Sep 2022 11:03:09 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+        Thu, 8 Sep 2022 23:07:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9A11203C4;
+        Thu,  8 Sep 2022 20:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662692751; x=1694228751;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=TzKoHybW+hbX1cCR2TyqZDPa5xl3MugybeEqxvzAbMY=;
+  b=I6nwR6PeyFwzTezGFj4/Gc/nC7EYO3TOTMuMfdvk6g0VTcBEK1zqL8Qr
+   jfW058uT04h19x5h4kteRaz/3Bm8YunhRRTRqL/EXoEd/9fVdLMgHtSV5
+   YJe1hZW33YCYGwTpX47JtpaC6PeryWGaHj23tTrA9E2apmEfKpBV9l7nj
+   NWSQq4E5631j+PL9eDgSbtxMhkJgx6cwt3hy3PuLgAX8zb0/ism9mqPsQ
+   S7AOlo4adLtDhb+v/pa8uKqDMcJkHbpmkvPRIsHs8XvpvUh6LPco/ybY/
+   2Vha41eVTW/iudfyfhtnyGUUQXtOncDE2BrN2KNCvqYP+uGGS0vOP0zoM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="296118742"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="296118742"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 20:05:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="740909333"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP; 08 Sep 2022 20:05:48 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Sep 2022 20:05:48 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Sep 2022 20:05:47 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 8 Sep 2022 20:05:47 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 9 Sep 2022 11:03:08 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 9 Sep 2022 11:03:07 +0800
-Message-ID: <3b18a9c687af38f7299261c9a589ef3dfc5a1aa7.camel@mediatek.com>
-Subject: Re: [PATCH 2/7] dt-bindings: phy: mediatek,tphy: add property to
- set pre-emphasis
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Fri, 9 Sep 2022 11:03:07 +0800
-In-Reply-To: <3c180570-ecf9-3db4-c698-39c1b4679c6e@linaro.org>
-References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
-         <20220819091344.2274-2-chunfeng.yun@mediatek.com>
-         <438da392-f419-ad76-7e91-aa4aab36e12c@linaro.org>
-         <816ecf6287533137b750c8bde9de5830e4229c56.camel@mediatek.com>
-         <bee8abe5-0299-d05e-643c-4810aa33f978@linaro.org>
-         <1a16cce9fe164bafc06ae193310be71c6f645d75.camel@mediatek.com>
-         <000babd8-5980-3d77-f156-324b3442cbe7@linaro.org>
-         <114c357f8d7f049d21ede789a292a8e2d45f4c61.camel@mediatek.com>
-         <0a82842d-283c-e266-84f4-6306f29b61da@linaro.org>
-         <8dcb4de53a52ab44d40f490099b6ed13e5ef7fe0.camel@mediatek.com>
-         <3c180570-ecf9-3db4-c698-39c1b4679c6e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+ 15.1.2375.31; Thu, 8 Sep 2022 20:05:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kxgqviJ5JV3Fo6N40pBUXexMcPzGQIaTscLhFDSZpSVberiyMFS3OkmtDa5Q76oIst4tbRkZJ8myt0PDqEqpn3/WfJKnUymzYqFC/LesVvZPzXGEFR16I5dDOI907KomVJ2RYbQ/mafheIIvuz0IbcEwAEvNSqO2EeWKwSpZ/+XDscZYwsQRTo2L30Gtl8xSi/vYlv1pS50SbT+I1Tt+/GjD330P/JpwE8tF8NABuEW3efp5bytRMEy9NWYvJSMaFU1q7ry7MfXkqEIK/37E3ntC0XwjWYldpDBXRjCmYkr92Brl7Y6BeIA4cnLawVIgINTl8fIVMHrDnXxZM+CRVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PQFlPU9kboG7aUAJ9RlSo9cNFxSu37rAtR8LsDMES7o=;
+ b=QSlO1F61CYCiOq6HjtDvt4NLpug4xwc5BRVz4m+ZjvdKQlQFjGQGV8d46p2iM0rulaDWpKBPHFRUHSPWJuF9pHXIVRR70XAh8mc+rAa3SPA0PKwo5OwotjIfTfCzE/Dph31t5om57yWwb1Asp+EjoSZ4crul6H5QbiwBRd8aFAl0ZHV5NAPsaiw5YPRWkDMDPUoswFUlsTvO73dgD03PHcLkpJMWJi+j+gJ4E0I98tVbebFno7bh80bkzPB787KRXbf0o7JMcRBrw/m0wKPBDPTQTJ1d/SNEGfrHyeaXhzqYaCiWlxwwpq/oZQFBIeBgu0UWzyrxw2XltmAmXALFVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
+ (2603:10b6:301:53::18) by IA1PR11MB6217.namprd11.prod.outlook.com
+ (2603:10b6:208:3eb::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Fri, 9 Sep
+ 2022 03:05:40 +0000
+Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
+ ([fe80::e9a3:201:f95c:891e]) by MWHPR1101MB2221.namprd11.prod.outlook.com
+ ([fe80::e9a3:201:f95c:891e%7]) with mapi id 15.20.5612.019; Fri, 9 Sep 2022
+ 03:05:39 +0000
+Date:   Fri, 9 Sep 2022 11:05:34 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     <isaku.yamahata@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        <isaku.yamahata@gmail.com>, Kai Huang <kai.huang@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        John Garry <john.garry@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Huang Ying" <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH v4 10/26] KVM: Drop kvm_count_lock and instead protect
+ kvm_usage_count with kvm_lock
+Message-ID: <YxqtfmhBGQlkhTvU@gao-cwp>
+References: <cover.1662679124.git.isaku.yamahata@intel.com>
+ <c95e36034d7ffd67b7afed3ba790de921426e737.1662679124.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <c95e36034d7ffd67b7afed3ba790de921426e737.1662679124.git.isaku.yamahata@intel.com>
+X-ClientProxiedBy: SG2P153CA0039.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::8)
+ To MWHPR1101MB2221.namprd11.prod.outlook.com (2603:10b6:301:53::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2221:EE_|IA1PR11MB6217:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9a6a509-0abe-4b00-f77b-08da92102c80
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2JtHkyEJWispu6dJK0hrSQ4WE0OhF2f3LHJT60TSHgeWfwT54Upe/unsrURVs9PvTCvzoJTmVRh4SeppkAJAbxkVU65uJXhxQUvHiMl+0G5J+HkPoxESpp/CJ9J7tVtzEB9YQNTq1xK1KvSuvckkvQ2OzC31kIi/4b7Qce862sJR7AC2is1JNwIh6buPbpr731Ckk9bNVuigVRgFBWLS8RsLU6F9/Bb9wjgIZH98LVW6q5vm0SjEoRVnxNoCazcyZBIyo4/+A07aVUSI5BETFJgfk4XBzPoazcud08fBUj1/TkICWdNVb/OWUZK8+/vbLAW955N5iF62z5MOeuPmDphI/Smks2/z7ggEbmg/9HPPAS4h5hZuT3P1yHOlKw1auWf7tnSsWmk4qnFvzNDymzdHdC//qdLlqEngfDpGt097YuicHImoHkVPPYaYNlBvn/gIchRPUfG0FNX9zQJa+KVMnhgmeEHhSazS+IamfTucqWp0LJIX6JrPoFd7zNmTnp5ERnCLbDsn+vWgge7qvjlcRQs04JJ5NM9VZ3EtaAQkqU0v7FKElncM2HD8ZdLVglNJwZ2OIyAp7k2Ff+jepEPbNBeodYzrmKO2IS/MYqtL+BQ9HFeOvlACQ17GIDFijrMw8ATGrqGu9ukHQctvSebb6XvofXxL7JrLxJAu+mwZH1AukG7RzlhRns95rEqYnO1fPO9jYMK5ffEdIQz2oQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2221.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(376002)(136003)(366004)(346002)(39860400002)(26005)(6636002)(83380400001)(7416002)(6512007)(6666004)(9686003)(54906003)(6506007)(478600001)(8936002)(86362001)(44832011)(34206002)(5660300002)(33716001)(2906002)(66476007)(8676002)(66946007)(4326008)(316002)(66556008)(186003)(41300700001)(82960400001)(6486002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FFM+/ssT3KBzo0J47pTYutX0zXovW0VrJZoyAugv/6uJYT1M6IJasbikAPJ8?=
+ =?us-ascii?Q?8JxrMFjAjasQDyzYSVOE9XbURYUHm4XHBjhSCzkLk2uozy2TLRgRAa8hwV47?=
+ =?us-ascii?Q?rjlxLx2E6cGs1G0WKZnPdwe/oWXcq0yvvUlRhrMCmt77wOGNPg2Ui/rfrNVb?=
+ =?us-ascii?Q?Xaue1T0No7bHDsmHGhT3jTTBbfMpf+4nbNYC1k5fyO2JFgHuaeUQ1WXVf07E?=
+ =?us-ascii?Q?ZufwWeBCJzDZqA9vDbGYTYs8WDW65trPod8TgqXoF39Ndc5XZ7PP97Xx5Nrx?=
+ =?us-ascii?Q?8plQZHEe2SCgU8BqNOliX0cFmb7Gf/wpUjk95wdHlcrQlIFCswuOOw6WPaKV?=
+ =?us-ascii?Q?KwaOzycIrI1vRbDJ8EbhanXwyGRVna6mmKO9g+BbqyCCV0USLhZHpTW3CDj5?=
+ =?us-ascii?Q?LdXGjBHCbUAGbTbjzvt111qwPUswthAfqMydD+gk1lGJgLICup+p2cD0+lOz?=
+ =?us-ascii?Q?opdftx38QNfj/I0mcX5EWDI/MbBZoHG18lS+yBK31cUuVN/+xsz+EwJ/3d/C?=
+ =?us-ascii?Q?8k+6pxSbB6KRvUXXU57wL2y1aPyTdIs54Xxgeb/k3qUUymffTZAB+Zxk6RHl?=
+ =?us-ascii?Q?eXhQS73YESP1aplhpObtjl38d7XqehNEIBn3CzEoGqLznvNF+hxPN/7uH3Fn?=
+ =?us-ascii?Q?btEewnR4bUYOV9J1kuQVrUyuAbol7FFNDXpE7oFtzkCo4onMwOj4Ulc/gxp8?=
+ =?us-ascii?Q?1pnBvfcYIM9EP0+hKhlIIJHDPQHOsLYowBWIfAi565S56j8RfknxhsOpqC4p?=
+ =?us-ascii?Q?nUuzVANARnQA4F5WHVQUrv2NQH8df4umT0pcmVQu+cE60tnPTZ4ydHqVtu2f?=
+ =?us-ascii?Q?EUWYh1ZlodYW/hDvoaY/PkNV/amj6VABNp5nc2leRLC+OJAZYO5Pnw6SAVbI?=
+ =?us-ascii?Q?XAtuRh0BbgAOi3a7yFhYqa6+aF111TGyUde/WR9QMR8skXtJ13Ho1tiGVj0G?=
+ =?us-ascii?Q?qoX90SnqFGkXaWOY5EBhxvALW8aKTKZU/Z7i8jklO+UZJpwLBRYpQPgWfR8K?=
+ =?us-ascii?Q?N4QEs/LpWFVy8VdRoH0LVkxjZSEdDETFuyJisBRYrB81Ru2QMnUarIHIitO5?=
+ =?us-ascii?Q?8qNCqhwRCMbFixZVQH3/3lSNEvDeMiAl6dZ+gU3DtriIqzAoBTpQ0no4ldVF?=
+ =?us-ascii?Q?O//kidOiKLj9XMKo///SGhamTDbtuUqbXVzUyNLMhNH/hAtbRVPqiUJTx3XA?=
+ =?us-ascii?Q?i6TFJWJjFKBDChifJlBoQaumVnSZlJK+ESb/tYQQog6LhFlKyXeltUuJet8r?=
+ =?us-ascii?Q?3MYCcY62UkBZscubpPNqYB/TmvmpbODvQtANhohfgXFXDehhwNzrrAoMxJGD?=
+ =?us-ascii?Q?HjwF3QdQjtpv+VcNLT0YqC2sz52m05aJqGlyZS6T+3o5ncSvn5NQM27mF+7N?=
+ =?us-ascii?Q?JuWFYC8KQi3VcvQlLob4kGtaDqn/9AULZyGKTHGtmiTrztue09iHHza6L1p2?=
+ =?us-ascii?Q?J6kPdvLp7sacW5GlMCi3pNxtZa1O7N0d6tqjI/YFTg389Qsf7jdB1ypPNPFZ?=
+ =?us-ascii?Q?ZCqM/MA3Br+fFIkBD6FVksS9GWSlS/g77olsXSUBnMcBNbFpbOn/rs99LJPO?=
+ =?us-ascii?Q?OTpHpUbM5gDyhSqYDGp9RStjhdsc7LM/IIkZ62Wq?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9a6a509-0abe-4b00-f77b-08da92102c80
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2221.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2022 03:05:39.1377
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yvVRRysDhMslkXnA0F1FmM620Gy3Y0IRsw4w7XhnmEjb9Pi1yoXzj3aXwCGSx5ff80hu78cacWT/1r7rA7b2Xg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6217
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 09:03 +0300, Krzysztof Kozlowski wrote:
-> On 31/08/2022 06:00, Chunfeng Yun wrote:
-> > On Tue, 2022-08-30 at 13:08 +0300, Krzysztof Kozlowski wrote:
-> > > On 29/08/2022 05:37, Chunfeng Yun wrote:
-> > > > On Fri, 2022-08-26 at 09:36 +0300, Krzysztof Kozlowski wrote:
-> > > > > On 26/08/2022 08:36, Chunfeng Yun wrote:
-> > > > > > On Tue, 2022-08-23 at 13:24 +0300, Krzysztof Kozlowski
-> > > > > > wrote:
-> > > > > > > On 22/08/2022 10:07, Chunfeng Yun wrote:
-> > > > > > > > On Fri, 2022-08-19 at 15:15 +0300, Krzysztof Kozlowski
-> > > > > > > > wrote:
-> > > > > > > > > On 19/08/2022 12:13, Chunfeng Yun wrote:
-> > > > > > > > > > Add a property to set usb2 phy's pre-emphasis.
-> > > > > > > > > > 
-> > > > > > > > > > Signed-off-by: Chunfeng Yun <
-> > > > > > > > > > chunfeng.yun@mediatek.com>
-> > > > > > > > > > ---
-> > > > > > > > > >  Documentation/devicetree/bindings/phy/mediatek,tph
-> > > > > > > > > > y.ya
-> > > > > > > > > > ml |
-> > > > > > > > > > 7
-> > > > > > > > > > +++++++
-> > > > > > > > > >  1 file changed, 7 insertions(+)
-> > > > > > > > > > 
-> > > > > > > > > > diff --git
-> > > > > > > > > > a/Documentation/devicetree/bindings/phy/mediatek,tp
-> > > > > > > > > > hy.y
-> > > > > > > > > > aml
-> > > > > > > > > > b/Documentation/devicetree/bindings/phy/mediatek,tp
-> > > > > > > > > > hy.y
-> > > > > > > > > > aml
-> > > > > > > > > > index 848edfb1f677..aee2f3027371 100644
-> > > > > > > > > > ---
-> > > > > > > > > > a/Documentation/devicetree/bindings/phy/mediatek,tp
-> > > > > > > > > > hy.y
-> > > > > > > > > > aml
-> > > > > > > > > > +++
-> > > > > > > > > > b/Documentation/devicetree/bindings/phy/mediatek,tp
-> > > > > > > > > > hy.y
-> > > > > > > > > > aml
-> > > > > > > > > > @@ -219,6 +219,13 @@ patternProperties:
-> > > > > > > > > >          minimum: 1
-> > > > > > > > > >          maximum: 15
-> > > > > > > > > >  
-> > > > > > > > > > +      mediatek,pre-emphasis:
-> > > > > > > > > > +        description:
-> > > > > > > > > > +          The selection of pre-emphasis (U2 phy)
-> > > > > > > > > > +        $ref:
-> > > > > > > > > > /schemas/types.yaml#/definitions/uint32
-> > > > > > > > > > +        minimum: 1
-> > > > > > > > > > +        maximum: 3
-> > > > > > > > > 
-> > > > > > > > > Instead of hard-coding register values in bindings,
-> > > > > > > > > you
-> > > > > > > > > should
-> > > > > > > > > rather
-> > > > > > > > > describe here feature/effect. If it is in units, use
-> > > > > > > > > unit
-> > > > > > > > > suffixes.
-> > > > > > > > > If
-> > > > > > > > > it is some choice, usually string enum is
-> > > > > > > > > appropriate.
-> > > > > > > > 
-> > > > > > > > How about changing description as bellow:
-> > > > > > > > 
-> > > > > > > > "The level of pre-emphasis, increases one level, boosts
-> > > > > > > > the
-> > > > > > > > relative
-> > > > > > > > amplitudes of signal's higher frequencies components
-> > > > > > > > about
-> > > > > > > > 4.16%
-> > > > > > > > (U2
-> > > > > > > > phy)"
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Still the question is what is the unit. 4.16%?
-> > > > > > 
-> > > > > > No unit, it's a level value, like an index of array.
-> > > > > > 
-> > > > > 
-> > > > > So a value from register/device programming? 
-> > > > 
-> > > > Yes
-> > > > > Rather a regular units
-> > > > > should be used if that's possible. If not, this should be
-> > > > > clearly
-> > > > > described here, not some magical number which you encode into
-> > > > > DTS...
-> > > > 
-> > > > Ok, I'll add more descriptions.
-> > > 
-> > > Better use logical value, e.g.
-> > > 
-> > 
-> > 
-https://urldefense.com/v3/__https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml*L38__;Iw!!CTRNKA9wMg0ARbw!1e-h0R_uwcaHKfKC9qYfaRWYeuWRq1sLCGy3yupNmkFyuW5s1nmRotL7Y0vFG9ETLLTA$
-> > >  
-> > 
-> > Optional unit may be -percent or -bp, but the value 4.16% * X
-> > (X=1,2,3...)is not an exact value, they are variable in a range and
-> > dependent more factors.
-> > So I think use level value is simple enough.
-> 
-> Then again explain exactly what are the levels. How you wrote it last
-> time, -bp would do the trick.
+On Thu, Sep 08, 2022 at 04:25:26PM -0700, isaku.yamahata@intel.com wrote:
+>-
+>-``kvm_count_lock``
+>-^^^^^^^^^^^^^^^^^^
+>-
+>-:Type:		raw_spinlock_t
+>-:Arch:		any
+>-:Protects:	- hardware virtualization enable/disable
+>-:Comment:	'raw' because hardware enabling/disabling must be atomic /wrt
+>-		migration.
+>+                - kvm_usage_count
+>+                - hardware virtualization enable/disable
+>+:Comment:	Use cpus_read_lock() for hardware virtualization enable/disable
+>+                because hardware enabling/disabling must be atomic /wrt
+>+                migration.  The lock order is cpus lock => kvm_lock.
 
-There are many different methods of measuring pre-emphasis.
-The way used in MediaTek USB2 PHY as below:
-
-pre-emphasis level equation = Vpp/Vs -1;
-Vpp: peak-peak voltage of differential signal;
-Vs : static voltage of differential signal, normal voltage, e.g. 400mV
-for u2 phy;
-
-The pre-emphasis circuitry within t-phy can be dynamically programmed
-to three different levels of pre-emphasis. The exact value of
-pre-emphasis cannot be predetermined, because each device requires
-a percentage of pre-emphasis that is dependent on the output signal
-strength and transmission path characteristics.
-
-Below shows three programmable pre-emphasis levels for a differential
-drive signal of 400 mV. The amount of pre-emphasis changes according
-to the transmission path parameters.
-
-programmable level   typical pre-emphasis level
-1                    4.16%
-2                    8.30%
-3                    12.40%
-
-The reasons that why prefer to use programmable level in dt-binding as
-following:
-1. as you said, -bp may do the trick, but the main problem is that
-   pre-emphasis level is variable on different SoC, and is also
-   variable even on different pcb for the same SoC. e.g. for the
-   programmable level 1, pre-emphasis level may be 6% on a platform,
-   but for the programmable level 2, pre-emphasis level may be also
-   6% on another platform;
-   I think use pre-emphasis level in property, e.g. 4.16%, the
-   deviation may be bigger than 40%, may cause confusion for users,
-   due to we can't promise that the actual measurement is about 4.16%,
-   it may be 2%, or 5% when measured;
-2. the programmable / logical level is flexible when we support more
-   and pre-emphasis level, ans it is easy for us to tune the level
-   due to it's continuous value.
-3. all other vendor properties that can't provide exact measurable
-   value in this dt-binding make use of logic level, I want to
-   keep them align;
-
-Thanks a lot
+Probably "/wrt CPU hotplug" is better.
 
 > 
-> Best regards,
-> Krzysztof
+>@@ -5708,8 +5728,18 @@ static void kvm_init_debug(void)
+> 
+> static int kvm_suspend(void)
+> {
+>-	if (kvm_usage_count)
+>+	/*
+>+	 * The caller ensures that CPU hotlug is disabled by
 
+					^hotplug
+
+>+	 * cpu_hotplug_disable() and other CPUs are offlined.  No need for
+>+	 * locking.
+>+	 */
+>+	lockdep_assert_not_held(&kvm_lock);
+>+
+>+	if (kvm_usage_count) {
+>+		preempt_disable();
+> 		hardware_disable_nolock(NULL);
+>+		preempt_enable();
+
+kvm_suspend() is called with interrupt disabled. So, no need to disable
+preemption.
+
+/**
+ * syscore_suspend - Execute all the registered system core suspend callbacks.
+ *
+ * This function is executed with one CPU on-line and disabled interrupts.
+ */
+int syscore_suspend(void)
+
+
+>+	}
+> 	return 0;
+> }
+> 
+>@@ -5723,8 +5753,10 @@ static void kvm_resume(void)
+> 		return; /* FIXME: disable KVM */
+> 
+> 	if (kvm_usage_count) {
+>-		lockdep_assert_not_held(&kvm_count_lock);
+>+		lockdep_assert_not_held(&kvm_lock);
+>+		preempt_disable();
+> 		hardware_enable_nolock((void *)__func__);
+>+		preempt_enable();
+
+ditto.

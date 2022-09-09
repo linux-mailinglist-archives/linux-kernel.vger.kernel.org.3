@@ -2,144 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01F75B2B19
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 02:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B125B2B25
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 02:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiIIA1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 20:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
+        id S229730AbiIIAmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 20:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIIA1U (ORCPT
+        with ESMTP id S229480AbiIIAml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 20:27:20 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5950B6D7F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 17:27:18 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id y82so420478yby.6
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 17:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=KtLw4C6VhVX+NvaGxIgELiy/zqMzxZXxqnnlbY2OKmo=;
-        b=crQ36UMHUqt61smHrlkBEpUd9i45+PgLY5J9fqfxhS5xFt+dCvkP4on4PdtNki3lCz
-         jM3i4We244MxzTcElsXWAr4ziy26d4HtGs1NYCrV4xa+QMChQpVMk4+s4kWhnDii1Pkq
-         yYzeKV/nWRkdftx9rY3IB4MT+wQ9wCh094Kp0vVZXw/48yA0cwlfWhLtGuaSLY8c5re5
-         9AGxg9RjHE2y5qcsqP3sIfonr94qxE4z65S4RNPfz7z+epLJQ9CDfp8pOawXS7ODD5Rs
-         kWyWoTv5WYqA6M7n+wk8eECV/QUIZsewZkXxm5axMe5CRivTrrka1Y3sdLZZWgIumVtu
-         oYrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=KtLw4C6VhVX+NvaGxIgELiy/zqMzxZXxqnnlbY2OKmo=;
-        b=twjpj6MZt5aLANjzktRVQJrH5aKfcdY8ec+QAlTQ/TZjI575KK7KKByRNx6AU3oxJC
-         2JVaNohJSKPa9Xgvmno6UBKUlR4CSWAVr/Wt5v0KsOFIe0xJhavVwEgF/ei4ISfhX7Z1
-         fCCKngVq7LdvcoXxeBj4qmgbJ0ZgPoLE1HNvnGtdQVnM7YPfl4cngWKh86EkmdBucxVv
-         4jLUfWVffBKYTJT1K6hWntYPsc8710gaHcXCXOl0avDqo6D1hOR0yfDI3Mdmv8w5Jd2E
-         8gjyyFZlneufAKN4NxlAgLcywZq4LfuYGMmppDJdTaku1Y94PiUdM+NYmsd0P5nJOUoS
-         A+Zw==
-X-Gm-Message-State: ACgBeo3DotKjWBsdXmuzFdjH9MTPh79C+HOzLMKIsfkaZS4zIl+98nXZ
-        n5j2Jr8RGocgUCeyC16NzpQVnBvYVEylv0oasQNoLA==
-X-Google-Smtp-Source: AA6agR6FKEIXt4Le+vLLG6frjvQmxHhi7IpkWph1Sqqg5DDpP37KZzCFD7SHe2MzUi799BfLdccL/mK6LPn2rgcWHb8=
-X-Received: by 2002:a05:6902:2d0:b0:694:d257:4c4b with SMTP id
- w16-20020a05690202d000b00694d2574c4bmr9751150ybh.316.1662683237776; Thu, 08
- Sep 2022 17:27:17 -0700 (PDT)
+        Thu, 8 Sep 2022 20:42:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6756497512
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 17:42:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662684160; x=1694220160;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DjvKuJEMOfKUtTh1+ADXQCMoCXIYt3rwrCGshVxb2Zs=;
+  b=bvFNy8KkP3iAMU/TpJKyNzbY9TppqCqQCzrMKslm4OqU6dIjDS+u3nmI
+   OkmUkiffP/ElIL5u/nns4k32Jd+yNe4U+lxBoJIInJCZEMP4Hz8PKcoR9
+   DFBn5+hjjlu49Q7iRZ8kT1ome/N2CubM7uSQnn5WgxLyOd6Q1beEOMngX
+   +Exh90V46+0yd9GNRCcvaDHrsTEVt9tb0w95/5Sq/YW8hERkn0qUSAdyf
+   fYtM7t6RnONX5NKK9my1TVg/qv9ON2QYxkJPmk0DHvmx1EUXE7GAAGQeq
+   8hN0HQtExWgHPmksPlntrk/wuzq8TfaXbPyMZikOmNjh3Lt6Hw6X4PR01
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="361319906"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="361319906"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 17:42:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="566171242"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Sep 2022 17:42:38 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWS6P-0000V9-32;
+        Fri, 09 Sep 2022 00:42:37 +0000
+Date:   Fri, 9 Sep 2022 08:42:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arm-integrator:virt-to-pfn-v6.0-rc1 20/24]
+ arch/openrisc/include/asm/page.h:82:26: error: invalid operands to binary <<
+ (have 'void *' and 'int')
+Message-ID: <202209090813.hAnwc80U-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-10-surenb@google.com>
- <98d5f462-c4dc-a967-0ab0-f24dd3e37dff@linux.ibm.com>
-In-Reply-To: <98d5f462-c4dc-a967-0ab0-f24dd3e37dff@linux.ibm.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 8 Sep 2022 17:27:06 -0700
-Message-ID: <CAJuCfpFoJmiGYXBLwOjW36iB302=V2_vvbRwQbftr_ix_92uuQ@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND 09/28] mm/mempolicy: mark VMA as locked when
- changing protection policy
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        laurent.dufour@fr.ibm.com, paulmck@kernel.org, luto@kernel.org,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        kent.overstreet@linux.dev, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        kernel-team@android.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 7:48 AM Laurent Dufour <ldufour@linux.ibm.com> wrote=
-:
->
-> Le 01/09/2022 =C3=A0 19:34, Suren Baghdasaryan a =C3=A9crit :
-> > Protect VMA from concurrent page fault handler while performing VMA
-> > protection policy changes.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  mm/mempolicy.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> > index b73d3248d976..6be1e5c75556 100644
-> > --- a/mm/mempolicy.c
-> > +++ b/mm/mempolicy.c
-> > @@ -383,8 +383,10 @@ void mpol_rebind_mm(struct mm_struct *mm, nodemask=
-_t *new)
-> >       struct vm_area_struct *vma;
-> >
-> >       mmap_write_lock(mm);
-> > -     for (vma =3D mm->mmap; vma; vma =3D vma->vm_next)
-> > +     for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
-> > +             vma_mark_locked(vma);
-> >               mpol_rebind_policy(vma->vm_policy, new);
-> > +     }
-> >       mmap_write_unlock(mm);
-> >  }
-> >
-> > @@ -632,6 +634,7 @@ unsigned long change_prot_numa(struct vm_area_struc=
-t *vma,
-> >       struct mmu_gather tlb;
-> >       int nr_updated;
-> >
-> > +     vma_mark_locked(vma);
->
-> If I understand that corretly, the VMA itself is not impacted, only the
-> PMDs/PTEs, and they are protected using the page table locks.
->
-> Am I missing something?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git virt-to-pfn-v6.0-rc1
+head:   bc69ecf9b2a3d1f9699edab614580d6a6e090407
+commit: 50c0db6d3425ce9310be32638e83e7e8d6a0530c [20/24] openrisc: Make pfn accessors statics inlines
+config: openrisc-randconfig-r023-20220909 (https://download.01.org/0day-ci/archive/20220909/202209090813.hAnwc80U-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=50c0db6d3425ce9310be32638e83e7e8d6a0530c
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator virt-to-pfn-v6.0-rc1
+        git checkout 50c0db6d3425ce9310be32638e83e7e8d6a0530c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc prepare
 
-I thought we would not want pages faulting in the VMA for which we are
-changing the protection. However I think what you are saying is that
-page table locks would already provide a more granular synchronization
-with page fault handlers, which makes sense to me. Sounds like we can
-skip locking the VMA here as well. Nice!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> >       tlb_gather_mmu(&tlb, vma->vm_mm);
-> >
-> >       nr_updated =3D change_protection(&tlb, vma, addr, end, PAGE_NONE,
-> > @@ -765,6 +768,7 @@ static int vma_replace_policy(struct vm_area_struct=
- *vma,
-> >       if (IS_ERR(new))
-> >               return PTR_ERR(new);
-> >
-> > +     vma_mark_locked(vma);
-> >       if (vma->vm_ops && vma->vm_ops->set_policy) {
-> >               err =3D vma->vm_ops->set_policy(vma, new);
-> >               if (err)
->
+All errors (new ones prefixed by >>):
+
+   In file included from arch/openrisc/include/asm/processor.h:19,
+                    from arch/openrisc/include/asm/thread_info.h:22,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/openrisc/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from arch/openrisc/kernel/asm-offsets.c:23:
+   arch/openrisc/include/asm/page.h: In function 'pfn_to_virt':
+>> arch/openrisc/include/asm/page.h:82:26: error: invalid operands to binary << (have 'void *' and 'int')
+      82 |         return __va(pfn) << PAGE_SHIFT;
+         |                          ^~
+   make[2]: *** [scripts/Makefile.build:117: arch/openrisc/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1207: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:222: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +82 arch/openrisc/include/asm/page.h
+
+    79	
+    80	static inline void * pfn_to_virt(unsigned long pfn)
+    81	{
+  > 82		return __va(pfn) << PAGE_SHIFT;
+    83	}
+    84	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

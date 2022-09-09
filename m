@@ -2,134 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F3C5B2C4A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FDB5B2C4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiIIC4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 22:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S230007AbiIIC55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 22:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiIIC4J (ORCPT
+        with ESMTP id S229572AbiIIC5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 22:56:09 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69944E2909
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 19:56:06 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id pj10so283102pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 19:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=y9sXSthHGZ5f1Zt1Dk1XSseRcGMxGjw9uUNwvIsGKDI=;
-        b=2mvvMyi/o6zU9l1XeMBP8CZ2WYZ3PjBpPUURYIw2udqDtXqevpogy7SMEEO7vF2Pq7
-         NAozEsoicGmGag7zAZVo9vCukik1+3KTfWfh6MlTWeDH+8KxE9E7oN/TRenRXMu6owU3
-         uJ4i2kWK8FeI2Ecq1Rv6p5H0DZ2XQUVkPnm+5iEqeeuA3Wv8Us8BFZU0TmtbXKk/GEOt
-         M59HU7y22WrnC4S6rHNbKCyqutGTchEKLePXuN3RkOF/TEzz/CLB3MXwOBh2co4rp+B4
-         TrRgLfuBWBj8NqcHZIM0fsk6dUV8c7/9BMctmrveupD9nqtc1pTs/cwDKlw8cBU+ddLM
-         3huw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=y9sXSthHGZ5f1Zt1Dk1XSseRcGMxGjw9uUNwvIsGKDI=;
-        b=HletT9EIeH8+jepQ7fL9kXP+v4D3B77XaF6iG3aMJryhq0jHubIKp9DF/S4VQ/x5KZ
-         PyM0Cbrj7kcjb/Hjvhtu4iotKlwZ3yLHZ6z+FbrizBEdLLeqdKZfrCkLqJTjP+iWrJJp
-         7Xm0RtpU83JRjAxG/rwP1PaoDl+xYXHn17IBul25+hZe0uukZT15VSF1duImmJcONBVy
-         19kbj6zlT/VSsvY/HE/ZURzDGt/Ha+gGKtX+Oun5bLC//2/truGQVsJ3ctYxaYJgXNjx
-         IMFcV/66kPmK+G+eeBGSsrwkElWvW56QOeP8esBOBSH+xTGiuWe5qpKqUomdshHEsg0r
-         rVhw==
-X-Gm-Message-State: ACgBeo1C0i86GdFuJklzJg245rY01aytpVazWqat9TQT6WR7kEWfCKLs
-        wgsVwTPUyNU7ZFmCrbi3h0Wb1RehE9JAnw==
-X-Google-Smtp-Source: AA6agR6RG4TKxRMoD9khjfuQrRTANMcH9NwgOzdGFd5iQJ7xz1K14X0x+gTN1m7I2VAoF75FFMespA==
-X-Received: by 2002:a17:902:7791:b0:173:3dc2:3bb9 with SMTP id o17-20020a170902779100b001733dc23bb9mr11726542pll.153.1662692165711;
-        Thu, 08 Sep 2022 19:56:05 -0700 (PDT)
-Received: from [10.4.159.81] ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id 44-20020a17090a0faf00b00200461cfa99sm2501821pjz.11.2022.09.08.19.56.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 19:56:05 -0700 (PDT)
-Message-ID: <fa5e5a79-aa1a-a009-d0c8-0a39380a71b6@bytedance.com>
-Date:   Fri, 9 Sep 2022 10:55:55 +0800
+        Thu, 8 Sep 2022 22:57:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A150B7EDA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 19:57:51 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MP0v767GHzmVM4;
+        Fri,  9 Sep 2022 10:54:11 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 9 Sep
+ 2022 10:57:48 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <axboe@kernel.dk>
+CC:     <dhowells@redhat.com>, <vbabka@suse.cz>, <willy@infradead.org>,
+        <akpm@linux-foundation.org>, <zhanglianjie@uniontech.com>,
+        <neilb@suse.de>, <jack@suse.cz>, <bvanassche@acm.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH] writeback: remove unused macro DIRTY_FULL_SCOPE
+Date:   Fri, 9 Sep 2022 10:57:11 +0800
+Message-ID: <20220909025711.32012-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [External] Re: [PATCH] cgroup/cpuset: Add a new isolated
- mems.policy type.
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, lizefan.x@bytedance.com,
-        wuyun.abel@bytedance.com
-References: <20220904040241.1708-1-hezhongkun.hzk@bytedance.com>
- <YxWbBYZKDTrkmlOe@dhcp22.suse.cz>
- <0e5f380b-9201-0f56-9144-ce8449491fc8@bytedance.com>
- <YxXUjvWmZoG9vVNV@dhcp22.suse.cz>
- <ca5e57fd-4699-2cec-b328-3d6bac43c8ef@bytedance.com>
- <Yxc+HZ6rjcR535oN@dhcp22.suse.cz>
- <93d76370-6c43-5560-9a5f-f76a8cc979e0@bytedance.com>
- <YxmXeC7te2HAi4dX@dhcp22.suse.cz>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <YxmXeC7te2HAi4dX@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed 07-09-22 21:50:24, Zhongkun He wrote:
-> [...]
->>> Do you really need to change the policy itself or only the effective
->>> nodemask? Do you need any other policy than bind and preferred?
->>
->> Yes, we need to change the policy, not only his nodemask. we really want
->> policy is interleave, and extend it to weight-interleave.
->> Say something like the following
->> 			node       weight
->>      interleave:		 0-3       1:1:1:1  default one by one
->>      weight-interleave:   0-3       1:2:4:6  alloc pages by weight
->> 					    (User set weight.)
->> In the actual usecase, the remaining resources of each node are different,
->> and the use of interleave cannot maximize the use of resources.
-> 
-> OK, this seems a separate topic. It would be good to start by proposing
-> that new policy in isolation with the semantic description.
-> 
->> Back to the previous question.
->>> The question is how to implement that with a sensible semantic.
->>
->> Thanks for your analysis and suggestions.It is really difficult to add
->> policy directly to cgroup for the hierarchical enforcement. It would be a
->> good idea to add pidfd_set_mempolicy.
-> 
-> Are you going to pursue that path?
->   
->> Also, there is a new idea.
->> We can try to separate the elements of mempolicy and use them independently.
->> Mempolicy has two meanings:
->>      nodes:which nodes to use(nodes,0-3), we can use cpuset's effective_mems
->> directly.
->>      mode:how to use them(bind,prefer,etc). change the mode to a
->> cpuset->flags,such as CS_INTERLEAVE。
->> task_struct->mems_allowed is equal to cpuset->effective_mems,which is
->> hierarchical enforcement。CS_INTERLEAVE can also be updated into tasks，
->> just like other flags(CS_SPREAD_PAGE).
->> When a process needs to allocate memory, it can find the appropriate node to
->> allocate pages according to the flag and mems_allowed.
-> 
-> I am not sure I see the advantage as the mode and nodes are always
-> closely coupled. You cannot really have one wihtout the other.
-> 
+It's introduced but never used. Remove it.
 
-Hi Michal, thanks for your suggestion and reply.
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ include/linux/writeback.h | 8 --------
+ 1 file changed, 8 deletions(-)
 
- > Are you going to pursue that path?
+diff --git a/include/linux/writeback.h b/include/linux/writeback.h
+index 3f045f6d6c4f..06f9291b6fd5 100644
+--- a/include/linux/writeback.h
++++ b/include/linux/writeback.h
+@@ -17,20 +17,12 @@ struct bio;
+ DECLARE_PER_CPU(int, dirty_throttle_leaks);
+ 
+ /*
+- * The 1/4 region under the global dirty thresh is for smooth dirty throttling:
+- *
+- *	(thresh - thresh/DIRTY_FULL_SCOPE, thresh)
+- *
+- * Further beyond, all dirtier tasks will enter a loop waiting (possibly long
+- * time) for the dirty pages to drop, unless written enough pages.
+- *
+  * The global dirty threshold is normally equal to the global dirty limit,
+  * except when the system suddenly allocates a lot of anonymous memory and
+  * knocks down the global dirty threshold quickly, in which case the global
+  * dirty limit will follow down slowly to prevent livelocking all dirtier tasks.
+  */
+ #define DIRTY_SCOPE		8
+-#define DIRTY_FULL_SCOPE	(DIRTY_SCOPE / 2)
+ 
+ struct backing_dev_info;
+ 
+-- 
+2.23.0
 
-Yes，I'll give it a try as it makes sense to modify the policy dynamically.
-
-Thanks.

@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8D55B2DD1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037BA5B2DD3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiIIExm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 00:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S230099AbiIIEys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 00:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiIIExj (ORCPT
+        with ESMTP id S229578AbiIIEyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 00:53:39 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC11123EE7;
-        Thu,  8 Sep 2022 21:53:38 -0700 (PDT)
-Received: from [192.168.0.6] (ip5f5aedd0.dynamic.kabel-deutschland.de [95.90.237.208])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7E82861EA1929;
-        Fri,  9 Sep 2022 06:53:35 +0200 (CEST)
-Message-ID: <4ccf5784-9e7f-6faf-a710-a97273ebd737@molgen.mpg.de>
-Date:   Fri, 9 Sep 2022 06:53:34 +0200
+        Fri, 9 Sep 2022 00:54:46 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F46D2528B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 21:54:45 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id BDA8E5C00E5;
+        Fri,  9 Sep 2022 00:54:44 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 09 Sep 2022 00:54:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1662699284; x=
+        1662785684; bh=amv9ICltjZk+eIYa+llWaKBwwrexAvmDG285zE+xSs4=; b=U
+        Bepp5EnGejqtxUrflkxrG2bfdX6wWVkuEr6E5JnQgq+bVXY+r90c6/JLTVkQNSSI
+        6y3NRGAIt+ViAnXdMBAHJqcCduYN6Gb4QKsxEZpYdYRzzzYv4o0h3q4bzNgoAbOM
+        m3hV7uKDO5h9Rnbl4gLMC5xnHNJ/9ynneNFEWGaWR7FZ0oCaqLLQV+cnwTWWezBi
+        OKoOLtdEiIczsuycfbq7rx5hi967OXSl25gFYzwMA8tcNYwkPwBU3INOAcfsM3jo
+        M0CIHUcpxTT/7ZHqArKmvX4Xf7cgJZVu7N1+p1s2DZx8i44tbaVdCh8RsoEQ9v2C
+        WFfH3t4Oy2I5AwWhLBNAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662699284; x=
+        1662785684; bh=amv9ICltjZk+eIYa+llWaKBwwrexAvmDG285zE+xSs4=; b=m
+        qZQEF/A34CRE9SqJEHjn/J3BnC+MEwhtVSjNObo/Re7gfIQYRUbPt4HZ1Kk2hlpe
+        dRDVgR0T7NEzSgzBxvZXtSaOWb82/1fgWzDXv/7dZAT4BiZ6S6r54Q8H1GM/cKli
+        3pCzqoUUp6FXfs6J4pVvoNMl8U4s8g5fbEAKZzEgINvrUUP2+6IU8qrUDQ4zH0xu
+        zbmTjhAGd9mX8MJ7Jcs3+rmDng43TOkppOEQwMdgrpYFx0XkV+xXTzWzxS8x38uV
+        O56B7Q6bBcUzSLqvRKdvrdB8uDFT03oe6Ddn5t2V5l2j6DzLqW9G10AxZIe0Nl70
+        HAbiXY3IEehfAF5aOsHKg==
+X-ME-Sender: <xms:FMcaY3rDW-O_HgBHCJCb6hgT_Y8e573Oy_1BHFc0NWY3L8Pqw87ppQ>
+    <xme:FMcaYxrzH4imNxLTJt_WXmoWOzpo_hugEmnua_G-4NfDUsSH2vJO-aMd7dDQkv4I5
+    eFSW27riT_disZWSA>
+X-ME-Received: <xmr:FMcaY0M2XEn1s8BDKWSKJ7W8WPKD27XAgJ-qaQJFGCReOSH8EhCmxhpYo_JjSBUTjD-a95XiNe0D818pv2wauOGkJY7PZcfzmUZ7KgmQM93lSbP2NYHRgRQ2gQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtgedgledtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvfevfhfhkffffgggjggtgfesth
+    ejredttdefjeenucfhrhhomhepufgrmhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghl
+    sehshhholhhlrghnugdrohhrgheqnecuggftrfgrthhtvghrnhepffdtveekvdegkeeuue
+    etgfetffeileevudekuefhheelvdfhiedtheduhfduhefhnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnug
+    drohhrgh
+X-ME-Proxy: <xmx:FMcaY664qnk1pDT8q_nKVVrHilvpdVsGEIhCM7ukH2eBeuu0XpEmCQ>
+    <xmx:FMcaY266SJD-Rg_ff8h-41H76Ms_czO8xdOR-GGfdKDqTvOt2c6t4A>
+    <xmx:FMcaYyjRxIhM7PDeRc3bTCT-b_BycRvVG_UmRlzyaE5tVCOAG7GCvw>
+    <xmx:FMcaY_Fgt0WpstGGPYE-nzc_VuDsaTOxlLxjJGwP0WQj2g1ZKHDfaw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Sep 2022 00:54:43 -0400 (EDT)
+Subject: Re: [PATCH v9 1/2] ASoC: sunxi: Add Allwinner H6 Digital MIC driver
+To:     Ban Tao <fengzheng923@gmail.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com, wens@csie.org,
+        jernej.skrabec@gmail.com
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <1661870696-31042-1-git-send-email-fengzheng923@gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <2e7a0006-00c9-c85a-8d05-144bed24dfba@sholland.org>
+Date:   Thu, 8 Sep 2022 23:54:42 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 2/3] md: Remove extra mddev_get() in md_seq_start()
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20220908161516.4361-1-logang@deltatee.com>
- <20220908161516.4361-3-logang@deltatee.com>
+In-Reply-To: <1661870696-31042-1-git-send-email-fengzheng923@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220908161516.4361-3-logang@deltatee.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Logan,
-
-
-Thank you for the updated series. One nit below, which could be 
-corrected by the maintainer before applying.
-
-Am 08.09.22 um 18:15 schrieb Logan Gunthorpe:
-> A regression is seen where mddev devices stay permanently after they
-> are stopped due to an elevated reference count.
+On 8/30/22 9:44 AM, Ban Tao wrote:
+> The Allwinner H6 and later SoCs have an DMIC block
+> which is capable of capture.
 > 
-> This was tracked down to an extra mddev_get() in md_seq_start().
-> 
-> It only happened rarely because most of the time the md_seq_start()
-> is called with a zero offset. The path with an extra mddev_get() only
-> happens when it starts with a non-zero offset.
-> 
-> The commit noted below changed an mddev_get() to check its success
-> but inadevrtantly left the original call in. Remove the extra call.
+> Signed-off-by: Ban Tao <fengzheng923@gmail.com>
+> Tested-by: Samuel Holland <samuel@sholland.org>
 
-inadvertently
+Looks good, thanks!
 
-> Fixes: 12a6caf27324 ("md: only delete entries from all_mddevs when the disk is freed")
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Acked-by: Guoqing Jiang <Guoqing.jiang@linux.dev>
-> ---
->   drivers/md/md.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> index afaf36b2f6ab..9dc0175280b4 100644
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -8154,7 +8154,6 @@ static void *md_seq_start(struct seq_file *seq, loff_t *pos)
->   	list_for_each(tmp,&all_mddevs)
->   		if (!l--) {
->   			mddev = list_entry(tmp, struct mddev, all_mddevs);
-> -			mddev_get(mddev);
->   			if (!mddev_get(mddev))
->   				continue;
->   			spin_unlock(&all_mddevs_lock);
-
-
-Kind regards,
-
-Paul
+Reviewed-by: Samuel Holland <samuel@sholland.org>

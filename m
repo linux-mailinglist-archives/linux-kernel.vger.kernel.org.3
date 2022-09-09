@@ -2,174 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5742C5B2C29
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949995B2C2E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiIICfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 22:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        id S229983AbiIICft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 22:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiIICfO (ORCPT
+        with ESMTP id S229965AbiIICfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 22:35:14 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFF86BD45;
-        Thu,  8 Sep 2022 19:35:10 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 77E8984A5B;
-        Fri,  9 Sep 2022 04:35:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1662690908;
-        bh=KZUxrLB9w3Y4O3+rbswXA7Hu2cCIB7pHxP9oYGvuKoI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tjTYyVa6jqfR3iUW9w+Lo3UY6twwuQte/MOC9MvZ421VURsZ9rFJXJqM8xsg9Oj/G
-         oqc3LE9YH5/iFkXUaNgS4UJcbmtl6HviqogiIOzzlFIneyfS4eyU0JKL8Ovd+HDrHN
-         VP77qkEaPCITRI6S168OlwiqTennd5ibc2biPFsrFVBkm3zjwYXdYBA8/i/O9quw9v
-         y0L5gBLMxQU7oc+mmZXClR0QPTiSF8ydtADBdRCxH9hSP3+KCdKqGniZ7nK8v3iLWo
-         iU4kNmd3OkEhM5TH35ipZ6NETo3fKsmbttE0Tm73sYxPB3TV0QJn0JZFaT//Y2o+RR
-         jdam9fKwk1trg==
-Message-ID: <a03ce7a3-dfa5-6016-afbf-33193a5e2376@denx.de>
-Date:   Fri, 9 Sep 2022 04:35:06 +0200
+        Thu, 8 Sep 2022 22:35:47 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9662BB01E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 19:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662690945; x=1694226945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U1hSfds/0CHqbUVcqtbT2D1gvOsodINiriQZ+MVT87w=;
+  b=D/CyEKXigMxkE4gdMxBkFY3khPFtQ9STehJDSCH3hSoOUp1QNq6oCnRu
+   2AIH+gv5dkknnW4J9GrnHB6QWGxHp6w1NjicQoe/1J94yxztQwBE0NWNB
+   3xj07KDgdC73qlAxWlkF9+FmyL4lA6wZ4EViypBp6N6jxOoblropig/oo
+   kWpPudaAyJ5f0Je+dkjtwE6s7wfKhwcAaVI6G1MPWA4dWsu0Y+upGUYnk
+   V1VJ+fmBsReD/ruvxpBdo5Q6U8sqPmoB8S6TYKs+VaWP/gYYwtVvPzlot
+   Zk1LnsCEFQ3pA6VlXslw1OQSwN6bapuqD4iSUUzGbB8PXJupB1nWwguoN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="280405055"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="280405055"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 19:35:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="592436885"
+Received: from lkp-server02.sh.intel.com (HELO b2938d2e5c5a) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 08 Sep 2022 19:35:43 -0700
+Received: from kbuild by b2938d2e5c5a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oWTrq-0000bb-1n;
+        Fri, 09 Sep 2022 02:35:42 +0000
+Date:   Fri, 9 Sep 2022 10:35:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v1 19/19] powerpc: Remove impossible mmu_psize_defs[] on
+ nohash
+Message-ID: <202209091055.Tq3tkK5a-lkp@intel.com>
+References: <304d1442c5caa276c87c2caa615fcb6eed96c30c.1662658653.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>
-References: <CAJ+vNU1Za2CPGVX3q4HKufsxbL5zRrk1B5CWFpKritetrTs4dA@mail.gmail.com>
- <59b6dd0a-7cbb-5dbd-8da0-57baeba3327e@gmail.com>
- <CAJ+vNU2FVQRwCa3DnOwkFjaZg-ntFLZmetwDbSggDXDdwOOGTg@mail.gmail.com>
- <2ab24cc4-4aa2-d364-9b29-55f5d6b23626@denx.de>
- <CAJ+vNU0voeMW06Je6nyrV1Ud3sT8Us+RACcQtsKUwKVaXF+dQw@mail.gmail.com>
- <ce0ffc43-bae7-a55b-ebea-985abc765c33@denx.de>
- <DU0PR04MB9417D8123D40FBC980E9C05388439@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <DU0PR04MB9417D8123D40FBC980E9C05388439@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <304d1442c5caa276c87c2caa615fcb6eed96c30c.1662658653.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/9/22 04:06, Peng Fan wrote:
->> Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
->>
->> On 9/8/22 21:25, Tim Harvey wrote:
->>> On Thu, Sep 8, 2022 at 9:55 AM Marek Vasut <marex@denx.de> wrote:
->>>>
->>>> On 9/8/22 18:00, Tim Harvey wrote:
->>>>> On Thu, Sep 1, 2022 at 9:14 PM Matti Vaittinen
->> <mazziesaccount@gmail.com> wrote:
->>>>>>
->>>>>> Hi Tim,
->>>>>>
->>>>>> On 9/2/22 01:23, Tim Harvey wrote:
->>>>>>> Greetings,
->>>>>>>
->>>>>>> I've found that the bd71847 clk driver
->> (CONFIG_COMMON_CLK_BD718XX
->>>>>>> drivers/clk/clk-bd718x7.c) disables clk-32k-out (the BD71847
->>>>>>> C32K_OUT
->>>>>>> pin) which is connected IMX8MM RTC_XTALI which ends up disabling
->>>>>>> the IMX RTC as well as the IMX WDOG functionality.
->>>>>>
->>>>>> //snip
->>>>>>
->>>>>>> This happens via clk_unprepare_unused() as nothing is flagging the
->>>>>>> clk-32k-out as being used. What should be added to the device-tree
->>>>>>> to signify that this clk is indeed necessary and should not be disabled?
->>>>>>
->>>>>> I have seen following proposal from Marek Vasut:
->>>>>>
->>>>>>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fl
->>>>>> ore.kernel.org%2Fall%2F20220517235919.200375-1-
->> marex%40denx.de%2FT%
->>>>>>
->> 2F%23m52d6d0831bf43d5f293e35cb27f3021f278d0564&amp;data=05%7C0
->> 1%7Cp
->>>>>>
->> eng.fan%40nxp.com%7C07d48edcc47c4694e08208da91da2bf4%7C686ea1d
->> 3bc2b
->>>>>>
->> 4c6fa92cd99c5c301635%7C0%7C0%7C637982664162868785%7CUnknown%
->> 7CTWFpb
->>>>>>
->> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
->> 6
->>>>>>
->> Mn0%3D%7C3000%7C%7C%7C&amp;sdata=uF26u9g4onuqCWzPRAvD%2F%
->> 2FLByaEhh5
->>>>>> Dtah9K8CcAOAM%3D&amp;reserved=0
->>>>>>
->>>>>> I am not sure if the discussion is completed though. I guess it was
->>>>>> agreed this was needed/usefull and maybe the remaining thing to
->>>>>> decide was just the property naming.
->>>>>>
->>>>>> Best Regards
->>>>>>            -- Matti
->>>>>>
->>>>>
->>>>> Thanks Matti,
->>>>>
->>>>> Marek - has there been any progress on determining how best to keep
->>>>> certain clocks from being disabled?
->>>>
->>>> No. You can read the discussion above.
->>>
->>> Marek,
->>>
->>> I wasn't on the linux-clk list at that time so can't respond to the
->>> thread but the discussion seems to have died out a couple of months
->>> ago with no agreement between you or Stephen on how to deal with it.
->>>
->>> So where do we take this from here? It looks like there are about 18
->>> boards with dt's using "rohm,bd718*" which would all have non working
->>> RTC/WDOG with CONFIG_COMMON_CLK_BD718XX enabled (which it is in
->>> arch/arm64/configs/defconfig) right?
-> 
-> Is there any requirement that the bd718xx clk needs to be runtime on/off?
+Hi Christophe,
 
-Yes, the 32kHz clock on BD71xxx should behave like any other clock, 
-unless specified otherwise, see below.
+I love your patch! Yet something to improve:
 
-> I suppose the clk should always be never be off, if yes, why not have something:
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on powerpc/topic/ppc-kvm linus/master v6.0-rc4 next-20220908]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-What is needed in this specific case of BD718xx is I think clock 
-consumer on the MX8M clock driver side which would claim the 32kHz input 
-from the PMIC and up the clock enable count to keep the 32 kHz clock 
-always on. The PMIC is most likely supplying 32 kHz clock to the MX8M, 
-which if the 32 kHz clock are turned off would hang (I observed that 
-before too).
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/powerpc-Kconfig-Fix-non-existing-CONFIG_PPC_FSL_BOOKE/20220909-014729
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-fsp2_defconfig (https://download.01.org/0day-ci/archive/20220909/202209091055.Tq3tkK5a-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/452a31e5ede29b8b06cd0db37bf68959ce3d753a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christophe-Leroy/powerpc-Kconfig-Fix-non-existing-CONFIG_PPC_FSL_BOOKE/20220909-014729
+        git checkout 452a31e5ede29b8b06cd0db37bf68959ce3d753a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-What I tried to address in this thread is a generic problem which 
-commonly appears on various embedded systems, except every time anyone 
-tried to solve it in a generic manner, it was rejected or they gave up.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The problem is this -- you have an arbitrary clock, and you need to keep 
-it running always otherwise the system fails, and you do not have a 
-clock consumer in the DT for whatever reason e.g. because the SoC is 
-only used as a clock source for some unrelated clock net. There must be 
-a way to mark the clock as "never disable these", i.e. critical-clock. 
-(I feel like I keep repeating this over and over in this thread, so 
-please read the whole thread backlog)
+All errors (new ones prefixed by >>):
+
+   __do_insb
+   ^
+   arch/powerpc/include/asm/io.h:577:56: note: expanded from macro '__do_insb'
+   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:45:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:224:1: note: expanded from here
+   __do_insw
+   ^
+   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:226:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:228:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:230:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/mm/nohash/tlb.c:29:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:232:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> arch/powerpc/mm/nohash/tlb.c:104:9: error: use of undeclared identifier 'mmu_psize_defs'
+           return mmu_psize_defs[psize].enc;
+                  ^
+>> arch/powerpc/mm/nohash/tlb.c:106:2: error: #else without #if
+   #else
+    ^
+>> arch/powerpc/mm/nohash/tlb.c:107:19: error: redefinition of 'mmu_get_tsize'
+   static inline int mmu_get_tsize(int psize)
+                     ^
+   arch/powerpc/mm/nohash/tlb.c:102:19: note: previous definition is here
+   static inline int mmu_get_tsize(int psize)
+                     ^
+>> arch/powerpc/mm/nohash/tlb.c:112:2: error: #endif without #if
+   #endif /* CONFIG_PPC_E500 */
+    ^
+   arch/powerpc/mm/nohash/tlb.c:315:13: error: no previous prototype for function 'early_init_mmu_47x' [-Werror,-Wmissing-prototypes]
+   void __init early_init_mmu_47x(void)
+               ^
+   arch/powerpc/mm/nohash/tlb.c:315:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init early_init_mmu_47x(void)
+   ^
+   static 
+   11 errors generated.
+
+
+vim +/mmu_psize_defs +104 arch/powerpc/mm/nohash/tlb.c
+
+41151e77a4d96e arch/powerpc/mm/tlb_nohash.c Becky Bruce            2011-06-28  101  
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  102  static inline int mmu_get_tsize(int psize)
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  103  {
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23 @104  	return mmu_psize_defs[psize].enc;
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  105  }
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23 @106  #else
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23 @107  static inline int mmu_get_tsize(int psize)
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  108  {
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  109  	/* This isn't used on !Book3E for now */
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  110  	return 0;
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  111  }
+823ee1119f6e4c arch/powerpc/mm/nohash/tlb.c Christophe Leroy       2022-09-08 @112  #endif /* CONFIG_PPC_E500 */
+25d21ad6e799cc arch/powerpc/mm/tlb_nohash.c Benjamin Herrenschmidt 2009-07-23  113  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

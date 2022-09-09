@@ -2,190 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723ED5B2D35
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE005B2CA5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiIIEBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 00:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S230083AbiIIDEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 23:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiIIEBp (ORCPT
+        with ESMTP id S229529AbiIIDEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 00:01:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7837D074A;
-        Thu,  8 Sep 2022 21:01:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A80161E35;
-        Fri,  9 Sep 2022 04:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16162C433C1;
-        Fri,  9 Sep 2022 04:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662696103;
-        bh=9PLi232bcOnEaVbw2xQNicyLAvrsStubFpd3g24HjS8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TKjmeoR2dbaaPj+sb57Jx3PPxOKZQnISq6tuHl3KURjplc474Wsl+FG1myLQNQq7k
-         vn+heCFNH8b+vdX1bDyNTmOZoG5Q2kzAxb8+kjed/itQsRlOg5iJE10lanYcUjyqkb
-         RMtXLmRMhhz3BWiUmEJQMe/mCAK7mYZnjk4BjrxbzSuXlCDyhTnd5/AF8bGcFewTI3
-         kNhgzS/EOHbxrAzMUnhPkxFCaFUmzWtDJqgjMF8kfpYEC4LSHh7fgDvqgjIsJ38cvm
-         gpCbQ+FqkQTsgzcmPaFmWnD7aEZMLRtiYwMADhEpdeoldiF33ZuM1rFE1OpGy9oiHm
-         gA5QrYY6nRKdg==
-Date:   Fri, 9 Sep 2022 07:01:36 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] selftests/sgx: Retry the ioctl()'s returned with
- EAGAIN
-Message-ID: <Yxq6oAcGkg33tkb8@kernel.org>
-References: <20220905020411.17290-1-jarkko@kernel.org>
- <20220905020411.17290-2-jarkko@kernel.org>
- <fe0e7a0c-da41-5918-6ef4-8906598998a6@intel.com>
- <Yxp4iIKjOQflQC2i@kernel.org>
- <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
+        Thu, 8 Sep 2022 23:04:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74625C08;
+        Thu,  8 Sep 2022 20:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662692663; x=1694228663;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=P+CRhjjxG8elyohg8uAXljHfLC1jEqw8D5rpZVMXHkg=;
+  b=hkedW7eADiTwcBB2yUQS3YK/USPc+nVVSnHNn8uUNbpb3YpHcRdv4NT0
+   tqP5QNJsLQHVAC1deLo1CI49JLTZfJmfQTpAOGIHp4JHXo25H2IAwtBCf
+   zrWeIjaOd7QTFORTcA0qXagojV0bOSp99/QR8JG1niS0N5sI9QMuIv9aE
+   aHNy2Ah5KSYVIXaX71Zvxz395CNlHqxvvGmNG/Xn+Jm9Ncf0U1h0gophD
+   HlZVFO0vIeKnk0/wsKeCvxCFXsTe08b+qPyItBZg5C/ZifF+/nHw+Vyev
+   lKr44f/cK4Pf4TE+0QaqZ9o44e+G2Cq2hBXTILK35QKE+8LUZcEadE7hP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277771734"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="277771734"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 20:03:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="740908460"
+Received: from sqa-gate.sh.intel.com (HELO michael.clx.dev.tsp.org) ([10.239.48.212])
+  by orsmga004.jf.intel.com with ESMTP; 08 Sep 2022 20:03:27 -0700
+From:   Kevin Tian <kevin.tian@intel.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Yi Liu <yi.l.liu@intel.com>
+Subject: [PATCH v3 00/15] Tidy up vfio_device life cycle
+Date:   Fri,  9 Sep 2022 18:22:32 +0800
+Message-Id: <20220909102247.67324-1-kevin.tian@intel.com>
+X-Mailer: git-send-email 2.21.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 05:06:58PM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 9/8/2022 4:19 PM, Jarkko Sakkinen wrote:
-> > On Thu, Sep 08, 2022 at 03:43:06PM -0700, Reinette Chatre wrote:
-> >> Hi Jarkko and Haitao,
-> >>
-> >> On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
-> >>> From: Haitao Huang <haitao.huang@linux.intel.com>
-> >>>
-> >>> For EMODT and EREMOVE ioctl()'s with a large range, kernel
-> >>> may not finish in one shot and return EAGAIN error code
-> >>> and count of bytes of EPC pages on that operations are
-> >>> finished successfully.
-> >>>
-> >>> Change the unclobbered_vdso_oversubscribed_remove test
-> >>> to rerun the ioctl()'s in a loop, updating offset and length
-> >>> using the byte count returned in each iteration.
-> >>>
-> >>> Fixes: 6507cce561b4 ("selftests/sgx: Page removal stress test")
-> >>
-> >> Should this patch be moved to the "critical fixes for v6.0" series?
-> > 
-> > I think not because it does not risk stability of the
-> > kernel itself. It's "nice to have" but not mandatory.
-> 
-> ok, thank you for considering it.
-> 
-> ...
-> 
-> >>> @@ -453,16 +454,30 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
-> >>>  	modt_ioc.offset = heap->offset;
-> >>>  	modt_ioc.length = heap->size;
-> >>>  	modt_ioc.page_type = SGX_PAGE_TYPE_TRIM;
-> >>> -
-> >>> +	count = 0;
-> >>>  	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
-> >>>  	       heap->size);
-> >>> -	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> >>> -	errno_save = ret == -1 ? errno : 0;
-> >>> +	do {
-> >>> +		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> >>> +
-> >>> +		errno_save = ret == -1 ? errno : 0;
-> >>> +		if (errno_save != EAGAIN)
-> >>> +			break;
-> >>> +
-> >>> +		EXPECT_EQ(modt_ioc.result, 0);
-> >>
-> >> If this check triggers then there is something seriously wrong and in that case
-> >> it may also be that this loop may be unable to terminate or the error condition would
-> >> keep appearing until the loop terminates (which may be many iterations). Considering
-> >> the severity and risk I do think that ASSERT_EQ() would be more appropriate,
-> >> similar to how ASSERT_EQ() is used in patch 5/5.
-> >>
-> >> Apart from that I think that this looks good.
-> >>
-> >> Thank you very much for adding this.
-> >>
-> >> Reinette
-> > 
-> > Hmm... I could along the lines:
-> > 
-> > /*
-> >  * Get time since Epoch is milliseconds.
-> >  */
-> > unsigned long get_time(void)
-> > {
-> >     struct timeval start;
-> > 
-> >     gettimeofday(&start, NULL);
-> > 
-> >     return (unsigneg long)start.tv_sec * 1000L + (unsigned long)start.tv_usec / 1000L;
-> > }
-> > 
-> > and
-> > 
-> > #define IOCTL_RETRY_TIMEOUT 100
-> > 
-> > In the test function:
-> > 
-> >         unsigned long start_time;
-> > 
-> >         /* ... */
-> > 
-> >         start_time = get_time();
-> >         do {
-> >                 EXPECT_LT(get_time() - start_time(), IOCTL_RETRY_TIMEOUT);
-> > 
-> >                 /* ... */
-> >         }
-> > 
-> >         /* ... */
-> > 
-> > What do you think?
-> 
-> I do think that your proposal can be considered for an additional check in this
-> test but the way I understand it it does not address my feedback.
-> 
-> In this patch the flow is:
-> 
-> 	do {
-> 		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> 
-> 		errno_save = ret == -1 ? errno : 0;
-> 		if (errno_save != EAGAIN)
-> 			break;
-> 
-> 		EXPECT_EQ(modt_ioc.result, 0);
-> 		...
-> 	} while ...
-> 
-> 
-> If this EXPECT_EQ() check fails then it means that errno_save is EAGAIN
-> and modt_ioc.result != 0. This should never happen because in the kernel
-> (sgx_enclave_modify_types()) the only time modt_ioc.result can be set is
-> when the ioctl() returns EFAULT.
-> 
-> In my opinion this check should be changed to:
-> 		ASSERT_EQ(modt_ioc.result, 0);
+The idea is to let vfio core manage the vfio_device life cycle instead
+of duplicating the logic cross drivers. Besides cleaner code in driver
+side this also allows adding struct device to vfio_device as the first
+step toward adding cdev uAPI in the future. Another benefit is that
+user can now look at sysfs to decide whether a device is bound to
+vfio [1], e.g.:
 
-Right, I missed this. It should be definitely ASSERT_EQ(().
+	/sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
 
-BR, Jarkko
+Though most drivers can fit the new model naturally:
+
+ - vfio_alloc_device() to allocate and initialize vfio_device
+ - vfio_put_device() to release vfio_device
+ - dev_ops->init() for driver private initialization
+ - dev_ops->release() for driver private cleanup
+
+vfio-ccw is the only exception due to a life cycle mess that its private
+structure mixes both parent and mdev info hence must be alloc/freed
+outside of the life cycle of vfio device.
+
+Per prior discussions this won't be fixed in short term by IBM folks [2].
+
+Instead of waiting this series introduces a few tricks to move forward:
+
+ - vfio_init_device() to initialize a pre-allocated device structure;
+
+ - require *EVERY* driver to implement @release and free vfio_device
+   inside. Then vfio-ccw can use a completion mechanism to delay the
+   free to css driver;
+
+The second trick is not a real burden to other drivers because they
+all require a @release for private cleanup anyay. Later once the ccw
+mess is fixed a simple cleanup can be done by moving free from @release
+to vfio core.
+
+Thanks
+Kevin
+
+[1] https://listman.redhat.com/archives/libvir-list/2022-August/233482.html
+[2] https://lore.kernel.org/all/0ee29bd6583f17f0ee4ec0769fa50e8ea6703623.camel@linux.ibm.com/
+
+v3:
+ - rebase to vfio-next after resolving conflicts with Yishai's series
+ - add missing fixes for two checkpatch errors
+ - fix grammar issues (Eric Auger)
+ - add more r-b's
+
+v2:
+ - https://lore.kernel.org/lkml/20220901143747.32858-1-kevin.tian@intel.com/
+ - rebase to 6.0-rc3
+ - fix build warnings (lkp)
+ - patch1: remove unnecessary forward reference (Jason)
+ - patch10: leave device_set released by vfio core (Jason)
+ - patch13: add Suggested-by
+ - patch15: add ABI file sysfs-devices-vfio-dev (Alex)
+ - patch15: rename 'vfio' to 'vfio_group' in procfs (Jason)
+
+v1: https://lore.kernel.org/lkml/20220827171037.30297-1-kevin.tian@intel.com/
+
+Kevin Tian (6):
+  vfio: Add helpers for unifying vfio_device life cycle
+  drm/i915/gvt: Use the new device life cycle helpers
+  vfio/platform: Use the new device life cycle helpers
+  vfio/amba: Use the new device life cycle helpers
+  vfio/ccw: Use the new device life cycle helpers
+  vfio: Rename vfio_device_put() and vfio_device_try_get()
+
+Yi Liu (9):
+  vfio/pci: Use the new device life cycle helpers
+  vfio/mlx5: Use the new device life cycle helpers
+  vfio/hisi_acc: Use the new device life cycle helpers
+  vfio/mdpy: Use the new device life cycle helpers
+  vfio/mtty: Use the new device life cycle helpers
+  vfio/mbochs: Use the new device life cycle helpers
+  vfio/ap: Use the new device life cycle helpers
+  vfio/fsl-mc: Use the new device life cycle helpers
+  vfio: Add struct device to vfio_device
+
+ .../ABI/testing/sysfs-devices-vfio-dev        |   8 +
+ MAINTAINERS                                   |   1 +
+ drivers/gpu/drm/i915/gvt/gvt.h                |   5 +-
+ drivers/gpu/drm/i915/gvt/kvmgt.c              |  52 ++++--
+ drivers/gpu/drm/i915/gvt/vgpu.c               |  33 ++--
+ drivers/s390/cio/vfio_ccw_ops.c               |  52 +++++-
+ drivers/s390/cio/vfio_ccw_private.h           |   3 +
+ drivers/s390/crypto/vfio_ap_ops.c             |  50 +++---
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c             |  85 +++++----
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    |  80 ++++-----
+ drivers/vfio/pci/mlx5/main.c                  |  50 ++++--
+ drivers/vfio/pci/vfio_pci.c                   |  20 +--
+ drivers/vfio/pci/vfio_pci_core.c              |  23 ++-
+ drivers/vfio/platform/vfio_amba.c             |  72 ++++++--
+ drivers/vfio/platform/vfio_platform.c         |  66 +++++--
+ drivers/vfio/platform/vfio_platform_common.c  |  71 +++-----
+ drivers/vfio/platform/vfio_platform_private.h |  18 +-
+ drivers/vfio/vfio_main.c                      | 167 +++++++++++++++---
+ include/linux/vfio.h                          |  28 ++-
+ include/linux/vfio_pci_core.h                 |   6 +-
+ samples/vfio-mdev/mbochs.c                    |  73 +++++---
+ samples/vfio-mdev/mdpy.c                      |  81 +++++----
+ samples/vfio-mdev/mtty.c                      |  67 ++++---
+ 23 files changed, 730 insertions(+), 381 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-vfio-dev
+
+
+base-commit: f39856aacb078c1c93acef011a37121b17d54fe0
+-- 
+2.21.3
+

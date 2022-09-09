@@ -2,84 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8685B2AC8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 02:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A51135B2AC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 02:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiIIAHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 20:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S230108AbiIIAI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 20:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiIIAHp (ORCPT
+        with ESMTP id S229459AbiIIAIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 20:07:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DE198D01;
-        Thu,  8 Sep 2022 17:07:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8CnUe8YsCxH7jOeI9watXOlcGG2e1D+krl2jJdDsPKk=; b=EYgnrRin8PibVJ+ZEQZ5z6zTPP
-        gq73HpWP2Ug2/e94NggkDzYdAchDB6ycog5O2RKJPa0biNITSw3g+ON1FyQL3aOqDmMXIW1AS1Pt6
-        XlM9w5s1DFKUKd/Aq4w6S6yZ7180Oy1yoPjnR98K/3iGYwfSP+V5TE9jp0V9Fqfk6M94M8A5zPwee
-        V8aJjx8UuFiwHlXA35Bze6iq3Gb6NQYS4/RmB+j6OPNwMEGLRZ9I9owrujr1+Ra3HjsUdDC3avGyg
-        kM4JWpjc/0AZ7VyCOoaNlwnQRhwDJc6CGHAwxkvOAdVH09Zal4dQq2PFbsH9FOAMEvW7QNOEqkiDQ
-        eRU91X4g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oWRYZ-00A8Ew-Dv; Fri, 09 Sep 2022 00:07:39 +0000
-Date:   Thu, 8 Sep 2022 17:07:39 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 0/7] kallsyms: Optimizes the performance of lookup symbols
-Message-ID: <YxqDyyVwVUnqc8B1@bombadil.infradead.org>
-References: <20220908130936.674-1-thunder.leizhen@huawei.com>
+        Thu, 8 Sep 2022 20:08:23 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590D07969C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 17:08:22 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id u22so240034plq.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 17:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=alQYuNcmbyILgkqdc4lZTWPETi3Q1DhJTtwP4LFLjP8=;
+        b=n/AUGPMUYZZfb5bavzFGZwu9R3KpTG7GrAfnB27Qrha2QfIbox4GmeJbtN0IsACOlx
+         DPl9zOSWFQj+vZ4V3T7LRV1jpSgliBYcaFlJcxT6eiIxUkZXja2uugEGypzsC6R+jrRn
+         kCrHN/iFAaC3yneW/3zVbwwwvHRE3DUkRupf0z7VHjyWR8hkYE2KJPwXuo4v/f2BHm5V
+         sGG0zDwGDL2DWUt9yThCZ/pWNPIGFVTVQuuKJHOwHLFlAh1NnV7cxYzT1R8e0+YSPIkz
+         O0laorld6Fk8A/nUnNS0M912l7F/tl8spoCbovBjHZHMgZE1JH4q7hEeaKf+qA1qH/QC
+         b2pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=alQYuNcmbyILgkqdc4lZTWPETi3Q1DhJTtwP4LFLjP8=;
+        b=aKwploM59P7IsXaP8sYzIAp3N3x/3jM95e46mCcnX9Ads//tC3flfJUmcOb5WoCC4R
+         ThxSmekZiCHdoN0jH5wPU/Uz5mLJT0d2oIEYn5dcuwl6ScuM4UtTFyDJdPNxxZ4h93Ol
+         mf7baBCfwX+EWx62DtxncMmZMBx7HdeuMhWUIeOvPmXV8Ebw9ip2GRnzvmX96Z51m1vs
+         g569E9ZVwjwipKUPEnl5SmqRr+i+yPA9twUHC3kmLiU9jA6hNsNudwy3ZoY8MQLKNC/o
+         zDBlWhw5Vig6eGS/Pzl4a/o5SgVKntYq0FJrwnrkgYMeO8qy3CWThH7SsMj3UchzZpDp
+         6aow==
+X-Gm-Message-State: ACgBeo1M9nUki+28k8kOlrpwcv2MoEe7gMjqCbJamFBw/BCepfVvzpqD
+        PUx1V6CAuMDk1psfMESZu+g=
+X-Google-Smtp-Source: AA6agR7G2LFHkXaQTstnJ6++CEhnuhxu11OQtQCRekr3JVbOuO2mxQwT/pvbiR+WtSvitVINDEOEOw==
+X-Received: by 2002:a17:902:d2cd:b0:177:4940:cc03 with SMTP id n13-20020a170902d2cd00b001774940cc03mr9548755plc.98.1662682101783;
+        Thu, 08 Sep 2022 17:08:21 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:b77b:e812:1879:ec2f])
+        by smtp.gmail.com with ESMTPSA id u9-20020a1709026e0900b0016d1b70872asm101877plk.134.2022.09.08.17.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 17:08:17 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH] locking: Add __sched to semaphore functions
+Date:   Thu,  8 Sep 2022 17:08:03 -0700
+Message-Id: <20220909000803.4181857-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908130936.674-1-thunder.leizhen@huawei.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 09:09:29PM +0800, Zhen Lei wrote:
-> Currently, to search for a symbol, we need to expand the symbols in
-> 'kallsyms_names' one by one, and then use the expanded string for
-> comparison. This is very slow.
-> 
-> In fact, we can first compress the name being looked up and then use
-> it for comparison when traversing 'kallsyms_names'.
-> 
-> This patch series optimizes the performance of function kallsyms_lookup_name(),
-> and function klp_find_object_symbol() in the livepatch module. Based on the
-> test results, the performance overhead is reduced to 5%. That is, the
-> performance of these functions is improved by 20 times.
-> 
-> To avoid increasing the kernel size in non-debug mode, the optimization is only
-> for the case CONFIG_KALLSYMS_ALL=y.
+The internal functions are marked with __sched already, let's do the same
+for external functions too so that we can skip them in the stack trace.
 
-WIthout having time yet to reveiw the implementation details, it would
-seem this is an area we may want to test for future improvements easily,
-so a selftest better yet a kunit test may be nice for this. Can you
-write one so we can easily gather a simple metric for "how long does
-this take"?
+Cc: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ kernel/locking/semaphore.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-  Luis
+diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
+index f2654d2fe43a..34bfae72f295 100644
+--- a/kernel/locking/semaphore.c
++++ b/kernel/locking/semaphore.c
+@@ -51,7 +51,7 @@ static noinline void __up(struct semaphore *sem);
+  * Use of this function is deprecated, please use down_interruptible() or
+  * down_killable() instead.
+  */
+-void down(struct semaphore *sem)
++void __sched down(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 
+@@ -74,7 +74,7 @@ EXPORT_SYMBOL(down);
+  * If the sleep is interrupted by a signal, this function will return -EINTR.
+  * If the semaphore is successfully acquired, this function returns 0.
+  */
+-int down_interruptible(struct semaphore *sem)
++int __sched down_interruptible(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 	int result = 0;
+@@ -101,7 +101,7 @@ EXPORT_SYMBOL(down_interruptible);
+  * -EINTR.  If the semaphore is successfully acquired, this function returns
+  * 0.
+  */
+-int down_killable(struct semaphore *sem)
++int __sched down_killable(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 	int result = 0;
+@@ -131,7 +131,7 @@ EXPORT_SYMBOL(down_killable);
+  * Unlike mutex_trylock, this function can be used from interrupt context,
+  * and the semaphore can be released by any task or interrupt.
+  */
+-int down_trylock(struct semaphore *sem)
++int __sched down_trylock(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 	int count;
+@@ -156,7 +156,7 @@ EXPORT_SYMBOL(down_trylock);
+  * If the semaphore is not released within the specified number of jiffies,
+  * this function returns -ETIME.  It returns 0 if the semaphore was acquired.
+  */
+-int down_timeout(struct semaphore *sem, long timeout)
++int __sched down_timeout(struct semaphore *sem, long timeout)
+ {
+ 	unsigned long flags;
+ 	int result = 0;
+@@ -180,7 +180,7 @@ EXPORT_SYMBOL(down_timeout);
+  * Release the semaphore.  Unlike mutexes, up() may be called from any
+  * context and even by tasks which have never called down().
+  */
+-void up(struct semaphore *sem)
++void __sched up(struct semaphore *sem)
+ {
+ 	unsigned long flags;
+ 
+-- 
+2.37.2.789.g6183377224-goog
+

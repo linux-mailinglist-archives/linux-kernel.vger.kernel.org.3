@@ -2,62 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADD35B2D11
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D02D5B2D14
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiIIDsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 23:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
+        id S230311AbiIIDsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 23:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiIIDsV (ORCPT
+        with ESMTP id S229896AbiIIDs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 23:48:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F047E1203DB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 20:48:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F17AB8206F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D581C433D7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 03:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662695297;
-        bh=PX3ihAO3NKjkC40uj7ai/McUKZqNLhwG6Yyy59W8/fI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=grqr98PFbFMNPRXQBg2JfLMLtHMNDaLnPd95myEtneiWyON4sYMv/BBcD+Egf2jWK
-         9Wp9LSG0Ar1pTRlHdDJykgr3XmTJKyoV7Kg7zFV8rkoF7N8/v/C3DaWYDyrxpVgCYF
-         JXyzWB8p2nG2F3R0b7SE6CR77QP0F8FfNoTbw9OUfiWueAK9vNILgOBg34T0uQljSw
-         6ealkbqy+E/zUCxWFo52wPUKaKoYP0KGqTA2hqLrrIkaW4Yz0eftsrPiSovcUjqCvf
-         LF6kF7BlO03XVnhDpFmrUJ20AlOqw+LiCKtoZVJkMd9liBo+I9EnGFdCv8TGN+EdGk
-         HEYRUKg5zHbCQ==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1278624b7c4so896593fac.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 20:48:17 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3SLRLoPoKHhGhVWg2lqyDtV0fOoNV19tqSnE/kWtmFBv6VIXxy
-        81/8JRSAyV8g0jTSmHBY3LL4zTRubl+GTllTsGs=
-X-Google-Smtp-Source: AA6agR7jc6we2MFCGtOIzPSfnjtgcz1GjDfE0+sEHOCUyzoouo0XAAN17Zq+2bKgcnj778KEVzSejik31ZoLdtS/iAQ=
-X-Received: by 2002:a05:6808:2028:b0:344:246d:2bed with SMTP id
- q40-20020a056808202800b00344246d2bedmr2706690oiw.19.1662695296022; Thu, 08
- Sep 2022 20:48:16 -0700 (PDT)
+        Thu, 8 Sep 2022 23:48:26 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5C51203F6;
+        Thu,  8 Sep 2022 20:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662695305; x=1694231305;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=7hy3wHOyMefroaXLr2w0cSJuhh6SixVIXSbJpuhHPdo=;
+  b=SGSLDdf318JkRraWQpJmxxMoewiwKd3lZuS4aeufWzl8Zp83uk+v3NvL
+   LH3f6qBxyBH1a6LFAnzdI0j2bJovP80k8OaUErYxo7doydzy7/bC2/WRA
+   NQWIWAA6e6b7EcXreP8MO7MVA60jsBzs7OOdrW4hA0t8fWGSEIoMzAb63
+   jyrObO1cmgNFWveM05QWfW6YhZWMJxq8Xz99qx3uTZDhQaGBUwK4aVbPj
+   R1jJYoBNlMgb4Rf3VAC+s2Y6SVhOkmQfpBT0kS0iGod5DhWC9rpmph+uC
+   b44feMLUrLfIWpaR7ngr37Fg0cz2aeox96p2sKxlX0gyK/rAyDLZgMeny
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="383683860"
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="383683860"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 20:48:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="645375451"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga008.jf.intel.com with ESMTP; 08 Sep 2022 20:48:24 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Sep 2022 20:48:23 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 8 Sep 2022 20:48:23 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 8 Sep 2022 20:48:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h3i023qBLTycm078ZE1bMdNaies4s/nmpTcIZA/YH2DDoaEtoPxqi/zsUF4qBn+jCkS5wETs9VldEE/wpfKJSna1utIgElA60JjB5/i9SxmGz5UnhyS4ZpLVox+8JjdYjpzW/sz3gyuDUcOuxYvc4aQO3wwV28DFXTPxS+J/DYcNSm7qvBZBysSo8UDFburjwXLnr9JU3N8IQv1g88OWl67qjug7gfh5z3p7p2xX5zFlIWYSHtkS2O/WAtMiAnlZQ/25qn4nG+QlDjODnlSNXcf2UavNr7Nwe8a5IHMZvKbCpk3ryJtPDn+vl4JdzSnfc8nXMMsabTEe3+P6GoD8ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7hy3wHOyMefroaXLr2w0cSJuhh6SixVIXSbJpuhHPdo=;
+ b=Vx6xGmiNk0Y1ha6gLYPw4aYWuzVrH9v0Mt++xggkFgYMCv5r8YqKm8ntp2oYbL/aqBACIIuurYD/q8aFUVZwHSVmWOKDpbeoBlSq3b10hOzEVfpL6CtbRsYWFUnqKl0vsXBVaE8KKap25R3Ar2X46aFXz4slgo1BvPl4xRZ7MRRuHfLZoyBQhngeLzi93XwmpHwU8YdNbKuPfKNw+edR5qnbTk8Iv/xoLLo6OYy4uy+q/wAK7sOgKDuQEZHmA9M6a9e2ofn6a8HeNVtThMcyl3iHiZovX/RsJqTdJPRLeqhb7cfB3ViC7mIywEmMVnQITRUg+/ukepQ9bxe3KfntPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by SN7PR11MB6800.namprd11.prod.outlook.com (2603:10b6:806:260::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Fri, 9 Sep
+ 2022 03:48:08 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::fce1:b229:d351:a708]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::fce1:b229:d351:a708%9]) with mapi id 15.20.5588.015; Fri, 9 Sep 2022
+ 03:48:08 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        "Cox, Philip" <philip.cox@canonical.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport
+ support
+Thread-Topic: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport
+ support
+Thread-Index: AQHYwxnXMVccQj8iy0OLPdFiiAdE5K3Wd72A
+Date:   Fri, 9 Sep 2022 03:48:08 +0000
+Message-ID: <449b29a40dcbafc9c0b81d19ed5c377b290b0ab5.camel@intel.com>
+References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a8a664d5-4243-4506-23fd-08da92161bd9
+x-ms-traffictypediagnostic: SN7PR11MB6800:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xNyFJ+AvTKbUQ/gcObpVb1Fe05LfufKzoI30Tzczf7kXz/lXM8+WvsWsoEP+sHnDwhNnJkcFM/QplmhmMKobjDWXC2eRyCDh8l07u3nHy6wnbczuXMl40K1ajz2rg800t1E1WpHiNQ6BSYdaxRkrBaDplBiSdgh5AALd3ucdcNZe5cKu1tOlBWPX1SzetxnfwiFR0xMIYw/YzEuhkQJWrTVOicYdYjwVWX/6AlU6E9a5CBL1YE7VDKMEgY/7nyAV6R2p4nDBJ905ou9UO6PF7rnA4kaHB+C0CMhBVcidn+X4+CZz6qq2SW7IM2MIikgVZVpdp4V59vEn5zRwVpzWw/5cye8kSMnCZGGpKXWf38uFE1P15v774J5BBpOPJfV9bSIe+j+GTYAXrBU/f9wKzb0vZbBNk0GBz3hWSvsPooPKIZJCkAoqLvAWMJT4d49BkdnOHUUKT0SDL8v8GeHabHHkA6LaFmH9pUPLvWhr1dnUHhiFJpOw3hgNpCYLPV6/rfKb/rlq2DA7wY76aRJc6GBK09DfUFJjLsXEwsvU4PKnfq5znM1tUDons6rlKpab3L4BXNArLMw/H41AcPSCcBVVRR0tqYwcnXx/hrI340wehgihZFgI0pzPaN/M4UC8iCQPyoX6UZZmn9v4SJxLrCWsklOhXD+0QxDo2HxZWsTlzwb1bn0NYKkMFaGF7q1NpPokyxEDcPePylkMgUUhFzjWPzdYBDUWos6zr3dp5CcXrT4kVZWzD2Wa7qUtEF5C74ELVA8ji++MLsvJdTISzw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(39860400002)(376002)(346002)(396003)(36756003)(2906002)(6506007)(66946007)(122000001)(38100700002)(71200400001)(6512007)(110136005)(316002)(54906003)(6486002)(7416002)(41300700001)(8936002)(76116006)(91956017)(82960400001)(5660300002)(478600001)(186003)(66446008)(86362001)(66476007)(38070700005)(66556008)(8676002)(4744005)(26005)(2616005)(4326008)(64756008)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UUlrMEQ4VC84WjlaaDVxdDdIQTdGTkhZVDZVdVFESHdMdlJTOVA0SFkxeDgx?=
+ =?utf-8?B?aFI3RjIwM3gxNk5QdFhvUWx6YXNOR2YrbUNtMklRUnBMRURIR000TTAyOEx2?=
+ =?utf-8?B?TXVwbmhNRkQwb1luc2NvNjE2cUdyT3U4ZnFYZmJyd0htTldHWmNVUDg2MHhR?=
+ =?utf-8?B?Q1F2M0dYaWJnbGJIMzNHaDZ6ZVV3bC9Qa3pVNm91eXA1ZmZMYjFEUWhNbkdy?=
+ =?utf-8?B?ejhXT1NxOXZkV1EzeUpHekpNSEZlYmVvNDZrZThoNm5lelhLcU9qNzY1VVNT?=
+ =?utf-8?B?SEV1NEZwQVRvbHY2ODhnR0FjVTlIdmZtaXlubmdLYUhVZ1lGdTkwVU9FcG5K?=
+ =?utf-8?B?OGozMlNyWnBrWW9oZjN6bW0xc3VwOVdOcHdNd2dweUt4N2V1V1I0WkVMblBX?=
+ =?utf-8?B?SzQ3dTBCZ2c2SWpQU1UrMnJ4VXNEQ01sTnhGK0V4VmNtdHdtWFJ0UnNXdkdF?=
+ =?utf-8?B?Z0JxTzdhaGRXVjdxNjA2TG9MSjNzeUppMWRRdmtYd0hlWFBYeE81bW9rUFk1?=
+ =?utf-8?B?U1dyUUNKQlRkSHFVaVdHcWo1NFVQUiswbGdINmRWdi9CUEpzajlrNXh0MGdn?=
+ =?utf-8?B?eW5hK2pUTG5ia0F5bHZoVFg4eU5YODJDWkxFVEdGS0VuUGlqLyt1TllYT3pL?=
+ =?utf-8?B?YUYvaHJaNGg0UVFQNkNVSCtjcFhMR2g0K3Z4U1l6ZHBNSmMxWVAyWkdhWHli?=
+ =?utf-8?B?Umd3SWY0RGZ3NC8wcExNcFhVclZMN2VKdzNWbVdlK1NrMGgyVUhqZXh6dU94?=
+ =?utf-8?B?ekJ1d3FKMzV4bER4NEFwVGtSUjNJTlZHcXNCNFNOeGxNbFNoVCs5VjJ5WkZE?=
+ =?utf-8?B?dlFxdFpVM2VDbkVleTBpdkZlR1JWQk14MUhJS1YwVWc5cEdHNlpaa2ZCRjJr?=
+ =?utf-8?B?SnNmazJ5Y29JVngzbXVXNUMrekdwVWtMaUJBWUVaenZETnA0MGFSUldxYjlD?=
+ =?utf-8?B?T0gremhtVVNDR2U1aVM5ajRnOGNINzE5RW5XT01hYk96NjR2UTY1QmNrRGVo?=
+ =?utf-8?B?N2cwUU9ENU9UeDFNRnpCZm9XWE9ZVVVqQXdRNXR4aURlWjJLSTJ0NFh6eCtH?=
+ =?utf-8?B?d1FlQjRZdmlxclV1V3NOMC9CZk1MQXFHSmdOUVVvWXNaSHVHaVVSLzdBYkhB?=
+ =?utf-8?B?VzBjNWV1Q3lGeEZ4bHh2L2NmYjJ4UkNCNmtxLzRVSkhPSER2VVc1L0NjTW9B?=
+ =?utf-8?B?UnNTRHZSVVZ0V01KNWt6b0JEbWI5WGluK0dhZ090Y3RZbXA2V05ORnduaFFV?=
+ =?utf-8?B?WUxSNWxTNEtDbThqVkdzMXRRSXA3U0YxNnE2ZlNRd1RvWlluWWxrelVHNXU5?=
+ =?utf-8?B?VFBZWXhUc3NJVE9JS056RTd3QU05WmdOR2xjb3NHNkh5dHY3Um96VW5KdFdy?=
+ =?utf-8?B?YVI5YjIwRllkZ015aDNNa0c4K1ZzbGdnMjZQTkZUNXF5WFJ1aG9PV1R4c2NF?=
+ =?utf-8?B?clpUbGlzSnExckc5blRZczNyZ1JNWjloMDNiYlk2TTNFRW1Cc2NlOTFON0dt?=
+ =?utf-8?B?WnAzb3JVYkNPcFpqQnVnWEt5K1BwNXY1SGwxYXg0OFhkNnRETThONUtPQW8x?=
+ =?utf-8?B?Ymtib1kwb2U5QzRXNW1Gd3dxZ1hpU2cvVXo2d2h3Mk9wamRicjJDZnhpVjds?=
+ =?utf-8?B?MHA1T0htRjNMUVlMRDltZ3VtS2Y0cDVEOU9oV0plemQ4dFRqR25FbzdhU0V0?=
+ =?utf-8?B?WTFpZTlJMlN5amhVWDhmY3oxbjdLUGdKN1M4cUQ5TWQyb0t3VUtvNEZjdjlp?=
+ =?utf-8?B?VEN4YU1LajhSOGF4ZTcyYko0ckdla2ZzVjZMd3NGK3lsTXpuZ3ZhYUNMREx1?=
+ =?utf-8?B?VThBOWp1cEQzWEhhb3g0b2MzME9zTFhIY1NqaWxTaXg2TWhiWXI5VEhaUGt0?=
+ =?utf-8?B?M0tLVHc0VmNUMHhoTG4yNkYwaU5xT3BqTEhNZ3dKWHpIL253VWNHTGs5bDNk?=
+ =?utf-8?B?Z0VVcWdEMkxWNDV5NXRSZ2NPa1pUMWR0M2FXbG5kM2FmS0MzMVYyTThqRENP?=
+ =?utf-8?B?SjR5czRnUkhuaHo1NGl5dHJjR29VTmlUQnhQTGtuZ0VrdVA5Nzg1WGprTnZ6?=
+ =?utf-8?B?RFFXN0MrY0U3ZzZqSlJBUGE5VWIzV3ZKNHYzOEtvbk1GcExXdWZjWHJWK3Ew?=
+ =?utf-8?B?S05xYkdYZXdYc25VV3p2R1JKSFpwVnJqaUVyQVhlMEhtMjJnUlFEQ3ZFUWEv?=
+ =?utf-8?B?SWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <73B07AF8C0FDB643ADDBC2D9E169D35A@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220908150421.323-1-jszhang@kernel.org>
-In-Reply-To: <20220908150421.323-1-jszhang@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 9 Sep 2022 11:48:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSFjqPW9ZLCehucJsv+4RJ9-0V+4qO3EVpzW-MW=oVNMw@mail.gmail.com>
-Message-ID: <CAJF2gTSFjqPW9ZLCehucJsv+4RJ9-0V+4qO3EVpzW-MW=oVNMw@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: vdso: fix NULL deference in vdso_join_timens()
- when vfork
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8a664d5-4243-4506-23fd-08da92161bd9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2022 03:48:08.0341
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mJg7SM3pAZCCScPMnhr/s8LyfhFT4k7js0XaiWwi89KUUZnuZMOlo1u8k+4OAk36R8ev4oUR8x1RE2KWfwTezQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6800
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,340 +181,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Great job! I've tested it on rv32-rootfs, and everything seems to be working.
-
-Tested-by: Guo Ren <guoren@kernel.org>
-
-On Thu, Sep 8, 2022 at 11:13 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Testing tools/testing/selftests/timens/vfork_exec.c got below
-> kernel log:
->
-> [    6.838454] Unable to handle kernel access to user memory without uaccess routines at virtual address 0000000000000020
-> [    6.842255] Oops [#1]
-> [    6.842871] Modules linked in:
-> [    6.844249] CPU: 1 PID: 64 Comm: vfork_exec Not tainted 6.0.0-rc3-rt15+ #8
-> [    6.845861] Hardware name: riscv-virtio,qemu (DT)
-> [    6.848009] epc : vdso_join_timens+0xd2/0x110
-> [    6.850097]  ra : vdso_join_timens+0xd2/0x110
-> [    6.851164] epc : ffffffff8000635c ra : ffffffff8000635c sp : ff6000000181fbf0
-> [    6.852562]  gp : ffffffff80cff648 tp : ff60000000fdb700 t0 : 3030303030303030
-> [    6.853852]  t1 : 0000000000000030 t2 : 3030303030303030 s0 : ff6000000181fc40
-> [    6.854984]  s1 : ff60000001e6c000 a0 : 0000000000000010 a1 : ffffffff8005654c
-> [    6.856221]  a2 : 00000000ffffefff a3 : 0000000000000000 a4 : 0000000000000000
-> [    6.858114]  a5 : 0000000000000000 a6 : 0000000000000008 a7 : 0000000000000038
-> [    6.859484]  s2 : ff60000001e6c068 s3 : ff6000000108abb0 s4 : 0000000000000000
-> [    6.860751]  s5 : 0000000000001000 s6 : ffffffff8089dc40 s7 : ffffffff8089dc38
-> [    6.862029]  s8 : ffffffff8089dc30 s9 : ff60000000fdbe38 s10: 000000000000005e
-> [    6.863304]  s11: ffffffff80cc3510 t3 : ffffffff80d1112f t4 : ffffffff80d1112f
-> [    6.864565]  t5 : ffffffff80d11130 t6 : ff6000000181fa00
-> [    6.865561] status: 0000000000000120 badaddr: 0000000000000020 cause: 000000000000000d
-> [    6.868046] [<ffffffff8008dc94>] timens_commit+0x38/0x11a
-> [    6.869089] [<ffffffff8008dde8>] timens_on_fork+0x72/0xb4
-> [    6.870055] [<ffffffff80190096>] begin_new_exec+0x3c6/0x9f0
-> [    6.871231] [<ffffffff801d826c>] load_elf_binary+0x628/0x1214
-> [    6.872304] [<ffffffff8018ee7a>] bprm_execve+0x1f2/0x4e4
-> [    6.873243] [<ffffffff8018f90c>] do_execveat_common+0x16e/0x1ee
-> [    6.874258] [<ffffffff8018f9c8>] sys_execve+0x3c/0x48
-> [    6.875162] [<ffffffff80003556>] ret_from_syscall+0x0/0x2
-> [    6.877484] ---[ end trace 0000000000000000 ]---
->
-> This is because the mm->context.vdso_info is NULL in vfork case. From
-> another side, mm->context.vdso_info either points to vdso info
-> for RV64 or vdso info for compat, there's no need to bloat riscv's
-> mm_context_t, we can handle the difference when setup the additional
-> page for vdso.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Fixes: 3092eb456375 ("riscv: compat: vdso: Add setup additional pages implementation")
-> ---
->
-> since v1:
->  - add "Fixes" tag
->  - fix build error when CONFIG_COMPAT is enabled.
->
->  arch/riscv/include/asm/mmu.h |   1 -
->  arch/riscv/kernel/vdso.c     | 178 +++++++++++++++++++----------------
->  2 files changed, 95 insertions(+), 84 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
-> index cedcf8ea3c76..0099dc116168 100644
-> --- a/arch/riscv/include/asm/mmu.h
-> +++ b/arch/riscv/include/asm/mmu.h
-> @@ -16,7 +16,6 @@ typedef struct {
->         atomic_long_t id;
->  #endif
->         void *vdso;
-> -       void *vdso_info;
->  #ifdef CONFIG_SMP
->         /* A local icache flush is needed before user execution can resume. */
->         cpumask_t icache_stale_mask;
-> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-> index 69b05b6c181b..8ca3b821e1b5 100644
-> --- a/arch/riscv/kernel/vdso.c
-> +++ b/arch/riscv/kernel/vdso.c
-> @@ -27,6 +27,11 @@ extern char vdso_start[], vdso_end[];
->  extern char compat_vdso_start[], compat_vdso_end[];
->  #endif
->
-> +enum vdso_abi {
-> +       VDSO_ABI_RV64,
-> +       VDSO_ABI_RV32,
-> +};
-> +
->  enum vvar_pages {
->         VVAR_DATA_PAGE_OFFSET,
->         VVAR_TIMENS_PAGE_OFFSET,
-> @@ -68,67 +73,7 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
->         return 0;
->  }
->
-> -static void __init __vdso_init(struct __vdso_info *vdso_info)
-> -{
-> -       unsigned int i;
-> -       struct page **vdso_pagelist;
-> -       unsigned long pfn;
-> -
-> -       if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4))
-> -               panic("vDSO is not a valid ELF object!\n");
-> -
-> -       vdso_info->vdso_pages = (
-> -               vdso_info->vdso_code_end -
-> -               vdso_info->vdso_code_start) >>
-> -               PAGE_SHIFT;
-> -
-> -       vdso_pagelist = kcalloc(vdso_info->vdso_pages,
-> -                               sizeof(struct page *),
-> -                               GFP_KERNEL);
-> -       if (vdso_pagelist == NULL)
-> -               panic("vDSO kcalloc failed!\n");
-> -
-> -       /* Grab the vDSO code pages. */
-> -       pfn = sym_to_pfn(vdso_info->vdso_code_start);
-> -
-> -       for (i = 0; i < vdso_info->vdso_pages; i++)
-> -               vdso_pagelist[i] = pfn_to_page(pfn + i);
-> -
-> -       vdso_info->cm->pages = vdso_pagelist;
-> -}
-> -
->  #ifdef CONFIG_TIME_NS
-> -struct vdso_data *arch_get_vdso_data(void *vvar_page)
-> -{
-> -       return (struct vdso_data *)(vvar_page);
-> -}
-> -
-> -/*
-> - * The vvar mapping contains data for a specific time namespace, so when a task
-> - * changes namespace we must unmap its vvar data for the old namespace.
-> - * Subsequent faults will map in data for the new namespace.
-> - *
-> - * For more details see timens_setup_vdso_data().
-> - */
-> -int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
-> -{
-> -       struct mm_struct *mm = task->mm;
-> -       struct vm_area_struct *vma;
-> -       struct __vdso_info *vdso_info = mm->context.vdso_info;
-> -
-> -       mmap_read_lock(mm);
-> -
-> -       for (vma = mm->mmap; vma; vma = vma->vm_next) {
-> -               unsigned long size = vma->vm_end - vma->vm_start;
-> -
-> -               if (vma_is_special_mapping(vma, vdso_info->dm))
-> -                       zap_page_range(vma, vma->vm_start, size);
-> -       }
-> -
-> -       mmap_read_unlock(mm);
-> -       return 0;
-> -}
-> -
->  static struct page *find_timens_vvar_page(struct vm_area_struct *vma)
->  {
->         if (likely(vma->vm_mm == current->mm))
-> @@ -197,13 +142,6 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
->         },
->  };
->
-> -static struct __vdso_info vdso_info __ro_after_init = {
-> -       .name = "vdso",
-> -       .vdso_code_start = vdso_start,
-> -       .vdso_code_end = vdso_end,
-> -       .dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-> -       .cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-> -};
->
->  #ifdef CONFIG_COMPAT
->  static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
-> @@ -216,21 +154,97 @@ static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
->                 .mremap = vdso_mremap,
->         },
->  };
-> +#endif
->
-> -static struct __vdso_info compat_vdso_info __ro_after_init = {
-> -       .name = "compat_vdso",
-> -       .vdso_code_start = compat_vdso_start,
-> -       .vdso_code_end = compat_vdso_end,
-> -       .dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
-> -       .cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
-> +static struct __vdso_info vdso_info[] __ro_after_init = {
-> +       [VDSO_ABI_RV64] = {
-> +               .name = "vdso",
-> +               .vdso_code_start = vdso_start,
-> +               .vdso_code_end = vdso_end,
-> +               .dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-> +               .cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-> +       },
-> +#ifdef CONFIG_COMPAT
-> +       [VDSO_ABI_RV32] = {
-> +               .name = "compat_vdso",
-> +               .vdso_code_start = compat_vdso_start,
-> +               .vdso_code_end = compat_vdso_end,
-> +               .dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
-> +               .cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
-> +       },
-> +#endif
->  };
-> +
-> +static void __init __vdso_init(enum vdso_abi abi)
-> +{
-> +       unsigned int i;
-> +       struct page **vdso_pagelist;
-> +       unsigned long pfn;
-> +
-> +       if (memcmp(vdso_info[abi].vdso_code_start, "\177ELF", 4))
-> +               panic("vDSO is not a valid ELF object!\n");
-> +
-> +       vdso_info[abi].vdso_pages = (
-> +               vdso_info[abi].vdso_code_end -
-> +               vdso_info[abi].vdso_code_start) >>
-> +               PAGE_SHIFT;
-> +
-> +       vdso_pagelist = kcalloc(vdso_info[abi].vdso_pages,
-> +                               sizeof(struct page *),
-> +                               GFP_KERNEL);
-> +       if (vdso_pagelist == NULL)
-> +               panic("vDSO kcalloc failed!\n");
-> +
-> +       /* Grab the vDSO code pages. */
-> +       pfn = sym_to_pfn(vdso_info[abi].vdso_code_start);
-> +
-> +       for (i = 0; i < vdso_info[abi].vdso_pages; i++)
-> +               vdso_pagelist[i] = pfn_to_page(pfn + i);
-> +
-> +       vdso_info[abi].cm->pages = vdso_pagelist;
-> +}
-> +
-> +#ifdef CONFIG_TIME_NS
-> +struct vdso_data *arch_get_vdso_data(void *vvar_page)
-> +{
-> +       return (struct vdso_data *)(vvar_page);
-> +}
-> +
-> +/*
-> + * The vvar mapping contains data for a specific time namespace, so when a task
-> + * changes namespace we must unmap its vvar data for the old namespace.
-> + * Subsequent faults will map in data for the new namespace.
-> + *
-> + * For more details see timens_setup_vdso_data().
-> + */
-> +int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
-> +{
-> +       struct mm_struct *mm = task->mm;
-> +       struct vm_area_struct *vma;
-> +
-> +       mmap_read_lock(mm);
-> +
-> +       for (vma = mm->mmap; vma; vma = vma->vm_next) {
-> +               unsigned long size = vma->vm_end - vma->vm_start;
-> +
-> +               if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_RV64].dm))
-> +                       zap_page_range(vma, vma->vm_start, size);
-> +#ifdef CONFIG_COMPAT
-> +               if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_RV32].dm))
-> +                       zap_page_range(vma, vma->vm_start, size);
-> +#endif
-> +       }
-> +
-> +       mmap_read_unlock(mm);
-> +       return 0;
-> +}
->  #endif
->
->  static int __init vdso_init(void)
->  {
-> -       __vdso_init(&vdso_info);
-> +       __vdso_init(VDSO_ABI_RV64);
->  #ifdef CONFIG_COMPAT
-> -       __vdso_init(&compat_vdso_info);
-> +       __vdso_init(VDSO_ABI_RV32);
->  #endif
->
->         return 0;
-> @@ -240,14 +254,14 @@ arch_initcall(vdso_init);
->  static int __setup_additional_pages(struct mm_struct *mm,
->                                     struct linux_binprm *bprm,
->                                     int uses_interp,
-> -                                   struct __vdso_info *vdso_info)
-> +                                   enum vdso_abi abi)
->  {
->         unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
->         void *ret;
->
->         BUILD_BUG_ON(VVAR_NR_PAGES != __VVAR_PAGES);
->
-> -       vdso_text_len = vdso_info->vdso_pages << PAGE_SHIFT;
-> +       vdso_text_len = vdso_info[abi].vdso_pages << PAGE_SHIFT;
->         /* Be sure to map the data page */
->         vdso_mapping_len = vdso_text_len + VVAR_SIZE;
->
-> @@ -258,18 +272,17 @@ static int __setup_additional_pages(struct mm_struct *mm,
->         }
->
->         ret = _install_special_mapping(mm, vdso_base, VVAR_SIZE,
-> -               (VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info->dm);
-> +               (VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info[abi].dm);
->         if (IS_ERR(ret))
->                 goto up_fail;
->
->         vdso_base += VVAR_SIZE;
->         mm->context.vdso = (void *)vdso_base;
-> -       mm->context.vdso_info = (void *)vdso_info;
->
->         ret =
->            _install_special_mapping(mm, vdso_base, vdso_text_len,
->                 (VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC),
-> -               vdso_info->cm);
-> +               vdso_info[abi].cm);
->
->         if (IS_ERR(ret))
->                 goto up_fail;
-> @@ -291,8 +304,7 @@ int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
->         if (mmap_write_lock_killable(mm))
->                 return -EINTR;
->
-> -       ret = __setup_additional_pages(mm, bprm, uses_interp,
-> -                                                       &compat_vdso_info);
-> +       ret = __setup_additional_pages(mm, bprm, uses_interp, VDSO_ABI_RV32);
->         mmap_write_unlock(mm);
->
->         return ret;
-> @@ -307,7 +319,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
->         if (mmap_write_lock_killable(mm))
->                 return -EINTR;
->
-> -       ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
-> +       ret = __setup_additional_pages(mm, bprm, uses_interp, VDSO_ABI_RV64);
->         mmap_write_unlock(mm);
->
->         return ret;
-> --
-> 2.34.1
->
-
-
--- 
-Best Regards
- Guo Ren
+T24gV2VkLCAyMDIyLTA5LTA3IGF0IDE3OjI3IC0wNzAwLCBLdXBwdXN3YW15IFNhdGh5YW5hcmF5
+YW5hbiB3cm90ZToNCj4gK1RFU1QodmVyaWZ5X3JlcG9ydCkNCj4gK3sNCj4gKwlfX3U4IHJlcG9y
+dGRhdGFbVERYX1JFUE9SVERBVEFfTEVOXTsNCj4gKwlzdHJ1Y3QgdGRyZXBvcnQgdGRyZXBvcnQ7
+DQo+ICsJc3RydWN0IHRkeF9yZXBvcnRfcmVxIHJlcTsNCj4gKwlpbnQgZGV2ZmQsIGk7DQo+ICsN
+Cj4gKwlkZXZmZCA9IG9wZW4oVERYX0dVRVNUX0RFVk5BTUUsIE9fUkRXUiB8IE9fU1lOQyk7DQo+
+ICsNCj4gKwlBU1NFUlRfTFQoMCwgZGV2ZmQpOw0KPiArDQo+ICsJLyogR2VuZXJhdGUgc2FtcGxl
+IHJlcG9ydCBkYXRhICovDQo+ICsJZm9yIChpID0gMDsgaSA8IFREWF9SRVBPUlREQVRBX0xFTjsg
+aSsrKQ0KPiArCQlyZXBvcnRkYXRhW2ldID0gaTsNCj4gKw0KPiArCS8qIEluaXRpYWxpemUgSU9D
+VEwgcmVxdWVzdCAqLw0KPiArCXJlcS5zdWJ0eXBlwqDCoMKgwqAgPSAwOw0KPiArCXJlcS5yZXBv
+cnRkYXRhwqAgPSAoX191NjQpcmVwb3J0ZGF0YTsNCj4gKwlyZXEucnBkX2xlbsKgwqDCoMKgID0g
+VERYX1JFUE9SVERBVEFfTEVOOw0KPiArCXJlcS50ZHJlcG9ydMKgwqDCoCA9IChfX3U2NCkmdGRy
+ZXBvcnQ7DQo+ICsJcmVxLnRkcl9sZW7CoMKgwqDCoCA9IHNpemVvZih0ZHJlcG9ydCk7DQo+ICsN
+Cg0KJ3JlcScgaXMgYSBsb2NhbCB2YXJpYWJsZSwgd2hpY2ggaXNuJ3QgZ3VhcmFudGVlZCB0byBi
+ZSB6ZXJvLiBMb29rcyB5b3UgbmVlZCB0bw0KZXhwbGljaXRseSBjbGVhciAncmVxJyBvdGhlcndp
+c2UgdGhlIHJlcS5yZXNlcnZlZFs3XSBtYXkgbm90IGJlIHplcm8uDQoNCi0tIA0KVGhhbmtzLA0K
+LUthaQ0KDQoNCg==

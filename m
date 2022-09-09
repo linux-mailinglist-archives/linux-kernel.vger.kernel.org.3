@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E455B2D3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34575B2D47
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 06:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIIEKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 00:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S229572AbiIIEQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 00:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiIIEKD (ORCPT
+        with ESMTP id S229550AbiIIEQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 00:10:03 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81C36B8F4;
-        Thu,  8 Sep 2022 21:09:51 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q9so447403pgq.6;
-        Thu, 08 Sep 2022 21:09:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=8RLKIEC5coZ0squ6v0xIcah94Pvav6o3jSl3N5xP2Q4=;
-        b=VSZqCEeWfo4HBqEmz+c8qCCNvWeCVhZ7GXP5TuRl6vyQOHWXUjVE0FYAgxiCs6iNJ+
-         EZfA2g//eDSbXg2+bb9lFjYHhqCw2ouajLrpyDicfmKz2TBon+9bjPYSyZ4UQHUNi5YV
-         EQ93XwfhnFiEgXNIudJ82+fgaDPk+nxtoADYLHFIkmxgpbTHKGPV+I/tSs8LQFQJ2RZL
-         eQdiPCXt9yV7ZaQwX9p/5VuyJCxiqThYUOQSlwr/IdjvfVp0FUK9/TInciYvdP0Pd7LJ
-         PdSdlX7WtslK+LE+Qu355XpFINa6nFw5H9dgajv7blX7jvxj6iDt8C6XOOEc4Dz8qXos
-         EH9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=8RLKIEC5coZ0squ6v0xIcah94Pvav6o3jSl3N5xP2Q4=;
-        b=QZ+YDQ2M/f0S/MlXji6frUxglUcwGATjAmrrnN6Eo0gqVwphzHMZZyoPYe3Rsmc2om
-         wT79h+QfjXi/wJjfr/Cc08PcbSxDXREotIACFMr4xx2LbJkSdpiVDgm8BeLjcItYAMnk
-         YyU+M49y+bODRTPc9XzGbez7kaRnE5aYGEN7ykFYzK+zvjZPwlktf+XqNvUVguNQKIZO
-         FSgPbAhhQQvIA2yr71WC0dv0QqKkuQwT17MI6Vx83lmE+HDxfA5eD3eqP76rmtEQNUuR
-         68O1O+UHo/yW2EimP5QsGcphHSrVE7dQpu7OE3LEFfZwdTqYZlBxDLaVYM8VW+3vobI9
-         Pf3A==
-X-Gm-Message-State: ACgBeo30ndopLou1gI3kLZ7txR+a1k+WFVvcncQ/O8Svqhfxa9SqMFOx
-        iiiZbTypGQlvrGm3LTLgEiJMoFu79sc=
-X-Google-Smtp-Source: AA6agR5iWtc9VwAvsdPPspO8pIpYOK6bsqQ8wHZQiqOS/j6juFYPy41EV4zghGLzHSnob2tAuL9zrQ==
-X-Received: by 2002:a05:6a00:1688:b0:53b:4239:7c5c with SMTP id k8-20020a056a00168800b0053b42397c5cmr12412828pfc.81.1662696590917;
-        Thu, 08 Sep 2022 21:09:50 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id t15-20020a170902b20f00b00176953f7997sm325484plr.158.2022.09.08.21.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 21:09:50 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org
-Cc:     song@kernel.org, Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v1] drivers/md/md-bitmap: check the return value of md_bitmap_get_counter()
-Date:   Thu,  8 Sep 2022 21:09:36 -0700
-Message-Id: <20220909040936.2610780-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 9 Sep 2022 00:16:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 006C3121105;
+        Thu,  8 Sep 2022 21:16:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09453153B;
+        Thu,  8 Sep 2022 21:16:23 -0700 (PDT)
+Received: from [10.162.41.8] (unknown [10.162.41.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F33023F71A;
+        Thu,  8 Sep 2022 21:16:07 -0700 (PDT)
+Message-ID: <46b8a713-64bf-9c00-9001-3196238d1482@arm.com>
+Date:   Fri, 9 Sep 2022 09:46:04 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v3 2/4] mm/tlbbatch: Introduce
+ arch_tlbbatch_should_defer()
+To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
+        yangyicong@hisilicon.com, huzhanyuan@oppo.com, lipeifeng@oppo.com,
+        zhangshiming@oppo.com, guojian@oppo.com, realmz6@gmail.com,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, Barry Song <21cnbao@gmail.com>,
+        wangkefeng.wang@huawei.com, xhao@linux.alibaba.com,
+        prime.zeng@hisilicon.com,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>
+References: <20220822082120.8347-1-yangyicong@huawei.com>
+ <20220822082120.8347-3-yangyicong@huawei.com>
+Content-Language: en-US
+In-Reply-To: <20220822082120.8347-3-yangyicong@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,27 +58,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the return value of md_bitmap_get_counter() in case it returns
-NULL pointer, which will result in a null pointer dereference.
+On 8/22/22 13:51, Yicong Yang wrote:
+> From: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+> 
+> The entire scheme of deferred TLB flush in reclaim path rests on the
+> fact that the cost to refill TLB entries is less than flushing out
+> individual entries by sending IPI to remote CPUs. But architecture
+> can have different ways to evaluate that. Hence apart from checking
+> TTU_BATCH_FLUSH in the TTU flags, rest of the decision should be
+> architecture specific.
+> 
+> Signed-off-by: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+> [https://lore.kernel.org/linuxppc-dev/20171101101735.2318-2-khandual@linux.vnet.ibm.com/]
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> [Rebase and fix incorrect return value type]
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/md/md-bitmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From semantics perspective, this patch still makes sense, even on its own.
 
-diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index bf6dffadbe6f..06ab1098ff99 100644
---- a/drivers/md/md-bitmap.c
-+++ b/drivers/md/md-bitmap.c
-@@ -2195,7 +2195,7 @@ int md_bitmap_resize(struct bitmap *bitmap, sector_t blocks,
- 
- 		if (set) {
- 			bmc_new = md_bitmap_get_counter(&bitmap->counts, block, &new_blocks, 1);
--			if (*bmc_new == 0) {
-+			if (bmc_new && *bmc_new == 0) {
- 				/* need to set on-disk bits too. */
- 				sector_t end = block + new_blocks;
- 				sector_t start = block >> chunkshift;
--- 
-2.25.1
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
+> ---
+>  arch/x86/include/asm/tlbflush.h | 12 ++++++++++++
+>  mm/rmap.c                       |  9 +--------
+>  2 files changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+> index cda3118f3b27..8a497d902c16 100644
+> --- a/arch/x86/include/asm/tlbflush.h
+> +++ b/arch/x86/include/asm/tlbflush.h
+> @@ -240,6 +240,18 @@ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
+>  	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false);
+>  }
+>  
+> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> +{
+> +	bool should_defer = false;
+> +
+> +	/* If remote CPUs need to be flushed then defer batch the flush */
+> +	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+> +		should_defer = true;
+> +	put_cpu();
+> +
+> +	return should_defer;
+> +}
+> +
+>  static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
+>  {
+>  	/*
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index edc06c52bc82..a17a004550c6 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -687,17 +687,10 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
+>   */
+>  static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
+>  {
+> -	bool should_defer = false;
+> -
+>  	if (!(flags & TTU_BATCH_FLUSH))
+>  		return false;
+>  
+> -	/* If remote CPUs need to be flushed then defer batch the flush */
+> -	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+> -		should_defer = true;
+> -	put_cpu();
+> -
+> -	return should_defer;
+> +	return arch_tlbbatch_should_defer(mm);
+>  }
+>  
+>  /*

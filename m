@@ -1,123 +1,124 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1335B2BAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 03:30:42 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 4083D5B2BBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 03:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiIIB2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 21:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S229788AbiIIBgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 21:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiIIB1l (ORCPT
+        with ESMTP id S229546AbiIIBgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 21:27:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5B51177A7;
-        Thu,  8 Sep 2022 18:27:41 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNyt42XNHzZcm3;
-        Fri,  9 Sep 2022 09:23:08 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 9 Sep
- 2022 09:27:39 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <shuah@kernel.org>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 8/8] selftests/tc-testings: add tunnel_key action deleting test case
-Date:   Fri, 9 Sep 2022 09:29:36 +0800
-Message-ID: <20220909012936.268433-9-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220909012936.268433-1-shaozhengchao@huawei.com>
-References: <20220909012936.268433-1-shaozhengchao@huawei.com>
+        Thu, 8 Sep 2022 21:36:52 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277A91079FA;
+        Thu,  8 Sep 2022 18:36:47 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1278a61bd57so332183fac.7;
+        Thu, 08 Sep 2022 18:36:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=X/EZDtBCJrUGRIamC4teU2YJMrak7hI+I7Ky8llWW9E=;
+        b=EPeHvNpiflSA2NJUm1qXeASxNHRjKLaBqu1qlpW0B2OIjvvB4d0jyrvVs1l38V2lNs
+         b6CqvWK3fjPV3oRM11WgtP4/f7ia5msjZaa7V9jwuwT8XpUI2OYY+Hec3lb0/pf43GLk
+         65OeBmSW9edvj0oT81geJZShLDJLgo9WigXrT06rnAAZw/rNyfZ0jq5IIfpdO9aHSh+y
+         Ldd4xFTp5bQ6X52qrbhw2m1h8YlzRRfFbGstbP8uFDSnP23DRTUhEGBUPGcjV8ERIsco
+         Lh8Vej/fxQgTpkom/YJESp6ab8GDqoSihDBnrQuqudUdb5WXq8FsScVkEH9Z4jIILpHG
+         szrg==
+X-Gm-Message-State: ACgBeo06TMAaJYuy1+DrgopZE7YUvRB8h7orDvLCph9EA+9nhmC1W59l
+        ry8gDgV61z/phO92ASPHeg==
+X-Google-Smtp-Source: AA6agR747AZv98h49vbs6uS03Dihe0xwNcWZz/GVQQY2NnEyKrNRx72F0ULZHX8xIhmFf3LxBp3kkw==
+X-Received: by 2002:a05:6870:b68f:b0:10b:ba83:92d4 with SMTP id cy15-20020a056870b68f00b0010bba8392d4mr3446141oab.130.1662687406373;
+        Thu, 08 Sep 2022 18:36:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t8-20020a0568301e2800b00636e6dea5e5sm359254otr.23.2022.09.08.18.36.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 18:36:45 -0700 (PDT)
+Received: (nullmailer pid 3734979 invoked by uid 1000);
+        Fri, 09 Sep 2022 01:36:44 -0000
+Date:   Thu, 8 Sep 2022 20:36:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sergiu.Moga@microchip.com
+Cc:     krzysztof.kozlowski@linaro.org, lee@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
+        richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, jirislaby@kernel.org,
+        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com,
+        Tudor.Ambarus@microchip.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 06/13] dt-bindings: serial: atmel,at91-usart: Add
+ SAM9260 compatibles to SAM9x60
+Message-ID: <20220909013644.GA3731620-robh@kernel.org>
+References: <20220906135511.144725-1-sergiu.moga@microchip.com>
+ <20220906135511.144725-7-sergiu.moga@microchip.com>
+ <9aa29d74-b1fc-d00e-dee4-57f277a366ab@linaro.org>
+ <c30cc112-0fb8-01e6-1bb8-eed7db0b9049@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c30cc112-0fb8-01e6-1bb8-eed7db0b9049@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test 3671: Delete tunnel_key set action with valid index
-Test 8597: Delete tunnel_key set action with invalid index
+On Thu, Sep 08, 2022 at 03:15:44PM +0000, Sergiu.Moga@microchip.com wrote:
+> On 08.09.2022 15:30, Krzysztof Kozlowski wrote:
+> > On 06/09/2022 15:55, Sergiu Moga wrote:
+> >> Add the AT91SAM9260 serial compatibles to the list of SAM9X60 compatibles
+> >> in order to highlight the incremental characteristics of the SAM9X60
+> >> serial IP.
+> >>
+> >> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> >> ---
+> >>
+> >>
+> >> v1 -> v2:
+> >> - Nothing, this patch was not here before
+> >>
+> >>
+> >>   Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml | 2 ++
+> >>   1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> >> index b25535b7a4d2..4d80006963c7 100644
+> >> --- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> >> +++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
+> >> @@ -26,6 +26,8 @@ properties:
+> >>         - items:
+> >>             - const: microchip,sam9x60-dbgu
+> >>             - const: microchip,sam9x60-usart
+> >> +          - const: atmel,at91sam9260-dbgu
+> >> +          - const: atmel,at91sam9260-usart
+> > 
+> > This is weird. You say in commit msg to "highlight the incremental
+> > characteristics" but you basically change here existing compatibles.
+> 
+> 
+> Does "show that they are incremental IP's" sound better then?
+> 
+> 
+> > This is not enum, but a list.
+> > 
+> 
+> 
+> What do you mean by this? I know it is a list, I specified so in the 
+> commit message.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- .../tc-tests/actions/tunnel_key.json          | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
+You are saying that compatible must be exactly the 4 strings above in 
+the order listed. You need another entry with another 'items' list.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-index d06346968bcb..b40ee602918a 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/tunnel_key.json
-@@ -933,5 +933,55 @@
-         "teardown": [
-             "$TC actions flush action tunnel_key"
-         ]
-+    },
-+    {
-+        "id": "3671",
-+        "name": "Delete tunnel_key set action with valid index",
-+	"category": [
-+            "actions",
-+            "tunnel_key"
-+        ],
-+        "setup": [
-+            [
-+                "$TC actions flush action tunnel_key",
-+                0,
-+                1,
-+                255
-+            ],
-+	    "$TC actions add action tunnel_key set src_ip 1.1.1.1 dst_ip 2.2.2.2 index 1"
-+        ],
-+        "cmdUnderTest": "$TC actions del action tunnel_key index 1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC actions list action tunnel_key",
-+        "matchPattern": "action order [0-9]+: tunnel_key.*set.*src_ip 1.1.1.1.*dst_ip 2.2.2.2.*index 1",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC actions flush action tunnel_key"
-+        ]
-+    },
-+    {
-+        "id": "8597",
-+        "name": "Delete tunnel_key set action with invalid index",
-+        "category": [
-+            "actions",
-+            "tunnel_key"
-+        ],
-+        "setup": [
-+            [
-+                "$TC actions flush action tunnel_key",
-+                0,
-+                1,
-+                255
-+            ],
-+            "$TC actions add action tunnel_key set src_ip 1.1.1.1 dst_ip 2.2.2.2 index 1"
-+        ],
-+        "cmdUnderTest": "$TC actions del action tunnel_key index 10",
-+        "expExitCode": "255",
-+        "verifyCmd": "$TC actions list action tunnel_key",
-+        "matchPattern": "action order [0-9]+: tunnel_key.*set.*src_ip 1.1.1.1.*dst_ip 2.2.2.2.*index 1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC actions flush action tunnel_key"
-+        ]
-     }
- ]
--- 
-2.17.1
-
+Rob

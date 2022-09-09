@@ -2,136 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EE45B2C11
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A036B5B2C1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiIICU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 22:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S229719AbiIICZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 22:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiIICUX (ORCPT
+        with ESMTP id S229507AbiIICZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 22:20:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D75B94100
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 19:20:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662690021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i8oCJIQ+FpBtHf/IlhXTh4IHCwTHuXi80ZP7njx9WBg=;
-        b=TSR3HQjSlKAYXv3iwap8qxJWC5bLtFHw2AtzTCDqLckqOJFQiLI3cJnA7nSayUQoQyzqo8
-        jtdOvTwrckzMwClgDeEUdnv41SDk7s+yZ8lmFUKnIzWACA19mYzM62v+gs1levVwLpC38h
-        D2/8olcQN9dFtNnQn5/TftorNbq3j08=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-142-jguoCVc2O62VkV6PbOfZhA-1; Thu, 08 Sep 2022 22:20:16 -0400
-X-MC-Unique: jguoCVc2O62VkV6PbOfZhA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C995085A585;
-        Fri,  9 Sep 2022 02:20:15 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.8.167])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 41C59909FF;
-        Fri,  9 Sep 2022 02:20:15 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full permission event response
-Date:   Thu, 08 Sep 2022 22:20:14 -0400
-Message-ID: <2254258.ElGaqSPkdT@x2>
-Organization: Red Hat
-In-Reply-To: <CAHC9VhRKHXzEwNRwPU_+BtrYb+7sYL+r8GBk60zurzi9wz4HTg@mail.gmail.com>
-References: <cover.1659996830.git.rgb@redhat.com> <2603742.X9hSmTKtgW@x2> <CAHC9VhRKHXzEwNRwPU_+BtrYb+7sYL+r8GBk60zurzi9wz4HTg@mail.gmail.com>
+        Thu, 8 Sep 2022 22:25:36 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46569F651D;
+        Thu,  8 Sep 2022 19:25:33 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id l65so313993pfl.8;
+        Thu, 08 Sep 2022 19:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=5QDb9H3n9Vmh44IvMFrk6MQuatVVN6ACTnX3iqoQ/H4=;
+        b=PaDtRQONcEyFONgdg0vE1UJJ1OdfXuO2ibxy5aFSgaUu2AY+YOzoMLWdt2yCXEJEjZ
+         FZ+a/YnCVoKrUawv2IijGh8X6ZZUfx2TuzfaBtX3lxs8C5/pgapktzoSZ9lNDvMKRXL6
+         z1Mf24KFv5WqcLbof/P7OEnRj607XFjrE1K/B0Kf837K19FAHpuFD+G+U3Xts8XhQOIg
+         MsWEvarRrEZfSuUzDe7o5xT5FD6/dytFSpBn/aHStuYgJ6qIf6SpvSn/sKyJXtvNyQaa
+         Plr8cahtkgWb1TgpT5BBU0OW//1hjCKfJLKRPy6q+K7xZ7kSkaZNEldpnlfGUZleLHsa
+         o7JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=5QDb9H3n9Vmh44IvMFrk6MQuatVVN6ACTnX3iqoQ/H4=;
+        b=iUY4mgQXm4RVVyjzSF1rW9VuTQg/PufvFaSlyjdZ9vxxJqSTQlg+UzTGHFlKyQ16rl
+         Drs5z4dfW1aKmKD2+0ITRfEt9AE/atC01418V/225wsO198ipdYhgBso32CJryVigurp
+         VbRglecd6rJ+2FS4SMYy2QTSNRI4Ntb/PLBasIf1jvAsI9a99oM4cdH1XlE2EcBd53cC
+         g3U5eQKPVrTURq/ImKrXL7fuTSq6lbeJV1k1i4VJedC43RdqWmLFoe5acg8mZDh5k+gG
+         oPhcKusGQhICbUOkufJFR3sJBd41uOtBmVxGe+7fyy1avuyoUy1jrOf9IgiMk9NSlxR2
+         9Wpg==
+X-Gm-Message-State: ACgBeo3ZcgRbgI/hs8DTald/04WdqPLV72uesLLlT8H8TYPB16736VMp
+        ZkZXm7PCOV2fzRiW6HEp0AhuPax/5EeVwmDVqBg=
+X-Google-Smtp-Source: AA6agR7kREh8kCv44vlwqIpD+PEn/ppeqsLEvtiCz77+C2piwSDf51k+qErsywoCJpkbRkidihCFilp6H9a6WccNcjo=
+X-Received: by 2002:a05:6a00:a05:b0:534:b1ad:cfac with SMTP id
+ p5-20020a056a000a0500b00534b1adcfacmr11688058pfh.35.1662690332750; Thu, 08
+ Sep 2022 19:25:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220907111132.31722-1-imagedong@tencent.com> <e4b7eddc-3a73-0994-467e-6d65d6ad80c0@tessares.net>
+ <52fcd27efafb415baa0bc52440296306110c56d7.camel@redhat.com>
+In-Reply-To: <52fcd27efafb415baa0bc52440296306110c56d7.camel@redhat.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 9 Sep 2022 10:25:20 +0800
+Message-ID: <CADxym3ZDow6UM6K3Nt_PDFq-4gfn8Hs0hCS62Dqsj4=tM_+hFQ@mail.gmail.com>
+Subject: Re: [PATCH net v3] net: mptcp: fix unreleased socket in accept queue
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        mathew.j.martineau@linux.intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, fw@strlen.de,
+        peter.krystad@linux.intel.com, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, September 8, 2022 5:22:15 PM EDT Paul Moore wrote:
-> On Thu, Sep 8, 2022 at 5:14 PM Steve Grubb <sgrubb@redhat.com> wrote:
-> > On Wednesday, September 7, 2022 4:23:49 PM EDT Paul Moore wrote:
-> > > On Wed, Sep 7, 2022 at 4:11 PM Steve Grubb <sgrubb@redhat.com> wrote:
-> > > > On Wednesday, September 7, 2022 2:43:54 PM EDT Richard Guy Briggs 
-wrote:
-> > > > > > > Ultimately I guess I'll leave it upto audit subsystem what it
-> > > > > > > wants
-> > > > > > > to
-> > > > > > > have in its struct fanotify_response_info_audit_rule because
-> > > > > > > for
-> > > > > > > fanotify subsystem, it is just an opaque blob it is passing.
-> > > > > > 
-> > > > > > In that case, let's stick with leveraging the type/len fields in
-> > > > > > the
-> > > > > > fanotify_response_info_header struct, that should give us all the
-> > > > > > flexibility we need.
-> > > > > > 
-> > > > > > Richard and Steve, it sounds like Steve is already aware of
-> > > > > > additional
-> > > > > > information that he wants to send via the
-> > > > > > fanotify_response_info_audit_rule struct, please include that in
-> > > > > > the
-> > > > > > next revision of this patchset.  I don't want to get this merged
-> > > > > > and
-> > > > > > then soon after have to hack in additional info.
-> > > > > 
-> > > > > Steve, please define the type and name of this additional field.
-> > > > 
-> > > > Maybe extra_data, app_data, or extra_info. Something generic that can
-> > > > be
-> > > > reused by any application. Default to 0 if not present.
-> > > 
-> > > I think the point is being missed ... The idea is to not speculate on
-> > > additional fields, as discussed we have ways to handle that, the issue
-> > > was that Steve implied that he already had ideas for "things" he
-> > > wanted to add.  If there are "things" that need to be added, let's do
-> > > that now, however if there is just speculation that maybe someday we
-> > > might need to add something else we can leave that until later.
-> > 
-> > This is not speculation. I know what I want to put there. I know you want
-> > to pin it down to exactly what it is. However, when this started a
-> > couple years back, one of the concerns was that we're building something
-> > specific to 1 user of fanotify. And that it would be better for all
-> > future users to have a generic facility that everyone could use if they
-> > wanted to. That's why I'm suggesting something generic, its so this is
-> > not special purpose that doesn't fit any other use case.
-> 
-> Well, we are talking specifically about fanotify in this thread and
-> dealing with data structures that are specific to fanotify.  I can
-> understand wanting to future proof things, but based on what we've
-> seen in this thread I think we are all set in this regard.
+On Thu, Sep 8, 2022 at 10:45 PM Paolo Abeni <pabeni@redhat.com> wrote:
+>
+> On Thu, 2022-09-08 at 15:56 +0200, Matthieu Baerts wrote:
+> > Hi Menglong,
+> >
+> > On 07/09/2022 13:11, menglong8.dong@gmail.com wrote:
+> > > From: Menglong Dong <imagedong@tencent.com>
+> > >
+> > > The mptcp socket and its subflow sockets in accept queue can't be
+> > > released after the process exit.
+> > >
+> > > While the release of a mptcp socket in listening state, the
+> > > corresponding tcp socket will be released too. Meanwhile, the tcp
+> > > socket in the unaccept queue will be released too. However, only init
+> > > subflow is in the unaccept queue, and the joined subflow is not in th=
+e
+> > > unaccept queue, which makes the joined subflow won't be released, and
+> > > therefore the corresponding unaccepted mptcp socket will not be relea=
+sed
+> > > to.
+> >
+> > Thank you for the v3.
+> >
+> > Unfortunately, our CI found a possible recursive locking:
+> >
+> > > - KVM Validation: debug:
+> > >   - Unstable: 1 failed test(s): selftest_mptcp_join - Critical: 1 Cal=
+l Trace(s) =E2=9D=8C:
+> > >   - Task: https://cirrus-ci.com/task/5418283233968128
+> > >   - Summary: https://api.cirrus-ci.com/v1/artifact/task/5418283233968=
+128/summary/summary.txt
+> >
+> > https://lore.kernel.org/mptcp/4e6d3d9e-1f1a-23ae-cb56-2d4f043f17ae@gmai=
+l.com/T/#u
+> >
+> > Do you mind looking at it please?
+>
+> Ah, that is actually a false positive, but we must silence it. The main
+> point is that the lock_sock() in mptcp_close() rightfully lacks the
+> _nested annotation.
+>
+> Instead of adding such annotation only for this call site, which would
+> be both ugly and dangerous, I suggest to factor_out from mptcp_close()
+> all the code the run under the socket lock, say in:
+>
+> bool __mptcp_close(struct sock *sk, long timeout)
+>         // return true if the caller need to cancel the mptcp worker
+>         // (outside the socket lock)
+>
+> and then in mptcp_subflow_queue_clean():
+>
+>         sock_hold(sk);
+>
+>         slow =3D lock_sock_fast_nested(sk);
+>         next =3D msk->dl_next;
+>         msk->first =3D NULL;
+>         msk->dl_next =3D NULL;
+>         do_cancel_work =3D __mptcp_close(sk, 0);
+>         unlock_sock_fast(sk, slow);
+>
+>         if (do_cancel_work)
+>                 mptcp_cancel_work(sk);
+>         sock_put(sk);
+>
+> All the above could require 2 different patches, 1 to factor-out the
+> helper, and 1 to actually implement the fix.
+>
 
-I'm trying to abide by what was suggested by the fs-devel folks. I can live 
-with it. But if you want to make something non-generic for all users of 
-fanotify, call the new field "trusted". This would decern when a decision was 
-made because the file was untrusted or access denied for another reason.
+Thanks for your explanation! As Matthieu said, I'll send the next
+version to the MPTCP mailing list only.
 
-> You mention that you know what you want to put in the struct, why not
-> share the details with all of us so we are all on the same page and
-> can have a proper discussion.
+Thanks!
+Menglong Dong
 
-Because I want to abide by the original agreement and not impose opinionated 
-requirements that serve no one else. I'd rather have something anyone can 
-use. I want to play nice.
-
--Steve
-
-
-
+> Cheers,
+>
+> Paolo
+>

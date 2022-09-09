@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CC35B2CF8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226535B2CFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 05:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiIIDc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 23:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S229853AbiIIDhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 23:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiIIDcu (ORCPT
+        with ESMTP id S229576AbiIIDhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 23:32:50 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85BAE72F7;
-        Thu,  8 Sep 2022 20:32:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VP7oAkp_1662694361;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VP7oAkp_1662694361)
-          by smtp.aliyun-inc.com;
-          Fri, 09 Sep 2022 11:32:45 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     jesse.brandeburg@intel.com
-Cc:     anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] iavf: Remove useless else if
-Date:   Fri,  9 Sep 2022 11:32:40 +0800
-Message-Id: <20220909033240.46329-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 8 Sep 2022 23:37:45 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12A7E291E;
+        Thu,  8 Sep 2022 20:37:43 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MP1n84tHNzmVM4;
+        Fri,  9 Sep 2022 11:34:04 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 9 Sep 2022 11:37:42 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 9 Sep 2022 11:37:41 +0800
+Message-ID: <d99630ed-0753-da9e-ab03-848b66bc3c63@huawei.com>
+Date:   Fri, 9 Sep 2022 11:37:41 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] sched: Move numa_balancing sysctls to its own file
+Content-Language: en-US
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220908072531.87916-1-wangkefeng.wang@huawei.com>
+ <YxqDa+WALRr8L7Q8@bombadil.infradead.org>
+ <679d8f0c-f8cc-d43e-5467-c32a78bcb850@huawei.com>
+In-Reply-To: <679d8f0c-f8cc-d43e-5467-c32a78bcb850@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The assignment of the else and else if branches is the same, so the else
-if here is redundant, so we remove it and add a comment to make the code
-here readable.
 
-./drivers/net/ethernet/intel/iavf/iavf_main.c:2211:6-8: WARNING: possible condition with no effect (if == else).
+On 2022/9/9 9:46, Kefeng Wang wrote:
+>
+> On 2022/9/9 8:06, Luis Chamberlain wrote:
+>> On Thu, Sep 08, 2022 at 03:25:31PM +0800, Kefeng Wang wrote:
+>>> The sysctl_numa_balancing_promote_rate_limit and sysctl_numa_balancing
+>>> are part of sched, move them to its own file.
+>>>
+>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> There is quite a bit of random cleanup on each kernel release
+>> for sysctls to do things like what you just did. Because of this it 
+>> has its
+>> own tree to help avoid conflicts. Can you base your patches on the
+>> sysctl-testing branch here and re-submit:
+>
+> Found this when reading memory tiering code，sure to re-submit based 
+> your branch,
+>
+> thanks.
+>
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing 
+>>
+Hi Luis，the numa_balancing_promote_rate_limit_MBps from commit 1db91dd846e0
+“memory tiering: rate limit NUMA migration throughput”only on 
+linux-next（from mm repo），
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2106
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/net/ethernet/intel/iavf/iavf_main.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+1）only send sysctl_numa_balancing changes based on your branch
+or
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 1671e52b6ba2..e105ffeca074 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2208,9 +2208,7 @@ iavf_set_vlan_offload_features(struct iavf_adapter *adapter,
- 		vlan_ethertype = ETH_P_8021Q;
- 	else if (prev_features & (NETIF_F_HW_VLAN_STAG_RX | NETIF_F_HW_VLAN_STAG_TX))
- 		vlan_ethertype = ETH_P_8021AD;
--	else if (prev_features & (NETIF_F_HW_VLAN_CTAG_RX | NETIF_F_HW_VLAN_CTAG_TX))
--		vlan_ethertype = ETH_P_8021Q;
--	else
-+	else /* contains prev_features & (NETIF_F_HW_VLAN_CTAG_RX | NETIF_F_HW_VLAN_CTAG_TX) */
- 		vlan_ethertype = ETH_P_8021Q;
- 
- 	if (!(features & (NETIF_F_HW_VLAN_STAG_RX | NETIF_F_HW_VLAN_CTAG_RX)))
--- 
-2.20.1.7.g153144c
+2）queued this patch from mm repo if no objection， Cc'ed Andrew
 
+Which one do your like, or other options, thanks.
+
+>>
+>> If testing goes fine, then I'd move this to sysctl-next which linux-next
+>> picks up for yet more testing.
+>>
+>> Are scheduling folks OK with this patch and me picking it up on the
+>> sysctl-next tree if all tests are a go?
+>>
+>>    Luis
+>> .

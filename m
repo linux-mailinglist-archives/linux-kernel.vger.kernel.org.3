@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AE45B2C25
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB045B2C2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 04:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiIICeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 22:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S229852AbiIICfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 22:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiIICeT (ORCPT
+        with ESMTP id S229507AbiIICff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 22:34:19 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6506109D2E;
-        Thu,  8 Sep 2022 19:34:17 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1278624b7c4so597336fac.5;
-        Thu, 08 Sep 2022 19:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=fGrsc0HBgDYyvA5mzdziJoY/MD2IIKvGq2s1hV4eNMw=;
-        b=bBWLRK/VW+7HLRt9xtpQRmk672gBKqyBOvCthHIY6QZmChG0xRIhVSuZLxzvac9/Np
-         HzI0ktV2ykCSzoi0jbU+bL8MfBnOH4J5pWYiiKXhjeddJ/MSRhgNQwVzwdHHOV2AuQvS
-         phumDuM+9RzFQEmhdq3Q3SL0OkVf/FDOQh8iSpZcFSRB/XX/7gRJmpXT0Tk8K8S8w7we
-         8yLaY8zYwsb9ZIfh+q6u9wumYfCGXvOqS9/lZIcuso8QH33hzOAn/MDmjw+QgobIzR51
-         1SyE4Jp+Qme9jvZajQ7asKs/nCtZ85YrMgrM5UncFBRRj/ngS+4JS6VFlhdLMoNJTVOC
-         zdgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=fGrsc0HBgDYyvA5mzdziJoY/MD2IIKvGq2s1hV4eNMw=;
-        b=18aeRia5fJzb5BPwCKcob7Ko9FAxQxhlAykBNgk8uHDRNUMNoHB2FWgpUCzSIbi9Qv
-         EKoyeA2f11lWkTXivauivir5d1kWU79SW0Tdrn3WBjJO5oCTruTiKCwo5tbEzrLxXUvr
-         3Vo11C+JDX94v1T7TXac0CLNBk617m7uQyITS0i/zNZDijyjTnR0T+V4/646FiqxiUmV
-         R+OohqvkGlD/gnhPOBfLUv85nleIiCcc/C3cxQyaQtj19jl0cZq2wxXntRgMVSia5w3n
-         4mL56Z77LO/nGotT8e3aiqab1SQBu+wVCMnZCntncQIqt2o2YCIi7vnNSnceAcNbFGws
-         eMHg==
-X-Gm-Message-State: ACgBeo0d7U37sgdAsE2+nwkiep3Bmu459zwv+pvoP8582xgslYcv87AL
-        priqB8obzvWFuYAx/S0BT6380Q7uKDFV/Q==
-X-Google-Smtp-Source: AA6agR68lPgGqF2kRNcn3etMwjxYP6mznt61YAwWCsxg5mLQ6N2N4KP1CWXMlBBjb11gAyrmBZsCRQ==
-X-Received: by 2002:a05:6808:2194:b0:344:e71e:39f4 with SMTP id be20-20020a056808219400b00344e71e39f4mr2616250oib.31.1662690856766;
-        Thu, 08 Sep 2022 19:34:16 -0700 (PDT)
-Received: from macondo ([2804:431:e7cc:ed0b:fde6:d0df:8e59:d84f])
-        by smtp.gmail.com with ESMTPSA id w16-20020a4a9d10000000b00448aff53822sm181326ooj.40.2022.09.08.19.34.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 19:34:16 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 23:34:12 -0300
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ACPI: PCC: Fix memory leak in address space setup
-Message-ID: <YxqmJLCQrK39Mx3O@macondo>
-References: <20220909021348.472674-1-rafaelmendsr@gmail.com>
+        Thu, 8 Sep 2022 22:35:35 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6565890825
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 19:35:29 -0700 (PDT)
+X-UUID: 2a3fe2328cdd469ab8af3e1a811a87e4-20220909
+X-UUID: 2a3fe2328cdd469ab8af3e1a811a87e4-20220909
+X-User: zhouzongmin@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <zhouzongmin@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1395227217; Fri, 09 Sep 2022 10:35:55 +0800
+From:   Zongmin Zhou <zhouzongmin@kylinos.cn>
+To:     airlied@redhat.com, kraxel@redhat.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Zongmin Zhou <zhouzongmin@kylinos.cn>,
+        Ming Xie <xieming@kylinos.cn>
+Subject: [PATCH] drm/qxl: drop set_prod_notify parameter from qxl_ring_create
+Date:   Fri,  9 Sep 2022 10:35:03 +0800
+Message-Id: <20220909023503.1886148-1-zhouzongmin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909021348.472674-1-rafaelmendsr@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 11:13:47PM -0300, Rafael Mendonca wrote:
-> The allocated memory for the pcc_data struct doesn't get freed under an
-> error path in pcc_mbox_request_channel() or acpi_os_ioremap().
-> 
-> Fixes: 77e2a04745ff8 ("ACPI: PCC: Implement OperationRegion handler for the PCC Type 3 subtype")
-> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-> ---
->  drivers/acpi/acpi_pcc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
-> index a12b55d81209..fe5ab0fdc3bf 100644
-> --- a/drivers/acpi/acpi_pcc.c
-> +++ b/drivers/acpi/acpi_pcc.c
-> @@ -63,6 +63,7 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
->  	if (IS_ERR(data->pcc_chan)) {
->  		pr_err("Failed to find PCC channel for subspace %d\n",
->  		       ctx->subspace_id);
-> +		kfree(data);
->  		return AE_NOT_FOUND;
->  	}
->  
-> @@ -72,6 +73,7 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
->  	if (!data->pcc_comm_addr) {
->  		pr_err("Failed to ioremap PCC comm region mem for %d\n",
->  		       ctx->subspace_id);
+Since qxl_io_reset(qdev) will be called immediately
+after qxl_ring_create() been called,
+and parameter like notify_on_prod will be set to default value.
+So the call to qxl_ring_init_hdr() before becomes meaningless.
 
-I was wondering if pcc_mbox_free_channel() should be called here as well
-in case of acpi_os_ioremap() failure.
+Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
+Suggested-by: Ming Xie<xieming@kylinos.cn>
+---
+ drivers/gpu/drm/qxl/qxl_cmd.c | 8 --------
+ drivers/gpu/drm/qxl/qxl_drv.h | 2 --
+ drivers/gpu/drm/qxl/qxl_kms.c | 4 +---
+ 3 files changed, 1 insertion(+), 13 deletions(-)
 
-> +		kfree(data);
->  		return AE_NO_MEMORY;
->  	}
->  
-> -- 
-> 2.34.1
-> 
+diff --git a/drivers/gpu/drm/qxl/qxl_cmd.c b/drivers/gpu/drm/qxl/qxl_cmd.c
+index 7b00c955cd82..63aa96a69752 100644
+--- a/drivers/gpu/drm/qxl/qxl_cmd.c
++++ b/drivers/gpu/drm/qxl/qxl_cmd.c
+@@ -53,17 +53,11 @@ void qxl_ring_free(struct qxl_ring *ring)
+ 	kfree(ring);
+ }
+ 
+-void qxl_ring_init_hdr(struct qxl_ring *ring)
+-{
+-	ring->ring->header.notify_on_prod = ring->n_elements;
+-}
+-
+ struct qxl_ring *
+ qxl_ring_create(struct qxl_ring_header *header,
+ 		int element_size,
+ 		int n_elements,
+ 		int prod_notify,
+-		bool set_prod_notify,
+ 		wait_queue_head_t *push_event)
+ {
+ 	struct qxl_ring *ring;
+@@ -77,8 +71,6 @@ qxl_ring_create(struct qxl_ring_header *header,
+ 	ring->n_elements = n_elements;
+ 	ring->prod_notify = prod_notify;
+ 	ring->push_event = push_event;
+-	if (set_prod_notify)
+-		qxl_ring_init_hdr(ring);
+ 	spin_lock_init(&ring->lock);
+ 	return ring;
+ }
+diff --git a/drivers/gpu/drm/qxl/qxl_drv.h b/drivers/gpu/drm/qxl/qxl_drv.h
+index 47c169673088..432758ad39a3 100644
+--- a/drivers/gpu/drm/qxl/qxl_drv.h
++++ b/drivers/gpu/drm/qxl/qxl_drv.h
+@@ -277,10 +277,8 @@ struct qxl_ring *qxl_ring_create(struct qxl_ring_header *header,
+ 				 int element_size,
+ 				 int n_elements,
+ 				 int prod_notify,
+-				 bool set_prod_notify,
+ 				 wait_queue_head_t *push_event);
+ void qxl_ring_free(struct qxl_ring *ring);
+-void qxl_ring_init_hdr(struct qxl_ring *ring);
+ int qxl_check_idle(struct qxl_ring *ring);
+ 
+ static inline uint64_t
+diff --git a/drivers/gpu/drm/qxl/qxl_kms.c b/drivers/gpu/drm/qxl/qxl_kms.c
+index 9bf6d4cc98d4..dc3828db1991 100644
+--- a/drivers/gpu/drm/qxl/qxl_kms.c
++++ b/drivers/gpu/drm/qxl/qxl_kms.c
+@@ -194,7 +194,6 @@ int qxl_device_init(struct qxl_device *qdev,
+ 					     sizeof(struct qxl_command),
+ 					     QXL_COMMAND_RING_SIZE,
+ 					     qdev->io_base + QXL_IO_NOTIFY_CMD,
+-					     false,
+ 					     &qdev->display_event);
+ 	if (!qdev->command_ring) {
+ 		DRM_ERROR("Unable to create command ring\n");
+@@ -207,7 +206,6 @@ int qxl_device_init(struct qxl_device *qdev,
+ 				sizeof(struct qxl_command),
+ 				QXL_CURSOR_RING_SIZE,
+ 				qdev->io_base + QXL_IO_NOTIFY_CURSOR,
+-				false,
+ 				&qdev->cursor_event);
+ 
+ 	if (!qdev->cursor_ring) {
+@@ -219,7 +217,7 @@ int qxl_device_init(struct qxl_device *qdev,
+ 	qdev->release_ring = qxl_ring_create(
+ 				&(qdev->ram_header->release_ring_hdr),
+ 				sizeof(uint64_t),
+-				QXL_RELEASE_RING_SIZE, 0, true,
++				QXL_RELEASE_RING_SIZE, 0,
+ 				NULL);
+ 
+ 	if (!qdev->release_ring) {
+-- 
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus

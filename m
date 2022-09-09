@@ -2,187 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EB15B2DF6
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF305B2DF5
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 07:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiIIFIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 01:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiIIFIl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230196AbiIIFIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 9 Sep 2022 01:08:41 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBAE125185;
-        Thu,  8 Sep 2022 22:08:39 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s206so547432pgs.3;
-        Thu, 08 Sep 2022 22:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date;
-        bh=H6g0zw3x4uhdRShDitcctRPwuYOehec1y5QBtGADziI=;
-        b=AT+UNya2KqPtonAW2GUdtaoo3iFkrMfKIoqAq0Gw8GeyMrKL1lMSLpf+2w4LkFVSmd
-         rF5ZkbBN8oRUfZaS3wOuba33F07ttW5ivZYhvYDdDHVLOzs80JFedoPISk7NUMhu74MA
-         Zr/QcYtDp7TLq3sudBFrI77fT5mKT9vmlPLD59egzWKS7ugwJNTUrbbg4Z/BldIyEylR
-         CYkSS9owOSN59B9v6OHSagL6zyQwqTrLdMYxo6RuyfPF/WAtm7deFAXPMn0hDhilFSY9
-         okSqyCWxlt+Cks/WpfEHYTdcncqYv253gOZoYF/yQPqZ6fI/XHK0s1uUfKIGdBZldpiX
-         tE3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=H6g0zw3x4uhdRShDitcctRPwuYOehec1y5QBtGADziI=;
-        b=ONh9KvNDA/yAT1Dlqt3Pb7wg8GVmPi4XXQBBpPiGB4nnjKMg9t8LDlyyV8Z1pNoy9W
-         DKRMe2y8f3O5+22s+whMsxs/DaBvCqv/VVBLCDvComM0GhwggEclTOm0MrGPUJseM1tV
-         uZl4gg96T+GZdrunhn9l6ZPfYbWc1WWVDC849w+YLfnS6bCJQjTBSxsyddD9/QoiYKe6
-         0jMMzvfEfm8wKBgPCYWC1xi6df5L7ycCxAr6LOUVjtcYAhhjRiRgXNvuGfBIAgJfw06A
-         LTgsrWnMfvyaolM1q2exbgwl+8e0BtMPAkGPIWaTjMUGFuhADMTdIgAH/BPl1S4gselh
-         y0sA==
-X-Gm-Message-State: ACgBeo3yfnldA03vRUXS8MDw7FSqSKB3/H7mdTYZFS3z8bF4b15lV85U
-        MD49mswIUXZlH8M/ogjRg7E=
-X-Google-Smtp-Source: AA6agR7gN7EshBqO1ylnbrWnBbL9+E1IKd2SVzOkBZFoasIfE3oF3x9tt81XF1xqi+eQ5iv1XatfyQ==
-X-Received: by 2002:a65:5688:0:b0:3c2:1015:988e with SMTP id v8-20020a655688000000b003c21015988emr10719184pgs.280.1662700118976;
-        Thu, 08 Sep 2022 22:08:38 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id b81-20020a621b54000000b005380832c1fesm605544pfb.10.2022.09.08.22.08.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 22:08:38 -0700 (PDT)
-Message-ID: <d1af650a-1e0b-a650-4cda-57fb1d54f1af@gmail.com>
-Date:   Fri, 9 Sep 2022 14:08:30 +0900
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229926AbiIIFIi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 9 Sep 2022 01:08:38 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE5512518F;
+        Thu,  8 Sep 2022 22:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662700116; x=1694236116;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3Z5IUwtXOaJd3WLXidp69Z38tSz9CI8nL8eloIE3i/A=;
+  b=JGJK+l6RsdTYKsNm+36UgMhwc2tAljYRIddNyHJNJ8olfDGN7dXd6l9C
+   nnh0ymdOF9Y437nfbh5jzm27R2/MROp9a9e3IKmdZheduuu8HaJ2nEfu9
+   z8BCfvQigt11EUmYNR/9ya5hH7q1V9tgQJij+WyxPr05wBPYi1HkQbYi8
+   IPQt6LSqSZL67Tv991qwE8Pa1y1nBNgKZd/IeQdF/4EC187vh7XJU24wn
+   guDvoRTw/63qgVAw0zRiE/AaZUBjEXGHCw7TFA2PIgZjSWiyjb+gYj6rV
+   yiW8FeNzsiQf2/ARE9wc1pt4kdZoXsqXU1OMhhBFKazXmrqaMKINmF2c4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277131593"
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="277131593"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 22:08:36 -0700
+X-IronPort-AV: E=Sophos;i="5.93,302,1654585200"; 
+   d="scan'208";a="740932401"
+Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 22:08:35 -0700
+Message-ID: <68cbcde7-7ae5-32ba-05c2-7ffec11be385@linux.intel.com>
+Date:   Thu, 8 Sep 2022 22:08:35 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-To:     Kees Cook <keescook@chromium.org>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <20220902223507.2537469-1-keescook@chromium.org>
-Subject: Re: [RFC] docs: Define c_paren_attributes for attributes with
- arguments
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport
+ support
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220902223507.2537469-1-keescook@chromium.org>
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        "Cox, Philip" <philip.cox@canonical.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <449b29a40dcbafc9c0b81d19ed5c377b290b0ab5.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <449b29a40dcbafc9c0b81d19ed5c377b290b0ab5.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
 
-I expected some responses from Jon, but looks like he's been busy
-elsewhere. Let me chime in.
 
-On Fri,  2 Sep 2022 15:35:07 -0700, Kees Cook wrote:
-> While Sphinx's "c_id_attributes" is needed for basic attributes, any
-> attributes with arguments need to be defined in "c_paren_attributes"
-> to avoid errors like:
+On 9/8/22 8:48 PM, Huang, Kai wrote:
+> On Wed, 2022-09-07 at 17:27 -0700, Kuppuswamy Sathyanarayanan wrote:
+>> +TEST(verify_report)
+>> +{
+>> +	__u8 reportdata[TDX_REPORTDATA_LEN];
+>> +	struct tdreport tdreport;
+>> +	struct tdx_report_req req;
+>> +	int devfd, i;
+>> +
+>> +	devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
+>> +
+>> +	ASSERT_LT(0, devfd);
+>> +
+>> +	/* Generate sample report data */
+>> +	for (i = 0; i < TDX_REPORTDATA_LEN; i++)
+>> +		reportdata[i] = i;
+>> +
+>> +	/* Initialize IOCTL request */
+>> +	req.subtype     = 0;
+>> +	req.reportdata  = (__u64)reportdata;
+>> +	req.rpd_len     = TDX_REPORTDATA_LEN;
+>> +	req.tdreport    = (__u64)&tdreport;
+>> +	req.tdr_len     = sizeof(tdreport);
+>> +
 > 
-> include/linux/fortify-string.h:116: warning: Function parameter or member '__builtin_strncpy' not described in '__diagnose_as'
-> include/linux/fortify-string.h:116: warning: Function parameter or member '1' not described in '__diagnose_as'
-> include/linux/fortify-string.h:116: warning: Function parameter or member '2' not described in '__diagnose_as'
-> include/linux/fortify-string.h:116: warning: Function parameter or member '3' not described in '__diagnose_as'
+> 'req' is a local variable, which isn't guaranteed to be zero. Looks you need to
+> explicitly clear 'req' otherwise the req.reserved[7] may not be zero.
 
-These warnings are from ./scripts/kernel-doc.
-So I think you need to teach the script about "__diagnose_as" so that
-the kernel-doc comment of strncpy() can be converted to reST doc
-which Sphinx can understand.
+In the next version, I explicitly set it to 0. I could initialize the struct to
+0. But doing it explicitly will show the expected values clearly.
 
-Past changes in ./scripts/kernel-doc might give you some hints.
-
-That said, I think Jon should be able to provide a pin-point suggestion.
-
-HTH,
-
-        Thanks, akira
+memset(req.reserved, 0, sizeof(req.reserved));
 
 > 
-> Move such attributes to "c_paren_attributes" and add __alloc_size
-> and __diagnose_as to the list.> 
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-doc@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> This patch is a lie (the above warning is actually not fixed), but I
-> was hoping someone could help with this. The Sphinx documentation says:> 
-> c_paren_attributes
->   A list of strings that the parser additionally should accept as
->   attributes with one argument. That is, if my_align_as is in the list,
->   then my_align_as(X) is parsed as an attribute for all strings X that
->   have balanced braces ((), [], and {}). This can for example be used
->   when attributes have been #define d for portability.
-> 
-> However, this appears to only work for attributes with literally a single
-> argument not "all strings X", so things like __printf and __diagnose_as
-> don't work.
-> 
-> Does this need fixing in Sphinx? Or am I missing something?
-> ---
->  Documentation/conf.py | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/conf.py b/Documentation/conf.py
-> index 934727e23e0e..17f996e3709f 100644
-> --- a/Documentation/conf.py
-> +++ b/Documentation/conf.py
-> @@ -59,18 +59,14 @@ if major >= 3:
->  
->              # include/linux/compiler_attributes.h:
->              "__alias",
-> -            "__aligned",
->              "__aligned_largest",
->              "__always_inline",
-> -            "__assume_aligned",
->              "__cold",
->              "__attribute_const__",
->              "__copy",
->              "__pure",
->              "__designated_init",
->              "__visible",
-> -            "__printf",
-> -            "__scanf",
->              "__gnu_inline",
->              "__malloc",
->              "__mode",
-> @@ -80,7 +76,6 @@ if major >= 3:
->              "__noreturn",
->              "__packed",
->              "__pure",
-> -            "__section",
->              "__always_unused",
->              "__maybe_unused",
->              "__used",
-> @@ -97,6 +92,21 @@ if major >= 3:
->  
->              # include/linux/linkage.h:
->              "asmlinkage",
-> +
-> +            # include/linux/fortify-string.h:
-> +            "__FORTIFY_INLINE",
-> +        ]
-> +
-> +        # Same as c_id_attributes above, but for those with arguments.
-> +        c_paren_attributes = [
-> +            # include/linux/compiler_attributes.h:
-> +            "__aligned",
-> +            "__alloc_size",
-> +            "__assume_aligned",
-> +            "__diagnose_as",
-> +            "__printf",
-> +            "__scanf",
-> +            "__section",
->          ]
->  
->  else:
-> -- 
-> 2.34.1
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

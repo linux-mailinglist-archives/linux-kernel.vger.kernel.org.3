@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AEF5B2E22
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 07:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8915B2E47
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 07:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiIIFeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 01:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S229994AbiIIFsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 01:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiIIFe2 (ORCPT
+        with ESMTP id S229975AbiIIFr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 01:34:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D601171;
-        Thu,  8 Sep 2022 22:34:26 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MP4P10dQmznVCR;
-        Fri,  9 Sep 2022 13:31:49 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 13:34:24 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-        <trix@redhat.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [bpf-next 2/2] libbpf: Add pathname_concat() helper
-Date:   Fri, 9 Sep 2022 13:45:46 +0800
-Message-ID: <1662702346-29665-2-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1662702346-29665-1-git-send-email-wangyufen@huawei.com>
-References: <1662702346-29665-1-git-send-email-wangyufen@huawei.com>
+        Fri, 9 Sep 2022 01:47:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FDA7F12D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 22:47:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E4ADB8206F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Sep 2022 05:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 700B8C433D6;
+        Fri,  9 Sep 2022 05:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662702474;
+        bh=0vVGtD3bKh45RiCjRwMej10XDq4aP2ygUfgxljQEXXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0a77IeEQp1gjZsZC7UYBds9koxGkx+nhssvrM7AKhM6rYp27+K3SbfaFeiM3CfbPh
+         a7JeqkjVE1ULnxgCfirYeR527dCBL4wt3R8+ANWluA8wl7x4iwx3781AZHHZ0uH4SN
+         P0d7pInr3BFo0Nq3lGH8QX4sNkvZBQsVpphYVHfE=
+Date:   Fri, 9 Sep 2022 07:47:52 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     forest@alittletooquiet.net, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH] staging: vt6655: fix potential memory conruption bug
+Message-ID: <YxrTiN1OuJ2cbtrn@kroah.com>
+References: <20220909053038.33188-1-namcaov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909053038.33188-1-namcaov@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,152 +51,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move snprintf and len check to common helper pathname_concat() to make the
-code simpler.
+On Fri, Sep 09, 2022 at 07:30:39AM +0200, Nam Cao wrote:
+> A line of code is attempting to set the entire struct vnt_rdes0 to
+> zero by treating it as unsigned int. However, this only works if
+> sizeof(unsigned int) is equal to sizeof(struct vnt_rdes0) (4 bytes),
+> which is not guaranteed. This may cause memory conruption if
+> sizeof(unsigned int) is 8 bytes for example. Fix the problem by using
+> memset instead.
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- tools/lib/bpf/libbpf.c | 74 ++++++++++++++++++--------------------------------
- 1 file changed, 27 insertions(+), 47 deletions(-)
+sizeof(unsigned int) is not going to be 8 bytes, so there's no memory
+issue here.  But your fix is good, so can you please just rewrite this
+to be "make it more obvious what is happening" type of patch?
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 5854b92..238a03e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2096,20 +2096,31 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
- 	return true;
- }
- 
--static int build_map_pin_path(struct bpf_map *map, const char *path)
-+static int pathname_concat(const char *path, const char *name, char *buf)
- {
--	char buf[PATH_MAX];
- 	int len;
- 
--	if (!path)
--		path = "/sys/fs/bpf";
--
--	len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
-+	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
- 	if (len < 0)
- 		return -EINVAL;
- 	else if (len >= PATH_MAX)
- 		return -ENAMETOOLONG;
- 
-+	return 0;
-+}
-+
-+static int build_map_pin_path(struct bpf_map *map, const char *path)
-+{
-+	char buf[PATH_MAX];
-+	int err;
-+
-+	if (!path)
-+		path = "/sys/fs/bpf";
-+
-+	err = pathname_concat(path, bpf_map__name(map), buf);
-+	if (err)
-+		return err;
-+
- 	return bpf_map__set_pin_path(map, buf);
- }
- 
-@@ -7959,17 +7970,8 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
- 			continue;
- 
- 		if (path) {
--			int len;
--
--			len = snprintf(buf, PATH_MAX, "%s/%s", path,
--				       bpf_map__name(map));
--			if (len < 0) {
--				err = -EINVAL;
--				goto err_unpin_maps;
--			} else if (len >= PATH_MAX) {
--				err = -ENAMETOOLONG;
-+			if (pathname_concat(path, bpf_map__name(map), buf))
- 				goto err_unpin_maps;
--			}
- 			sanitize_pin_path(buf);
- 			pin_path = buf;
- 		} else if (!map->pin_path) {
-@@ -8007,14 +8009,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
- 		char buf[PATH_MAX];
- 
- 		if (path) {
--			int len;
--
--			len = snprintf(buf, PATH_MAX, "%s/%s", path,
--				       bpf_map__name(map));
--			if (len < 0)
--				return libbpf_err(-EINVAL);
--			else if (len >= PATH_MAX)
--				return libbpf_err(-ENAMETOOLONG);
-+			err = pathname_concat(path, bpf_map__name(map), buf);
-+			if (err)
-+				return err;
- 			sanitize_pin_path(buf);
- 			pin_path = buf;
- 		} else if (!map->pin_path) {
-@@ -8032,6 +8029,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
- int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
- {
- 	struct bpf_program *prog;
-+	char buf[PATH_MAX];
- 	int err;
- 
- 	if (!obj)
-@@ -8043,17 +8041,8 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
- 	}
- 
- 	bpf_object__for_each_program(prog, obj) {
--		char buf[PATH_MAX];
--		int len;
--
--		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
--		if (len < 0) {
--			err = -EINVAL;
-+		if (pathname_concat(path, prog->name, buf))
- 			goto err_unpin_programs;
--		} else if (len >= PATH_MAX) {
--			err = -ENAMETOOLONG;
--			goto err_unpin_programs;
--		}
- 
- 		err = bpf_program__pin(prog, buf);
- 		if (err)
-@@ -8064,13 +8053,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
- 
- err_unpin_programs:
- 	while ((prog = bpf_object__prev_program(obj, prog))) {
--		char buf[PATH_MAX];
--		int len;
--
--		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
--		if (len < 0)
--			continue;
--		else if (len >= PATH_MAX)
-+		if (pathname_concat(path, prog->name, buf))
- 			continue;
- 
- 		bpf_program__unpin(prog, buf);
-@@ -8089,13 +8072,10 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
- 
- 	bpf_object__for_each_program(prog, obj) {
- 		char buf[PATH_MAX];
--		int len;
- 
--		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
--		if (len < 0)
--			return libbpf_err(-EINVAL);
--		else if (len >= PATH_MAX)
--			return libbpf_err(-ENAMETOOLONG);
-+		err = pathname_concat(path, prog->name, buf);
-+		if (err)
-+			return libbpf_err(err);
- 
- 		err = bpf_program__unpin(prog, buf);
- 		if (err)
--- 
-1.8.3.1
+thanks,
 
+greg k-h

@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FD35B2E1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 07:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51615B2E1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 07:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiIIFbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Sep 2022 01:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S230266AbiIIFbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Sep 2022 01:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIIFbC (ORCPT
+        with ESMTP id S230246AbiIIFbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Sep 2022 01:31:02 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B9811EA53;
-        Thu,  8 Sep 2022 22:31:00 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bq23so863148lfb.7;
-        Thu, 08 Sep 2022 22:31:00 -0700 (PDT)
+        Fri, 9 Sep 2022 01:31:12 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9219811FC84
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Sep 2022 22:31:09 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id m1so877639edb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Sep 2022 22:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=dzFYcSV0AZC8OzcF88d2UgzTXJbjZS/keSWnAO017vc=;
-        b=ayMIV5wahl/SjJ3e3f7rrK6sAK/+YMEpQETXQCHN61xyvTiKoB2O05IiZLhgmk3BUm
-         QQQAKCdBA4w5SCVhYsWAyAZAwyAakmg2hOHINUhT8a8H66KjJRHNAZ8X6gpy+EBWMifE
-         RjjwwPnnwsplYxykdCdu9VI3s6NEvqizeqEJze5lKqtXcz/HBzmL9G3PU/Np5od0yXqm
-         A5ycPWPT/HHUOkZoDj5PdWUaiVvu9Iyt1CWjVgKnkAPthfGfsZMhDFSzUxk3avaE0j+C
-         WOfNQSE5QUu8xRTDlQ4O0mU4euj+80lbK+i1fxPgROAdjspcT7QI1JHJ/xIQa/ugrHB2
-         uHEw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=rFLYto3K2CmPKXSaAwZZF63wiwFYIhCIDikeGhcUnes=;
+        b=Vh+mhSWgZgTLphVA7O4Bl/hkzzn+QFBX+c6TpP67Jvhxve+3ZvMEsnRGarb9hn4QnI
+         gR3sKN1N+9CcKQsENky2g3dZmQPaNajPmTLnUmxo0DQMMv7EGIxLlymkU33pn+UlsXBI
+         eneOP25O/x24rccf9CwVkHaTE/axO56ileDjfRlC1dk5sU4OWUipKuxvbg2vSLEwjm6K
+         JM7CIiZNbqusM3B6IZZF0njS6sndC+VpI4F23c6BvXP/w7/ymQOtnfLn7Cz9UOylkpLp
+         5uFuS3PppUMN3Bf8pC72ptvsULZOPHRtkQWiaoeJnwxTG0f5wGTA9fS4Bpwg9Yhjt/8b
+         7DJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=dzFYcSV0AZC8OzcF88d2UgzTXJbjZS/keSWnAO017vc=;
-        b=8K6CNLhpgrPJ/Rnh4MSDVnf1B+njI2JUiFEoI8Uoa/dNJkNJ3eUyntsNsZRgbqkLld
-         LfKKlXk2JXAifI3P9kX5ZituaSwS7SnvT9BvjcAgBipXGZwaNKQwcrOhmJuqaYgQzpia
-         QdbMtGAjwOxOSYpa/Ece37Z9W/WgKnIS/WxeAPFZprkEijBYnwbTRSvcejtiDgBFbD1C
-         X+AG9xbO2H3OKZ5ZQXomD4foymUFYo9Pa7PeHru3lATjfVCIPoxJvIfyQzpuTBVnbsAA
-         hGEQyD5gLXyIz8o8UCTSDw2nzkX99lY4zmDITvxkzJmB+yZggI/oKP/xYI+yFYTi36HT
-         rjyg==
-X-Gm-Message-State: ACgBeo3uHv5joHffEQEHVcxzapi0qUZJ4bGU0DWIdxgQzIrrNvgcEpkI
-        PxB58LuNp65f42dAGGSaHLhrda4MsSZWpDz8DAc=
-X-Google-Smtp-Source: AA6agR4TIPzG58nzTztaGfpSg9qEpzrjSJU9Kd6zH4PWlBDT6gbBxiQXsOzE4CyQoWh/iSb3F2zeVl0OLQRZi3IF2J8=
-X-Received: by 2002:ac2:4e0f:0:b0:48b:7a5f:91c8 with SMTP id
- e15-20020ac24e0f000000b0048b7a5f91c8mr4143120lfr.430.1662701458885; Thu, 08
- Sep 2022 22:30:58 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=rFLYto3K2CmPKXSaAwZZF63wiwFYIhCIDikeGhcUnes=;
+        b=DRTUhuk7d92l+vGFxCroXORgU6rPjKRSOsz4WN+hNG0lqsR/DGm2h+K9UgN5bc50lA
+         1h8gZKqYnU3NTVX8kX19vVRJnAtwbfC/VDV5WnjzEpM4EABizJokbB7DsmdDjYPuOo/9
+         8tAN5QpAj7Habl7kD85HEB3aYQCNz3YvNFeLhAcXezTH9sPQdlcF9uLG8MKvBYT60q/B
+         +xyT3EpbSii7Y7uztxY3r1hApD/i50onetPLlTlFMi+T33kg3lrLP0yX5w7IVdGmpDqE
+         x9cTzimLM/yUFzFWxcZMXHF4uKTnk26x8GUMEF2mWU5mVEKvup2UVmuq9kMKLvG+pb9j
+         v0ag==
+X-Gm-Message-State: ACgBeo0L+8XjKbHw9jiA00WkXdUi2/rsQcZm2LRZF+S2QBa0zfATIaX8
+        LgwEGcFK5HF3EmSLR209h7c=
+X-Google-Smtp-Source: AA6agR5iOqgAL3CEJpA6vw7nmX1vYQnQX4bL/IqLhmfPnASR2l8FZA7WUpKLDWc48uWUwD9jd0kWdg==
+X-Received: by 2002:a05:6402:35c5:b0:450:4b7d:9c49 with SMTP id z5-20020a05640235c500b004504b7d9c49mr5636435edc.149.1662701468058;
+        Thu, 08 Sep 2022 22:31:08 -0700 (PDT)
+Received: from localhost.localdomain (ip-217-105-46-83.ip.prioritytelecom.net. [217.105.46.83])
+        by smtp.gmail.com with ESMTPSA id d16-20020a50fb10000000b0044ee91129f9sm369370edq.70.2022.09.08.22.31.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 22:31:07 -0700 (PDT)
+From:   Nam Cao <namcaov@gmail.com>
+To:     forest@alittletooquiet.net, gregkh@linuxfoundation.org
+Cc:     namcaov@gmail.com, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH] staging: vt6655: fix potential memory conruption bug
+Date:   Fri,  9 Sep 2022 07:30:39 +0200
+Message-Id: <20220909053038.33188-1-namcaov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <SJ0PR20MB433769C4E2C73207CC9B1F15E9439@SJ0PR20MB4337.namprd20.prod.outlook.com>
-In-Reply-To: <SJ0PR20MB433769C4E2C73207CC9B1F15E9439@SJ0PR20MB4337.namprd20.prod.outlook.com>
-From:   Alex Shi <seakeel@gmail.com>
-Date:   Fri, 9 Sep 2022 13:30:22 +0800
-Message-ID: <CAJy-Amnx92Fbm5XT1LwAZ73ENharwTF70scYDkw8J9FA4j6Qww@mail.gmail.com>
-Subject: Re: [PATCH] docs: zh_CN: fix several inapproriate terms
-To:     Whye <whye314@outlook.com>
-Cc:     Alex Shi <alexs@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -69,64 +68,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCBTZXAgOSwgMjAyMiBhdCAxMToxNiBBTSBXaHllIDx3aHllMzE0QG91dGxvb2suY29t
-PiB3cm90ZToNCj4NCj4gQ29ycmVjdCBzZXZlcmFsIGluYXBwcm9yaWF0ZSB0ZXJtcyBhbWQgbWFy
-a3MNCj4NCj4gU2lnbmVkLW9mZi1ieTogV2h5ZSA8d2h5ZTMxNEBvdXRsb29rLmNvbT4NCj4gLS0t
-DQo+ICBEb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9wcm9jZXNzLzEuSW50cm8ucnN0
-ICAgfCAyICstDQo+ICBEb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9wcm9jZXNzLzIu
-UHJvY2Vzcy5yc3QgfCA0ICsrLS0NCj4gIDIgZmlsZXMgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCsp
-LCAzIGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90cmFuc2xh
-dGlvbnMvemhfQ04vcHJvY2Vzcy8xLkludHJvLnJzdCBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRp
-b25zL3poX0NOL3Byb2Nlc3MvMS5JbnRyby5yc3QNCj4gaW5kZXggNGY5Mjg0Y2JlMzNiLi41YjAy
-ZTc0YWRhNzIgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NO
-L3Byb2Nlc3MvMS5JbnRyby5yc3QNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMv
-emhfQ04vcHJvY2Vzcy8xLkludHJvLnJzdA0KPiBAQCAtMTg1LDcgKzE4NSw3IEBAIEFuZHJldyBN
-b3J0b24sIEFuZHJldyBQcmljZSwgVHN1Z2lrYXp1IFNoaWJhdGEg5ZKMIEpvY2hlbiBWb8OfIOOA
-gg0KPiAg5omA5pyJ6LSh54yu57uZ5YaF5qC455qE5Luj56CB6YO95b+F6aG75piv5ZCI5rOV55qE
-5YWN6LS56L2v5Lu244CC5Zug5q2k77yM5LiN5o6l5Y+X5Yy/5ZCN77yI5oiW5YyW5ZCN77yJ6LSh
-54yuDQo+ICDogIXnmoTku6PnoIHjgILmiYDmnInotKHnjK7ogIXpg73pnIDopoHlnKjku5bku6zn
-moTku6PnoIHkuIrigJxzaWduIG9mZu+8iOetvuWPke+8ieKAne+8jOWjsOaYjuS7o+eggeWPr+S7
-pQ0KPiAg5ZyoR1BM5LiL5LiO5YaF5qC45LiA6LW35YiG5Y+R44CC5peg5rOV5o+Q5L6b5pyq6KKr
-5YW25omA5pyJ6ICF6K645Y+v5Li65YWN6LS56L2v5Lu255qE5Luj56CB77yM5oiW5Y+v6IO95Li6
-DQo+IC3lhoXmoLjpgKDmiJDniYjmnYPnm7jlhbPpl67popjnmoTku6PnoIHvvIjkvovlpoLvvIzn
-lLHnvLrkuY/pgILlvZPkv53miqTnmoTlj43lkJHlt6XnqIvlt6XkvZzmtL7nlJ/nmoTku6PnoIHv
-vIkNCj4gK+WGheaguOmAoOaIkOeJiOadg+ebuOWFs+mXrumimOeahOS7o+egge+8iOS+i+Wmgu+8
-jOeUsee8uuS5j+mAguW9k+S/neaKpOeahOmAhuWQkeW3peeoi+W3peS9nOa0vueUn+eahOS7o+eg
-ge+8iQ0KDQpXZSB0YWxrZWQgYWJvdXQgdGhlIGRpZmZlcmVudCwgYW5kIGJvdGggb2YgdGhlbSBo
-YXZlIHN1cHBvcnRlciBhbmQNCm9wcG9uZW50cy4gQ2hhbmdlIGlzIHVubmVzc2FyeS4NCg0KRm9y
-IG90aGVycw0KDQpSZXZpZXdlZC1ieTogQWxleCBTaGkgPGFsZXhzQGtlcm5lbC5vcmc+DQoNCj4g
-IOS4jeiDveiiq+aOpeWPl+OAgg0KPg0KPiAg5pyJ5YWz54mI5p2D6Zeu6aKY55qE5o+Q6Zeu5Zyo
-TGludXjlvIDlj5Hpgq7ku7bliJfooajkuK3lvojluLjop4HjgILov5nmoLfnmoTpl67popjpgJrl
-uLjkvJrlvpfliLDkuI3lsJHnrZTmoYjvvIwNCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24v
-dHJhbnNsYXRpb25zL3poX0NOL3Byb2Nlc3MvMi5Qcm9jZXNzLnJzdCBiL0RvY3VtZW50YXRpb24v
-dHJhbnNsYXRpb25zL3poX0NOL3Byb2Nlc3MvMi5Qcm9jZXNzLnJzdA0KPiBpbmRleCA0YTZlZDAy
-MTk0OTQuLjA0NGU5OThiMjlhYSAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi90cmFuc2xh
-dGlvbnMvemhfQ04vcHJvY2Vzcy8yLlByb2Nlc3MucnN0DQo+ICsrKyBiL0RvY3VtZW50YXRpb24v
-dHJhbnNsYXRpb25zL3poX0NOL3Byb2Nlc3MvMi5Qcm9jZXNzLnJzdA0KPiBAQCAtMzI3LDcgKzMy
-Nyw3IEBAIHJlZGhhdC5jb20vbWFpbG1hbi9saXN0aW5mb+OAgg0KPiAgICDlrZDns7vnu5/lvIDl
-j5HkurrlkZjnmoTmnIDkvbPlnLrmiYDjgIINCj4NCj4gIOacgOWQjuS4gOeCueKAlOKAlOaJvuWI
-sOato+ehrueahOmCruS7tuWIl+ihqOKAlOKAlOaYr+W8gOWPkeS6uuWRmOW4uOWHuumUmeeahOWc
-sOaWueOAguWcqGxpbnV4LWtlcm5lbOS4ig0KPiAt5o+Q5Ye65LiO572R57uc55u45YWz55qE6Zeu
-6aKY55qE5Lq65Yeg5LmO6IKv5a6a5Lya5pS25Yiw5LiA5Liq56S86LKM55qE5bu66K6u77yM6L2s
-5YiwbmV0ZGV25YiX6KGo5LiK5o+Q5Ye677yMDQo+ICvmj5Dlh7rkuI7nvZHnu5znm7jlhbPnmoTp
-l67popjnmoTkurrlh6DkuY7ogq/lrprkvJrmlLbliLDkuIDkuKrnpLzosoznmoTlu7rorq7vvJro
-vazliLBuZXRkZXbliJfooajkuIrmj5Dlh7rvvIwNCj4gIOWboOS4uui/meaYr+Wkp+WkmuaVsOe9
-kee7nOW8gOWPkeS6uuWRmOe7j+W4uOWHuueOsOeahOWIl+ihqOOAgui/mOacieWFtuS7luWIl+ih
-qOWPr+eUqOS6jnNjc2njgIF2aWRlbzRsaW51eOOAgQ0KPiAgaWRl44CBZmlsZXN5c3RlbeetieWt
-kOezu+e7n+OAguafpeaJvumCruS7tuWIl+ihqOeahOacgOS9s+S9jee9ruaYr+S4juWGheaguOa6
-kOS7o+eggeS4gOi1t+aJk+WMheeahA0KPiAgTUFJTlRBSU5FUlPmlofku7bjgIINCj4gQEAgLTMz
-OCw3ICszMzgsNyBAQCBNQUlOVEFJTkVSU+aWh+S7tuOAgg0KPiAg5YWz5LqO5aaC5L2V5byA5aeL
-5YaF5qC45byA5Y+R6L+H56iL55qE6Zeu6aKY5b6I5bi46KeB4oCU4oCU5Liq5Lq65ZKM5YWs5Y+4
-55qG54S244CC5ZCM5qC35bi46KeB55qE5piv5aSx6K+v77yM6L+ZDQo+ICDkvb/lvpflhbPns7vn
-moTlvIDlp4vmr5TmnKzlupTnmoTmm7Tlm7Dpmr7jgIINCj4NCj4gLeWFrOWPuOmAmuW4uOW4jOac
-m+iBmOivt+efpeWQjeeahOW8gOWPkeS6uuWRmOadpeWQr+WKqOW8gOWPkeWboumYn+OAguWunumZ
-heS4iu+8jOi/meaYr+S4gOenjeacieaViOeahOaKgOacr+OAgg0KPiAr5YWs5Y+46YCa5bi45biM
-5pyb6IGY6K+355+l5ZCN55qE5byA5Y+R5Lq65ZGY5p2l5ZCv5Yqo5byA5Y+R5Zui6Zif44CC5a6e
-6ZmF5LiK77yM6L+Z5piv5LiA56eN5pyJ5pWI55qE5pa55byP44CCDQo+ICDkvYblroPkuZ/lvoDl
-voDmmK/mmILotLXnmoTvvIzogIzkuJTlr7nlop7liqDmnInnu4/pqoznmoTlhoXmoLjlvIDlj5Hk
-urrlkZjnmoTmlbDph4/msqHmnInlpJrlpKfluK7liqnjgILogIMNCj4gIOiZkeWIsOaXtumXtOaK
-leWFpe+8jOWPr+S7peiuqeWGhemDqOW8gOWPkeS6uuWRmOWKoOW/q0xpbnV45YaF5qC455qE5byA
-5Y+R6YCf5bqm44CC5Yip55So6L+Z5q615pe26Ze05Y+v5LulDQo+ICDorqnpm4fkuLvmi6XmnInk
-uIDmibnml6Lkuobop6PlhoXmoLjlj4jkuobop6Plhazlj7jnmoTlvIDlj5HkurrlkZjvvIzov5jl
-j6/ku6XluK7liqnln7norq3lhbbku5bkurrjgILku47kuK3mnJ8NCj4gLS0NCj4gMi4yNS4xDQo+
-DQo=
+A line of code is attempting to set the entire struct vnt_rdes0 to
+zero by treating it as unsigned int. However, this only works if
+sizeof(unsigned int) is equal to sizeof(struct vnt_rdes0) (4 bytes),
+which is not guaranteed. This may cause memory conruption if
+sizeof(unsigned int) is 8 bytes for example. Fix the problem by using
+memset instead.
+
+Signed-off-by: Nam Cao <namcaov@gmail.com>
+---
+ drivers/staging/vt6655/device_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
+index 8e2a976aaaad..a38657769c20 100644
+--- a/drivers/staging/vt6655/device_main.c
++++ b/drivers/staging/vt6655/device_main.c
+@@ -867,7 +867,7 @@ static bool device_alloc_rx_buf(struct vnt_private *priv,
+ 		return false;
+ 	}
+ 
+-	*((unsigned int *)&rd->rd0) = 0; /* FIX cast */
++	memset((void *)&rd->rd0, 0, sizeof(rd->rd0));
+ 
+ 	rd->rd0.res_count = cpu_to_le16(priv->rx_buf_sz);
+ 	rd->rd0.owner = OWNED_BY_NIC;
+-- 
+2.25.1
+

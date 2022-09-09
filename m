@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468D85B2B6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 03:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921425B2B76
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Sep 2022 03:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiIIBRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Sep 2022 21:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
+        id S229778AbiIIBVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Sep 2022 21:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIIBRp (ORCPT
+        with ESMTP id S229546AbiIIBVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Sep 2022 21:17:45 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17E1098EF;
-        Thu,  8 Sep 2022 18:17:44 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNyfb0P30zZcl8;
-        Fri,  9 Sep 2022 09:13:11 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 09:17:41 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 09:17:40 +0800
-Subject: Re: [PATCH 0/7] kallsyms: Optimizes the performance of lookup symbols
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-modules@vger.kernel.org>
-References: <20220908130936.674-1-thunder.leizhen@huawei.com>
- <YxqDyyVwVUnqc8B1@bombadil.infradead.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <0e662541-baf8-1074-06bd-1398bdf7c2a7@huawei.com>
-Date:   Fri, 9 Sep 2022 09:17:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 8 Sep 2022 21:21:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEA410B032;
+        Thu,  8 Sep 2022 18:21:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3374561DE3;
+        Fri,  9 Sep 2022 01:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66532C433C1;
+        Fri,  9 Sep 2022 01:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662686509;
+        bh=fVPajho/aOku1+8nabWUPcT67X3OaItOI+7Sotm7FB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T/d4eyoFdQxk8p+PjLpEOdlfzaANQNJguMj9T0/2rVrTISomyq4dO9J6/B9wwZ327
+         ZXKzlYzzzK4Rh1mwKxe+7V1Z1/XpfCaggPh9JwTbGkAWf61f/3UwZQtacdq4Iv5do/
+         ATaMTXBe6nVFU+P5b5LV1uzi7sXQsm0Vpfe52HLtOS7v5ZGJqxpDe7uTA7vNiqEekY
+         X6iLjiSF36DXHQhGDcIKrQ9cvd6Mcblx4ske0Cpk//Bfgb4v7l330gkspuQfLfzETh
+         GP15eKqlJLQcSQHiK/rQIwpSANrstQAdfbtRkv2fvfNIiVc4fZ185yc9IV8MeUMTKQ
+         +Yb+dEfLjr+6Q==
+Date:   Thu, 8 Sep 2022 21:21:48 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     =?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.19 24/33] fec: Restart PPS after link state
+ change
+Message-ID: <YxqVLDukdCpFKWd7@sashalap>
+References: <20220830171825.580603-1-sashal@kernel.org>
+ <20220830171825.580603-24-sashal@kernel.org>
+ <243d3362-403d-7a94-34fa-12385100cc53@prolan.hu>
 MIME-Version: 1.0
-In-Reply-To: <YxqDyyVwVUnqc8B1@bombadil.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <243d3362-403d-7a94-34fa-12385100cc53@prolan.hu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/9/9 8:07, Luis Chamberlain wrote:
-> On Thu, Sep 08, 2022 at 09:09:29PM +0800, Zhen Lei wrote:
->> Currently, to search for a symbol, we need to expand the symbols in
->> 'kallsyms_names' one by one, and then use the expanded string for
->> comparison. This is very slow.
+On Wed, Aug 31, 2022 at 03:02:46PM +0200, Csókás Bence wrote:
+>
+>On 2022. 08. 30. 19:18, Sasha Levin wrote:
+>>From: Csókás Bence <csokas.bence@prolan.hu>
 >>
->> In fact, we can first compress the name being looked up and then use
->> it for comparison when traversing 'kallsyms_names'.
+>>[ Upstream commit f79959220fa5fbda939592bf91c7a9ea90419040 ]
 >>
->> This patch series optimizes the performance of function kallsyms_lookup_name(),
->> and function klp_find_object_symbol() in the livepatch module. Based on the
->> test results, the performance overhead is reduced to 5%. That is, the
->> performance of these functions is improved by 20 times.
->>
->> To avoid increasing the kernel size in non-debug mode, the optimization is only
->> for the case CONFIG_KALLSYMS_ALL=y.
-> 
-> WIthout having time yet to reveiw the implementation details, it would
-> seem this is an area we may want to test for future improvements easily,
-> so a selftest better yet a kunit test may be nice for this. Can you
-> write one so we can easily gather a simple metric for "how long does
-> this take"?
+>>On link state change, the controller gets reset,
+>>causing PPS to drop out and the PHC to lose its
+>>time and calibration. So we restart it if needed,
+>>restoring calibration and time registers.
+>
+>There is an ongoing investigation on netdev@ about a potential kernel 
+>panic on kernels newer than 5.12 with this patch applied. Please hold 
+>off on backporting to 5.19 until the bugfix is applied to upstream.
 
-Good advice. I'll write it today.
-
-> 
->   Luis
-> .
-> 
+Will do.
 
 -- 
-Regards,
-  Zhen Lei
+Thanks,
+Sasha
